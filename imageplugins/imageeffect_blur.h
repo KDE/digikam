@@ -45,7 +45,7 @@ public:
 private:
 
     KIntNumInput *m_radiusInput;
-    Digikam::ImageWidget *m_previewWidget;
+    //Digikam::ImageWidget *m_previewWidget;
     
     void blur(uint* data, int w, int h, int r);
     

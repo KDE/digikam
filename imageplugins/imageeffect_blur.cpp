@@ -59,15 +59,16 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Blur image"),
+    /*QVGroupBox *gbox = new QVGroupBox(i18n("Blur image"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
+    
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image blur preview."));
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    topLayout->addWidget(gbox);*/
                                                   
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
@@ -86,8 +87,8 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     m_radiusInput->setValue(0);
     
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+    /*connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            SLOT(slotEffect()));*/
             
     adjustSize();
 }
@@ -98,7 +99,7 @@ ImageEffect_Blur::~ImageEffect_Blur()
 
 void ImageEffect_Blur::slotEffect()
 {
-    Digikam::ImageIface* iface =
+/*    Digikam::ImageIface* iface =
         m_previewWidget->imageIface();
    
     uint* data = iface->getPreviewData();
@@ -110,7 +111,7 @@ void ImageEffect_Blur::slotEffect()
            
     iface->putPreviewData(data);
     delete [] data;
-    m_previewWidget->update();
+    m_previewWidget->update();*/
 }
 
 void ImageEffect_Blur::slotOk()

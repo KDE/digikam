@@ -59,15 +59,16 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Sharpen image"),
+    /*QVGroupBox *gbox = new QVGroupBox(i18n("Sharpen image"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
+    
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image sharpen preview."));
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    topLayout->addWidget(gbox);*/
                                                   
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
@@ -81,13 +82,13 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
     
-    hlay->addWidget(label,1);
+    hlay->addWidget(label, 1);
     hlay->addWidget(m_radiusInput, 5);
 
     m_radiusInput->setValue(0);
     
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+/*    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            SLOT(slotEffect()));*/
                 
     adjustSize();
 }
@@ -98,7 +99,7 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
 
 void ImageEffect_Sharpen::slotEffect()
 {
-    Digikam::ImageIface* iface =
+/*    Digikam::ImageIface* iface =
         m_previewWidget->imageIface();
    
     uint* data = iface->getPreviewData();
@@ -110,7 +111,7 @@ void ImageEffect_Sharpen::slotEffect()
            
     iface->putPreviewData(data);
     delete [] data;
-    m_previewWidget->update();
+    m_previewWidget->update();*/
 }
 
 void ImageEffect_Sharpen::slotOk()
