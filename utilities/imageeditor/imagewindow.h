@@ -65,72 +65,72 @@ public:
     
 private:
 
-    Canvas*              m_canvas;
+    Canvas*                m_canvas;
     
-    QPopupMenu*          m_contextMenu;
+    QPopupMenu*            m_contextMenu;
     
-    KAccel*              m_accel;
+    KAccel*                m_accel;
 
-    QLabel*              m_nameLabel;
-    QLabel*              m_zoomLabel;
-    QLabel*              m_resLabel;
+    QLabel*                m_nameLabel;
+    QLabel*                m_zoomLabel;
+    QLabel*                m_resLabel;
     
-    KURL::List           m_urlList;
-    KURL                 m_urlCurrent;
-    KURL                 m_newFile;
+    KURL::List             m_urlList;
+    KURL                   m_urlCurrent;
+    KURL                   m_newFile;
     
     // Allow to use Image properties and Comments/Tags dialogs from main window.
-    AlbumIconView*       m_view;
+    AlbumIconView*         m_view;
     
-    int                  m_JPEGCompression;
-    int                  m_PNGCompression;
+    int                    m_JPEGCompression;
+    int                    m_PNGCompression;
     
-    bool                 m_TIFFCompression;
-    bool                 m_rotatedOrFlipped;
-    bool                 m_fullScreen;
-    bool                 m_fullScreenHideToolBar;
-    bool                 m_allowSaving;
+    bool                   m_TIFFCompression;
+    bool                   m_rotatedOrFlipped;
+    bool                   m_fullScreen;
+    bool                   m_fullScreenHideToolBar;
+    bool                   m_allowSaving;
 
     // Actions
 
-    KAction              *m_navNextAction;
-    KAction              *m_navPrevAction;
-    KAction              *m_navFirstAction;
-    KAction              *m_navLastAction;
+    KAction               *m_navNextAction;
+    KAction               *m_navPrevAction;
+    KAction               *m_navFirstAction;
+    KAction               *m_navLastAction;
 
-    KAction              *m_saveAction;
-    KAction              *m_saveAsAction;
-    KAction              *m_restoreAction;
+    KAction               *m_saveAction;
+    KAction               *m_saveAsAction;
+    KAction               *m_restoreAction;
     
-    KAction              *m_zoomPlusAction;
-    KAction              *m_zoomMinusAction;
-    KToggleAction        *m_zoomFitAction;
-    KToggleAction        *m_fullScreenAction;
-    KSelectAction        *m_viewHistogramAction;
+    KAction               *m_zoomPlusAction;
+    KAction               *m_zoomMinusAction;
+    KToggleAction         *m_zoomFitAction;
+    KToggleAction         *m_fullScreenAction;
+    KSelectAction         *m_viewHistogramAction;
 
-    KActionMenu          *m_rotateAction;
-    KActionMenu          *m_flipAction;
-    KAction              *m_rotate90Action;
-    KAction              *m_rotate180Action;
-    KAction              *m_rotate270Action;
-    KAction              *m_flipHorzAction;
-    KAction              *m_flipVertAction;
+    KActionMenu           *m_rotateAction;
+    KActionMenu           *m_flipAction;
+    KAction               *m_rotate90Action;
+    KAction               *m_rotate180Action;
+    KAction               *m_rotate270Action;
+    KAction               *m_flipHorzAction;
+    KAction               *m_flipVertAction;
 
-    KAction              *m_resizeAction;
-    KAction              *m_cropAction;
+    KAction               *m_resizeAction;
+    KAction               *m_cropAction;
     
-    KAction              *m_fileprint;    
-    KAction              *m_fileproperties;
-    KAction              *m_fileDelete;
-    KAction              *m_commentedit;
+    KAction               *m_fileprint;    
+    KAction               *m_fileproperties;
+    KAction               *m_fileDelete;
+    KAction               *m_commentedit;
     
-    KAction              *m_copyAction;
-    KToolBarPopupAction  *m_undoAction;
-    KToolBarPopupAction  *m_redoAction;
+    KAction               *m_copyAction;
+    KToolBarPopupAction   *m_undoAction;
+    KToolBarPopupAction   *m_redoAction;
     
-    KAction              *m_imagePluginsHelp;
+    KAction               *m_imagePluginsHelp;
     
-    static ImageWindow*  m_instance;
+    static ImageWindow    *m_instance;
 
 private:
 

@@ -89,7 +89,7 @@ ImageWindow* ImageWindow::imagewindow()
 ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow::ImageWindow()
-           : KMainWindow(0,0,WType_TopLevel|WDestructiveClose)
+           : KMainWindow(0, 0, WType_TopLevel|WDestructiveClose)
 {
     m_instance              = this;
     m_rotatedOrFlipped      = false;
@@ -140,17 +140,22 @@ ImageWindow::ImageWindow()
     // -- setup connections ---------------------------
            
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
-            SLOT(slotContextMenu()));
+            this, SLOT(slotContextMenu()));
+            
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
-            SLOT(slotZoomChanged(float)));
+            this, SLOT(slotZoomChanged(float)));
+            
     connect(m_canvas, SIGNAL(signalSelected(bool)),
-            SLOT(slotSelected(bool)));
+            this, SLOT(slotSelected(bool)));
+            
     connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
-            SLOT(slotChanged(bool, bool)));
+            this, SLOT(slotChanged(bool, bool)));
+            
     connect(m_canvas, SIGNAL(signalShowNextImage()),
-            SLOT(slotLoadNext()));
+            this, SLOT(slotLoadNext()));
+            
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
-            SLOT(slotLoadPrev()));
+            this, SLOT(slotLoadPrev()));
     
     // -- read settings --------------------------------
     
@@ -173,6 +178,8 @@ ImageWindow::~ImageWindow()
             plugin->setEnabledSelectionActions(false);
         }
     }
+    
+    delete m_canvas; 
 }
 
 void ImageWindow::buildGUI()
@@ -378,15 +385,19 @@ void ImageWindow::buildGUI()
     // -- if rotating/flipping set the rotatedflipped flag to true ---------------------
 
     connect(m_rotate90Action, SIGNAL(activated()),
-            SLOT(slotRotatedOrFlipped()));
+            this, SLOT(slotRotatedOrFlipped()));
+            
     connect(m_rotate180Action, SIGNAL(activated()),
-            SLOT(slotRotatedOrFlipped()));
+            this, SLOT(slotRotatedOrFlipped()));
+            
     connect(m_rotate270Action, SIGNAL(activated()),
-            SLOT(slotRotatedOrFlipped()));
+            this, SLOT(slotRotatedOrFlipped()));
+            
     connect(m_flipHorzAction, SIGNAL(activated()),
-            SLOT(slotRotatedOrFlipped()));
+            this, SLOT(slotRotatedOrFlipped()));
+            
     connect(m_flipVertAction, SIGNAL(activated()),
-            SLOT(slotRotatedOrFlipped()));
+            this, SLOT(slotRotatedOrFlipped()));
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList,
@@ -454,12 +465,14 @@ void ImageWindow::applySettings()
 
 void ImageWindow::readSettings()
 {
+    bool autoZoom = false;
+
     KConfig* config = kapp->config();
     applyMainWindowSettings(config, "ImageViewer Settings");
     config->setGroup("ImageViewer Settings");
 
     // GUI options.
-    bool autoZoom = config->readBoolEntry("AutoZoom", true);
+    autoZoom = config->readBoolEntry("AutoZoom", true);
     
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
