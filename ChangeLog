@@ -1,6 +1,643 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
-        * <Gilles Caulier> Added new ImagePlugins setup for ImageEditor. The ImagePlugins 
+        * cgilles (2004-10-11): Fixed 'OpenInKonqui' action in according 
+          with the current album selection
+        * cgilles (2004-10-11): Added 'Gamma Adjustment' menu option 
+          (GammaCalibration kipi plugin removed).
+        * cgilles (2004-10-11): Added 'Open in Konqueror' menu option (DirOperations
+          kipi-plugin have been removed!) 
+        * cgilles (2004-10-11): Added digikamimageplugins tip of day if available.
+        * pahlibar (2004-10-10): fixed recursive calls in the resizedialog which 
+          hung the app 
+        * jahrens (2004-10-09): Double click on a tag/album/collection opens / closes it,
+          depending on it's previous state.
+        * cgilles (2004-10-09): Update Digikam Splashscreen by Yves Chauffour.
+        * pahlibar (2004-10-06): make sure that the messages from the kioslaves are
+          i18ned. the translations are in digikam catalogue.
+        * jahrens (2004-10-05): Setting album thumbnail through drag and drop.
+          Setting the dropped image as the album thumbnail. If the ctrl key
+          is pressed, when dropping the image, the thumbnail is set without
+          a popup menu. Otherwise it is shown a popup menu.
+        * cgilles (2004-10-05): Added new method for to get (X,Y) selection
+          coordinates. Request for digikamimageplugins (Raindrop especially). 
+        * pahlibar (2004-10-04): enable tagalbums to be seen by kipiplugins. tag albums
+          have a prefix "Tag:" in their name to differentiate from normal albums
+        * pahlibar (2004-10-04): added option to not ask for confirmation before moving
+          items to trash (off by default).
+        * pahlibar (2004-10-04): configure.in tests revamped:
+          merge multiple configure.ins into one. use pkg-config for libkipi and libkexif
+          output clearly at the end as to the status of each of the configure tests
+        * jahrens (2004-10-04): The album thumbnails are stored with a relative path in
+          the db now. So the album thumbnail will be kept if the album is moved to another
+          parent. 
+        * pahlibar (2004-10-04): put the fear of the lord in the user when deleting camera
+          items. make sure that they understand the files are unrecoverable
+        * pahlibar (2004-10-04): deleting items will either move-to-trash (default) or
+          actually delete, depending on user settings.
+        * jahrens (2004-10-03): Changed the drag'n'drop behavior when objects are dropped,
+          so we have standard drag'n'drop behavior in digikam when the shift or ctrl key is
+          pressed. 
+          - dropping images on a tag with ctrl key pressed
+          The tag is assigned to the images without displaying a popup menu
+          which asks if that really should be done (bugzilla #89007)
+          - dropping images on an album
+          (a) ctrl key pressed: the images are copied to the album
+          (b) shift key pressed: the images are moved to the album
+          (c) no key pressed: popup menu is shown, whichs asks what to do
+          - dropping an album on another album
+          (a) ctrl key pressed: the album is copied to the other album
+          (b) shift key pressed: the album is moved to the other album
+          (c) no key pressed: popup menu is shown, whichs asks what to do
+        * pahlibar (2004-10-01): thanks to joern's invaluable contributions to digikam,
+          his status has been upgraded from a "mere" developer to author
+          also give credit to hans karlsson for the very cool digikam banner and app
+          icons
+        * pahlibar (2004-10-01): finish implementing the remainder of the camera interface
+          features: 
+          - context menu for viewing, exif, properties, download, delete
+          - new properties dialog
+        * jahrens (2004-09-30): 
+          - Added an item ("Set as Album Thumbnail") to the context menu in the thumbnail
+          view to select a particular image as the album thumbnail - to let the user choose
+          his own thumbnails for the albums.
+          - Furthermore I've changed the album thumbnail creation completely. The image path,
+          from which the album thumbnail was created is now stored in the digikam database.
+        
+          To create these new album icons, the user has to browse through his albums. The
+          first readable image will be used as the default icon. Then he can change the
+          album thumbnail to an images he likes (with the context menu as described above).
+          This is not the best solution to create the new thumbnails, but we decided not to
+          add too much special code to the application which is only needed for the first
+          run after an upgrade.
+        * pahlibar (2004-09-30): some installations do not specify extern "C" in jpeglib.h
+          which leads to linking problems.
+        * pahlibar (2004-09-30): new icons for digikam. special thanks to Hans Karlsson
+          for this lovely piece of work
+        * pahlibar (2004-09-29): auto orientation of image using lossless jpeg operation
+          implemented in the cameragui. on by default. customize in the advanced options
+        * pahlibar (2004-09-28): use mime specific icons for camera items
+        * pahlibar (2004-09-28): removed kioslave camera implementation (has been replaced
+          with threaded version) 
+        * cgilles (2004-09-27): Added icon for imageplugins help
+        * pahlibar (2004-09-24): 
+          - simplified camera gui interface
+          - kioslave interface was getting too kludgy. replaced with threads
+          - advanced options: currently implemented - file rename while downloading
+        * jahrens (2004-09-23): added setIcon for PAlbum
+        * pahlibar (2004-09-21): sync with libkipi changes
+        * pahlibar (2004-09-20): use ktempfile to save the generated thumbnail (fudged
+          from kio::previewjob) so that race conditions with other apps is prevented and
+          also files are saved with 0600 permissions (closer adherence to fd.o stds)
+        * pahlibar (2004-09-19): sloppy programming. forgot to escape the urls/filenames
+          for the database query.
+        * rytilahti (2004-09-18): save the splitter position
+        * pahlibar (2004-09-16): Fixed crash when deleting files (this should fix the
+         rename batchprocess plugin crash reported by gilles also). thumbnailjob was
+         referencing a kfileitem which got deleted by kdirlister. couldn't find the exact
+         place of the problem, so reverted back to using kurls in the thumbnailjob.
+         - removed imlib2 loading of thumbnails, as some tests indicated that faster
+         loading of thumbnails can be doing a png load directly into a qimage. code for
+          that coming soon.
+        * pahlibar (2004-09-15): sync with libkipi changes
+        * pahlibar (2004-09-15): 
+          - move the deleting files from database code from the main app to kioslave,
+          this makes the deleting file operations appear much lesser non-blocking
+          - added code for showing the tag albums in the kipiplugins, but disabled it
+          till issues with the imagegallery are resolved.
+        * pahlibar (2004-09-15): strip off newlines from squeezed text. clears up
+          rendering issues in the thumbnail view
+        * cgilles (2004-09-13): Added Kipi version informations to the GUI (Digikam about
+          and plugins setup) 
+        * pahlibar (2004-09-12): context specific enabling/disabling of album/tag specific
+          actions in the menubar
+        * pahlibar (2004-09-10): refresh album comments in the thumbnail view when album
+          comments are changed using the album property editor
+        * cgilles (2004-09-10): Fixed album properties dialog layout.
+        * cgilles (2004-09-09): Added release ID header file
+        * pahlibar (2004-09-08): allow addition of new images from external sources
+          supported by kio
+        * pahlibar (2004-09-08): polishing... one of the two views (left - tree, right -
+          thumbnail) will have the appearance of focus. this prevent ugly focus outs when
+          for eg, a context menu is requested on a view.
+        * pahlibar (2004-09-08): don't stat if the src url is not a local
+          file/directory. just pass it on straight through to kio::copyjob
+        * cgilles (2004-09-08): Added PNG max compression when saving PNG images
+        * pahlibar (2004-09-07): 
+          - moved out context assign/remove tags menu into separate class
+          - now remove tags menu will show only those tags which have been
+          assigned to at least one item
+        * pahlibar (2004-09-07): 
+          - option to hide toolbar in fullscreen mode in the imagewindow
+          - pressing ESC will exit out of fullscreen mode
+        * pahlibar (2004-09-07): 
+          pressing escape in the imageviwer fullscreen mode will exit out of the 
+          fullscreen mode
+        * pahlibar (2004-09-06): 
+         hide menubar & statusbar in fullscreen mode for the imagewindow.
+         plug and unplug the fullscreen action in the toolbar accordingly
+        * pahlibar (2004-09-06): 
+          create the toolbar with proper object name. dunno why ktoolbar took off
+          the option to specify the object name in the constructor
+        * pahlibar (2004-09-05): 
+          following a suggestion from mornfall, its now possible to assign/remove tags
+          which have subtags from the context menu, without causing too much confusion
+        * pahlibar (2004-09-05): 
+          reposition filetip after resize.
+        * cgilles (2004-09-05): Fixed an i18n problem between the real ImagePlugins name
+          and the ImagePlugins loading/unloading fonctions. 
+          Using now the libraries plugins name for the ImagePlugins setup.
+        * pahlibar (2004-09-04): 
+          finally.... proper indication of which of the left and right view have
+          the focus in the mainwindow. the view which has the focus is shown
+          raised and the other one is shown sunken
+        * pahlibar (2004-09-04): 
+          fixed restoring the position and size of mainwindow and imagewindow(previous 
+          commit) after fullscreen maximization
+        * pahlibar (2004-09-04): 
+          fixed broken fullscreen maximization for imageeditor.
+        * jahrens (2004-09-04): 
+          - minor drag and drop changes
+           - disabled dropping an album to another album when in "ByFolder-Mode"
+           - changed AlbumDrag constructor
+           - handling dragging pixmap when no pixmap is available
+        * cgilles (2004-09-03): Added missing i18n for entry menu
+        * cgilles (2004-09-03): Fixed include header. Work fine now with
+          digikamimageplugins cvs module (alone mode resqueted by Achim Bohnet). 
+        * cgilles (2004-09-02): Fixed header for digikamimageplugins building
+        * cgilles (2004-09-02): Using KIPI icon
+        * jahrens (2004-09-01): 
+          - album drag and drop
+            - albums can be moved/copied in the album folder view through drag and drop. 
+              So albums can be rearranged.
+          - albums can be dropped on a collection to assign it to the collection
+          - Completely rewrite of AlbumFolderView::contentsDragMoveEvent()
+        * pahlibar (2004-09-01): don't do the albumfolderitem open/close once the initial
+          loading is complete. this prevents surprises during DnD copy/move of albums
+        * pahlibar (2004-09-01): use digikamio for copying/moving files/albums.
+        * pahlibar (2004-09-01): 
+          - app interface for digikamio kioslave: uses digikamio kioslave for
+          file/folder copy/move within the album library and KIO::copyjob for
+          external file/folder copy/move.
+          - busyprogressbar: a progressbar which shows a busy indicator when the
+          total and current progress is not (the progress bar shuttles from
+          left to right). used within the digikamio app interface. can be used
+          elsewhere
+        * pahlibar (2004-09-01): 
+          digikamio:
+          - new kioslave for file/folder copying/moving while preserving all metadata.
+          - unlike kde file kioslave this can move/copy folders recursively
+          - handles four cases of copy/move: a) album copy/move b) file copy/move
+           c) external folder copy/move into album library d) external file copy/move
+           into album library
+        * cgilles (2004-09-01): Fixed slider/spinbox slots
+        * jahrens (2004-08-31): Minor drag and drop changes
+        * cgilles (2004-08-31): Added link to DigikamImagePlugins handbooks in ImageEditor
+          help menu 
+        * jahrens (2004-08-30): Drag and drop improvement:
+          An album is opened and displays its children when the mouse pointer pauses over
+          the album during drag and drop. 
+        * jahrens (2004-08-29): Added an import option to import image folders as digikam
+          albums 
+         - select the parent album in the folder view (if no album is selected root will be the parent)
+         - Album->Import->Import Folders...
+         -select the folders in the appearing file select dialog
+        * rhoezler (2004-08-26): - "Correct EXIF orientation tag" now works on all
+          selected images, not just the first one 
+        * pahlibar (2004-08-26): 
+         - if drag moves over an unacceptable position, remove the old droptarget
+          and set it to zero. prevents surprises in case of dropevents.
+        * pahlibar (2004-08-26):  as joern pointed out the drag was being called out
+          multiple times. i turned on the contents mouse tracking for implementing the
+          tooltips which led to this breakage.this commit will set startDragItem to zero
+          once mouse leaves the widget 
+        * jahrens (2004-08-26): Dragging an object in the albumiconview can continuously
+          produce new drag objects.
+          1. Select an image in the albumiconview
+          2. drop it on the albumfolderview or at the window title, so the drag object 
+           is destroyed
+          3. don't press the mouse button and leave the mouse over the albumiconview,
+           but not over an image. the image is still selected.
+          4. switch to another desktop by a shortcut and switch back to the desktop
+           that displays digikam
+          5. a new QMouseEvent is generated. Since the mouse isn't positioned over an
+           image a new drag object for the previously selected image is created -> bug!
+        * rhoezler (2004-08-26): - Fix order of transformation during EXIF auto rotate
+          Add missing "horizontal flip" option that was lost when moving it to the image menu
+        * cgilles (2004-08-26): Add new cursor changing method for the image preview
+          widget (using by the long preview process like OilPaint for to show a 
+          waiting cursor in the widget area).
+        * cgilles (2004-08-25): Setup : fixed kipi plugins icon setup.
+          ImagePreviewWidget : Added moved action between Pan icon widget
+          and Image region widget when the selection focus have changed (thanks to Joern 
+          for this idea). The Image Region is updated but not the preview effect during the
+          selection mouvement (only when the mouse is released). This way improveme the
+          region selection choise in the original image.
+        * cgilles (2004-08-25): Fix pan size for the large original image.
+        * pahlibar (2004-08-24): fix a bunch of memory leaks
+        * pahlibar (2004-08-24): fix memory leak
+        * pahlibar (2004-08-24): enable ok button only if values have changed from zero
+          state.some cleanup in hsl
+        * pahlibar (2004-08-24): hide tooltip on mouse wheel event
+        * cgilles (2004-08-24): Moved all Digikam widgets in /libs/widgets folder.
+          Fixed Makefiles in according.
+        * pahlibar (2004-08-23): warn users on an attempt to delete an album or a tag, if
+          there are sub albums and tags. also show the number of sub albums and tags.
+        * pahlibar (2004-08-23): use WStyle_Splash for splash screen. makes splashscreen
+          hideable by clicking on it. added a new page to the setup dialog
+          (Miscellaneous). added option to turn off splashscreen
+        * pahlibar (2004-08-22): write comments only to jpeg jfif section. we want to
+          reserve exif user comments for the Adobe XMP metadata (maybe)
+        * pahlibar (2004-08-22): use kmenubar instead of qmenubar for the guibuilder, so
+         that kde specific menubar settings (Mac OS type menubar for eg) is respected
+        * pahlibar (2004-08-22): break lines in tooltip only at word boundaries
+        * jahrens (2004-08-22): Tags can be dropped on images to assign the tag
+        * pahlibar (2004-08-21): show filesize in both human readable form and in bytes 
+          change Date -> Modification Date
+        * pahlibar (2004-08-21): use local aware date string format. break comments when
+          too long 
+        * pahlibar (2004-08-21): show corner arrows based on position (fudged from
+          kfiletip(libkonq)) 
+        * pahlibar (2004-08-20): don't show tooltips if thumbview is not the active window 
+        * pahlibar (2004-08-20): loose the tooltip on focusout
+        * pahlibar (2004-08-20): showing tooltips is now configurable. on by default
+        * pahlibar (2004-08-20): show meta info also in tooltip (at some point we will
+          have to make this customizable)
+        * pahlibar (2004-08-20): polishing tooltip - break line between tags, don't break
+          line elsewhere, strip leading / from album/tag names (albumfiletip.cpp)
+          hide tooltip on mousepressevent on thumbnail view (thumbview.cpp)
+        * pahlibar (2004-08-20): tooltips for thumbnail items
+        * pahlibar (2004-08-19): use middle mouse button to scroll image
+        * pahlibar (2004-08-18): assign/remove tags in bulk using right click menu
+        * jahrens (2004-08-18): Added drag and drop for tags.
+          - Tags can be moved and dropped on another tag inside the album folderview,
+          so it is possible to rearrange the tag hierarchy.
+          - When a tag is moved to another parent its children are moved as well.
+        * pahlibar (2004-08-18): seems the last deselecting items when selection box
+          changes wasn't completely correct. ctrlbutton-down-and-mousemove should not
+          remove existing selection 
+        * pahlibar (2004-08-18): drag selection should unselect items outside the
+          selection box. 
+        * pahlibar (2004-08-16): show an error message if exif correction fails
+        * pahlibar (2004-08-15): set block size of gdbm file to 0, so that it will pick up
+          the correct blocksize from the filesystem. prevents thrashing of the filesystem
+          so much 
+        * pahlibar (2004-08-15): do the initial selection of albums/tags only after all
+          albums have been loaded. last selected tag can also be remembered now.
+        * pahlibar (2004-08-14):  dump and restore album tree state. remember last album
+          opened (only physical albums, not tags - as listing files in tags requires that
+          the corresponding physical albums have been loaded already and because of kio
+          loading of albums, this is not guaranteed)
+        * pahlibar (2004-08-12): added theme "Clean"
+        * rhoezler (2004-08-12): Move "Set Exif Orientation" RMB entry to Image->Correct
+          Exif Orientation Tag. 
+        * pahlibar (2004-08-12): changed version to 0.7.0-cvs. use kde b.k.o. as default
+          reportbug option 
+        * jahrens (2004-08-11): Changed some menus according to the kde style guide
+          http://developer.kde.org/documentation/standards/kde/style/menus/index.html
+        * jahrens (2004-08-11): Changed the cameraui context menu to make it look like the
+          albumiconview context menu.
+        * pahlibar (2004-08-10): use exif rotation only if requested
+        * jahrens (2004-08-10): Added a context menu to cameraui.
+        * rhoezler (2004-08-10): Save correct orientation tag if image has been EXIF
+          auto-rotated and modified/saved. 
+        * rhoezler (2004-08-10): Implemented EXIF-based rotation in the image editor via
+          the Imlib interface. 
+        * jahrens (2004-08-09): Removed populatetags to rebuild the tag layout. Instead
+          adding/removing a TAlbumChecklistItem. 
+        * pahlibar (2004-08-08): in thumbview, controlbutton + drawrubber should preserve
+          existing selection 
+        * jahrens (2004-08-07): Context menu appears after RMB everywhere in the listctrl
+          (imagedescedit) with root selected as tag when no tag was under the mouse. 
+        * pahlibar (2004-08-07): fix crash when requested texture width/height is <= 0
+        * pahlibar (2004-08-06): enable editing of tags from comments/tag editor
+        * pahlibar (2004-08-06): Compilation fixes in imagelevels.cpp. added new theme Marine
+          improved Dreary Theme
+        * cgilles (2004-08-06): Added methods for to load/save levels data values from/to
+          a Gimp levels text file. 
+        * pahlibar (2004-08-05): add a menuitem to add a camera from the cameras menu
+        * pahlibar (2004-08-05): moving to the first row of thumbnails using keys will
+          ensure that the header is also shown
+        * pahlibar (2004-08-05): bump up the version of the xmlgui file
+        * cgilles (2004-08-05): Added Set/Get levels values methods.
+        * pahlibar (2004-08-04): arrow in listview should use text color
+        * jahrens (2004-08-04): Added a context menu to comments/tags dialog
+          (ImageDescEdit) to add/delete tags. "Edit" is still unavailable, because changes 
+          made to tags in this dialog are not forwarded to the albumiconview. So I have
+          disabled edit until I found a solution. 
+        * pahlibar (2004-08-04): digikam gets theming support. fluxbox style themes
+         (texture renderer fudged from fluxbox code). themes can be installed at system
+         level $PREFIX/share/apps/digikam/themes or in user home directory in
+         ~/.kde/share/apps/digikam/themes. sample theme ("Dreary") included
+        * cgilles (2004-08-04): ImageEditor: fixed disable menu actions when an image is
+         opened from cameraclient. The actions are 'File/remove from current Album' and
+         'Image/Comments' 
+        * cgilles (2004-08-03): ImageEditor :
+          - Added config tab in main setup dialog.
+          - New option: JPEG quality image during saving operations.
+          - New option: background color setting.
+          - Fixed TIFF saving operations.
+        * pahlibar (2004-08-02): renaming of albums while retaining meta data
+        * cgilles (2004-08-02): Histogram viewer: added drawing all color channels (RGB)
+          at the same time capability. 
+        * cgilles (2004-08-02): Fixed AddImage method. Tested with BatchProcessImages plugins. 
+        * cgilles (2004-08-02): Added selection mode option in constructor.
+        * cgilles (2004-08-02): fixed histogram viewer crash if current image loaded failed
+        * cgilles (2004-07-30): Fixed histogram rendering in according with Achim bohnet
+          advices. 
+        * pahlibar (2004-07-30): Fix crash when slave dies
+        * cgilles (2004-07-30): Added wait cursor during image traitments. The calculation
+          can be long if the image size is big. 
+        * cgilles (2004-07-30): Using ImageHistogram API in normalize and Equalize algorithms.
+        * cgilles (2004-07-29): First import of autolevel correction class (adapted from
+          the Gimp2.0). Added menu entry in ImageDitor for AutoLevel correction.
+        * pahlibar (2004-07-28): added iterator for albums
+        * jahrens (2004-07-28): Changed drag'n'drop popup menues to make them look like
+          other kde applications 
+        * cgilles (2004-07-28): Added new common ColorGrdientWidget for HistogramViewer in
+          ImageEditor and File properties dialog. Source code more simply...
+        * cgilles (2004-07-28): Added new image Histogram tab in File properties dialog.
+        * cgilles (2004-07-28): Added image Histogram Viewer.
+          - New Histogram manipulation class.
+          - New Histogram widget.
+          - New Histogram Viewer dialog for ImageEditor.
+        * jahrens (2004-07-27): Added drag'n'drop from external sources to AlbumFolderView 
+        * pahlibar (2004-07-27): Reorganization of cvs.
+          - digikam/libs digikam/libs/guibuilder digikam/libs/histogram added
+          - guibuilder code moved to digikam/libs/guibuilder
+        * pahlibar (2004-07-26): added texture building routines (fudged from
+          fluxbox). this will form the basis of theming support for digikam (around
+          v0.8). use the texture routines to build base pixmaps for thumbnail
+          items. currently hard-coded colors. 
+        * pahlibar (2004-07-26): when the native thumbnail loader fails and kde previewjob
+          is used, the previewjob returns the thumbnail with fileitem. if the file got
+          deleted in the meantime or the album got changed, digikam will crash as the
+          kfileitem has been deleted and we are referencing a deleted item. solution: use
+          kurl causing previewjob to generate its own kfileitem and on return use the url to
+          find the item in the dictionary to assign the pixmap.
+        * jahrens (2004-07-25): Adding a tab to KPropertiesDialog to show the extra
+          information retrieved from the camera 
+        * pahlibar (2004-07-25): double-click/return-press will open up the imageviewer
+          for the camera file items
+        * pahlibar (2004-07-25): Disable saving of images when viewing a camera file in
+          the image editor. User can still use saveas to save the file elsewhere. at some
+          point, we have to start thinking of allowing user to save the file and the file
+          gets uploaded back into the camera. maybe too much of a hassle for an
+          infrequently used operation
+        * pahlibar (2004-07-25): implemented viewing image
+        * pahlibar (2004-07-24): - added: retrieve and show camera information
+          (summary/manual/about). fix: the error dialog in camera window is now correctly
+          placed over the camera window.
+        * pahlibar (2004-07-24): slowly adding back all the old features from the
+          digikamcameraclient 
+          - implemented getting exif information for a camera file item
+          - pahlibar (2004-07-24): 
+          - if thumbnail can't be loaded from database, delete the key
+          - safety checks: check if db is valid
+        * pahlibar (2004-07-23): "instant loading" thumbnails
+          - creates a database file (gdbm database) in ~/.thumbnails
+          - adds a tiny low resolution (48x48) thumbnail for each file in the album
+          that you browse to using digikam
+          - on loading an album, this database is queried to see if a thumbnail is
+          present for a file and if yes, this thumbnail is loaded, rough scaled to
+          the size needed and shown.
+          - the regular thumbnail loader runs in the background, as usual, and it
+          keeps updating the displayed thumbnails, essentially smoothing the
+          thumbnails.
+         - result is that if the user visits an album which he/she has browsed to
+          before, the rough thumbnail are shown fast and then the smoothing process
+          of the thumbnails begin.
+         - regular thumbnails are still stored according to the freedesktop standards
+        * pahlibar (2004-07-23): 
+          - set the cursor to a busy cursor when loading images.
+          - semi-progressive painting of the images when flipping between
+          images. essentially what it does is splits the painting of the image into
+          multiple small paints (stripwise). used only when loading an image and not
+          while scrolling/zooming/... . scrolling through images should be
+          non-blocking and seem a bit faster
+         - preload next image (not really sure it helps since rendering is the
+         - most expensive part and we do not do any rendering in the preload)
+         - fixed a painting bug when resizing the selection with handles
+        * pahlibar (2004-07-22): fixed memory leak which caused imlib to not free memory
+          on closing the imagewindow
+        * pahlibar (2004-07-21): Camera File Properties dialog a la KDE file properties dialog.
+        * pahlibar (2004-07-21): implemented select all/none/invert for camera window
+        * cgilles (2004-07-21): ImageEditor: Added new image colors enhacement plugin
+          'Normalize'. 
+        * pahlibar (2004-07-20): two levels of redeye correction:
+          a) mild - use if other parts of face have been selected
+          b) aggressive - use if eye(s) have been selected exactly
+        * pahlibar (2004-07-20): optimization for loading items in a tag (especially
+          recursively). seems queries on sqlite when using JOIN tables is rather slow. by building
+          the album list manually and then querying items from the tag table alone,
+          the queries are much faster (nearly 10x speed increase). consequently
+          listing of items from the tags  has a >2x speed increase (stating and
+          listentry slow things down).
+        * cgilles (2004-07-20): Fix RGB image plugin sliders (look similar with Photoshop
+          and The Gimp) 
+        * cgilles (2004-07-20): Fix balance values for BCG image plugin (like photoshop
+          and the Gimp). 
+        * pahlibar (2004-07-19): 
+          - initial version cameragui
+          - merged back into main application
+          - interface for interacting with digikamcamera kioslave in a
+          - connection oriented mode
+          - only download implemented currently
+          - dirselectdialog (modified from kdirselectdialog) for
+          - selecting/creating target album
+        * pahlibar (2004-07-18): 
+          - initial version of camera kioslave
+          - unlike kamera this is a connection oriented kioslave.
+          - only download implemented currently. rest to follow. initial gui tomorrow.
+        * rytilahti (2004-07-17): Check if the camera hasn't been added to the list after
+          the last save. Also fixed some messages to 
+          KDE standard ones.
+        * pahlibar (2004-07-16): improved the sepia filtering, using the hsl functions.
+        * pahlibar (2004-07-16): included some utility functions to convert from RGB to
+          HSL and back. Useful for plugins.
+        * pahlibar (2004-07-16): fix crash in slotSaveAs. only try to write exif if both
+          src and destination are jpeg files. also emit a signal to indicate that a file
+          has been modified when saving.
+        * cgilles (2004-07-16): ImageEditor: added new HSL balance correction plugin !
+        * cgilles (2004-07-16): ImageEditor : Added new 'Free image rotation' option with
+          dialog. 
+        * pahlibar (2004-07-13): keyevents behave more like standard listviews.
+        * pahlibar (2004-07-13): emit a signal when a file has been added. tag albums
+          don't update automatically. copy all the metadata when using saveas not just the
+          comments. removed unnecessary double loading of image
+        * cgilles (2004-07-13): - Re-enable 'File print' option from the old ImageViewer.
+          This implementation is impired of Kuickshow source code and freeze the GUI during the
+          printing calculation. I will push that in a thread...
+          - Added Save and Saveas method in imlibiface.
+        * pahlibar (2004-07-12): Sort Images by Name, Path, Date, File Size
+        * pahlibar (2004-07-12): on initial display, the initial sizes of the left and
+          right view are to be in the ratio of 1:2. sometimes these sizes were not set
+          right. override the resizeevent to set the ratios correctly on initial loading
+        * pahlibar (2004-07-12): fix importing of images. allow importing only if
+          destination album is a physical album
+        * cgilles (2004-07-12): Added Image comments edit dialog for ImageEditor.
+          Restored the Image Comments Edit option from old ImageViewer.
+        * cgilles (2004-07-12): Restored View Exif info from old ImageViewer.
+          Added new menu entry 'Image'.
+        * cgilles (2004-07-12): Restored Image file properties menu option from old ImagViewer.
+        * cgilles (2004-07-12): Added proview effect to sharpen and blur pimageplugins.
+          Removed selection parsing.
+        * cgilles (2004-07-12): BCG ImagePlugin : Added whatsthis, help button, and Reset
+          values button. 
+        * cgilles (2004-07-12): Added new ImageEditor plugin : colors balance (RGB adjustments) !!!
+        * pahlibar (2004-07-11): shift-arrow keyboard keys will allow multiple selection of items. 
+        * pahlibar (2004-07-11): Make recursive retrieval a setup option
+        * pahlibar (2004-07-11): 
+          - reimplement the item lister using pure kdirlister and use the new
+            digikamtags protocol
+          - non-blocking listing of items in Tag Albums from database.
+          - Currently recursive retrieval is hard coded in by default.
+            need to make this selectable in the setup dialog
+          - use updatedirectory instead of reloading the items from tag in case
+            of modifications. (more work might be needed here. maybe a kdirwatch
+            to watch the items in the tag, as kdirlister doesn't do it for us
+            thinking its a non-local protocol)
+        * pahlibar (2004-07-11): 
+          -  kioslave to retrieve items in a tag album in a non-blocking fashion
+            implemented as a virtual filesystem with tag albums retrieved as
+            virtual folders. but the files themselves are listed as local files
+            with protocol "file"
+          - recursive retrieval of items in subtags (only if requested)
+          - an important side-effect of the kioslave is that users can see the
+            tag albums in konqueror. just type digikamtags:/ in the locationbar.
+            by default recursive retrieval is disabled for external applications.
+        * pahlibar (2004-07-09): 
+          In the comments/tag-editor Ctrl-Enter will save and move onto
+          the next item. Shift-Enter will save and move to the prev item
+        * cgilles (2004-07-09): Added new image plugins for ImageEditor : blur and sharpen
+          filters ! 
+        * pahlibar (2004-07-08): Use stdgui items for forward back buttons in
+          tag-comments-editor 
+        * pahlibar (2004-07-08): Added a checkbox in the comment/tag-editor to
+          automatically save comments/tags when navigating between items
+        * pahlibar (2004-07-07): 
+          Large number of changes:
+          a) interfaces subdirectory removed. some of the code moved to digikam subdir
+          b) sqlite source code (v2.8.14) imported into a separate subdir
+          c) AlbumManager/AlbumDB/Album (note: change in name from AlbumInfo->Album)
+             rewritten from scratch
+          d) AlbumDB is the new sqlite based database backend instead of the old xml
+             style database. Old xml database will be imported automatically into
+             the new database. No export function yet (do we still need a separate
+             digikam xml format? we can think of exporting to some other app format,
+             like kimdaba/kphotobook). Note: the old xml files are still retained,
+             so you can safely run this new digikam on your existing album library.
+          e) Album is an abstract class with derived implementations of two (currently)
+             kinds: Physical Albums (PAlbum) - representing folders on the drive and
+             Tag Album (TAlbum) - representing tags in the database
+          f) Nested albums supported (some optimization might be needed for loading
+             the initial list of physical albums). both folders and tags can have
+             unlimited nesting
+          g) Native light-weight implementation of a treeview to replace qlistview
+             based treeview. this new implementation is flicker-free and has a cleaner
+             look compared to qlistview
+          h) Tagging of images added (you must have guessed it from the above statements).
+             Tags are shown as "albums" under a subtree of the treeview on the left.
+             Tagging can be done individually for an image using a dialog (enhanced version
+             of  the old comments dialog) or in bulk by selecting a bunch of images and
+             dragging and dropping on a tag.
+          i) rewrite of the painting routines by getting information from the database
+             diretly instead of loading it into memory. thumbnail items have a fixed
+             grid size and text not fitting into the grid will be shown truncated with dots.
+             (need to add a tooltip for this)
+          f) extra information that can be shown in the thumbnail view:
+             name (yes, name is hideable), date, file size, resolution, comments,
+             jpeg comments, tags. removed items: Exif comments and mimetype
+          g) lots more. i will add them to the ChangeLog as and when i remember them
+        * cgilles (2004-06-23): Fixed TipOfDay slot
+        * cgilles (2004-06-23): Extract the DigikamPlugins TipOfDays for LibKipi.
+          Add a merging call of Digikam and Kipi TipsOfDays at the same time.
+        * cgilles (2004-06-23): Update
+        * cgilles (2004-06-19): Fix release number 0.6.3 -> 0.7.0
+          Added ReadSettings method to kipiinterface.
+        * cgilles (2004-06-18): [no log message]
+        * cgilles (2004-06-16): Fix KIPI plugins category indentification in according
+          with last libKIPI changes. 
+        * cgilles (2004-06-15): Changed plugins category identification in according with
+          the last LibKIPI changes. 
+        * cgilles (2004-06-15): Updated the menu and popup menu in according with KIPI
+          plugins actions. Added 'album_action' collection. 
+        * pahlibar (2004-06-14): make sure image resize dialog has the imagewindow as
+          parent, so that it doesn't cause the imagewindow to bury itself when invoked
+        * cgilles (2004-06-14): The Batch Processes KIPI plugins can be used now directly
+          by the AlbumFolder popup menu. 
+        * cgilles (2004-06-14): Fixed KIPI plugins dynamic loading/unloading
+        * pahlibar (2004-06-13): 
+          Shift-Wheel to move between images. Ctrl-Wheel to change zoom
+        * pahlibar (2004-06-12): 
+          1) zoom in small steps 10% increments
+          2) hold shift button and roll the wheel mouse to zoomin/out
+        * pahlibar (2004-06-12): 
+          fixed minor painting issue with the selection rectangle
+        * pahlibar (2004-06-12): 
+         alpha blended selection for smooth selections unlike the last
+         cross-hatched pattern from qpainter. 
+        * pahlibar (2004-06-12): 
+          1) Bump up the delay for smooth painting a bit in imageeditor
+          2) add album title as caption for the imageeditor
+          3) add first and last buttons to the toolbar in the imageeditor
+        * pahlibar (2004-06-12): imageeditor selection gets resize handles.
+        * pahlibar (2004-06-11): 
+          1) Zooming should be much faster (and use considerably less memory at
+          large zooms). rendering done in two phases: a sub-super-pixel sampled
+          scaled one first and with a qtimer timeout an antialiased scaled one.
+          we take advantage of imlib2 speed (and cache use) and render from image
+          to pixmap for every repaint. only exposed area is rendered unlike
+          previously where the entire image was rendered to a cached pixmap.
+          
+          2) fix 2 of the bugs reported by  Mikolaj Machowski:
+            a) space between resolution and "pixels"
+            b) imageviewer being pushed back behind main app when a plugin
+               dialog opens
+        * rhoezler (2004-06-11): Implement Libkexif changes (writing EXIF data without
+          reading it). 
+        * rhoezler (2004-06-08): Make it compile after Libkexif change.
+        * pahlibar (2004-06-08): minor performance optimizations. don't render to mask
+          unless image has alpha 
+        * pahlibar (2004-06-08): 
+          Cleaned up the imageplugin interface. hopefully should be easier to program for.
+          enable selection based image plugin actions (eg. redeye) only if a selection
+          is made
+        * pahlibar (2004-06-07): 
+          first set of digikam imageeditor plugins:
+          1) adjust brightness/contrast/gamma
+          2) convert to black & white
+          3) convert to sepia (too strong a sepia cast now. need to fix this)
+          4) solarizing plugin
+          5) redeye correction plugin.
+        * pahlibar (2004-06-07): 
+          new imageeditor merge. old imageviewer still retained (not compiled though,
+          till all the functions are ported).
+          New features:
+          1) ported to imlib2
+          2) new gui - based on qmainwindow with menubar and toolbar
+          3) plugin interface so that image editor plugins can be written externally
+          4) native dynamic gui builder instead of xmlgui for performance reasons.
+          5) new selection method
+          6) new resize image option
+        * rhoezler (2004-06-07): - Check for and use Libkexif from kdeextra-libs-1 now for
+          Digikam. Building digikam/utilities/kexif is disabled, but I won't remove the
+          files until we're sure it doesn't cause any problems.
+        * cgilles (2004-06-07): Enable kipi plugins support on configure script by default.
+        * rhoezler (2004-06-07): - Load KIPI plugins via loadPlugins() again
+          - Pass entire path to plugin, not just image name
+        * rhoezler (2004-06-06): - Prevent digikam from crashing, if it could not get a plugin.
+        * rhoezler (2004-06-06): - Make digikam compile with the lateset libkipi changes
+        * pahlibar (2004-06-02): 
+          prevent thumbnail kioslave from crashing, if the imlib2 imageloader is
+          not able to return image data
+        * pahlibar (2004-06-02): 
+          more subdued highlighting for thumbnails.
+          load the metainfo only if its requested (showing the initial screen with
+          filenames and empty thumbnails should be much faster now if file comments
+          and/or resolution is not requested). fix memory leak if file metainfo is
+          requested multiple times.
+          in setup warn users that above two makes things slower.
+                * <Gilles Caulier> Added new ImagePlugins setup for ImageEditor. The ImagePlugins 
 	  can be loaded/unloaded dynamicly.
 	* <Gilles Caulier> Added new widgets for ImagePlugins: imageregionwidget, 
 	  imagepreviewwidget, and imagepaniconwidget. Updated blur and sharpen ImagePlugins.
