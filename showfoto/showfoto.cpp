@@ -47,6 +47,7 @@
 #include <libkexif/kexifutils.h>
 
 #include <cstdio>
+#include <unistd.h>
 
 // Local includes.
 
