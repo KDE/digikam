@@ -17,6 +17,7 @@ libcameraui_la_LDFLAGS = $(LIB_GPHOTO) $(all_libraries) $(KDE_RPATH)
 
 INCLUDES= \
 	-I$(top_srcdir)/digikam/digikam \
+	-I$(top_srcdir)/digikam/interfaces \
 	-I$(top_srcdir)/digikam/utilities/kexif \
 	-I$(top_srcdir)/digikam/utilities/imageviewer \
 	$(GPHOTO_CFLAGS) $(all_includes)
