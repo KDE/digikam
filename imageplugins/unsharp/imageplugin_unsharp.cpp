@@ -41,10 +41,10 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_unsharp,
                             KGenericFactory<ImagePlugin_Unsharp>("digikamimageplugin_unsharp"));
 
 ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
-                                             const QStringList &)
+                                         const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Unsharp")
 {
-    new KAction(i18n("Unsharped Mask..."), 0, 
+    new KAction(i18n("Unsharped Mask..."), "unsharpedmask", 0, 
                 this, SLOT(slotUnsharp()),
                 actionCollection(), "imageplugin_unsharp");
 

@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_unsharp_ui.rc
+       
+digikamimageplugin_unsharpicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_unsharpicon_ICON = AUTO
