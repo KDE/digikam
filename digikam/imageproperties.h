@@ -42,6 +42,8 @@ class QSpinBox;
 class QLabel;
 class QTextEdit;
 
+class KSqueezedTextLabel;
+
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumLister;
@@ -76,14 +78,33 @@ private:
     // For main dialog.    
     
     AlbumIconView                *m_view;
+    
     AlbumIconItem                *m_currItem;
+    
     AlbumLister                  *m_lister;
+    
+    // For General tab.
+    
+    QLabel                       *m_generalThumb;
+    
+    KSqueezedTextLabel           *m_filename;
+    KSqueezedTextLabel           *m_filetype;
+    KSqueezedTextLabel           *m_filepath;
+    KSqueezedTextLabel           *m_filedate;
+    KSqueezedTextLabel           *m_filesize;
+    KSqueezedTextLabel           *m_fileowner;
+    KSqueezedTextLabel           *m_filepermissions;
+    
+    QGuardedPtr<ThumbnailJob>     m_generalThumbJob;
+        
+    void setupGeneralTab(KURL fileURL);
 
     // For Exif viever.
     
     QLabel                       *m_exifThumb;
-    QTextEdit                    *m_textEdit;
+
     KExifData                    *mExifData;
+    
     KExifListView                *m_listview;
     
     void setupExifViewer(void);
@@ -97,7 +118,7 @@ private:
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
     
-    QLabel                       *m_thumbLabel;
+    QLabel                       *m_histogramThumb;
     QLabel                       *m_labelMeanValue;
     QLabel                       *m_labelPixelsValue;
     QLabel                       *m_labelStdDevValue;
@@ -107,7 +128,7 @@ private:
     
     QImage                        m_image;
     
-    QGuardedPtr<ThumbnailJob>     m_thumbJob;
+    QGuardedPtr<ThumbnailJob>     m_HistogramThumbJob;
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::HistogramWidget     *m_histogramWidget;
@@ -125,14 +146,19 @@ private slots:
     void slotUser1();
     void slotUser2();
     
+    // For General tab.
+
+    void slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
+                                 const KFileMetaInfo*);  
+                                  
     // For histogram viever.
     
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
     void slotIntervChanged(int);
-    void slotGotThumbnail(const KURL&, const QPixmap& pix,
-                          const KFileMetaInfo*);  
+    void slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
+                                   const KFileMetaInfo*);  
   
 };
 

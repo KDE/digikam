@@ -34,15 +34,21 @@
 #include <qspinbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qdatetime.h>
 
 // KDE includes.
 
+#include <kmimetype.h>
+#include <kfileitem.h>
 #include <klocale.h>
 #include <kselect.h>
 #include <kdialogbase.h>
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kseparator.h> 
+#include <ksqueezedtextlabel.h>
+#include <kglobal.h>
 
 // LibKexif includes.
 
@@ -87,6 +93,10 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     m_currItem = currItem;
     m_lister   = view->albumLister();
     KURL fileURL(m_currItem->fileItem()->url());
+    
+    //General tab init.
+    
+    setupGeneralTab(fileURL.path());
     
     // Exif Viewer init.
     
@@ -163,18 +173,40 @@ void ImageProperties::slotItemChanged()
     if (!m_currItem)
         return;
 
-    if (!m_thumbJob.isNull())
+    if (!m_HistogramThumbJob.isNull())
     {
-        m_thumbJob->kill();
+        m_HistogramThumbJob->kill();
     }
 
-    if (!m_thumbJob.isNull())
+    if (!m_HistogramThumbJob.isNull())
     {
-        delete m_thumbJob;
+        delete m_HistogramThumbJob;
+    }
+
+    if (!m_generalThumbJob.isNull())
+    {
+        m_generalThumbJob->kill();
+    }
+
+    if (!m_generalThumbJob.isNull())
+    {
+        delete m_generalThumbJob;
     }
 
     KURL fileURL(m_currItem->fileItem()->url());    
  
+    // Update General tab.
+    
+    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
+    
+    connect(m_generalThumbJob,
+            SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)),
+            SLOT(slotGotGeneralThumbnail(const KURL&,
+                                         const QPixmap&,
+                                         const KFileMetaInfo*)));
+                                         
     // Update Exif Viewer tab.
        
     m_listview->clear();
@@ -210,15 +242,15 @@ void ImageProperties::slotItemChanged()
        
     // Update Histogram Viewer tab.
     
-    m_thumbJob = new ThumbnailJob(fileURL, 48);
+    m_HistogramThumbJob = new ThumbnailJob(fileURL, 48);
     
-    connect(m_thumbJob,
+    connect(m_HistogramThumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
                                            const KFileMetaInfo*)),
-            SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+            SLOT(slotGotHistogramThumbnail(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)));
     
     m_image.load(fileURL.path());
     
@@ -265,19 +297,19 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
                                               
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     
-    m_thumbLabel = new QLabel( page );
-    m_thumbLabel->setFixedHeight( 48 );
-    hlay->addWidget(m_thumbLabel);
+    m_histogramThumb = new QLabel( page );
+    m_histogramThumb->setFixedHeight( 48 );
+    hlay->addWidget(m_histogramThumb);
     
-    m_thumbJob = new ThumbnailJob(fileURL, 48);
+    m_HistogramThumbJob = new ThumbnailJob(fileURL, 48);
     
-    connect(m_thumbJob,
+    connect(m_HistogramThumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
                                            const KFileMetaInfo*)),
-            SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+            SLOT(slotGotHistogramThumbnail(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)));
     
     QGridLayout *grid = new QGridLayout(hlay, 2, 4);
     
@@ -572,10 +604,10 @@ void ImageProperties::updateInformations()
 }
 
 
-void ImageProperties::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                       const KFileMetaInfo*)
+void ImageProperties::slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
+                                                const KFileMetaInfo*)
 {
-    m_thumbLabel->setPixmap(pix);
+    m_histogramThumb->setPixmap(pix);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -587,7 +619,7 @@ void ImageProperties::setupExifViewer(void)
     QGridLayout* layout = new QGridLayout(page);
     m_listview = new KExifListView(page, true);
     
-    QGroupBox *box = new QGroupBox(1, Qt::Vertical, i18n("Embedded thumnail"), page);
+    QGroupBox *box = new QVGroupBox(i18n("Embedded thumnail"), page);
     m_exifThumb = new QLabel(box);
     
     layout->addWidget(m_listview, 0, 0);
@@ -613,6 +645,117 @@ void ImageProperties::setupExifViewer(void)
         }        
 }
 
+//-----------------------------------------------------------------------------------------------------------
+// General Tab implementation methods
+
+void ImageProperties::setupGeneralTab(KURL fileURL)
+{
+    QFrame *page = addPage( i18n("General") );
+    QVBoxLayout *vlay = new QVBoxLayout( page, 0, spacingHint() );
+    
+    m_generalThumb = new QLabel( page );
+    m_generalThumb->setFixedHeight( 128 );
+    vlay->addWidget(m_generalThumb, 0, Qt::AlignHCenter);
+    
+    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
+    
+    connect(m_generalThumbJob,
+            SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)),
+            SLOT(slotGotGeneralThumbnail(const KURL&,
+                                         const QPixmap&,
+                                         const KFileMetaInfo*)));
+    
+    KSeparator *sep1 = new KSeparator (Horizontal, page);
+    vlay->addWidget(sep1);
+    
+    QHBoxLayout *hlay1 = new QHBoxLayout();
+    vlay->addLayout( hlay1 );
+    QLabel *name = new QLabel( i18n("Name:"), page);
+    m_filename = new KSqueezedTextLabel( fileURL.fileName(), page);
+    name->setBuddy( m_filename );
+    hlay1->addWidget( name );
+    hlay1->addStretch( 1 );
+    hlay1->addWidget( m_filename );
+    
+    QHBoxLayout *hlay2 = new QHBoxLayout();
+    vlay->addLayout( hlay2 );
+    QLabel *type = new QLabel( i18n("Type:"), page);
+    m_filetype = new KSqueezedTextLabel( KMimeType::findByURL(fileURL)->name(), page);
+    type->setBuddy( m_filetype );
+    hlay2->addWidget( type );
+    hlay2->addStretch( 1 );
+    hlay2->addWidget( m_filetype );
+
+    QHBoxLayout *hlay3 = new QHBoxLayout();
+    vlay->addLayout( hlay3 );
+    QLabel *path = new QLabel( i18n("Location:"), page);
+    m_filepath = new KSqueezedTextLabel( fileURL.path(), page);
+    path->setBuddy( m_filepath );
+    hlay3->addWidget( path );
+    hlay3->addStretch( 1 );
+    hlay3->addWidget( m_filepath );
+    
+    const KFileItem* fi = m_currItem->fileItem();    
+    
+    QHBoxLayout *hlay4 = new QHBoxLayout();
+    vlay->addLayout( hlay4 );
+    QLabel *date = new QLabel( i18n("Modification Date:"), page);
+    QDateTime dateurl;
+    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
+    m_filedate = new KSqueezedTextLabel( KGlobal::locale()->formatDateTime(dateurl, true, true),
+                                         page);
+    date->setBuddy( m_filedate );
+    hlay4->addWidget( date );
+    hlay4->addStretch( 1 );
+    hlay4->addWidget( m_filedate );
+    
+    QHBoxLayout *hlay5 = new QHBoxLayout();
+    vlay->addLayout( hlay5 );
+    QLabel *size = new QLabel( i18n("Size:"), page);
+    m_filesize = new KSqueezedTextLabel( i18n("%1 (%2)")
+                                         .arg(KIO::convertSize(fi->size()))
+                                         .arg(KGlobal::locale()->formatNumber(fi->size(), 0)),
+                                         page);
+    size->setBuddy( m_filesize );
+    hlay5->addWidget( size );
+    hlay5->addStretch( 1 );
+    hlay5->addWidget( m_filesize );
+
+    QHBoxLayout *hlay6 = new QHBoxLayout();
+    vlay->addLayout( hlay6 );
+    QLabel *owner = new QLabel( i18n("Owner:"), page);
+    m_fileowner = new KSqueezedTextLabel( i18n("%1 - %2)")
+                                         .arg(fi->user())
+                                         .arg(fi->group()),
+                                         page);
+    owner->setBuddy( m_fileowner );
+    hlay6->addWidget( owner );
+    hlay6->addStretch( 1 );
+    hlay6->addWidget( m_fileowner );
+
+    QHBoxLayout *hlay7 = new QHBoxLayout();
+    vlay->addLayout( hlay7 );
+    QLabel *permissions = new QLabel( i18n("Permissions:"), page);
+    m_filepermissions = new KSqueezedTextLabel( fi->permissionsString(),
+                                                page);
+    permissions->setBuddy( m_filepermissions );
+    hlay7->addWidget( permissions );
+    hlay7->addStretch( 1 );
+    hlay7->addWidget( m_filepermissions );
+        
+    KSeparator *sep2 = new KSeparator (Horizontal, page);
+    vlay->addWidget(sep2);
+    
+    vlay->addStretch(1);
+}
+
+void ImageProperties::slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
+                                              const KFileMetaInfo*)
+{
+    m_generalThumb->setPixmap(pix);
+}
 
 #include "imageproperties.moc"
 
