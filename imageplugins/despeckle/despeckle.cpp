@@ -6,7 +6,7 @@
  * 
  * Copyright 2004 by Gilles Caulier
  *
- * Desplecke algorithm come from plug-ins/common/despeckle.c 
+ * Despeckle algorithm come from plug-ins/common/despeckle.c 
  * Gimp 2.0 source file and copyrighted 
  * 1997-1998 by Michael Sweet (mike at easysw.com)
  * 
