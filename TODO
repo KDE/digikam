@@ -12,6 +12,7 @@ Main Application:
 * Save relative sizes of treeview and thumbnailview
 * Option to hide header in thumbnail view
 * Option to hide image names
+* Added LibKIPI support instead Digikamplugins interface.
 
 CameraClient:
 
@@ -33,7 +34,7 @@ ImageViever (for 0.7.0):
 * Add image file format export (in plugin)..
 * Add delete image option
 
-Plugins:
+Plugins (LibKIPI):
 
-==> see the TODO file in 'digikamplugins' CVS module.
+==> see the TODO file in 'kdeextragear-libs-1' CVS module.
 
