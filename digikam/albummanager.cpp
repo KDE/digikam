@@ -516,7 +516,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, QString&
     return true;
 }
 
-bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString errMsg)
+bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
 {
     if (!album)
     {

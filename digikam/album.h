@@ -72,7 +72,6 @@ public:
     Type    type() const;
 
     bool    isRoot() const;
-    bool    hasDescendant(Album* album) const;
     bool    isAncestorOf(Album* album) const;
     
     void    setIcon(const QString& icon);
