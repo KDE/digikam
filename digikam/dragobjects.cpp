@@ -129,7 +129,7 @@ TagDrag::TagDrag( int albumid, QWidget *dragSource,
 
 bool TagDrag::canDecode( const QMimeSource* e )
 {
-    e->provides("digikam/tag-id");
+    return e->provides("digikam/tag-id");
 }
 
 const char* TagDrag::format( int i ) const

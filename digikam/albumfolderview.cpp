@@ -1104,10 +1104,9 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         }
     }
     
-    // Do not allow an album to be dropped on it's child when dragging tags
-    AlbumFolderItem *folderItem = static_cast<AlbumFolderItem*>(dragItem_);
-    if(TagDrag::canDecode(event) &&
-       (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album())))
+    // Do not allow an album to be dropped on it's child
+    AlbumFolderItem *folderItem = dynamic_cast<AlbumFolderItem*>(dragItem_);
+    if (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album()))
     {
         event->ignore();
         return;
@@ -1118,7 +1117,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         // only allow DnD onto a tag album if its being dragged
         // from a physical album or a tag album
         // additional allow drags from tag onto a tag to move it
-        if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) ||
+        if (!(TagItemsDrag::canDecode(event)   ||
+              AlbumItemsDrag::canDecode(event) ||
               TagDrag::canDecode(event)))
         {
             event->ignore();
@@ -1138,7 +1138,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     dropTarget_->addDropHighlight();
 }
 
-void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *event)
+void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
 {
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
@@ -1154,7 +1154,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
     if (!a)
         return;
 
-    if (a->isRoot() && a->type() == Album::PHYSICAL) {
+    if (a->type() == Album::PHYSICAL) {
         PAlbum *album = static_cast<PAlbum*>(a);
         phyAlbumDropEvent(event, album);
     }
@@ -1365,12 +1365,11 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
             
             ListItem *parentItem = dragItem_->parent();
             parentItem->removeChild(dragItem_);
-            ListItem *dropItem = itemAt( event->pos() );
+            AlbumFolderItem* dropItem =
+                static_cast<AlbumFolderItem*>(album->getViewItem());
             dropItem->insertChild(dragItem_);
-        }
-        else if(id == 20)
-        {
-            return;
+            if (!dropItem->isOpen())
+                dropItem->setOpen(true);
         }
     }
 }
