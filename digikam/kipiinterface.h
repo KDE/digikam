@@ -32,7 +32,6 @@
 // Qt includes.
 
 #include <qvaluelist.h>
-#include <qdatetime.h>
 #include <qstring.h>
 #include <qmap.h>
 
@@ -49,9 +48,12 @@
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
+class QDateTime;
+
 class AlbumManager;
 class Album;
 class PAlbum;
+class TAlbum;
 class AlbumDB;
 class AlbumSettings;
 
@@ -68,6 +70,7 @@ class ImageInfo;
 class DigikamImageInfo : public KIPI::ImageInfoShared
 {
 public:
+    
     DigikamImageInfo( KIPI::Interface* interface, const KURL& url );
     ~DigikamImageInfo();
     
@@ -85,17 +88,14 @@ public:
     virtual void clearAttributes();
     virtual void addAttributes( const QMap<QString,QVariant>& );
     
-    virtual int DigikamImageInfo::angle();
+    virtual int  angle();
     virtual void setAngle( int angle );
     
 private:
-    AlbumManager *albumManager_;
-    QString   imageName_;
-    KURL      imageUrl_;
-    KURL      albumURL_;
-    QString   imageComments_;
-    PAlbum    *palbum_;
-    AlbumDB   *albumDB_;
+
+    PAlbum *parentAlbum();
+
+    PAlbum *palbum_;
 };
 
 
@@ -103,10 +103,13 @@ private:
 
 class DigikamImageCollection : public KIPI::ImageCollectionShared
 {
+    
 public:
-    enum Type { AllAlbumItems, AlbumItemsSelection };
 
-    DigikamImageCollection( Type tp, QString filter, PAlbum *album=0 );
+    enum Type { AllItems, SelectedItems };
+
+    DigikamImageCollection( Type tp, Album *album,
+                            const QString& filter );
     ~DigikamImageCollection();
     
     virtual QString name();
@@ -119,14 +122,13 @@ public:
     virtual KURL uploadRoot();
     virtual QString uploadRootName();
     
-protected:
-    PAlbum       *palbum_;
-    AlbumManager *albumManager_;
-    
-    KURL commonRoot();
-    
 private:
-    Type tp_;
+
+    KURL::List imagesFromPAlbum(PAlbum* album) const;
+    KURL::List imagesFromTAlbum(TAlbum* album) const;
+    
+    Type    tp_;
+    Album  *album_;
     QString imgFilter_;
 };
 
@@ -138,11 +140,10 @@ class DigikamKipiInterface : public KIPI::Interface
     Q_OBJECT
 
 public:
+
     DigikamKipiInterface( QObject *parent, const char *name=0);
     ~DigikamKipiInterface();
 
-    void readSettings();
-    
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
     virtual KIPI::ImageCollection currentScope();
@@ -154,23 +155,22 @@ public:
     virtual int features() const;
     virtual QString fileExtensions();
 
-protected slots:
+private slots:
+
     void slot_onAddImageFinished(KIO::Job* job);
 
 public slots:
+
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Album *palbum );
     
-
-protected:
-    QString askForCategory();
+private:
     
     // For Add images operations.
     PAlbum       *m_sourceAlbum;
     PAlbum       *m_targetAlbum;
     QString       m_imageFileName;
     
-    QString       imagesFileFilter_; 
     AlbumManager *albumManager_;
     AlbumDB      *albumDB_;
 };

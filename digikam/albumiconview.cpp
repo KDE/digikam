@@ -1293,7 +1293,8 @@ void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& p
 void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
 {
     /*
-      todo
+      //TODO: Move the kde thumbnail loading into thumbnailjob
+      
     KIO::PreviewJob* job = KIO::filePreview(item->url(), (int)d->thumbSize.size());
                                             
     connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),

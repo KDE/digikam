@@ -485,8 +485,6 @@ void DigikamApp::slotSetupChanged()
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
     m_config->sync();
-
-    KipiInterface_->readSettings();
 }
 
 void DigikamApp::slotEditKeys()
@@ -556,12 +554,6 @@ void DigikamApp::loadPlugins()
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
-    connect( mAlbumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
-             KipiInterface_, SLOT( slotSelectionChanged( bool ) ) );
-
-    connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( Album * ) ),
-             KipiInterface_, SLOT( slotCurrentAlbumChanged( Album * ) ) );
-                 
     ignores << QString::fromLatin1( "HelloWorld" );    
     ignores << QString::fromLatin1( "KameraKlient" );    
     
