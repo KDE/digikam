@@ -712,6 +712,12 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
                         it->setSelected(true, false);
                     }
                 }
+//                for (ThumbItem *it = item->next; it; it = it->next) 
+//                {
+//                    if (it->isSelected()) {
+//                        it->setSelected(false, false);
+//                    }
+//                }
             }
             else if (fwdSelection) {
                 for (ThumbItem *it = item;
@@ -720,8 +726,16 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
                         it->setSelected(true, false);
                     }
                 }
+//                for (ThumbItem *it = item->prev; it; it = it->prev) 
+//                {
+//                    if (it->isSelected()) {
+//                        it->setSelected(false, false);
+//                    }
+//                }
             }
             else {
+                // No other item is selected, invert the selection 
+                // of the current item
                 item->setSelected(!item->isSelected(), false);
             }
 
@@ -1310,8 +1324,14 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         
     case Key_Right: {
         ThumbItem *item = currItem ? currItem->next : d->firstItem;
+        
         if (item)
         {
+            if(currItem && currItem->isSelected() && item->isSelected())
+            {
+                currItem->setSelected(false,false);
+            }
+            
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
@@ -1321,8 +1341,14 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         
     case Key_Left: {
         ThumbItem *item = currItem ? currItem->prev : d->firstItem;
+        
         if (item)
         {
+            if(currItem && currItem->isSelected() && item->isSelected())
+            {
+                currItem->setSelected(false,false);
+            }
+            
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
@@ -1333,7 +1359,7 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     case Key_Up: {
 
         currItem = currItem ? currItem : d->firstItem;
-        
+
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() - d->spacing*2;
         
@@ -1346,6 +1372,11 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 
         if (item)
         {
+            if(currItem && currItem->isSelected() && item->isSelected())
+            {
+                currItem->setSelected(false,false);
+            }
+
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
@@ -1356,7 +1387,7 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     case Key_Down: {
 
         currItem = currItem ? currItem : d->firstItem;
-
+        
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() + currItem->height() +
                 d->spacing * 2;
@@ -1370,6 +1401,11 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         
         if (item)
         {
+            if(currItem && currItem->isSelected() && item->isSelected())
+            {
+                currItem->setSelected(false,false);
+            }
+            
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }

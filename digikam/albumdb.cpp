@@ -247,7 +247,7 @@ void AlbumDB::readPAlbum(PAlbum *album)
 
     if (!values.isEmpty()) 
     {
-	album->setID(values[0].toInt());    
+        album->setID(values[0].toInt());    
         album->setDate(QDate::fromString(values[1], Qt::ISODate), false);
         album->setCaption(values[2], false);
         album->setCollection(values[3], false);
