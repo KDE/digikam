@@ -61,13 +61,12 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("Digikam"),
-                          "0.7.0",
+                          "0.7.0-cvs",
                           description,
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2004, Digikam developers team"),
                           0,
-                          "http://digikam.sourceforge.net",
-                          "digikam-users@lists.sourceforge.net");
+                          "http://digikam.sourceforge.net");
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Main coordinator and developer"),
