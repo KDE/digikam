@@ -266,7 +266,7 @@ void ImageDescEdit::slotApply()
             AlbumSettings::instance()->getSaveExifComments())
         {
             // store as JPEG Exif comment
-            KFileMetaInfo metaInfo(fileURL, "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo metaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
 
             // set Jpeg comment
              if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"

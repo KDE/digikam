@@ -23,8 +23,7 @@
 #include <kdirlister.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-
-#include <kdirwatch.h>
+#include <kdeversion.h>
 
 #include <qfile.h>
 #include <qdict.h>
@@ -70,8 +69,6 @@ public:
     Album            *currentAlbum;
     
     KURL::List        urlsToOpen;
-
-    KDirWatch        *dirWatch;
 };
     
 
@@ -294,7 +291,11 @@ bool AlbumManager::createPAlbum(PAlbum* parent, const QString& name,
     KURL url = parent->getKURL();
     url.addPath(name);
 
+#if KDE_IS_VERSION(3,2,0)
     return KIO::NetAccess::mkdir(url, (QWidget*)0);
+#else
+    return KIO::NetAccess::mkdir(url);
+#endif
 }
 
 bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)
@@ -311,7 +312,12 @@ bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)
         return false;
     }
 
-    if (KIO::NetAccess::del(album->getKURL(), (QWidget*)0)) {
+#if KDE_IS_VERSION(3,2,0)
+    if (KIO::NetAccess::del(album->getKURL(), (QWidget*)0))
+#else
+    if (KIO::NetAccess::del(album->getKURL()))
+#endif
+    {
         d->db->deleteAlbum(album);
         return true;
     }

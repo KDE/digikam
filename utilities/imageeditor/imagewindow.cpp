@@ -44,6 +44,8 @@
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <kdeversion.h>
+
 #include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
@@ -537,7 +539,7 @@ void ImageWindow::slotCommentsEdit()
         
         if (settings->getSaveExifComments())
         {
-            KFileMetaInfo metaInfo(m_urlCurrent, "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo metaInfo(m_urlCurrent.path(), "image/jpeg", KFileMetaInfo::Fastest);
             if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
             {
                 // store as JPEG JFIF comment
@@ -571,7 +573,11 @@ void ImageWindow::slotDeleteCurrentItem()
         return;
     }
 
+#if KDE_IS_VERSION(3,2,0)
     if (!KIO::NetAccess::del(m_urlCurrent, this))
+#else
+    if (!KIO::NetAccess::del(m_urlCurrent))
+#endif
     {
         QString errMsg(KIO::NetAccess::lastErrorString());
         KMessageBox::error(this, errMsg, errMsg);

@@ -129,7 +129,7 @@ void DigikamImageInfo::setDescription( const QString& description )
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveExifComments())
         {
-            KFileMetaInfo metaInfo(_url, "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo metaInfo(_url.path(), "image/jpeg", KFileMetaInfo::Fastest);
             if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
             {
                // store as JPEG JFIF comment
