@@ -13,7 +13,7 @@ libdigikaminterfaces_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 digikaminclude_HEADERS = plugin.h albummanager.h albuminfo.h \
 			digikamio.h thumbnailjob.h
 
-digikamincludedir = $(includedir)/digikam/digikam
+digikamincludedir = $(includedir)/digikam
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	$(all_includes) 
