@@ -1,5 +1,7 @@
 METASOURCES = AUTO
-INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor $(all_includes)
+INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor \
+	-I$(top_srcdir)/digikam/libs/guibuilder \
+	$(all_includes)
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_core.la
