@@ -1,5 +1,6 @@
 v0.6.3 (usingLibKIPI)-Alpha1 
 ----------------------------------------------------------------------------
+        * Updated Splashscreen for 0.6.3 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
         * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
 
 v0.6.2-RC        05/07/04
