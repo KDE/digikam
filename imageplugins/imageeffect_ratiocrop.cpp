@@ -64,7 +64,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
     setButtonWhatsThis ( User1, i18n("<p>Reset selection area to the image center.") );     
-    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size accordinly with the current ratio.") );     
+    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size according to the current ratio.") );     
     
     // -------------------------------------------------------------
         
@@ -119,7 +119,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_useRuleThirdLines = new QCheckBox( i18n("Show Rule Third Lines"), plainPage());
     QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can display the rule third lines "
-                                               "who help you to compose your photograph."));
+                                               "which help you to compose your photograph."));
     
     l2->addWidget( m_customLabel1 );
     l2->addWidget( m_customRatioNInput );
