@@ -96,6 +96,7 @@
 #include "cameradragobject.h"
 #include "dragobjects.h"
 
+#include "texture.h"
 #include "albumiconitem.h"
 #include "digikamapp.h"
 #include "albumiconview.h"
@@ -1128,16 +1129,18 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
     
-    if (!d->currentAlbum || (!QUriDrag::canDecode(event) &&
-                             !CameraDragObject::canDecode(event))
-        || event->source() == this) {
+    if (!d->currentAlbum || d->currentAlbum->type() != Album::PHYSICAL
+        || (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event))
+        || event->source() == this)
+    {
         event->ignore();
         return;
     }
 
     if (QUriDrag::canDecode(event)) {
 
-        KURL destURL(d->currentAlbum->getKURL());
+        PAlbum* palbum = (PAlbum*)d->currentAlbum;
+        KURL destURL(palbum->getKURL());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
@@ -1590,7 +1593,7 @@ void AlbumIconView::updateItemRectsPixmap()
         d->fnXtra.setPixelSize(fnSz-2);
     }
 
-    int margin  = 2;
+    int margin  = 5;
     int w = QMAX(d->thumbSize.size(), 100) + 2*margin;
 
     QFontMetrics fm(d->fnReg);
@@ -1658,31 +1661,27 @@ void AlbumIconView::updateItemRectsPixmap()
     d->itemRegPixmap.resize(d->itemRect.width(), d->itemRect.height());
     d->itemRegPixmap.fill(Qt::white);
 
-    QRegion reg(d->itemRect);
-    reg -= d->itemPixmapRect;
-
     {
+        d->itemRegPixmap.resize(d->itemRect.width(), d->itemRect.height());
+        Texture tex(d->itemRect.width()-2, d->itemRect.height()-2,
+                    QColor("#efefef"), QColor("#e0e0e0"));
+        QPixmap pix = tex.renderPixmap();
         QPainter p(&d->itemRegPixmap);
-        p.setClipRegion(reg);
-        p.fillRect(d->itemRect, QColor("#ededed"));
-        p.setPen(QColor("#fdfdfd"));
-        p.drawLine(0,0,0,d->itemRect.height()-1);
-        p.drawLine(0,0,d->itemRect.width()-1,0);
-        p.setPen(QColor("#adadad"));
-        p.drawLine(0,d->itemRect.height()-1,d->itemRect.width()-1,d->itemRect.height()-1);
-        p.drawLine(d->itemRect.width()-1,0,d->itemRect.width()-1,d->itemRect.height()-1);
+        p.setPen(Qt::black);
+        p.drawPixmap(1, 1, pix);
+        p.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
         p.end();
     }
 
-    d->itemSelPixmap.resize(d->itemRect.width(), d->itemRect.height());
-    d->itemSelPixmap.fill(Qt::white);
-
     {
+        d->itemSelPixmap.resize(d->itemRect.width(), d->itemRect.height());
+        Texture tex(d->itemRect.width()-2, d->itemRect.height()-2,
+                    colorGroup().highlight().light(120), colorGroup().highlight());
+        QPixmap pix = tex.renderPixmap();
         QPainter p(&d->itemSelPixmap);
-        p.setClipRegion(reg);
-        p.fillRect(d->itemRect, colorGroup().highlight());
-        p.setPen(QColor("#666666"));
-        p.drawRect(d->itemRect);
+        p.setPen(Qt::black);
+        p.drawPixmap(1, 1, pix);
+        p.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
         p.end();
     }
 }
