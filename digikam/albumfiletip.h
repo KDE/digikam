@@ -27,6 +27,7 @@
 
 #include <qframe.h>
 #include <qstring.h>
+#include <qpixmap.h>
 
 class QLabel;
 class QDateTime;
@@ -45,16 +46,20 @@ public:
 protected:
 
     bool event(QEvent *e);
+    void drawContents(QPainter *p);
 
 private:
 
     void    reposition();
+    void    renderArrows();
     void    updateText();
     QString dateToString(const QDateTime& date) const;
     
     AlbumIconView* m_view;
     AlbumIconItem* m_iconItem;
     QLabel*        m_label;
+    int            m_corner;
+    QPixmap        m_corners[4];
 };
 
 #endif /* ALBUMFILETIP_H */

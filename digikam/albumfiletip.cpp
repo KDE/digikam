@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qdatetime.h>
 #include <qstylesheet.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kfileitem.h>
@@ -46,6 +47,7 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
 {
     m_view     = view;
     m_iconItem = 0;
+    m_corner   = 0;
     hide();
 
     setPalette( QToolTip::palette() );
@@ -56,9 +58,11 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     m_label->setMargin(0);
     m_label->setAlignment(Qt::AlignAuto | Qt::AlignVCenter);
 
-    QVBoxLayout *layout = new QVBoxLayout(this, 5, 0);
+    QVBoxLayout *layout = new QVBoxLayout(this, 10, 0);
     layout->addWidget(m_label);
     layout->setResizeMode(QLayout::Fixed);
+
+    renderArrows();
 }
 
 AlbumFileTip::~AlbumFileTip()
@@ -87,7 +91,13 @@ void AlbumFileTip::reposition()
     rect.moveBy( off.x(), off.y() );
 
     QPoint pos = rect.center();
+    // m_corner:
+    // 0: upperleft
+    // 1: upperright
+    // 2: lowerleft
+    // 3: lowerright
 
+    m_corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
     QRect desk = KGlobalSettings::desktopGeometry(rect.center());
     if (rect.center().x() + width() > desk.right())
@@ -95,8 +105,10 @@ void AlbumFileTip::reposition()
         // to the left
         if (pos.x() - width() < 0) {
             pos.setX(0);
+            m_corner = 4;
         } else {
             pos.setX( pos.x() - width() );
+            m_corner = 1;
         }
     }
     // should the tooltip be shown above or below the ivi ?
@@ -104,11 +116,83 @@ void AlbumFileTip::reposition()
     {
         // above
         pos.setY( rect.top() - height() );
+        m_corner += 2;
     }
     else pos.setY( rect.bottom() );
 
     move( pos );
     
+}
+
+void AlbumFileTip::renderArrows()
+{
+    int w = 10;
+
+    {
+        // left top arrow
+        QPixmap& pix = m_corners[0];
+        pix.resize(w,w);
+        pix.fill(colorGroup().background());
+
+        QPainter p(&pix);
+        p.setPen(QPen(Qt::black, 1));
+
+        for (int j=0; j<w; j++)
+        {
+            p.drawLine(0,j,w-j-1,j);
+        }
+        p.end();
+    }
+
+    {
+        // right top arrow
+        QPixmap& pix = m_corners[1];
+        pix.resize(w,w);
+        pix.fill(colorGroup().background());
+
+        QPainter p(&pix);
+        p.setPen(QPen(Qt::black, 1));
+
+        for (int j=0; j<w; j++)
+        {
+            p.drawLine(j,j,w-1,j);
+        }
+
+        p.end();
+    }
+
+    {
+        // left bottom arrow
+        QPixmap& pix = m_corners[2];
+        pix.resize(w,w);
+        pix.fill(colorGroup().background());
+
+        QPainter p(&pix);
+        p.setPen(QPen(Qt::black, 1));
+
+        for (int j=0; j<w; j++)
+        {
+            p.drawLine(0,j,j,j);
+        }
+        p.end();
+    }
+
+    {
+        // right bottom arrow
+        QPixmap& pix = m_corners[3];
+        pix.resize(w,w);
+        pix.fill(colorGroup().background());
+
+        QPainter p(&pix);
+        p.setPen(QPen(Qt::black, 1));
+
+        for (int j=0; j<w; j++)
+        {
+            p.drawLine(w-j-1,j,w-1,j);
+        }
+        
+        p.end();
+    }
 }
 
 bool AlbumFileTip::event(QEvent *e)
@@ -128,6 +212,34 @@ bool AlbumFileTip::event(QEvent *e)
     return QFrame::event(e);
 }
 
+void AlbumFileTip::drawContents(QPainter *p)
+{
+    if (m_corner >= 4)
+    {
+        QFrame::drawContents( p );
+        return;
+    }
+
+    QPixmap &pix = m_corners[m_corner];
+
+    switch ( m_corner )
+    {
+        case 0:
+            p->drawPixmap( 3, 3, pix );
+            break;
+        case 1:
+            p->drawPixmap( width() - pix.width() - 3, 3, pix );
+            break;
+        case 2:
+            p->drawPixmap( 3, height() - pix.height() - 3, pix );
+            break;
+        case 3:
+            p->drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
+            break;
+    }
+
+    QFrame::drawContents( p );
+}
 
 
 void AlbumFileTip::updateText()
