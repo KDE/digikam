@@ -54,7 +54,6 @@
 #include <kurl.h>
 #include <kurldrag.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -68,6 +67,11 @@
 #include <libkexif/kexif.h>
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kcalendarsystem.h>
+#endif
 
 // Local includes.
 
@@ -912,11 +916,18 @@ void AlbumIconView::updateBanner()
 
     QDate date = d->currentAlbum->getDate();
 
+#if KDE_IS_VERSION(3,2,0)
     d->albumDate = i18n("%1 %2 - %3 Items")
-                   .arg(KGlobal::locale()->calendar()->monthName(date, true))
+                   .arg(KGlobal::locale()->calendar()->monthName(date, false))
                    .arg(KGlobal::locale()->calendar()->year(date))
                    .arg(QString::number(count()));
-
+#else
+    d->albumDate = i18n("%1 %2 - %3 Items")
+                   .arg(KGlobal::locale()->monthName(date.month()))
+                   .arg(QString::number(date.year()))
+                   .arg(QString::number(count()));
+#endif
+    
     calcBanner();
     repaintBanner();
 }

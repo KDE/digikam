@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kurldrag.h>
 #include <kmessagebox.h>
@@ -53,6 +52,7 @@
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
+#include <kcalendarsystem.h>
 #else
 #include <klineeditdlg.h>
 #endif
@@ -248,7 +248,11 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(AlbumFolderItem* folderItem)
     QDate date = folderItem->albumInfo()->getDate();
     
     QString timeString = QString::number(date.year()) + ", " +
+#if KDE_IS_VERSION(3,2,0)
                          KGlobal::locale()->calendar()->monthName(date, false);
+#else
+                         KGlobal::locale()->monthName(date.month(), false);
+#endif
 
     AlbumFolderItem* parentItem = 0;
     
