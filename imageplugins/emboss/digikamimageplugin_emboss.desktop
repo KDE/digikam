@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Emboss Image Plugin
+Comment=Emboss image effect plugin for digikam
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+X-KDE-Library=digikamimageplugin_emboss
+author=Gilles Caulier, caulier dot gilles at free dot fr
