@@ -42,6 +42,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kpopupmenu.h>
+#include <khelpmenu.h>
 
 #include "albummanager.h"
 #include "album.h"
@@ -98,6 +100,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     QHBoxLayout* btnLayout = new QHBoxLayout();
     
     m_advBtn      = new QPushButton(i18n("&Advanced %1").arg(">>"), this);
+    m_helpBtn     = new QPushButton(i18n("&Help"), this);
     m_downloadBtn = new QPushButton(i18n("&Download"), this);
     m_deleteBtn   = new QPushButton(i18n("D&elete"), this);
     m_closeBtn    = new QPushButton(i18n("&Close"), this);
@@ -105,12 +108,21 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     btnLayout->addWidget(m_advBtn);
     btnLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Expanding,
                                        QSizePolicy::Fixed));
+    btnLayout->addWidget(m_helpBtn);
     btnLayout->addWidget(m_downloadBtn);
     btnLayout->addWidget(m_deleteBtn);
     btnLayout->addWidget(m_closeBtn);
 
-    mainLayout->addLayout(btnLayout);
+    // About popupmenu button using a slot for calling the camera interface
+    // anchor in Digikam handbook.
+    
+    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(), false);
+    helpMenu->menu()->removeItemAt(0);
+    helpMenu->menu()->insertItem(i18n("Digikam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    m_helpBtn->setPopup( helpMenu->menu() );
 
+    mainLayout->addLayout(btnLayout);
+    
     m_advBox = new QVBox(this);
     m_advBox->setSpacing(5);
     m_showAdvanced = false;
@@ -216,6 +228,13 @@ void CameraUI::closeEvent(QCloseEvent* e)
     delete m_controller;
     saveSettings();
     e->accept();    
+}
+
+
+void CameraUI::slotHelp()
+{
+    KApplication::kApplication()->invokeHelp("camerainterface.anchor",
+                                             "digikam");
 }
 
 void CameraUI::slotBusy(bool val)

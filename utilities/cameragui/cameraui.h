@@ -69,6 +69,7 @@ private:
     
     CameraIconView*   m_view;
 
+    QPushButton*      m_helpBtn;
     QPushButton*      m_closeBtn;
     QPushButton*      m_downloadBtn;
     QPushButton*      m_deleteBtn;
@@ -90,6 +91,8 @@ private:
     CameraController* m_controller;
 
 private slots:
+
+    void slotHelp();
 
     void slotConnected(bool val);
     void slotBusy(bool val);

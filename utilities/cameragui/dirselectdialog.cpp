@@ -49,9 +49,10 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
                                  const QString& startDir,
                                  QWidget* parent,
                                  QString header)
-    : KDialogBase(parent, 0, true, i18n("Select Album"), User1|Ok|Cancel)
+    : KDialogBase(parent, 0, true, i18n("Select Album"), Help|User1|Ok|Cancel)
 {
     setButtonText(User1, i18n("&New Album"));
+    setHelp("targetalbumdialog.anchor", "digikam");
     
     QFrame *page     = makeMainWidget();
     QVBoxLayout* lay = new QVBoxLayout(page, 5, 5);
