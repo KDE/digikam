@@ -869,16 +869,4 @@ void Canvas::slotPaintStrips()
     }
 }
 
-void Canvas::keyPressEvent(QKeyEvent *e)
-{
-    if (e->key() == Qt::Key_Plus)
-        slotIncreaseZoom();
-    else if (e->key() == Qt::Key_Minus)
-        slotDecreaseZoom();
-    else if (e->key() == Qt::Key_A)
-        slotToggleAutoZoom();
-
-    e->accept();
-}
-
 #include "canvas.moc"
