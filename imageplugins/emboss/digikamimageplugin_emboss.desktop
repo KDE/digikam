@@ -1,25 +1,26 @@
 [Desktop Entry]
 Name=ImagePlugin_Emboss
+Name[da]=Relief
 Name[it]=PluginImmagini_Rilievo
 Name[nl]=Afbeeldingplugin_Reliëf
 Name[pt]='Plugin' de Elevar
 Name[pt_BR]='Plugin' de Elevar
 Name[sr]=Сликовни прикључак — рељеф
-Name[sr@Latn]=Сликовни прикључак — рељеф
 Name[sv]=Insticksprogram för reliefeffekt
 Name[ta]=பிம்பசொருகுப்பொருள்_எம்போஸ்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Emboss image effect plugin for digikam
+Comment[da]=Reliefeffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Gravureffektes
+Comment[et]=Digikami kohrutuse pildiefektiplugin
 Comment[fr]=Module externe de Digikam pour mettre en relief une image
 Comment[it]=Plugin di effetto di rilievo delle immagini per Digikam
 Comment[nl]=Digikam-effectplugin voor reliëf-afbeeldingen
 Comment[pt]='Plugin' de efeito de elevar imagem para o digikam
 Comment[pt_BR]='Plugin' de efeito de elevar imagem para o digikam
 Comment[sr]=Digikam-ов прикључак за ефекат рељефа на сликама
-Comment[sr@Latn]=Digikam-ов прикључак за ефекат рељефа на сликама
 Comment[sv]=Digikam insticksprogram för reliefbildeffekt
 Comment[ta]=டிஜிகாமிற்கான மேல்தூக்கி நிற்கும் பிம்ப விளைவு
 

@@ -1,25 +1,26 @@
 [Desktop Entry]
 Name=ImagePlugin_Charcoal
+Name[da]=Kul
 Name[it]=PluginImmagini_Carboncino
 Name[nl]=Afbeeldingplugin_Houtskool
 Name[pt]='Plugin' Carvão
 Name[pt_BR]='Plugin' Carvão
 Name[sr]=Сликовни прикључак — воштане боје
-Name[sr@Latn]=Сликовни прикључак — воштане боје
 Name[sv]=Insticksprogram för kolteckning
 Name[ta]=பிம்பசொருகுப்பொருள்_கார்கோல்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Charcoal drawing image effect plugin for digikam
+Comment[da]=Kuleffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Kohlezeichnungseffektes
+Comment[et]=Digikami söejoonistuse pildiefektiplugin
 Comment[fr]=Module externe de Digikam pour simuler le dessin au fusain
 Comment[it]=Plugin di effetto di disegno dell'immagine con carboncino per Digikam
 Comment[nl]=Digikam-effectplugin voor houtskooltekeningen
 Comment[pt]='Plugin' de efeito de desenho de imagem a carvão para o digikam
 Comment[pt_BR]='Plugin' de efeito de desenho de imagem a carvão para o digikam
 Comment[sr]=Digikam-ов прикључак за ефекат соларизације слика
-Comment[sr@Latn]=Digikam-ов прикључак за ефекат соларизације слика
 Comment[sv]=Digikam insticksprogram för kolteckningsbildeffekt
 Comment[ta]=டிஜிகாமிற்கான கார்கல் வரையும் பிம்ப விளைவு சொருகுப்பொருள்
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_FilmGrain
+Name[da]=Kornet film
 Name[it]=PluginImmagini_GranaPellicola
 Name[nl]=Afbeeldingplugin_filmkorreligheid
 Name[pt]='Plugin' de Grão de Filme
@@ -11,7 +12,9 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Film grain image effect plugin for digikam
+Comment[da]=Kornet film-effekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Effektes von Körnigen Film
+Comment[et]=Digikami teralisuse pildiefektiplugin
 Comment[fr]=Module externe de Digikam pour simuler le grain d'un film
 Comment[it]=Plugin per l'effetto di grana della pellicola delle immagini per Digikam
 Comment[nl]=Digikam-effectplugin voor filmkorreligheid

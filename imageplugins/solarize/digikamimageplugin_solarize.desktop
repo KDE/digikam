@@ -1,27 +1,28 @@
 [Desktop Entry]
 Name=ImagePlugin_Solarize
+Name[da]=Solarisér
 Name[en_GB]=ImagePlugin_Solarise
 Name[it]=PluginImmagini_Solarizza
 Name[nl]=Afbeeldingplugin_Solarizeren
 Name[pt]='Plugin' de Solarizar
 Name[pt_BR]='Plugin' de Solarizar
 Name[sr]=Сликовни прикључак — осунчавање
-Name[sr@Latn]=Сликовни прикључак — осунчавање
 Name[sv]=Insticksprogram för solarisering
 Name[ta]=பிம்பசொருகுப்பொருள்_சாலரைஸ்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Image solarize effect plugin for digikam
+Comment[da]=Solariséreffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Solarisierungseffektes
 Comment[en_GB]=Image solarise effect plugin for digikam
+Comment[et]=Digikami ülesärituse pildiefektiplugin
 Comment[fr]=Module externe de Digikam pour solariser une image
 Comment[it]=Plugin di effetto di solarizzazione delle immagini per Digikam
 Comment[nl]=Digikam-plugin voor solarizeereffecten
 Comment[pt]='Plugin' de solarizar imagem para o digikam
 Comment[pt_BR]='Plugin' de solarizar imagem para o digikam
 Comment[sr]=Digikam-ов прикључак за ефекат осунчавања слика
-Comment[sr@Latn]=Digikam-ов прикључак за ефекат осунчавања слика
 Comment[sv]=Digikam insticksprogram för att solarisera bild
 Comment[ta]=டிஜிகாமிற்கான பிம்ப கறுப்பாக்கும் விளைவு சொருகுப்பொருள்
 

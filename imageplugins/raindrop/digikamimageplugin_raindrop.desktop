@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_RainDrop
+Name[da]=Regndråbe
 Name[it]=PluginImmagini_GocciaDiPioggia
 Name[nl]=Afbeeldingplugin_regendruppels
 Name[pt]='Plugin' de Gota de Chuva
@@ -10,7 +11,9 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Rain dropping image effect plugin for digikam
+Comment[da]=Regndråbeeffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Regentropfeneffektes
+Comment[et]=Digikami vihmapiisa pildiefektiplugin
 Comment[fr]=Module externe de Digikam pour simuler des gouttes de pluies
 Comment[it]=Plugin per l'effetto a goccia di pioggia delle immagini per Digikam
 Comment[nl]=Digikam-effectplugin voor regendruppels
