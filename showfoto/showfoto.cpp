@@ -19,27 +19,41 @@
  * 
  * ============================================================ */
 
+#include <qlayout.h>
+
 #include <kaction.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 
 #include "canvas.h"
+#include "thumbbar.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
 {
+    QWidget* widget = new QWidget(this);
+    QHBoxLayout *lay = new QHBoxLayout(widget);
 
-    m_canvas = new Canvas(this);
-    setCentralWidget(m_canvas);
+    m_canvas = new Canvas(widget);
+    m_bar    = new ThumbBarView(widget);
+    lay->addWidget(m_canvas);
+    lay->addWidget(m_bar);
+
+    setCentralWidget(widget);
 
     setupActions();
 
-    m_urlList = urlList;
+    connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
+            SLOT(slotOpenURL(const KURL&)));
+
     if (!urlList.isEmpty())
     {
-        m_urlCurrent = urlList.first();
-        m_canvas->load(m_urlCurrent.path());
+        for (KURL::List::const_iterator it = urlList.begin();
+             it != urlList.end(); ++it)
+        {
+            new ThumbBarItem(m_bar, *it);
+        }
     }
 
     resize(800,600);
@@ -47,6 +61,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
 ShowFoto::~ShowFoto()
 {
+    delete m_bar;
     delete m_canvas;
 }
 
@@ -84,41 +99,38 @@ void ShowFoto::slotOpenFile()
                                                 mimes,
                                                 this,
                                                 i18n("Open images"));
-    
-    
+        
     if (!urls.isEmpty())
     {
-        m_urlList = urls;
-        m_urlCurrent = urls.first();
-        m_canvas->load(m_urlCurrent.path());
+        m_bar->clear();
+        for (KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it)
+        {
+            new ThumbBarItem(m_bar, *it);
+        }
     }
 }
 
 void ShowFoto::slotNext()
 {
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-    if (it != m_urlList.end()) {
-
-        if (m_urlCurrent != m_urlList.last()) {
-           KURL urlNext = *(++it);
-           m_urlCurrent = urlNext;
-           m_canvas->load(m_urlCurrent.path());
-        }
+    ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->next())
+    {
+        m_bar->setSelected(curr->next());
     }
 }
 
 void ShowFoto::slotPrev()
 {
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-    if (it != m_urlList.begin()) {
-
-        if (m_urlCurrent != m_urlList.first())
-        {
-            KURL urlPrev = *(--it);
-            m_urlCurrent = urlPrev;
-            m_canvas->load(m_urlCurrent.path());
-        }
+    ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->prev())
+    {
+        m_bar->setSelected(curr->prev());
     }
+}
+
+void ShowFoto::slotOpenURL(const KURL& url)
+{
+    m_canvas->load(url.path());
 }
 
 void ShowFoto::slotAutoFit()

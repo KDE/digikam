@@ -26,6 +26,7 @@ class KAction;
 class KToggleAction;
 
 class Canvas;
+class ThumbBarView;
 
 class ShowFoto : public KMainWindow
 {
@@ -42,6 +43,7 @@ private slots:
     void slotNext();
     void slotPrev();
     void slotAutoFit();
+    void slotOpenURL(const KURL& url);
     
 private:
 
@@ -50,8 +52,7 @@ private:
 private:
 
     Canvas*         m_canvas;
-    KURL::List      m_urlList;
-    KURL            m_urlCurrent;
+    ThumbBarView*   m_bar;
     KToggleAction*  m_zoomFitAction;
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
