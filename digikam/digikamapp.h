@@ -67,7 +67,7 @@ class DigikamApp : public KMainWindow
 
 public:
 
-    DigikamApp();
+    DigikamApp(bool detectCamera=false);
     ~DigikamApp();
     
     static DigikamApp* getinstance();
@@ -201,6 +201,7 @@ private slots:
     void slotCameraConnect();
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
+    void slotCameraAutoDetect();
     void slotEditKeys();
     void slotConfToolbars();
     void slotToggleFullScreen();

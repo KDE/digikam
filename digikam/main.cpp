@@ -40,7 +40,6 @@
 #include <kimageio.h>
 #include <ktip.h>
 #include <kdeversion.h>
-#include <dcopclient.h>
 
 // KIPI Includes.
 
@@ -55,8 +54,8 @@
 
 static KCmdLineOptions options[] =
 {
-  { 0, 0, 0 }
-  // INSERT YOUR COMMANDLINE OPTIONS HERE
+    { "detect-camera", I18N_NOOP("Automatically detect and open camera"), 0 },
+    KCmdLineLastOption
 };
 
 int main(int argc, char *argv[])
@@ -193,11 +192,13 @@ int main(int argc, char *argv[])
 
     KApplication app;
 
-    // get our DCOP client and attach so that we may use it
-    DCOPClient *client = app.dcopClient();
-    client->attach();
-    app.dcopClient()->registerAs(app.name(), false);
-
+    bool detectCamera = false;
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    if (args && args->isSet("detect-camera"))
+    {
+        detectCamera = true;
+    }
+    
     KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
     QString version = config->readEntry("Version");
@@ -231,7 +232,7 @@ int main(int argc, char *argv[])
         splash = new SplashScreen();
     }
 
-    DigikamApp *digikam = new DigikamApp();
+    DigikamApp *digikam = new DigikamApp(detectCamera);
 
     app.setMainWidget(digikam);
     digikam->show();

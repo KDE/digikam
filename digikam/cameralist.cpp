@@ -23,6 +23,10 @@
 #include <qdom.h>
 #include <qtextstream.h>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
+#include "gpiface.h"
 #include "cameratype.h"
 #include "cameralist.h"
 
@@ -178,6 +182,32 @@ CameraType* CameraList::find(const QString& title)
             return ctype;
     }
     return 0;
+}
+
+CameraType* CameraList::autoDetect()
+{
+    QString model, port;
+    if (GPIface::autoDetect(model, port) != 0)
+    {
+        KMessageBox::error(0, i18n("Failed to auto-detect camera.\n"
+                                   "Please check if your camera is turned on "
+                                   "and retry."));
+        return 0;
+    }
+
+    // check if the camera is already in the list
+    for (CameraType *ctype = d->clist.first(); ctype;
+         ctype = d->clist.next()) {
+        if (ctype->model() == model && ctype->port() == port)
+            return ctype;
+    }
+
+    // looks like a new camera
+
+    CameraType* ctype = new CameraType(model, model, port, "/");
+    insert(ctype);
+
+    return ctype;
 }
 
 void CameraList::clear()

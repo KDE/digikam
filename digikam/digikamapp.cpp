@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qkeysequence.h>
 #include <qsignalmapper.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -71,7 +72,8 @@
 #include "imagewindow.h"
 #include "digikamapp.h"
 
-DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
+DigikamApp::DigikamApp(bool detectCamera)
+    : KMainWindow( 0, "Digikam" )
 {
     m_instance = this;
     m_config = kapp->config();
@@ -109,6 +111,12 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 
     // Load Themes
     populateThemes();
+
+    // Auto-detect camera if requested so
+    if (detectCamera)
+    {
+        QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
+    }
 }
 
 DigikamApp::~DigikamApp()
@@ -657,6 +665,13 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
 
     if (cAction)
         mCameraMenuAction->remove(cAction);
+}
+
+void DigikamApp::slotCameraAutoDetect()
+{
+    CameraType* ctype = mCameraList->autoDetect();
+    if (ctype)
+        ctype->action()->activate();        
 }
 
 void DigikamApp::slotSetup()
