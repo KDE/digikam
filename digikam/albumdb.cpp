@@ -400,7 +400,7 @@ bool AlbumDB::importXML(PAlbum *album)
             if (!name.isNull() && !caption.isNull()) {
                 execSql( QString("INSERT INTO Images (name, dirid, caption) "
                                  "VALUES('%1','%2','%3');")
-                         .arg(name)
+                         .arg(escapeString(name))
                          .arg(album->getID())
                          .arg(escapeString(caption)) );
             }
