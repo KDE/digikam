@@ -203,7 +203,7 @@ void DigikamApp::setupActions()
     sortActionList.append(i18n("By Date"));
     mAlbumSortAction->setItems(sortActionList);
 
-    mDeleteAction = new KAction(i18n("Delete Album from HardDisk"),
+    mDeleteAction = new KAction(i18n("Delete Album"),
                                     "edittrash",
                                     0,
                                     mView,
