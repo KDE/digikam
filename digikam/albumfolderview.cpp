@@ -99,6 +99,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     phyRootItem_ = 0;
     tagRootItem_ = 0;
     openAlbumTimer_ = new QTimer(this);
+    stateInitialLoading_ = true;
     
     connect(this, SIGNAL(signalSelectionChanged(ListItem*)),
             SLOT(slotSelectionChanged(ListItem*)));
@@ -424,10 +425,13 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
         }
 
         // restore album's parent state based on last run
-        int fakeID = (album->type() == Album::PHYSICAL) ? 100000 : 200000;
-        fakeID += album->getID();
-        pItem->setOpen(stateAlbumOpen_.contains(fakeID) &&
-                       stateAlbumOpen_[fakeID]);
+        if (stateInitialLoading_)
+        {
+            int fakeID = (album->type() == Album::PHYSICAL) ? 100000 : 200000;
+            fakeID += album->getID();
+            pItem->setOpen(stateAlbumOpen_.contains(fakeID) &&
+                           stateAlbumOpen_[fakeID]);
+        }
         
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
@@ -486,6 +490,8 @@ void AlbumFolderView::slotAlbumsCleared()
 
 void AlbumFolderView::slotAllAlbumsLoaded()
 {
+    stateInitialLoading_ = false;
+    
     AlbumFolderItem* folderItem = 0;
 
     if (stateAlbumSel_ >= 100000 &&

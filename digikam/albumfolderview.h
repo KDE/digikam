@@ -144,6 +144,7 @@ private:
     
     QMap<int,int>                      stateAlbumOpen_;
     int                                stateAlbumSel_;
+    bool                               stateInitialLoading_;
 
 signals:
 
