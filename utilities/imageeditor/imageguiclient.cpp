@@ -29,8 +29,9 @@
 
 #include "imageguiclient.h"
 
-ImageGUIClient::ImageGUIClient()
-    : QObject(0), Digikam::GUIClient()
+ImageGUIClient::ImageGUIClient(QWidget *parent)
+    : QObject(parent), Digikam::GUIClient(),
+      m_parent(parent)
 {
     m_navPrevAction = new KAction(i18n("&Previous"), "back",
                                   KStdAccel::shortcut( KStdAccel::Prior),

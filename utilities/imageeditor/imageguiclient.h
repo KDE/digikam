@@ -25,6 +25,7 @@
 #include <qobject.h>
 #include <guiclient.h>
 
+class QWidget;
 class KAction;
 class KToggleAction;
 
@@ -34,7 +35,7 @@ class ImageGUIClient : public QObject, public Digikam::GUIClient
 
 public:
     
-    ImageGUIClient();
+    ImageGUIClient(QWidget *parent);
 
     virtual QStringList guiDefinition() const;
     
@@ -69,6 +70,8 @@ private slots:
     void slotAboutKDE();
 
 private:
+
+    QWidget       *m_parent;
 
     KAction       *m_navNextAction;
     KAction       *m_navPrevAction;

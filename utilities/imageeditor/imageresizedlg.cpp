@@ -29,9 +29,9 @@
 
 #include "imageresizedlg.h"
 
-ImageResizeDlg::ImageResizeDlg(int *width, int *height)
+ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
     : KDialogBase(Plain, i18n("Resize Image"), Ok|Cancel, Ok,
-                  0, 0, true, true)
+                  parent, 0, true, true)
 {
     m_width  = width;
     m_height = height;

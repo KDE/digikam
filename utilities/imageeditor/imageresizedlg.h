@@ -34,7 +34,7 @@ class ImageResizeDlg : public KDialogBase
 
 public:
 
-    ImageResizeDlg(int* width, int* height);
+    ImageResizeDlg(QWidget* parent, int* width, int* height);
     ~ImageResizeDlg();
 
 private:

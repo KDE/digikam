@@ -57,7 +57,7 @@ ImageWindow::ImageWindow()
     // -- build the gui -------------------------------------
     
     m_guiFactory = new Digikam::GUIFactory();
-    m_guiClient  = new ImageGUIClient();
+    m_guiClient  = new ImageGUIClient(this);
     m_guiFactory->insertClient(m_guiClient);
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
@@ -315,7 +315,7 @@ void ImageWindow::slotResize()
     int width  = m_canvas->imageWidth();
     int height = m_canvas->imageHeight();
 
-    ImageResizeDlg dlg(&width, &height);
+    ImageResizeDlg dlg(this, &width, &height);
     if (dlg.exec() == QDialog::Accepted && 
         (width != m_canvas->imageWidth() ||
         height != m_canvas->imageHeight())) 
