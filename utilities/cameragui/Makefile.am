@@ -11,6 +11,7 @@ libcameragui_la_SOURCES = cameraui.cpp   cameraguiclient.cpp \
 libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
+	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	$(all_includes) 
 

@@ -30,6 +30,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
+		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \

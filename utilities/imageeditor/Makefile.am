@@ -2,8 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libimageeditor.la
 
-libimageeditor_la_SOURCES = guiclient.cpp  guifactory.cpp \
-			    imlibinterface.cpp imageiface.cpp \
+libimageeditor_la_SOURCES = imlibinterface.cpp imageiface.cpp \
 			    imagewidget.cpp imageplugin.cpp \
 			    imagepluginloader.cpp \
 			    imagewindow.cpp imageguiclient.cpp \
@@ -14,7 +13,7 @@ libimageeditor_la_SOURCES = guiclient.cpp  guifactory.cpp \
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB2) $(LIB_KEXIF) -ltiff
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	  -I$(top_srcdir)/digikam/interfaces \
+	  -I$(top_srcdir)/digikam/libs/guibuilder \
 	  -I$(top_srcdir)/digikam/utilities/kexif \
 	  $(IMLIB2_CFLAGS) $(all_includes) 
 
