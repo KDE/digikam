@@ -42,6 +42,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <kio/netaccess.h>
 
 #include <libkexif/kexifdata.h>
@@ -78,7 +79,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     KGlobal::dirs()->addResourceType("data",
                                      KGlobal::dirs()->kde_default("data")
                                      + "digikam");
-    
+
+    KGlobal::iconLoader()->addAppDir("digikam");
+
     ImagePluginLoader* imagePluginLoader
         = new ImagePluginLoader(this);
     

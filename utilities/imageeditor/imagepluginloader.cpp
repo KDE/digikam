@@ -56,7 +56,6 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
           {
           KService::Ptr service = *iter;
           imagePluginsList2Load.append(service->library());
-          kdDebug() << "Append plugin: " << service->name() << endl;
           }
        }
     else
