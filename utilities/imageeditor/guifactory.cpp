@@ -328,7 +328,7 @@ void GUIFactory::buildGUI(GUIElement *g, QWidget *widget)
         if (!text.isEmpty())
             i18nText = i18n( text );
         else
-            i18nText = i18n( "No text!" );
+            i18nText = i18n( "No text." );
         
         if (gui->m_type == GUIElement::Action) {
             if (gui->m_action)
