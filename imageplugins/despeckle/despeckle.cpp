@@ -5,7 +5,7 @@
  * Description : noise reduction image filter for Digikam 
  *               image editor.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Despeckle algorithm come from plug-ins/common/despeckle.c 
  * Gimp 2.0 source file and copyrighted 
@@ -88,7 +88,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A despeckle image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -269,8 +269,7 @@ DespeckleDialog::~DespeckleDialog()
 
 void DespeckleDialog::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("despeckle",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("despeckle", "digikamimageplugins");
 }
 
 void DespeckleDialog::closeEvent(QCloseEvent *e)
@@ -330,7 +329,6 @@ void DespeckleDialog::slotEffect()
     if (m_cancel) return;
     
     m_progressBar->setValue(0);  
-    memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }

@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for to simulate 
  *               an oil painting.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Original OilPaint algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
@@ -82,7 +82,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("An oil painting image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -264,7 +264,6 @@ void ImageEffect_OilPaint::slotEffect()
     if (m_cancel) return;
     
     m_progressBar->setValue(0);  
-    memcpy(image.bits(), (uchar *)data, image.numBytes());
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }

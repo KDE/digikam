@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for to emboss 
  *               an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Original Emboss algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
@@ -83,7 +83,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("An embossed image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -205,8 +205,7 @@ void ImageEffect_Emboss::slotCancel()
 
 void ImageEffect_Emboss::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("emboss",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("emboss", "digikamimageplugins");
 }
 
 void ImageEffect_Emboss::closeEvent(QCloseEvent *e)
@@ -230,7 +229,6 @@ void ImageEffect_Emboss::slotEffect()
     if (m_cancel) return;
     
     m_progressBar->setValue(0);  
-    memcpy(image.bits(), (uchar *)data, image.numBytes());
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }

@@ -105,7 +105,6 @@ void ImageEffect_Blur::slotEffect()
         
     Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
 
-    memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
 }
 

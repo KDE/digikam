@@ -227,7 +227,6 @@ void ImageEffect_FilmGrain::slotEffect()
     if (m_cancel) return;
     
     m_progressBar->setValue(0);  
-    memcpy(image.bits(), (uchar *)data, image.numBytes());
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }

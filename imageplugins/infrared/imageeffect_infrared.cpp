@@ -212,8 +212,7 @@ void ImageEffect_Infrared::slotCancel()
 
 void ImageEffect_Infrared::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("infrared",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("infrared", "digikamimageplugins");
 }
 
 void ImageEffect_Infrared::closeEvent(QCloseEvent *e)
@@ -244,7 +243,6 @@ void ImageEffect_Infrared::slotEffect()
     if (m_cancel) return;
     
     m_progressBar->setValue(0);  
-    memcpy(image.bits(), (uchar *)data, image.numBytes());
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }

@@ -4,7 +4,7 @@
  * Date  : 2004-08-27
  * Description : Unsharped mask image filter for ImageEditor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Unsharped mask algorithm come from plug-ins/common/unsharp.c 
  * Gimp 2.0 source file and copyrighted 
@@ -87,7 +87,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("An unsharped mask image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -254,8 +254,7 @@ UnsharpDialog::~UnsharpDialog()
 
 void UnsharpDialog::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("unsharp",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("unsharp", "digikamimageplugins");
 }
 
 void UnsharpDialog::closeEvent(QCloseEvent *e)
@@ -312,7 +311,6 @@ void UnsharpDialog::slotEffect()
     
     if (m_cancel) return;
     m_progressBar->setValue(0);    
-    memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
