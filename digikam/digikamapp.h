@@ -164,9 +164,7 @@ private slots:
     void slotSetup();
     void slotSetupChanged();
 
-#ifdef HAVE_KIPI
     void slotKipiPluginPlug();
-#endif
         
     void slotCameraConnect();
     void slotCameraAdded(CameraType *ctype);

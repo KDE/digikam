@@ -550,11 +550,11 @@ void DigikamApp::loadPlugins()
     #endif    
 }
 
-#ifdef HAVE_KIPI    
-
 void DigikamApp::slotKipiPluginPlug()
 { 
-qDebug ("replug !!!");   
+#ifdef HAVE_KIPI    
+
+    qDebug ("replug !!!");   
     unplugActionList( QString::fromLatin1("file_actions_export") );
     unplugActionList( QString::fromLatin1("file_actions_import") );
     unplugActionList( QString::fromLatin1("image_actions") );
@@ -612,8 +612,9 @@ qDebug ("replug !!!");
     plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
     plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
     plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
-    }
+
 #endif
+}
 
     
 DigikamApp* DigikamApp::m_instance = 0;    
