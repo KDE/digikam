@@ -2,7 +2,7 @@
  * File  : imageeffect_border.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-01-20
- * Description : a Digikam image plugin for to add a border  
+ * Description : a Digikam image plugin for add a border  
  *               to an image.
  * 
  * Copyright 2005 by Gilles Caulier
