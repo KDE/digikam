@@ -20,9 +20,10 @@ x Upload/download dynamicly the plugins.                           <Gilles Cauli
 x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.6.3>
 x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.6.3>
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.6.3>
+o Add image date from EXIF data for each album item.               <Ralf Holzer    - 0.6.3>
 * Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
 o Added config saving of Albums opened in Albums treeview.         
-o LibExif 0.6.x support.
+x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.6.3>
 o Added dockable main widgets like ShowImg.                        
 o Added subfolders Albums support.
 o Added tagging images feature.
@@ -81,6 +82,7 @@ o Added Plugins interface.
 o Added Blur/Sharpen image filters.
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.
+o Auto-rotate view according to EXIF orientation tag
 
 
 Exif Viewer :
