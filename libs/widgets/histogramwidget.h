@@ -46,7 +46,10 @@ enum HistogramType
     AlphaChannelHistogram,    // Alpha channel.
     ColorChannelsHistogram,   // All color channels.
     LinScaleHistogram,        // Linear scale.
-    LogScaleHistogram         // Logarithmic scale.
+    LogScaleHistogram,        // Logarithmic scale.
+    RedColor,                 // Red color to foreground in All Colors Channel mode.
+    GreenColor,               // Green color to foreground in All Colors Channel mode.
+    BlueColor                 // Blue color to foreground in All Colors Channel mode.
 };
     
 public:
@@ -59,6 +62,7 @@ public:
     
     int    m_channelType;     // Channel type to draw.
     int    m_scaleType;       // Scale to use for drawing.
+    int    m_colorType;       // Color to use for drawing in All Colors Channel mode.
 
 signals:
     

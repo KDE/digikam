@@ -95,7 +95,10 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     image = image.smoothScale(48, 48, QImage::ScaleMin);
     pix.convertFromImage(image);
     imagePreview->setPixmap(pix);
-
+    hlay->addWidget(imagePreview);
+           
+    QGridLayout *grid = new QGridLayout(hlay, 2, 4);
+    
     QLabel *label1 = new QLabel(i18n("Channel:"), page);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, page );
@@ -127,11 +130,25 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
                                      "Logarithmic scale can be used when the maximal counts is big. "
                                      "Like this all values (small and big) will be visible on the graph."));
     
-    hlay->addWidget(imagePreview);                                     
-    hlay->addWidget(label1);
-    hlay->addWidget(m_channelCB);
-    hlay->addWidget(label2);
-    hlay->addWidget(m_scaleCB);
+    QLabel *label10 = new QLabel(i18n("Colors:"), page);
+    label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_colorsCB = new QComboBox( false, page );
+    m_colorsCB->insertItem( i18n("Red") );
+    m_colorsCB->insertItem( i18n("Green") );
+    m_colorsCB->insertItem( i18n("Blue") );
+    m_colorsCB->setCurrentText( i18n("Red") );
+    m_colorsCB->setEnabled( false );
+    QWhatsThis::add( m_colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
+                                       "<b>Red</b>: drawing the red image channel on the foreground.<p>"
+                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
+                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
+                                     
+    grid->addWidget(label1, 0, 0);
+    grid->addWidget(m_channelCB, 0, 1);
+    grid->addWidget(label2, 0, 2);
+    grid->addWidget(m_scaleCB, 0, 3);
+    grid->addWidget(label10, 1, 0);
+    grid->addWidget(m_colorsCB, 1, 1);
     
     // -------------------------------------------------------------
     
@@ -216,6 +233,9 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
+    
+    connect(m_colorsCB, SIGNAL(activated(int)),
+            this, SLOT(slotColorsChanged(int)));            
  
     connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
             this, SLOT(slotUpdateMinInterv(int)));
@@ -245,31 +265,37 @@ void HistogramPropsPlugin::slotChannelChanged(int channel)
        case 1:           // Red.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+          m_colorsCB->setEnabled(false);
           break;
        
        case 2:           // Green.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+          m_colorsCB->setEnabled(false);
           break;
           
        case 3:           // Blue.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_colorsCB->setEnabled(false);
           break;
 
        case 4:           // Alpha.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(false);
           break;
           
        case 5:           // All color channels.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(true);
           break;
                               
        default:          // Luminosity.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(false);
           break;
        }
    
@@ -290,6 +316,26 @@ void HistogramPropsPlugin::slotScaleChanged(int scale)
           break;
        }
    
+    m_histogramWidget->repaint(false);
+}
+
+void HistogramPropsPlugin::slotColorsChanged(int color)
+{
+    switch(color)
+       {
+       case 1:           // Green.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::GreenColor;
+          break;
+       
+       case 2:           // Blue.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::BlueColor;
+          break;
+
+       default:          // Red.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::RedColor;
+          break;
+       }
+
     m_histogramWidget->repaint(false);
 }
 

@@ -65,6 +65,7 @@ private:
     
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
+    QComboBox                    *m_colorsCB;    
     
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
@@ -88,6 +89,7 @@ private slots:
 
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
+    void slotColorsChanged(int color);
     void slotIntervChanged(int);
 };
 

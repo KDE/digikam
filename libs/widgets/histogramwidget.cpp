@@ -53,6 +53,7 @@ HistogramWidget::HistogramWidget(int w, int h, uint *i_data,
 {
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
+    m_colorType      = RedColor;
     m_inSelected     = false;
     m_selectMode     = selectMode;
     m_xmin           = 0;
@@ -282,40 +283,131 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
                p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - yr);                 
-               p1.drawLine(x, wHeight, x, wHeight - yg);                 
-               p1.drawLine(x, wHeight, x, wHeight - yb);     
+               
+               // Witch color must be used on the foreground with all colors channel mode?
+               switch (m_colorType) 
+                  {
+                  case Digikam::HistogramWidget::RedColor:
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yr);     
+                    break;
+
+                  case Digikam::HistogramWidget::GreenColor:
+                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yg);     
+                    break;
+
+                  default:
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                    p1.drawLine(x, wHeight, x, wHeight - yb);     
+                    break;
+                  }
                }
             else 
                {
-               p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - yr);                 
-               p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - yg);                 
-               p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - yb);                 
-               p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
-               p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
-               p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
-               p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+               // Witch color must be used on the foreground with all colors channel mode?
+               switch (m_colorType) 
+                  {
+                  case Digikam::HistogramWidget::RedColor:
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                    break;
+
+                  case Digikam::HistogramWidget::GreenColor:
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                    break;
+  
+                  default:
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                    break;
+                  }
                }
             }
          else 
             {
-            p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, wHeight - yr);                 
-            p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, wHeight - yg);                 
-            p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, wHeight - yb);                 
-            p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);     
-            p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
-            p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
-            p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                
+            // Witch color must be used on the foreground with all colors channel mode?
+            switch (m_colorType) 
+               {
+               case Digikam::HistogramWidget::RedColor:
+                 p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                 p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                 p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                 break;
+
+               case Digikam::HistogramWidget::GreenColor:
+                 p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                 p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                 p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                 break;
+
+               default:
+                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                 p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                 p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                 p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
+                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                 break;
+               }
             }
          }
       }
