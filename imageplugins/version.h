@@ -20,10 +20,10 @@
  * ============================================================ */
 
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef DIGIKAMIMAGEPLUGINS_VERSION_H
+#define DIGIKAMIMAGEPLUGINS_VERSION_H
 
 static const char * const digikamimageplugins_version = "0.7.0-cvs";
 
-#endif // VERSION_H
+#endif // DIGIKAMIMAGEPLUGINS_VERSION_H
 

@@ -20,10 +20,10 @@
  * ============================================================ */
 
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef DIGIKAM_VERSION_H
+#define DIGIKAM_VERSION_H
 
 static const char * const digikam_version = "0.7.0-cvs";
 
-#endif // VERSION_H
+#endif // DIGIKAM_VERSION_H
 
