@@ -285,13 +285,13 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     // -------------------------------------------------------------
     // Gains settings slots.
 
-    connect(m_redGain, SIGNAL(valueChanged(int)),
+    connect(m_redGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));  
 
-    connect(m_greenGain, SIGNAL(valueChanged(int)),
+    connect(m_greenGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));  
     
-    connect(m_blueGain, SIGNAL(valueChanged(int)),
+    connect(m_blueGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));  
 
     connect(m_preserveLuminosity, SIGNAL(toggled (bool)),
