@@ -25,6 +25,8 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <ktextedit.h>
+#include <kdeversion.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -99,7 +101,10 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     topLayout->addWidget(thumbBox, 0, 0);
 
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
-    m_commentsEdit = new QTextEdit(commentsBox);
+    m_commentsEdit = new KTextEdit(commentsBox);
+#if KDE_IS_VERSION(3,2,0)
+    m_commentsEdit->setCheckSpellingEnabled(true);
+#endif
     topLayout->addWidget(commentsBox, 1, 0);
 
     QVGroupBox* tagsBox = new QVGroupBox(i18n("Tags"), plainPage());

@@ -8,12 +8,12 @@
 #include "thumbnailjob.h"
 
 class QLabel;
-class QTextEdit;
 class QListView;
 class QPixmap;
 class QCheckListItem;
 class QCheckBox;
 class KFileMetaInfo;
+class KTextEdit;
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumLister;
@@ -41,7 +41,7 @@ private:
     AlbumLister   *m_lister;
     QLabel        *m_thumbLabel;
     QLabel        *m_nameLabel;
-    QTextEdit     *m_commentsEdit;
+    KTextEdit     *m_commentsEdit;
     QListView     *m_tagsView;
     QCheckBox     *m_autoSaveBox;
     bool           m_modified;
