@@ -21,6 +21,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+
+
 // Qt includes.
 
 #include <qstring.h>
@@ -37,6 +39,7 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <qtimer.h>
+#include <qpainter.h>
 
 // KDE includes.
 
@@ -84,7 +87,11 @@
 #include "cameradragobject.h"
 #include "dragobjects.h"
 
-#include <qpainter.h>
+extern "C"
+{
+#include <X11/Xlib.h>
+}
+
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
                : ListView(parent)
@@ -1525,15 +1532,41 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
 
         if (srcAlbum == destAlbum)
             return;
-        
-        QPopupMenu popMenu(this);
-        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-        popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-        
-        popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
+
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+        int id = 0;
+
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+        // If shift key is pressed while dragging copy the drag object without
+        // displaying popup menu -> move
+        if ( ( (keys_return[key_3 / 8]) && (1 << (key_3 % 8)) ) ||
+             ( (keys_return[key_4 / 8]) && (1 << (key_4 % 8)) ))
+        {
+            id = 10;
+        }
+        // If ctrl key is pressed while dragging copy the drag object without
+        // displaying popup menu -> copy
+        else if ( ( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
+                  ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
+        {        
+            id = 11;
+        }
+        else
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            
+            popMenu.setMouseTracking(true);
+            id = popMenu.exec(QCursor::pos());
+        }
+                       
         switch(id)
         {
         case 10:
@@ -1559,15 +1592,41 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
+
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+        int id = 0;
+
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+        // If shift key is pressed while dropping copy the drag object without
+        // displaying popup menu -> move
+        if ( ( (keys_return[key_3 / 8]) && (1 << (key_3 % 8)) ) ||
+             ( (keys_return[key_4 / 8]) && (1 << (key_4 % 8)) ))
+        {
+            id = 10;
+        }
+        // If ctrl key is pressed while dropping, copy the drag object without
+        // displaying popup menu -> copy
+        else if ( ( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
+                  ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
+        {        
+            id = 11;
+        }
+        else
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            
+            popMenu.setMouseTracking(true);
+            id = popMenu.exec(QCursor::pos());
+        }
         
-        QPopupMenu popMenu(this);
-        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-        popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-        
-        popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
         switch(id) {
         case 10: {
             new DigikamIO(srcURLs, destAlbum->getKURL(), true);
@@ -1624,15 +1683,27 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
     if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
     {
-        QPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("tag"), 
-                        i18n("Assign Tag '%1' to dropped items")
-                        .arg(album->getPrettyURL()), 10);
-        popmenu.insertSeparator(-1);
-        popmenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );    
-        
-        if (popmenu.exec(QCursor::pos()) != 10)
-            return;
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+
+        // If a ctrl key is pressed while dropping the drag object,
+        // the tag is assigned to the images without showing a 
+        // popup menu.
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        if (!( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
+             ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
+        {
+            QPopupMenu popmenu(this);
+            popmenu.insertItem(SmallIcon("tag"), 
+                            i18n("Assign Tag '%1' to dropped items")
+                            .arg(album->getPrettyURL()), 10);
+            popmenu.insertSeparator(-1);
+            popmenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );    
+            
+            if (popmenu.exec(QCursor::pos()) != 10)
+                return;
+        }
         
         KURL::List      urls;
         QValueList<int> dirIDs;
