@@ -125,7 +125,7 @@ void SplashScreen::drawContents()
 void SplashScreen::drawContents( QPainter *painter )
 {
     int position;
-    QColor basecolor (155, 192, 231); // Base green color
+    QColor basecolor (155, 192, 231);
 
     // Draw background circles
     painter->setPen(NoPen);
