@@ -287,7 +287,7 @@ void AlbumFileTip::updateText()
     
     // File properties ----------------------------------------------
     
-    tip += headBeg + QString("File Properties") + headEnd;
+    tip += headBeg + QString(i18n("File Properties")) + headEnd;
 
     tip += cellBeg + i18n("Name:") + cellMid;
     tip += fi->url().fileName() + cellEnd;

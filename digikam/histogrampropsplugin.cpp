@@ -113,7 +113,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
                                        "<b>Blue</b>: drawing the blue image channel values.<p>"
                                        "<b>Alpha</b>: drawing the alpha image channel values. " 
                                        "This channel corresponding to the transparency value and "
-                                       "is supported by some image formats like PNG or GIF.<p>"
+                                       "is supported by some image formats such as PNG or GIF.<p>"
                                        "<b>Colors</b>: drawing all color channels values at the same time."));
     
     QLabel *label2 = new QLabel(i18n("Scale:"), page);
