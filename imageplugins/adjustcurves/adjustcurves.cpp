@@ -217,7 +217,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_loadButton, i18n("<p>Load curve settings from a Gimp curves text file."));
     m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
     QWhatsThis::add( m_saveButton, i18n("<p>Save curve settings to a Gimp curves text file."));
-    m_resetButton = new QPushButton(i18n("&Reset All Values"), gbox3);
+    m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' curve values."));
     
     m_pickerColorButtonGroup = new QHButtonGroup(gbox3);
