@@ -85,7 +85,6 @@ private:
     
     // For histogram viever.
     
-    QLabel                       *m_thumbLabel;
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
     QComboBox                    *m_colorsCB;    
@@ -93,6 +92,7 @@ private:
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
     
+    QLabel                       *m_thumbLabel;
     QLabel                       *m_labelMeanValue;
     QLabel                       *m_labelPixelsValue;
     QLabel                       *m_labelStdDevValue;
