@@ -68,7 +68,6 @@ void ImageRegionWidget::setImage(void)
     uint *data = iface.getOriginalData();
     
     m_img.create( w, h, 32 );
-    m_img.setAlphaBuffer(true);
     memcpy(m_img.bits(), data, m_img.numBytes());
     m_pix = new QPixmap(w, h);
     m_pix->convertFromImage(m_img);
