@@ -351,7 +351,11 @@ void ImageWindow::slotLoadCurrent()
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
     
     if (m_view)
-       m_view->findItem((*it).url())->setSelected(true);
+    {
+        ThumbItem* item = m_view->findItem((*it).url());
+        if (item)
+            item->setSelected(true);
+    }
     
     uint index = m_urlList.findIndex(m_urlCurrent);
 
