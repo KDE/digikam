@@ -69,9 +69,7 @@ public:
     Colormap cm;
     int      depth;
 
-    // PENDING (Gilles) : Renchi, can you give me some explanations about this variable ?
     bool valid;
-    bool dirty;
     
     int  width;
     int  height;
@@ -132,7 +130,6 @@ ImlibInterface::ImlibInterface()
 
     d->image  = 0;
     d->valid = false;
-    d->dirty = true;
     d->width  = 0;
     d->height = 0;
     d->origWidth  = 0;
@@ -185,7 +182,6 @@ bool ImlibInterface::load(const QString& filename)
         d->origWidth  = imlib_image_get_width();
         d->origHeight = imlib_image_get_height();
         d->valid  = true;
-        d->dirty  = true;
 
         d->width  = d->origWidth;
         d->height = d->origHeight;
@@ -220,11 +216,6 @@ bool ImlibInterface::save(const QString& file)
 
     bool result = saveAction(file, currentMimeType);
     
-    // PENDING (Gilles) : Renchi,
-    // What do you want to do with this varaible in according with 'result' value ?
-    d->valid   = false;
-    d->dirty   = true;
-    
     imlib_context_pop();
     return result;
 }
@@ -240,11 +231,6 @@ bool ImlibInterface::saveAs(const QString& file, const QString& mimeType)
     else 
        result = saveAction(file, mimeType);
 
-    // PENDING (Gilles) : Renchi,
-    // What do you wnat to do with this varaible in according with 'result' value ?
-    d->valid   = true;
-    d->dirty   = true;
-    
     imlib_context_pop();
     return result;    
 }
@@ -417,14 +403,12 @@ void ImlibInterface::zoom(double val)
     d->zoom   = val;
     d->width  = (int)(d->origWidth  * val);
     d->height = (int)(d->origHeight * val);
-    d->dirty  = true;
 }
 
 void ImlibInterface::rotate90()
 {
     imlib_context_push(d->context);
     imlib_image_orientate(1);
-    d->dirty = true;
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -435,7 +419,6 @@ void ImlibInterface::rotate180()
 {
     imlib_context_push(d->context);
     imlib_image_orientate(2);
-    d->dirty = true;
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -446,7 +429,6 @@ void ImlibInterface::rotate270()
 {
     imlib_context_push(d->context);
     imlib_image_orientate(3);
-    d->dirty = true;
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -457,7 +439,6 @@ void ImlibInterface::flipHoriz()
 {
     imlib_context_push(d->context);
     imlib_image_flip_horizontal();
-    d->dirty = true;
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -469,7 +450,6 @@ void ImlibInterface::flipVert()
 {
     imlib_context_push(d->context);
     imlib_image_flip_vertical();
-    d->dirty = true;
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -490,7 +470,6 @@ void ImlibInterface::crop(int x, int y, int w, int h)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    d->dirty = true;
 }
 
 void ImlibInterface::resize(int w, int h)
@@ -509,7 +488,6 @@ void ImlibInterface::resize(int w, int h)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    d->dirty = true;
 }
 
 void ImlibInterface::changeGamma(double gamma)
@@ -526,7 +504,6 @@ void ImlibInterface::changeGamma(double gamma)
 
     imlib_context_set_color_modifier(0);
     
-    d->dirty = true;
     imlib_context_pop();
 }
 
@@ -544,8 +521,6 @@ void ImlibInterface::changeBrightness(double brightness)
 
     imlib_context_set_color_modifier(0);
 
-    d->dirty = true;
-
     imlib_context_pop();
 }
 
@@ -562,8 +537,6 @@ void ImlibInterface::changeContrast(double contrast)
     imlib_modify_color_modifier_contrast(d->contrast);
 
     imlib_context_set_color_modifier(0);
-
-    d->dirty = true;
 
     imlib_context_pop();
 }
@@ -593,7 +566,6 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 
     imlib_context_pop();
 
-    d->dirty = true;
     emit signalRequestUpdate();
 }
 
@@ -621,8 +593,6 @@ void ImlibInterface::putData(uint* data)
     imlib_image_put_back_data(ptr);
 
     imlib_context_pop();
-
-    d->dirty = true;
 
     emit signalRequestUpdate();
 }
@@ -679,8 +649,6 @@ void ImlibInterface::putSelectedData(uint* data)
 
     imlib_context_pop();
 
-    d->dirty = true;
-
     emit signalRequestUpdate();
 }
 
@@ -718,14 +686,6 @@ bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType
         return false;  // Do not reload the file if saving failed !
         }
 
-    // Now kill the image and re-read it from the saved file
-            
-    if ( load(saveFile) == false ) 
-        {
-        kdWarning() << "error loading image '" << QFile::encodeName(saveFile).data() << endl;
-        return false;
-        }
-     
     return true;
 }
 
