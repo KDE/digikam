@@ -75,6 +75,9 @@ public:
     int   getOriginalImageHeight(void);
     QRect getRegionSelection(void);
     
+    int   getMinWidthRange(void);
+    int   getMinHeightRange(void);
+    
     void  resetSelection(void);
     void  maxAspectSelection(void);
 
@@ -95,7 +98,11 @@ protected:
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
-            
+
+protected slots:
+
+    void slotTimerDone(void);
+                
 private:
 
     enum ResizingMode
@@ -128,7 +135,10 @@ private:
     QRect       m_localTopRightCorner;
     QRect       m_localBottomRightCorner;
     
-    QPixmap*    m_pixmap;
+    QPixmap    *m_pixmap;
+    
+    QTimer     *m_timerW;
+    QTimer     *m_timerH;
     
     int         m_currentAspectRatioType;
     int         m_currentAspectRatio;

@@ -136,7 +136,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput = new KIntNumInput(plainPage());
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
-    m_widthInput->setRange(50, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
     topLayout->addMultiCellWidget(m_widthInput, 3, 3, 3, 4);
     
@@ -147,7 +147,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput = new KIntNumInput(plainPage());
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
-    m_heightInput->setRange(50, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+    m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
     topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);
     
@@ -220,14 +220,14 @@ void ImageEffect_RatioCrop::readSettings(void)
 
     m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    // Paysage per default.
     
-    if ( m_orientCB->currentItem() == Digikam::ImageSelectionWidget::Paysage )
+    if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
        {
        m_widthInput->setValue( config->readNumEntry("Custom Aspect Ratio Width", 800) );
-       m_heightInput->setValue( 1 );
+       m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
        }
     else       
        {
-       m_widthInput->setValue( 1 );
+       m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
        m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
        }
     
@@ -259,7 +259,6 @@ void ImageEffect_RatioCrop::slotUser1()
     m_imageSelectionWidget->resetSelection();
 } 
 
-
 void ImageEffect_RatioCrop::slotUser2()
 {
     m_imageSelectionWidget->maxAspectSelection();
@@ -279,8 +278,10 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1, true);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1, true);
-    m_widthInput->setRange(100, m_imageSelectionWidget->getOriginalImageWidth() - rect.x() , 1, true);
-    m_heightInput->setRange(100, m_imageSelectionWidget->getOriginalImageHeight() - rect.y(), 1, true);
+    m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
+                           m_imageSelectionWidget->getOriginalImageWidth() - rect.x() , 1, true);
+    m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(), 
+                            m_imageSelectionWidget->getOriginalImageHeight() - rect.y(), 1, true);
     
     m_xInput->blockSignals(false);
     m_yInput->blockSignals(false);
@@ -292,7 +293,7 @@ void ImageEffect_RatioCrop::slotSelectionWidthChanged(int newWidth)
 {
     m_widthInput->blockSignals(true);
     m_widthInput->setValue(newWidth);
-    m_widthInput->setRange(100, m_imageSelectionWidget->getOriginalImageWidth() -
+    m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(), m_imageSelectionWidget->getOriginalImageWidth() -
                            m_imageSelectionWidget->getRegionSelection().x(), 1, true);
     m_widthInput->blockSignals(false);
 }
@@ -301,7 +302,7 @@ void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
 {
     m_heightInput->blockSignals(true);
     m_heightInput->setValue(newHeight);
-    m_heightInput->setRange(100, m_imageSelectionWidget->getOriginalImageHeight() - 
+    m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(), m_imageSelectionWidget->getOriginalImageHeight() - 
                             m_imageSelectionWidget->getRegionSelection().y(), 1, true);
     m_heightInput->blockSignals(false);
 }

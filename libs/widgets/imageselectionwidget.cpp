@@ -18,10 +18,12 @@
  * 
  * ============================================================ */
  
-#define OPACITY 0.7
-#define RCOL    0xAA
-#define GCOL    0xAA
-#define BCOL    0xAA
+#define OPACITY  0.7
+#define RCOL     0xAA
+#define GCOL     0xAA
+#define BCOL     0xAA
+
+#define MINRANGE 50
  
 // C++ includes.
 
@@ -37,6 +39,7 @@
 #include <qimage.h>
 #include <qpen.h>
 #include <qpoint.h> 
+#include <qtimer.h> 
 
 // KDE include.
 
@@ -66,6 +69,8 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     m_currentOrientation      = orient; 
     m_currentResizing         = ResizingNone;
     m_ruleThirdLines          = ruleThirdLines;
+    m_timerW = 0;
+    m_timerH = 0;
 
     m_iface  = new ImageIface(w,h);
 
@@ -102,6 +107,18 @@ int ImageSelectionWidget::getOriginalImageHeight(void)
 QRect ImageSelectionWidget::getRegionSelection(void)
 {
     return m_regionSelection;
+}
+
+int ImageSelectionWidget::getMinWidthRange(void)
+{
+    return( (int)( ((float)MINRANGE - (float)m_rect.x() ) * 
+                   ( (float)m_iface->originalWidth() / (float)m_w )) );
+}
+                                            
+int ImageSelectionWidget::getMinHeightRange(void)
+{    
+    return( (int)( ((float)MINRANGE - (float)m_rect.y() ) *
+                   ( (float)m_iface->originalHeight() / (float)m_h )) );    
 }
 
 void ImageSelectionWidget::resetSelection(void)
@@ -157,7 +174,7 @@ void ImageSelectionWidget::slotRuleThirdLines(bool ruleThirdLines)
 void ImageSelectionWidget::setSelectionOrientation(int orient)
 {
     m_currentOrientation = orient;
-    applyAspectRatio(false);
+    applyAspectRatio(true);
 }
 
 void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
@@ -224,6 +241,17 @@ void ImageSelectionWidget::setSelectionWidth(int w)
     applyAspectRatio(false, true, false);
     localToRealRegion();
     emit signalSelectionHeightChanged(m_regionSelection.height());
+    
+    if (m_timerW)
+       {
+       m_timerW->stop();
+       delete m_timerW;
+       }
+    
+    m_timerW = new QTimer( this );
+    connect( m_timerW, SIGNAL(timeout()),
+             this, SLOT(slotTimerDone()) );
+    m_timerW->start(500, true);
 }
 
 void ImageSelectionWidget::setSelectionHeight(int h)
@@ -233,6 +261,22 @@ void ImageSelectionWidget::setSelectionHeight(int h)
     applyAspectRatio(true, true, false);
     localToRealRegion();
     emit signalSelectionWidthChanged(m_regionSelection.width());
+        
+    if (m_timerH)
+       {
+       m_timerH->stop();
+       delete m_timerH;
+       }
+    
+    m_timerH = new QTimer( this );
+    connect( m_timerH, SIGNAL(timeout()),
+             this, SLOT(slotTimerDone()) );
+    m_timerH->start(500, true);
+}
+
+void ImageSelectionWidget::slotTimerDone(void)
+{
+    regionSelectionChanged(true);
 }
 
 void ImageSelectionWidget::setCenterSelection(void)
@@ -564,23 +608,23 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
           QPoint pm(e->x(), e->y());
           
           if ( m_currentResizing == ResizingTopLeft &&
-               pm.x() < m_localRegionSelection.right() - 50 &&
-               pm.y() < m_localRegionSelection.bottom() - 50 )
+               pm.x() < m_localRegionSelection.right() - MINRANGE &&
+               pm.y() < m_localRegionSelection.bottom() - MINRANGE )
               m_localRegionSelection.setTopLeft(pm);             
              
           else if ( m_currentResizing == ResizingTopRight  &&
-               pm.x() > m_localRegionSelection.left() + 50 &&
-               pm.y() < m_localRegionSelection.bottom() - 50 )
+               pm.x() > m_localRegionSelection.left() + MINRANGE &&
+               pm.y() < m_localRegionSelection.bottom() - MINRANGE )
              m_localRegionSelection.setTopRight(pm);
           
           else if ( m_currentResizing == ResizingBottomLeft  &&
-               pm.x() < m_localRegionSelection.right() - 50 &&
-               pm.y() > m_localRegionSelection.top() + 50 )
+               pm.x() < m_localRegionSelection.right() - MINRANGE &&
+               pm.y() > m_localRegionSelection.top() + MINRANGE )
              m_localRegionSelection.setBottomLeft(pm);
              
           else if ( m_currentResizing == ResizingBottomRight  &&
-               pm.x() > m_localRegionSelection.left() + 50 &&
-               pm.y() > m_localRegionSelection.top() + 50 )
+               pm.x() > m_localRegionSelection.left() + MINRANGE &&
+               pm.y() > m_localRegionSelection.top() + MINRANGE )
              m_localRegionSelection.setBottomRight(pm);
           else 
              return;
