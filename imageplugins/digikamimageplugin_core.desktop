@@ -10,7 +10,7 @@ Name[sv]=Insticksprogram med bildkärna
 Name[ta]=பிம்ப சொருகுபொருள்_கோர்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Digikam Core Image Plugin
 Comment[bg]=Основна приставка за изображение на Digikam
 Comment[da]=Digikam billed-plugin
