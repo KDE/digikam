@@ -411,7 +411,6 @@ void ImageWindow::applySettings()
 void ImageWindow::readSettings()
 {
     applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
-    setAutoSaveSettings("ImageViewer Settings");
 
     KConfig* config = kapp->config();
 
@@ -446,6 +445,8 @@ void ImageWindow::saveSettings()
     config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
     config->writeEntry("FullScreen", m_fullScreen);
     config->sync();
+
+    saveMainWindowSettings(config, "ImageViewer Settings");
 }
 
 void ImageWindow::slotLoadCurrent()
