@@ -64,7 +64,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
-                                        "Select a region including the eyes to enable this action.") );
+                                        "Select a region including the eyes to use this option.") );
 
     new KAction(i18n("Brightness/Contrast/Gamma..."), "adjustbcg", 0,
                 this, SLOT(slotBCG()),
