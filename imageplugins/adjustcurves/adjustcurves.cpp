@@ -228,8 +228,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
-    QToolTip::add( m_pickBlack, i18n( "Black tone color picker" ) );
-    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Black Tone</b> "
+    QToolTip::add( m_pickBlack, i18n( "Shadow tone color picker" ) );
+    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
                                        "smooth curves point on Red, Green and Blue channels."));
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
@@ -248,8 +248,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
-    QToolTip::add( m_pickWhite, i18n( "White tone color picker" ) );
-    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>White Tone</b> "
+    QToolTip::add( m_pickWhite, i18n( "Highlight tone color picker" ) );
+    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "smooth curves point on Red, Green and Blue channels."));
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
@@ -266,8 +266,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image using picker "
-                                                   "color tools to select Black, Middle, and White tone for ajust curves point in Red, "
-                                                   "Green and Blue Channels."));
+                                                   "color tools to select shadow, middle, and highlight tones for ajust curves point in Red, "
+                                                   "Green, Blue, and Luminosity Channels."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
     QFrame *frame3 = new QFrame(gbox4);
@@ -329,8 +329,7 @@ AdjustCurveDialog::~AdjustCurveDialog()
 
 void AdjustCurveDialog::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("adjustcurves",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("adjustcurves", "digikamimageplugins");
 }
 
 void AdjustCurveDialog::closeEvent(QCloseEvent *e)
@@ -345,6 +344,8 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
     if ( m_pickBlack->isOn() )
        {
        // Black tonal curves point.
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1, 
+                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 35));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(color.red(), 35));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(color.green(), 35));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(color.blue(), 35));      
@@ -353,6 +354,8 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
     else if ( m_pickGray->isOn() )
        {
        // Gray tonal curves point.
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8, 
+                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 128));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint::QPoint(color.red(), 128));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint::QPoint(color.green(), 128));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint::QPoint(color.blue(), 128));      
@@ -361,6 +364,8 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
     else if ( m_pickWhite->isOn() )
        {
        // White tonal curves point.
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 15, 
+                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 220));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(color.red(), 220));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(color.green(), 220));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 220));      
@@ -371,7 +376,7 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
 
     // Calculate Red, green, blue curves.
     
-    for (int i = Digikam::ImageHistogram::RedChannel ; i <= Digikam::ImageHistogram::BlueChannel ; i++)
+    for (int i = Digikam::ImageHistogram::ValueChannel ; i <= Digikam::ImageHistogram::BlueChannel ; i++)
        m_curves->curvesCalculateCurve(i);
     
     m_curvesWidget->repaint(false);
