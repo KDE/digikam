@@ -144,7 +144,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                this, SLOT(slotColdTone()),
                                actionCollection(), "implugcore_coldtone") );
 
-    m_convertToAction->insert( new KAction(i18n("Platinum"), "platinum", 0,
+    m_convertToAction->insert( new KAction(i18n("Platinum"), "platinium", 0,
                                this, SLOT(slotPlatinum()),
                                actionCollection(), "implugcore_platinum") );
                                
