@@ -126,6 +126,7 @@ void DigikamCamera::special(const QByteArray &da)
     
     if (cmd == 1)
     {
+        infoMessage(i18n("Connecting to Camera..."));
         int result = m_camera->initialize();
         if (result != GPCamera::GPSuccess)
         {
