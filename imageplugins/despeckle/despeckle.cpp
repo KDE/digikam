@@ -58,6 +58,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kimageeffect.h>
+#include <kprogress.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -162,7 +163,14 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     hlay5->addWidget(m_useRecursiveMethod, 1);
 
     // -------------------------------------------------------------
+        
+    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
+    m_progressBar = new KProgress(100, plainPage(), "progressbar");
+    m_progressBar->setValue(0);
+    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
+    hlay6->addWidget(m_progressBar, 1);
     
+    // -------------------------------------------------------------
     adjustSize();
     slotUser1();    // Reset all parameters to the default values.
     
@@ -224,9 +232,11 @@ void DespeckleDialog::slotEffect()
     int   wl   = m_whiteLevelInput->value();
     bool  af   = m_useAdaptativeMethod->isChecked();
     bool  rf   = m_useRecursiveMethod->isChecked();
-            
+    
+    m_progressBar->setValue(0);              
     despeckle(data, w, h, r, bl, wl, af, rf);   
-
+    m_progressBar->setValue(0);  
+    
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
@@ -245,7 +255,8 @@ void DespeckleDialog::slotOk()
     int   wl    = m_whiteLevelInput->value();
     bool  af    = m_useAdaptativeMethod->isChecked();
     bool  rf    = m_useRecursiveMethod->isChecked();
-            
+
+    m_progressBar->setValue(0);               
     despeckle(data, w, h, r, bl, wl, af, rf);   
            
     iface.putOriginalData(data);
@@ -298,7 +309,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
                  sel_y2 = h;
                  
      int         sel_width = w;  // Selection width 
-                 
+     int         sel_height = h; // Selection height                  
      int         img_bpp = 4;    // Bytes-per-pixel in image
                  
      QImage      image, region;                 
@@ -446,6 +457,12 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
            };
          
         memcpy (data + (w * y), dst_row, width);
+        
+        if ((y & 15) == 0)
+           {
+           m_progressBar->setValue((int)(100.0*(double) (y - sel_y1) / (double) sel_height));
+           kapp->processEvents();
+           }
         };
 
      // OK, we're done.  Free all memory used...

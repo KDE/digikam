@@ -30,6 +30,7 @@ class QPushButton;
 class QCheckBox;
 
 class KIntNumInput;
+class KProgress;
 
 namespace Digikam
 {
@@ -61,6 +62,8 @@ private:
     KIntNumInput *m_radiusInput;
     KIntNumInput *m_blackLevelInput;
     KIntNumInput *m_whiteLevelInput;
+        
+    KProgress    *m_progressBar;
     
     QCheckBox    *m_useAdaptativeMethod;
     QCheckBox    *m_useRecursiveMethod;

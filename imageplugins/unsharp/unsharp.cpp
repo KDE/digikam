@@ -58,6 +58,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kimageeffect.h>
+#include <kprogress.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -152,6 +153,14 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
+    QHBoxLayout *hlay5 = new QHBoxLayout(topLayout);
+    m_progressBar = new KProgress(100, plainPage(), "progressbar");
+    m_progressBar->setValue(0);
+    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
+    hlay5->addWidget(m_progressBar, 1);
+    
+    // -------------------------------------------------------------
+        
     adjustSize();
     slotUser1();    // Reset all parameters to the default values.
     
@@ -205,8 +214,10 @@ void UnsharpDialog::slotEffect()
     double r    = m_radiusInput->value();
     double a    = m_amountInput->value();
     int    th   = m_thresholdInput->value();
-            
+    
+    m_progressBar->setValue(0);            
     unsharp(data, w, h, r, a, th);   
+    m_progressBar->setValue(0);    
     
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
@@ -224,7 +235,8 @@ void UnsharpDialog::slotOk()
     double r     = m_radiusInput->value();
     double a     = m_amountInput->value();
     int    th    = m_thresholdInput->value();
-            
+    
+    m_progressBar->setValue(0);        
     unsharp(data, w, h, r, a, th);   
            
     iface.putOriginalData(data);
@@ -236,8 +248,6 @@ void UnsharpDialog::slotOk()
 void UnsharpDialog::unsharp(uint* data, int w, int h, double radius, 
                             double amount, int threshold)
 {
-    int     width = w;
-    int     height = h;
     int     bytes = 4;      // bpp in image.
     int     x1 = 0;         // Full image used.
     int     x2 = w;
@@ -286,12 +296,8 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
     
     for (row = 0; row < y; row++)
       {
-      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, (x2-x1));
       memcpy(dest_row, newData + x1 + (y1+row)*w, (x2-x1)*bytes); 
-      
       memset(dest_row, 0, x*bytes);
-      
-      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, (x2-x1));
       memcpy(newData + x1 + (y1+row)*w, dest_row, (x2-x1)*bytes); 
       }
 
@@ -299,16 +305,16 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
     
     for (row = 0; row < y; row++)
       {
-      //gimp_pixel_rgn_get_row(&srcPR, cur_row, x1, y1+row, x);
       memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
-      
-      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, x);
       memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
-      
       blur_line(ctable, cmatrix, cmatrix_length, cur_row, dest_row, x, bytes);
-      
-      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, x);
       memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
+      
+      if (row%5 == 0)
+          {
+          m_progressBar->setValue((int)(100.0*((double)row/(3*y))));
+          kapp->processEvents();
+          }
       }
 
     // allocate column buffers 
@@ -319,22 +325,22 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
   
     for (col = 0; col < x; col++)
       {
-      //gimp_pixel_rgn_get_col(&destPR, cur_col, x1+col, y1, y);
-
       for (int n = 0 ; n < y ; ++n)
           memcpy(cur_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
             
-      //gimp_pixel_rgn_get_col(&destPR, dest_col, x1+col, y1, y);
-      
       for (int n = 0 ; n < y ; ++n)
           memcpy(dest_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
       
       blur_line(ctable, cmatrix, cmatrix_length, cur_col, dest_col, y, bytes);
       
-      //gimp_pixel_rgn_set_col(&destPR, dest_col, x1+col, y1, y);
-      
       for (int n = 0 ; n < y ; ++n)
           memcpy(newData + x1+col+w*(n+y1), dest_col + (n*bytes), bytes);
+          
+      if (col%5 == 0)
+         {
+         m_progressBar->setValue((int)(100.0*((double)col/(3*x) + 0.33)));          
+         kapp->processEvents();
+         }
       }
 
     // merge the source and destination (which currently contains the blurred version) images 
@@ -343,11 +349,10 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
       {
       value = 0;
       // get source row 
-      //gimp_pixel_rgn_get_row(&srcPR, cur_row, x1, y1+row, x);
       memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
       
       // get dest row 
-      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, x);
+
       memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
       
       // combine the two 
@@ -370,7 +375,14 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
             }
          }
       
-      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, x);         
+      // update progress bar every five rows 
+      
+      if (row%5 == 0)
+         {
+         m_progressBar->setValue((int)(100.0*((double)row/(3*y) + 0.67)));
+         kapp->processEvents();
+         }
+         
       memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
       }
 

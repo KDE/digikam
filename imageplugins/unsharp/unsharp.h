@@ -30,6 +30,7 @@ class QPushButton;
 
 class KDoubleNumInput;
 class KIntNumInput;
+class KProgress;
 
 namespace Digikam
 {
@@ -60,7 +61,10 @@ private:
     
     KDoubleNumInput *m_radiusInput;
     KDoubleNumInput *m_amountInput;
+    
     KIntNumInput    *m_thresholdInput;
+    
+    KProgress       *m_progressBar;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
