@@ -142,7 +142,7 @@ if test -n "${GPHOTO_CONFIG}"; then
   AC_SUBST(LIB_GPHOTO)
 else
   AC_MSG_WARN([gPhoto2 not found.])
-  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
 fi
 
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"

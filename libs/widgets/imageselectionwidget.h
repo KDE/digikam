@@ -48,15 +48,15 @@ public:
     RATIO04X05,                // 4:5
     RATIO05x07,                // 5:7
     RATIO07x10,                // 7:10
-    RATIONONE,                 // No aspect ratio.
+    RATIONONE                  // No aspect ratio.
     };
 
     enum Orient  
     {
-    Landscape = 0,            
-    Paysage,                
+    Landscape = 0,
+    Paysage
     };
-    
+
     ImageSelectionWidget(int width, int height, QWidget *parent=0, 
                          float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
                          int orient=Landscape);
@@ -97,7 +97,7 @@ private:
     ResizingTopLeft,
     ResizingTopRight, 
     ResizingBottomLeft,   
-    ResizingBottomRight,
+    ResizingBottomRight
     };
     
     ImageIface *m_iface;
