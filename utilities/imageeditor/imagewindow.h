@@ -31,6 +31,7 @@
 // Kde includes.
 
 #include <kurl.h>
+#include <kio/job.h>
 
 class QPopupMenu;
 class QLabel;
@@ -99,6 +100,9 @@ private slots:
     void slotFileProperties();
     void slotExifInfo();
     void slotCommentsEdit();
+    
+    void slotRemoveCurrentItemfromAlbum();
+    void slot_onDeleteCurrentItemFinished(KIO::Job *job);
 };
 
 #endif /* IMAGEWINDOW_H */

@@ -68,6 +68,7 @@ signals:
     void signalRestore();
 
     void signalFileProperties();
+    void signalRemoveCurrentItemfromAlbum();
     void signalExifInfo();
     void signalCommentsEdit();
     
@@ -99,6 +100,7 @@ private:
     KAction       *m_cropAction;
     
     KAction       *m_fileproperties;
+    KAction       *m_fileremovefromalbum;
     KAction       *m_exifinfo;
     KAction       *m_commentedit;
     

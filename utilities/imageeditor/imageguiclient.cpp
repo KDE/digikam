@@ -130,17 +130,22 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         actionCollection(),
                                         "flip_vertical") );
 
-    m_fileproperties = new KAction(i18n("File Properties..."), 0,
+    m_fileproperties = new KAction(i18n("File Properties..."), "image",
                                    ALT+Key_Return, 
                                    this, SIGNAL(signalFileProperties()),
                                    actionCollection(), "file_properties");
 
-    m_exifinfo = new KAction(i18n("Exif Information..."), "ExifInfo",
+    m_fileremovefromalbum = new KAction(i18n("Remove from Album"), "editdelete",
+                                   SHIFT+Key_Delete, 
+                                   this, SIGNAL(signalRemoveCurrentItemfromAlbum()),
+                                   actionCollection(), "file_remove");
+                                                                      
+    m_exifinfo = new KAction(i18n("Exif Information..."), "exifinfo",
                              Key_F6, 
                              this, SIGNAL(signalExifInfo()),
                              actionCollection(), "exif_info");
                              
-    m_commentedit = new KAction(i18n("Edit Image Comments..."), "EditComments",
+    m_commentedit = new KAction(i18n("Edit Image Comments..."), "imagecomment",
                                 Key_F3, 
                                 this, SIGNAL(signalCommentsEdit()),
                                 actionCollection(), "comments_edit");
@@ -166,6 +171,7 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_save/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_saveas/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_restore/ ");
+    guiDef.append("MenuBar/Menu/&File/ /Action/file_remove/ ");        
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/comments_edit/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/exif_info/ ");

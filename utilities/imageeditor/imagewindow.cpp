@@ -147,6 +147,8 @@ ImageWindow::ImageWindow()
 
     connect(m_guiClient, SIGNAL(signalFileProperties()),
             SLOT(slotFileProperties()));
+    connect(m_guiClient, SIGNAL(signalRemoveCurrentItemfromAlbum()),
+            SLOT(slotRemoveCurrentItemfromAlbum()));            
     connect(m_guiClient, SIGNAL(signalExifInfo()),
             SLOT(slotExifInfo()));            
     connect(m_guiClient, SIGNAL(signalCommentsEdit()),
@@ -414,9 +416,7 @@ void ImageWindow::slotCommentsEdit()
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
-    {
         return;
-    }
     
     AlbumDB* db = AlbumManager::instance()->albumDB();
     QString comments( db->getItemCaption(palbum, m_urlCurrent.fileName()) );
@@ -442,6 +442,83 @@ void ImageWindow::slotCommentsEdit()
             }
         }
     }       
+}
+
+void ImageWindow::slotRemoveCurrentItemfromAlbum()
+{
+    QString warnMsg(i18n("About to delete \"%1\"\nfrom Album\n\"%2\"\nAre you sure?")
+                    .arg(m_urlCurrent.filename())
+                    .arg(m_urlCurrent.path().section('/', -2, -2)));
+
+    if (KMessageBox::warningContinueCancel(this,
+                                           warnMsg,
+                                           i18n("Warning"),
+                                           i18n("Delete"))
+        ==  KMessageBox::Continue) 
+          {
+          PAlbum *palbum = AlbumManager::instance()->findPAlbum( KURL(m_urlCurrent.directory()) );
+          
+          if (!palbum)
+              return;
+          
+          AlbumDB* db = AlbumManager::instance()->albumDB();
+          db->deleteItem( palbum, m_urlCurrent.fileName() );
+          
+          // PENDING (gilles): Renchi, it's really necessary to do that ? 
+          // (if i don't do it, the image file isn't deleted from album !)
+          
+          KIO::DeleteJob* job = KIO::del(m_urlCurrent, false, true);
+
+          connect(job, SIGNAL(result(KIO::Job*)),
+                  this, SLOT(slot_onDeleteCurrentItemFinished(KIO::Job*)));
+          }
+}    
+          
+void ImageWindow::slot_onDeleteCurrentItemFinished(KIO::Job* job)
+{
+    if (job->error())
+        {
+        job->showErrorDialog(this);
+        return;
+        }          
+          
+    KURL CurrentToRemove = m_urlCurrent;
+    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+
+    if (it != m_urlList.end())
+       {
+       if (m_urlCurrent != m_urlList.last())
+          {
+          // Try to get the next image in the current Album...
+          
+          KURL urlNext = *(++it);
+          m_urlCurrent = urlNext;
+          m_urlList.remove(CurrentToRemove);
+          slotLoadCurrent();
+          return;
+          }
+       else if (m_urlCurrent != m_urlList.first())
+          {
+          // Try to get the preview image in the current Album...
+
+          KURL urlPrev = *(--it);
+          m_urlCurrent = urlPrev;
+          m_urlList.remove(CurrentToRemove);
+          slotLoadCurrent();
+          return;
+          }
+       }
+    else
+       {
+       // No image in the current Album -> Quit ImageEditor...
+              
+       KMessageBox::information(this,
+                                i18n("There is no image to show in the current Album!\n"
+                                     "The ImageViewer will be closed..."),
+                                i18n("No image in the current Album"));
+
+       close();
+       }
 }
 
 #include "imagewindow.moc"
