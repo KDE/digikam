@@ -139,7 +139,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QGroupBox *gbox = new QGroupBox(plainPage());
     gbox->setFlat(false);
     gbox->setTitle(i18n("Curves Settings"));
-    QGridLayout* grid = new QGridLayout( gbox, 3, 6, 20, spacingHint());
+    QGridLayout* grid = new QGridLayout( gbox, 4, 6, 20, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -175,24 +175,42 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
     grid->addMultiCellWidget(label2, 0, 0, 4, 4);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
+    
+    QLabel *label5 = new QLabel(i18n("Mode:"), gbox);
+    label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_modeCB = new QComboBox( false, gbox );
+    m_modeCB->insertItem( i18n("Smooth") );
+    m_modeCB->insertItem( i18n("Free") );
+    m_modeCB->setCurrentText( i18n("Smooth") );
+    QWhatsThis::add( m_modeCB, i18n("<p>Select here the curves drawing mode."));
 
+    QLabel *label6 = new QLabel(i18n("Position:"), gbox);
+    label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelPos = new QLabel(gbox);
+    m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+                                     
+    grid->addMultiCellWidget(label5, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_modeCB, 1, 1, 2, 2);
+    grid->addMultiCellWidget(label6, 1, 1, 4, 4);
+    grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
+    
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
     m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gbox );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
     m_curvesWidget = new CurvesWidget(256, 256, imageData, width, height, m_curves, frame);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curves drawing of the selected image "
                                           "histogram channel"));
     l->addWidget(m_curvesWidget, 0);
-    grid->addMultiCellWidget(frame, 1, 1, 1, 5);
+    grid->addMultiCellWidget(frame, 2, 2, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 2, 2, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
     
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
 
@@ -233,20 +251,31 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
     adjustSize();
-    //disableResize();
+    disableResize();
 
     QTimer::singleShot(0, this, SLOT(slotResetAllChannels())); // Reset all parameters to the default values.
     parentWidget()->setCursor( KCursor::arrowCursor()  );
-                    
+
     // -------------------------------------------------------------
-    // Channels and scale selection slots.
+    
+    connect(m_curvesWidget, SIGNAL(signalMouseMoved(int, int)),
+            this, SLOT(slotPositionChanged(int, int)));
+                        
+    connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
+            this, SLOT(slotEffect()));
+    
+    // -------------------------------------------------------------
+    // ComboBox slots.
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
-
+            
+    connect(m_modeCB, SIGNAL(activated(int)),
+            this, SLOT(slotModeChanged(int)));
+    
     // -------------------------------------------------------------
     // Bouttons slots.
 
@@ -296,6 +325,11 @@ void AdjustCurveDialog::slotUser1()
     slotChannelChanged(m_channelCB->currentItem());
 
     slotEffect();
+}
+
+void AdjustCurveDialog::slotPositionChanged(int x, int y)
+{
+    m_labelPos->setText(i18n("x:%1   y:%2").arg(x).arg(y));
 }
 
 void AdjustCurveDialog::slotEffect()
@@ -397,6 +431,22 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
 
        default:          // Lin.
           m_curvesWidget->m_scaleType = CurvesWidget::LinScaleHistogram;
+          break;
+       }
+
+    m_curvesWidget->repaint(false);
+}
+
+void AdjustCurveDialog::slotModeChanged(int mode)
+{
+    switch(mode)
+       {
+       case 1:           // Free.
+          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
+          break;
+
+       default:          // Smooth.
+          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
           break;
        }
 

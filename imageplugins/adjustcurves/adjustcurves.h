@@ -28,6 +28,7 @@
 
 class QComboBox;
 class QPushButton;
+class QLabel;
 
 class CurvesWidget;
 
@@ -57,7 +58,10 @@ protected:
 private:
     
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_scaleCB;    
+    QComboBox                    *m_scaleCB;  
+    QComboBox                    *m_modeCB;  
+    
+    QLabel                       *m_labelPos;
     
     QPushButton                  *m_loadButton;
     QPushButton                  *m_saveButton;
@@ -90,6 +94,8 @@ private slots:
     void slotSaveCurves();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
+    void slotModeChanged(int mode);
+    void slotPositionChanged(int x, int y);
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

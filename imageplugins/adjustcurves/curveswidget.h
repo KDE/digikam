@@ -76,15 +76,15 @@ public:
     // Stop current histogram computations.
     void stopHistogramComputation(void);
     
-    int   m_channelType;     // Channel type to draw.
-    int   m_scaleType;       // Scale to use for drawing.
+    int m_channelType;     // Channel type to draw.
+    int m_scaleType;       // Scale to use for drawing.
 
     class Digikam::ImageHistogram *m_imageHistogram;          
 
 signals:
     
-    void signalMousePressed( int );
-    void signalMouseReleased( int );
+    void signalMouseMoved( int x, int y );
+    void signalCurvesChanged(void);
     void signalHistogramComputationDone(void);
     void signalHistogramComputationFailed(void);
 
@@ -102,6 +102,10 @@ protected:
 private:
 
     int                   m_clearFlag;          // Clear drawing zone with message.
+    int                   m_leftmost;
+    int                   m_rightmost;
+    int                   m_grab_point;
+    int                   m_last;
     
     bool                  m_blinkFlag;         
     

@@ -22,6 +22,7 @@
 // C++ includes.
 
 #include <cmath>
+#include <cstdlib>
 
 // Qt includes.
 
@@ -60,6 +61,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_blinkFlag      = false;
     m_clearFlag      = HistogramNone;
     m_curves         = curves;
+    m_grab_point     = -1;    
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -284,7 +286,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
  
       // Drawing histogram
 
-      p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+      p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
       p1.drawLine(x, wHeight, x, wHeight - y);                 
       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
       p1.drawLine(x, wHeight - y, x, 0);         
@@ -296,32 +298,209 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       }
    
    // Drawing curves points.
-      
-   p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
+   
+   if ( m_curves->getCurveType(m_channelType) == Digikam::ImageCurves::CURVE_SMOOTH )
+      {      
+      p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
             
-   for (int p = 0 ; p < 17 ; ++p)
-      {
-      QPoint curvePoint = m_curves->getCurvePoint(m_channelType, p);
+      for (int p = 0 ; p < 17 ; ++p)
+         {
+         QPoint curvePoint = m_curves->getCurvePoint(m_channelType, p);
       
-      p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 3, 
-                      wHeight - 3 - ((curvePoint.y() * 256) / wHeight),
-                      6, 6 ); 
+         p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 2, 
+                         wHeight - 2 - ((curvePoint.y() * 256) / wHeight),
+                         4, 4 ); 
+         }
       }
-      
+               
    p1.end();
    bitBlt(this, 0, 0, &pm);
 }
 
 void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 {
+   int i;
+   int closest_point;
+   int distance;
+
+   int x = CLAMP0255( (int)(e->pos().x()*(256.0/(float)width())) );
+   int y = CLAMP0255( (int)(e->pos().y()*(256.0/(float)height())) );
+
+   distance = 65536;
+   
+   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+      {
+      if (m_curves->getCurvePointX(m_channelType, i) != -1)
+         {
+         if (abs (x - m_curves->getCurvePointX(m_channelType, i)) < distance)
+            {
+            distance = abs (x - m_curves->getCurvePointX(m_channelType, i));
+            closest_point = i;
+            }
+         }
+      }
+         
+   if (distance > 8)
+      closest_point = (x + 8) / 16;   
+   
+   if (e->button() != Qt::LeftButton)
+      return;
+
+   setCursor( KCursor::crossCursor() );
+
+   switch( m_curves->getCurveType(m_channelType) )
+      {
+      case Digikam::ImageCurves::CURVE_SMOOTH:
+         
+         // Determine the leftmost and rightmost points.
+         
+         m_leftmost = -1;
+         
+         for (i = closest_point - 1 ; i >= 0 ; --i)
+            {
+            if (m_curves->getCurvePointX(m_channelType, i) != -1)
+               {
+               m_leftmost = m_curves->getCurvePointX(m_channelType, i);
+               break;
+               }
+            }
+           
+         m_rightmost = 256;
+         
+         for (i = closest_point + 1 ; i < 17 ; ++i)
+            {
+            if (m_curves->getCurvePointX(m_channelType, i) != -1)
+               {
+               m_rightmost = m_curves->getCurvePointX(m_channelType, i);
+               break;
+               }
+            }
+               
+         m_grab_point = closest_point;
+         m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
+         break;
+
+      case Digikam::ImageCurves::CURVE_FREE:
+         m_curves->setCurveValue(m_channelType, x, 255 - y);
+         m_grab_point = x;
+         m_last = y;
+         break;
+      }
+
+   m_curves->curvesCalculateCurve(m_channelType);
+   repaint(false);
 }
 
 void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
+   if (e->button() != Qt::LeftButton)
+      return;      
+   
+   setCursor( KCursor::arrowCursor() );    
+   m_grab_point = -1;
+   m_curves->curvesCalculateCurve(m_channelType);
+   repaint(false);
+   emit signalCurvesChanged();
 }
 
 void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
 {
+   int i;
+   int closest_point;
+   int x1, x2, y1, y2;
+   int distance;
+
+   int x = CLAMP0255( (int)(e->pos().x()*(256.0/(float)width())) );
+   int y = CLAMP0255( (int)(e->pos().y()*(256.0/(float)height())) );
+
+   distance = 65536;
+   
+   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+      {
+      if (m_curves->getCurvePointX(m_channelType, i) != -1)
+         {
+         if (abs (x - m_curves->getCurvePointX(m_channelType, i)) < distance)
+            {
+            distance = abs (x - m_curves->getCurvePointX(m_channelType, i));
+            closest_point = i;
+            }
+         }
+      }
+         
+   if (distance > 8)
+      closest_point = (x + 8) / 16;   
+      
+   switch ( m_curves->getCurveType(m_channelType) )
+      {
+      case Digikam::ImageCurves::CURVE_SMOOTH:
+     
+         if (m_grab_point == -1)   // If no point is grabbed... 
+            {
+            if ( m_curves->getCurvePointX(m_channelType, closest_point) != -1 )
+               setCursor( KCursor::arrowCursor() );    
+            else
+               setCursor( KCursor::crossCursor() );
+            }
+         else                      // Else, drag the grabbed point
+            {
+            setCursor( KCursor::crossCursor() );
+ 
+            m_curves->setCurvePointX(m_channelType, m_grab_point, -1);
+            
+            if (x > m_leftmost && x < m_rightmost)
+               {
+               closest_point = (x + 8) / 16;
+               
+               if (m_curves->getCurvePointX(m_channelType, closest_point) == -1)
+                  m_grab_point = closest_point;
+
+               m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
+               }
+
+            m_curves->curvesCalculateCurve(m_channelType);
+            emit signalCurvesChanged();
+            }
+         
+         break;
+
+      case Digikam::ImageCurves::CURVE_FREE:
+        
+        if (m_grab_point != -1)
+           {
+           if (m_grab_point > x)
+              {
+              x1 = x;
+              x2 = m_grab_point;
+              y1 = y;
+              y2 = m_last;
+              }
+           else
+              {
+              x1 = m_grab_point;
+              x2 = x;
+              y1 = m_last;
+              y2 = y;
+              }
+
+           if (x2 != x1)
+              {
+              for (i = x1 ; i <= x2 ; ++i)
+                 m_curves->setCurveValue(m_channelType, i, 255 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
+              }
+           else
+              m_curves->setCurveValue(m_channelType, x, 255 - y);
+
+           m_grab_point = x;
+           m_last = y;
+           }
+
+         emit signalCurvesChanged();
+         
+         break;
+      }
+      
+      emit signalMouseMoved(x, 255 - y);
+      repaint(false);
 }
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
