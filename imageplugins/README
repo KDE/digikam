@@ -10,8 +10,8 @@ Resume :
 Digikam uses a plugin architecture for additional functionality in ImageEditor.
 Currently implemented plugins are:
 
- 1) AdjustLevels       : A plugins for to adjust the image histogram levels manually.
-
+ 1) AdjustLevels       : A plugin for to adjust the image histogram levels manually.
+ 2) SolarizeImage      : A plugin for to solarize an image.
 
 
 Contact :
