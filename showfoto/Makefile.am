@@ -4,7 +4,6 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor \
 	   -I$(top_srcdir)/digikam/libs/thumbbar/ \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 
-
 showfoto_SOURCES = main.cpp showfoto.cpp 
 
 showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
