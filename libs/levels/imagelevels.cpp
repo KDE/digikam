@@ -7,7 +7,8 @@
  * Copyright 2004 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
- * app/base/levels.c and gimplut.c source files.
+ * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c 
+ * source files.
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
  * This program is free software; you can redistribute it
@@ -22,12 +23,14 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
 // C++ includes. 
  
 #include <cstdio>
 #include <cmath>
 #include <cstring>
+#include <cstdlib>
+#include <cerrno>
 
 // KDE includes.
 
@@ -508,5 +511,116 @@ int ImageLevels::getLevelHighOutputValue(int Channel)
     
     return 0;
 }
+
+// This method is inspired of Gimp2.0 
+// app/base/gimpleveltool.c::gimp_levels_tool_settings_load
+bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
+{
+    // TODO : support KURL !
+    
+    FILE          *file;
+    int            low_input[5];
+    int            high_input[5];
+    int            low_output[5];
+    int            high_output[5];
+    double         gamma[5];
+    int            i, fields;
+    char           buf[50];
+    char          *nptr;
+
+    file = fopen(fileUrl.path(), "r");
+    
+    if (!file)
+       return false;
+    
+    if (! fgets (buf, sizeof (buf), file))
+       {
+       fclose(file);
+       return false;
+       }
+
+    if (strcmp (buf, "# GIMP Levels File\n") != 0)
+       {
+       fclose(file);
+       return false;
+       }
+
+    for (i = 0 ; i < 5 ; ++i)
+      {
+      fields = fscanf (file, "%d %d %d %d ",
+                       &low_input[i],
+                       &high_input[i],
+                       &low_output[i],
+                       &high_output[i]);
+
+      if (fields != 4)
+        {
+        fclose(file);
+        return false;
+        }
+
+      if (! fgets (buf, 50, file))
+        {
+        fclose(file);
+        return false;
+        }
+
+      gamma[i] = strtod (buf, &nptr);
+
+      if (buf == nptr || errno == ERANGE)
+        {
+        fclose(file);
+        return false;
+        }
+      }
+
+    for (i = 0 ; i < 5 ; ++i)
+      {
+      setLevelGammaValue(i, gamma[i]);
+      setLevelLowInputValue(i, low_input[i]);
+      setLevelHighInputValue(i, high_input[i]);
+      setLevelLowOutputValue(i, low_output[i]);
+      setLevelHighOutputValue(i, high_output[i]);
+      }
+
+    fclose(file);
+    return true;
+}
+
+// This method is inspired of Gimp2.0 
+// app/base/gimpleveltool.c::gimp_levels_tool_settings_load
+bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
+{
+    // TODO : support KURL !
+  
+    FILE          *file;
+    int            i;
+
+    file = fopen(fileUrl.path(), "w");
+    
+    if (!file)
+       return false;
+
+    fprintf (file, "# GIMP Levels File\n");
+
+    for (i = 0 ; i < 5 ; ++i)
+      {
+      char buf[256];
+      sprintf (buf, "%f", getLevelGammaValue(i));
+      
+      fprintf (file, "%d %d %d %d %s\n",
+               getLevelLowInputValue(i),
+               getLevelHighInputValue(i),
+               getLevelLowOutputValue(i),
+               getLevelHighInputValue(i), 
+               buf);
+      }
+
+    fflush(file);
+    fclose(file);
+  
+    return true;
+}
+
 
 }  // NameSpace Digikam

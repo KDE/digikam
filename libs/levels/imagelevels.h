@@ -32,7 +32,11 @@
 #define GIMP_RGB_INTENSITY(r,g,b) ((r) * GIMP_RGB_INTENSITY_RED   + \
                                    (g) * GIMP_RGB_INTENSITY_GREEN + \
                                    (b) * GIMP_RGB_INTENSITY_BLUE)
-                                   
+
+// KDE includes.
+
+#include <kurl.h>
+                                                                      
 namespace Digikam
 {
 
@@ -88,7 +92,7 @@ public:
     void   levelsLutSetup(int nchannels);
     void   levelLutProcess(uint *srcPR, uint *destPR, int w, int h);
 
-    // Methods for to set manualy the levels values.        
+    // Methods for to set manually the levels values.        
     
     void   setLevelGammaValue(int Channel, double val);
     void   setLevelLowInputValue(int Channel, int val);
@@ -101,7 +105,12 @@ public:
     int    getLevelHighInputValue(int Channel);
     int    getLevelLowOutputValue(int Channel);
     int    getLevelHighOutputValue(int Channel);    
-        
+
+    // Methods for to save/load the levels values to/from a Gimp levels text file.        
+    
+    bool   saveLevelsToGimpLevelsFile(KURL fileUrl);
+    bool   loadLevelsFromGimpLevelsFile(KURL fileUrl);
+    
 private:
 
     // Levels data.
