@@ -77,6 +77,8 @@ void AlbumLister::openAlbum(Album *album)
     d->dirLister->disconnect(this);
     
     d->currAlbum = album;
+    if (!album)
+        return;
 
     if (album->type() == Album::PHYSICAL)
     {
