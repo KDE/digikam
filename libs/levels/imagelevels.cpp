@@ -7,7 +7,7 @@
  * Copyright 2004 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
- * app/base/levels.c source file.
+ * app/base/levels.c and gimplut.c source files.
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
  * This program is free software; you can redistribute it
@@ -351,83 +351,85 @@ void ImageLevels::levelsLutSetup(int nchannels)
        }
 }
 
+// This method is inspired of Gimp2.0 
+// app/base/gimplut.c::gimp_lut_process
 void ImageLevels::levelLutProcess(uint *srcPR, uint *destPR, int w, int h)
 {
-  uint   height, width, src_r_i, dest_r_i;
-  uchar *src, *dest;
-  uchar *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
+    uint   height, width, src_r_i, dest_r_i;
+    uchar *src, *dest;
+    uchar *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
 
-  if (m_lut->nchannels > 0)
+    if (m_lut->nchannels > 0)
        lut0 = m_lut->luts[0];
-  if (m_lut->nchannels > 1)
+    if (m_lut->nchannels > 1)
        lut1 = m_lut->luts[1];
-  if (m_lut->nchannels > 2)
+    if (m_lut->nchannels > 2)
        lut2 = m_lut->luts[2];
-  if (m_lut->nchannels > 3)
+    if (m_lut->nchannels > 3)
        lut3 = m_lut->luts[3];
 
-  height   = h;
-  src      = (uchar*)srcPR;
-  dest     = (uchar*)destPR;
-  width    = w;
-  src_r_i  = 0;
-  dest_r_i = 0;
+    height   = h;
+    src      = (uchar*)srcPR;
+    dest     = (uchar*)destPR;
+    width    = w;
+    src_r_i  = 0;
+    dest_r_i = 0;
 
-  if (src_r_i == 0 && dest_r_i == 0)
-    {
-      width *= h;
-      h = 1;
-    }
+    if (src_r_i == 0 && dest_r_i == 0)
+       {
+       width *= h;
+       h = 1;
+       }
 
   while (h--)
     {
-      switch (m_lut->nchannels)
-	{
-	case 1:
-	  while (width--)
-	    {
-	      *dest = lut0[*src];
-	      src++;
-	      dest++;
-	    }
-	  break;
-	case 2:
-	  while (width--)
-	    {
-	      dest[0] = lut0[src[0]];
-	      dest[1] = lut1[src[1]];
-	      src  += 2;
-	      dest += 2;
-	    }
-	  break;
-	case 3:
-	  while (width--)
-	    {
-	      dest[0] = lut0[src[0]];
-	      dest[1] = lut1[src[1]];
-	      dest[2] = lut2[src[2]];
-	      src  += 3;
-	      dest += 3;
-	    }
-	  break;
-	case 4:
-	  while (width--)
-	    {
-	      dest[0] = lut0[src[0]];
-	      dest[1] = lut1[src[1]];
-	      dest[2] = lut2[src[2]];
-	      dest[3] = lut3[src[3]];
-	      src  += 4;
-	      dest += 4;
-	    }
-	  break;
-	default:
-	  kdWarning() << "ImageLevels::levelLutProcess: Error: nchannels = " << m_lut->nchannels << endl;
-	}
+    switch (m_lut->nchannels)
+    {
+    case 1:
+      while (width--)
+        {
+          *dest = lut0[*src];
+          src++;
+          dest++;
+        }
+      break;
+    case 2:
+      while (width--)
+        {
+          dest[0] = lut0[src[0]];
+          dest[1] = lut1[src[1]];
+          src  += 2;
+          dest += 2;
+        }
+      break;
+    case 3:
+      while (width--)
+        {
+          dest[0] = lut0[src[0]];
+          dest[1] = lut1[src[1]];
+          dest[2] = lut2[src[2]];
+          src  += 3;
+          dest += 3;
+        }
+      break;
+    case 4:
+      while (width--)
+        {
+          dest[0] = lut0[src[0]];
+          dest[1] = lut1[src[1]];
+          dest[2] = lut2[src[2]];
+          dest[3] = lut3[src[3]];
+          src  += 4;
+          dest += 4;
+        }
+      break;
+    default:
+      kdWarning() << "ImageLevels::levelLutProcess: Error: nchannels = " << m_lut->nchannels << endl;
+    }
 
-      width = w;
-      src  += src_r_i;
-      dest += dest_r_i;
+    width = w;
+    src  += src_r_i;
+    dest += dest_r_i;
     }
 }
 
