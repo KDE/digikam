@@ -284,8 +284,6 @@ void ImagePropertiesHistogram::setCurrentURL(const KURL& url)
         if(m_image.depth() < 32)                 // we works always with 32bpp.
             m_image = m_image.convertDepth(32);
        
-        m_image.setAlphaBuffer(true);
-        
         // If a selection area is done in Image Editor and if the current image is the same 
         // in Image Editor, then compute too the histogram for this selection.
         
