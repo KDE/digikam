@@ -543,11 +543,8 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );
     
-/*    if ( m_config->readEntry("KIPI Plugins List") == QString::null )         
-       KipiPluginLoader_->loadPlugins();                             
-    else 
-       KipiPluginLoader_->loadPlugins(m_config->readListEntry("KIPI Plugins List"));
-*/
+    KipiPluginLoader_->loadPlugins();                             
+
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin(); it != list.end(); ++it ) 

@@ -176,11 +176,11 @@ KURL::List DigikamImageCollection::images()
         switch ( _tp ) 
            {
            case AllAlbumItems:
-              items = album_->getAllItems();
+              items = album_->getAllItemsPath();
               break;
               
            case AlbumItemsSelection:
-              items = album_->getSelectedItems();
+              items = album_->getSelectedItemsPath();
               break;
               
            default:
