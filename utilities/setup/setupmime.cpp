@@ -27,7 +27,7 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qcombobox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -49,47 +49,55 @@ SetupMime::SetupMime(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QHGroupBox *imageFileFilterBox = new QHGroupBox(i18n("Image files"), parent);
-
+   QGroupBox *imageFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Image files"), parent);
+   
    QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
    imageFileFilterLabel->setText(i18n("Show only image files with extensions:"));
 
-   imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
-
+   m_imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
+   QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>You can set here the extension of image files "
+                                                "who will displayed on Albums (like JPEG or TIFF)."));
+   
    layout->addWidget(imageFileFilterBox);
    
    // --------------------------------------------------------
    
-   QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie files"), parent);
-   QGridLayout* movieFileFilterGroupLayout = new QGridLayout( movieFileFilterBox->layout() );
-   movieFileFilterGroupLayout->setAlignment( Qt::AlignTop );
-   movieFileFilterGroupLayout->addMultiCellWidget( movieFileFilterBox, 0, 2, 0, 2 );
-   
+   QGroupBox *movieFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Movie files"), parent);
+  
    QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
    movieFileFilterLabel->setText(i18n("Show only movie files with extensions:"));
-   movieFileFilterGroupLayout->addWidget( movieFileFilterLabel, 0, 1);
    
-   movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
-   movieFileFilterGroupLayout->addWidget( movieFileFilterEdit, 0, 2);
+   m_movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
+   QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>You can set here the extension of the movie files "
+                                                "who will displayed on Albums (like MPEG or AVI)."));
 
-   QLabel *moviePlayerLabel = new QLabel(movieFileFilterBox);
-   moviePlayerLabel->setText(i18n("open movie files in:"));
-   movieFileFilterGroupLayout->addWidget( moviePlayerLabel, 1, 1);
-      
-   moviePlayer = new QComboBox(movieFileFilterBox);
-   movieFileFilterGroupLayout->addWidget( moviePlayer, 1, 2);
-   
    layout->addWidget(movieFileFilterBox);
+
+   // --------------------------------------------------------
    
+   QGroupBox *audioFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Audio files"), parent);
+  
+   QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
+   audioFileFilterLabel->setText(i18n("Show only audio files with extensions:"));
+   
+   m_audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
+   QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>You can set here the extension of audio files "
+                                                "who will displayed on Albums (like MP3 or OGG)."));
+   
+   layout->addWidget(audioFileFilterBox);
+      
    // --------------------------------------------------------
 
-   QHGroupBox *rawFileFilterBox = new QHGroupBox(i18n("Raw files"), parent);
+   QGroupBox *rawFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Raw files"), parent);
 
    QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
    rawFileFilterLabel->setText(i18n("Show only Raw files with extensions:"));
 
-   rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
-
+   m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
+   QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>You can set here the extension of RAW image files "
+                                                "who will displayed on Albums (like CRW for Canon camera"
+                                                "or NEF for Nikon camera)."));
+                                                
    layout->addWidget(rawFileFilterBox);
    
    // --------------------------------------------------------
@@ -109,9 +117,10 @@ void SetupMime::applySettings()
     
     if (!settings) return;
 
-    settings->setImageFileFilter(imageFileFilterEdit->text());
-    settings->setMovieFileFilter(movieFileFilterEdit->text());
-    settings->setRawFileFilter(rawFileFilterEdit->text());
+    settings->setImageFileFilter(m_imageFileFilterEdit->text());
+    settings->setMovieFileFilter(m_movieFileFilterEdit->text());
+    settings->setAudioFileFilter(m_audioFileFilterEdit->text());
+    settings->setRawFileFilter(m_rawFileFilterEdit->text());
     
     settings->saveSettings();
 }
@@ -122,9 +131,10 @@ void SetupMime::readSettings()
     
     if (!settings) return;
 
-    imageFileFilterEdit->setText(settings->getImageFileFilter());
-    movieFileFilterEdit->setText(settings->getMovieFileFilter());
-    rawFileFilterEdit->setText(settings->getRawFileFilter());    
+    m_imageFileFilterEdit->setText(settings->getImageFileFilter());
+    m_movieFileFilterEdit->setText(settings->getMovieFileFilter());
+    m_audioFileFilterEdit->setText(settings->getAudioFileFilter());
+    m_rawFileFilterEdit->setText(settings->getRawFileFilter());    
 }
 
 

@@ -72,9 +72,12 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    layout->addWidget(albumPathBox);
 
    // --------------------------------------------------------
+
+   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(2,
+                                           Qt::Horizontal, 
+                                           i18n("Default Thumbnail Size"),
+                                           parent);
    
-   QVButtonGroup* iconSizeButtonGroup = new QVButtonGroup(parent);
-   iconSizeButtonGroup->setTitle( i18n( "Default Thumbnail Size" ) );
    iconSizeButtonGroup->setRadioButtonExclusive(true);
 
    smallIconButton_ = new QRadioButton(iconSizeButtonGroup);
@@ -93,8 +96,9 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QVGroupBox* iconTextGroup = new QVGroupBox(parent);
-   iconTextGroup->setTitle(i18n("Extra Information  in Thumbnail View"));
+   QGroupBox *iconTextGroup = new QGroupBox(2, Qt::Horizontal, 
+                                            i18n("Extra Information in Thumbnail View"),
+                                            parent);
 
    iconShowMimeBox_ = new QCheckBox(iconTextGroup);
    iconShowMimeBox_->setText(i18n("Show file type (e.g. image/jpeg)"));

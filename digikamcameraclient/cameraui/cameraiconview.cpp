@@ -103,8 +103,6 @@ void CameraIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
     createPixmap(d->videoPix, "icons/multimedia.png", scale);
     d->unknownPix = pix;
     createPixmap(d->unknownPix, "icons/documents.png", scale);
-    
-
 }
 
 void CameraIconView::createPixmap(QPixmap& pix, const QString& icon,
@@ -141,7 +139,6 @@ CameraIconItem* CameraIconView::addItem(const GPFileItemInfo* fileInfo)
     else
         pix = d->unknownPix;
 
-
     CameraIconItem *iconItem =
         new CameraIconItem(this, fileInfo, pix);
 
@@ -169,7 +166,6 @@ void CameraIconView::calcBanner()
 
 void CameraIconView::paintBanner(QPainter*)
 {
-    
 }
 
 void CameraIconView::markDownloaded(CameraIconItem* iconItem)

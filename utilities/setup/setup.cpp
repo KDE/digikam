@@ -49,12 +49,10 @@ Setup::Setup(QWidget* parent, const char* name)
     
     page_general = addPage(i18n("Albums"), i18n("Albums settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
-                                  
     generalPage_ = new SetupGeneral(page_general);
 
-    page_mime = addPage(i18n("Mime types"), i18n("Mime types settings"),
-                           BarIcon("mime", KIcon::SizeMedium));
-                                  
+    page_mime = addPage(i18n("Mime types"), i18n("Albums items Mime types settings"),
+                        BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
     
     page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),

@@ -23,10 +23,11 @@
 #ifndef SETUPMIME_H
 #define SETUPMIME_H
 
+// Qt includes.
+
 #include <qwidget.h>
 
 class QLineEdit;
-class QComboBox;
 
 class SetupMime : public QWidget
 {
@@ -43,11 +44,10 @@ private:
 
     void readSettings();
 
-    QLineEdit *imageFileFilterEdit;
-    QLineEdit *movieFileFilterEdit;
-    QLineEdit *rawFileFilterEdit;
-    
-    QComboBox *moviePlayer;
+    QLineEdit *m_imageFileFilterEdit;
+    QLineEdit *m_movieFileFilterEdit;
+    QLineEdit *m_audioFileFilterEdit;
+    QLineEdit *m_rawFileFilterEdit;
 };
 
 #endif // SETUPMIME_H 

@@ -169,7 +169,10 @@ void AlbumIconView::applySettings(const AlbumSettings*
     if (!settings) return;
     d->albumSettings = settings;
 
-    d->imageLister->setNameFilter(d->albumSettings->getImageFileFilter());
+    d->imageLister->setNameFilter(d->albumSettings->getImageFileFilter() + " " + 
+                                  d->albumSettings->getMovieFileFilter() + " " +
+                                  d->albumSettings->getAudioFileFilter() + " " +
+                                  d->albumSettings->getRawFileFilter());
     
     ThumbnailSize thumbSize((ThumbnailSize::Size)
                             d->albumSettings->getDefaultIconSize()); 
@@ -298,6 +301,7 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
         connect(d->thumbJob,
                 SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+                
         connect(d->thumbJob,
                 SIGNAL(signalFailed(const KURL&)),
                 SLOT(slotFailedThumbnail(const KURL&)));
@@ -392,12 +396,14 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     KTrader::OfferList::Iterator iter;
     KService::Ptr ptr;
     int index = 100;
-    for( iter = offers.begin(); iter != offers.end(); ++iter ) {
+    
+    for( iter = offers.begin(); iter != offers.end(); ++iter ) 
+        {
         ptr = *iter;
         openWithMenu->insertItem( ptr->pixmap(KIcon::Small),
                                   ptr->name(), index++);
         serviceVector.push_back(ptr);
-    }
+        }
     
     // --------------------------------------------------------
 
@@ -421,13 +427,15 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     QPtrListIterator<KAction> it(mergeActions);
     KAction *action;
     bool count = 0;
-    while ( (action = it.current()) != 0 ) {
+    while ( (action = it.current()) != 0 ) 
+        {
         action->plug(&popmenu);
         ++it;
         count++;
-    }
+        }
 
     // Don't insert a separator if we didn't plug in any actions
+    
     if (count != 0)
         popmenu.insertSeparator();
     
@@ -475,7 +483,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     default:
         break;
     }
-
 
     //---------------------------------------------------------------
 
@@ -593,19 +600,39 @@ void AlbumIconView::slot_onDeleteSelectedItemsFinished(KIO::Job* job)
 
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
+    AlbumSettings *settings = AlbumSettings::instance();
+    
+    if (!settings) return;
+    
     if (!item) return;
+    
+    QString currentFileExtension = item->fileItem()->url().fileName().section( '.', -1 );
+    QString imagefilter = settings->getImageFileFilter();
 
+    if ( imagefilter.find(currentFileExtension) == -1 )     // If the current item isn't an image file.
+       {
+       KTrader::OfferList offers = KTrader::self()->query(item->fileItem()->mimetype(),
+                                                          "Type == 'Application'");          
+       
+       KService::Ptr ptr = offers.first();
+       KRun::run(*ptr, item->fileItem()->url());     // Run the dedicaced app for to show the item.
+       return;                                                  
+       }
+
+    // Run Digikam ImageViewer with all image files in the current Album.
+    
     KURL::List urlList;
 
-    for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
-        AlbumIconItem *iconItem =
-            static_cast<AlbumIconItem *>(it);
-        urlList.append(iconItem->fileItem()->url());
-    }
-
-    ImageView *view =
-        new ImageView(0, urlList,
-                      item->fileItem()->url());
+    for (ThumbItem *it = firstItem() ; it ; it = it->nextItem()) 
+        {
+        AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+        QString fileExtension = iconItem->fileItem()->url().fileName().section( '.', -1 );
+        
+        if ( imagefilter.find(fileExtension) != -1 )
+           urlList.append(iconItem->fileItem()->url());
+        }
+               
+    ImageView *view = new ImageView(0, urlList, item->fileItem()->url());
     view->show();
 }
 

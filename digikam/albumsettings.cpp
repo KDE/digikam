@@ -45,6 +45,7 @@ public:
     QStringList albumCollectionNames;
     QString     imageFilefilter;
     QString     movieFilefilter;
+    QString     audioFilefilter;
     QString     rawFilefilter;
 
     int            thumbnailSize;
@@ -97,9 +98,10 @@ void AlbumSettings::init()
 
     d->albumSortOrder = AlbumSettings::ByCollection;
                                           
-    d->imageFilefilter = "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp *.xpm *.ppm";
+    d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
-    d->rawFilefilter = "*.crw *.nef";
+    d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
+    d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
     d->thumbnailSize = ThumbnailSize::Medium;
 
     d->iconShowMime = false;
@@ -138,6 +140,11 @@ void AlbumSettings::readSettings()
             config->readEntry("Movie File Filter",
                               d->movieFilefilter);
 
+    if (config->hasKey("Audio File Filter"))
+        d->audioFilefilter =
+            config->readEntry("Audio File Filter",
+                              d->audioFilefilter);
+                              
     if (config->hasKey("Raw File Filter"))
         d->rawFilefilter =
             config->readEntry("Raw File Filter",
@@ -189,6 +196,9 @@ void AlbumSettings::saveSettings()
 
     config->writeEntry("Movie File Filter",
                        d->movieFilefilter);
+    
+    config->writeEntry("Audio File Filter",
+                       d->audioFilefilter);
                            
     config->writeEntry("Raw File Filter",
                        d->rawFilefilter);
@@ -272,6 +282,16 @@ void AlbumSettings::setMovieFileFilter(const QString& filter)
 QString AlbumSettings::getMovieFileFilter() const
 {
     return d->movieFilefilter;
+}
+
+void AlbumSettings::setAudioFileFilter(const QString& filter)
+{
+    d->audioFilefilter = filter;    
+}
+
+QString AlbumSettings::getAudioFileFilter() const
+{
+    return d->audioFilefilter;
 }
 
 void AlbumSettings::setRawFileFilter(const QString& filter)

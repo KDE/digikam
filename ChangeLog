@@ -1,5 +1,10 @@
-v0.6.3 (usingLibKIPI)-Alpha1 
+v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * Added Full Mime type support for images, movies, audio, and RAW files.
+
+v0.6.2-RC            05/18/04    
+----------------------------------------------------------------------------
+        * Syncing with Sourceforge.net repository.
         * Added a new toolsbar in ImageViewer with an images list selection
           and preview of images.
         * Added 'Image Properties' action button in ImageViewer.

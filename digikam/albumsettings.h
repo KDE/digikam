@@ -31,16 +31,16 @@
 
 class AlbumSettingsPrivate;
 
-class AlbumSettings {
-
+class AlbumSettings 
+{
 public:
 
     enum AlbumSortOrder
-    {
+        {
         ByCollection = 0,
         ByDate,
         Flat
-    };
+        };
 
     AlbumSettings();
     ~AlbumSettings();
@@ -65,7 +65,10 @@ public:
     
     void setMovieFileFilter(const QString& filter);
     QString getMovieFileFilter() const;
-        
+
+    void setAudioFileFilter(const QString& filter);
+    QString getAudioFileFilter() const;
+            
     void setRawFileFilter(const QString& filter);
     QString getRawFileFilter() const;
     
@@ -93,7 +96,6 @@ private:
     void init();
 
     AlbumSettingsPrivate* d;
-
 };
 
 #endif  // ALBUMSETTINGS_H

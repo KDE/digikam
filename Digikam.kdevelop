@@ -1,8 +1,8 @@
 <!DOCTYPE kdevelop>
 <kdevelop>
   <general>
-    <author>Renchi Raju</author>
-    <email>renchi@pooh.tam.uiuc.edu</email>
+    <author>Renchi Raju / Gilles Caulier</author>
+    <email>renchi at pooh.tam.uiuc.edu / caulier.gilles at free.fr</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
@@ -12,11 +12,10 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
-      <part>KDevVisualBoyAdvance</part>
     </ignoreparts>
     <secondaryLanguages/>
   </general>
@@ -31,7 +30,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns></hidepatterns>
+      <hidepatterns/>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <showvcsfields>true</showvcsfields>
     </tree>
@@ -55,12 +54,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell>../libtool</dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -92,8 +91,8 @@
     <run>
       <directoryradio>custom</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>/home/gilles/Temp2/CVS/digikam/</mainprogram>
-      <programargs/>
+      <mainprogram>/mnt/Temp2/CVS/kdeextragear-3/digikam/digikam/digikam</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -152,4 +151,11 @@
       <implementationsuffix>.cpp</implementationsuffix>
     </filetemplates>
   </cppsupportpart>
+  <kdevcvsservice>
+    <recursivewhenupdate>true</recursivewhenupdate>
+    <prunedirswhenupdate>true</prunedirswhenupdate>
+    <createdirswhenupdate>true</createdirswhenupdate>
+    <recursivewhencommitremove>true</recursivewhencommitremove>
+    <revertoptions>-C</revertoptions>
+  </kdevcvsservice>
 </kdevelop>
