@@ -14,7 +14,6 @@ libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/guibuilder \
-	  -I$(top_srcdir)/digikam/utilities/kexif \
 	  $(IMLIB2_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageiface.h imagewidget.h imageplugin.h
