@@ -47,7 +47,7 @@ libexif >= 0.5.7
 libgdbm >= 1.8.0
 libKIPI from kdeextragear-libs-1
 libKexif from kdeextragear-libs-1
-
+libtiff >= 3.5.x
 
 Installation :
 ------------------------------------------------------------------------
