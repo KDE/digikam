@@ -560,6 +560,17 @@ void ThumbView::drawRubber(QPainter *p)
 
 }
 
+void ThumbView::leaveEvent(QEvent *e)
+{
+    // hide tooltip
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+    
+    QScrollView::leaveEvent(e);
+}
+
 void ThumbView::focusOutEvent(QFocusEvent *e)
 {
     // hide tooltip
@@ -717,6 +728,14 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     
     if (e->state() == NoButton )
     {
+        if (!isActiveWindow())
+        {
+            d->toolTipItem = 0;
+            d->toolTipTimer->stop();
+            slotToolTip();
+            return;
+        }
+        
         ThumbItem* item = findItem(e->pos());
         if (item != d->toolTipItem)
         {

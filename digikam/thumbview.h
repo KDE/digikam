@@ -58,7 +58,9 @@ public:
     
 protected:
 
+    virtual void leaveEvent(QEvent *e);
     virtual void focusOutEvent(QFocusEvent *e);
+
     virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
     virtual void contentsMouseReleaseEvent(QMouseEvent *e);
