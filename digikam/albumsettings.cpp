@@ -55,6 +55,7 @@ public:
     bool iconShowSize;
     bool iconShowDate;
     bool iconShowComments;
+    bool iconShowFileComments;
     bool iconShowResolution;
     bool saveExifComments;
 
@@ -351,6 +352,16 @@ void AlbumSettings::setIconShowComments(bool val)
 bool AlbumSettings::getIconShowComments() const
 {
     return d->iconShowComments;
+}
+
+void AlbumSettings::setIconShowFileComments(bool val)
+{
+    d->iconShowFileComments = val;
+}
+
+bool AlbumSettings::getIconShowFileComments() const
+{
+    return d->iconShowFileComments;
 }
 
 void AlbumSettings::setSaveExifComments(bool val)

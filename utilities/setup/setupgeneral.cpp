@@ -114,7 +114,10 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    iconShowDateBox_->setText(i18n("Show file modification date"));
 
    iconShowCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowCommentsBox_->setText(i18n("Show File Comments"));
+   iconShowCommentsBox_->setText(i18n("Show Digikam comments"));
+
+   iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
+   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file"));
 
    layout->addWidget(iconTextGroup);
    
@@ -165,6 +168,7 @@ void SetupGeneral::applySettings()
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
+    settings->setIconShowFileComments(iconShowFileCommentsBox_->isChecked());
     settings->setSaveExifComments(iconSaveExifBox_->isChecked());
 
     settings->saveSettings();
@@ -200,6 +204,7 @@ void SetupGeneral::readSettings()
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
+    iconShowFileCommentsBox_->setChecked(settings->getIconShowFileComments());
     iconSaveExifBox_->setChecked(settings->getSaveExifComments());
 }
 

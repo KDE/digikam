@@ -279,21 +279,25 @@ void AlbumIconItem::updateExtraText()
                 firstLine = false;
             extraText += comments;
         }
+    }
 
-        // FIXME : This code must be fixed by Richard Taylor !!!
+    if(settings->getIconShowFileComments())
+    {
+      // read and display JPEG COM field
+      KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+
+      if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+      {
+        extraText += "\n";
+        QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
+
+        // Only append JPEG comments if they are different from the regular comment
+        QString comments;
+        view_->getItemComments(text(), comments);
         
-        // read and display JPEG COM field
-   /*     KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
-
-        if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
-        {
-            extraText += "\n";
-            QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
-
-            // Only append JPEG comments if they are different from the regular comment
-            if(jpegComments != comments)
-              extraText += jpegComments;
-        }*/  
+        if(jpegComments != comments)
+          extraText += jpegComments;
+      }  
     }
 
     if (imageWidth_ != 0 && imageHeight_ != 0) {

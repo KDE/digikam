@@ -58,6 +58,7 @@ private:
     QCheckBox    *iconShowSizeBox_;
     QCheckBox    *iconShowDateBox_;
     QCheckBox    *iconShowCommentsBox_;
+    QCheckBox    *iconShowFileCommentsBox_;
     QCheckBox    *iconSaveExifBox_;
     
 private slots:
