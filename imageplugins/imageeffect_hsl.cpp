@@ -113,6 +113,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     enableButtonOK( false );
     adjustSize();
+    disableResize();                  
 }
 
 ImageEffect_HSL::~ImageEffect_HSL()

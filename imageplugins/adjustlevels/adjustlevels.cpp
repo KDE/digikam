@@ -40,6 +40,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -340,7 +341,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
     
     adjustSize();
-    slotResetAllChannels();    
+    QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));     // Reset all parameters to the default values.    
+    disableResize(); 
 }
 
 AdjustLevelDialog::~AdjustLevelDialog()

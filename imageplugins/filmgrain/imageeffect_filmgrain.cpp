@@ -79,17 +79,6 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                    true,
                                    true,
                                    i18n("&Reset values")),
-/*                     : KDialogBase(Plain,
-                                   WStyle_Customize | WStyle_Minimize | WType_TopLevel,
-                                   parent,
-                                   0,
-                                   true,
-                                   i18n("Film Grain"),
-                                   Help|User1|Ok|Cancel,
-                                   Ok,
-                                   true,
-                                   i18n("&Reset values")),*/
-                       
                        m_parent(parent)
 {
     QString whatsThis;
@@ -193,6 +182,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     
     adjustSize();
     QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
+    disableResize(); 
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()

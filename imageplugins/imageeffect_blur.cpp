@@ -35,6 +35,7 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -81,13 +82,15 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     m_radiusInput->setValue(0);
     
-    adjustSize();
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));
+    
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
+    adjustSize();
+    disableResize();                  
 }
 
 ImageEffect_Blur::~ImageEffect_Blur()

@@ -202,7 +202,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.     
+    disableResize();        
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()

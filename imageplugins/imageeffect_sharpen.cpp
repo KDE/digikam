@@ -81,8 +81,6 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     m_radiusInput->setValue(0);
     
-    adjustSize();
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -90,6 +88,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
             this, SLOT(slotEffect()));
     
     QTimer::singleShot(0, this, SLOT(slotEffect()));
+    adjustSize();
+    disableResize();                  
 }
 
 ImageEffect_Sharpen::~ImageEffect_Sharpen()

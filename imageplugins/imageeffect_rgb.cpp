@@ -141,6 +141,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     enableButtonOK( false );
     adjustSize();
+    disableResize();                  
 }
 
 ImageEffect_RGB::~ImageEffect_RGB()

@@ -105,6 +105,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     enableButtonOK( false );
     adjustSize();
+    disableResize();      
 }
 
 ImageEffect_BCG::~ImageEffect_BCG()
