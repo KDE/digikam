@@ -466,7 +466,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     AlbumIconItem* iconItem
         = static_cast<AlbumIconItem *>(item);
 
-    int selectedCount = selectedItems().count();
     
     // --------------------------------------------------------
 

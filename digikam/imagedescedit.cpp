@@ -385,7 +385,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
                                            const QPoint &, int )
 {
     TAlbum              *album;
-    TAlbumCheckListItem *albumItem;
+    TAlbumCheckListItem *albumItem = 0;
     
     if (!item) 
     {
