@@ -29,6 +29,7 @@
 #include <kapplication.h>
 #include <kaboutapplication.h>
 #include <kaboutkde.h>
+#include <kbugreport.h> 
 
 // Local includes.
 
@@ -175,6 +176,8 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         actionCollection(),
                                         "imageview_helpimageplugins");
                          
+    KStdAction::reportBug(this, SLOT(slotBugReport()), actionCollection(),
+                         "imageview_reportbug");
     KStdAction::aboutApp(this, SLOT(slotAboutApp()), actionCollection(),
                          "imageview_aboutapp");
     KStdAction::aboutKDE(this, SLOT(slotAboutKDE()), actionCollection(),
@@ -221,7 +224,10 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/DefineGroup/Generic/ ");
 
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_help/ ");
+    guiDef.append("MenuBar/Menu/&Help/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_helpimageplugins/ ");
+    guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_reportbug/ ");
+    guiDef.append("MenuBar/Menu/&Help/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutapp/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutkde/ ");
 
@@ -261,6 +267,12 @@ QStringList ImageGUIClient::guiDefinition() const
 void ImageGUIClient::slotHelp()
 {
     KApplication::kApplication()->invokeHelp( "imageeditor.anchor", "digikam" );
+}
+
+void ImageGUIClient::slotBugReport()
+{
+    KBugReport dlg(kapp->activeWindow());//, bool modal=true, const KAboutData *aboutData=0L)
+    dlg.exec();
 }
 
 void ImageGUIClient::slotAboutApp()
