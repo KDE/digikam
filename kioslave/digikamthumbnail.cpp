@@ -295,11 +295,20 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
     if (!data)
         return false;
 
-    
-    for (int y = 0 ; y < new_height_ ; ++y)
-    {
-        data = imlib_image_get_data() + (DATA32)( y * new_width_ );
-        memcpy(image.scanLine(y), data, new_width_ * 4 );
+    uint a,r,g,b;
+    uint* imgData = (uint*) image.bits();
+
+    for (int i = 0; i < new_width_*new_height_; i++) {
+
+        a = (*data & 0xff000000) >> 24;
+        r = (*data & 0xff0000)   >> 16;
+        g = (*data & 0xff00)     >> 8;
+        b = (*data & 0xff);
+
+        *imgData = qRgba(r,g,b,a);
+
+        data++;
+        imgData++;
     }
     
     imlib_free_image();        
