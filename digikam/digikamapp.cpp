@@ -267,7 +267,6 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_addImages");
     mAddImagesAction->setWhatsThis(i18n("This option adding new images in the current Album."));
-                                    
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
                                     "fileopen",
@@ -590,16 +589,36 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
 void DigikamApp::slot_albumSelected(bool val)
 {
-    mDeleteAction->setEnabled(val);
-    mAddImagesAction->setEnabled(val);
-    mPropsEditAction->setEnabled(val);
-    mOpenInKonquiAction->setEnabled(val);
+    Album *album = mAlbumManager->currentAlbum();
+    if(album && !album->isRoot())
+    {   
+        mDeleteAction->setEnabled(val);
+        mAddImagesAction->setEnabled(val);
+        mPropsEditAction->setEnabled(val);
+        mOpenInKonquiAction->setEnabled(val);
+    }
+    else
+    {
+        mDeleteAction->setEnabled(false);
+        mAddImagesAction->setEnabled(false);
+        mPropsEditAction->setEnabled(false);
+        mOpenInKonquiAction->setEnabled(false);
+    }
 }
 
 void DigikamApp::slot_tagSelected(bool val)
 {
-    mDeleteTagAction->setEnabled(val);
-    mEditTagAction->setEnabled(val);
+    Album *album = mAlbumManager->currentAlbum();
+    if(album && !album->isRoot())
+    {
+        mDeleteTagAction->setEnabled(val);
+        mEditTagAction->setEnabled(val);
+    }
+    else
+    {
+        mDeleteTagAction->setEnabled(false);
+        mEditTagAction->setEnabled(false);
+    }
 }
 
 void DigikamApp::slot_imageSelected(bool val)

@@ -125,7 +125,7 @@ private:
 
     // Theme Actions
     KSelectAction *mThemeMenuAction;
-    
+
     // Album Actions
     KAction       *mNewAction;
     KAction       *mDeleteAction;
