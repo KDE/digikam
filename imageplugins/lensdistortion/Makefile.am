@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_lensdistortion_ui.rc
+       
+digikamimageplugin_lensdistortionicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_lensdistortionicon_ICON = AUTO
