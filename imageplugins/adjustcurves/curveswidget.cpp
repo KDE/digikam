@@ -90,6 +90,35 @@ void CurvesWidget::reset(void)
     repaint(false);
 }
 
+void CurvesWidget::curveTypeChanged(void)
+{
+    switch ( m_curves->getCurveType(m_channelType) )
+       {
+       case Digikam::ImageCurves::CURVE_SMOOTH:
+  
+          //  pick representative points from the curve and make them control points
+          
+          for (int i = 0; i <= 8; ++i)
+             {
+             int index = CLAMP0255 (i * 32);
+             
+             m_curves->setCurvePoint( m_channelType,
+                                      i * 2, QPoint::QPoint(index, 
+                                             m_curves->getCurveValue(m_channelType,
+                                             index)) );
+             }
+          
+          m_curves->curvesCalculateCurve(m_channelType);
+          break;
+         
+       case Digikam::ImageCurves::CURVE_FREE:
+          break;
+       }
+                       
+    repaint(false);             
+    emit signalCurvesChanged();        
+}
+
 void CurvesWidget::customEvent(QCustomEvent *event)
 {
     if (!event) return;

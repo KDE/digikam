@@ -59,7 +59,7 @@ private:
     
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
-    QComboBox                    *m_modeCB;  
+    QComboBox                    *m_typeCB;  
     
     QLabel                       *m_labelPos;
     
@@ -94,7 +94,7 @@ private slots:
     void slotSaveCurves();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-    void slotModeChanged(int mode);
+    void slotCurveTypeChanged(int type);
     void slotPositionChanged(int x, int y);
 };
 

@@ -77,6 +77,7 @@ public:
     void stopHistogramComputation(void);
     
     void reset(void);
+    void curveTypeChanged(void);
     
     int m_channelType;     // Channel type to draw.
     int m_scaleType;       // Scale to use for drawing.

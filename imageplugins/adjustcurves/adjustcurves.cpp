@@ -176,13 +176,13 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(label2, 0, 0, 4, 4);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
     
-    QLabel *label5 = new QLabel(i18n("Mode:"), gbox);
+    QLabel *label5 = new QLabel(i18n("Type:"), gbox);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_modeCB = new QComboBox( false, gbox );
-    m_modeCB->insertItem( i18n("Smooth") );
-    m_modeCB->insertItem( i18n("Free") );
-    m_modeCB->setCurrentText( i18n("Smooth") );
-    QWhatsThis::add( m_modeCB, i18n("<p>Select here the curves drawing mode."));
+    m_typeCB = new QComboBox( false, gbox );
+    m_typeCB->insertItem( i18n("Smooth") );
+    m_typeCB->insertItem( i18n("Free") );
+    m_typeCB->setCurrentText( i18n("Smooth") );
+    QWhatsThis::add( m_typeCB, i18n("<p>Select here the curve type to draw for the current channel."));
 
     QLabel *label6 = new QLabel(i18n("Position:"), gbox);
     label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -190,7 +190,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
                                      
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_modeCB, 1, 1, 2, 2);
+    grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
     grid->addMultiCellWidget(label6, 1, 1, 4, 4);
     grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
     
@@ -273,8 +273,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
             
-    connect(m_modeCB, SIGNAL(activated(int)),
-            this, SLOT(slotModeChanged(int)));
+    connect(m_typeCB, SIGNAL(activated(int)),
+            this, SLOT(slotCurveTypeChanged(int)));
     
     // -------------------------------------------------------------
     // Bouttons slots.
@@ -436,9 +436,9 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
     m_curvesWidget->repaint(false);
 }
 
-void AdjustCurveDialog::slotModeChanged(int mode)
+void AdjustCurveDialog::slotCurveTypeChanged(int type)
 {
-    switch(mode)
+    switch(type)
        {
        case 1:           // Free.
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
@@ -448,8 +448,8 @@ void AdjustCurveDialog::slotModeChanged(int mode)
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
           break;
        }
-
-    m_curvesWidget->repaint(false);
+    
+    m_curvesWidget->curveTypeChanged();
 }
 
 void AdjustCurveDialog::slotLoadCurves()
