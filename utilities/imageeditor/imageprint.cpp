@@ -165,6 +165,11 @@ bool ImagePrint::printImageWithQt()
     int w = metrics.width();
     int h = metrics.height();
 
+    kdDebug() << "Printer Resolution: " << m_printer.resolution() << endl;
+    kdDebug() << "Width: " << w << ", Height: " << h
+              << ", Image Width: " << image.width()
+              << ", Image Height: " << image.height() << endl;
+    
     QString t = "true";
     QString f = "false";
 
@@ -186,7 +191,7 @@ bool ImagePrint::printImageWithQt()
     
     bool shrinkToFit = (m_printer.option( "app-imageeditor-shrinkToFit" ) != f);
     
-    if ( shrinkToFit && image.width() > w || image.height() > h )
+    if ( shrinkToFit && (image.width() > w || image.height() > h) )
         image = image.smoothScale( w, h, QImage::ScaleMin );
 
     // Align image.
