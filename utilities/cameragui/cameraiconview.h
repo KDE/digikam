@@ -51,6 +51,10 @@ private:
 
     CameraIconViewPriv *d;
 
+signals:
+
+    void signalFileView(CameraIconItem* item);
+    
 public slots:
 
     void slotNewItems(const KFileItemList& itemList);
@@ -59,6 +63,10 @@ public slots:
 
     void slotGotThumbnail(const KFileItem* item, const QPixmap& pix);
     void slotFailedThumbnail(const KFileItem* item);
+
+private slots:
+
+    void slotDoubleClicked(ThumbItem *item);
 };
 
 

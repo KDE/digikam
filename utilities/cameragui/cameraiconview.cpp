@@ -48,6 +48,11 @@ CameraIconView::CameraIconView(QWidget* parent)
     setWFlags(Qt::WDestructiveClose);
 
     d = new CameraIconViewPriv;
+
+    connect(this, SIGNAL(signalDoubleClicked(ThumbItem *)),
+            SLOT(slotDoubleClicked(ThumbItem *)));
+    connect(this, SIGNAL(signalReturnPressed(ThumbItem *)),
+            SLOT(slotDoubleClicked(ThumbItem *)));
 }
 
 CameraIconView::~CameraIconView()
@@ -123,6 +128,15 @@ void CameraIconView::slotGotThumbnail(const KFileItem* item, const QPixmap& pix)
 void CameraIconView::slotFailedThumbnail(const KFileItem* item)
 {
     kdDebug() << "Failed thumbnail " << item->url().url() << endl;
+}
+
+void CameraIconView::slotDoubleClicked(ThumbItem *item)
+{
+    if (!item)
+        return;
+
+    CameraIconItem *iconItem = static_cast<CameraIconItem*>(item);
+    emit signalFileView(iconItem);
 }
 
 #include "cameraiconview.moc"

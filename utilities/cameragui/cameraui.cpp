@@ -153,6 +153,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     
     connect(d->view, SIGNAL(signalSelectionChanged()),
             SLOT(slotSelectionChanged()));
+    connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
+            SLOT(slotFileView(CameraIconItem*)));
     
     connect(d->controller, SIGNAL(signalNewItems(const KFileItemList&)),
             d->view, SLOT(slotNewItems(const KFileItemList&)));
