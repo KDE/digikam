@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 
+#include <qapplication.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qcolor.h>
@@ -318,7 +319,7 @@ void GPController::initialize()
     mutex_.unlock();
 
     if (result == GPCamera::GPSuccess) {
-        postEvent(parent_, new GPEvent(GPEvent::Init));
+        QApplication::postEvent(parent_, new GPEvent(GPEvent::Init));
     }
     else if (result == GPCamera::GPSetup) {
         QString msg(i18n("Camera Model or Port not specified correctly.\n"
@@ -343,7 +344,7 @@ void GPController::getSubFolders(const QString& folder)
     mutex_.unlock();
 
     if (result == GPCamera::GPSuccess) {
-        postEvent(parent_, new GPEventGetSubFolders(folder,
+        QApplication::postEvent(parent_, new GPEventGetSubFolders(folder,
                                                     subFolderList));
 
         if (subFolderList.count() > 0) {
@@ -388,7 +389,7 @@ void GPController::getItemsInfo(const QString& folder)
     mutex_.unlock();
 
     if (result == GPCamera::GPSuccess) {
-        postEvent(parent_, new GPEventGetItemsInfo(folder,
+        QApplication::postEvent(parent_, new GPEventGetItemsInfo(folder,
                                                    infoList));
     }
     else {
@@ -405,7 +406,7 @@ void GPController::getAllItemsInfo(const QString& folder)
     mutex_.lock();
     camera_->getAllItemsInfo(folder, infoList);
     mutex_.unlock();
-    postEvent(parent_, new GPEventGetAllItemsInfo(infoList));
+    QApplication::postEvent(parent_, new GPEventGetAllItemsInfo(infoList));
     
 }
 
@@ -424,12 +425,12 @@ void GPController::getThumbnail(const QString& folder,
 
         scaleHighlightThumbnail(thumbnail, thumbSize);
 
-        postEvent(parent_, new GPEventGetThumbnail(folder,
+        QApplication::postEvent(parent_, new GPEventGetThumbnail(folder,
                                                    imageName,
                                                    thumbnail));
     }
     else {
-        qWarning(i18n("Failed to get preview for '%1/%2'").arg(folder).arg(imageName));
+        qWarning(i18n("Failed to get preview for '%1/%2'").arg(folder).arg(imageName).ascii());
     }
 
 }
@@ -448,7 +449,7 @@ void GPController::downloadItem(const QString& folder,
         error(msg);
     }
     else {
-        postEvent(parent_, new GPEventDownloadItem(folder,
+        QApplication::postEvent(parent_, new GPEventDownloadItem(folder,
                                                    itemName));
     }
 
@@ -468,7 +469,7 @@ void GPController::openItem(const QString& folder,
         error(msg);
     }
     else {
-        postEvent(parent_, new GPEventOpenItem(saveFile));
+        QApplication::postEvent(parent_, new GPEventOpenItem(saveFile));
     }
 }
 
@@ -487,7 +488,7 @@ void GPController::openItemWithService(const QString& folder,
         error(msg);
     }
     else {
-        postEvent(parent_,
+        QApplication::postEvent(parent_,
                   new GPEventOpenItemWithService(saveFile,
                                                  serviceName));
     }
@@ -505,7 +506,7 @@ void GPController::deleteItem(const QString& folder,
        error(msg);
    }
    else {
-       postEvent(parent_,
+       QApplication::postEvent(parent_,
                  new GPEventDeleteItem(folder, itemName));
    }
 }
@@ -521,7 +522,7 @@ void GPController::deleteAllItems(const QString& rootFolder)
        error(msg);
    }
    else {
-       postEvent(parent_,
+       QApplication::postEvent(parent_,
                  new GPEvent(GPEvent::DeleteAllItems));
    }
 }
@@ -565,7 +566,7 @@ void GPController::uploadItem(const QString& folder,
             }
 
             if (!infoList2.isEmpty())
-                postEvent(parent_, new GPEventGetItemsInfo(folder,
+                QApplication::postEvent(parent_, new GPEventGetItemsInfo(folder,
                                                   infoList2));
 
         }
@@ -590,15 +591,15 @@ void GPController::exifInfo(const QString& folder,
         error(msg);
     }
     else {
-        postEvent(parent_, new GPEventExifInfo(folder, itemName,
+        QApplication::postEvent(parent_, new GPEventExifInfo(folder, itemName,
                                                data, size));
     }
 }
 
 void GPController::error(const QString& errorMsg)
 {
-    qWarning(errorMsg);
-    postEvent(parent_, new GPEventError(errorMsg));
+    qWarning(errorMsg.ascii());
+    QApplication::postEvent(parent_, new GPEventError(errorMsg));
 }
 
 void GPController::scaleHighlightThumbnail(QImage& thumbnail,
@@ -652,12 +653,12 @@ void GPController::scaleHighlightThumbnail(QImage& thumbnail,
 void GPController::slotStatusMsg(const QString& msg)
 {
     if (!msg.isEmpty())
-        postEvent(parent_, new GPEventStatusMsg(msg));
+        QApplication::postEvent(parent_, new GPEventStatusMsg(msg));
 }
 
 void GPController::slotProgressVal(int val)
 {
-    postEvent(parent_, new GPEventProgress(val));
+    QApplication::postEvent(parent_, new GPEventProgress(val));
 }
 
 void GPController::slotErrorMsg(const QString& msg)
@@ -667,7 +668,7 @@ void GPController::slotErrorMsg(const QString& msg)
 
 void GPController::showBusy(bool val)
 {
-    postEvent(parent_, new GPEventBusy(val));
+    QApplication::postEvent(parent_, new GPEventBusy(val));
 }
 
 void GPController::getInformation(QString& summary, QString& manual,
