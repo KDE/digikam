@@ -503,10 +503,12 @@ void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
         QString errMsg;
         if (!albumMan_->deleteTAlbum(album, errMsg)) 
             KMessageBox::error(0, errMsg);
+        else
+        {
+            if(item)
+                delete item;    
+        }
     }
-
-    if(item)
-        delete item;    
 }
 
 
