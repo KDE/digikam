@@ -19,6 +19,11 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
+#include <cstdio>
+#include <unistd.h> 
+ 
 // Qt includes. 
  
 #include <qlayout.h>
@@ -48,11 +53,10 @@
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
 
+// Lib KExif includes.
+
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
-
-#include <cstdio>
-#include <unistd.h>
 
 // Local includes.
 
@@ -85,6 +89,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     KGlobal::iconLoader()->addAppDir("digikam");
 
+    // Load image plugins.
+    
     m_imagePluginLoader = new ImagePluginLoader(this);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
@@ -105,13 +111,16 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     //-------------------------------------------------------------
     
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
-            SLOT(slotOpenURL(const KURL&)));
+            this, SLOT(slotOpenURL(const KURL&)));
             
-    connect(m_canvas, SIGNAL(signalSelected(bool)),
-            m_cropAction, SLOT(setEnabled(bool)));
+/*    connect(m_canvas, SIGNAL(signalSelected(bool)),
+            m_cropAction, SLOT(setEnabled(bool)));*/
             
     connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
             this, SLOT(slotChanged(bool, bool)));
+            
+    connect(m_canvas, SIGNAL(signalSelected(bool)),
+            this, SLOT(slotSelected(bool)));
 
     //-------------------------------------------------------------
         
@@ -167,6 +176,16 @@ void ShowFoto::setupActions()
     m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
                                          actionCollection(), "saveas");
 
+    m_revertAction->setEnabled(false);
+    m_saveAction->setEnabled(false);
+    m_saveAsAction->setEnabled(false);
+    
+    // -- Edit actions ----------------------------------------------------------------                     
+
+    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
+                                    actionCollection(), "copy");
+    m_copyAction->setEnabled(false);
+    
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
                                            KStdAccel::shortcut(KStdAccel::Undo),
                                            m_canvas, SLOT(slotUndo()),
@@ -186,12 +205,8 @@ void ShowFoto::setupActions()
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
-                                         
-    m_revertAction->setEnabled(false);
-    m_saveAction->setEnabled(false);
-    m_saveAsAction->setEnabled(false);
                      
-    // ---------------------------------------------------------------
+    // -- View Actions -----------------------------------------------
     
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
@@ -646,6 +661,9 @@ bool ShowFoto::save()
 
 void ShowFoto::slotOpenURL(const KURL& url)
 {
+    if(!promptUserSave())
+        return;
+
     QString localFile;
 #if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
@@ -771,7 +789,6 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(moreUndo);
-    m_saveAsAction->setEnabled(moreUndo);
 }
 
 void ShowFoto::slotAboutToShowUndoMenu()
@@ -803,6 +820,19 @@ void ShowFoto::slotAboutToShowRedoMenu()
         {
             m_redoAction->popupMenu()->insertItem(*iter, id);
         }        
+    }
+}
+
+void ShowFoto::slotSelected(bool val)
+{
+    m_cropAction->setEnabled(val);
+    m_copyAction->setEnabled(val);
+
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+        if (plugin) {
+            plugin->setEnabledSelectionActions(val);
+        }
     }
 }
 

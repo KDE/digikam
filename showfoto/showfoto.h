@@ -67,7 +67,9 @@ private slots:
     void slotViewHistogram();
     void slotChangeBCG();
     void slotImagePluginsHelp();
+    
     void slotChanged(bool, bool);
+    void slotSelected(bool);
     
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
@@ -103,6 +105,7 @@ private:
     KAction               *m_saveAsAction;
     KAction               *m_imagePluginsHelp;
 
+    KAction               *m_copyAction;
     KToolBarPopupAction   *m_undoAction;
     KToolBarPopupAction   *m_redoAction;
         

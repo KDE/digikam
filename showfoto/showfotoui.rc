@@ -14,6 +14,8 @@
 
    <Menu name="Edit" >
      <text>&amp;Edit</text>
+     <Action name="copy" />
+     <Separator/>     
      <Action name="undo" /> 
      <Action name="redo" />      
   </Menu>

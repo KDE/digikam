@@ -1,16 +1,13 @@
 todo stuff before 0.7.3 release
 ---------------------------------
 
-* provide actions for save/saveas
-* use exifrestorer for save/saveas
-
+* fix actions toogle rules
 * disable plugin menu entries if no current image. 
-* writing hanbook based on digiKam handbook image editor part. 
-* lauch messagebox when image is modified and user change current image.
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
-* add Edit menu entries like in digiKam image editor. 
 * add shofoto settings dialog. 
 * disable thumbbar in full screen mode. 
+* writing handbook based on digiKam handbook image editor part. 
+* use exifrestorer for save/saveas
 
 later stuff
 -----------
