@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_WhiteBalance
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=White balance correction plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_whitebalance
+author=Gilles Caulier, caulier dot gilles at free dot fr
