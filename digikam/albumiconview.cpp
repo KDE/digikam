@@ -359,6 +359,7 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
     else
     {
         d->thumbJob->addItems(fileList);
+        slotContentsMoving(contentsX(), contentsY());
     }
     
     emit signalItemsAdded();
@@ -405,7 +406,6 @@ void AlbumIconView::slotImageListerClear()
 
 void AlbumIconView::slotImageListerCompleted()
 {
-
 }
 
 void AlbumIconView::slotImageListerRefreshItems(const KFileItemList& itemList)
@@ -610,10 +610,7 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
-        d->imageLister->stop();
-        d->itemDict.clear();
-        clear();
-        d->imageLister->openAlbum(d->currentAlbum);
+        d->imageLister->updateDirectory();        
     }
     else
     {
@@ -669,6 +666,8 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     
    AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
                              newName);
+   if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+       d->imageLister->updateDirectory();
 }
 
 void AlbumIconView::slotDeleteSelectedItems()
@@ -694,19 +693,27 @@ void AlbumIconView::slotDeleteSelectedItems()
                                                nameList,
                                                i18n("Warning"),
                                                i18n("Delete"))
-        ==  KMessageBox::Continue) {
+        ==  KMessageBox::Continue)
+    {
 
-       KIO::DeleteJob* job = KIO::del(urlList, false, true);
+        KIO::DeleteJob* job = KIO::del(urlList, false, true);
 
-       connect(job, SIGNAL(result(KIO::Job*)),
-               this, SLOT(slotOnDeleteSelectedItemsFinished(KIO::Job*)));
-       }
+        connect(job, SIGNAL(result(KIO::Job*)),
+                this, SLOT(slotOnDeleteSelectedItemsFinished(KIO::Job*)));
+    }
+
+    // TODO: use a native delete to remove items from database if current
+    // album is a tag album OR use a kdirwatch on all the items in the
+    // tag album.
 }
 
 void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
+
+    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+        d->imageLister->updateDirectory();
 
     updateBanner();
 }

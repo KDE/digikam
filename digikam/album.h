@@ -139,6 +139,7 @@ public:
     void    setPID(int id);
     int     getPID() const;
     QString getURL() const;
+    KURL    getKURL() const;
     QPixmap getPixmap() const;
     
 private:

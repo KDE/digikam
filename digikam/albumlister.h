@@ -41,6 +41,7 @@ public:
     void stop();
 
     void setNameFilter(const QString& nameFilter);
+    void updateDirectory();
 
     PAlbum* findParentAlbum(const KFileItem *item) const;
     
@@ -58,7 +59,8 @@ signals:
 
 private slots:
 
-    void slotNewItems(const KFileItemList& items);
+    void slotNewPhyItems(const KFileItemList& items);
+    void slotNewTagItems(const KFileItemList& items);
     void slotDeleteItem(KFileItem *item);
     void slotClear();
 };

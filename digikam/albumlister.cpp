@@ -25,6 +25,7 @@
 
 #include <kdirlister.h>
 #include <kdirwatch.h>
+#include <kdebug.h>
 
 #include "album.h"
 #include "albummanager.h"
@@ -94,11 +95,11 @@ void AlbumLister::openAlbum(Album *album)
     
     d->currAlbum = album;
     d->comments.clear();
-    
+
     if (album->type() == Album::PHYSICAL)
     {
         connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
-                SLOT(slotNewItems(const KFileItemList&)));
+                SLOT(slotNewPhyItems(const KFileItemList&)));
         connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
                 SLOT(slotDeleteItem(KFileItem*)) );
         connect(d->dirLister, SIGNAL(clear()),
@@ -113,59 +114,47 @@ void AlbumLister::openAlbum(Album *album)
     }
     else if (album->type() == Album::TAG)
     {
+        connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
+                SLOT(slotNewTagItems(const KFileItemList&)));
+        connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
+                SLOT(slotDeleteItem(KFileItem*)) );
+        connect(d->dirLister, SIGNAL(clear()),
+                SLOT(slotClear()));
+        connect(d->dirLister, SIGNAL(completed()),
+                SIGNAL(signalCompleted()));
+        connect(d->dirLister, SIGNAL(refreshItems(const KFileItemList&)),
+                SIGNAL(signalRefreshItems(const KFileItemList&)));
 
-        struct timeval t1, t2;
-
-        gettimeofday(&t1, 0);
-        
-        emit signalClear();
-        d->itemList.clear();
-
-        d->dirWatch = new KDirWatch;
-
-        QString basePath(AlbumManager::instance()->getLibraryPath() + 
-                         QString("/"));
-        
-        TAlbum* t = static_cast<TAlbum*>(album);
-        if (!t->isRoot())
-        {
-
-            d->db->beginTransaction();
-            
-            QStringList     urls;
-            QValueList<int> dirIDs;
-
-            d->db->getItemsInTAlbum(t, urls, dirIDs);
-
-            AlbumManager* man = AlbumManager::instance();
-            
-            QStringList::iterator     itU = urls.begin();
-            QValueList<int>::iterator itD = dirIDs.begin();
-            while (itU != urls.end())
-            {
-                KFileItem *fileItem =
-                    new KFileItem(KFileItem::Unknown,
-                                  KFileItem::Unknown,
-                                  KURL(basePath + *itU), true);
-                fileItem->setExtraData(this, man->findPAlbum(*itD));
-                d->itemList.append(fileItem);
-                itU++;
-                itD++;
-            }
-            
-            d->db->commitTransaction();
-
-            emit signalNewItems(d->itemList);
-
-            gettimeofday(&t2, 0);
-            printf("Scan time = %ld ms\n", (t2.tv_sec-t1.tv_sec)*1000 +
-                   (t2.tv_usec-t1.tv_usec)/1000);
-
-        }
+        //TODO: make recursive retrieval a setup option
+        TAlbum *a = static_cast<TAlbum*>(album);
+        KURL url(a->getKURL());
+        url.setQuery("?recurse=yes");
+        d->dirLister->openURL(url, false, true);
     }
-    else {
+    else
+    {
         emit signalClear();
     }
+}
+
+void AlbumLister::updateDirectory()
+{
+    if (!d->currAlbum)
+        return;
+
+    if (d->currAlbum->type() == Album::PHYSICAL)
+    {
+        PAlbum *a = static_cast<PAlbum*>(d->currAlbum);
+        d->dirLister->updateDirectory(a->getKURL());
+    }
+    else if (d->currAlbum->type() == Album::TAG)
+    {
+        //TODO: make recursive retrieval a setup option
+        TAlbum *a = static_cast<TAlbum*>(d->currAlbum);
+        KURL url(a->getKURL());
+        url.setQuery("?recurse=yes");
+        d->dirLister->updateDirectory(url);
+    }        
 }
 
 PAlbum* AlbumLister::findParentAlbum(const KFileItem *item) const
@@ -186,7 +175,7 @@ void AlbumLister::setNameFilter(const QString& nameFilter)
     d->dirLister->setNameFilter(nameFilter);    
 }
 
-void AlbumLister::slotNewItems(const KFileItemList& items)
+void AlbumLister::slotNewPhyItems(const KFileItemList& items)
 {
     if (d->currAlbum && d->currAlbum->type() == Album::PHYSICAL)
     {
@@ -199,6 +188,50 @@ void AlbumLister::slotNewItems(const KFileItemList& items)
     }
 
     emit signalNewItems(items);
+}
+
+void AlbumLister::slotNewTagItems(const KFileItemList& items)
+{
+    KFileItemList filteredItems;
+    
+    KIO::UDSEntry entry;
+    PAlbum*       album;
+    int           id;
+    KFileItem*    item;
+
+    AlbumManager* man = AlbumManager::instance();
+    
+    for (KFileItemListIterator it(items); (item = it.current()); ++it)
+    {
+        if (item->isDir())
+            continue;
+        
+        album = 0;
+        
+        entry = item->entry();
+        for( KIO::UDSEntry::ConstIterator it = entry.begin();
+             it != entry.end(); it++ )
+        {
+            if ((*it).m_uds == KIO::UDS_XML_PROPERTIES)
+            {
+                id = (*it).m_str.toInt();
+                album = man->findPAlbum(id);
+                break;
+            }
+        }
+
+        if (!album)
+        {
+            kdWarning() << k_funcinfo << "Failed to retrieve dirid from kioslave for "
+                        << item->url().prettyURL() << endl;
+            continue;
+        }
+
+        filteredItems.append(item);
+        item->setExtraData(this, album);
+    }
+
+    emit signalNewItems(filteredItems);
 }
 
 void AlbumLister::slotDeleteItem(KFileItem *item)

@@ -328,6 +328,28 @@ QString TAlbum::getURL() const
     return url;
 }
 
+KURL TAlbum::getKURL() const
+{
+    KURL url;
+    url.setProtocol("digikamtags");
+    
+    if (isRoot())
+    {
+        url.setPath("/");
+    }
+    else if (getParent())
+    {
+        TAlbum *parent = dynamic_cast<TAlbum*>(getParent());
+        url.setPath(parent->getKURL().path(1));
+        url.addPath(QString::number(m_id));
+    }
+    else
+    {
+        url = KURL();
+    }
+    return url;
+}
+
 QPixmap TAlbum::getPixmap() const
 {
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
