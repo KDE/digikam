@@ -29,11 +29,14 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kfilemetainfo.h>
+#include <libkexif/kexifdata.h>
 
 // Local includes.
 
 #include "albummanager.h"
 #include "albuminfo.h"
+#include "albumsettings.h"
 #include "digikamio.h"
 #include "kipiinterface.h"
 
@@ -44,6 +47,7 @@ DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url 
                 : KIPI::ImageInfoShared( interface, url )
 {
     imageName_ = url.fileName();
+    imageUrl_ = url.path();
     albumName_ = url.path().section('/', -2, -2);
     
     if (albumName_.isEmpty() == false && imageName_.isEmpty() == false)
@@ -85,9 +89,31 @@ void DigikamImageInfo::setDescription( const QString& description )
 {
     if (album_)
        {
-       album_->openDB();
-       album_->setItemComments(imageName_, description);
-       album_->closeDB();    
+           album_->openDB();
+           album_->setItemComments(imageName_, description);
+           album_->closeDB();    
+
+           // store as JPEG Exif comment
+           AlbumSettings *settings = AlbumSettings::instance();
+
+           QString fileName(imageUrl_);
+           KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
+
+           if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
+           {
+               // set Jpeg comment
+               if (metaInfo.containsGroup("Jpeg EXIF Data"))
+               {
+                   metaInfo["Jpeg EXIF Data"].item("Comment").setValue(description);
+                   metaInfo.applyChanges();
+               }
+
+               // set EXIF UserComment
+               KExifData *exifData = new KExifData;
+               exifData->writeComment(fileName,description);
+               delete exifData;
+           }
+
        }
 }
 

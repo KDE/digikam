@@ -80,6 +80,7 @@ public:
 
 private:
     QString             imageName_;
+    QString             imageUrl_;
     QString             albumName_;
     QString             imageComments_;
     Digikam::AlbumInfo *album_;
