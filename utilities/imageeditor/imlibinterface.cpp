@@ -500,6 +500,7 @@ void ImlibInterface::zoom(double val)
 void ImlibInterface::rotate90()
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     imlib_image_orientate(1);
 
     d->origWidth = imlib_image_get_width();
@@ -510,6 +511,7 @@ void ImlibInterface::rotate90()
 void ImlibInterface::rotate180()
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     imlib_image_orientate(2);
 
     d->origWidth = imlib_image_get_width();
@@ -520,6 +522,7 @@ void ImlibInterface::rotate180()
 void ImlibInterface::rotate270()
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     imlib_image_orientate(3);
 
     d->origWidth = imlib_image_get_width();
@@ -530,6 +533,7 @@ void ImlibInterface::rotate270()
 void ImlibInterface::flipHoriz()
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     imlib_image_flip_horizontal();
 
     d->origWidth = imlib_image_get_width();
@@ -541,6 +545,7 @@ void ImlibInterface::flipHoriz()
 void ImlibInterface::flipVert()
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     imlib_image_flip_vertical();
 
     d->origWidth = imlib_image_get_width();
@@ -681,8 +686,10 @@ void ImlibInterface::changeContrast(double contrast)
 
 void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 {
+
     imlib_context_push(d->context);
 
+    imlib_context_set_image(d->image);
     bool alpha = imlib_image_has_alpha();
     
     imlib_context_set_color_modifier(d->cmod);
@@ -723,7 +730,8 @@ uint* ImlibInterface::getData()
 void ImlibInterface::putData(uint* data)
 {
     imlib_context_push(d->context);
-    
+    imlib_context_set_image(d->image);
+
     DATA32* ptr = imlib_image_get_data();
 
     memcpy(ptr, data, d->origWidth*d->origHeight*sizeof(DATA32));
