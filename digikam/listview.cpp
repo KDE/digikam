@@ -355,20 +355,6 @@ void ListView::contentsMousePressEvent(QMouseEvent *e)
     if (!item)
         return;
 
-    setSelected(item);
-
-    if (e->button() == Qt::RightButton) {
-        emit signalRightButtonPressed(item);
-        return;
-    }
-}
-
-void ListView::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-    ListItem* item = itemAt(e->pos());
-    if (!item)
-        return;
-
     if (item->isExpandable()) {
         QRect r(d->arrowBoxPos + item->m_offset,
                 item->m_pos + d->itemHeight/2 - d->controlSize/2,
@@ -378,6 +364,17 @@ void ListView::contentsMouseReleaseEvent(QMouseEvent *e)
             return;
         }
     }
+    
+    setSelected(item);
+
+    if (e->button() == Qt::RightButton) {
+        emit signalRightButtonPressed(item);
+        return;
+    }
+}
+
+void ListView::contentsMouseReleaseEvent(QMouseEvent *)
+{
 }
 
 void ListView::contentsMouseDoubleClickEvent(QMouseEvent *e)
