@@ -241,14 +241,17 @@ void ImageEffect_SuperImpose::populateTemplates(void)
     if (!m_templatesUrl.isValid() || !m_templatesUrl.isLocalFile())
        return;
        
-    QDir *dir = new QDir(m_templatesUrl.path(), "*.png *.PNG");
+    QDir dir(m_templatesUrl.path(), "*.png *.PNG");
     
-    if (!dir->exists())
+    if (!dir.exists())
        return;
        
-    dir->setFilter ( QDir::Files | QDir::NoSymLinks );
+    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
 
-    const QFileInfoList* fileinfolist = dir->entryInfoList();
+    const QFileInfoList* fileinfolist = dir.entryInfoList();
+    if (!fileinfolist)
+       return;
+    
     QFileInfoListIterator it(*fileinfolist);
     QFileInfo* fi;
 
