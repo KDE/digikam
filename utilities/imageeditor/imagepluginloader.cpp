@@ -56,6 +56,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
           {
           KService::Ptr service = *iter;
           imagePluginsList2Load.append(service->library());
+          kdDebug() << "Append plugin: " << service->name() << endl;
           }
        }
     else
@@ -84,8 +85,9 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
               break;
            else
               {
+              int error;
               plugin = KParts::ComponentFactory
-                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
+                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0, &error);
 
               if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                  {
@@ -98,7 +100,20 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                     
                  ++cpt;
                  }
-                                
+              else
+              {
+                  kdWarning(  ) << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                                     << service->name()
+                                     << " (" << service->library() << ")"
+                                     << " with error number "
+                                     << error << endl;
+                  if (error == KParts::ComponentFactory::ErrNoLibrary)
+                      kdWarning(  ) << "KLibLoader says: "
+                                         << KLibLoader::self()->lastErrorMessage() << endl;
+                  
+              }
+
+              
               break;
               }
            }

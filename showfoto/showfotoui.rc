@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="1" name="showfoto" >
+<gui version="1" name="showfoto" >
 
 <MenuBar>
 
@@ -14,33 +14,11 @@
      <Action name="file_properties" /> 
  </Menu>
 
- <Menu name="go" >
-   <text>&amp;Go</text>
+ <Menu name="Image" >
+   <text>&amp;Image</text>
      <Action name="go_bwd" /> 
      <Action name="go_fwd" /> 
- </Menu>
-
- <Menu name="transform" >
-   <text>&amp;Transform</text>
-     <Action name="rotate_90" />
-     <Action name="rotate_180" />
-     <Action name="rotate_270" />
      <Separator />
-     <Action name="flip_horiz" />
-     <Action name="flip_vert" />
-     <Separator />
-     <Action name="crop" />
- </Menu>
-
- <Menu name="view" >
-   <text>&amp;View</text>
-     <Action name="zoom_plus" />
-     <Action name="zoom_minus" />
-     <Action name="zoom_fit" /> 
-     <Separator />
-     <Action name="full_screen" /> 
-     <Action name="show_thumbs" /> 
-     <Action name="view_histogram" /> 
  </Menu>
 
  <Menu name="Fix" >
@@ -53,9 +31,34 @@
      <Action name="contrast_minus" />
  </Menu>
 
+ <Menu name="Transform" >
+   <text>&amp;Transform</text>
+     <Action name="rotate_90" />
+     <Action name="rotate_180" />
+     <Action name="rotate_270" />
+     <Separator />
+     <Action name="flip_horiz" />
+     <Action name="flip_vert" />
+     <Separator />
+     <Action name="crop" />
+ </Menu>
+
+ <Menu name="View" >
+   <text>&amp;View</text>
+     <Action name="zoom_plus" />
+     <Action name="zoom_minus" />
+     <Action name="zoom_fit" /> 
+     <Separator />
+     <Action name="full_screen" /> 
+     <Action name="show_thumbs" /> 
+     <Action name="view_histogram" /> 
+ </Menu>
+
+ <Merge/>
+ 
 </MenuBar>
 
-<ToolBar noMerge="1" name="mainToolBar">
+<ToolBar name="ToolBar">
   <text>Main Toolbar</text>
   <Action name="go_bwd" />
   <Action name="go_fwd" />
@@ -73,6 +76,9 @@
   <Action name="crop" />
   <Separator />
   <Action name="full_screen" /> 
+  <Merge/>
 </ToolBar>
 
-</kpartgui>
+<ActionProperties/>
+ 
+</gui>

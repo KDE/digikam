@@ -40,6 +40,8 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kio/netaccess.h>
 
 #include <libkexif/kexifdata.h>
@@ -53,6 +55,8 @@
 #include "exifrestorer.h"
 #include "canvas.h"
 #include "thumbbar.h"
+#include "imageplugin.h"
+#include "imagepluginloader.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
@@ -70,6 +74,27 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     setCentralWidget(widget);
     setupActions();
+
+    KGlobal::dirs()->addResourceType("data",
+                                     KGlobal::dirs()->kde_default("data")
+                                     + "digikam");
+    
+    ImagePluginLoader* imagePluginLoader
+        = new ImagePluginLoader(this);
+    
+    for (Digikam::ImagePlugin* plugin = imagePluginLoader->pluginList().first();
+         plugin; plugin = imagePluginLoader->pluginList().next())
+    {
+        if (plugin)
+        {
+            guiFactory()->addClient(plugin);
+            plugin->setParentWidget(this);
+            plugin->setEnabledSelectionActions(false);
+        }
+        else
+            kdDebug() << "Invalid plugin to add!" << endl;
+    }
+    
     applySettings();
 
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
