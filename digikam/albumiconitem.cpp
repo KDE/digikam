@@ -44,6 +44,12 @@
 #include <klocale.h>
 #include <kexifdata.h>
 
+// X11 includes.
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <Imlib2.h>
+
 // Local includes.
 
 #include "albumsettings.h"
@@ -59,11 +65,12 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
                              int imageWidth, int imageHeight)
              : ThumbItem(parent, text, pix)
 {
-    view_ = parent;
-    size_ = size;
-    fileItem_ = fileItem;
-    imageWidth_ = imageWidth;
+    view_        = parent;
+    size_        = size;
+    fileItem_    = fileItem;
+    imageWidth_  = imageWidth;
     imageHeight_ = imageHeight;
+    
     updateExtraText();
     calcRect();
 }
@@ -342,16 +349,20 @@ void AlbumIconItem::updateExtraText()
 
     }
     
-    // FIXME : using KIO/KFileMetaInfo instead for extract Width and Height values ! Qimage is too long !!!
+    // FIXME : perhaps using KIO/KFileMetaInfo instead for extract Width and Height values ! 
+    // Imlib2 work fine but you must to test another solution...
                 
     if ( settings->getIconShowResolution() )
        {
-       QImage im(fileItem_->url().path());
-
-       if(im.isNull() == false)
+       Imlib_Image imlib2_im =0;
+       imlib2_im = imlib_load_image(fileItem_->url().path());
+       
+       if (imlib2_im)
           {
-          imageWidth_= im.width();
-          imageHeight_= im.height();
+          imlib_context_set_image(imlib2_im);
+          imageWidth_= imlib_image_get_width();
+          imageHeight_= imlib_image_get_height();
+          imlib_free_image();
           }
     
        if (imageWidth_ != 0 && imageHeight_ != 0) 

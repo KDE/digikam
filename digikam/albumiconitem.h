@@ -31,7 +31,7 @@
 
 // Local includes.
 
-#include <thumbitem.h>
+#include "thumbitem.h"
 
 
 class QPainter;

@@ -101,7 +101,7 @@ protected:
 private:
 
     AlbumIconViewPrivate *d;
-
+    
     void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap);
 
 private slots:
