@@ -525,7 +525,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertItem(i18n("Properties"), 14);
     
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
-        popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+        popmenu.insertItem(i18n("Set as Album Thumbnail"), 17); 
     
     popmenu.insertSeparator();
 
