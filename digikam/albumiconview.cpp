@@ -65,7 +65,8 @@
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kexifdata.h>
+#include <libkexif/kexif.h>
+#include <libkexif/kexifdata.h>
 
 // Local includes.
 
@@ -76,7 +77,6 @@
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
-#include "kexif.h"
 #include "imageview.h"
 #include "thumbnailsize.h"
 #include "digikampluginmanager.h"

@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 #include <kdirlister.h>
 #include <kio/job.h>
+#include <libkexif/kexif.h>
 
 #include <qpushbutton.h>
 #include <qsplitter.h>
@@ -60,7 +61,6 @@
 #include "dmessagebox.h"
 
 #include "imageview.h"
-#include "kexif.h"
 
 CameraUIView::CameraUIView(QWidget* parent,
                            const CameraType& ctype)

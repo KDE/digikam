@@ -75,6 +75,8 @@
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
 #include <kapplication.h> 
+#include <libkexif/kexif.h>
+#include <libkexif/kexifdata.h>
 
 // Local includes
 
@@ -86,8 +88,6 @@
 #include "imagedescedit.h"
 #include "albummanager.h"
 #include "albuminfo.h"
-#include "kexif.h"
-#include "kexifdata.h"
 
 
 /////////////////////////////////////// CLASS ////////////////////////////////////////////

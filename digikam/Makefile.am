@@ -4,7 +4,6 @@ lib_LTLIBRARIES = libdigikam.la
 bin_PROGRAMS = digikam
 
 INCLUDES = \
-	-I$(top_srcdir)/digikam/utilities/kexif \
 	-I$(top_srcdir)/digikam/utilities/imageviewer \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
 	-I$(top_srcdir)/digikam/utilities/setup \
@@ -22,8 +21,7 @@ libdigikam_la_SOURCES = digikamapp.cpp digikamview.cpp \
 		digikamfirstrun.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		$(LIBSOCKET) $(LIB_KFILE) \
-		$(top_builddir)/digikam/utilities/kexif/libkexif.la \
+		$(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
 		$(top_builddir)/digikam/utilities/imageviewer/libimageviewer.la \
 		$(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 		$(top_builddir)/digikam/utilities/setup/libsetup.la \
@@ -34,7 +32,7 @@ libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) \
+		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KEXIF)\
 		  libdigikam.la
                   
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) $(LIB_KIPI)

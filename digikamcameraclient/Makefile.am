@@ -17,7 +17,7 @@ INCLUDES = \
 digikamcameraclient_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # the libraries to link against.
-digikamcameraclient_LDADD   = $(LIB_KDEUI) $(LIB_KFILE) \
+digikamcameraclient_LDADD   = $(LIB_KDEUI) $(LIB_KFILE) $(LIB_KEXIF) \
 	$(top_builddir)/digikam/digikamcameraclient/cameraui/libcameraui.la \
 	$(top_builddir)/digikam/digikam/libdigikam.la
 

@@ -66,5 +66,8 @@ KDE_CHECK_HEADER(libkexif/kexif.h, have_kexif=yes, have_kexif=no)
 if test "$have_kexif" = "no"; then
   AC_WARN([Can't find Libkexif headers, Digikam won't be compiled.])
   DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+else
+  LIB_KEXIF="-lkexif"
+  AC_SUBST(LIB_KEXIF)
 fi
 

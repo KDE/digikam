@@ -42,7 +42,7 @@
 #include <kurl.h>
 #include <kio/global.h>
 #include <klocale.h>
-#include <kexifdata.h>
+#include <libkexif/kexifdata.h>
 
 // X11 includes.
 
