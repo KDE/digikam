@@ -40,6 +40,8 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kpassivepopup.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -49,16 +51,55 @@
 
 #include "imageeffect_redeye.h"
 
+class RedEyePassivePopup : public KPassivePopup
+{
+public:
+
+    RedEyePassivePopup(QWidget* parent)
+        : KPassivePopup(parent), m_parent(parent)          
+    {
+    }
+
+protected:
+
+    virtual void positionSelf()
+    {
+        move(m_parent->x() + 30, m_parent->y() + 30);
+    }
+
+private:
+
+    QWidget* m_parent;
+};
+
 void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 {
+    // -- check if we actually have a selection --------------------
+
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getSelectedData();
+    int   w    = iface.selectedWidth();
+    int   h    = iface.selectedHeight();
+
+    if (!data || !w || !h)
+    {
+        RedEyePassivePopup* popup = new RedEyePassivePopup(parent);
+        popup->setView(i18n("Redeye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the redeye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
     // -- run the dlg ----------------------------------------------
 
     ImageEffect_RedEyeDlg dlg(parent);
 
     if (dlg.exec() != QDialog::Accepted)
         return;
-
-    parent->setCursor( KCursor::waitCursor() );
 
     // -- save settings ----------------------------------------------
 
@@ -71,17 +112,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 
     // -- do the actual operations -----------------------------------
 
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getSelectedData();
-    int   w    = iface.selectedWidth();
-    int   h    = iface.selectedHeight();
-
-    if (!data || !w || !h)
-    {
-        parent->setCursor( KCursor::arrowCursor() );
-        return;
-    }
+    parent->setCursor( KCursor::waitCursor() );
 
     uint* newData = new uint[w*h];
     memcpy(newData, data, w*h*sizeof(unsigned int));

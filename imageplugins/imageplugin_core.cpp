@@ -63,7 +63,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     m_redeyeAction = new KAction(i18n("Red Eye Reduction..."), 0,
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
-    m_redeyeAction->setEnabled(false);
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to enable this action.") );
 
@@ -177,9 +176,8 @@ QStringList ImagePlugin_Core::guiDefinition() const
     return guiDef;
 }
 
-void ImagePlugin_Core::setEnabledSelectionActions(bool enable)
+void ImagePlugin_Core::setEnabledSelectionActions(bool)
 {
-    m_redeyeAction->setEnabled(enable);
 }
 
 void ImagePlugin_Core::slotBlur()
