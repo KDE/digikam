@@ -180,8 +180,8 @@ void DigikamFirstRun::slotChangePath()
     
     QFileInfo targetPath(result);
     if (!targetPath.isWritable()) {
-        KMessageBox::sorry(0, i18n("No write access for this path!\n"
-                                   "Please select another path or change write access!"));
+        KMessageBox::sorry(0, i18n("No write access for this path.\n"
+                                   "Please select another path or change write access."));
         return;
     }
     
