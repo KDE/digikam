@@ -623,10 +623,9 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
     {
         d->imageLister->updateDirectory();        
     }
-    else
-    {
-        updateContents();
-    }
+
+    updateBanner();
+    updateContents();
 }
 
 void AlbumIconView::slotShowExifInfo(AlbumIconItem* item)

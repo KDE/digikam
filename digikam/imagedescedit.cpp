@@ -44,6 +44,8 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
+#include "albumfolderview.h"
+#include "albumfolderitem.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albumlister.h"
@@ -380,15 +382,15 @@ void ImageDescEdit::slotGotThumbnail(const KFileItem*, const QPixmap& pix,
 }
 
 void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 
-                                           const QPoint &point, int nr)
+                                           const QPoint &, int )
 {
-    TAlbum *album;
-    TAlbumCheckListItem *albumItem;
+    if (!item)
+        return;
     
-    if(item)
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
+    TAlbum              *album;
+    TAlbumCheckListItem *albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
-    if(!albumItem || !item)
+    if(!albumItem)
         album = AlbumManager::instance()->findTAlbum(0);
     else
         album = albumItem->m_album;
@@ -402,8 +404,8 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
                        i18n("New Tag"), 10);
     if (!album->isRoot())
     {                       
-//        popmenu.insertItem(SmallIcon("pencil"),
-//                           i18n("Edit Tag Properties"), 11);
+        popmenu.insertItem(SmallIcon("pencil"),
+                           i18n("Edit Tag Properties"), 11);
         popmenu.insertItem(SmallIcon("edittrash"),
                            i18n("Delete Tag"), 12);
     }
@@ -470,41 +472,31 @@ void ImageDescEdit::tagDelete(TAlbum *album)
 
 void ImageDescEdit::tagEdit(TAlbum* album)
 {
-/*    if (!album || album->isRoot())
+    if (!album || album->isRoot())
         return;
 
-    QString title, icon;
-    if (!TagEditDlg::tagEdit(album, title, icon))
+    AlbumFolderItem *folderItem =
+        static_cast<AlbumFolderItem*>(album->getViewItem());
+
+    AlbumFolderView* folderView =
+        static_cast<AlbumFolderView*>(folderItem->listView());
+    folderView->tagEdit(album);
+
+    // Now update the icon/title of the corresponding checklistitem
+
+    QListViewItemIterator it(m_tagsView);
+    while (it.current())
     {
-        return;
-    }
-    
-    AlbumManager *albumMan_ = AlbumManager::instance();
-    
-    TAlbumCheckListItem *folderItem =
-        static_cast<TAlbumCheckListItem*>(album->getViewItem());
-    
-    if (album->getTitle() != title)
-    {
-        QString errMsg;
-        if (!albumMan_->renameTAlbum(album, title, errMsg))
-            KMessageBox::error(0, errMsg);
-        else {
-            folderItem->setText(0, title);
-            populateTags();
+        TAlbumCheckListItem* tItem =
+            dynamic_cast<TAlbumCheckListItem*>(it.current());
+        if (tItem && tItem->m_album == album)
+        {
+            tItem->setText(0, album->getTitle());
+            tItem->setPixmap(0, album->getPixmap());
         }
-    }
-
-    if (album->getIcon() != icon)
-    {
-        QString errMsg;
-        if (!albumMan_->updateTAlbumIcon(album, icon, errMsg))
-            KMessageBox::error(0, errMsg);
-        else
-            folderItem->setPixmap(getBlendedIcon(album));
+        ++it;
     }
     
-    emit signalTagsAssigned();*/
 }
 
 
