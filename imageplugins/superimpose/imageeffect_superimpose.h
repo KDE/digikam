@@ -35,8 +35,12 @@
 
 class QPushButton;
 
-class ThumbBarView;
 class DirSelectWidget;
+
+namespace Digikam
+{
+class ThumbBarView;
+}
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -54,18 +58,18 @@ public:
 
 private:
 
-    QWidget           *m_parent;
+    QWidget               *m_parent;
     
-    QPushButton       *m_helpButton;
+    QPushButton           *m_helpButton;
     
-    SuperImposeWidget *m_previewWidget;
+    SuperImposeWidget     *m_previewWidget;
     
-    ThumbBarView      *m_thumbnailsBar;
+    Digikam::ThumbBarView *m_thumbnailsBar;
 
-    KURL               m_templatesUrl;
-    KURL               m_templatesRootUrl;
+    KURL                   m_templatesUrl;
+    KURL                   m_templatesRootUrl;
     
-    DirSelectWidget   *m_dirSelect;
+    DirSelectWidget       *m_dirSelect;
     
     void populateTemplates(void);
     

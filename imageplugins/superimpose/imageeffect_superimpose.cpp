@@ -65,7 +65,6 @@
 // Local includes.
 
 #include "version.h"
-#include "thumbbar.h"
 #include "superimposewidget.h"
 #include "dirselectwidget.h"
 #include "imageeffect_superimpose.h"
@@ -185,7 +184,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     QGroupBox *gbox2 = new QGroupBox(i18n("Templates"), plainPage());
     QGridLayout* grid = new QGridLayout( gbox2, 2, 3, 20, spacingHint());
     
-    m_thumbnailsBar = new ThumbBarView(gbox2);
+    m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
     QWhatsThis::add( templateDirButton, i18n("<p>Change here the current templates' root directory.") );
@@ -252,7 +251,7 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 
     while( (fi = it.current() ) )
         {
-        new ThumbBarItem( m_thumbnailsBar, KURL::KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( m_thumbnailsBar, KURL::KURL(fi->filePath()) );
         ++it;
         }
 }

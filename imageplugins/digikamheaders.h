@@ -37,6 +37,7 @@
 #include <imageselectionwidget.h>
 #include <imageguidewidget.h>
 #include <imagewidget.h>
+#include <thumbbar.h>
 
 #else
 
@@ -55,6 +56,7 @@
 #include <digikam/imageselectionwidget.h>
 #include <digikam/imageguidewidget.h>
 #include <digikam/imagewidget.h>
+#include <digikam/thumbbar.h>
 
 #endif
 

@@ -13,7 +13,7 @@ if test -d $srcdir/digikam; then
    AC_MSG_RESULT([found])
    have_digikam_toplevel=yes
    have_digikam=yes
-   LIBDIGIKAM_CFLAGS='-I$(top_srcdir)/digikam/utilities/imageeditor -I$(top_srcdir)/digikam/libs/guibuilder -I$(top_srcdir)/digikam/libs/curves -I$(top_srcdir)/digikam/libs/histogram -I$(top_srcdir)/digikam/libs/levels -I$(top_srcdir)/digikam/libs/filters -I$(top_srcdir)/digikam/libs/widgets'
+   LIBDIGIKAM_CFLAGS='-I$(top_srcdir)/digikam/utilities/imageeditor -I$(top_srcdir)/digikam/libs/guibuilder -I$(top_srcdir)/digikam/libs/curves -I$(top_srcdir)/digikam/libs/histogram -I$(top_srcdir)/digikam/libs/levels -I$(top_srcdir)/digikam/libs/filters -I$(top_srcdir)/digikam/libs/widgets -I$(top_srcdir)/digikam/libs/thumbbar'
    LIBDIGIKAM_LIBS='$(top_builddir)/digikam/digikam/libdigikam.la'
    LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
    AC_SUBST(LIBDIGIKAM_CFLAGS)
