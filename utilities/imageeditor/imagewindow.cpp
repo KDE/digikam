@@ -279,6 +279,12 @@ void ImageWindow::applySettings()
     // JPEG compression value.
     m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
 
+    // PNG compression value.
+    m_PNGCompression = config->readNumEntry("PNGCompression", 1);
+
+    // TIFF compression.
+    m_TIFFCompression = config->readBoolEntry("TIFFCompression", false);
+
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
     {
@@ -681,7 +687,8 @@ void ImageWindow::slotFilePrint()
             ok = true;
             tmpFile.setAutoDelete( true );
 
-            if ( m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, "png") )
+            if ( m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, m_PNGCompression,
+                                         m_TIFFCompression, "png") )
                {
                ImagePrint *printOperations = new ImagePrint(tmpFile.name(),
                                                             printer,
@@ -706,7 +713,8 @@ void ImageWindow::slotSave()
 {
     QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
 
-    bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression);
+    bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, 
+                                          m_PNGCompression, m_TIFFCompression);
 
     if (result == false)
     {
@@ -810,7 +818,8 @@ void ImageWindow::slotSaveAs()
 
     QString tmpFile = locateLocal("tmp", m_newFile.filename());
 
-    int result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, format.lower());
+    int result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
+                                         m_TIFFCompression, format.lower());
 
     if (result == false)
     {

@@ -52,10 +52,15 @@ private:
     QStringList   m_enableImagePluginList;
     
     KColorButton *m_backgroundColor;
+    
     KIntNumInput *m_JPEGcompression;
+    KIntNumInput *m_PNGcompression;
+    
+    QCheckBox    *m_TIFFcompression;
     QCheckBox    *m_hideToolBar;
 
     QLabel       *m_pluginsNumber;
+    
     KListView    *m_pluginList;
     
     void readSettings();

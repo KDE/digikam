@@ -48,9 +48,14 @@ public:
 
     void load(const QString& filename);
     void preload(const QString& filename);
-    int  save(const QString& filename, int JPEGcompression);
-    int  saveAs(const QString& filename, int JPEGcompression, const QString& mimeType);
-    int  saveAsTmpFile(const QString& filename, int JPEGcompression, const QString& mimeType=0);
+    int  save(const QString& filename, int JPEGcompression, 
+              int PNGcompression, bool TIFFcompression);
+    int  saveAs(const QString& filename, int JPEGcompression, 
+                int PNGcompression, bool TIFFcompression, 
+                const QString& mimeType);
+    int  saveAsTmpFile(const QString& filename, int JPEGcompression, 
+                       int PNGcompression, bool TIFFcompression, 
+                       const QString& mimeType=0);
         
     bool maxZoom();
     bool minZoom();

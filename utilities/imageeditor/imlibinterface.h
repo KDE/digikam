@@ -50,8 +50,11 @@ public:
     bool load(const QString& filename);
     void preload(const QString& filename);
     bool restore();
-    bool save(const QString& file, int JPEGcompression);
-    bool saveAs(const QString& file, int JPEGcompression, const QString& mimeType=0);
+    bool save(const QString& file, int JPEGcompression, 
+              int PNGcompression, bool TIFFcompression);
+    bool saveAs(const QString& file, int JPEGcompression, 
+                int PNGcompression, bool TIFFcompression,
+                const QString& mimeType=0);
         
     void zoom(double val);
 
@@ -103,7 +106,9 @@ signals:
     
 private:
 
-    bool saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType); 
+    bool saveAction(const QString& saveFile, int JPEGcompression, 
+                    int PNGcompression, bool TIFFcompression, 
+                    const QString& mimeType); 
     bool saveTIFF(const QString& saveFile, bool compress);
     void exifRotate(QString filename);
         

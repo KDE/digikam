@@ -64,9 +64,13 @@ public:
 private:
 
     ImageGUIClient*      m_guiClient;
+    
     Digikam::GUIFactory* m_guiFactory;
+    
     Canvas*              m_canvas;
+    
     QPopupMenu*          m_contextMenu;
+    
     KAccel*              m_accel;
 
     QLabel*              m_nameLabel;
@@ -77,13 +81,15 @@ private:
     KURL                 m_urlCurrent;
     KURL                 m_newFile;
     
-    bool                 m_rotatedOrFlipped;
     
+    int                  m_JPEGCompression;
+    int                  m_PNGCompression;
+    
+    bool                 m_TIFFCompression;
+    bool                 m_rotatedOrFlipped;
     bool                 m_fullScreen;
     bool                 m_fullScreenHideToolBar;
     bool                 m_allowSaving;
-    
-    int                  m_JPEGCompression;
     
     static ImageWindow*  m_instance;
 

@@ -199,23 +199,31 @@ void Canvas::preload(const QString& filename)
     d->im->preload(filename);
 }
 
-int Canvas::save(const QString& filename, int JPEGcompression)
+int Canvas::save(const QString& filename, int JPEGcompression,
+                 int PNGcompression, bool TIFFcompression)
 {
-    int result = d->im->save(filename, JPEGcompression);
+    int result = d->im->save(filename, JPEGcompression, PNGcompression, 
+                             TIFFcompression);
     if ( result == true ) emit signalChanged(false);
     return result;
 }
 
-int Canvas::saveAs(const QString& filename, int JPEGcompression, const QString& mimeType)
+int Canvas::saveAs(const QString& filename, int JPEGcompression, 
+                   int PNGcompression, bool TIFFcompression, 
+                   const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, JPEGcompression, mimeType);
+    int result = d->im->saveAs(filename, JPEGcompression, PNGcompression, 
+                               TIFFcompression, mimeType);
     if ( result == true ) emit signalChanged(false);
     return result;
 }
 
-int Canvas::saveAsTmpFile(const QString& filename, int JPEGcompression, const QString& mimeType)
+int Canvas::saveAsTmpFile(const QString& filename, int JPEGcompression,
+                          int PNGcompression, bool TIFFcompression, 
+                          const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, JPEGcompression, mimeType);
+    int result = d->im->saveAs(filename, JPEGcompression, PNGcompression, 
+                               TIFFcompression, mimeType);
     return result;
 }
 

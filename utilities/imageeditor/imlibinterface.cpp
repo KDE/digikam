@@ -299,29 +299,35 @@ bool ImlibInterface::restore()
     return ( load(d->filename) );
 }
 
-bool ImlibInterface::save(const QString& file, int JPEGcompression)
+bool ImlibInterface::save(const QString& file, int JPEGcompression, 
+                          int PNGcompression, bool TIFFcompression)
 {
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
     
     QString currentMimeType(imlib_image_format());
 
-    bool result = saveAction(file, JPEGcompression, currentMimeType);
+    bool result = saveAction(file, JPEGcompression, PNGcompression, 
+                             TIFFcompression, currentMimeType);
     
     imlib_context_pop();
     return result;
 }
 
-bool ImlibInterface::saveAs(const QString& file, int JPEGcompression, const QString& mimeType)
+bool ImlibInterface::saveAs(const QString& file, int JPEGcompression, 
+                            int PNGcompression, bool TIFFcompression, 
+                            const QString& mimeType)
 {
     bool result;
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
     if (!mimeType)
-        result = saveAction(file, JPEGcompression, imlib_image_format());
+        result = saveAction(file, JPEGcompression, PNGcompression, 
+                            TIFFcompression, imlib_image_format());
     else 
-       result = saveAction(file, JPEGcompression, mimeType);
+       result = saveAction(file, JPEGcompression, PNGcompression, 
+                           TIFFcompression, mimeType);
 
     imlib_context_pop();
     return result;    
@@ -610,19 +616,6 @@ void ImlibInterface::rotate(double angle)
                                                  center_y - (int)((float)(d3 + d4) / 2.0),
                                                  d1 + d2, d3 + d4);
     
-/*    Imlib_Image im = imlib_create_image( d1 + d2, d3 + d4 );
-    imlib_context_set_image(im);
-     
-    imlib_context_set_blend(1);
-    imlib_blend_image_onto_image_skewed(
-                      d->image,                             // Source image.
-                      0,                                    // Alpha op.
-                      0, 0,                                 // (x,y) source.
-                      d->origWidth, d->origHeight,          // (w,h) source.
-                      0, d4,                                // (x,y) dest.
-                      d2, (-1)*d3,                          // h(x,y) angle.
-                      d1, d4);                              // v(x,y) angle.*/
-
     imlib_context_set_image(im2);
     d->image = im2;
     
@@ -798,7 +791,9 @@ void ImlibInterface::putSelectedData(uint* data)
     emit signalRequestUpdate();
 }
 
-bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType) 
+bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression,
+                                int PNGcompression, bool TIFFcompression,
+                                const QString& mimeType) 
 {
     kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
               << mimeType.ascii() << ")" << endl;
@@ -811,22 +806,22 @@ bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, co
         // a different compression algorithm
        
         // This function is temporarily used until we move dependency to imlib2 > 1.1
-        return ( saveTIFF(saveFile, true) );        
+        return ( saveTIFF(saveFile, TIFFcompression) );        
     }
     
     if ( !mimeType.isEmpty() )
         imlib_image_set_format(mimeType.ascii()); 
     
-    // Always save JPEG files with the at 'JPEGcompression' % quality without compression.
+    // Always save JPEG files with 'JPEGcompression' compression ratio (in %).
             
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
         imlib_image_attach_data_value ("quality", NULL, JPEGcompression,
                                        (void (*)(void*, void*))NULL);
             
-    // Always saving PNG files with a max. compression (small size).
+    // Always saving PNG files with 'PNGcompression' compression ratio (in %).
               
     if ( mimeType.upper() == QString("PNG") ) 
-        imlib_image_attach_data_value ("quality", NULL, 1,
+        imlib_image_attach_data_value ("quality", NULL, PNGcompression,
                                        (void (*)(void*, void*))NULL);
 
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);

@@ -56,15 +56,40 @@ SetupEditor::SetupEditor(QWidget* parent )
                                                    parent);
 
    m_JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
-   m_JPEGcompression->setRange(1, 100, 1, true );
-   m_JPEGcompression->setLabel( i18n("&JPEG compression:") );
+   m_JPEGcompression->setRange(10, 100, 1, true );
+   m_JPEGcompression->setLabel( i18n("&JPEG compression:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value for JPEG images:<p>"
-                                            "<b>1</b>: very high compression<p>"
-                                            "<b>25</b>: high compression<p>"
+                                            "<b>10</b>: very high compression (quality less but "
+                                            "small file size)<p>"
+                                            "<b>25</b>: high compression <p>"
                                             "<b>50</b>: medium compression<p>"
-                                            "<b>75</b>: low compression (default value)<p>"
-                                            "<b>100</b>: no compression"));
+                                            "<b>75</b>: low compression (default)<p>"
+                                            "<b>100</b>: no compression (lossless but large file size)"));
+   
+   m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
+   m_PNGcompression->setRange(1, 100, 1, true );
+   m_PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignVCenter );
+
+   QWhatsThis::add( m_PNGcompression, i18n("<p>The compression value for PNG images:<p>"
+                                           "<b>1</b>: very high compression (small file size but "
+                                           "long decompression - default)<p>"
+                                           "<b>25</b>: high compression<p>"
+                                           "<b>50</b>: medium compression<p>"
+                                           "<b>75</b>: low compression<p>"
+                                           "<b>100</b>: no compression (large file size but "
+                                           "short decompression)<p>"
+                                           "<b>Note: PNG is always a lossless compression format!</b>"));
+
+   m_TIFFcompression = new QCheckBox(i18n("Using TIFF compression"),
+                                     savingOptionsGroup);
+   
+   QWhatsThis::add( m_TIFFcompression, i18n("<p>Toggle LZW compression algorithm with TIFF images.<p>"
+                                            "If you enable this option, you can reduce the TIFF image "
+                                            "file size.<p>"
+                                            "<b>Note: because LZW pattents issues, some systems don't "
+                                            "include LZW library and this option cannot be used.</b>"));
+
    layout->addWidget(savingOptionsGroup);
 
    // --------------------------------------------------------
@@ -186,6 +211,8 @@ void SetupEditor::applySettings()
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
+    config->writeEntry("PNGCompression", m_PNGcompression->value());
+    config->writeEntry("TIFFCompression", m_TIFFcompression->isChecked());
     config->writeEntry("ImagePlugins List", getImagePluginsListEnable());
     config->writeEntry("FullScreen Hide ToolBar", m_hideToolBar->isChecked());
     config->sync();
@@ -199,6 +226,8 @@ void SetupEditor::readSettings()
     config->setGroup("ImageViewer Settings");
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
+    m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 1) );
+    m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
 
