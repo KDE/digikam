@@ -36,27 +36,28 @@ class QCheckBox;
 class QRadioButton;
 
 class KComboBox;
-class KIntNumInput;
+class KDoubleNumInput;
 
 class ImagePrint  
 {
 public:
 
-    ImagePrint(const QString& filename, KPrinter& printer, 
-               const QString& originalFileName);
+    ImagePrint(QImage& image, KPrinter& printer, 
+               const QString& fileName);
     ~ImagePrint();
 
     bool printImageWithQt();
 
 private:
     
-    QString   m_filename;
-    KPrinter& m_printer;
-    QString   m_originalFileName;
-    
-    void addConfigPages();
     QString minimizeString( QString text, const QFontMetrics& metrics,
                             int maxWidth );                           
+private:
+    
+    QImage    m_image;
+    KPrinter& m_printer;
+    QString   m_filename;
+    
 };
 
 
@@ -80,24 +81,13 @@ private slots:
 
 private:
 
-    // return values in pixels!
-    int scaleWidth() const;
-    int scaleHeight() const;
-
-    void setScaleWidth( int pixels );
-    void setScaleHeight( int pixels );
-
-    int fromUnitToPixels( float val ) const;
-    float pixelsToUnit( int pixels ) const;
-
-    QCheckBox *m_shrinkToFit;
-    QRadioButton *m_scale;
-    KIntNumInput *m_width;
-    KIntNumInput *m_height;
-    KComboBox *m_units;
-    QCheckBox *m_addFileName;
-    QCheckBox *m_blackwhite;
-
+    QRadioButton    *m_scaleToFit;
+    QRadioButton    *m_scale;
+    KDoubleNumInput *m_width;
+    KDoubleNumInput *m_height;
+    KComboBox       *m_units;
+    QCheckBox       *m_addFileName;
+    QCheckBox       *m_blackwhite;
 };
 
 #endif // IMAGEPRINT_H 

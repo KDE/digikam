@@ -58,6 +58,7 @@
 #include "exifrestorer.h"
 #include "guifactory.h"
 #include "canvas.h"
+#include "imlibinterface.h"
 #include "imageguiclient.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -674,6 +675,13 @@ void ImageWindow::slotDeleteCurrentItem()
 
 void ImageWindow::slotFilePrint()
 {
+    uint* data   = Digikam::ImlibInterface::instance()->getData();
+    int   width  = Digikam::ImlibInterface::instance()->origWidth();
+    int   height = Digikam::ImlibInterface::instance()->origHeight();
+
+    if (!data || !width || !height)
+        return;
+
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );
     printer.setCreator( "Digikam-ImageEditor");
@@ -685,33 +693,15 @@ void ImageWindow::slotFilePrint()
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
     {
-        bool ok = false;
-        KTempFile tmpFile( "digikam_imageeditor", ".png" );
-
-        if ( tmpFile.status() == 0 )
+        QImage image((uchar*)data, width, height, 32, 0, 0, QImage::IgnoreEndian);
+        image = image.copy();
+    
+        ImagePrint printOperations(image, printer, m_urlCurrent.filename());
+        if (!printOperations.printImageWithQt())
         {
-            ok = true;
-            tmpFile.setAutoDelete( true );
-
-            if ( m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, m_PNGCompression,
-                                         m_TIFFCompression, "png") )
-            {
-                ImagePrint *printOperations = new ImagePrint(tmpFile.name(),
-                                                             printer,
-                                                             m_urlCurrent.filename());
-
-                if ( printOperations->printImageWithQt() == false )
-                    ok = false;
-
-                delete printOperations;
-            }
-            else
-                ok = false;
-        }
-
-        if ( ok == false )
-            KMessageBox::error(this, i18n("Failed to print file\n\"%1\"")
+            KMessageBox::error(this, i18n("Failed to print file: '%1'")
                                .arg(m_urlCurrent.filename()));
+        }
     }
 }
 

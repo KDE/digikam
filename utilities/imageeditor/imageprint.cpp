@@ -64,13 +64,8 @@
 
 #include "imageprint.h"
 
+// Image printdialog class -------------------------------------------------------------
 
-//////////////////////////////////// CONSTRUCTORS ///////////////////////////////////////////
-
-ImagePrint::ImagePrint(const QString& filename, KPrinter& printer, const QString& originalFileName)
-          : m_filename( filename), m_printer( printer ), m_originalFileName( originalFileName)
-{
-}
 
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
                           : KPrintDialogPage( parent, name )
@@ -82,7 +77,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     layout->setSpacing( KDialog::spacingHint() );
 
     m_addFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
-    m_addFileName->setChecked( true );
+    m_addFileName->setChecked( false );
     layout->addWidget( m_addFileName );
 
     m_blackwhite = new QCheckBox ( i18n("Print image in &black and white"), this);
@@ -92,8 +87,9 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );
-    m_shrinkToFit = new QCheckBox( i18n("Shrink image to &fit, if necessary"), group );
-    m_shrinkToFit->setChecked( true );
+
+    m_scaleToFit = new QRadioButton( i18n("Scale image to &fit"), group );
+    m_scaleToFit->setChecked( true );
 
     QWidget *widget = new QWidget( group );
     QGridLayout *grid = new QGridLayout( widget, 3, 3 );
@@ -103,7 +99,6 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     grid->setColStretch( 2, 10 );
 
     m_scale = new QRadioButton( i18n("Print e&xact size: "), widget );
-    m_scale->setEnabled( false ); // ###
     grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
     group->insert( m_scale );
     
@@ -112,176 +107,23 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
 
     m_units = new KComboBox( false, widget, "unit combobox" );
     grid->addWidget( m_units, 0, 2, AlignLeft );
-    m_units->insertItem( i18n("Millimeters") );
     m_units->insertItem( i18n("Centimeters") );
     m_units->insertItem( i18n("Inches") );
 
-    m_width = new KIntNumInput( widget, "exact width" );
+    m_width = new KDoubleNumInput( widget, "exact width" );
     grid->addWidget( m_width, 1, 1 );
     m_width->setLabel( i18n("&Width:" ) );
     m_width->setMinValue( 1 );
 
-    m_height = new KIntNumInput( widget, "exact height" );
+    m_height = new KDoubleNumInput( widget, "exact height" );
     grid->addWidget( m_height, 2, 1 );
     m_height->setLabel( i18n("&Height:" ) );
     m_height->setMinValue( 1 );
 }
 
-
-//////////////////////////////////// DESTRUCTOR /////////////////////////////////////////////
-
-ImagePrint::~ImagePrint()
-{
-}
-
-
 ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
 {
 }
-
-
-//////////////////////////////////////// FONCTIONS //////////////////////////////////////////
-
-bool ImagePrint::printImageWithQt()
-{
-    QImage image( m_filename );
-    
-    if ( image.isNull() ) 
-        {
-        kdWarning() << "Can't load image: " << m_filename << " for printing.\n";
-        return false;
-        }
-
-    QPainter p;
-    p.begin( &m_printer );
-
-    QPaintDeviceMetrics metrics( &m_printer );
-    p.setFont( KGlobalSettings::generalFont() );
-    QFontMetrics fm = p.fontMetrics();
-
-    int w = metrics.width();
-    int h = metrics.height();
-
-    kdDebug() << "Printer Resolution: " << m_printer.resolution() << endl;
-    kdDebug() << "Width: " << w << ", Height: " << h
-              << ", Image Width: " << image.width()
-              << ", Image Height: " << image.height() << endl;
-    
-    QString t = "true";
-    QString f = "false";
-
-    // Black & white print ?
-    
-    if ( m_printer.option( "app-imageeditor-blackwhite" ) != f) 
-        image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-
-    int filenameOffset = 0;
-    bool printFilename = m_printer.option( "app-imageeditor-printFilename" ) != f;
-    
-    if ( printFilename ) 
-        {
-        filenameOffset = fm.lineSpacing() + 14;
-        h -= filenameOffset; // filename goes into one line!
-        }
-
-    // Shrink image to pagesize, if necessary.
-    
-    bool shrinkToFit = (m_printer.option( "app-imageeditor-shrinkToFit" ) != f);
-    
-    if ( shrinkToFit && (image.width() > w || image.height() > h) )
-        image = image.smoothScale( w, h, QImage::ScaleMin );
-
-    // Align image.
-    
-    bool ok = false;
-    int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
-    
-    if ( !ok )
-        alignment = Qt::AlignCenter; // default
-
-    int x = 0;
-    int y = 0;
-
-    // ### need a GUI for this in ImagePrintDialogPage!
-    // x - alignment
-
-    kdDebug() << "Width: " << w << ", Height: " << h
-              << ", Rescaled Image Width: " << image.width()
-              << ", Rescaled Image Height: " << image.height() << endl;
-    
-    if ( alignment & Qt::AlignHCenter )
-        x = (w - image.width())/2;
-    else if ( alignment & Qt::AlignLeft )
-        x = 0;
-    else if ( alignment & Qt::AlignRight )
-        x = w - image.width();
-
-    // y - alignment
-    if ( alignment & Qt::AlignVCenter )
-        y = (h - image.height())/2;
-    else if ( alignment & Qt::AlignTop )
-        y = 0;
-    else if ( alignment & Qt::AlignBottom )
-        y = h - image.height();
-
-    // Perform the actual drawing.
-
-    kdDebug() << "Printing at x, y : "
-              << x << ", " << y << endl;
-    
-    p.drawImage( x, y, image );
-
-    if ( printFilename )
-        {
-        QString fname = minimizeString( m_originalFileName, fm, w );
-        
-        if ( !fname.isEmpty() )
-            {
-            int fw = fm.width( fname );
-            int x = (w - fw)/2;
-            int y = metrics.height() - filenameOffset/2;
-            p.drawText( x, y, fname );
-            }
-         }
-
-    p.end();
-
-    return true;
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
-                                    int maxWidth )
-{
-    if ( text.length() <= 5 )
-        return QString::null; // no sense to cut that tiny little string
-
-    bool changed = false;
-    
-    while ( metrics.width( text ) > maxWidth )
-        {
-        int mid = text.length() / 2;
-        text.remove( mid, 2 ); // remove 2 characters in the middle
-        changed = true;
-        }
-
-    if ( changed ) // add "..." in the middle
-        {
-        int mid = text.length() / 2;
-        
-        if ( mid <= 5 ) // sanity check
-            return QString::null;
-
-        text.replace( mid - 1, 3, "..." );
-        }
-
-    return text;
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
                                            bool /*incldef*/ )
@@ -289,18 +131,15 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
     QString t = "true";
     QString f = "false";
 
-//    ### opts["app-imageeditor-alignment"] = ;
     opts["app-imageeditor-printFilename"] = m_addFileName->isChecked() ? t : f;
     opts["app-imageeditor-blackwhite"] = m_blackwhite->isChecked() ? t : f;
-    opts["app-imageeditor-shrinkToFit"] = m_shrinkToFit->isChecked() ? t : f;
+    opts["app-imageeditor-scaleToFit"] = m_scaleToFit->isChecked() ? t : f;
     opts["app-imageeditor-scale"] = m_scale->isChecked() ? t : f;
     opts["app-imageeditor-scale-unit"] = m_units->currentText();
-    opts["app-imageeditor-scale-width-pixels"] = QString::number( scaleWidth() );
-    opts["app-imageeditor-scale-height-pixels"] = QString::number( scaleHeight() );
+    opts["app-imageeditor-scale-width"] = QString::number( m_width->value() );
+    opts["app-imageeditor-scale-height"] = QString::number( m_height->value() );
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
 {
@@ -312,31 +151,29 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     // was always checked. And this isn't the wanted behavior. So, with this works.
     // KPrint magic ;-)
     m_blackwhite->setChecked ( false );
-    m_shrinkToFit->setChecked( opts["app-imageeditor-shrinkToFit"] != f );
+    m_scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
     m_scale->setChecked( opts["app-imageeditor-scale"] == t );
 
     m_units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
 
-    bool ok;
-    int val = opts["app-imageeditor-scale-width-pixels"].toInt( &ok );
+    bool   ok;
+    double val;
+
+    val = opts["app-imageeditor-scale-width"].toDouble( &ok );
     
     if ( ok )
-        setScaleWidth( val );
+        m_width->setValue( val );
     
-    val = opts["app-imageeditor-scale-height-pixels"].toInt( &ok );
+    val = opts["app-imageeditor-scale-height"].toDouble( &ok );
     
     if ( ok )
-        setScaleHeight( val );
+        m_height->setValue( val );
 
-    if ( m_scale->isChecked() == m_shrinkToFit->isChecked() )
-        m_shrinkToFit->setChecked( !m_scale->isChecked() );
+    if ( m_scale->isChecked() == m_scaleToFit->isChecked() )
+        m_scaleToFit->setChecked( !m_scale->isChecked() );
 
-    // ### re-enable when implemented
-    toggleScaling( false && m_scale->isChecked() );
+    toggleScaling( m_scale->isChecked() );
 }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageEditorPrintDialogPage::toggleScaling( bool enable )
 {
@@ -345,53 +182,170 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
     m_units->setEnabled( enable );
 }
 
+// Image print class -----------------------------------------------------------------
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-int ImageEditorPrintDialogPage::scaleWidth() const
+ImagePrint::ImagePrint(QImage& image, KPrinter& printer,
+                       const QString& filename)
+          : m_image( image ), m_printer( printer ),
+            m_filename( filename )
 {
-    return fromUnitToPixels( m_width->value() );
+}
+
+ImagePrint::~ImagePrint()
+{
+}
+
+bool ImagePrint::printImageWithQt()
+{
+    if ( m_image.isNull() ) 
+    {
+        kdWarning() << "Supplied Image for printing is null" << endl;
+        return false;
+    }
+
+    QString t = "true";
+    QString f = "false";
+    
+    // Black & white print ?
+    if ( m_printer.option( "app-imageeditor-blackwhite" ) != f)
+    {
+        m_image = m_image.convertDepth( 1, Qt::MonoOnly |
+                                       Qt::ThresholdDither |
+                                       Qt::AvoidDither );
+    }
+
+    QPainter p;
+    p.begin( &m_printer );
+
+    QPaintDeviceMetrics metrics( &m_printer );
+    p.setFont( KGlobalSettings::generalFont() );
+    QFontMetrics fm = p.fontMetrics();
+
+
+    int filenameOffset = 0;
+    int w = metrics.width();
+    int h = metrics.height();
+
+    bool printFilename = m_printer.option( "app-imageeditor-printFilename" ) != f;
+    if ( printFilename )
+    {
+        // filename goes into one line!
+        filenameOffset = fm.lineSpacing() + 14;
+        h -= filenameOffset; 
+    }
+    
+    if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
+    {
+        
+        // Scale image to fit pagesize
+        m_image = m_image.smoothScale( w, h, QImage::ScaleMin );
+    }
+    else
+    {
+        // scale image to exact dimensions
+        QString unit  = m_printer.option("app-imageeditor-scale-unit");
+        double  wunit = m_printer.option("app-imageeditor-scale-width").toDouble();
+        double  hunit = m_printer.option("app-imageeditor-scale-height").toDouble();
+        int     wresize, hresize;
+        if (unit == i18n("Centimeters"))
+        {
+            // centimeters
+            wresize = (int)(metrics.logicalDpiX() * wunit / 2.54);
+            hresize = (int)(metrics.logicalDpiY() * hunit / 2.54);
+        }
+        else
+        {
+            // inches
+            wresize  = (int)(metrics.logicalDpiX() * wunit);
+            hresize  = (int)(metrics.logicalDpiY() * hunit);
+        }
+
+        m_image = m_image.smoothScale( wresize, hresize, QImage::ScaleMin );
+    }
+
+    // Align image.
+    bool ok = false;
+    int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
+    
+    if ( !ok )
+    {
+        // default
+        alignment = Qt::AlignCenter; 
+    }
+
+    int x = 0;
+    int y = 0;
+
+    // TODO: a GUI for this in ImagePrintDialogPage!
+
+    // x - alignment
+    if ( alignment & Qt::AlignHCenter )
+        x = (w - m_image.width())/2;
+    else if ( alignment & Qt::AlignLeft )
+        x = 0;
+    else if ( alignment & Qt::AlignRight )
+        x = w - m_image.width();
+
+    // y - alignment
+    if ( alignment & Qt::AlignVCenter )
+        y = (h - m_image.height())/2;
+    else if ( alignment & Qt::AlignTop )
+        y = 0;
+    else if ( alignment & Qt::AlignBottom )
+        y = h - m_image.height();
+
+    // Perform the actual drawing.
+    p.drawImage( x, y, m_image );
+
+    if ( printFilename )
+    {
+        QString fname = minimizeString( m_filename, fm, w );
+        
+        if ( !fname.isEmpty() )
+        {
+            int fw = fm.width( fname );
+            int x = (w - fw)/2;
+            int y = metrics.height() - filenameOffset/2;
+            p.drawText( x, y, fname );
+        }
+    }
+
+    p.end();
+
+    return true;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-int ImageEditorPrintDialogPage::scaleHeight() const
+QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
+                                    int maxWidth )
 {
-    return fromUnitToPixels( m_height->value() );
+    // no sense to cut that tiny little string
+    if ( text.length() <= 5 )
+        return QString();
+
+    bool changed = false;
+    
+    while ( metrics.width( text ) > maxWidth )
+    {
+        int mid = text.length() / 2;
+        // remove 2 characters in the middle
+        text.remove( mid, 2 ); 
+        changed = true;
+    }
+
+    // add "..." in the middle
+    if ( changed ) 
+    {
+        int mid = text.length() / 2;
+        
+        // sanity check
+        if ( mid <= 5 ) 
+            return QString();
+
+        text.replace( mid - 1, 3, "..." );
+    }
+
+    return text;
 }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void ImageEditorPrintDialogPage::setScaleWidth( int pixels )
-{
-    m_width->setValue( (int) pixelsToUnit( pixels ) );
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void ImageEditorPrintDialogPage::setScaleHeight( int pixels )
-{
-    m_width->setValue( (int) pixelsToUnit( pixels ) );
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-int ImageEditorPrintDialogPage::fromUnitToPixels( float /*value*/ ) const
-{
-    return 1; // ###
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-float ImageEditorPrintDialogPage::pixelsToUnit( int /*pixels*/ ) const
-{
-    return 1.0; // ###
-}
-
 
 #include "imageprint.moc"
