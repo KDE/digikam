@@ -274,7 +274,7 @@ int DigikamKipiInterface::features() const
 {
     return KIPI::ImagesHasComments    | KIPI::AcceptNewImages |
            KIPI::AlbumEQDir           | KIPI::AlbumsHaveComments |
-           KIPI::ImageTitlesWritable;
+           KIPI::ImageTitlesWritable  | KIPI::ImagesHasTime;
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
