@@ -414,7 +414,7 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
     {
         PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
-        if(album && (album->getIconKURL().equals(iconItem->fileItem()->url())))
+        if(album && album->getIconKURL().equals(iconItem->fileItem()->url()))
         {
             QString err;
             AlbumManager::instance()->updatePAlbumIcon( album,  "",
@@ -527,6 +527,8 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
         popmenu.insertItem(i18n("Set as Album Thumbnail"), 17); 
+    else
+        popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17); 
     
     popmenu.insertSeparator();
 
@@ -661,6 +663,14 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         QString err;
         AlbumManager::instance()->updatePAlbumIcon( album, 
                 iconItem->fileItem()->url().filename(false), true, err );
+    }
+    else
+    {
+        TAlbum *album = static_cast<TAlbum*>(d->currentAlbum);
+
+        QString err;
+        AlbumManager::instance()->updateTAlbumIcon( album, 
+                iconItem->fileItem()->url().path(false), true, err );
     }
 }
 

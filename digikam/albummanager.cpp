@@ -502,7 +502,8 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     return true;
 }
 
-bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, QString& errMsg)
+bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, 
+                                    bool emitSignalChanged, QString& errMsg)
 {
     if (!album)
     {
@@ -518,6 +519,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, QString&
     
     d->db->setIcon(album, icon);
     
+    if(emitSignalChanged)    
+        emit signalTAlbumIconChanged(album);        
     return true;
 }
 

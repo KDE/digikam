@@ -177,7 +177,9 @@ private slots:
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
                                   const KFileMetaInfo*);
     void slotThumbnailLost(const KURL&, bool isDir);
+
     void slotPAlbumIconChanged(PAlbum*);    
+    void slotTAlbumIconChanged(TAlbum*);    
     
     void slotThemeChanged();
 };

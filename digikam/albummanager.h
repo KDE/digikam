@@ -80,7 +80,8 @@ public:
                       const QString& icon, QString& errMsg);
     bool deleteTAlbum(TAlbum* album, QString& errMsg);
     bool renameTAlbum(TAlbum* album, const QString& name, QString& errMsg);
-    bool updateTAlbumIcon(TAlbum* album, const QString& icon, QString& errMsg);
+    bool updateTAlbumIcon(TAlbum* album, const QString& icon, 
+                          bool emitSignalChanged, QString& errMsg);
     bool moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg);
     
     void setItemHandler(AlbumItemHandler *handler);
@@ -118,6 +119,7 @@ signals:
     void signalAlbumCurrentChanged(Album* album);
     void signalAllAlbumsLoaded();
     void signalPAlbumIconChanged(PAlbum* album);    
+    void signalTAlbumIconChanged(TAlbum* album);        
 };
 
 #endif /* ALBUMMANAGER_H */

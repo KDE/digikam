@@ -127,7 +127,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
     connect(albumMan_, SIGNAL(signalPAlbumIconChanged(PAlbum*)),
-            this, SLOT(slotPAlbumIconChanged(PAlbum*)));
+            this, SLOT(slotPAlbumIconChanged(PAlbum*)));    
+    connect(albumMan_, SIGNAL(signalTAlbumIconChanged(TAlbum*)),
+            this, SLOT(slotTAlbumIconChanged(TAlbum*)));            
 
     connect(openAlbumTimer_, SIGNAL(timeout()),
             this, SLOT(slotOpenAlbumFolderItem()));
@@ -357,27 +359,63 @@ void AlbumFolderView::clearEmptyGroupItems()
     }
 }
 
+void AlbumFolderView::slotTAlbumIconChanged(TAlbum* album)
+{
+    if (!album || !album->getViewItem()) {
+        return;
+    }
+
+    AlbumFolderItem *folderItem =
+        static_cast<AlbumFolderItem*>(album->getViewItem());
+    
+    folderItem->setPixmap(getBlendedIcon(album));
+}
+
 QPixmap AlbumFolderView::getBlendedIcon(TAlbum* album) const
 {
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    QString icon(album->getIcon());
 
     QPixmap baseIcon(iconLoader->loadIcon("tag",
                                           KIcon::NoGroup,
                                           32,
                                           KIcon::DefaultState,
                                           0, true));
+                                          
+    if(!album)
+        return baseIcon;
+                                          
+    QString icon(album->getIcon());                                          
+    
     if (!icon.isEmpty())
     {
-        QPixmap pix(iconLoader->loadIcon(icon,
-                                         KIcon::NoGroup,
-                                         20,
-                                         KIcon::DefaultState,
-                                         0, true));
+        QPixmap pix;
+        if(icon.startsWith("/"))
+        {
+            pix = iconLoader->loadIcon(icon,
+                                        KIcon::User,
+                                        20,
+                                        KIcon::DefaultState,
+                                        0, true);
+            if(pix.isNull())
+            {
+                QString err;
+                AlbumManager::instance()->updateTAlbumIcon( album, "",
+                                                            true, err );
+            }
+        }
+        else
+        {
+            pix = iconLoader->loadIcon(icon,
+                                        KIcon::NoGroup,
+                                        20,
+                                        KIcon::DefaultState,
+                                        0, true);
+        }
+        
         if (!pix.isNull())
         {
             QPainter p(&baseIcon);
-            p.drawPixmap(6,9, pix, 0, 0, -1, -1);
+            p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
             p.end();
         }
     }
@@ -1025,7 +1063,7 @@ void AlbumFolderView::tagEdit(TAlbum* album)
     if (album->getIcon() != icon)
     {
         QString errMsg;
-        if (!albumMan_->updateTAlbumIcon(album, icon, errMsg))
+        if (!albumMan_->updateTAlbumIcon(album, icon, false, errMsg))
             KMessageBox::error(0, errMsg);
         else
             folderItem->setPixmap(getBlendedIcon(album));
@@ -1473,6 +1511,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
     if (!dropTarget_)
         return;
     
+    dropTarget_->removeDropHighlight();
+        
     if(dropTarget_->isGroupItem()) 
     {
         AlbumFolderItem *item =
@@ -1496,7 +1536,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
             tagAlbumDropEvent(event, album);
         }
     }        
-    dropTarget_->removeDropHighlight();
+
     dropTarget_ = 0;
 }
 
@@ -1713,14 +1753,51 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
     if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
     {
+        KURL::List      urls;
+        QValueList<int> dirIDs;
+        
+        if (!TagItemsDrag::decode(event, urls, dirIDs))
+            return;
+
         char keys_return[32];
         XQueryKeymap(x11Display(), keys_return);
-
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        
+        if( AlbumManager::instance()->currentAlbum() == album )
+        {
+            int id = 0;
+            // Setting the dropped image as the tag thumbnail
+            // If the ctrl key is pressed, when dropping the image, the
+            // thumbnail is set without a popup menu
+            if ( ( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
+                 ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
+            {
+                id = 12;
+            }
+            else 
+            {
+                QPopupMenu popMenu(this);
+                popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
+                popMenu.insertSeparator(-1);
+                popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+                
+                popMenu.setMouseTracking(true);
+                id = popMenu.exec(QCursor::pos());
+            }
+            
+            if(id == 12)
+            {
+                QString errMsg;
+                AlbumManager::instance()->updateTAlbumIcon(album, 
+                    urls.first().path(), true, errMsg);
+            }
+            return;
+        }
+    
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a 
         // popup menu.
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
         if (!( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
              ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
         {
@@ -1734,13 +1811,7 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
             if (popmenu.exec(QCursor::pos()) != 10)
                 return;
         }
-        
-        KURL::List      urls;
-        QValueList<int> dirIDs;
-        
-        if (!TagItemsDrag::decode(event, urls, dirIDs))
-            return;
-    
+            
         AlbumDB* db = AlbumManager::instance()->albumDB();
     
         db->beginTransaction();
