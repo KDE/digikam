@@ -21,6 +21,7 @@ x Lauch the Albums properties when a new Album is added
 - Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
 - Added dockable main widgets like Showimg.                        <Gilles Caulier - 0.6.3>
 x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.6.3>
+x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer - 0.6.3>
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
 o View/Hide main toolbar/statusbar.
@@ -62,13 +63,16 @@ Image Viever/Editor:
 --------------------
 
 * Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
-- Add RedEyes correction.                                          <Gilles Caulier - 0.6.3>
-- Add Blur/Sharpen image filters.                                  <Gilles Caulier - 0.6.3>
+- Added RedEyes correction.                                        <Gilles Caulier - 0.6.3>
+- Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.6.3>
+- Added Settings dialog.                                           <Gilles Caulier - 0.6.3>
+- Build a main popup menu like the Gimp.                           <Gilles Caulier - 0.6.3>
+o Add multithread interface for printing.
 o Added dockable toolbars.
-o Add Plugins interface.
-o Add Blur/Sharpen image filters.
-o Add image Histogram viewer.
-o Add Colors autocorrection filter.
+o Added Plugins interface.
+o Added Blur/Sharpen image filters.
+o Added image Histogram viewer.
+o Added Colors autocorrection filter.
 
 
 Plugins (LibKIPI):

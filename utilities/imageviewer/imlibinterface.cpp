@@ -53,32 +53,34 @@ public:
 
     ImImage(const QString& filename) 
         {
-        w          = 0;
-        h          = 0;
-        ow         = 0;
-        oh         = 0;
-        pixmap     = 0;
-        im         = 0;
-        dirty      = true;
-        changed    = false;
-        valid      = false;
-
-        file  = filename;
-        im = imlib_load_image(QFile::encodeName(file).data());
+        w       = 0;
+        h       = 0;
+        ow      = 0;
+        oh      = 0;
+        pixmap  = 0;
+        im      = 0;
+        dirty   = true;
+        changed = false;
+        valid   = false;
+        file    = filename;
+        
+        im = imlib_load_image_with_error_return(QFile::encodeName(file).data(), &errorRet);
         
         if (im) 
             {
             valid = true;
             imlib_context_set_image(im);
             
-            
+            ow = imlib_image_get_width();
+            oh = imlib_image_get_height();
             w     = ow;
             h     = oh;
             
             mod = imlib_context_get_color_modifier();
             render();
             }
-
+        else
+            qDebug("error loading image '%s': %i", QFile::encodeName(file).data(),(int)errorRet);
         }
     
     ~ImImage() 
@@ -93,9 +95,11 @@ public:
             imlib_context_set_image(im);
             imlib_free_image();
             }
+            
         if (pixmap) 
             {
             //Imlib_free_pixmap(idata, pixmap);
+            
             imlib_context_set_mask(pixmap);
             imlib_free_pixmap_and_mask(pixmap); 
             }
@@ -128,7 +132,7 @@ public:
             imlib_context_set_image(im);
             imlib_free_image();
             
-            im = imlib_load_image(QFile::encodeName(file).data());
+            im = imlib_load_image_with_error_return(QFile::encodeName(file).data(), &errorRet);
             imlib_context_set_image(im);
             
             ow = imlib_image_get_width();
@@ -169,8 +173,8 @@ public:
 
     Pixmap x11Pixmap() 
         {
-        if (dirty)
-            render();
+        if (dirty) render();
+        
         return pixmap;       
         }
 
@@ -198,7 +202,7 @@ public:
         {
         if (!im) return;
 
-        w  = int(ow  * zoom);
+        w  = int(ow * zoom);
         h  = int(oh * zoom);
         dirty  = true;
         }
@@ -423,9 +427,8 @@ private:
             //ImlibSaveInfo saveInfo;
             //saveInfo.quality = 256;
             
-            Imlib_Load_Error valRet;
-            imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &valRet);
-            result = (int)valRet;
+            imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &errorRet);
+            result = (int)errorRet;
             }
 
         // Now kill the image and re-read it from the saved file
@@ -444,7 +447,7 @@ private:
         imlib_context_set_image(im);
         imlib_free_image();
         
-        im = imlib_load_image(QFile::encodeName(saveFile).data());
+        im = imlib_load_image_with_error_return(QFile::encodeName(saveFile).data(), &errorRet);
         imlib_context_set_image(im);
         
         ow    = imlib_image_get_width();
@@ -501,10 +504,13 @@ private:
         }
     
     //ImlibData          *idata;
+    
     Imlib_Image           im;
     Imlib_Color_Modifier  mod;
     Pixmap                pixmap;
     Pixmap                mask;
+    Imlib_Load_Error      errorRet;
+    
     int                   w;
     int                   h;
     int                   ow;
@@ -586,8 +592,7 @@ private:
 
     QPtrList<ImImage>  cache;
     unsigned int       cacheSize;
-    ImImage           *current;
-    
+    ImImage           *current;    
 };
 
 // ----------------------------------------------------------------
@@ -677,7 +682,7 @@ void ImlibInterface::load(const QString& file)
 
 void ImlibInterface::preload(const QString& file)
 {
-    if (!d->cache->find(file))
+    if ( !d->cache->find(file) )
         d->cache->add(file);
 }
 
@@ -758,8 +763,7 @@ void ImlibInterface::zoom(double val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->zoom(val);
+    if (im) im->zoom(val);
 }
 
 
@@ -769,8 +773,7 @@ void ImlibInterface::rotate90()
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->rotate90();
+    if (im) im->rotate90();
 }
 
 
@@ -780,8 +783,7 @@ void ImlibInterface::rotate180()
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->rotate180();
+    if (im) im->rotate180();
 }
 
 
@@ -791,8 +793,7 @@ void ImlibInterface::rotate270()
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->rotate270();
+    if (im) im->rotate270();
 }
 
 
@@ -802,8 +803,7 @@ void ImlibInterface::flipHorizontal()
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->flipHorizontal();
+    if (im) im->flipHorizontal();
 }
 
 
@@ -813,8 +813,7 @@ void ImlibInterface::flipVertical()
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->flipVertical();
+    if (im) im->flipVertical();
 }
 
 
@@ -824,8 +823,7 @@ void ImlibInterface::crop(int x, int y, int w, int h)
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->crop(x, y, w, h);
+    if (im) im->crop(x, y, w, h);
 }
 
 
@@ -835,8 +833,7 @@ void ImlibInterface::changeGamma(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->changeGamma(val);
+    if (im) im->changeGamma(val);
 }
 
 
@@ -846,8 +843,7 @@ void ImlibInterface::changeBrightness(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->changeBrightness(val);
+    if (im) im->changeBrightness(val);
 }
 
 
@@ -857,8 +853,7 @@ void ImlibInterface::changeContrast(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im)
-        im->changeContrast(val);
+    if (im) im->changeContrast(val);
 }
 
 

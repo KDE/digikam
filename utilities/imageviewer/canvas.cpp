@@ -504,12 +504,14 @@ void Canvas::slotIncreaseZoom()
 
     double zoom;
 
-    if (d->zoom >= 1.0) {
-        zoom = d->zoom + 0.25;
-    }
-    else {
-        zoom = 1.0/( ceil(1/d->zoom)-1.0 );
-    }
+    if (d->zoom >= 1.0) 
+       {
+       zoom = d->zoom + 0.25;
+       }
+    else 
+       {
+       zoom = 1.0/( ceil(1/d->zoom)-1.0 );
+       }
 
     setZoom(zoom);
     
@@ -529,11 +531,14 @@ void Canvas::slotDecreaseZoom()
 
     double zoom;
     
-    if (d->zoom > 1.0) {
-        zoom = d->zoom - 0.25;    
-    } else {
-        zoom=1/( floor(1/d->zoom)+1.0 );
-    }
+    if (d->zoom > 1.0) 
+       {
+       zoom = d->zoom - 0.25;    
+       }
+    else 
+       {
+       zoom=1/( floor(1/d->zoom)+1.0 );
+       }
 
     setZoom(zoom); 
 
@@ -783,10 +788,12 @@ void Canvas::slotContrastMinus()
 void Canvas::slotRestore()
 {
     iface->restore();
+    
     if (d->autoZoom)
         updateAutoZoom();
     else
         setZoom(d->zoom);
+        
     updateContentsSize();
     viewport()->repaint();
     

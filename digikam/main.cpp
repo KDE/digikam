@@ -60,12 +60,12 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("Digikam"),
                           "0.6.3",
-			  description,
-			  KAboutData::License_GPL,
+                          description,
+                          KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2003, Digikam developers team"),
-			  0,
-			  "http://digikam.sourceforge.net",
-			  "digikam-users@list.sourceforge.net");
+                          0,
+                          "http://digikam.sourceforge.net",
+                          "digikam-users@list.sourceforge.net");
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Main coordinator and developer"),
@@ -73,80 +73,90 @@ int main(int argc, char *argv[])
                           "http://digikam.sourceforge.net");
 
     aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Developer, co-coordinator, French translations"),
+                          I18N_NOOP("Current maintainer, developer, co-coordinator, French translations"),
                           "caulier dot gilles at free.fr",
                           "http://caulier.gilles.free.fr");
 
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
                           "todd at theshoemakers.net",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Gregory Kokanosky",
                           I18N_NOOP("Developer"),
                           "gregory dot kokanosky at free.fr",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Rune Laursen",
                           I18N_NOOP("Danish translations"),
                           "runerl at skjoldhoej.dk",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Stefano Rivoir",
                           I18N_NOOP("Italian translations"),
                           "s dot rivoir at gts.it",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Jan Toenjes",
                           I18N_NOOP("German translations"),
                           "jan dot toenjes at web.de",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Oliver Doerr",
                           I18N_NOOP("German translations and beta tester"),
                           "oliver at doerr-privat.de",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Quique",
                           I18N_NOOP("Spanish translations"),
                           "quique at sindominio.net",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Marcus Meissner",
                           I18N_NOOP("Czech translations"),
                           "marcus at jet.franken.de",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Janos Tamasi",
                           I18N_NOOP("Hungarian translations"),
                           "janusz at vnet.hu",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Jasper van der Marel",
                           I18N_NOOP("Dutch translations"),
                           "jasper dot van dot der dot marel at wanadoo.nl",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Anna Sawicka",
                           I18N_NOOP("Polish translations"),
                           "ania at kajak.org.pl",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Achim Bohnet",
                           I18N_NOOP("Bugs reports and patchs"),
                           "ach at mpe.mpg.de",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Charles Bouveyron",
                           I18N_NOOP("Beta tester"),
                           "c dot bouveyron at tuxfamily.org",
-			  0);
+                          0);
 
     aboutData.addCredit ( "Richard Groult",
                           I18N_NOOP("Plugins contributor and beta tester"),
                           "Richard dot Groult at jalix.org",
-			  0);
+                          0);
 
+    aboutData.addCredit ( "Ralf Holzer",
+                          I18N_NOOP("Developer"),
+                          "ralf at well.com",
+                          0);
+                                                    
+    aboutData.addCredit ( "Richard Taylor",
+                          I18N_NOOP("Developer"),
+                          "r dot taylor at bcs.org.uk",
+                          0);
+                          
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"),
                             I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 

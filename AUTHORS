@@ -1,8 +1,8 @@
 COORDINATORS :
 
 Renchi Raju <renchi at pooh.tam.uiuc.edu>                             : Main coordinator and developer.
-Gilles Caulier <caulier dot gilles at free.fr>                        : Developer, co-coordinator,
-                                                                        French translations.
+Gilles Caulier <caulier dot gilles at free.fr>                        : Current maintainer, developer,
+                                                                        co-coordinator, French translations.
 
 TRANSLATORS :
 
@@ -20,6 +20,8 @@ CONTRIBUTORS :
 
 Todd Shoemaker <todd at theshoemakers.net>                            : Developer.
 Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Developer.
+Ralf Holzer <ralf at well.com>                                        : Developer.
+Richard Taylor <r dot taylor at bcs.org.uk>                           : Developer.
 Achim Bohnet <ach at mpe.mpg.de>                                      : Bugs reports and patchs.
 Charles Bouveyron <c dot bouveyron at tuxfamily.org>                  : Beta tester.
 Oliver Dörr <oliver at doerr-privat.de>                               : Beta tester.

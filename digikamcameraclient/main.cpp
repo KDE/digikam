@@ -36,7 +36,7 @@
 static const char *description =
     I18N_NOOP("Digital camera interface for KDE");
 
-static const char *version = "0.6.3 (using LibKIPI)";
+static const char *version = "0.6.3";
 
 static KCmdLineOptions options[] =
 {
@@ -51,12 +51,12 @@ int main(int argc, char **argv)
     KAboutData about ("digikamcameraclient",
                       I18N_NOOP("DigikamCameraClient"),
                       version,
-		      description,
-		      KAboutData::License_GPL,
+                      description,
+                      KAboutData::License_GPL,
                       "(C) 2002-2004, Digikam developers team",
-		      0,
-		      "http://digikam.sourceforge.net",
-		      "digikam-users@list.sourceforge.net");
+                      0,
+                      "http://digikam.sourceforge.net",
+                      "digikam-users@list.sourceforge.net");
 
     about.addAuthor ( "Renchi Raju",
                       I18N_NOOP("coordinator and main developer"),
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
                       "http://digikam.sourceforge.net");
 
     about.addAuthor ( "Caulier Gilles",
-                      I18N_NOOP("Developer, co-coordinator, French translations"),
+                      I18N_NOOP("Current maintainer, developer, co-coordinator, French translations"),
                       "caulier dot gilles at free.fr",
                       "http://caulier.gilles.free.fr");
 
@@ -76,12 +76,12 @@ int main(int argc, char **argv)
     about.addCredit ( "Gregory Kokanosky",
                       I18N_NOOP("Developer"),
                       "gregory.kokanosky@free.fr",
-		      0);
+                      0);
 
     about.addCredit ( "Rune Laursen",
                       I18N_NOOP("Danish translations"),
                       "runerl at skjoldhoej.dk",
-		      0);
+                      0);
 
     about.addCredit ( "Stefano Rivoir",
                       I18N_NOOP("Italian translations"),
@@ -138,6 +138,16 @@ int main(int argc, char **argv)
                       "Richard dot Groult at jalix.org",
                       0);
 
+    about.addCredit ( "Ralf Holzer",
+                      I18N_NOOP("Developer"),
+                      "ralf at well.com",
+                      0);
+
+    about.addCredit ( "Richard Taylor",
+                      I18N_NOOP("Developer"),
+                      "r dot taylor at bcs.org.uk",
+                      0);
+                                                                  
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
 

@@ -1946,8 +1946,8 @@ void ImageView::slotAbout( void )
                                   "Authors: Renchi Raju and Gilles Caulier\n\n"
                                   "Emails:\n"
                                   "renchi at pooh.tam.uiuc.edu\n"
-                                  "caulier dot gilles at free.fr\n\n"
-                                  "This program use 'imlib1' API for all images manipulations.\n"),
+                                  "caulier dot gilles at free.fr\n"
+                                  "This program use 'imlib2' API for all images manipulations.\n"),
                                   i18n("About Digikam image viewer"));
 }
 
