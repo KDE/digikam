@@ -39,6 +39,12 @@
 #include <kdialog.h>
 #include <klistview.h>
 
+// Includes files for plugins support.
+
+#ifdef HAVE_KIPI
+#include <libkipi/pluginloader.h>
+#endif
+
 // Local includes.
 
 #include "setupplugins.h"
@@ -52,33 +58,40 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    
    m_pluginsNumber = new QLabel(parent);
    layout->addWidget( m_pluginsNumber );
+   QString pluginsListHelp = i18n("<p>Here you can see the list of plugins who can be "
+                                  "loaded or unloaded from the current Digikam instance.");
 
+#ifdef HAVE_KIPI
+   KIPI::ConfigWidget* Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
+   QWhatsThis::add( Kipiconfig, pluginsListHelp);
+   layout->addWidget( Kipiconfig );
+#else
    m_pluginList = new KListView( parent, "pluginList" );
    m_pluginList->addColumn( i18n( "Name" ) );
    m_pluginList->addColumn( i18n( "Description" ) );
    m_pluginList->setResizeMode( QListView::LastColumn );
    m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, i18n("<p>Here you can see the list of plugins "
-                                       "loaded on the current Digikam instance"));
+   QWhatsThis::add( m_pluginList, pluginsListHelp);
    layout->addWidget( m_pluginList );
+#endif   
 }
 
 SetupPlugins::~SetupPlugins()
 {
 }
 
+void SetupPlugins::initPlugins(int kipiPluginsNumber)
+{
+    m_pluginsNumber->setText(i18n("KIPI plugins found: %1").arg(kipiPluginsNumber));   
+}
+
+
+// Only for DigikamPlugins !!!    
 void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
     
-    #ifdef HAVE_KIPI
-    QString pluginsType = i18n("KIPI plugins");
-    #else
-    QString pluginsType = i18n("Digikam plugins");
-    #endif
-
-    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
-                                                 .arg(lista.count()/2));    
+    m_pluginsNumber->setText(i18n("Digikam plugins found: %1").arg(lista.count()/2));    
     
     while(  it != lista.end() )
         {
@@ -93,6 +106,7 @@ void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
         }
 }
 
+// Only for DigikamPlugins !!!
 QStringList SetupPlugins::getPluginList()
 {
     QStringList list;

@@ -39,7 +39,9 @@ public:
     SetupPlugins(QWidget* parent = 0);
     ~SetupPlugins();
 
+    void initPlugins(int kipiPluginsNumber);
     void initPlugins(QStringList lista, QStringList listl);
+    
     QStringList getPluginList();
 
 private:
