@@ -111,7 +111,7 @@ private:
     void saveSettings();
     bool promptUserSave();
     bool save();
-    void toogleActions(bool val);
+    void toggleActions(bool val);
     void loadPlugins();
     void unLoadPlugins();
 

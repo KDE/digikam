@@ -177,7 +177,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     setAutoSaveSettings();
     
     if ( urlList.isEmpty() )
-       toogleActions(false);
+       toggleActions(false);
 }
 
 ShowFoto::~ShowFoto()
@@ -548,7 +548,7 @@ void ShowFoto::slotOpenFile()
             new Digikam::ThumbBarItem(m_bar, *it);
         }
            
-    toogleActions(true);
+        toggleActions(true);
     }
 }
 
@@ -1047,7 +1047,7 @@ void ShowFoto::slotSelected(bool val)
     }
 }
 
-void ShowFoto::toogleActions(bool val)
+void ShowFoto::toggleActions(bool val)
 {
     m_zoomFitAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
@@ -1183,7 +1183,7 @@ void ShowFoto::slotSetup()
     applySettings();
 
     if ( m_bar->countItems() == 0 )    
-       toogleActions(false);
+       toggleActions(false);
 }
 
 void ShowFoto::loadPlugins()
@@ -1279,7 +1279,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     
     // Disable menu actions if no current image.
     if ( m_bar->countItems() == 0 )    
-       toogleActions(false);
+       toggleActions(false);
 }
 
 void ShowFoto::slotContextMenu()
