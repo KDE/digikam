@@ -275,12 +275,15 @@ void AlbumFileTip::updateText()
 
     QDateTime date;
     date.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
-    tip += cellBeg + i18n("Date:") + cellMid +
+    tip += cellBeg + i18n("Modification Date:") + cellMid +
            KGlobal::locale()->formatDateTime(date, true, true)
            + cellEnd;
            
     tip += cellBeg + i18n("Size:") + cellMid;
-    tip += i18n("%1 bytes").arg(fi->size()) + cellEnd;
+    tip += i18n("%1 (%2)")
+           .arg(KIO::convertSize(fi->size()))
+           .arg(KGlobal::locale()->formatNumber(fi->size(), 0))
+           + cellEnd;
 
     tip += cellBeg + i18n("Owner:") + cellMid +
            fi->user() + QString(" - ") + fi->group() + cellEnd;
