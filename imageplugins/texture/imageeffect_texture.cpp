@@ -138,7 +138,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Texture:"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Type:"), plainPage());
     
     m_textureType = new QComboBox( false, plainPage() );
     m_textureType->insertItem( i18n("Paper") );
@@ -165,12 +165,12 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Blending:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Relief:"), plainPage());
     
     m_blendGain = new KIntNumInput(plainPage());
     m_blendGain->setRange(1, 255, 1, true);  
     m_blendGain->setValue(200);
-    QWhatsThis::add( m_blendGain, i18n("<p>Set here the blending gain used to merge texture and image."));
+    QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
     hlay2->addWidget(label2, 1);
     hlay2->addWidget(m_blendGain, 4);
