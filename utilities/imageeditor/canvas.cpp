@@ -297,31 +297,17 @@ void Canvas::paintViewportRect(const QRect& vr, bool aa, bool mask)
             rr = QRect(rr.x() - cr.x(),
                        rr.y() - cr.y(),
                        rr.width(), rr.height());
-            /*QRegion reg(0,0,cr.width(),cr.height());
-            reg -= rr;
-
-            QPainter p(d->qpix);
-            p.setClipRegion(reg);
-            p.setRasterOp( NotROP );
-            p.fillRect(reg.boundingRect(),
-                       QBrush(Qt::white,Qt::Dense5Pattern)); 
-            p.setClipping(false);
-            p.setPen(QPen(color0, 1));
-            p.setBrush( NoBrush );
-            p.drawRect(rr);
-            p.end();*/
 
             d->im->paint(d->qpix, x, y, w, h, ir.x()-cr.x(), ir.y()-cr.y(),
                          aa ? 1:0, rr.x(), rr.y(), rr.width(), rr.height());
 
-            if (rr.intersects(QRect(ir.x()-cr.x(),ir.y()-cr.y(),
-                                    ir.width(),ir.height()))) {
-                QPainter p(d->qpix);
-                p.setPen(QPen(QColor(240,240,255),1));
-                p.setBrush( NoBrush );
-                p.drawRect(rr);
-                p.end();
-            }
+            rr = QRect(d->rubber->normalize());
+            rr = QRect(rr.x() - cr.x(), rr.y() - cr.y(),
+                       rr.width(), rr.height());
+            QPainter p(d->qpix);
+            p.setPen(QPen(QColor(250,250,255),1));
+            p.drawRect(rr);
+            p.end();
 
         }
         else {
