@@ -55,7 +55,7 @@
 #include <qframe.h>
 #include <qtimer.h>
 #include <qcheckbox.h>
- #include <qfile.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -90,7 +90,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                   : KDialogBase(Plain, i18n("Color Channel Mixer"), Help|User1|Ok|Cancel, Ok,
                                 parent, 0, true, true, i18n("&Reset Values"))
 {
-    destinationPreviewData = 0L;
+    m_destinationPreviewData = 0L;
     parentWidget()->setCursor( KCursor::waitCursor() );
     
     setButtonWhatsThis ( User1, i18n("<p>Reset color channels' gains settings from the current selected channel.") );
@@ -243,23 +243,19 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
 
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Image Preview"), plainPage());
+    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
 
-    QLabel *label3 = new QLabel(i18n("Original:"), gbox4);
-    label3->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageWidget(240, 160, frame2);
+    m_previewOriginalWidget = new Digikam::ImageWidget(300, 200, frame2);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
-    QLabel *label4 = new QLabel(i18n("Target:"), gbox4);
-    label4->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
+    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
                                                  "gains adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
@@ -319,16 +315,15 @@ ChannelMixerDialog::~ChannelMixerDialog()
 
 void ChannelMixerDialog::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("channelmixer",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("channelmixer", "digikamimageplugins");
 }
 
 void ChannelMixerDialog::closeEvent(QCloseEvent *e)
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (destinationPreviewData) 
-       delete [] destinationPreviewData;
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
     e->accept();
@@ -500,16 +495,16 @@ void ChannelMixerDialog::slotEffect()
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
 
-    if (destinationPreviewData) 
-       delete [] destinationPreviewData;
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
     
-    destinationPreviewData = new uint[w*h];
+    m_destinationPreviewData = new uint[w*h];
 
-    memcpy (destinationPreviewData, orgData, w*h*4);  
+    memcpy (m_destinationPreviewData, orgData, w*h*4);  
 
     if (m)
        {
-       Digikam::ImageFilters::channelMixerImage(destinationPreviewData, w, h,      // Image data.
+       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,      // Image data.
                 l,                                                                 // Preserve luminosity.    
                 m,                                                                 // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,                 // Red channel gains.
@@ -518,7 +513,7 @@ void ChannelMixerDialog::slotEffect()
        }
     else
        {
-       Digikam::ImageFilters::channelMixerImage(destinationPreviewData, w, h,      // Image data.
+       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,      // Image data.
                 l,                                                                 // Preserve luminosity.    
                 m,                                                                 // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,                   // Red channel gains.
@@ -526,11 +521,11 @@ void ChannelMixerDialog::slotEffect()
                 m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);                 // Blue channel gains.
        }
     
-    ifaceDest->putPreviewData(destinationPreviewData);
+    ifaceDest->putPreviewData(m_destinationPreviewData);
     m_previewTargetWidget->update();
     
     // Update histogram.
-    m_histogramWidget->updateData(destinationPreviewData, w, h); 
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h); 
     
     delete [] orgData;
 }
@@ -615,12 +610,12 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
 {
     switch(scale)
        {
-       case 1:           // Log.
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
-          break;
-
-       default:          // Lin.
+       case Linear:
           m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
+          break;
+       
+       case Logarithmic:
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
           break;
        }
 

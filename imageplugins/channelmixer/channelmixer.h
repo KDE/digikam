@@ -60,6 +60,12 @@ private:
     BlueChannelGains
     };
 
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+
 protected:
 
     void closeEvent(QCloseEvent *e);
@@ -101,7 +107,7 @@ private:
     Digikam::ImageWidget         *m_previewOriginalWidget;
     Digikam::ImageWidget         *m_previewTargetWidget;
     
-    uint                         *destinationPreviewData;
+    uint                         *m_destinationPreviewData;
 
     void adjustSliders(void);
     
