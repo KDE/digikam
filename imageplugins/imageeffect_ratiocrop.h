@@ -71,6 +71,8 @@ private:
     void readSettings(void);
     void writeSettings(void);
     
+    void applyRatioChanges(int a);
+    
 private slots:
 
     void slotUser1();
@@ -84,7 +86,7 @@ private slots:
     void slotCustomRatioChanged(void);
     void slotOrientChanged(int o);
     void slotRatioChanged(int a);
-    void slotSelectionChanged(QRect rect);
+    void slotSelectionChanged(QRect rect );
     void slotSelectionWidthChanged(int newWidth);
     void slotSelectionHeightChanged(int newHeight);
 };

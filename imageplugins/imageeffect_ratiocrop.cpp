@@ -136,7 +136,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput = new KIntNumInput(plainPage());
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
-    m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_widthInput->setRange(100, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
     topLayout->addMultiCellWidget(m_widthInput, 3, 3, 3, 4);
     
@@ -147,7 +147,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput = new KIntNumInput(plainPage());
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
-    m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+    m_heightInput->setRange(100, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
     topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);
     
@@ -180,16 +180,16 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_heightInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotHeightChanged(int)));
     
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
-            this, SLOT(slotSelectionChanged(QRect)));                                            
-
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionWidthChanged(int)),
             this, SLOT(slotSelectionWidthChanged(int)));                                            
 
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionHeightChanged(int)),
             this, SLOT(slotSelectionHeightChanged(int)));                                            
                         
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
+            this, SLOT(slotSelectionChanged(QRect)));       
+                
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));      
 
     // -------------------------------------------------------------
@@ -215,7 +215,8 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 3) );                 // 3:4 per default.
     m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
     m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
-    slotRatioChanged(m_ratioCB->currentItem());
+    
+    applyRatioChanges(m_ratioCB->currentItem());
 
     m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    // Paysage per default.
     
@@ -230,7 +231,7 @@ void ImageEffect_RatioCrop::readSettings(void)
        m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
        }
     
-    slotOrientChanged(m_orientCB->currentItem());
+    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());       
     
     m_useRuleThirdLines->setChecked( config->readBoolEntry("Use Rule Third Lines", false) );
 }
@@ -276,6 +277,11 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_widthInput->setValue(rect.width());
     m_heightInput->setValue(rect.height());
     
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1, true);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1, true);
+    m_widthInput->setRange(100, m_imageSelectionWidget->getOriginalImageWidth() - rect.x() , 1, true);
+    m_heightInput->setRange(100, m_imageSelectionWidget->getOriginalImageHeight() - rect.y(), 1, true);
+    
     m_xInput->blockSignals(false);
     m_yInput->blockSignals(false);
     m_widthInput->blockSignals(false);
@@ -286,6 +292,8 @@ void ImageEffect_RatioCrop::slotSelectionWidthChanged(int newWidth)
 {
     m_widthInput->blockSignals(true);
     m_widthInput->setValue(newWidth);
+    m_widthInput->setRange(100, m_imageSelectionWidget->getOriginalImageWidth() -
+                           m_imageSelectionWidget->getRegionSelection().x(), 1, true);
     m_widthInput->blockSignals(false);
 }
 
@@ -293,6 +301,8 @@ void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
 {
     m_heightInput->blockSignals(true);
     m_heightInput->setValue(newHeight);
+    m_heightInput->setRange(100, m_imageSelectionWidget->getOriginalImageHeight() - 
+                            m_imageSelectionWidget->getRegionSelection().y(), 1, true);
     m_heightInput->blockSignals(false);
 }
 
@@ -319,9 +329,20 @@ void ImageEffect_RatioCrop::slotHeightChanged(int h)
 void ImageEffect_RatioCrop::slotOrientChanged(int o)
 {
     m_imageSelectionWidget->setSelectionOrientation(o);
+    
+    // Reset selection area.
+    slotUser1(); 
 }
 
 void ImageEffect_RatioCrop::slotRatioChanged(int a)
+{
+    applyRatioChanges(a);
+       
+    // Reset selection area.
+    slotUser1(); 
+}
+
+void ImageEffect_RatioCrop::applyRatioChanges(int a)
 {
     m_imageSelectionWidget->setSelectionAspectRatioType(a);
     
@@ -356,6 +377,9 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
 {
     m_imageSelectionWidget->setSelectionAspectRatioValue(
             (float)(m_customRatioNInput->value()) / (float)(m_customRatioDInput->value()) );
+    
+    // Reset selection area.
+    slotUser1(); 
 }
 
 void ImageEffect_RatioCrop::slotOk()
