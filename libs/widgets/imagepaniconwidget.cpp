@@ -119,6 +119,18 @@ void ImagePanIconWidget::setCenterSelection(void)
 
 void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
+    if (targetDone)
+       {
+       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
+       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
+       if (m_localRegionSelection.right() > m_rect.width())
+          m_localRegionSelection.moveRight(m_rect.width());
+       if (m_localRegionSelection.bottom() > m_rect.height()) 
+          m_localRegionSelection.moveBottom(m_rect.height());
+       
+       repaint(false);
+       }
+    
     int x = (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
                    ( (float)m_iface->originalWidth() / (float)m_w ));
                                             
@@ -130,23 +142,11 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
                                      
     int h = (int)((float)m_localRegionSelection.height() *
                  ( (float)m_iface->originalHeight() / (float)m_h ));
-    
+                     
     m_regionSelection.setX(x);
     m_regionSelection.setY(y);
     m_regionSelection.setWidth(w);                                     
     m_regionSelection.setHeight(h);
-    
-    if (targetDone)
-       {
-       if (m_regionSelection.left() < 0) m_regionSelection.moveLeft(0);
-       if (m_regionSelection.top() < 0) m_regionSelection.moveTop(0);
-       if (m_regionSelection.right() > m_iface->originalWidth())
-          m_regionSelection.moveRight(m_iface->originalWidth());
-       if (m_regionSelection.bottom() > m_iface->originalHeight()) 
-          m_regionSelection.moveBottom(m_iface->originalHeight());
-       
-       setRegionSelection(m_regionSelection);
-       }
        
     emit signalSelectionMoved( m_regionSelection, targetDone );
 }

@@ -64,9 +64,6 @@ private:
     RATIO07x10,                //  7 x 10
     };
     
-        
-    void updateSelectionSize(QRect rect);
-    
 private slots:
 
     void slotUser1();
@@ -75,7 +72,6 @@ private slots:
     void slotHeightChanged(int h);
     void slotOrientChanged(int o);
     void slotRatioChanged(void);
-    void slotSelectionMoved(QRect rect, bool target);
     void slotSelectionChanged(QRect rect);
 };
 
