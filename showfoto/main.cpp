@@ -73,7 +73,6 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KGlobal::locale()->setMainCatalogue( "digikam" );
-    KGlobal::locale()->insertCatalogue("digikamimageplugins");
 
     KApplication app;
     KImageIO::registerFormats();
@@ -89,6 +88,9 @@ int main(int argc, char *argv[])
     ShowFoto *w = new ShowFoto(urlList);
     app.setMainWidget(w);
     w->show();
+    
+    KGlobal::locale()->insertCatalogue("digikamimageplugins");
+
     return app.exec();
 }
 
