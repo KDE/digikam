@@ -19,6 +19,8 @@
 #ifndef SHOWFOTO_H
 #define SHOWFOTO_H
 
+// KDE includes.
+
 #include <kmainwindow.h>
 #include <kurl.h>
 
@@ -46,7 +48,8 @@ private slots:
     void slotOpenURL(const KURL& url);
     void slotToggleFullScreen();
     void slotEscapePressed();
-    
+    void slotFileProperties();
+        
 private:
 
     void setupActions();
@@ -54,10 +57,15 @@ private:
 private:
 
     Canvas*         m_canvas;
+    
     ThumbBarView*   m_bar;
+    
     KToggleAction*  m_zoomFitAction;
+    
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
+    KAction*        m_fileproperties;
+    
     bool            m_fullScreen;
 };
 

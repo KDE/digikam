@@ -19,7 +19,11 @@
  * 
  * ============================================================ */
 
+// Qt includes. 
+ 
 #include <qlayout.h>
+
+// KDE includes.
 
 #include <kaction.h>
 #include <klocale.h>
@@ -27,8 +31,10 @@
 #include <kmenubar.h>
 #include <kimageio.h>
 #include <kaccel.h>
-
+#include <kpropertiesdialog.h>
 #include <kdeversion.h>
+
+// Local includes.
 
 #include "canvas.h"
 #include "thumbbar.h"
@@ -82,6 +88,11 @@ void ShowFoto::setupActions()
     KStdAction::back(this, SLOT(slotPrev()),
                      actionCollection(), "go_bwd");
 
+    m_fileproperties = new KAction(i18n("Properties"), "exifinfo",
+                                   ALT+Key_Return,
+                                   this, SLOT(slotFileProperties()),
+                                   actionCollection(), "file_properties");
+                     
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                            actionCollection(), "zoom_plus");
@@ -129,6 +140,14 @@ void ShowFoto::slotOpenFile()
             new ThumbBarItem(m_bar, *it);
         }
     }
+}
+
+void ShowFoto::slotFileProperties()
+{
+    ThumbBarItem* curr = m_bar->currentItem();
+    
+    if (curr)
+        (void) new KPropertiesDialog( curr->url(), this, "props dialog", true );
 }
 
 void ShowFoto::slotNext()
