@@ -14,3 +14,4 @@ libsetup_la_SOURCES = setup.cpp setupcamera.cpp \
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 
+KDE_OPTIONS=nofinal

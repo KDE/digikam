@@ -61,7 +61,7 @@ libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) \
+		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS)  \
 		  libdigikam.la
 
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2)
@@ -81,3 +81,4 @@ kdelnk_DATA = digikam.desktop
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamui.rc
 
+KDE_OPTIONS = nofinal

@@ -20,3 +20,4 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 digikamcameraguiicondir = $(kde_datadir)/digikam/icons
 digikamcameraguiicon_ICON = AUTO
 
+KDE_OPTIONS=nofinal

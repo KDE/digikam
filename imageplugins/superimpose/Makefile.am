@@ -21,3 +21,4 @@ kde_services_DATA = digikamimageplugin_superimpose.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_superimpose.pot
 
+KDE_OPTIONS=nofinal

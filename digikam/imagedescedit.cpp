@@ -18,6 +18,7 @@
  *
  * ============================================================ */
 
+
 #include <klocale.h>
 #include <kurl.h>
 #include <kdebug.h>
@@ -552,6 +553,6 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     
 }
 
-
 #include "imagedescedit.moc"
+
 

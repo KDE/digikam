@@ -31,3 +31,4 @@ digikamimageeditoricon_ICON = AUTO
 
 kde_servicetypes_DATA = digikamimageplugin.desktop
 
+KDE_OPTIONS=nofinal
