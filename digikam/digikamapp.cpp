@@ -551,6 +551,8 @@ void DigikamApp::slotKipiPluginPlug()
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
         
+        // Plugin category identification using standard method.
+        
         if ( plugin->category() == KIPI::IMAGESPLUGIN )
             popup = &m_kipiImageActions;
 
@@ -568,25 +570,68 @@ void DigikamApp::slotKipiPluginPlug()
         
         else if ( plugin->category() == KIPI::COLLECTIONSPLUGIN )
             popup = &m_kipiAlbumActions;
+                            
+        else if ( plugin->category() == KIPI::UNDEFINEDPLUGIN )
+            {
+            // Plugin category identification using KAction method based.
+        
+            KActionPtrList actions = plugin->actions();
+            
+            for( KActionPtrList::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 ) 
+                {
+                if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
+                   popup = &m_kipiImageActions;
 
+                else if ( plugin->category(*it2) == KIPI::EXPORTPLUGIN )
+                   popup = &m_kipiFileActionsExport;
+        
+                else if ( plugin->category(*it2) == KIPI::IMPORTPLUGIN )
+                   popup = &m_kipiFileActionsImport;
+
+                else if ( plugin->category(*it2) == KIPI::TOOLSPLUGIN )
+                   popup = &m_kipiToolsActions;
+
+                else if ( plugin->category(*it2) == KIPI::BATCHPLUGIN )
+                   popup = &m_kipiBatchActions;
+        
+                else if ( plugin->category(*it2) == KIPI::COLLECTIONSPLUGIN )
+                   popup = &m_kipiAlbumActions;
+                
+                // Plug the KIPI plugins actions in according with the KAction method.   
+                
+                if ( popup )            
+                   {             
+                   popup->append( *it2 );
+                   }
+                else 
+                   {
+                   kdDebug() << "No menu found for a plugin (by KAction identification method)!!!" << endl;
+                   }
+                }
+            
+            continue;
+            }
+        
+        // Plug the KIPI plugins actions in according with the standard method.   
+            
         if ( popup ) 
             {
             KActionPtrList actions = plugin->actions();
             
-            for( KActionPtrList::Iterator it = actions.begin(); it != actions.end(); ++it ) 
+            for( KActionPtrList::Iterator it3 = actions.begin(); it3 != actions.end(); ++it3 ) 
                 {
-                popup->append( *it );
+                popup->append( *it3 );
                 }
             }
         else 
             {
-            kdDebug() << "No menu found for a plugin !!!" << endl;
+            kdDebug() << "No menu found for a plugin (by standard identification method)!!!" << endl;
             }
             
         plugin->actionCollection()->readShortcutSettings();
         }
         
-    // Create createGUI menu in according with plugins.
+    // Create GUI menu in according with plugins.
     
     plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
     plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
