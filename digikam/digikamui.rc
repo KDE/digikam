@@ -9,12 +9,12 @@
      <Action name="album_add" />
      <Action name="album_sort" />
    <Separator/>
-     <Action name="album_addImages" />
      <Action name="album_propsEdit" />
    <Separator/>
       <ActionList name="album_actions"/>
    <Separator/>
       <Menu name="Import"><text>&amp;Import</text>
+         <Action name="album_addImages" />
          <ActionList name="file_actions_import"/>
       </Menu>
       <Menu name="Export"><text>&amp;Export</text>
