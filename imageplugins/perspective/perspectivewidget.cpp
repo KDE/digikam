@@ -41,6 +41,7 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpointarray.h>
+#include <qregion.h>
 
 // KDE include.
 
@@ -56,9 +57,6 @@
 // Local includes.
 
 #include "perspectivewidget.h"
-
-#define MIN4(a,b,c,d) QMIN(QMIN(a,b),QMIN(c,d))
-#define MAX4(a,b,c,d) QMAX(QMAX(a,b),QMAX(c,d))
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -157,24 +155,8 @@ QRect PerspectiveWidget::getTargetSize(void)
                                getTopLeftCorner().x(), getTopLeftCorner().y(),
                                getTopRightCorner().x(), getTopRightCorner().y(),
                                getBottomLeftCorner().x(), getBottomLeftCorner().y(),
-                               getBottomRightCorner().x(), getBottomRightCorner().y()
-                             );
+                               getBottomRightCorner().x(), getBottomRightCorner().y() );
     
-/*    int x1 = MIN4( getTopLeftCorner().x(),     getBottomLeftCorner().x(), 
-                   getBottomRightCorner().x(), getTopRightCorner().x() );
-                  
-    int y1 = MIN4( getTopLeftCorner().y(),     getBottomLeftCorner().y(), 
-                   getBottomRightCorner().y(), getTopRightCorner().y() );
-    
-    int x2 = MAX4( getTopLeftCorner().x(),     getBottomLeftCorner().x(), 
-                   getBottomRightCorner().x(), getTopRightCorner().x() );
-                   
-    int y2 = MAX4( getTopLeftCorner().y(),     getBottomLeftCorner().y(), 
-                   getBottomRightCorner().y(), getTopRightCorner().y() );
-    
-    QRect targetRect; 
-    targetRect.setCoords( x1, y1, x2, y2 );                            
-    return targetRect;*/
     return perspectiveArea.boundingRect();
 }
 
@@ -338,28 +320,61 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_currentResizing != ResizingNone )
           {
+          QPointArray unsablePoints;
           QPoint pm(e->x(), e->y());        
-          
+                    
           if ( m_currentResizing == ResizingTopLeft )
              {
+             unsablePoints.putPoints(0, 3, 
+                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
+                                     m_topRightPoint.x(), m_topRightPoint.y(),
+                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y());
+             QRegion unsableArea(unsablePoints);
+             
+             if ( unsableArea.contains(pm) ) return;
+             
              m_topLeftPoint = pm;             
              setCursor( KCursor::sizeFDiagCursor() );
              }
             
           else if ( m_currentResizing == ResizingTopRight )
              {
+             unsablePoints.putPoints(0, 3, 
+                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
+                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
+                                     m_topLeftPoint.x(), m_topLeftPoint.y() );
+             QRegion unsableArea(unsablePoints);
+             
+             if ( unsableArea.contains(pm) ) return;
+             
              m_topRightPoint = pm;
              setCursor( KCursor::sizeBDiagCursor() );
              }
           
           else if ( m_currentResizing == ResizingBottomLeft  )
              {
+             unsablePoints.putPoints(0, 3, 
+                                     m_topRightPoint.x(), m_topRightPoint.y(),
+                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
+                                     m_bottomRightPoint.x(), m_bottomRightPoint.y() );
+             QRegion unsableArea(unsablePoints);
+             
+             if ( unsableArea.contains(pm) ) return;
+             
              m_bottomLeftPoint = pm;
              setCursor( KCursor::sizeBDiagCursor() );
              }
              
           else if ( m_currentResizing == ResizingBottomRight )
              {
+             unsablePoints.putPoints(0, 3, 
+                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
+                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
+                                     m_topRightPoint.x(), m_topRightPoint.y() );
+             QRegion unsableArea(unsablePoints);
+             
+             if ( unsableArea.contains(pm) ) return;
+             
              m_bottomRightPoint = pm;
              setCursor( KCursor::sizeFDiagCursor() );
              }
