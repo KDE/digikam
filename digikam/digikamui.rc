@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikam" >
+<kpartgui version="3" name="digikam" >
  
  <MenuBar>
   
