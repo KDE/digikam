@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qdir.h>
 #include <qlistbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -67,9 +68,10 @@ SetupCollections::SetupCollections(QWidget* parent )
    collectionGroupLayout->setAlignment( Qt::AlignTop );
    
    albumCollectionBox_ = new QListBox(collectionGroup);
-/*   albumCollectionBox_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                                  QSizePolicy::Maximum));*/
-
+   QWhatsThis::add( albumCollectionBox_, i18n("<p>Here you can added or removed some Albums "
+                                              "collection types for improve the Albums sorting "
+                                              "in Digikam."));
+                                                
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
   
    collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
@@ -94,7 +96,7 @@ SetupCollections::SetupCollections(QWidget* parent )
            this, SLOT(slotDelCollection()));
    
    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
-                                           QSizePolicy::Expanding );
+                                          QSizePolicy::Expanding );
    collectionGroupLayout->addItem( spacer, 4, 1 );
    
    layout->addWidget(collectionGroup);

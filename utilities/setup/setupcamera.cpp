@@ -27,6 +27,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlistview.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -61,7 +62,9 @@ SetupCamera::SetupCamera( QWidget* parent )
     listView_->addColumn( i18n("Path") );
     listView_->setAllColumnsShowFocus(true); 
     groupBoxLayout->addMultiCellWidget( listView_, 0, 4, 0, 0 );
-
+    QWhatsThis::add( listView_, i18n("<p>You can see here the digital camera list used by Digikam "
+                                     "via the Gphoto interface."));
+                                     
     addButton_ = new QPushButton( groupBox );
     groupBoxLayout->addWidget( addButton_, 0, 1 );
 

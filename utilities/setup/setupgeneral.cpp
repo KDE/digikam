@@ -35,6 +35,7 @@
 #include <qpushbutton.h>
 #include <qdir.h>
 #include <qlistbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -64,6 +65,9 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    albumPathBox->setTitle(i18n("Albums Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
+   QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the Digikam Albums "
+                                        "library in your computer."));
+                                                
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
                                                    albumPathBox);
    connect(changePathButton, SIGNAL(clicked()),
@@ -73,8 +77,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1,
-                                                        Qt::Horizontal, 
+   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal, 
                                                         i18n("Default Thumbnails Size"),
                                                         parent);
    
