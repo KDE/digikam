@@ -670,8 +670,10 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
 void DigikamApp::slotCameraAutoDetect()
 {
     CameraType* ctype = mCameraList->autoDetect();
-    if (ctype)
-        ctype->action()->activate();        
+    if (ctype && ctype->action())
+    {
+        ctype->action()->activate();
+    }
 }
 
 void DigikamApp::slotSetup()

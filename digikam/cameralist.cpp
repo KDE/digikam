@@ -198,12 +198,21 @@ CameraType* CameraList::autoDetect()
     // check if the camera is already in the list
     for (CameraType *ctype = d->clist.first(); ctype;
          ctype = d->clist.next()) {
-        if (ctype->model() == model && ctype->port() == port)
+        // we can get away with checking only the model, as the auto-detection
+        // works only for usb cameras. so the port is always usb:
+        if (ctype->model() == model)
             return ctype;
     }
 
     // looks like a new camera
-
+    
+    // NOTE: libgphoto2 now (2.1.4+) expects port names to be
+    // something like "usb:001,012". but on linux these port numbers
+    // will change everytime camera is reconnected. gphoto port funcs
+    // also allow regexp match, so the safe bet is to just pass in
+    // "usb:" and cross your fingers that user doesn't have multiple cameras
+    // connected at the same time (whack them if they do).
+    port = "usb:";
     CameraType* ctype = new CameraType(model, model, port, "/");
     insert(ctype);
 
