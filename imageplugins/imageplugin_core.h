@@ -60,6 +60,7 @@ private slots:
     void slotBW();
     void slotSepia();
     void slotRedEye();
+    void slotRatioCrop();
 
 };
     

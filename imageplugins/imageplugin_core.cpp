@@ -39,6 +39,7 @@
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
 #include "imageeffect_colorsenhance.h"
+#include "imageeffect_ratiocrop.h"
 #include "imageplugin_core.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
@@ -49,7 +50,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------
-    // Fix/Colors menu actions
+    // Fix and Colors menu actions
 
     new KAction(i18n("Blur..."), 0,
                 this, SLOT(slotBlur()),
@@ -118,6 +119,14 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSepia()),
                 actionCollection(), "implugcore_sepia");
 
+    //-------------------------------
+    // Transform menu actions.
+    
+    new KAction(i18n("Ratio Crop..."), 0,
+                this, SLOT(slotRatioCrop()),
+                actionCollection(), "implugcore_ratiocrop");
+    
+
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
@@ -128,6 +137,9 @@ ImagePlugin_Core::~ImagePlugin_Core()
 QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
+
+    //-------------------------------
+    // Fix and Colors menu actions
 
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_bcg/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_hsl/ ");
@@ -144,6 +156,14 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
 
+    //-------------------------------
+    // Transform menu actions.
+
+    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/implugcore_ratiocrop/ ");
+
+    //-------------------------------
+    // Filters menu actions.
+
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_sepia/ ");
 
@@ -152,7 +172,8 @@ QStringList ImagePlugin_Core::guiDefinition() const
     i18n( "Fi&x" );
     i18n( "Fi&lters" );
     i18n( "&Colors" );
-
+    i18n( "&Transform" );
+    
     return guiDef;
 }
 
@@ -231,5 +252,10 @@ void ImagePlugin_Core::slotRedEye()
     ImageEffect_RedEye::removeRedEye(parentWidget());
 }
 
+void ImagePlugin_Core::slotRatioCrop()
+{
+    ImageEffect_RatioCrop dlg(parentWidget());
+    dlg.exec();
+}
 
 #include "imageplugin_core.moc"
