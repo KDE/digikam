@@ -137,11 +137,18 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     if (d->currItem == item)
         return;
 
+    if (d->currItem)
+    {
+        ThumbBarItem* item = d->currItem;
+        d->currItem = 0;
+        item->repaint();
+    }
+
     d->currItem = item;
     if (d->currItem)
     {
         ensureVisible(0,item->m_pos);
-        updateContents();
+        item->repaint();
         emit signalURLSelected(item->url());
     }
 }
@@ -224,9 +231,15 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     if (!barItem || barItem == d->currItem)
         return;
 
-    
+    if (d->currItem)
+    {
+        ThumbBarItem* item = d->currItem;
+        d->currItem = 0;
+        item->repaint();
+    }
+
     d->currItem = barItem;
-    viewport()->update();
+    barItem->repaint();
     
     emit signalURLSelected(barItem->url());
 }
@@ -338,6 +351,15 @@ void ThumbBarView::rearrangeItems()
     }
 }
 
+void ThumbBarView::repaintItem(ThumbBarItem* item)
+{
+    if (item)
+    {
+        repaintContents(0, item->m_pos, visibleWidth(),
+                        d->tileSize+2*d->margin);
+    }
+}
+
 void ThumbBarView::slotUpdate()
 {
     rearrangeItems();
@@ -358,10 +380,7 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
     }
     
     item->m_pixmap = new QPixmap(pix);
-    if (item->m_pos < height())
-    {
-        viewport()->update();
-    }
+    item->repaint();
 }
 
 void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
@@ -381,10 +400,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     }
     
     item->m_pixmap = new QPixmap(pix);
-    if (item->m_pos < height())
-    {
-        viewport()->update();
-    }
+    item->repaint();
 }
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view,
@@ -415,6 +431,11 @@ ThumbBarItem* ThumbBarItem::next() const
 ThumbBarItem* ThumbBarItem::prev() const
 {
     return m_prev;
+}
+
+void ThumbBarItem::repaint()
+{
+    m_view->repaintItem(this);   
 }
 
 #include "thumbbar.moc"

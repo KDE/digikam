@@ -58,6 +58,7 @@ private:
     void insertItem(ThumbBarItem* item);
     void removeItem(ThumbBarItem* item);
     void rearrangeItems();
+    void repaintItem(ThumbBarItem* item);
 
 signals:
 
@@ -89,6 +90,8 @@ public:
     ThumbBarItem* next() const;
     ThumbBarItem* prev() const;
     int           position() const;
+
+    void          repaint();
 
 private:
 
