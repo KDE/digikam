@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
                           0);
 
     aboutData.addCredit ( "Tom Albers",
-                          I18N_NOOP("digiKam bugs.kde.org frontman, Feedback"),
+                          I18N_NOOP("digiKam bugs.kde.org frontman, patches and feedback"),
                           "tomalbers at kde.nl",
                           0);
     
