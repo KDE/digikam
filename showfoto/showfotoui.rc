@@ -23,6 +23,8 @@
      <Separator />
      <Action name="flip_horiz" />
      <Action name="flip_vert" />
+     <Separator />
+     <Action name="crop" />
  </Menu>
 
  <Menu name="view" >
@@ -56,6 +58,8 @@
   <Action name="zoom_plus" />
   <Action name="zoom_minus" />
   <Action name="zoom_fit" />
+  <Separator />
+  <Action name="crop" />
   <Separator />
   <Action name="full_screen" /> 
 </ToolBar>

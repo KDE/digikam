@@ -70,6 +70,7 @@ private:
     KAction*        m_zoomMinusAction;
     KToggleAction*  m_fullScreenAction;
     KToggleAction*  m_showBarAction;
+    KAction*        m_cropAction;
     
     bool            m_fullScreen;
 };

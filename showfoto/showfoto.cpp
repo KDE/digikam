@@ -62,6 +62,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             SLOT(slotOpenURL(const KURL&)));
+    connect(m_canvas, SIGNAL(signalSelected(bool)),
+            m_cropAction, SLOT(setEnabled(bool)));
 
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
@@ -146,6 +148,12 @@ void ShowFoto::setupActions()
     new KAction(i18n("Flip Vertically"), 0, Key_Slash,
                 m_canvas, SLOT(slotFlipVert()),
                 actionCollection(), "flip_vert");
+
+    m_cropAction = new KAction(i18n("Crop"), "crop",
+                               CTRL+Key_C,
+                               m_canvas, SLOT(slotCrop()),
+                               actionCollection(), "crop");
+    m_cropAction->setEnabled(false);
     
     // ---------------------------------------------------------------
 
