@@ -194,7 +194,7 @@ void CameraUI::slotDownloadSelected()
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
     
-    KURL url = DirSelectDialog::selectDir(libPath, currPath, header);
+    KURL url = DirSelectDialog::selectDir(libPath, currPath, this, header);
     if (!url.isValid())
         return;
 
@@ -232,7 +232,7 @@ void CameraUI::slotDownloadAll()
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
     
-    KURL url = DirSelectDialog::selectDir(libPath, currPath, header);
+    KURL url = DirSelectDialog::selectDir(libPath, currPath, this, header);
     if (!url.isValid())
         return;
 

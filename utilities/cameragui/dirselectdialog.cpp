@@ -46,8 +46,9 @@
 
 DirSelectDialog::DirSelectDialog(const QString& rootDir,
                                  const QString& startDir,
+                                 QWidget* parent,
                                  QString header)
-    : KDialogBase( 0, 0, true, i18n("Select Album"), User1|Ok|Cancel)
+    : KDialogBase(parent, 0, true, i18n("Select Album"), User1|Ok|Cancel)
 {
     setButtonText(User1, i18n("&New Album"));
     
@@ -202,9 +203,9 @@ void DirSelectDialog::slotUser1()
 }
 
 KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
-                                QString header)
+                                QWidget* parent, QString header)
 {
-    DirSelectDialog dlg(rootDir, startDir, header);
+    DirSelectDialog dlg(rootDir, startDir, parent, header);
 
     if (dlg.exec() != QDialog::Accepted)
         return KURL();
