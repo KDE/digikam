@@ -726,6 +726,11 @@ void AlbumIconView::slotFilesModified()
     d->imageLister->updateDirectory();
 }
 
+void AlbumIconView::slotFilesModified(const KURL& url)
+{
+    refreshItems(QStringList(url.path()));    
+}
+
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
     AlbumSettings *settings = AlbumSettings::instance();
@@ -775,6 +780,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     imview->disconnect(this);
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
             SLOT(slotFilesModified()));
+    connect(imview, SIGNAL(signalFileModified(const KURL&)),
+            SLOT(slotFilesModified(const KURL& url)));
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             SLOT(slotFilesModified()));
         

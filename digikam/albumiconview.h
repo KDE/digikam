@@ -148,6 +148,7 @@ private slots:
 
     void slotOnDeleteSelectedItemsFinished(KIO::Job* job);
     void slotFilesModified();
+    void slotFilesModified(const KURL& url);
 
     void slotContentsMoving(int x, int y);
     
