@@ -1542,9 +1542,9 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             return;
         }
 
+        int id = 0;
         char keys_return[32];
         XQueryKeymap(x11Display(), keys_return);
-        int id = 0;
         int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
         int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
         int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
@@ -1553,7 +1553,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
-            // If the ctrl key is pressing when dropping the image the
+            // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
             if ( ( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
                  ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
