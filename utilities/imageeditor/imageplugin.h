@@ -24,7 +24,7 @@
 
 #include <qobject.h>
 
-#include <digikam/guiclient.h>
+#include "guiclient.h"
 
 class KInstance;
 class QWidget;
