@@ -334,8 +334,13 @@ public:           // Fonctions.
         if (!im) return;
 
         imlib_modify_color_modifier_gamma(val);
-        imlib_apply_color_modifier();
+        imlib_get_color_modifier_tables(r_table, g_table,
+                                         b_table, a_table);
         imlib_reset_color_modifier();
+        imlib_set_color_modifier_tables(r_table, g_table,
+                                         b_table, a_table);
+        imlib_apply_color_modifier();
+
         dirty   = true;
         qDebug("gamma:%f", (float)val);
         }
