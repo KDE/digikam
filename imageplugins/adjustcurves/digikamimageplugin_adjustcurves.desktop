@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_AdjustCurves
+Name[nl]=Afbeeldingplugin_HoekenBijstellen
 Name[pt]='Plugin' Ajustar Curvas
 Name[pt_BR]='Plugin' Ajustar Curvas
 Name[sv]=Insticksprogram för justering av kurvor
@@ -8,10 +9,9 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust curves plugin for digiKam
-Comment[fr]=Module externe de digiKam pour l'ajustement par courbes d'une image
-Comment[pt]='Plugin' de ajustar as curvas do histograma para o digikam
-Comment[pt_BR]='Plugin' de ajustar as curvas do histograma para o digikam
-Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
+Comment[nl]=Digikam-plugin voor hoekenbijstelling van afbeeldinghistogram
+Comment[pt]='Plugin' de ajustar as curvas do histograma para o digiKam
+Comment[pt_BR]='Plugin' de ajustar as curvas do histograma para o digiKam
 
 X-KDE-Library=digikamimageplugin_adjustcurves
 author=Caulier Gilles, caulier dot gilles at free dot fr
