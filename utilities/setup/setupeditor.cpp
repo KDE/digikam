@@ -62,7 +62,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             "<b>1</b>: low quality (high compression and small file size)<p>"
                                             "<b>50</b>: medium quality<p>"
                                             "<b>100</b>: high quality (no compression and large file size)<p>"
-                                            "<b>Note: JPEG is a lossless image compression format! Default quality is 75.</b>"));
+                                            "<b>Note: JPEG is not a lossless image compression format. Default quality is 75.</b>"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
    m_PNGcompression->setRange(1, 9, 1, true );
@@ -74,7 +74,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                            "<b>5</b>: medium compression<p>"
                                            "<b>9</b>: high compression (small file size but "
                                            "long compression duration)<p>"
-                                           "<b>Note: PNG is always a lossless image compression format!</b>"));
+                                           "<b>Note: PNG is always a lossless image compression format.</b>"));
 
    m_TIFFcompression = new QCheckBox(i18n("Compress TIFF files"),
                                      savingOptionsGroup);
@@ -83,7 +83,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             "If you enable this option, you can reduce "
                                             "the final file size of the TIFF image.</p>"
                                             "<p>A lossless compression format (Adobe Deflate) "
-                                            "is used to save the file<p>"));
+                                            "is used to save the file.<p>"));
 
    layout->addWidget(savingOptionsGroup);
 
