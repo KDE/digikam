@@ -880,7 +880,7 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->contextMenu, d->actions.find("help"));
     addMenuItem(d->contextMenu, d->actions.find("about"));
 
-    // Disable save, saveas, crop, and restore actions in popupmenu.
+    // Disable save, crop, and restore actions in popupmenu.
     
     CAction *action = 0;
 
@@ -890,9 +890,6 @@ void ImageView::setupPopupMenu()
     action = d->actions.find("save");
     d->contextMenu->setItemEnabled(action->menuID, false);
 
-    action = d->actions.find("saveas");
-    d->contextMenu->setItemEnabled(action->menuID, false);
-    
     action = d->actions.find("restore");
     d->contextMenu->setItemEnabled(action->menuID, false);
 }
@@ -1757,9 +1754,6 @@ void ImageView::slotChanged(bool val)
     CAction *action = 0;
 
     action = d->actions.find("save");
-    d->contextMenu->setItemEnabled(action->menuID, val);
-
-    action = d->actions.find("saveas");
     d->contextMenu->setItemEnabled(action->menuID, val);
 
     action = d->actions.find("restore");
