@@ -305,6 +305,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
        
        case 3: // Motion Blur.
+       case 6: // Focus Blur.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           m_levelInput->setEnabled(true);
@@ -317,7 +318,6 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
           
        case 5: // Skake Blur    
-       case 6: // Focus Blur.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           break;
@@ -398,7 +398,7 @@ void ImageEffect_BlurFX::slotEffect()
           break;
                               
        case 6: // Focus Blur.
-          focusBlur(data, w, h, w/2, h/2, 10, d*10, false, pRect);
+          focusBlur(data, w, h, w/2, h/2, d, l*10, false, pRect);
           break;
        
        case 7: // Smart Blur.
@@ -457,12 +457,12 @@ void ImageEffect_BlurFX::slotEffect()
        case 1: // Radial Blur.
        case 2: // Far Blur.
        case 5: // Shake Blur.
-       case 6: // Focus Blur.
        case 8: // Frost Glass.
        case 9: // Mosaic.
           break;
 
        case 3: // Motion Blur.
+       case 6: // Focus Blur.
        case 7: // Smart Blur.
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
@@ -534,7 +534,7 @@ void ImageEffect_BlurFX::slotOk()
              break;
           
           case 6: // Focus Blur.
-             focusBlur(data, w, h, w/2, h/2, 10, d*10);
+             focusBlur(data, w, h, w/2, h/2, d, l*10);
              break;
        
           case 7: // Smart Blur.
@@ -785,13 +785,13 @@ void ImageEffect_BlurFX::radialBlur(uint *data, int Width, int Height, int X, in
  * data             => The image data in RGBA mode.                            
  * Width            => Width of image.                          
  * Height           => Height of image.                            
- * BlurRadius       => Raduis of blured image. 
- * Radius           => Focus distance.
+ * BlurRadius       => Radius of blured image. 
+ * BlendRadius      => Radius of blending effect.
  * bInversed        => If true, invert focus effect.
  * pArea            => Preview area.
  *                                                                                 
  */
-void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, 
+void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
                                    bool bInversed, QRect pArea)
 {
     int LineWidth = Width * 4;                     
@@ -814,21 +814,163 @@ void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int
        nStride = (Width - xMax + xMin)*4;
        }
     
-    register int h, w, nh, nw = 0;
-    register int i = yMin * LineWidth + xMin * 4;
-    
-    int nBlendFactor;
-    double lfRadius;
-    
     int    BitCount = LineWidth * Height;
     uchar*    pBits = (uchar*)data;
     uchar* pResBits = new uchar[BitCount];
             
     // Gaussian blur using the BlurRadius parameter.
-    memcpy (pResBits, data, BitCount);        
-    Digikam::ImageFilters::gaussianBlurImage((uint *)pResBits, Width, Height, BlurRadius);
     
-    // Blending result  
+    memcpy (pResBits, data, BitCount);        
+    
+    // Gaussian kernel computation.
+    
+    int    nKSize, nCenter;
+    double x, sd, factor, lnsd, lnfactor;
+    register int i, j, n, h, w;
+
+    nKSize = 2 * BlurRadius + 1;
+    nCenter = nKSize / 2;
+    int *Kernel = new int[nKSize];
+
+    lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
+    lnsd = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
+    factor = exp (lnfactor);
+    sd = exp (lnsd);
+
+    for (i = 0; i < nKSize; i++)
+        {
+        x = sqrt ((i - nCenter) * (i - nCenter));
+        Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
+        }
+    
+    // Apply Gaussian kernel.
+    
+    int nSumR, nSumG, nSumB, nCount;
+    int nKernelWidth = BlurRadius * 2 + 1;
+    
+    uchar* pInBits  = pResBits;
+    uchar* pOutBits = new uchar[BitCount];
+    uchar* pBlur    = new uchar[BitCount];
+    
+    // We need to copy our bits to blur bits
+    
+    memcpy (pBlur, pInBits, BitCount);     
+
+    // We need to alloc a 2d array to help us to store the values
+    
+    int** arrMult = Alloc2DArray (nKernelWidth, 256);
+    
+    for (i = 0; i < nKernelWidth; i++)
+        for (j = 0; j < 256; j++)
+            arrMult[i][j] = j * Kernel[i];
+
+    // We need to initialize all the loop and iterator variables
+    
+    nSumR = nSumG = nSumB = nCount = j = 0;
+    i = yMin * LineWidth + xMin * 4;
+    
+    // Now, we enter in the main loop
+    
+    for (h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
+        {
+        for (w = xMin; !m_cancel && (w < xMax); w++, i += 4)
+            {
+            // first of all, we need to blur the horizontal lines
+                
+            for (n = -BlurRadius; !m_cancel && (n <= BlurRadius); n++)
+               {
+               // if is inside...
+               if (IsInside (Width, Height, w + n, h))
+                    {
+                    // we points to the pixel
+                    j = i + n * 4;
+                    
+                    // finally, we sum the pixels using a method similar to assigntables
+                    nSumR += arrMult[n + BlurRadius][pInBits[j+2]];
+                    nSumG += arrMult[n + BlurRadius][pInBits[j+1]];
+                    nSumB += arrMult[n + BlurRadius][pInBits[ j ]];
+                    
+                    // we need to add to the counter, the kernel value
+                    nCount += Kernel[n + BlurRadius];
+                    }
+                }
+                
+            if (nCount == 0) nCount = 1;                    
+                
+            // now, we return to blur bits the horizontal blur values
+            pBlur[i+2] = LimitValues (nSumR / nCount);
+            pBlur[i+1] = LimitValues (nSumG / nCount);
+            pBlur[ i ] = LimitValues (nSumB / nCount);
+            // ok, now we reinitialize the variables
+            nSumR = nSumG = nSumB = nCount = 0;
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)(h - yMin) * 25.0) / (yMax - yMin)));
+        kapp->processEvents();         
+        }
+
+    // Getting the blur bits, we initialize position variables
+    j = 0;
+    i = yMin * LineWidth + xMin * 4;
+
+    // We enter in the second main loop
+        
+    for (h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
+        {
+        for (w = xMin; !m_cancel && (w < xMax); w++, i += 4)
+            {
+            // first of all, we need to blur the vertical lines
+            for (n = -BlurRadius; !m_cancel && (n <= BlurRadius); n++)
+                {
+                // if is inside...
+                if (IsInside(Width, Height, w, h + n))
+                    {
+                    // we points to the pixel
+                    j = i + n * 4;
+                                          
+                    // finally, we sum the pixels using a method similar to assigntables
+                    nSumR += arrMult[n + BlurRadius][pBlur[j+2]];
+                    nSumG += arrMult[n + BlurRadius][pBlur[j+1]];
+                    nSumB += arrMult[n + BlurRadius][pBlur[ j ]];
+                    
+                    // we need to add to the counter, the kernel value
+                    nCount += Kernel[n + BlurRadius];
+                    }
+                }
+                
+            if (nCount == 0) nCount = 1;                    
+                
+            // now, we return to bits the vertical blur values
+            pOutBits[i+2] = LimitValues (nSumR / nCount);
+            pOutBits[i+1] = LimitValues (nSumG / nCount);
+            pOutBits[ i ] = LimitValues (nSumB / nCount);
+                
+            // ok, now we reinitialize the variables
+            nSumR = nSumG = nSumB = nCount = 0;
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (25.0 + ((double)(h - yMin) * 25.0) / (yMax - yMin)));
+        kapp->processEvents();         
+        }
+
+    memcpy (pResBits, pOutBits, BitCount);   
+       
+    // now, we must free memory
+    Free2DArray (arrMult, nKernelWidth);
+    delete [] pBlur;
+    delete [] pOutBits;
+    delete [] Kernel;        
+        
+    // Blending results.  
+    
+    int nBlendFactor;
+    double lfRadius;
+        
+    register int nh, nw = 0;
+    i = yMin * LineWidth + xMin * 4;
+    
     for (h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
         {
         nh = Y - h;
@@ -839,7 +981,7 @@ void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int
 
             lfRadius = sqrt (nh * nh + nw * nw);
 
-            nBlendFactor = LimitValues ((int)(255.0 * lfRadius / (double)Radius));
+            nBlendFactor = LimitValues ((int)(255.0 * lfRadius / (double)BlendRadius));
 
             if (bInversed)
                 {
@@ -858,7 +1000,7 @@ void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int
             }
         
         // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)(h - yMin) * 100.0) / (yMax - yMin)));
+        m_progressBar->setValue((int) (50.0 + ((double)(h - yMin) * 50.0) / (yMax - yMin)));
         kapp->processEvents();             
        }
     

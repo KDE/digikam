@@ -69,7 +69,7 @@ protected:
     // Backported from ImageProcessing version 2
     void zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
     void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
-    void focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, 
+    void focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
                    bool bInversed=false, QRect pArea=QRect::QRect());
     void farBlur(uint *data, int Width, int Height, int Distance);
     void motionBlur(uint *data, int Width, int Height, int Distance, double Angle=0.0);
