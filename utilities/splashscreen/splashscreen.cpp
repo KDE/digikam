@@ -4,7 +4,7 @@
  * Description :
  *
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,26 +18,30 @@
  *
  * ============================================================ */
 
+// Qt includes. 
+ 
 #include <qpixmap.h>
-#include <qstring.h>
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qpainter.h>
+
+// KDE includes.
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 
+// Local includes.
+
 #include "splashscreen.h"
 
-
-SplashScreen::SplashScreen()
-    : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
+SplashScreen::SplashScreen(const QString& splash)
+            : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
 {
     currState_ = 0;
     progressBarSize_ = 3;
     
-    QString file = locate( "appdata", "digikam-splash.png" );
+    QString file = locate( "appdata", splash );
 
     pix_ = new QPixmap(file);
 

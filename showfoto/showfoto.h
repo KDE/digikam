@@ -36,6 +36,7 @@ class KToolBarPopupAction;
 
 class Canvas;
 class ImagePluginLoader;
+class SplashScreen;
 
 namespace Digikam
 {
@@ -50,6 +51,8 @@ public:
 
     ShowFoto(const KURL::List& urlList);
     ~ShowFoto();
+    
+    virtual void show();
 
 protected:
 
@@ -104,6 +107,8 @@ private:
     
     Digikam::ThumbBarView *m_bar;
     
+    SplashScreen          *m_splash;
+                           
     KConfig               *m_config;
     
     KAction               *m_zoomPlusAction;

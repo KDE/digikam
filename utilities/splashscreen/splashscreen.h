@@ -4,7 +4,7 @@
  * Description :
  *
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,7 +21,10 @@
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
+// Qt includes.
+
 #include <qwidget.h>
+#include <qstring.h>
 
 class QPixmap;
 class QTimer;
@@ -32,7 +35,7 @@ class SplashScreen : public QWidget
 
 public:
 
-    SplashScreen();
+    SplashScreen(const QString& splash);
     ~SplashScreen();
 
     void finish( QWidget *mainWin );

@@ -2,6 +2,7 @@ bin_PROGRAMS = showfoto
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor \
 	   -I$(top_srcdir)/digikam/libs/thumbbar/ \
+	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 
 showfoto_SOURCES = main.cpp showfoto.cpp 
@@ -20,6 +21,9 @@ METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/showfoto
 rc_DATA = showfotoui.rc
+
+showfotosplashpicdir = $(kde_datadir)/showfoto
+showfotosplashpic_DATA = showfoto-splash.png
 
 xdg_apps_DATA = showfoto.desktop
 

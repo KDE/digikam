@@ -70,13 +70,17 @@
 #include "imageresizedlg.h"
 #include "imageprint.h"
 #include "imlibinterface.h"
+#include "splashscreen.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
+        : KMainWindow( 0, "Showfoto" )
 {
+    m_splash     = 0;
     m_config     = kapp->config();
     m_fullScreen = false;
     
+    m_splash     = new SplashScreen("showfoto-splash.png");
     QWidget* widget  = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -96,7 +100,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // Load image plugins.
     
-    m_imagePluginLoader = new ImagePluginLoader(this);
+    m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next())
@@ -1026,6 +1030,17 @@ void ShowFoto::slotResize()
         (width != m_canvas->imageWidth() ||
         height != m_canvas->imageHeight()))
         m_canvas->resizeImage(width, height);
+}
+
+void ShowFoto::show()
+{
+    if(m_splash)
+    {
+        m_splash->finish(this);
+        delete m_splash;
+        m_splash = 0;
+    }
+    KMainWindow::show();
 }
 
 #include "showfoto.moc"
