@@ -58,11 +58,11 @@
 // Digikam includes.
 
 #include <digikam/imageiface.h>
-#include <digikam/imagetoolswidget.h>
 
 // Local includes.
 
 #include "version.h"
+#include "freerotationwidget.h"
 #include "imageeffect_freerotation.h"
 
 namespace DigikamFreeRotationImagesPlugin
@@ -133,7 +133,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageToolsWidget(480, 320, frame);
+    m_previewWidget = new FreeRotationWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the free rotation operation preview."
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be draw "

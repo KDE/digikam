@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = digikamimageplugin_freerotation.la
 
 digikamimageplugin_freerotation_la_SOURCES = \
 	imageplugin_freerotation.cpp \
-	imageeffect_freerotation.cpp 
+	imageeffect_freerotation.cpp freerotationwidget.cpp 
 
 digikamimageplugin_freerotation_la_LIBADD = $(LIB_KPARTS) -ldigikam 
 
