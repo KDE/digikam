@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                           i18n("Using Kipi library version %1").arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
-                          I18N_NOOP("Digikam"),
+                          I18N_NOOP("digiKam"),
                           digikam_version,        // Release number available in version.h to the top source dir.
                           Description.latin1(),
                           KAboutData::License_GPL,
@@ -83,6 +83,11 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Developer, co-coordinator, French translations"),
                           "caulier dot gilles at free.fr",
                           "http://caulier.gilles.free.fr");
+
+    aboutData.addAuthor ( "Joern Ahrens",
+                          I18N_NOOP("Developer"),
+                          "kde at jokele.de",
+                          0);
 
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
@@ -163,11 +168,12 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Feedback and patches"),
                           "r dot taylor at bcs.org.uk",
                           0);
-                          
-    aboutData.addCredit ( "Joern Ahrens",
-                          I18N_NOOP("Developer"),
-                          "kde at jokele.de",
+
+    aboutData.addCredit ( "Hans Karlsson",
+                          I18N_NOOP("digiKam website banner and application icons"),
+                          "karlsson dot h at home dot se",
                           0);
+    
     
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"),
                             I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
