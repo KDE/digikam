@@ -125,6 +125,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     QLabel *label3 = new QLabel(i18n("Intensity range :"), page);
     label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, page);
+    m_minInterv->setValue(0);
     m_maxInterv = new QSpinBox(0, 255, 1, page);
     m_maxInterv->setValue(255);
     hlay2->addWidget(label3);
@@ -194,7 +195,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotIntervChanged(int)));
     
-    
+    updateInformations(); 
 }
 
 void HistogramPropsPlugin::slotChannelChanged(int channel)
