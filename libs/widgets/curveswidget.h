@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qwidget.h>
+#include <qcolor.h>
 
 class QCustomEvent;
 
@@ -77,6 +78,7 @@ public:
     
     void reset(void);
     void curveTypeChanged(void);
+    void setCurveGuide(QColor color);
     
     int m_channelType;     // Channel type to draw.
     int m_scaleType;       // Scale to use for drawing.
@@ -112,6 +114,9 @@ private:
     
     bool                  m_blinkFlag;         
     bool                  m_readOnlyMode;
+    bool                  m_guideVisible;
+    
+    QColor                m_colorGuide;
     
     QTimer               *m_blinkTimer;
     

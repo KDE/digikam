@@ -65,6 +65,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_grab_point     = -1;    
     m_last           = 0;
     m_readOnlyMode   = readOnly;
+    m_guideVisible   = false;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -90,6 +91,12 @@ void CurvesWidget::reset(void)
 {
     m_grab_point = -1;    
     repaint(false);
+}
+
+void CurvesWidget::setCurveGuide(QColor color)
+{
+    m_guideVisible = true;
+    m_colorGuide = color;
 }
 
 void CurvesWidget::curveTypeChanged(void)
@@ -377,7 +384,37 @@ void CurvesWidget::paintEvent( QPaintEvent * )
              }
          }
       }
-               
+
+   // Drawing color guide.
+
+   p1.setPen(QPen::QPen(Qt::black, 1, Qt::DotLine));      
+   
+   if (m_guideVisible)   
+      {
+      switch(m_channelType)
+         {
+         case CurvesWidget::RedChannelHistogram:      
+            p1.drawLine(m_colorGuide.red(), 0, m_colorGuide.red(), wHeight);  
+            break;
+         
+         case CurvesWidget::GreenChannelHistogram:    
+            p1.drawLine(m_colorGuide.green(), 0, m_colorGuide.green(), wHeight);  
+            break;
+             
+         case CurvesWidget::BlueChannelHistogram:     
+            p1.drawLine(m_colorGuide.blue(), 0, m_colorGuide.blue(), wHeight);  
+            break;
+             
+         case CurvesWidget::ValueHistogram:    
+            p1.drawLine(QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue()), 0,
+                        QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue()), wHeight);  
+            break;
+
+         default:                                     // Alpha.
+            break;
+         }  
+      }
+                     
    p1.end();
    bitBlt(this, 0, 0, &pm);
 }
