@@ -636,12 +636,18 @@ void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config());
     KEditToolbar *dlg = new KEditToolbar(actionCollection(), "digikamui.rc");
-    
+
     if (dlg->exec())
-        {
+    {
         createGUI("digikamui.rc");
         applyMainWindowSettings(KGlobal::config());
-        }
+        plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
+        plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
+        plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
+        plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
+        plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
+        plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
+    }
     
     delete dlg;
 }
