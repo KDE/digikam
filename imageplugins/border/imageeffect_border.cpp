@@ -271,7 +271,7 @@ void ImageEffect_Border::writeSettings(void)
 
 void ImageEffect_Border::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("borders",
+    KApplication::kApplication()->invokeHelp("border",
                                              "digikamimageplugins");
 }
 
