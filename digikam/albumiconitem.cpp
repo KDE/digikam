@@ -285,7 +285,7 @@ void AlbumIconItem::updateExtraText()
         // read and display JPEG COM field
    /*     KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
 
-        if(metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+        if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
         {
             extraText += "\n";
             QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
