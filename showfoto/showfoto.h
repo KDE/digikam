@@ -56,18 +56,15 @@ private:
 
 private:
 
-    KURL::List      m_urlList;
-    
     Canvas*         m_canvas;
     
     ThumbBarView*   m_bar;
     
     KToggleAction*  m_zoomFitAction;
-    KToggleAction*  m_fullScreenAction;
     
-    KAction*        m_fileProperties;
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
+    KToggleAction*  m_fullScreenAction;
     
     bool            m_fullScreen;
 };
