@@ -33,6 +33,7 @@ extern "C"
 
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 
 // Qt includes.
 
