@@ -220,39 +220,39 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_resetButton = new QPushButton(i18n("&Reset All Values"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' curve values."));
     
-    QHButtonGroup *bGroup = new QHButtonGroup(gbox3);
-    m_pickBlack = new QPushButton(bGroup);
-    bGroup->insert(m_pickBlack, BlackTonal);
+    m_pickerColorButtonGroup = new QHButtonGroup(gbox3);
+    m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "Black tone color picker" ) );
-    QWhatsThis::add( m_pickBlack, i18n("<p>Set here the color from original image used to set <b>Black Tone</b> "
-                                       "curves point on Red, Green and Blue channels."));
-    m_pickGray  = new QPushButton(bGroup);
-    bGroup->insert(m_pickGray, GrayTonal);
+    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Black Tone</b> "
+                                       "smooth curves point on Red, Green and Blue channels."));
+    m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickGray->setToggleButton(true);
     QToolTip::add( m_pickGray, i18n( "Middle tone color picker" ) );
-    QWhatsThis::add( m_pickGray, i18n("<p>Set here the color from original image used to set <b>Middle Tone</b> "
-                                      "curves point on Red, Green and Blue channels."));
-    m_pickWhite = new QPushButton(bGroup);
-    bGroup->insert(m_pickWhite, WhiteTonal);
+    QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
+                                      "smooth curves point on Red, Green and Blue channels."));
+    m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
     KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
     QToolTip::add( m_pickWhite, i18n( "White tone color picker" ) );
-    QWhatsThis::add( m_pickWhite, i18n("<p>Set here the color from original image used to set <b>White Tone</b> "
-                                       "curves point on Red, Green and Blue channels."));
-    bGroup->setExclusive(true);
-    bGroup->setFrameShape(QFrame::NoFrame);
+    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>White Tone</b> "
+                                       "smooth curves point on Red, Green and Blue channels."));
+    m_pickerColorButtonGroup->setExclusive(true);
+    m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
 
     topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
 
@@ -508,12 +508,18 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
     switch(type)
        {
        case SmoothDrawing:          
+          {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+          m_pickerColorButtonGroup->setEnabled(true);
           break;
+          }
        
        case FreeDrawing:          
+          {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
+          m_pickerColorButtonGroup->setEnabled(false);
           break;
+          }
        }
     
     m_curvesWidget->curveTypeChanged();
