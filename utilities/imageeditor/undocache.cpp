@@ -95,6 +95,9 @@ bool UndoCache::pushLevel(int level, int w, int h, uint* data)
     ba.resetRawData((const char*)data, w*h*sizeof(uint));
 
     file.close();
+
+    d->cacheFilenames.append(cacheFile);
+
     return true;
 }
 
@@ -122,5 +125,8 @@ bool UndoCache::popLevel(int level, int& w, int& h, uint*& data)
     file.close();
 
     ::unlink(QFile::encodeName(cacheFile));
+
+    d->cacheFilenames.remove(cacheFile);
+
     return true;
 }

@@ -134,6 +134,9 @@ DigikamApp::DigikamApp(bool detectCamera)
 
 DigikamApp::~DigikamApp()
 {
+    if (ImageWindow::imagewindow())
+        delete ImageWindow::imagewindow();
+    
     if (mView)
         delete mView;
 
