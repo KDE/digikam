@@ -717,8 +717,8 @@ void ImlibInterface::putSelectedData(uint* data)
 bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType) 
 {
     bool result;
-    kdWarning() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
-                << mimeType.ascii() << ")" << endl;
+    kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
+              << mimeType.ascii() << ")" << endl;
     
     if (mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF")) 
        {

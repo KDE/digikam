@@ -695,11 +695,11 @@ void ImageWindow::slotSaveAs()
 
     // Check for cancel.    
     
-    if ( imageFileSaveDialog->exec() == KFileDialog::Ok )
-       {
+    if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
+    {
        delete imageFileSaveDialog; 
        return;   
-       }
+    }
        
     m_newFile = imageFileSaveDialog->selectedURL().path();
     QString format = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
