@@ -3,6 +3,7 @@ METASOURCES = AUTO
 INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/libs/histogram \
+	-I$(top_srcdir)/digikam/libs/widgets \
 	-I$(top_srcdir)/digikam/libs/levels \
 	$(all_includes)   
         

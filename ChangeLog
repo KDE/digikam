@@ -1,5 +1,7 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> Added new widgets for ImagePlugins: imageregionwidget, 
+	  imagepreviewwidget, and imagepaniconwidget. Updated blur and sharpen ImagePlugins.
         * <Gilles Caulier> ImageEditor: Added new ImageEditor settings in main 
 	  setup dialog. New options for JPEG compression value and Background color.  
         * <Gilles Caulier> ImageEditor: Auto-correction of levels plugin. 

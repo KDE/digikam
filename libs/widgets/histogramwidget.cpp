@@ -35,9 +35,12 @@
 #include <kdebug.h>
 #include <kcursor.h>
 
+// Digikam includes.
+
+#include <imagehistogram.h>
+
 // Local includes.
 
-#include "imagehistogram.h"
 #include "histogramwidget.h"
 
 namespace Digikam
