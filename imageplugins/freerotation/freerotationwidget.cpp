@@ -72,7 +72,9 @@ FreeRotationWidget::~FreeRotationWidget()
 {
     delete [] m_data;
     delete m_iface;
-    delete m_pixmap;
+    
+    if (m_pixmap)
+       delete m_pixmap;
 }
 
 Digikam::ImageIface* FreeRotationWidget::imageIface()

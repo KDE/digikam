@@ -43,7 +43,7 @@ Q_OBJECT
 
 public:
 
-    FreeRotationWidget(int width, int height, QWidget *parent=0);
+    FreeRotationWidget(int w, int h, QWidget *parent=0);
     ~FreeRotationWidget();
         
     Digikam::ImageIface* imageIface();
