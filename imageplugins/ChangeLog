@@ -1,3 +1,10 @@
+v0.7.2-Beta1 - xx/xx/05
+----------------------------------------------------------------------------
+
+    * New plugin 'ShearTool'.
+    * New plugin 'LensDistortion'.
+    * New plugin 'AntiVignetting'.
+
 v0.7.1 - 01/03/05
 ----------------------------------------------------------------------------
     * Update and fix handbooks for final release.
