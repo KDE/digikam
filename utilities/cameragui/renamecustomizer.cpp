@@ -41,7 +41,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     
     setColumnLayout(0, Qt::Vertical);
     layout()->setSpacing(5);
-    layout()->setMargin(5);
+    layout()->setMargin(10);
 
     QGridLayout* mainLayout = new QGridLayout(layout());
     
