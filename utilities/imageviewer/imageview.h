@@ -82,6 +82,7 @@ private slots:
     void slotNextImage();
     void slotPrevImage();
     void slotShowRotateMenu();
+    void slotShowFlipMenu();
     void slotShowContextMenu();
     void slotSave();
     void slotSaveAs();

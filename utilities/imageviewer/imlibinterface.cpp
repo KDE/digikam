@@ -1,23 +1,27 @@
-/* ============================================================
- * File  : imlibinterface.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-16
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    IMLIBINTERFACE.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+// Qt lib includes.
 
 #include <qwidget.h>
 #include <qstring.h>
@@ -25,13 +29,20 @@
 #include <qfileinfo.h>
 #include <qptrlist.h>
 
+// X11 includes.
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <Imlib.h>
 
-extern "C" {
+// C Ansi include.
+
+extern "C" 
+{
 #include <tiffio.h>
 }
+
+// Local includes.
 
 #include "imlibinterface.h"
 
@@ -181,6 +192,26 @@ public:
         dirty = true;
     }
 
+    void flipHorizontal() {
+        if (!im) return;
+
+        Imlib_flip_image_horizontal(idata, im);
+        ow  = im->rgb_width;
+        oh = im->rgb_height;
+        changed = true;
+        dirty = true;
+    }
+
+    void flipVertical() {
+        if (!im) return;
+
+        Imlib_flip_image_vertical(idata, im);
+        ow  = im->rgb_width;
+        oh = im->rgb_height;
+        changed = true;
+        dirty = true;
+    }
+    
     void crop(int x, int y, int w, int h) {
 
         if (!im) return;
@@ -563,6 +594,22 @@ void ImlibInterface::rotate270()
     if (!im) d->cache->image(d->file);
     if (im)
         im->rotate270();
+}
+
+void ImlibInterface::flipHorizontal()
+{
+    ImImage *im = d->cache->currentImage();
+    if (!im) d->cache->image(d->file);
+    if (im)
+        im->flipHorizontal();
+}
+
+void ImlibInterface::flipVertical()
+{
+    ImImage *im = d->cache->currentImage();
+    if (!im) d->cache->image(d->file);
+    if (im)
+        im->flipVertical();
 }
 
 void ImlibInterface::crop(int x, int y, int w, int h)

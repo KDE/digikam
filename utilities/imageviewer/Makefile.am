@@ -12,3 +12,6 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/interfaces \
 	  -I$(top_srcdir)/digikam/utilities/kexif \
 	  $(IMLIB_CFLAGS) $(all_includes) 
+
+digikamimageviewericondir = $(kde_datadir)/digikam/icons
+digikamimageviewericon_ICON = AUTO

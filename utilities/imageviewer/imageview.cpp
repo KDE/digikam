@@ -191,6 +191,7 @@ public:
     CButton *bFullScreen;
     CButton *bCrop;
     CButton *bRotate;
+    CButton *bFlip;
     CButton *bBCGEdit;
     CButton *bCommentsEdit;
     CButton *bExifInfo;
@@ -201,8 +202,8 @@ public:
     CButton *bClose;
 
     QPopupMenu *rotateMenu;
+    QPopupMenu *flipMenu;
     QPopupMenu *contextMenu;
-
 };
 
 
@@ -211,7 +212,7 @@ public:
 ImageView::ImageView(QWidget* parent,
                      const KURL::List& urlList,
                      const KURL& urlCurrent)
-    : QWidget(parent, 0, Qt::WDestructiveClose)
+         : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageViewPrivate;
     
@@ -227,7 +228,7 @@ ImageView::ImageView(QWidget* parent,
 
 
 ImageView::ImageView(QWidget* parent, const KURL& urlCurrent)
-    : QWidget(parent, 0, Qt::WDestructiveClose)
+         : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageViewPrivate;
 
@@ -394,7 +395,6 @@ void ImageView::setupConnections()
 
 void ImageView::setupActions()
 {
-
     d->actions.setAutoDelete(true);
 
     d->actions.insert("prev",
@@ -461,6 +461,25 @@ void ImageView::setupActions()
                                   SLOT(slotRotate270()),
                                   QKeySequence(Key_3)));
 
+    d->actions.insert("flip",
+                      new CAction(i18n("Flip Image"),
+                                  this,
+                                  SLOT(slotShowFlipMenu()),
+                                  QKeySequence(Key_F)));
+
+
+    d->actions.insert("fliphorizontal",
+                      new CAction(i18n("Flip Horizontal"),
+                                  d->canvas,
+                                  SLOT(slotFlipHorizontal()),
+                                  QKeySequence(Key_H)));
+
+    d->actions.insert("flipvertical",
+                      new CAction(i18n("Flip Vertical"),
+                                  d->canvas,
+                                  SLOT(slotFlipVertical()),
+                                  QKeySequence(Key_V)));
+                                  
     d->actions.insert("gamma+",
                       new CAction(i18n("Increase Gamma"),
                                   d->canvas,
@@ -551,7 +570,6 @@ void ImageView::setupActions()
                                   SLOT(slotClose()),
                                   QKeySequence(CTRL+Key_Q)));
 
-
     // Now insert these keys into the keydict
 
     d->actionKeys.setAutoDelete(false);
@@ -567,6 +585,9 @@ void ImageView::setupActions()
     addKeyInDict("rotate90");
     addKeyInDict("rotate180");
     addKeyInDict("rotate270");
+    addKeyInDict("flip");
+    addKeyInDict("fliphorizontal");
+    addKeyInDict("flipvertical");
     addKeyInDict("gamma+");
     addKeyInDict("gamma-");
     addKeyInDict("brightness+");
@@ -601,7 +622,13 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->rotateMenu, d->actions.find("rotate180"));
     addMenuItem(d->rotateMenu, d->actions.find("rotate270"));
 
+    // Setup the flip menu
 
+    d->flipMenu = new QPopupMenu(this);
+
+    addMenuItem(d->flipMenu, d->actions.find("fliphorizontal"));
+    addMenuItem(d->flipMenu, d->actions.find("flipvertical"));
+    
     // Setup the context menu
 
     d->contextMenu = new QPopupMenu(this);
@@ -617,12 +644,11 @@ void ImageView::setupPopupMenu()
     d->contextMenu->insertSeparator();
 
     d->contextMenu->insertItem(i18n("Rotate Image"), d->rotateMenu);
+    d->contextMenu->insertItem(i18n("Flip Image"), d->flipMenu);
 
     addMenuItem(d->contextMenu, d->actions.find("crop"));
 
     addMenuItem(d->contextMenu, d->actions.find("bcgEdit"));
-    addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
-    addMenuItem(d->contextMenu, d->actions.find("ExifInfo"));
 
     QPopupMenu *brightnessMenu = new QPopupMenu(d->contextMenu);
     addMenuItem(brightnessMenu, d->actions.find("brightness+"));
@@ -640,7 +666,12 @@ void ImageView::setupPopupMenu()
     d->contextMenu->insertItem(i18n("Gamma"), gammaMenu);
 
     d->contextMenu->insertSeparator();
+    
+    addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
+    addMenuItem(d->contextMenu, d->actions.find("ExifInfo"));
 
+    d->contextMenu->insertSeparator();
+    
     addMenuItem(d->contextMenu, d->actions.find("save"));
     addMenuItem(d->contextMenu, d->actions.find("saveas"));
     addMenuItem(d->contextMenu, d->actions.find("restore"));
@@ -768,6 +799,11 @@ void ImageView::setupButtons()
                              BarIcon("rotate_cw"));
     d->buttonLayout->addWidget(d->bRotate);
 
+    d->bFlip = new CButton(d->buttonBar,
+                             d->actions.find("flip"),
+                             BarIcon("flip_image"));
+    d->buttonLayout->addWidget(d->bFlip);
+    
     d->bCrop  = new CButton(d->buttonBar,
                              d->actions.find("crop"),
                              BarIcon("crop"),
@@ -954,7 +990,7 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
          d->bNext->setEnabled(false);         
          KMessageBox::information(this,
                                   i18n("There is no image to show in the current Album!\n"
-                                       "The Digikam ImageViewer will be closed..."),
+                                       "The ImageViewer will be closed..."),
                                   i18n("No image in the current Album")
                                   );
 
@@ -969,6 +1005,14 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
 void ImageView::slotShowRotateMenu()
 {
     d->rotateMenu->exec(QCursor::pos());
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotShowFlipMenu()
+{
+    d->flipMenu->exec(QCursor::pos());
 }
 
 
@@ -1308,10 +1352,10 @@ void ImageView::promptUserSave()
     if (d->bSave->isEnabled()) {
 
         int result =
-            KMessageBox::warningYesNo(this,
-                                      d->urlCurrent.filename() +
-                                      i18n(" has been modified.\n"
-                                           "Do you wish to want to save it?"));
+            KMessageBox::warningYesNo(this,                                      
+                                      i18n("\"%1\" has been modified.\n"
+                                           "Do you wish to want to save it?")
+                                           .arg(d->urlCurrent.filename()));
         if (result == KMessageBox::Yes)
             slotSave();
     }

@@ -1,26 +1,31 @@
-/* ============================================================
- * File  : imlibinterface.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-16
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    IMLIBINTERFACE.H
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
 
 #ifndef IMLIBINTERFACE_H
 #define IMLIBINTERFACE_H
+
+// Qt lib includes.
 
 #include <qobject.h>
 
@@ -28,8 +33,8 @@ class QWidget;
 class QString;
 class ImlibInterfacePrivate;
 
-class ImlibInterface : public QObject {
-
+class ImlibInterface : public QObject 
+{
     Q_OBJECT
 
 public:
@@ -52,6 +57,9 @@ public:
     void rotate90();
     void rotate180();
     void rotate270();
+
+    void flipHorizontal();
+    void flipVertical();
     
     void crop(int x, int y, int w, int h);
 
@@ -68,8 +76,6 @@ public:
 private:
 
     ImlibInterfacePrivate *d;
-    
-
 };
 
-#endif /* IMLIBINTERFACE_H */
+#endif // IMLIBINTERFACE_H 

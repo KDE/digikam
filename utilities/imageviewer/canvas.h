@@ -1,26 +1,31 @@
-/* ============================================================
- * File  : canvas.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-09
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    CANVAS.H
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
 
 #ifndef CANVAS_H
 #define CANVAS_H
+
+// Qt lib includes.
 
 #include <qscrollview.h>
 
@@ -31,8 +36,8 @@ class QWheelEvent;
 class CanvasPrivate;
 class ImlibInterface;
 
-class Canvas : public QScrollView {
-
+class Canvas : public QScrollView 
+{
     Q_OBJECT
     
 public:
@@ -79,10 +84,14 @@ public slots:
     void slotSetAutoZoom(bool val);
     void slotToggleAutoZoom();
 
-    // image modifiers
+    // Image modifiers
+    
     void slotRotate90();
     void slotRotate180();
     void slotRotate270();
+    
+    void slotFlipHorizontal();
+    void slotFlipVertical();
 
     void slotCrop();
     
@@ -105,7 +114,6 @@ signals:
     void signalRightButtonClicked();
     void signalShowNextImage();
     void signalShowPrevImage();
-    
 };
     
-#endif /* CANVAS_H */
+#endif // CANVAS_H 

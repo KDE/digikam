@@ -1,24 +1,28 @@
-/* ============================================================
- * File  : canvas.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-09
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    CANVAS.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
-
+// Qt lib includes. 
+ 
 #include <qfile.h>
 #include <qstring.h>
 #include <qevent.h>
@@ -32,17 +36,22 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
-extern "C" {
+// C ansi includes.
+
+extern "C" 
+{
 #include <math.h>
 }
+
+// Local includes.
 
 #include "canvas.h"
 #include "imlibinterface.h"
 
 const double maxZoom_ = 8.0;
 
-class CanvasPrivate {
-
+class CanvasPrivate 
+{
 public:
 
     double zoom;
@@ -54,8 +63,11 @@ public:
     bool fullScreen;
 };
 
+
+/////////////////////////////////// CONSTRUCTOR /////////////////////////////////////////////
+
 Canvas::Canvas(QWidget *parent)
-    : QScrollView(parent)
+      : QScrollView(parent)
 {
 
     
@@ -73,6 +85,9 @@ Canvas::Canvas(QWidget *parent)
     
 }
 
+
+///////////////////////////////// DESTRUCTOR ////////////////////////////////////////////////
+
 Canvas::~Canvas()
 {
     if (d->rubber)
@@ -82,6 +97,9 @@ Canvas::~Canvas()
     delete iface;
     
 }
+
+
+////////////////////////////////// FONCTIONS ////////////////////////////////////////////////
 
 void Canvas::load(const QString& filename)
 {
@@ -108,10 +126,16 @@ void Canvas::load(const QString& filename)
     qApp->restoreOverrideCursor();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::preload(const QString& filename)
 {
     iface->preload(filename);    
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 int Canvas::save(const QString& filename)
 {
@@ -123,10 +147,16 @@ int Canvas::save(const QString& filename)
     return result;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 bool Canvas::autoZoomOn()
 {
     return d->autoZoom;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::setZoom(double zoom)
 {
@@ -134,6 +164,9 @@ void Canvas::setZoom(double zoom)
     iface->zoom(zoom);
     emit signalZoomChanged(d->zoom);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::updateAutoZoom()
 {
@@ -156,6 +189,9 @@ void Canvas::updateAutoZoom()
     setZoom(zoom);
 
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::updateContentsSize()
 {
@@ -220,6 +256,8 @@ void Canvas::updateContentsSize()
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
@@ -231,6 +269,9 @@ void Canvas::resizeEvent(QResizeEvent* e)
     updateContentsSize();    
     // No need to repaint. its called automatically after resize
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::viewportPaintEvent(QPaintEvent *e)
 {
@@ -271,13 +312,14 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
     if (d->rubber) {
         p.setClipping(false);
         p.setRasterOp( NotROP );
-	p.setPen(QPen(color0, 2));
-	p.setBrush( NoBrush );
+        p.setPen(QPen(color0, 2));
+        p.setBrush( NoBrush );
         drawRubber(&p);
     }
-    
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::contentsMousePressEvent(QMouseEvent *e)
 {
@@ -315,6 +357,9 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
     d->pressedMoved = false;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 {
@@ -356,6 +401,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     d->pressedMoved = true;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
@@ -386,6 +434,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
@@ -407,6 +457,8 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::drawRubber(QPainter *p)
 {
     if ( !p || !d->rubber )
@@ -426,15 +478,24 @@ void Canvas::drawRubber(QPainter *p)
                           QStyleOption(colorGroup().base()));
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 bool Canvas::maxZoom()
 {
     return (d->zoom >= maxZoom_);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 bool Canvas::minZoom()
 {
     return (d->zoom <= 1.0/maxZoom_);
 }
+
+
+/////////////////////////////////// SLOTS ///////////////////////////////////////////////////
 
 void Canvas::slotIncreaseZoom()
 {
@@ -458,6 +519,9 @@ void Canvas::slotIncreaseZoom()
     emit signalZoomChanged(d->zoom);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotDecreaseZoom()
 {
     if (d->autoZoom || minZoom())
@@ -480,6 +544,9 @@ void Canvas::slotDecreaseZoom()
 
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotSetZoom1()
 {
     if (d->autoZoom || minZoom())
@@ -492,6 +559,9 @@ void Canvas::slotSetZoom1()
 
     emit signalZoomChanged(d->zoom);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotSetAutoZoom(bool val)
 {
@@ -506,10 +576,50 @@ void Canvas::slotSetAutoZoom(bool val)
     viewport()->repaint();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotToggleAutoZoom()
 {
     slotSetAutoZoom(!d->autoZoom);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void Canvas::slotFlipHorizontal()
+{
+    iface->flipHorizontal();
+
+    if (d->autoZoom)
+        updateAutoZoom();
+    iface->zoom(d->zoom);
+    
+    updateContentsSize();
+    viewport()->repaint();
+
+    emit signalChanged(true);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void Canvas::slotFlipVertical()
+{
+    iface->flipVertical();
+
+    if (d->autoZoom)
+        updateAutoZoom();
+    iface->zoom(d->zoom);
+    
+    updateContentsSize();
+    viewport()->repaint();
+
+    emit signalChanged(true);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotRotate90()
 {
@@ -525,6 +635,9 @@ void Canvas::slotRotate90()
     emit signalChanged(true);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotRotate180()
 {
     iface->rotate180();
@@ -539,6 +652,9 @@ void Canvas::slotRotate180()
     emit signalChanged(true);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotRotate270()
 {
     iface->rotate270();
@@ -552,6 +668,9 @@ void Canvas::slotRotate270()
 
     emit signalChanged(true);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotCrop()
 {
@@ -593,6 +712,8 @@ void Canvas::slotCrop()
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotGammaPlus()
 {
     iface->changeGamma(6);
@@ -600,6 +721,9 @@ void Canvas::slotGammaPlus()
 
     emit signalChanged(true);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotGammaMinus()
 {
@@ -609,6 +733,9 @@ void Canvas::slotGammaMinus()
     emit signalChanged(true);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotBrightnessPlus()
 {
     iface->changeBrightness(6);
@@ -616,6 +743,9 @@ void Canvas::slotBrightnessPlus()
 
     emit signalChanged(true);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotBrightnessMinus()
 {
@@ -625,6 +755,9 @@ void Canvas::slotBrightnessMinus()
     emit signalChanged(true);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotContrastPlus()
 {
     iface->changeContrast(6);
@@ -632,6 +765,9 @@ void Canvas::slotContrastPlus()
 
     emit signalChanged(true);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotContrastMinus()
 {
@@ -641,6 +777,8 @@ void Canvas::slotContrastMinus()
     emit signalChanged(true);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void Canvas::slotRestore()
 {
