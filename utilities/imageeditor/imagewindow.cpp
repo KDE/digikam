@@ -35,6 +35,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kpropertiesdialog.h>
+#include <kmessagebox.h>
+#include <libkexif/kexif.h>
 
 // Local includes.
 
@@ -139,7 +141,10 @@ ImageWindow::ImageWindow()
 
     connect(m_guiClient, SIGNAL(signalFileProperties()),
             SLOT(slotFileProperties()));
-                
+
+    connect(m_guiClient, SIGNAL(signalExifInfo()),
+            SLOT(slotExifInfo()));            
+                            
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
@@ -380,6 +385,20 @@ void ImageWindow::slotSelected(bool val)
 void ImageWindow::slotFileProperties()
 {
     (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
+}
+
+void ImageWindow::slotExifInfo()
+{
+    KExif *exif = new KExif(this);
+    
+    if (exif->loadFile(m_urlCurrent.path()) == 0)
+        exif->show();
+    else 
+        {
+        delete exif;
+        KMessageBox::sorry(this,
+                           i18n("This item has no Exif Information"));
+        }
 }
 
 #include "imagewindow.moc"

@@ -97,6 +97,7 @@ private slots:
     void slotSelected(bool);
     
     void slotFileProperties();
+    void slotExifInfo();
 };
 
 #endif /* IMAGEWINDOW_H */

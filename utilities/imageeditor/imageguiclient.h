@@ -29,6 +29,7 @@
 #include <guiclient.h>
 
 class QWidget;
+
 class KAction;
 class KToggleAction;
 
@@ -67,7 +68,8 @@ signals:
     void signalRestore();
 
     void signalFileProperties();
-
+    void signalExifInfo();
+    
 private slots:
 
     void slotHelp();
@@ -96,6 +98,7 @@ private:
     KAction       *m_cropAction;
     
     KAction       *m_fileproperties;
+    KAction       *m_exifinfo;
 
     friend class ImageWindow;
 };

@@ -20,6 +20,8 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+ 
 #include <kaction.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -27,6 +29,8 @@
 #include <kapplication.h>
 #include <kaboutapplication.h>
 #include <kaboutkde.h>
+
+// Local includes.
 
 #include "imageguiclient.h"
 
@@ -84,7 +88,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
     new KAction(i18n("&Resize..."), 0, 0,
                      this, SIGNAL(signalResize()),
                      actionCollection(), "imageview_resize");
-
+                     
     m_cropAction = new KAction(i18n("&Crop"), "crop",
                                CTRL+Key_C, 
                                this, SIGNAL(signalCrop()),
@@ -127,10 +131,15 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         "flip_vertical") );
 
     m_fileproperties = new KAction(i18n("View Image properties..."), "ImageProperties",
-                               ALT+Key_Return, 
-                               this, SIGNAL(signalFileProperties()),
-                               actionCollection(), "file_properties");
-                                        
+                                   ALT+Key_Return, 
+                                   this, SIGNAL(signalFileProperties()),
+                                   actionCollection(), "file_properties");
+
+    m_exifinfo = new KAction(i18n("View Exif Information..."), "ExifInfo",
+                             Key_F6, 
+                             this, SIGNAL(signalExifInfo()),
+                             actionCollection(), "exif_info");
+                                                                                                         
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
     KStdAction::aboutApp(this, SLOT(slotAboutApp()), actionCollection(),
@@ -156,6 +165,9 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/file_properties/ ");
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
+    
+    guiDef.append("MenuBar/Menu/&Image/ /Action/exif_info/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Separator/ / ");
     
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_rotate/ ");
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_flip/ ");

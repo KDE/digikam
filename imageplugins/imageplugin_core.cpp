@@ -92,12 +92,13 @@ QStringList ImagePlugin_Core::guiDefinition() const
 
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_blur/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sharpen/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bcg/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_rgb/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_redeye/ ");
+
+    guiDef.append("MenuBar/Menu/&Image/Generic/Action/implugcore_bcg/ ");
+    guiDef.append("MenuBar/Menu/&Image/Generic/Action/implugcore_rgb/ ");
 
     return guiDef;
 }
