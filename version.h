@@ -22,7 +22,7 @@
 #ifndef DIGIKAM_VERSION_H
 #define DIGIKAM_VERSION_H
 
-static const char digikam_version[] = "0.7.1";
+static const char digikam_version[] = "0.7.2-cvs";
 
 #endif // DIGIKAM_VERSION_H
 
