@@ -665,6 +665,7 @@ void ImageWindow::slotFilePrint()
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );
     printer.setCreator( "Digikam-ImageEditor");
+    printer.setUsePrinterResolution(true);
 
     KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ImageEditor page"));
 
