@@ -150,12 +150,6 @@ private:
     KAction               *m_flipVertAction;
     
     KActionMenu           *m_BCGAction;
-    KAction               *m_incGammaAction;
-    KAction               *m_decGammaAction;
-    KAction               *m_incBrightAction;
-    KAction               *m_decBrightAction;
-    KAction               *m_incContrastAction;
-    KAction               *m_decContrastAction;
     
     KAction               *m_copyAction;
     KToolBarPopupAction   *m_undoAction;
@@ -175,7 +169,7 @@ private:
     bool                   m_fullScreenHideToolBar;
     bool                   m_fullScreenHideThumbBar;
     bool                   m_deleteItem2Trash;
-
+    bool                   m_disableBCGActions;
 };
 
 #endif /* SHOWFOTO_H */

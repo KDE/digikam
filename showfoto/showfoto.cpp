@@ -82,6 +82,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
 {
     m_splash                 = 0;
+    m_disableBCGActions      = false;
     m_deleteItem2Trash       = true;
     m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
@@ -131,6 +132,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
     loadPlugins();
+    
+    // If plugin core is available, unplug BCG actions.
+    if ( m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )   
+       {
+       actionCollection()->remove(m_BCGAction);
+       m_disableBCGActions = true;
+       }
     
     applySettings();
 
@@ -250,39 +258,32 @@ void ShowFoto::setupActions()
                      
     // -- View Actions -----------------------------------------------
     
-    m_zoomPlusAction =
-        KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
-                           actionCollection(), "zoom_plus");
-    m_zoomMinusAction =
-        KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
-                            actionCollection(), "zoom_minus");
-    m_zoomFitAction
-        = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                            Key_A,
-                            this, SLOT(slotAutoFit()),
-                            actionCollection(), "zoom_fit");
+    m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
+                                          actionCollection(), "zoom_plus");
+    m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
+                                            actionCollection(), "zoom_minus");
+    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
+                                        Key_A, this, SLOT(slotAutoFit()),
+                                        actionCollection(), "zoom_fit");
 
 #if KDE_IS_VERSION(3,2,0)
     m_fullScreenAction =
         KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                actionCollection(), this, "full_screen");
 #else 
-    m_fullScreenAction =
-        new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                          CTRL+SHIFT+Key_F, this,
-                          SLOT(slotToggleFullScreen()),
-                          actionCollection(), "full_screen");
+    m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
+                                           CTRL+SHIFT+Key_F, this,
+                                           SLOT(slotToggleFullScreen()),
+                                           actionCollection(), "full_screen");
 #endif
 
-    m_showBarAction =
-        new KToggleAction(i18n("Hide thumbnails"), 0, Key_T,
-                          this, SLOT(slotToggleShowBar()),
-                          actionCollection(), "show_thumbs");
+    m_showBarAction = new KToggleAction(i18n("Hide thumbnails"), 0, Key_T,
+                                        this, SLOT(slotToggleShowBar()),
+                                        actionCollection(), "show_thumbs");
 
-    m_viewHistogramAction = 
-        new KSelectAction(i18n("View &Histogram"), 0, Key_H,
-                          this, SLOT(slotViewHistogram()),
-                          actionCollection(), "view_histogram");
+    m_viewHistogramAction = new KSelectAction(i18n("View &Histogram"), 0, Key_H,
+                                              this, SLOT(slotViewHistogram()),
+                                              actionCollection(), "view_histogram");
     m_viewHistogramAction->setEditable(false);
     
     QStringList selectItems;
@@ -355,31 +356,31 @@ void ShowFoto::setupActions()
                                   0, actionCollection(), "bcg");
     m_BCGAction->setDelayed(false);
 
-    m_incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
-                           this, SLOT(slotChangeBCG()),
-                           actionCollection(), "gamma_plus");
-    m_decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
-                           this, SLOT(slotChangeBCG()),
-                           actionCollection(), "gamma_minus");
-    m_incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
-                            this, SLOT(slotChangeBCG()),
-                            actionCollection(), "brightness_plus");
-    m_decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
-                            this, SLOT(slotChangeBCG()),
-                            actionCollection(), "brightness_minus");
-    m_incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
-                              this, SLOT(slotChangeBCG()),
-                              actionCollection(), "contrast_plus");
-    m_decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
-                              this, SLOT(slotChangeBCG()),
-                              actionCollection(), "contrast_minus");
+    KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
+                                  this, SLOT(slotChangeBCG()),
+                                  actionCollection(), "gamma_plus");
+    KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
+                                  this, SLOT(slotChangeBCG()),
+                                  actionCollection(), "gamma_minus");
+    KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
+                                   this, SLOT(slotChangeBCG()),
+                                   actionCollection(), "brightness_plus");
+    KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
+                                   this, SLOT(slotChangeBCG()),
+                                   actionCollection(), "brightness_minus");
+    KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
+                                     this, SLOT(slotChangeBCG()),
+                                     actionCollection(), "contrast_plus");
+    KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
+                                     this, SLOT(slotChangeBCG()),
+                                     actionCollection(), "contrast_minus");
 
-    m_BCGAction->insert(m_incBrightAction);
-    m_BCGAction->insert(m_decBrightAction);
-    m_BCGAction->insert(m_incContrastAction);
-    m_BCGAction->insert(m_decContrastAction);
-    m_BCGAction->insert(m_incGammaAction);
-    m_BCGAction->insert(m_decGammaAction);
+    m_BCGAction->insert(incBrightAction);
+    m_BCGAction->insert(decBrightAction);
+    m_BCGAction->insert(incContrastAction);
+    m_BCGAction->insert(decContrastAction);
+    m_BCGAction->insert(incGammaAction);
+    m_BCGAction->insert(decGammaAction);
                 
     // -- help actions -----------------------------------------------
     
@@ -1020,10 +1021,12 @@ void ShowFoto::toogleActions(bool val)
     m_viewHistogramAction->setEnabled(val);
     m_rotateAction->setEnabled(val);
     m_flipAction->setEnabled(val);
-    m_BCGAction->setEnabled(val);
     m_fileprint->setEnabled(val);
     m_resizeAction->setEnabled(val);
     m_fileDelete->setEnabled(val);
+    
+    if (!m_disableBCGActions)
+       m_BCGAction->setEnabled(val);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next()) 
@@ -1179,20 +1182,13 @@ void ShowFoto::unLoadPlugins()
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-    /*
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+/*    
+    KURL urlCurrent(m_bar->currentItem()->url());
 
-    if (!palbum)
-        return;
-
-
-    AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings->getUseTrash())
+    if (!m_deleteItem2Trash)
     {
         QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                        .arg(m_urlCurrent.filename()));
+                        .arg(urlCurrent.filename()));
         if (KMessageBox::warningContinueCancel(this,
                                                warnMsg,
                                                i18n("Warning"),
@@ -1202,17 +1198,30 @@ void ShowFoto::slotDeleteCurrentItem()
             return;
         }
     }
-
-    if (!SyncJob::userDelete(m_urlCurrent))
+*/
+/*    if (!SyncJob::userDelete(urlCurrent))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
         return;
     }
+*/
+    // Remove item in thumbbar.
+    
+    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+     {
+        if (item->url().equals(urlCurrent))
+        {
+            m_bar->removeItem(item);
+            break;
+        }
+    }
 
-    emit signalFileDeleted(m_urlCurrent);
+    // Update thumbbar item preview.
+    m_bar->invalidateThumb(m_bar->currentItem());
 
-    KURL CurrentToRemove = m_urlCurrent;
+        
+/*    KURL CurrentToRemove = m_urlCurrent;
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
     if (it != m_urlList.end())

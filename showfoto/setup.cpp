@@ -41,11 +41,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 {
     setHelp("setupdialog.anchor", "showfoto");
 
-    page_editor = addPage(i18n("Image Editor"), i18n("Image Editor"),
-                        BarIcon("image", KIcon::SizeMedium));
+    page_editor = addPage(i18n("General"), i18n("General Settings"),
+                        BarIcon("showfoto", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
 
-    page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins"),
+    page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins Settings"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         

@@ -3,8 +3,9 @@ todo stuff before 0.7.3 release
 
 * update Showfoto splashscreen (different to digiKam).
 * add Move to trash.
-* disable Fix-Increase/Decrease BCG if core plugin is available. 
-* writing handbook based on digiKam handbook image editor part. 
+* add RMB menu.
+* add image properties dialog like in digiKam without add libdigikam depency.
+* writing handbook based on digiKam image editor part handbook. 
 
 later stuff
 -----------
