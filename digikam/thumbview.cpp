@@ -695,6 +695,13 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
                         paintRegion += QRect(item->rect());
                     }
                 }
+                else {
+                    if (item->isSelected()) {
+                        item->setSelected(false, false);
+                        changed = true;
+                        paintRegion += QRect(item->rect());
+                    }
+                }
             }
         }
     }
