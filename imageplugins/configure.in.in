@@ -38,7 +38,7 @@ else
    fi
 fi   
 
-if test "x$have_digikam_toplevel" == "xyes"; then
+if test "x$have_digikam_toplevel" = "xyes"; then
    AC_DEFINE(HAVE_DIGIKAM_TOPLEVEL, 1, [Using digiKam sources from toplevel])
 fi
 
