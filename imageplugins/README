@@ -27,6 +27,11 @@ Currently implemented plugins are:
 15) SuperImpose      : A tool for to superimposed a template to an image.
 16) Perpective       : A tool for adjusting image perpective.
 17) Border           : A tool for add a border around an image.
+18) InsertText       : A tool for add text in image.
+19) Infrared         : Simulate infrared film.
+20) ChannelMixer     : Color channels mixer tool.
+21) BlurFX           : Blurring special effects package.
+22) DistortionFX     : Distortion special effects package. 
 
 Contact :
 -----------------------------------------------------------------------
