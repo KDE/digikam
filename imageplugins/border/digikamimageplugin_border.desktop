@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_Border
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Added border to image plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_border
+author=Gilles Caulier, caulier dot gilles at free dot fr
