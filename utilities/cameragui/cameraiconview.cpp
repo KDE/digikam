@@ -20,8 +20,14 @@
  * ============================================================ */
 
 #include <qfile.h>
+#include <qpixmap.h>
 
+#include <kmimetype.h>
+
+extern "C"
+{
 #include <time.h>
+}
 
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
@@ -68,6 +74,11 @@ void CameraIconView::addItem(const GPItemInfo& info)
         item->setDownloadName( getTemplatedName( m_renamer->nameTemplate(),
                                                  item ) );
     }
+
+    KMimeType::Ptr mime;
+    mime = KMimeType::mimeType( info.mime );
+    QPixmap p = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
+    item->setPixmap(p);
 }
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)
