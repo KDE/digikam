@@ -1,25 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    ALBUMICONVIEW.CPP
-//
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * File  : albumiconview.cpp
+ * Author: Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2002-02-21
+ * Description : an image histogram viewer dialog.
+ * 
+ * Copyright 2002-2004 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -99,6 +98,7 @@
 #include "texture.h"
 #include "albumiconitem.h"
 #include "digikamapp.h"
+#include "histogrampropsplugin.h"
 #include "albumiconview.h"
 
 class AlbumIconViewPrivate 
@@ -799,11 +799,16 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;    
 
-    KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
-    if (dlg.exec())
+    KPropertiesDialog *dlg = new KPropertiesDialog(item->fileItem()->url(), this, 0, true, false);
+    HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(dlg, item->fileItem()->url().path());
+    dlg->insertPlugin(histogramProps);
+    
+    if (dlg->exec())
     {
         item->repaint();
     }
+    
+    delete dlg;
 }
 
 // ------------------------------------------------------------------------------
