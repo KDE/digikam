@@ -90,8 +90,12 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 
     // Load Plugins
     pluginManager_ = new DigikamPluginManager(this);
-    pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
     
+    if ( m_config->readEntry("Plugin List") == QString::null )         
+       pluginManager_->loadPlugins();                             
+    else 
+       pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
+       
     // Start the camera process
     DigikamCameraProcess *process = new DigikamCameraProcess(this);
     process->start();
@@ -102,6 +106,10 @@ DigikamApp::~DigikamApp()
     if (mView)
         delete mView;
 
+    m_config->writeEntry( "Plugin List", pluginManager_->loadedPluginList() );
+    m_config->sync();
+    delete m_config;
+    
     mAlbumSettings->saveSettings();
     delete mAlbumSettings;
 }
@@ -350,9 +358,6 @@ void DigikamApp::slot_imageSelected(bool val)
 
 void DigikamApp::slot_exit()
 {
-    m_config->writeEntry( "Plugin List", pluginManager_->loadedPluginList() );
-    m_config->sync();
-
     close();
 }
 
