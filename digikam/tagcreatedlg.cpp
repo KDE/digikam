@@ -80,7 +80,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     if (!parent->isRoot())
     {
         m_icon = parent->getIcon();
-        m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
+        m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
     }
 }
 
@@ -102,8 +102,8 @@ QString TagCreateDlg::icon() const
 
 void TagCreateDlg::slotIconChange()
 {
-    m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 32);
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));              
+    m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));              
 }
 
 bool TagCreateDlg::tagCreate(TAlbum* parent, QString& title,
@@ -165,7 +165,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
 
     m_icon = album->getIcon();
 
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
 TagEditDlg::~TagEditDlg()
@@ -185,12 +185,12 @@ QString TagEditDlg::icon() const
 
 void TagEditDlg::slotIconChange()
 {
-    QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 32);
+    QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
     if (icon.isEmpty() || icon == m_icon)
         return;
 
     m_icon = icon;
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
 bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
