@@ -303,7 +303,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
             }
         
         // Update de progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 50.0) / Height));
+        m_progressBar->setValue((int) (((double)h * 25.0) / Height));
         kapp->processEvents(); 
         }
 
@@ -329,7 +329,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
             }
         
         // Update de progress bar in dialog.
-        m_progressBar->setValue((int) (50.0 + ((double)h * 50.0) / Height));
+        m_progressBar->setValue((int) (25.0 + ((double)h * 25.0) / Height));
         kapp->processEvents(); 
         }
         
@@ -363,6 +363,10 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
             pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Blue.
             pOutBits[i++] = pInBits[i];                                                  // Alpha.
             }
+        
+        // Update de progress bar in dialog.
+        m_progressBar->setValue((int) (50.0 + ((double)h * 50.0) / Height));
+        kapp->processEvents();             
         }
     
     // Copy target image to destination.
