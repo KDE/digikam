@@ -4,7 +4,7 @@
  * Date  : 2004-02-12
  * Description :
  *
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -284,8 +284,8 @@ void ImageWindow::buildGUI()
                                            CTRL+SHIFT+Key_F,
                                            this, SLOT(slotToggleFullScreen()),
                                            actionCollection(), "toggle_fullScreen");
-					   
-    m_viewHistogramAction = new KSelectAction(i18n("View &Histogram"), "viewhistogram",
+
+    m_viewHistogramAction = new KSelectAction(i18n("View &Histogram"), "histogram",
                                               Key_H,
                                               this, SLOT(slotViewHistogram()),
                                               actionCollection(), "imageview_histogram");
