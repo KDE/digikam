@@ -194,7 +194,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, m_originalWidth, m_originalHeight, frame, false, true);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, m_originalWidth, m_originalHeight, frame, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any filter "
                                              "settings changes."));

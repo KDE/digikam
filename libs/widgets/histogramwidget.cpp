@@ -747,7 +747,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                                  "Std dev.: %3<br>"
                                  "Count: %4<br>"
                                  "Median: %5<br>"
-                                 "Percent: %6<br>")
+                                 "Percent: %6")
                                  .arg(histogram->getMean(m_channelType, 0, 255))
                                  .arg(histogram->getPixels())
                                  .arg(histogram->getStdDev(m_channelType, 0, 255))
