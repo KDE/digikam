@@ -33,7 +33,7 @@
 
   <Menu name="Filters">
    <text>Fi&amp;lters</text>
-   <Action name="implugcore_convert_to" /> 
+   <Action name="implugcore_blackwhite" /> 
   </Menu>
 
 
