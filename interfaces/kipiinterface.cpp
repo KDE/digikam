@@ -274,7 +274,7 @@ QValueList<KIPI::ImageCollection> KipiInterface::allAlbums()
          album ; album = album->nextAlbum())
         {
         album->openDB();
-        result.append( KIPI::ImageCollection( col ) );
+//        result.append( KIPI::ImageCollection( col ) );
         album->closeDB();
         }
 
