@@ -71,6 +71,8 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
     imageWidth_  = imageWidth;
     imageHeight_ = imageHeight;
     
+    metaInfo_ = new KFileMetaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+
     updateExtraText();
     calcRect();
 }
@@ -78,6 +80,7 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
 
 AlbumIconItem::~AlbumIconItem()
 {
+   delete metaInfo_;
 }
 
 
@@ -321,27 +324,42 @@ void AlbumIconItem::updateExtraText()
     if(settings->getIconShowFileComments())
     {
        // read and display JPEG COM comment and JPEG EXIF UserComment
-       KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
-
-       if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+       if(metaInfo_->isValid() && metaInfo_->mimeType() == "image/jpeg" && metaInfo_->containsGroup("Jpeg EXIF Data"))
        {
           KExifData *exifData = new KExifData;
           exifData->readFromFile(fileItem_->url().path());
 
-          extraText += "\n";
-          QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
+          QString jpegComments = metaInfo_->group("Jpeg EXIF Data").item("Comment").value().toString();
           QString exifComments = exifData->getUserComment();
 
           QString comments;
           view_->getItemComments(text(), comments);
 
+          jpegComments = jpegComments.stripWhiteSpace();
+          exifComments = exifComments.stripWhiteSpace();
+
+
           // Only append comments if they are different from the regular comment
           if( !settings->getIconShowComments() || jpegComments != comments ) {
-             extraText += jpegComments;
+             if( jpegComments != "" ) {
+                if (!firstLine)
+                   extraText += "\n";
+                else
+                   firstLine = false;
+                
+                extraText += jpegComments;
+             }
           }
 
           if( !settings->getIconShowComments() || exifComments != comments ) {
-             if( jpegComments != exifComments ) extraText += exifComments;
+             if( jpegComments != exifComments && exifComments != "" ) {
+                if (!firstLine)
+                   extraText += "\n";
+                else
+                   firstLine = false;
+                
+                extraText += exifComments;
+             }
           }
 
           delete exifData;
@@ -349,31 +367,39 @@ void AlbumIconItem::updateExtraText()
 
     }
     
-    // FIXME : perhaps using KIO/KFileMetaInfo instead for extract Width and Height values ! 
-    // Imlib2 work fine but you must to test another solution...
-                
     if ( settings->getIconShowResolution() )
-       {
-       Imlib_Image imlib2_im = 0;
-       imlib2_im = imlib_load_image(fileItem_->url().path().latin1());
-       
-       if (imlib2_im)
-          {
-          imlib_context_set_image(imlib2_im);
-          imageWidth_= imlib_image_get_width();
-          imageHeight_= imlib_image_get_height();
-          imlib_free_image();
-          }
-    
-       if (imageWidth_ != 0 && imageHeight_ != 0) 
-          {
+
+       // get image dimensions from JPEG meta info if possible
+       if(metaInfo_->isValid() && metaInfo_->mimeType() == "image/jpeg" && metaInfo_->containsGroup("Jpeg EXIF Data")) {
+          QSize jpegDimensions =  metaInfo_->group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+          
           if (!firstLine)
-              extraText += "\n";
+             extraText += "\n";
           else
-              firstLine = false;
-        
-          extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
-                                           .arg(QString::number(imageHeight_));
+             firstLine = false;
+
+          extraText += i18n("%1x%2 pixels").arg( jpegDimensions.width() ).arg( jpegDimensions.height() );
+       } else {
+          Imlib_Image imlib2_im =0;
+          imlib2_im = imlib_load_image(fileItem_->url().path().latin1());
+
+          if (imlib2_im)
+          {
+             imlib_context_set_image(imlib2_im);
+             imageWidth_= imlib_image_get_width();
+             imageHeight_= imlib_image_get_height();
+             imlib_free_image();
+          }
+
+          if (imageWidth_ != 0 && imageHeight_ != 0) 
+          {
+             if (!firstLine)
+                extraText += "\n";
+             else
+                firstLine = false;
+
+             extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
+                .arg(QString::number(imageHeight_));
           }
        }
        

@@ -40,6 +40,7 @@ class QImage;
 class QColorGroup;
 
 class KFileItem;
+class KFileMetaInfo;
 
 class AlbumIconView;
 
@@ -80,6 +81,7 @@ private:
     int size_;
     int imageWidth_;
     int imageHeight_;
+    const KFileMetaInfo *metaInfo_;
 
     QString extraText_;
     QRect   itemExtraRect_;
