@@ -567,6 +567,11 @@ void ThumbView::leaveEvent(QEvent *e)
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
+
+    // nullify the d->startDragItem if the mouse
+    // leaves the widget
+    
+    d->startDragItem = 0;
     
     QScrollView::leaveEvent(e);
 }
