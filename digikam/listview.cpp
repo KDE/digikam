@@ -393,6 +393,9 @@ void ListView::keyPressEvent(QKeyEvent *e)
     if (!e)
         return;
 
+    if(e->state())
+        return;
+    
     switch(e->key()) {
     case (Qt::Key_Down): {
         if (!d->selectedItem)
@@ -492,7 +495,7 @@ QRect ListView::itemRect(ListItem* item) const
 
 void ListView::setSelected(ListItem* item)
 {
-    if (item == d->selectedItem)
+    if (!item || item == d->selectedItem)
         return;
     
     d->selectedItem = item;

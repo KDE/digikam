@@ -171,10 +171,6 @@ void ListItem::removeChild(ListItem* child)
     
     if (m_listView) {
         m_listView->takeItem(child);
-        
-        if (m_listView->d->selectedItem == this)
-            m_listView->d->selectedItem = 0;
-        
         m_listView->triggerUpdate();
     }
 }
@@ -259,6 +255,11 @@ void ListItem::setOpen(bool val)
 bool ListItem::isOpen() const
 {
     return m_open;    
+}
+
+bool ListItem::isRoot() const
+{
+    return m_root;
 }
 
 void ListItem::repaint()

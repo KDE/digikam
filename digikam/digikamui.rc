@@ -5,6 +5,9 @@
 
   <Menu name="Album" >
    <text>&amp;Album</text>
+     <Action name="album_back" />  
+     <Action name="album_forward" />    
+   <Separator/>     
      <Action name="album_new" />
    <Separator/>
      <Action name="album_propsEdit" />
@@ -96,6 +99,8 @@
 
  <ToolBar noMerge="1" name="ToolBar" >
   <text>Main Toolbar</text>
+  <Action name="album_back" />  
+  <Action name="album_forward" />    
   <Action name="album_new" />
   <Action name="album_addImages" />
   <Action name="album_propsEdit" />

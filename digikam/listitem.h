@@ -58,6 +58,8 @@ public:
     void setOpen(bool val);
     bool isOpen() const;
 
+    bool isRoot() const;
+    
     void repaint();
 
     ListView* listView() const;

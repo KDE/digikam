@@ -51,6 +51,7 @@ class ImagePluginLoader;
 
 class KAction;
 class KActionMenu;
+class KToolBarPopupAction;
 class KSelectAction;
 class KConfig;
 
@@ -78,7 +79,9 @@ public:
 
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);
-
+    void enableAlbumBackwardHistory(bool enable);
+    void enableAlbumForwardHistory(bool enable);
+    
 private:
 
     void setupView();
@@ -129,6 +132,8 @@ private:
     KAction       *mNewAction;
     KAction       *mDeleteAction;
     KSelectAction *mAlbumSortAction;
+    KToolBarPopupAction   *mBackwardActionMenu;
+    KToolBarPopupAction   *mForwardActionMenu;
 
     KAction       *mAddImagesAction;
     KAction       *mPropsEditAction;
@@ -183,7 +188,10 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slot_gammaAdjustment();
-    
+
+    void slotAboutToShowForwardMenu();
+    void slotAboutToShowBackwardMenu();
+            
     void slotSetup();
     void slotSetupCamera();
     void slotSetupChanged();

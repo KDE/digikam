@@ -42,6 +42,7 @@ class AlbumIconItem;
 class AlbumSettings;
 class AlbumManager;
 class Album;
+class AlbumHistory;
 
 class DigikamView : public QSplitter {
 
@@ -54,6 +55,9 @@ public:
 
     void applySettings(const AlbumSettings* settings);
 
+    void getForwardHistory(QStringList &titles);
+    void getBackwardHistory(QStringList &titles);    
+    
 private:
 
     void setupConnections();
@@ -64,7 +68,8 @@ private:
     AlbumFolderView          *mFolderView;
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
-
+    AlbumHistory             *mAlbumHistory;
+    
 public slots:
 
     void slot_newAlbum();
@@ -78,6 +83,9 @@ public slots:
     void slot_albumAddImages();
     void slot_albumOpenInKonqui();
     void slotAlbumImportFolder();
+    void slotAlbumHistoryBack(int steps=1);
+    void slotAlbumHistoryForward(int steps=1);
+    void slotAlbumDeleted(Album *album);
 
     // Tag action slots
     void slotNewTag();
@@ -95,7 +103,7 @@ public slots:
     void slotSelectNone();
     void slotSelectInvert();
     void slotSortImages(int order);
-  
+
 private slots:
 
     void slot_imageSelected();

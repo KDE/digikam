@@ -184,6 +184,40 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    mBackwardActionMenu = new  KToolBarPopupAction(i18n("&Back"),
+                                    "back",
+                                    ALT+Key_Left,
+                                    mView,
+                                    SLOT(slotAlbumHistoryBack()),
+                                    actionCollection(),
+                                    "album_back");
+    mBackwardActionMenu->setEnabled(false);
+    connect(mBackwardActionMenu->popupMenu(), 
+            SIGNAL(aboutToShow()),
+            this,
+            SLOT(slotAboutToShowBackwardMenu()));
+    connect(mBackwardActionMenu->popupMenu(), 
+            SIGNAL(activated(int)),
+            mView,
+            SLOT(slotAlbumHistoryBack(int)));
+       
+    mForwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
+                                    "forward",
+                                    ALT+Key_Right,
+                                    mView,
+                                    SLOT(slotAlbumHistoryForward()),
+                                    actionCollection(),
+                                    "album_forward");
+    mForwardActionMenu->setEnabled(false);
+    connect(mForwardActionMenu->popupMenu(), 
+            SIGNAL(aboutToShow()),
+            this,
+            SLOT(slotAboutToShowForwardMenu()));
+    connect(mForwardActionMenu->popupMenu(), 
+            SIGNAL(activated(int)),
+            mView,
+            SLOT(slotAlbumHistoryForward(int)));    
+        
     mNewAction = new KAction(i18n("&New Album..."),
                                     "albumfoldernew",
                                     KStdAccel::shortcut(KStdAccel::New),
@@ -494,7 +528,6 @@ void DigikamApp::setupActions()
     mImageSortAction->setCurrentItem((int)mAlbumSettings->getImageSortOrder());
 }
 
-
 void DigikamApp::enableThumbSizePlusAction(bool val)
 {
     mThumbSizePlusAction->setEnabled(val);
@@ -503,6 +536,48 @@ void DigikamApp::enableThumbSizePlusAction(bool val)
 void DigikamApp::enableThumbSizeMinusAction(bool val)
 {
     mThumbSizeMinusAction->setEnabled(val);
+}
+
+void DigikamApp::enableAlbumBackwardHistory(bool enable)
+{
+    mBackwardActionMenu->setEnabled(enable);
+}
+
+void DigikamApp::enableAlbumForwardHistory(bool enable)
+{
+    mForwardActionMenu->setEnabled(enable);
+}
+
+void DigikamApp::slotAboutToShowBackwardMenu()
+{
+    mBackwardActionMenu->popupMenu()->clear();
+    QStringList titles;
+    mView->getBackwardHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            mBackwardActionMenu->popupMenu()->insertItem(*iter, id);
+        }        
+    }
+}
+
+void DigikamApp::slotAboutToShowForwardMenu()
+{
+    mForwardActionMenu->popupMenu()->clear();
+    QStringList titles;
+    mView->getForwardHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            mForwardActionMenu->popupMenu()->insertItem(*iter, id);
+        }        
+    }
 }
 
 void DigikamApp::slot_albumSelected(bool val)

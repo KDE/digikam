@@ -50,6 +50,7 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albumsettings.h"
+#include "albumhistory.h"
 #include "thumbnailsize.h"
 
 #include "digikamapp.h"
@@ -81,6 +82,8 @@ DigikamView::DigikamView(QWidget *parent)
     mFolderView->setInFocus(true);
     mIconView->setInFocus(false);
 
+    mAlbumHistory = new AlbumHistory();    
+    
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
     if(config->hasKey("SplitterSizes"))
@@ -98,6 +101,7 @@ DigikamView::~DigikamView()
     config->setGroup("MainWindow");
     config->writeEntry("SplitterSizes", sizes());
 
+    delete mAlbumHistory;
     mAlbumMan->setItemHandler(0);
 }
 
@@ -115,7 +119,9 @@ void DigikamView::setupConnections()
             this, SLOT(slot_albumSelected(Album*)));
     connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slot_albumsCleared()));
-
+    connect(mAlbumMan, SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+    
     // -- IconView Connections -------------------------------------
 
     connect(mIconView,  SIGNAL(signalSelectionChanged()),
@@ -173,6 +179,62 @@ void DigikamView::slotEditTag()
 
 // ----------------------------------------------------------------
 
+void DigikamView::slotAlbumDeleted(Album *album)
+{
+    Album *nextAlbum = mAlbumHistory->deleteAlbum(album);
+    
+    if(nextAlbum && nextAlbum->getViewItem())
+    {
+        AlbumFolderItem *item;    
+        item = static_cast<AlbumFolderItem*>(nextAlbum->getViewItem());
+        mFolderView->setSelected(item);
+        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
+        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
+    }
+}
+
+void DigikamView::slotAlbumHistoryBack(int steps)
+{
+    Album *album = mAlbumHistory->back(steps);
+    
+    if(album && album->getViewItem())
+    {
+        AlbumFolderItem *item;    
+        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        mFolderView->setSelected(item);
+        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
+        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
+    }
+    return;
+}
+
+void DigikamView::slotAlbumHistoryForward(int steps)
+{
+    Album *album = mAlbumHistory->forward(steps);
+    
+    if(album && album->getViewItem())
+    {
+        AlbumFolderItem *item;    
+        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        mFolderView->setSelected(item);
+        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
+        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
+    }
+    return;    
+}
+
+void DigikamView::getBackwardHistory(QStringList &titles)
+{
+    mAlbumHistory->getBackwardHistory(titles);
+}
+
+void DigikamView::getForwardHistory(QStringList &titles)
+{
+    mAlbumHistory->getForwardHistory(titles);
+}
+
+// ----------------------------------------------------------------
+
 void DigikamView::slot_albumSelected(Album* album)
 {
     if (!album) {
@@ -192,6 +254,11 @@ void DigikamView::slot_albumSelected(Album* album)
         emit signal_albumSelected(false);
         emit signal_tagSelected(true);
     }
+    
+    mAlbumHistory->addAlbum(album);
+    mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
+    mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());    
+    
     mIconView->setAlbum(album);
 }
 
