@@ -56,7 +56,10 @@ public:
     ~DigikamView();
 
     void applySettings(const AlbumSettings* settings);
-    void setInitialSizes();
+
+protected:
+
+    void resizeEvent(QResizeEvent *e);
     
 private:
 
@@ -68,6 +71,7 @@ private:
     AlbumFolderView          *mFolderView;
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
+    bool                      mInitialResize;
 
 public slots:
 

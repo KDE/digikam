@@ -101,8 +101,6 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     // todo:
     //DigikamCameraProcess *process = new DigikamCameraProcess(this);
     //process->start();
-
-    mView->setInitialSizes();
 }
 
 DigikamApp::~DigikamApp()

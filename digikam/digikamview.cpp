@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 // Local includes.
 
@@ -56,9 +57,10 @@
 #include "digikamview.h"
 
 DigikamView::DigikamView(QWidget *parent)
-           : QSplitter(Qt::Horizontal, parent)
+    : QSplitter(Qt::Horizontal, parent)
 {
     mParent = static_cast<DigikamApp *>(parent);
+    mInitialResize = false;
 
     mAlbumMan = AlbumManager::instance();
     
@@ -110,24 +112,20 @@ void DigikamView::setupConnections()
 }
 
 
-void DigikamView::setInitialSizes()
+void DigikamView::resizeEvent(QResizeEvent *e)
 {
-    int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    KConfig* config = kapp->config();
-    QSize size( config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 0 ),
-                config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 0 ) );
-
-    if (!size.isEmpty() )
+    QSplitter::resizeEvent(e);
+    
+    if (!mInitialResize)
     {
+        mInitialResize = true;
+
         QValueList<int> sz;
-        sz.append(size.width()/3);
-        sz.append(size.width()*2/3);
+        sz.append(width()/3);
+        sz.append(width()*2/3);
         setSizes(sz);
     }
 }
-
 
 void DigikamView::slot_sortAlbums(int order)
 {
