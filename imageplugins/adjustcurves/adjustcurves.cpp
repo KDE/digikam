@@ -43,6 +43,7 @@
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -277,6 +278,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's curve-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
+                                                      "will be will be over-colored. This haven't effect to final rendering."));
+                                                          
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
     // -------------------------------------------------------------
@@ -297,6 +302,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const QColor &, bool ))); 
+            
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));              
     
     // -------------------------------------------------------------
     // ComboBox slots.
@@ -423,7 +431,7 @@ void AdjustCurveDialog::slotEffect()
     uint* desData = new uint[w*h];
 
     // Calculate the LUT to apply on the image.
-    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
     // Apply the lut to the image.
     m_curves->curvesLutProcess(orgData, desData, w, h);

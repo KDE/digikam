@@ -87,7 +87,7 @@ public:
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
     float  curvesLutFunc(int n_channels, int channel, float value);
-    void   curvesLutSetup(int nchannels);
+    void   curvesLutSetup(int nchannels, bool overIndicator=false);
     void   curvesLutProcess(uint *srcPR, uint *destPR, int w, int h);
 
     // Methods for to set manually the curves values.        

@@ -34,6 +34,7 @@ class QComboBox;
 class QPushButton;
 class QLabel;
 class QHButtonGroup;
+class QCheckBox;
 
 namespace Digikam
 {
@@ -104,6 +105,8 @@ private:
     QPushButton                  *m_pickGray;
     QPushButton                  *m_pickWhite;
     
+    QCheckBox                    *m_overExposureIndicatorBox;
+
     QHButtonGroup                *m_pickerColorButtonGroup;
     
     Digikam::CurvesWidget        *m_curvesWidget;

@@ -346,7 +346,7 @@ void ImageCurves::curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab)
 
 // This method is inspired of Gimp2.0 
 // app/base/gimplut.c::gimp_lut_setup 
-void ImageCurves::curvesLutSetup(int nchannels)
+void ImageCurves::curvesLutSetup(int nchannels, bool overIndicator)
 {
     int    i; 
     uint   v;
@@ -372,6 +372,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
           // To add gamma correction use func(v ^ g) ^ 1/g instead. 
           
           val = 255.0 * curvesLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
+          if (overIndicator && val > 255) val = 0;
           m_lut->luts[i][v] = (uchar)CLAMP (val, 0, 255);
           }
        }
