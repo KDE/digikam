@@ -145,8 +145,9 @@ protected slots:
     void slot_onAddImageFinished(KIO::Job* job);
 
 public slots:
-    void slotSelectionChanged( bool );    
-
+    void slotSelectionChanged( bool b );
+    void slotCurrentAlbumChanged( Digikam::AlbumInfo *album );
+    
 protected:
     QString askForCategory();
     

@@ -477,6 +477,18 @@ void DigikamKipiInterface::delImage( const KURL& url )
 void DigikamKipiInterface::slotSelectionChanged( bool b )
 {
     emit selectionChanged( b );
+    emit currentScopeChanged( b );
+}
+
+void DigikamKipiInterface::slotCurrentAlbumChanged( Digikam::AlbumInfo *album )
+{
+    bool b = false;
+    
+    if ( album )
+       b = true;
+    
+    emit currentAlbumChanged( b );
+    emit currentScopeChanged( b );
 }
 
 QString DigikamKipiInterface::fileExtensions()
