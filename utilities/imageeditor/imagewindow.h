@@ -38,7 +38,6 @@ class KAccel;
 class KAction;
 
 class AlbumIconView;
-class AlbumIconItem;
 
 class ImageGUIClient;
 class Canvas;
@@ -107,7 +106,6 @@ private:
     void promptUserSave();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
-    AlbumIconItem* getCurrItemFromUrlList(void);
 
 signals:
 

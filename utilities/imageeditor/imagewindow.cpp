@@ -558,29 +558,29 @@ void ImageWindow::slotFileProperties()
     if (!m_view)
         (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
     else
-        {
-        AlbumIconItem *iconItem = getCurrItemFromUrlList();                 
-       
+    {
+        AlbumIconItem *iconItem = m_view->findItem(m_urlCurrent.url());
+        
         if (iconItem)
-           {
-           ImageProperties properties(m_view, iconItem, this);
-           properties.exec();
-           }
+        {
+            ImageProperties properties(m_view, iconItem, this);
+            properties.exec();
         }
+    }
 }
 
 void ImageWindow::slotCommentsEdit()
 {
     if (m_view)
-       {
-       AlbumIconItem *iconItem = getCurrItemFromUrlList();                 
-       
-       if (iconItem)
-          {
-          ImageDescEdit descEdit(m_view, iconItem, this);
-          descEdit.exec();
-          }
-       }
+    {
+        AlbumIconItem *iconItem = m_view->findItem(m_urlCurrent.url());
+
+        if (iconItem)
+        {
+            ImageDescEdit descEdit(m_view, iconItem, this);
+            descEdit.exec();
+        }
+    }
 }
 
 void ImageWindow::slotDeleteCurrentItem()
@@ -666,35 +666,35 @@ void ImageWindow::slotFilePrint()
     KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ImageEditor page"));
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
-        {
+    {
         bool ok = false;
         KTempFile tmpFile( "digikam_imageeditor", ".png" );
 
         if ( tmpFile.status() == 0 )
-            {
+        {
             ok = true;
             tmpFile.setAutoDelete( true );
 
             if ( m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, m_PNGCompression,
                                          m_TIFFCompression, "png") )
-               {
-               ImagePrint *printOperations = new ImagePrint(tmpFile.name(),
-                                                            printer,
-                                                            m_urlCurrent.filename());
+            {
+                ImagePrint *printOperations = new ImagePrint(tmpFile.name(),
+                                                             printer,
+                                                             m_urlCurrent.filename());
 
-               if ( printOperations->printImageWithQt() == false )
-                   ok = false;
+                if ( printOperations->printImageWithQt() == false )
+                    ok = false;
 
-               delete printOperations;
-               }
-            else
-               ok = false;
+                delete printOperations;
             }
+            else
+                ok = false;
+        }
 
         if ( ok == false )
-           KMessageBox::error(this, i18n("Failed to print file\n\"%1\"")
-                              .arg(m_urlCurrent.filename()));
-        }
+            KMessageBox::error(this, i18n("Failed to print file\n\"%1\"")
+                               .arg(m_urlCurrent.filename()));
+    }
 }
 
 void ImageWindow::slotSave()
@@ -984,15 +984,15 @@ void ImageWindow::slotEscapePressed()
 void ImageWindow::promptUserSave()
 {
     if (m_guiClient->m_saveAction->isEnabled())
-        {
+    {
         int result =
             KMessageBox::warningYesNo(this,
                                       i18n("The image \"%1\" has been modified.\n"
                                            "Do you want to save it?")
-                                           .arg(m_urlCurrent.filename()));
+                                      .arg(m_urlCurrent.filename()));
         if (result == KMessageBox::Yes)
             slotSave();
-        }
+    }
 }
 
 void ImageWindow::closeEvent(QCloseEvent *e)
@@ -1024,22 +1024,6 @@ void ImageWindow::unplugActionAccel(KAction* action)
 void ImageWindow::slotImagePluginsHelp()
 {
     KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
-}
-
-AlbumIconItem* ImageWindow::getCurrItemFromUrlList(void)
-{
-    if (m_view)
-       {
-       for (ThumbItem *it = m_view->firstItem() ; it ; it = it->nextItem())
-          {
-          AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-          
-          if (iconItem->fileItem()->url() == m_urlCurrent) 
-             return iconItem;
-          }
-       }
-    
-    return 0L;
 }
 
 #include "imagewindow.moc"

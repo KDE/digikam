@@ -884,8 +884,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
                     item->fileItem()->url(),
                     d->currentAlbum ? d->currentAlbum->getTitle():QString(),
                     true,
-                    this       // Allow to use image properties and coments/tags dialogs
-                   );
+                    this);  // Allow to use image properties and comments/tags dialogs
                    
     if (imview->isHidden())
         imview->show();

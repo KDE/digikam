@@ -104,6 +104,9 @@ public:
     QFont    itemFontXtra() const;
 
     void     setInFocus(bool val);
+
+    AlbumIconItem* findItem(const QPoint& pos);
+    AlbumIconItem* findItem(const QString& url) const;
     
 protected:
 
@@ -126,8 +129,6 @@ private:
     
     void           updateItemRectsPixmap();
     bool           showMetaInfo();
-    AlbumIconItem* findItem(const QPoint& pos);
-    AlbumIconItem* findItem(const QString& url) const;
 
 private slots:
 
