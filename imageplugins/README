@@ -34,6 +34,7 @@ Currently implemented plugins are:
 22) DistortionFX     : Distortion special effects package. 
 23) Texture          : A tool to apply a decorative texture to an image.
 24) WhiteBalance     : A tool to correct image white color balance.
+25) Restoration      : An advanced filter to restore photograph.
 
 Contact :
 -----------------------------------------------------------------------
