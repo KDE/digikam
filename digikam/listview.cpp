@@ -497,7 +497,8 @@ void ListView::setSelected(ListItem* item)
 {
     if (!item || item == d->selectedItem)
         return;
-    
+
+    ensureItemVisible(item);        
     d->selectedItem = item;
     viewport()->update();
     
