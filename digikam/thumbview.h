@@ -65,6 +65,7 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
     virtual void contentsMouseReleaseEvent(QMouseEvent *e);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
+    virtual void contentsWheelEvent(QWheelEvent *e);
     
     virtual void viewportPaintEvent(QPaintEvent *pe);
     virtual void resizeEvent(QResizeEvent* e);

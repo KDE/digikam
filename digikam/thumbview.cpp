@@ -905,6 +905,16 @@ void ThumbView::contentsMouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
+void ThumbView::contentsWheelEvent(QWheelEvent *e)
+{
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    QScrollView::contentsWheelEvent(e);
+    viewport()->update();
+}
+
 void ThumbView::rebuildContainers()
 {
     deleteContainers();
