@@ -51,6 +51,7 @@ extern "C"
 // LibKEXIF includes.
 
 #include <libkexif/kexifutils.h>
+#include <libkexif/kexifdata.h>
 
 // Local includes.
 
@@ -210,7 +211,29 @@ void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& )
 
 int DigikamImageInfo::angle()
 {
-    // TODO ! This will a libKExif implementation call ?
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings->getExifRotate())
+    {
+        KExifData exifData;
+        
+        if (exifData.readFromFile(_url.path()))
+        {
+            KExifData::ImageOrientation orientation = exifData.getImageOrientation();
+
+            switch (orientation) {
+            case KExifData::ROT_180:
+                return 180;
+            case KExifData::ROT_90:
+            case KExifData::ROT_90_HFLIP:
+            case KExifData::ROT_90_VFLIP:
+                return 90;
+            case KExifData::ROT_270:
+                return 270;
+            default:
+                return 0;
+            }
+        }
+    }
     
     return 0;
 }
