@@ -78,13 +78,13 @@ private:
     AlphaChannel
     };
     
-    enum HistogramScale
+    enum CurvesDrawingType
     {
     SmoothDrawing=0,
     FreeDrawing
     };
     
-    enum CurvesDrawingType
+    enum HistogramScale
     {
     Linear=0,
     Logarithmic
