@@ -478,6 +478,8 @@ void ImageEffect_Restoration::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
+    enableButton(User2, false);
+    enableButton(User3, false);
     
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_previewImage = m_imagePreviewWidget->getOriginalClipImage();
@@ -521,6 +523,8 @@ void ImageEffect_Restoration::slotOk()
     m_normalizeBox->setEnabled(false);
     enableButton(Ok, false);
     enableButton(User1, false);
+    enableButton(User2, false);
+    enableButton(User3, false);
     m_parent->setCursor( KCursor::waitCursor() );
     m_progressBar->setValue(0);
     
