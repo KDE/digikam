@@ -56,9 +56,9 @@ public:
 
     CanvasPrivate() :
         maxZoom(8.0),
-        tileSize(512)
+        tileSize(128)
     {
-        tileCache.setMaxCost(20);
+        tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
     }
 
@@ -307,7 +307,11 @@ void Canvas::resizeEvent(QResizeEvent* e)
 void Canvas::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
-
+    er = QRect(QMAX(er.x()-1,0),
+               QMAX(er.y()-1,0),
+               QMIN(er.width()+2, contentsRect().width()),
+               QMIN(er.height()+2,contentsRect().height()));
+    
     paintViewport(er, d->zoom <= 1.0);
     if (d->zoom > 1.0)
         d->paintTimer->start(100, true);
