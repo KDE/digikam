@@ -38,7 +38,6 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kstdaccel.h>
-#include <dcopclient.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <ktip.h>
@@ -55,11 +54,11 @@
 #include "album.h"
 #include "cameralist.h"
 #include "cameratype.h"
+#include "cameraui.h"
 #include "albumsettings.h"
 #include "setup.h"
 #include "setupplugins.h"
 #include "digikamview.h"
-#include "digikamcameraprocess.h"
 #include "imagepluginloader.h"
 #include "digikamapp.h"
  
@@ -96,11 +95,6 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     // Load KIPI Plugins.
         
     loadPlugins();
-              
-    // Start the camera process
-    // todo:
-    //DigikamCameraProcess *process = new DigikamCameraProcess(this);
-    //process->start();
 }
 
 DigikamApp::~DigikamApp()
@@ -423,6 +417,15 @@ void DigikamApp::slot_exit()
 
 void DigikamApp::slotCameraConnect()
 {
+    CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
+    
+    if (ctype) 
+    {
+        CameraUI* cgui = new CameraUI(this, ctype->model(), ctype->port(),
+                                      ctype->path());
+        cgui->show();
+    }
+    
     /* todo:
      *
     CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));

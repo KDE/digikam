@@ -1,1 +1,1 @@
-SUBDIRS = imageeditor splashscreen setup 
+SUBDIRS = imageeditor splashscreen setup cameragui

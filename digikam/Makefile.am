@@ -5,6 +5,7 @@ bin_PROGRAMS = digikam
 
 INCLUDES = \
 	-I$(top_srcdir)/digikam/sqlite \
+	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
 	-I$(top_srcdir)/digikam/utilities/setup \
@@ -28,9 +29,10 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
+		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		        $(top_builddir)/digikam/utilities/setup/libsetup.la 
+		        $(top_builddir)/digikam/utilities/setup/libsetup.la
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
 			-lkipi -no-undefined 
