@@ -7,6 +7,9 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
+ * Some parts are inspired from RawPhoto implementation copyrighted 
+ * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -96,6 +99,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_WP     = MAXSMPL;
     m_rgbMax = 256;
     
+    m_destinationPreviewData = 0L;
     m_whiteBalanceCurves = new Digikam::ImageCurves();
     
     for (int i = Digikam::ImageHistogram::RedChannel ; i <= Digikam::ImageHistogram::BlueChannel ; i++)
@@ -114,6 +118,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
+    
+    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance algorithm"),
+                     "jochym at ifj edu pl");
     
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
@@ -136,7 +143,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QLabel *labelTitle = new QLabel( i18n("White Color Balance Correction"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -150,10 +157,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
     
-    QGroupBox *gbox = new QGroupBox(plainPage());
+    QGroupBox *gbox = new QGroupBox(i18n("Settings"), plainPage());
     gbox->setFlat(false);
-    gbox->setTitle(i18n("Curves Corrections"));
-    QGridLayout* grid = new QGridLayout( gbox, 11, 5, 20, spacingHint());
+    QGridLayout* grid = new QGridLayout( gbox, 11, 4, 20, spacingHint());
     
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -178,10 +184,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                      "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
 
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
-    grid->addMultiCellWidget(label2, 0, 0, 4, 4);
-    grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
+    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
+    grid->addMultiCellWidget(label2, 0, 0, 3, 3);
+    grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
     
     // -------------------------------------------------------------
         
@@ -189,108 +195,100 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gbox );
-    m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
-
-    m_whiteBalanceCurvesWidget = new Digikam::CurvesWidget(256, 128, imageData, width, height, 
-                                                           m_whiteBalanceCurves, frame, true);
-    QWhatsThis::add( m_whiteBalanceCurvesWidget, i18n("<p>This is the curve drawing of the selected image "
-                                                      "histogram channel. No operation can be done here. "
-                                                      "This graph is just an informative view witch will "
-                                                      "inform you how the color curves auto-adjustments "
-                                                      "will be processed on image."));
-    l->addWidget(m_whiteBalanceCurvesWidget, 0);
-    grid->addMultiCellWidget(frame, 2, 2, 1, 5);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
+                                             "selected image channel. This one is re-computed at any filter "
+                                             "settings changes."));
+    l->addWidget(m_histogramWidget, 0);
+    grid->addMultiCellWidget(frame, 2, 2, 0, 4);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 3, 3, 0, 4);
     
     // -------------------------------------------------------------
     
-    QLabel *label3 = new QLabel(i18n("Shadows:"), gbox);
+    m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
     m_darkInput = new KDoubleNumInput(gbox);
     m_darkInput->setPrecision(2);
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
         
-    grid->addMultiCellWidget(label3, 5, 5, 1, 1);
-    grid->addMultiCellWidget(m_darkInput, 5, 5, 2, 5);
+    grid->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
+    grid->addMultiCellWidget(m_darkInput, 5, 5, 1, 4);
 
-    QLabel *label4 = new QLabel(i18n("Black Point:"), gbox);
+    m_blackLabel = new QLabel(i18n("Black Point:"), gbox);
     m_blackInput = new KDoubleNumInput(gbox);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
     QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
-    grid->addMultiCellWidget(label4, 6, 6, 1, 1);
-    grid->addMultiCellWidget(m_blackInput, 6, 6, 2, 5);
+    grid->addMultiCellWidget(m_blackLabel, 6, 6, 0, 0);
+    grid->addMultiCellWidget(m_blackInput, 6, 6, 1, 4);
 
-    QLabel *label5 = new QLabel(i18n("Exposure (EV):"), gbox);
+    m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
     m_exposureInput = new KDoubleNumInput(gbox);
     m_exposureInput->setPrecision(2);
     m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
-    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the exposure value in EV."));
+    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
         
-    grid->addMultiCellWidget(label5, 7, 7, 1, 1);
-    grid->addMultiCellWidget(m_exposureInput, 7, 7, 2, 5);
+    grid->addMultiCellWidget(m_exposureLabel, 7, 7, 0, 0);
+    grid->addMultiCellWidget(m_exposureInput, 7, 7, 1, 4);
     
-    QLabel *label6 = new QLabel(i18n("Gamma:"), gbox);
+    m_gammaLabel = new QLabel(i18n("Gamma:"), gbox);
     m_gammaInput = new KDoubleNumInput(gbox);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.01, 1.5, 0.01, true);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma corection value."));
         
-    grid->addMultiCellWidget(label6, 8, 8, 1, 1);
-    grid->addMultiCellWidget(m_gammaInput, 8, 8, 2, 5);
+    grid->addMultiCellWidget(m_gammaLabel, 8, 8, 0, 0);
+    grid->addMultiCellWidget(m_gammaInput, 8, 8, 1, 4);
     
-    QLabel *label7 = new QLabel(i18n("Temperature (K):"), gbox);
-    m_temperatureInput = new KDoubleNumInput(gbox);
-    m_temperatureInput->setPrecision(2);
-    m_temperatureInput->setRange(2.2, 7.0, 0.1, true);
+    m_temperatureLabel = new QLabel(i18n("Temperature:"), gbox);
+    m_temperatureInput = new KIntNumInput(gbox);
+    m_temperatureInput->setRange(2200, 7000, 100, true);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance colour temperature in Kelvin."));
         
-    grid->addMultiCellWidget(label7, 9, 9, 1, 1);
-    grid->addMultiCellWidget(m_temperatureInput, 9, 9, 2, 5);
+    grid->addMultiCellWidget(m_temperatureLabel, 9, 9, 0, 0);
+    grid->addMultiCellWidget(m_temperatureInput, 9, 9, 1, 4);
     
-    QLabel *label8 = new QLabel(i18n("Saturation:"), gbox);
+    m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
     m_saturationInput = new KDoubleNumInput(gbox);
     m_saturationInput->setPrecision(2);
     m_saturationInput->setRange(0.0, 2.0, 0.1, true);
     QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
         
-    grid->addMultiCellWidget(label8, 10, 10, 1, 1);
-    grid->addMultiCellWidget(m_saturationInput, 10, 10, 2, 5);
+    grid->addMultiCellWidget(m_saturationLabel, 10, 10, 0, 0);
+    grid->addMultiCellWidget(m_saturationInput, 10, 10, 1, 4);
     
-    QLabel *label9 = new QLabel(i18n("Green:"), gbox);
+    m_greenLabel = new QLabel(i18n("Green:"), gbox);
     m_greenInput = new KDoubleNumInput(gbox);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(0.2, 2.5, 0.1, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the magenta colour cast removal level."));
         
-    grid->addMultiCellWidget(label9, 11, 11, 1, 1);
-    grid->addMultiCellWidget(m_greenInput, 11, 11, 2, 5);
+    grid->addMultiCellWidget(m_greenLabel, 11, 11, 0, 0);
+    grid->addMultiCellWidget(m_greenInput, 11, 11, 1, 4);
     
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
         
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
+    QGroupBox *gbox4 = new QGroupBox(i18n("Preview"), plainPage());
+    gbox4->setFlat(false);
+    QGridLayout* grid2 = new QGridLayout( gbox4, 3, 3, 20, spacingHint());
 
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. Click on image to select "
-                                                   "the tone colors to ajust image's white-balance."));
-    
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image to select "
+                                                   "the tone to ajust image's white-balance with <b>Color Picker</b> method."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+    grid2->addMultiCellWidget(frame2, 0, 0, 0, 2);
     
-    QHBoxLayout *hlay3 = new QHBoxLayout(l2);                                                   
-                                                   
-    QLabel *label10 = new QLabel(i18n("Method:"), frame2);
-    m_wbMethod = new QComboBox( false, frame2 );
+    QLabel *label10 = new QLabel(i18n("Method:"), gbox4);
+    m_wbMethod = new QComboBox( false, gbox4 );
     m_wbMethod->insertItem( i18n("Color Picker") );
     m_wbMethod->insertItem( i18n("Correction Filters") );
     QWhatsThis::add( m_wbMethod, i18n("<p>Select here the method to adjust white color balance:<p>"
@@ -298,24 +296,24 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                       "in the original photograph and setting a correction filter from that.<p>"
                                       "<b>Correction Filters</b>: advanced method using all filter settings manualy.<p>"));
     
-    QHButtonGroup *bGroup = new QHButtonGroup(frame2);
+    QHButtonGroup *bGroup = new QHButtonGroup(gbox4);
     m_blackColorButton = new QPushButton( bGroup );
     QWhatsThis::add( m_blackColorButton, i18n("<p>Set here the color from original image use to correct <b>Black</b> "
-                                              "tones with white-balance."));
+                                              "tones with white-balance filter with <b>Color Picker</b> method."));
     bGroup->insert(m_blackColorButton, WhiteColor);
     m_blackColorButton->setToggleButton(true);
     m_whiteColorButton = new QPushButton( bGroup );
     QWhatsThis::add( m_whiteColorButton, i18n("<p>Set here the color from original image use to correct <b>White</b> "
-                                              "tones with white-balance."));
+                                              "tones with white-balance filter with <b>Color Picker</b> method."));
     bGroup->insert(m_whiteColorButton, BlackColor);
     m_whiteColorButton->setToggleButton(true);
     m_whiteColorButton->setOn(true);
     bGroup->setExclusive(true);
     bGroup->setFrameShape(QFrame::NoFrame);
     
-    hlay3->addWidget(label10, 1);
-    hlay3->addWidget(m_wbMethod, 2);
-    hlay3->addWidget(bGroup, 2);
+    grid2->addMultiCellWidget(label10, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_wbMethod, 1, 1, 1, 1);
+    grid2->addMultiCellWidget(bGroup, 1, 1, 2, 2);
             
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -323,6 +321,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
+    grid2->addMultiCellWidget(frame3, 2, 2, 0, 2);
 
     topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
@@ -344,12 +343,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_wbMethod, SIGNAL(activated(int)),
             this, SLOT(slotMethodChanged(int)));
                 
-    connect(m_previewOriginalWidget, SIGNAL(crossCenterColorChanged( const QColor & )),
+    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
             this, SLOT(slotColorSelectedFromImage( const QColor & ))); 
 
     // Slider controls.
                         
-    connect(m_temperatureInput, SIGNAL(valueChanged (double)),
+    connect(m_temperatureInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                       
             
     connect(m_darkInput, SIGNAL(valueChanged (double)),
@@ -377,7 +376,12 @@ ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 
 void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
 {
-    delete m_whiteBalanceCurvesWidget;
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+       
+    delete m_histogramWidget;
     delete m_whiteBalanceCurves;
     e->accept();
 }
@@ -386,22 +390,27 @@ void ImageEffect_WhiteBalance::slotUser1()
 {
     blockSignals(true);
 
-    m_blackColor = Qt::black;
-    setBlackColor(m_blackColor);    
-    m_whiteColor = Qt::white;
-    setWhiteColor(m_whiteColor);  
+    if ( m_wbMethod->currentItem() == CorrectionFilter )
+       {
+       // Neutral color temperature settings.
+       m_temperatureInput->setValue(4750);                     
+       m_darkInput->setValue(0.5);
+       m_blackInput->setValue(0.0);
+       m_exposureInput->setValue(0.0);
+       m_gammaInput->setValue(0.6);  
+       m_saturationInput->setValue(1.0);  
+       m_greenInput->setValue(1.2);  
+       }
+    else
+       {    
+       m_blackColor = Qt::black;
+       setBlackColor(m_blackColor);    
+       m_whiteColor = Qt::white;
+       setWhiteColor(m_whiteColor);  
+       m_whiteBalanceCurves->curvesReset();
+       }
     
-    // Neutral color temperature settings.
-    m_temperatureInput->setValue(4.75);                     
-    m_darkInput->setValue(0.5);
-    m_blackInput->setValue(0.0);
-    m_exposureInput->setValue(0.0);
-    m_gammaInput->setValue(0.6);  
-    m_saturationInput->setValue(1.0);  
-    m_greenInput->setValue(1.2);  
-        
-    m_whiteBalanceCurves->curvesReset();
-    m_previewOriginalWidget->resetCrossPosition();    
+    m_previewOriginalWidget->resetSpotPosition();    
     m_channelCB->setCurrentItem(0);
     slotChannelChanged(0);
     
@@ -428,7 +437,6 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           break;
           }
        }
-
 }
 
 void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
@@ -447,13 +455,25 @@ void ImageEffect_WhiteBalance::setWhiteColor(QColor color)
     pixmap.fill(color);
     m_whiteColor = color;
     m_whiteColorButton->setPixmap(pixmap);
-    QToolTip::add( m_whiteColorButton, i18n( "<p>White color tone:<p>"
-                                             "Red:   %1.<br>"
-                                             "Green: %2<br>"
-                                             "Blue:  %3")
-                                             .arg(m_whiteColor.red())
-                                             .arg(m_whiteColor.green())
-                                             .arg(m_whiteColor.blue()) );
+    QString numVal;
+    
+    QString tip = "<table cellspacing=0 cellpadding=0>";
+    QString headBeg("<tr bgcolor=\"orange\"><td colspan=2><nobr><font size=-1 color=\"black\"><i>");
+    QString headEnd("</i></font></nobr></td></nobr</tr>");
+    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellMid("</font></nobr></td><td><nobr><font size=-1 color=\"black\">");
+    QString cellEnd("</font></nobr></td></tr>");
+
+    tip += headBeg + i18n("<b>Color Picker</b> method<br>White color tone:") + headEnd;
+    tip += cellBeg + i18n("Red:") + cellMid;
+    tip += numVal.setNum(m_whiteColor.red()) + cellEnd;
+    tip += cellBeg + i18n("Green:") + cellMid;
+    tip += numVal.setNum(m_whiteColor.green()) + cellEnd;
+    tip += cellBeg + i18n("Blue:") + cellMid;
+    tip += numVal.setNum(m_whiteColor.blue()) + cellEnd;
+    tip += "</table>";
+        
+    QToolTip::add( m_whiteColorButton, tip);    
 }
 
 void ImageEffect_WhiteBalance::setBlackColor(QColor color)
@@ -462,52 +482,64 @@ void ImageEffect_WhiteBalance::setBlackColor(QColor color)
     pixmap.fill(color);
     m_blackColor = color;
     m_blackColorButton->setPixmap(pixmap);
-    QToolTip::add( m_blackColorButton, i18n( "<p>Black color tone:<p>"
-                                             "Red:   %1.<br>"
-                                             "Green: %2<br>"
-                                             "Blue:  %3")
-                                             .arg(m_blackColor.red())
-                                             .arg(m_blackColor.green())
-                                             .arg(m_blackColor.blue()) );
+    QString numVal;
+    
+    QString tip = "<table cellspacing=0 cellpadding=0>";
+    QString headBeg("<tr bgcolor=\"orange\"><td colspan=2><nobr><font size=-1 color=\"black\"><i>");
+    QString headEnd("</i></font></nobr></td></nobr</tr>");
+    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellMid("</font></nobr></td><td><nobr><font size=-1 color=\"black\">");
+    QString cellEnd("</font></nobr></td></tr>");
+
+    tip += headBeg + i18n("<b>Color Picker</b> method<br>Black color tone:") + headEnd;
+    tip += cellBeg + i18n("Red:") + cellMid;
+    tip += numVal.setNum(m_blackColor.red()) + cellEnd;
+    tip += cellBeg + i18n("Green:") + cellMid;
+    tip += numVal.setNum(m_blackColor.green()) + cellEnd;
+    tip += cellBeg + i18n("Blue:") + cellMid;
+    tip += numVal.setNum(m_blackColor.blue()) + cellEnd;
+    tip += "</table>";
+        
+    QToolTip::add( m_blackColorButton, tip);    
 }
 
 void ImageEffect_WhiteBalance::slotScaleChanged(int scale)
 {
     switch(scale)
        {
-       case 1:           // Log.
-          m_whiteBalanceCurvesWidget->m_scaleType = Digikam::CurvesWidget::LogScaleHistogram;
+       case Linear:
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
           break;
-
-       default:          // Lin.
-          m_whiteBalanceCurvesWidget->m_scaleType = Digikam::CurvesWidget::LinScaleHistogram;
+       
+       case Logarithmic:
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
           break;
        }
 
-    m_whiteBalanceCurvesWidget->repaint(false);
+    m_histogramWidget->repaint(false);
 }
 
 void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 {
     switch(channel)
        {
-       case 0:           // Red.
-          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
-          m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
+       case RedChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_hGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
-       case 1:           // Green.
-          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
-          m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
+       case GreenChannel:         
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_hGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
-       case 2:           // Blue.
-          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
-          m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
+       case BlueChannel:         
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_hGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
        }
 
-    m_whiteBalanceCurvesWidget->repaint(false);
+    m_histogramWidget->repaint(false);
 }
 
 void ImageEffect_WhiteBalance::slotEffect()
@@ -517,20 +549,46 @@ void ImageEffect_WhiteBalance::slotEffect()
     uint*  data   = iface->getPreviewData();
     int    w      = iface->previewWidth();
     int    h      = iface->previewHeight();
-    m_temperature = m_temperatureInput->value();
-    m_dark        = m_darkInput->value();
-    m_black       = m_blackInput->value();
-    m_exposition  = m_exposureInput->value();
-    m_gamma       = m_gammaInput->value();
-    m_saturation  = m_saturationInput->value();
-    m_green       = m_greenInput->value();
     
-    whiteBalance(data, w, h, m_blackColor, m_whiteColor);
-    m_whiteBalanceCurvesWidget->repaint(false);
+    // Create the new empty destination image data space.
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
     
-    iface->putPreviewData(data);       
-    delete [] data;
+    m_destinationPreviewData = new uint[w*h];
+    memcpy (m_destinationPreviewData, data, w*h*4);  
+    
+    if ( m_wbMethod->currentItem() == CorrectionFilter )
+       {
+       // Update settings
+       m_temperature = m_temperatureInput->value()/1000.0;
+       m_dark        = m_darkInput->value();
+       m_black       = m_blackInput->value();
+       m_exposition  = m_exposureInput->value();
+       m_gamma       = m_gammaInput->value();
+       m_saturation  = m_saturationInput->value();
+       m_green       = m_greenInput->value();
+       
+       // Set preview lut.
+       setRGBmult();
+       m_mg = 1.0;
+       setLUTv();
+       setRGBmult();
+       
+       // Apply White balance adjustments.
+       whiteBalanceCorrectionFilter(m_destinationPreviewData, w, h);
+       }
+    else
+       whiteBalanceColorPicker(m_destinationPreviewData, w, h, m_blackColor, m_whiteColor);
+           
+    iface->putPreviewData(m_destinationPreviewData);       
     m_previewTargetWidget->update();
+    
+    // Update histogram.
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, 0, 0, 0, false); 
+    
+    delete [] data;
 }
 
 void ImageEffect_WhiteBalance::slotOk()
@@ -541,15 +599,30 @@ void ImageEffect_WhiteBalance::slotOk()
     uint*  data   = iface.getOriginalData();
     int    w      = iface.originalWidth();
     int    h      = iface.originalHeight();
-    m_temperature = m_temperatureInput->value();
-    m_dark        = m_darkInput->value();
-    m_black       = m_blackInput->value();
-    m_exposition  = m_exposureInput->value();
-    m_gamma       = m_gammaInput->value();
-    m_saturation  = m_saturationInput->value();
-    m_green       = m_greenInput->value();
         
-    whiteBalance(data, w, h, m_blackColor, m_whiteColor);
+    if ( m_wbMethod->currentItem() == CorrectionFilter )
+       {
+       // Update settings
+       m_temperature = m_temperatureInput->value()/1000.0;
+       m_dark        = m_darkInput->value();
+       m_black       = m_blackInput->value();
+       m_exposition  = m_exposureInput->value();
+       m_gamma       = m_gammaInput->value();
+       m_saturation  = m_saturationInput->value();
+       m_green       = m_greenInput->value();
+       
+       // Set final lut.
+       setRGBmult();
+       m_mr = m_mb = 1.0;
+       if (m_clipSat) m_mg=1.0; 
+       setLUTv();
+       setRGBmult();
+       
+       // Apply White balance adjustments.
+       whiteBalanceCorrectionFilter(data, w, h);
+       }
+    else
+       whiteBalanceColorPicker(data, w, h, m_blackColor, m_whiteColor);
 
     iface.putOriginalData(i18n("White Balance"), data);                   
     delete [] data;
@@ -578,7 +651,7 @@ void ImageEffect_WhiteBalance::setRGBmult(void)
     m_mb /= mi;
 }
 
-void ImageEffect_WhiteBalance::setLUTv(int mv)
+void ImageEffect_WhiteBalance::setLUTv(void)
 {
     double b, g;
 
@@ -607,31 +680,9 @@ void ImageEffect_WhiteBalance::setLUTv(int mv)
         curve[i] *= (1 - m_dark * exp(-x * x / 0.002));
         curve[i] /= (float)i;
         }
-
-    uchar lut;
-    double p, v;
-        
-    for (uint j = 0; j < 256; j++) 
-       {
-       p = (m_clipSat && j > m_rgbMax) ? m_rgbMax : j;
-       v = pow(p * b / MAXSMPL, m_gamma);
-       v = (v > m_BP) ? MAXOUT * (v - m_BP) / (1 - m_BP) : 0;
-       lut = (uchar)((v > 256) ? mv : v);
-       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::RedChannel, j, lut);              
-       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::GreenChannel, j, lut);              
-       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::BlueChannel, j, lut);              
-       }
 }
 
-void ImageEffect_WhiteBalance::setLUT(void)
-{
-    setRGBmult();
-    m_mg = 1.0;
-    setLUTv(m_overExp ? 0 : 255);
-    setRGBmult();
-}
-
-void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height, QColor bColor, QColor wColor)
+void ImageEffect_WhiteBalance::whiteBalanceCorrectionFilter(uint *data, int width, int height)
 {  
     int   x, y, c;
     uint   i;
@@ -640,8 +691,6 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height, Q
     uchar *rp = (uchar *)data;
     uchar *p  = pOutBits;
          
-    setLUT();    
-    
     for (y = 0 ; y < height ; y++)
         {
         for (x = 0 ; x < width ; x++, p += 4, rp += 4) 
@@ -685,12 +734,14 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height, Q
     memcpy (data, pOutBits, width*height*4);       
             
     delete [] pOutBits;    
+}
 
-    
 // The theory of this method inspired from tutorial from 'lasm' available at http://www.geocities.com/lasm.rm/wb2.html
 // I have re-create a new curves computation (not based on linear color transformation) for to have better results.        
-    
-    /*    uchar* pOutBits = new uchar[w*h*4];    
+
+void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, int height, QColor bColor, QColor wColor)
+{  
+    uchar* pOutBits = new uchar[width*height*4];    
 
     // Start curves points.  
             
@@ -723,27 +774,11 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height, Q
     // Calculate lut and apply to image.
        
     m_whiteBalanceCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    m_whiteBalanceCurves->curvesLutProcess(data, (uint *)pOutBits, w, h);
+    m_whiteBalanceCurves->curvesLutProcess(data, (uint *)pOutBits, width, height);
     
-    memcpy (data, pOutBits, w*h*4);       
+    memcpy (data, pOutBits, width*height*4);       
        
-    delete [] pOutBits;*/
-    
-    /*
-    uchar* pInBits = (uchar*)data;
-    
-    
-    for (int y = 0; y < h; y++)
-        {
-        for (int x = 0; x < w; x++)
-            {        
-            pInBits[i++] = (uchar)(pInBits[i] * mb);    // Blue.
-            pInBits[i++] = (uchar)(pInBits[i] * mg);    // Green.
-            pInBits[i++] = (uchar)(pInBits[i] * mr);    // Red.
-            pInBits[i++] = pInBits[i];                  // Alpha.
-            }
-        }
-        */
+    delete [] pOutBits;
 }
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

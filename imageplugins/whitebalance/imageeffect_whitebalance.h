@@ -37,13 +37,14 @@ class QComboBox;
 class QPushButton;
 
 class KDoubleNumInput;
+class KIntNumInput;
 
 namespace Digikam
 {
 class ImageGuideWidget;
 class ImageWidget;
 class ColorGradientWidget;
-class CurvesWidget;
+class HistogramWidget;
 class ImageCurves;
 }
 
@@ -97,6 +98,21 @@ private:
     CorrectionFilter
     };
    
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+    
+    enum ColorChannel
+    {
+    RedChannel=0,
+    GreenChannel,
+    BlueChannel
+    };
+    
+    uint                         *m_destinationPreviewData;
+    
     QWidget                      *m_parent;
     
     QPushButton                  *m_helpButton;
@@ -111,7 +127,15 @@ private:
     QColor                        m_blackColor;
     QColor                        m_whiteColor;
     
-    KDoubleNumInput              *m_temperatureInput;
+    QLabel                       *m_temperatureLabel;
+    QLabel                       *m_darkLabel;
+    QLabel                       *m_blackLabel;
+    QLabel                       *m_exposureLabel;
+    QLabel                       *m_gammaLabel;
+    QLabel                       *m_saturationLabel;
+    QLabel                       *m_greenLabel;
+
+    KIntNumInput                 *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
     KDoubleNumInput              *m_blackInput;
     KDoubleNumInput              *m_exposureInput;
@@ -119,11 +143,10 @@ private:
     KDoubleNumInput              *m_saturationInput;
     KDoubleNumInput              *m_greenInput;
     
-    Digikam::CurvesWidget        *m_whiteBalanceCurvesWidget;
+    Digikam::HistogramWidget     *m_histogramWidget;
     Digikam::ImageCurves         *m_whiteBalanceCurves;
     
     Digikam::ColorGradientWidget *m_hGradient;
-    Digikam::ColorGradientWidget *m_vGradient;
     
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageWidget         *m_previewTargetWidget; 
@@ -133,9 +156,9 @@ private:
     void setWhiteColor(QColor color);
     void setBlackColor(QColor color);
     void setRGBmult(void);
-    void setLUTv(int mv);
-    void setLUT(void);
-    void whiteBalance(uint *data, int w, int h, QColor bColor, QColor wColor);
+    void setLUTv(void);
+    void whiteBalanceCorrectionFilter(uint *data, int w, int h);
+    void whiteBalanceColorPicker(uint *data, int w, int h, QColor bColor, QColor wColor);
 
 private slots:
 
