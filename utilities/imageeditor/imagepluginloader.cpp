@@ -177,6 +177,26 @@ Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)
     return NULL;
 }
 
+bool ImagePluginLoader::pluginLibraryIsLoaded(QString libraryName)
+{
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
+    KTrader::OfferList::ConstIterator iter;
+    
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+       {
+       KService::Ptr service = *iter;
+       Digikam::ImagePlugin *plugin;
+
+       if(service->library() == libraryName)
+           {
+           if( pluginIsLoaded(service->name()) )
+              return true;
+           }
+       }
+    
+    return false;
+}
+
 ImagePluginLoader::~ImagePluginLoader()
 {
     m_instance = 0;

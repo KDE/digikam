@@ -46,6 +46,10 @@ public:
 
     QPtrList<Digikam::ImagePlugin>& pluginList();
     void loadPluginsFromList(QStringList list);
+    
+    // Return true if plugin library is loaded in memory.
+    // 'libraryName' is internal plugin library name not i18n.
+    bool pluginLibraryIsLoaded(QString libraryName);
 
 private:
 
