@@ -446,8 +446,13 @@ void CameraUI::slotDeleteSelected()
     if (folders.isEmpty())
         return;
 
-    QString warnMsg(i18n("About to delete these Image(s). Deleted files are unrecoverable. "
-                         "Are you sure?"));
+    QString warnMsg(i18n("About to delete this image. "
+                         "Deleted files are unrecoverable. "
+                         "Are you sure?",
+                         "About to delete these %n images. "
+                         "Deleted files are unrecoverable. "
+                         "Are you sure?",
+                         deleteList.count()));
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
@@ -483,8 +488,13 @@ void CameraUI::slotDeleteAll()
     if (folders.isEmpty())
         return;
 
-    QString warnMsg(i18n("About to delete these Image(s). Deleted files are unrecoverable. "
-                         "Are you sure?"));
+    QString warnMsg(i18n("About to delete this image. "
+                         "Deleted files are unrecoverable. "
+                         "Are you sure?",
+                         "About to delete these %n images. "
+                         "Deleted files are unrecoverable. "
+                         "Are you sure?",
+                         deleteList.count()));
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),

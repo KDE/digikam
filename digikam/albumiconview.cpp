@@ -777,7 +777,9 @@ void AlbumIconView::slotDeleteSelectedItems()
     if (!d->albumSettings->getUseTrash() ||
         d->albumSettings->getAskTrashConfirmation())
     {    
-        QString warnMsg(i18n("About to delete these Image(s).\nAre you sure?"));
+        QString warnMsg(i18n("About to delete this image. Are you sure?",
+                             "About to delete these %n images. Are you sure?",
+                             nameList.count()));
         if (KMessageBox::warningContinueCancelList(this,
                                                    warnMsg,
                                                    nameList,
