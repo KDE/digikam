@@ -2,8 +2,8 @@
  * File  : main.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-11-22
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -11,12 +11,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifdef HAVE_CONFIG_H
@@ -44,10 +44,10 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
     QString Description = i18n("digiKam Photo Viewer");
-    
-    KAboutData aboutData( "showfoto", 
+
+    KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.1", 
+                          "0.1",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004, digiKam developers team"),
@@ -71,18 +71,20 @@ int main(int argc, char *argv[])
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
-    
+
+    KGlobal::locale()->setMainCatalogue( "digikam" );
+
     KApplication app;
     KImageIO::registerFormats();
-    
+
     KURL::List urlList;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for(int i = 0; i < args->count(); i++) 
+    for(int i = 0; i < args->count(); i++)
     {
         urlList.append(args->url(i));
     }
     args->clear();
-    
+
     ShowFoto *w = new ShowFoto(urlList);
     app.setMainWidget(w);
     w->show();
