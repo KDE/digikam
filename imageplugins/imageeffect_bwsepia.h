@@ -26,8 +26,8 @@ class ImageEffect_BWSepia
 public:
 
     static void convertTOBW();
-    static void convertTOSepia();
-
+    static void changeTonality(int redMask, int greenMask, int blueMask);
+    
 };
 
 #endif /* IMAGEEFFECT_BWSEPIA_H */
