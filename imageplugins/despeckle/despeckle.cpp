@@ -194,7 +194,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
     m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), plainPage());
     m_useRecursiveMethod->setChecked( false );
-    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive media filter type."));           
+    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type."));           
     hlay5->addWidget(m_useAdaptativeMethod, 1);
     hlay5->addWidget(m_useRecursiveMethod, 1);
 
