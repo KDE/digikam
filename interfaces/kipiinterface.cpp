@@ -25,13 +25,28 @@
 #include <config.h>
 #endif
 
+// C Ansi includes
+
+extern "C"
+{
+#include <stdio.h>
+#include <sys/types.h>
+#include <utime.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/stat.h>
+}
+
 // KDE includes.
 
 #include <klocale.h>
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
-#include <libkexif/kexifutils.h>
 #include <kdebug.h>
+
+// LibKEXIF includes.
+
+#include <libkexif/kexifutils.h>
 
 // Local includes.
 
@@ -135,6 +150,69 @@ void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
     // TODO !
 }
 
+int DigikamImageInfo::angle()
+{
+    // TODO !
+}
+
+void DigikamImageInfo::setAngle( int angle )
+{
+    // TODO !
+}
+
+void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
+{
+    FILE * f;
+    struct utimbuf * t = new utimbuf();
+    struct tm tmp;
+    struct stat st;
+    
+    QDate newDate = time.date();
+    QTime newTime = time.time();
+
+    time_t ti;
+
+    f = fopen(imageUrl_.ascii(), "r");
+
+    if ( f == NULL )
+       {
+       kdWarning() << "DigikamImageInfo::setTime : Cannot open image file !!!" << endl;
+       return;
+       }
+
+    fclose( f );
+
+    tmp.tm_mday = newDate.day();
+    tmp.tm_mon = newDate.month() - 1;
+    tmp.tm_year = newDate.year() - 1900;
+
+    tmp.tm_hour = newTime.hour();
+    tmp.tm_min = newTime.minute();
+    tmp.tm_sec = newTime.second();
+    tmp.tm_isdst = -1;
+
+    ti = mktime( &tmp );
+
+    if( ti == -1 )
+       {
+       kdWarning() << "DigikamImageInfo::setTime : Cannot eval local time !!!" << endl;
+       return;
+       }
+
+    if( stat(imageUrl_.ascii(), &st ) == -1 )
+       {
+       kdWarning() << "DigikamImageInfo::setTime : Cannot stat image file !!!" << endl;
+       return;
+       }
+
+    // Change Access and modification date.
+       
+    t->actime = ti;
+    t->modtime = ti;
+
+    if( utime(imageUrl_.ascii(), t ) != 0 )
+       kdWarning() << "DigikamImageInfo::setTime : Cannot change image file date and time !!!" << endl;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +352,6 @@ KIPI::ImageCollection DigikamKipiInterface::currentScope()
         return currentAlbum();
 }
 
-
 QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
     QValueList<KIPI::ImageCollection> result;
@@ -310,7 +387,10 @@ int DigikamKipiInterface::features() const
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
-    DigikamImageCollection *currentAlbum = new DigikamImageCollection( DigikamImageCollection::AllAlbumItems );
+    m_sourceAlbum = albumManager_->findAlbum(url.path().section('/', -2, -2));
+    m_targetAlbum = albumManager_->currentAlbum();
+    
+    m_imageFileName = url.path().section('/', -1);                            
         
     if ( url.isValid() == false )
        {
@@ -319,7 +399,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
        }
     else 
        {
-       KIO::CopyJob* job = KIO::copy(url, KURL(currentAlbum->path()), true);
+       KIO::CopyJob* job = KIO::copy(url, KURL(m_targetAlbum->getPath() + "/" + m_imageFileName), true);
        
        connect(job, SIGNAL(result(KIO::Job*)),
                this, SLOT(slot_onAddImageFinished(KIO::Job*)));
@@ -332,6 +412,19 @@ void DigikamKipiInterface::slot_onAddImageFinished(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(0);
+    else
+       {                    // Copy the image comments if the source image is in the Albums library.
+       if (m_sourceAlbum)
+          {
+          m_sourceAlbum->openDB();
+          QString comments = m_sourceAlbum->getItemComments(m_imageFileName);
+          m_sourceAlbum->closeDB();
+
+          m_targetAlbum->openDB();
+          m_targetAlbum->setItemComments(m_imageFileName, comments);
+          m_targetAlbum->closeDB();
+          }
+       }
     
     albumManager_->refreshItemHandler(); 
 }

@@ -77,6 +77,11 @@ public:
     virtual QMap<QString,QVariant> attributes();
     virtual void clearAttributes();
     virtual void addAttributes( const QMap<QString,QVariant>& );
+    
+    virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
+    
+    virtual int DigikamImageInfo::angle();
+    virtual void setAngle( int angle );
 
 private:
     QString             imageName_;
@@ -140,6 +145,11 @@ protected slots:
     
 protected:
     QString askForCategory();
+    
+    // For Add images operations.
+    Digikam::AlbumInfo *m_sourceAlbum;
+    Digikam::AlbumInfo *m_targetAlbum;
+    QString             m_imageFileName;
     
     Digikam::AlbumManager *albumManager_;
 };
