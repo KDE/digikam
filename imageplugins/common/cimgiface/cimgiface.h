@@ -26,6 +26,7 @@
 
 #include <qthread.h>
 #include <qimage.h>
+#include <qstring.h>
 
 // Local include.
 
@@ -77,9 +78,11 @@ private:
     int       m_imageWidth;
     int       m_imageHeight;
     
-    QImage    m_inPaintingMask;
-    
     bool      m_cancel;   // Used to stop thread during calculations.
+    
+    QString   m_tmpMaskFile;
+    
+    QImage    m_inPaintingMask;
     
     QObject  *m_parent;
 

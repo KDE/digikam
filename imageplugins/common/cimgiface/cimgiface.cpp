@@ -20,6 +20,13 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
+ // C Ansi includes
+
+extern "C"
+{
+#include <unistd.h>
+}
   
 // C++ includes. 
  
@@ -31,10 +38,12 @@
 
 #include <qobject.h>
 #include <qevent.h>
+#include <qfile.h>
 
 // KDE includes.
 
 #include <kapplication.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -79,10 +88,17 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     m_onormalize  = normalize;
     m_linear      = linearInterpolation;
 
+    m_tmpMaskFile = QString::null;
+    
     if (inPaintingMask)
        {
+       KStandardDirs dir;
+       m_tmpMaskFile = dir.saveLocation("tmp");
+       m_tmpMaskFile.append(QString::number(getpid()));
+       m_tmpMaskFile.append(".png");
        m_inPaintingMask = inPaintingMask->copy();
-       m_inPaintingMask.save("/tmp/mask.png", "PNG");
+       m_inPaintingMask.save(m_tmpMaskFile, "PNG");
+       kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
        }
         
     if (m_imageData && m_imageWidth && m_imageHeight)
@@ -107,6 +123,13 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
 CimgIface::~CimgIface()
 { 
     stopComputation();
+    
+    if (m_tmpMaskFile != QString::null)
+       {
+       // Remove temporary inpainting mask.
+       QFile mask(m_tmpMaskFile);
+       mask.remove();
+       }
 }
 
 void CimgIface::stopComputation(void)
@@ -322,7 +345,7 @@ bool CimgIface::prepare_restore()
 bool CimgIface::prepare_inpaint()
 {
     //const char *file_m = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
-    const char *file_m = "/tmp/mask.png";
+    const char *file_m = m_tmpMaskFile.latin1();
     
     if (!file_m) 
        {
@@ -330,8 +353,10 @@ bool CimgIface::prepare_inpaint()
        return false;
        }
 
-    const unsigned int dilate  = 0; //cimg_option("-dilate",0,"Inpainting mask dilatation");
-    const unsigned int ip_init = 3; //cimg_option("-init",3,"Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol)");
+    //cimg_option("-dilate",0,"Inpainting mask dilatation");
+    const unsigned int dilate  = 0; 
+    //cimg_option("-init",3,"Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol)");
+    const unsigned int ip_init = 3; 
     
     if (cimg::strncasecmp("block",file_m,5)) 
         mask = CImg<uchar>(file_m);
