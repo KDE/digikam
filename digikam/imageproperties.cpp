@@ -248,7 +248,7 @@ ImageProperties::~ImageProperties()
     m_histogramWidget->stopHistogramComputation();
    
     // Save config.
-    getCurrentExifItem();
+    slotGetCurrentExifItem();
     
     kapp->config()->setGroup("Image Properties Dialog");
     kapp->config()->writeEntry("Tab Actived", activePageIndex());
@@ -397,7 +397,7 @@ void ImageProperties::slotItemChanged()
         else if (meta.containsGroup("Technical"))
             dims = meta.group("Technical").item("Dimensions").value().toSize();
         
-        m_filedim->setText( QString("%1x%2 %3").arg(dims.width())
+        m_filedim->setText( QString("%1 x %2 %3").arg(dims.width())
                             .arg(dims.height()).arg(i18n("pixels")) );
         }
    
@@ -425,7 +425,7 @@ void ImageProperties::slotItemChanged()
     
     if (m_view)             // Digikam embeded mode.
        {           
-       m_sep2->show();
+       m_sep3->show();
        m_filealbum->show();
        m_filecomments->show();
        m_filetags->show();
@@ -448,7 +448,7 @@ void ImageProperties::slotItemChanged()
        }
     else                    // Stand Alone mode.
        {
-       m_sep2->hide();
+       m_sep3->hide();
        m_filealbum->hide();
        m_filecomments->hide();
        m_filetags->hide();
@@ -984,7 +984,10 @@ void ImageProperties::setupExifViewer(void)
             this, SLOT(slotLevelExifChanged(int)));
             
     connect(m_embeddedThumbBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToogleEmbeddedThumb(bool)));            
+            this, SLOT(slotToogleEmbeddedThumb(bool)));       
+            
+    connect(m_listview, SIGNAL(signal_itemDescription(const QString&)),
+            this, SLOT(slotGetCurrentExifItem()));
 }
 
 void ImageProperties::slotLevelExifChanged(int level)
@@ -1038,7 +1041,7 @@ void ImageProperties::slotToogleEmbeddedThumb(bool toogle)
        m_embeddedThumbnail->hide();
 }
 
-void ImageProperties::getCurrentExifItem(void)
+void ImageProperties::slotGetCurrentExifItem(void)
 {    
     switch(m_levelExifCB->currentItem())
        {
@@ -1093,7 +1096,7 @@ void ImageProperties::setupGeneralTab()
     m_sep1 = new KSeparator (Horizontal, page);
     vlay->addWidget(m_sep1);
     
-    QGridLayout *hlay1 = new QGridLayout(8, 3);
+    QGridLayout *hlay1 = new QGridLayout(3, 3);
     vlay->addLayout( hlay1 );
     
     QLabel *name = new QLabel( i18n("Name:"), page);
@@ -1114,61 +1117,69 @@ void ImageProperties::setupGeneralTab()
     hlay1->addMultiCellWidget( dim, 2, 2, 0, 0 );
     hlay1->addMultiCellWidget( m_filedim, 2, 2, 1, 2  );
 
+    m_sep2 = new KSeparator (Horizontal, page);
+    vlay->addWidget(m_sep2);
+    
+    // Setup File system infos.
+        
+    QGridLayout *hlay2 = new QGridLayout(5, 3);
+    vlay->addLayout( hlay2 );
+    
     m_pathLabel = new QLabel( i18n("Location:"), page);
     m_filepath = new KSqueezedTextLabel(page);
     m_pathLabel->setBuddy( m_filepath );
-    hlay1->addMultiCellWidget( m_pathLabel, 3, 3, 0, 0 );
-    hlay1->addMultiCellWidget( m_filepath, 3, 3, 1, 2  );
+    hlay2->addMultiCellWidget( m_pathLabel, 0, 0, 0, 0 );
+    hlay2->addMultiCellWidget( m_filepath, 0, 0, 1, 2  );
     
     QLabel *date = new QLabel( i18n("Modification Date:"), page);
     m_filedate = new KSqueezedTextLabel(page);
     date->setBuddy( m_filedate );
-    hlay1->addMultiCellWidget( date, 4, 4, 0, 0 );
-    hlay1->addMultiCellWidget( m_filedate, 4, 4, 1, 2  );
+    hlay2->addMultiCellWidget( date, 1, 1, 0, 0 );
+    hlay2->addMultiCellWidget( m_filedate, 1, 1, 1, 2  );
     
     QLabel *size = new QLabel( i18n("Size:"), page);
     m_filesize = new KSqueezedTextLabel(page);
     size->setBuddy( m_filesize );
-    hlay1->addMultiCellWidget( size, 5, 5, 0, 0 );
-    hlay1->addMultiCellWidget( m_filesize, 5, 5, 1, 2  );
+    hlay2->addMultiCellWidget( size, 2, 2, 0, 0 );
+    hlay2->addMultiCellWidget( m_filesize, 2, 2, 1, 2  );
 
     QLabel *owner = new QLabel( i18n("Owner:"), page);
     m_fileowner = new KSqueezedTextLabel(page);
     owner->setBuddy( m_fileowner );
-    hlay1->addMultiCellWidget( owner, 6, 6, 0, 0 );
-    hlay1->addMultiCellWidget( m_fileowner, 6, 6, 1, 2  );
+    hlay2->addMultiCellWidget( owner, 3, 3, 0, 0 );
+    hlay2->addMultiCellWidget( m_fileowner, 3, 3, 1, 2  );
 
     QLabel *permissions = new QLabel( i18n("Permissions:"), page);
     m_filepermissions = new KSqueezedTextLabel(page);
     permissions->setBuddy( m_filepermissions );
-    hlay1->addMultiCellWidget( permissions, 7, 7, 0, 0 );
-    hlay1->addMultiCellWidget( m_filepermissions, 7, 7, 1, 2  );
+    hlay2->addMultiCellWidget( permissions, 4, 4, 0, 0 );
+    hlay2->addMultiCellWidget( m_filepermissions, 4, 4, 1, 2  );
         
-    m_sep2 = new KSeparator (Horizontal, page);
-    vlay->addWidget(m_sep2);
+    m_sep3 = new KSeparator (Horizontal, page);
+    vlay->addWidget(m_sep3);
 
     // Setup Digikam infos.
     
-    QGridLayout *hlay2 = new QGridLayout(3, 3);
-    vlay->addLayout( hlay2 );
+    QGridLayout *hlay3 = new QGridLayout(3, 3);
+    vlay->addLayout( hlay3 );
     
     m_albumLabel = new QLabel( i18n("Album:"), page);
     m_filealbum = new KSqueezedTextLabel(page);
     m_albumLabel->setBuddy( m_filealbum );
-    hlay2->addMultiCellWidget( m_albumLabel, 0, 0, 0, 0 );
-    hlay2->addMultiCellWidget( m_filealbum, 0, 0, 1, 2  );
+    hlay3->addMultiCellWidget( m_albumLabel, 0, 0, 0, 0 );
+    hlay3->addMultiCellWidget( m_filealbum, 0, 0, 1, 2  );
 
     m_commentsLabel = new QLabel( i18n("Comments:"), page);
     m_filecomments = new KSqueezedTextLabel(page);
     m_commentsLabel->setBuddy( m_filecomments );
-    hlay2->addMultiCellWidget( m_commentsLabel, 1, 1, 0, 0 );
-    hlay2->addMultiCellWidget( m_filecomments, 1, 1, 1, 2  );
+    hlay3->addMultiCellWidget( m_commentsLabel, 1, 1, 0, 0 );
+    hlay3->addMultiCellWidget( m_filecomments, 1, 1, 1, 2  );
     
     m_tagsLabel = new QLabel( i18n("Tags:"), page);
     m_filetags = new KSqueezedTextLabel(page);
     m_tagsLabel->setBuddy( m_filetags );
-    hlay2->addMultiCellWidget( m_tagsLabel, 2, 2, 0, 0 );
-    hlay2->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
+    hlay3->addMultiCellWidget( m_tagsLabel, 2, 2, 0, 0 );
+    hlay3->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
                     
     vlay->addStretch(1);
 }

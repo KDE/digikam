@@ -149,6 +149,7 @@ private:
     
     KSeparator                   *m_sep1;    
     KSeparator                   *m_sep2;
+    KSeparator                   *m_sep3;
     
     QGuardedPtr<ThumbnailJob>     m_generalThumbJob;
         
@@ -175,7 +176,6 @@ private:
     QString                       m_currentAllExifItemName;
     
     void setupExifViewer(void);
-    void getCurrentExifItem(void);
     void setCurrentExifItem(void);
     
     // For histogram viever.
@@ -233,6 +233,7 @@ private slots:
       
     void slotLevelExifChanged(int level);
     void slotToogleEmbeddedThumb(bool toogle);
+    void slotGetCurrentExifItem(void);
     
     // For histogram viever.
     
