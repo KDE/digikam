@@ -50,7 +50,11 @@ HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
 {
-    if (m_image.load(imageFile) == true)
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
+    m_image.load(imageFile);
+    
+    if (m_image.isNull() == false)
        {
        if(m_image.depth() < 32)           // we works always with 32bpp.
           m_image = m_image.convertDepth(32);
@@ -67,6 +71,12 @@ HistogramViewer::HistogramViewer(QWidget *parent, QImage image)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
 {                             
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
+    
+    if (image.isNull() == true)
+       return;
+       
     m_image = image;
     
     if(m_image.depth() < 32)           // we works always with 32bpp.
@@ -83,6 +93,8 @@ HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, u
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
 {
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
     setupGui(imageData, width, height);
 }
 
@@ -237,8 +249,12 @@ HistogramViewer::~HistogramViewer()
 
 void HistogramViewer::closeEvent(QCloseEvent *e)
 {
-    delete m_histogramWidget;
-    delete m_hGradient;
+    if ( m_histogramWidget )
+       delete m_histogramWidget;
+    
+    if ( m_hGradient )        
+       delete m_hGradient;
+    
     e->accept();    
 }
 
