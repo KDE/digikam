@@ -67,8 +67,8 @@ HistogramWidget::~HistogramWidget()
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
     uint   x, y;
-    int    wWidth = width();
-    int    wHeight = height();
+    uint   wWidth = width();
+    uint   wHeight = height();
     double max;
     
     switch(m_channelType)

@@ -36,7 +36,7 @@ ColorGradientWidget::~ColorGradientWidget()
 {
 }
     
-void ColorGradientWidget::drawArrow( QPainter *painter, bool show, const QPoint &pos )
+void ColorGradientWidget::drawArrow( QPainter *, bool , const QPoint & )
 {
     // Do nothing !!! We won't arrow...
 }

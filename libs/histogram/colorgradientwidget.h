@@ -40,7 +40,7 @@ public:
     
 protected:
     
-    virtual void drawArrow( QPainter *painter, bool show, const QPoint &pos );
+    virtual void drawArrow( QPainter *, bool, const QPoint &);
     
 };
 
