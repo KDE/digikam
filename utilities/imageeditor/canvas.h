@@ -58,12 +58,14 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent *e);
     void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsWheelEvent(QWheelEvent *e);
+    void keyPressEvent(QKeyEvent *e);
     
 private:
 
     void updateAutoZoom();
     void updateContentsSize();
-    void paintViewportRect(const QRect& vr, bool aa);
+    void paintViewportRect(const QRect& vr, bool aa, bool mask);
+    void drawRubber();
 
     CanvasPrivate *d;
 
