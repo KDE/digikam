@@ -291,7 +291,8 @@ void PerspectiveWidget::paintEvent( QPaintEvent * )
 
 void PerspectiveWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton )
+    if ( e->button() == Qt::LeftButton &&
+         m_rect.contains( e->x(), e->y() ))
        {
        if ( m_topLeftCorner.contains( e->x(), e->y() ) )
           m_currentResizing = ResizingTopLeft;
@@ -315,23 +316,36 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton )
+    if ( e->state() == Qt::LeftButton &&
+         m_rect.contains( e->x(), e->y() ))
        {
        if ( m_currentResizing != ResizingNone )
           {
           QPoint pm(e->x(), e->y());        
           
           if ( m_currentResizing == ResizingTopLeft )
+             {
              m_topLeftPoint = pm;             
+             setCursor( KCursor::sizeFDiagCursor() );
+             }
             
           else if ( m_currentResizing == ResizingTopRight )
+             {
              m_topRightPoint = pm;
+             setCursor( KCursor::sizeBDiagCursor() );
+             }
           
           else if ( m_currentResizing == ResizingBottomLeft  )
+             {
              m_bottomLeftPoint = pm;
+             setCursor( KCursor::sizeBDiagCursor() );
+             }
              
           else if ( m_currentResizing == ResizingBottomRight )
+             {
              m_bottomRightPoint = pm;
+             setCursor( KCursor::sizeFDiagCursor() );
+             }
           
           updatePixmap();
           repaint(false);
