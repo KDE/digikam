@@ -44,13 +44,15 @@ SetupPlugins::SetupPlugins(QWidget* parent )
 {
    QVBoxLayout *layout = new QVBoxLayout( parent, 10);
    layout->setSpacing( KDialog::spacingHint() );
+   
+   m_pluginsNumber = new QLabel(parent);
+   layout->addWidget( m_pluginsNumber );
 
    m_pluginList = new KListView( parent, "pluginList" );
-   m_pluginList->setAllColumnsShowFocus( true );
-   m_pluginList->setResizeMode( KListView::LastColumn );
-   m_pluginList->setFullWidth( true );
    m_pluginList->addColumn( i18n( "Name" ) );
    m_pluginList->addColumn( i18n( "Description" ) );
+   m_pluginList->setResizeMode( QListView::LastColumn );
+   m_pluginList->setAllColumnsShowFocus( true );
    QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
                                        "who must be loaded/unloaded from/to the current "
                                        "Digikam instance. At the next instance this list "
@@ -65,6 +67,8 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
+    m_pluginsNumber->setText(i18n("Plugins founded: %1")
+                             .arg(lista.count()/2));
     
     while(  it != lista.end() )
         {

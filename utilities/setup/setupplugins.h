@@ -28,6 +28,7 @@
 #include <qwidget.h>
 
 class KListView;
+class QLabel;
 
 class SetupPlugins : public QWidget
 {
@@ -42,7 +43,8 @@ public:
     QStringList getPluginList();
 
 private:
-
+    
+    QLabel*    m_pluginsNumber;
     KListView* m_pluginList;
 };
 
