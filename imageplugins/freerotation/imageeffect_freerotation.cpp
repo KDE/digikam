@@ -235,6 +235,7 @@ void ImageEffect_FreeRotation::slotOk()
     memcpy(src.bits(), data, src.numBytes());
     matrix.rotate(angle);
     src = src.xForm(matrix);
+    Digikam::ImageFilters::antiAliasImage((uint*)src.bits(), src.width(), src.height());
     iface.putOriginalData((uint*)src.bits(), src.width(), src.height());
         
     delete [] data;

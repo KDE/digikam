@@ -218,12 +218,11 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
             
     QImage newImage, targetImg;
     newImage.create( m_origW, m_origH, 32 );
-    newImage.setAlphaBuffer(true) ;
     memcpy(newImage.bits(), newData, newImage.numBytes());
     targetImg = newImage.copy(getTargetSize());
     
     // Update target image.
-    
+    Digikam::ImageFilters::antiAliasImage((uint*)targetImg.bits(), targetImg.width(), targetImg.height());
     m_iface->putOriginalData((uint*)targetImg.bits(), targetImg.width(), targetImg.height());
 
     delete [] data;

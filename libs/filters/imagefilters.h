@@ -30,20 +30,20 @@ class ImageFilters
 private:
 
 struct double_packet
-{
+    {
     double red;
     double green;
     double blue;
     double alpha;
-};
+    };
 
 struct short_packet
-{
+    {
     unsigned short int red;
     unsigned short int green;
     unsigned short int blue;
     unsigned short int alpha;
-};
+    };
 
 struct NormalizeParam 
     {
@@ -59,7 +59,7 @@ public:
     static void normalizeImage(uint *data, int w, int h);
     static void autoLevelsCorrectionImage(uint *data, int w, int h);
     static void invertImage(uint *data, int w, int h);
-
+    static void antiAliasImage(uint *data, int Width, int Height, int Sensibility=128);
 };
 
 }  // NameSpace Digikam

@@ -4,11 +4,11 @@
  * Description : image filters. 
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Normalize an Equalize algorithms fixed and adapted for to work with Raw 
+ * Normalize an Equalize algorithms fixed and adapted to work with Raw 
  * data image (ARGB).
  * 
- * Algorithms are taken from KImageEffect API of KDE project.
- * Copyright (C) 1998, 1999, 2001, 2002 Daniel M. Duley <mosfet@kde.org>
+ * Original Equalise and StretchContrast Algorithms copyright 2002
+ * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
  *
  * Original Normalize Image algorithm copyrighted 1997 by 
  * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
@@ -557,6 +557,138 @@ void ImageFilters::invertImage(uint *data, int w, int h)
                         
     memcpy (data, desData, w*h*4);
     delete [] desData;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Performs image antialiasing. This is a blur with less pixels.
+
+void ImageFilters::antiAliasImage(uint *data, int Width, int Height, int Sensibility)
+{
+    if (!data || !Width || !Height)
+       {
+       kdWarning() << ("ImageFilters::antiAliasImage: no image data available!")
+                   << endl;
+       return;
+       }
+       
+    int LineWidth = Width * 4;
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    uchar* Bits = (uchar*)data;
+        
+    int i = 0, j = 0, k = 0;
+    
+    // Simple Bluring method.
+    
+    for (int h = 1; h < Height - 1; h++)
+        {
+        for (int w = 1; w < Width - 1; w++)
+            {
+            i = h * LineWidth + 4 * w;
+            j = (h + 1) * LineWidth + 4 * w;
+            k = (h - 1) * LineWidth + 4 * w;
+
+            Bits[i+2] = (Bits[i-2] + Bits[j-2] + Bits[k-2] +
+                         Bits[i+2] + Bits[j+2] + Bits[k+2] +
+                         Bits[i+6] + Bits[j+6] + Bits[k+6]) / 9;
+            Bits[i+1] = (Bits[i-3] + Bits[j-3] + Bits[k-3] +
+                         Bits[i+1] + Bits[j+1] + Bits[k+1] +
+                         Bits[i+5] + Bits[j+5] + Bits[k+5]) / 9;
+            Bits[ i ] = (Bits[i-4] + Bits[j-4] + Bits[k-4] +
+                         Bits[ i ] + Bits[ j ] + Bits[ k ] +
+                         Bits[i+4] + Bits[j+4] + Bits[k+4]) / 9;
+            }
+        }
+                                                                                                              
+/*  
+    // Advanced bluring method using sensitivity value (not yet working correctly).
+    
+    uchar Temp[3][9];
+    
+    if (Sensibility > 255)        // MAX = 255
+        Sensibility = 255;        
+    if (Sensibility < 0)          // MIN = 0
+        Sensibility = 0;
+                                                           
+    int y, i = 0, j = 0, k = 0, GrayCmp, Gray, add;
+    
+    for (int h = 1; h < Height - 1; h++)
+        {
+        for (int w = 1; w < Width - 1; w++)
+            {
+            i = h * LineWidth + 4 * w;
+            j = (h + 1) * LineWidth + 4 * w;
+            k = (h - 1) * LineWidth + 4 * w;
+            Gray = (Bits[i+2] + Bits[i+1] + Bits[i]) / 3;
+
+            for (y = 0; y < 3; y++)
+                {
+                add = y * 4;
+                GrayCmp = (Bits[j+add-2] + Bits[j+add-3] + Bits[j+add-4]) / 3;
+                
+                if (! ((GrayCmp > Gray + Sensibility) || (GrayCmp < Gray - Sensibility)))
+                    {
+                    Temp[0][y] = Bits[ i ];
+                    Temp[1][y] = Bits[i+1];
+                    Temp[2][y] = Bits[i+2];
+                    }
+                else
+                    {
+                    Temp[0][y] = Bits[j+add-4];
+                    Temp[1][y] = Bits[j+add-3];
+                    Temp[2][y] = Bits[j+add-2];
+                    }
+                }
+
+            for (y = 0; y < 3; y++)
+                {
+                add = y * 4;
+                GrayCmp = (Bits[i+add-2] + Bits[i+add-3] + Bits[i+add-4]) / 3;
+                    
+                if (! ((GrayCmp > Gray + Sensibility) || (GrayCmp < Gray - Sensibility)))
+                    {
+                    Temp[0][y+3] = Bits[ i ];
+                    Temp[1][y+3] = Bits[i+1];
+                    Temp[2][y+3] = Bits[i+2];
+                    }
+                else
+                    {
+                    Temp[0][y+3] = Bits[i+add-4];
+                    Temp[1][y+3] = Bits[i+add-3];
+                    Temp[2][y+3] = Bits[i+add-2];
+                    }
+                }
+
+             for (y = 0; y < 3; y++)
+                {
+                add = y * 4;
+                GrayCmp = (Bits[k+add-2] + Bits[k+add-3] + Bits[k+add-4]) / 3;
+                    
+                if (! ((GrayCmp > Gray + Sensibility) || (GrayCmp < Gray - Sensibility)))
+                    {
+                    Temp[0][y+6] = Bits[ i ];
+                    Temp[1][y+6] = Bits[i+1];
+                    Temp[2][y+6] = Bits[i+2];
+                    }
+                else
+                    {
+                    Temp[0][y+6] = Bits[k+add-4];
+                    Temp[1][y+6] = Bits[k+add-3];
+                    Temp[2][y+6] = Bits[k+add-2];
+                    }
+                }
+
+            Bits[i+2] = (Temp[2][0] + Temp[2][1] + Temp[2][2] +
+                         Temp[2][3] + Temp[2][4] + Temp[2][5] +
+                         Temp[2][6] + Temp[2][7] + Temp[2][8]) / 9;
+            Bits[i+1] = (Temp[1][0] + Temp[1][1] + Temp[1][2] +
+                         Temp[1][3] + Temp[1][4] + Temp[1][5] +
+                         Temp[1][6] + Temp[1][7] + Temp[1][8]) / 9;
+            Bits[ i ] = (Temp[0][0] + Temp[0][1] + Temp[0][2] +
+                         Temp[0][3] + Temp[0][4] + Temp[0][5] +
+                         Temp[0][6] + Temp[0][7] + Temp[0][8]) / 9;
+            }
+        }*/
 }
 
 }  // NameSpace Digikam
