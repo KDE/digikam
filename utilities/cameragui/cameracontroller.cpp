@@ -366,6 +366,12 @@ void CameraController::slotResult(KIO::Job *job)
 {
     if (job->error())
     {
+        if (job->error() == KIO::ERR_SLAVE_DIED)
+        {
+            slotSlaveDied();
+            return;            
+        }
+        
         if (d->state == ST_CONNECT)
         {
             emit signalFatal(QString("Failed to connect to camera"));
