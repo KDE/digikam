@@ -420,8 +420,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     {
     case 10:
     {
-        tagNew(album);
-        populateTags();        
+        tagNew(album, albumItem);
         break;
     }
     case 11:
@@ -432,9 +431,11 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
     case 12:
     {
-        if (!album->isRoot()) {
+        if (!album->isRoot()) 
+        {
             tagDelete(album);
-            populateTags();
+            if(albumItem)
+                delete item;
         }
         break;
     }
@@ -443,17 +444,32 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
 }
 
-void ImageDescEdit::tagNew(TAlbum* parent)
+void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
 {
     QString title, icon;
     AlbumManager *albumMan_ = AlbumManager::instance();
     
-    if (!TagCreateDlg::tagCreate(parent, title, icon))
+    if (!TagCreateDlg::tagCreate(parAlbum, title, icon))
         return;
 
     QString errMsg;
-    if (!albumMan_->createTAlbum(parent, title, icon, errMsg))
+    if (!albumMan_->createTAlbum(parAlbum, title, icon, errMsg))
+    {
         KMessageBox::error(0, errMsg);
+    }
+    else
+    {
+        TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
+        while (child)
+        {
+            if (child->getTitle() == title)
+            {
+                new TAlbumCheckListItem(item, child);
+                return;
+            }
+            child = dynamic_cast<TAlbum*>(child->next());
+        }
+    }
 }
 
 void ImageDescEdit::tagDelete(TAlbum *album)

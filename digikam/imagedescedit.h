@@ -46,7 +46,7 @@ private:
     QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
-    void tagNew(TAlbum* parent);
+    void tagNew(TAlbum* parAlbum, QCheckListItem *item);
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
     
