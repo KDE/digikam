@@ -155,7 +155,7 @@ void ImageRotateDlg::freerotation(double angle, uint *data, int w, int h)
     imlib_context_set_image(im2);
     
     QSize sz(imlib_image_get_width(), imlib_image_get_height());
-    sz.scale(480, 320, QSize::ScaleMin);
+    sz.scale(w, h, QSize::ScaleMin);
     
     // Scale image to the target preview size.
     Imlib_Image im3 = imlib_create_cropped_scaled_image(0, 0, imlib_image_get_width(), 
