@@ -67,7 +67,6 @@ private:
     void addMenuItem(QPopupMenu *menu, CAction *action);
     void addKeyInDict(const QString& key);
     void promptUserSave();
-
     void loadCurrentItem();
 
     ImageViewPrivate *d;
@@ -92,6 +91,7 @@ private slots:
     void slotSaveResult(KIO::Job *job);
     void slotBCGEdit();
     void slotCommentsEdit();
+    void slotExifInfo();
     void slotRemoveCurrentItemfromAlbum();
     void slot_onDeleteCurrentItemFinished(KIO::Job *job);
     void slotKeyPress(int key);

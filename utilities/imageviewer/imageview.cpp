@@ -189,6 +189,7 @@ public:
     CButton *bRotate;
     CButton *bBCGEdit;
     CButton *bCommentsEdit;
+    CButton *bExifInfo;
     CButton *bSave;
     CButton *bRestore;
     CButton *bRemoveCurrent;
@@ -505,7 +506,13 @@ void ImageView::setupActions()
                                   this,
                                   SLOT(slotCommentsEdit()),
                                   QKeySequence(Key_F3)));
-
+    
+    d->actions.insert("ExifInfo",
+                      new CAction(i18n("View Exif Information"),
+                                  this,
+                                  SLOT(slotExifInfo()),
+                                  QKeySequence(Key_F6)));
+                                  
     d->actions.insert("crop",
                       new CAction(i18n("Crop"),
                                   d->canvas,
@@ -561,6 +568,7 @@ void ImageView::setupActions()
     addKeyInDict("contrast-");
     addKeyInDict("bcgEdit");
     addKeyInDict("commentsEdit");
+    addKeyInDict("ExifInfo");
     addKeyInDict("crop");
     addKeyInDict("save");
     addKeyInDict("restore");
@@ -606,6 +614,7 @@ void ImageView::setupPopupMenu()
 
     addMenuItem(d->contextMenu, d->actions.find("bcgEdit"));
     addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
+    addMenuItem(d->contextMenu, d->actions.find("ExifInfo"));
 
     QPopupMenu *brightnessMenu = new QPopupMenu(d->contextMenu);
     addMenuItem(brightnessMenu, d->actions.find("brightness+"));
@@ -701,39 +710,45 @@ void ImageView::setupButtons()
     d->bZoomIn = new CButton(d->buttonBar,
                              d->actions.find("zoomIn"),
                              BarIcon("viewmag+"));
+                             
     d->buttonLayout->addWidget(d->bZoomIn);
 
     d->bZoomOut = new CButton(d->buttonBar,
-                              d->actions.find("zoomOut"),
-                              BarIcon("viewmag-"));
+                             d->actions.find("zoomOut"),
+                             BarIcon("viewmag-"));
     d->buttonLayout->addWidget(d->bZoomOut);
 
     d->bZoomAuto = new CButton(d->buttonBar,
-                               d->actions.find("toggleAutoZoom"),
-                               BarIcon("viewmagfit"),
-                               true, true);
+                             d->actions.find("toggleAutoZoom"),
+                             BarIcon("viewmagfit"),
+                             true, true);
     d->buttonLayout->addWidget(d->bZoomAuto);
 
     d->bZoom1 = new CButton(d->buttonBar,
-                            d->actions.find("zoom1"),
-                            BarIcon("viewmag1"));
+                             d->actions.find("zoom1"),
+                             BarIcon("viewmag1"));
     d->buttonLayout->addWidget(d->bZoom1);
 
     d->bFullScreen = new CButton(d->buttonBar,
-                                 d->actions.find("toggleFullScreen"),
-                                 BarIcon("window_fullscreen"),
-                                 true, true);
+                             d->actions.find("toggleFullScreen"),
+                             BarIcon("window_fullscreen"),
+                             true, true);
     d->buttonLayout->addWidget(d->bFullScreen);
 
     d->bBCGEdit = new CButton(d->buttonBar,
-                              d->actions.find("bcgEdit"),
-                              BarIcon("blend"));
+                             d->actions.find("bcgEdit"),
+                             BarIcon("blend"));
     d->buttonLayout->addWidget(d->bBCGEdit);
 
     d->bCommentsEdit = new CButton(d->buttonBar,
-                                   d->actions.find("commentsEdit"),
-                                   BarIcon("image_comments"));
+                             d->actions.find("commentsEdit"),
+                             BarIcon("imagecomment"));
     d->buttonLayout->addWidget(d->bCommentsEdit);
+
+    d->bExifInfo = new CButton(d->buttonBar,
+                             d->actions.find("ExifInfo"),
+                             BarIcon("exifinfo"));
+    d->buttonLayout->addWidget(d->bExifInfo);
 
     
     d->bRotate = new CButton(d->buttonBar,
@@ -742,31 +757,31 @@ void ImageView::setupButtons()
     d->buttonLayout->addWidget(d->bRotate);
 
     d->bCrop  = new CButton(d->buttonBar,
-                            d->actions.find("crop"),
-                            BarIcon("crop"),
-                            false);
+                             d->actions.find("crop"),
+                             BarIcon("crop"),
+                             false);
     d->buttonLayout->addWidget(d->bCrop);
 
     d->bSave  = new CButton(d->buttonBar,
-                            d->actions.find("save"),
-                            BarIcon("filesave"),
-                            false);
+                             d->actions.find("save"),
+                             BarIcon("filesave"),
+                             false);
     d->buttonLayout->addWidget(d->bSave);
 
     d->bRestore  = new CButton(d->buttonBar,
-                               d->actions.find("restore"),
-                               BarIcon("undo"),
-                               false);
+                             d->actions.find("restore"),
+                             BarIcon("undo"),
+                             false);
     d->buttonLayout->addWidget(d->bRestore);
 
     d->bRemoveCurrent  = new CButton(d->buttonBar,
-                               d->actions.find("remove"),
-                               BarIcon("editdelete"));
+                             d->actions.find("remove"),
+                             BarIcon("editdelete"));
     d->buttonLayout->addWidget(d->bRemoveCurrent);
 
     d->bClose = new CButton(d->buttonBar,
-                            d->actions.find("close"),
-                            BarIcon("exit"));
+                             d->actions.find("close"),
+                             BarIcon("exit"));
     d->buttonLayout->addWidget(d->bClose);
 
 
@@ -1110,6 +1125,23 @@ void ImageView::slotCommentsEdit()
        }
        
     currentAlbum->closeDB();   
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotExifInfo()
+{
+    KExif *exif = new KExif(0);
+    
+    if (exif->loadFile(d->urlCurrent.path()) == 0)
+        exif->show();
+    else {
+        delete exif;
+        KMessageBox::sorry(this,
+                           i18n("This item has no Exif Information"));
+    }
+
 }
 
 
