@@ -264,12 +264,15 @@ void ImageEffect_SuperImpose::slotHelp()
 
 void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
 {
-    KURL url = KFileDialog::getExistingDirectory(m_templatesUrl.path(), kapp->activeWindow(),
+    KURL url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use..."));
     
     if( url.isValid() )
        {
        m_dirSelect->setRootPath(url);
+       m_templatesRootUrl = url;
+       m_templatesUrl = url;
+       populateTemplates();
        }
 }
 
