@@ -79,7 +79,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     m_radiusInput->setRange(0, 10, 1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                                          "1 and above determine the blur matrix radius "
-                                         "that determine how much to blur the image."));
+                                         "that determines how much to blur the image."));
     
     hlay->addWidget(label,1);
     hlay->addWidget(m_radiusInput, 5);

@@ -79,7 +79,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_radiusInput->setRange(0, 10, 1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                                          "1 and above determine the sharpen matrix radius "
-                                         "that determine how much to sharp the image."));
+                                         "that determines how much to sharpen the image."));
     
     hlay->addWidget(label,1);
     hlay->addWidget(m_radiusInput, 5);

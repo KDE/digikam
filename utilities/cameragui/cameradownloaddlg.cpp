@@ -196,8 +196,8 @@ void CameraDownloadDlg::slotResult(KIO::Job* job)
 {
     if (job->error())
     {
-        QString msg(i18n("The following error occured. "
-                         "Would you like to continue?\n"));
+        QString msg(i18n("The following error occurred; "
+                         "would you like to continue?\n"));
         msg += job->errorString();
         
         if (KMessageBox::warningContinueCancel(this, msg)

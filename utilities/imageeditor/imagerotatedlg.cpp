@@ -53,7 +53,7 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);
     m_angleInput->setValue(0.0);
     QWhatsThis::add( m_angleInput, 
-                     i18n("<p>An angle in degrees to apply to the image."));
+                     i18n("<p>An angle in degrees by which to rotate the image."));
     topLayout->addWidget(label, 0, 0);
     topLayout->addWidget(m_angleInput, 0, 1);
 }
