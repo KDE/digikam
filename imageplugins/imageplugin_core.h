@@ -47,7 +47,6 @@ public:
 private:
 
     KAction     *m_redeyeAction;
-    KActionMenu *m_colorsAction;
         
 private slots:
 

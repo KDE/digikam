@@ -67,43 +67,33 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setEnabled(false);
     
-    m_colorsAction = new KActionMenu(i18n("&Colors"), "blend",
-                                     actionCollection(),
-                                     "implugcore_colors");
-    m_colorsAction->setDelayed(false);
-
-    m_colorsAction->insert( 
-                new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
+    new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
                 this, SLOT(slotBCG()),
-                actionCollection(), "implugcore_bcg") );
-                        
-    m_colorsAction->insert(
-                new KAction(i18n("Hue/Saturation/Lightness..."), 0, 
+                actionCollection(), "implugcore_bcg");
+
+    new KAction(i18n("Hue/Saturation/Lightness..."), 0, 
                 this, SLOT(slotHSL()),
-                actionCollection(), "implugcore_hsl") );
-    
-    m_colorsAction->insert(
-                new KAction(i18n("Color balance..."), 0, 
+                actionCollection(), "implugcore_hsl");                
+
+    new KAction(i18n("Color balance..."), 0, 
                 this, SLOT(slotRGB()),
-                actionCollection(), "implugcore_rgb") );
+                actionCollection(), "implugcore_rgb");                
 
-    m_colorsAction->insert(new KActionSeparator());  
-                
-    m_colorsAction->insert(
-                new KAction(i18n("Normalize"), 0, 
+    new KAction(i18n("Normalize"), 0, 
                 this, SLOT(slotNormalize()),
-                actionCollection(), "implugcore_normalize") );
+                actionCollection(), "implugcore_normalize");                
 
-    m_colorsAction->insert(
-                new KAction(i18n("Equalize"), 0, 
+    new KAction(i18n("Equalize"), 0, 
                 this, SLOT(slotEqualize()),
-                actionCollection(), "implugcore_equalize") );                
-    
-    m_colorsAction->insert(
-                new KAction(i18n("Auto levels"), 0, 
+                actionCollection(), "implugcore_equalize");                
+
+    new KAction(i18n("Auto levels"), 0, 
                 this, SLOT(slotAutoLevels()),
-                actionCollection(), "implugcore_autolevels") );   
-                    
+                actionCollection(), "implugcore_autolevels");                
+
+    //-------------------------------                
+    // Image menu actions.
+                                    
     new KAction(i18n("Histogram..."), 0, 
                 this, SLOT(slotHistogramViewer()),
                 actionCollection(), "implugcore_histogramviewer");
@@ -136,6 +126,14 @@ QStringList ImagePlugin_Core::guiDefinition() const
 
     guiDef.append("MenuBar/Menu/&Image/Image/Action/implugcore_histogramviewer/ ");
 
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_bcg/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_hsl/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_rgb/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Separator/ /  ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_normalize/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_equalize/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_autolevels/ ");
+    
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
