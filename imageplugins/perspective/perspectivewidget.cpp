@@ -154,8 +154,8 @@ QRect PerspectiveWidget::getTargetSize(void)
     perspectiveArea.putPoints( 0, 4, 
                                getTopLeftCorner().x(), getTopLeftCorner().y(),
                                getTopRightCorner().x(), getTopRightCorner().y(),
-                               getBottomLeftCorner().x(), getBottomLeftCorner().y(),
-                               getBottomRightCorner().x(), getBottomRightCorner().y() );
+                               getBottomRightCorner().x(), getBottomRightCorner().y(),
+                               getBottomLeftCorner().x(), getBottomLeftCorner().y() );
     
     return perspectiveArea.boundingRect();
 }
@@ -210,9 +210,9 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
     // Perform perspective adjustment.
     
     m_transformedCenter = buildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_origW, m_origH),
-                                                  getTopLeftCorner(), getTopRightCorner(), 
-                                                  getBottomLeftCorner(), getBottomRightCorner(), 
-                                                  data, newData);
+                                           getTopLeftCorner(), getTopRightCorner(), 
+                                           getBottomLeftCorner(), getBottomRightCorner(), 
+                                           data, newData);
 
     // Perform an auto-croping around the image.
             
@@ -328,12 +328,11 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              unsablePoints.putPoints(0, 7, 
                                      m_w-1, m_h-1,
                                      0, m_h-1, 
-                                     0, m_bottomLeftPoint.y(),
-                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
-                                     m_topRightPoint.x(), m_topRightPoint.y(),
-                                     m_topRightPoint.x(), 0,
-                                     m_w-1, 0
-                                     );
+                                     0, m_bottomLeftPoint.y()-10,
+                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y()-10,
+                                     m_topRightPoint.x()-10, m_topRightPoint.y(),
+                                     m_topRightPoint.x()-10, 0,
+                                     m_w-1, 0 );
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -347,12 +346,11 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              unsablePoints.putPoints(0, 7,
                                      0, m_h-1, 
                                      0, 0,
-                                     m_topLeftPoint.x(), 0,
-                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
-                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
-                                     m_w-1, m_bottomRightPoint.y(),
-                                     m_w-1, m_h-1
-                                     );
+                                     m_topLeftPoint.x()+10, 0,
+                                     m_topLeftPoint.x()+10, m_topLeftPoint.y(),
+                                     m_bottomRightPoint.x(), m_bottomRightPoint.y()-10,
+                                     m_w-1, m_bottomRightPoint.y()-10,
+                                     m_w-1, m_h-1);
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -366,12 +364,11 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              unsablePoints.putPoints(0, 7,
                                      m_w-1, 0,
                                      m_w-1, m_h-1, 
-                                     m_bottomRightPoint.x(), m_h-1,
-                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
-                                     m_topLeftPoint.x(), m_topLeftPoint.y(), 
+                                     m_bottomRightPoint.x()-10, m_h-1,
+                                     m_bottomRightPoint.x()-10, m_bottomRightPoint.y()+10,
+                                     m_topLeftPoint.x(), m_topLeftPoint.y()+10, 
                                      0, m_topLeftPoint.y(),
-                                     0, 0
-                                     );
+                                     0, 0);
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -385,12 +382,11 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              unsablePoints.putPoints(0, 7,
                                      0, 0,
                                      m_w-1, 0,
-                                     m_w-1, m_topRightPoint.y(),                                      
-                                     m_topRightPoint.x(), m_topRightPoint.y(), 
-                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
-                                     m_bottomLeftPoint.x(), m_w-1,
-                                     0, m_w-1
-                                     );
+                                     m_w-1, m_topRightPoint.y()+10,                                      
+                                     m_topRightPoint.x(), m_topRightPoint.y()+10, 
+                                     m_bottomLeftPoint.x()+10, m_bottomLeftPoint.y(),
+                                     m_bottomLeftPoint.x()+10, m_w-1,
+                                     0, m_w-1);
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
