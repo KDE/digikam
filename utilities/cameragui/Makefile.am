@@ -5,8 +5,9 @@ noinst_LTLIBRARIES = libcameragui.la
 libcameragui_la_SOURCES = cameraui.cpp   cameraiconview.cpp  \
 			cameraiconitem.cpp cameracontroller.cpp \
 			dirselectdialog.cpp animwidget.cpp \
-			renamecustomizer.cpp gpcamera.cpp gpiteminfo.cpp \
-			gpiteminfodlg.cpp camerainfodialog.cpp \
+			renamecustomizer.cpp  \
+			dkcamera.cpp gpcamera.cpp umscamera.cpp \
+			gpiteminfo.cpp gpiteminfodlg.cpp camerainfodialog.cpp \
 			exifrotate.cpp transupp.cpp 
 
 libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 

@@ -21,16 +21,15 @@
 #ifndef GPCAMERA_H
 #define GPCAMERA_H
 
-#include <qstring.h>
-#include <qstringlist.h>
-
-#include "gpiteminfo.h"
+#include "dkcamera.h"
 
 class QImage;
 class GPCameraPrivate;
 class GPStatus;
 
-class GPCamera
+// Gphoto2 camera Implementation of abstract type DKCamera
+
+class GPCamera : public DKCamera
 {
 
 public:

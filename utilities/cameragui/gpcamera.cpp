@@ -84,6 +84,7 @@ bool GPStatus::cancel = false;
 GPCamera::GPCamera(const QString& model,
                    const QString& port,
                    const QString& path)
+    : DKCamera(model, port, path)
 {
     status = 0;
     

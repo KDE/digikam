@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include <typeinfo>
 #include <libkexif/kexifdialog.h>
 
 extern "C"
@@ -49,6 +50,7 @@ extern "C"
 
 #include <imagewindow.h>
 #include "gpcamera.h"
+#include "umscamera.h"
 #include "exifrotate.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
@@ -116,7 +118,7 @@ public:
 
     QWidget*               parent;
     CameraThread*          thread;
-    GPCamera*              camera;
+    DKCamera*              camera;
     MTQueue<CameraCommand> cmdQueue;
     QTimer*                timer;
     bool                   close;
@@ -253,13 +255,15 @@ void CameraThread::run()
                                     thumbnail);
 
             if (!thumbnail.isNull())
+            {
                 thumbnail = thumbnail.smoothScale(128,128,QImage::ScaleMin);
         
-            CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
-            event->map.insert("folder", QVariant(folder));
-            event->map.insert("file", QVariant(file));
-            event->map.insert("thumbnail", QVariant(thumbnail));
-            QApplication::postEvent(parent, event);
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("thumbnail", QVariant(thumbnail));
+                QApplication::postEvent(parent, event);
+            }
 
             break;
         }
@@ -483,7 +487,11 @@ CameraController::CameraController(QWidget* parent, const QString& model,
     d->skipAll       = false;
     d->downloadTotal = 0;
 
-    d->camera = new GPCamera(model, port, path);
+    if (model.lower() == "directory browse")
+        d->camera = new UMSCamera(model, port, path);
+    else
+        d->camera = new GPCamera(model, port, path);
+        
     d->thread = new CameraThread(this);
     d->timer  = new QTimer();
 
@@ -787,7 +795,22 @@ void CameraController::slotProcessNext()
     QString folder;
     QString file;
     QString dest;
-    
+
+    if ((cmd->action == CameraCommand::gp_exif) &&
+        (typeid(*(d->camera)) == typeid(UMSCamera)))
+    {
+        folder = QDeepCopy<QString>(cmd->map["folder"].asString());
+        file   = QDeepCopy<QString>(cmd->map["file"].asString());
+
+        KExifDialog exif(d->parent);
+        exif.loadFile(folder + "/" + file);
+        exif.exec();
+
+        d->cmdQueue.dequeue();
+        d->timer->start(50, false);
+        return;
+    }
+        
     if (cmd->action == CameraCommand::gp_download)
     {
         folder = QDeepCopy<QString>(cmd->map["folder"].asString());

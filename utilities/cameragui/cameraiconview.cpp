@@ -107,6 +107,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
         return;
 
     item->setPixmap(pixmap);
+    item->repaint();
 }
 
 void CameraIconView::slotDownloadNameChanged()
