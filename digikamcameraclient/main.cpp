@@ -156,7 +156,7 @@ int main(int argc, char **argv)
     // register ourselves as a dcop client
     app.dcopClient()->registerAs(app.name(), false);
 
-    DigikamCameraClient *client = new DigikamCameraClient;
+    new DigikamCameraClient;
 
     return app.exec();
 }

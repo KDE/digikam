@@ -100,6 +100,7 @@ unsigned int GPStatus::progress_start_func(GPContext *,
 
   target = _target;
 
+  return 0;
 }
 
 void GPStatus::progress_update_func(GPContext *,

@@ -206,7 +206,7 @@ void SetupGeneral::slotChangeAlbumPath()
             albumPathEdit->text(),
             this);
 
-    if (KURL(result).cmp(KURL(QDir::homeDirPath()), true)) {
+    if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) {
         KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as Albums library."));
         return;
     }

@@ -28,7 +28,7 @@
 #include <krun.h>
 #include <kservice.h>
 #include <kfiledialog.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kdirlister.h>
 #include <kio/job.h>
@@ -158,7 +158,7 @@ void CameraUIView::setCurrentAlbum(const QString& album)
                  downloadAlbumBox_->text(i));
         KURL url2(libraryPath_ + QString("/") +
                   currentAlbum_);
-        if (url1.cmp(url2, true)) {
+        if (url1.equals(url2, true)) {
             downloadAlbumBox_->setCurrentItem(i);
             return;
         }
@@ -522,9 +522,10 @@ void CameraUIView::slotCameraUpload()
 
         while (container_->findItem(folderItem->folderPath(),
                                     uploadName)) {
-            QString msg(i18n("Camera Folder '%1' contains item '%2'\n Please, enter New Name").arg(folderItem->folderName()).arg(uploadName));
+            QString msg(i18n("Camera Folder '%1' contains item '%2'\n Please, enter New Name")
+                        .arg(folderItem->folderName()).arg(uploadName));
             uploadName =
-                KLineEditDlg::getText(msg,uploadName,&ok,this);
+                KInputDialog::getText("",msg,uploadName,&ok,this);
             if (!ok) return;
         }
 
@@ -707,7 +708,8 @@ void CameraUIView::slotCreateNewAlbum()
     
     bool ok;
     QString newDir =
-        KLineEditDlg::getText(i18n("Enter New Album Name: "),
+        KInputDialog::getText(i18n("New Album Name"),
+                              i18n("Enter New Album Name: "),
                               "", &ok, this);
     if (!ok) return;
 
@@ -750,7 +752,7 @@ void CameraUIView::slotNewAlbums(const KFileItemList& fileItemList)
                  downloadAlbumBox_->text(i));
         KURL url2(libraryPath_ + QString("/") +
                   currentAlbum_);
-        if (url1.cmp(url2, true)) {
+        if (url1.equals(url2, true)) {
             downloadAlbumBox_->setCurrentItem(i);
             return;
         }
@@ -764,7 +766,7 @@ void CameraUIView::slotDeleteAlbum(KFileItem* fileItem)
     for (int i = 0; i < downloadAlbumBox_->count(); i++) {
         KURL url(libraryPath_ + QString("/") +
                  downloadAlbumBox_->text(i));
-        if (fileItem->url().cmp(url, true)) {
+        if (fileItem->url().equals(url, true)) {
             downloadAlbumBox_->removeItem(i);
             return;
         }

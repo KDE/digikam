@@ -54,6 +54,7 @@
 #include <kurl.h>
 #include <kurldrag.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -448,22 +449,22 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     // Merge in the plugin actions ----------------------------
 
-    #ifdef HAVE_KIPI
+#ifdef HAVE_KIPI
     const QPtrList<KAction>& mergeActions = DigikamApp::getinstance()->menuMergeActions();
-    #else
+#else
     const QPtrList<KAction>& mergeActions = DigikamPluginManager::instance()->menuMergeActions();
-    #endif
+#endif
     
     QPtrListIterator<KAction> it(mergeActions);
     KAction *action;
     bool count = 0;
     
     while ( (action = it.current()) != 0 ) 
-        {
+    {
         action->plug(&popmenu);
         ++it;
         count++;
-        }
+    }
 
     // Don't insert a separator if we didn't plug in any actions
     
@@ -884,8 +885,8 @@ void AlbumIconView::updateBanner()
     QDate date = d->currentAlbum->getDate();
 
     d->albumDate = i18n("%1 %2 - %3 Items")
-                   .arg(KGlobal::locale()->monthName(date.month()))
-                   .arg(QString::number(date.year()))
+                   .arg(KGlobal::locale()->calendar()->monthName(date, true))
+                   .arg(KGlobal::locale()->calendar()->year(date))
                    .arg(QString::number(count()));
 
     calcBanner();
@@ -931,7 +932,7 @@ void AlbumIconView::startDrag()
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    QUriDrag* drag = KURLDrag::newDrag( urlList, this );
+    KURLDrag* drag = new KURLDrag( urlList, this);
     drag->setPixmap(pix);
     drag->dragCopy();
 }

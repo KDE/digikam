@@ -92,7 +92,7 @@ int ExifRestorer::readFile(const QString& filename, ReadMode mode)
             section->data[0] =  lh;
             section->data[1] =  ll;
             filestream.read((char*)&(section->data[2]), section->size-2);
-            if (filestream.gcount() != (unsigned)section->size-2) {
+            if ((section->size-2) != (unsigned int)filestream.gcount()) {
                 qWarning("Premature File End");
                 return -1;
             }

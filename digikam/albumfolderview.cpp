@@ -41,6 +41,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kurldrag.h>
 #include <kmessagebox.h>
@@ -48,7 +49,7 @@
 #include <kpropsdlg.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 // Local includes.
 
@@ -241,7 +242,7 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(AlbumFolderItem* folderItem)
     QDate date = folderItem->albumInfo()->getDate();
     
     QString timeString = QString::number(date.year()) + ", " +
-                         KGlobal::locale()->monthName(date.month());
+                         KGlobal::locale()->calendar()->monthName(date, false);
 
     AlbumFolderItem* parentItem = 0;
     
@@ -366,8 +367,9 @@ void AlbumFolderView::albumNew()
         }
 
     bool ok;
-    QString newDir = KLineEditDlg::getText(i18n("Enter New Album Name: "),
-                                                "", &ok, this);
+    QString newDir = KInputDialog::getText(i18n("New Album Name"),
+                                           i18n("Enter New Album Name: "),
+                                           QString::null, &ok, this);
     if (!ok) return;
     
     KURL newAlbumURL = settings->getAlbumLibraryPath();

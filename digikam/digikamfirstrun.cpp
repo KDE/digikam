@@ -141,7 +141,7 @@ void DigikamFirstRun::slotChangePath()
             pathEdit_->text(),
             this);
 
-    if (KURL(result).cmp(KURL(QDir::homeDirPath()), true)) {
+    if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) {
         KMessageBox::sorry(0, i18n("Cannot Use Home Directory as Album Library"));
         return;
     }

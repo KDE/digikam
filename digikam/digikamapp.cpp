@@ -123,10 +123,12 @@ DigikamApp* DigikamApp::getinstance()
     return m_instance;
 }
 
+#ifdef HAVE_KIPI
 const QPtrList<KAction>& DigikamApp::menuMergeActions()
 {
     return m_kipiImageActions;
 }
+#endif
 
 bool DigikamApp::queryClose()
 {

@@ -43,7 +43,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 // // Local includes.
 
@@ -150,8 +150,9 @@ void SetupCollections::slotAddCollection()
 {
     bool ok;
     QString newCollection =
-        KLineEditDlg::getText(i18n("Enter New Collection Name: "),
-                              "", &ok, this);
+        KInputDialog::getText(i18n("New Collection Name"),
+                              i18n("Enter New Collection Name: "),
+                              QString::null, &ok, this);
     if (!ok) return;
 
     bool found = false;
