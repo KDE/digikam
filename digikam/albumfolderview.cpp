@@ -722,6 +722,8 @@ void AlbumFolderView::albumEdit(PAlbum* album)
             if (!albumMan_->renamePAlbum(album, title, errMsg))
                 KMessageBox::error(0, errMsg);
         }
+
+	emit signalAlbumModified();
     }
 }
 

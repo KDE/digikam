@@ -122,6 +122,9 @@ void DigikamView::setupConnections()
 
     connect(mFolderView, SIGNAL(signalInFocus()),
             SLOT(slotFolderViewInFocus()));
+
+    connect(mFolderView, SIGNAL(signalAlbumModified()),
+	    mIconView, SLOT(slotAlbumModified()));
 }
 
 void DigikamView::slot_sortAlbums(int order)

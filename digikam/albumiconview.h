@@ -75,7 +75,6 @@ public:
     QStringList itemTagPaths(AlbumIconItem* item);
 
     void    refreshIcon(AlbumIconItem* item);
-    void    albumDescChanged();
 
     AlbumIconItem* firstSelectedItem();
     AlbumLister*   albumLister() const;
@@ -172,6 +171,7 @@ public slots:
     void slotDeleteSelectedItems();
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotProperties(AlbumIconItem* item);
+    void slotAlbumModified();
 
 signals:
 

@@ -156,6 +156,7 @@ signals:
 
     void signalTagsAssigned();
     void signalInFocus();
+    void signalAlbumModified();
     
 private slots:
 

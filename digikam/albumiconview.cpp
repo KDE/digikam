@@ -263,12 +263,6 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     }
 }
 
-
-void AlbumIconView::albumDescChanged()
-{
-    updateBanner();
-}
-
 void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
@@ -1859,6 +1853,11 @@ AlbumIconItem* AlbumIconView::findItem(const QPoint& pos)
 AlbumIconItem* AlbumIconView::findItem(const QString& url) const
 {
     return d->itemDict.find(url);    
+}
+
+void AlbumIconView::slotAlbumModified()
+{
+    updateBanner();
 }
 
 void AlbumIconView::slotAssignTag(int tagID)
