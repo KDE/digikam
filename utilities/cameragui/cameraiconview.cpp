@@ -92,7 +92,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)
 {
-    QIconViewItem* item = m_itemDict.find(folder+file);
+    CameraIconViewItem* item = m_itemDict.find(folder+file);
     if (!item)
         return;
 
@@ -103,7 +103,7 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename,
                                   const QPixmap& pixmap)
 {
-    QIconViewItem* item = m_itemDict.find(folder+filename);
+    CameraIconViewItem* item = m_itemDict.find(folder+filename);
     if (!item)
         return;
 

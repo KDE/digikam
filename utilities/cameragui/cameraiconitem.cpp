@@ -182,3 +182,9 @@ QString CameraIconViewItem::getDownloadName() const
 {
     return m_downloadName;
 }
+
+void CameraIconViewItem::setPixmap(const QPixmap& icon)
+{
+    QIconViewItem::setPixmap(icon);
+    calcRect();
+}

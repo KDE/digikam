@@ -40,12 +40,14 @@ public:
 
     GPItemInfo* itemInfo() const
         { return m_itemInfo; }
+
+    virtual void setPixmap(const QPixmap& icon);
     
 protected:
 
-    void calcRect(const QString & text_ = QString::null);
-    void paintItem(QPainter *, const QColorGroup& cg);
-    void paintFocus(QPainter *, const QColorGroup& cg);
+    virtual void calcRect(const QString & text_ = QString::null);
+    virtual void paintItem(QPainter *, const QColorGroup& cg);
+    virtual void paintFocus(QPainter *, const QColorGroup& cg);
     
 private:
 
