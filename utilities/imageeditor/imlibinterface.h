@@ -69,6 +69,7 @@ public:
     int  origWidth();
     int  origHeight();
     bool hasAlpha();    
+    bool exifRotated();
 
     void setSelectedArea(int x, int y, int w, int h);
     void getSelectedArea(int& x, int& y, int& w, int& h);
@@ -104,11 +105,12 @@ private:
 
     bool saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType); 
     bool saveTIFF(const QString& saveFile, bool compress);
-    void ImlibInterface::exifRotate(QString filename);
+    void exifRotate(QString filename);
         
     ImlibInterface();
     ImlibInterfacePrivate *d;
     static ImlibInterface *m_instance;
+    bool m_rotatedOrFlipped;
 };
 
 }

@@ -599,6 +599,11 @@ bool Canvas::minZoom()
     return ((d->zoom - 0.1) <= 0.1);
 }
 
+bool Canvas::exifRotated()
+{
+    return d->im->exifRotated();
+}
+
 void Canvas::slotIncreaseZoom()
 {
     if (d->autoZoom || maxZoom())

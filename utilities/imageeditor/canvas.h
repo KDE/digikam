@@ -54,6 +54,7 @@ public:
         
     bool maxZoom();
     bool minZoom();
+    bool exifRotated();
     int  imageWidth();
     int  imageHeight();
 

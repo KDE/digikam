@@ -689,7 +689,7 @@ void ImageWindow::slotSave()
     else 
         kdWarning() << ("slotSave::No Exif Data Found") << endl;
     
-    if( m_rotatedOrFlipped )
+    if( m_rotatedOrFlipped || m_canvas->exifRotated() )
        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
 
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_urlCurrent,

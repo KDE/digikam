@@ -143,6 +143,8 @@ ImlibInterface::ImlibInterface()
     d->selW = 0;
     d->selH = 0;
     d->zoom = 1.0;
+        
+    m_rotatedOrFlipped = false;
 }
 
 ImlibInterface::~ImlibInterface()
@@ -210,6 +212,12 @@ bool ImlibInterface::load(const QString& filename)
 }
 
 
+bool ImlibInterface::exifRotated()
+{
+    return m_rotatedOrFlipped;
+}
+
+
 void ImlibInterface::exifRotate(QString filename)
 {
    // Rotate image based on EXIF rotate tag
@@ -256,6 +264,8 @@ void ImlibInterface::exifRotate(QString filename)
                 rotate270();
                 break;
         }
+
+        m_rotatedOrFlipped = true;
     }
 
     delete exifData;
