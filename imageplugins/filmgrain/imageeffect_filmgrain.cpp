@@ -144,7 +144,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Film sensibility (ASA):"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Film sensibility (ISO):"), plainPage());
     
     m_sensibilitySlider = new QSlider(0, 14, 1, 2, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
@@ -154,7 +154,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(800) );
-    whatsThis = i18n("<p>Set here the film sensitivity in ASA to use for simulating the film graininess.");
+    whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
