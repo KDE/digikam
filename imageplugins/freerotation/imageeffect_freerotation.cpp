@@ -297,7 +297,6 @@ void ImageEffect_FreeRotation::slotOk()
     int d3 = abs((int)((double)(w)*sin( angle * RAD2DEGCONST ) ));
     int d4 = abs((int)((double)(h)*cos( angle * RAD2DEGCONST ) ));
     
-    imlib_free_image();
     imlib_context_set_image(im);
     
     // Get the original image center.
@@ -311,7 +310,7 @@ void ImageEffect_FreeRotation::slotOk()
 
     imlib_context_set_image(im2);
     
-    uint* ptr = imlib_image_get_data_for_reading_only();
+    uint* ptr  = imlib_image_get_data_for_reading_only();
     int   newW = imlib_image_get_width();
     int   newH = imlib_image_get_height();
 
