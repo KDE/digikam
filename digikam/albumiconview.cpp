@@ -558,16 +558,17 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 
 void AlbumIconView::slot_showExifInfo(AlbumIconItem* item)
 {
-    if (!item) return;
+    if ( !item ) return;
 
     KExif *exif = new KExif(0);
-    if (exif->loadFile(item->fileItem()->url().path()) == 0)
+    
+    if ( exif->loadFile(item->fileItem()->url().path()) == 0 )
         exif->show();
-    else {
+    else 
+        {
         delete exif;
-        KMessageBox::sorry(0,
-                           i18n("This item has no Exif Information"));
-    }
+        KMessageBox::sorry(0, i18n("This item has no Exif Information"));
+        }
 }
 
 void AlbumIconView::slotRename(AlbumIconItem* item)
