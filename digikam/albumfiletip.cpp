@@ -133,17 +133,19 @@ void AlbumFileTip::updateText()
 {
     QString tip;
 
-    QString headBeg("<tr bgcolor=\"orange\"><nobr><td colspan=2>"
-                    "<font size=-2 color=\"black\"><i>");
-    QString headEnd("</i></font></td></nobr</tr>");
+    QString headBeg("<tr bgcolor=\"orange\"><td colspan=2>"
+                    "<nobr><font size=-2 color=\"black\"><i>");
+    QString headEnd("</i></font></nobr></td></nobr</tr>");
 
-    QString cellBeg("<tr><td><font size=-1 color=\"black\">");
-    QString cellMid("</font></td><td><font size=-1 color=\"black\">");
-    QString cellEnd("</font></td></tr>");
+    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellMid("</font></nobr></td>"
+                    "<td><nobr><font size=-1 color=\"black\">");
+    QString cellEnd("</font></nobr></td></tr>");
 
-    QString cellSpecBeg("<tr><td><font size=-1 color=\"black\">");
-    QString cellSpecMid("</font></td><td><font size=-1 color=\"steelblue\"><i>");
-    QString cellSpecEnd("</i></font></td></tr>");
+    QString cellSpecBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellSpecMid("</font></nobr></td>"
+                        "<td><nobr><font size=-1 color=\"steelblue\"><i>");
+    QString cellSpecEnd("</i></font></nobr></td></tr>");
     
     tip = "<table cellspacing=0 cellpadding=0>";
 
@@ -178,14 +180,19 @@ void AlbumFileTip::updateText()
     if (album)
     {
         tip += cellBeg + i18n("Album:") + cellMid +
-               album->getPrettyURL() + cellEnd;
+               album->getURL().remove(0,1) + cellEnd;
     }
     
     tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +
            m_view->itemComments(m_iconItem) + cellSpecEnd;
-           
+
+    QStringList tagPaths(m_view->itemTagPaths(m_iconItem));
+    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+    {
+        (*it).remove(0,1);
+    }
     tip += cellBeg + i18n("Tags:") + cellMid +
-           m_view->itemTagPaths(m_iconItem).join(", ") + cellEnd;
+           tagPaths.join(",<br>") + cellEnd;
     
     tip += "</table>";
 

@@ -564,6 +564,13 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     if (renamingItem)
         renamingItem->cancelRenameItem();
 
+    // hide tooltip
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    
     // Delete any existing rubber -------------------------------
 
     if ( d->rubber ) {
