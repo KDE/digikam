@@ -33,11 +33,18 @@
 
 class KAction;
 
-namespace Digikam
-{
-class Plugin;
-}
-
+#ifdef HAVE_KIPI                         // libKIPI support.
+   namespace KIPI
+   {
+   class Plugin;
+   }
+#else                                    // DigikamPlugins support.
+   namespace Digikam
+   {
+   class Plugin;
+   }
+#endif
+   
 class DigikamPluginManager : public QObject
 {
 public:
@@ -49,7 +56,13 @@ public:
     void loadPlugins(QStringList list);
     
     static DigikamPluginManager* instance();
-    const  QPtrList<Digikam::Plugin>& pluginList();
+    
+    #ifdef HAVE_KIPI                         // libKIPI support.
+       const  QPtrList<KIPI::Plugin>& pluginList();
+    #else                                    // DigikamPlugins support.   
+       const  QPtrList<Digikam::Plugin>& pluginList();
+    #endif
+    
     const  QPtrList<KAction>&         menuMergeActions();
     
     const  QStringList availablePluginList();
@@ -58,12 +71,23 @@ public:
 private:
 
     static DigikamPluginManager* instance_;
-    QPtrList<Digikam::Plugin>    pluginList_;
+    
+    #ifdef HAVE_KIPI                         // libKIPI support.
+       QPtrList<KIPI::Plugin>    pluginList_;
+    #else                                    // DigikamPlugins support.   
+       QPtrList<Digikam::Plugin>    pluginList_;
+    #endif
+
     QPtrList<KAction>            menuMergeActions_;
     QStringList                  availablePluginList_;
     
     void initAvailablePluginList();
-    Digikam::Plugin* pluginIsLoaded(QString pluginName);
+    
+    #ifdef HAVE_KIPI                         // libKIPI support.
+       KIPI::Plugin* pluginIsLoaded(QString pluginName);
+    #else                                    // DigikamPlugins support.   
+       Digikam::Plugin* pluginIsLoaded(QString pluginName);
+    #endif
 };
 
 #endif // DIGIKAMPLUGINMANAGER_H 

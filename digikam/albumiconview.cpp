@@ -429,6 +429,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     QPtrListIterator<KAction> it(mergeActions);
     KAction *action;
     bool count = 0;
+    
     while ( (action = it.current()) != 0 ) 
         {
         action->plug(&popmenu);
@@ -634,7 +635,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     if (!item) return;
     
     QString currentFileExtension = item->fileItem()->url().fileName().section( '.', -1 );
-    QString imagefilter = settings->getImageFileFilter();
+    QString imagefilter = settings->getImageFileFilter().lower() + settings->getImageFileFilter().upper();
 
     if ( imagefilter.find(currentFileExtension) == -1 )     // If the current item isn't an image file.
        {
