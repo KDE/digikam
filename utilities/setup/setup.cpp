@@ -1,26 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    SETUP.CPP
-//
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/* ============================================================
+ * File   : setup.cpp
+ * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2003-02-03
+ * Description : Digikam setup dialog.
+ * 
+ * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+ 
 // Qt includes.
 
 #include <qtabwidget.h>
@@ -38,14 +37,15 @@
 #include "setupexif.h"
 #include "setupcollections.h"
 #include "setupmime.h"
+#include "setupeditor.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
 #include "setup.h"
 
 
 Setup::Setup(QWidget* parent, const char* name)
-    : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
-                  name, true, true )
+     : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
+                   name, true, true )
 {
     setWFlags(Qt::WDestructiveClose);
     setHelp("setupwindow.anchor", "digikam");
@@ -66,6 +66,10 @@ Setup::Setup(QWidget* parent, const char* name)
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
+    page_editor = addPage(i18n("Editor"), i18n("Image editor settings"),
+                        BarIcon("colorize", KIcon::SizeMedium));
+    editorPage_ = new SetupEditor(page_editor);
+    
     page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
                            BarIcon("run", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
@@ -91,6 +95,7 @@ void Setup::slotOkClicked()
     mimePage_->applySettings();
     cameraPage_->applySettings();
     exifPage_->applySettings();
+    editorPage_->applySettings();
     close();
 }
 

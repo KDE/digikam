@@ -1,8 +1,8 @@
 /* ============================================================
- * File  : setupmime.h
+ * File  : setupeditor.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2003-05-03
- * Description : mime types setup tab.
+ * Date  : 2004-08-03
+ * Description : setup tab for ImageEditor.
  * 
  * Copyright 2004 by Gilles Caulier
  *
@@ -19,23 +19,24 @@
  * 
  * ============================================================ */
 
-#ifndef SETUPMIME_H
-#define SETUPMIME_H
+#ifndef SETUPEDITOR_H
+#define SETUPEDITOR_H
 
 // Qt includes.
 
 #include <qwidget.h>
 
-class QLineEdit;
+class KColorButton;
+class KIntNumInput;
 
-class SetupMime : public QWidget
+class SetupEditor : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupMime(QWidget* parent = 0);
-    ~SetupMime();
+    SetupEditor(QWidget* parent = 0);
+    ~SetupEditor();
 
     void applySettings();
 
@@ -43,10 +44,8 @@ private:
 
     void readSettings();
 
-    QLineEdit *m_imageFileFilterEdit;
-    QLineEdit *m_movieFileFilterEdit;
-    QLineEdit *m_audioFileFilterEdit;
-    QLineEdit *m_rawFileFilterEdit;
+    KColorButton *m_backgroundColor;
+    KIntNumInput *m_JPEGcompression;
 };
 
-#endif // SETUPMIME_H 
+#endif // SETUPEDITOR_H 

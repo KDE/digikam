@@ -26,6 +26,7 @@
 // Qt includes.
 
 #include <qscrollview.h>
+#include <qcolor.h>
 
 class QString;
 class QPixmap;
@@ -47,9 +48,9 @@ public:
 
     void load(const QString& filename);
     void preload(const QString& filename);
-    int  save(const QString& filename);
-    int  saveAs(const QString& filename, const QString& mimeType);
-    int  saveAsTmpFile(const QString& filename, const QString& mimeType=0);
+    int  save(const QString& filename, int JPEGcompression);
+    int  saveAs(const QString& filename, int JPEGcompression, const QString& mimeType);
+    int  saveAsTmpFile(const QString& filename, int JPEGcompression, const QString& mimeType=0);
         
     bool maxZoom();
     bool minZoom();
@@ -58,6 +59,8 @@ public:
 
     void resizeImage(int w, int h);
     void rotateImage(double angle);
+    
+    QColor m_backgroundColor;
         
 protected:
     

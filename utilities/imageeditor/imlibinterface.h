@@ -23,6 +23,8 @@
 #ifndef IMLIBINTERFACE_H
 #define IMLIBINTERFACE_H
 
+// Qt includes.
+
 #include <qobject.h>
 
 class QWidget;
@@ -48,8 +50,8 @@ public:
     bool load(const QString& filename);
     void preload(const QString& filename);
     bool restore();
-    bool save(const QString& file);
-    bool saveAs(const QString& file, const QString& mimeType=0);
+    bool save(const QString& file, int JPEGcompression);
+    bool saveAs(const QString& file, int JPEGcompression, const QString& mimeType=0);
         
     void zoom(double val);
 
@@ -100,7 +102,7 @@ signals:
     
 private:
 
-    bool saveAction(const QString& saveFile, const QString& mimeType); 
+    bool saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType); 
     bool saveTIFF(const QString& saveFile, bool compress);
         
     ImlibInterface();

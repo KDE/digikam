@@ -77,7 +77,7 @@ ImageWindow* ImageWindow::instance()
 ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow::ImageWindow()
-    : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
+           : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
 {
     m_instance           = this;
     m_rotatedOrFlipped   = false;
@@ -255,10 +255,21 @@ void ImageWindow::readSettings()
     bool autoZoom;
     
     config->setGroup("ImageViewer Settings");
+    
+    // GUI options.
     width = config->readNumEntry("Width", 500);
     height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
     m_fullScreen = config->readBoolEntry("FullScreen", false);
+    
+    // Background color.
+    QColor *Black = new QColor(Qt::black);
+    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor", Black);
+    delete Black;
+
+    // JPEG compression value.
+    m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
+        
     //config->setGroup("EXIF Settings");
     //setExifOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
@@ -601,7 +612,7 @@ void ImageWindow::slotFilePrint()
             ok = true;
             tmpFile.setAutoDelete( true );
             
-            if ( m_canvas->saveAsTmpFile(tmpFile.name(), "png") )
+            if ( m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, "png") )
                {
                ImagePrint *printOperations = new ImagePrint(tmpFile.name(),
                                                             printer,
@@ -626,7 +637,7 @@ void ImageWindow::slotSave()
 {
     QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
     
-    bool result = m_canvas->saveAsTmpFile(tmpFile);
+    bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression);
 
     if (result == false) 
         {
@@ -713,7 +724,7 @@ void ImageWindow::slotSaveAs()
  
     QString tmpFile = locateLocal("tmp", m_newFile.filename());
      
-    int result = m_canvas->saveAsTmpFile(tmpFile, format.lower());
+    int result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, format.lower());
  
     if (result == false) 
        {

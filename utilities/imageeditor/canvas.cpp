@@ -82,9 +82,12 @@ public:
 };
 
 Canvas::Canvas(QWidget *parent)
-    : QScrollView(parent)
+      : QScrollView(parent)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
+    
+    // Background color per default = black.
+    m_backgroundColor.setRgb( 0, 0, 0 );     
 
     d = new CanvasPrivate;
 
@@ -104,7 +107,7 @@ Canvas::Canvas(QWidget *parent)
     d->qpix   = 0;
     d->paintTimer = new QTimer;
     d->stripPaintTimer = new QTimer;
-
+    
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
     p.fillRect(0, 0, 8, 8, QColor(144,144,144));
@@ -192,23 +195,23 @@ void Canvas::preload(const QString& filename)
     d->im->preload(filename);
 }
 
-int Canvas::save(const QString& filename)
+int Canvas::save(const QString& filename, int JPEGcompression)
 {
-    int result = d->im->save(filename);
+    int result = d->im->save(filename, JPEGcompression);
     if ( result == true ) emit signalChanged(false);
     return result;
 }
 
-int Canvas::saveAs(const QString& filename, const QString& mimeType)
+int Canvas::saveAs(const QString& filename, int JPEGcompression, const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, mimeType);
+    int result = d->im->saveAs(filename, JPEGcompression, mimeType);
     if ( result == true ) emit signalChanged(false);
     return result;
 }
 
-int Canvas::saveAsTmpFile(const QString& filename, const QString& mimeType)
+int Canvas::saveAsTmpFile(const QString& filename, int JPEGcompression, const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, mimeType);
+    int result = d->im->saveAs(filename, JPEGcompression, mimeType);
     return result;
 }
 
@@ -383,7 +386,7 @@ void Canvas::paintViewportRect(const QRect& vr, bool aa, bool mask)
 
     QPainter p(d->qpix);
     p.setClipRegion(clipRegion);
-    p.fillRect(0, 0, cr.width(), cr.height(), colorGroup().base());
+    p.fillRect(0, 0, cr.width(), cr.height(), m_backgroundColor);
     p.end();
 
     bitBlt(viewport(), vr.x(), vr.y(), d->qpix, 0, 0,

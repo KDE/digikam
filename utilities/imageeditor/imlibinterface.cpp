@@ -98,7 +98,7 @@ public:
 };
 
 ImlibInterface::ImlibInterface()
-    : QObject()
+              : QObject()
 {
     m_instance = this;
     
@@ -223,29 +223,29 @@ bool ImlibInterface::restore()
     return ( load(d->filename) );
 }
 
-bool ImlibInterface::save(const QString& file)
+bool ImlibInterface::save(const QString& file, int JPEGcompression)
 {
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
     
     QString currentMimeType(imlib_image_format());
 
-    bool result = saveAction(file, currentMimeType);
+    bool result = saveAction(file, JPEGcompression, currentMimeType);
     
     imlib_context_pop();
     return result;
 }
 
-bool ImlibInterface::saveAs(const QString& file, const QString& mimeType)
+bool ImlibInterface::saveAs(const QString& file, int JPEGcompression, const QString& mimeType)
 {
     bool result;
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
     if (!mimeType)
-        result = saveAction(file, imlib_image_format());
+        result = saveAction(file, JPEGcompression, imlib_image_format());
     else 
-       result = saveAction(file, mimeType);
+       result = saveAction(file, JPEGcompression, mimeType);
 
     imlib_context_pop();
     return result;    
@@ -714,13 +714,13 @@ void ImlibInterface::putSelectedData(uint* data)
     emit signalRequestUpdate();
 }
 
-bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType) 
+bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType) 
 {
     bool result;
     kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
               << mimeType.ascii() << ")" << endl;
     
-    if (mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF")) 
+    if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
        {
        // Imlib2 uses LZW compression (not available
        // in most distributions) which results
@@ -728,17 +728,16 @@ bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType
        // a different compression algorithm
        
        // Renchi, I use this implemetation temporally until imlib2 support correctly TIFF file format 
-       result = saveTIFF(saveFile, true);        
+       return ( saveTIFF(saveFile, true) );        
        }
     
-    if (!mimeType.isEmpty())
+    if ( !mimeType.isEmpty() )
        imlib_image_set_format(mimeType.ascii()); 
     
-    // Always save jpeg files at 95 % quality without compression
+    // Always save jpeg files with the at 'JPEGcompression' % quality without compression
             
-    if (mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG")) 
-       imlib_image_attach_data_value ("quality", NULL, 95, NULL);
-               
+    if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
+       imlib_image_attach_data_value ("quality", NULL, JPEGcompression, NULL);
             
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 

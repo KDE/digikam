@@ -79,6 +79,8 @@ private:
     bool                 m_fullScreen;
     bool                 m_allowSaving;
     
+    int                  m_JPEGCompression;
+    
     static ImageWindow*  m_instance;
 
 private:

@@ -1,26 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    SETUP.H
-//
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/* ============================================================
+ * File   : setup.h
+ * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2003-02-03
+ * Description : Digikam setup dialog.
+ * 
+ * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+ 
 #ifndef SETUP_H
 #define SETUP_H
 
@@ -29,10 +28,12 @@
 #include <kdialogbase.h>
 
 class QFrame;
+
 class SetupGeneral;
 class SetupExif;
 class SetupCollections;
 class SetupMime;
+class SetupEditor;
 class SetupPlugins;
 class SetupCamera;
 
@@ -53,6 +54,7 @@ private:
     QFrame           *page_exif;
     QFrame           *page_collections;
     QFrame           *page_mime;
+    QFrame           *page_editor;
     QFrame           *page_plugins;
     QFrame           *page_camera;
     
@@ -60,6 +62,7 @@ private:
     SetupExif        *exifPage_;
     SetupCollections *collectionsPage_;
     SetupMime        *mimePage_;
+    SetupEditor      *editorPage_;
     SetupCamera      *cameraPage_;
 
 private slots:
