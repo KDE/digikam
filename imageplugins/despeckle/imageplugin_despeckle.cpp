@@ -1,5 +1,5 @@
 /* ============================================================
- * File  : imageplugin_despeckle.h
+ * File  : imageplugin_despeckle.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-24
  * Description : 
