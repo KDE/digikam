@@ -164,10 +164,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, gbox );
+    m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
@@ -332,12 +334,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
-                                                      "will be colored black. This will not have an effect on the final rendering."));
+                                                      "will be over-colored. This will not have an effect on the final rendering."));
 
-    m_WBSaturedIndicatorBox = new QCheckBox(i18n("White Balance Saturation Indicator"), gbox4);
-    QWhatsThis::add( m_WBSaturedIndicatorBox, i18n("<p>If you enable this option, over-saturated pixels from the target image preview "
-                                                   "will be over-colored. This will not have an effect on the final rendering."));
-    
     topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
@@ -367,9 +365,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));                        
     
-    connect(m_WBSaturedIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                        
-            
     // Correction Filter Slider controls.
                         
     connect(m_temperaturePresetCB, SIGNAL(activated(int)),
@@ -427,8 +422,8 @@ void ImageEffect_WhiteBalance::slotUser1()
     slotTemperaturePresetChanged(Neutral);
     
     m_previewOriginalWidget->resetSpotPosition();    
-    m_channelCB->setCurrentItem(RedChannel);
-    slotChannelChanged(RedChannel);
+    m_channelCB->setCurrentItem(LuminosityChannel);
+    slotChannelChanged(LuminosityChannel);
     
     m_histogramWidget->reset();
     
@@ -657,6 +652,11 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 {
     switch(channel)
        {
+       case LuminosityChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          break;
+ 
        case RedChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
           m_hGradient->setColors( QColor( "red" ), QColor( "black" ) );
@@ -702,10 +702,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
     m_overExp     = m_overExposureIndicatorBox->isChecked();
-    m_WBind       = m_WBSaturedIndicatorBox->isChecked();
-    
-    if (m_overExp) m_WBSaturedIndicatorBox->setEnabled(true);
-    else m_WBSaturedIndicatorBox->setEnabled(false);
+    m_WBind       = m_overExp;
     
     // Set preview lut.
     setRGBmult();

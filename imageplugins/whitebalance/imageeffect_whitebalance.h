@@ -94,7 +94,8 @@ private:
     
     enum ColorChannel
     {
-    RedChannel=0,
+    LuminosityChannel=0,
+    RedChannel,
     GreenChannel,
     BlueChannel
     };
@@ -130,7 +131,6 @@ private:
     QComboBox                    *m_scaleCB;  
     
     QCheckBox                    *m_overExposureIndicatorBox;
-    QCheckBox                    *m_WBSaturedIndicatorBox;
     
     QLabel                       *m_temperatureLabel;
     QLabel                       *m_darkLabel;
