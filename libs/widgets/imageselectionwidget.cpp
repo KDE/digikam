@@ -481,13 +481,15 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton )
+    if ( e->state() == Qt::LeftButton && 
+         m_rect.contains(e->x(), e->y()) )
        {
        if ( m_currentResizing == ResizingNone )
           {
+          setCursor ( KCursor::sizeAllCursor() );
           int newxpos = e->x();
           int newypos = e->y();
-       
+               
           m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
 
           updatePixmap();
