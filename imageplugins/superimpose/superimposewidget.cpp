@@ -49,7 +49,6 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_pixmap     = new QPixmap(w, h);
-    m_zoomFactor = 100;
     m_editMode   = MOVE;
     
     m_iface  = new Digikam::ImageIface(0, 0);
@@ -67,7 +66,7 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     setMouseTracking(true);
 
     m_rect = QRect(0, 0, w, h);
-    m_currentSelection = QRect(m_w/2 - w/2, m_h/2 - h/2, w, h);
+    resetEdit();
 }
 
 SuperImposeWidget::~SuperImposeWidget()
@@ -87,6 +86,14 @@ QSize SuperImposeWidget::getTemplateSize(void)
 void SuperImposeWidget::makeSuperImpose(QPixmap *target, int w, int h)
 {
     makePixmap(target, w, h);
+}
+
+void SuperImposeWidget::resetEdit(void)
+{
+    m_zoomFactor = 100;
+    m_currentSelection = QRect(m_w/2 - width()/2, m_h/2 - height()/2, width(), height());
+    makePixmap(m_pixmap, width(), height());
+    repaint(false);
 }
 
 void SuperImposeWidget::makePixmap(QPixmap *pixmap, int w, int h)

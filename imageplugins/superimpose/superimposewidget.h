@@ -63,6 +63,7 @@ public:
 
     Digikam::ImageIface* imageIface();
     void  setEditMode(int mode);
+    void  resetEdit(void);
     QRect getCurrentSelection(void);
     QSize getTemplateSize(void);
     void makeSuperImpose(QPixmap *target, int w, int h);

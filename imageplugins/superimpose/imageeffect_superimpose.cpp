@@ -78,14 +78,14 @@ namespace DigikamSuperImposeImagesPlugin
 
 ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
                        : KDialogBase(Plain, i18n("Template Superimpose"),
-                                      Help|User1|Ok|Cancel, Ok,
-                                      parent, 0, true, true,
-                                      i18n("&Reset Values")),
-                          m_parent(parent)
+                                     Help|User1|Ok|Cancel, Ok,
+                                     parent, 0, true, true,
+                                     i18n("&Reset Values")),
+                         m_parent(parent)
 {
     QString whatsThis;
         
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset edition mode to the default settings.") );
     
     // About data and help button.
     
@@ -235,10 +235,7 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 
 void ImageEffect_SuperImpose::slotUser1()
 {
-    blockSignals(true);
-                   
-    
-    blockSignals(false);
+    m_previewWidget->resetEdit();
 } 
 
 void ImageEffect_SuperImpose::slotHelp()
