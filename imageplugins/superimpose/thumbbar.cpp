@@ -469,8 +469,6 @@ void ThumbBarItem::repaint()
     m_view->repaintItem(this);   
 }
 
-#include "thumbbar.moc"
-
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
     : QToolTip(parent->viewport()), m_view(parent)
 {
@@ -522,3 +520,5 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
     
     tip(r, tipText);
 }
+
+#include "thumbbar.moc"
