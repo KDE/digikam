@@ -262,9 +262,9 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
         er = QRect(x,y,w,h);
     }
 
-    paintViewportRect(er, false, !d->pressedMoving);
+    paintViewportRect(er, d->zoom <= 1.0, !d->pressedMoving);
 
-    if (!d->pressedMoving)
+    if (!d->pressedMoving && (d->zoom > 1.0))
         d->paintTimer->start(100, true);
 }
 
