@@ -627,16 +627,16 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     // Delete any existing rubber -------------------------------
 
     if ( d->rubber ) {
-	QPainter p;
-	p.begin(viewport());
-	p.setRasterOp(NotROP);
-	p.setPen(QPen(color0, 1));
-	p.setBrush(NoBrush);
-
-	drawRubber(&p);
-	p.end();
-	delete d->rubber;
-	d->rubber = 0;
+	   QPainter p;
+	   p.begin(viewport());
+	   p.setRasterOp(NotROP);
+	   p.setPen(QPen(color0, 1));
+	   p.setBrush(NoBrush);
+    
+	   drawRubber(&p);
+	   p.end();
+	   delete d->rubber;
+	   d->rubber = 0;
     }
 
     d->dragStartPos = e->pos();
