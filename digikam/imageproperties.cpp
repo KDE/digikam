@@ -221,7 +221,11 @@ void ImageProperties::slotItemChanged()
     const KFileItem* fi = m_currItem->fileItem();    
     m_filename->setText( fileURL.fileName() );
     m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
+#if KDE_VERSION >= 0x30200
     KFileMetaInfo meta(fileURL);
+#else
+    KFileMetaInfo meta(fileURL.path());
+#endif
     
     if (meta.isValid())
         {
