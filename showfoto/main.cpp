@@ -4,7 +4,7 @@
  * Date  : 2004-11-22
  * Description :
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.2",
+                          "0.2.0",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2005, digiKam developers team"),
