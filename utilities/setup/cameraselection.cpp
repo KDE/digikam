@@ -334,3 +334,5 @@ void CameraSelection::slotOkClicked()
     emit signalOkClicked(currentTitle(), currentModel(),
                          currentPortPath(), currentCameraPath());
 }
+
+#include "cameraselection.moc"

@@ -287,3 +287,5 @@ void SetupGeneral::slotDelCollection()
     if (!item) return;
     delete item;
 }
+
+#include "setupgeneral.moc"

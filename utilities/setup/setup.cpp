@@ -63,3 +63,5 @@ void Setup::slotOkClicked()
     close();
 }
 
+
+#include "setup.moc"

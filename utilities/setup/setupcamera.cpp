@@ -237,3 +237,5 @@ void SetupCamera::applySettings()
         }
     }
 }
+
+#include "setupcamera.moc"
