@@ -69,7 +69,7 @@ SetupCollections::SetupCollections(QWidget* parent )
    
    albumCollectionBox_ = new QListBox(collectionGroup);
    albumCollectionBox_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                                  QSizePolicy::Maximum/*MinimumExpanding*/));
+                                                  QSizePolicy::Maximum));
 
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
   
