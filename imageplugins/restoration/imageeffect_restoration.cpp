@@ -445,7 +445,12 @@ void ImageEffect_Restoration::slotUser1()
 
 void ImageEffect_Restoration::slotCancel()
 {
-    m_cimgInterface->stopComputation();
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_cimgInterface->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
@@ -456,8 +461,13 @@ void ImageEffect_Restoration::slotHelp()
 
 void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
 {
-    m_cimgInterface->stopComputation();
-    e->accept();    
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_cimgInterface->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
+    e->accept();
 }
 
 void ImageEffect_Restoration::slotEffect()
@@ -567,7 +577,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               {
               case PreviewRendering:
                  {
-                 kdDebug() << "Restoration completed..." << endl;
+                 kdDebug() << "Preview Restoration completed..." << endl;
                  
                  m_imagePreviewWidget->setPreviewImageData(m_previewImage);
                  m_imagePreviewWidget->setPreviewImageWaitCursor(false);
@@ -592,6 +602,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               
               case FinalRendering:
                  {
+                 kdDebug() << "Final Restoration completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
                  iface.putOriginalData(i18n("Restoration"), m_originalData);
        
@@ -604,23 +615,33 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
             }
         else                   // Computation Failed !
             {
-            kdDebug() << "Restoration failed..." << endl;
-            m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-            m_progressBar->setValue(0);  
-            setButtonText(User1, i18n("&Reset Values"));
-            setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-            enableButton(Ok, true);    
-            m_detailInput->setEnabled(true);
-            m_gradientInput->setEnabled(true);
-            m_timeStepInput->setEnabled(true);
-            m_blurInput->setEnabled(true);
-            m_blurItInput->setEnabled(true);
-            m_angularStepInput->setEnabled(true);
-            m_integralStepInput->setEnabled(true);
-            m_gaussianInput->setEnabled(true);
-            m_linearInterpolationBox->setEnabled(true);
-            m_normalizeBox->setEnabled(true);
-            m_dirty = false;   
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Restoration failed..." << endl;
+                    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+                    m_progressBar->setValue(0);  
+                    setButtonText(User1, i18n("&Reset Values"));
+                    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
+                    enableButton(Ok, true);    
+                    m_detailInput->setEnabled(true);
+                    m_gradientInput->setEnabled(true);
+                    m_timeStepInput->setEnabled(true);
+                    m_blurInput->setEnabled(true);
+                    m_blurItInput->setEnabled(true);
+                    m_angularStepInput->setEnabled(true);
+                    m_integralStepInput->setEnabled(true);
+                    m_gaussianInput->setEnabled(true);
+                    m_linearInterpolationBox->setEnabled(true);
+                    m_normalizeBox->setEnabled(true);
+                    m_dirty = false;   
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
             }
         }
 }

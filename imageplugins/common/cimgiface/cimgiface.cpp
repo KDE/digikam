@@ -65,16 +65,16 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     
     // Get the config data
 
-    nb_iter    = blurIt;
-    dt         = timeStep;
-    dlength    = integralStep;
-    dtheta     = angularStep;
-    sigma      = blur;
-    power1     = detail;
-    power2     = gradient;
-    gauss_prec = gaussian;
-    onormalize = normalize;
-    linear     = linearInterpolation;
+    m_nb_iter     = blurIt;
+    m_dt          = timeStep;
+    m_dlength     = integralStep;
+    m_dtheta      = angularStep;
+    m_sigma       = blur;
+    m_power1      = detail;
+    m_power2      = gradient;
+    m_gauss_prec  = gaussian;
+    m_onormalize  = normalize;
+    m_linear      = linearInterpolation;
     
     if (m_imageData && m_imageWidth && m_imageHeight)
        {
@@ -107,15 +107,6 @@ void CimgIface::stopComputation(void)
     cleanup();
     img   = CImg<>();    
     eigen = CImgl<>(CImg<>(), CImg<>());
-    
-    if (m_parent)
-       {
-       CimgIface::EventData *d = new CimgIface::EventData;
-       d->starting = false;
-       d->success  = false;
-       d->progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       }
 }
 
 // List of threaded operations.
@@ -127,7 +118,7 @@ void CimgIface::run()
 
 void CimgIface::startComputation()
 {
-    CimgIface::EventData *d=0L;
+    CimgIface::EventData *d;
     
     if (m_parent)
        {
@@ -136,7 +127,7 @@ void CimgIface::startComputation()
        d->success  = false;
        d->progress = 0;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       kdDebug() << "CimgIface::Start computation..." << endl;
+       kdDebug() << "CimgIface::Initialization..." << endl;
        }
         
     // Copy the src data into a CImg type image with three channels and no alpha. This means that a CImg is always rgba.
@@ -157,16 +148,29 @@ void CimgIface::startComputation()
           img(x, y, 2) = data[i+2];
           }
        }
-       
+
+    kdDebug() << "CimgIface::Process Computation..." << endl;
+              
     if (!process()) 
        {
        kdDebug() << "CimgIface::Error during CImg filter computation!" << endl;
        // Everything went wrong.
-    
+       
+       if (m_parent)
+          {
+          CimgIface::EventData *d = new CimgIface::EventData;
+          d->starting = false;
+          d->success  = false;
+          d->progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          }    
+          
        return;
        }
     
     // Copy CImg onto destination.
+    
+    kdDebug() << "CimgIface::Finalization..." << endl;
 
     data = (uchar*)m_imageData;
     i = 0;
@@ -212,7 +216,7 @@ bool CimgIface::process()
         
      int counter = 0;
      
-     for (unsigned int iter = 0; !m_cancel && (iter < nb_iter); iter++)
+     for (unsigned int iter = 0; !m_cancel && (iter < m_nb_iter); iter++)
         {
         // Compute smoothed structure tensor field G
         compute_smoothed_tensor();
@@ -232,8 +236,8 @@ bool CimgIface::process()
     
     // Save result and end program
         
-    if (m_visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0, 255);
-    if (onormalize) dest.normalize(0, 255);
+    if (!m_cancel && m_visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0, 255);
+    if (!m_cancel && m_onormalize) dest.normalize(0, 255);
         
     cleanup();
     
@@ -288,7 +292,7 @@ bool CimgIface::prepare()
 
 bool CimgIface::check_args()
 {
-    if (power2 < power1)
+    if (m_power2 < m_power1)
        {
        kdDebug() << "Error : p2<p1 !" << endl;
        return false;
@@ -339,15 +343,19 @@ bool CimgIface::prepare_inpaint()
     case 1 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255; } break;
     case 2 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand()); } break;
     case 3 : break;
-    case 4 : {
+    case 4 : 
+        {
         CImg<uchar> tmask(mask),ntmask(tmask);
         CImg_3x3(M,uchar);
         CImg_3x3(I,float);
-        while (CImgStats(ntmask,false).max>0) {
-            cimg_map3x3(tmask,x,y,0,0,M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
+        while (!m_cancel && CImgStats(ntmask,false).max>0) 
+        {
+            cimg_map3x3(tmask,x,y,0,0,M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) 
+            {
                 const float ccp = Mcp?0.0f:1.0f, cpc = Mpc?0.0f:1.0f,
                     cnc = Mnc?0.0f:1.0f, ccn = Mcn?0.0f:1.0f, csum = ccp + cpc + cnc + ccn;
-                cimg_mapV(img,k) {
+                cimg_mapV(img,k) 
+                {
                     cimg_get3x3(img,x,y,0,k,I);
                     img(x,y,k) = (ccp*Icp + cpc*Ipc + cnc*Inc + ccn*Icn)/csum;
                 }
@@ -355,7 +363,7 @@ bool CimgIface::prepare_inpaint()
             }
             tmask = ntmask;
         }
-    } break;    
+        } break;    
     
     default: break;
     }
@@ -370,7 +378,7 @@ bool CimgIface::prepare_inpaint()
         const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
         G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;    
         }
-    G.blur(sigma);
+    G.blur(m_sigma);
     { cimg_mapXY(G,x,y) 
         {
             G.get_tensor(x,y).symeigen(eigen(0),eigen(1));
@@ -380,8 +388,8 @@ bool CimgIface::prepare_inpaint()
                 u  = eigen(1)[0],
                 v  = eigen(1)[1],      
                 ng = (float)std::sqrt(l1+l2),
-                n1 = (float)(1.0/std::pow(1+ng,power1)),
-                n2 = (float)(1.0/std::pow(1+ng,power2)),
+                n1 = (float)(1.0/std::pow(1+ng,m_power1)),
+                n2 = (float)(1.0/std::pow(1+ng,m_power2)),
                sr1 = (float)std::sqrt(n1),
                sr2 = (float)std::sqrt(n2);
           G(x,y,0) = sr1*u*u + sr2*v*v;
@@ -464,7 +472,7 @@ void CimgIface::compute_smoothed_tensor()
         const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
         G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;    
         }
-    G.blur(sigma);
+    G.blur(m_sigma);
 }
 
 void CimgIface::compute_normalized_tensor()
@@ -477,8 +485,8 @@ void CimgIface::compute_normalized_tensor()
             l2 = eigen(0)[1],
             u = eigen(1)[0],
             v = eigen(1)[1],      
-            n1 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*power1)),
-            n2 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*power2));
+            n1 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*m_power1)),
+            n2 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*m_power2));
         G(x,y,0) = n1*u*u + n2*v*v;
         G(x,y,1) = u*v*(n1-n2);
         G(x,y,2) = n1*v*v + n2*u*u;
@@ -518,32 +526,32 @@ void CimgIface::compute_W(float cost, float sint)
 void CimgIface::compute_LIC_back_forward(int x, int y)
 {
     float l, X,Y, cu, cv, lsum=0;
-    const float fsigma2 = 2*dt*(W(x,y,0)*W(x,y,0) + W(x,y,1)*W(x,y,1));
-    const float length = gauss_prec*(float)std::sqrt(fsigma2);
+    const float fsigma2 = 2*m_dt*(W(x,y,0)*W(x,y,0) + W(x,y,1)*W(x,y,1));
+    const float length = m_gauss_prec*(float)std::sqrt(fsigma2);
 
-    if (linear) 
+    if (m_linear) 
         {
         // Integrate with linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y;
         
-        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X+=dlength*u; Y+=dlength*v; cu=u; cv=v; lsum+=coef;
+            X+=m_dlength*u; Y+=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
             
-        cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
+        cu = W(x,y,0); cv = W(x,y,1); X=x-m_dlength*cu; Y=y-m_dlength*cv;
         
-        for (l=dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=m_dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X-=dlength*u; Y-=dlength*v; cu=u; cv=v; lsum+=coef;
+            X-=m_dlength*u; Y-=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
         } 
     else 
@@ -551,24 +559,24 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
         // Integrate with non linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y; 
         
-        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
             float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X+=dlength*u; Y+=dlength*v; cu=u; cv=v; lsum+=coef;
+            X+=m_dlength*u; Y+=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
                 
-        cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
+        cu = W(x,y,0); cv = W(x,y,1); X=x-m_dlength*cu; Y=y-m_dlength*cv;
         
-        for (l = dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l = m_dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
             float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X-=dlength*u; Y-=dlength*v; cu=u; cv=v; lsum+=coef;
+            X-=m_dlength*u; Y-=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
     }
     sum(x,y)+=lsum;
@@ -579,7 +587,7 @@ void CimgIface::compute_LIC(int &counter)
     dest.fill(0);
     sum.fill(0);
     
-    for (float theta = (180%(int)dtheta)/2.0f; !m_cancel && (theta < 180); theta += dtheta) 
+    for (float theta = (180%(int)m_dtheta)/2.0f; !m_cancel && (theta < 180); theta += m_dtheta) 
         {
         const float rad = (float)(theta*cimg::PI/180.0);
         const float cost = (float)std::cos(rad);
@@ -598,7 +606,7 @@ void CimgIface::compute_LIC(int &counter)
               // Update the progress bar in dialog.
               
               double progress = counter;
-              progress /= (double)dest.width * dest.height * nb_iter * (180 / dtheta);
+              progress /= (double)dest.width * dest.height * m_nb_iter * (180 / m_dtheta);
               CimgIface::EventData *d = new CimgIface::EventData;
               d->starting = true;
               d->success = false;

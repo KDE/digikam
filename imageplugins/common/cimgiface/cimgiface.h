@@ -119,16 +119,16 @@ private:  // CImg filter interface.
 private:  // CImg filter data.
     
     // CImg filter settings.
-    unsigned int nb_iter;    // Number of smoothing iterations
-    float        dt;         // Time step
-    float        dlength;    // Integration step
-    float        dtheta;     // Angular step (in degrees)
-    float        sigma;      // Structure tensor blurring
-    float        power1;     // Diffusion limiter along isophote
-    float        power2;     // Diffusion limiter along gradient
-    float        gauss_prec; // Precision of the gaussian function
-    bool         onormalize; // Output image normalization (in [0,255])
-    bool         linear;     // Use linear interpolation for integration
+    unsigned int m_nb_iter;    // Number of smoothing iterations
+    float        m_dt;         // Time step
+    float        m_dlength;    // Integration step
+    float        m_dtheta;     // Angular step (in degrees)
+    float        m_sigma;      // Structure tensor blurring
+    float        m_power1;     // Diffusion limiter along isophote
+    float        m_power2;     // Diffusion limiter along gradient
+    float        m_gauss_prec; // Precision of the gaussian function
+    bool         m_onormalize; // Output image normalization (in [0,255])
+    bool         m_linear;     // Use linear interpolation for integration
 
     // CImg computation modes.
     bool         m_restore;
