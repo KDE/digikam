@@ -394,7 +394,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     // -------------------------------------------------------------
                                                   
     QGroupBox *gbox2 = new QGroupBox(i18n("Filter Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 4, 2, 20, spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 5, 2, 20, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gbox2 );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
@@ -470,15 +470,15 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     gridBox2->addMultiCellWidget(label4, 4, 4, 0, 0);
     gridBox2->addMultiCellWidget(m_brightenSlider, 4, 4, 1, 1);
     gridBox2->addMultiCellWidget(m_brightenSpinBox, 4, 4, 2, 2);
+    
+    m_progressBar = new KProgress(100, gbox2, "progressbar");
+    m_progressBar->setValue(0);
+    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
+    gridBox2->addMultiCellWidget(m_progressBar, 5, 5, 0, 2);
 
     topLayout->addMultiCellWidget(gbox2, 1, 1, 2, 2);
     
     // -------------------------------------------------------------
-        
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    topLayout->addMultiCellWidget(m_progressBar, 2, 2, 0, 2);
 
     adjustSize();
     disableResize();  
