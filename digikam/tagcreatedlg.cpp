@@ -187,7 +187,11 @@ QString TagEditDlg::icon() const
 
 void TagEditDlg::slotIconChange()
 {
-    m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 32);
+    QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 32);
+    if (icon.isEmpty() || icon == m_icon)
+        return;
+
+    m_icon = icon;
     m_iconButton->setIconSet( KApplication::kApplication()->iconLoader()
                               ->loadIcon(m_icon, KIcon::NoGroup, 32,
                                          KIcon::DefaultState, 0, true));
