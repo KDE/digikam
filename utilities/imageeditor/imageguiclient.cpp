@@ -32,8 +32,6 @@
 ImageGUIClient::ImageGUIClient()
     : QObject(0), Digikam::GUIClient()
 {
-    setInstance(0);
-
     m_navPrevAction = new KAction(i18n("&Previous"), "back",
                                   KStdAccel::shortcut( KStdAccel::Prior),
                                   this, SIGNAL(signalPrev()),

@@ -35,7 +35,7 @@ class ImageIface
 {
 public:
 
-    ImageIface(int w, int h);
+    ImageIface(int w=0, int h=0);
     ~ImageIface();
 
     uint* getPreviewData();
@@ -59,7 +59,7 @@ public:
     void setOriginalBCG(double brightness, double contrast, double gamma);
     
     void paint(QWidget* widget, int x, int y, int w, int h);
-    
+
 private:
 
     ImageIfacePriv* d;

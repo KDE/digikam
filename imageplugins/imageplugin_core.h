@@ -24,26 +24,34 @@
 
 #include <imageplugin.h>
 
-namespace Digikam
-{
-class GUIClient;
-}
-
-class ImageGUIClient_Core;
+class KAction;
 
 class ImagePlugin_Core : public Digikam::ImagePlugin
 {
+    Q_OBJECT
+    
 public:
 
     ImagePlugin_Core(QObject *parent, const char* name,
                      const QStringList &args);
     ~ImagePlugin_Core();
 
-    Digikam::GUIClient* guiClient();
+    QStringList guiDefinition() const;
+
+    void setEnabledSelectionActions(bool enable);
 
 private:
 
-    ImageGUIClient_Core* m_guiClient;
+    KAction *m_redeyeAction;
+    
+private slots:
+
+    void slotBCG();
+    void slotBW();
+    void slotSepia();
+    void slotSolarize();
+    void slotRedEye();
+
 };
     
 #endif /* IMAGEPLUGIN_CORE_H */

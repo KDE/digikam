@@ -79,7 +79,7 @@ Canvas::Canvas(QWidget *parent)
             viewport(), SLOT(update()));
     connect(d->im, SIGNAL(signalRequestUpdate()),
             SLOT(slotChanged()));
-    connect(this, SIGNAL(signalCropSelected(bool)),
+    connect(this, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected()));
 }
 
@@ -101,7 +101,7 @@ void Canvas::load(const QString& filename)
     if (d->rubber) {
         delete d->rubber;
         d->rubber = 0;
-        emit signalCropSelected(false);
+        emit signalSelected(false);
     }
     
     d->zoom = 1.0;
@@ -162,7 +162,7 @@ void Canvas::updateContentsSize()
         delete d->rubber;
         d->rubber = 0;
         d->pressedMoved = false;
-        emit signalCropSelected(false);
+        emit signalSelected(false);
     }
 
     int wZ = int(d->im->width());
@@ -310,9 +310,9 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         emit signalRightButtonClicked();
     else {
         if (d->pressedMoved && d->rubber)
-            emit signalCropSelected(true);
+            emit signalSelected(true);
         else
-            emit signalCropSelected(false);
+            emit signalSelected(false);
     }
 }
 

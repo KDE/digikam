@@ -87,7 +87,7 @@ private slots:
     void slotContextMenu();
     void slotZoomChanged(float zoom);
     void slotChanged(bool);
-    void slotCropSelected(bool);
+    void slotSelected(bool);
 };
 
 #endif /* IMAGEWINDOW_H */

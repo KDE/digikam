@@ -24,19 +24,27 @@
 
 #include <qobject.h>
 
+#include "guiclient.h"
+
+class KInstance;
+
 namespace Digikam
 {
 
-class GUIClient;
-
-class ImagePlugin : public QObject
+class ImagePlugin : public QObject, public GUIClient
 {
 public:
     
     ImagePlugin(QObject *parent, const char* name=0);
     virtual ~ImagePlugin();
+
+    void setInstance(KInstance *instance);
+
+    virtual void setEnabledSelectionActions(bool enable);
     
-    virtual GUIClient* guiClient() = 0;
+private:
+
+    KInstance  *m_instance;
 };
 
 }

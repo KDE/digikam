@@ -107,7 +107,6 @@ ImageIface::ImageIface(int w, int h)
     p.fillRect(0, 4, 4, 4, QColor(100,100,100));
     p.fillRect(4, 0, 4, 4, QColor(100,100,100));
     p.end();
-
 }
 
 ImageIface::~ImageIface()

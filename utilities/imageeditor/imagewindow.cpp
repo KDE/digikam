@@ -63,8 +63,9 @@ ImageWindow::ImageWindow()
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
-        if (plugin->guiClient()) {
-            m_guiFactory->insertClient(plugin->guiClient());
+        if (plugin) {
+            m_guiFactory->insertClient(plugin);
+            plugin->setEnabledSelectionActions(false);
         }
     }
     
@@ -132,8 +133,8 @@ ImageWindow::ImageWindow()
             SLOT(slotContextMenu()));
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
             SLOT(slotZoomChanged(float)));
-    connect(m_canvas, SIGNAL(signalCropSelected(bool)),
-            SLOT(slotCropSelected(bool)));
+    connect(m_canvas, SIGNAL(signalSelected(bool)),
+            SLOT(slotSelected(bool)));
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             SLOT(slotChanged(bool)));
 
@@ -149,6 +150,14 @@ ImageWindow::~ImageWindow()
     saveSettings();
     delete m_guiClient;
     delete m_guiFactory;
+
+    ImagePluginLoader* loader = ImagePluginLoader::instance();
+    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+         plugin; plugin = loader->pluginList().next()) {
+        if (plugin) {
+            plugin->setEnabledSelectionActions(false);
+        }
+    }
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList,
@@ -328,9 +337,18 @@ void ImageWindow::slotChanged(bool val)
     m_guiClient->m_saveAction->setEnabled(val);
 }
 
-void ImageWindow::slotCropSelected(bool val)
+void ImageWindow::slotSelected(bool val)
 {
     m_guiClient->m_cropAction->setEnabled(val);
+
+    ImagePluginLoader* loader = ImagePluginLoader::instance();
+    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+         plugin; plugin = loader->pluginList().next()) {
+        if (plugin) {
+            m_guiFactory->insertClient(plugin);
+            plugin->setEnabledSelectionActions(val);
+        }
+    }
 }
 
 

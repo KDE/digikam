@@ -26,7 +26,6 @@
 #include <qstringlist.h>
 
 class KActionCollection;
-class KInstance;
 
 namespace Digikam
 {
@@ -40,14 +39,11 @@ public:
 
     virtual QStringList guiDefinition() const = 0;
 
-    void setInstance(KInstance *instance);
-
     KActionCollection* actionCollection();
 
 private:
 
     KActionCollection     *m_actionCollection;
-    KInstance             *m_instance;
 };
 
 }

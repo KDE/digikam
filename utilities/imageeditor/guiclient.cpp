@@ -20,11 +20,6 @@
  * ============================================================ */
 
 #include <kaction.h>
-#include <kinstance.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-
-#include <qfile.h>
 
 #include "guiclient.h"
 
@@ -34,7 +29,6 @@ namespace Digikam
 GUIClient::GUIClient()
 {
     m_actionCollection = 0;
-    m_instance = 0;
 }
 
 GUIClient::~GUIClient()
@@ -43,15 +37,11 @@ GUIClient::~GUIClient()
         delete m_actionCollection;
 }
 
-void GUIClient::setInstance(KInstance *instance)
-{
-    m_instance = instance;    
-}
-
 KActionCollection* GUIClient::actionCollection()
 {
     if (!m_actionCollection)
-        m_actionCollection = new KActionCollection((QWidget*)0, (const char*)0);
+        m_actionCollection = new KActionCollection((QWidget*)0,
+                                                   (const char*)0);
 
     return m_actionCollection;
 }
