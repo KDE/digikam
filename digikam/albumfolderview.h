@@ -32,7 +32,6 @@
 #include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qmap.h>
-#include <qtimer.h>
 
 // KDE includes.
 
@@ -42,6 +41,7 @@ class QDate;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
+class QTimer;
 class KURL;
 class KFileItem;
 class KFileMetaInfo;
