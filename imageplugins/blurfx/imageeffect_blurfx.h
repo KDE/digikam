@@ -70,6 +70,8 @@ protected:
     void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance);
     void motionBlur(uint *data, int Width, int Height, int Distance, double Angle=0.0);
     void focusBlur (uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, bool bInversed=false);
+    void smartBlur(uint *data, int Width, int Height, int Radius, int Strenght);
+    void mosaic(uint *data, int Width, int Height, int SizeW, int SizeH);
 
 private:
     
@@ -86,10 +88,10 @@ private:
     
     QLabel               *m_effectTypeLabel;
     QLabel               *m_distanceLabel;
-    QLabel               *m_angleLabel;
+    QLabel               *m_levelLabel;
     
     KIntNumInput         *m_distanceInput;
-    KIntNumInput         *m_angleInput;
+    KIntNumInput         *m_levelInput;
     
     KProgress            *m_progressBar;
     
@@ -181,7 +183,19 @@ private:
        Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
        return (Y * GetLineWidth(Width) + 4 * X);
        };
-                            
+
+    inline bool IsColorInsideTheRange (uchar cR, uchar cG, uchar cB, 
+                                       uchar nR, uchar nG, uchar nB, 
+                                       int Range)
+       {
+       if ((nR >= cR - Range) && (nR <= cR + Range))
+           if ((nG >= cG - Range) && (nG <= cG + Range))
+               if ((nB >= cB - Range) && (nB <= cB + Range))
+                   return (true);
+
+       return (false);
+       };
+                                          
 private slots:
 
     void slotHelp();

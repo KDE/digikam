@@ -153,7 +153,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectTypeLabel = new QLabel(i18n("Type:"), gbox2);
     
     m_effectType = new QComboBox( false, gbox2 );
-    m_effectType->insertItem( i18n("Mosaic") );
     m_effectType->insertItem( i18n("Fish Eyes") );
     m_effectType->insertItem( i18n("Twirl") );
     m_effectType->insertItem( i18n("Cilindrical Hor.") );
@@ -173,8 +172,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
-                                        "recreates it by filling those cells with average pixel value.<p>"
                                         "<b>Fish Eyes</b>: Warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograh 'Fish Eyes' effect.<p>"
                                         "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
@@ -310,50 +307,46 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
           
     switch (type)
        {
-       case 0:  // Mosaic.
-          m_iterationInput->setValue(0);
-          break;
-       
-       case 14: // Polar Coordinates.
-       case 15: // Unpolar Coordinates.
-          m_levelInput->setEnabled(false);
-          m_levelLabel->setEnabled(false);
-          break;
-          
-       case 2:  // Twirl.
+       case 1:  // Twirl.
           m_levelInput->setRange(-50, 50, 1, true);
           m_levelInput->setValue(10);
           break;
 
-       case 1:  // Fish Eye.
-       case 3:  // Cilindrical Hor.
-       case 4:  // Cilindrical Vert.
-       case 5:  // Cilindrical H/V.
-       case 6:  // Caricature.
+       case 0:  // Fish Eye.
+       case 2:  // Cilindrical Hor.
+       case 3:  // Cilindrical Vert.
+       case 4:  // Cilindrical H/V.
+       case 5:  // Caricature.
           m_levelInput->setRange(0, 200, 1, true);
           m_levelInput->setValue(50);
           break;
 
-       case 7:  // Multiple Corners.
+       case 6:  // Multiple Corners.
           m_levelInput->setRange(1, 10, 1, true);
           m_levelInput->setValue(4);
           break;
                                                   
-       case 8:  // Waves Horizontal.
-       case 9:  // Waves Vertical.
-       case 10: // Block Waves 1.
-       case 11: // Block Waves 2.
-       case 12: // Circular Waves 1.
-       case 13: // Circular Waves 2.
-       case 16: // Tile.
+       case 7:  // Waves Horizontal.
+       case 8:  // Waves Vertical.
+       case 9: // Block Waves 1.
+       case 10: // Block Waves 2.
+       case 11: // Circular Waves 1.
+       case 12: // Circular Waves 2.
+       case 15: // Tile.
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           m_iterationInput->setRange(0, 200, 1, true);
           m_iterationInput->setValue(10);
           break;
-       
-       case 17: // Neon.
-       case 18: // Find Edges.
+
+       case 13: // Polar Coordinates.
+       case 14: // Unpolar Coordinates.
+          m_levelInput->setEnabled(false);
+          m_levelLabel->setEnabled(false);
+          break;
+                 
+       case 16: // Neon.
+       case 17: // Find Edges.
           m_levelInput->setRange(0, 5, 1, true);
           m_levelInput->setValue(3);
           m_iterationInput->setEnabled(true);
@@ -402,79 +395,75 @@ void ImageEffect_DistortionFX::slotEffect()
 
     switch (m_effectType->currentItem())
        {
-       case 0: // Mosaic.
-          mosaic(data, w, h, l, l);
-          break;
-
-       case 1: // Fish Eye.
+       case 0: // Fish Eye.
           fisheye(data, w, h, (double)(l/5.0), false);
           break;
        
-       case 2: // Twirl.
+       case 1: // Twirl.
           twirl(data, w, h, l, false);
           break;
 
-       case 3: // Cilindrical Hor.
+       case 2: // Cilindrical Hor.
           cilindrical(data, w, h, (double)l, true, false, false);
           break;
 
-       case 4: // Cilindrical Vert.
+       case 3: // Cilindrical Vert.
           cilindrical(data, w, h, (double)l, false, true, false);
           break;
                     
-       case 5: // Cilindrical H/V.
+       case 4: // Cilindrical H/V.
           cilindrical(data, w, h, (double)l, true, true, false);
           break;
        
-       case 6: // Caricature.
+       case 5: // Caricature.
           fisheye(data, w, h, (double)(-l/5.0), false);
           break;
           
-       case 7: // Multiple Corners.          
+       case 6: // Multiple Corners.          
           multipleCorners(data, w, h, l, false);
           break;
        
-       case 8: // Waves Horizontal.
+       case 7: // Waves Horizontal.
           waves(data, w, h, l, f, true, false);
           break;
        
-       case 9: // Waves Vertical.
+       case 8: // Waves Vertical.
           waves(data, w, h, l, f, true, true);
           break;
        
-       case 10: // Block Waves 1.
+       case 9: // Block Waves 1.
           blockWaves(data, w, h, l, f, false);
           break;
        
-       case 11: // Block Waves 2.
+       case 10: // Block Waves 2.
           blockWaves(data, w, h, l, f, true);
           break;
        
-       case 12: // Circular Waves 1.
+       case 11: // Circular Waves 1.
           circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 0.0, false, false);
           break;
        
-       case 13: // Circular Waves 2.
+       case 12: // Circular Waves 2.
           circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 25.0, true, false);
           break;
        
-       case 14: // Polar Coordinates.
+       case 13: // Polar Coordinates.
           polarCoordinates(data, w, h, true, false);
           break;
 
-       case 15: // Unpolar Coordinates.
+       case 14: // Unpolar Coordinates.
           polarCoordinates(data, w, h, false, false);
           break;
                     
-       case 16:  // Tile.
+       case 15:  // Tile.
           tile(data, w, h, 200-f, 200-f, l);
           break;
 
-       case 17: // Neon.
+       case 16: // Neon.
           neon(data, w, h, l, f);
           break;
           
-       case 18: // Find Edges.
+       case 17: // Find Edges.
           findEdges(data, w, h, l, f);
           break;
        }
@@ -499,31 +488,30 @@ void ImageEffect_DistortionFX::slotEffect()
     
     switch (m_effectType->currentItem())
        {
-       case 0:  // Mosaic.
-       case 1:  // Fish Eye.
-       case 2:  // Twirl.
-       case 3:  // Cilindrical Hor.
-       case 4:  // Cilindrical Vert.
-       case 5:  // Cilindrical H/V.
-       case 6:  // Caricature.
-       case 7:  // Multiple Corners.          
+       case 0:  // Fish Eye.
+       case 1:  // Twirl.
+       case 2:  // Cilindrical Hor.
+       case 3:  // Cilindrical Vert.
+       case 4:  // Cilindrical H/V.
+       case 5:  // Caricature.
+       case 6:  // Multiple Corners.          
           break;
        
-       case 14: // Polar Coordinates.
-       case 15: // Unpolar Coordinates.
+       case 13: // Polar Coordinates.
+       case 14: // Unpolar Coordinates.
           m_levelInput->setEnabled(false);
           m_levelLabel->setEnabled(false);
           break;
 
-       case 8:  // Waves Horizontal.
-       case 9:  // Waves Vertical.
-       case 10: // Block Waves 1.
-       case 11: // Block Waves 2.
-       case 12: // Circular Waves 1.
-       case 13: // Circular Waves 2.
-       case 16: // Tile.
-       case 17: // Neon.
-       case 18: // Find Edges.
+       case 7:  // Waves Horizontal.
+       case 8:  // Waves Vertical.
+       case 9:  // Block Waves 1.
+       case 10: // Block Waves 2.
+       case 11: // Circular Waves 1.
+       case 12: // Circular Waves 2.
+       case 15: // Tile.
+       case 16: // Neon.
+       case 17: // Find Edges.
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           break;
@@ -564,79 +552,75 @@ void ImageEffect_DistortionFX::slotOk()
        {
        switch (m_effectType->currentItem())
           {
-          case 0: // Mosaic.
-             mosaic(data, w, h, l, l);
-             break;
-
-          case 1: // Fish Eye.
+          case 0: // Fish Eye.
              fisheye(data, w, h, (double)(l/5.0));
              break;
        
-          case 2: // Twirl.
+          case 1: // Twirl.
              twirl(data, w, h, l);
              break;
 
-          case 3: // Cilindrical Hor.
+          case 2: // Cilindrical Hor.
              cilindrical(data, w, h, (double)l, true, false);
              break;
           
-          case 4: // Cilindrical Vert.
+          case 3: // Cilindrical Vert.
              cilindrical(data, w, h, (double)l, false, true);
              break;
           
-          case 5: // Cilindrical H/V.
+          case 4: // Cilindrical H/V.
              cilindrical(data, w, h, (double)l, false, true);
              break;
           
-          case 6: // Caricature.
+          case 5: // Caricature.
              fisheye(data, w, h, (double)(-l/5.0));
              break;
           
-          case 7: // Multiple Corners.          
+          case 6: // Multiple Corners.          
              multipleCorners(data, w, h, l);
              break;
           
-          case 8: // Waves Horizontal.
+          case 7: // Waves Horizontal.
              waves(data, w, h, l, f, true, false);
              break;
        
-          case 9: // Waves Vertical.
+          case 8: // Waves Vertical.
              waves(data, w, h, l, f, true, true);
              break;
 
-          case 10: // Block Waves 1.
+          case 9: // Block Waves 1.
              blockWaves(data, w, h, l, f, false);
              break;
           
-          case 11: // Block Waves 2.
+          case 10: // Block Waves 2.
              blockWaves(data, w, h, l, f, true);
              break;
        
-          case 12: // Circular Waves 1.
+          case 11: // Circular Waves 1.
              circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 0.0, false);
              break;
           
-          case 13: // Circular Waves 2.
+          case 12: // Circular Waves 2.
              circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 25.0, true);
              break;
           
-          case 14: // Polar Coordinates.
+          case 13: // Polar Coordinates.
              polarCoordinates(data, w, h, true);
              break;
 
-          case 15: // Unpolar Coordinates.
+          case 14: // Unpolar Coordinates.
              polarCoordinates(data, w, h, false);
              break;
                           
-          case 16:  // Tile.
+          case 15:  // Tile.
              tile(data, w, h, 200-f, 200-f, l);
              break;
 
-          case 17: // Neon.
+          case 16: // Neon.
              neon(data, w, h, l, f);
              break;
           
-          case 18: // Find Edges.
+          case 17: // Find Edges.
              findEdges(data, w, h, l, f);
              break;
           }
@@ -647,85 +631,6 @@ void ImageEffect_DistortionFX::slotOk()
     delete [] data;    
     m_parent->setCursor( KCursor::arrowCursor() );        
     accept();
-}
-
-/* Function to apply the mosaic effect backported from ImageProcessing version 2                                             
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Size             => Size of mosaic .
- *                                                                                  
- * Theory           => Ok, you can find some mosaic effects on PSC, but this one   
- *                     has a great feature, if you see a mosaic in other code you will
- *                     see that the corner pixel doesn't change. The explanation is   
- *                     simple, the color of the mosaic is the same as the first pixel 
- *                     get. Here, the color of the mosaic is the same as the mosaic   
- *                     center pixel. 
- *                     Now the function scan the rows from the top (like photoshop).
- */
-void ImageEffect_DistortionFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
-{
-    // we need to check for valid values
-    
-    if (SizeW < 1) SizeW = 1;
-    if (SizeH < 1) SizeH = 1;
-
-    // if sizew and sizeh we do nothing
-    
-    if ((SizeW == 1) && (SizeH == 1))
-        return;
-
-    int i, j, k;            
-    
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-
-    int BitCount    = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
-    
-    // this loop will never look for transparent colors
-    
-    for (int h = 0; !m_cancel && (h < Height); h += SizeH)
-        {
-        for (int w = 0; !m_cancel && (w < Width); w += SizeW)
-            {
-            // we store the top-left corner position
-            i = k = SetPosition(Width, w, h);
-            
-            // now, we have to find the center pixel for mosaic's rectangle
-            
-            j = SetPositionAdjusted(Width, Height, w + (SizeW / 2), h + (SizeH / 2));
-
-            // now, we fill the mosaic's rectangle with the center pixel color
-            
-            for (int subw = w; !m_cancel && (subw <= w + SizeW); subw++, i = k += 4)
-                {
-                for (int subh = h; !m_cancel && (subh <= h + SizeH); subh++, i += LineWidth)
-                    {
-                    // if is inside...
-                    
-                    if (IsInside(Width, Height, subw, subh))
-                        {
-                        // ...we attrib the colors
-                        pResBits[i+2] = pBits[j+2];
-                        pResBits[i+1] = pBits[j+1];
-                        pResBits[ i ] = pBits[ j ];
-                        }
-                    }
-                }
-            }
-        
-        // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-        kapp->processEvents();             
-        }
-        
-    if (!m_cancel) 
-       memcpy (data, pResBits, BitCount);        
-                
-    delete [] pResBits;        
 }
 
 /* Function to apply the fisheye effect backported from ImageProcessing version 2                                           

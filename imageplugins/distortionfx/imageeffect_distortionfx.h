@@ -60,7 +60,6 @@ protected:
     void closeEvent(QCloseEvent *e);
     
     // Backported from ImageProcessing version 2
-    void mosaic(uint *data, int Width, int Height, int SizeW, int SizeH);
     void fisheye(uint *data, int Width, int Height, double Coeff, bool AntiAlias=true);
     void twirl(uint *data, int Width, int Height, int Twirl, bool AntiAlias=true);
     void cilindrical(uint *data, int Width, int Height, double Coeff, bool Horizontal, bool Vertical, bool AntiAlias=true);

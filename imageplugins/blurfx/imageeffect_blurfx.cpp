@@ -160,7 +160,9 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Softner Blur") );
     m_effectType->insertItem( i18n("Skake Blur") );
     m_effectType->insertItem( i18n("Focus Blur") );
+    m_effectType->insertItem( i18n("Smart Blur") );
     m_effectType->insertItem( i18n("Frost Glass") );
+    m_effectType->insertItem( i18n("Mosaic") );
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
                                         "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                         "a specified center point. This simulates the blur of a zooming camera.<p>"
@@ -178,26 +180,30 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "This simulates the blur of a random moving camera.<p>"
                                         "<b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
                                         "of a lens.<p>"
+                                        "<b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
+                                        "muddying the rest of the image.<p>"
                                         "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
-                                        "a frosted glass."));
+                                        "a frosted glass."
+                                        "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
+                                        "recreates it by filling those cells with average pixel value.<p>"));
     gridBox2->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
     gridBox2->addMultiCellWidget(m_effectType, 0, 0, 1, 2);
                                                   
-    m_distanceLabel = new QLabel(i18n("Level:"), gbox2);
+    m_distanceLabel = new QLabel(i18n("Distance:"), gbox2);
     m_distanceInput = new KIntNumInput(gbox2);
-    m_distanceInput->setRange(0, 200, 1, true);
+    m_distanceInput->setRange(0, 100, 1, true);    
     QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
     
     gridBox2->addMultiCellWidget(m_distanceLabel, 1, 1, 0, 0);
     gridBox2->addMultiCellWidget(m_distanceInput, 1, 1, 1, 1);
         
-    m_angleLabel = new QLabel(i18n("Angle:"), gbox2);
-    m_angleInput = new KIntNumInput(gbox2);
-    m_angleInput->setRange(0, 360, 1, true);
-    QWhatsThis::add( m_angleInput, i18n("<p>This value controls the angle to use for motion blur effect."));  
+    m_levelLabel = new QLabel(i18n("Level:"), gbox2);
+    m_levelInput = new KIntNumInput(gbox2);
+    m_levelInput->setRange(0, 360, 1, true);
+    QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
     
-    gridBox2->addMultiCellWidget(m_angleLabel, 2, 2, 0, 0);
-    gridBox2->addMultiCellWidget(m_angleInput, 2, 2, 1, 1);
+    gridBox2->addMultiCellWidget(m_levelLabel, 2, 2, 0, 0);
+    gridBox2->addMultiCellWidget(m_levelInput, 2, 2, 1, 1);
     
     m_progressBar = new KProgress(100, gbox2, "progressbar");
     m_progressBar->setValue(0);
@@ -220,7 +226,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     connect(m_distanceInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));            
     
-    connect(m_angleInput, SIGNAL(valueChanged(int)),
+    connect(m_levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));            
 }
 
@@ -281,12 +287,14 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
     m_distanceLabel->setEnabled(true);
     
     m_distanceInput->blockSignals(true);
-    m_angleInput->blockSignals(true);
+    m_levelInput->blockSignals(true);
     m_distanceInput->setRange(0, 200, 1, true);
     m_distanceInput->setValue(100);
+    m_levelInput->setRange(0, 360, 1, true);
+    m_levelInput->setValue(45);
     
-    m_angleInput->setEnabled(false);
-    m_angleLabel->setEnabled(false);
+    m_levelInput->setEnabled(false);
+    m_levelLabel->setEnabled(false);
           
     switch (type)
        {
@@ -294,7 +302,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
        
        case 1: // Radial Blur.
-       case 7: // Frost Glass.
+       case 8: // Frost Glass.
           m_distanceInput->setRange(0, 10, 1, true);
           m_distanceInput->setValue(3);
           break;
@@ -308,8 +316,8 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
        case 3: // Motion Blur.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
-          m_angleInput->setEnabled(true);
-          m_angleLabel->setEnabled(true);
+          m_levelInput->setEnabled(true);
+          m_levelLabel->setEnabled(true);
           break;
 
        case 4: // Softner Blur.
@@ -319,13 +327,23 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           
        case 5: // Skake Blur    
        case 6: // Focus Blur.
+       case 9: // Mosaic.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
+          break;
+       
+       case 7: // Smart Blur.
+          m_distanceInput->setRange(0, 20, 1, true);
+          m_distanceInput->setValue(3);
+          m_levelInput->setEnabled(true);
+          m_levelLabel->setEnabled(true);
+          m_levelInput->setRange(0, 255, 1, true);
+          m_levelInput->setValue(128);
           break;
        }
 
     m_distanceInput->blockSignals(false);
-    m_angleInput->blockSignals(false);
+    m_levelInput->blockSignals(false);
        
     slotEffect();
 }
@@ -342,8 +360,8 @@ void ImageEffect_BlurFX::slotEffect()
     m_effectType->setEnabled(false);
     m_distanceInput->setEnabled(false);
     m_distanceLabel->setEnabled(false);
-    m_angleInput->setEnabled(false);
-    m_angleLabel->setEnabled(false);
+    m_levelInput->setEnabled(false);
+    m_levelLabel->setEnabled(false);
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
@@ -357,7 +375,7 @@ void ImageEffect_BlurFX::slotEffect()
     int h       = iface->originalHeight();
     
     int d       = m_distanceInput->value();
-    int a       = m_angleInput->value();
+    int l       = m_levelInput->value();
 
     m_progressBar->setValue(0); 
 
@@ -376,7 +394,7 @@ void ImageEffect_BlurFX::slotEffect()
           break;
 
        case 3: // Motion Blur.
-          motionBlur(data, w, h, d, (double)a);
+          motionBlur(data, w, h, d, (double)l);
           break;
 
        case 4: // Softner Blur.
@@ -391,9 +409,17 @@ void ImageEffect_BlurFX::slotEffect()
           focusBlur(data, w, h, w/2, h/2, 10, d*10);
           break;
        
-       case 7: // Frost Glass.
+       case 7: // Smart Blur.
+          smartBlur(data, w, h, d, l);
+          break;
+       
+       case 8: // Frost Glass.
           frostGlass(data, w, h, d);
           break;
+
+       case 9: // Mosaic.
+          mosaic(data, w, h, d, d);
+          break;                    
        }
     
     if ( !m_cancel ) 
@@ -421,12 +447,14 @@ void ImageEffect_BlurFX::slotEffect()
        case 2: // Far Blur.
        case 5: // Shake Blur.
        case 6: // Focus Blur.
-       case 7: // Frost Glass.
+       case 8: // Frost Glass.
+       case 9: // Mosaic.
           break;
 
        case 3: // Motion Blur.
-          m_angleInput->setEnabled(true);
-          m_angleLabel->setEnabled(true);
+       case 7: // Smart Blur.
+          m_levelInput->setEnabled(true);
+          m_levelLabel->setEnabled(true);
           break;
 
        case 4: // Softner Blur.
@@ -449,8 +477,8 @@ void ImageEffect_BlurFX::slotOk()
     m_effectType->setEnabled(false);
     m_distanceInput->setEnabled(false);
     m_distanceLabel->setEnabled(false);
-    m_angleInput->setEnabled(false);
-    m_angleLabel->setEnabled(false);
+    m_levelInput->setEnabled(false);
+    m_levelLabel->setEnabled(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -462,7 +490,7 @@ void ImageEffect_BlurFX::slotOk()
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
     int d       = m_distanceInput->value();
-    int a       = m_angleInput->value();
+    int l       = m_levelInput->value();
 
     m_progressBar->setValue(0); 
         
@@ -483,7 +511,7 @@ void ImageEffect_BlurFX::slotOk()
              break;
 
           case 3: // Motion Blur.
-             motionBlur(data, w, h, d, (double)a);
+             motionBlur(data, w, h, d, (double)l);
              break;
 
           case 4: // Softner Blur.
@@ -497,10 +525,18 @@ void ImageEffect_BlurFX::slotOk()
           case 6: // Focus Blur.
              focusBlur(data, w, h, w/2, h/2, 10, d*10);
              break;
-             
-          case 7: // Frost Glass
+       
+          case 7: // Smart Blur.
+             smartBlur(data, w, h, d, l);
+             break;
+                       
+          case 8: // Frost Glass
              frostGlass(data, w, h, d);
              break;
+       
+          case 9: // Mosaic.
+             mosaic(data, w, h, d, d);
+             break;                    
           }
        
        if ( !m_cancel ) iface->putOriginalData(data);
@@ -509,6 +545,159 @@ void ImageEffect_BlurFX::slotOk()
     delete [] data;    
     m_parent->setCursor( KCursor::arrowCursor() );        
     accept();
+}
+
+/* Function to apply the SmartBlur effect                                           
+ *                                                                                  
+ * data             => The image data in RGBA mode.  
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * Radius           => blur matrix radius.                                         
+ * Strenght         => Color strenght.                                         
+ *                                                                                  
+ * Theory           => Similar to SmartBlur from Photoshop, this function has the   
+ *                     same engine as Blur function, but, in a matrix with n        
+ *                     dimentions, we take only colors that pass by sensibility filter
+ *                     The result is a clean image, not totally blurred, but a image  
+ *                     with correction between pixels.      
+ */
+
+void ImageEffect_BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Strenght)
+{
+    if (Radius <= 0) return;
+    
+    int nStride = GetStride (Width);
+    register int sumR, sumG, sumB, nCount, i, j, w, h, a;
+
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    int    BitCount = LineWidth * Height;
+    uchar* pBits    = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+    uchar* pBlur    = new uchar[BitCount];
+    
+    // We need to copy our bits to blur bits
+    
+    memcpy (pBlur, pBits, BitCount);     
+    
+    // we have to initialize all loop and positions valiables
+    i = j = sumR = sumG = sumB = nCount = 0;
+
+    // we have reached the main loop
+    
+    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+        {
+        for (w = 0; !m_cancel && (w < Width); w++, i += 4)
+            {
+            // ...we enter this loop to sum the bits
+            for (a = -Radius; !m_cancel && (a <= Radius); a++)
+                {
+                // verify if is inside the rect
+                if (IsInside( Width, Height, w + a, h))
+                    {
+                    // we need to find the pixel's position
+                    j = i + a * 4;
+                                                
+                    // now, we have to check if is inside the sensibility filter
+                    if (IsColorInsideTheRange (pBits[i+2], pBits[i+1], pBits[i],
+                                               pBits[j+2], pBits[j+1], pBits[j],
+                                               Strenght))
+                        {
+                        // finally we sum the bits
+                        sumR += pBits[j+2];
+                        sumG += pBits[j+1];
+                        sumB += pBits[ j ];
+                        }
+                    else
+                        {
+                        // finally we sum the bits
+                        sumR += pBits[i+2];
+                        sumG += pBits[i+1];
+                        sumB += pBits[ i ];
+                        }
+
+                    // increment counter
+                    nCount++;
+                    }
+                }
+
+                // now, we have to calc the arithmetic average
+                pBlur[i+2] = sumR / nCount;
+                pBlur[i+1] = sumG / nCount;
+                pBlur[ i ] = sumB / nCount;
+                
+                // we initialize the variables
+                sumR = sumG = sumB = nCount = 0;
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)h * 50.0) / Height));
+        kapp->processEvents();         
+        }
+    
+    // we need to initialize position's variables
+    i = j = 0;
+
+    // we have reached the second part of main loop
+    
+    for (w = 0; !m_cancel && (w < Width); w++, i = w * 4)
+        {
+        for (h = 0;!m_cancel && ( h < Height); h++, i += LineWidth)
+            {
+            // ...we enter this loop to sum the bits
+            for (a = -Radius; !m_cancel && (a <= Radius); a++)
+                {
+                // verify if is inside the rect
+                    if (IsInside (Width, Height, w, h + a))
+                    {
+                    // we need to find the pixel's position
+                    j = i + a * LineWidth;
+                        
+                    // now, we have to check if is inside the sensibility filter
+                    if (IsColorInsideTheRange (pBits[i+2], pBits[i+1], pBits[i],
+                                               pBits[j+2], pBits[j+1], pBits[j],
+                                               Strenght))
+                        {
+                        // finally we sum the bits
+                        sumR += pBlur[j+2];
+                        sumG += pBlur[j+1];
+                        sumB += pBlur[ j ];
+                        }
+                    else
+                        {
+                        // finally we sum the bits
+                        sumR += pBits[i+2];
+                        sumG += pBits[i+1];
+                        sumB += pBits[ i ];
+                        }
+
+                    // increment counter
+                    nCount++;
+                    }
+                }
+
+                // now, we have to calc the arithmetic average
+                pResBits[i+2] = sumR / nCount;
+                pResBits[i+1] = sumG / nCount;
+                pResBits[ i ] = sumB / nCount;
+                
+                // we initialize the variables
+                sumR = sumG = sumB = nCount = 0;
+            }
+    
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (50.0 + ((double)w * 50.0) / Width));
+        kapp->processEvents();             
+        }
+
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);      
+       
+    // now, we must free memory
+    delete [] pBlur;
+    delete [] pResBits;
 }
 
 /* Function to apply the ZoomBlur effect backported from ImageProcessing version 2                                           
@@ -1118,6 +1307,85 @@ void ImageEffect_BlurFX::frostGlass(uint *data, int Width, int Height, int Frost
        memcpy (data, NewBits, BitCount);        
                 
     delete [] NewBits;
+}
+
+/* Function to apply the mosaic effect backported from ImageProcessing version 2                                             
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * Size             => Size of mosaic .
+ *                                                                                  
+ * Theory           => Ok, you can find some mosaic effects on PSC, but this one   
+ *                     has a great feature, if you see a mosaic in other code you will
+ *                     see that the corner pixel doesn't change. The explanation is   
+ *                     simple, the color of the mosaic is the same as the first pixel 
+ *                     get. Here, the color of the mosaic is the same as the mosaic   
+ *                     center pixel. 
+ *                     Now the function scan the rows from the top (like photoshop).
+ */
+void ImageEffect_BlurFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
+{
+    // we need to check for valid values
+    
+    if (SizeW < 1) SizeW = 1;
+    if (SizeH < 1) SizeH = 1;
+
+    // if sizew and sizeh we do nothing
+    
+    if ((SizeW == 1) && (SizeH == 1))
+        return;
+
+    int i, j, k;            
+    
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+
+    int BitCount    = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+    
+    // this loop will never look for transparent colors
+    
+    for (int h = 0; !m_cancel && (h < Height); h += SizeH)
+        {
+        for (int w = 0; !m_cancel && (w < Width); w += SizeW)
+            {
+            // we store the top-left corner position
+            i = k = SetPosition(Width, w, h);
+            
+            // now, we have to find the center pixel for mosaic's rectangle
+            
+            j = SetPositionAdjusted(Width, Height, w + (SizeW / 2), h + (SizeH / 2));
+
+            // now, we fill the mosaic's rectangle with the center pixel color
+            
+            for (int subw = w; !m_cancel && (subw <= w + SizeW); subw++, i = k += 4)
+                {
+                for (int subh = h; !m_cancel && (subh <= h + SizeH); subh++, i += LineWidth)
+                    {
+                    // if is inside...
+                    
+                    if (IsInside(Width, Height, subw, subh))
+                        {
+                        // ...we attrib the colors
+                        pResBits[i+2] = pBits[j+2];
+                        pResBits[i+1] = pBits[j+1];
+                        pResBits[ i ] = pBits[ j ];
+                        }
+                    }
+                }
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
+        kapp->processEvents();             
+        }
+        
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;        
 }
 
 /* Function to get a color in a matriz with a determined size                       
