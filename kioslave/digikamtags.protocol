@@ -21,4 +21,5 @@ Description[pt_BR]='Kioslave' de marcas Digikam
 Description[ru]=Обработчик тегов digikam
 Description[sv]=I/O-slav för Digikams taggar
 Description[ta]=டிஜிகேம் ஒட்டுகளின் kioslave
+Description[xx]=xxDigikam tags kioslavexx
 Class=:local

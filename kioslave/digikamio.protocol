@@ -21,4 +21,5 @@ Description[pt_BR]='Kioslave' Digikam IO
 Description[ru]=Обработчик ввода-вывода digikam
 Description[sv]=Digikam I/O-slav
 Description[ta]=டிஜிகேம் IO kioslave
+Description[xx]=xxDigikam IO kioslavexx
 Class=:local
