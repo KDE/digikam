@@ -87,13 +87,13 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->insertItem( "7:10" );
     m_ratioCB->insertItem( i18n("None") );
     m_ratioCB->setCurrentText( "1:1" );
-    QWhatsThis::add( m_ratioCB, i18n("<p>Select here your contrained aspect ratio for cropping."));
+    QWhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping."));
     
     QLabel *label2 = new QLabel(i18n("Orientation:"), plainPage());
     m_orientCB = new QComboBox( false, plainPage() );
     m_orientCB->insertItem( i18n("Landscape") );
     m_orientCB->insertItem( i18n("Portrait") );
-    QWhatsThis::add( m_orientCB, i18n("<p>Select here contrained aspect ratio orientation."));
+    QWhatsThis::add( m_orientCB, i18n("<p>Select here constrained aspect ratio orientation."));
     
     topLayout->addMultiCellWidget(label, 1, 1, 0, 0);
     topLayout->addMultiCellWidget(m_ratioCB, 1, 1, 1, 1);
