@@ -139,13 +139,11 @@ void ImagePreviewWidget::setPreviewImageData(QImage img)
 void ImagePreviewWidget::setCenterImageRegionPosition(void)
 {
     m_imageRegionWidget->setCenterClipPosition();
-    updateSelectionInfo(getOriginalImageRegion());
 }
 
 void ImagePreviewWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
 {
     m_imageRegionWidget->setClipPosition(rect.x(), rect.y(), targetDone);
-    updateSelectionInfo(rect);
 }
 
 void ImagePreviewWidget::slotOriginalImageRegionChanged(void)

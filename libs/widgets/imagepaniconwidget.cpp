@@ -101,12 +101,6 @@ void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
     int h = (int)((float)m_localRegionSelection.height() *
                  ( (float)m_iface->originalHeight() / (float)m_h ));
     
-    if (x < 0) x = 0;
-    else if (x > m_iface->originalWidth()) x = m_iface->originalWidth() - m_w;
-    
-    if (y < 0) y = 0;
-    else if (y > m_iface->originalHeight()) y = m_iface->originalHeight() - m_h;
-    
     m_regionSelection.setX(x);
     m_regionSelection.setY(y);
     m_regionSelection.setWidth(w);                                     
