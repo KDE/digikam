@@ -272,7 +272,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
     
     int Noise = (int)(Sensibility / 10.0);
     int nStride = GetStride(Width);
-    register int h, w, i = 0, j = 0, k = 0;       
+    register int h, w, i = 0;       
     int nRand;
 
     int LineWidth = Width * 4;                     
@@ -309,30 +309,8 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
 
     // Blur grain mask without using Alpha.    
     
-    for (h = 1; !m_cancel && (h < Height - 1); h++)
-        {
-        for (w = 1; !m_cancel && (w < Width - 1); w++)
-            {
-            i = h * LineWidth + 4 * w;
-            j = (h + 1) * LineWidth + 4 * w;
-            k = (h - 1) * LineWidth + 4 * w;
-
-            pGrainBits[i+2] = (pGrainBits[i-2] + pGrainBits[j-2] + pGrainBits[k-2] +
-                               pGrainBits[i+2] + pGrainBits[j+2] + pGrainBits[k+2] +
-                               pGrainBits[i+6] + pGrainBits[j+6] + pGrainBits[k+6]) / 9;
-            pGrainBits[i+1] = (pGrainBits[i-3] + pGrainBits[j-3] + pGrainBits[k-3] +
-                               pGrainBits[i+1] + pGrainBits[j+1] + pGrainBits[k+1] +
-                               pGrainBits[i+5] + pGrainBits[j+5] + pGrainBits[k+5]) / 9;
-            pGrainBits[ i ] = (pGrainBits[i-4] + pGrainBits[j-4] + pGrainBits[k-4] +
-                               pGrainBits[ i ] + pGrainBits[ j ] + pGrainBits[ k ] +
-                               pGrainBits[i+4] + pGrainBits[j+4] + pGrainBits[k+4]) / 9;
-            }
-        
-        // Update de progress bar in dialog.
-        m_progressBar->setValue((int) (25.0 + ((double)h * 25.0) / Height));
-        kapp->processEvents(); 
-        }
-        
+    Digikam::ImageFilters::smartBlurImage((uint *)pGrainBits, Width, Height);
+            
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
 

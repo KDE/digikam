@@ -222,7 +222,7 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
     targetImg = newImage.copy(getTargetSize());
     
     // Update target image.
-    Digikam::ImageFilters::antiAliasImage((uint*)targetImg.bits(), targetImg.width(), targetImg.height());
+    Digikam::ImageFilters::smartBlurImage((uint*)targetImg.bits(), targetImg.width(), targetImg.height());
     m_iface->putOriginalData((uint*)targetImg.bits(), targetImg.width(), targetImg.height());
 
     delete [] data;
