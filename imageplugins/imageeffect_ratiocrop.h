@@ -83,6 +83,8 @@ private slots:
     void slotOrientChanged(int o);
     void slotRatioChanged(int a);
     void slotSelectionChanged(QRect rect);
+    void slotSelectionWidthChanged(int newWidth);
+    void slotSelectionHeightChanged(int newHeight);
 };
 
 #endif /* IMAGEEFFECT_RATIOCROP_H */

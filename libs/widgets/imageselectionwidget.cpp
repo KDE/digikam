@@ -188,15 +188,19 @@ void ImageSelectionWidget::setSelectionY(int y)
 void ImageSelectionWidget::setSelectionWidth(int w)
 {
     m_regionSelection.setWidth(w);
-    realToLocalRegion();
-    applyAspectRatio(false);
+    realToLocalRegion(true);
+    applyAspectRatio(false, true, false);
+    localToRealRegion();
+    emit signalSelectionHeightChanged(m_regionSelection.height());
 }
 
 void ImageSelectionWidget::setSelectionHeight(int h)
 {
     m_regionSelection.setHeight(h);
-    realToLocalRegion();
-    applyAspectRatio(true);
+    realToLocalRegion(true);
+    applyAspectRatio(true, true, false);
+    localToRealRegion();
+    emit signalSelectionWidthChanged(m_regionSelection.width());
 }
 
 void ImageSelectionWidget::setCenterSelection(void)
@@ -207,13 +211,16 @@ void ImageSelectionWidget::setCenterSelection(void)
     applyAspectRatio(false);
 }
 
-void ImageSelectionWidget::realToLocalRegion(void)
+void ImageSelectionWidget::realToLocalRegion(bool updateSizeOnly)
 {
-    m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
-                                              ( (float)m_w / (float)m_iface->originalWidth() )) );
+    if (!updateSizeOnly)
+       {
+       m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
+                                    ( (float)m_w / (float)m_iface->originalWidth() )) );
                                             
-    m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)m_regionSelection.y() * 
-                                              ( (float)m_h / (float)m_iface->originalHeight() )) );
+       m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)m_regionSelection.y() * 
+                                    ( (float)m_h / (float)m_iface->originalHeight() )) );
+       }
                                             
     m_localRegionSelection.setWidth( (int)((float)m_regionSelection.width() *
                                           ( (float)m_w / (float)m_iface->originalWidth() )) );
@@ -239,7 +246,7 @@ void ImageSelectionWidget::localToRealRegion(void)
     m_regionSelection.setRect(x, y, w, h);
 }
 
-void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget)
+void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget, bool updateChange)
 {
     // Save local selection area for re-adjustment after changing width and height.
     QRect oldLocalRegionSelection = m_localRegionSelection;
@@ -299,7 +306,9 @@ void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget)
        }       
        
     // Recalculate the real selection values.
-    regionSelectionChanged();
+    
+    if (updateChange) 
+       regionSelectionChanged();
     
     if (repaintWidget)
        {
@@ -330,7 +339,7 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
 
 void ImageSelectionWidget::regionSelectionChanged(void)
 {
-   localToRealRegion();
+    localToRealRegion();
 
     emit signalSelectionChanged( m_regionSelection );   
 }

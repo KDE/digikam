@@ -183,6 +183,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));                                            
 
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionWidthChanged(int)),
+            this, SLOT(slotSelectionWidthChanged(int)));                                            
+
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionHeightChanged(int)),
+            this, SLOT(slotSelectionHeightChanged(int)));                                            
+                        
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotSelectionChanged(QRect)));      
 
@@ -245,6 +251,20 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_xInput->blockSignals(false);
     m_yInput->blockSignals(false);
     m_widthInput->blockSignals(false);
+    m_heightInput->blockSignals(false);
+}
+
+void ImageEffect_RatioCrop::slotSelectionWidthChanged(int newWidth)
+{
+    m_widthInput->blockSignals(true);
+    m_widthInput->setValue(newWidth);
+    m_widthInput->blockSignals(false);
+}
+
+void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
+{
+    m_heightInput->blockSignals(true);
+    m_heightInput->setValue(newHeight);
     m_heightInput->blockSignals(false);
 }
 

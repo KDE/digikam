@@ -85,7 +85,9 @@ signals:
 
     void signalSelectionMoved( QRect rect, bool targetDone );     
     void signalSelectionChanged( QRect rect );   
-
+    void signalSelectionWidthChanged( int newWidth ); 
+    void signalSelectionHeightChanged( int newHeight ); 
+    
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -138,9 +140,9 @@ private:
     void regionSelectionMoved( bool targetDone );
     
     void regionSelectionChanged(void);
-    void realToLocalRegion(void);
+    void realToLocalRegion(bool updateSizeOnly=false);
     void localToRealRegion(void);
-    void applyAspectRatio(bool WOrH, bool repaintWidget=true);
+    void applyAspectRatio(bool WOrH, bool repaintWidget=true, bool updateChange=true);
     void updatePixmap(void);
 };
 
