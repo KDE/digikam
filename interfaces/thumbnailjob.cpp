@@ -471,3 +471,5 @@ void ThumbnailJob::highlight(QImage& thumb)
 }
 
 
+
+#include "thumbnailjob.moc"

@@ -372,3 +372,5 @@ bool AlbumManager::renameDirectory(const QString& oldPath,
 
 
 }
+
+#include "albummanager.moc"

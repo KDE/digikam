@@ -48,3 +48,5 @@ void Plugin::disableView()
 
 };
 
+
+#include "plugin.moc"

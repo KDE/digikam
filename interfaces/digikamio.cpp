@@ -288,3 +288,5 @@ bool rename(Digikam::AlbumInfo* album,
 }
 
 }
+
+#include "digikamio.moc"
