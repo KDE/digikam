@@ -129,7 +129,7 @@ private slots:
     void slotToggleAdvanced();
     
 signals:
-    void signalLastDestionation(const KURL&);
+    void signalLastDestination(const KURL&);
 };
 
 #endif /* CAMERAUI_H */

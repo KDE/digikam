@@ -246,7 +246,7 @@ bool CameraUI::isBusy() const
 void CameraUI::closeEvent(QCloseEvent* e)
 {
     if(!m_lastDestURL.isEmpty())
-        emit signalLastDestionation(m_lastDestURL);
+        emit signalLastDestination(m_lastDestURL);
 
     delete m_controller;
     saveSettings();

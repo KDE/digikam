@@ -632,7 +632,7 @@ void DigikamApp::slotCameraConnect()
         CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
                                       ctype->port(), ctype->path());
         cgui->show();
-        connect(cgui, SIGNAL(signalLastDestionation(const KURL&)),
+        connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
                 mView, SLOT(slotSelectAlbum(const KURL&)));
     }
 }
