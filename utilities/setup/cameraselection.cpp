@@ -117,7 +117,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     umsMountBoxLayout->setAlignment( Qt::AlignTop );
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
-    umsMountLabel->setText( i18n( "only for USB mass storage\n"
+    umsMountLabel->setText( i18n( "only for USB/IEEE mass storage\n"
                                   "cameras" ) );
     umsMountBoxLayout->addWidget( umsMountLabel );
 

@@ -1,55 +1,63 @@
-/* ============================================================
- * File  : setup.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-10
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+//////////////////////////////////////////////////////////////////////////////
+//
+//    SETUP.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Qt includes.
 
 #include <qtabwidget.h>
 #include <qapplication.h>
+#include <qframe.h>
+
+// KDE includes.
+
 #include <klocale.h>
+#include <kiconloader.h>
+
+// Local includes.
 
 #include "setupcamera.h"
 #include "setupgeneral.h"
-
 #include "setup.h"
 
+
 Setup::Setup(QWidget* parent, const char* name)
-    : KDialogBase(parent, name, true, i18n("Configure"),
-                  Ok|Cancel, Ok, true )
+    : KDialogBase(IconList, i18n("Configure"), Ok|Cancel, Ok, parent,
+                  name, true, true )
 {
     setWFlags(Qt::WDestructiveClose);
-
-    QTabWidget *tabWidget = new QTabWidget(this);
-    setMainWidget(tabWidget);
-
-    generalPage_ = new SetupGeneral(tabWidget);
-    tabWidget->insertTab(generalPage_, i18n("Albums"));
-
-    cameraPage_ = new SetupCamera(tabWidget);
-    tabWidget->insertTab(cameraPage_, i18n("Cameras"));
-
-
+    
+    page_general = addPage(i18n("Albums"), i18n("Albums settings"),
+                           BarIcon("folder_image", KIcon::SizeMedium));
+                                  
+    generalPage_ = new SetupGeneral(page_general);
+    
+    page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),
+                          BarIcon("digitalcam", KIcon::SizeMedium));
+    cameraPage_ = new SetupCamera(page_camera);
+    
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
     show();
-    int W=Setup::width (), H=Setup::height();
-    move(QApplication::desktop()->width ()/2-(W/2), QApplication::desktop()->height()/2-(H/2));
 }
 
 Setup::~Setup()

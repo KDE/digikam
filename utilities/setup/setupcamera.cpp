@@ -1,31 +1,39 @@
-/* ============================================================
- * File  : setupcamera.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-10
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    SETUPGENERAL.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+// Qt includes.
 
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlistview.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kmessagebox.h>
+
+// Local includes.
 
 #include "setupcamera.h"
 #include "cameraselection.h"
@@ -33,12 +41,13 @@
 #include "cameratype.h"
 #include "gpiface.h"
 
-SetupCamera::SetupCamera( QWidget* parent )
-    : QWidget( parent )
-{
-    QVBoxLayout* vbox = new QVBoxLayout( this, 5, 5 ); 
 
-    QGroupBox* groupBox = new QGroupBox( this, "groupBox" );
+SetupCamera::SetupCamera( QWidget* parent )
+           : QWidget( parent )
+{
+    QVBoxLayout* vbox = new QVBoxLayout( parent, 5, 5 ); 
+
+    QGroupBox* groupBox = new QGroupBox( parent, "groupBox" );
     groupBox->setColumnLayout(0, Qt::Vertical );
     groupBox->layout()->setSpacing( 5 );
     groupBox->layout()->setMargin( 5 );
@@ -83,14 +92,17 @@ SetupCamera::SetupCamera( QWidget* parent )
     // connections
 
     connect(listView_, SIGNAL(selectionChanged()),
-            this,      SLOT(slotSelectionChanged()));
+            this, SLOT(slotSelectionChanged()));
     
     connect(addButton_, SIGNAL(clicked()),
             this, SLOT(slotAddCamera()));
+    
     connect(removeButton_, SIGNAL(clicked()),
             this, SLOT(slotRemoveCamera()));
+    
     connect(editButton_, SIGNAL(clicked()),
             this, SLOT(slotEditCamera()));
+    
     connect(autoDetectButton_, SIGNAL(clicked()),
             this, SLOT(slotAutoDetectCamera()));
 

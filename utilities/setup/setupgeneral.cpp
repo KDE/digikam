@@ -1,23 +1,27 @@
-/* ============================================================
- * File  : setupgeneral.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-15
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+//////////////////////////////////////////////////////////////////////////////
+//
+//    SETUPGENERAL.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// QT includes.
 
 #include <qlayout.h>
 #include <qvbuttongroup.h>
@@ -32,6 +36,8 @@
 #include <qdir.h>
 #include <qlistbox.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
@@ -39,20 +45,22 @@
 #include <kmessagebox.h>
 #include <klineeditdlg.h>
 
+// // Local includes.
+
 #include "thumbnailsize.h"
 #include "albumsettings.h"
 #include "setupgeneral.h"
 
 
 SetupGeneral::SetupGeneral(QWidget* parent )
-    : QWidget(parent)
+            : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( this,10);
+   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
    layout->setSpacing( KDialog::spacingHint() );
 
    // --------------------------------------------------------
 
-   QHGroupBox *albumPathBox = new QHGroupBox(this);
+   QHGroupBox *albumPathBox = new QHGroupBox(parent);
    albumPathBox->setTitle(i18n("Album Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
@@ -65,7 +73,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QHGroupBox *fileFilterBox = new QHGroupBox(this);
+   QHGroupBox *fileFilterBox = new QHGroupBox(parent);
 
    QLabel *fileFilterLabel = new QLabel(fileFilterBox);
    fileFilterLabel->setText(i18n("Show only files with extensions:"));
@@ -76,7 +84,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    
    // --------------------------------------------------------
    
-   QVButtonGroup* iconSizeButtonGroup = new QVButtonGroup(this);
+   QVButtonGroup* iconSizeButtonGroup = new QVButtonGroup(parent);
    iconSizeButtonGroup->setTitle( i18n( "Default Thumbnail Size" ) );
    iconSizeButtonGroup->setRadioButtonExclusive(true);
 
@@ -96,7 +104,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QVGroupBox* iconTextGroup = new QVGroupBox(this);
+   QVGroupBox* iconTextGroup = new QVGroupBox(parent);
    iconTextGroup->setTitle(i18n("Extra Information  in Thumbnail View"));
 
    iconShowMimeBox_ = new QCheckBox(iconTextGroup);
@@ -115,7 +123,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    
    // --------------------------------------------------------
 
-   QGroupBox* collectionGroup = new QVGroupBox(this);
+   QGroupBox* collectionGroup = new QVGroupBox(parent);
    collectionGroup->setTitle(i18n("Album Collection Types"));
    collectionGroup->setColumnLayout(0, Qt::Vertical );
    collectionGroup->layout()->setSpacing( KDialog::spacingHint() );
