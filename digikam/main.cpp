@@ -39,6 +39,7 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <ktip.h>
+#include <kdeversion.h>
 #include <dcopclient.h>
 
 // Local includes.
@@ -208,11 +209,15 @@ int main(int argc, char *argv[])
 
     splash->finish( digikam );
 
+#if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
     
-    KTipDialog::showMultiTip(0, tipsFiles);
+    KTipDialog::showMultiTip(0, tipsFiles, true);
+#else
+    KTipDialog::showTip(0, "digikam/tips", true);
+#endif
 
     return app.exec();
 }
