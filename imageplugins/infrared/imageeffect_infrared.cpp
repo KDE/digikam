@@ -140,7 +140,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     m_addFilmGrain = new QCheckBox( i18n("Add Film Grain"), plainPage());
     m_addFilmGrain->setChecked( true );
-    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option adding infrared film grain to image depending of sensibility."));
+    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to the image depending on ISO-sensitivity."));
     hlay->addWidget(m_addFilmGrain, 1);
     
     // -------------------------------------------------------------
@@ -156,9 +156,9 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     m_sensibilityLCDValue = new QLCDNumber (3, plainPage(), "m_sensibilityLCDValue");
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(200) );
-    whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the infrared film. "
-                     "Increasing this value will increase the efficentcy of green color, the halo effect "
-                     "on the hightlight, and the film graininess (if this one is enable).");
+    whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
+                     "Increasing this value will increase the portion of green color in the mix. " 
+                     "It'll also increase the halo effect on the hightlights, and the film graininess (if the box is checked).");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
