@@ -237,6 +237,8 @@ void ImageEffect_Border::readSettings(void)
     m_niepceLineColor = config->readColorEntry("Niepce Line Color", black);
     m_bevelUpperLeftColor = config->readColorEntry("Bevel Upper Left Color", gray1);
     m_bevelLowerRightColor = config->readColorEntry("Bevel Lower Right Color", gray2);
+    m_decorativeFirstColor = config->readColorEntry("Decorative First Color", black);; 
+    m_decorativeSecondColor = config->readColorEntry("Decorative Second Color", black);
     
     delete black;
     delete white;
@@ -259,6 +261,8 @@ void ImageEffect_Border::writeSettings(void)
     config->writeEntry( "Niepce Line Color", m_niepceLineColor );
     config->writeEntry( "Bevel Upper Left Color", m_bevelUpperLeftColor );
     config->writeEntry( "Bevel Lower Right Color", m_bevelLowerRightColor );
+    config->writeEntry( "Decorative First Color", m_decorativeFirstColor );
+    config->writeEntry( "Decorative Second Color", m_decorativeSecondColor );
     
     config->sync();
 }
@@ -338,6 +342,7 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
+          m_decorativeFirstColor = color;
           break;
        }
        
@@ -376,6 +381,7 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
+          m_decorativeSecondColor = color;
           break;          
        }
        
@@ -384,10 +390,10 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
 
 void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 {
-    m_labelForeground->setText(i18n("Foreground:"));
-    m_labelBackground->setText(i18n("Background:"));    
+    m_labelForeground->setText(i18n("First:"));
+    m_labelBackground->setText(i18n("Second:"));
     QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the foreground color of the border."));
-    QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the foreground color of the border."));
+    QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the Background color of the border."));
     m_foregroundColorButton->setEnabled(true);
     m_backgroundColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
@@ -403,8 +409,6 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           break;
        
        case 1: // Niepce.
-          m_labelForeground->setText(i18n("Main:"));
-          m_labelBackground->setText(i18n("Line:"));
           QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the main border."));
           QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the line."));
           m_foregroundColorButton->setColor( m_niepceBorderColor );
@@ -412,8 +416,6 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           break;
 
        case 2: // Beveled.
-          m_labelForeground->setText(i18n("Upper Left:"));
-          m_labelBackground->setText(i18n("Lower Right:"));
           QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the upper left area."));
           QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the lower right area."));
           m_foregroundColorButton->setColor( m_bevelUpperLeftColor );
@@ -436,10 +438,10 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
-          m_foregroundColorButton->setEnabled(false);
-          m_backgroundColorButton->setEnabled(false);
-          m_labelForeground->setEnabled(false);
-          m_labelBackground->setEnabled(false);
+          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the first line."));
+          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the second line."));
+          m_foregroundColorButton->setColor( m_decorativeFirstColor );
+          m_backgroundColorButton->setColor( m_decorativeSecondColor );
           break;
        }
 
@@ -458,24 +460,23 @@ void ImageEffect_Border::slotEffect()
     float ratio = (float)w/(float)iface->originalWidth();
     int borderWidth = (int)((float)m_borderWidth->value()*ratio);
     
-    QImage src, dest;
+    QImage src, dest, tmp;
     src.create( w, h, 32 );
-    src.setAlphaBuffer(true);
     memcpy(src.bits(), data, src.numBytes());
 
     switch (borderType)
        {
        case 0: // Solid.
-          solid(src, dest, m_solidColor, borderWidth);
+          solid(src, tmp, m_solidColor, borderWidth);
           break;
        
        case 1: // Niepce.
-          niepce(src, dest, m_niepceBorderColor, borderWidth, 
+          niepce(src, tmp, m_niepceBorderColor, borderWidth, 
                  m_niepceLineColor, 3);
           break;
 
        case 2: // Beveled.
-          bevel(src, dest, m_bevelUpperLeftColor,
+          bevel(src, tmp, m_bevelUpperLeftColor,
                 m_bevelLowerRightColor, borderWidth);
           break;
 
@@ -496,13 +497,16 @@ void ImageEffect_Border::slotEffect()
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
           setCursor( KCursor::waitCursor() );
-          pattern(src, dest, borderWidth);
+          pattern(src, tmp, borderWidth, m_decorativeFirstColor, m_decorativeSecondColor);
           setCursor( KCursor::arrowCursor() );        
           break;
        }
-
-    iface->putPreviewData((uint*)dest.scale(w, h).bits());
     
+    tmp = tmp.scale(w, h, QImage::ScaleMin);
+    dest.create( w, h, 32 );
+    dest.fill(m_previewWidget->colorGroup().background().rgb());
+    bitBlt( &dest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());
+    iface->putPreviewData((uint*)dest.bits());
     delete [] data;
     m_previewWidget->update();
 }
@@ -522,7 +526,6 @@ void ImageEffect_Border::slotOk()
     
     QImage src, dest;
     src.create( w, h, 32 );
-    src.setAlphaBuffer(true);
     memcpy(src.bits(), data, src.numBytes());
 
     switch (borderType)
@@ -557,7 +560,7 @@ void ImageEffect_Border::slotOk()
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
-          pattern(src, dest, m_borderWidth->value());
+          pattern(src, dest, m_borderWidth->value(), m_decorativeFirstColor, m_decorativeSecondColor);
           break;
        }
 
@@ -574,10 +577,9 @@ void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int 
 {
     dest.reset();
     dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    dest.setAlphaBuffer(true);
     dest.fill(fg.rgb());
        
-    KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
+    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
 }
 
 void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth)
@@ -587,12 +589,11 @@ void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int
     
     dest.reset();
     dest.create(src.width() + borderWidth*2 + lineWidth*2, src.height() + borderWidth*2 + lineWidth*2, 32);
-    dest.setAlphaBuffer(true);
     dest.fill(fg.rgb());
     
     // Copy original image.
                          
-    KImageEffect::blendOnLower(borderWidth + lineWidth, borderWidth + lineWidth, src, dest);
+    bitBlt( &dest, borderWidth + lineWidth, borderWidth + lineWidth, &src, 0, 0, src.width(), src.height());
 
     // Drawing fine line.
     // top
@@ -638,7 +639,6 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
     
     dest.reset();
     dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    dest.setAlphaBuffer(true);
     
     // top
     
@@ -679,10 +679,11 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
           output[x] = btmColor.rgb();
        }
        
-    KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
+    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
 }
 
-void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
+void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
+                                 const QColor &firstColor, const QColor &secondColor)
 {
     QString pattern;
     
@@ -760,23 +761,29 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
     QPainter p(&patternPixmap);
+    
+    // Pattern tile.
     p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
                 QBrush::QBrush(Qt::black,
                 QPixmap::QPixmap(path + pattern + ".png")) );
-    
-    p.setPen(QPen(Qt::black, 10, Qt::SolidLine));
-    p.drawRect( m_borderWidth->value()-5, m_borderWidth->value()-5, 
-                m_previewWidget->imageIface()->originalWidth()+10, 
-                m_previewWidget->imageIface()->originalHeight()+10 );
 
-    p.drawRect( 5, 5, patternPixmap.width()-10, patternPixmap.height()-10 );
+    // First line.                
+    p.setPen(QPen(firstColor, 20, Qt::SolidLine));
+    p.drawRect( 0, 0, patternPixmap.width(), patternPixmap.height() );
+
+    // Second line.
+    p.setPen(QPen(secondColor, 20, Qt::SolidLine));
+    p.drawRect( m_borderWidth->value(), m_borderWidth->value(), 
+                m_previewWidget->imageIface()->originalWidth(), 
+                m_previewWidget->imageIface()->originalHeight() );
                                 
     p.end();
     
     dest = patternPixmap.convertToImage().scale( src.width() + borderWidth*2,
                                                  src.height() + borderWidth*2 );
     
-    KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
+    // Copy original image.                                                 
+    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
 }
 
 }  // NameSpace DigikamBorderImagesPlugin
