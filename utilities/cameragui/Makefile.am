@@ -14,7 +14,7 @@ libcameragui_la_LIBADD  = $(LIB_GPHOTO) $(LIBKEXIF_LIBS) -ljpeg
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
-	$(all_includes) $(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS)
+	$(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
 digikamcameraguiicondir = $(kde_datadir)/digikam/icons
 digikamcameraguiicon_ICON = AUTO
