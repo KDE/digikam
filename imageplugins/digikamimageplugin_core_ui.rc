@@ -39,6 +39,9 @@
 
  </MenuBar>
 
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
 
  <ActionProperties/>
 
