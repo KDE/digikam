@@ -3,11 +3,39 @@
 
 <MenuBar>
 
-  <Menu name="view" >
+  <Menu name="file" >
+   <text>&amp;File</text>
+     <Action name="open_file" /> 
+ </Menu>
+
+ <Menu name="go" >
+   <text>&amp;Go</text>
+     <Action name="go_bwd" /> 
+     <Action name="go_fwd" /> 
+ </Menu>
+
+ <Menu name="view" >
    <text>&amp;View</text>
+     <Action name="zoom_plus" />
+     <Action name="zoom_minus" />
      <Action name="zoom_fit" /> 
+     <Separator />
+     <Action name="full_screen" /> 
  </Menu>
 
 </MenuBar>
+
+<ToolBar noMerge="1" name="mainToolBar">
+  <text>Main Toolbar</text>
+  <Action name="open_file" />
+  <Action name="go_bwd" />
+  <Action name="go_fwd" />
+  <Separator />
+  <Action name="zoom_plus" />
+  <Action name="zoom_minus" />
+  <Action name="zoom_fit" />
+  <Separator />
+  <Action name="full_screen" /> 
+</ToolBar>
 
 </kpartgui>

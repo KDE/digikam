@@ -44,6 +44,8 @@ private slots:
     void slotPrev();
     void slotAutoFit();
     void slotOpenURL(const KURL& url);
+    void slotToggleFullScreen();
+    void slotEscapePressed();
     
 private:
 
@@ -56,6 +58,7 @@ private:
     KToggleAction*  m_zoomFitAction;
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
+    bool            m_fullScreen;
 };
 
 #endif /* SHOWFOTO_H */

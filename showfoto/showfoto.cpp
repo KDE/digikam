@@ -24,7 +24,9 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <kmenubar.h>
 #include <kimageio.h>
+#include <kaccel.h>
 
 #include "canvas.h"
 #include "thumbbar.h"
@@ -40,8 +42,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     lay->addWidget(m_canvas);
     lay->addWidget(m_bar);
 
+    m_fullScreen = false;
+    
     setCentralWidget(widget);
-
     setupActions();
 
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
@@ -69,27 +72,36 @@ void ShowFoto::setupActions()
 {
 
     KStdAction::open(this, SLOT(slotOpenFile()),
-                     actionCollection());
+                     actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
     KStdAction::forward(this, SLOT(slotNext()),
-                        actionCollection());
+                        actionCollection(), "go_fwd");
     KStdAction::back(this, SLOT(slotPrev()),
-                     actionCollection());
+                     actionCollection(), "go_bwd");
 
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
-                           actionCollection());
+                           actionCollection(), "zoom_plus");
     m_zoomMinusAction =
         KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
-                       actionCollection());
+                            actionCollection(), "zoom_minus");
     m_zoomFitAction
         = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
                             Key_A,
                             this, SLOT(slotAutoFit()),
                             actionCollection(), "zoom_fit");
+
+    KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+                           actionCollection(), this, "full_screen");
     
     createGUI("showfotoui.rc", false);
+
+    KAccel *accel = new KAccel(this);
+    accel->insert("Exit fullscreen", i18n("Exit Fullscreen"),
+                  i18n("Exit out of the fullscreen mode"),
+                  Key_Escape, this, SLOT(slotEscapePressed()),
+                  false, true);
 }
 
 void ShowFoto::slotOpenFile()
@@ -103,7 +115,8 @@ void ShowFoto::slotOpenFile()
     if (!urls.isEmpty())
     {
         m_bar->clear();
-        for (KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it)
+        for (KURL::List::const_iterator it = urls.begin();
+             it != urls.end(); ++it)
         {
             new ThumbBarItem(m_bar, *it);
         }
@@ -141,6 +154,51 @@ void ShowFoto::slotAutoFit()
     m_zoomMinusAction->setEnabled(!checked);
 
     m_canvas->slotToggleAutoZoom();
+}
+
+void ShowFoto::slotToggleFullScreen()
+{
+    if (m_fullScreen)
+    {
+
+#if QT_VERSION >= 0x030300
+        setWindowState( windowState() & ~WindowFullScreen );
+#else
+        showNormal();
+#endif
+        menuBar()->show();
+        QObject* obj = child("mainToolBar","KToolBar");
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            toolBar->show();
+        }
+    
+        m_fullScreen = false;
+    }
+    else
+    {
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+
+        QObject* obj = child("mainToolBar","KToolBar");
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            toolBar->hide();
+        }
+
+        showFullScreen();
+        m_fullScreen = true;
+    }
+}
+
+void ShowFoto::slotEscapePressed()
+{
+    if (!m_fullScreen)
+        return;
+
+    slotToggleFullScreen();    
 }
 
 #include "showfoto.moc"
