@@ -30,6 +30,7 @@
 #include <qstylesheet.h>
 #include <qpainter.h>
 #include <qapplication.h>
+#include <qstylesheet.h>
 
 // KDE includes.
 
@@ -384,8 +385,7 @@ QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
 
-    str.replace(QChar('<'), "&lt;");
-    str.replace(QChar('>'), "&gt;");
+    str = QStyleSheet::escape(str);
                  
     uint maxLen = 30;
 
