@@ -393,83 +393,85 @@ void ListView::keyPressEvent(QKeyEvent *e)
     if (!e)
         return;
 
-    if(e->state())
-        return;
+    if(!e->state())
+    {
+        switch(e->key()) {
+        case (Qt::Key_Down): {
+            if (!d->selectedItem)
+                setSelected(d->rootItem->m_firstChild);
+            else {
+                int pos = d->visibleItems.findRef(d->selectedItem);
+                if (pos != -1 && pos < (int)d->visibleItems.size()-1) {
+                    pos++;
+                    ListItem* item = d->visibleItems.at(pos);
+                    if (item) {
+                        setSelected(item);
+                        ensureVisible(0, item->m_pos+d->itemHeight/2);
+                    }
+                }
+            }
+            break;
+        }
     
-    switch(e->key()) {
-    case (Qt::Key_Down): {
-        if (!d->selectedItem)
-            setSelected(d->rootItem->m_firstChild);
-        else {
-            int pos = d->visibleItems.findRef(d->selectedItem);
-            if (pos != -1 && pos < (int)d->visibleItems.size()-1) {
-                pos++;
-                ListItem* item = d->visibleItems.at(pos);
-                if (item) {
-                    setSelected(item);
-                    ensureVisible(0, item->m_pos+d->itemHeight/2);
+        case (Qt::Key_Up): {
+            if (!d->selectedItem)
+                setSelected(d->rootItem->m_firstChild);
+            else {
+                int pos = d->visibleItems.findRef(d->selectedItem);
+                if (pos != -1 && pos > 0) {
+                    pos--;
+                    ListItem* item = d->visibleItems.at(pos);
+                    if (item) {
+                        setSelected(item);
+                        ensureVisible(0, item->m_pos+d->itemHeight/2);
+                    }
                 }
             }
+            break;
         }
-        break;
-    }
-
-    case (Qt::Key_Up): {
-        if (!d->selectedItem)
-            setSelected(d->rootItem->m_firstChild);
-        else {
-            int pos = d->visibleItems.findRef(d->selectedItem);
-            if (pos != -1 && pos > 0) {
-                pos--;
-                ListItem* item = d->visibleItems.at(pos);
-                if (item) {
-                    setSelected(item);
-                    ensureVisible(0, item->m_pos+d->itemHeight/2);
-                }
-            }
-        }
-        break;
-    }
-
-    case (Qt::Key_Right): {
-        if (d->selectedItem)
-        {
-            if (!d->selectedItem->isOpen())
+    
+        case (Qt::Key_Right): {
+            if (d->selectedItem)
             {
-                d->selectedItem->setOpen(true);
-            }
-            else
-            {
-                ListItem *child = d->selectedItem->firstChild();
-                if (child)
-                    setSelected(child);
-            }
-        }       
-        break;
-    }
-
-    case (Qt::Key_Left): {
-        if (d->selectedItem)
-        {
-            if (d->selectedItem->isOpen())
-            {
-                d->selectedItem->setOpen(false);
-            }
-            else
-            {
-                ListItem* p = d->selectedItem->parent();
-                if (p && p != d->rootItem)
+                if (!d->selectedItem->isOpen())
                 {
-                    setSelected(p);
+                    d->selectedItem->setOpen(true);
+                }
+                else
+                {
+                    ListItem *child = d->selectedItem->firstChild();
+                    if (child)
+                        setSelected(child);
+                }
+            }       
+            break;
+        }
+    
+        case (Qt::Key_Left): {
+            if (d->selectedItem)
+            {
+                if (d->selectedItem->isOpen())
+                {
+                    d->selectedItem->setOpen(false);
+                }
+                else
+                {
+                    ListItem* p = d->selectedItem->parent();
+                    if (p && p != d->rootItem)
+                    {
+                        setSelected(p);
+                    }
                 }
             }
+            break;
         }
-        break;
+            
+        default:
+            e->ignore();
+        }
     }
-        
-    default:
+    else
         e->ignore();
-    }
 }
 
 ListItem* ListView::itemAt(const QPoint& pt)
@@ -495,7 +497,7 @@ QRect ListView::itemRect(ListItem* item) const
 
 void ListView::setSelected(ListItem* item)
 {
-    if (!item || item == d->selectedItem)
+    if (item == d->selectedItem)
         return;
 
     ensureItemVisible(item);        
