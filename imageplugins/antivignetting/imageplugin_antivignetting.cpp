@@ -54,7 +54,7 @@ ImagePlugin_AntiVignetting::~ImagePlugin_AntiVignetting()
 QStringList ImagePlugin_AntiVignetting::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_antivignetting/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /Action/imageplugin_antivignetting/ ");
     return guiDef;
 }
 

@@ -54,7 +54,7 @@ ImagePlugin_LensDistortion::~ImagePlugin_LensDistortion()
 QStringList ImagePlugin_LensDistortion::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_lensdistortion/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /Action/imageplugin_lensdistortion/ ");
     return guiDef;
 }
 

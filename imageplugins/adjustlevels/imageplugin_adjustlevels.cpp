@@ -55,7 +55,7 @@ ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()
 QStringList ImagePlugin_AdjustLevels::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/imageplugin_adjustlevels/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /Menu/&Colors/ /Action/imageplugin_adjustlevels/ ");
     return guiDef;
 }
 

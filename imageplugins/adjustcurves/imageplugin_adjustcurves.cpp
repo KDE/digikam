@@ -54,7 +54,7 @@ ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()
 QStringList ImagePlugin_AdjustCurves::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/imageplugin_adjustcurves/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /Menu/&Colors/ /Action/imageplugin_adjustcurves/ ");
     return guiDef;
 }
 

@@ -55,7 +55,7 @@ ImagePlugin_Solarize::~ImagePlugin_Solarize()
 QStringList ImagePlugin_Solarize::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_solarize/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_solarize/ ");
     return guiDef;
 }
 

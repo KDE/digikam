@@ -58,7 +58,7 @@ ImagePlugin_Unsharp::~ImagePlugin_Unsharp()
 QStringList ImagePlugin_Unsharp::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_unsharp/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /Action/imageplugin_unsharp/ ");
     return guiDef;
 }
 
