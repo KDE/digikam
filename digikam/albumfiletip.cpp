@@ -384,11 +384,13 @@ QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
 
+    str.replace(QChar('<'), "&lt;");
+    str.replace(QChar('>'), "&gt;");
+                 
     uint maxLen = 30;
 
     if (str.length() <= maxLen)
         return str;
-
 
     QString br;
 

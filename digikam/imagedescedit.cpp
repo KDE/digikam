@@ -104,6 +104,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
     m_commentsEdit = new KTextEdit(commentsBox);
+    m_commentsEdit->setTextFormat(QTextEdit::PlainText);
 #if KDE_IS_VERSION(3,2,0)
     m_commentsEdit->setCheckSpellingEnabled(true);
 #endif
