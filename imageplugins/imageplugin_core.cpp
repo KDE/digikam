@@ -80,18 +80,34 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
 
-    new KAction(i18n("Normalize"), 0,
+    KAction *normalizeAction = new KAction(i18n("Normalize"), 0,
                 this, SLOT(slotNormalize()),
                 actionCollection(), "implugcore_normalize");
+    normalizeAction->setWhatsThis( i18n( "This option scales brightness values across the active "
+                                         "image so that the darkest point becomes black, and the "
+                                         "brightest point becomes as bright as possible without "
+                                         "altering its hue. This is often a \"magic fix\" for "
+                                         "images that are dim or washed out."));                
 
-    new KAction(i18n("Equalize"), 0,
+    KAction *equalizeAction = new KAction(i18n("Equalize"), 0,
                 this, SLOT(slotEqualize()),
                 actionCollection(), "implugcore_equalize");
-
-    new KAction(i18n("Auto Levels"), 0,
+    equalizeAction->setWhatsThis( i18n( "This option adjusts the brightness of colors across the "
+                                        "active image so that the histogram for the Value channel "
+                                        "is as nearly as possible flat, that is, so that each possible "
+                                        "brightness value appears at about the same number of pixels "
+                                        "as each other value. Sometimes Equalize works wonderfully at "
+                                        "enhancing the contrasts in an image. Other times it gives "
+                                        "garbage. It is a very powerful operation, which can either work "
+                                        "miracles on an image or destroy it.display the current image histogram."));  
+                                         
+    KAction *autolevelseAction = new KAction(i18n("Auto Levels"), 0,
                 this, SLOT(slotAutoLevels()),
                 actionCollection(), "implugcore_autolevels");
-
+    autolevelseAction->setWhatsThis( i18n( "This option maximizes the tonal range in the Red, Green, "
+                                           "and Blue channels. It search the image shadow and highlight "
+                                           "limit values and adjust the Red, Green, and Blue channels "
+                                           "to a full histogram range."));  
     //-------------------------------
     // Image menu actions.
 

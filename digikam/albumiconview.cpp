@@ -529,7 +529,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("text_block"),
                        i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(i18n("Properties && &Meta-data..."), 14);
+    popmenu.insertItem(i18n("Properties && &Meta-Data..."), 14);
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
         popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);

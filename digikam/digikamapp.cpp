@@ -191,7 +191,8 @@ void DigikamApp::setupActions()
                                     SLOT(slot_newAlbum()),
                                     actionCollection(),
                                     "album_new");
-
+    mNewAction->setWhatsThis(i18n("This option create a new empty Album in the database."));
+                                         
     mAlbumSortAction = new KSelectAction(i18n("&Sort Albums"),
                                     0,
                                     0,
@@ -223,6 +224,8 @@ void DigikamApp::setupActions()
                                     SLOT(slot_albumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
+    mAddImagesAction->setWhatsThis(i18n("This option adding new images in the current Album."));
+                                    
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
                                     "fileopen",
@@ -240,7 +243,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_albumPropsEdit()),
                                     actionCollection(),
                                     "album_propsEdit");
-
+    mPropsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
+                                        "about the Collection."));
+    
     mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
                                     0,
@@ -272,7 +277,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageView()),
                                     actionCollection(),
                                     "image_view");
-
+    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the current selected "
+                                        "image."));
+                                        
     mImageCommentsAction = new KAction(i18n("Edit Image Comments && Tags..."),
                                    "imagecomment",
                                     Key_F3,
@@ -280,7 +287,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageCommentsEdit()),
                                     actionCollection(),
                                     "image_comments");
-
+    mImageCommentsAction->setWhatsThis(i18n("This option allows you to edit the comments and tags of the current "
+                                            "selected image."));
+                                        
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
                                     Key_F2,
@@ -288,7 +297,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageRename()),
                                     actionCollection(),
                                     "image_rename");
-
+    mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename of the current selected "
+                                          "image."));                                    
+                                    
     mImageDeleteAction = new KAction(i18n("Delete"),
                                     "editdelete",
                                     SHIFT+Key_Delete,
@@ -297,13 +308,15 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_delete");
 
-    mImagePropsAction = new KAction(i18n("Properties && &Meta-data..."),
+    mImagePropsAction = new KAction(i18n("Properties && &Meta-Data..."),
                                     "exifinfo",
                                     ALT+Key_Return,
                                     mView,
                                     SLOT(slotImageProperties()),
                                     actionCollection(),
                                     "image_properties");
+    mImagePropsAction->setWhatsThis(i18n("This option allows you to display the file properties, the meta-data "
+                                         "and the histogram of the current selected image."));
 
     mImageSortAction = new KSelectAction(i18n("&Sort Images"),
                                     0,
@@ -411,6 +424,7 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizePlus()),
                                    actionCollection(),
                                    "album_thumbSizeIncrease");
+    mThumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase the Album thumbnails size."));    
 
     mThumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
                                    "viewmag-",
@@ -419,6 +433,7 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizeMinus()),
                                    actionCollection(),
                                    "album_thumbSizeDecrease");
+    mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease the Album thumbnails size."));    
 
     mFullScreenAction = new KAction(i18n("Toggle Full Screen"),
                                    "window_fullscreen",
@@ -427,7 +442,8 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-
+    mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main windows in full screen mode."));    
+    
     mQuitAction = KStdAction::quit(this,
                                    SLOT(slot_exit()),
                                    actionCollection(),
