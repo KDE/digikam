@@ -24,3 +24,6 @@ KDE_OPTIONS=nofinal
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_adjustcurves_ui.rc
+
+digikamimageplugin_adjustcurvesicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_adjustcurvesicon_ICON = AUTO

@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_freerotation_ui.rc
+
+digikamimageplugin_freerotationicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_freerotationicon_ICON = AUTO

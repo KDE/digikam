@@ -40,7 +40,7 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
-    new KAction(i18n("Curves Adjust..."), 0, 
+    new KAction(i18n("Curves Adjust..."), "adjustcurves", 0, 
                 this, SLOT(slotCurvesAdjust()),
                 actionCollection(), "imageplugin_adjustcurves");
 

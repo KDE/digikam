@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_freerotation,
 ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const char*, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_FreeRotation")
 {
-    new KAction(i18n("Free Rotation..."), 0, 
+    new KAction(i18n("Free Rotation..."), "freerotation", 0, 
                 this, SLOT(slotFreeRotation()),
                 actionCollection(), "imageplugin_freerotation");
     

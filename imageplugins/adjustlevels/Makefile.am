@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_adjustlevels_ui.rc
+
+digikamimageplugin_adjustlevelsicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_adjustlevelsicon_ICON = AUTO
