@@ -1,5 +1,197 @@
+v0.7.2				28/02/05
+----------------------------------------------------------------------------
+2005-02-28 15:26  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: Fix copyright.
+	  Fix colors ordering in gaussian blur
+
+2005-02-27 00:31  cgilles
+
+	* libs/filters/imagefilters.cpp: Channel mixer: fixed inversion
+	  between red and blue channels
+
+2005-02-25 16:27  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: Add channel
+	  mixer for future image plugin.
+
+2005-02-25 11:34  cgilles
+
+	* libs/widgets/: imageguidewidget.cpp, imageguidewidget.h: Fix
+	  mouse tracking for cross postion at lauch widget.  Add new method
+	  for get cross position and set cross visible (for future image
+	  plugins)
+
+2005-02-25 10:05  cgilles
+
+	* libs/widgets/: imagepaniconwidget.cpp, imagepaniconwidget.h:
+	  Improve double buffering.  Fix mouse right click focus running.
+
+2005-02-25 07:44  cgilles
+
+	* digikam/digikamfirstrun.cpp: Fix i18n
+
+2005-02-24 07:33  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: New gaussian
+	  blur filter used in image editor plugins
+
+2005-02-24 02:20  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+
+	  prompt for save if image has been modified and user tries to open
+	  a new file
+
+2005-02-23 11:22  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: Fix antialias
+	  method to smartblur
+
+2005-02-22 10:57  cgilles
+
+	* digikam/imagepropertieshistogram.cpp: No need to have Qimage
+	  alpha buffer enable.
+
+2005-02-22 10:54  cgilles
+
+	* libs/widgets/imageregionwidget.cpp: No need to enable QImage
+	  alphaBuffer
+
+2005-02-21 15:55  cgilles
+
+	* libs/widgets/imageselectionwidget.cpp: Fixed bug #91378, comments
+	  #6 CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-21 05:37  pahlibar
+
+	* kioslave/digikamio.cpp:
+
+	  when copying files over, set the file modification time to that
+	  of src file BUG: 99896
+
+2005-02-20 19:19  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+
+	  the toolbar "name" got changed in the transition to kmainwindow.
+	  change. fixes bug with toolbar not hiding in full screen mode
+
+2005-02-20 19:05  pahlibar
+
+	* utilities/setup/setupcamera.cpp:
+
+	  do the same for auto-detect in setup as in main window
+	  auto-detect
+
+2005-02-17 16:47  pahlibar
+
+	* digikam/digikamapp.cpp, utilities/imageeditor/undocache.cpp:
+
+	  make sure the undo cache is properly emptied if the user closes
+	  the main window instead of the image window first
+
+2005-02-17 16:15  pahlibar
+
+	* utilities/cameragui/cameraiconview.cpp:
+
+	  use localtime and not utc to generate the exif based filename
+	  BUGS: 99544
+
+2005-02-16 19:49  pahlibar
+
+	* digikam/albumfiletip.cpp:
+
+	  Better solution. escape all html characters CCBUGS: 99500
+
+2005-02-16 02:13  pahlibar
+
+	* digikam/: albumfiletip.cpp, imagedescedit.cpp:
+
+	  show tooltip text as actual text. also set format in
+	  commentseditor to use plaintext BUGS: 99500
+
+2005-02-15 23:28  ach
+
+	* digikam/main.cpp, showfoto/main.cpp: oh,oh msg freeze. revert
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-15 21:54  ach
+
+	* digikam/main.cpp, showfoto/main.cpp: you were not that lazy this
+	  year ;)
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-15 12:40  lukas
+
+	* showfoto/main.cpp: show the app translated
+
+2005-02-14 11:16  cgilles
+
+	* imageplugins/imageplugin_core.cpp: Fix icon name
+
+2005-02-14 09:18  cgilles
+
+	* Makefile.am: Patch from Laurent Montel
+
+2005-02-11 23:21  pahlibar
+
+	* digikam/: albumiconitem.cpp, albumiconitem.h, thumbitem.cpp,
+	  thumbitem.h:
+
+	  these methods should be const
+
+2005-02-11 20:26  jahrens
+
+	* digikam/: albumiconitem.cpp, albumiconitem.h, albumiconview.cpp,
+	  albumiconview.h, thumbview.cpp, thumbview.h: We just decided not
+	  to make this behavior configurable.  So it's possible to commit
+	  before 0.7.2 release.
+
+	  Hey Achim, no more reason to walk in circles. Stop walking and
+	  update ;-)
+
+	  BUG: 88805
+
+2005-02-11 18:33  pahlibar
+
+	* digikam/main.cpp:
+
+	  insert the catalogues for kipiplugins and digikamimageplugins so
+	  that the tips can be translated properly
+
+2005-02-10 18:41  pahlibar
+
+	* libs/filters/imagefilters.cpp:
+
+	  suppress compiler warning
+
+2005-02-09 21:14  adridg
+
+	* kioslave/parse.c: compile on non-linux
+
+2005-02-09 15:47  adrian
+
+	* digikam/digikam.desktop: remove .png icon extentsion, because it
+	  might break the svg support in some icon theme.
+
+2005-02-09 13:14  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: Bugfix: Missing
+	  to add antialiasing filter after apply an affine transformation
+	  to an image.	CCMAIl: digikam-devel@list.sourceforge.net
+
+
+
 v0.7.2-beta1			08/02/05
 ----------------------------------------------------------------------------
+
+2005-02-08 12:17  cgilles
+
+	* ChangeLog: Updated for 0.7.2-beta1 release
+
 2005-02-08 10:29  cgilles
 
 	* digikam.lsm, version.h: UPdate
