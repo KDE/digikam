@@ -92,11 +92,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     viewBoxLayout->addMultiCellWidget(m_view, 0, 0, 0, 3);
 
     m_cancelBtn = new QToolButton(viewBox);
-    QPixmap icon = kapp->iconLoader()->loadIcon("stop",
-                                                KIcon::NoGroup,
-                                                22);
+    QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop",
+                                                       KIcon::Toolbar,
+                                                       22);
     m_cancelBtn->setText(i18n("Cancel"));
-    m_cancelBtn->setIconSet(icon);
+    m_cancelBtn->setIconSet(iconSet);
     m_cancelBtn->setEnabled(false);
     viewBoxLayout->addWidget(m_cancelBtn, 1, 0);
     
