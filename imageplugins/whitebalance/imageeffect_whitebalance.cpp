@@ -213,7 +213,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_autoAdjustExposure = new QPushButton(gbox);
     m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto Exposure adjustments." ) );
-    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can adjust automaticly Exposure "
+    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
     m_exposureInput = new KDoubleNumInput(gbox);
     m_exposureInput->setPrecision(2);
@@ -331,12 +331,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
     
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
-                                                      "will be colored black. This haven't effect to final rendering."));
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
+                                                      "will be colored black. This will not have an effect on the final rendering."));
 
     m_WBSaturedIndicatorBox = new QCheckBox(i18n("White Balance Saturation Indicator"), gbox4);
-    QWhatsThis::add( m_WBSaturedIndicatorBox, i18n("<p>If you enable this option, over-satured pixels from target image preview "
-                                                   "will be over-colored. This haven't effect to final rendering."));
+    QWhatsThis::add( m_WBSaturedIndicatorBox, i18n("<p>If you enable this option, over-saturated pixels from the target image preview "
+                                                   "will be over-colored. This will not have an effect on the final rendering."));
     
     topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
