@@ -146,13 +146,13 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_renameCustomizer = new RenameCustomizer(m_advBox);
     m_view->setRenameCustomizer(m_renameCustomizer);
 
-    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera provided Information(EXIF)"),
+    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera-provided Information (EXIF)"),
                                          m_advBox);
     m_autoRotateCheck = new QCheckBox(i18n("Automatically rotate/flip using "
-                                           "camera provided information (EXIF)"),
+                                           "camera-provided information (EXIF)"),
                                       exifBox);
     m_autoAlbumCheck = new QCheckBox(i18n("Download photos into automatically "
-                                          "created date based sub-albums of "
+                                          "created date-based sub-albums of "
                                           "destination album"),
                                       exifBox);
     

@@ -393,7 +393,7 @@ void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
 void ImageDescEdit::slotFailedThumbnail(const KURL&)
 {
     m_thumbLabel->clear();
-    m_thumbLabel->setText(i18n("Thumnail unavailable"));
+    m_thumbLabel->setText(i18n("Thumbnail unavailable"));
 }
 
 void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 

@@ -97,8 +97,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                         "as each other value. Sometimes Equalize works wonderfully at "
                                         "enhancing the contrasts in an image. Other times it gives "
                                         "garbage. It is a very powerful operation, which can either work "
-                                        "miracles on an image or destroy it.display the current image "
-                                        "histogram."));  
+                                        "miracles on an image or destroy it."));  
                                          
     KAction *autolevelseAction = new KAction(i18n("Auto Levels"), 0,
                 this, SLOT(slotAutoLevels()),

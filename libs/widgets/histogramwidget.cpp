@@ -272,7 +272,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
        p1.setPen(Qt::red);
        p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                  i18n("Histogram\ncalculation\nfailed!"));
+                  i18n("Histogram\ncalculation\nfailed."));
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;

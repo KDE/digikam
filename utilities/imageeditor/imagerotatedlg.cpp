@@ -90,8 +90,8 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);
     m_angleInput->setValue(0.0);
     QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
-                                        "A positive angle rotating image in clockwize, "
-                                        "negative in counterclockwize."));
+                                        "A positive angle rotates the image clockwise; "
+                                        "a negative angle rotates it counter-clockwise."));
     hlay->addWidget(label, 1);
     hlay->addWidget(m_angleInput, 5);
     

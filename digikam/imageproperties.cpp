@@ -1196,7 +1196,7 @@ void ImageProperties::slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
 void ImageProperties::slotFailedGeneralThumbnail(const KURL&)
 {
     m_generalThumb->clear();
-    m_generalThumb->setText(i18n("Thumnail unavailable"));
+    m_generalThumb->setText(i18n("Thumbnail unavailable"));
 }
 
 #include "imageproperties.moc"
