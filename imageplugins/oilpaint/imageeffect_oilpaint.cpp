@@ -89,7 +89,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins.php");
+                                       "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");

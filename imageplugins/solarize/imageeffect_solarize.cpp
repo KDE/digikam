@@ -69,7 +69,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2004, Renchi Raju",
                                        0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins.php");
+                                       "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),
                      "renchi@pooh.tam.uiuc.edu");

@@ -107,7 +107,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins.php");
+                                       "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
