@@ -525,7 +525,7 @@ void ChannelMixerDialog::slotEffect()
     m_previewTargetWidget->update();
     
     // Update histogram.
-    m_histogramWidget->updateData(m_destinationPreviewData, w, h); 
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, 0, 0, 0, false); 
     
     delete [] orgData;
 }
