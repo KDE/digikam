@@ -215,12 +215,19 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
 
     setupHistogramViewer();
 
+    // Read config.
+    
+    kapp->config()->setGroup("Image Properties Dialog");
+    showPage(kapp->config()->readNumEntry("Tab Actived", 0));                              // General tab.
+    m_levelExifCB->setCurrentItem(kapp->config()->readNumEntry("Exif Level", 0));          // General Exif level.
+    m_channelCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Channel", 0));     // Luminosity.
+    m_scaleCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Scale", 0));         // Linear.
+    m_colorsCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Color", 0));        // Red.
+    m_renderingCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Rendering", 0)); // Full image.
+
     // Init all info data.
     
     slotItemChanged();
-    
-    kapp->config()->setGroup("Image Properties Dialog");
-    showPage(kapp->config()->readNumEntry("Tab Actived", 0));
     
     resize(configDialogSize("Image Properties Dialog"));
     
@@ -230,11 +237,17 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
 ImageProperties::~ImageProperties()
 {
     // If there is a currently histogram computation when dialog is closed,
-    // stop it before the m_image data are deleted!
+    // stop it before the m_image data are deleted automaticly!
     m_histogramWidget->stopHistogramComputation();
    
+    // Save config.
     kapp->config()->setGroup("Image Properties Dialog");
     kapp->config()->writeEntry("Tab Actived", activePageIndex());
+    kapp->config()->writeEntry("Exif Level", m_levelExifCB->currentItem());
+    kapp->config()->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    kapp->config()->writeEntry("Histogram Scale", m_scaleCB->currentItem());
+    kapp->config()->writeEntry("Histogram Color", m_colorsCB->currentItem());
+    kapp->config()->writeEntry("Histogram Rendering", m_renderingCB->currentItem());
 
     saveDialogSize("Image Properties Dialog");
     
@@ -385,15 +398,8 @@ void ImageProperties::slotItemChanged()
     
     if (m_ExifData->readFromFile(fileURL.path()))
         {
-        QPtrList<KExifIfd> ifdList(m_ExifData->ifdList());
-
-        for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
-            {
-            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(),
-                                                            ifd->getName());
-            m_listview->addItems(ifd->entryList(), item );
-            }
-        
+        slotLevelExifChanged(m_levelExifCB->currentItem());
+    
         // Exif embedded thumbnails creation.
     
         QImage thumbnail(m_ExifData->getThumbnail());
@@ -448,6 +454,7 @@ void ImageProperties::slotItemChanged()
                                          m_imageSelection.height());
            m_renderingLabel->show();                                         
            m_renderingCB->show();                                         
+           slotRenderingChanged(m_renderingCB->currentItem());
            }
         else 
            {
@@ -455,6 +462,10 @@ void ImageProperties::slotItemChanged()
            m_renderingLabel->hide();                                         
            m_renderingCB->hide();
            }
+           
+        slotChannelChanged(m_channelCB->currentItem());
+        slotScaleChanged(m_scaleCB->currentItem());
+        slotColorsChanged(m_colorsCB->currentItem());
         }
     else 
         {
@@ -499,7 +510,6 @@ void ImageProperties::setupHistogramViewer(void)
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->insertItem( i18n("Colors") );
-    m_channelCB->setCurrentText( i18n("Luminosity") );
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: drawing the image luminosity values.<p>"
                                        "<b>Red</b>: drawing the red image channel values.<p>"
@@ -515,7 +525,6 @@ void ImageProperties::setupHistogramViewer(void)
     m_scaleCB = new QComboBox( false, page );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
-    m_scaleCB->setCurrentText( i18n("Logarithmic") );
     QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image maximal counts is small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts is big. "
@@ -527,7 +536,6 @@ void ImageProperties::setupHistogramViewer(void)
     m_colorsCB->insertItem( i18n("Red") );
     m_colorsCB->insertItem( i18n("Green") );
     m_colorsCB->insertItem( i18n("Blue") );
-    m_colorsCB->setCurrentText( i18n("Red") );
     m_colorsCB->setEnabled( false );
     QWhatsThis::add( m_colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
                                        "<b>Red</b>: drawing the red image channel on the foreground.<p>"
@@ -539,7 +547,6 @@ void ImageProperties::setupHistogramViewer(void)
     m_renderingCB = new QComboBox( false, page );
     m_renderingCB->insertItem( i18n("Full Image") );
     m_renderingCB->insertItem( i18n("Selection") );
-    m_renderingCB->setCurrentText( i18n("Full Image") );
     
     QWhatsThis::add( m_renderingCB, i18n("<p>Select here the histogram rendering method:<p>"
                      "<b>Full Image</b>: drawing histogram using the full image.<p>"
@@ -764,7 +771,6 @@ void ImageProperties::slotUpdateMinInterv(int min)
     m_minInterv->setValue(min);
 }
 
-
 void ImageProperties::slotUpdateMaxInterv(int max)
 {
     m_maxInterv->setValue(max);
@@ -812,14 +818,19 @@ void ImageProperties::slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
                                                 const KFileMetaInfo*)
 {
     m_histogramThumb->clear();
+    m_mainExifThumb->clear();
     
     if (!pix.isNull())
+       {
        m_histogramThumb->setPixmap(pix);
+       m_mainExifThumb->setPixmap(pix);
+       }
 }
 
 void ImageProperties::slotFailedHistogramThumbnail(const KURL&)
 {
     m_histogramThumb->clear();
+    m_mainExifThumb->clear();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -830,6 +841,26 @@ void ImageProperties::setupExifViewer(void)
     QFrame *page = addPage( i18n("Exif") );
     QGridLayout* layout = new QGridLayout(page);
     
+    QHBoxLayout *hlay = new QHBoxLayout(layout);
+    
+    m_mainExifThumb = new QLabel( page );
+    m_mainExifThumb->setFixedHeight( 48 );
+
+    QLabel *label1 = new QLabel(i18n("Level: "), page);
+    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_levelExifCB = new QComboBox( false, page );
+    m_levelExifCB->insertItem( i18n("General") );
+    m_levelExifCB->insertItem( i18n("Extended") );
+    m_levelExifCB->insertItem( i18n("All") );
+    QWhatsThis::add( m_levelExifCB, i18n("<p>Select here the Exif information level to display<p>"
+                                         "<b>General</b>: display general information about the photograph (default).<p>"
+                                         "<b>Extended</b>: display extended information about the photograph.<p>"
+                                         "<b>All</b>: display all Exif sections."));  
+    hlay->addWidget(m_mainExifThumb);
+    hlay->addStretch();
+    hlay->addWidget(label1);
+    hlay->addWidget(m_levelExifCB);
+
     // Setup Exif infos tab.                                         
     
     m_listview = new KExifListView(page, true);
@@ -839,8 +870,52 @@ void ImageProperties::setupExifViewer(void)
     QWhatsThis::add( m_exifThumb, i18n("<p>You can see here the Exif thumbnail embedded in image.<p>"
                                        "If you press under with right mouse button, you can corrected the "
                                        "Exif orientation tag by a popup menu."));
-    layout->addWidget(m_listview, 0, 0);
-    layout->addWidget(box, 1, 0);
+                                       
+    layout->addWidget(m_listview, 1, 0);
+    layout->addWidget(box, 2, 0);
+    
+    connect(m_levelExifCB, SIGNAL(activated(int)),
+            this, SLOT(slotLevelExifChanged(int)));
+}
+
+void ImageProperties::slotLevelExifChanged(int level)
+{
+    m_listview->clear();
+    QPtrList<KExifIfd> ifdList(m_ExifData->ifdList());
+    
+    switch(level)
+       {
+       case 1:           // Extended.
+          for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
+              {
+              if (ifd->getName() == "EXIF")
+                 {
+                 m_listview->addItems(ifd->entryList());
+                 return;
+                 }
+              }
+          break;
+       
+       case 2:           // All.
+          for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
+              {
+              KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(),
+                                                              ifd->getName());
+              m_listview->addItems(ifd->entryList(), item );
+              }
+          break;
+
+       default:          // General.
+          for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
+              {
+              if (ifd->getName() == "0")
+                 {
+                 m_listview->addItems(ifd->entryList());
+                 return;
+                 }
+              }
+          break;
+       }
 }
 
 //-----------------------------------------------------------------------------------------------------------

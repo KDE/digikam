@@ -129,6 +129,10 @@ private:
     void setupGeneralTab(void);
 
     // For Exif viever.
+                                 
+    QLabel                       *m_mainExifThumb;
+    
+    QComboBox                    *m_levelExifCB;
     
     ExifThumbLabel               *m_exifThumb;
 
@@ -189,6 +193,10 @@ private slots:
     
     void slotFailedGeneralThumbnail(const KURL&);
 
+    // For Exif viever.
+      
+    void slotLevelExifChanged(int level);
+    
     // For histogram viever.
     
     void slotChannelChanged(int channel);
