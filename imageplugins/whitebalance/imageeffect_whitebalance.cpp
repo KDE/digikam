@@ -262,8 +262,10 @@ void ImageEffect_WhiteBalance::slotUser1()
     blockSignals(true);
                    
     m_whiteBalanceCurves->curvesReset();
-    m_previewOriginalWidget->resetCrossPosition();    
     m_targetColor->setCurrentItem(WhiteColor);
+    m_previewOriginalWidget->resetCrossPosition();    
+    m_channelCB->setCurrentItem(0);
+    slotChannelChanged(0);
     
     blockSignals(false);
     slotEffect();  
