@@ -45,8 +45,8 @@ public:
 
     ~ImlibInterface();
 
-    void load(const QString& filename);
-    void restore();
+    bool load(const QString& filename);
+    bool restore();
     bool save(const QString& file);
     bool saveAs(const QString& file);
         

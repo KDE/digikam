@@ -150,8 +150,9 @@ ImlibInterface::~ImlibInterface()
     m_instance = 0;
 }
 
-void ImlibInterface::load(const QString& filename)
+bool ImlibInterface::load(const QString& filename)
 {
+    bool valRet;
     d->valid = false;
 
     d->filename = filename;
@@ -192,23 +193,28 @@ void ImlibInterface::load(const QString& filename)
         d->gamma      = 1.0;
         d->contrast   = 1.0;
         d->brightness = 0.0;
+        valRet = true;
     }
     else {
         kdWarning() << k_funcinfo << "Failed to load image: error number: "
                     << errorReturn << endl;
+        valRet = false;
     }
         
     imlib_context_pop();
+    
+    return (valRet);
 }
 
-void ImlibInterface::restore()
+bool ImlibInterface::restore()
 {
-    load(d->filename);
+    return ( load(d->filename) );
 }
 
 bool ImlibInterface::save(const QString& file)
 {
     imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
     
     bool result = saveAction(file);
     d->valid   = false;
@@ -221,7 +227,8 @@ bool ImlibInterface::save(const QString& file)
 bool ImlibInterface::saveAs(const QString& file)
 {
     imlib_context_push(d->context);
-    
+    imlib_context_set_image(d->image);
+        
     bool result = saveAction(file);
     d->valid   = true;
     d->dirty   = true;
@@ -667,127 +674,83 @@ void ImlibInterface::putSelectedData(uint* data)
 
 bool ImlibInterface::saveAction(const QString& saveFile) 
 {
-        QFileInfo fileInfo(saveFile);
-        QString ext = fileInfo.extension(false);
-        bool result;
+    QFileInfo fileInfo(saveFile);
+    QString ext = fileInfo.extension(false);
+    bool result;
 
-        if (ext.upper() == QString("TIFF") || ext.upper() == QString("TIF")) 
-            {
-            // Imlib uses LZW compression (not available
-            // in most distributions) which results
-            // in corrupted tiff files. Here we use
-            // a different compression algorithm
-            result = saveTIFF(saveFile, true);
-            }
-        else 
-            {
-            // Always save jpeg files at 95 % quality without compression
-            imlib_image_attach_data_value ("quality", NULL, 95, NULL);
+    if (ext.upper() == QString("TIFF") || ext.upper() == QString("TIF")) 
+       {
+       // Imlib uses LZW compression (not available
+       // in most distributions) which results
+       // in corrupted tiff files. Here we use
+       // a different compression algorithm
+       result = saveTIFF(saveFile, true);
+       }
+    else 
+       {
+       // Always save jpeg files at 95 % quality without compression
+       imlib_image_attach_data_value ("quality", NULL, 95, NULL);
             
-            //ImlibSaveInfo saveInfo;
-            //saveInfo.quality = 256;
-            
-            imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
+       imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 
-            if( d->errorRet != IMLIB_LOAD_ERROR_NONE ) {
-               kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
-                         << (int)d->errorRet << endl;
-               result = false;
-            } else {
-               result = true;
-            }
-            }
+       if( d->errorRet != IMLIB_LOAD_ERROR_NONE ) 
+          {
+          kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
+                    << (int)d->errorRet << endl;
+          result = false;
+          }
+       else 
+          result = true;
+       }
 
     // Now kill the image and re-read it from the saved file
             
-    if (d->image) {
-        imlib_context_set_image(d->image);
-        imlib_free_image();
-        d->image = 0;
-    }
-
-    d->width  = 0;
-    d->height = 0;
-    d->origWidth  = 0;
-    d->origHeight = 0;
-    d->selX = 0;
-    d->selY = 0;
-    d->selW = 0;
-    d->selH = 0;
-
-    //d->image = imlib_load_image(filename.latin1());
-    d->image = imlib_load_image_with_error_return(QFile::encodeName(saveFile),
-                                                  &d->errorRet);
-
-    if (d->image) 
-        {
-        imlib_context_set_image(d->image);
-        imlib_image_set_changes_on_disk();
-
-        d->origWidth  = imlib_image_get_width();
-        d->origHeight = imlib_image_get_height();
-        d->valid  = true;
-        d->dirty  = true;
-
-        d->width  = d->origWidth;
-        d->height = d->origHeight;
-
-        d->gamma      = 1.0;
-        d->contrast   = 1.0;
-        d->brightness = 0.0;
-        }
-    else 
-        {
-        kdWarning() << k_funcinfo << "Failed to load image: error number: "
-                    << d->errorRet << endl;
-        result = false;
-        }
-        
-    imlib_context_pop();
-        
+    if ( load(saveFile) == false ) 
+       result = false;
+     
     return result;
 }
 
 bool ImlibInterface::saveTIFF(const QString& saveFile, bool compress) 
 {
-        TIFF               *tif;
-        DATA32             *data;
-        int                 y;
-        int                 w;
+    TIFF   *tif;
+    DATA32 *data;
+    int     y;
+    int     w;
 
-        tif = TIFFOpen(QFile::encodeName(saveFile).data(), "w");
+    tif = TIFFOpen(QFile::encodeName(saveFile).data(), "w");
         
-        if (tif)
-            {
-            TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, imlib_image_get_width());
-            TIFFSetField(tif, TIFFTAG_IMAGELENGTH, imlib_image_get_height());
-            TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-            TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
-            TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    if (tif)
+       {
+       TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, imlib_image_get_width());
+       TIFFSetField(tif, TIFFTAG_IMAGELENGTH, imlib_image_get_height());
+       TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+       TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+       TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
             
-            if (compress)
-                TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
-            else
-                TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-                    {
-                    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
-                    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-                    w = TIFFScanlineSize(tif);
-                    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
-                                 TIFFDefaultStripSize(tif, 0));
+       if (compress)
+          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+       else
+          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+          {
+          TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
+          TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+          w = TIFFScanlineSize(tif);
+          TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
+          TIFFDefaultStripSize(tif, 0));
                 
-                    for (y = 0 ; y < imlib_image_get_height() ; ++y)
-                        {
-                        data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() );
-                        TIFFWriteScanline(tif, data, y, 0);
-                        }
-                    }
+          for (y = 0 ; y < imlib_image_get_height() ; ++y)
+              {
+              data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() );
+              TIFFWriteScanline(tif, data, y, 0);
+              }
+          }
             
-            TIFFClose(tif);
-            return true;
-            }
+       TIFFClose(tif);
+       return true;
+       }
             
-        return false;  
+    return false;  
 }
 
 ImlibInterface* ImlibInterface::instance()

@@ -31,6 +31,7 @@
 // Kde includes.
 
 #include <kurl.h>
+#include <kio/job.h>
 
 class QPopupMenu;
 class QLabel;
@@ -69,7 +70,11 @@ private:
     
     KURL::List           m_urlList;
     KURL                 m_urlCurrent;
-
+    KURL                 m_newFile;
+    
+    bool                 setExifOrientation;
+    bool                 rotatedOrFlipped;
+    
     static ImageWindow*  m_instance;
 
 private:
@@ -99,6 +104,11 @@ private slots:
     void slotZoomChanged(float zoom);
     void slotChanged(bool);
     void slotSelected(bool);
+    
+    void slotSave();
+    void slotSaveResult(KIO::Job *job);
+    void slotSaveAs();
+    void slotSaveAsResult(KIO::Job *job);
     
     void slotFilePrint();
     void slotFileProperties();

@@ -33,17 +33,22 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kpropertiesdialog.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <libkexif/kexif.h>
-#include <libkexif/kexifutils.h>
 #include <kprinter.h>
 #include <ktempfile.h>
+#include <kimageio.h>
+#include <kfiledialog.h>
+#include <libkexif/kexif.h>
+#include <libkexif/kexifdata.h>
+#include <libkexif/kexifutils.h>
 
 // Local includes.
 
+#include "exifrestorer.h"
 #include "guifactory.h"
 #include "canvas.h"
 #include "imageguiclient.h"
@@ -122,6 +127,26 @@ ImageWindow::ImageWindow()
     connect(m_guiClient, SIGNAL(signalExit()),
             SLOT(close()));
 
+    connect(m_guiClient, SIGNAL(signalSave()),
+            SLOT(slotSave()));
+    connect(m_guiClient, SIGNAL(signalSaveAs()),
+            SLOT(slotSaveAs()));
+                        
+    connect(m_guiClient, SIGNAL(signalRestore()),
+            m_canvas, SLOT(slotRestore()));
+
+    connect(m_guiClient, SIGNAL(signalFilePrint()),
+            SLOT(slotFilePrint()));
+    connect(m_guiClient, SIGNAL(signalFileProperties()),
+            SLOT(slotFileProperties()));
+    connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
+            SLOT(slotDeleteCurrentItem()));            
+    connect(m_guiClient, SIGNAL(signalExifInfo()),
+            SLOT(slotExifInfo()));            
+    connect(m_guiClient, SIGNAL(signalCommentsEdit()),
+            SLOT(slotCommentsEdit()));            
+            
+            
     connect(m_guiClient, SIGNAL(signalZoomPlus()),
             m_canvas, SLOT(slotIncreaseZoom()));
     connect(m_guiClient, SIGNAL(signalZoomMinus()),
@@ -145,20 +170,6 @@ ImageWindow::ImageWindow()
             m_canvas, SLOT(slotCrop()));
     connect(m_guiClient, SIGNAL(signalResize()),
             SLOT(slotResize()));
-
-    connect(m_guiClient, SIGNAL(signalRestore()),
-            m_canvas, SLOT(slotRestore()));
-
-    connect(m_guiClient, SIGNAL(signalFilePrint()),
-            SLOT(slotFilePrint()));
-    connect(m_guiClient, SIGNAL(signalFileProperties()),
-            SLOT(slotFileProperties()));
-    connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
-            SLOT(slotDeleteCurrentItem()));            
-    connect(m_guiClient, SIGNAL(signalExifInfo()),
-            SLOT(slotExifInfo()));            
-    connect(m_guiClient, SIGNAL(signalCommentsEdit()),
-            SLOT(slotCommentsEdit()));            
                             
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
@@ -426,8 +437,7 @@ void ImageWindow::slotCommentsEdit()
     
     AlbumDB* db = AlbumManager::instance()->albumDB();
     QString comments( db->getItemCaption(palbum, m_urlCurrent.fileName()) );
-
-    
+  
     if (ImageCommentEdit::editComments(m_urlCurrent.filename(), comments, this)) 
     {
         db->setItemCaption(palbum, m_urlCurrent.fileName(), comments);
@@ -501,6 +511,7 @@ void ImageWindow::slotDeleteCurrentItem()
     }
 
     // No image in the current Album -> Quit ImageEditor...
+    
     KMessageBox::information(this,
                              i18n("There is no image to show in the current Album!\n"
                                   "The ImageEditor will be closed..."),
@@ -530,6 +541,149 @@ void ImageWindow::slotFilePrint()
             }
         }
 }
+
+void ImageWindow::slotSave()
+{
+    QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
+    
+    bool result = m_canvas->save(tmpFile);
+
+    if (result == false) 
+        {
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                                 .arg(m_urlCurrent.filename())
+                                 .arg(m_urlCurrent.path().section('/', -2, -2)));
+        return;
+        }
+
+    ExifRestorer exifHolder;
+    exifHolder.readFile(m_urlCurrent.path(), ExifRestorer::ExifOnly);
+
+    if (exifHolder.hasExif()) 
+       {
+       ExifRestorer restorer;
+       restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+       restorer.insertExifData(exifHolder.exifData());
+       restorer.writeFile(tmpFile);
+       }
+    else 
+        kdWarning() << ("No Exif Data Found") << endl;
+    
+    if( rotatedOrFlipped )
+       KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+
+    KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_urlCurrent,
+                                           -1, true, false, false);
+
+    connect(job, SIGNAL(result(KIO::Job *) ),
+            this, SLOT(slotSaveResult(KIO::Job *)));
+}
+
+void ImageWindow::slotSaveResult(KIO::Job *job)
+{
+    if (job->error()) 
+       {
+       job->showErrorDialog(this);
+       return;
+       }
+}
+
+void ImageWindow::slotSaveAs()
+ {
+    // Get the new filename. 
+    
+    // PENDING (Gilles): we must used the list of Imlib2 files format supported instead (provide by the 
+    // imlib2 plugins installed in the system).
+    
+    QStringList mimetypes = KImageIO::mimeTypes( KImageIO::Writing );
+     
+    m_newFile = KURL(KFileDialog::getSaveFileName(m_urlCurrent.directory(),
+                                                mimetypes.join(" "),
+                                                this,
+                                                i18n("New image filename")));
+ 
+    // Check for cancel.
+     
+    if (!m_newFile.isValid()) return;
+ 
+    QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
+     
+    int result = m_canvas->saveAs(tmpFile);
+ 
+    if (result != 1) 
+       {
+       KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                          .arg(m_newFile.filename())
+                          .arg(m_newFile.path().section('/', -2, -2)));
+       return;
+       }
+     
+    ExifRestorer exifHolder;
+    exifHolder.readFile(m_urlCurrent.path(), ExifRestorer::ExifOnly);
+ 
+    if (exifHolder.hasExif()) 
+       {
+       ExifRestorer restorer;
+       restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+       restorer.insertExifData(exifHolder.exifData());
+       restorer.writeFile(tmpFile);
+       }
+    else 
+       kdWarning() << ("No Exif Data Found") << endl;
+    
+    if( rotatedOrFlipped )
+       KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+    
+    KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_newFile,
+                                           -1, true, false, false);
+  
+    connect(job, SIGNAL(result(KIO::Job *) ),
+            this, SLOT(slotSaveAsResult(KIO::Job *)));
+}
+
+void ImageWindow::slotSaveAsResult(KIO::Job *job)
+{
+    if (job->error()) 
+       {
+       job->showErrorDialog(this);
+       return;
+       }
+
+    // Added new file URL into list if the new file have been added in the current Album
+    // and added the comments if exists.
+
+    KURL su(m_urlCurrent.directory());
+    PAlbum *sourcepAlbum = AlbumManager::instance()->findPAlbum(su);
+
+    if (!sourcepAlbum)
+        return;
+
+    KURL tu(m_newFile.directory());
+    PAlbum *targetpAlbum = AlbumManager::instance()->findPAlbum(tu);
+
+    if (!targetpAlbum)
+        return;
+
+    // Copy the comments from the original image to the target image.
+                    
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    QString comments( db->getItemCaption(sourcepAlbum, m_urlCurrent.fileName()) );
+    
+    db->setItemCaption(targetpAlbum, m_newFile.fileName(), comments);
+    
+    if ( m_urlCurrent.directory() == m_newFile.directory() &&  // Target Album = current Album ?
+         m_urlList.find(m_newFile) == m_urlList.end() )        // The image file not already exist
+       {                                                       // in the list.            
+       m_canvas->slotRestore();
+       m_canvas->load(m_newFile.path());
+       KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+       m_urlList.insert(it, m_newFile);
+       m_urlCurrent = m_newFile;
+       }
+    
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target images.
+}
+
 
 #include "imagewindow.moc"
 
