@@ -24,7 +24,7 @@
 
 #include <qobject.h>
 
-#include "guiclient.h"
+#include <guiclient.h>
 
 class KInstance;
 class QWidget;

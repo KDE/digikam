@@ -5,6 +5,7 @@ bin_PROGRAMS = digikam
 
 INCLUDES = \
 	-I$(top_srcdir)/digikam/sqlite \
+	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \

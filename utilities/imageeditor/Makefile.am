@@ -17,8 +17,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/utilities/kexif \
 	  $(IMLIB2_CFLAGS) $(all_includes) 
 
-digikaminclude_HEADERS = guiclient.h guifactory.h imageiface.h \
-			 imagewidget.h imageplugin.h
+digikaminclude_HEADERS = imageiface.h imagewidget.h imageplugin.h
 
 digikamincludedir = $(includedir)/digikam
 
