@@ -283,7 +283,7 @@ void ImageDescEdit::slotApply()
             }
 
             // set EXIF UserComment
-            KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
+            //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
         }
         
         m_modified = false;
