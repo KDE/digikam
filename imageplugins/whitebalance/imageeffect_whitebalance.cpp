@@ -236,7 +236,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
     m_saturationInput = new KDoubleNumInput(gbox);
     m_saturationInput->setPrecision(2);
-    m_saturationInput->setRange(0.0, 2.0, 0.1, true);
+    m_saturationInput->setRange(0.0, 2.0, 0.01, true);
     QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
         
     m_gammaLabel = new QLabel(i18n("Gamma:"), gbox);
@@ -284,7 +284,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_greenLabel = new QLabel(i18n("Green:"), gbox);
     m_greenInput = new KDoubleNumInput(gbox);
     m_greenInput->setPrecision(2);
-    m_greenInput->setRange(0.2, 2.5, 0.1, true);
+    m_greenInput->setRange(1.0, 2.5, 0.01, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
         
     grid2->addMultiCellWidget(m_exposureLabel, 0, 0, 0, 0);
