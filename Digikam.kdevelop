@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
@@ -83,11 +83,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -117,10 +117,10 @@
       <makebin/>
     </make>
     <run>
-      <directoryradio>custom</directoryradio>
+      <directoryradio>build</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>/home/gilles/Temp2/CVS/kdeextragear-3/digikam/digikam/digikam</mainprogram>
-      <programargs/>
+      <mainprogram>digikam/digikam/digikam</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -130,7 +130,7 @@
     </general>
     <configurations>
       <default>
-        <configargs>--enable-debug=full --enable-kipi</configargs>
+        <configargs>--enable-debug=full</configargs>
         <builddir/>
         <topsourcedir>../</topsourcedir>
         <cppflags/>
