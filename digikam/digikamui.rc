@@ -114,6 +114,10 @@
   <Separator name="separator_10" />
   <Separator name="separator_11" />
   <Separator name="separator_12" />
+  <Action name="image_sort" />  
+  <Separator name="separator_13" />
+  <Separator name="separator_14" />
+  <Separator name="separator_15" />
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
   <Action name="full_screen" />
