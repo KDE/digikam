@@ -1267,7 +1267,7 @@ void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
           matrix.rotate(180);
           break;
 
-       case KExifData::VFlip:
+       case KExifData::VFLIP:
           matrix.scale(1,-1);
           break;
 
