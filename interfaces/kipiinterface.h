@@ -32,6 +32,9 @@
 // Qt includes.
 
 #include <qvaluelist.h>
+#include <qdatetime.h>
+#include <qstring.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -106,6 +109,8 @@ public:
     
     virtual QString name();
     virtual QString comment();
+    virtual QString category();
+    virtual QDate date();
     virtual KURL::List images();
     virtual KURL path();
     virtual KURL uploadPath();

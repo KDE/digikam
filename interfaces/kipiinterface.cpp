@@ -39,7 +39,6 @@ extern "C"
 
 // Qt includes.
 
-#include <qstring.h>
 #include <qdir.h>
 
 // KDE includes.
@@ -63,7 +62,7 @@ extern "C"
 #include "kipiinterface.h"
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// IMAGE INFO IMPLEMENTATION CLASS ////////////////////////////////////////
 
 DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url )
                 : KIPI::ImageInfoShared( interface, url )
@@ -203,33 +202,35 @@ QMap<QString,QVariant> DigikamImageInfo::attributes()
 {
     QMap<QString,QVariant> res;
     
-    // TODO !
+    // TODO ! This will used for the futures tags Digikam features.
     
     return res;
 }
 
 void DigikamImageInfo::clearAttributes()
 {
-    // TODO !
+    // TODO ! This will used for the futures tags Digikam features.
 }
 
 void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
 {
-    // TODO !
+    // TODO ! This will used for the futures tags Digikam features.
 }
 
 int DigikamImageInfo::angle()
 {
-    // TODO !
+    // TODO ! This will a libKExif implementation call ?
+    
+    return 0;
 }
 
 void DigikamImageInfo::setAngle( int angle )
 {
-    // TODO !
+    // TODO ! This will a libKExif implementation call ?
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// IMAGE COLLECTION IMPLEMENTATION CLASS ////////////////////////////////////
 
 DigikamImageCollection::DigikamImageCollection( Type tp, QString filter, Digikam::AlbumInfo *album )
                       : tp_( tp ), imgFilter_(filter)
@@ -255,6 +256,32 @@ QString DigikamImageCollection::name()
         }
     else
         return QString::null;
+}
+
+QString DigikamImageCollection::category()
+{
+    if (album_) 
+        {
+        album_->openDB();
+        QString category = album_->getCollection();
+        album_->closeDB();    
+        return (category);    
+        }
+    else
+        return QString::null;
+}
+
+QDate DigikamImageCollection::date()
+{
+    if (album_) 
+        {
+        album_->openDB();
+        QDate date = album_->getDate();
+        album_->closeDB();    
+        return (date);    
+        }
+    else
+        return QDate();
 }
 
 QString DigikamImageCollection::comment()
@@ -293,7 +320,8 @@ KURL::List DigikamImageCollection::images()
               album_->closeDB();        
           
               if ( items.isEmpty() == true )
-                 kdWarning() << "DigikamImageCollection::images()::AllAlbumItems : images list is empty!!!" << endl;
+                 kdWarning() << "DigikamImageCollection::images()::AllAlbumItems : images list is empty!!!" 
+                             << endl;
 
               break;
               }
@@ -305,7 +333,8 @@ KURL::List DigikamImageCollection::images()
               album_->closeDB();        
 
            if ( items.isEmpty() == true )
-                 kdWarning() << "DigikamImageCollection::images()::AlbumItemsSelection : images list is empty!!!" << endl;
+                 kdWarning() << "DigikamImageCollection::images()::AlbumItemsSelection : images list is empty!!!"
+                             << endl;
 
               break;
               }
@@ -357,7 +386,7 @@ QString DigikamImageCollection::uploadRootName()
     return (i18n("My Albums"));
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// KIPI INTERFACE IMPLEMENTATION CLASS //////////////////////////////////////////
 
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                      :KIPI::Interface( parent, name )
@@ -383,7 +412,8 @@ KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
                                          ) );
     else
        {
-       kdWarning() << "DigikamKipiInterface::currentAlbum() : no current album!!!" << endl;
+       kdWarning() << "DigikamKipiInterface::currentAlbum() : no current album!!!" 
+                   << endl;
        return KIPI::ImageCollection(0);
        }
 }
@@ -392,7 +422,8 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
     if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
        {
-       kdWarning() << "DigikamKipiInterface::currentSelection() : no current selection!!!" << endl;
+       kdWarning() << "DigikamKipiInterface::currentSelection() : no current selection!!!" 
+                   << endl;
        return KIPI::ImageCollection(0);
        }
     else
@@ -420,7 +451,8 @@ KIPI::ImageCollection DigikamKipiInterface::currentScope()
        }       
     else
        {
-       kdWarning() << "DigikamKipiInterface::currentScope() : no current album!!!" << endl;
+       kdWarning() << "DigikamKipiInterface::currentScope() : no current album!!!" 
+                   << endl;
        return KIPI::ImageCollection(0);
        }
 }
@@ -460,17 +492,22 @@ int DigikamKipiInterface::features() const
 {
     return KIPI::ImagesHasComments    | KIPI::AcceptNewImages |
            KIPI::AlbumEQDir           | KIPI::AlbumsHaveComments |
-           KIPI::ImageTitlesWritable  | KIPI::ImagesHasTime;
+           KIPI::ImageTitlesWritable  | KIPI::ImagesHasTime |
+           KIPI::AlbumsHaveCategory   | KIPI::AlbumsHaveCreationDate;
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
     m_sourceAlbum = 0;
     m_targetAlbum = 0;
+    
+    // The root path is the Digikam Album library path ?
+    // If it's true, do nothing because the image is already in the Albums library.
+    
+    if ( url.path().section('/', 0, -3) == albumManager_->getLibraryPath() )
+       return true;    
+    
     m_sourceAlbum = albumManager_->findAlbum(url.path().section('/', -2, -2));
-    
-    if ( m_sourceAlbum ) return true;    // Do nothing because the image is already in the Albums library.
-    
     m_targetAlbum = albumManager_->currentAlbum();
     
     if ( m_targetAlbum ) 
@@ -502,7 +539,7 @@ void DigikamKipiInterface::slot_onAddImageFinished(KIO::Job* job)
     if (job->error())
         job->showErrorDialog(0);
     else
-       {                    // Copy the image comments if the source image is in the Albums library.
+       {  // Copy the image comments if the source image is in the Albums library.
        if (m_sourceAlbum)
           {
           m_sourceAlbum->openDB();
@@ -533,17 +570,21 @@ void DigikamKipiInterface::delImage( const KURL& url )
           {
           if ( KIO::NetAccess::del(url) == false )
              {
-             kdWarning() << "DigikamKipiInterface::delImage() : Cannot delete an image !!!" << endl;
+             kdWarning() << "DigikamKipiInterface::delImage() : Cannot delete an image !!!" 
+                         << endl;
              }
           }
        else 
           {
-          kdWarning() << "DigikamKipiInterface::delImage() : cannot find the Album in the Digikam Album library !!!" << endl;
+          kdWarning() << "DigikamKipiInterface::delImage() : "
+                         "cannot find the Album in the Digikam Album library !!!" 
+                      << endl;
           }   
        }
     else 
        {
-       kdWarning() << "DigikamKipiInterface::delImage() : url isn't in the Digikam Album library !!!" << endl;
+       kdWarning() << "DigikamKipiInterface::delImage() : url isn't in the Digikam Album library !!!" 
+                   << endl;
        }   
 }
 
