@@ -70,11 +70,11 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_PNGcompression, i18n("<p>The compression value for PNG images:<p>"
-                                           "<b>1</b>: very high compression (small file size but "
-                                           "long decompression - default)<p>"
+                                           "<b>1</b>: no compression (large file size but "
+                                           "short decompression duration - default)<p>"
                                            "<b>5</b>: medium compression<p>"
-                                           "<b>9</b>: no compression (large file size but "
-                                           "short decompression)<p>"
+                                           "<b>9</b>: very high compression (small file size but "
+                                           "long decompression duration)<p>"
                                            "<b>Note: PNG is always a lossless compression format!</b>"));
 
    m_TIFFcompression = new QCheckBox(i18n("Compress TIFF files"),
