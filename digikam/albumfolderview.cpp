@@ -1059,7 +1059,7 @@ void AlbumFolderView::startDrag()
                                    this);
     if(tagDrag) {
         tagDrag->setPixmap(*folderItem->pixmap());
-        tagDrag->dragCopy();
+        tagDrag->drag();
     }
 }
 
