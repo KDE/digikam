@@ -41,7 +41,6 @@
 #include <kdialogbase.h>
 #include <kdeversion.h>
 #include <kapplication.h>
-#include <kurl.h>
 #include <kcursor.h>
 
 // LibKexif includes.
@@ -107,7 +106,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
           m_image = m_image.convertDepth(32);
        
        m_image.setAlphaBuffer(true);
-       setupHistogramViewer((uint *)m_image.bits(), m_image.width(), m_image.height());
+       setupHistogramViewer((uint *)m_image.bits(), m_image.width(), m_image.height(), fileURL);
        }
     
     parentWidget()->setCursor( KCursor::arrowCursor() );       
@@ -222,7 +221,7 @@ void ImageProperties::slotItemChanged()
 //-----------------------------------------------------------------------------------------------------------
 // Histogram Viewer implementation methods
 
-void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint height)
+void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint height, KURL fileURL)
 {
     QFrame *page = addPage( i18n("&Histogram"));
    
@@ -232,17 +231,28 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
                                               
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     
-    QLabel *imagePreview = new QLabel( page );
-    imagePreview->setFixedHeight( 48 );
-    QImage image;
+    m_thumbLabel = new QLabel( page );
+    m_thumbLabel->setFixedHeight( 48 );
+    hlay->addWidget(m_thumbLabel);
+    
+    m_thumbJob = new ThumbnailJob(fileURL, 48);
+    
+    connect(m_thumbJob,
+            SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)),
+            SLOT(slotGotThumbnail(const KURL&,
+                                  const QPixmap&,
+                                  const KFileMetaInfo*)));
+    
+    /*QImage image;
     QPixmap pix;
     image.create( width, height, 32 );
     image.setAlphaBuffer(true) ;
     memcpy(image.bits(), imageData, image.numBytes());
     image = image.smoothScale(48, 48, QImage::ScaleMin);
     pix.convertFromImage(image);
-    imagePreview->setPixmap(pix);
-    hlay->addWidget(imagePreview);
+    m_thumbLabel->setPixmap(pix);*/
            
     QGridLayout *grid = new QGridLayout(hlay, 2, 4);
     
@@ -532,6 +542,13 @@ void ImageProperties::updateInformations()
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
+}
+
+
+void ImageProperties::slotGotThumbnail(const KURL&, const QPixmap& pix,
+                                       const KFileMetaInfo*)
+{
+    m_thumbLabel->setPixmap(pix);
 }
 
 //-----------------------------------------------------------------------------------------------------------

@@ -26,10 +26,16 @@
 
 #include <qstring.h>
 #include <qimage.h>
+#include <qguardedptr.h>
 
 // KDE includes.
 
 #include <kdialogbase.h>
+#include <kurl.h>
+
+// Local includes.
+
+#include "thumbnailjob.h"
 
 class QComboBox;
 class QSpinBox;
@@ -65,6 +71,8 @@ public slots:
         
 private:
 
+    // For main dialog.    
+    
     AlbumIconView *m_view;
     AlbumIconItem *m_currItem;
     AlbumLister   *m_lister;
@@ -77,6 +85,7 @@ private:
     
     // For histogram viever.
     
+    QLabel                       *m_thumbLabel;
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
     QComboBox                    *m_colorsCB;    
@@ -93,26 +102,31 @@ private:
     
     QImage                        m_image;
     
+    QGuardedPtr<ThumbnailJob>     m_thumbJob;
+    
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::HistogramWidget     *m_histogramWidget;
     
-    void setupHistogramViewer(uint *imageData, uint width, uint height);
+    void setupHistogramViewer(uint *imageData, uint width, uint height, KURL fileURL);
 
     void updateInformations();
 
         
 private slots:
 
+    // For main dialog.    
+
+    void slotItemChanged();
+    void slotUser1();
+    void slotUser2();
+    
     // For histogram viever.
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
     void slotIntervChanged(int);
-    
-    
-    void slotItemChanged();
-    void slotUser1();
-    void slotUser2();
+    void slotGotThumbnail(const KURL&, const QPixmap& pix,
+                          const KFileMetaInfo*);  
   
 };
 
