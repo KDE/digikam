@@ -23,7 +23,8 @@ x Added image sizes annotation for each album item.                <Gilles Cauli
 * Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
 - Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
 o Added dockable main widgets like ShowImg.                        
-o Subfolders Albums support.
+o Added subfolders Albums support.
+o Added tagging images feature.
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
 o View/Hide main toolbar/statusbar.
