@@ -59,7 +59,7 @@ public:
     static void normalizeImage(uint *data, int w, int h);
     static void autoLevelsCorrectionImage(uint *data, int w, int h);
     static void invertImage(uint *data, int w, int h);
-    static void antiAliasImage(uint *data, int Width, int Height, int Sensibility=128);
+    static void smartBlurImage(uint *data, int Width, int Height);
 };
 
 }  // NameSpace Digikam
