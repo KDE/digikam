@@ -25,6 +25,7 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpixmap.h>
+#include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
 
@@ -51,12 +52,11 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     QHBoxLayout* mainLayout = new QHBoxLayout(this, 0, KDialog::spacingHint());
     
     QVGroupBox *gbox1 = new QVGroupBox(i18n("Image Preview Selection"), this);
-    QLabel *label3 = new QLabel(i18n("Original image panel:"), gbox1);
-    label3->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame3 = new QFrame(gbox1);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
+    QToolTip::add( m_imagePanIconWidget, i18n( "Original image panel." ) );
     QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
                                                 "which can help you to select the clip preview."
                                                 "<p>Click and drag the mouse cursor in the "
@@ -70,26 +70,25 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     mainLayout->addWidget(gbox1);
     
     QVGroupBox *gbox2 = new QVGroupBox(title, this);
-    QLabel *label1 = new QLabel(i18n("Original:"), gbox2);
-    label1->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame1 = new QFrame(gbox2);
     frame1->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
+    QToolTip::add( m_imageRegionWidget, i18n( "Original image preview." ) );
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
                                                "which will be used for the preview computation."
                                                "<p>Click and drag the mouse cursor in the "
                                                "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0, Qt::AlignCenter);
     
-    QLabel *label2 = new QLabel(i18n("Target:"), gbox2);
-    label2->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+
     QFrame *frame2 = new QFrame(gbox2);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2 = new QVBoxLayout(frame2, 5, 0);
     m_previewTargetLabel = new QLabel(frame2);
     m_previewTargetLabel->setFixedSize(w, h);
+    QToolTip::add( m_previewTargetLabel, i18n( "Target image preview." ) );
     QWhatsThis::add( m_previewTargetLabel, i18n("<p>You can see here the image clip preview "
                                                 "computation result."));
     l2->addWidget(m_previewTargetLabel, 0, Qt::AlignCenter);
