@@ -1131,7 +1131,7 @@ void ImageProperties::setupGeneralTab()
     hlay2->addMultiCellWidget( m_pathLabel, 0, 0, 0, 0 );
     hlay2->addMultiCellWidget( m_filepath, 0, 0, 1, 2  );
     
-    QLabel *date = new QLabel( i18n("Modification Date:"), page);
+    QLabel *date = new QLabel( i18n("Modified:"), page);
     m_filedate = new KSqueezedTextLabel(page);
     date->setBuddy( m_filedate );
     hlay2->addMultiCellWidget( date, 1, 1, 0, 0 );
