@@ -28,6 +28,7 @@ class KAction;
 class KToggleAction;
 class KSelectAction;
 class KConfig;
+class KToolBarPopupAction;
 
 class Canvas;
 class ImagePluginLoader;
@@ -66,7 +67,12 @@ private slots:
     void slotViewHistogram();
     void slotChangeBCG();
     void slotImagePluginsHelp();
-        
+    void slotChanged(bool, bool);
+    
+    void slotAboutToShowUndoMenu();
+    void slotAboutToShowRedoMenu();
+
+            
 private:
 
     void setupActions();
@@ -95,10 +101,11 @@ private:
     KAction               *m_revertAction;
     KAction               *m_saveAction;
     KAction               *m_saveAsAction;
-    KAction               *m_undoAction;
-    KAction               *m_redoAction;
     KAction               *m_imagePluginsHelp;
 
+    KToolBarPopupAction   *m_undoAction;
+    KToolBarPopupAction   *m_redoAction;
+        
     KSelectAction         *m_viewHistogramAction;
     
     bool                   m_fullScreen;

@@ -29,6 +29,7 @@
 // KDE includes.
 
 #include <kaction.h>
+#include <kstdaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -44,6 +45,8 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
+#include <ktoolbar.h>
+#include <kpopupmenu.h>
 
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
@@ -107,17 +110,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             m_cropAction, SLOT(setEnabled(bool)));
             
-    connect(m_canvas, SIGNAL(signalChanged(bool)),
-            m_saveAction, SLOT(setEnabled(bool)));
-            
-    connect(m_canvas, SIGNAL(signalChanged(bool)),
-            m_saveAsAction, SLOT(setEnabled(bool)));
-            
-    connect(m_canvas, SIGNAL(signalChanged(bool)),
-            m_revertAction, SLOT(setEnabled(bool)));
-            
-    connect(m_canvas, SIGNAL(signalChanged(bool)),
-            m_undoAction, SLOT(setEnabled(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
+            this, SLOT(slotChanged(bool, bool)));
 
     //-------------------------------------------------------------
         
@@ -167,23 +161,35 @@ void ShowFoto::setupActions()
     m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "revert");
 
-    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
-                                    actionCollection(), "undo");
-    
-    m_redoAction = KStdAction::redo(m_canvas, SLOT(slotRedo()),
-                                    actionCollection(), "redo");
-
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
     
     m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
                                          actionCollection(), "saveas");
 
+    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
+                                           KStdAccel::shortcut(KStdAccel::Undo),
+                                           m_canvas, SLOT(slotUndo()),
+                                           actionCollection(), "undo");
+    connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowUndoMenu()));
+    connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotUndo(int)));
+    m_undoAction->setEnabled(false);
+
+    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo", 
+                                           KStdAccel::shortcut(KStdAccel::Redo),
+                                           m_canvas, SLOT(slotRedo()),
+                                           actionCollection(), "redo");
+    connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowRedoMenu()));
+    connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotRedo(int)));
+    m_redoAction->setEnabled(false);
+                                         
     m_revertAction->setEnabled(false);
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
-    m_undoAction->setEnabled(false);
-    m_redoAction->setEnabled(false);
                      
     // ---------------------------------------------------------------
     
@@ -757,6 +763,47 @@ void ShowFoto::slotChangeBCG()
 void ShowFoto::slotImagePluginsHelp()
 {
     KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
+}
+
+void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
+{
+    m_revertAction->setEnabled(moreUndo);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+    m_saveAction->setEnabled(moreUndo);
+    m_saveAsAction->setEnabled(moreUndo);
+}
+
+void ShowFoto::slotAboutToShowUndoMenu()
+{
+    m_undoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getUndoHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_undoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
+}
+
+void ShowFoto::slotAboutToShowRedoMenu()
+{
+    m_redoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getRedoHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_redoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
 }
 
 #include "showfoto.moc"
