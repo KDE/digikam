@@ -22,14 +22,6 @@
  *
  * ============================================================ */
 
-// C++ includes. 
- 
-#include <cstdio>
-#include <cmath>
-#include <cstring>
-#include <cstdlib>
-#include <cerrno>
-
 // C++ includes.
 
 #include <cstdio>
