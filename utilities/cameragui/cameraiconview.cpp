@@ -21,21 +21,26 @@
 
 #include <qfile.h>
 #include <qpixmap.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <kmimetype.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 extern "C"
 {
 #include <time.h>
 }
 
+#include "cameraui.h"
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
 #include "renamecustomizer.h"
 
-CameraIconView::CameraIconView(QWidget* parent)
-    : QIconView(parent), m_renamer(0)
+CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
+    : QIconView(parent), m_renamer(0), m_ui(ui)
 {
     setAutoArrange(true);    
     setSorting(true);
@@ -49,6 +54,10 @@ CameraIconView::CameraIconView(QWidget* parent)
 
     connect(this, SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
+    connect(this, SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)),
+            SLOT(slotContextMenu(QIconViewItem*, const QPoint&)));
+    connect(this, SIGNAL(doubleClicked(QIconViewItem*)),
+            SLOT(slotDoubleClicked(QIconViewItem*)));
 }
 
 CameraIconView::~CameraIconView()
@@ -171,6 +180,71 @@ void CameraIconView::slotSelectionChanged()
     }
 
     emit signalSelected(selected);
+}
+
+void CameraIconView::slotContextMenu(QIconViewItem * item, const QPoint&)
+{
+    if (!item)
+        return;
+
+    // don't popup context menu if the camera is busy
+    if (m_ui->isBusy())
+        return;
+
+    CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
+    
+    QPopupMenu menu;
+    menu.insertItem(SmallIcon("editimage"), i18n("View"), 0);
+    menu.insertSeparator();
+    menu.insertItem(i18n("Properties"), 1);
+    menu.insertItem(SmallIcon("text_block"), i18n("EXIF Information"), 2);
+    menu.insertSeparator();
+    menu.insertItem(SmallIcon("down"),i18n("Download"), 3);
+    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 4);
+
+    int result = menu.exec(QCursor::pos());
+
+    switch (result)
+    {
+    case(0):
+    {
+        emit signalFileView(camItem);
+        break;
+    }
+    case(1):
+    {
+        emit signalFileProperties(camItem);
+        break;
+    }
+    case(2):
+    {
+        emit signalFileExif(camItem);
+        break;
+    }
+    case(3):
+    {
+        emit signalDownload();
+        break;
+    }
+    case(4):
+    {
+        emit signalDelete();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void CameraIconView::slotDoubleClicked(QIconViewItem* item)
+{
+    if (!item)
+        return;
+    
+    if (m_ui->isBusy())
+        return;
+
+    emit signalFileView(static_cast<CameraIconViewItem*>(item));
 }
 
 #include "cameraiconview.moc"

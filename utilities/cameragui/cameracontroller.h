@@ -45,12 +45,15 @@ public:
     void listFolders();
     void listFiles(const QString& folder);
     void getThumbnail(const QString& folder, const QString& file);
+    void getExif(const QString& folder, const QString& file);
 
     void downloadPrep();
     void download(const QString& folder, const QString& file,
                   const QString& dest, bool autoRotate);
 
     void deleteFile(const QString& folder, const QString& file);
+
+    void openFile(const QString& folder, const QString& file);
     
 protected:
 

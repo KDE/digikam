@@ -27,6 +27,7 @@
 
 class GPItemInfo;
 class RenameCustomizer;
+class CameraUI;
 class CameraIconViewItem;
 
 class CameraIconView : public QIconView
@@ -35,7 +36,7 @@ class CameraIconView : public QIconView
     
 public:
 
-    CameraIconView(QWidget* parent);
+    CameraIconView(CameraUI* ui, QWidget* parent);
     ~CameraIconView();
 
     void setRenameCustomizer(RenameCustomizer* renamer);
@@ -52,15 +53,26 @@ private:
     
     QDict<CameraIconViewItem> m_itemDict;
     RenameCustomizer*         m_renamer;
+    CameraUI*                 m_ui;
 
 signals:
 
     void signalSelected(bool selected);
+    void signalFileView(CameraIconViewItem*);
+    void signalFileProperties(CameraIconViewItem*);
+    void signalFileExif(CameraIconViewItem*);
+    void signalDownload();
+    void signalDelete();
     
 public slots:
 
     void slotDownloadNameChanged();
     void slotSelectionChanged();
+
+private slots:
+
+    void slotContextMenu(QIconViewItem* item, const QPoint& pos);
+    void slotDoubleClicked(QIconViewItem* item);
 };    
 
 #endif /* CAMERAICONVIEW_H */

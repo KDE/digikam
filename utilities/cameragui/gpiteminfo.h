@@ -44,7 +44,6 @@ public:
     int     downloaded;
     int     readPermissions;
     int     writePermissions;
-
 };
 
 class QDataStream;

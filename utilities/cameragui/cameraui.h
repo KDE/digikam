@@ -40,6 +40,7 @@ class QPopupMenu;
 class QProgressBar;
 
 class CameraIconView;
+class CameraIconViewItem;
 class CameraController;
 class RenameCustomizer;
 class AnimWidget;
@@ -55,6 +56,8 @@ public:
              const QString& path);
     ~CameraUI();
 
+    bool isBusy() const;
+    
 protected:
 
     void closeEvent(QCloseEvent* e);
@@ -101,6 +104,10 @@ private slots:
     void slotDeleteSelected();
     void slotDeleteAll();
 
+    void slotFileView(CameraIconViewItem* item);
+    void slotFileProps(CameraIconViewItem* item);
+    void slotFileExif(CameraIconViewItem* item);
+    
     void slotDownloaded(const QString&, const QString&);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&);

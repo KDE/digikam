@@ -1,12 +1,10 @@
 /* ============================================================
- * File  : camerapropsplugin.h
- * Author: Jörn Ahrens <kde@jokele.de>
- * Date  : 2004-07-23
+ * File  : gpiteminfodlg.h
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date  : 2004-09-30
  * Description : 
- * This class adds additional tab to KPropertiesDialog to show
- * the extended file attributes from the digikamcamera kioslave. 
  * 
- * Copyright 2004 by Jörn Ahrens
+ * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,24 +19,19 @@
  * 
  * ============================================================ */
 
-#ifndef CAMERAPROPSPLUGIN_H
-#define CAMERAPROPSPLUGIN_H
+#ifndef GPITEMINFODLG_H
+#define GPITEMINFODLG_H
 
-#include <kpropertiesdialog.h>
+#include <kdialogbase.h>
 
-namespace KIO
-{
-class Slave;
-class Job;
-}
+class GPItemInfo;
 
-class CameraPropsPlugin : public KPropsDlgPlugin
+class GPItemInfoDlg : public KDialogBase
 {
 public:
 
-    CameraPropsPlugin(KPropertiesDialog *_props);
-    virtual ~CameraPropsPlugin() {};
-    
+    GPItemInfoDlg(QWidget* parent, const GPItemInfo* itemInfo);
+    ~GPItemInfoDlg();
 };
 
-#endif /* CAMERAPROPSPLUGIN_H */
+#endif /* GPITEMINFODLG_H */

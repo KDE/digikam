@@ -36,6 +36,10 @@
 #include <kmessagebox.h>
 #include <kio/renamedlg.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
+#include <kurl.h>
+
+#include <libkexif/kexif.h>
 
 extern "C"
 {
@@ -43,8 +47,9 @@ extern "C"
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
-}    
+}
 
+#include <imagewindow.h>
 #include "gpcamera.h"
 #include "exifrotate.h"
 #include "mtqueue.h"
@@ -67,7 +72,8 @@ public:
         gp_upload,
         gp_delete,
         gp_thumbnail,
-        gp_exif
+        gp_exif,
+        gp_open
     };
     
     Action                 action;
@@ -86,11 +92,13 @@ public:
         gp_listedfiles,
         gp_downloaded,
         gp_downloadFailed,
+        gp_opened,
         gp_uploaded,
         gp_uploadFailed,
         gp_deleted,
         gp_deleteFailed,
         gp_thumbnailed,
+        gp_exif,
         gp_infomsg,
         gp_errormsg
     };
@@ -253,6 +261,40 @@ void CameraThread::run()
 
             break;
         }
+        case(CameraCommand::gp_exif):
+        {
+            QString folder = cmd->map["folder"].asString();
+            QString file   = cmd->map["file"].asString();
+
+            sendInfo(i18n("Getting EXIF information for %1/%2...")
+                     .arg(folder)
+                     .arg(file));
+
+            char* edata = 0;
+            int   esize;
+            d->camera->getExif(folder, file, &edata, esize);
+
+            if (!edata || !esize)
+            {
+                sendError(i18n("Failed to retrieve EXIF information for %1")
+                          .arg(file));
+            }
+            else
+            {
+                QByteArray  ba;
+                QDataStream ds(ba, IO_WriteOnly);
+                ds.writeRawBytes(edata, esize);
+                delete [] edata;
+        
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_exif);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("exifSize", QVariant(esize));
+                event->map.insert("exifData", QVariant(ba));
+                QApplication::postEvent(parent, event);
+            }
+            break;
+        }
         case(CameraCommand::gp_download):
         {
             QString folder     = cmd->map["folder"].asString();
@@ -307,6 +349,32 @@ void CameraThread::run()
                 event->map.insert("file", QVariant(file));
                 event->map.insert("dest", QVariant(dest));
                 QApplication::postEvent(parent, event);
+            }                
+            break;
+        }
+        case(CameraCommand::gp_open):
+        {
+            QString folder     = cmd->map["folder"].asString();
+            QString file       = cmd->map["file"].asString();
+            QString dest       = cmd->map["dest"].asString();
+
+            sendInfo(i18n("Retrieving file %1 from camera...")
+                     .arg(file));
+
+            bool result = d->camera->downloadItem(folder, file, dest);
+
+            if (result)
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_opened);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("dest", QVariant(dest));
+                QApplication::postEvent(parent, event);
+            }
+            else
+            {
+                sendError(i18n("Failed to retrieve file %1 from camera")
+                          .arg(file));
             }                
             break;
         }
@@ -468,6 +536,15 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
     d->cmdQueue.enqueue(cmd);
 }
 
+void CameraController::getExif(const QString& folder, const QString& file)
+{
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_exif;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    d->cmdQueue.enqueue(cmd);
+}
+
 void CameraController::downloadPrep()
 {
     d->overwriteAll  = false;
@@ -493,6 +570,16 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
     cmd->action = CameraCommand::gp_delete;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
+    d->cmdQueue.enqueue(cmd);
+}
+
+void CameraController::openFile(const QString& folder, const QString& file)
+{
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_open;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("dest", QVariant(locateLocal("tmp", file)));
     d->cmdQueue.enqueue(cmd);
 }
 
@@ -558,6 +645,25 @@ void CameraController::customEvent(QCustomEvent* e)
         emit signalThumbnail(folder, file, thumb);
         break;
     }
+    case (CameraEvent::gp_exif) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+        QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
+
+        KExif exif(d->parent);
+        if (exif.loadData(file, ba.data(), ba.size()))
+        {
+            exif.exec();
+        }
+        else 
+        {
+            KMessageBox::sorry(0, i18n("Failed to retrieve EXIF information for %1")
+                               .arg(file));
+        }
+        
+        break;
+    }
     case (CameraEvent::gp_downloaded) :
     {
         QString folder = QDeepCopy<QString>(event->map["folder"].asString());
@@ -621,6 +727,24 @@ void CameraController::customEvent(QCustomEvent* e)
         }
 
         d->timer->start(50);
+        break;
+    }
+    case (CameraEvent::gp_opened) :
+    {
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+        QString dest   = QDeepCopy<QString>(event->map["dest"].asString());
+
+        KURL url(dest);
+        KURL::List urlList;
+        urlList << url;
+
+        ImageWindow *im = ImageWindow::instance();
+        im->loadURL(urlList, url, file, false);
+        if (im->isHidden())
+            im->show();
+        else
+            im->raise();
+        im->setFocus();
         break;
     }
     default:

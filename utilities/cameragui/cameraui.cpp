@@ -48,6 +48,7 @@
 #include "dirselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "gpiteminfodlg.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
@@ -72,7 +73,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     viewBoxLayout->setColStretch( 2, 1 );
     viewBoxLayout->setColStretch( 3, 0 );
 
-    m_view = new CameraIconView(viewBox);
+    m_view = new CameraIconView(this, viewBox);
     viewBoxLayout->addMultiCellWidget(m_view, 0, 0, 0, 3);
 
     m_cancelBtn = new QToolButton(viewBox);
@@ -145,12 +146,23 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_deleteMenu->setItemEnabled(0, false);
     m_deleteBtn->setPopup(m_deleteMenu);
 
-    connect(m_view, SIGNAL(signalSelected(bool)),
-            SLOT(slotItemsSelected(bool)));
     connect(m_closeBtn, SIGNAL(clicked()),
             SLOT(close()));
     connect(m_advBtn, SIGNAL(clicked()),
             SLOT(slotToggleAdvanced()));
+
+    connect(m_view, SIGNAL(signalSelected(bool)),
+            SLOT(slotItemsSelected(bool)));
+    connect(m_view, SIGNAL(signalFileView(CameraIconViewItem*)),
+            SLOT(slotFileView(CameraIconViewItem*)));
+    connect(m_view, SIGNAL(signalFileProperties(CameraIconViewItem*)),
+            SLOT(slotFileProps(CameraIconViewItem*)));
+    connect(m_view, SIGNAL(signalFileExif(CameraIconViewItem*)),
+            SLOT(slotFileExif(CameraIconViewItem*)));
+    connect(m_view, SIGNAL(signalDownload()),
+            SLOT(slotDownloadSelected()));
+    connect(m_view, SIGNAL(signalDelete()),
+            SLOT(slotDeleteSelected()));
 
     // -- Read settings --------------------------------------------------
 
@@ -186,11 +198,17 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     connect(m_cancelBtn, SIGNAL(clicked()),
             m_controller, SLOT(slotCancel()));
 
+    m_busy = false;
     QTimer::singleShot(0, m_controller, SLOT(slotConnect()));
 }
 
 CameraUI::~CameraUI()
 {
+}
+
+bool CameraUI::isBusy() const
+{
+    return m_busy;
 }
 
 void CameraUI::closeEvent(QCloseEvent* e)
@@ -217,6 +235,9 @@ void CameraUI::slotBusy(bool val)
     }
     else
     {
+        if (m_busy)
+            return;
+        
         if (!m_anim->running())
             m_anim->start();
         m_busy = true;
@@ -477,6 +498,24 @@ void CameraUI::slotDeleteAll()
             m_controller->deleteFile(*itFolder, *itFile);
         }
     }
+}
+
+void CameraUI::slotFileView(CameraIconViewItem* item)
+{
+    m_controller->openFile(item->itemInfo()->folder,
+                           item->itemInfo()->name);
+}
+
+void CameraUI::slotFileProps(CameraIconViewItem* item)
+{
+    GPItemInfoDlg dlg(this, item->itemInfo());
+    dlg.exec();
+}
+
+void CameraUI::slotFileExif(CameraIconViewItem* item)
+{
+    m_controller->getExif(item->itemInfo()->folder,
+                          item->itemInfo()->name);
 }
 
 void CameraUI::slotItemsSelected(bool selected)

@@ -37,6 +37,9 @@ public:
 
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
+
+    GPItemInfo* itemInfo() const
+        { return m_itemInfo; }
     
 protected:
 
