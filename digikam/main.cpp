@@ -48,14 +48,7 @@
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
-#ifdef HAVE_KIPI
-static const char *description = I18N_NOOP("A Photo-Management Application for KDE\n"
-                                           "(built with KIPI plugins support)");
-#else
-static const char *description = I18N_NOOP("A Photo-Management Application for KDE\n"
-                                           "(built with Digikam plugins support)");
-#endif
-
+static const char *description = I18N_NOOP("A Photo-Management Application for KDE");
 
 static KCmdLineOptions options[] =
 {
@@ -82,7 +75,7 @@ int main(int argc, char *argv[])
                           "http://digikam.sourceforge.net");
 
     aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Current maintainer, developer, co-coordinator, French translations"),
+                          I18N_NOOP("Developer, co-coordinator, French translations"),
                           "caulier dot gilles at free.fr",
                           "http://caulier.gilles.free.fr");
 

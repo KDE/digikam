@@ -2,21 +2,16 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdigikaminterfaces.la
 
-libdigikaminterfaces_la_SOURCES = plugin.cpp \
-		                  albummanager.cpp albuminfo.cpp \
+libdigikaminterfaces_la_SOURCES = albummanager.cpp albuminfo.cpp \
 		                  albumxmleditor.cpp albumxmlparser.cpp \
 		                  digikamio.cpp \
 		                  thumbnailjob.cpp albumitemhandler.cpp \
 		                  kipiinterface.cpp
 
-libdigikaminterfaces_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KIPI)
-
-digikaminclude_HEADERS = plugin.h albummanager.h albuminfo.h \
-			 digikamio.h thumbnailjob.h kipiinterface.h
+libdigikaminterfaces_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -lkipi
 
 digikamincludedir = $(includedir)/digikam
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	$(all_includes) 
+	  $(all_includes) 
 
-kde_servicetypes_DATA = digikamplugin.desktop

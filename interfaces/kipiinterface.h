@@ -3,6 +3,7 @@
 //    KIPIINTERFACE.H
 //
 //    Copyright (C) 2004 Gilles Caulier <caulier dot gilles at free.fr>
+//                       Ralf Holzer <ralf at well.com>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -27,8 +28,6 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-#ifdef HAVE_KIPI
 
 // Qt includes.
 
@@ -153,7 +152,5 @@ protected:
     
     Digikam::AlbumManager *albumManager_;
 };
-
-#endif  // HAVE_KIPI
 
 #endif  // DIGIKAM_KIPIINTERFACE_H

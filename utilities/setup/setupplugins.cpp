@@ -41,9 +41,7 @@
 
 // Includes files for plugins support.
 
-#ifdef HAVE_KIPI
 #include <libkipi/pluginloader.h>
-#endif
 
 // Local includes.
 
@@ -61,19 +59,9 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    QString pluginsListHelp = i18n("<p>Here you can see the list of plugins who can be "
                                   "loaded or unloaded from the current Digikam instance.");
 
-#ifdef HAVE_KIPI
    KIPI::ConfigWidget* Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
    QWhatsThis::add( Kipiconfig, pluginsListHelp);
    layout->addWidget( Kipiconfig );
-#else
-   m_pluginList = new KListView( parent, "pluginList" );
-   m_pluginList->addColumn( i18n( "Name" ) );
-   m_pluginList->addColumn( i18n( "Description" ) );
-   m_pluginList->setResizeMode( QListView::LastColumn );
-   m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, pluginsListHelp);
-   layout->addWidget( m_pluginList );
-#endif   
 }
 
 SetupPlugins::~SetupPlugins()
@@ -83,44 +71,6 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::initPlugins(int kipiPluginsNumber)
 {
     m_pluginsNumber->setText(i18n("KIPI plugins found: %1").arg(kipiPluginsNumber));   
-}
-
-
-// Only for DigikamPlugins !!!    
-void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
-{
-    QStringList::Iterator it = lista.begin();
-    
-    m_pluginsNumber->setText(i18n("Digikam plugins found: %1").arg(lista.count()/2));    
-    
-    while(  it != lista.end() )
-        {
-        QCheckListItem *item = new QCheckListItem (m_pluginList, *it, QCheckListItem::CheckBox);
-        item->setText(0, *it);
-        
-        if (listl.contains(*it)) item->setOn(true);
-        
-        ++it;
-        item->setText(1, *it);
-        ++it;
-        }
-}
-
-// Only for DigikamPlugins !!!
-QStringList SetupPlugins::getPluginList()
-{
-    QStringList list;
-    QCheckListItem * item = (QCheckListItem*)m_pluginList->firstChild();
-        
-    while( item )
-            {
-            if (item->isOn())
-               list.append(item->text(0));
-               
-            item = (QCheckListItem*)item->nextSibling();
-            }
-            
-    return list;
 }
 
 

@@ -43,7 +43,6 @@ namespace Digikam
 class AlbumManager;
 }
 
-#ifdef HAVE_KIPI
 namespace KIPI
 {
 class PluginLoader;
@@ -51,9 +50,6 @@ class PluginLoader;
 
 class PluginLoader;               //   For KIPI pluggins support.
 class DigikamKipiInterface;
-#else
-class DigikamPluginManager;       //   For DigikamPlugins support.
-#endif
 
 class KAction;
 class KActionMenu;
@@ -78,10 +74,8 @@ public:
     
     static DigikamApp* getinstance();
 
-#ifdef HAVE_KIPI
-    const  QPtrList<KAction>& menuImageActions();
-    const  QPtrList<KAction>& menuBatchActions();
-#endif
+    const QPtrList<KAction>& menuImageActions();
+    const QPtrList<KAction>& menuBatchActions();
 
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);
@@ -101,7 +95,6 @@ private:
     static DigikamApp     *m_instance;
     Digikam::AlbumManager *mAlbumManager;
     
-#ifdef HAVE_KIPI
     KIPI::PluginLoader    *KipiPluginLoader_;
     DigikamKipiInterface  *KipiInterface_;
     QPtrList<KAction>      m_kipiFileActionsExport;
@@ -109,16 +102,13 @@ private:
     QPtrList<KAction>      m_kipiImageActions;
     QPtrList<KAction>      m_kipiToolsActions;
     QPtrList<KAction>      m_kipiBatchActions;
-#else
-    DigikamPluginManager  *pluginManager_;
-#endif
      
-    KConfig       *m_config;    
-    Setup         *m_setup;
+    KConfig               *m_config;    
+    Setup                 *m_setup;
     
-    DigikamView   *mView;
-    CameraList    *mCameraList;
-    bool           mFullScreen;
+    DigikamView           *mView;
+    CameraList            *mCameraList;
+    bool                   mFullScreen;
 
     // Album Settings
     AlbumSettings *mAlbumSettings;

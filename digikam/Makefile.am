@@ -11,31 +11,31 @@ INCLUDES = \
 	$(all_includes)
 
 libdigikam_la_SOURCES = digikamapp.cpp digikamview.cpp \
-		albumfolderview.cpp albumfolderitem.cpp \
-		albumiconview.cpp albumiconitem.cpp \
-		thumbview.cpp thumbitem.cpp \
-		albumpropsedit.cpp imagedescedit.cpp \
-		albumsettings.cpp \
-		cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		digikampluginmanager.cpp digikamcameraprocess.cpp \
-		digikamfirstrun.cpp
+		        albumfolderview.cpp albumfolderitem.cpp \
+		        albumiconview.cpp albumiconitem.cpp \
+		        thumbview.cpp thumbitem.cpp \
+		        albumpropsedit.cpp imagedescedit.cpp \
+		        albumsettings.cpp \
+		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
+		        digikamcameraprocess.cpp \
+		        digikamfirstrun.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		$(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
-		$(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
-		$(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		$(top_builddir)/digikam/utilities/setup/libsetup.la \
-		$(top_builddir)/digikam/interfaces/libdigikaminterfaces.la
+		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
+		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
+		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
+		        $(top_builddir)/digikam/utilities/setup/libsetup.la \
+		        $(top_builddir)/digikam/interfaces/libdigikaminterfaces.la
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
 
 digikam_SOURCES = main.cpp
-digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KEXIF)\
+digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
+		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KEXIF) \
 		  libdigikam.la
 
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) $(LIB_KIPI)
+digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) -lkipi
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp

@@ -21,3 +21,17 @@ if test "$have_kexif" = "no"; then
   echo "kdeextragear-libs-1 package first."
   echo ""
 fi
+
+if test x$have_kipi = xno; then
+    echo ""
+    echo ""
+    echo "------------------------------------------"
+    echo "           W A R N I N G  !!!             "
+    echo "------------------------------------------"
+    echo ""
+    echo "You are missing the KIPI plugin interface from kdeextragear-libs-1"
+    echo "Compilation of Digikam has therefore been disabled."
+    echo ""
+    echo ""
+fi
+

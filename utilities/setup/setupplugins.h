@@ -2,7 +2,7 @@
 //
 //    SETUPPLUGINS.H
 //
-//    Copyright (C) 2004 Gilles CAULIER <caulier dot gilles at free.fr>
+//    Copyright (C) 2004 Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -40,9 +40,6 @@ public:
     ~SetupPlugins();
 
     void initPlugins(int kipiPluginsNumber);
-    void initPlugins(QStringList lista, QStringList listl);
-    
-    QStringList getPluginList();
 
 private:
     

@@ -80,7 +80,6 @@
 #include "imagedescedit.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
-#include "digikampluginmanager.h"
 
 #include "cameratype.h"
 #include "cameradragobject.h"
@@ -445,7 +444,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     // Merge in the plugin actions ----------------------------
 
-#ifdef HAVE_KIPI
     const QPtrList<KAction>& ImageActions = DigikamApp::getinstance()->menuImageActions();
     
     QPtrListIterator<KAction> it1(ImageActions);
@@ -480,25 +478,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     
     if (count != 0)
         popmenu.insertSeparator();
-#else
-    const QPtrList<KAction>& mergeActions = DigikamPluginManager::instance()->menuMergeActions();
-    
-    QPtrListIterator<KAction> it(mergeActions);
-    KAction *action;
-    bool count = 0;
-    
-    while ( (action = it.current()) != 0 ) 
-    {
-        action->plug(&popmenu);
-        ++it;
-        count = 1;
-    }
-
-    // Don't insert a separator if we didn't plug in any actions
-    
-    if (count != 0)
-        popmenu.insertSeparator();
-#endif    
 
     // --------------------------------------------------------
 

@@ -1,5 +1,6 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> Removed all old Digikamplugins depencies. 
         * <Gilles Caulier> Added thumbnails creation with imlib2 API.
         * <Gilles Caulier> Added a new option in general setup for to show the 
           images resolution of Album items (using imlib2).

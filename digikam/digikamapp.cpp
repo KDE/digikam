@@ -58,13 +58,9 @@
 
 // Includes files for plugins support.
 
-#ifdef HAVE_KIPI
 #include "kipiinterface.h"
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
-#else
-#include "digikampluginmanager.h"
-#endif
 
 #include "imagepluginloader.h"
  
@@ -125,7 +121,6 @@ DigikamApp* DigikamApp::getinstance()
     return m_instance;
 }
 
-#ifdef HAVE_KIPI
 const QPtrList<KAction>& DigikamApp::menuImageActions()
 {
     return m_kipiImageActions;
@@ -135,7 +130,6 @@ const QPtrList<KAction>& DigikamApp::menuBatchActions()
 {
     return m_kipiBatchActions;
 }
-#endif
 
 bool DigikamApp::queryClose()
 {
@@ -330,11 +324,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
     
-#ifdef HAVE_KIPI    // For KIPI plugins.
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
-#else               // For DigikamPlugins.
-    createGUI();
-#endif
     
     // Initialize Actions ---------------------------------------
     mDeleteAction->setEnabled(false);
@@ -446,28 +436,15 @@ void DigikamApp::slotSetup()
     connect(m_setup, SIGNAL(okClicked()),
             this,  SLOT(slotSetupChanged()));
     
-#ifdef HAVE_KIPI    // KIPI plugins.
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     m_setup->pluginsPage_->initPlugins((int)list.count());
-#else   // DigikamPlugins        
-    m_setup->pluginsPage_->initPlugins(pluginManager_->availablePluginList(),
-                                       pluginManager_->loadedPluginList());
-#endif                                   
     
     m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
-#ifdef HAVE_KIPI    // KIPI plugins.
     KipiPluginLoader_->loadPlugins();  
-#else               // DigikamPlugins 
-    
-    // Get the plugins list who must be loaded for the instance.
-    QStringList pluginsList = m_setup->pluginsPage_->getPluginList();
-    m_config->writeEntry( "Digikam Plugins List", pluginsList );
-#endif     
-    
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     m_config->sync();
@@ -478,8 +455,6 @@ void DigikamApp::slotEditKeys()
     KKeyDialog* dialog = new KKeyDialog();
     dialog->insert( actionCollection(), i18n( "General" ) );
     
-#ifdef HAVE_KIPI    // KIPI plugins.
-
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
@@ -487,8 +462,6 @@ void DigikamApp::slotEditKeys()
         KIPI::Plugin* plugin = (*it)->plugin;
         dialog->insert( plugin->actionCollection(), (*it)->comment );
         }
-    
-#endif 
     
     dialog->configure();
 
@@ -531,8 +504,6 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::loadPlugins()
 {
-#ifdef HAVE_KIPI    // Loading KIPI plugins.
-   
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
     
@@ -544,25 +515,11 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_->loadPlugins();                             
     
-#else   // Loading DigikamPlugins
-    
-    pluginManager_ = new DigikamPluginManager(this);
-    
-    if ( m_config->readEntry("Digikam Plugins List") == QString::null )         
-       pluginManager_->loadPlugins();                             
-    else 
-       pluginManager_->loadPlugins(m_config->readListEntry("Digikam Plugins List"));
-    
-#endif    
-
     new ImagePluginLoader(this);
 }
 
 void DigikamApp::slotKipiPluginPlug()
 { 
-#ifdef HAVE_KIPI    
-
-    qDebug ("replug !!!");   
     unplugActionList( QString::fromLatin1("file_actions_export") );
     unplugActionList( QString::fromLatin1("file_actions_import") );
     unplugActionList( QString::fromLatin1("image_actions") );
@@ -626,8 +583,6 @@ void DigikamApp::slotKipiPluginPlug()
     plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
     plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
     plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
-
-#endif
 }
 
     
