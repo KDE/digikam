@@ -1,5 +1,7 @@
 METASOURCES = AUTO
 
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 	      -I$(top_srcdir)/digikamimageplugins/common/cimgiface \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
