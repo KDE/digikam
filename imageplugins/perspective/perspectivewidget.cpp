@@ -232,10 +232,10 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
 
 void PerspectiveWidget::updatePixmap(void)
 {
-    m_topLeftCorner.setRect(m_topLeftPoint.x(), m_topLeftPoint.y(), 5, 5);
-    m_topRightCorner.setRect(m_topRightPoint.x() - 4, m_topRightPoint.y(), 5, 5);
-    m_bottomLeftCorner.setRect(m_bottomLeftPoint.x(), m_bottomLeftPoint.y() - 4, 5, 5);   
-    m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 4, m_bottomRightPoint.y() - 4, 5, 5);
+    m_topLeftCorner.setRect(m_topLeftPoint.x(), m_topLeftPoint.y(), 8, 8);
+    m_topRightCorner.setRect(m_topRightPoint.x() - 7, m_topRightPoint.y(), 8, 8);
+    m_bottomLeftCorner.setRect(m_bottomLeftPoint.x(), m_bottomLeftPoint.y() - 7, 8, 8);   
+    m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 7, m_bottomRightPoint.y() - 7, 8, 8);
     
     // Drawing background and image transformation.
     
@@ -411,9 +411,6 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
            setCursor ( KCursor::arrowCursor() );
        }
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Matrix 3x3 perspective transformation implementations.
 
 QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                                            QPoint transTopLeft, QPoint transTopRight,
@@ -665,6 +662,10 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
 
     delete dest;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Matrix 3x3 perspective transformation implementations.
 
 /**
  * matrix3Identity:
