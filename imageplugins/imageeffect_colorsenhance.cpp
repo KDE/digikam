@@ -486,19 +486,22 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
 {
     Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
+    uint* orgData = iface.getOriginalData();
+    int   w       = iface.originalWidth();
+    int   h       = iface.originalHeight();
 
-    if (!data || !w || !h)
+    if (!orgData || !w || !h)
        {
        kdWarning() << ("ImageEffect_ColorsEnhance::autoLevelsCorrectionImage: no image data available!")
                    << endl;
        return;
        }
   
+  // Create the new empty destination image data space.
+  uint* desData = new uint[w*h];
+       
   // Create an histogram of the current image.     
-  Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
+  Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h);
   
   // Create an empty instance of levels to use.
   Digikam::ImageLevels    *levels    = new Digikam::ImageLevels();      
@@ -509,15 +512,16 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
   // Recalculate the transfer arrays.
   levels->levelsCalculateTransfers();
 
-  // Renchi, Whats doing this method exactly ?
+  // Calculate the LUT to apply on the image.
   levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
   
-  // TODO : Renchi, what are doing with the lut and the level ?
-  //        Where Gimp change the original image data ?
-                    
-  iface.putOriginalData(data);
+  // Apply the lut to the image.
+  levels->levelLutProcess(orgData, desData, w, h);
   
-  delete [] data;
+  iface.putOriginalData(desData);
+  
+  delete [] orgData;
+  delete [] desData;
   delete histogram;
   delete levels;
 }
