@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=ImagePlugin_FilmGrain
+Name[it]=PluginImmagini_GranaPellicola
+Name[nl]=Afbeeldingplugin_filmkorreligheid
+Name[pt]='Plugin' de Grão de Filme
+Name[pt_BR]='Plugin' de Grão de Filme
+Name[sv]=Insticksprogram för filmkorn
+Name[ta]=பிம்பசொருகுப்பொருள்_ ஃபிலிம்க்ரைன்
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 
 Comment=Film grain image effect plugin for digikam
+Comment[de]=Digikam Plugin zum Erzeugen eines Effektes von Körnigen Film
+Comment[fr]=Module externe de Digikam pour simuler le grain d'un film
+Comment[it]=Plugin per l'effetto di grana della pellicola delle immagini per Digikam
+Comment[nl]=Digikam-effectplugin voor filmkorreligheid
+Comment[pt]='Plugin' de efeito de grão de filme para o digikam
+Comment[pt_BR]='Plugin' de efeito de grão de filme para o digikam
+Comment[sv]=Digikam insticksprogram för filmkornsbildeffekt
+Comment[ta]=டிஜிகாமிற்கான ஃபிலிம் சிறுபுள்ளிகள் உள்ள பிம்ப விளைவு
 
 X-KDE-Library=digikamimageplugin_filmgrain
 author=Gilles Caulier, caulier dot gilles at free dot fr
