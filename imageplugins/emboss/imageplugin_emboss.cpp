@@ -44,19 +44,13 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
                 this, SLOT(slotEmboss()),
                 actionCollection(), "imageplugin_emboss");
                 
+    setXMLFile( "digikamimageplugin_emboss_ui.rc" );                
     
     kdDebug() << "ImagePlugin_Emboss plugin loaded" << endl;
 }
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()
 {
-}
-
-QStringList ImagePlugin_Emboss::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_emboss/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Emboss::slotEmboss()

@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Emboss();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotEmboss();

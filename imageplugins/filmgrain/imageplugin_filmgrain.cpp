@@ -43,19 +43,13 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const char*, const
                 this, SLOT(slotFilmGrain()),
                 actionCollection(), "imageplugin_filmgrain");
                 
+    setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );                                
     
     kdDebug() << "ImagePlugin_FilmGrain plugin loaded" << endl;
 }
 
 ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()
 {
-}
-
-QStringList ImagePlugin_FilmGrain::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_filmgrain/ ");
-    return guiDef;
 }
 
 void ImagePlugin_FilmGrain::slotFilmGrain()

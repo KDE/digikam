@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_emboss.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_emboss.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_emboss_ui.rc        

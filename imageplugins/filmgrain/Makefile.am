@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_filmgrain.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_filmgrain.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_filmgrain_ui.rc        
