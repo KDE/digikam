@@ -469,7 +469,8 @@ void DigikamApp::setupActions()
     mDeleteAction->setEnabled(false);
     mAddImagesAction->setEnabled(false);
     mPropsEditAction->setEnabled(false);
-
+    mOpenInKonquiAction->setEnabled(false);
+    
     mImageViewAction->setEnabled(false);
     mImageCommentsAction->setEnabled(false);
     mImageViewExifAction->setEnabled(false);
@@ -499,6 +500,7 @@ void DigikamApp::slot_albumSelected(bool val)
     mDeleteAction->setEnabled(val);
     mAddImagesAction->setEnabled(val);
     mPropsEditAction->setEnabled(val);
+    mOpenInKonquiAction->setEnabled(val);
 }
 
 void DigikamApp::slot_tagSelected(bool val)
