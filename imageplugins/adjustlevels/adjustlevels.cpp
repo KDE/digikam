@@ -77,14 +77,14 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();      
 
-    setButtonWhatsThis ( User1, i18n("<p>Reset levels values from the current selected channel.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset level values from the currently selected channel.") );
     
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Adjust Levels"), 
                                        "0.7.0-cvs",
-                                       I18N_NOOP("An image histogram levels adjustments plugin for Digikam."),
+                                       I18N_NOOP("An image-histogram-levels adjustment plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -221,7 +221,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     // -------------------------------------------------------------
     
-    QHGroupBox *gbox3 = new QHGroupBox(i18n("All channels levels"), plainPage());
+    QHGroupBox *gbox3 = new QHGroupBox(i18n("All channels' levels"), plainPage());
     m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
     QWhatsThis::add( m_loadButton, i18n("<p>Load levels settings from a Gimp levels text file."));
     m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
@@ -252,7 +252,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level adjustments preview."));
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
     topLayout->addMultiCellWidget(gbox4, 0, 2, 1, 1);  
