@@ -71,8 +71,6 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
     imageWidth_  = imageWidth;
     imageHeight_ = imageHeight;
     
-    metaInfo_ = new KFileMetaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
-
     updateExtraText();
     calcRect();
 }
@@ -281,6 +279,8 @@ void AlbumIconItem::updateExtraText()
     QString extraText;
     bool firstLine = true;
 
+    metaInfo_ = new KFileMetaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+
     const AlbumSettings *settings = view_->settings();
     if (!settings) return;
 
@@ -411,3 +411,4 @@ void AlbumIconItem::setImageDimensions(int width, int height)
     imageWidth_  = width;
     imageHeight_ = height;
 }
+
