@@ -86,7 +86,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    
    QWhatsThis::add( m_TIFFcompression, i18n("<p>Toggle LZW compression algorithm with TIFF images.<p>"
                                             "If you enable this option, you can reduce the TIFF image "
-                                            "file size.<p>"
+                                            "files size.<p>"
                                             "<b>Note: because LZW pattents issues, some systems don't "
                                             "include LZW library and this option cannot be used.</b>"));
 
