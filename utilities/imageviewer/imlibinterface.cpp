@@ -421,8 +421,8 @@ private:           // Fonctions.
             }
         else 
             {
-            // Always save at 100 % quality for jpeg files
-            // TODO: maybe change this later
+            // Always save jpeg files at 95 % quality without compression
+            imlib_image_attach_data_value ("quality", NULL, 95, NULL);
             
             //ImlibSaveInfo saveInfo;
             //saveInfo.quality = 256;
