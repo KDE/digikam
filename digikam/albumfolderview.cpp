@@ -711,3 +711,5 @@ void AlbumFolderView::slotGotThumbnail(const KURL& url, const QPixmap& thumbnail
         static_cast<AlbumFolderItem*>(album->getViewItem());
     folderItem->setPixmap(thumbnail);
 }
+
+#include "albumfolderview.moc"

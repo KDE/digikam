@@ -250,3 +250,5 @@ bool AlbumPropsEdit::editProps(const Digikam::AlbumInfo *albumInfo, QString& tit
     return ok;
 }
 
+
+#include "albumpropsedit.moc"

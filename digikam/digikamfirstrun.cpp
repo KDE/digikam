@@ -164,3 +164,5 @@ void DigikamFirstRun::slotPathEdited(const QString& newPath)
     QDir dir(newPath);
     okButton_->setEnabled(dir.exists() && dir != QDir(QDir::homeDirPath ()));
 }
+
+#include "digikamfirstrun.moc"

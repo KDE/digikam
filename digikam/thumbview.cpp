@@ -1285,3 +1285,5 @@ ThumbItem* ThumbView::findLastVisibleItem(const QRect &r ) const
 
     return i;
 }
+
+#include "thumbview.moc"

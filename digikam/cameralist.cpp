@@ -191,3 +191,5 @@ void CameraList::clear()
     }
 }
 
+
+#include "cameralist.moc"

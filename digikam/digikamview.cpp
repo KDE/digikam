@@ -371,3 +371,5 @@ void DigikamView::slotSelectInvert()
     mIconView->invertSelection();
 }
 
+
+#include "digikamview.moc"

@@ -445,3 +445,5 @@ void DigikamApp::slotShowTip()
 {
   KTipDialog::showTip("digikam/tips", true);
 }
+
+#include "digikamapp.moc"

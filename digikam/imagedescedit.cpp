@@ -99,3 +99,5 @@ bool ImageDescEdit::editComments(const QString& itemName,
     itemComments = dlg.mCommentsEdit->text();
     return ok;
 }
+
+#include "imagedescedit.moc"

@@ -91,3 +91,5 @@ void DigikamCameraProcess::slotProcessEnded()
         start();
     }
 }
+
+#include "digikamcameraprocess.moc"

@@ -1054,3 +1054,5 @@ bool AlbumIconView::eventFilter(QObject *obj, QEvent *ev)
     return ThumbView::eventFilter(obj, ev);    
 }
 
+
+#include "albumiconview.moc"
