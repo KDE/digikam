@@ -76,6 +76,7 @@ private:
     void createFolderThumbnail();
     void emitThumbnail(QImage& thumb);
     void createShmSeg();
+    void exifRotate(const QString& filePath, QImage& thumb);
 
 protected slots:
 

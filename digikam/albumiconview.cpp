@@ -101,7 +101,6 @@
 #include "cameratype.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
-#include "exiforientation_p.h"
 
 #include "albumiconitem.h"
 #include "digikamapp.h"
@@ -1580,17 +1579,8 @@ void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
     AlbumIconItem *iconItem = d->itemDict.find(url.url());
     if (!iconItem)
         return;
-    
-    if(settings->getExifRotate())
-    {
-        QPixmap rotPix(pix);
-        exifRotate(url.path(), rotPix);
-        iconItem->setPixmap(rotPix, metaInfo);
-    }
-    else
-    {
-        iconItem->setPixmap(pix, metaInfo);
-    }
+
+    iconItem->setPixmap(pix, metaInfo);
     
     if( d->currentAlbum->type() == Album::PHYSICAL && 
         d->currentAlbum->getIcon().isEmpty())
@@ -1690,71 +1680,6 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         refreshItems((*it).path()); 
     }
 }
-
-void AlbumIconView::exifRotate(const QString& filePath, QPixmap& pixmap)
-{
-   // Rotate thumbnail based on EXIF rotate tag
-    QWMatrix matrix;
-
-    /*
-    KExifData exifData;
-
-    if(!exifData.readFromFile(filename))
-    {
-        return;
-    }
-
-    KExifData::ImageOrientation orientation = exifData->getImageOrientation();
-    */
-
-    KExifData::ImageOrientation orientation
-        = getExifOrientation(filePath);
-    
-    bool doXform = (orientation != KExifData::NORMAL &&
-                    orientation != KExifData::UNSPECIFIED);
-
-    switch (orientation) {
-       case KExifData::NORMAL:
-       case KExifData::UNSPECIFIED:
-          break;
-
-       case KExifData::HFLIP:
-          matrix.scale(-1,1);
-          break;
-
-       case KExifData::ROT_180:
-          matrix.rotate(180);
-          break;
-
-       case KExifData::VFLIP:
-          matrix.scale(1,-1);
-          break;
-
-       case KExifData::ROT_90_HFLIP:
-          matrix.scale(-1,1);
-          matrix.rotate(90);
-          break;
-
-       case KExifData::ROT_90:
-          matrix.rotate(90);
-          break;
-
-       case KExifData::ROT_90_VFLIP:
-          matrix.scale(1,-1);
-          matrix.rotate(90);
-          break;
-
-       case KExifData::ROT_270:
-          matrix.rotate(270);
-          break;
-    }
-
-    //transform accordingly
-    if ( doXform )
-       pixmap = pixmap.xForm( matrix );
-
-}
-
 
 QRect AlbumIconView::itemRect() const
 {

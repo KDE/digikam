@@ -36,6 +36,8 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 
+#include "albumsettings.h"
+#include "exiforientation_p.h"
 #include "thumbdb.h"
 #include "thumbnailjob.h"
 
@@ -437,6 +439,12 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
 
     thumb = thumb.smoothScale(d->size, d->size, QImage::ScaleMin);
 
+    // EXIF rotate the thumbnail if requested so
+    if (AlbumSettings::instance()->getExifRotate())
+    {
+        exifRotate(d->curr_url.path(), thumb);
+    }
+
     QPixmap pix(thumb);
 
     int w = pix.width();
@@ -461,6 +469,58 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
     }
 
     emit signalThumbnailMetaInfo(d->curr_url, pix, metaInfo);
+}
+
+void ThumbnailJob::exifRotate(const QString& filePath, QImage& thumb)
+{
+    // Rotate thumbnail based on EXIF rotate tag
+    QWMatrix matrix;
+
+    KExifData::ImageOrientation orientation
+        = getExifOrientation(filePath);
+    
+    bool doXform = (orientation != KExifData::NORMAL &&
+                    orientation != KExifData::UNSPECIFIED);
+
+    switch (orientation) {
+       case KExifData::NORMAL:
+       case KExifData::UNSPECIFIED:
+          break;
+
+       case KExifData::HFLIP:
+          matrix.scale(-1,1);
+          break;
+
+       case KExifData::ROT_180:
+          matrix.rotate(180);
+          break;
+
+       case KExifData::VFLIP:
+          matrix.scale(1,-1);
+          break;
+
+       case KExifData::ROT_90_HFLIP:
+          matrix.scale(-1,1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90:
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90_VFLIP:
+          matrix.scale(1,-1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_270:
+          matrix.rotate(270);
+          break;
+    }
+
+    //transform accordingly
+    if ( doXform )
+       thumb = thumb.xForm( matrix );
 }
 
 void ThumbnailJob::slotTimeout()

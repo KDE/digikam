@@ -377,7 +377,6 @@ void ImageDescEdit::slotItemChanged()
 void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
                                      const KFileMetaInfo*)
 {
-    // todo: exif autorotate the thumbnail
     m_thumbLabel->setPixmap(pix);
 }
 
