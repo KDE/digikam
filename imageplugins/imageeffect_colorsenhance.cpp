@@ -71,25 +71,24 @@ void ImageEffect_ColorsEnhance::equalizeImage()
        }
        
     struct double_packet  high, low, intensity;
-    struct double_packet *histogram;
     struct double_packet *map;
     struct short_packet  *equalize_map;
     int                   x, y;
-    unsigned int         *p, *q;
+    unsigned int         *q;
     register long         i;               
     unsigned char         r, g, b, a;
     
-    // Memory allocation. I have fixed the that because the old implementation 
-    // using malloc !!! Now we use a full C++ compliance.
+    // Create an histogram of the current image.     
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
     
-    histogram    = new double_packet[256];
-    map          = new double_packet[256];
-    equalize_map = new short_packet[256];
+    // Memory allocation.
+    map                                = new double_packet[256];
+    equalize_map                       = new short_packet[256];
     
     if( !histogram || !map || !equalize_map )
        {
        if(histogram)
-           delete [] histogram;
+           delete histogram;
        
        if(map)
            delete [] map;
@@ -101,37 +100,19 @@ void ImageEffect_ColorsEnhance::equalizeImage()
        return;
        }
     
-    // Form histogram.
-    
-    memset(histogram, 0, 256*sizeof(struct double_packet));
-        
-    for (y = 0 ; y < h ; ++y)
-      {
-      p = data + (w * y);
-      
-      for (x = 0 ; x < w ; ++x)
-         {
-         histogram[(unsigned char)(*p)].blue++;
-         histogram[(unsigned char)(*p >> 8)].green++;
-         histogram[(unsigned char)(*p >> 16)].red++;
-         histogram[(unsigned char)(*p >> 24)].alpha++;
-         p++;
-         }
-      }
-      
     // Integrate the histogram to get the equalization map.
      
     memset(&intensity, 0, sizeof(struct double_packet));
-    memset(&high, 0, sizeof(struct double_packet));            
-    memset(&low,  0, sizeof(struct double_packet));
+    memset(&high,      0, sizeof(struct double_packet));            
+    memset(&low,       0, sizeof(struct double_packet));
     
     for(i = 0 ; i <= 255 ; ++i)
        {
-       intensity.red   += histogram[i].red;
-       intensity.green += histogram[i].green;
-       intensity.blue  += histogram[i].blue;
-       intensity.alpha += histogram[i].alpha;
-       map[i]=intensity;
+       intensity.red   += histogram->getValue(Digikam::ImageHistogram::RedChannel, i);
+       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);
+       intensity.blue  += histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);
+       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i);
+       map[i] = intensity;
        }
     
     low =  map[0];
@@ -150,7 +131,7 @@ void ImageEffect_ColorsEnhance::equalizeImage()
           equalize_map[i].alpha=(unsigned short)((65535*(map[i].alpha-low.alpha))/(high.alpha-low.alpha));
        }
     
-    delete [] histogram;
+    delete histogram;
     delete [] map;
     
     // Stretch the histogram.
@@ -209,25 +190,24 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        }
 
     struct double_packet  high, low, intensity;
-    struct double_packet *histogram;
     struct short_packet  *normalize_map;
     long long             number_pixels;
     int                   x, y;
-    unsigned int         *p, *q;
+    unsigned int         *q;
     register long         i;
     unsigned long         threshold_intensity;
     unsigned char         r, g, b, a;
         
-    // Memory allocation. I have fixed the that because the old implementation 
-    // using malloc !!! Now we use a full C++ compliance.
+    // Create an histogram of the current image.     
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
     
-    histogram     = new double_packet[256];
+    // Memory allocation.
     normalize_map = new short_packet[256];
     
     if( !histogram || !normalize_map )
        {
        if(histogram)
-           delete [] histogram;
+           delete histogram;
        
        if(normalize_map)
            delete [] normalize_map;
@@ -236,33 +216,11 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        return;
        }
 
-    // Form histogram.
-    
-    memset(histogram, 0, 256*sizeof(struct double_packet));
-        
-    for (y = 0 ; y < h ; ++y)
-      {
-      p = data + (w * y);
-      
-      for (x = 0 ; x < w ; ++x)
-         {
-         histogram[(unsigned char)(*p)].blue++;
-         histogram[(unsigned char)(*p >> 8)].green++;
-         histogram[(unsigned char)(*p >> 16)].red++;
-         histogram[(unsigned char)(*p >> 24)].alpha++;
-         p++;
-         }
-      }
-
     // Find the histogram boundaries by locating the 0.1 percent levels.
     
     number_pixels = (long long)(w*h);
     threshold_intensity = number_pixels / 1000;
 
-    // This code is missing in the original implementation and 
-    // if we use multiple normalize call in the same instance this 
-    // provide differents normalization results (violet rendering)!!!
-    
     memset(&high, 0, sizeof(struct double_packet));            
     memset(&low,  0, sizeof(struct double_packet));
         
@@ -272,7 +230,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
     
     for(high.red = 255 ; high.red != 0 ; high.red--)
        {
-       intensity.red += histogram[(unsigned char)high.red].red;
+       intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
+                                            (unsigned char)high.red);
        
        if( intensity.red > threshold_intensity )
           break;
@@ -285,7 +244,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
         
        for(low.red = 0 ; low.red < 255 ; low.red++)
           {
-          intensity.red += histogram[(unsigned char)low.red].red;
+          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
+                                               (unsigned char)low.red);
           
           if( intensity.red > threshold_intensity )
               break;
@@ -295,7 +255,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(high.red = 255 ; high.red != 0 ; high.red--)
           {
-          intensity.red += histogram[(unsigned char)high.red].red;
+          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
+                                               (unsigned char)high.red);
           
           if( intensity.red > threshold_intensity )
              break;
@@ -308,7 +269,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
     
     for(high.green = 255 ; high.green != 0 ; high.green--)
        {
-       intensity.green += histogram[(unsigned char)high.green].green;
+       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, 
+                                              (unsigned char)high.green);
        
        if( intensity.green > threshold_intensity )
           break;
@@ -321,7 +283,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(low.green = 0 ; low.green < 255 ; low.green++)
           {
-          intensity.green += histogram[(unsigned char)low.green].green;
+          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel,
+                                                 (unsigned char)low.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -331,7 +294,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(high.green = 255 ; high.green != 0 ; high.green--)
           {
-          intensity.green += histogram[(unsigned char)high.green].green;
+          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, 
+                                                 (unsigned char)high.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -344,7 +308,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
     
     for(high.blue = 255 ; high.blue != 0 ; high.blue--)
        {
-       intensity.blue += histogram[(unsigned char)high.blue].blue;
+       intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
+                                             (unsigned char)high.blue);
        
        if( intensity.blue > threshold_intensity )
           break;
@@ -357,7 +322,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
         
        for(low.blue = 0 ; low.blue < 255 ; low.blue++)
           {
-          intensity.blue += histogram[(unsigned char)low.blue].blue;
+          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
+                                                (unsigned char)low.blue);
           
           if( intensity.blue > threshold_intensity )
               break;
@@ -367,7 +333,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(high.blue = 255 ; high.blue != 0 ; high.blue--)
           {
-          intensity.blue += histogram[(unsigned char)high.blue].blue;
+          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
+                                                (unsigned char)high.blue);
           
           if( intensity.blue > threshold_intensity )
              break;
@@ -380,7 +347,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
     
     for(high.alpha = 255 ; high.alpha != 0 ; high.alpha--)
        {
-       intensity.alpha += histogram[(unsigned char)high.alpha].alpha;
+       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
+                                              (unsigned char)high.alpha);
        
        if( intensity.alpha > threshold_intensity )
           break;
@@ -393,7 +361,8 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(low.alpha = 0 ; low.alpha < 255 ; low.alpha++)
           {
-          intensity.alpha += histogram[(unsigned char)low.alpha].alpha;
+          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
+                                                 (unsigned char)low.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
@@ -403,14 +372,15 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        
        for(high.alpha = 255 ; high.alpha != 0 ; high.alpha--)
           {
-          intensity.alpha += histogram[(unsigned char)high.alpha].alpha;
+          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
+                                                 (unsigned char)high.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
           }
        }
     
-    delete [] histogram;
+    delete histogram;
 
     // Stretch the histogram to create the normalized image mapping.
     
@@ -482,6 +452,7 @@ void ImageEffect_ColorsEnhance::normalizeImage()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// Performs histogram auto correction of levels.
 
 void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
 {
