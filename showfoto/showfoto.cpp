@@ -105,13 +105,16 @@ void ShowFoto::setupActions()
                             this, SLOT(slotAutoFit()),
                             actionCollection(), "zoom_fit");
 
-#if KDE_VERSION >= 0x30200
-    KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                           actionCollection(), this, "full_screen");
-#else
-    KAction("Fullscreen",Key_F,
-                           this,SLOT(slotToggleFullScreen()),
-                           actionCollection(), "full_screen");
+#if KDE_IS_VERSION(3,2,0)
+    m_fullScreenAction =
+        KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+                               actionCollection(), this, "full_screen");
+#else 
+    m_fullScreenAction =
+        new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
+                          CTRL+SHIFT+Key_F, this,
+                          SLOT(slotToggleFullScreen()),
+                          actionCollection(), "full_screen");
 #endif
     
     createGUI("showfotoui.rc", false);
@@ -225,7 +228,7 @@ void ShowFoto::slotEscapePressed()
     if (!m_fullScreen)
         return;
 
-    slotToggleFullScreen();    
+    m_fullScreenAction->activate();
 }
 
 #include "showfoto.moc"

@@ -64,6 +64,8 @@ private:
     
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
+    KToggleAction*  m_fullScreenAction;
+    
     KAction*        m_fileproperties;
     
     bool            m_fullScreen;
