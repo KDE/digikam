@@ -178,6 +178,11 @@ void AlbumSettings::readSettings()
             config->readBoolEntry("Icon Show Comments",
                                   true);
 
+    if (config->hasKey("Icon Show File Comments"))
+        d->iconShowFileComments =
+            config->readBoolEntry("Icon Show File Comments",
+                                  true);
+
     if (config->hasKey("Save EXIF Comments"))
         d->saveExifComments =
             config->readBoolEntry("Save EXIF Comments",
@@ -221,6 +226,8 @@ void AlbumSettings::saveSettings()
                        d->iconShowDate);
     config->writeEntry("Icon Show Comments",
                        d->iconShowComments);
+    config->writeEntry("Icon Show File Comments",
+                       d->iconShowFileComments);
     config->writeEntry("Save EXIF Comments",
                        d->saveExifComments);
     config->sync();
