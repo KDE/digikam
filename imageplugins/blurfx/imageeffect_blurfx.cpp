@@ -183,9 +183,9 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "<b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
                                         "muddying the rest of the image.<p>"
                                         "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
-                                        "a frosted glass."
+                                        "a frosted glass.<p>"
                                         "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
-                                        "recreates it by filling those cells with average pixel value.<p>"));
+                                        "recreates it by filling those cells with average pixel value."));
     gridBox2->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
     gridBox2->addMultiCellWidget(m_effectType, 0, 0, 1, 2);
                                                   
