@@ -1,30 +1,27 @@
-/* ============================================================
- * File  : imageview.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-11
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+//////////////////////////////////////////////////////////////////////////////
+//
+//    IMAGEVIEW.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kapp.h>
-#include <kconfig.h>
+// Qt lib includes
 
 #include <qobject.h>
 #include <qpixmap.h>
@@ -44,12 +41,29 @@
 #include <qsignal.h>
 #include <qevent.h>
 
+// KDE lib includes
+
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kapp.h>
+#include <kconfig.h>
+
+// Local includes
+
 #include "exifrestorer.h"
 #include "imeventfilter.h"
 #include "canvas.h"
 #include "imagebcgedit.h"
 #include "imageview.h"
+#include "imagedescedit.h"
+#include "albummanager.h"
+#include "albuminfo.h"
+#include "kexif.h"
 
+
+/////////////////////////////////////// CLASS ////////////////////////////////////////////
 
 class CAction {
 
@@ -142,7 +156,6 @@ protected:
                                    QStyleOption());
         drawButtonLabel(p);
     }
-
 };
 
 class ImageViewPrivate {
@@ -175,6 +188,7 @@ public:
     CButton *bCrop;
     CButton *bRotate;
     CButton *bBCGEdit;
+    CButton *bCommentsEdit;
     CButton *bSave;
     CButton *bRestore;
     CButton *bRemoveCurrent;
@@ -184,6 +198,9 @@ public:
     QPopupMenu *contextMenu;
 
 };
+
+
+//////////////////////////////////// CONSTRUCTORS ///////////////////////////////////////////
 
 ImageView::ImageView(QWidget* parent,
                      const KURL::List& urlList,
@@ -203,6 +220,7 @@ ImageView::ImageView(QWidget* parent,
     init();    
 }
 
+
 ImageView::ImageView(QWidget* parent, const KURL& urlCurrent)
     : QWidget(parent, 0, Qt::WDestructiveClose)
 {
@@ -218,12 +236,18 @@ ImageView::ImageView(QWidget* parent, const KURL& urlCurrent)
     init();
 }
 
+
+//////////////////////////////////// DESTRUCTOR /////////////////////////////////////////////
+
 ImageView::~ImageView()
 {
     saveSettings();
     d->actions.clear();
     delete d;
 }
+
+
+//////////////////////////////////////// FONCTIONS //////////////////////////////////////////
 
 void ImageView::init()
 {
@@ -247,6 +271,9 @@ void ImageView::init()
     loadCurrentItem();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::readSettings()
 {
     KConfig* config = kapp->config();
@@ -264,11 +291,15 @@ void ImageView::readSettings()
     fullScreen = config->readBoolEntry("FullScreen", false);
 
     resize(width, height);
+    
     if (autoZoom)
         d->bZoomAuto->animateClick();
     if (fullScreen)
         d->bFullScreen->animateClick();
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::saveSettings()
 {
@@ -284,6 +315,9 @@ void ImageView::saveSettings()
     config->sync();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::loadCurrentItem()
 {
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
@@ -293,13 +327,13 @@ void ImageView::loadCurrentItem()
 
         d->canvas->load(d->urlCurrent.path());
 
-        QString text = d->urlCurrent.filename();
-        text += " (" + QString::number(index+1)
-                + i18n(" of ") + QString::number(d->urlList.count())
-                + ")";
+        QString text = i18n("%1 (%2 of %3)")
+                       .arg(d->urlCurrent.filename())
+                       .arg(QString::number(index+1))
+                       .arg(QString::number(d->urlList.count()));
 
         d->nameLabel->setText(text);
-
+            
         // Going up, Mr. Tyler?
         if (d->preloadNext && (d->urlCurrent != d->urlList.last())) {
 
@@ -318,6 +352,9 @@ void ImageView::loadCurrentItem()
     }
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::initGui()
 {
     QVBoxLayout *vlayout = new QVBoxLayout(this);
@@ -329,6 +366,9 @@ void ImageView::initGui()
     d->canvas = new Canvas(this);
     vlayout->addWidget(d->canvas);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::setupConnections()
 {
@@ -345,6 +385,9 @@ void ImageView::setupConnections()
     connect(d->canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::setupActions()
 {
@@ -456,6 +499,12 @@ void ImageView::setupActions()
                                   this,
                                   SLOT(slotBCGEdit()),
                                   QKeySequence(CTRL+Key_E)));
+    
+    d->actions.insert("commentsEdit",
+                      new CAction(i18n("Edit Image Comments"),
+                                  this,
+                                  SLOT(slotCommentsEdit()),
+                                  QKeySequence(Key_F3)));
 
     d->actions.insert("crop",
                       new CAction(i18n("Crop"),
@@ -511,6 +560,7 @@ void ImageView::setupActions()
     addKeyInDict("contrast+");
     addKeyInDict("contrast-");
     addKeyInDict("bcgEdit");
+    addKeyInDict("commentsEdit");
     addKeyInDict("crop");
     addKeyInDict("save");
     addKeyInDict("restore");
@@ -519,8 +569,10 @@ void ImageView::setupActions()
 
     d->actionKeys.insert(QKeySequence(Key_Escape),
                          d->actions.find("close"));
-
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::setupPopupMenu()
 {
@@ -553,6 +605,7 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->contextMenu, d->actions.find("crop"));
 
     addMenuItem(d->contextMenu, d->actions.find("bcgEdit"));
+    addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
 
     QPopupMenu *brightnessMenu = new QPopupMenu(d->contextMenu);
     addMenuItem(brightnessMenu, d->actions.find("brightness+"));
@@ -580,7 +633,8 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->contextMenu, d->actions.find("close"));
 
 
-    // Disable save, crop, and restore in popupmenu
+    // Disable save, crop, and restore actions in popupmenu.
+    
     CAction *action = 0;
 
     action = d->actions.find("crop");
@@ -593,6 +647,9 @@ void ImageView::setupPopupMenu()
     d->contextMenu->setItemEnabled(action->menuID, false);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::addMenuItem(QPopupMenu *menu, CAction *action)
 {
     if (action) {
@@ -601,12 +658,18 @@ void ImageView::addMenuItem(QPopupMenu *menu, CAction *action)
     }
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::addKeyInDict(const QString& key)
 {
     CAction *action = d->actions.find(key);
     if (action)
         d->actionKeys.insert(action->key, action);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::setupButtons()
 {
@@ -667,6 +730,12 @@ void ImageView::setupButtons()
                               BarIcon("blend"));
     d->buttonLayout->addWidget(d->bBCGEdit);
 
+    d->bCommentsEdit = new CButton(d->buttonBar,
+                                   d->actions.find("commentsEdit"),
+                                   BarIcon("image_comments"));
+    d->buttonLayout->addWidget(d->bCommentsEdit);
+
+    
     d->bRotate = new CButton(d->buttonBar,
                              d->actions.find("rotate"),
                              BarIcon("rotate_cw"));
@@ -705,6 +774,8 @@ void ImageView::setupButtons()
 }
 
 
+//////////////////////////////////////// SLOTS //////////////////////////////////////////////
+
 void ImageView::slotNextImage()
 {
     promptUserSave();
@@ -720,10 +791,20 @@ void ImageView::slotNextImage()
              KURL urlNext = *(++it);
              d->urlCurrent = urlNext;
              loadCurrentItem();
-
+             
+             if (d->urlList.count() == 1)
+                d->bPrev->setEnabled(false);
+             else       
+                d->bPrev->setEnabled(true);
+                          
+             if (d->urlCurrent == d->urlList.last()) 
+                 d->bNext->setEnabled(false);   
          }
     }
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotPrevImage()
 {
@@ -740,10 +821,20 @@ void ImageView::slotPrevImage()
              KURL urlPrev = *(--it);
              d->urlCurrent = urlPrev;
              loadCurrentItem();
-
+             
+             if (d->urlList.count() == 1)
+                d->bNext->setEnabled(false);
+             else       
+                d->bNext->setEnabled(true);
+             
+             if (d->urlCurrent == d->urlList.first()) 
+                 d->bPrev->setEnabled(false);
          }
     }
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotRemoveCurrentItemfromAlbum()
 {
@@ -763,6 +854,9 @@ void ImageView::slotRemoveCurrentItemfromAlbum()
                this, SLOT(slot_onDeleteCurrentItemFinished(KIO::Job*)));
        }
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
 {
@@ -788,6 +882,15 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
           d->urlCurrent = urlNext;
           d->urlList.remove(CurrentToRemove);
           loadCurrentItem();
+          
+          if (d->urlList.count() == 1)
+             d->bPrev->setEnabled(false);
+          else       
+             d->bPrev->setEnabled(true);
+             
+          if (d->urlCurrent == d->urlList.last()) 
+              d->bNext->setEnabled(false);   
+              
           return;
           }
 
@@ -799,6 +902,15 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
           d->urlCurrent = urlPrev;
           d->urlList.remove(CurrentToRemove);
           loadCurrentItem();
+          
+          if (d->urlList.count() == 1)
+             d->bNext->setEnabled(false);
+          else       
+             d->bNext->setEnabled(true);
+
+          if (d->urlCurrent == d->urlList.first()) 
+              d->bPrev->setEnabled(false);
+              
           return;
           }
 
@@ -806,6 +918,8 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
 
       else
          {
+         d->bPrev->setEnabled(false);    
+         d->bNext->setEnabled(false);         
          KMessageBox::information(this,
                                   i18n("There is no image to show in the current Album!\n"
                                        "The Digikam ImageViewer will be closed..."),
@@ -817,15 +931,24 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
        }
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotShowRotateMenu()
 {
     d->rotateMenu->exec(QCursor::pos());
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotShowContextMenu()
 {
     d->contextMenu->exec(QCursor::pos());
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotSave()
 {
@@ -861,8 +984,10 @@ void ImageView::slotSave()
 
     connect(job, SIGNAL(result(KIO::Job *) ),
             this, SLOT(slotSaveResult(KIO::Job *)));
-    
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotToggleAutoZoom()
 {
@@ -888,6 +1013,9 @@ void ImageView::slotToggleAutoZoom()
     d->contextMenu->setItemEnabled(action->menuID, val);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotToggleFullScreen()
 {
     if (d->fullScreen) {
@@ -901,12 +1029,16 @@ void ImageView::slotToggleFullScreen()
     }
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotZoomChanged(double zoom)
 {
-    d->zoomLabel->setText(i18n("Zoom") + QString(" : ")
-                          + QString::number(zoom*100, 'f', 1)
-                          + "%");
+    d->zoomLabel->setText(i18n("Zoom: %1 %").arg(QString::number(zoom*100, 'f', 1)));
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotCropSelected(bool val)
 {
@@ -914,6 +1046,9 @@ void ImageView::slotCropSelected(bool val)
     CAction *action = d->actions.find("crop");
     d->contextMenu->setItemEnabled(action->menuID, val);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotChanged(bool val)
 {
@@ -929,11 +1064,16 @@ void ImageView::slotChanged(bool val)
     d->contextMenu->setItemEnabled(action->menuID, val);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotClose()
 {
     close();    
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotBCGEdit()
 {
@@ -954,6 +1094,27 @@ void ImageView::slotBCGEdit()
     bcgEdit->show();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotCommentsEdit()
+{
+    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()->currentAlbum();
+    currentAlbum->openDB();
+    QString comments(currentAlbum->getItemComments(d->urlCurrent.filename()));
+    
+    if (ImageDescEdit::editComments(d->urlCurrent.filename(), comments, this)) 
+       {
+       currentAlbum->setItemComments(d->urlCurrent.filename(), comments);
+       Digikam::AlbumManager::instance()->refreshItemHandler(d->urlCurrent.filename());
+       }
+       
+    currentAlbum->closeDB();   
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotSaveResult(KIO::Job *job)
 {
     if (job->error()) {
@@ -961,6 +1122,9 @@ void ImageView::slotSaveResult(KIO::Job *job)
         return;
     }
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::slotKeyPress(int key)
 {
@@ -978,6 +1142,9 @@ void ImageView::slotKeyPress(int key)
     
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::closeEvent(QCloseEvent *e)
 {
     if (!e) return;
@@ -986,6 +1153,9 @@ void ImageView::closeEvent(QCloseEvent *e)
     
     e->accept();
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImageView::promptUserSave()
 {
