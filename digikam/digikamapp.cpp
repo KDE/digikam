@@ -885,7 +885,7 @@ void DigikamApp::slotKipiPluginPlug()
     m_kipiBatchActions.clear();
     m_kipiAlbumActions.clear();
 
-    m_kipiAlbumActions.append( mAlbumImportAction );
+    m_kipiAlbumActions.append( mAddImagesAction );
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
