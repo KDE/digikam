@@ -257,13 +257,13 @@ void ImageGUIClient::slotHelp()
 
 void ImageGUIClient::slotAboutApp()
 {
-    KAboutApplication dlg;
+    KAboutApplication dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImageGUIClient::slotAboutKDE()
 {
-    KAboutKDE dlg;
+    KAboutKDE dlg(kapp->activeWindow());
     dlg.exec();
 }
 

@@ -178,13 +178,13 @@ void CameraGUIClient::slotHelp()
 
 void CameraGUIClient::slotAboutApp()
 {
-    KAboutApplication dlg;
+    KAboutApplication dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void CameraGUIClient::slotAboutKDE()
 {
-    KAboutKDE dlg;
+    KAboutKDE dlg(kapp->activeWindow());
     dlg.exec();
 }
 
