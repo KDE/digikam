@@ -159,7 +159,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     QGroupBox *gbox = new QGroupBox(i18n("Settings"), plainPage());
     gbox->setFlat(false);
-    QGridLayout* grid = new QGridLayout( gbox, 11, 4, 20, spacingHint());
+    QVBoxLayout* layout2 = new QVBoxLayout( gbox, 20 );
+
+    QGridLayout *grid = new QGridLayout( layout2, 2, 4, spacingHint());
     
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -188,8 +190,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
-    
-    // -------------------------------------------------------------
         
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -200,13 +200,34 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                              "selected image channel. This one is re-computed at any filter "
                                              "settings changes."));
     l->addWidget(m_histogramWidget, 0);
-    grid->addMultiCellWidget(frame, 2, 2, 0, 4);
+    grid->addMultiCellWidget(frame, 1, 1, 0, 4);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 3, 3, 0, 4);
+    grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
     
     // -------------------------------------------------------------
+
+    m_grid = new QGridLayout( layout2, 6, 4, spacingHint());
+    
+    // Color Picker settings widgets.
+
+    m_bGroup = new QHButtonGroup(gbox);
+    m_blackColorButton = new QPushButton( m_bGroup );
+    QWhatsThis::add( m_blackColorButton, i18n("<p>Set here the color from original image use to correct <b>Black</b> "
+                                              "tones with white-balance filter with <b>Color Picker</b> method."));
+    m_bGroup->insert(m_blackColorButton, WhiteColor);
+    m_blackColorButton->setToggleButton(true);
+    m_whiteColorButton = new QPushButton( m_bGroup );
+    QWhatsThis::add( m_whiteColorButton, i18n("<p>Set here the color from original image use to correct <b>White</b> "
+                                              "tones with white-balance filter with <b>Color Picker</b> method."));
+    m_bGroup->insert(m_whiteColorButton, BlackColor);
+    m_whiteColorButton->setToggleButton(true);
+    m_whiteColorButton->setOn(true);
+    m_bGroup->setExclusive(true);
+    m_bGroup->setFrameShape(QFrame::NoFrame);
+        
+    // Correction Filter settings widgets.
     
     m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
     m_darkInput = new KDoubleNumInput(gbox);
@@ -214,26 +235,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
         
-    grid->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
-    grid->addMultiCellWidget(m_darkInput, 5, 5, 1, 4);
-
     m_blackLabel = new QLabel(i18n("Black Point:"), gbox);
     m_blackInput = new KDoubleNumInput(gbox);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
     QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
-    grid->addMultiCellWidget(m_blackLabel, 6, 6, 0, 0);
-    grid->addMultiCellWidget(m_blackInput, 6, 6, 1, 4);
-
     m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
     m_exposureInput = new KDoubleNumInput(gbox);
     m_exposureInput->setPrecision(2);
     m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
     QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
-        
-    grid->addMultiCellWidget(m_exposureLabel, 7, 7, 0, 0);
-    grid->addMultiCellWidget(m_exposureInput, 7, 7, 1, 4);
     
     m_gammaLabel = new QLabel(i18n("Gamma:"), gbox);
     m_gammaInput = new KDoubleNumInput(gbox);
@@ -241,42 +253,32 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_gammaInput->setRange(0.01, 1.5, 0.01, true);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma corection value."));
         
-    grid->addMultiCellWidget(m_gammaLabel, 8, 8, 0, 0);
-    grid->addMultiCellWidget(m_gammaInput, 8, 8, 1, 4);
-    
     m_temperatureLabel = new QLabel(i18n("Temperature:"), gbox);
     m_temperatureInput = new KIntNumInput(gbox);
     m_temperatureInput->setRange(2200, 7000, 100, true);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance colour temperature in Kelvin."));
         
-    grid->addMultiCellWidget(m_temperatureLabel, 9, 9, 0, 0);
-    grid->addMultiCellWidget(m_temperatureInput, 9, 9, 1, 4);
-    
     m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
     m_saturationInput = new KDoubleNumInput(gbox);
     m_saturationInput->setPrecision(2);
     m_saturationInput->setRange(0.0, 2.0, 0.1, true);
     QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
         
-    grid->addMultiCellWidget(m_saturationLabel, 10, 10, 0, 0);
-    grid->addMultiCellWidget(m_saturationInput, 10, 10, 1, 4);
-    
     m_greenLabel = new QLabel(i18n("Green:"), gbox);
     m_greenInput = new KDoubleNumInput(gbox);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(0.2, 2.5, 0.1, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the magenta colour cast removal level."));
+
+    layout2->addStretch();
         
-    grid->addMultiCellWidget(m_greenLabel, 11, 11, 0, 0);
-    grid->addMultiCellWidget(m_greenInput, 11, 11, 1, 4);
-    
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
         
     // -------------------------------------------------------------
 
     QGroupBox *gbox4 = new QGroupBox(i18n("Preview"), plainPage());
     gbox4->setFlat(false);
-    QGridLayout* grid2 = new QGridLayout( gbox4, 3, 3, 20, spacingHint());
+    QGridLayout* grid2 = new QGridLayout( gbox4, 3, 2, 20, spacingHint());
 
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -285,7 +287,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image to select "
                                                    "the tone to ajust image's white-balance with <b>Color Picker</b> method."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
-    grid2->addMultiCellWidget(frame2, 0, 0, 0, 2);
+    grid2->addMultiCellWidget(frame2, 0, 0, 0, 1);
     
     QLabel *label10 = new QLabel(i18n("Method:"), gbox4);
     m_wbMethod = new QComboBox( false, gbox4 );
@@ -296,24 +298,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                       "in the original photograph and setting a correction filter from that.<p>"
                                       "<b>Correction Filters</b>: advanced method using all filter settings manualy.<p>"));
     
-    QHButtonGroup *bGroup = new QHButtonGroup(gbox4);
-    m_blackColorButton = new QPushButton( bGroup );
-    QWhatsThis::add( m_blackColorButton, i18n("<p>Set here the color from original image use to correct <b>Black</b> "
-                                              "tones with white-balance filter with <b>Color Picker</b> method."));
-    bGroup->insert(m_blackColorButton, WhiteColor);
-    m_blackColorButton->setToggleButton(true);
-    m_whiteColorButton = new QPushButton( bGroup );
-    QWhatsThis::add( m_whiteColorButton, i18n("<p>Set here the color from original image use to correct <b>White</b> "
-                                              "tones with white-balance filter with <b>Color Picker</b> method."));
-    bGroup->insert(m_whiteColorButton, BlackColor);
-    m_whiteColorButton->setToggleButton(true);
-    m_whiteColorButton->setOn(true);
-    bGroup->setExclusive(true);
-    bGroup->setFrameShape(QFrame::NoFrame);
-    
     grid2->addMultiCellWidget(label10, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_wbMethod, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(bGroup, 1, 1, 2, 2);
             
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -321,15 +307,15 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
-    grid2->addMultiCellWidget(frame3, 2, 2, 0, 2);
+    grid2->addMultiCellWidget(frame3, 2, 2, 0, 1);
 
     topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
-
+    slotMethodChanged(ColorPicker);
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     adjustSize();
     disableResize();
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 
     // -------------------------------------------------------------
@@ -411,8 +397,8 @@ void ImageEffect_WhiteBalance::slotUser1()
        }
     
     m_previewOriginalWidget->resetSpotPosition();    
-    m_channelCB->setCurrentItem(0);
-    slotChannelChanged(0);
+    m_channelCB->setCurrentItem(RedChannel);
+    slotChannelChanged(RedChannel);
     
     blockSignals(false);
     slotEffect();  
@@ -429,11 +415,75 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
        {
        case ColorPicker:
           {
+          m_darkLabel->hide();
+          m_darkInput->hide();
+          m_blackLabel->hide();
+          m_blackInput->hide();
+          m_exposureLabel->hide();
+          m_exposureInput->hide();
+          m_gammaLabel->hide();
+          m_gammaInput->hide();
+          m_temperatureLabel->hide();
+          m_temperatureInput->hide();
+          m_saturationLabel->hide();
+          m_saturationInput->hide();
+          m_greenLabel->hide();
+          m_greenInput->hide();
+          m_grid->remove(m_darkLabel);
+          m_grid->remove(m_darkInput);
+          m_grid->remove(m_blackLabel);
+          m_grid->remove(m_blackInput);
+          m_grid->remove(m_exposureLabel);
+          m_grid->remove(m_exposureInput);
+          m_grid->remove(m_gammaLabel);
+          m_grid->remove(m_gammaInput);
+          m_grid->remove(m_temperatureLabel);
+          m_grid->remove(m_temperatureInput);
+          m_grid->remove(m_saturationLabel);
+          m_grid->remove(m_saturationInput);
+          m_grid->remove(m_greenLabel);
+          m_grid->remove(m_greenInput);
+          
+          m_grid->addMultiCellWidget(m_bGroup, 0, 0, 0, 4);
+          m_bGroup->show();
+          slotUser1();
           break;
           }
 
        case CorrectionFilter:
           {
+          m_bGroup->hide();
+          m_grid->remove(m_bGroup);
+          
+          m_grid->addMultiCellWidget(m_darkLabel, 0, 0, 0, 0);
+          m_grid->addMultiCellWidget(m_darkInput, 0, 0, 1, 4);
+          m_grid->addMultiCellWidget(m_blackLabel, 1, 1, 0, 0);
+          m_grid->addMultiCellWidget(m_blackInput, 1, 1, 1, 4);
+          m_grid->addMultiCellWidget(m_exposureLabel, 2, 2, 0, 0);
+          m_grid->addMultiCellWidget(m_exposureInput, 2, 2, 1, 4);
+          m_grid->addMultiCellWidget(m_gammaLabel, 3, 3, 0, 0);
+          m_grid->addMultiCellWidget(m_gammaInput, 3, 3, 1, 4);
+          m_grid->addMultiCellWidget(m_temperatureLabel, 4, 4, 0, 0);
+          m_grid->addMultiCellWidget(m_temperatureInput, 4, 4, 1, 4);
+          m_grid->addMultiCellWidget(m_saturationLabel, 5, 5, 0, 0);
+          m_grid->addMultiCellWidget(m_saturationInput, 5, 5, 1, 4);
+          m_grid->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
+          m_grid->addMultiCellWidget(m_greenInput, 6, 6, 1, 4);
+          m_darkLabel->show();
+          m_darkInput->show();
+          m_blackLabel->show();
+          m_blackInput->show();
+          m_exposureLabel->show();
+          m_exposureInput->show();
+          m_gammaLabel->show();
+          m_gammaInput->show();
+          m_temperatureLabel->show();
+          m_temperatureInput->show();
+          m_saturationLabel->show();
+          m_saturationInput->show();
+          m_greenLabel->show();
+          m_greenInput->show();
+          slotUser1();
           break;
           }
        }
@@ -614,7 +664,7 @@ void ImageEffect_WhiteBalance::slotOk()
        // Set final lut.
        setRGBmult();
        m_mr = m_mb = 1.0;
-       if (m_clipSat) m_mg=1.0; 
+       if (m_clipSat) m_mg = 1.0; 
        setLUTv();
        setRGBmult();
        

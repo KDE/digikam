@@ -35,6 +35,8 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
+class QGridLayout;
+class QHButtonGroup;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -134,7 +136,11 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
-
+    
+    QGridLayout                  *m_grid;
+    
+    QHButtonGroup                *m_bGroup;
+    
     KIntNumInput                 *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
     KDoubleNumInput              *m_blackInput;
