@@ -44,6 +44,8 @@ public:
     void clear(bool updateView=true);
     void triggerUpdate();
 
+    void removeItem(ThumbBarItem* item);
+
     ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
 
@@ -61,7 +63,6 @@ protected:
 private:
 
     void insertItem(ThumbBarItem* item);
-    void removeItem(ThumbBarItem* item);
     void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
 
