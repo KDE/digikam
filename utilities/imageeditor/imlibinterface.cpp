@@ -667,21 +667,26 @@ void ImlibInterface::putSelectedData(uint* data)
 bool ImlibInterface::saveAction(const QString& saveFile) 
 {
     bool result;
-
+    QFileInfo fileInfo(saveFile);
+    QString ext = fileInfo.extension(false);
+    kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" << ext.ascii() << ")" << endl;
+    
+    imlib_image_set_format(ext.ascii()); 
+    
     // Always save jpeg files at 95 % quality without compression
-    imlib_image_attach_data_value ("quality", NULL, 95, NULL);
+    if (ext.upper() == QString("JPG") || ext.upper() == QString("JPEG")) 
+       imlib_image_attach_data_value ("quality", NULL, 95, NULL);
             
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 
     if( d->errorRet != IMLIB_LOAD_ERROR_NONE ) 
-    {
-        kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
-                  << (int)d->errorRet << endl;
+        {
+        kdWarning() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
+                    << (int)d->errorRet << endl;
         result = false;
-    }
+        }
     else 
         result = true;
-
 
     // Now kill the image and re-read it from the saved file
             

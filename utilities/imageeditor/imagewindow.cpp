@@ -577,6 +577,8 @@ void ImageWindow::slotSave()
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                                  .arg(m_urlCurrent.filename())
                                  .arg(m_urlCurrent.path().section('/', -2, -2)));
+        
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                                   
         return;
         }
 
@@ -608,6 +610,7 @@ void ImageWindow::slotSaveResult(KIO::Job *job)
     if (job->error()) 
        {
        job->showErrorDialog(this);
+       QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));  
        return;
        }
 }
@@ -628,17 +631,19 @@ void ImageWindow::slotSaveAs()
  
     // Check for cancel.
      
-    if (!m_newFile.isValid()) return;
+    if ( !m_newFile.isValid() ) return;
  
-    QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
+    QString tmpFile = locateLocal("tmp", m_newFile.filename());
      
     int result = m_canvas->saveAs(tmpFile);
  
-    if (result != 1) 
+    if (result == false) 
        {
        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                           .arg(m_newFile.filename())
                           .arg(m_newFile.path().section('/', -2, -2)));
+       
+       QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                            
        return;
        }
      
@@ -670,6 +675,7 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     if (job->error()) 
     {
        job->showErrorDialog(this);
+       QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      
        return;
     }
 
@@ -705,7 +711,6 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target image.
 }
-
 
 #include "imagewindow.moc"
 
