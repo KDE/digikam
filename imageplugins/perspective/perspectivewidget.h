@@ -124,7 +124,12 @@ private:  // Widget methods.
     
     QRect       m_rect;                    
     
+    // Tranformed center area for mouse position control.
+    
+    QPoint      m_transformedCenter;
+    
     // Draggable local region selection corners.
+    
     QRect       m_topLeftCorner;
     QRect       m_topRightCorner;
     QRect       m_bottomLeftCorner;
@@ -146,7 +151,7 @@ private:  // Matrix 3x3 perspective transformation implementations.
     double coeff[3][3];
     };
 
-    void   matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+    QPoint matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                                    QPoint transTopLeft, QPoint transTopRight,
                                    QPoint transBottomLeft, QPoint transBottomRight,
                                    uint* data, uint* newData);

@@ -40,6 +40,7 @@
 #include <qbrush.h>
 #include <qpixmap.h>
 #include <qimage.h>
+#include <qpointarray.h>
 
 // KDE include.
 
@@ -108,6 +109,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     setMouseTracking(true);
     
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
+
     resetSelection();
 }
 
@@ -149,7 +151,16 @@ QPoint PerspectiveWidget::getBottomRightCorner(void)
 
 QRect PerspectiveWidget::getTargetSize(void)
 {
-    int x1 = MIN4( getTopLeftCorner().x(),     getBottomLeftCorner().x(), 
+    QPointArray perspectiveArea;
+    
+    perspectiveArea.putPoints( 0, 4, 
+                               getTopLeftCorner().x(), getTopLeftCorner().y(),
+                               getTopRightCorner().x(), getTopRightCorner().y(),
+                               getBottomLeftCorner().x(), getBottomLeftCorner().y(),
+                               getBottomRightCorner().x(), getBottomRightCorner().y()
+                             );
+    
+/*    int x1 = MIN4( getTopLeftCorner().x(),     getBottomLeftCorner().x(), 
                    getBottomRightCorner().x(), getTopRightCorner().x() );
                   
     int y1 = MIN4( getTopLeftCorner().y(),     getBottomLeftCorner().y(), 
@@ -163,7 +174,8 @@ QRect PerspectiveWidget::getTargetSize(void)
     
     QRect targetRect; 
     targetRect.setCoords( x1, y1, x2, y2 );                            
-    return targetRect;
+    return targetRect;*/
+    return perspectiveArea.boundingRect();
 }
 
 float PerspectiveWidget::getAngleTopLeft(void)
@@ -215,10 +227,10 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
     
     // Perform perspective adjustment.
     
-    matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_origW, m_origH),
-                            getTopLeftCorner(), getTopRightCorner(), 
-                            getBottomLeftCorner(), getBottomRightCorner(), 
-                            data, newData);
+    m_transformedCenter = matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_origW, m_origH),
+                                                  getTopLeftCorner(), getTopRightCorner(), 
+                                                  getBottomLeftCorner(), getBottomRightCorner(), 
+                                                  data, newData);
 
     // Perform an auto-croping around the image.
             
@@ -249,10 +261,10 @@ void PerspectiveWidget::updatePixmap(void)
     
     uint *newData = new uint[m_w * m_h];
     
-    matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_w, m_h),
-                            m_topLeftPoint, m_topRightPoint, 
-                            m_bottomLeftPoint, m_bottomRightPoint, 
-                            m_data, newData);
+    m_transformedCenter = matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_w, m_h),
+                                                  m_topLeftPoint, m_topRightPoint, 
+                                                  m_bottomLeftPoint, m_bottomRightPoint, 
+                                                  m_data, newData);
                                                    
     m_iface->putPreviewData(newData);
 
@@ -277,6 +289,11 @@ void PerspectiveWidget::updatePixmap(void)
     p.fillRect(m_topRightCorner, brush);
     p.fillRect(m_bottomLeftCorner, brush);
     p.fillRect(m_bottomRightCorner, brush);
+
+    // Drawing transformed center.
+    
+    p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
+    p.drawEllipse( m_transformedCenter.x(), m_transformedCenter.y(), 4, 4 ); 
 
     p.end();
     
@@ -367,10 +384,10 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Matrix 3x3 perspective transformation implementations.
 
-void PerspectiveWidget::matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                                                QPoint transTopLeft, QPoint transTopRight,
-                                                QPoint transBottomLeft, QPoint transBottomRight,
-                                                uint* data, uint* newData)
+QPoint PerspectiveWidget::matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+                                                  QPoint transTopLeft, QPoint transTopRight,
+                                                  QPoint transBottomLeft, QPoint transBottomRight,
+                                                  uint* data, uint* newData)
 {
     Matrix3 matrix, transform;
     double  scalex;
@@ -405,67 +422,71 @@ void PerspectiveWidget::matrix3BuildPerspective(QPoint orignTopLeft, QPoint orig
     // Determine the perspective transform that maps from
     // the unit cube to the transformed coordinates
     
-       {
-       double dx1, dx2, dx3, dy1, dy2, dy3;
+    double dx1, dx2, dx3, dy1, dy2, dy3;
 
-       dx1 = tx2 - tx4;
-       dx2 = tx3 - tx4;
-       dx3 = tx1 - tx2 + tx4 - tx3;
+    dx1 = tx2 - tx4;
+    dx2 = tx3 - tx4;
+    dx3 = tx1 - tx2 + tx4 - tx3;
 
-       dy1 = ty2 - ty4;
-       dy2 = ty3 - ty4;
-       dy3 = ty1 - ty2 + ty4 - ty3;
+    dy1 = ty2 - ty4;
+    dy2 = ty3 - ty4;
+    dy3 = ty1 - ty2 + ty4 - ty3;
 
-       //  Is the mapping affine?  
+    //  Is the mapping affine?  
     
-       if ((dx3 == 0.0) && (dy3 == 0.0))
-          {
-          matrix.coeff[0][0] = tx2 - tx1;
-          matrix.coeff[0][1] = tx4 - tx2;
-          matrix.coeff[0][2] = tx1;
-          matrix.coeff[1][0] = ty2 - ty1;
-          matrix.coeff[1][1] = ty4 - ty2;
-          matrix.coeff[1][2] = ty1;
-          matrix.coeff[2][0] = 0.0;
-          matrix.coeff[2][1] = 0.0;
-          }
+    if ((dx3 == 0.0) && (dy3 == 0.0))
+       {
+       matrix.coeff[0][0] = tx2 - tx1;
+       matrix.coeff[0][1] = tx4 - tx2;
+       matrix.coeff[0][2] = tx1;
+       matrix.coeff[1][0] = ty2 - ty1;
+       matrix.coeff[1][1] = ty4 - ty2;
+       matrix.coeff[1][2] = ty1;
+       matrix.coeff[2][0] = 0.0;
+       matrix.coeff[2][1] = 0.0;
+       }
+    else
+       {
+       double det1, det2;
+          
+       det1 = dx3 * dy2 - dy3 * dx2;
+       det2 = dx1 * dy2 - dy1 * dx2;
+
+       if (det1 == 0.0 && det2 == 0.0)
+          matrix.coeff[2][0] = 1.0;
        else
-          {
-          double det1, det2;
+          matrix.coeff[2][0] = det1 / det2;
 
-          det1 = dx3 * dy2 - dy3 * dx2;
-          det2 = dx1 * dy2 - dy1 * dx2;
+       det1 = dx1 * dy3 - dy1 * dx3;
 
-          if (det1 == 0.0 && det2 == 0.0)
-             matrix.coeff[2][0] = 1.0;
-          else
-             matrix.coeff[2][0] = det1 / det2;
+       if (det1 == 0.0 && det2 == 0.0)
+          matrix.coeff[2][1] = 1.0;
+       else
+          matrix.coeff[2][1] = det1 / det2;
 
-          det1 = dx1 * dy3 - dy1 * dx3;
+       matrix.coeff[0][0] = tx2 - tx1 + matrix.coeff[2][0] * tx2;
+       matrix.coeff[0][1] = tx3 - tx1 + matrix.coeff[2][1] * tx3;
+       matrix.coeff[0][2] = tx1;
 
-          if (det1 == 0.0 && det2 == 0.0)
-             matrix.coeff[2][1] = 1.0;
-          else
-             matrix.coeff[2][1] = det1 / det2;
-
-          matrix.coeff[0][0] = tx2 - tx1 + matrix.coeff[2][0] * tx2;
-          matrix.coeff[0][1] = tx3 - tx1 + matrix.coeff[2][1] * tx3;
-          matrix.coeff[0][2] = tx1;
-
-          matrix.coeff[1][0] = ty2 - ty1 + matrix.coeff[2][0] * ty2;
-          matrix.coeff[1][1] = ty3 - ty1 + matrix.coeff[2][1] * ty3;
-          matrix.coeff[1][2] = ty1;
-          }
-
-       matrix.coeff[2][2] = 1.0;
+       matrix.coeff[1][0] = ty2 - ty1 + matrix.coeff[2][0] * ty2;
+       matrix.coeff[1][1] = ty3 - ty1 + matrix.coeff[2][1] * ty3;
+       matrix.coeff[1][2] = ty1;
        }
 
+    matrix.coeff[2][2] = 1.0;
+ 
     matrix3Identity (&transform);
     matrix3Translate(&transform, -x1, -y1);
     matrix3Scale    (&transform, scalex, scaley);
     matrix3Mult     (&matrix, &transform);
     
+    // Calculate new image center after perspective transformation.
+    
     matrix3TransformAffine(data, newData, &transform, (int)x2, (int)y2);
+    double newCenterX, newCenterY;
+    matrix3TransformPoint(&transform, x2/2.0, y2/2.0, &newCenterX, &newCenterY);
+
+    return( QPoint::QPoint((int)newCenterX, (int)newCenterY) );
 }
 
 void PerspectiveWidget::matrix3TransformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h)
@@ -714,7 +735,7 @@ void PerspectiveWidget::matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2)
  * Transforms a point in 2D as specified by the transformation matrix.
  */
 void PerspectiveWidget::matrix3TransformPoint(const Matrix3 *matrix, double x, double y,
-                                                    double *newx, double *newy)
+                                              double *newx, double *newy)
 {
     double  w;
 
