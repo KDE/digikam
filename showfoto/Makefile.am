@@ -22,5 +22,7 @@ rc_DATA = showfotoui.rc
 
 xdg_apps_DATA = showfoto.desktop
 
+KDE_ICON = showfoto 
+
 
 
