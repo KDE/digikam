@@ -28,7 +28,7 @@
   </Menu>
 
   <Menu name="Tag" >
-   <text>&amp;Tag</text>
+   <text>T&amp;ag</text>
      <Action name="tag_new" />
      <Action name="tag_edit" />
      <Action name="tag_delete" />
@@ -64,7 +64,7 @@
      <Action name="full_screen" />
   </Menu>
   
-  <Menu name="Tools"><text>&amp;Tools</text>
+  <Menu name="Tools"><text>Too&amp;ls</text>
     <ActionList name="tool_actions"/>
     <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
        <ActionList name="batch_actions"/>
