@@ -220,12 +220,12 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    if (thumbnail_.isNull())
+    /*if (thumbnail_.isNull())
     {
         int w = view_->thumbnailSize().size();
         ThumbDB::instance()->getThumb(fileItem_->url().path(1),  thumbnail_,
                                       w, w);
-    }
+                                      }*/
             
     r = view_->itemPixmapRect();
     p.drawPixmap(r.x() + (r.width()-thumbnail_.width())/2,

@@ -175,7 +175,7 @@ void ThemeEngine::buildDefaultTheme()
     t->baseColor           = cg.base();
     t->textRegColor        = cg.text();
     t->textSelColor        = cg.highlightedText();
-    t->textSpecialRegColor = "steelblue";
+    t->textSpecialRegColor = QColor("#0000EF");
     t->textSpecialSelColor = cg.highlightedText();
 
     t->bannerColor      = cg.highlight();
@@ -190,14 +190,14 @@ void ThemeEngine::buildDefaultTheme()
     t->thumbRegBevel    = Theme::FLAT;
     t->thumbRegGrad     = Theme::SOLID;
     t->thumbRegBorder   = true;
-    t->thumbRegBorderColor = Qt::black;
+    t->thumbRegBorderColor = QColor("#E0E0EF");
 
     t->thumbSelColor    = cg.highlight();
     t->thumbSelColorTo  = cg.highlight();
     t->thumbSelBevel    = Theme::FLAT;
     t->thumbSelGrad     = Theme::SOLID;
     t->thumbSelBorder   = true;
-    t->thumbSelBorderColor = Qt::black;
+    t->thumbSelBorderColor = QColor("#E0E0EF");
 
     t->listRegColor     = cg.base();
     t->listRegColorTo   = cg.base();
