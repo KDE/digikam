@@ -48,6 +48,8 @@ public:
     void renameAlbum(Album *album, const QString& newName);
     bool createTAlbum(TAlbum* parent, const QString& name, const QString& icon);
     void moveTAlbum(TAlbum *album, TAlbum *parent);
+    bool addPAlbum(const QString& url, const QString& caption,
+                   const QDate& date, const QString& collection);
     
     void beginTransaction();
     void commitTransaction();

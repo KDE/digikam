@@ -972,6 +972,17 @@ void AlbumDB::moveTAlbum(TAlbum *album, TAlbum *parent)
              .arg(album->getID()) );
 }
 
+bool AlbumDB::addPAlbum(const QString& url, const QString& caption,
+                        const QDate& date, const QString& collection)
+{
+    return execSql( QString("REPLACE INTO Albums (url, date, caption, collection) "
+                            "VALUES('%1', '%2', '%3', '%4');")
+                    .arg(escapeString(url))
+                    .arg(date.toString(Qt::ISODate))
+                    .arg(escapeString(caption))
+                    .arg(escapeString(collection)));
+}
+
 bool AlbumDB::createTAlbum(TAlbum* parent, const QString& name,
                            const QString& icon)
 {

@@ -26,6 +26,7 @@
 #include <kio/netaccess.h>
 
 #include <qfile.h>
+#include <qdir.h>
 #include <qdict.h>
 #include <qintdict.h>
 
@@ -266,8 +267,12 @@ TAlbumList AlbumManager::tAlbums() const
     return d->tAlbumList;
 }
 
-bool AlbumManager::createPAlbum(PAlbum* parent, const QString& name,
-                                  QString& errMsg)
+bool AlbumManager::createPAlbum(PAlbum* parent,
+                                const QString& name,
+                                const QString& caption,
+                                const QDate& date,
+                                const QString& collection,
+                                QString& errMsg)
 {
     if (!parent)
     {
@@ -302,12 +307,32 @@ bool AlbumManager::createPAlbum(PAlbum* parent, const QString& name,
 
     KURL url = parent->getKURL();
     url.addPath(name);
+    url.cleanPath();
 
-#if KDE_IS_VERSION(3,2,0)
-    return KIO::NetAccess::mkdir(url, (QWidget*)0);
-#else
-    return KIO::NetAccess::mkdir(url);
-#endif
+    // make the directory synchronously, so that we can add the
+    // album info to the database directly
+    if (::mkdir(QFile::encodeName(url.path(-1)), 0777) != 0)
+    {
+        if (errno == EACCES)
+            errMsg = i18n("Access denied to path");
+        else if (errno == ENOSPC)
+            errMsg = i18n("Disk full");
+        else
+            errMsg = i18n("Unknown error"); // being lazy
+
+        return false;
+    }
+
+    // Now insert the album properties into the database
+
+    QString u(QDir::cleanDirPath(url.path()));
+    u.remove(0, QDir::cleanDirPath(d->libraryPath).length());
+    if (!u.startsWith("/"))
+        u.prepend("/");
+
+    d->db->addPAlbum(u, caption, date, collection);
+
+    return true;
 }
 
 bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)

@@ -59,10 +59,7 @@
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
-#include <kinputdialog.h>
 #include <kcalendarsystem.h>
-#else
-#include <klineeditdlg.h>
 #endif
 
 // Local includes.
@@ -583,31 +580,32 @@ void AlbumFolderView::albumNew(PAlbum* parent)
     {
         KMessageBox::error(0,
                            i18n("The Albums Library has not been set correctly.\n"
-                                "Select \"Configure Digikam\" from the Settings menu and choose a folder to use for the Albums Library."));
+                                "Select \"Configure Digikam\" from the Settings "
+                                "menu and choose a folder to use for the Albums "
+                                "Library."));
         return;
     }
 
-    bool ok;
-
-#if KDE_IS_VERSION(3,2,0)
-    QString newDir = KInputDialog::getText(i18n("New Album Name"),
-                                           i18n("<qt><b>Creating a new album in <i>%1</i></b><hr><br>\n"
-                                                   "Enter a name for the new album:</qt>")
-                                               .arg(parent->getPrettyURL()),
-                                           QString::null, &ok, this);
-#else
-    QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
-                                           i18n("<qt><b>Creating a new album in <i>%1</i></b><hr><br>\n"
-                                                   "Enter a name for the new album:</qt>")
-                                                .arg(parent->getPrettyURL()),
-                                           QString::null, &ok, this);
-#endif
-
-    if (!ok)
+    QString     title;
+    QString     comments;
+    QString     collection;
+    QDate       date;
+    QStringList albumCollections;
+        
+    if (!AlbumPropsEdit::createNew(parent, title, comments, date, collection,
+                                   albumCollections))
         return;
 
+    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+    if (albumCollections != oldAlbumCollections)
+    {
+        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+        resort();
+    }
+    
     QString errMsg;
-    if (albumMan_->createPAlbum(parent, newDir, errMsg))
+    if (albumMan_->createPAlbum(parent, title, comments, date,
+                                collection, errMsg))
     {
         connect(albumMan_, SIGNAL(signalAlbumAdded(Album*)),
                 this, SLOT(slotNewAlbumCreated(Album*)));
@@ -628,15 +626,13 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
         album->type() != Album::PHYSICAL) {
         return;
     }
-
+    
     PAlbum* pa = dynamic_cast<PAlbum*>(album);
     AlbumFolderItem* folderItem =
-        static_cast<AlbumFolderItem*>(pa->getViewItem());
-
+         static_cast<AlbumFolderItem*>(pa->getViewItem());
+    
     ensureItemVisible(folderItem);
     setSelected(folderItem);
-
-    albumEdit(pa);
 }
 
 void AlbumFolderView::albumDelete()

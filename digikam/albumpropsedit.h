@@ -45,7 +45,7 @@ class AlbumPropsEdit : public KDialogBase
 {
 public:
 
-    AlbumPropsEdit(PAlbum* album);
+    AlbumPropsEdit(PAlbum* album, bool create=false);
     ~AlbumPropsEdit();
 
     QString     title() const;
@@ -61,6 +61,13 @@ public:
                           QString& collection,
                           QStringList& albumCollections);
 
+    static bool createNew(PAlbum *parent,
+                          QString& title,
+                          QString& comments,
+                          QDate& date,
+                          QString& collection,
+                          QStringList& albumCollections);
+    
 private:
 
     PAlbum         *album_;

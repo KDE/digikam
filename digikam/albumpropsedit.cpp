@@ -52,9 +52,10 @@
 #include "albumsettings.h"
 #include "albumpropsedit.h"
 
-AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
-              : KDialogBase( Plain, i18n("Edit Album"), Help|Ok|Cancel, Ok,
-                             0, 0, true, true )
+AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
+    : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
+                   Help|Ok|Cancel, Ok,
+                   0, 0, true, true )
 {
     setHelp("albumpropsedit.anchor", "digikam");
     album_ = album;
@@ -63,8 +64,16 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
                                               0, spacingHint() );
 
     QLabel *topLabel = new QLabel( plainPage() );
-    topLabel->setText( i18n( "<qt><b><i>%1</i> Album Properties</b></qt>")
-                       .arg(album->getTitle()));
+    if (create)
+    {
+        topLabel->setText( i18n( "<qt><b>Create new Album in </b>%1</qt>")
+                           .arg(album->getTitle()));
+    }
+    else
+    {
+        topLabel->setText( i18n( "<qt><b><i>%1</i> Album Properties</b></qt>")
+                           .arg(album->getTitle()));
+    }
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
 
@@ -134,9 +143,17 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
         }
     }
 
-    titleEdit_->setText( album->getTitle() );
-    commentsEdit_->setText( album->getCaption() );
-    datePicker_->setDate( album->getDate() );
+    if (create)
+    {
+        titleEdit_->setText( i18n("New Album") );
+        datePicker_->setDate( QDate::currentDate() );
+    }
+    else
+    {
+        titleEdit_->setText( album->getTitle() );
+        commentsEdit_->setText( album->getCaption() );
+        datePicker_->setDate( album->getDate() );
+    }
 
     // Connections -------------------------------------------
 
@@ -197,6 +214,26 @@ bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
                                QStringList& albumCollections)
 {
     AlbumPropsEdit dlg(album);
+
+    bool ok = dlg.exec() == QDialog::Accepted;
+
+    title            = dlg.title();
+    comments         = dlg.comments();
+    date             = dlg.date();
+    collection       = dlg.collection();
+    albumCollections = dlg.albumCollections();
+
+    return ok;
+}
+
+bool AlbumPropsEdit::createNew(PAlbum  *parent,
+                               QString& title,
+                               QString& comments,
+                               QDate&   date,
+                               QString& collection,
+                               QStringList& albumCollections)
+{
+    AlbumPropsEdit dlg(parent, true);
 
     bool ok = dlg.exec() == QDialog::Accepted;
 

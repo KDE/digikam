@@ -36,6 +36,7 @@ class AlbumDB;
 class AlbumItemHandler;
 class AlbumManagerPriv;
 
+class QDate;
 class KDirLister;
 
 typedef QValueList<PAlbum*> PAlbumList;
@@ -70,8 +71,12 @@ public:
     PAlbum*   findPAlbum(int id) const;
     TAlbum*   findTAlbum(int id) const;
     
-    bool createPAlbum(PAlbum* parent, const QString& name, QString& errMsg);
+    bool createPAlbum(PAlbum* parent, const QString& name,
+                      const QString& caption, const QDate& date,
+                      const QString& collection, 
+                      QString& errMsg);
     bool deletePAlbum(PAlbum* album, QString& errMsg);
+    
     bool renamePAlbum(PAlbum* album, const QString& newName, QString& errMsg);
     bool updatePAlbumIcon(PAlbum *album, const QString& icon, 
                           bool emitSignalChanged, QString& errMsg);
