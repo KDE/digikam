@@ -790,6 +790,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     if (imview->isHidden())
         imview->show();
     imview->raise();
+    imview->setFocus();
 }
 
 void AlbumIconView::slotProperties(AlbumIconItem* item)
@@ -1355,10 +1356,10 @@ void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& p
 
 void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
 {
-    KFileItemList itemList;
-    itemList.append(item);
+    KURL::List urlList;	
+    urlList.append(item->url());
     
-    KIO::PreviewJob* job = KIO::filePreview(itemList, (int)d->thumbSize.size());
+    KIO::PreviewJob* job = KIO::filePreview(urlList, (int)d->thumbSize.size());
                                             
     connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
             SLOT(slotGotThumbnailKDE(const KFileItem*, const QPixmap&)));
@@ -1368,12 +1369,21 @@ void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
 
 void AlbumIconView::slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix)
 {
-    slotGotThumbnail(item, pix, 0);
+    AlbumIconItem* iconItem = findItem(item->url().url());
+    if (!iconItem)
+        return;
+    
+    slotGotThumbnail(iconItem->fileItem(), pix, 0);
 }
 
 void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
 {
-    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken", "image_broken.png");
+    AlbumIconItem* iconItem = findItem(item->url().url());
+    if (!iconItem)
+        return;
+
+    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
+                                                   "image_broken.png");
     dir = dir + "/image_broken.png";
 
     int size = (int)d->thumbSize.size();
@@ -1381,7 +1391,7 @@ void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
     QImage img(dir);
     img = img.smoothScale(size, size);
 
-    slotGotThumbnail(item, QPixmap(img), 0);
+    slotGotThumbnail(iconItem->fileItem(), QPixmap(img), 0);
 }
 
 void AlbumIconView::slotFinishedThumbnail()
