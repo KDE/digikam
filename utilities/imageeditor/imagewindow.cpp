@@ -412,29 +412,36 @@ void ImageWindow::slotCommentsEdit()
 {
     KURL u(m_urlCurrent.directory());
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+    {
+        return;
+    }
+    
     AlbumDB* db = AlbumManager::instance()->albumDB();
     QString comments( db->getItemCaption(palbum, m_urlCurrent.fileName()) );
+
     
     if (ImageCommentEdit::editComments(m_urlCurrent.filename(), comments, this)) 
-       {
-       db->setItemCaption(palbum, m_urlCurrent.fileName(), comments);
+    {
+        db->setItemCaption(palbum, m_urlCurrent.fileName(), comments);
     
-       AlbumSettings *settings = AlbumSettings::instance();
+        AlbumSettings *settings = AlbumSettings::instance();
         
-       if (settings->getSaveExifComments())
-          {
-          KFileMetaInfo metaInfo(m_urlCurrent, "image/jpeg", KFileMetaInfo::Fastest);
-          if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
-             {
-             // store as JPEG JFIF comment
-             if (metaInfo.containsGroup("Jpeg EXIF Data"))
+        if (settings->getSaveExifComments())
+        {
+            KFileMetaInfo metaInfo(m_urlCurrent, "image/jpeg", KFileMetaInfo::Fastest);
+            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
+            {
+                // store as JPEG JFIF comment
+                if (metaInfo.containsGroup("Jpeg EXIF Data"))
                 {
-                metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
-                metaInfo.applyChanges();
+                    metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
+                    metaInfo.applyChanges();
                 }
-             }
-          }
-       }       
+            }
+        }
+    }       
 }
 
 #include "imagewindow.moc"
