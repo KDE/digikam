@@ -28,7 +28,6 @@
 #include <X11/Xlib.h>
 #include <Imlib2.h>
 
-#include <iostream>
 #include "imlibinterface.h"
 
 using namespace std;
@@ -234,27 +233,33 @@ void ImlibInterface::paint(QPaintDevice *w, int dx, int dy, int dw, int dh,
     if (d->dirty)
         render();
 
-    bitBlt(w, sx, sy, &d->qpix, dx, dy, dw, dh, Qt::CopyROP, false);
+    bitBlt(w, sx, sy, &d->qpix, dx, dy, dw, dh, Qt::CopyROP, !hasAlpha());
 }
 
 void ImlibInterface::render()
 {
     d->qpix.resize(d->width, d->height);
-    d->qmask.resize(d->width, d->height);
 
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
+    imlib_context_set_drawable(d->qpix.handle());
+    imlib_context_set_mask(0);
+    imlib_context_set_blend(0);
+    
     if (imlib_image_has_alpha()) {
         QPainter p;
         p.begin(&d->qpix);
         p.drawTiledPixmap(0,0,d->width,d->height,d->qcheck);
         p.end();
-    }    
+
+        d->qmask.resize(d->width, d->height);
+        imlib_context_set_mask(d->qmask.handle());
+        imlib_context_set_blend(1);
+    }
         
-    imlib_context_set_drawable(d->qpix.handle());
-    imlib_context_set_mask(d->qmask.handle());
     imlib_render_image_on_drawable_at_size(0,0,d->width,d->height);
+
     imlib_context_pop();
 
     d->dirty = false;
