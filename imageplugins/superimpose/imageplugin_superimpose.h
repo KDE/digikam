@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_SuperImpose();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotSuperImpose();

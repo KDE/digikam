@@ -22,3 +22,6 @@ messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_superimpose.pot
 
 KDE_OPTIONS=nofinal
+
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_superimpose_ui.rc
