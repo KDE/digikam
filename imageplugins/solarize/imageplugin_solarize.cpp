@@ -40,7 +40,7 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                                                    const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Solarize")
 {
-    new KAction(i18n("Solarize Image..."), 0, 
+    new KAction(i18n("Solarize Image..."), "solarizetool", 0, 
                 this, SLOT(slotSolarize()),
                 actionCollection(), "imageplugin_solarize");
                 
