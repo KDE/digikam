@@ -212,14 +212,20 @@ ImageEffect_Charcoal::~ImageEffect_Charcoal()
 
 void ImageEffect_Charcoal::slotUser1()
 {
-    blockSignals(true);
+    m_pencilInput->blockSignals(true);
+    m_pencilInput->blockSignals(true);
+    m_smoothInput->blockSignals(true);
+    m_smoothSlider->blockSignals(true);
             
     m_pencilInput->setValue(30);
     m_pencilSlider->setValue(30);
     m_smoothInput->setValue(10);
     m_smoothSlider->setValue(10);
     
-    blockSignals(false);
+    m_pencilInput->blockSignals(false);
+    m_pencilInput->blockSignals(false);
+    m_smoothInput->blockSignals(false);
+    m_smoothSlider->blockSignals(false);
     slotEffect();
 } 
 

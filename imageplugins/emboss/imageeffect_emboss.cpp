@@ -191,12 +191,14 @@ ImageEffect_Emboss::~ImageEffect_Emboss()
 
 void ImageEffect_Emboss::slotUser1()
 {
-    blockSignals(true);
+    m_depthInput->blockSignals(true);
+    m_depthSlider->blockSignals(true);
     
     m_depthInput->setValue(30);
     m_depthSlider->setValue(30);
     
-    blockSignals(false);
+    m_depthInput->blockSignals(false);
+    m_depthSlider->blockSignals(false);
     slotEffect();
 } 
 

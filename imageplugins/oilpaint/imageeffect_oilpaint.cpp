@@ -218,14 +218,20 @@ ImageEffect_OilPaint::~ImageEffect_OilPaint()
 
 void ImageEffect_OilPaint::slotUser1()
 {
-    blockSignals(true);
+    m_brushSizeInput->blockSignals(true);
+    m_brushSizeSlider->blockSignals(true);
+    m_smoothInput->blockSignals(true);
+    m_smoothSlider->blockSignals(true);
 
     m_brushSizeInput->setValue(1);
     m_brushSizeSlider->setValue(1);
     m_smoothInput->setValue(30);
     m_smoothSlider->setValue(30);
         
-    blockSignals(false);
+    m_brushSizeInput->blockSignals(false);
+    m_brushSizeSlider->blockSignals(false);
+    m_smoothInput->blockSignals(false);
+    m_smoothSlider->blockSignals(false);
     slotEffect();
 } 
 

@@ -293,7 +293,12 @@ void DespeckleDialog::slotCancel()
 
 void DespeckleDialog::slotUser1()
 {
-    blockSignals(true);
+    m_radiusInput->blockSignals(true);
+    m_radiusSlider->blockSignals(true);
+    m_blackLevelInput->blockSignals(true);
+    m_blackLevelSlider->blockSignals(true);
+    m_whiteLevelInput->blockSignals(true);
+    m_whiteLevelSlider->blockSignals(true);
             
     m_radiusInput->setValue(3);
     m_radiusSlider->setValue(3);
@@ -302,7 +307,12 @@ void DespeckleDialog::slotUser1()
     m_whiteLevelInput->setValue(248);
     m_whiteLevelSlider->setValue(248);
 
-    blockSignals(false);
+    m_radiusInput->blockSignals(false);
+    m_radiusSlider->blockSignals(false);
+    m_blackLevelInput->blockSignals(false);
+    m_blackLevelSlider->blockSignals(false);
+    m_whiteLevelInput->blockSignals(false);
+    m_whiteLevelSlider->blockSignals(false);
     slotEffect();
 } 
 

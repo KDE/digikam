@@ -266,7 +266,12 @@ void ImageEffect_RainDrop::slotCancel()
 
 void ImageEffect_RainDrop::slotUser1()
 {
-    blockSignals(true);
+    m_dropSlider->blockSignals(true);
+    m_dropSpinBox->blockSignals(true);
+    m_amountSlider->blockSignals(true);
+    m_amountSpinBox->blockSignals(true);
+    m_coeffSlider->blockSignals(true);
+    m_coeffSpinBox->blockSignals(true);
       
     m_dropSlider->setValue(80);
     m_dropSpinBox->setValue(80);
@@ -275,7 +280,12 @@ void ImageEffect_RainDrop::slotUser1()
     m_coeffSlider->setValue(30);
     m_coeffSpinBox->setValue(30);
 
-    blockSignals(false);
+    m_dropSlider->blockSignals(false);
+    m_dropSpinBox->blockSignals(false);
+    m_amountSlider->blockSignals(false);
+    m_amountSpinBox->blockSignals(false);
+    m_coeffSlider->blockSignals(false);
+    m_coeffSpinBox->blockSignals(false);
     slotEffect();
 } 
 

@@ -279,7 +279,12 @@ void UnsharpDialog::slotCancel()
 
 void UnsharpDialog::slotUser1()
 {
-    blockSignals(true);
+    m_radiusInput->blockSignals(true);
+    m_radiusSlider->blockSignals(true);
+    m_amountInput->blockSignals(true);
+    m_amountSlider->blockSignals(true);
+    m_thresholdInput->blockSignals(true);
+    m_thresholdSlider->blockSignals(true);
                 
     m_radiusInput->setValue(50);
     m_radiusSlider->setValue(50);
@@ -288,7 +293,12 @@ void UnsharpDialog::slotUser1()
     m_thresholdInput->setValue(0);
     m_thresholdSlider->setValue(0);
                                      
-    blockSignals(false);
+    m_radiusInput->blockSignals(false);
+    m_radiusSlider->blockSignals(false);
+    m_amountInput->blockSignals(false);
+    m_amountSlider->blockSignals(false);
+    m_thresholdInput->blockSignals(false);
+    m_thresholdSlider->blockSignals(false);
     slotEffect();
 } 
 
