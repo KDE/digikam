@@ -503,6 +503,11 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
       repaint(false);
 }
 
+void CurvesWidget::leaveEvent( QEvent * )
+{
+      emit signalMouseMoved(-1, -1);
+}
+
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
 
 #include "curveswidget.moc"

@@ -329,7 +329,10 @@ void AdjustCurveDialog::slotUser1()
 
 void AdjustCurveDialog::slotPositionChanged(int x, int y)
 {
-    m_labelPos->setText(i18n("x:%1   y:%2").arg(x).arg(y));
+    if ( x == -1 && y == -1)
+       m_labelPos->clear();
+    else
+       m_labelPos->setText(i18n("x:%1   y:%2").arg(x).arg(y));
 }
 
 void AdjustCurveDialog::slotEffect()
