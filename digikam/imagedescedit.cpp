@@ -140,8 +140,6 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     m_tagsView->installEventFilter(this);
     
     m_commentsEdit->setFocus();
-    
-    disableResize();
 }
 
 ImageDescEdit::~ImageDescEdit()
