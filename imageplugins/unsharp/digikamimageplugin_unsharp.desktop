@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Unsharp Filter Image Plugin
+Comment=Unsharped mask image filter plugin for digikam
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+X-KDE-Library=digikamimageplugin_unsharp
+author=Caulier Gilles, caulier dot gilles at free dot fr

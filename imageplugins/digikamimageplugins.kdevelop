@@ -1,8 +1,8 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <general>
-    <author>Caulier Gilles</author>
-    <email>caulier.gilles@free.fr</email>
+    <author>Gilles Caulier</author>
+    <email>caulier.gilles at free.fr</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
@@ -10,6 +10,13 @@
       <keyword>Qt</keyword>
       <keyword>KDE</keyword>
     </keywords>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
+    <description>Image plugins for Digikam image editor.</description>
+    <ignoreparts/>
+    <secondaryLanguages>
+      <language>C</language>
+    </secondaryLanguages>
   </general>
   <kdevfileview>
     <groups>
@@ -59,16 +66,46 @@
       <toc>w3c-uaag10</toc>
       <toc>wxwindows_bugs</toc>
     </ignoretocs>
-    <ignoreqt_xml>
-      <toc>qmake User Guide</toc>
-    </ignoreqt_xml>
+    <ignoreqt_xml/>
+    <projectdoc>
+      <userdocDir>html/</userdocDir>
+      <apidocDir>html/</apidocDir>
+    </projectdoc>
+    <ignoredoxygen/>
+    <ignorekdocs/>
+    <ignoredevhelp>
+      <toc>atk</toc>
+      <toc>bonobo-activation</toc>
+      <toc>gdk</toc>
+      <toc>glib</toc>
+      <toc>gobject</toc>
+      <toc>libgnome</toc>
+      <toc>libbonobo</toc>
+      <toc>libbonoboui</toc>
+      <toc>ORBit2</toc>
+      <toc>pango</toc>
+      <toc>gdk-pixbuf</toc>
+    </ignoredevhelp>
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
+      <breakonloadinglibs>true</breakonloadinglibs>
+      <separatetty>false</separatetty>
+      <floatingtoolbar>false</floatingtoolbar>
     </general>
+    <display>
+      <staticmembers>false</staticmembers>
+      <demanglenames>true</demanglenames>
+    </display>
   </kdevdebugger>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
       <type ext="ui" />
       <type ext="cpp" />
@@ -81,10 +118,41 @@
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
+      <abortonerror>false</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin/>
     </make>
     <run>
-      <directoryradio>executable</directoryradio>
+      <directoryradio>build</directoryradio>
+      <customdirectory>/</customdirectory>
+      <mainprogram>../digikam/digikam/digikam</mainprogram>
+      <programargs/>
+      <terminal>false</terminal>
+      <autocompile>true</autocompile>
+      <envvars/>
     </run>
+    <general>
+      <useconfiguration>default</useconfiguration>
+    </general>
+    <configurations>
+      <default>
+        <configargs>--enable-debug=full</configargs>
+        <builddir/>
+        <topsourcedir>../</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
+      </default>
+    </configurations>
   </kdevautoproject>
   <kdevcppsupport>
     <references/>
@@ -101,4 +169,10 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
   </kdevcppsupport>
+  <cppsupportpart>
+    <filetemplates>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+    </filetemplates>
+  </cppsupportpart>
 </kdevelop>

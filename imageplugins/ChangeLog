@@ -1,3 +1,8 @@
+v0.5.0 - 08/27/04
+----------------------------------------------------------------------------
+    * Added new unsharped mask filter plugin using Gimp 2.0 algorithm.
+    * Updated noise reduction filter plugin with Gimp 2.0 algorithm.
+
 v0.4.0 - 08/26/04
 ----------------------------------------------------------------------------
     * Added new Charcoal drawing effect plugin using KDEImageEffect API.

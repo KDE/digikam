@@ -1,0 +1,628 @@
+/* ============================================================
+ * File  : unsharp.cpp
+ * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2004-08-27
+ * Description : Unsharped mask image filter for ImageEditor
+ * 
+ * Copyright 2004 by Gilles Caulier
+ *
+ * Unsharped mask algorithm come from plug-ins/common/unsharp.c 
+ * Gimp 2.0 source file and copyrighted 
+ * 1999 by Winston Chang (winstonc at cs.wisc.edu)
+ * 
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published bythe Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+
+// Imlib2 include.
+
+#define X_DISPLAY_MISSING 1
+#include <Imlib2.h>
+
+// C++ include.
+
+#include <cstring>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+
+// Qt includes.
+
+#include <qlayout.h>
+#include <qframe.h>
+#include <qvgroupbox.h>
+#include <qlabel.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
+#include <qpushbutton.h>
+#include <qimage.h>
+
+// KDE includes.
+
+#include <knuminput.h>
+#include <kcursor.h>
+#include <klocale.h>
+#include <kaboutdata.h>
+#include <khelpmenu.h>
+#include <kiconloader.h>
+#include <kapplication.h>
+#include <kpopupmenu.h>
+#include <kimageeffect.h>
+#include <kdebug.h>
+
+// Digikam includes.
+
+#include <imageiface.h>
+#include <imagepreviewwidget.h>
+
+// Local includes.
+
+#include "unsharp.h"
+
+namespace DigikamUnsharpFilterImagesPlugin
+{
+
+UnsharpDialog::UnsharpDialog(QWidget* parent)
+               : KDialogBase(Plain, i18n("Unsharped mask"), Help|User1|Ok|Cancel, Ok,
+                             parent, 0, true, true, i18n("&Reset values")),
+                 m_parent(parent)
+{
+    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    
+    // About data and help button.
+    KAboutData* about = new KAboutData("unsharp", I18N_NOOP("Unsharped mask"), "1.0",
+                                       I18N_NOOP("An unsharped mask image filter plugin for Digikam."),
+                                       KAboutData::License_GPL, "(c) 2004, Gilles Caulier", "",
+                                       "http://digikam.sourceforge.net");
+    
+    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                     "caulier dot gilles at free.fr");
+
+    about->addAuthor("Winston Chang", I18N_NOOP("Unsharped mask algorithm author from Gimp"),
+                     "winstonc at cs.wisc.edu");
+                         
+    m_helpButton = actionButton( Help );
+    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    helpMenu->menu()->removeItemAt(0);
+    helpMenu->menu()->insertItem(i18n("Unsharped mask handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    m_helpButton->setPopup( helpMenu->menu() );
+    
+    // -------------------------------------------------------------
+
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+
+    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
+    
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
+                                                           i18n("Unsharped mask image preview"),
+                                                           plainPage());
+    hlay1->addWidget(m_imagePreviewWidget);
+    
+    // -------------------------------------------------------------
+
+    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
+    QLabel *label1 = new QLabel(i18n("Radius :"), plainPage());
+    m_radiusInput = new KDoubleNumInput(plainPage());
+    m_radiusInput->setPrecision(1);
+    m_radiusInput->setRange(0.1, 120.0, 0.1, true);
+    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
+                                         "1 and above determine the blur matrix radius "
+                                         "that determines how much to blur the image."));
+    hlay2->addWidget(label1, 1);
+    hlay2->addWidget(m_radiusInput, 5);
+    
+    // -------------------------------------------------------------
+
+    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
+    QLabel *label2 = new QLabel(i18n("Amount :"), plainPage());
+    m_amountInput = new KDoubleNumInput(plainPage());
+    m_amountInput->setPrecision(1);
+    m_amountInput->setRange(0.0, 5.0, 0.1, true);
+    QWhatsThis::add( m_amountInput, i18n("<p>The percentage of the difference between the "
+                                         "original and the blur image that is added back "      
+                                         "into the original."));
+    hlay3->addWidget(label2, 1);
+    hlay3->addWidget(m_amountInput, 5);
+
+    // -------------------------------------------------------------
+
+    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
+    QLabel *label3 = new QLabel(i18n("Threshold :"), plainPage());
+    m_thresholdInput = new KIntNumInput(plainPage());
+    m_thresholdInput->setRange(0, 255, 1, true);
+    QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum RGB value, "
+                                            "needed to apply the difference amount."));
+    hlay4->addWidget(label3, 1);
+    hlay4->addWidget(m_thresholdInput, 5);
+
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    slotUser1();    // Reset all parameters to the default values.
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
+    
+    connect(m_radiusInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotEffect()));
+
+    connect(m_amountInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotEffect()));
+
+    connect(m_thresholdInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                                                
+}
+
+UnsharpDialog::~UnsharpDialog()
+{
+}
+
+void UnsharpDialog::slotHelp()
+{
+    KApplication::kApplication()->invokeHelp("unsharp",
+                                             "digikamimageplugins");
+}
+
+void UnsharpDialog::closeEvent(QCloseEvent *e)
+{
+    e->accept();    
+}
+
+void UnsharpDialog::slotUser1()
+{
+    blockSignals(true);
+    m_radiusInput->setValue(5.0);
+    m_amountInput->setValue(0.5);
+    m_thresholdInput->setValue(0);
+    blockSignals(false);
+    
+    slotEffect();
+} 
+
+void UnsharpDialog::slotEffect()
+{
+    QImage img = m_imagePreviewWidget->getOriginalClipImage();
+   
+    uint*  data = (uint *)img.bits();
+    int    w    = img.width();
+    int    h    = img.height();
+    double r    = m_radiusInput->value();
+    double a    = m_amountInput->value();
+    int    th   = m_thresholdInput->value();
+            
+    unsharp(data, w, h, r, a, th);   
+    
+    memcpy(img.bits(), (uchar *)data, img.numBytes());
+    m_imagePreviewWidget->setPreviewImageData(img);
+}
+
+void UnsharpDialog::slotOk()
+{
+    m_parent->setCursor( KCursor::waitCursor() );
+    Digikam::ImageIface iface(0, 0);
+    
+    uint*  data = iface.getOriginalData();
+    int    w     = iface.originalWidth();
+    int    h     = iface.originalHeight();
+    double r     = m_radiusInput->value();
+    double a     = m_amountInput->value();
+    int    th    = m_thresholdInput->value();
+            
+    unsharp(data, w, h, r, a, th);   
+           
+    iface.putOriginalData(data);
+    delete [] data;
+    m_parent->setCursor( KCursor::arrowCursor() );
+    accept();
+}
+
+void UnsharpDialog::unsharp(uint* data, int w, int h, double radius, 
+                            double amount, int threshold)
+{
+    int     width = w;
+    int     height = h;
+    int     bytes = 4;      // bpp in image.
+    int     x1 = 0;         // Full image used.
+    int     x2 = w;
+    int     y1 = 0;
+    int     y2 = h;
+  
+    uchar  *cur_col;
+    uchar  *dest_col;
+    uchar  *cur_row;
+    uchar  *dest_row;
+    int     x;
+    int     y;
+    double *cmatrix = NULL;
+    int     cmatrix_length;
+    double *ctable;
+
+    uint* newData = new uint[w*h];
+    
+    // these are counters for loops 
+    int row, col;  
+
+    // these are used for the merging step 
+    int diff;
+    int value;
+    int u,v;
+
+    // find height and width of subregion to act on 
+    x = x2-x1;
+    y = y2-y1;
+
+    // generate convolution matrix and make sure it's smaller than each dimension 
+    cmatrix_length = gen_convolve_matrix(radius, &cmatrix);
+  
+    // generate lookup table 
+    ctable = gen_lookup_table(cmatrix, cmatrix_length);
+
+    //  allocate row buffers 
+    cur_row  = new uchar[x * bytes];
+    dest_row = new uchar[x * bytes];
+
+    // find height and width of subregion to act on 
+    x = x2-x1;
+    y = y2-y1;
+
+    // blank out a region of the destination memory area, I think 
+    
+    for (row = 0; row < y; row++)
+      {
+      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, (x2-x1));
+      memcpy(dest_row, newData + x1 + (y1+row)*w, (x2-x1)*bytes); 
+      
+      memset(dest_row, 0, x*bytes);
+      
+      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, (x2-x1));
+      memcpy(newData + x1 + (y1+row)*w, dest_row, (x2-x1)*bytes); 
+      }
+
+    // blur the rows 
+    
+    for (row = 0; row < y; row++)
+      {
+      //gimp_pixel_rgn_get_row(&srcPR, cur_row, x1, y1+row, x);
+      memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
+      
+      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, x);
+      memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
+      
+      blur_line(ctable, cmatrix, cmatrix_length, cur_row, dest_row, x, bytes);
+      
+      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, x);
+      memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
+      }
+
+    // allocate column buffers 
+    cur_col  = new uchar[y * bytes];
+    dest_col = new uchar[y * bytes];
+
+    // blur the cols 
+  
+    for (col = 0; col < x; col++)
+      {
+      //gimp_pixel_rgn_get_col(&destPR, cur_col, x1+col, y1, y);
+
+      for (int pxit = 0 ; pxit < y ; ++pxit)
+          memcpy(cur_col + (pxit*bytes), newData + (x1+col+pxit+(y1*w))*bytes, bytes);
+            
+      //gimp_pixel_rgn_get_col(&destPR, dest_col, x1+col, y1, y);
+      
+      for (int pxit = 0 ; pxit < y ; ++pxit)
+          memcpy(dest_col + (pxit*bytes), newData + (x1+col+pxit+(y1*w))*bytes, bytes);
+      
+      blur_line(ctable, cmatrix, cmatrix_length, cur_col, dest_col, y, bytes);
+      
+      //gimp_pixel_rgn_set_col(&destPR, dest_col, x1+col, y1, y);
+      
+      for (int pxit = 0 ; pxit < y ; ++pxit)
+          memcpy(newData + (x1+col+pxit+(y1*w))*bytes, dest_col + (pxit*bytes), bytes);
+      }
+
+    // merge the source and destination (which currently contains the blurred version) images 
+  
+    for (row = 0; row < y; row++)
+      {
+      value = 0;
+      // get source row 
+      //gimp_pixel_rgn_get_row(&srcPR, cur_row, x1, y1+row, x);
+      memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
+      
+      // get dest row 
+      //gimp_pixel_rgn_get_row(&destPR, dest_row, x1, y1+row, x);
+      memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
+      
+      // combine the two 
+      
+      for (u = 0; u < x; u++)
+         {
+         for (v = 0; v < bytes; v++)
+            {
+            diff = (cur_row[u*bytes+v] - dest_row[u*bytes+v]);
+            // do tresholding 
+          
+            if (abs (2 * diff) < threshold)
+               diff = 0;
+
+            value = (int)(cur_row[u*bytes+v] + amount * diff);
+
+            if (value < 0) dest_row[u*bytes+v] = 0;
+            else if (value > 255) dest_row[u*bytes+v] = 255;
+            else  dest_row[u*bytes+v] = value;
+            }
+         }
+      
+      //gimp_pixel_rgn_set_row(&destPR, dest_row, x1, y1+row, x);         
+      memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
+      }
+
+    memcpy(data, newData, w*h*bytes);  
+    
+    // free the memory we took 
+    delete [] cur_row;
+    delete [] dest_row;
+    delete [] cur_col;
+    delete [] dest_col;
+    delete [] cmatrix;
+    delete [] ctable;
+    delete [] newData;
+}
+
+/*
+ this function is written as if it is blurring a column at a time,
+ even though it can operate on rows, too.  There is no difference
+ in the processing of the lines, at least to the blur_line function. 
+ */
+   
+void UnsharpDialog::blur_line (double *ctable, double *cmatrix, int cmatrix_length,
+                               uchar *cur_col, uchar *dest_col, int y, long bytes)
+{
+    double scale;
+    double sum;
+    int i=0, j=0;
+    int row;
+    int cmatrix_middle = cmatrix_length/2;
+
+    double *cmatrix_p;
+    uchar  *cur_col_p;
+    uchar  *cur_col_p1;
+    uchar  *dest_col_p;
+    double *ctable_p;
+
+    // this first block is the same as the non-optimized version --
+    // it is only used for very small pictures, so speed isn't a
+    // big concern.
+
+    if (cmatrix_length > y)
+       {
+       for (row = 0; row < y ; row++)
+          {
+          scale=0;
+      
+          // find the scale factor 
+          
+          for (j = 0; j < y ; j++)
+             {
+             // if the index is in bounds, add it to the scale counter 
+       
+             if ((j + cmatrix_length/2 - row >= 0) && (j + cmatrix_length/2 - row < cmatrix_length))
+                scale += cmatrix[j + cmatrix_length/2 - row];
+             }
+      
+          for (i = 0; i<bytes; i++)
+             {
+             sum = 0;
+       
+             for (j = 0; j < y; j++)
+                {
+                if ((j >= row - cmatrix_length/2) && (j <= row + cmatrix_length/2))
+                   sum += cur_col[j*bytes + i] * cmatrix[j];
+                }
+       
+             dest_col[row*bytes + i] = (uchar) ROUND (sum / scale);
+             }
+          }
+       }
+    else
+      {
+      // for the edge condition, we only use available info and scale to one 
+      
+      for (row = 0; row < cmatrix_middle; row++)
+         {
+         // find scale factor 
+         scale=0;
+      
+         for (j = cmatrix_middle - row; j<cmatrix_length; j++)
+            scale += cmatrix[j];
+         
+         for (i = 0; i<bytes; i++)
+            {
+            sum = 0;
+            
+            for (j = cmatrix_middle - row; j<cmatrix_length; j++)
+               {
+               sum += cur_col[(row + j-cmatrix_middle)*bytes + i] * cmatrix[j];
+               }
+            
+            dest_col[row*bytes + i] = (uchar) ROUND (sum / scale);
+            }
+         }
+         
+         // go through each pixel in each col 
+         dest_col_p = dest_col + row*bytes;
+         
+         for (; row < y-cmatrix_middle; row++)
+            {
+            cur_col_p = (row - cmatrix_middle) * bytes + cur_col;
+            
+            for (i = 0; i<bytes; i++)
+               {
+               sum = 0;
+               cmatrix_p = cmatrix;
+               cur_col_p1 = cur_col_p;
+               ctable_p = ctable;
+               
+               for (j = cmatrix_length; j>0; j--)
+                  {
+                  sum += *(ctable_p + *cur_col_p1);
+                  cur_col_p1 += bytes;
+                  ctable_p += 256;
+                  }
+          
+               cur_col_p++;
+               *(dest_col_p++) = ROUND (sum);
+               }
+            }
+
+      // for the edge condition , we only use available info, and scale to one 
+      
+      for (; row < y; row++)
+         {
+         // find scale factor 
+         scale=0;
+      
+         for (j = 0; j< y-row + cmatrix_middle; j++)
+             scale += cmatrix[j];
+         
+         for (i = 0; i<bytes; i++)
+            {
+            sum = 0;
+            
+            for (j = 0; j<y-row + cmatrix_middle; j++)
+               {
+               sum += cur_col[(row + j-cmatrix_middle)*bytes + i] * cmatrix[j];
+               }
+          
+            dest_col[row*bytes + i] = (uchar) ROUND (sum / scale);
+            }
+         }
+      }
+}
+
+/*
+ generates a 1-D convolution matrix to be used for each pass of
+ a two-pass gaussian blur.  Returns the length of the matrix.
+ */
+ 
+int UnsharpDialog::gen_convolve_matrix (double radius, double **cmatrix_p)
+{
+    int     matrix_length;
+    int     matrix_midpoint;
+    double* cmatrix;
+    int     i,j;
+    double  std_dev;
+    double  sum;
+
+    // we want to generate a matrix that goes out a certain radius
+    // from the center, so we have to go out ceil(rad-0.5) pixels,
+    // inlcuding the center pixel.  Of course, that's only in one direction,
+    // so we have to go the same amount in the other direction, but not count
+    // the center pixel again.  So we double the previous result and subtract
+    // one.
+    // The radius parameter that is passed to this function is used as
+    // the standard deviation, and the radius of effect is the
+    // standard deviation * 2.  It's a little confusing.
+ 
+    radius = fabs(radius) + 1.0;
+
+    std_dev = radius;
+    radius = std_dev * 2;
+
+    // Go out 'radius' in each direction 
+    matrix_length = (int)(2 * ceil(radius-0.5) + 1);
+  
+    if (matrix_length <= 0) matrix_length = 1;
+  
+    matrix_midpoint = matrix_length/2 + 1;
+    *cmatrix_p = new double[matrix_length];
+    cmatrix = *cmatrix_p;
+
+    // Now we fill the matrix by doing a numeric integration approximation
+    // from -2*std_dev to 2*std_dev, sampling 50 points per pixel.
+    // We do the bottom half, mirror it to the top half, then compute the
+    // center point.  Otherwise asymmetric quantization errors will occur.
+    // The formula to integrate is e^-(x^2/2s^2).
+  
+    // first we do the top (right) half of matrix 
+  
+    for (i = matrix_length/2 + 1; i < matrix_length; i++)
+      {
+      double base_x = i - floor(matrix_length/2) - 0.5;
+      sum = 0;
+      
+      for (j = 1; j <= 50; j++)
+          {
+          if ( base_x+0.02*j <= radius )
+             sum += exp (-(base_x+0.02*j)*(base_x+0.02*j) / (2*std_dev*std_dev));
+          }
+      
+      cmatrix[i] = sum/50;
+      }
+
+    // mirror the thing to the bottom half 
+    
+    for (i=0; i<=matrix_length/2; i++) 
+       {
+       cmatrix[i] = cmatrix[matrix_length-1-i];
+       }
+
+    // find center val -- calculate an odd number of quanta to make it symmetric,
+    // * even if the center point is weighted slightly higher than others. 
+    sum = 0;
+  
+    for (j=0; j<=50; j++)
+       {
+       sum += exp (-(0.5+0.02*j)*(0.5+0.02*j) / (2*std_dev*std_dev));
+       }
+  
+    cmatrix[matrix_length/2] = sum/51;
+
+    // normalize the distribution by scaling the total sum to one 
+    sum=0;
+    for (i=0; i<matrix_length; i++) sum += cmatrix[i];
+    for (i=0; i<matrix_length; i++) cmatrix[i] = cmatrix[i] / sum;
+
+    return matrix_length;
+}
+
+
+/*
+ Generates a lookup table for every possible product of 0-255 and
+ each value in the convolution matrix.  The returned array is
+ indexed first by matrix position, then by input multiplicand (?)
+ value.
+ */
+double* UnsharpDialog::gen_lookup_table (double *cmatrix, int cmatrix_length)
+{
+    int i, j;
+    double* lookup_table   = new double[cmatrix_length * 256];
+    double* lookup_table_p = lookup_table;
+    double* cmatrix_p      = cmatrix;
+
+    for (i=0 ; i<cmatrix_length ; i++)
+      {
+      for (j=0 ; j<256 ; j++)
+         {
+         *(lookup_table_p++) = *cmatrix_p * (double)j;
+         }
+         
+      cmatrix_p++;
+      }
+
+    return lookup_table;
+}
+
+}  // NameSpace DigikamUnsharpFilterImagesPlugin
+
+#include "unsharp.moc"
