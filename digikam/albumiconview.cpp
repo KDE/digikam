@@ -341,6 +341,9 @@ void AlbumIconView::refreshIcon(AlbumIconItem* item)
 
 void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 {
+    if(d->currentAlbum->isRoot())
+        return;
+        
     KFileItem* item;
 
     for (KFileItemListIterator it(itemList); (item = it.current()); ++it)
