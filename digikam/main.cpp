@@ -183,6 +183,11 @@ int main(int argc, char *argv[])
                           I18N_NOOP("digiKam website, Feedback"),
                           "yves dot chaufour at wanadoo.fr",
                           0);
+
+    aboutData.addCredit ( "Tom Albers",
+                          I18N_NOOP("digiKam bugs.kde.org frontman, Feedback"),
+                          "tomalbers at kde.nl",
+                          0);
     
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
