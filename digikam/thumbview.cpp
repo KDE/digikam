@@ -75,6 +75,8 @@ public:
         ThumbItem *item;
     };   
 
+    ThumbItem* toolTipItem;
+    QTimer*    toolTipTimer;
 };
 
 
@@ -118,9 +120,15 @@ ThumbView::ThumbView(QWidget* parent, const char* name,
     d->updateTimer = new QTimer(this);
     d->startDragItem = 0;
 
+    d->toolTipTimer = new QTimer();
+    d->toolTipItem  = 0;
+    
     connect(d->updateTimer, SIGNAL(timeout()),
-            this, SLOT(slotUpdate()));
+            SLOT(slotUpdate()));
+    connect(d->toolTipTimer, SIGNAL(timeout()),
+            SLOT(slotToolTip()));
 
+    setEnableToolTips(true);
 }
 
 ThumbView::~ThumbView()
@@ -131,6 +139,7 @@ ThumbView::~ThumbView()
         delete d->rubber;
     
     delete d->updateTimer;
+    delete d->toolTipTimer;
     delete d;
 }
 
@@ -139,6 +148,10 @@ void ThumbView::clear(bool update)
     d->clearing = true;
 
     renamingItem = 0;
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     deleteContainers();
     d->selectedItems.clear();
@@ -244,6 +257,13 @@ void ThumbView::takeItem(ThumbItem *item)
     // Remove from selected item list
     d->selectedItems.remove(item);
 
+    if (d->toolTipItem == item)
+    {
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
+    }
+    
     if (item == d->firstItem) {
 	d->firstItem = d->firstItem->next;
 	if (d->firstItem)
@@ -312,6 +332,18 @@ void ThumbView::sort()
 
     delete [] items;
     
+}
+
+void ThumbView::setEnableToolTips(bool val)
+{
+    viewport()->setMouseTracking(val);
+    if (!val)
+        d->toolTipTimer->stop();
+}
+
+void ThumbView::slotToolTip()
+{
+    emit signalShowToolTip(d->toolTipItem);
 }
 
 void ThumbView::viewportPaintEvent(QPaintEvent *pe)
@@ -654,7 +686,6 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     p.end();
 
     d->pressedMoved = false;
-
 }
 
 
@@ -664,7 +695,22 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     if (!e) return;
     
     if (e->state() == NoButton )
+    {
+        ThumbItem* item = findItem(e->pos());
+        if (item != d->toolTipItem)
+        {
+            d->toolTipItem = 0;
+            slotToolTip();
+            
+            d->toolTipItem = item;
+            d->toolTipTimer->start(500, true);
+        }
         return;
+    }
+
+    d->toolTipItem  = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
     
     // Dragging ?
     if (d->startDragItem) {

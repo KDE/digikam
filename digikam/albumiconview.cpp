@@ -85,6 +85,7 @@
 #include "thumbnailjob.h"
 #include "albumfilecopymove.h"
 #include "albumlister.h"
+#include "albumfiletip.h"
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -141,6 +142,7 @@ public:
     QFont fnXtra;
 
     QDict<AlbumIconItem> itemDict;
+    AlbumFileTip*        toolTip;
 };
 
 
@@ -151,6 +153,8 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     d->init();
     d->imageLister = new AlbumLister();
 
+    d->toolTip = new AlbumFileTip(this);
+    
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
@@ -185,6 +189,9 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
+    connect(this, SIGNAL(signalShowToolTip(ThumbItem*)),
+            this, SLOT(slotShowToolTip(ThumbItem*)));
+    
     // -- Self connections ----------------------------------------------
 
     connect(this, SIGNAL(contentsMoving(int, int)),
@@ -212,6 +219,7 @@ AlbumIconView::~AlbumIconView()
         delete d->thumbJob;
     
     delete d->imageLister;
+    delete d->toolTip;
     delete d;
 }
 
@@ -905,6 +913,33 @@ QStringList AlbumIconView::itemTagNames(AlbumIconItem* item)
     return db->getItemTagNames(album, item->text());
 }
 
+QStringList AlbumIconView::itemTagPaths(AlbumIconItem* item)
+{
+    PAlbum* album = d->imageLister->findParentAlbum(item->fileItem());
+    if (!album)
+    {
+        kdWarning() << "Failed to find parent album for "
+                    << item->fileItem()->url().prettyURL()
+                    << endl;
+        return QString("");
+    }
+
+    QStringList tagPaths;
+
+    AlbumManager* man = AlbumManager::instance();
+    AlbumDB*      db  = man->albumDB();
+    
+    IntList tagIDs(db->getItemTagIDs(album, item->text()));
+    for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    {
+        TAlbum* ta = man->findTAlbum(*it);
+        if (ta)
+            tagPaths.append(ta->getURL());
+    }
+            
+    return tagPaths;
+}
+
 AlbumIconItem* AlbumIconView::firstSelectedItem()
 {
     AlbumIconItem *iconItem = 0;
@@ -1292,6 +1327,11 @@ void AlbumIconView::slotContentsMoving(int x, int y)
             return;
         item = (AlbumIconItem*)item->nextItem();
     }
+}
+
+void AlbumIconView::slotShowToolTip(ThumbItem* item)
+{
+    d->toolTip->setIconItem(dynamic_cast<AlbumIconItem*>(item));
 }
 
 QStringList AlbumIconView::allItems()

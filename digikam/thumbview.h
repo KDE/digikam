@@ -53,6 +53,8 @@ public:
     ThumbItem *findLastVisibleItem(const  QRect &r ) const;
 
     void sort();
+
+    void setEnableToolTips(bool val);
     
 protected:
 
@@ -102,10 +104,15 @@ signals:
     void signalDoubleClicked(ThumbItem *item);
     void signalReturnPressed(ThumbItem *item);
     void signalItemRenamed(ThumbItem *item);
+    void signalShowToolTip(ThumbItem *item);
 
 public slots:
 
     void slotUpdate();
+
+private slots:
+
+    void slotToolTip();
     
 };
 

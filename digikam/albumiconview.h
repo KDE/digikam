@@ -73,6 +73,7 @@ public:
 
     QString     itemComments(AlbumIconItem *item);
     QStringList itemTagNames(AlbumIconItem* item);
+    QStringList itemTagPaths(AlbumIconItem* item);
 
     void    refreshIcon(AlbumIconItem* item);
     void    albumDescChanged();
@@ -151,6 +152,7 @@ private slots:
     void slotFilesModified(const KURL& url);
 
     void slotContentsMoving(int x, int y);
+    void slotShowToolTip(ThumbItem* item);
 
     void slotThemeChanged();
     

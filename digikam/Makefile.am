@@ -29,7 +29,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
-			thumbdb.cpp
+			thumbdb.cpp albumfiletip.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \
