@@ -76,7 +76,7 @@ namespace DigikamDespeckleFilterImagesPlugin
 {
 
 DespeckleDialog::DespeckleDialog(QWidget* parent)
-               : KDialogBase(Plain, i18n("Noise reduction"), Help|User1|Ok|Cancel, Ok,
+               : KDialogBase(Plain, i18n("Noise Reduction"), Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset values")),
                  m_parent(parent)
 {
@@ -88,7 +88,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Noise reduction"), 
+                                       I18N_NOOP("Noise Reduction"), 
                                        "0.7.0-cvs",
                                        I18N_NOOP("A despeckle image filter plugin for Digikam."),
                                        KAboutData::License_GPL,
@@ -105,7 +105,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Noise reduction handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Noise Reduction handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------

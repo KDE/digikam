@@ -71,7 +71,7 @@ namespace DigikamAdjustLevelsImagesPlugin
 {
 
 AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                 : KDialogBase(Plain, i18n("Adjust color levels"), Help|User1|Ok|Cancel, Ok,
+                 : KDialogBase(Plain, i18n("Adjust Color Levels"), Help|User1|Ok|Cancel, Ok,
                                parent, 0, true, true, i18n("&Reset values"))
 {
     // Create an empty instance of levels to use.
@@ -96,7 +96,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Adjust levels handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Adjust Levels handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------

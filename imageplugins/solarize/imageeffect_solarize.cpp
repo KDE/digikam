@@ -75,7 +75,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Solarize image handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Solarize Image handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------

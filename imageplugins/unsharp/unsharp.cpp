@@ -77,7 +77,7 @@ namespace DigikamUnsharpFilterImagesPlugin
 {
 
 UnsharpDialog::UnsharpDialog(QWidget* parent)
-               : KDialogBase(Plain, i18n("Unsharped mask"), Help|User1|Ok|Cancel, Ok,
+               : KDialogBase(Plain, i18n("Unsharped Mask"), Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset values")),
                  m_parent(parent)
 {
@@ -89,7 +89,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Unsharped mask"), 
+                                       I18N_NOOP("Unsharped Mask"), 
                                        "0.7.0-cvs",
                                        I18N_NOOP("An unsharped mask image filter plugin for Digikam."),
                                        KAboutData::License_GPL,
@@ -106,7 +106,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Unsharped mask handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Unsharped Mask handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
