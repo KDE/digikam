@@ -81,10 +81,10 @@ x Added Blur/Sharpen image filters.                                <Gilles Cauli
 x Added Color balance plugin.                                      <Gilles Caulier - 0.7.0>  
 x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
 x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
-o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
-o Added Settings dialog.                                           
+* Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.                              
+o Added Settings dialog (if necessary).                                           
 
 
 SplashScreen :
