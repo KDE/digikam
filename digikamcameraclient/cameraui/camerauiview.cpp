@@ -28,11 +28,17 @@
 #include <krun.h>
 #include <kservice.h>
 #include <kfiledialog.h>
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kdirlister.h>
 #include <kio/job.h>
 #include <libkexif/kexif.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 #include <qpushbutton.h>
 #include <qsplitter.h>
@@ -533,8 +539,13 @@ void CameraUIView::slotCameraUpload()
                                     uploadName)) {
             QString msg(i18n("Camera Folder '%1' contains item '%2'\n Please, enter New Name")
                         .arg(folderItem->folderName()).arg(uploadName));
-            uploadName =
-                KInputDialog::getText("",msg,uploadName,&ok,this);
+
+#if KDE_IS_VERSION(3,2,0)
+            uploadName = KInputDialog::getText("",msg,uploadName,&ok,this);
+#else
+            uploadName = KLineEditDlg::getText("",msg,uploadName,&ok,this);
+#endif
+
             if (!ok) return;
         }
 
@@ -716,10 +727,17 @@ void CameraUIView::slotCreateNewAlbum()
     }
     
     bool ok;
-    QString newDir =
-        KInputDialog::getText(i18n("New Album Name"),
-                              i18n("Enter New Album Name: "),
-                              "", &ok, this);
+
+#if KDE_IS_VERSION(3,2,0)
+    QString newDir = KInputDialog::getText(i18n("New Album Name"),
+                                           i18n("Enter New Album Name: "),
+                                           QString::null, &ok, this);
+#else
+    QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
+                                           i18n("Enter New Album Name: "),
+                                           QString::null, &ok, this);
+#endif
+
     if (!ok) return;
 
     KURL newAlbumURL(libraryPath_);

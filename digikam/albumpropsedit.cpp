@@ -21,7 +21,13 @@
 
 #include <klocale.h>
 #include <kurl.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -213,9 +219,16 @@ QStringList AlbumPropsEdit::albumCollections() const
 void AlbumPropsEdit::slotAddCollection()
 {
     bool ok;
+
+#if KDE_IS_VERSION(3,2,0)
     QString newCollection = KInputDialog::getText(i18n("New Collection Name"),
                                                   i18n("Enter New Collection Name: "),
                                                   QString::null, &ok, this);
+#else
+    QString newCollection = KLineEditDlg::getText(i18n("New Collection Name"),
+                                                  i18n("Enter New Collection Name: "),
+                                                  QString::null, &ok, this);
+#endif
     if (!ok) return;
 
     if (!albumCollections_.contains(newCollection)) {

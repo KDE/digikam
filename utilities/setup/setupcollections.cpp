@@ -43,7 +43,13 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 // // Local includes.
 
@@ -149,10 +155,19 @@ void SetupCollections::slotCollectionSelectionChanged()
 void SetupCollections::slotAddCollection()
 {
     bool ok;
+
+#if KDE_IS_VERSION(3,2,0)
     QString newCollection =
         KInputDialog::getText(i18n("New Collection Name"),
                               i18n("Enter New Collection Name: "),
                               QString::null, &ok, this);
+#else
+    QString newCollection =
+        KLineEditDlg::getText(i18n("New Collection Name"),
+                              i18n("Enter New Collection Name: "),
+                              QString::null, &ok, this);
+#endif
+    
     if (!ok) return;
 
     bool found = false;

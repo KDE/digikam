@@ -49,7 +49,13 @@
 #include <kpropsdlg.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 // Local includes.
 
@@ -367,9 +373,17 @@ void AlbumFolderView::albumNew()
         }
 
     bool ok;
+
+#if KDE_IS_VERSION(3,2,0)
     QString newDir = KInputDialog::getText(i18n("New Album Name"),
                                            i18n("Enter New Album Name: "),
                                            QString::null, &ok, this);
+#else
+    QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
+                                           i18n("Enter New Album Name: "),
+                                           QString::null, &ok, this);
+#endif
+    
     if (!ok) return;
     
     KURL newAlbumURL = settings->getAlbumLibraryPath();
