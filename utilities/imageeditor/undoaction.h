@@ -78,6 +78,24 @@ private:
     int m_dir;
 };
 
+class UndoActionBCG : public UndoAction
+{
+public:
+
+    UndoActionBCG(Digikam::ImlibInterface* iface,
+                  double gamma, double brightness,
+                  double contrast);
+    ~UndoActionBCG();
+
+    void rollBack();
+    
+private:
+
+    double m_gamma;
+    double m_brightness;
+    double m_contrast;
+};
+
 class UndoActionIrreversible : public UndoAction
 {
 public:

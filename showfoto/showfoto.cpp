@@ -82,6 +82,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
             m_saveAsAction, SLOT(setEnabled(bool)));
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_revertAction, SLOT(setEnabled(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool)),
+            m_undoAction, SLOT(setEnabled(bool)));
 
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
@@ -120,6 +122,9 @@ void ShowFoto::setupActions()
     m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "revert");
 
+    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
+                                    actionCollection(), "undo");
+    
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
     
@@ -129,6 +134,7 @@ void ShowFoto::setupActions()
     m_revertAction->setEnabled(false);
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
+    m_undoAction->setEnabled(false);
                      
     // ---------------------------------------------------------------
     

@@ -702,6 +702,9 @@ void ImlibInterface::resize(int w, int h)
 
 void ImlibInterface::changeGamma(double gamma)
 {
+    d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
+                                            d->contrast));
+
     imlib_context_push(d->context);
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
@@ -721,6 +724,9 @@ void ImlibInterface::changeGamma(double gamma)
 
 void ImlibInterface::changeBrightness(double brightness)
 {
+    d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
+                                            d->contrast));
+
     imlib_context_push(d->context);
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
@@ -740,6 +746,9 @@ void ImlibInterface::changeBrightness(double brightness)
 
 void ImlibInterface::changeContrast(double contrast)
 {
+    d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
+                                            d->contrast));
+
     imlib_context_push(d->context);
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
@@ -756,6 +765,28 @@ void ImlibInterface::changeContrast(double contrast)
 
     emit signalModified(true);
 }
+
+void ImlibInterface::changeBCG(double gamma, double brightness, double contrast)
+{
+    imlib_context_push(d->context);
+    imlib_context_set_color_modifier(d->cmod);
+    imlib_reset_color_modifier();
+    
+    d->gamma      = gamma;
+    d->brightness = brightness;
+    d->contrast   = contrast;
+
+    imlib_modify_color_modifier_gamma(d->gamma);
+    imlib_modify_color_modifier_brightness(d->brightness);
+    imlib_modify_color_modifier_contrast(d->contrast);
+
+    imlib_context_set_color_modifier(0);
+
+    imlib_context_pop();
+
+    emit signalModified(true);
+}
+
 
 void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 {

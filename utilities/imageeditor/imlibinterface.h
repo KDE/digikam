@@ -93,6 +93,7 @@ public:
     void changeGamma(double gamma);
     void changeBrightness(double brightness);
     void changeContrast(double contrast);
+    void changeBCG(double gamma, double brightness, double contrast);
 
     void setBCG(double brightness, double contrast, double gamma);
     

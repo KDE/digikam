@@ -88,6 +88,24 @@ void UndoActionFlip::rollBack()
     }
 }
 
+UndoActionBCG::UndoActionBCG(Digikam::ImlibInterface* iface,
+                             double gamma, double brightness,
+                             double contrast)
+    : UndoAction(iface), m_gamma(gamma), m_brightness(brightness),
+      m_contrast(contrast)
+{
+    
+}
+UndoActionBCG::~UndoActionBCG()
+{
+    
+}
+
+void UndoActionBCG::rollBack()
+{
+    m_iface->changeBCG(m_gamma, m_brightness, m_contrast);    
+}
+
 UndoActionIrreversible::UndoActionIrreversible(Digikam::ImlibInterface* iface)
     : UndoAction(iface)
 {
@@ -101,3 +119,4 @@ UndoActionIrreversible::~UndoActionIrreversible()
 void UndoActionIrreversible::rollBack()
 {
 }
+

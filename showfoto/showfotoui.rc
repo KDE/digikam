@@ -8,6 +8,7 @@
      <Action name="open_file" /> 
      <Action name="save" />
      <Action name="saveas" />
+     <Action name="undo" /> 
      <Action name="revert" /> 
      <Action name="file_properties" /> 
  </Menu>
@@ -60,7 +61,7 @@
   <Action name="open_file" />
   <Action name="save" />
   <Action name="saveas" />
-  <Action name="revert" /> 
+  <Action name="undo" /> 
   <Separator />
   <Action name="zoom_plus" />
   <Action name="zoom_minus" />
