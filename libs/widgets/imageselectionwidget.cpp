@@ -373,6 +373,30 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
 
 void ImageSelectionWidget::regionSelectionChanged(bool targetDone)
 {
+    if (targetDone)
+       {
+       if (m_localRegionSelection.left() < 0) 
+          {
+          m_localRegionSelection.setLeft(0);
+          applyAspectRatio(false);
+          }
+       if (m_localRegionSelection.top() < 0) 
+          {
+          m_localRegionSelection.setTop(0);
+          applyAspectRatio(true);
+          }
+       if (m_localRegionSelection.right() > m_rect.width())
+          {
+          m_localRegionSelection.setRight(m_rect.width());
+          applyAspectRatio(false);
+          }
+       if (m_localRegionSelection.bottom() > m_rect.height()) 
+          {
+          m_localRegionSelection.setBottom(m_rect.height());
+          applyAspectRatio(true);
+          }
+       }
+    
     localToRealRegion();
 
     if (targetDone)
@@ -540,25 +564,27 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
           QPoint pm(e->x(), e->y());
           
           if ( m_currentResizing == ResizingTopLeft &&
-               pm.x() < m_localRegionSelection.right() - 8 &&
-               pm.y() < m_localRegionSelection.bottom() - 8 )
+               pm.x() < m_localRegionSelection.right() - 50 &&
+               pm.y() < m_localRegionSelection.bottom() - 50 )
               m_localRegionSelection.setTopLeft(pm);             
              
           else if ( m_currentResizing == ResizingTopRight  &&
-               pm.x() > m_localRegionSelection.left() + 8 &&
-               pm.y() < m_localRegionSelection.bottom() - 8 )
+               pm.x() > m_localRegionSelection.left() + 50 &&
+               pm.y() < m_localRegionSelection.bottom() - 50 )
              m_localRegionSelection.setTopRight(pm);
           
           else if ( m_currentResizing == ResizingBottomLeft  &&
-               pm.x() < m_localRegionSelection.right() - 8 &&
-               pm.y() > m_localRegionSelection.top() + 8 )
+               pm.x() < m_localRegionSelection.right() - 50 &&
+               pm.y() > m_localRegionSelection.top() + 50 )
              m_localRegionSelection.setBottomLeft(pm);
              
           else if ( m_currentResizing == ResizingBottomRight  &&
-               pm.x() > m_localRegionSelection.left() + 8 &&
-               pm.y() > m_localRegionSelection.top() + 8 )
+               pm.x() > m_localRegionSelection.left() + 50 &&
+               pm.y() > m_localRegionSelection.top() + 50 )
              m_localRegionSelection.setBottomRight(pm);
-          
+          else 
+             return;
+             
           applyAspectRatio(false, false);
           applyAspectRatio(true);
           
