@@ -45,9 +45,9 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qcombobox.h>
-#include <qpixmap.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -87,6 +87,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QString whatsThis;
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
 
+    m_originalImageData = imageData;
+    m_originalWidth     = width;
+    m_originalHeight    = height;
+    
     m_clipSat = true;
     m_overExp = false;
     m_WBind   = false;
@@ -190,7 +194,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, m_originalWidth, m_originalHeight, frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any filter "
                                              "settings changes."));
@@ -203,25 +207,31 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 6, 4, spacingHint());
+    QGridLayout *grid2 = new QGridLayout( layout2, 6, 5, spacingHint());
+    KIconLoader icon;
     
-    m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
-    m_darkInput = new KDoubleNumInput(gbox);
-    m_darkInput->setPrecision(2);
-    m_darkInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
-        
+    m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
+    m_autoAdjustExposure = new QPushButton(gbox);
+    m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( m_autoAdjustExposure, i18n( "Auto Exposure adjustments." ) );
+    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can adjust automaticly Exposure "
+                                                "and Black Point values."));
+    m_exposureInput = new KDoubleNumInput(gbox);
+    m_exposureInput->setPrecision(2);
+    m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
+    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
+    
     m_blackLabel = new QLabel(i18n("Black Point:"), gbox);
     m_blackInput = new KDoubleNumInput(gbox);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
     QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
-    m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
-    m_exposureInput = new KDoubleNumInput(gbox);
-    m_exposureInput->setPrecision(2);
-    m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
-    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
+    m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
+    m_darkInput = new KDoubleNumInput(gbox);
+    m_darkInput->setPrecision(2);
+    m_darkInput->setRange(0.0, 1.0, 0.01, true);
+    QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
     m_saturationInput = new KDoubleNumInput(gbox);
@@ -256,14 +266,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "<b>Xenon</b>: xenon lamp or light arc (500K).<p>"
                                                  "<b>Sun</b>: sunny daylight around noon (5500K).<p>"
                                                  "<b>Flash</b>: electronic photo flash (5600K).<p>"
-                                                 "<b>Sky</b>: overcast sky light (6500K)."
+                                                 "<b>Sky</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gbox);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickTemperature->setToggleButton(true);
-    QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker" ) );
+    QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
     QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original image used to set "
                                              "white color balance temperature and green component."));
     m_temperatureInput = new KDoubleNumInput(gbox);
@@ -277,22 +287,23 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_greenInput->setRange(0.2, 2.5, 0.1, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta colour cast removal level."));
         
-    grid2->addMultiCellWidget(m_darkLabel, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput, 0, 0, 1, 4);
+    grid2->addMultiCellWidget(m_exposureLabel, 0, 0, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(m_exposureInput, 0, 0, 2, 5);
     grid2->addMultiCellWidget(m_blackLabel, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput, 1, 1, 1, 4);
-    grid2->addMultiCellWidget(m_exposureLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_exposureInput, 2, 2, 1, 4);
+    grid2->addMultiCellWidget(m_blackInput, 1, 1, 1, 5);
+    grid2->addMultiCellWidget(m_darkLabel, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(m_darkInput, 2, 2, 1, 5);
     grid2->addMultiCellWidget(m_saturationLabel, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput, 3, 3, 1, 4);
+    grid2->addMultiCellWidget(m_saturationInput, 3, 3, 1, 5);
     grid2->addMultiCellWidget(m_gammaLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 4, 4, 1, 4);
+    grid2->addMultiCellWidget(m_gammaInput, 4, 4, 1, 5);
     grid2->addMultiCellWidget(m_temperatureLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 5, 5, 1, 1);
-    grid2->addMultiCellWidget(m_pickTemperature, 5, 5, 2, 2);
-    grid2->addMultiCellWidget(m_temperatureInput, 5, 5, 3, 4);
+    grid2->addMultiCellWidget(m_temperaturePresetCB, 5, 5, 1, 2);
+    grid2->addMultiCellWidget(m_pickTemperature, 5, 5, 3, 3);
+    grid2->addMultiCellWidget(m_temperatureInput, 5, 5, 4, 5);
     grid2->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 4);
+    grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 5);
         
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
         
@@ -336,6 +347,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
 
     connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
             this, SLOT(slotColorSelectedFromImage( const QColor & ))); 
+
+    connect(m_autoAdjustExposure, SIGNAL(clicked()),
+            this, SLOT(slotAutoAdjustExposure()));
 
     // Correction Filter Slider controls.
                         
@@ -404,6 +418,55 @@ void ImageEffect_WhiteBalance::slotUser1()
 void ImageEffect_WhiteBalance::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("whitebalance", "digikamimageplugins");
+}
+
+void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
+{
+    parentWidget()->setCursor( KCursor::waitCursor() );
+
+    // Create an histogram of original image.     
+    
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(m_originalImageData, m_originalWidth, m_originalHeight);
+       
+    // Calculate optimal exposition and black level 
+    
+    int stop, i, scale, w, h;
+    double black, expo, sum;
+    
+    w = m_originalWidth / 400;
+    h = m_originalHeight / 400;
+    scale = QMAX(w, h);
+    scale = QMAX(1, scale);
+    
+    // Cutoff at 0.5% of the histogram.
+    
+    stop = ((uint)(m_originalWidth / scale)*(uint)(m_originalHeight / scale)) / 200;
+    
+    for (i = m_rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
+        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+    
+    expo = -log((float)(i+1) / m_rgbMax) / log(2);
+    kdDebug() << "White level at:" << i << endl;
+    
+    // Cutoff at 0.5% of the histogram. 
+    
+    stop = ((uint)(m_originalWidth / scale)*(uint)(m_originalHeight / scale)) / 200;
+    
+    for (i = 1, sum = 0; (i < 256) && (sum < stop); i++)
+        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+    
+    black = (double)i / m_rgbMax;
+    black /= 2;
+    
+    kdDebug() << "Black:" << black << "  Exposition:" << expo << endl;
+
+    m_blackInput->setValue(black);
+    m_exposureInput->setValue(expo);        
+
+    delete histogram;
+    
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    slotEffect();  
 }
 
 void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)

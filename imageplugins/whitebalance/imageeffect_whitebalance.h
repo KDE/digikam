@@ -113,12 +113,17 @@ private:
     None
     };
     
+    uint                         *m_originalImageData;
+    int                           m_originalWidth;
+    int                           m_originalHeight;
+    
     uint                         *m_destinationPreviewData;
     
     QWidget                      *m_parent;
     
     QPushButton                  *m_helpButton;
     QPushButton                  *m_pickTemperature;
+    QPushButton                  *m_autoAdjustExposure;
     
     QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
@@ -164,6 +169,7 @@ private slots:
     void slotChannelChanged(int channel);
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
+    void slotAutoAdjustExposure(void);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
