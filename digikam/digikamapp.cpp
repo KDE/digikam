@@ -523,7 +523,8 @@ void DigikamApp::loadPlugins()
     connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( Digikam::AlbumInfo * ) ),
              KipiInterface_, SLOT( slotCurrentAlbumChanged( Digikam::AlbumInfo * ) ) );
                  
-    ignores << QString::fromLatin1( "HelloWorld" );    
+    ignores.append(QString::fromLatin1( "HelloWorld" ));
+    ignores.append(QString::fromLatin1( "KameraKlient" ));    
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );
     
     connect( KipiPluginLoader_, SIGNAL( replug() ),
