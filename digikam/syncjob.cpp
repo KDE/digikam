@@ -64,6 +64,12 @@ bool SyncJob::trash(const KURL::List& urls)
     return sj.trashPriv(urls);    
 }
 
+bool SyncJob::copy(const KURL &src, const KURL &dest)
+{
+    SyncJob sj;
+    return sj.copyPriv(src, dest);
+}
+
 QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
 {
     SyncJob sj;
@@ -99,6 +105,19 @@ bool SyncJob::trashPriv(const KURL::List& urls)
     KURL dest(KGlobalSettings::trashPath());
     
     KIO::Job* job = KIO::move( urls, dest );
+    connect( job, SIGNAL(result( KIO::Job* )),
+             SLOT(slotResult( KIO::Job*)) );
+
+    enter_loop();
+    return success_;
+}
+
+bool SyncJob::copyPriv(const KURL &src, const KURL &dest)
+{
+    success_ = true;
+
+    KIO::FileCopyJob* job = KIO::file_move(src, dest, -1,
+                                           true, false, false);
     connect( job, SIGNAL(result( KIO::Job* )),
              SLOT(slotResult( KIO::Job*)) );
 
@@ -174,7 +193,7 @@ void SyncJob::slotLoadThumbnailFailed()
     qApp->exit_loop();
 }
 
-void SyncJob::slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix,
+void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix,
                                        const KFileMetaInfo*)
 {
     if(!pix.isNull() && (thumbnailSize_ < ThumbnailSize::Tiny))

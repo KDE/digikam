@@ -121,7 +121,6 @@ private slots:
     void slotRotatedOrFlipped();
     
     void slotSave();
-    void slotSaveResult(KIO::Job *job);
     void slotSaveAs();
     void slotSaveAsResult(KIO::Job *job);
     

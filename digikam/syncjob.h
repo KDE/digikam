@@ -57,6 +57,8 @@ public:
     /* moves the urls to trash. use only userDelete unless
        there is a specific need for this */
     static bool trash(const KURL::List& urls);
+    
+    static bool copy(const KURL &src, const KURL &dest);
 
     /* Load the image or icon for the tag thumbnail */    
     static QPixmap getTagThumbnail(const QString &name, int size);
@@ -72,6 +74,8 @@ private:
     bool delPriv(const KURL::List& urls);
     bool trashPriv(const KURL::List& urls);
 
+    bool copyPriv(const KURL &src, const KURL &dest);
+    
     QPixmap getTagThumbnailPriv(const QString &name, int size);
 
     void enter_loop();

@@ -715,24 +715,16 @@ void ImageWindow::slotSave()
     if( m_rotatedOrFlipped || m_canvas->exifRotated() )
        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
 
-    KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_urlCurrent,
-                                           -1, true, false, false);
-
-    connect(job, SIGNAL(result(KIO::Job *) ),
-            this, SLOT(slotSaveResult(KIO::Job *)));
-}
-
-void ImageWindow::slotSaveResult(KIO::Job *job)
-{
-    if (job->error()) 
+    if(!SyncJob::copy(KURL(tmpFile), m_urlCurrent))
     {
-       job->showErrorDialog(this);
-       return;
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
     }
-    
-    emit signalFileModified(m_urlCurrent);
-
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                                   
+    else
+    {
+        emit signalFileModified(m_urlCurrent);
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));          
+    }
 }
 
 void ImageWindow::slotSaveAs()
@@ -743,7 +735,8 @@ void ImageWindow::slotSaveAs()
     
     QStringList mimetypes;
     mimetypes << "image/jpeg" << "image/png" << "image/tiff" << "image/gif"  
-              << "image/x-tga" << "image/x-bmp" <<  "image/x-xpm" <<  "image/x-portable-anymap"; 
+              << "image/x-tga" << "image/x-bmp" <<  "image/x-xpm" 
+              << "image/x-portable-anymap"; 
     
     KFileDialog *imageFileSaveDialog = new KFileDialog(m_urlCurrent.directory(),
                                                        QString::null,
@@ -751,9 +744,9 @@ void ImageWindow::slotSaveAs()
                                                        "imageFileSaveDialog",
                                                        false);
     
-    imageFileSaveDialog->setOperationMode( KFileDialog::Saving );                                               
-    imageFileSaveDialog->setMode( KFile::File );                                               
-    imageFileSaveDialog->setCaption( i18n("New image file name") );  
+    imageFileSaveDialog->setOperationMode( KFileDialog::Saving );                   
+    imageFileSaveDialog->setMode( KFile::File );
+    imageFileSaveDialog->setCaption( i18n("New image file name") );
     imageFileSaveDialog->setMimeFilter(mimetypes);
 
     // Check for cancel.    
