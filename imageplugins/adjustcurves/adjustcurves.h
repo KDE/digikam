@@ -29,9 +29,10 @@
 class QComboBox;
 class QPushButton;
 
+class CurvesWidget;
+
 namespace Digikam
 {
-class HistogramWidget;
 class ImageCurves;
 class ImageWidget;
 class ColorGradientWidget;
@@ -63,7 +64,7 @@ private:
     QPushButton                  *m_helpButton;
     QPushButton                  *m_resetButton;
     
-    Digikam::HistogramWidget     *m_histogramWidget;
+    CurvesWidget                 *m_curvesWidget;
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;

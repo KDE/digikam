@@ -64,13 +64,13 @@
 #include <digikam/imagehistogram.h>
 #include <digikam/imagecurves.h>
 #include <digikam/imageiface.h>
-#include <digikam/histogramwidget.h>
 #include <digikam/imagewidget.h>
 #include <digikam/colorgradientwidget.h>
 
 // Local includes.
 
 #include "version.h"
+#include "curveswidget.h"
 #include "adjustcurves.h"
 
 namespace DigikamAdjustCurvesImagesPlugin
@@ -184,10 +184,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 1, 1, 0, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 256, imageData, width, height, frame, false);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the curve drawing of the selected image "
+    m_curvesWidget = new CurvesWidget(256, 256, imageData, width, height, frame);
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                              "histogram channel"));
-    l->addWidget(m_histogramWidget, 0);
+    l->addWidget(m_curvesWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
@@ -272,7 +272,7 @@ void AdjustCurveDialog::slotHelp()
 
 void AdjustCurveDialog::closeEvent(QCloseEvent *e)
 {
-    delete m_histogramWidget;
+    delete m_curvesWidget;
     delete m_curves;
     e->accept();
 }
@@ -359,32 +359,32 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     switch(channel)
        {
        case 1:           // Red.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_curvesWidget->m_channelType = CurvesWidget::RedChannelHistogram;
           m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
        case 2:           // Green.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_curvesWidget->m_channelType = CurvesWidget::GreenChannelHistogram;
           m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
        case 3:           // Blue.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_curvesWidget->m_channelType = CurvesWidget::BlueChannelHistogram;
           m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
 
        case 4:           // Alpha.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+          m_curvesWidget->m_channelType = CurvesWidget::AlphaChannelHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
 
        default:          // Luminosity.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_curvesWidget->m_channelType = CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
        }
 
-    m_histogramWidget->repaint(false);
+    m_curvesWidget->repaint(false);
 }
 
 void AdjustCurveDialog::slotScaleChanged(int scale)
@@ -392,15 +392,15 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
     switch(scale)
        {
        case 1:           // Log.
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
+          m_curvesWidget->m_scaleType = CurvesWidget::LogScaleHistogram;
           break;
 
        default:          // Lin.
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
+          m_curvesWidget->m_scaleType = CurvesWidget::LinScaleHistogram;
           break;
        }
 
-    m_histogramWidget->repaint(false);
+    m_curvesWidget->repaint(false);
 }
 
 void AdjustCurveDialog::slotLoadCurves()
