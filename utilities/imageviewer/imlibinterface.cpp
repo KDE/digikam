@@ -54,12 +54,10 @@ class ImImage
 private:           // Variables.
 
     Imlib_Image           im;
-    Imlib_Image           old_im;
     
     Imlib_Color_Modifier  mod;
     
     Pixmap                pixmap;
-    
     Pixmap                mask;
     
     Imlib_Load_Error      errorRet;
@@ -310,27 +308,16 @@ public:           // Fonctions.
     
     void ajustInit(void)
         {
-/*        imlib_context_set_image(im);        
-        old_im = imlib_create_cropped_image(0, 0,
-                 imlib_image_get_width(), imlib_image_get_height());
-        dirty = true;        
-        render();*/
         }
         
     void ajustAccepted(void)
         {
-/*        imlib_context_set_image(old_im);
-        imlib_free_image();
-        imlib_context_set_image(im);*/
         changed = true;
         dirty   = true;             
         }
         
     void ajustRejected(void)
         {
-/*        imlib_context_set_image(old_im);
-        imlib_free_image();
-        imlib_context_set_image(im);*/
         changed = false;
         }
 
@@ -338,12 +325,10 @@ public:           // Fonctions.
         {
         if (!im) return;
 
-/*        imlib_context_set_image(old_im);        
-        im = imlib_create_cropped_image(0, 0,
-             imlib_image_get_width(), imlib_image_get_height());*/
         imlib_context_set_image(im);        
         imlib_modify_color_modifier_gamma(val);
         imlib_apply_color_modifier();
+        imlib_reset_color_modifier();
         dirty   = true;
         qDebug("gamma:%f", (float)val);
         }
@@ -352,12 +337,10 @@ public:           // Fonctions.
         {
         if (!im) return;
         
-/*        imlib_context_set_image(old_im);  
-        im = imlib_create_cropped_image(0, 0,
-             imlib_image_get_width(), imlib_image_get_height());*/
         imlib_context_set_image(im);        
         imlib_modify_color_modifier_brightness(val);
         imlib_apply_color_modifier();
+        imlib_reset_color_modifier();
         dirty      = true;
         qDebug("brightness:%f", (float)val);
         }
@@ -366,12 +349,10 @@ public:           // Fonctions.
         {
         if (!im) return;
 
-/*        imlib_context_set_image(old_im);
-        im = imlib_create_cropped_image(0, 0,
-             imlib_image_get_width(), imlib_image_get_height());*/
         imlib_context_set_image(im);        
         imlib_modify_color_modifier_contrast(val);
         imlib_apply_color_modifier();
+        imlib_reset_color_modifier();
         dirty    = true;
         qDebug("contrast:%f", (float)val);
         }
