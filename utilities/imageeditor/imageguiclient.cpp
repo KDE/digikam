@@ -134,7 +134,9 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                this, SIGNAL(signalCrop()),
                                actionCollection(), "imageview_crop");
     m_cropAction->setEnabled(false);
-
+    m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
+                                                              "Select the image region to enable this action.") );
+                                        
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
                                      actionCollection(),
                                      "imageview_rotate");
