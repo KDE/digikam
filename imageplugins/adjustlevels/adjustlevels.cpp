@@ -87,7 +87,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Adjust Levels"),
                                        digikamimageplugins_version,
-                                       I18N_NOOP("An image-histogram-levels adjustment plugin for Digikam."),
+                                       I18N_NOOP("An image-histogram-levels adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier",
                                        0,

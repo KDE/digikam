@@ -92,7 +92,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Noise Reduction"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A despeckle image filter plugin for Digikam."),
+                                       I18N_NOOP("A despeckle image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,

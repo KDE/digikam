@@ -81,7 +81,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Perspective"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin to process for process image "
+                                       I18N_NOOP("A digiKam image plugin to process for process image "
                                        "perspective adjustment."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

@@ -86,7 +86,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Emboss Image"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("An embossed image effect plugin for Digikam."),
+                                       I18N_NOOP("An embossed image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,

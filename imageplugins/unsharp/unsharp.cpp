@@ -92,7 +92,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Unsharped Mask"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("An unsharped mask image filter plugin for Digikam."),
+                                       I18N_NOOP("An unsharped mask image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,

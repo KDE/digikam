@@ -65,7 +65,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Solarize Image"),
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A solarize image plugin for Digikam."),
+                                       I18N_NOOP("A solarize image plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Renchi Raju",
                                        0,

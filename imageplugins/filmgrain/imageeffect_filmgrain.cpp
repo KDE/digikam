@@ -85,7 +85,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Film Grain"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin to apply a film grain effect to an image."),
+                                       I18N_NOOP("A digiKam image plugin to apply a film grain effect to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,

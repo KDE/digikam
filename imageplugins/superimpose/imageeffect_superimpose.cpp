@@ -103,7 +103,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Template Superimpose"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin to superimpose a template to an image."),
+                                       I18N_NOOP("A digiKam image plugin to superimpose a template to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,

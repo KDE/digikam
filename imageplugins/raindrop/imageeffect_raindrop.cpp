@@ -85,7 +85,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Raindrops"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin to add raindrops to an image."),
+                                       I18N_NOOP("A digiKam image plugin to add raindrops to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
