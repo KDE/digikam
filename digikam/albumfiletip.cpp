@@ -312,7 +312,7 @@ void AlbumFileTip::updateText()
 
     // Digikam properties  ------------------------------------------
 
-    tip += headBeg + i18n("%1 properties").arg("DigiKam") + headEnd;
+    tip += headBeg + i18n("digiKam properties") + headEnd;
 
     PAlbum* album = m_view->albumLister()->findParentAlbum(fi);
     if (album)
