@@ -150,7 +150,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     layout->addWidget( pixmapLabelLeft );
     QLabel *labelTitle = new QLabel( i18n("White Color Balance Correction"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
-    lqiout=>sudCdredchFqsdob( |qbelTitle, 1 );
+    layout->setStretchFactor( labelTitle, 1 );
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
 
     QString directory;
@@ -902,8 +902,10 @@ void ImageEffect_WhiteBalance::slotUser2()
 
         fscanf (fp, "%*s %s", buf1);
 
-        // Smoothing settings.
-        fscanf (fp, "%*s %s %s %s %s %s", buf1, buf2, buf3, buf4, buf5);
+        fscanf (fp, "%*s %s %s %s %s %s %s %s", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
+        fclose(fp);
+        
+        blockSignals(true);
         m_temperatureInput->setValue( atof(buf1) );
         m_darkInput->setValue( atof(buf2) );
         m_blackInput->setValue( atof(buf3) );
@@ -911,8 +913,9 @@ void ImageEffect_WhiteBalance::slotUser2()
         m_gammaInput->setValue( atof(buf5) );
         m_saturationInput->setValue( atof(buf6) );
         m_greenInput->setValue( atof(buf7) );
-
-        fclose(fp);
+        m_histogramWidget->reset();
+        blockSignals(false);
+        slotEffect();  
         }
     else
         {
@@ -953,7 +956,7 @@ void ImageEffect_WhiteBalance::slotUser3()
         sprintf (buf5, "%5.3f", m_gammaInput->value());
         sprintf (buf6, "%5.3f", m_saturationInput->value());
         sprintf (buf7, "%5.3f", m_greenInput->value());
-        fprintf (fp, "SETTINGS: %s %s %s\n", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
+        fprintf (fp, "SETTINGS: %s %s %s %s %s %s %s\n", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
 
         fclose (fp);
         }
