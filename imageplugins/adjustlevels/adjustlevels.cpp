@@ -43,6 +43,7 @@
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -305,7 +306,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image using picker "
+                                                   "color tools to select shadow, middle, and highlight tones for ajust levels point in Red, "
+                                                   "Green, Blue, and Luminosity Channels."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
     QFrame *frame3 = new QFrame(gbox4);
@@ -314,7 +317,11 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
-
+    
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
+                                                      "will be will be over-colored. This haven't effect to final rendering."));
+                                                      
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
     adjustSize();
@@ -335,6 +342,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const QColor &, bool )));             
 
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));      
+                        
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
 
@@ -554,7 +564,7 @@ void AdjustLevelDialog::slotEffect()
     uint* desData = new uint[w*h];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);

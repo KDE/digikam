@@ -94,7 +94,7 @@ public:
     void   levelsWhiteToneAdjustByColors(int channel, QColor color);
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
-    void   levelsLutSetup(int nchannels);
+    void   levelsLutSetup(int nchannels, bool overIndicator=false);
     void   levelsLutProcess(uint *srcPR, uint *destPR, int w, int h);
 
     // Methods for to set manually the levels values.        

@@ -30,6 +30,7 @@ class QComboBox;
 class QSpinBox;
 class QPushButton;
 class QHButtonGroup;
+class QCheckBox;
 
 class KDoubleSpinBox;
 class KGradientSelector;
@@ -101,6 +102,8 @@ private:
     QPushButton               *m_pickBlack;
     QPushButton               *m_pickGray;
     QPushButton               *m_pickWhite;
+    
+    QCheckBox                    *m_overExposureIndicatorBox;
     
     QHButtonGroup             *m_pickerColorButtonGroup;
     

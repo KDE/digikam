@@ -330,7 +330,7 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
 
 // This method is inspired of Gimp2.0 
 // app/base/gimplut.c::gimp_lut_setup 
-void ImageLevels::levelsLutSetup(int nchannels)
+void ImageLevels::levelsLutSetup(int nchannels, bool overIndicator)
 {
     int    i; 
     uint   v;
@@ -355,7 +355,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
           {
           // to add gamma correction use func(v ^ g) ^ 1/g instead. 
           val = 255.0 * levelsLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
-          
+          if (overIndicator && val > 255) val = 0;
           m_lut->luts[i][v] = (uchar)CLAMP (val, 0, 255);
           }
        }

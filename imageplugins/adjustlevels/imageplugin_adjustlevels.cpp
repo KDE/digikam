@@ -4,7 +4,7 @@
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
 
 ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
-                : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
+                        : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     new KAction(i18n("Levels Adjust..."), "adjustlevels", 0, 
                 this, SLOT(slotLevelsAdjust()),
