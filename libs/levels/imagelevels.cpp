@@ -589,7 +589,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 }
 
 // This method is inspired of Gimp2.0 
-// app/base/gimpleveltool.c::gimp_levels_tool_settings_load
+// app/base/gimpleveltool.c::gimp_levels_tool_settings_save
 bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
 {
     // TODO : support KURL !
