@@ -1,4 +1,4 @@
-SUBDIRS = adjustlevels solarize despeckle
+SUBDIRS = adjustlevels solarize despeckle oilpaint
 
 AUTOMAKE_OPTIONS = foreign 
 

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Oil Paint Image Plugin
+Comment=Oil paint image effect plugin for digikam
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+X-KDE-Library=digikamimageplugin_oilpaint
+author=Gilles Caulier, caulier dot gilles at free dot fr

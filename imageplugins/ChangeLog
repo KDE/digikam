@@ -1,3 +1,7 @@
+v0.4.0 - 08/26/04
+----------------------------------------------------------------------------
+    * Added new Oil painting effect plugin using KDEImageEffect API.
+    
 v0.3.0 - 08/25/04
 ----------------------------------------------------------------------------
     * Added new noise reduction filter 'Despeckle' plugin using KDEImageEffect API.

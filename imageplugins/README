@@ -1,10 +1,5 @@
 DIGIKAMIMAGEPLUGINS
 
-Authors :
-----------------------------------------------------------------------
-- Gilles Caulier    <caulier dot gilles at free.fr>
-
-
 Resume :
 ----------------------------------------------------------------------
 Digikam uses a plugin architecture for additional functionality in ImageEditor.
@@ -13,6 +8,7 @@ Currently implemented plugins are:
  1) AdjustLevels       : A plugin for to adjust the image histogram levels manually.
  2) SolarizeImage      : A plugin for to solarize an image.
  3) Despeckle          : A noise reduction filter.
+ 3) OilPaint           : An oil painting effect filter.
 
 Contact :
 -----------------------------------------------------------------------
