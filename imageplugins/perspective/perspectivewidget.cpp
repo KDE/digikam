@@ -565,7 +565,7 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
 
     // "Outside" a channel is transparency, not the bg color  
   
-    bg_color[0] = 0; // FIXME !
+    bg_color[0] = 0; 
 
     // Find the inverse of the transformation matrix  
   
