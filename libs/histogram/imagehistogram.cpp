@@ -49,8 +49,6 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h)
 
 ImageHistogram::~ImageHistogram()
 { 
-    delete [] m_imageData;
-    
     if (m_histogram)
        delete [] m_histogram;
 }
