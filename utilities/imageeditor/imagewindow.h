@@ -34,6 +34,7 @@
 
 class QPopupMenu;
 class QLabel;
+
 class KAccel;
 class KAction;
 
@@ -128,7 +129,6 @@ private slots:
     void slotEscapePressed();
 
     void slotResize();
-    void slotRotate();
     
     void slotContextMenu();
     void slotZoomChanged(float zoom);

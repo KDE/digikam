@@ -156,11 +156,6 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         actionCollection(),
                                         "rotate_270") );
 
-    m_rotateAction->insert( new KAction(i18n("&Free Rotation..."),
-                                        0, 0, this, SIGNAL(signalRotate()),
-                                        actionCollection(),
-                                        "imageview_freeRotation") );
-
     m_flipAction = new KActionMenu(i18n("Flip"),
                                         "flip_image",
                                         actionCollection(),

@@ -65,7 +65,6 @@ public:
     QRect getSelectedArea();
 
     void resizeImage(int w, int h);
-    void rotateImage(double angle);
 
     void setBackgroundColor(const QColor& color);
     void setExifOrient(bool exifOrient);

@@ -557,40 +557,6 @@ void ImlibInterface::resize(int w, int h)
     imlib_context_pop();
 }
 
-void ImlibInterface::rotate(double angle)
-{
-    imlib_context_push(d->context);
-
-    imlib_context_set_image(d->image);
-    
-    // Imlib2 use an angle in Radian, not in Degrees. We must converting that !
-    Imlib_Image im = imlib_create_rotated_image( angle * PI / 180.0 );
-    
-    int d1 = abs((int)((double)(d->origHeight)*sin( angle * PI / 180.0) ));
-    int d2 = abs((int)((double)(d->origWidth)*cos( angle * PI / 180.0) ));
-    int d3 = abs((int)((double)(d->origWidth)*sin( angle * PI / 180.0) ));
-    int d4 = abs((int)((double)(d->origHeight)*cos( angle * PI / 180.0) ));
-    
-    imlib_free_image();
-    imlib_context_set_image(im);
-    
-    int center_x = (int)((float)(imlib_image_get_width()) / 2.0);
-    int center_y = (int)((float)(imlib_image_get_height()) / 2.0);
-        
-    Imlib_Image im2 = imlib_create_cropped_image(center_x - (int)((float)(d1 + d2) / 2.0),
-                                                 center_y - (int)((float)(d3 + d4) / 2.0),
-                                                 d1 + d2, d3 + d4);
-    
-    imlib_context_set_image(im2);
-    d->image = im2;
-    
-    imlib_context_set_image(d->image);
-    
-    d->origWidth = imlib_image_get_width();
-    d->origHeight = imlib_image_get_height();
-    imlib_context_pop();
-}
-
 void ImlibInterface::changeGamma(double gamma)
 {
     imlib_context_push(d->context);
