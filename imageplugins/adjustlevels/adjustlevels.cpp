@@ -502,7 +502,7 @@ void AdjustLevelDialog::slotEffect()
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
-    m_levels->levelLutProcess(orgData, desData, w, h);
+    m_levels->levelsLutProcess(orgData, desData, w, h);
 
     ifaceDest->putPreviewData(desData);
     m_previewTargetWidget->update();
@@ -530,7 +530,7 @@ void AdjustLevelDialog::slotOk()
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
-    m_levels->levelLutProcess(orgData, desData, w, h);
+    m_levels->levelsLutProcess(orgData, desData, w, h);
 
     ifaceDest->putOriginalData(desData);
 
