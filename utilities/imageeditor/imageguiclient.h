@@ -79,8 +79,9 @@ signals:
     
 private slots:
 
-    void slotBugReport();
     void slotHelp();
+    void slotContextHelpActivated();
+    void slotBugReport();
     void slotAboutApp();
     void slotAboutKDE();
 

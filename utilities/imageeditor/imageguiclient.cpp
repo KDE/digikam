@@ -19,6 +19,14 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+ 
+// Qt includes.
+
+#include <qwhatsthis.h>
+
+#if defined Q_WS_X11 && ! defined K_WS_QTONLY
+#include <qxembed.h>
+#endif
 
 // KDE includes.
 
@@ -36,8 +44,8 @@
 #include "imageguiclient.h"
 
 ImageGUIClient::ImageGUIClient(QWidget *parent)
-    : QObject(parent), Digikam::GUIClient(),
-      m_parent(parent)
+              : QObject(parent), Digikam::GUIClient(),
+                m_parent(parent)
 {
     m_navPrevAction = new KAction(i18n("&Previous"), "back",
                                   KStdAccel::shortcut( KStdAccel::Prior),
@@ -175,7 +183,9 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         SIGNAL(signalShowImagePluginsHelp()),
                                         actionCollection(),
                                         "imageview_helpimageplugins");
-                         
+
+    KStdAction::whatsThis(this, SLOT(slotContextHelpActivated()), actionCollection(),
+                         "imageview_contexthelp");             
     KStdAction::reportBug(this, SLOT(slotBugReport()), actionCollection(),
                          "imageview_reportbug");
     KStdAction::aboutApp(this, SLOT(slotAboutApp()), actionCollection(),
@@ -224,6 +234,7 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/DefineGroup/Generic/ ");
 
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_help/ ");
+    guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_contexthelp/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_helpimageplugins/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_reportbug/ ");
@@ -269,9 +280,22 @@ void ImageGUIClient::slotHelp()
     KApplication::kApplication()->invokeHelp( "imageeditor.anchor", "digikam" );
 }
 
+void ImageGUIClient::slotContextHelpActivated()
+{
+    QWhatsThis::enterWhatsThisMode();
+    QWidget* w = QApplication::widgetAt( QCursor::pos(), true );
+    while ( w && !w->isTopLevel() && !w->inherits("QXEmbed")  )
+        w = w->parentWidget();
+#if defined Q_WS_X11 && ! defined K_WS_QTONLY
+     if ( w && w->inherits("QXEmbed") )
+        (( QXEmbed*) w )->enterWhatsThisMode();
+#endif
+
+}
+
 void ImageGUIClient::slotBugReport()
 {
-    KBugReport dlg(kapp->activeWindow());//, bool modal=true, const KAboutData *aboutData=0L)
+    KBugReport dlg(kapp->activeWindow());
     dlg.exec();
 }
 
