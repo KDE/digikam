@@ -124,7 +124,7 @@ KDE_FIND_IMLIB2_CONFIG
      
 if test -z "$ac_imlib2_config"; then
   AC_MSG_WARN([Imlib 2.x not found.])
-  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
 fi
 
 #------------------------------------------------------------------
