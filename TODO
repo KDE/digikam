@@ -22,30 +22,26 @@ x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer 
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.7.0>
 x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.7.0>
 x Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
-o Add image date from EXIF data for each album item.               <Ralf Holzer    - 0.7.0>
+x Added subfolders Albums support.
+x Added tagging images feature.
+x Option to hide image names.
+x Added a test for checking if a camera name is already in the 
+  Digikam camera list when a new camera is added.
+o View/Hide main toolbar/statusbar.
+o Add image date from EXIF data for each album item.               
 o Added config saving of Albums opened in Albums treeview.         
-o Added dockable main widgets like ShowImg.                        
-o Added subfolders Albums support.
-o Added tagging images feature.
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
-o View/Hide main toolbar/statusbar.
 o Backup and retrieve image comments and album properties.
 o Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
   with KURLBar::writeItem API (settings is in 
   ~/.kde/share/config/kdeglobals file).
 o Save relative sizes of treeview and thumbnailview.
 o Option to hide header in thumbnail view.
-o Option to hide image names.
-o Added a test for checking if a camera name is already in the 
-  Digikam camera list when a new camera is added.
-
 
 CameraClient:
 -------------
 
-o Lauch the Albums properties when a new Album is added 
-  to the Database (using DCOP).                                    
 o Make Folder Ability.
 o Delete Folder Ability.
 o Camera Configure Dialog.
@@ -55,17 +51,15 @@ o DnD Upload (moved to wishlist. in case of the future parts
 o View/Hide main toolbar/statusbar.
 o Enable/Disable thumnails generation (bandwith limitation
   in slow camera connexion).
-o Sorting the download Album list in the QComboBox Widget.
 
   
 Thumnails interface:
 --------------------
 
-o Using embedded image for thumnails generation.                   
 x Using imlib2 for to provide thumbnails if 
   embedded image unavaible.                                        <Gilles Caulier - 0.7.0>  
-o Thumnails generation for RAW files.
 x EXIF autorotate.                                                 <Ralf Holzer    - 0.7.0>
+o Thumnails generation for RAW files.
 
   
 Image Viewer/Editor :
