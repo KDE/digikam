@@ -174,14 +174,14 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     topLayout->addMultiCellWidget(m_borderWidth, 3, 3, 1, 3);
         
     m_labelForeground = new QLabel(plainPage());
-    m_foregroundColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), plainPage() );
+    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), plainPage() );
     m_labelBackground = new QLabel(plainPage());
-    m_backgroundColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), plainPage() );
+    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), plainPage() );
 
     topLayout->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
-    topLayout->addMultiCellWidget(m_foregroundColorButton, 4, 4, 1, 1);
+    topLayout->addMultiCellWidget(m_firstColorButton, 4, 4, 1, 1);
     topLayout->addMultiCellWidget(m_labelBackground, 4, 4, 2, 2);
-    topLayout->addMultiCellWidget(m_backgroundColorButton, 4, 4, 3, 3);
+    topLayout->addMultiCellWidget(m_secondColorButton, 4, 4, 3, 3);
     
     // -------------------------------------------------------------
 
@@ -206,10 +206,10 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     connect(m_borderWidth, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));            
 
-    connect(m_foregroundColorButton, SIGNAL(changed(const QColor &)),
+    connect(m_firstColorButton, SIGNAL(changed(const QColor &)),
             this, SLOT(slotColorForegroundChanged(const QColor &)));            
 
-    connect(m_backgroundColorButton, SIGNAL(changed(const QColor &)),
+    connect(m_secondColorButton, SIGNAL(changed(const QColor &)),
             this, SLOT(slotColorBackgroundChanged(const QColor &)));            
 }
 
@@ -282,8 +282,8 @@ void ImageEffect_Border::slotUser1()
 {
     m_borderType->blockSignals(true);
     m_borderWidth->blockSignals(true);
-    m_foregroundColorButton->blockSignals(true);
-    m_backgroundColorButton->blockSignals(true);
+    m_firstColorButton->blockSignals(true);
+    m_secondColorButton->blockSignals(true);
         
     m_borderType->setCurrentItem(0);    // Solid.
     m_borderWidth->setValue(100);
@@ -292,8 +292,8 @@ void ImageEffect_Border::slotUser1()
 
     m_borderType->blockSignals(false);
     m_borderWidth->blockSignals(false);
-    m_foregroundColorButton->blockSignals(false);
-    m_backgroundColorButton->blockSignals(false);
+    m_firstColorButton->blockSignals(false);
+    m_secondColorButton->blockSignals(false);
 } 
 
 void ImageEffect_Border::slotTimer()
@@ -392,10 +392,10 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 {
     m_labelForeground->setText(i18n("First:"));
     m_labelBackground->setText(i18n("Second:"));
-    QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the foreground color of the border."));
-    QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the Background color of the border."));
-    m_foregroundColorButton->setEnabled(true);
-    m_backgroundColorButton->setEnabled(true);
+    QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the foreground color of the border."));
+    QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the Background color of the border."));
+    m_firstColorButton->setEnabled(true);
+    m_secondColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
     m_labelBackground->setEnabled(true);
     m_borderWidth->setEnabled(true);
@@ -403,23 +403,23 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
     switch (borderType)
        {
        case 0: // Solid.
-          m_foregroundColorButton->setColor( m_solidColor );
-          m_backgroundColorButton->setEnabled(false);
+          m_firstColorButton->setColor( m_solidColor );
+          m_secondColorButton->setEnabled(false);
           m_labelBackground->setEnabled(false);
           break;
        
        case 1: // Niepce.
-          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the main border."));
-          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the line."));
-          m_foregroundColorButton->setColor( m_niepceBorderColor );
-          m_backgroundColorButton->setColor( m_niepceLineColor );
+          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the main border."));
+          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the line."));
+          m_firstColorButton->setColor( m_niepceBorderColor );
+          m_secondColorButton->setColor( m_niepceLineColor );
           break;
 
        case 2: // Beveled.
-          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the upper left area."));
-          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the lower right area."));
-          m_foregroundColorButton->setColor( m_bevelUpperLeftColor );
-          m_backgroundColorButton->setColor( m_bevelLowerRightColor );
+          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the upper left area."));
+          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the lower right area."));
+          m_firstColorButton->setColor( m_bevelUpperLeftColor );
+          m_secondColorButton->setColor( m_bevelLowerRightColor );
           break;
 
        case 3: // Decorative Pine.
@@ -438,10 +438,10 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
-          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the first line."));
-          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the second line."));
-          m_foregroundColorButton->setColor( m_decorativeFirstColor );
-          m_backgroundColorButton->setColor( m_decorativeSecondColor );
+          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the first line."));
+          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the second line."));
+          m_firstColorButton->setColor( m_decorativeFirstColor );
+          m_secondColorButton->setColor( m_decorativeSecondColor );
           break;
        }
 

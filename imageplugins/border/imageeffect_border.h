@@ -83,8 +83,8 @@ private:
 
     KIntNumInput         *m_borderWidth;
     
-    KColorButton         *m_foregroundColorButton;
-    KColorButton         *m_backgroundColorButton;
+    KColorButton         *m_firstColorButton;
+    KColorButton         *m_secondColorButton;
     
     Digikam::ImageWidget *m_previewWidget;
 
