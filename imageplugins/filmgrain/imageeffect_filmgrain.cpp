@@ -136,7 +136,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Film sensibility:"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Film sensibility (ASA):"), plainPage());
     
     m_sensibilitySlider = new QSlider(0, 14, 1, 2, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
@@ -184,7 +184,6 @@ void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
     m_sensibilitySlider->setValue(2);
-    slotEffect();
     blockSignals(false);
 } 
 
