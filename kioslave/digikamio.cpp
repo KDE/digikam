@@ -44,6 +44,7 @@ extern "C"
 #include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>
+#include <utime.h>
 #include <errno.h>
 #include <sqlite.h>
 }
@@ -411,6 +412,18 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
                      .arg(escapeString(dest.fileName()))
                      .arg(oldDirID)
                      .arg(escapeString(src.fileName())) );
+
+            // also set the filetime to that of the original file
+            struct utimbuf t;
+            t.actime  = buff_src.st_atime;
+            t.modtime = buff_src.st_mtime;
+
+            if ( ::utime( _dest.data(), &t ) != 0 )
+            {
+                kdWarning() << k_funcinfo
+                            << "Failed to set datetime of destination file "
+                            << "to that of of original file" << endl;
+            }
         }
 
         execSql( "COMMIT TRANSACTION;");
@@ -445,6 +458,18 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
             error(KIO::ERR_COULD_NOT_WRITE, dest.prettyURL());
             failed = true;
             return;
+        }
+
+        // also set the filetime to that of the original file
+        struct utimbuf t;
+        t.actime  = buff_src.st_atime;
+        t.modtime = buff_src.st_mtime;
+
+        if ( ::utime( _dest.data(), &t ) != 0 )
+        {
+            kdWarning() << k_funcinfo
+                        << "Failed to set datetime of destination file "
+                        << "to that of of original file" << endl;
         }
     }
 }
