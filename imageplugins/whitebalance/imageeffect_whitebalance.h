@@ -46,7 +46,6 @@ class ImageGuideWidget;
 class ImageWidget;
 class ColorGradientWidget;
 class HistogramWidget;
-class ImageCurves;
 }
 
 namespace DigikamWhiteBalanceImagesPlugin
@@ -79,9 +78,6 @@ private:
     double                        m_dark;
     double                        m_green;
 
-    int                           m_blackExposure;
-    int                           m_grayExposure;
-    int                           m_whiteExposure;
     int                           m_BP, m_WP;
     
     uint                          m_rgbMax;
@@ -91,12 +87,6 @@ private:
         
 private:
 
-    enum BWMethod 
-    {
-    ColorPicker=0,
-    CorrectionFilter
-    };
-   
     enum HistogramScale
     {
     Linear=0,
@@ -133,15 +123,6 @@ private:
     QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
-    QComboBox                    *m_wbMethod;
-    
-    QPushButton                  *m_blackColorButton;
-    QPushButton                  *m_grayColorButton;
-    QPushButton                  *m_whiteColorButton;
-    
-    QColor                        m_blackColor;
-    QColor                        m_grayColor;
-    QColor                        m_whiteColor;
     
     QLabel                       *m_temperatureLabel;
     QLabel                       *m_darkLabel;
@@ -150,16 +131,9 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
-
-    QLabel                       *m_blackPickColorLabel;    
-    QLabel                       *m_grayPickColorLabel;    
-    QLabel                       *m_whitePickColorLabel;    
     
     QGridLayout                  *m_grid;
     
-    KIntNumInput                 *m_blackExposureInput;
-    KIntNumInput                 *m_grayExposureInput;
-    KIntNumInput                 *m_whiteExposureInput;
     KIntNumInput                 *m_temperatureInput;
     
     KDoubleNumInput              *m_darkInput;
@@ -170,7 +144,6 @@ private:
     KDoubleNumInput              *m_greenInput;
     
     Digikam::HistogramWidget     *m_histogramWidget;
-    Digikam::ImageCurves         *m_whiteBalanceCurves;
     
     Digikam::ColorGradientWidget *m_hGradient;
     
@@ -179,13 +152,9 @@ private:
 
 private:
         
-    void setWhiteColor(QColor color);
-    void setGrayColor(QColor color);
-    void setBlackColor(QColor color);
     void setRGBmult(void);
     void setLUTv(void);
-    void whiteBalanceCorrectionFilter(uint *data, int w, int h);
-    void whiteBalanceColorPicker(uint *data, int w, int h);
+    void whiteBalance(uint *data, int w, int h);
 
 private slots:
 
@@ -196,10 +165,6 @@ private slots:
     void slotColorSelectedFromImage( const QColor &color );
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
-    void slotMethodChanged(int method);
-    void slotBlackColorPickerToggle(bool b);
-    void slotGrayColorPickerToggle(bool g);
-    void slotWhiteColorPickerToggle(bool w);
     void slotTemperaturePresetChanged(int tempPreset);
 };
 
