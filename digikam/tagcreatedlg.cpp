@@ -61,7 +61,8 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     m_titleEdit = new QLineEdit(plainPage());
     gl->addWidget(m_titleEdit, 0, 1);
 
-
+    setFocusProxy(m_titleEdit);
+    
     QLabel *iconTextLabel = new QLabel(plainPage());
     iconTextLabel->setText(i18n("Set Icon: "));
     gl->addWidget(iconTextLabel, 1, 0);
@@ -152,6 +153,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     m_titleEdit->setText(album->getTitle());
     gl->addWidget(m_titleEdit, 0, 1);
 
+    setFocusProxy(m_titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
     iconTextLabel->setText(i18n("Set Icon: "));

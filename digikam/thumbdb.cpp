@@ -23,6 +23,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qdir.h>
+#include <qfile.h>
 #include <qcstring.h>
 #include <qdatastream.h>
 
@@ -64,7 +65,8 @@ ThumbDB::ThumbDB()
     QString dbPath(QDir::homeDirPath() +
                  "/.thumbnails/digikam-thumbnails.db");
 
-    d->db = gdbm_open((char*)dbPath.latin1(), 1024, GDBM_WRCREAT|GDBM_FAST,
+    const char* path = QFile::encodeName(dbPath);
+    d->db = gdbm_open((char*)path, 1024, GDBM_WRCREAT|GDBM_FAST,
                       0666, 0);
 }
 

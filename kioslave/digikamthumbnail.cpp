@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qimage.h>
 #include <qdatastream.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -177,7 +178,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     QString format=QImageIO::imageFormat(path);
     if (format !="JPEG") return false;
     
-    FILE* inputFile=fopen(path.latin1(), "rb");
+    FILE* inputFile=fopen(QFile::encodeName(path), "rb");
     if(!inputFile)
         return false;
 
@@ -267,7 +268,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path)
 {
     Imlib_Image imlib2_im =
-        imlib_load_image_immediately_without_cache(path.latin1());
+        imlib_load_image_immediately_without_cache(QFile::encodeName(path));
         
     if (imlib2_im == NULL) {
         return false;

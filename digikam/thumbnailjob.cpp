@@ -280,7 +280,7 @@ bool ThumbnailJob::statThumbnail()
     if (!d->dir)
     {
         struct stat stbuf;
-        if (::stat(file.latin1(), &stbuf) == -1)
+        if (::stat(QFile::encodeName(file), &stbuf) == -1)
         {
             // stat failed
             return false;
@@ -292,7 +292,7 @@ bool ThumbnailJob::statThumbnail()
         }
     }
         
-    d->image = imlib_load_image_immediately_without_cache(file.latin1());
+    d->image = imlib_load_image_immediately_without_cache(QFile::encodeName(file));
     if (!d->image)
     {
         return false;
@@ -529,7 +529,7 @@ void ThumbnailJob::slotTimeout()
     }
         
     struct stat stbuf;
-    if (::stat(d->curr_item->url().path().latin1(), &stbuf) == -1)
+    if (::stat(QFile::encodeName(d->curr_item->url().path()), &stbuf) == -1)
     {
         kdWarning() << k_funcinfo << "Stat failed for url "
                     << d->curr_item->url().prettyURL() << endl;

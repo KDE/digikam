@@ -338,7 +338,7 @@ bool AlbumFileCopyMove::fileMove(PAlbum* srcAlbum, PAlbum* destAlbum,
     QString src  = srcAlbum->getKURL().path(1)  + srcFile;
     QString dest = destAlbum->getKURL().path(1) + destFile;
     
-    return (::rename(src.latin1(), dest.latin1()) == 0);
+    return (::rename(QFile::encodeName(src), QFile::encodeName(dest)) == 0);
 }
 
 bool AlbumFileCopyMove::fileStat(PAlbum* album, const QString& name)

@@ -33,6 +33,7 @@ extern "C"
 // Qt includes.
 
 #include <qstring.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -76,7 +77,7 @@ int ExifRestorer::readFile(const QString& filename, ReadMode mode)
 
     std::ifstream filestream;
 
-    filestream.open(filename.latin1(), ios::binary | ios::in);
+    filestream.open(QFile::encodeName(filename), ios::binary | ios::in);
     if (!filestream.good()) {
         kdWarning() << "Failed to Open file" << endl;
         return -1;
@@ -224,7 +225,7 @@ int ExifRestorer::readFile(const QString& filename, ReadMode mode)
 
 int ExifRestorer::writeFile(const QString& filename)
 {
-    std::ofstream outStream (filename.latin1(), ios::binary | ios::out);
+    std::ofstream outStream (QFile::encodeName(filename), ios::binary | ios::out);
 
     if (!outStream) {
         kdWarning() << "Error in opening output file" << endl;

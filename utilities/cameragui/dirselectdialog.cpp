@@ -86,7 +86,6 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
     m_urlsToList.clear();
     while (!dirToList.equals(m_rootURL, true))
     {
-        //qDebug( "List: %s", dirToList.url().latin1());
         m_urlsToList.push( dirToList );
         dirToList = dirToList.upURL();
         dirToList.cleanPath();
@@ -136,7 +135,6 @@ void DirSelectDialog::openNextDir( KFileTreeViewItem* parent)
 
 void DirSelectDialog::slotNextDirToList( KFileTreeViewItem* item )
 {
-    //qDebug( "Listed: %s", item->fileItem()->url().url().latin1() );
     m_treeView->ensureItemVisible( item );
     QRect r = m_treeView->itemRect( item );
     if ( r.isValid() )

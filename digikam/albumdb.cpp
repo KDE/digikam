@@ -68,7 +68,7 @@ void AlbumDB::setDBPath(const QString& path)
     m_valid = false;
     
     char *errMsg = 0;
-    m_db = sqlite_open(path.latin1(), 0, &errMsg);
+    m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
         kdWarning() << k_funcinfo << "Cannot open database: "

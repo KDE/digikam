@@ -25,6 +25,7 @@
 #include <qstringlist.h>
 #include <qimage.h>
 #include <qdom.h>
+#include <qfile.h>
 
 #include <iostream>
 
@@ -560,7 +561,7 @@ int GPCamera::downloadItem(const QString& folder,
     delete status;
     status = 0;
 
-    if (gp_file_save(cfile, saveFile.latin1()) != GP_OK) {
+    if (gp_file_save(cfile, QFile::encodeName(saveFile)) != GP_OK) {
         gp_file_unref(cfile);
         return GPError;
     }
@@ -640,7 +641,7 @@ int GPCamera::uploadItem(const QString& folder,
     CameraFile *cfile;
     gp_file_new(&cfile);
 
-    if (gp_file_open(cfile, localFile.local8Bit()) != GP_OK) {
+    if (gp_file_open(cfile, QFile::encodeName(localFile)) != GP_OK) {
         gp_file_unref(cfile);
         return GPError;
     }
