@@ -478,12 +478,12 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertItem(i18n("Open With ..."), openWithMenu, 11);
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("text_block"),
-                       i18n("Edit Comments ..."), 12);
+                       i18n("Edit Comments and Tags ..."), 12);
     popmenu.insertItem(SmallIcon("text_italic"),
                        i18n("View Exif Information ..."), 13);
     popmenu.insertItem(SmallIcon("text_italic"),
-                       i18n("Set Exif Orientation ..."), exifOrientationMenu, 17);
-    popmenu.insertItem(i18n("Properties"), 14);
+                       i18n("Set Exif Orientation"), exifOrientationMenu, 17);
+    popmenu.insertItem(i18n("Properties ..."), 14);
     popmenu.insertSeparator();
 
     // Merge in the KIPI plugins actions ----------------------------

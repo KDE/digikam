@@ -238,8 +238,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_view");
 
-    mImageCommentsAction = new KAction(i18n("Edit Image Comments"),
-                                    "imagecomment",
+    mImageCommentsAction = new KAction(i18n("Edit Image Comments and Tags"),
                                     Key_F3,
                                     mView,
                                     SLOT(slot_imageCommentsEdit()),
@@ -247,7 +246,6 @@ void DigikamApp::setupActions()
                                     "image_comments");
 
     mImageExifAction = new KAction(i18n("View Exif Information"),
-                                    "exifinfo",
                                     Key_F6,
                                     mView,
                                     SLOT(slot_imageExifInfo()),
@@ -255,7 +253,6 @@ void DigikamApp::setupActions()
                                     "image_exif");
 
     mImageRenameAction = new KAction(i18n("Rename"),
-                                    "pencil",
                                     Key_F2,
                                     mView,
                                     SLOT(slot_imageRename()),
