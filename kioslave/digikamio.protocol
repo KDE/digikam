@@ -15,6 +15,7 @@ Description=Digikam IO kioslave
 Description[fr]=module d'entrées/sorties de digiKam
 Description[pt]='Kioslave' Digikam IO
 Description[pt_BR]='Kioslave' Digikam IO
+Description[ru]=Обработчик ввода-вывода digikam
 Description[sv]=Digikam I/O-slav
 Description[ta]=டிஜிகேம் IO kioslave
 Class=:local
