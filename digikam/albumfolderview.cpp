@@ -765,9 +765,21 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
     
     if(!album->getIcon().isEmpty())
     {
+        if(!KURL::isRelativeURL(album->getIcon()))
+        {        
+            // An older version saved the icon paths with an absolute path to the
+            // db. This caused trouble if the album was moved to another parent.
+            // Here is the absolute path  changed into an relative path 
+            // in the album folder
+            QString errMsg;
+            KURL iconURL(album->getIcon());
+            albumMan_->updatePAlbumIcon(album, 
+                                        iconURL.filename(false), false, errMsg);
+        }
+        
         if (iconThumbJob_.isNull())
         {
-            iconThumbJob_ = new Digikam::ThumbnailJob(album->getIcon(),
+            iconThumbJob_ = new Digikam::ThumbnailJob(album->getIconAbsolute(),
                                                 (int)ThumbnailSize::Tiny,
                                                 false);
             connect(iconThumbJob_,
@@ -785,7 +797,7 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
         }
         else
         {
-             iconThumbJob_->addItem(album->getIcon());
+             iconThumbJob_->addItem(album->getIconAbsolute());
         }    
     }
     else
@@ -822,9 +834,9 @@ void::AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
     PAlbum *album = AlbumManager::instance()->findPAlbum( url.directory() );
     if(!album)
         return;
-            
+        
     album->deleteIcon();
-    
+
     AlbumFolderItem *folderItem = 
         static_cast<AlbumFolderItem*>(album->getViewItem());    
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
@@ -834,8 +846,8 @@ void::AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
                                                KIcon::DefaultState,
                                                0, true));
 
-     QString errMsg;
-     AlbumManager::instance()->updatePAlbumIcon(album, "", false, errMsg);
+    QString errMsg;
+    AlbumManager::instance()->updatePAlbumIcon(album, "", false, errMsg);
 }
 
 

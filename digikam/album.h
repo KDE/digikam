@@ -121,7 +121,8 @@ public:
     QString    getPrettyURL() const;
     KURL       getKURL() const;
     KFileItem* fileItem() const;
-
+    QString    getIconAbsolute() const;
+    
 private:
 
     QString    m_collection;

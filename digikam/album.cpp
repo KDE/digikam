@@ -339,6 +339,14 @@ KFileItem* PAlbum::fileItem() const
     return m_fileItem;    
 }
 
+QString PAlbum::getIconAbsolute() const
+{
+    KURL u(getKURL());
+    u.addPath(m_icon);
+    
+    return u.prettyURL();
+}
+
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)

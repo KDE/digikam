@@ -414,7 +414,8 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
     {
         PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
-        if(album && (album->getIcon() == iconItem->fileItem()->url().prettyURL()))
+        if(album && (album->getIconAbsolute() == 
+                     iconItem->fileItem()->url().prettyURL()))
         {
             QString err;
             AlbumManager::instance()->updatePAlbumIcon( album,  
@@ -660,7 +661,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
 
         QString err;
         AlbumManager::instance()->updatePAlbumIcon( album, 
-            iconItem->fileItem()->url().prettyURL(), true, err );
+                iconItem->fileItem()->url().filename(false), true, err );
     }
 }
 
@@ -741,7 +742,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     {
         QString err;
         AlbumManager::instance()->updatePAlbumIcon( album,  
-            item->fileItem()->url().prettyURL(), false, err );        
+            item->fileItem()->url().filename(false), false, err );                
     }       
 }
 
@@ -1570,7 +1571,7 @@ void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
         QString err;
         PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
         AlbumManager::instance()->updatePAlbumIcon( album,
-            iconItem->fileItem()->url().prettyURL(), true, err );
+            iconItem->fileItem()->url().filename(false), true, err );
     }
 }
 
