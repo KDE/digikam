@@ -27,6 +27,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
 
@@ -42,6 +43,10 @@
 #include <kdeversion.h>
 #include <dcopclient.h>
 
+// KIPI Includes.
+
+#include <libkipi/version.h>
+
 // Local includes.
 
 #include "version.h"
@@ -49,7 +54,7 @@
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
-static const char *description = I18N_NOOP("A Photo-Management Application for KDE");
+//static const char *description = I18N_NOOP("A Photo-Management Application for KDE");
 
 static KCmdLineOptions options[] =
 {
@@ -59,10 +64,13 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
+    QString Description = i18n("A Photo-Management Application for KDE") + "\n" + 
+                          i18n("Using Kipi library version %1").arg(kipi_version);
+    
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("Digikam"),
                           digikam_version,        // Release number available in version.h to the top source dir.
-                          description,
+                          Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2004, Digikam developers team"),
                           0,
