@@ -129,7 +129,7 @@ private:
     
     ExifThumbLabel               *m_exifThumb;
 
-    KExifData                    *mExifData;
+    KExifData                    *m_ExifData;
     
     KExifListView                *m_listview;
     

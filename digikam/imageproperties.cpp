@@ -198,7 +198,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     
     // Exif Viewer init.
     
-    mExifData = 0L;
+    m_ExifData = 0L;
     
     setupExifViewer();
         
@@ -223,6 +223,9 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
 
 ImageProperties::~ImageProperties()
 {
+    // If there is a currently histogram computation when dialog is closed,
+    // stop it before the m_image data are deleted!
+    m_histogramWidget->stopHistogramComputation();
    
     kapp->config()->setGroup("Image Properties Dialog");
     kapp->config()->writeEntry("Tab Actived", activePageIndex());
@@ -231,8 +234,8 @@ ImageProperties::~ImageProperties()
     
     // For Exif viewer.
     
-    if (mExifData)
-        delete mExifData;
+    if (m_ExifData)
+        delete m_ExifData;
     
     // For histogram viever.
     
@@ -367,14 +370,14 @@ void ImageProperties::slotItemChanged()
        
     m_listview->clear();
     
-    if (mExifData)
-        delete mExifData;
+    if (m_ExifData)
+        delete m_ExifData;
     
-    mExifData = new KExifData;
+    m_ExifData = new KExifData;
     
-    if (mExifData->readFromFile(fileURL.path()))
+    if (m_ExifData->readFromFile(fileURL.path()))
         {
-        QPtrList<KExifIfd> ifdList(mExifData->ifdList());
+        QPtrList<KExifIfd> ifdList(m_ExifData->ifdList());
 
         for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
             {
@@ -385,13 +388,13 @@ void ImageProperties::slotItemChanged()
         
         // Exif embedded thumbnails creation.
     
-        QImage thumbnail(mExifData->getThumbnail());
+        QImage thumbnail(m_ExifData->getThumbnail());
         
         if (!thumbnail.isNull()) 
             {
             m_exifThumb->setFixedSize(thumbnail.size());
             m_exifThumb->setPixmap(QPixmap(thumbnail));
-            m_exifThumb->setOrientationMenu(mExifData);
+            m_exifThumb->setOrientationMenu(m_ExifData);
             }        
         else
             {
@@ -417,15 +420,23 @@ void ImageProperties::slotItemChanged()
     connect(m_HistogramThumbJob,
             SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedHistogramThumbnail(const KURL&)));     
-                                                       
-    m_image.reset();                                            
+
+    // This is necessary to stop computation because m_image.bits() is currently used by
+    // histogram algorithm.
+    m_histogramWidget->stopHistogramComputation();
+    
     m_image.load(fileURL.path());
     
-    if(m_image.depth() < 32)                 // we works always with 32bpp.
-        m_image = m_image.convertDepth(32);
+    if ( !m_image.isNull() )
+       {
+        if(m_image.depth() < 32)                 // we works always with 32bpp.
+            m_image = m_image.convertDepth(32);
        
-    m_image.setAlphaBuffer(true);
-    m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+        m_image.setAlphaBuffer(true);
+        m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+        }
+    else 
+        m_histogramWidget->updateData(0L, 0, 0);
                
     // Setup buttons.
            
