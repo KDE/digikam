@@ -210,9 +210,7 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
-        imlib_image_orientate(-1);
-        imlib_image_flip_horizontal();
+        imlib_image_orientate(1);
         
         ow = imlib_image_get_width();
         oh = imlib_image_get_height();
@@ -225,9 +223,7 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
-        imlib_image_flip_horizontal();
-        imlib_image_flip_vertical();
+        imlib_image_orientate(2);
 
         ow = imlib_image_get_width();
         oh = imlib_image_get_height();
@@ -240,9 +236,7 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
-        imlib_image_orientate(-1);
-        imlib_image_flip_vertical();
+        imlib_image_orientate(3);
 
         ow = imlib_image_get_width();
         oh = imlib_image_get_height();
@@ -255,7 +249,6 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
         imlib_image_flip_horizontal();
         
         ow = imlib_image_get_width();
@@ -269,7 +262,6 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
         imlib_image_flip_vertical();
         
         ow = imlib_image_get_width();
@@ -283,7 +275,6 @@ public:
         {
         if (!im) return;
 
-        imlib_context_set_image(im);
         im = imlib_create_cropped_image(x, y, w, h);
         
         imlib_context_set_image(im);        
@@ -302,8 +293,6 @@ public:
         
         if ( nval <= 5.0 && nval >= 0.0 ) 
             {            
-            imlib_context_set_image(im); 
-            imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_gamma(nval);
             imlib_apply_color_modifier();
             gamma   = nval;
@@ -321,8 +310,6 @@ public:
         
         if ( nval <= 1.0 && nval >= -1.0 ) 
             {
-            imlib_context_set_image(im); 
-            imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_brightness(nval);
             imlib_apply_color_modifier();
             brightness = nval;
@@ -340,8 +327,6 @@ public:
         
         if ( nval <= 10.0 && nval >= -10.0 ) 
             {
-            imlib_context_set_image(im); 
-            imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_contrast(nval);
             imlib_apply_color_modifier();
             contrast = nval;
@@ -378,8 +363,6 @@ private:
     int saveAction(const QString& saveFile) 
         {
         // Apply the modifiers to the image
-        
-        //Imlib_apply_modifiers_to_rgb(idata, im);
         
         imlib_context_set_image(im);
         imlib_apply_color_modifier(); 
@@ -456,7 +439,7 @@ private:
             else
                 TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
                     {
-                    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+                    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
                     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
                     w = TIFFScanlineSize(tif);
                     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
@@ -464,8 +447,7 @@ private:
                 
                     for (y = 0 ; y < imlib_image_get_height() ; ++y)
                         {
-                        //data = im->rgb_data + (y * im->rgb_width * 3);
-                        data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() * 4 );
+                        data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() );
                         TIFFWriteScanline(tif, data, y, 0);
                         }
                     }
