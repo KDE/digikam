@@ -67,7 +67,7 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
-    m_pluginsNumber->setText(i18n("Plugins founded: %1")
+    m_pluginsNumber->setText(i18n("Plugins found: %1")
                              .arg(lista.count()/2));
     
     while(  it != lista.end() )
