@@ -64,11 +64,13 @@ private slots:
     void slotFirst();
     void slotSave();
     void slotSaveAs();
-    void slotAutoFit();
+    void slotFilePrint();
     void slotOpenURL(const KURL& url);
-    void slotToggleFullScreen();
-    void slotEscapePressed();
     void slotFileProperties();
+    
+    void slotToggleFullScreen();
+    void slotAutoFit();
+    void slotEscapePressed();
     void slotToggleShowBar();
     void slotViewHistogram();
     void slotChangeBCG();
@@ -116,6 +118,7 @@ private:
     KAction               *m_saveAction;
     KAction               *m_saveAsAction;
     KAction               *m_propertiesAction;
+    KAction               *m_fileprint;    
     
     KAction               *m_forwardAction;
     KAction               *m_backAction;

@@ -16,6 +16,8 @@
      <Action name="save" />
      <Action name="saveas" />
      <Action name="revert" /> 
+     <Separator/>
+     <Action name="print" />
  </Menu>
 
    <Menu name="Edit" >

@@ -67,6 +67,8 @@
 #include "thumbbar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
+#include "imageprint.h"
+#include "imlibinterface.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
@@ -180,18 +182,23 @@ void ShowFoto::setupActions()
                              this, SLOT(slotFileProperties()),
                              actionCollection(), "file_properties");
 
-    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
-                                        actionCollection(), "revert");
-
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
     
     m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
                                          actionCollection(), "saveas");
+    
+    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+                                        actionCollection(), "revert");
 
     m_revertAction->setEnabled(false);
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
+    
+    m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
+                              CTRL+Key_P,
+                              this, SLOT(slotFilePrint()),
+                              actionCollection(), "print");
     
     // -- Edit actions ----------------------------------------------------------------                     
 
@@ -929,6 +936,7 @@ void ShowFoto::toogleActions(bool val)
     m_rotateAction->setEnabled(val);
     m_flipAction->setEnabled(val);
     m_BCGAction->setEnabled(val);
+    m_fileprint->setEnabled(val);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next()) 
@@ -968,6 +976,38 @@ void ShowFoto::slotConfToolbars()
 void ShowFoto::slotNewToolbarConfig()
 {
     applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+}
+
+void ShowFoto::slotFilePrint()
+{
+    uint* data   = Digikam::ImlibInterface::instance()->getData();
+    int   width  = Digikam::ImlibInterface::instance()->origWidth();
+    int   height = Digikam::ImlibInterface::instance()->origHeight();
+
+    if (!data || !width || !height)
+        return;
+
+    KPrinter printer;
+    printer.setDocName( m_bar->currentItem()->url().filename() );
+    printer.setCreator( "ShowFoto");
+#if KDE_IS_VERSION(3,2,0)
+    printer.setUsePrinterResolution(true);
+#endif
+
+    KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ShowFoto page"));
+
+    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
+    {
+        QImage image((uchar*)data, width, height, 32, 0, 0, QImage::IgnoreEndian);
+        image = image.copy();
+    
+        ImagePrint printOperations(image, printer, m_bar->currentItem()->url().filename());
+        if (!printOperations.printImageWithQt())
+        {
+            KMessageBox::error(this, i18n("Failed to print file: '%1'")
+                               .arg(m_bar->currentItem()->url().filename()));
+        }
+    }
 }
 
 
