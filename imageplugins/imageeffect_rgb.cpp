@@ -60,7 +60,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480,320,frame);
+    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image color balance preview."));
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
@@ -241,6 +241,7 @@ void ImageEffect_RGB::adjustRGB(double r, double g, double b, double a, uint *da
     
     imlib_context_pop();
     imlib_context_free(context);
+    delete [] newData;
 }
 
 

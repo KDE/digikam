@@ -52,12 +52,23 @@
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : KDialogBase(Plain, i18n("Blur image"),
-                  Ok|Cancel, Ok,
-                  parent, 0, true, true)
+                              Help|Ok|Cancel, Ok,
+                              parent, 0, true, true)
 {
+    setHelp("imageviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
+    QVGroupBox *gbox = new QVGroupBox(i18n("Blur image"),
+                                      plainPage());
+    QFrame *frame = new QFrame(gbox);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image blur preview."));
+    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
+    topLayout->addWidget(gbox);
+                                                  
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -75,6 +86,9 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     m_radiusInput->setValue(1);
     
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            SLOT(slotEffect()));
+            
     adjustSize();
 }
 
@@ -82,30 +96,42 @@ ImageEffect_Blur::~ImageEffect_Blur()
 {
 }
 
+void ImageEffect_Blur::slotEffect()
+{
+    Digikam::ImageIface* iface =
+        m_previewWidget->imageIface();
+   
+    uint* data = iface->getPreviewData();
+    int   w    = iface->previewWidth();
+    int   h    = iface->previewHeight();
+    int   r    = m_radiusInput->value();
+        
+    blur(data, w, h, r);
+           
+    iface->putPreviewData(data);
+    delete [] data;
+    m_previewWidget->update();
+}
+
 void ImageEffect_Blur::slotOk()
 {
-    Digikam::ImageIface iface(0, 0);
+    Digikam::ImageIface* iface =
+        m_previewWidget->imageIface();
 
-    bool selection = true;
-    
-    // Try to work on a selection.
-    uint* data = iface.getSelectedData();
-    int   w    = iface.selectedWidth();
-    int   h    = iface.selectedHeight();
-    
-    if (!data || !w || !h)
-        {
-        // If no selection, try to work on the full image.
-        data  = iface.getOriginalData();
-        w     = iface.originalWidth();
-        h     = iface.originalHeight();
-        
-        if (!data || !w || !h)
-           return;
-        
-        selection = false;           
-        }
+    uint* data = iface->getOriginalData();
+    int w      = iface->originalWidth();
+    int h      = iface->originalHeight();
+    int r      = m_radiusInput->value();
+            
+    blur(data, w, h, r);
+           
+    iface->putOriginalData(data);
+    delete [] data;
+    accept();
+}
 
+void ImageEffect_Blur::blur(uint* data, int w, int h, int r)
+{
     uint* newData = new uint[w*h];
     memcpy(newData, data, w*h*sizeof(unsigned int));
     
@@ -115,7 +141,7 @@ void ImageEffect_Blur::slotOk()
     Imlib_Image imTop = imlib_create_image_using_copied_data(w, h, newData);
     imlib_context_set_image(imTop);
     
-    imlib_image_blur( m_radiusInput->value() );
+    imlib_image_blur( r );
     
     uint* ptr = imlib_image_get_data_for_reading_only();
     memcpy(data, ptr, w*h*sizeof(unsigned int));
@@ -125,14 +151,7 @@ void ImageEffect_Blur::slotOk()
     
     imlib_context_pop();
     imlib_context_free(context);
-           
-    if ( selection == true )
-       iface.putSelectedData(data);
-    else 
-       iface.putOriginalData(data);
-    
     delete [] newData;
-    accept();
 }
 
 #include "imageeffect_blur.moc"

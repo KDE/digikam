@@ -49,12 +49,13 @@ private:
     KDoubleNumInput      *m_bInput;
     Digikam::ImageWidget *m_previewWidget;
 
+    void adjustRGB(double r, double g, double b, double a, uint *data, int w, int h);
+        
 private slots:
 
     void slotUser1();
     void slotEffect();
     void slotOk();
-    void adjustRGB(double r, double g, double b, double a, uint *data, int w, int h);
 };
 
 #endif /* IMAGEEFFECT_RGB_H */
