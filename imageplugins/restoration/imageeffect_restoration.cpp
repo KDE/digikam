@@ -718,7 +718,6 @@ void ImageEffect_Restoration::slotUser3()
     
     if ( fp )
         {       
-        const char *str = 0L;
         char        buf1[256];
         char        buf2[256];
         char        buf3[256];
