@@ -125,6 +125,7 @@ Theme& Theme::operator=(const Theme& theme)
 
 void Theme::print()
 {
+    /*
     kdDebug() << "Theme :                      " << name << endl;
     
     kdDebug() << "Base Color:                  " << baseColor << endl;
@@ -167,4 +168,5 @@ void Theme::print()
     kdDebug() << "ListSel Gradient :          " << listSelGrad << endl;
     kdDebug() << "ListSel Border :            " << listSelBorder << endl;
     kdDebug() << "ListSel Border Color :      " << listSelBorderColor << endl;
+    */
 }
