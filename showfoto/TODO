@@ -6,7 +6,7 @@ todo stuff before 0.7.3 release
 
 * disable plugin menu entries if no current image. 
 * writing hanbook based on digiKam handbook image editor part. 
-* implemented Redo/Undo features 
+* lauch messagebox when image is modified and user change current image.
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add Edit menu entries like in digiKam image editor. 
 * add shofoto settings dialog. 
