@@ -175,11 +175,11 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
     m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
     QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
-                                               "<b>None</b>: no preset values. Lets settings to default.<p>"
+                                               "<b>None</b>: no preset values. Puts settings to default.<p>"
                                                "<b>Reduce Uniform Noise</b>: reduce small image artefacts like CCD noise.<p>"
                                                "<b>Reduce JPEG Artefacts</b>: reduce large image artefacts like JPEG compression mosaic.<p>"
                                                "<b>Reduce Texturing</b>: reduce image artefacts like paper texture "
-                                               "coming from a scanned image.<p>"));
+                                               "of a scanned image.<p>"));
 
     grid->addMultiCellWidget(typeLabel, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 1, 1);
@@ -200,7 +200,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Low smoothing limitation factor used to set the sharpening level of target image."));
+    QWhatsThis::add( m_detailInput, i18n("<p>Relative smoothing factor used to set the sharpening level of the details in the target image." 
+                         "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
 
@@ -209,7 +210,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
     m_gradientInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_gradientInput, i18n("<p>Hight smoothing limitation factor used to set the sharpening level of target image."));
+    QWhatsThis::add( m_gradientInput, i18n("<p>Anisotropic (directional) modifier of the Detail Factor. Keep it small for Gaussian noise ."));
     grid2->addMultiCellWidget(m_gradientLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
 
@@ -218,8 +219,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_timeStepInput = new KDoubleNumInput(secondPage);
     m_timeStepInput->setPrecision(2);
     m_timeStepInput->setRange(0.0, 500.0, 0.01, true);
-    QWhatsThis::add( m_timeStepInput, i18n("<p>If this value is hight, smoothing operations will be computed on a large image area "
-                                           "and large artefacs will be reduce."));
+    QWhatsThis::add( m_timeStepInput, i18n("<p>Total smoothing power: if Detail Factor sets the relative smoothing and Gradient Factor the "
+                                     "direction, Time Step sets the overall effect."));
     grid2->addMultiCellWidget(m_timeStepLabel, 2, 2, 0, 0);
     grid2->addMultiCellWidget(m_timeStepInput, 2, 2, 1, 1);
 
@@ -228,8 +229,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_blurInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.01, true);
-    QWhatsThis::add( m_blurInput, i18n("<p>This value control blurring level of target image. Do not use an hight value here else "
-                                       "target image will be completly blur."));
+    QWhatsThis::add( m_blurInput, i18n("<p>This value controls blurring level of the target image. Do not use an high value here else "
+                                       "target image will be completly blurred."));
     grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
     grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
     
@@ -238,7 +239,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_blurItInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(1);
     m_blurItInput->setRange(1.0, 16.0, 1.0, true);
-    QWhatsThis::add( m_blurItInput, i18n("<p>Set the blurring iterations to process on target image."));
+    QWhatsThis::add( m_blurItInput, i18n("<p>Sets the number of times the filter is applied on the target image."));
     grid2->addMultiCellWidget(m_blurItLabel, 1, 1, 3, 3);
     grid2->addMultiCellWidget(m_blurItInput, 1, 1, 4, 4);
     
@@ -253,7 +254,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_angularStepInput = new KDoubleNumInput(thirdPage);
     m_angularStepInput->setPrecision(2);
     m_angularStepInput->setRange(5.0, 90.0, 0.01, true);
-    QWhatsThis::add( m_angularStepInput, i18n("<p>Set here the angular step in degrees."));
+    QWhatsThis::add( m_angularStepInput, i18n("<p>Set here the angular integration step in degrees in analogy to anisotropy."));
     grid3->addMultiCellWidget(m_angularStepLabel, 0, 0, 0, 0);
     grid3->addMultiCellWidget(m_angularStepInput, 0, 0, 1, 1);
 
@@ -262,7 +263,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_integralStepInput = new KDoubleNumInput(thirdPage);
     m_integralStepInput->setPrecision(2);
     m_integralStepInput->setRange(0.1, 10.0, 0.01, true);
-    QWhatsThis::add( m_integralStepInput, i18n("<p>Set here the integral step."));
+    QWhatsThis::add( m_integralStepInput, i18n("<p>Set here the spatial integral step. Stay below 1."));
     grid3->addMultiCellWidget(m_integralStepLabel, 1, 1, 0, 0);
     grid3->addMultiCellWidget(m_integralStepInput, 1, 1, 1, 1);
 
