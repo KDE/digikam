@@ -67,7 +67,8 @@ Notes :
 - More specifics compilation and installation options can be used with '.configure' script.
 Checked this with './configure --help' command line.
 
-- You must build and install the 'digikam' source code before trying build this module.
+- For to buid DigikamImagePlugins, you must build and install the 'digikam' source code before 
+and restart 'make -f Makefile.cvs; ./configure; ...' commands.
 
 Nota : use the '--enable-debug=full' option with the configure script for to provide
 a full information bug report.
