@@ -25,6 +25,8 @@
 class ImageEffect_ColorsEnhance
 {
 
+private:
+
 struct double_packet
 {
     double red;
