@@ -1,50 +1,63 @@
 DIGIKAM PROJECT TODO:
 =====================
 
+Legend for the next release:
+----------------------------
+
+* Work in progress.
+- Currently planned.
+o Future task.
+
+
 Main Application:
 -----------------
 
-* Added LibKIPI support instead Digikamplugins interface.          <planed by Gilles Caulier for 0.6.3>
-* Add image sizes annotation for each album item.                  <planed by Gilles Caulier for 0.6.3>
-* Added config saving of Albums opened in Albums treeview.         <planed by Gilles Caulier for 0.6.3>
-* Added dockable main widgets like Showimg.                        <planed by Gilles Caulier for 0.6.3>
-* Custom thumbnail highlighting of album thumbnails.
-* Added Albums protection with password capability.
-* View/Hide main toolbar/statusbar.
-* Backup and retrieve image comments and album properties.
-* Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
+* Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.6.3>
+* Lauch the Albums properties when a new Album is added 
+  to the Database.                                                 <Gilles Caulier - 0.6.3>
+- Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
+- Add image sizes annotation for each album item.                  <Gilles Caulier - 0.6.3>
+- Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
+- Added dockable main widgets like Showimg.                        <Gilles Caulier - 0.6.3>
+o Custom thumbnail highlighting of album thumbnails.
+o Added Albums protection with password capability.
+o View/Hide main toolbar/statusbar.
+o Backup and retrieve image comments and album properties.
+o Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
   with KURLBar::writeItem API (settings is in 
   ~/.kde/share/config/kdeglobals file).
-* Save relative sizes of treeview and thumbnailview.
-* Option to hide header in thumbnail view.
-* Option to hide image names.
+o Save relative sizes of treeview and thumbnailview.
+o Option to hide header in thumbnail view.
+o Option to hide image names.
 
 
 CameraClient:
 -------------
 
-* Make Folder Ability.
-* Delete Folder Ability.
-* Camera Configure Dialog.
-* Camera Capture Support.
-* DnD Upload (moved to wishlist. in case of the future parts
+* Lauch the Albums properties when a new Album is added 
+  to the Database.                                                 <Gilles Caulier - 0.6.3>
+o Make Folder Ability.
+o Delete Folder Ability.
+o Camera Configure Dialog.
+o Camera Capture Support.
+o DnD Upload (moved to wishlist. in case of the future parts
   implementation there can be no DnD upload).
-* View/Hide main toolbar/statusbar.
-* Enable/Disable thumnails generation (bandwith limitation
+o View/Hide main toolbar/statusbar.
+o Enable/Disable thumnails generation (bandwith limitation
   in slow camera connexion).
 
 
-ImageViever:
-------------
+Image Viever/Editor:
+--------------------
 
-* Port from imlib1 to imlib2.                                      <planed by Gilles Caulier for 0.6.3>
-* Add RedEyes correction.                                          <planed by Gilles Caulier for 0.6.3>
-* Add Blur/Sharpen image filters.                                  <planed by Gilles Caulier for 0.6.3>
-* Added dockable toolbars.
-* Add Plugins interface.
-* Add Blur/Sharpen image filters.
-* Add image Histogram viewer.
-* Add Colors autocorrection filter.
+* Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
+- Add RedEyes correction.                                          <Gilles Caulier - 0.6.3>
+- Add Blur/Sharpen image filters.                                  <Gilles Caulier - 0.6.3>
+o Added dockable toolbars.
+o Add Plugins interface.
+o Add Blur/Sharpen image filters.
+o Add image Histogram viewer.
+o Add Colors autocorrection filter.
 
 
 Plugins (LibKIPI):
