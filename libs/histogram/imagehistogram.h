@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : image histogram manipulation methods.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +73,7 @@ struct double_packet
 
 public:
     
-    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0, bool threaded=true);
+    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0);
     ~ImageHistogram();
     
     // Method to stop threaded calculations.

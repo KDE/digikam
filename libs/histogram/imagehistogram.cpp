@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : image histogram manipulation methods.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent, bool threaded)
+ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent)
               : QThread()
 { 
     m_imageData   = i_data;
@@ -56,7 +56,7 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent
     
     if (m_imageData && m_imageWidth && m_imageHeight)
        {
-       if (threaded)
+       if (m_parent)
           start();
        else
           calcHistogramValues();
