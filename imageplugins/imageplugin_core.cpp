@@ -38,6 +38,7 @@
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
+#include "imageeffect_colorsenhance.h"
 #include "imageplugin_core.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
@@ -77,6 +78,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb") );
 
+    m_colorsAction->insert(
+                new KAction(i18n("Normalize"), 0, 
+                this, SLOT(slotNormalize()),
+                actionCollection(), "implugcore_normalize") );
+
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
@@ -89,6 +95,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSolarize()),
                 actionCollection(), "implugcore_solarize");
     
+/*    new KAction(i18n("Testing KImageEffect filter"), 0, 
+                this, SLOT(slotTest()),
+                actionCollection(), "implugcore_test");*/
+
     m_redeyeAction = new KAction(i18n("Red Eye Reduction"), 0, 
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
@@ -108,6 +118,8 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
+    
+//    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_test/ ");
 
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
@@ -159,6 +171,11 @@ void ImagePlugin_Core::slotHSL()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotNormalize()
+{
+    ImageEffect_ColorsEnhance::normalizeImage();
+}
+
 void ImagePlugin_Core::slotSolarize()
 {
     ImageEffect_Solarize dlg(parentWidget());
@@ -179,5 +196,11 @@ void ImagePlugin_Core::slotRedEye()
 {
     ImageEffect_RedEye::removeRedEye(parentWidget());    
 }
+
+void ImagePlugin_Core::slotTest()
+{
+    ImageEffect_ColorsEnhance::testKImageEffect();
+}
+
 
 #include "imageplugin_core.moc"

@@ -56,10 +56,13 @@ private slots:
     void slotBCG();
     void slotRGB();
     void slotHSL();
+    void slotNormalize();
     void slotBW();
     void slotSepia();
     void slotSolarize();
     void slotRedEye();
+
+    void slotTest();
 
 };
     
