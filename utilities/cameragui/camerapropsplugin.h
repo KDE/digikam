@@ -34,12 +34,10 @@ class Job;
 
 class CameraPropsPlugin : public KPropsDlgPlugin
 {
-    Q_OBJECT
-    
 public:
 
     CameraPropsPlugin(KPropertiesDialog *_props);
-   	virtual ~CameraPropsPlugin() {};
+    virtual ~CameraPropsPlugin() {};
     
 };
 
