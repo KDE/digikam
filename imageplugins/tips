@@ -7,7 +7,9 @@
 <img src="hicolor/32x32/apps/digikamimageplugins.png">
 </td>
 <td>
-Did you know that if select a part of the image before launching 'RainDrops' image editor plugin, this part will be ignored by the filter. You can use this to, for example, not add drops on a human face.
+Did you know that you can keep a zone clear of raindrops with the
+'Select' tool? Selecting the area to avoid (for example a face) before
+launching the 'RainDrops' filter will keep it free from rain drops.
 </td>
 </tr>
 </table>
