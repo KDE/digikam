@@ -50,7 +50,7 @@ class PluginLoader;
 }
 
 class PluginLoader;               //   For KIPI pluggins support.
-class KipiInterface;
+class DigikamKipiInterface;
 #else
 class DigikamPluginManager;       //   For DigikamPlugins support.
 #endif
@@ -101,31 +101,32 @@ private:
     Digikam::AlbumManager *mAlbumManager;
     
 #ifdef HAVE_KIPI
-    KIPI::PluginLoader    *pluginLoader_;
-    KipiInterface         *interface_;
-    QPtrList<KAction>      m_kipiFileActions;
+    KIPI::PluginLoader    *KipiPluginLoader_;
+    DigikamKipiInterface  *KipiInterface_;
+    QPtrList<KAction>      m_kipiFileActionsExport;
+    QPtrList<KAction>      m_kipiFileActionsImport;
     QPtrList<KAction>      m_kipiImageActions;
     QPtrList<KAction>      m_kipiToolsActions;
 #else
     DigikamPluginManager  *pluginManager_;
 #endif
      
-    KConfig               *m_config;    
-    Setup                 *m_setup;
+    KConfig       *m_config;    
+    Setup         *m_setup;
     
-    DigikamView           *mView;
-    CameraList            *mCameraList;
-    bool                   mFullScreen;
+    DigikamView   *mView;
+    CameraList    *mCameraList;
+    bool           mFullScreen;
 
     // Album Settings
-    AlbumSettings* mAlbumSettings;
+    AlbumSettings *mAlbumSettings;
 
     // Camera Actions
-    KActionMenu *mCameraMenuAction;
+    KActionMenu   *mCameraMenuAction;
  
     // Album Actions
-    KAction *mNewAction;
-    KAction *mDeleteAction;
+    KAction       *mNewAction;
+    KAction       *mDeleteAction;
     KSelectAction *mAlbumSortAction;
 
     KAction *mAddImagesAction;

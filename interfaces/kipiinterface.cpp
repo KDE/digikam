@@ -73,17 +73,6 @@ QString DigikamImageInfo::description()
     return imageComments_;
 }
 
-QMap<QString,QVariant> DigikamImageInfo::attributes()
-{
-    QMap<QString,QVariant> res;   // FIXME !
-    /*if ( _info ) {
-        for( QMapIterator<QString,QStringList> it = _info->_options.begin(); it != _info->_options.end(); ++it ) {
-            res.insert( it.key(), QVariant( it.data() ) );
-        }
-    }*/
-    return res;
-}
-
 void DigikamImageInfo::setTitle( const QString& name )
 {
     if (album_ && name.isEmpty() == false)
@@ -102,6 +91,21 @@ void DigikamImageInfo::setDescription( const QString& description )
        }
 }
 
+QMap<QString,QVariant> DigikamImageInfo::attributes()
+{
+    QMap<QString,QVariant> res;
+    
+    // FIXME !
+    
+    /*if ( _info ) {
+        for( QMapIterator<QString,QStringList> it = _info->_options.begin(); it != _info->_options.end(); ++it ) {
+            res.insert( it.key(), QVariant( it.data() ) );
+        }
+    }*/
+    
+    return res;
+}
+
 void DigikamImageInfo::clearAttributes()
 {
     // FIXME !
@@ -110,44 +114,25 @@ void DigikamImageInfo::clearAttributes()
 void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
 {
     // FIXME !
-}
-
-int DigikamImageInfo::angle()
-{
-    return 0; // FIXME !
-}
-
-void DigikamImageInfo::setAngle( int angle )
-{
-    // FIXME !
-}
-
-QDateTime DigikamImageInfo::time( KIPI::TimeSpec what )
-{
-    return KIPI::ImageInfoShared::time( what );    // FIXME !
-}
-
-bool DigikamImageInfo::isTimeExact()
-{
-    return true;   // FIXME !
-}
-
-void DigikamImageInfo::setTime( const QDateTime& time, KIPI::TimeSpec spec )
-{
-    // FIXME !
-}
-
-void DigikamImageInfo::cloneData( ImageInfoShared* other )
-{
-    ImageInfoShared::cloneData( other );   // FIXME !
+    
+    /*if ( _info ) {
+        for( QMapConstIterator<QString,QVariant> it = map.begin(); it != map.end(); ++it ) {
+            QStringList list = it.data().toStringList();
+            _info->addOption( it.key(), list );
+        }
+    }*/
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DigikamImageCollection::DigikamImageCollection( Type tp )
+DigikamImageCollection::DigikamImageCollection( Type tp, Digikam::AlbumInfo *album )
                       : _tp( tp )
 {
+    if (album)
+       album_ = album;
+    else
+       album_ = Digikam::AlbumManager::instance()->currentAlbum();
 }
 
 DigikamImageCollection::~DigikamImageCollection()
@@ -156,13 +141,11 @@ DigikamImageCollection::~DigikamImageCollection()
 
 QString DigikamImageCollection::name()
 {
-    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()->currentAlbum();
-    
-    if (currentAlbum) 
+    if (album_) 
         {
-        currentAlbum->openDB();
-        QString title = currentAlbum->getTitle();
-        currentAlbum->closeDB();    
+        album_->openDB();
+        QString title = album_->getTitle();
+        album_->closeDB();    
         return (title);    
         }
     else
@@ -171,13 +154,11 @@ QString DigikamImageCollection::name()
 
 QString DigikamImageCollection::comment()
 {
-    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()->currentAlbum();
-    
-    if (currentAlbum) 
+    if (album_) 
         {
-        currentAlbum->openDB();
-        QString comments = currentAlbum->getComments();
-        currentAlbum->closeDB();        
+        album_->openDB();
+        QString comments = album_->getComments();
+        album_->closeDB();        
         return (comments);
         }
     else
@@ -186,25 +167,33 @@ QString DigikamImageCollection::comment()
 
 KURL::List DigikamImageCollection::images()
 {
-    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()->currentAlbum();
-    
-    if (currentAlbum) 
+    QStringList items;
+
+    if (album_) 
         {
+        album_->openDB();
+        
         switch ( _tp ) 
            {
-           case CurrentAlbum:
-              return KURL::List( currentAlbum->getAllItems() );
-
-           case CurrentSelection:
-              return KURL::List( currentAlbum->getSelectedItems() );
-
-           case SubClass:
-              qFatal( "The subclass should implement images()" );   // FIXME !!!
-              return KURL::List();
+           case AllAlbumItems:
+              items = album_->getAllItems();
+              break;
+              
+           case AlbumItemsSelection:
+              items = album_->getSelectedItems();
+              break;
+              
+           default:
+              break;
            }
+        
+        album_->closeDB();        
         }
         
-    return KURL::List();
+    if ( items.isEmpty() == true )
+       return KURL::List();
+    else
+       return KURL::List(items);
 }
 
 
@@ -216,7 +205,9 @@ KURL DigikamImageCollection::path()
 KURL DigikamImageCollection::commonRoot()
 {
     KURL url;
-    url.setPath( Digikam::AlbumManager::instance()->getLibraryPath() );
+    album_->openDB();
+    url.setPath( album_->getPath() );
+    album_->closeDB();        
     return url;
 }
 
@@ -227,77 +218,66 @@ KURL DigikamImageCollection::uploadPath()
 
 KURL DigikamImageCollection::uploadRoot()
 {
-    KURL url;
-    url.setPath( Digikam::AlbumManager::instance()->getLibraryPath() );
-    return url;
+    return commonRoot();
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-KipiInterface::KipiInterface( QObject *parent, const char *name)
-              :KIPI::Interface( parent, name )
+DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
+                     :KIPI::Interface( parent, name )
+{
+    albumManager_ = Digikam::AlbumManager::instance();
+}
+
+DigikamKipiInterface::~DigikamKipiInterface()
 {
 }
 
-KipiInterface::~KipiInterface()
+KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 {
+    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AllAlbumItems ) );
 }
 
-KIPI::ImageCollection KipiInterface::currentAlbum()
+KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
-    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::CurrentAlbum ) );
+    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection ) );
 }
 
-KIPI::ImageCollection KipiInterface::currentSelection()
-{
-    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::CurrentSelection ) );
-}
-
-QValueList<KIPI::ImageCollection> KipiInterface::allAlbums()
+QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
     QValueList<KIPI::ImageCollection> result;
-    /*ImageSearchInfo context = MainView::theMainView()->currentContext();
-    QString optionGroup = MainView::theMainView()->currentBrowseCategory();
-    if ( optionGroup.isNull() )
-        optionGroup = Options::instance()->albumCategory();
-
-    QMap<QString,int> categories = ImageDB::instance()->classify( context, optionGroup );
-
-    for( QMapIterator<QString,int> it = categories.begin(); it != categories.end(); ++it ) {
-        CategoryImageCollection* col = new CategoryImageCollection( context, optionGroup, it.key() );
-        result.append( KIPI::ImageCollection( col ) );
-    }
-*/
-
-    for (Digikam::AlbumInfo *album=Digikam::AlbumManager::instance()->firstAlbum() ;
+    
+    for (Digikam::AlbumInfo *album = albumManager_->firstAlbum() ;
          album ; album = album->nextAlbum())
         {
         album->openDB();
-//        result.append( KIPI::ImageCollection( col ) );
+        DigikamImageCollection* col = new DigikamImageCollection( DigikamImageCollection::AllAlbumItems, album );
+        result.append( KIPI::ImageCollection( col ) );
         album->closeDB();
         }
 
     return result;
 }
 
-KIPI::ImageInfo KipiInterface::info( const KURL& url )
+KIPI::ImageInfo DigikamKipiInterface::info( const KURL& url )
 {
     return KIPI::ImageInfo( new DigikamImageInfo( this, url ) );
 }
 
-void KipiInterface::refreshImages( const KURL::List& urls )
+void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 {
-    emit imagesChanged( urls );
+    albumManager_->refreshItemHandler(); 
 }
 
-int KipiInterface::features() const
+int DigikamKipiInterface::features() const
 {
-    return KIPI::ImagesHasComments | KIPI::ImagesHasTime | KIPI::SupportsDateRanges |
-           KIPI::AcceptNewImages   | KIPI::AlbumEQDir    | KIPI::AlbumsHaveComments;
+    return KIPI::ImagesHasComments    | KIPI::AcceptNewImages |
+           KIPI::AlbumEQDir           | KIPI::AlbumsHaveComments |
+           KIPI::ImageTitlesWritable;
 }
 
-bool KipiInterface::addImage( const KURL& url, QString& errmsg )
+bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
     /*QString dir = url.path();
     QString root = Options::instance()->imageDirectory();
@@ -310,10 +290,11 @@ bool KipiInterface::addImage( const KURL& url, QString& errmsg )
     dir = dir.mid( root.length() );
     ImageInfo* info = new ImageInfo( dir );
     ImageDB::instance()->addImage( info );*/
+    
     return true;      // FIXME !
 }
 
-void KipiInterface::delImage( const KURL& url )
+void DigikamKipiInterface::delImage( const KURL& url )
 {
     /*ImageInfo* info = ImageDB::instance()->find( url.path() );
     if ( info ) {

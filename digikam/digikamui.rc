@@ -11,7 +11,8 @@
    <Action name="album_propsEdit" />
    <Separator/>
       <DefineGroup name="album_plugins_merge" />
-      <ActionList name="file_actions"/>
+      <ActionList name="file_actions_import"/>
+      <ActionList name="file_actions_export"/>
    <Separator/>
    <Action name="album_remove" />
    <Action name="album_delete" />
