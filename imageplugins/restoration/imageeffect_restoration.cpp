@@ -191,7 +191,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>."));
+    QWhatsThis::add( m_detailInput, i18n("<p>Low smoothing limitation factor used to sharpening level of target image detail."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
 
@@ -200,7 +200,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
     m_gradientInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_gradientInput, i18n("<p>."));
+    QWhatsThis::add( m_gradientInput, i18n("<p>Hight smoothing limitation factor used to sharpening level of target image detail."));
     grid2->addMultiCellWidget(m_gradientLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
 
@@ -209,7 +209,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_timeStepInput = new KDoubleNumInput(secondPage);
     m_timeStepInput->setPrecision(2);
     m_timeStepInput->setRange(0.0, 500.0, 0.01, true);
-    QWhatsThis::add( m_timeStepInput, i18n("<p>."));
+    QWhatsThis::add( m_timeStepInput, i18n("<p>If this value is hight, smoothing operations will be computed on a large image area "
+                                           "and large artefacs will be reduce."));
     grid2->addMultiCellWidget(m_timeStepLabel, 2, 2, 0, 0);
     grid2->addMultiCellWidget(m_timeStepInput, 2, 2, 1, 1);
 
@@ -218,7 +219,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_blurInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.01, true);
-    QWhatsThis::add( m_blurInput, i18n("<p>."));
+    QWhatsThis::add( m_blurInput, i18n("<p>This value control blurring level of target image. Do not use an hight value here else "
+                                       "target image will be completly blur."));
     grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
     grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
     
@@ -227,7 +229,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_blurItInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(1);
     m_blurItInput->setRange(1.0, 16.0, 1.0, true);
-    QWhatsThis::add( m_blurItInput, i18n("<p>."));
+    QWhatsThis::add( m_blurItInput, i18n("<p>Set the blurring iterations to process on target image."));
     grid2->addMultiCellWidget(m_blurItLabel, 1, 1, 3, 3);
     grid2->addMultiCellWidget(m_blurItInput, 1, 1, 4, 4);
     
@@ -242,7 +244,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_angularStepInput = new KDoubleNumInput(thirdPage);
     m_angularStepInput->setPrecision(2);
     m_angularStepInput->setRange(5.0, 90.0, 0.01, true);
-    QWhatsThis::add( m_angularStepInput, i18n("<p>."));
+    QWhatsThis::add( m_angularStepInput, i18n("<p>Set here the angular step in degrees."));
     grid3->addMultiCellWidget(m_angularStepLabel, 0, 0, 0, 0);
     grid3->addMultiCellWidget(m_angularStepInput, 0, 0, 1, 1);
 
@@ -251,7 +253,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_integralStepInput = new KDoubleNumInput(thirdPage);
     m_integralStepInput->setPrecision(2);
     m_integralStepInput->setRange(0.1, 10.0, 0.01, true);
-    QWhatsThis::add( m_integralStepInput, i18n("<p>."));
+    QWhatsThis::add( m_integralStepInput, i18n("<p>Set here the integral step."));
     grid3->addMultiCellWidget(m_integralStepLabel, 1, 1, 0, 0);
     grid3->addMultiCellWidget(m_integralStepInput, 1, 1, 1, 1);
 
@@ -260,16 +262,16 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gaussianInput = new KDoubleNumInput(thirdPage);
     m_gaussianInput->setPrecision(2);
     m_gaussianInput->setRange(0.0, 500.0, 0.01, true);
-    QWhatsThis::add( m_gaussianInput, i18n("<p>."));
+    QWhatsThis::add( m_gaussianInput, i18n("<pSet here the precision of the gaussian function."));
     grid3->addMultiCellWidget(m_gaussianLabel, 2, 2, 0, 0);
     grid3->addMultiCellWidget(m_gaussianInput, 2, 2, 1, 1);
     
     m_linearInterpolationBox = new QCheckBox(i18n("Use Linear Interpolation"), thirdPage);
-    QWhatsThis::add( m_linearInterpolationBox, i18n("<p>."));
+    QWhatsThis::add( m_linearInterpolationBox, i18n("<p>Enable this option to use a linear interpolation for integration."));
     grid3->addMultiCellWidget(m_linearInterpolationBox, 0, 0, 3, 3);
     
     m_normalizeBox = new QCheckBox(i18n("Normalize Photograph"), thirdPage);
-    QWhatsThis::add( m_normalizeBox, i18n("<p>."));
+    QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
     
     vlay->addWidget(mainTab);
