@@ -10,6 +10,7 @@
      <Action name="album_sort" />
    <Separator/>
      <Action name="album_propsEdit" />
+     <Action name="album_openinkonqui" />
    <Separator/>
       <ActionList name="album_actions"/>
    <Separator/>

@@ -129,9 +129,10 @@ private:
     KAction       *mDeleteAction;
     KSelectAction *mAlbumSortAction;
 
-    KAction *mAddImagesAction;
-    KAction *mPropsEditAction;
-    KAction *mAlbumImportAction;
+    KAction       *mAddImagesAction;
+    KAction       *mPropsEditAction;
+    KAction       *mAlbumImportAction;
+    KAction       *mOpenInKonquiAction;
     
     // Tag Actions
     KAction *mNewTagAction;

@@ -220,12 +220,12 @@ void DigikamApp::setupActions()
                                     "album_addImages");
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
-                                      "fileopen",
-                                      0,
-                                      mView,
-                                      SLOT(slotAlbumImportFolder()),
-                                      actionCollection(),
-                                      "album_importFolder");                            
+                                    "fileopen",
+                                    0,
+                                    mView,
+                                    SLOT(slotAlbumImportFolder()),
+                                    actionCollection(),
+                                    "album_importFolder");                            
 
                                     
     mPropsEditAction = new KAction( i18n("Edit Album Properties"),
@@ -236,6 +236,14 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_propsEdit");
 
+    mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
+                                    "konqueror",
+                                    0,
+                                    mView,
+                                    SLOT(slot_albumOpenInKonqui()),
+                                    actionCollection(),
+                                    "album_openinkonqui");
+                                    
     // -----------------------------------------------------------
 
     mNewTagAction = new KAction(i18n("New &Tag"), "tag",
@@ -276,7 +284,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_view_exif");
 
-   mImageRenameAction = new KAction(i18n("Rename"),
+    mImageRenameAction = new KAction(i18n("Rename"),
                                     "pencil",
                                     Key_F2,
                                     mView,

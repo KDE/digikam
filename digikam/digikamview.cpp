@@ -40,6 +40,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <krun.h>
 
 // Local includes.
 
@@ -196,6 +197,16 @@ void DigikamView::slot_albumSelected(Album* album)
     mIconView->setAlbum(album);
 }
 
+void DigikamView::slot_albumOpenInKonqui()
+{
+    Album *album = mAlbumMan->currentAlbum();
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+       
+    new KRun(palbum->getKURL()); // KRun will delete itself.
+}
 
 void DigikamView::slot_imageSelected()
 {
