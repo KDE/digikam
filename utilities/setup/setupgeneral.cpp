@@ -134,7 +134,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (Warning: Slow)"));
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
-   iconShowResolutionBox_->setText(i18n("Show image resolution (Warning: Slow)"));
+   iconShowResolutionBox_->setText(i18n("Show image dimensions (Warning: Slow)"));
 
    layout->addWidget(iconTextGroup);
    
