@@ -29,7 +29,6 @@
 
 #include <kmdcodec.h>
 #include <kdebug.h>
-#include <kdebug.h>
 
 extern "C"
 {
