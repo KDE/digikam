@@ -68,6 +68,8 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
     
+    int cpt = 0;
+    
     // Load plugin core at the first time.
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
@@ -92,6 +94,8 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                  
                  if (m_splash)      
                     m_splash->message(i18n("Loading: %1").arg(plugin->name()));
+                    
+                 ++cpt;
                  }
                                 
               break;
@@ -128,13 +132,15 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                 
                 if (m_splash)      
                    m_splash->message(i18n("Loading: %1").arg(plugin->name()));
+                
+                ++cpt;
                 }
              }
           }
        }
 
     if (m_splash)      
-       m_splash->message(i18n("%1 Image Plugins loaded").arg(offers.count()));    
+       m_splash->message(i18n("%1 Image Plugins loaded").arg(cpt));    
 
     m_splash = 0;        // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 

@@ -884,6 +884,8 @@ void DigikamApp::slotKipiPluginPlug()
     m_kipiAlbumActions.clear();
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
+    
+    int cpt = 0;
 
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
     {
@@ -892,6 +894,8 @@ void DigikamApp::slotKipiPluginPlug()
         if ( !plugin || !(*it)->shouldLoad() )
             continue;
 
+        ++cpt;
+        
         if(mSplash)
             mSplash->message(i18n("Loading: %1").arg((*it)->name()));
 
@@ -934,7 +938,7 @@ void DigikamApp::slotKipiPluginPlug()
     }
     
     if(mSplash)
-        mSplash->message(i18n("%1 Kipi Plugins loaded").arg(list.count()));
+        mSplash->message(i18n("%1 Kipi Plugins loaded").arg(cpt));
     
     // Create GUI menu in according with plugins.
 
