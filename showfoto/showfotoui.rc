@@ -103,6 +103,14 @@
   <Merge/>
 </ToolBar>
 
+<Menu name="RMBMenu">
+    <Action name="file_bwd" />
+    <Action name="file_fwd" />
+    <Separator/>
+    <Action name="rotate" /> 
+    <Action name="crop" />    
+</Menu>
+
 <ActionProperties/>
  
 </gui>

@@ -31,6 +31,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 // KDE includes.
 
@@ -143,6 +145,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
        m_disableBCGActions = true;
        }
     
+    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));    
     applySettings();
 
     // -- setup connections ---------------------------
@@ -150,6 +153,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
     
+    connect(m_canvas, SIGNAL(signalRightButtonClicked()),
+            this, SLOT(slotContextMenu()));
+                
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
             this, SLOT(slotZoomChanged(float)));
             
@@ -1256,6 +1262,11 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     
     if ( m_bar->countItems() == 0 )    
        toogleActions(false);
+}
+
+void ShowFoto::slotContextMenu()
+{
+    m_contextMenu->exec(QCursor::pos());
 }
 
 #include "showfoto.moc"

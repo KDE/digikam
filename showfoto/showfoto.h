@@ -28,6 +28,7 @@
 #include <kurl.h>
 
 class QLabel;
+class QPopupMenu;
 
 class KAction;
 class KActionMenu;
@@ -99,7 +100,8 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
-    
+    void slotContextMenu();
+        
     void slotDeleteCurrentItemResult( KIO::Job * job );
                
 private:
@@ -122,7 +124,13 @@ private:
     Digikam::ThumbBarView *m_bar;
     
     SplashScreen          *m_splash;
-                           
+    
+    QLabel                *m_nameLabel;
+    QLabel                *m_zoomLabel;
+    QLabel                *m_resLabel;
+        
+    QPopupMenu            *m_contextMenu;
+                               
     KConfig               *m_config;
     
     KAction               *m_zoomPlusAction;
@@ -163,10 +171,6 @@ private:
     KToolBarPopupAction   *m_redoAction;
         
     KSelectAction         *m_viewHistogramAction;
-    
-    QLabel*                m_nameLabel;
-    QLabel*                m_zoomLabel;
-    QLabel*                m_resLabel;
     
     int                    m_JPEGCompression;
     int                    m_PNGCompression;

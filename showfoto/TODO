@@ -2,7 +2,6 @@ todo stuff before 0.7.3 release
 ---------------------------------
 
 * update Showfoto splashscreen (different to digiKam).
-* add RMB menu.
 * add image properties dialog like in digiKam without add libdigikam depency.
 * writing handbook based on digiKam image editor part handbook. 
 
