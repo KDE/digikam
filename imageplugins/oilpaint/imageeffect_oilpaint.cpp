@@ -133,10 +133,12 @@ void ImageEffect_OilPaint::closeEvent(QCloseEvent *e)
 
 void ImageEffect_OilPaint::slotEffect()
 {
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     double factor = m_numInput->value();
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     QImage newImage = KImageEffect::oilPaintConvolve(image, factor);
     m_imagePreviewWidget->setPreviewImageData(newImage);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
 
 void ImageEffect_OilPaint::slotOk()
