@@ -1,5 +1,7 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> ImageEditor: Added new ImageEditor settings in main 
+	  setup dialog. New options for JPEG compression value and Background color.  
         * <Gilles Caulier> ImageEditor: Auto-correction of levels plugin. 
         * <Gilles Caulier> ImageEditor: Equalize image plugin. 
         * <Gilles Caulier> ImageEditor: Normalize image plugin. 
@@ -28,7 +30,7 @@ v0.7.0-beta1
         * <Gilles Caulier> KIPI plugins can be loaded/unloaded dynamicly.
         * <Ralf Holzer> Moved KExif into a separate library in kextragear-libs-1
         * <Ralf Holzer> Added rotation of thumbnails according to EXIF Orientation 
-        * <Ralf Holzer> Added saving of EXIF orientation on flip/rotate in imageviewer
+        * <Ralf Holzer> Added saving of EXIF orientation on flip/rotate in ImageEditor
         * <Ralf Holzer> Added saving of comments in EXIF UserComment field 
           and in JPEG COM field
         * <Gilles Caulier> Added Albums Collections and plugins management 
