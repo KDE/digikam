@@ -3,7 +3,7 @@
  * Date  : 2004-07-09
  * Description : Blur image filter for ImageEditor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,11 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// Imlib2 include.
-
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
 
 // C++ include.
 
@@ -46,6 +41,7 @@
 
 #include <imageiface.h>
 #include <imagepreviewwidget.h>
+#include <imagefilters.h>
 
 // Local includes.
 
@@ -68,12 +64,12 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     hlay1->addWidget(m_imagePreviewWidget);
  
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Radius:"), plainPage());
+    QLabel *label = new QLabel(i18n("Smoothness:"), plainPage());
     
     m_radiusInput = new KIntNumInput(plainPage());
-    m_radiusInput->setRange(0, 10, 1, true);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
-                                         "1 and above determine the blur matrix radius "
+    m_radiusInput->setRange(0, 20, 1, true);
+    QWhatsThis::add( m_radiusInput, i18n("<p>A value of 0 has no effect, "
+                                         "1 and above determine the gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
     
     hlay2->addWidget(label, 1);
@@ -87,9 +83,9 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));
     
-    QTimer::singleShot(0, this, SLOT(slotEffect()));
     adjustSize();
     disableResize();                  
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
 }
 
 ImageEffect_Blur::~ImageEffect_Blur()
@@ -107,7 +103,7 @@ void ImageEffect_Blur::slotEffect()
     int   h    = img.height();
     int   r    = m_radiusInput->value();
         
-    blur(data, w, h, r);
+    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
 
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
@@ -123,7 +119,7 @@ void ImageEffect_Blur::slotOk()
     int h      = iface.originalHeight();
     int r      = m_radiusInput->value();
             
-    blur(data, w, h, r);
+    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
            
     iface.putOriginalData(data);
     delete [] data;
@@ -131,24 +127,5 @@ void ImageEffect_Blur::slotOk()
     accept();
 }
 
-void ImageEffect_Blur::blur(uint* data, int w, int h, int r)
-{
-    Imlib_Context context = imlib_context_new();
-    imlib_context_push(context);
-
-    Imlib_Image imTop = imlib_create_image_using_copied_data(w, h, data);
-    imlib_context_set_image(imTop);
-    
-    imlib_image_blur( r );
-    
-    uint* ptr = imlib_image_get_data_for_reading_only();
-    memcpy(data, ptr, w*h*sizeof(unsigned int));
-    
-    imlib_context_set_image(imTop);
-    imlib_free_image_and_decache();
-    
-    imlib_context_pop();
-    imlib_context_free(context);
-}
 
 #include "imageeffect_blur.moc"
