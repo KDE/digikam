@@ -87,7 +87,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 {
     QString whatsThis;
            
-    setButtonWhatsThis ( User1, i18n("<p>Reset edition mode to the default settings.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset addition mode to the default settings.") );
     
     // Read settings.
     
@@ -103,7 +103,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Template Superimpose"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to superimpose a template to an image."),
+                                       I18N_NOOP("A digiKam image plugin to superimpose a template onto an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
@@ -154,7 +154,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new SuperImposeWidget(400, 300, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the template superimposing preview on the image.") );
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template superimposed onto the image.") );
 
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
                                                                                       
@@ -193,7 +193,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     m_thumbnailsBar = new ThumbBarView(gbox2);
     m_dirSelect = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
-    QWhatsThis::add( templateDirButton, i18n("<p>Change here the current templates root directory.") );
+    QWhatsThis::add( templateDirButton, i18n("<p>Change here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 2);    

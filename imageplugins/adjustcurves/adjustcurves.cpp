@@ -81,7 +81,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     // Create an empty instance of curves to use.
     m_curves = new Digikam::ImageCurves();
 
-    setButtonWhatsThis ( User1, i18n("<p>Reset curves values from the current selected channel.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset curves' values from the current selected channel.") );
 
     // About data and help button.
 
@@ -134,7 +134,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
     QGroupBox *gbox = new QGroupBox(plainPage());
     gbox->setFlat(false);
-    gbox->setTitle(i18n("Curves Settings"));
+    gbox->setTitle(i18n("Curve Settings"));
     QGridLayout* grid = new QGridLayout( gbox, 4, 6, 20, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
@@ -198,7 +198,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
     m_curvesWidget = new CurvesWidget(256, 256, imageData, width, height, m_curves, frame);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curves drawing of the selected image "
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
     l->addWidget(m_curvesWidget, 0);
     grid->addMultiCellWidget(frame, 2, 2, 1, 5);
@@ -213,9 +213,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
     QHGroupBox *gbox3 = new QHGroupBox(i18n("All Channels' Curves"), plainPage());
     m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
-    QWhatsThis::add( m_loadButton, i18n("<p>Load curves settings from a Gimp curves text file."));
+    QWhatsThis::add( m_loadButton, i18n("<p>Load curve settings from a Gimp curves text file."));
     m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
-    QWhatsThis::add( m_saveButton, i18n("<p>Save curves settings to a Gimp curves text file."));
+    QWhatsThis::add( m_saveButton, i18n("<p>Save curve settings to a Gimp curves text file."));
     m_resetButton = new QPushButton(i18n("&Reset All Values"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' curve values."));
 

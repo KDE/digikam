@@ -135,10 +135,10 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the free rotation operation preview."
                                            "If you move the mouse cursor on this preview, "
-                                           "a vertical and horizontal dashed line will be draw "
-                                           "for guide you to adjust the rotation angle. "
-                                           "Press the mouse left button to freeze the dashed "
-                                           "lines position."));
+                                           "a vertical and horizontal dashed line will be drawn "
+                                           "to guide you in adjusting the rotation angle. "
+                                           "Press the left mouse button to freeze the dashed "
+                                           "line's position."));
                                            
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);

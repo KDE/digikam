@@ -329,8 +329,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Lens Distortion Correction"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to reduce spherical aberration provide "
-                                                 "by lens on an image."),
+                                       I18N_NOOP("A digiKam image plugin to reduce spherical aberration caused "
+                                                 "by a lens to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -386,9 +386,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the spherical aberration correction. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be draw "
-                                           "for guide you to adjust lens distortion correction . "
-                                           "Press the mouse left button to freeze the dashed "
-                                           "lines position."));
+                                           "to guide you in adjusting the lens distortion correction. "
+                                           "Press the left mouse button to freeze the dashed "
+                                           "line's position."));
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
@@ -427,8 +427,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_edgeSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_edgeSpinBox");
     m_edgeSpinBox->setValue(0);
         
-    whatsThis = i18n("<p>This value controls like the Main control, but the Edge control has more effect "
-                     "at the edges of the image than at the centre.");
+    whatsThis = i18n("<p>This value controls in the same manner as the Main control, but has more effect "
+                     "at the edges of the image than at the center.");
     
     QWhatsThis::add( m_edgeSpinBox, whatsThis);
     QWhatsThis::add( m_edgeSlider, whatsThis);                     
@@ -445,7 +445,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_rescaleSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_rescaleSpinBox");
     m_rescaleSpinBox->setValue(0);
     
-    whatsThis = i18n("<p>This value rescale overall image size.");
+    whatsThis = i18n("<p>This value rescales the overall image size.");
     QWhatsThis::add( m_rescaleSpinBox, whatsThis);
     QWhatsThis::add( m_rescaleSlider, whatsThis);                     
     

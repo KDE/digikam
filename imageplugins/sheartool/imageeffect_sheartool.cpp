@@ -81,7 +81,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Shear Tool"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to process shearing image."),
+                                       I18N_NOOP("A digiKam image plugin to shear an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -132,10 +132,10 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the shearing image operation preview. "
                                            "If you move the mouse cursor on this preview, "
-                                           "a vertical and horizontal dashed line will be draw "
-                                           "for guide you to adjust the shearing correction. "
-                                           "Press the mouse left button to freeze the dashed "
-                                           "lines position."));
+                                           "a vertical and horizontal dashed line will be drawn "
+                                           "to guide you in adjusting the shearing correction. "
+                                           "Press the left mouse button to freeze the dashed "
+                                           "line's position."));
                                            
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
@@ -151,7 +151,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_magnitudeX = new KIntNumInput(plainPage());
     m_magnitudeX->setRange((int)((-2.0/3.0)*iface->originalWidth()), (int)((2.0/3.0)*iface->originalWidth()), 1, true);
     m_magnitudeX->setValue(0);
-    QWhatsThis::add( m_magnitudeX, i18n("<p>The shearing X magnitude in pixels."));
+    QWhatsThis::add( m_magnitudeX, i18n("<p>The X-shearing magnitude, in pixels."));
     hlay->addWidget(label, 1);
     hlay->addWidget(m_magnitudeX, 5);
         
@@ -160,7 +160,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_magnitudeY = new KIntNumInput(plainPage());
     m_magnitudeY->setRange((int)((-2.0/3.0)*iface->originalHeight()), (int)((2.0/3.0)*iface->originalHeight()), 1, true);
     m_magnitudeY->setValue(0);
-    QWhatsThis::add( m_magnitudeY, i18n("<p>The shearing Y magnitude in pixels."));
+    QWhatsThis::add( m_magnitudeY, i18n("<p>The Y-shearing magnitude, in pixels."));
     hlay2->addWidget(label2, 1);
     hlay2->addWidget(m_magnitudeY, 5);
     

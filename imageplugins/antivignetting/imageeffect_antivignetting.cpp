@@ -185,7 +185,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_powerSpinBox->setValue(10);
         
     whatsThis = i18n("<p>This value is used as the exponent controlling the fall-off in density "
-                     "from the centre of the filter to the periphery.");
+                     "from the center of the filter to the periphery.");
     QWhatsThis::add( m_powerSpinBox, whatsThis);
     QWhatsThis::add( m_powerSlider, whatsThis);                     
     
@@ -203,8 +203,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_radiusSpinBox = new QSpinBox(1, 100, 1, gbox2, "m_radiusSpinBox");
     m_radiusSpinBox->setValue(10);
     
-    whatsThis = i18n("<p>This value is the radius of the center filter. It's a multiple of the "
-                     "half diagonal measure of the image, at which the density of the filter falls to zero");
+    whatsThis = i18n("<p>This value is the radius of the center filter. It is a multiple of the "
+                     "half-diagonal measure of the image, at which the density of the filter falls to zero.");
     QWhatsThis::add( m_radiusSpinBox, whatsThis);
     QWhatsThis::add( m_radiusSlider, whatsThis);                     
     
