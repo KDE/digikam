@@ -112,9 +112,11 @@ ImageEffect_BCG::~ImageEffect_BCG()
 
 void ImageEffect_BCG::slotUser1()
 {
+    blockSignals(true);	
     m_bInput->setValue(0.0);
     m_cInput->setValue(1.0);
     m_gInput->setValue(1.0);
+    blockSignals(false);	
     slotEffect();
 } 
 
