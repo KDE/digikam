@@ -40,7 +40,7 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
               : KDialogBase(Plain, i18n("Rotate Image"), Help|Ok|Cancel, Ok,
                             parent, 0, true, true)
 {
-    setHelp("imageviewer.anchor", "digikam");
+    setHelp("imageeditor.anchor", "digikam");
     
     m_angle = angle;
 

@@ -38,9 +38,9 @@
 
 CameraSelection::CameraSelection( QWidget* parent )
     : KDialogBase(parent, 0, true, i18n("Camera Selection"),
-                  Ok|Cancel, Ok, true)
+                  Help|Ok|Cancel, Ok, true)
 {
-
+    setHelp("cameraselection.anchor", "digikam");
     UMSCameraNameActual_ = QString("Directory Browse");
     UMSCameraNameShown_  = QString("USB Mass Storage");
 

@@ -39,7 +39,7 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
               : KDialogBase(Plain, i18n("Resize Image"), Help|Ok|Cancel, Ok,
                             parent, 0, true, true)
 {
-    setHelp("imageviewer.anchor", "digikam");
+    setHelp("imageeditor.anchor", "digikam");
     
     m_width  = width;
     m_height = height;

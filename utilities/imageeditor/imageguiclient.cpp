@@ -252,7 +252,7 @@ QStringList ImageGUIClient::guiDefinition() const
 
 void ImageGUIClient::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp( "imageviewer.anchor", "digikam" );
+    KApplication::kApplication()->invokeHelp( "imageeditor.anchor", "digikam" );
 }
 
 void ImageGUIClient::slotAboutApp()
