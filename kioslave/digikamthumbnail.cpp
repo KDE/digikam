@@ -211,6 +211,20 @@ static QImage loadPNG(const QString& path)
     if (has_alpha)
         png_set_expand(png_ptr);
 
+    if (QImage::systemByteOrder() == QImage::LittleEndian)
+    {
+        png_set_bgr(png_ptr);
+        png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+    }
+    else
+    {
+        png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
+        png_set_swap_alpha(png_ptr);
+    }
+
+    if ( bit_depth == 16 )
+        png_set_strip_16(png_ptr);         
+
     png_set_bgr(png_ptr);
     png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
     png_set_strip_16(png_ptr);
