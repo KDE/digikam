@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_InsertText
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Insert text to image plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_inserttext
+author=Gilles Caulier, caulier dot gilles at free dot fr
