@@ -123,16 +123,20 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
+    
     m_radiusSlider = new QSlider(1, 20, 1, 1, Qt::Horizontal, plainPage(), "m_radiusSlider");
     m_radiusSlider->setTickmarks(QSlider::Below);
     m_radiusSlider->setTickInterval(1);
     m_radiusSlider->setTracking ( false );
+    
     m_radiusInput = new QSpinBox(1, 20, 1, plainPage(), "m_radiusInput");
+    
     whatsThis = i18n("<p>A radius of 0 has no effect, "
                      "1 and above determine the blur matrix radius "
                      "that determines how much to blur the image.");
     QWhatsThis::add( m_radiusInput, whatsThis);
     QWhatsThis::add( m_radiusSlider, whatsThis);
+    
     hlay2->addWidget(label1, 1);
     hlay2->addWidget(m_radiusSlider, 3);
     hlay2->addWidget(m_radiusInput, 1);
@@ -141,16 +145,20 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
+    
     m_blackLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_blackLevelSlider");
     m_blackLevelSlider->setTickmarks(QSlider::Below);
     m_blackLevelSlider->setTickInterval(20);
     m_blackLevelSlider->setTracking ( false );  
+    
     m_blackLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_blackLevelInput");
+    
     whatsThis = i18n("<p>This value controls adjust the black "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.");
     QWhatsThis::add( m_blackLevelInput, whatsThis);
     QWhatsThis::add( m_blackLevelSlider, whatsThis);                     
+    
     hlay3->addWidget(label2, 1);
     hlay3->addWidget(m_blackLevelSlider, 3);
     hlay3->addWidget(m_blackLevelInput, 1);
@@ -159,16 +167,21 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
+    
     m_whiteLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_whiteLevelSlider");
     m_whiteLevelSlider->setTickmarks(QSlider::Below);
     m_whiteLevelSlider->setTickInterval(20);
     m_whiteLevelSlider->setTracking ( false );  
+    
     m_whiteLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_whiteLevelInput");
+    
     whatsThis = i18n("<p>This value controls adjust the white "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.");
+    
     QWhatsThis::add( m_whiteLevelInput, whatsThis);
     QWhatsThis::add( m_whiteLevelSlider, whatsThis);                         
+    
     hlay4->addWidget(label3, 1);
     hlay4->addWidget(m_whiteLevelSlider, 3);
     hlay4->addWidget(m_whiteLevelInput, 1);
