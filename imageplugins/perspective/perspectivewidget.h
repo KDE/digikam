@@ -98,6 +98,21 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
+private:  // Matrix 3x3 perspective transformation implementations.
+        
+    struct Matrix3
+    {
+    double coeff[3][3];
+    };
+
+    void   matrix3Identity(Matrix3 *matrix);
+    void   matrix3Translate(Matrix3 *matrix, double x, double y);
+    void   matrix3Scale(Matrix3 *matrix, double x, double y);
+    void   matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2);
+    void   matrix3TransformPoint(const Matrix3 *matrix, double x, double y, double *newx, double *newy);
+    void   matrix3Invert(Matrix3 *matrix);
+    double matrix3Determinant(const Matrix3 *matrix);
+    
 private:  // Widget methods.
 
     enum ResizingMode
@@ -142,29 +157,12 @@ private:  // Widget methods.
     
     QPixmap*    m_pixmap;
     
-    void updatePixmap(void);
-
-private:  // Matrix 3x3 perspective transformation implementations.
-        
-    struct Matrix3
-    {
-    double coeff[3][3];
-    };
-
-    QPoint matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                                   QPoint transTopLeft, QPoint transTopRight,
-                                   QPoint transBottomLeft, QPoint transBottomRight,
-                                   uint* data, uint* newData);
-
-    void   matrix3Identity(Matrix3 *matrix);
-    void   matrix3Translate(Matrix3 *matrix, double x, double y);
-    void   matrix3Scale(Matrix3 *matrix, double x, double y);
-    void   matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2);
-    void   matrix3TransformPoint(const Matrix3 *matrix, double x, double y, double *newx, double *newy);
-    void   matrix3Invert(Matrix3 *matrix);
-    double matrix3Determinant(const Matrix3 *matrix);
-    
-    void   matrix3TransformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h);
+    void   updatePixmap(void);
+    void   transformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h);
+    QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+                            QPoint transTopLeft, QPoint transTopRight,
+                            QPoint transBottomLeft, QPoint transBottomRight,
+                            uint* data, uint* newData);
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

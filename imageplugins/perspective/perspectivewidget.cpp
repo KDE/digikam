@@ -209,7 +209,7 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
     
     // Perform perspective adjustment.
     
-    m_transformedCenter = matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_origW, m_origH),
+    m_transformedCenter = buildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_origW, m_origH),
                                                   getTopLeftCorner(), getTopRightCorner(), 
                                                   getBottomLeftCorner(), getBottomRightCorner(), 
                                                   data, newData);
@@ -243,7 +243,7 @@ void PerspectiveWidget::updatePixmap(void)
     
     uint *newData = new uint[m_w * m_h];
     
-    m_transformedCenter = matrix3BuildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_w, m_h),
+    m_transformedCenter = buildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_w, m_h),
                                                   m_topLeftPoint, m_topRightPoint, 
                                                   m_bottomLeftPoint, m_bottomRightPoint, 
                                                   m_data, newData);
@@ -325,10 +325,15 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                     
           if ( m_currentResizing == ResizingTopLeft )
              {
-             unsablePoints.putPoints(0, 3, 
-                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
+             unsablePoints.putPoints(0, 7, 
+                                     m_w-1, m_h-1,
+                                     0, m_h-1, 
+                                     0, m_bottomLeftPoint.y(),
+                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
                                      m_topRightPoint.x(), m_topRightPoint.y(),
-                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y());
+                                     m_topRightPoint.x(), 0,
+                                     m_w-1, 0
+                                     );
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -339,10 +344,15 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
             
           else if ( m_currentResizing == ResizingTopRight )
              {
-             unsablePoints.putPoints(0, 3, 
-                                     m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
+             unsablePoints.putPoints(0, 7,
+                                     0, m_h-1, 
+                                     0, 0,
+                                     m_topLeftPoint.x(), 0,
+                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
                                      m_bottomRightPoint.x(), m_bottomRightPoint.y(),
-                                     m_topLeftPoint.x(), m_topLeftPoint.y() );
+                                     m_w-1, m_bottomRightPoint.y(),
+                                     m_w-1, m_h-1
+                                     );
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -353,10 +363,15 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
           
           else if ( m_currentResizing == ResizingBottomLeft  )
              {
-             unsablePoints.putPoints(0, 3, 
-                                     m_topRightPoint.x(), m_topRightPoint.y(),
-                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
-                                     m_bottomRightPoint.x(), m_bottomRightPoint.y() );
+             unsablePoints.putPoints(0, 7,
+                                     m_w-1, 0,
+                                     m_w-1, m_h-1, 
+                                     m_bottomRightPoint.x(), m_h-1,
+                                     m_bottomRightPoint.x(), m_bottomRightPoint.y(),
+                                     m_topLeftPoint.x(), m_topLeftPoint.y(), 
+                                     0, m_topLeftPoint.y(),
+                                     0, 0
+                                     );
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -367,10 +382,15 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
           else if ( m_currentResizing == ResizingBottomRight )
              {
-             unsablePoints.putPoints(0, 3, 
-                                     m_topLeftPoint.x(), m_topLeftPoint.y(),
+             unsablePoints.putPoints(0, 7,
+                                     0, 0,
+                                     m_w-1, 0,
+                                     m_w-1, m_topRightPoint.y(),                                      
+                                     m_topRightPoint.x(), m_topRightPoint.y(), 
                                      m_bottomLeftPoint.x(), m_bottomLeftPoint.y(),
-                                     m_topRightPoint.x(), m_topRightPoint.y() );
+                                     m_bottomLeftPoint.x(), m_w-1,
+                                     0, m_w-1
+                                     );
              QRegion unsableArea(unsablePoints);
              
              if ( unsableArea.contains(pm) ) return;
@@ -399,10 +419,10 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Matrix 3x3 perspective transformation implementations.
 
-QPoint PerspectiveWidget::matrix3BuildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                                                  QPoint transTopLeft, QPoint transTopRight,
-                                                  QPoint transBottomLeft, QPoint transBottomRight,
-                                                  uint* data, uint* newData)
+QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+                                           QPoint transTopLeft, QPoint transTopRight,
+                                           QPoint transBottomLeft, QPoint transBottomRight,
+                                           uint* data, uint* newData)
 {
     Matrix3 matrix, transform;
     double  scalex;
@@ -497,14 +517,14 @@ QPoint PerspectiveWidget::matrix3BuildPerspective(QPoint orignTopLeft, QPoint or
     
     // Calculate new image center after perspective transformation.
     
-    matrix3TransformAffine(data, newData, &transform, (int)x2, (int)y2);
+    transformAffine(data, newData, &transform, (int)x2, (int)y2);
     double newCenterX, newCenterY;
     matrix3TransformPoint(&transform, x2/2.0, y2/2.0, &newCenterX, &newCenterY);
 
     return( QPoint::QPoint((int)newCenterX, (int)newCenterY) );
 }
 
-void PerspectiveWidget::matrix3TransformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h)
+void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h)
 {
     Matrix3     m;
     Matrix3     inv;
