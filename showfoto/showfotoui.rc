@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="showfoto" >
+
+<MenuBar>
+
+  <Menu name="view" >
+   <text>&amp;View</text>
+     <Action name="zoom_fit" /> 
+ </Menu>
+
+</MenuBar>
+
+</kpartgui>
