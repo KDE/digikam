@@ -87,14 +87,6 @@ o Added Colors autocorrection filter.
 o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 
 
-Exif Viewer :
--------------
-
-o Make Exif editor.
-o Using KDialogBase.
-o Added help access.
-
-
 SplashScreen :
 -------------
 
@@ -106,10 +98,9 @@ Handbook :
 
 - Updated screenshoots.                                            <Gilles Caulier - 0.7.0>
 - New screenshoots for dialog (setup, Album properties, 
-  Exif viewer, ImageViewer).                                       <Gilles Caulier - 0.7.0>
-- Added new sections for Album properties, Exif viewer and 
-  ImageViewer.                                                     <Gilles Caulier - 0.7.0>
-- Extract plugins section and create new handbooks 
+  ImageEditor).                                                    <Gilles Caulier - 0.7.0>
+- Added new sections for Album properties, and ImageEditor.        <Gilles Caulier - 0.7.0>
+x Extract plugins section and create new handbooks 
   for KipiPlugins.                                                 <Gilles Caulier - 0.7.0>
 
 
