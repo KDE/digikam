@@ -557,20 +557,14 @@ void ImageCurves::setCurveType(int channel, CurveType type)
 // app/base/gimpcurvestool.c::gimp_curves_tool_settings_load
 bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
 {
-/*    // TODO : support KURL !
-    
-    FILE          *file;
-    int            low_input[5];
-    int            high_input[5];
-    int            low_output[5];
-    int            high_output[5];
-    double         gamma[5];
-    int            i, fields;
-    char           buf[50];
-    char          *nptr;
+    FILE *file;
+    int   i, j;
+    int   fields;
+    char  buf[50];
+    int   index[5][17];
+    int   value[5][17];
 
     file = fopen(QFile::encodeName(fileUrl.path()), "r");
-    
     if (!file)
        return false;
     
@@ -580,51 +574,38 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
        return false;
        }
 
-    if (strcmp (buf, "# GIMP Levels File\n") != 0)
-       {
-       fclose(file);
+    if (strcmp (buf, "# GIMP Curves File\n") != 0)
        return false;
+
+    for (i = 0 ; i < 5 ; ++i)
+       {
+       for (j = 0 ; j < 17 ; ++j)
+          {
+          fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
+          if (fields != 2)
+             {
+             kdWarning() <<  "fields != 2" << endl;
+             fclose(file);
+             return false;
+             }
+          }
+       }
+
+    for (i = 0  ; i < 5 ; ++i)
+       {
+       m_curves->curve_type[i] = CURVE_SMOOTH;
+
+       for (j = 0 ; j < 17 ; ++j)
+          {
+          m_curves->points[i][j][0] = index[i][j];
+          m_curves->points[i][j][1] = value[i][j];
+          }
        }
 
     for (i = 0 ; i < 5 ; ++i)
-      {
-      fields = fscanf (file, "%d %d %d %d ",
-                       &low_input[i],
-                       &high_input[i],
-                       &low_output[i],
-                       &high_output[i]);
+       curvesCalculateCurve(i);
 
-      if (fields != 4)
-        {
-        fclose(file);
-        return false;
-        }
-
-      if (! fgets (buf, 50, file))
-        {
-        fclose(file);
-        return false;
-        }
-
-      gamma[i] = strtod (buf, &nptr);
-
-      if (buf == nptr || errno == ERANGE)
-        {
-        fclose(file);
-        return false;
-        }
-      }
-
-    for (i = 0 ; i < 5 ; ++i)
-      {
-      setLevelGammaValue(i, gamma[i]);
-      setLevelLowInputValue(i, low_input[i]);
-      setLevelHighInputValue(i, high_input[i]);
-      setLevelLowOutputValue(i, low_output[i]);
-      setLevelHighOutputValue(i, high_output[i]);
-      }
-
-    fclose(file);*/
+    fclose(file);
     return true;
 }
 
@@ -632,36 +613,50 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
 // app/base/gimpcurvestool.c::gimp_curves_tool_settings_load
 bool ImageCurves::saveCurvesToGimpCurvesFile(KURL fileUrl)
 {
-/*    // TODO : support KURL !
-  
-    FILE          *file;
-    int            i;
+    // TODO : support KURL !
+    
+    FILE *file;
+    int   i, j;
+    int   index;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "w");
     
     if (!file)
        return false;
+    
+    for (i = 0 ; i < 5 ; ++i)
+       {
+       if (m_curves->curve_type[i] == CURVE_FREE)
+          {
+          //  Pick representative points from the curve and make them control points.
+   
+          for (j = 0 ; j <= 8 ; ++j)
+             {
+             index = CLAMP0255 (j * 32);
+             m_curves->points[i][j * 2][0] = index;
+             m_curves->points[i][j * 2][1] = m_curves->curve[i][index];
+             }
+          }
+       }
 
-    fprintf (file, "# GIMP Levels File\n");
+    fprintf (file, "# GIMP Curves File\n");
 
     for (i = 0 ; i < 5 ; ++i)
-      {
-      char buf[256];
-      sprintf (buf, "%f", getLevelGammaValue(i));
-      
-      fprintf (file, "%d %d %d %d %s\n",
-               getLevelLowInputValue(i),
-               getLevelHighInputValue(i),
-               getLevelLowOutputValue(i),
-               getLevelHighInputValue(i), 
-               buf);
-      }
+       {
+       for (j = 0 ; j < 17 ; ++j)
+          {
+          fprintf (file, "%d %d ",
+                   m_curves->points[i][j][0],
+                   m_curves->points[i][j][1]);
 
+          fprintf (file, "\n");
+          }
+       }
+    
     fflush(file);
     fclose(file);
-  */
+
     return true;
 }
-
 
 }  // NameSpace Digikam
