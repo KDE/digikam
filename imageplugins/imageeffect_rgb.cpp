@@ -31,10 +31,11 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qspinbox.h>
+#include <qslider.h>
 
 // KDE includes.
 
-#include <knuminput.h>
 #include <klocale.h>
 
 // Digikam includes.
@@ -69,39 +70,63 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel      *label = 0;
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Cyan/Red:"), plainPage());
-    m_rInput = new KIntNumInput(plainPage());
-    m_rInput->setRange(-100, 100, 1, true);
-    QWhatsThis::add( m_rInput, i18n("<p>Set here the cyan/red color adjustment of the image."));
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_rInput,5);
-
+    label    = new QLabel(i18n("Cyan"), plainPage());
+    label->setAlignment ( Qt::AlignRight );
+    hlay->addWidget(label, 1);
+    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_rSlider");
+    m_rSlider->setTickmarks(QSlider::Below);
+    m_rSlider->setTickInterval(20);
+    QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
+    hlay->addWidget(m_rSlider, 5);
+    label    = new QLabel(i18n("Red"), plainPage());
+    hlay->addWidget(label, 1);
+    m_rInput = new QSpinBox(-100, 100, 1, plainPage(), "m_rInput");
+    hlay->addWidget(m_rInput, 1);
+    
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Magenta/Green:"), plainPage());
-    m_gInput = new KIntNumInput(plainPage());
-    m_gInput->setRange(-100, 100, 1, true);
-    QWhatsThis::add( m_gInput, i18n("<p>Set here the magenta/green color adjustment of the image."));
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_gInput,5);
-
+    label    = new QLabel(i18n("Magenta"), plainPage());
+    label->setAlignment ( Qt::AlignRight );
+    hlay->addWidget(label, 1);
+    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_gSlider");
+    m_gSlider->setTickmarks(QSlider::Below);
+    m_gSlider->setTickInterval(20);
+    QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
+    hlay->addWidget(m_gSlider, 5);
+    label    = new QLabel(i18n("Green"), plainPage());
+    hlay->addWidget(label, 1);
+    m_gInput = new QSpinBox(-100, 100, 1, plainPage(), "m_gInput");
+    hlay->addWidget(m_gInput, 1);
+ 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Yellow/blue:"), plainPage());
-    m_bInput = new KIntNumInput(plainPage());
-    m_bInput->setRange(-100, 100, 1, true);
-    QWhatsThis::add( m_bInput, i18n("<p>Set here the yellow/blue color adjustment of the image."));    
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_bInput,5);
+    label    = new QLabel(i18n("Yellow"), plainPage());
+    label->setAlignment ( Qt::AlignRight );
+    hlay->addWidget(label, 1);
+    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_bSlider");
+    m_bSlider->setTickmarks(QSlider::Below);
+    m_bSlider->setTickInterval(20);
+    QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));    
+    hlay->addWidget(m_bSlider, 5);
+    label    = new QLabel(i18n("blue"), plainPage());
+    hlay->addWidget(label, 1);
+    m_bInput = new QSpinBox(-100, 100, 1, plainPage(), "m_bInput");
+    hlay->addWidget(m_bInput, 1);
 
     m_rInput->setValue(0);
     m_gInput->setValue(0);
     m_bInput->setValue(0);
 
+    connect(m_rSlider, SIGNAL(valueChanged(int)),
+            m_rInput, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
+    connect(m_gSlider, SIGNAL(valueChanged(int)),
+            m_gInput, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
+    connect(m_bSlider, SIGNAL(valueChanged(int)),
+            m_bInput, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
 
@@ -114,11 +139,7 @@ ImageEffect_RGB::~ImageEffect_RGB()
 
 void ImageEffect_RGB::slotUser1()
 {
-    blockSignals(true);
-    m_rInput->setValue(0);
-    m_gInput->setValue(0);
-    m_bInput->setValue(0);
-    blockSignals(false);
+    adjustSliders(0, 0, 0);
     slotEffect();
 } 
 
@@ -130,7 +151,9 @@ void ImageEffect_RGB::slotEffect()
     uint* data  = iface->getPreviewData();
     int   w     = iface->previewWidth();
     int   h     = iface->previewHeight();
-        
+
+    adjustSliders(m_rInput->value(), m_gInput->value(), m_bInput->value());
+                
     double r = ((double)m_rInput->value() + 100.0)/100.0;
     double g = ((double)m_gInput->value() + 100.0)/100.0;  
     double b = ((double)m_bInput->value() + 100.0)/100.0;
@@ -151,7 +174,9 @@ void ImageEffect_RGB::slotOk()
     uint* data  = iface->getOriginalData();
     int   w     = iface->originalWidth();
     int   h     = iface->originalHeight();
-        
+
+    adjustSliders(m_rInput->value(), m_gInput->value(), m_bInput->value());
+            
     double r = ((double)m_rInput->value() + 100.0)/100.0;
     double g = ((double)m_gInput->value() + 100.0)/100.0;  
     double b = ((double)m_bInput->value() + 100.0)/100.0;
@@ -162,6 +187,15 @@ void ImageEffect_RGB::slotOk()
     iface->putOriginalData(data);
     delete [] data;
     accept();
+}
+
+void ImageEffect_RGB::adjustSliders(int r, int g, int b)
+{
+    blockSignals(true);
+    m_rSlider->setValue(r);
+    m_gSlider->setValue(g);
+    m_bSlider->setValue(b);
+    blockSignals(false);
 }
 
 void ImageEffect_RGB::adjustRGB(double r, double g, double b, double a, uint *data, int w, int h)

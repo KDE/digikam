@@ -26,7 +26,8 @@
 
 #include <kdialogbase.h>
 
-class KIntNumInput;
+class QSpinBox;
+class QSlider;
 
 namespace Digikam
 {
@@ -44,13 +45,19 @@ public:
 
 private:
 
-    KIntNumInput         *m_rInput;
-    KIntNumInput         *m_gInput;
-    KIntNumInput         *m_bInput;
+    QSpinBox             *m_rInput;
+    QSpinBox             *m_gInput;
+    QSpinBox             *m_bInput;
+    
+    QSlider              *m_rSlider;
+    QSlider              *m_gSlider;
+    QSlider              *m_bSlider;
+    
     Digikam::ImageWidget *m_previewWidget;
 
     void adjustRGB(double r, double g, double b, double a, uint *data, int w, int h);
-        
+    void adjustSliders(int r, int g, int b);
+    
 private slots:
 
     void slotUser1();

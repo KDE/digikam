@@ -126,9 +126,9 @@ void ImageEffect_BCG::slotEffect()
         m_previewWidget->imageIface();
 
     double b = m_bInput->value();
-    double c = m_cInput->value() + (double)(1.0);    
-    double g = m_gInput->value() + (double)(1.0);
-
+    double c = m_cInput->value() + (double)(1.00);    
+    double g = m_gInput->value() + (double)(1.00);
+    
     iface->setPreviewBCG(b, c, g);
     m_previewWidget->update();
 }
@@ -139,8 +139,8 @@ void ImageEffect_BCG::slotOk()
         m_previewWidget->imageIface();
 
     double b = m_bInput->value();
-    double c = m_cInput->value() + (double)(1.0);    
-    double g = m_gInput->value() + (double)(1.0);
+    double c = m_cInput->value() + (double)(1.00);    
+    double g = m_gInput->value() + (double)(1.00);
 
     iface->setOriginalBCG(b, c, g);
 
