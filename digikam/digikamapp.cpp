@@ -81,11 +81,13 @@ DigikamApp::DigikamApp(bool detectCamera)
 
     mFullScreen = false;
     mView = 0;
-    bool showSplash = m_config->readBoolEntry("Show Splash", true);
+	
     mSplash = 0;
-    
-    if(showSplash)
+    if(m_config->readBoolEntry("Show Splash", true) &&
+       !kapp->isRestored())
+    {
         mSplash = new SplashScreen();
+    }
 
     mAlbumSettings = new AlbumSettings();
     mAlbumSettings->readSettings();
