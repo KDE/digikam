@@ -680,6 +680,48 @@ IntList AlbumDB::getItemTagIDs(PAlbum *album, const QString& name)
     return ids;
 }
 
+IntList AlbumDB::getItemCommonTagIDs(const IntList& dirIDList, const QStringList& nameList)
+{
+    IntList ids;
+    
+    if (dirIDList.isEmpty() || dirIDList.count() != nameList.count())
+        return ids;
+
+    QStringList values;
+
+    QString sql = QString("SELECT tagid FROM ImageTags "
+                          "WHERE (dirid=%1 AND name='%2')")
+                  .arg(dirIDList.first())
+                  .arg(escapeString(nameList.first()));
+
+    IntList::const_iterator     diter = dirIDList.begin();
+    QStringList::const_iterator niter = nameList.begin();
+
+    ++diter;
+    ++niter;
+
+    while (diter != dirIDList.end())
+    {
+        sql += QString(" OR (dirid=%1 AND name='%2')")
+               .arg(*diter)
+               .arg(escapeString(*niter));
+        ++diter;
+        ++niter;
+    }
+
+    sql += QString(";");
+    execSql( sql, &values );
+
+    if (values.isEmpty())
+        return ids;
+    
+    for (QStringList::iterator it=values.begin(); it != values.end(); ++it)
+    {
+        ids << (*it).toInt();
+    }
+    return ids;
+}
+
 void AlbumDB::setItemCaption(PAlbum *album, const QString& name, const QString& caption)
 {
     QStringList values;

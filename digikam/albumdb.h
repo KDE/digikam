@@ -24,6 +24,7 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qstringlist.h>
 #include <qdatetime.h>
 
 typedef struct sqlite sqleet; // hehe.
@@ -59,6 +60,7 @@ public:
     QString     getItemCaption(PAlbum *album, const QString& name);
     QStringList getItemTagNames(PAlbum *album, const QString& name);
     IntList     getItemTagIDs(PAlbum *album, const QString& name);
+    IntList     getItemCommonTagIDs(const IntList& dirIDList, const QStringList& nameList);
 
     void setItemCaption(PAlbum *album, const QString& name,
                         const QString& caption);

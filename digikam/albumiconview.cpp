@@ -88,6 +88,7 @@
 #include "digikamio.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
+#include "tagspopupmenu.h"
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -516,11 +517,15 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     // Bulk assignment/removal of tags --------------------------
 
-    QPopupMenu* assignTagsPopup = getTagsPopup(1000);
-    QPopupMenu* removeTagsPopup = getTagsPopup(2000);
+    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(this, 1000);
+    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(this, 2000, true);
+    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
+            SLOT(slotAssignTag(int)));
+    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
+            SLOT(slotRemoveTag(int)));
     
-    popmenu.insertItem(i18n("Assign Tags"), assignTagsPopup);
-    popmenu.insertItem(i18n("Remove Tags"), removeTagsPopup);
+    popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
+    popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
     popmenu.insertSeparator();
     
     // Merge in the KIPI plugins actions ----------------------------
@@ -616,66 +621,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     if (id >= 100 && id < 1000) {
         KService::Ptr imageServicePtr = serviceVector[id-100];
         KRun::run(*imageServicePtr, iconItem->fileItem()->url());
-    }
-    else if (id >= 1000 && id < 2000)
-    {
-        AlbumManager* man = AlbumManager::instance();
-        AlbumDB* db = man->albumDB();
-        
-        TAlbum* talbum = man->findTAlbum(id-1000);
-
-        if (talbum)
-        {        
-            for (ThumbItem *it = firstItem(); it; it = it->nextItem())
-            {
-                if (it->isSelected())
-                {
-                    AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-                    PAlbum* palbum =
-                        d->imageLister->findParentAlbum(albumItem->fileItem());
-                    if (palbum)
-                    {
-                        db->setItemTag(palbum, albumItem->text(), talbum);
-                    }
-                }
-            }
-        }
-
-        if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-        {
-            d->imageLister->updateDirectory();        
-        }
-        updateContents();
-    }
-    else if (id >= 2000)
-    {
-        AlbumManager* man = AlbumManager::instance();
-        AlbumDB* db = man->albumDB();
-        
-        TAlbum* talbum = man->findTAlbum(id-2000);
-
-        if (talbum)
-        {        
-            for (ThumbItem *it = firstItem(); it; it = it->nextItem())
-            {
-                if (it->isSelected())
-                {
-                    AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-                    PAlbum* palbum =
-                        d->imageLister->findParentAlbum(albumItem->fileItem());
-                    if (palbum)
-                    {
-                        db->removeItemTag(palbum, albumItem->text(), talbum);
-                    }
-                }
-            }
-        }
-
-        if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-        {
-            d->imageLister->updateDirectory();        
-        }
-        updateContents();
     }
 
     serviceVector.clear();
@@ -1894,39 +1839,67 @@ AlbumIconItem* AlbumIconView::findItem(const QString& url) const
     return d->itemDict.find(url);    
 }
 
-QPopupMenu* AlbumIconView::getTagsPopup(int addToID, QWidget* parent, int tagid)
+void AlbumIconView::slotAssignTag(int tagID)
 {
     AlbumManager* man = AlbumManager::instance();
-    TAlbum* album = man->findTAlbum(tagid);
-    if (!album)
-        return 0;
-    
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    
-    QPopupMenu* popup = new QPopupMenu(parent);
+    AlbumDB* db = man->albumDB();
+        
+    TAlbum* talbum = man->findTAlbum(tagID);
 
-    if (!album->isRoot())
-    {
-        QPixmap pix(iconLoader->loadIcon(album->getIcon(),KIcon::Small));
-        popup->insertItem(pix, album->getTitle(), addToID + album->getID());
-        popup->insertSeparator();
-    }
-    
-    for (Album* a = album->firstChild(); a; a = a->next())
-    {
-        QPixmap pix(iconLoader->loadIcon(a->getIcon(),KIcon::Small));
-        if (a->firstChild())
+    if (talbum)
+    {        
+        for (ThumbItem *it = firstItem(); it; it = it->nextItem())
         {
-            popup->insertItem(pix, a->getTitle(),
-                              getTagsPopup(addToID, popup, a->getID()));
-        }
-        else
-        {
-            popup->insertItem(pix, a->getTitle(), addToID+a->getID());
+            if (it->isSelected())
+            {
+                AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                PAlbum* palbum =
+                    d->imageLister->findParentAlbum(albumItem->fileItem());
+                if (palbum)
+                {
+                    db->setItemTag(palbum, albumItem->text(), talbum);
+                }
+            }
         }
     }
 
-    return popup;
+    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    {
+        d->imageLister->updateDirectory();        
+    }
+    updateContents();
+
+}
+
+void AlbumIconView::slotRemoveTag(int tagID)
+{
+    AlbumManager* man = AlbumManager::instance();
+    AlbumDB* db = man->albumDB();
+        
+    TAlbum* talbum = man->findTAlbum(tagID);
+
+    if (talbum)
+    {        
+        for (ThumbItem *it = firstItem(); it; it = it->nextItem())
+        {
+            if (it->isSelected())
+            {
+                AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                PAlbum* palbum =
+                    d->imageLister->findParentAlbum(albumItem->fileItem());
+                if (palbum)
+                {
+                    db->removeItemTag(palbum, albumItem->text(), talbum);
+                }
+            }
+        }
+    }
+
+    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    {
+        d->imageLister->updateDirectory();        
+    }
+    updateContents();
 }
 
 #include "albumiconview.moc"

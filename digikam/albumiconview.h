@@ -45,7 +45,6 @@ class QPoint;
 class QString;
 class QPainter;
 class QPixmap;
-class QPopupMenu;
 
 class AlbumIconItem;
 class AlbumSettings;
@@ -127,7 +126,6 @@ private:
     bool           showMetaInfo();
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
-    QPopupMenu*    getTagsPopup(int addToID, QWidget* parent=0, int tagid=0);
 
 private slots:
 
@@ -156,6 +154,9 @@ private slots:
     void slotShowToolTip(ThumbItem* item);
 
     void slotThemeChanged();
+
+    void slotAssignTag(int tagID);
+    void slotRemoveTag(int tagID);
     
 public slots:
 
