@@ -68,7 +68,7 @@ ThumbDB::ThumbDB()
     QCString encPath = QFile::encodeName(dbPath);
     
     const char* path = encPath; 
-    d->db = gdbm_open((char*)path, 1024, GDBM_WRCREAT|GDBM_FAST,
+    d->db = gdbm_open((char*)path, 0, GDBM_WRCREAT|GDBM_FAST,
                       0666, 0);
      if (!d->db)
          kdWarning() << "Failed to open Thumbnail DB file: " << dbPath << endl;
