@@ -1,3 +1,31 @@
+v0.7.1-beta2			20/12/04
+----------------------------------------------------------------------------
+2004-12-20 15:11  pahlibar
+
+	* configure.in.in:
+	  make sure to check for libkexif 0.2 version
+
+2004-12-20 13:21  pahlibar
+
+	* digikam/albumdb.cpp:
+	  revert back to using local8bit as moving to fromutf8 breaks
+	  backward compatibility for "C" locale users
+
+2004-12-20 13:18  pahlibar
+
+	* kioslave/digikamthumbnail.cpp:
+	  fix endianness issue in loading png thumbnails
+
+2004-12-18 15:16  cgilles
+
+	* utilities/splashscreen/digikam-splash.png: Updated official 0.7.1
+	  release splashscreen from Yemu
+
+2004-12-18 04:17  cgilles
+
+	* digikam/imagedescedit.cpp: kexif.h have been changed to
+	  kexifwidget.h.  Bug reported by Laurent Montel from MandrakeSoft
+
 v0.7.1-beta1			17/12/04
 ----------------------------------------------------------------------------
 2004-12-17 12:17  cgilles
