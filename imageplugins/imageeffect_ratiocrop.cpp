@@ -98,7 +98,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     topLayout->addMultiCellWidget(label2, 1, 1, 3, 3);
     topLayout->addMultiCellWidget(m_orientCB, 1, 1, 4, 4);
 
-    QHBoxLayout* l2 = new QHBoxLayout(plainPage(), 1, 0);
+    QHBoxLayout* l2 = new QHBoxLayout((QWidget*)0, 1, 0);
     m_customLabel1 = new QLabel(i18n("Custom Ratio: "), plainPage());
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
     m_customRatioNInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
