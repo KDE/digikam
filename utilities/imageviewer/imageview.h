@@ -81,6 +81,8 @@ private:
     void addKeyInDict(const QString& key);
     void promptUserSave();
     void loadCurrentItem();
+    void setPrevAction(bool val);
+    void setNextAction(bool val);
     
     // For printing. 
     

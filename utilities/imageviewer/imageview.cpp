@@ -200,6 +200,8 @@ public:
     Canvas      *canvas;
     QWidget     *buttonBar;
     QHBoxLayout *buttonLayout;
+    QWidget     *buttonBar2;
+    QHBoxLayout *buttonLayout2;
     QLabel      *nameLabel;
     QLabel      *zoomLabel;
 
@@ -379,9 +381,7 @@ void ImageView::readSettings()
     bool autoZoom;
     bool fullScreen;
     
-    
     config->setGroup("ImageViewer Settings");
-
     width = config->readNumEntry("Width", 500);
     height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
@@ -403,7 +403,6 @@ void ImageView::saveSettings()
     KConfig* config = kapp->config();
 
     config->setGroup("ImageViewer Settings");
-
     config->writeEntry("Width", width());
     config->writeEntry("Height", height());
     config->writeEntry("AutoZoom", d->bZoomAuto->isOn());
@@ -455,10 +454,14 @@ void ImageView::initGui()
 {
     QVBoxLayout *vlayout = new QVBoxLayout(this);
 
-    d->buttonBar = new QWidget(this);
-    d->buttonLayout = new QHBoxLayout(d->buttonBar, 2);
-    vlayout->addWidget(d->buttonBar);
+    d->buttonBar2 = new QWidget(this);
+    d->buttonLayout2 = new QHBoxLayout(d->buttonBar2, 2, -1, "buttonbar2");
+    vlayout->addWidget(d->buttonBar2);
 
+    d->buttonBar = new QWidget(this);
+    d->buttonLayout = new QHBoxLayout(d->buttonBar, 2, -1, "buttonbar1");
+    vlayout->addWidget(d->buttonBar);
+        
     d->canvas = new Canvas(this);
     vlayout->addWidget(d->canvas);
 }
@@ -853,53 +856,58 @@ void ImageView::addKeyInDict(const QString& key)
 
 void ImageView::setupButtons()
 {
-    d->bPrev = new CButton(d->buttonBar,
-                           d->actions.find("prev"),
-                           BarIcon("back"));
-    d->buttonLayout->addWidget(d->bPrev);
+    d->bPrev = new CButton(d->buttonBar2,
+                             d->actions.find("prev"),
+                             BarIcon("back"));
+    d->buttonLayout2->addWidget(d->bPrev);
 
-    d->bNext = new CButton(d->buttonBar,
+    d->bNext = new CButton(d->buttonBar2,
                              d->actions.find("next"),
                              BarIcon("forward"));
-    d->buttonLayout->addWidget(d->bNext);
+    d->buttonLayout2->addWidget(d->bNext);
 
-    QHBox *labelBox = new QHBox(d->buttonBar);
+    QHBox *labelBox = new QHBox(d->buttonBar2);
     labelBox->setPaletteBackgroundColor(Qt::white);
     labelBox->setMargin(0);
     labelBox->setSpacing(2);
-    d->buttonLayout->addSpacing(5);
-    d->buttonLayout->addWidget(labelBox);
-    d->buttonLayout->addSpacing(5);
-
+    
+    d->buttonLayout2->addSpacing(5);
+    d->buttonLayout2->addWidget(labelBox);
+    d->buttonLayout2->addSpacing(5);
+    
     d->nameLabel = new QLabel(labelBox);
     d->nameLabel->setPaletteBackgroundColor(Qt::white);
     d->nameLabel->setFrameShape(QFrame::Box);
+    labelBox->setStretchFactor(d->nameLabel, 5);
+    
     d->zoomLabel = new QLabel(labelBox);
     d->zoomLabel->setPaletteBackgroundColor(Qt::white);
     d->zoomLabel->setFrameShape(QFrame::Box);
-
-    d->bZoomIn = new CButton(d->buttonBar,
+    labelBox->setStretchFactor(d->zoomLabel, 1);
+    
+    d->bZoomIn = new CButton(d->buttonBar2,
                              d->actions.find("zoomIn"),
                              BarIcon("viewmag+"));
-                             
-    d->buttonLayout->addWidget(d->bZoomIn);
+    d->buttonLayout2->addWidget(d->bZoomIn);
 
-    d->bZoomOut = new CButton(d->buttonBar,
+    d->bZoomOut = new CButton(d->buttonBar2,
                              d->actions.find("zoomOut"),
                              BarIcon("viewmag-"));
-    d->buttonLayout->addWidget(d->bZoomOut);
+    d->buttonLayout2->addWidget(d->bZoomOut);
 
-    d->bZoomAuto = new CButton(d->buttonBar,
+    d->bZoomAuto = new CButton(d->buttonBar2,
                              d->actions.find("toggleAutoZoom"),
                              BarIcon("viewmagfit"),
                              true, true);
-    d->buttonLayout->addWidget(d->bZoomAuto);
+    d->buttonLayout2->addWidget(d->bZoomAuto);
 
-    d->bZoom1 = new CButton(d->buttonBar,
+    d->bZoom1 = new CButton(d->buttonBar2,
                              d->actions.find("zoom1"),
                              BarIcon("viewmag1"));
-    d->buttonLayout->addWidget(d->bZoom1);
+    d->buttonLayout2->addWidget(d->bZoom1);
 
+    //-----------------------------------------------------------------
+    
     d->bFullScreen = new CButton(d->buttonBar,
                              d->actions.find("toggleFullScreen"),
                              BarIcon("window_fullscreen"),
@@ -985,6 +993,8 @@ void ImageView::setupButtons()
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::closeEvent(QCloseEvent *e)
 {
     if (!e) return;
@@ -1057,7 +1067,6 @@ bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
     if ( shrinkToFit && image.width() > w || image.height() > h ) {
         image = image.smoothScale( w, h, QImage::ScaleMin );
     }
-
 
     //
     // align image
@@ -1249,6 +1258,28 @@ float ImageViewPrintDialogPage::pixelsToUnit( int /*pixels*/ ) const
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::setNextAction(bool val)
+{
+    d->bNext->setEnabled(val);
+    CAction *action = 0;
+    action = d->actions.find("next");
+    d->contextMenu->setItemEnabled(action->menuID, val);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::setPrevAction(bool val)
+{
+    d->bPrev->setEnabled(val);
+    CAction *action = 0;
+    action = d->actions.find("prev");
+    d->contextMenu->setItemEnabled(action->menuID, val);
+}
+
+
 //////////////////////////////////////// SLOTS //////////////////////////////////////////////
 
 void ImageView::slotNextImage()
@@ -1268,12 +1299,12 @@ void ImageView::slotNextImage()
            loadCurrentItem();
              
            if (d->urlList.count() == 1)
-              d->bPrev->setEnabled(false);
+               setPrevAction(false);
            else       
-              d->bPrev->setEnabled(true);
+               setPrevAction(true);
                           
            if (d->urlCurrent == d->urlList.last()) 
-               d->bNext->setEnabled(false);   
+               setNextAction(false);
            }
         }
 }
@@ -1298,12 +1329,12 @@ void ImageView::slotPrevImage()
              loadCurrentItem();
              
              if (d->urlList.count() == 1)
-                d->bNext->setEnabled(false);
+               setNextAction(false);
              else       
-                d->bNext->setEnabled(true);
+               setNextAction(true);
              
              if (d->urlCurrent == d->urlList.first()) 
-                 d->bPrev->setEnabled(false);
+                setPrevAction(false);
              }
          }
 }
