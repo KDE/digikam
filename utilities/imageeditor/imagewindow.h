@@ -84,6 +84,7 @@ private:
     ImageWindow();
     void readSettings();
     void saveSettings();
+    void promptUserSave();
 
 signals:
 
@@ -124,6 +125,11 @@ private slots:
     void slotCommentsEdit();
     
     void slotDeleteCurrentItem();
+
+protected:
+
+    void closeEvent(QCloseEvent *e);
+
 };
 
 #endif /* IMAGEWINDOW_H */

@@ -324,6 +324,8 @@ void ImageWindow::slotLoadCurrent()
 
 void ImageWindow::slotLoadNext()
 {
+    promptUserSave();
+    
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
     if (it != m_urlList.end()) {
@@ -338,6 +340,8 @@ void ImageWindow::slotLoadNext()
 
 void ImageWindow::slotLoadPrev()
 {
+    promptUserSave();
+    
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
     if (it != m_urlList.begin()) {
@@ -351,15 +355,16 @@ void ImageWindow::slotLoadPrev()
     }
 }
 
-
 void ImageWindow::slotLoadFirst()
 {
+    promptUserSave();
     m_urlCurrent = m_urlList.first();
     slotLoadCurrent();
 }
 
 void ImageWindow::slotLoadLast()
 {
+    promptUserSave();
     m_urlCurrent = m_urlList.last();
     slotLoadCurrent();
 }
@@ -793,6 +798,29 @@ void ImageWindow::slotToggleFullScreen()
         m_fullScreen = true;
         }
 }
+
+void ImageWindow::promptUserSave()
+{
+    if (m_guiClient->m_saveAction->isEnabled()) 
+        {
+        int result =
+            KMessageBox::warningYesNo(this,                                      
+                                      i18n("The image \"%1\" has been modified.\n"
+                                           "Do you want to save it?")
+                                           .arg(m_urlCurrent.filename()));
+        if (result == KMessageBox::Yes)
+            slotSave();
+        }
+}
+
+void ImageWindow::closeEvent(QCloseEvent *e)
+{
+    if (!e) return;
+
+    promptUserSave();
+    e->accept();
+}
+
 
 #include "imagewindow.moc"
 
