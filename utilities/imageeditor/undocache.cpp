@@ -21,6 +21,9 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kaboutdata.h>
+#include <kinstance.h>
+#include <kglobal.h>
 
 #include <qcstring.h>
 #include <qstring.h>
@@ -55,7 +58,11 @@ UndoCache::UndoCache()
 {
     d = new UndoCachePriv;
 
-    d->dbPath = locateLocal("cache", "digikam_imageviewer_undo.db");
+    QString tmp = QString("%1-%2")
+                  .arg(KGlobal::instance()->aboutData()->programName())
+                  .arg(getpid());
+    
+    d->dbPath = locateLocal("cache", tmp + "_undocache.db");
     QCString encPath = QFile::encodeName(d->dbPath);
 
     const char* path = encPath; 
