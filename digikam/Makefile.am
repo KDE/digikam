@@ -11,6 +11,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/curves \
 	-I$(top_srcdir)/digikam/libs/themeengine \
 	-I$(top_srcdir)/digikam/libs/widgets \
+	-I$(top_srcdir)/digikam/libs/thumbbar \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
@@ -45,6 +46,7 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
 		        $(top_builddir)/digikam/libs/levels/liblevels.la \
 		        $(top_builddir)/digikam/libs/curves/libcurves.la \
 		        $(top_builddir)/digikam/libs/filters/libfilters.la \
+		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
