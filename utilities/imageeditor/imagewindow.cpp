@@ -279,11 +279,13 @@ void ImageWindow::applySettings()
                                                         &bgColor));
     m_canvas->update();
 
-    // JPEG compression value.
-    m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
+    // JPEG quality value.
+    // JPEG quality slider setting : 0 - 100 ==> imlib2 setting : 25 - 100.
+    m_JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75) + 25.0 - (75.0/99.0));
 
     // PNG compression value.
-    m_PNGCompression = -11*config->readNumEntry("PNGCompression", 1) + 111;
+    // PNG compression slider setting : 1 - 9 ==> imlib2 setting : 100 - 1.
+    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1) + 100.0 - ((1.0-100.0)/8.0));
 
     // TIFF compression.
     m_TIFFCompression = config->readBoolEntry("TIFFCompression", false);
