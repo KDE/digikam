@@ -46,7 +46,7 @@ CameraUI* CameraUI::getInstance()
 
 CameraUI::CameraUI(const QString& libraryPath, const QString& downloadAlbum,
                    const CameraType& ctype)
-    : KMainWindow( 0, ctype.title().ascii() )
+    : KMainWindow( 0, ctype.title().utf8() )
 {
     fullScreen = false;
     instance_ = this;
