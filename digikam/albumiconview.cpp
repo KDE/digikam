@@ -974,26 +974,24 @@ void AlbumIconView::updateBanner()
         date             = album->getDate();
 
 #if KDE_IS_VERSION(3,2,0)
-        d->albumDate = i18n("%1 %2 - %3 Items")
+        d->albumDate = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", QString::number(count()))
                        .arg(KGlobal::locale()->calendar()->monthName(date, false))
-                       .arg(KGlobal::locale()->calendar()->year(date))
-                       .arg(QString::number(count()));
+                       .arg(KGlobal::locale()->calendar()->year(date));
 #else
-        d->albumDate = i18n("%1 %2 - %3 Items")
+        d->albumDate = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", QString::number(count()))
                        .arg(KGlobal::locale()->monthName(date.month()))
-                       .arg(QString::number(date.year()))
-                       .arg(QString::number(count()));
+                       .arg(QString::number(date.year()));
 #endif
     }
     else if (d->currentAlbum->type() == Album::TAG)
     {
         d->albumComments = (static_cast<TAlbum*>(d->currentAlbum))->getURL();
-        d->albumDate     = i18n("%1 Items").arg(QString::number(count()));
+        d->albumDate     = i18n("1 Item", "%n Items", QString::number(count()));
     }
     else
     {
         d->albumComments = QString("");
-        d->albumDate     = i18n("%1 Items").arg(QString::number(count()));
+        d->albumDate     = i18n("1 Item", "%n Items", QString::number(count()));
     }
     
     calcBanner();
