@@ -1193,7 +1193,7 @@ void AlbumIconView::slotSetExifOrientation( const QString filename, int orientat
     exifData->writeOrientation(filename, o);
     delete exifData;
 
-    emit 
+    refresh(); 
 }
 
 void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
