@@ -1,5 +1,6 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * Added saving of comments in EXIF UserComment field and in JPEG COM field
         * Added Albums Collections and plugins management Settings tabs in Settings dialog.
         * New Settings dialog based on QFrame widget (KDE standard).
         * Added plugins management settings (loaded/unloaded plugins).
