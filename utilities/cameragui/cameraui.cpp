@@ -370,9 +370,9 @@ void CameraUI::slotDownloadSelected()
                      .arg(KGlobal::locale()->calendar()->day(date.date()));
 #else
         newDirName = QString("%1, %2, %3")
-                     .arg(KGlobal::locale()->monthName(date.month()))
-                     .arg(date.year())
-                     .arg(date.day());
+                     .arg(date.date().year())
+                     .arg(KGlobal::locale()->monthName(date.date().month()))
+                     .arg(date.date().day());
 #endif
     }
     
@@ -450,9 +450,9 @@ void CameraUI::slotDownloadAll()
                      .arg(KGlobal::locale()->calendar()->day(date.date()));
 #else
         newDirName = QString("%1, %2, %3")
-                     .arg(KGlobal::locale()->monthName(date.month()))
-                     .arg(date.year())
-                     .arg(date.day());
+                     .arg(date.date().year())
+                     .arg(KGlobal::locale()->monthName(date.date().month()))
+                     .arg(date.date().day());
 #endif
     }
     
