@@ -172,12 +172,12 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>Fish Eyes</b>: Warps the photograph around a 3D spherical shape to "
+                                        "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograh 'Fish Eyes' effect.<p>"
                                         "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
-                                        "<b>Cilindrical Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
-                                        "<b>Cilindrical Vert.</b>: warps the photograph around a vertical cylinder.<p>"
-                                        "<b>Cilindrical H/V.</b>: warps the photograph around a 2 cylinders, vertical "
+                                        "<b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
+                                        "<b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.<p>"
+                                        "<b>Cylinder H/V.</b>: warps the photograph around a 2 cylinders, vertical "
                                         "and horizontal.<p>"
                                         "<b>Caricature</b>: distorts photograph with 'Fish Eyes' effect inverted.<p>"
                                         "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
