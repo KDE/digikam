@@ -38,6 +38,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qbrush.h>
+#include <qpen.h>
 #include <qtimer.h> 
 
 // KDE includes.
@@ -752,20 +753,30 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
           break;
        }
     
-    QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + borderWidth*2,
-                          m_previewWidget->imageIface()->originalHeight() + borderWidth*2);
+    QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + m_borderWidth->value()*2,
+                          m_previewWidget->imageIface()->originalHeight() + m_borderWidth->value()*2);
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
     QPainter p(&patternPixmap);
+    
     p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
                 QBrush::QBrush(QColor::QColor(Qt::black),
                 QPixmap::QPixmap(path + pattern + ".png")) );
+    
+    p.setPen(QPen(Qt::black, 10, Qt::SolidLine));
+    p.drawRect( m_borderWidth->value(), m_borderWidth->value(), 
+                m_previewWidget->imageIface()->originalWidth(), 
+                m_previewWidget->imageIface()->originalHeight() );
+                
+    p.drawRect( 0, 0, patternPixmap.width(), patternPixmap.height() );
+    
     p.end();
     
     dest = patternPixmap.convertToImage().scale( src.width() + borderWidth*2,
                                                  src.height() + borderWidth*2 );
+    
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
 }
 
