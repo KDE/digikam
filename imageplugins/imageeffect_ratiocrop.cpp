@@ -203,7 +203,7 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 void ImageEffect_RatioCrop::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("Aspect Ratio Crop Tool Settings");
     
     m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
     m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
@@ -235,7 +235,7 @@ void ImageEffect_RatioCrop::readSettings(void)
 void ImageEffect_RatioCrop::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("Aspect Ratio Crop Tool Settings");
     config->writeEntry( "Aspect Ratio", m_ratioCB->currentItem() );
     config->writeEntry( "Aspect Ratio Orientation", m_orientCB->currentItem() );
     config->writeEntry( "Custom Aspect Ratio Num", m_customRatioNInput->value() );
