@@ -497,7 +497,8 @@ void ImageEffect_Border::slotEffect()
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
           setCursor( KCursor::waitCursor() );
-          pattern(src, tmp, borderWidth, m_decorativeFirstColor, m_decorativeSecondColor);
+          pattern( src, tmp, borderWidth, m_decorativeFirstColor, m_decorativeSecondColor,
+                 (int)(20.0*ratio), (int)(20.0*ratio) );
           setCursor( KCursor::arrowCursor() );        
           break;
        }
@@ -560,7 +561,7 @@ void ImageEffect_Border::slotOk()
        case 16:// Decorative Granit.
        case 17:// Decorative Rock.
        case 18:// Decorative Wall.
-          pattern(src, dest, m_borderWidth->value(), m_decorativeFirstColor, m_decorativeSecondColor);
+          pattern(src, dest, m_borderWidth->value(), m_decorativeFirstColor, m_decorativeSecondColor, 20, 20);
           break;
        }
 
@@ -683,7 +684,8 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
 }
 
 void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
-                                 const QColor &firstColor, const QColor &secondColor)
+                                 const QColor &firstColor, const QColor &secondColor, 
+                                 int firstWidth, int secondWidth)
 {
     QString pattern;
     
@@ -760,30 +762,25 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
-    QPainter p(&patternPixmap);
-    
     // Pattern tile.
+    QPainter p(&patternPixmap);
     p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
                 QBrush::QBrush(Qt::black,
                 QPixmap::QPixmap(path + pattern + ".png")) );
-
-    // First line.                
-    p.setPen(QPen(firstColor, 20, Qt::SolidLine));
-    p.drawRect( 0, 0, patternPixmap.width(), patternPixmap.height() );
-
-    // Second line.
-    p.setPen(QPen(secondColor, 20, Qt::SolidLine));
-    p.drawRect( m_borderWidth->value(), m_borderWidth->value(), 
-                m_previewWidget->imageIface()->originalWidth(), 
-                m_previewWidget->imageIface()->originalHeight() );
-                                
     p.end();
     
-    dest = patternPixmap.convertToImage().scale( src.width() + borderWidth*2,
-                                                 src.height() + borderWidth*2 );
+    // First line around the pattern tile.
+    QImage tmp2 = patternPixmap.convertToImage().scale( src.width() + borderWidth*2, src.height() + borderWidth*2 );
+    
+    solid(tmp2, dest, firstColor, firstWidth);                                                 
+    
+    // Second line around original image.
+    QImage tmp;
+    solid(src, tmp, secondColor, secondWidth);                                                 
     
     // Copy original image.                                                 
-    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
+    bitBlt( &dest, borderWidth, borderWidth, 
+            &tmp, 0, 0, tmp.width(), tmp.height());
 }
 
 }  // NameSpace DigikamBorderImagesPlugin

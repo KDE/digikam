@@ -94,7 +94,8 @@ private:
     void solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth);
     void niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth);
     void bevel(QImage &src, QImage &dest, const QColor &topColor, const QColor &btmColor, int borderWidth);
-    void pattern(QImage &src, QImage &dest, int borderWidth, const QColor &firstColor, const QColor &secondColor);
+    void pattern(QImage &src, QImage &dest, int borderWidth, const QColor &firstColor, 
+                 const QColor &secondColor, int firstWidth, int secondWidth);
 
 private slots:
 
