@@ -150,7 +150,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Width:"), plainPage());
     m_borderWidth = new KIntNumInput(plainPage());
 
-    QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width to add around the image."));
+    QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
     
     topLayout->addMultiCellWidget(label2, 3, 3, 0, 0);
     topLayout->addMultiCellWidget(m_borderWidth, 3, 3, 1, 3);
