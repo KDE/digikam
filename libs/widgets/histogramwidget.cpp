@@ -103,6 +103,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_xmin             = 0;
     m_xmax             = 0;
     m_blinkComputation = blinkComputation;
+    m_guideVisible     = false;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -136,6 +137,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_xmin             = 0;
     m_xmax             = 0;
     m_blinkComputation = blinkComputation;
+    m_guideVisible     = false;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
