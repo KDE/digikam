@@ -53,7 +53,7 @@ ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()
 QStringList ImagePlugin_FreeRotation::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Transform/ /Action/imageplugin_freerotation/ ");
+    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/imageplugin_freerotation/ ");
     return guiDef;
 }
 

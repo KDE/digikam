@@ -55,7 +55,7 @@ ImagePlugin_Emboss::~ImagePlugin_Emboss()
 QStringList ImagePlugin_Emboss::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_emboss/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_emboss/ ");
     return guiDef;
 }
 

@@ -54,7 +54,7 @@ ImagePlugin_Despeckle::~ImagePlugin_Despeckle()
 QStringList ImagePlugin_Despeckle::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/ /Action/imageplugin_despeckle/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_despeckle/ ");
     return guiDef;
 }
 

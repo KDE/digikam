@@ -53,7 +53,7 @@ ImagePlugin_SuperImpose::~ImagePlugin_SuperImpose()
 QStringList ImagePlugin_SuperImpose::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Image/ /Action/imageplugin_superimpose/ ");
+    guiDef.append("MenuBar/Menu/&Image/Image/Action/imageplugin_superimpose/ ");
     return guiDef;
 }
 

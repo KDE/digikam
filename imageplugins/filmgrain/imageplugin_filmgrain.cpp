@@ -54,7 +54,7 @@ ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()
 QStringList ImagePlugin_FilmGrain::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_filmgrain/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_filmgrain/ ");
     return guiDef;
 }
 

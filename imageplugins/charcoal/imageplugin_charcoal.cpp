@@ -55,7 +55,7 @@ ImagePlugin_Charcoal::~ImagePlugin_Charcoal()
 QStringList ImagePlugin_Charcoal::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_charcoal/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_charcoal/ ");
     return guiDef;
 }
 

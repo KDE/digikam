@@ -53,7 +53,7 @@ ImagePlugin_ShearTool::~ImagePlugin_ShearTool()
 QStringList ImagePlugin_ShearTool::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Transform/ /Action/imageplugin_sheartool/ ");
+    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/imageplugin_sheartool/ ");
     return guiDef;
 }
 

@@ -54,7 +54,7 @@ ImagePlugin_RainDrop::~ImagePlugin_RainDrop()
 QStringList ImagePlugin_RainDrop::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_raindrop/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_raindrop/ ");
     return guiDef;
 }
 

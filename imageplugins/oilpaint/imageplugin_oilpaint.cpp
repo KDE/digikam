@@ -55,7 +55,7 @@ ImagePlugin_OilPaint::~ImagePlugin_OilPaint()
 QStringList ImagePlugin_OilPaint::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/ /Action/imageplugin_oilpaint/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_oilpaint/ ");
     return guiDef;
 }
 
