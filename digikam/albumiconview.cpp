@@ -459,7 +459,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     {
         action->plug(&popmenu);
         ++it;
-        count++;
+        count = 1;
     }
 
     // Don't insert a separator if we didn't plug in any actions
