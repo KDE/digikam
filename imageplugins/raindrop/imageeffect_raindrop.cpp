@@ -344,21 +344,36 @@ void ImageEffect_RainDrop::slotEffect()
     
     if (selectedW && selectedH)     
        {
-       // Get a copy of the selected image region for restoring at end...
-       QImage orgImg, selectedImg;
+       QImage orgImg, zone1, zone2, zone3, zone4, selectedImg;
        orgImg.create( w, h, 32 );
        memcpy(orgImg.bits(), data, orgImg.numBytes());
        selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
+       
+       // Cut the original image in 4 area without clipping region.       
+       
+       zone1 = orgImg.copy(0, 0, selectedX, w);
+       zone2 = orgImg.copy(selectedX, 0, selectedX + selectedW, selectedY);
+       zone3 = orgImg.copy(selectedX, selectedY + selectedH, selectedX + selectedW, h);
+       zone4 = orgImg.copy(selectedX + selectedW, 0, w, h);
     
-       rainDrops(data, w, h, 0, d, a, c, true);
+       // Apply effect on each area.
+       
+       rainDrops((uint*)zone1.bits(), zone1.width(), zone1.height(), 0, d, a, c, true, 0, 25);
+       rainDrops((uint*)zone2.bits(), zone2.width(), zone2.height(), 0, d, a, c, true, 25, 50);
+       rainDrops((uint*)zone3.bits(), zone3.width(), zone3.height(), 0, d, a, c, true, 50, 75);
+       rainDrops((uint*)zone4.bits(), zone4.width(), zone4.height(), 0, d, a, c, true, 75, 100);
     
-       QImage newImg, targetImg;
+       // Build the target image.
+       
+       QImage newImg;
        newImg.create( w, h, 32 );
-       memcpy(newImg.bits(), data, newImg.numBytes());
         
-       bitBlt( &newImg, selectedX, selectedY, 
-               &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
-    
+       bitBlt( &newImg, 0, 0, &zone1, 0, 0, selectedX, w );
+       bitBlt( &newImg, selectedX, 0, &zone2, 0, 0, selectedX + selectedW, selectedY );
+       bitBlt( &newImg, selectedX, selectedY + selectedH, &zone3, 0, 0, selectedX + selectedW, h );
+       bitBlt( &newImg, selectedX + selectedW, 0, &zone4, 0, 0, w, h );
+       bitBlt( &newImg, selectedX, selectedY, &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
+       
        QImage destImg = newImg.smoothScale(wp, hp);
        iface->putPreviewData((uint*)destImg.bits());
        }
@@ -422,21 +437,36 @@ void ImageEffect_RainDrop::slotOk()
            
        if (selectedW && selectedH)     
           {
-          // Get a copy of the selected image region for restoring at end...
-          QImage orgImg, selectedImg;
+          QImage orgImg, zone1, zone2, zone3, zone4, selectedImg;
           orgImg.create( w, h, 32 );
           memcpy(orgImg.bits(), data, orgImg.numBytes());
           selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
+       
+          // Cut the original image in 4 area without clipping region.       
+       
+          zone1 = orgImg.copy(0, 0, selectedX, w);
+          zone2 = orgImg.copy(selectedX, 0, selectedX + selectedW, selectedY);
+          zone3 = orgImg.copy(selectedX, selectedY + selectedH, selectedX + selectedW, h);
+          zone4 = orgImg.copy(selectedX + selectedW, 0, w, h);
     
-          rainDrops(data, w, h, 0, d, a, c, true);
+          // Apply effect on each area.
+       
+          rainDrops((uint*)zone1.bits(), zone1.width(), zone1.height(), 0, d, a, c, true, 0, 25);
+          rainDrops((uint*)zone2.bits(), zone2.width(), zone2.height(), 0, d, a, c, true, 25, 50);
+          rainDrops((uint*)zone3.bits(), zone3.width(), zone3.height(), 0, d, a, c, true, 50, 75);
+          rainDrops((uint*)zone4.bits(), zone4.width(), zone4.height(), 0, d, a, c, true, 75, 100);
     
-          QImage newImg, targetImg;
+          // Build the target image.
+       
+          QImage newImg;
           newImg.create( w, h, 32 );
-          memcpy(newImg.bits(), data, newImg.numBytes());
-
-          bitBlt( &newImg, selectedX, selectedY, 
-                  &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
-               
+        
+          bitBlt( &newImg, 0, 0, &zone1, 0, 0, selectedX, w );
+          bitBlt( &newImg, selectedX, 0, &zone2, 0, 0, selectedX + selectedW, selectedY );
+          bitBlt( &newImg, selectedX, selectedY + selectedH, &zone3, 0, 0, selectedX + selectedW, h );
+          bitBlt( &newImg, selectedX + selectedW, 0, &zone4, 0, 0, w, h );
+          bitBlt( &newImg, selectedX, selectedY, &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
+       
           if ( !m_cancel ) iface->putOriginalData((uint*)newImg.bits());
           }
        else 
@@ -462,6 +492,8 @@ void ImageEffect_RainDrop::slotOk()
  * Amount           => It's the maximum number for rain drops inside the image.
  * Coeff            => It's the fisheye's coefficient.
  * bLimitRange      => If true, the drop will not be cut.
+ * progressMin      => Min. value for progress bar (can be different if using clipping area).
+ * progressMax      => Max. value for progress bar (can be different if using clipping area).
  *                                                                                   
  * Theory           => This functions does several math's functions and the engine   
  *                     is simple to undestand, but a little hard to implement. A       
@@ -471,7 +503,7 @@ void ImageEffect_RainDrop::slotOk()
  *                     and after this, a blur function will finish the effect.            
  */
 void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, 
-                                     int Amount, int Coeff, bool bLimitRange)
+                                     int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
     int    nRandSize, i;
     int    nCounter = 0;
@@ -527,13 +559,13 @@ void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int MinD
             i = Amount;
             
             // Update the progress bar in dialog.
-            m_progressBar->setValue(100);
+            m_progressBar->setValue(progressMax);
             kapp->processEvents(); 
             break;
             }
         
         // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)i * 100.0) / Amount));
+        m_progressBar->setValue( (int)(progressMin + ((double)(i) * (double)(progressMax-progressMin)) / (double)Amount) );
         kapp->processEvents(); 
         }
 
@@ -779,21 +811,6 @@ bool ImageEffect_RainDrop::SetDropStatusBits (int Width, int Height, uchar *pSta
         }
 
     return (true);
-}
-
-/* Function to get the width's stride                                               
- *                                                                                  
- * Width            => Bitmap's width                                               
- *                                                                                  
- */ 
-int ImageEffect_RainDrop::GetStride (int Width)
-{
-    int LineWidth = Width * 4;
-
-    if (LineWidth % 4)
-        return (4 - (LineWidth % 4));
-
-    return (0);
 }
 
 /* This function limits the RGB values                        

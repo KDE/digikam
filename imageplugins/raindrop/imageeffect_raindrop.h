@@ -78,7 +78,7 @@ private:
     Digikam::ImageWidget *m_previewWidget;
 
     void rainDrops(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, int Amount, 
-                   int Coeff, bool bLimitRange);
+                   int Coeff, bool bLimitRange, int progressMin=0, int progressMax=100);
                    
     bool CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits, int X, int Y, 
                         int DropSize, double Coeff, bool bLimitRange);
@@ -91,7 +91,10 @@ private:
     
     inline bool IsInside (int Width, int Height, int X, int Y);
     
-    inline int GetStride (int Width);
+    inline int GetStride (int Width){ int LineWidth = Width * 4;
+                                      if (LineWidth % 4) 
+                                         return (4 - (LineWidth % 4)); 
+                                      return (0); };
 
     inline int GetLineWidth (int Width){ return ((Width * 4) + GetStride (Width)); };
             
