@@ -51,13 +51,15 @@ namespace Digikam
 class ImageCurves
 {
 
-private:
+public:
 
 enum CurveType
 {
     CURVE_SMOOTH = 0,            // Smooth curve type
     CURVE_FREE                   // Freehand curve type.
 };
+
+private:
 
 struct _Curves
 {
@@ -91,10 +93,14 @@ public:
     
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePoint(int channel, int point, QPoint val);
+    void   setCurvePointX(int channel, int point, int x);
+    void   setCurvePointY(int channel, int point, int y);
     void   setCurveType(int channel, CurveType type);
     
     int    getCurveValue(int channel, int bin);
     QPoint getCurvePoint(int channel, int point);
+    int    getCurvePointX(int channel, int point);
+    int    getCurvePointY(int channel, int point);
     int    getCurveType(int channel);
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.        

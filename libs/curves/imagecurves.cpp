@@ -477,6 +477,26 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
     return QPoint::QPoint(-1, -1);
 }
 
+int ImageCurves::getCurvePointX(int channel, int point)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 )
+       return(m_curves->points[channel][point][0]);
+    
+    return(-1);
+}
+
+int ImageCurves::getCurvePointY(int channel, int point)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 )
+       return(m_curves->points[channel][point][1]);
+    
+    return (-1);
+}
+
 int ImageCurves::getCurveType(int channel)
 {
     if ( m_curves && 
@@ -508,11 +528,33 @@ void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
        }
 }
 
+void ImageCurves::setCurvePointX(int channel, int point, int x)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 &&
+         x>=0 && x<=255)
+       {
+       m_curves->points[channel][point][0] = x;
+       }
+}
+
+void ImageCurves::setCurvePointY(int channel, int point, int y)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 &&
+         y>=0 && y<=255)
+       {
+       m_curves->points[channel][point][1] = y;
+       }
+}
+
 void ImageCurves::setCurveType(int channel, CurveType type)
 {
     if ( m_curves && 
          channel>=0 && channel<5 && 
-         type>=CURVE_SMOOTH && type<CURVE_FREE )
+         type>=CURVE_SMOOTH && type<=CURVE_FREE )
        m_curves->curve_type[channel] = type;
 }
 
