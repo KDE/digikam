@@ -35,7 +35,6 @@
 
 class QString;
 class QIconViewItem;
-class QResizeEvent;
 class KURL;
 
 class DigikamApp;
@@ -57,10 +56,6 @@ public:
 
     void applySettings(const AlbumSettings* settings);
 
-protected:
-
-    void resizeEvent(QResizeEvent *e);
-    
 private:
 
     void setupConnections();
@@ -71,7 +66,6 @@ private:
     AlbumFolderView          *mFolderView;
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
-    bool                      mInitialResize;
 
 public slots:
 

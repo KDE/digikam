@@ -60,17 +60,21 @@ DigikamView::DigikamView(QWidget *parent)
     : QSplitter(Qt::Horizontal, parent)
 {
     mParent = static_cast<DigikamApp *>(parent);
-    mInitialResize = false;
 
     mAlbumMan = AlbumManager::instance();
     
     mFolderView = new AlbumFolderView(this);
     mIconView = new AlbumIconView(this);
 
-    mFolderView->setSizePolicy(QSizePolicy::Preferred,
-                               QSizePolicy::Expanding);
-    mIconView->setSizePolicy(QSizePolicy::Expanding,
-                             QSizePolicy::Expanding);
+    QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
+                             QSizePolicy::Expanding,
+                             1, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Expanding,
+                              2, 1);
+    
+    mFolderView->setSizePolicy(leftSzPolicy);
+    mIconView->setSizePolicy(rightSzPolicy);
 
     setOpaqueResize(false);
 
@@ -109,22 +113,6 @@ void DigikamView::setupConnections()
 
     connect(mFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
-}
-
-
-void DigikamView::resizeEvent(QResizeEvent *e)
-{
-    QSplitter::resizeEvent(e);
-    
-    if (!mInitialResize)
-    {
-        mInitialResize = true;
-
-        QValueList<int> sz;
-        sz.append(width()/3);
-        sz.append(width()*2/3);
-        setSizes(sz);
-    }
 }
 
 void DigikamView::slot_sortAlbums(int order)
