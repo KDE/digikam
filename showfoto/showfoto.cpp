@@ -156,6 +156,22 @@ void ShowFoto::setupActions()
                   i18n("Exit out of the fullscreen mode"),
                   Key_Escape, this, SLOT(slotEscapePressed()),
                   false, true);
+    accel->insert("Next Image Key_Space", i18n("Next Image"),
+                  i18n("Load Next Image"),
+                  Key_Space, this, SLOT(slotNext()),
+                  false, true);
+    accel->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+                  i18n("Load Previous Image"),
+                  Key_Backspace, this, SLOT(slotPrev()),
+                  false, true);
+    accel->insert("Next Image Key_Next", i18n("Next Image"),
+                  i18n("Load Next Image"),
+                  Key_Next, this, SLOT(slotNext()),
+                  false, true);
+    accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
+                  i18n("Load Previous Image"),
+                  Key_Prior, this, SLOT(slotPrev()),
+                  false, true);
 }
 
 void ShowFoto::applySettings()
