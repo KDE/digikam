@@ -279,6 +279,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
+    // -------------------------------------------------------------
+    
     adjustSize();
     disableResize();
 
