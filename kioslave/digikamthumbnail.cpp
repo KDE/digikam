@@ -48,12 +48,13 @@
 
 // C Ansi includes.
 
-extern "C" 
+extern "C"
 {
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <jpeglib.h>
-#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -79,7 +80,7 @@ static void exifRotate(const QString& filePath, QImage& thumb)
 
     KExifData::ImageOrientation orientation
         = getExifOrientation(filePath);
-    
+
     bool doXform = (orientation != KExifData::NORMAL &&
                     orientation != KExifData::UNSPECIFIED);
 
@@ -139,9 +140,9 @@ static QImage loadPNG(const QString& path)
 
     has_alpha = 0;
     has_grey = 0;
-    
+
     QImage qimage;
-    
+
     f = fopen(path.latin1(), "rb");
     if (!f)
         return qimage;
@@ -186,9 +187,9 @@ static QImage loadPNG(const QString& path)
 
     w = w32;
     h = h32;
-    
+
     qimage.create(w, h, 32);
-    
+
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand(png_ptr);
 
@@ -224,7 +225,7 @@ static QImage loadPNG(const QString& path)
 
     /* 16bit color -> 8bit color */
     if ( bit_depth == 16 )
-        png_set_strip_16(png_ptr);         
+        png_set_strip_16(png_ptr);
 
     /* pack all pixels to byte boundaires */
 
@@ -263,8 +264,8 @@ static QImage loadPNG(const QString& path)
         qimage.setText(text_ptr->key,0,text_ptr->text);
         text_ptr++;
     }
-    
-    
+
+
     png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
     fclose(f);
@@ -291,8 +292,8 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     bool exif = (metaData("exif") == "yes");
 
     cachedSize_ = (size <= 128) ? 128 : 256;
-    
-    if (cachedSize_ <= 0) 
+
+    if (cachedSize_ <= 0)
     {
         error(KIO::ERR_INTERNAL, i18n("No or invalid size specified"));
         kdWarning() << "No or invalid size specified" << endl;
@@ -326,14 +327,18 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         if ( !loadJPEG(img, url.path()) )
         {
             // Try to load with imlib2 API...
-            if ( !loadImlib2(img, url.path()) ) 
+            if ( !loadImlib2(img, url.path()) )
             {
                 // Try to load with QT/KDELib API...
-                img.load(url.path());            
+                if (!img.load(url.path()))
+                {
+                    // Try to load with dcraw
+                    loadDCRAW( img, url.path() );
+                }
             }
         }
-    
-        if (img.isNull()) 
+
+        if (img.isNull())
         {
             error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
                   .arg(url.prettyURL()));
@@ -366,27 +371,27 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     img = img.smoothScale(size, size, QImage::ScaleMin);
     if (exif)
         exifRotate(url.path(), img);
-    
+
     QByteArray imgData;
     QDataStream stream( imgData, IO_WriteOnly );
 
     QString shmid = metaData("shmid");
-    
-    if (shmid.isEmpty()) 
+
+    if (shmid.isEmpty())
     {
         stream << img;
     }
     else
     {
         void *shmaddr = shmat(shmid.toInt(), 0, 0);
-        
+
         if (shmaddr == (void *)-1)
         {
             error(KIO::ERR_INTERNAL, "Failed to attach to shared memory segment " + shmid);
             kdWarning() << "Failed to attach to shared memory segment " << shmid << endl;
             return;
         }
-            
+
         if (img.width() * img.height() > cachedSize_ * cachedSize_)
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
@@ -394,12 +399,12 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
             shmdt((char*)shmaddr);
             return;
         }
-            
+
         stream << img.width() << img.height() << img.depth();
         memcpy(shmaddr, img.bits(), img.numBytes());
         shmdt((char*)shmaddr);
     }
-    
+
     data(imgData);
     finished();
 }
@@ -408,7 +413,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 /////////////////////////////////////////////////////////////////////////////////////////
 // JPEG Extraction
 
-struct myjpeg_error_mgr : public jpeg_error_mgr 
+struct myjpeg_error_mgr : public jpeg_error_mgr
 {
     jmp_buf setjmp_buffer;
 };
@@ -417,7 +422,7 @@ extern "C"
 {
     static void myjpeg_error_exit(j_common_ptr cinfo)
     {
-        myjpeg_error_mgr* myerr = 
+        myjpeg_error_mgr* myerr =
             (myjpeg_error_mgr*) cinfo->err;
 
         char buffer[JMSG_LENGTH_MAX];
@@ -431,7 +436,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 {
     QString format=QImageIO::imageFormat(path);
     if (format !="JPEG") return false;
-    
+
     FILE* inputFile=fopen(QFile::encodeName(path), "rb");
     if(!inputFile)
         return false;
@@ -468,7 +473,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     jpeg_start_decompress(&cinfo);
 
     QImage img;
-    
+
     switch(cinfo.output_components) {
     case 3:
     case 4:
@@ -511,7 +516,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     fclose(inputFile);
 
     image = img.smoothScale(newx,newy);
-    
+
     return true;
 }
 
@@ -523,36 +528,90 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
 {
     Imlib_Image imlib2_im =
         imlib_load_image_immediately_without_cache(QFile::encodeName(path));
-        
+
     if (imlib2_im == NULL) {
         return false;
     }
-    
-    imlib_context_set_image(imlib2_im);     
-    
+
+    imlib_context_set_image(imlib2_im);
+
     org_width_  = imlib_image_get_width();
     org_height_ = imlib_image_get_height();
 
     if ( QMAX(org_width_, org_height_) != cachedSize_ )
     {
-        imlib2_im = imlib_create_cropped_scaled_image(0, 0, 
-                                                      org_width_, org_height_, 
-                                                      cachedSize_, cachedSize_); 
+        imlib2_im = imlib_create_cropped_scaled_image(0, 0,
+                                                      org_width_, org_height_,
+                                                      cachedSize_, cachedSize_);
     }
 
     new_width_  = imlib_image_get_width();
-    new_height_ = imlib_image_get_height(); 
-       
+    new_height_ = imlib_image_get_height();
+
     image.create( new_width_, new_height_, 32 );
     image.setAlphaBuffer(true) ;
-    
+
     DATA32 *data = imlib_image_get_data();
     if (!data)
         return false;
 
     memcpy(image.bits(), data, image.numBytes());
 
-    imlib_free_image();        
+    imlib_free_image();
+    return true;
+}
+
+bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
+{
+    QCString command;
+
+    // run dcraw with options:
+    // -c : write to stdout
+    // -h : Half-size color image (3x faster than -q)
+    // -2 : 8bit ppm output
+    // -a : Use automatic white balance
+    // -w : Use camera white balance, if possible
+    command  = "dcraw -c -h -2 -w -a ";
+    command += "'";
+    command += QFile::encodeName( path );
+    command += "'";
+    kdDebug() << "Running dcraw command " << command << endl;
+
+    FILE* f = popen( command.data(), "r" );
+
+    QByteArray imgData;
+
+    if ( !f )
+        return false;
+
+    const int MAX_IPC_SIZE = (1024*32);
+    char buffer[MAX_IPC_SIZE];
+
+    QFile file;
+    file.open( IO_ReadOnly,  f );
+    Q_LONG len;
+    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    {
+        if ( len == -1 )
+        {
+            file.close();
+            return false;
+        }
+        else
+        {
+            int oldSize = imgData.size();
+            imgData.resize( imgData.size() + len );
+            memcpy(imgData.data()+oldSize, buffer, len);
+        }
+    }
+
+    file.close();
+    pclose( f );
+
+    if ( imgData.isEmpty() )
+        return false;
+
+    image.loadFromData( imgData );
     return true;
 }
 
@@ -577,9 +636,9 @@ extern "C"
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamthumbnail" );
         ( void ) KGlobal::locale();
-        
+
         kdDebug() << "*** Starting kio_digikamthumbnail " << endl;
-        
+
         if (argc != 4) {
             kdDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2"
                       << endl;
@@ -587,10 +646,10 @@ extern "C"
         }
 
         KImageIO::registerFormats();
-        
+
         kio_digikamthumbnailProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         kdDebug() << "*** kio_digikamthumbnail Done" << endl;
         return 0;
     }

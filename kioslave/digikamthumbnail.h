@@ -46,10 +46,11 @@ private:
 
     bool loadJPEG(QImage& image, const QString& path);
     bool loadImlib2(QImage& image, const QString& path);
+    bool loadDCRAW(QImage& image,  const QString& path);
     void createThumbnailDirs();
-    
+
     int  cachedSize_;
-    
+
     int org_width_;
     int org_height_;
     int new_width_;
