@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                           i18n("Using Kipi library version %1").arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
-                          I18N_NOOP("Digikam"),
+                          I18N_NOOP("digiKam"),
                           digikam_version,        // Release number available in version.h to the top source dir.
                           Description.latin1(),
                           KAboutData::License_GPL,
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 
     KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
-    double version = config->readDoubleNumEntry("Version");
+    QString version = config->readEntry("Version");
 
     bool showSplash = config->readBoolEntry("Show Splash", true);
 
@@ -200,7 +200,10 @@ int main(int argc, char *argv[])
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
-    if (version < 0.6 || !dirInfo.exists() || !dirInfo.isDir())
+    
+    if (version.startsWith("0.5") ||
+        !dirInfo.exists() || 
+        !dirInfo.isDir())
     {
         // Run the first run
         DigikamFirstRun *firstRun = new DigikamFirstRun(config);

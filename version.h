@@ -24,7 +24,6 @@
 #define DIGIKAM_VERSION_H
 
 static const char * const digikam_version = "0.7-beta1";
-static double digikam_numeric_version = 0.7;
 
 #endif // DIGIKAM_VERSION_H
 

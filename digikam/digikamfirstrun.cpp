@@ -135,9 +135,16 @@ void DigikamFirstRun::slotOk()
             return;
         }
     }
+    
+    QFileInfo path(albumLibraryFolder);
+    if (!path.isWritable()) {
+        KMessageBox::information(0, i18n("No write access for this path.\n"
+                                         "Warning: the comments and tag features will not work!"));
+        return;
+    }
 
     config_->setGroup("General Settings");
-    config_->writeEntry("Version", digikam_numeric_version);
+    config_->writeEntry("Version", digikam_version);
 
     config_->setGroup("Album Settings");
     config_->writePathEntry("Album Path", albumLibraryFolder);
