@@ -29,9 +29,9 @@ ImageViever:
 * Port from imlib1 to imlib2.
 * Add Plugins interface.
 * Add RedEyes correction.
-* Add Blur/Sharpen image filters (in plugin).
-* Add image Histogram viewer (in plugin).
-* Add Color autocorrection filter (in plugin).
+* Add Blur/Sharpen image filters.
+* Add image Histogram viewer.
+* Add Color autocorrection filter.
 
 Plugins (LibKIPI):
 

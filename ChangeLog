@@ -1,5 +1,7 @@
 v0.6.3 (usingLibKIPI)-Alpha1 
 ----------------------------------------------------------------------------
+        * Added a new toolsbar in ImageViewer with an images list selection
+          and preview of images.
         * Added 'Image Properties' action button in ImageViewer.
         * Added 'Print image' action button in ImageViewer.        
         * Added a broken image when the thumbnailizations failed.
