@@ -433,7 +433,7 @@ void ImageProperties::slotItemChanged()
        m_commentsLabel->show();
        m_tagsLabel->show();       
        
-       PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
+       PAlbum* palbum = m_view->albumLister()->findParentAlbum(m_currItem->fileItem());
     
        if (palbum)
            m_filealbum->setText( palbum->getURL().remove(0, 1) );
