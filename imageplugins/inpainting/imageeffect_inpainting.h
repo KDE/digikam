@@ -27,6 +27,7 @@
 
 #include <qimage.h>
 #include <qrect.h>
+#include <qstring.h>
 
 // KDE include.
 
@@ -149,7 +150,7 @@ private slots:
     void slotUser1();
     void slotUser2();
     void slotUser3();
-
+    void processCImgURL(const QString&);
 };
     
 }  // NameSpace DigikamInPaintingImagesPlugin

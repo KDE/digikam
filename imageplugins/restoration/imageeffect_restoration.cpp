@@ -46,6 +46,7 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kurllabel.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
@@ -163,9 +164,17 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_mainTab = new QTabWidget( plainPage() );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
+    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    cimgLogoLabel->setText(QString::null);
+    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
+    directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+    
     QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
@@ -180,13 +189,14 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                                                "<b>Reduce Texturing</b>: reduce image artefacts like paper texture or Moire patterns"
                                                "of a scanned image.<p>"));
 
-    grid->addMultiCellWidget(typeLabel, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 1, 1);
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
+    grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 2, 2);
     
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 1);
+    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
         
     // -------------------------------------------------------------
     
@@ -292,6 +302,9 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
+    
+    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processCImgURL(const QString&)));
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
@@ -442,6 +455,11 @@ void ImageEffect_Restoration::slotCancel()
 void ImageEffect_Restoration::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("restoration", "digikamimageplugins");
+}
+
+void ImageEffect_Restoration::processCImgURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void ImageEffect_Restoration::closeEvent(QCloseEvent *e)

@@ -48,6 +48,7 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kurllabel.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
@@ -201,9 +202,17 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_mainTab = new QTabWidget( plainPage() );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
+    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    cimgLogoLabel->setText(QString::null);
+    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
+    directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+    
     QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_inpaintingTypeCB = new QComboBox( false, firstPage ); 
@@ -217,13 +226,14 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                                "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
                                                "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
 
-    grid->addMultiCellWidget(typeLabel, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_inpaintingTypeCB, 0, 0, 1, 1);
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
+    grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_inpaintingTypeCB, 0, 0, 2, 2);
     
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 1);
+    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
         
     // -------------------------------------------------------------
     
@@ -331,6 +341,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     
     // -------------------------------------------------------------
     
+    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processCImgURL(const QString&)));
+    
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotUser1()));
 }
@@ -417,6 +430,11 @@ void ImageEffect_InPainting_Dialog::slotCancel()
 void ImageEffect_InPainting_Dialog::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("inpainting", "digikamimageplugins");
+}
+
+void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)

@@ -26,6 +26,7 @@
 // Qt include.
 
 #include <qimage.h>
+#include <qstring.h>
 
 // KDE include.
 
@@ -151,7 +152,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotTimer();
-
+    void processCImgURL(const QString&);
 };
     
 }  // NameSpace DigikamRestorationImagesPlugin
