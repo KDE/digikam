@@ -101,7 +101,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 5, 4 , marginHint(), spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 5, 3 , marginHint(), spacingHint());
     
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -114,7 +114,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Add Border to Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 3);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
     
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -126,6 +126,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
+    // -------------------------------------------------------------
+    
     QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -133,7 +135,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the border added to the image.") );
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 3);
+    topLayout->addMultiCellWidget(gbox, 1, 4, 0, 0);
     
     // -------------------------------------------------------------
                                                   
@@ -162,28 +164,24 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Granite") );
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
-
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
+    topLayout->addMultiCellWidget(label1, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(m_borderType, 1, 1, 2, 2);
     
-    topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(m_borderType, 2, 2, 1, 1);
     QLabel *label2 = new QLabel(i18n("Width:"), plainPage());
     m_borderWidth = new KIntNumInput(plainPage());
-
     QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
-    
-    topLayout->addMultiCellWidget(label2, 3, 3, 0, 0);
-    topLayout->addMultiCellWidget(m_borderWidth, 3, 3, 1, 3);
+    topLayout->addMultiCellWidget(label2, 2, 2, 1, 1);
+    topLayout->addMultiCellWidget(m_borderWidth, 2, 2, 2, 2);
         
     m_labelForeground = new QLabel(plainPage());
     m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), plainPage() );
     m_labelBackground = new QLabel(plainPage());
     m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), plainPage() );
-
-    topLayout->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
-    topLayout->addMultiCellWidget(m_firstColorButton, 4, 4, 1, 1);
-    topLayout->addMultiCellWidget(m_labelBackground, 4, 4, 2, 2);
-    topLayout->addMultiCellWidget(m_secondColorButton, 4, 4, 3, 3);
+    topLayout->addMultiCellWidget(m_labelForeground, 3, 3, 1, 1);
+    topLayout->addMultiCellWidget(m_firstColorButton, 3, 3, 2, 2);
+    topLayout->addMultiCellWidget(m_labelBackground, 4, 4, 1, 1);
+    topLayout->addMultiCellWidget(m_secondColorButton, 4, 4, 2, 2);
     
     // -------------------------------------------------------------
 
