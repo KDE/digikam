@@ -865,7 +865,9 @@ void AlbumFolderView::albumImportFolder()
     {
         KMessageBox::error(0,
                            i18n("The Albums Library has not been set correctly.\n"
-                                "Select \"Configure Digikam\" from the Settings menu and choose a folder to use for the Albums Library."));
+                                "Select \"Configure Digikam\" from the Settings "
+				"menu and choose a folder to use for the Albums "
+				"Library."));
         return;
     }
 
