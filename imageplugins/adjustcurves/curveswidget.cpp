@@ -258,6 +258,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     QPixmap pm(size());
     QPainter p1;
     p1.begin(&pm, this);
+    
+    int curvePrevVal = 0;
        
     for (x = 0 ; x < wWidth ; ++x)
       {
@@ -330,7 +332,12 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       // Drawing curve.   
    
       p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-      p1.drawPoint(x, wHeight - ((curveVal * 256) / wHeight)); 
+      
+      //p1.drawPoint(x, wHeight - ((curveVal * 256) / wHeight)); 
+      
+      p1.drawLine(x - 1, wHeight - ((curvePrevVal * 256) / wHeight),
+                  x,     wHeight - ((curveVal * 256) / wHeight));         
+      curvePrevVal = curveVal;
       }
    
    // Drawing curves points.
