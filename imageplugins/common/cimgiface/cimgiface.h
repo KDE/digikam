@@ -118,6 +118,7 @@ private:  // CImg filter interface.
     
 private:  // CImg filter data.
     
+    // CImg filter settings.
     unsigned int nb_iter;    // Number of smoothing iterations
     float        dt;         // Time step
     float        dlength;    // Integration step
@@ -129,12 +130,13 @@ private:  // CImg filter data.
     bool         onormalize; // Output image normalization (in [0,255])
     bool         linear;     // Use linear interpolation for integration
 
-    // Internal use
-    bool        restore;
-    bool        inpaint;
-    bool        resize;
-    const char* visuflow;
+    // CImg computation modes.
+    bool         m_restore;
+    bool         m_inpaint;
+    bool         m_resize;
+    const char*  m_visuflow;
     
+    // Internal use.
     cimg_library::CImg<> dest, sum, W;
     cimg_library::CImg<> img, img0, flow,G;
     cimg_library::CImgl<> eigen;

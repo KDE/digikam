@@ -58,10 +58,10 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     m_parent      = parent;
     m_cancel      = false;
         
-    restore       = restoreMode;
-    inpaint       = inpaintMode;
-    resize        = resizeMode;
-    visuflow      = visuflowMode;
+    m_restore     = restoreMode;
+    m_inpaint     = inpaintMode;
+    m_resize      = resizeMode;
+    m_visuflow    = visuflowMode;
     
     // Get the config data
 
@@ -91,7 +91,6 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
           d->starting = false;
           d->success = false;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          delete d;
           }
        }
 }
@@ -108,6 +107,15 @@ void CimgIface::stopComputation(void)
     cleanup();
     img   = CImg<>();    
     eigen = CImgl<>(CImg<>(), CImg<>());
+    
+    if (m_parent)
+       {
+       CimgIface::EventData *d = new CimgIface::EventData;
+       d->starting = false;
+       d->success  = false;
+       d->progress = 0;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       }
 }
 
 // List of threaded operations.
@@ -129,7 +137,6 @@ void CimgIface::startComputation()
        d->progress = 0;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
        kdDebug() << "CimgIface::Start computation..." << endl;
-       delete d;
        }
         
     // Copy the src data into a CImg type image with three channels and no alpha. This means that a CImg is always rgba.
@@ -156,16 +163,6 @@ void CimgIface::startComputation()
        kdDebug() << "CimgIface::Error during CImg filter computation!" << endl;
        // Everything went wrong.
     
-       if (m_parent)
-          {
-          d = new CimgIface::EventData;
-          d->starting = false;
-          d->success  = false;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          delete d;
-          }
-       
        return;
        }
     
@@ -194,7 +191,6 @@ void CimgIface::startComputation()
           d->progress = 0;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
           kdDebug() << "CimgIface::End of computation..." << endl;
-          delete d;
           }
        else
           {
@@ -204,7 +200,6 @@ void CimgIface::startComputation()
           d->progress = 0;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
           kdDebug() << "CimgIface::Computation aborted..." << endl;
-          delete d;
           }
        }
 }
@@ -237,7 +232,7 @@ bool CimgIface::process()
     
     // Save result and end program
         
-    if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0, 255);
+    if (m_visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0, 255);
     if (onormalize) dest.normalize(0, 255);
         
     cleanup();
@@ -267,7 +262,7 @@ void CimgIface::cleanup()
 
 bool CimgIface::prepare()
 {
-    if (!restore && !inpaint && !resize && !visuflow) 
+    if (!m_restore && !m_inpaint && !m_resize && !m_visuflow) 
        {
        kdDebug() << "Unspecified CImg filter computation Mode!" << endl;
        return false;
@@ -275,10 +270,10 @@ bool CimgIface::prepare()
 
     // Init algorithm parameters
     
-    if (restore)  if (!prepare_restore())  return false;
-    if (inpaint)  if (!prepare_inpaint())  return false;
-    if (resize)   if (!prepare_resize())   return false;
-    if (visuflow) if (!prepare_visuflow()) return false;
+    if (m_restore)  if (!prepare_restore())  return false;
+    if (m_inpaint)  if (!prepare_inpaint())  return false;
+    if (m_resize)   if (!prepare_resize())   return false;
+    if (m_visuflow) if (!prepare_visuflow()) return false;
 
     if (!check_args()) return false;
 
@@ -424,7 +419,7 @@ bool CimgIface::prepare_visuflow()
 
     int w,h; get_geom(geom,w,h);
     
-    if (!cimg::strcasecmp(visuflow,"circle")) { // Create a circular vector flow
+    if (!cimg::strcasecmp(m_visuflow,"circle")) { // Create a circular vector flow
         flow = CImg<>(400,400,1,2);
         cimg_mapXY(flow,x,y) {
             const float ang = (float)(std::atan2(y-0.5*flow.dimy(),x-0.5*flow.dimx()));
@@ -433,7 +428,7 @@ bool CimgIface::prepare_visuflow()
         }
     }
     
-    if (!cimg::strcasecmp(visuflow,"radial")) { // Create a radial vector flow
+    if (!cimg::strcasecmp(m_visuflow,"radial")) { // Create a radial vector flow
         flow = CImg<>(400,400,1,2);
         cimg_mapXY(flow,x,y) {
             const float ang = (float)(std::atan2(y-0.5*flow.dimy(),x-0.5*flow.dimx()));
@@ -442,7 +437,7 @@ bool CimgIface::prepare_visuflow()
         }
     }
     
-    if (!flow.data) flow = CImg<>(visuflow);
+    if (!flow.data) flow = CImg<>(m_visuflow);
     
     flow.resize(w,h,1,2,3);
     
@@ -460,7 +455,7 @@ bool CimgIface::prepare_visuflow()
 
 void CimgIface::compute_smoothed_tensor()
 {
-    if (visuflow || inpaint) return;
+    if (m_visuflow || m_inpaint) return;
     
     CImg_3x3(I,float);
     G.fill(0);
@@ -474,7 +469,7 @@ void CimgIface::compute_smoothed_tensor()
 
 void CimgIface::compute_normalized_tensor()
 {
-    if (restore || resize) cimg_mapXY(G,x,y) 
+    if (m_restore || m_resize) cimg_mapXY(G,x,y) 
         {
         G.get_tensor(x,y).symeigen(eigen(0),eigen(1));
         const float
@@ -489,7 +484,7 @@ void CimgIface::compute_normalized_tensor()
         G(x,y,2) = n1*v*v + n2*u*u;
         }    
     
-    if (visuflow) cimg_mapXY(G,x,y) 
+    if (m_visuflow) cimg_mapXY(G,x,y) 
         {
         const float 
             u = flow(x,y,0),
@@ -609,7 +604,6 @@ void CimgIface::compute_LIC(int &counter)
               d->success = false;
               d->progress = (int)(100*progress);
               QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-              delete d;
               }
         
            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
