@@ -1014,6 +1014,51 @@ void AlbumFolderView::resizeEvent(QResizeEvent* e)
 
 // Drag and Drop -----------------------------------------
 
+void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
+{
+    if( !e ) return;
+    
+    dragStartPos_ = e->pos();
+    dragItem_ = itemAt( e->pos() );
+}
+
+void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if( !e ) return;
+    
+    if( e->state() == NoButton )
+        return;
+    
+    // Dragging ?
+    if( dragItem_ ) 
+    {
+        if (( dragStartPos_ - e->pos() ).manhattanLength()
+             > QApplication::startDragDistance() ) 
+        {
+            startDrag();
+        }
+        return;
+    }
+}
+
+void AlbumFolderView::startDrag()
+{
+    AlbumFolderItem *folderItem
+        = static_cast<AlbumFolderItem *>(dragItem_);
+
+    if (folderItem->isGroupItem() || folderItem->album()->isRoot())
+        return;
+
+    if (folderItem->album()->type() == Album::PHYSICAL)
+        return;
+        
+    // Start dragging a tag        
+    TagDrag *tagDrag = new TagDrag(folderItem->album()->getID(), 
+                                   this);
+    tagDrag->setPixmap(*folderItem->pixmap());
+    tagDrag->drag();
+}
+
 void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
 {
     // override the default drag enter event avoid selection problems
@@ -1023,9 +1068,11 @@ void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
 
 void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 {
-    if (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event))
+    if (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) &&
+        !TagDrag::canDecode(event))
     {
         event->ignore();
+
         return;
     }
 
@@ -1033,26 +1080,46 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     QPoint point(0, event->pos().y());
     AlbumFolderItem* newDropTarget = static_cast<AlbumFolderItem*>(itemAt(point));
     if (!newDropTarget ||  newDropTarget->isGroupItem() ||
-        !newDropTarget->album() ||  newDropTarget->album()->isRoot())
+        !newDropTarget->album())
     {
         event->ignore();
         return;
     }
 
+    // Do not allow drop on root for certain events    
+    if (newDropTarget->album()->isRoot() &&
+       (QUriDrag::canDecode(event) || CameraDragObject::canDecode(event)))
+    {
+        event->ignore();
+        return;
+    }
+    
     if (newDropTarget->album()->type() == Album::PHYSICAL)
     {
         // do not allow DnD from tags onto a physical album
-        if (TagItemsDrag::canDecode(event))
+        if (TagItemsDrag::canDecode(event) || TagDrag::canDecode(event))
         {
             event->ignore();
             return;
         }
     }
-    else if (newDropTarget->album()->type() == Album::TAG)
+    
+    // Do not allow an album to be dropped on it's child when dragging tags
+    AlbumFolderItem *folderItem = static_cast<AlbumFolderItem*>(dragItem_);
+    if(TagDrag::canDecode(event) &&
+       (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album())))
+    {
+        event->ignore();
+        return;
+    }
+
+    if (newDropTarget->album()->type() == Album::TAG)
     {
         // only allow DnD onto a tag album if its being dragged
         // from a physical album or a tag album
-        if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event)))
+        // additional allow drags from tag onto a tag to move it
+        if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) ||
+              TagDrag::canDecode(event)))
         {
             event->ignore();
             return;
@@ -1060,18 +1127,18 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     }
 
     event->accept();
-    if (dropTarget_ == newDropTarget)
+    if (dropTarget_ == newDropTarget) {
         return;
+    }
 
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
-
 
     dropTarget_ = newDropTarget;
     dropTarget_->addDropHighlight();
 }
 
-void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent*)
+void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *event)
 {
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
@@ -1084,10 +1151,10 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
         return;
 
     Album* a = dropTarget_->album();
-    if (!a || a->isRoot())
+    if (!a)
         return;
 
-    if (a->type() == Album::PHYSICAL) {
+    if (a->isRoot() && a->type() == Album::PHYSICAL) {
         PAlbum *album = static_cast<PAlbum*>(a);
         phyAlbumDropEvent(event, album);
     }
@@ -1108,6 +1175,8 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
     if (AlbumItemsDrag::canDecode(event))
     {
         // Internal drag from one album to another
+        if(album->isRoot())
+            return;
         
         PAlbum* srcAlbum  = 0;
         PAlbum* destAlbum = album;
@@ -1242,39 +1311,68 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
 
 void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
-    if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event)))
-        return;
-
-    QPopupMenu popmenu(this);
-    popmenu.insertItem(SmallIcon("tag"), 
-                       i18n("Assign Tag '%1' to dropped items")
-                       .arg(album->getPrettyURL()), 10);
-
-    if (popmenu.exec(QCursor::pos()) != 10)
-        return;
-    
-    KURL::List      urls;
-    QValueList<int> dirIDs;
-    
-    if (!TagItemsDrag::decode(event, urls, dirIDs))
-        return;
-
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-
-    db->beginTransaction();
-    KURL::List::const_iterator      itU = urls.begin();
-    QValueList<int>::const_iterator itD = dirIDs.begin();
-    for ( ; itU != urls.end() || itD != dirIDs.end(); ++itU, ++itD)
+    if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
     {
-        PAlbum* pa = AlbumManager::instance()->findPAlbum(*itD);
-        if (pa)
+        QPopupMenu popmenu(this);
+        popmenu.insertItem(SmallIcon("tag"), 
+                        i18n("Assign Tag '%1' to dropped items")
+                        .arg(album->getPrettyURL()), 10);
+    
+        if (popmenu.exec(QCursor::pos()) != 10)
+            return;
+        
+        KURL::List      urls;
+        QValueList<int> dirIDs;
+        
+        if (!TagItemsDrag::decode(event, urls, dirIDs))
+            return;
+    
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+    
+        db->beginTransaction();
+        KURL::List::const_iterator      itU = urls.begin();
+        QValueList<int>::const_iterator itD = dirIDs.begin();
+        for ( ; itU != urls.end() || itD != dirIDs.end(); ++itU, ++itD)
         {
-            db->setItemTag(pa, (*itU).fileName(), album);
+            PAlbum* pa = AlbumManager::instance()->findPAlbum(*itD);
+            if (pa)
+            {
+                db->setItemTag(pa, (*itU).fileName(), album);
+            }
+        }
+        db->commitTransaction();
+    
+        emit signalTagsAssigned();
+    }
+    else if(TagDrag::canDecode(event))
+    {
+        QPopupMenu popMenu(this);
+        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel"), 20 );
+        popMenu.setMouseTracking(true);
+        int id = popMenu.exec(QCursor::pos());
+        
+        if(id == 10) 
+        {
+            AlbumFolderItem *item =
+                static_cast<AlbumFolderItem*>(dragItem_);
+            TAlbum *itemAlbum = static_cast<TAlbum*>(item->album());
+            TAlbum *parent = static_cast<TAlbum*>(album);
+
+            QString errMsg;
+            AlbumManager::instance()->moveTAlbum(itemAlbum, parent, errMsg);
+            
+            ListItem *parentItem = dragItem_->parent();
+            parentItem->removeChild(dragItem_);
+            ListItem *dropItem = itemAt( event->pos() );
+            dropItem->insertChild(dragItem_);
+        }
+        else if(id == 20)
+        {
+            return;
         }
     }
-    db->commitTransaction();
-
-    emit signalTagsAssigned();
 }
 
 void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,

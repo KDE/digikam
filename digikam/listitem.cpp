@@ -118,6 +118,7 @@ void ListItem::insertChild(ListItem* child)
     else {
         child->m_offset = m_offset + 20;
         child->m_depth  = m_depth  + 1;
+        adjustChildOffsets();
     }
     
     m_expandable = true;
@@ -126,6 +127,17 @@ void ListItem::insertChild(ListItem* child)
 
     if (m_listView)
         m_listView->triggerUpdate();
+}
+
+void ListItem::adjustChildOffsets()
+{
+    ListItem *child = m_firstChild;
+    while(child) {
+        child->m_offset = m_offset + 20;
+        child->m_depth  = m_depth + 1;
+        child->adjustChildOffsets();
+        child = child->m_next;
+    }
 }
 
 void ListItem::removeChild(ListItem* child)

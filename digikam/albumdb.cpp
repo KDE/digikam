@@ -902,6 +902,13 @@ void AlbumDB::setIcon(TAlbum *album, const QString& icon)
     album->setIcon(icon);
 }
 
+void AlbumDB::moveTAlbum(TAlbum *album, TAlbum *parent)
+{
+    execSql( QString("UPDATE Tags SET pid='%1' WHERE id=%2;")
+             .arg(parent->getID())
+             .arg(album->getID()) );
+}
+
 bool AlbumDB::createTAlbum(TAlbum* parent, const QString& name,
                            const QString& icon)
 {

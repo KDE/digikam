@@ -48,7 +48,8 @@ public:
     
     void insertChild(ListItem* child);
     void removeChild(ListItem* child);
-
+    void adjustChildOffsets();
+    
     void clear();
 
     bool isExpandable() const;

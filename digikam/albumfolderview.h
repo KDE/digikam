@@ -112,7 +112,11 @@ protected:
     void contentsDragMoveEvent(QDragMoveEvent*);
     void contentsDragLeaveEvent(QDragLeaveEvent*);
     void contentsDropEvent(QDropEvent*);
-
+    
+    virtual void contentsMousePressEvent(QMouseEvent *e);    
+    virtual void contentsMouseMoveEvent(QMouseEvent *e);
+    virtual void startDrag();
+    
     void resizeEvent(QResizeEvent* e);
 
     void paintItemBase(QPainter* p, const QColorGroup& group,
@@ -131,6 +135,8 @@ private:
     QPixmap                            itemRegPix_;
     QPixmap                            itemSelPix_;
 
+    QPoint                             dragStartPos_;
+    ListItem                           *dragItem_;
     QMap<int,int>                      stateAlbumOpen_;
     int                                stateAlbumSel_;
     

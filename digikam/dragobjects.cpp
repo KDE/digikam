@@ -119,3 +119,36 @@ const char* TagItemsDrag::format(int i) const
     else
         return 0;
 }
+
+TagDrag::TagDrag( int albumid, QWidget *dragSource, 
+                         const char *name ) :
+    QDragObject( dragSource, name )
+{
+    mAlbumID = albumid;
+}
+
+bool TagDrag::canDecode( const QMimeSource* e )
+{
+    e->provides("digikam/tag-id");
+}
+
+const char* TagDrag::format( int i ) const
+{
+    switch( i )
+    {
+        case 0:
+            return "digikam/tag-id";
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
+QByteArray TagDrag::encodedData( const char* ) const
+{
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << mAlbumID;
+    return ba;
+}

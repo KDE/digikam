@@ -516,6 +516,28 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, QString&
     return true;
 }
 
+bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString errMsg)
+{
+    if (!album)
+    {
+        errMsg = i18n("No such album");
+        return false;
+    }
+
+    if (album == d->rootTAlbum)
+    {
+        errMsg = i18n("Cannot move root tag");
+        return false;
+    }
+    
+    d->db->moveTAlbum(album, parent);
+    album->getParent()->removeChild(album);
+    album->setParent(parent);
+    album->setPID(parent->getID());    
+    
+    return true;
+}
+
 void AlbumManager::insertPAlbum(PAlbum *album)
 {
     if (!album)

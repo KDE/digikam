@@ -213,6 +213,46 @@ bool Album::isRoot() const
     return m_root;
 }
 
+bool Album::hasDescendant(Album* album) const
+{
+    if(album->isRoot())
+        return false;
+    
+    if(getID() == album->getID())
+        return true;
+        
+    Album *child = firstChild();
+    while(child)
+    {
+        if(child->getID() == album->getID()) {
+            return true;
+        }
+        else if(child->hasDescendant(album)) {
+            return true;
+        }
+        else {
+            child = child->next();
+        }
+    }
+    return false;
+}
+
+bool Album::isAncestorOf(Album* album) const
+{
+    bool val = false;
+    Album* a = album;
+    while (a && !a->isRoot())
+    {
+        if (a == this)
+        {
+            val = true;
+            break;
+        }
+        a = a->getParent();
+    }
+    return val;
+}
+
 void Album::setIcon(const QString& icon)
 {
     m_icon = icon;    

@@ -64,4 +64,26 @@ protected:
     virtual const char* format(int i) const;
 };
 
+/**
+ * Provides an drag object for a tag
+ *
+ * When a tag is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class TagDrag : public QDragObject
+{
+public:
+
+    TagDrag( int albumid, QWidget *dragSource = 0, const char *name = 0 );
+    static bool     canDecode(const QMimeSource* e);
+    
+protected:
+
+    QByteArray      encodedData( const char* ) const;
+    const char*     format(int i) const;
+    
+private:
+    int     mAlbumID;
+};
+
 #endif /* DRAGOBJECTS_H */
