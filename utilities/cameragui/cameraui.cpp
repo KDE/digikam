@@ -380,18 +380,18 @@ void CameraUI::saveInitialSize()
 void CameraUI::slotRightButtonClicked(ThumbItem *, const QPoint &pos)
 {
     QPopupMenu popmenu(this);
-    popmenu.insertItem(i18n("Download All"), 
+    popmenu.insertItem(i18n("Download All..."), 
                        this, SLOT(slotDownloadAll()));                           
-    popmenu.insertItem(i18n("Download Selected"), 
+    popmenu.insertItem(i18n("Download Selected..."), 
                        this, SLOT(slotDownloadSelected()));
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("editimage"),
-                       i18n("View/Edit"),
+                       i18n("View/Edit..."),
                        this, SLOT(slotFileView()));
     popmenu.insertItem(SmallIcon("text_italic"), 
-                       i18n("View Exif Information ..."),
+                       i18n("View Exif Information"),
                        this, SLOT(slotFileExif()));
-    popmenu.insertItem(i18n("Properties ..."),
+    popmenu.insertItem(i18n("Properties"),
                        this, SLOT(slotFileProperties()));                       
     popmenu.exec(pos);
 }
