@@ -1137,7 +1137,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
     if (QUriDrag::canDecode(event)) {
 
-        KURL destURL(d->currentAlbum->getURL());
+        KURL destURL(d->currentAlbum->getKURL());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
