@@ -1,2 +1,2 @@
-SUBDIRS = icons pics 
+SUBDIRS = icons pics tips 
 
