@@ -23,7 +23,7 @@
 #ifndef DIGIKAMIMAGEPLUGINS_VERSION_H
 #define DIGIKAMIMAGEPLUGINS_VERSION_H
 
-static const char * const digikamimageplugins_version = "0.7.0";
+static const char * const digikamimageplugins_version = "0.7.1-cvs";
 
 #endif // DIGIKAMIMAGEPLUGINS_VERSION_H
 
