@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_FreeRotation();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotFreeRotation();

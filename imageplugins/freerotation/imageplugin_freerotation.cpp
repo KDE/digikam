@@ -42,19 +42,14 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const char*,
     new KAction(i18n("Free Rotation..."), 0, 
                 this, SLOT(slotFreeRotation()),
                 actionCollection(), "imageplugin_freerotation");
-                
+    
+    setXMLFile("digikamimageplugin_freerotation_ui.rc");         
+                                    
     kdDebug() << "ImagePlugin_FreeRotation plugin loaded" << endl;
 }
 
 ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()
 {
-}
-
-QStringList ImagePlugin_FreeRotation::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/imageplugin_freerotation/ ");
-    return guiDef;
 }
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
