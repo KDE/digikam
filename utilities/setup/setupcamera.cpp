@@ -196,7 +196,7 @@ void SetupCamera::slotAutoDetectCamera()
     bool found = false;
 
     if(listView_->findItem(model,1)) {
-      CameraList* clist = CameraList::instance();
+       CameraList* clist = CameraList::instance();
        if (clist) {
           if (clist->find(model))
              found = true;
