@@ -45,6 +45,7 @@ protected:
     void mousePressEvent( QMouseEvent * );
     void drawContents();
     void drawContents(QPainter *painter);
+    void animate();
         
 private:
 
@@ -54,6 +55,8 @@ private:
     QString  currStatus_;
     QColor   currColor_;
     int      currAlign_;
+    int      currState_;
+    int      progressBarSize_;
 
 private slots:
 

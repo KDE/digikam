@@ -34,6 +34,9 @@
 SplashScreen::SplashScreen()
     : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
 {
+    currState_ = 0;
+    progressBarSize_ = 3;
+    
     QString file = locate( "appdata", "digikam-splash.png" );
 
     pix_ = new QPixmap(file);
@@ -43,7 +46,7 @@ SplashScreen::SplashScreen()
     QRect scr = QApplication::desktop()->screenGeometry();
     move( scr.center() - rect().center() );
     show();
-    repaint();
+    animate();
 
     close_ = false;
     
@@ -101,9 +104,15 @@ void SplashScreen::message(const QString &message, int alignment,
     currStatus_ = message;
     currAlign_ = alignment;
     currColor_ = color;
-    repaint();
+    animate();
 }
 
+
+void SplashScreen::animate()
+{
+    currState_ = ((currState_ + 1) % (2*progressBarSize_-1));
+    repaint();
+}
 
 void SplashScreen::drawContents()
 {
@@ -115,6 +124,32 @@ void SplashScreen::drawContents()
 
 void SplashScreen::drawContents( QPainter *painter )
 {
+    int position;
+    QColor basecolor (155, 192, 231); // Base green color
+
+    // Draw background circles
+    painter->setPen(NoPen);
+    painter->setBrush(QColor(225,234,231));
+    painter->drawEllipse(21,7,9,9);
+    painter->drawEllipse(32,7,9,9);
+    painter->drawEllipse(43,7,9,9);
+    
+    // Draw animated circles, increments are chosen
+    // to get close to background's color
+    // (didn't work well with QColor::light function)
+    for (int i=0; i < progressBarSize_; i++)
+    {
+        position = (currState_+i)%(2*progressBarSize_-1);
+        if (position < 3)
+        {
+            painter->setBrush(QColor(basecolor.red()-18*i,
+                              basecolor.green()-28*i,
+                              basecolor.blue()-10*i));
+            painter->drawEllipse(21+position*11,7,9,9);
+        }
+    }
+    
+    
     painter->setPen(currColor_);
     
     QFont fnt(KGlobalSettings::generalFont());
@@ -122,7 +157,7 @@ void SplashScreen::drawContents( QPainter *painter )
     painter->setFont(fnt);
    
     QRect r = rect();
-    r.setRect( r.x() + 5, r.y() + 5, r.width() - 10, r.height() - 10 );
+    r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
     painter->drawText(r, currAlign_, currStatus_);
 }
 
