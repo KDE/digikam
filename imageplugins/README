@@ -24,6 +24,7 @@ Currently implemented plugins are:
 12) ShearTool        : A tool for shearing an image.
 13) AntiVignetting   : A tool for to reduce image vignetting.
 14) LensDistortion   : A tool for to reduce optical lens distortions.
+15) SuperImpose      : A tool for to superimposed a template to an image.
 
 Contact :
 -----------------------------------------------------------------------
