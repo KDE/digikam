@@ -44,6 +44,7 @@
 #include <qvaluevector.h>
 #include <qptrlist.h>
 #include <qguardedptr.h>
+#include <qdict.h>
 
 // KDE includes.
 
@@ -136,6 +137,8 @@ public:
     QFont fnReg;
     QFont fnCom;
     QFont fnXtra;
+
+    QDict<AlbumIconItem> itemDict;
 };
 
 
@@ -223,6 +226,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     }
 
     d->imageLister->stop();
+    d->itemDict.clear();
     clear();
 
     if (d->currentAlbum)
@@ -249,6 +253,7 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
         }
 
         d->imageLister->stop();
+        d->itemDict.clear();
         clear();
         
         d->thumbSize = thumbSize;
@@ -264,6 +269,7 @@ void AlbumIconView::setAlbum(Album* album)
     if (!album) 
     {
         d->currentAlbum = 0;
+        d->itemDict.clear();
         clear();
 
         d->imageLister->stop();
@@ -310,9 +316,13 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
         if (item->isDir())
             continue;
 
-        AlbumIconItem* iconItem = new AlbumIconItem(this, item->url().filename(),
-                                                    item);
+        KURL url( item->url() );
+        url.cleanPath();
+        
+        AlbumIconItem* iconItem = new AlbumIconItem(this, url.filename(), item);
         item->setExtraData(this, iconItem);
+
+        d->itemDict.insert(url.url(), iconItem);
     }
 
     updateBanner();
@@ -377,12 +387,18 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
     
     delete iconItem;
     item->removeExtraData(this);
+
+    KURL u(item->url());
+    u.cleanPath();
+    d->itemDict.remove(u.url());
+
     rearrangeItems();
     updateBanner();
 }
 
 void AlbumIconView::slotImageListerClear()
 {
+    d->itemDict.clear();
     clear();
     emit signalSelectionChanged();
 }
@@ -595,6 +611,7 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
         d->imageLister->stop();
+        d->itemDict.clear();
         clear();
         d->imageLister->openAlbum(d->currentAlbum);
     }
@@ -1230,6 +1247,7 @@ void AlbumIconView::refresh()
     if (!d->thumbJob.isNull())
         d->thumbJob->kill();
     d->imageLister->stop();
+    d->itemDict.clear();
     clear();
     
     d->imageLister->openAlbum(d->currentAlbum);
@@ -1237,30 +1255,46 @@ void AlbumIconView::refresh()
 
 void AlbumIconView::refreshItems(const QStringList& itemList)
 {
-    /* todo
-       
     if (!d->currentAlbum || itemList.empty())
         return;
-    
-    KURL::List urlList;
+
+    KFileItemList fList;
     for ( QStringList::const_iterator it = itemList.begin();
           it != itemList.end(); ++it )
     {
-        urlList.append(d->currentA1lbum->getURL().path(1) + *it);
+        KURL u(*it);
+        u.cleanPath();
+
+        AlbumIconItem* iconItem = findItem(u.url());
+        if (iconItem)
+            fList.append(iconItem->fileItem());
     }
+        
+    if (fList.isEmpty())
+        return;
 
-    if (d->thumbJob.isNull()) {
-
+    if (d->thumbJob.isNull())
+    {
         d->thumbJob =
-            new Digikam::ThumbnailJob(urlList,
-                                      (int)d->thumbSize.size());
+            new Digikam::ThumbnailJob(fList, (int)d->thumbSize.size());
+        connect(d->thumbJob, 
+                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                                               const QPixmap&,
+                                               const KFileMetaInfo*)),
+                SLOT(slotGotThumbnail(const KFileItem*,
+                                      const QPixmap&,
+                                      const KFileMetaInfo*)));
         connect(d->thumbJob,
-                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+                SIGNAL(signalFailed(const KFileItem*)),
+                SLOT(slotFailedThumbnail(const KFileItem*)));
+        connect(d->thumbJob,
+                SIGNAL(signalCompleted()),
+                SLOT(slotFinishedThumbnail()));
     }
     else
-        d->thumbJob->addItems(urlList);
-    */
+    {
+        d->thumbJob->addItems(fList);
+    }
 }
 
 void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& pix,
@@ -1621,6 +1655,11 @@ bool AlbumIconView::showMetaInfo()
 {
     return (d->albumSettings->getIconShowResolution() ||
             d->albumSettings->getIconShowFileComments());
+}
+
+AlbumIconItem* AlbumIconView::findItem(const QString& url) const
+{
+    return d->itemDict.find(url);    
 }
 
 #include "albumiconview.moc"

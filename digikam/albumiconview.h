@@ -122,9 +122,10 @@ private:
 
     AlbumIconViewPrivate *d;
     
-    void exifRotate(QString filename, QPixmap& pixmap);
-    void updateItemRectsPixmap();
-    bool showMetaInfo();
+    void           exifRotate(QString filename, QPixmap& pixmap);
+    void           updateItemRectsPixmap();
+    bool           showMetaInfo();
+    AlbumIconItem* findItem(const QString& url) const;
 
 private slots:
 
