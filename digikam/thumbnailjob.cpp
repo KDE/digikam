@@ -512,7 +512,7 @@ void ThumbnailJob::emitThumbnail()
     KFileMetaInfo *metaInfo = 0;
     if (d->metainfo)
     {
-        metaInfo = new KFileMetaInfo(d->curr_item->url());
+        metaInfo = new KFileMetaInfo(d->curr_item->url().path());
     }
 
     emit signalThumbnailMetaInfo(d->curr_item, pix, metaInfo);
