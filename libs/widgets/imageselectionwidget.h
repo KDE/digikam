@@ -38,8 +38,28 @@ class ImageSelectionWidget : public QWidget
 Q_OBJECT
 
 public:
+    
+    enum RatioAspect           // Contrained Aspect Ratio list.
+    {
+    RATIOCUSTOM=0,             // Custom aspect ratio.
+    RATIO01X01,                // 1:1
+    RATIO02x03,                // 2:3
+    RATIO03X04,                // 3:4
+    RATIO04X05,                // 4:5
+    RATIO05x07,                // 5:7
+    RATIO07x10,                // 7:10
+    RATIONONE,                 // No aspect ratio.
+    };
 
-    ImageSelectionWidget(int width, int height, QWidget *parent=0);
+    enum Orient  
+    {
+    Landscape = 0,            
+    Paysage,                
+    };
+    
+    ImageSelectionWidget(int width, int height, QWidget *parent=0, 
+                         float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
+                         int orient=Landscape);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(void);
@@ -48,7 +68,8 @@ public:
     void  setSelectionWidth(int w);
     void  setSelectionHeight(int h);
     void  setSelectionOrientation(int orient);
-    void  setSelectionAspectRatio(int aspectRatio);
+    void  setSelectionAspectRatioType(int aspectRatioType);
+    void  setSelectionAspectRatioValue(float aspectRatioValue);
     
     int   getOriginalImageWidth(void);
     int   getOriginalImageHeight(void);
@@ -56,22 +77,6 @@ public:
     
     void  resetSelection(void);
     
-    enum RatioAspect           // Contrained Aspect Ratio list.
-    {
-    RATIO01X01 = 0,            // 1:1
-    RATIO02x03,                // 2:3
-    RATIO03X04,                // 3:4
-    RATIO04X05,                // 4:5
-    RATIO05x07,                // 5:7
-    RATIO07x10,                // 7:10
-    };
-
-    enum Orient  
-    {
-    Landscape = 0,            
-    Paysage,                
-    };
-            
 signals:
 
     void signalSelectionMoved( QRect rect, bool targetDone );     
@@ -116,15 +121,19 @@ private:
     
     QPixmap*    m_pixmap;
     
-    int         m_currentOrientation;
+    int         m_currentAspectRatioType;
     int         m_currentAspectRatio;
     int         m_currentResizing;
+    int         m_currentOrientation;
+    
+    float       m_currentAspectRatioValue;
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    
     void regionSelectionMoved( bool targetDone );
+    
     void regionSelectionChanged(void);
     void realToLocalRegion(void);
+    void localToRealRegion(void);
     void applyAspectRatio(bool WOrH, bool repaintWidget=true);
     void updatePixmap(void);
 };

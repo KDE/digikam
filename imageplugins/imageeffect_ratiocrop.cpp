@@ -74,12 +74,15 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
+    m_ratioCB->insertItem( i18n("Custom") );
     m_ratioCB->insertItem( "1:1" );
     m_ratioCB->insertItem( "2:3" );
     m_ratioCB->insertItem( "3:4" );
     m_ratioCB->insertItem( "4:5" );
     m_ratioCB->insertItem( "5:7" );
     m_ratioCB->insertItem( "7:10" );
+    m_ratioCB->insertItem( i18n("None") );
+    m_ratioCB->setCurrentText( "1:1" );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your aspect ratio for cropping."));
     
     QLabel *label2 = new QLabel(i18n("Orientation:"), plainPage());
@@ -92,26 +95,55 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     hlay->addWidget(label2, 1);
     hlay->addWidget(m_orientCB, 2);
 
+    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
+    m_customRatioNInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
+    m_customLabel1 = new QLabel(i18n("Custom Ratio:"), plainPage());
+    m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
+    m_customLabel2 = new QLabel(":", plainPage());
+    hlay4->addWidget(m_customLabel1, 1);
+    hlay4->addWidget(m_customRatioNInput);
+    hlay4->addWidget(m_customLabel2);
+    hlay4->addWidget(m_customRatioDInput);
+    hlay4->addStretch(5);
+    
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("Width:"), plainPage());
+    m_xInput = new KIntNumInput(plainPage());
+    m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     m_widthInput = new KIntNumInput(plainPage());
+    m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    hlay2->addWidget(label3, 1);
-    hlay2->addWidget(m_widthInput, 5);
+    hlay2->addWidget(m_xInput, 3);
+    hlay2->addWidget(m_widthInput, 3);
     
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label4 = new QLabel(i18n("Height:"), plainPage());
+    m_yInput = new KIntNumInput(plainPage());
+    m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     m_heightInput = new KIntNumInput(plainPage());
+    m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
-    hlay3->addWidget(label4, 1);
-    hlay3->addWidget(m_heightInput, 5);
+    hlay3->addWidget(m_yInput, 3);
+    hlay3->addWidget(m_heightInput, 3);
     
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
     
     connect(m_orientCB, SIGNAL(activated(int)),
             this, SLOT(slotOrientChanged(int)));
-        
+
+    connect(m_xInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotXChanged(int)));
+
+    connect(m_yInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotYChanged(int)));                                    
+
+    connect(m_customRatioNInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotCustomRatioChanged()));
+
+    connect(m_customRatioDInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotCustomRatioChanged()));
+                                                        
     connect(m_widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
 
@@ -120,7 +152,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));                                            
-            
+
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotSelectionChanged(QRect)));      
+
+    slotRatioChanged(m_ratioCB->currentItem());
     QTimer::singleShot(0, this, SLOT(slotUser1()));
     adjustSize();
     disableResize();                  
@@ -133,20 +169,34 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 void ImageEffect_RatioCrop::slotUser1()
 {
     m_imageSelectionWidget->resetSelection();
-/*    m_imageSelectionWidget->setSelectionX(0);
-    m_imageSelectionWidget->setSelectionY(0);
-    m_widthInput->setValue((int)(m_imageSelectionWidget->getOriginalImageWidth() / 2.0));
-    m_imageSelectionWidget->setCenterSelection();*/
 } 
 
 void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
 {
+    m_xInput->blockSignals(true);
+    m_yInput->blockSignals(true);
     m_widthInput->blockSignals(true);
     m_heightInput->blockSignals(true);
+    
+    m_xInput->setValue(rect.x());
+    m_yInput->setValue(rect.y());
     m_widthInput->setValue(rect.width());
     m_heightInput->setValue(rect.height());
+    
+    m_xInput->blockSignals(false);
+    m_yInput->blockSignals(false);
     m_widthInput->blockSignals(false);
     m_heightInput->blockSignals(false);
+}
+
+void ImageEffect_RatioCrop::slotXChanged(int x)
+{
+    m_imageSelectionWidget->setSelectionX(x);
+}
+
+void ImageEffect_RatioCrop::slotYChanged(int y)
+{
+    m_imageSelectionWidget->setSelectionY(y);
 }
 
 void ImageEffect_RatioCrop::slotWidthChanged(int w)
@@ -166,7 +216,29 @@ void ImageEffect_RatioCrop::slotOrientChanged(int o)
 
 void ImageEffect_RatioCrop::slotRatioChanged(int a)
 {
-    m_imageSelectionWidget->setSelectionAspectRatio(a);
+    m_imageSelectionWidget->setSelectionAspectRatioType(a);
+    
+    if ( a == 0 ) // Custom ratio selected.
+       {
+       m_customLabel1->setEnabled(true);
+       m_customLabel2->setEnabled(true);
+       m_customRatioNInput->setEnabled(true);
+       m_customRatioDInput->setEnabled(true);
+       slotCustomRatioChanged();
+       }
+    else
+       {
+       m_customLabel1->setEnabled(false);
+       m_customLabel2->setEnabled(false);
+       m_customRatioNInput->setEnabled(false);
+       m_customRatioDInput->setEnabled(false);
+       }
+}
+
+void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
+{
+    m_imageSelectionWidget->setSelectionAspectRatioValue(
+            (float)(m_customRatioNInput->value()) / (float)(m_customRatioDInput->value()) );
 }
 
 void ImageEffect_RatioCrop::slotOk()

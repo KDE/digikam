@@ -25,9 +25,11 @@
 
 #include <kdialogbase.h>
 
+class QLabel;
 class QComboBox;
 
 class KIntNumInput;
+class KIntSpinBox;
 
 namespace Digikam
 {
@@ -47,11 +49,19 @@ private:
 
     QWidget      *m_parent;
     
+    QLabel       *m_customLabel1;
+    QLabel       *m_customLabel2;
+    
     QComboBox    *m_ratioCB;
     QComboBox    *m_orientCB;
     
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;
+    KIntNumInput *m_xInput;    
+    KIntNumInput *m_yInput;    
+     
+    KIntSpinBox  *m_customRatioNInput;
+    KIntSpinBox  *m_customRatioDInput;
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
     
@@ -59,8 +69,11 @@ private slots:
 
     void slotUser1();
     void slotOk();
+    void slotXChanged(int x);
+    void slotYChanged(int y);
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
+    void slotCustomRatioChanged(void);
     void slotOrientChanged(int o);
     void slotRatioChanged(int a);
     void slotSelectionChanged(QRect rect);
