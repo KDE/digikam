@@ -1,3 +1,34 @@
+v0.7			11/07/04
+----------------------------------------------------------------------------
+
+2004-11-04 14:44  jahrens
+
+	* digikam/albumfolderview.cpp: Album icon update function deleted..
+	  it shouldn't be available in 0.7.
+
+2004-11-03 19:49  pahlibar
+
+	* utilities/cameragui/: cameraui.cpp, dirselectdialog.cpp,
+	  dirselectdialog.h:
+	  when user starts to download items from a camera, the new album
+	  dialog has name pre-filled with exif date for the first image in
+	  the camera.  BUG: 92312
+
+2004-11-03 14:14  aseigo
+
+	* digikam/albumpropsedit.cpp: fix tab order and initial widget
+	  focus
+
+2004-11-03 06:37  cgilles
+
+	* imageplugins/imageplugin_core.cpp,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imageguiclient.h: Digikam ImageEditor :
+	  Added missing "whatsThis" Help menu option (reported by some
+	  users).  Fixed RedEyes Correction menu entry QToolTip to
+	  QWhatsThis.
+	
+
 v0.7-rc1		11/01/04
 ----------------------------------------------------------------------------
 
