@@ -42,6 +42,7 @@
 #include <kedittoolbar.h>
 #include <ktip.h>
 #include <kpopupmenu.h>
+#include <kdeversion.h>
 
 // Includes files for plugins support.
 
@@ -556,11 +557,15 @@ void DigikamApp::slotToggleFullScreen()
 
 void DigikamApp::slotShowTip()
 {
+#if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
     
-    KTipDialog::showMultiTip(0, tipsFiles, true);
+    KTipDialog::showMultiTip(this, tipsFiles, true);
+#else
+    KTipDialog::showTip(this, "digikam/tips", true);
+#endif
 }
 
 void DigikamApp::slotShowKipiHelp()
