@@ -148,7 +148,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Radial Blur") );
     m_effectType->insertItem( i18n("Far Blur") );
     m_effectType->insertItem( i18n("Motion Blur") );
-    m_effectType->insertItem( i18n("Softner Blur") );
+    m_effectType->insertItem( i18n("Softener Blur") );
     m_effectType->insertItem( i18n("Skake Blur") );
     m_effectType->insertItem( i18n("Focus Blur") );
     m_effectType->insertItem( i18n("Smart Blur") );
@@ -163,7 +163,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "of an unfocalized camera lens.<p>"
                                         "<b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
                                         "This simulates the blur of a linear moving camera.<p>"
-                                        "<b>Softner Blur</b>: blurs the image softly in dark tones and hardly in light "
+                                        "<b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
                                         "tones. This gives images a dreamy and glossy soft focus effect. It's ideal "
                                         "for creating romantic portraits, glamour photographs, or giving images a warm "
                                         "and subtle glow.<p>"
