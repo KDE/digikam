@@ -147,7 +147,8 @@ public:
 
 protected:
 
-    // override this to paint with no border
+    // Override this to paint with no border.
+    
     void drawButton( QPainter * p ) 
         {
         QStyle::SCFlags controls = QStyle::SC_ToolButton;
@@ -243,14 +244,14 @@ ImageView::ImageView(QWidget* parent,
                      bool fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    fromCameraUIFlag = fromCameraUI;
+    fromCameraUIFlag  = fromCameraUI;
     d = new ImageViewPrivate;
     
-    d->fullScreen = false;
-    d->preloadNext = true;
+    d->fullScreen     = false;
+    d->preloadNext    = true;
  
-    d->urlList    = KURL::List(urlList);
-    d->urlCurrent = urlCurrent;
+    d->urlList        = KURL::List(urlList);
+    d->urlCurrent     = urlCurrent;
     d->singleItemMode = false;
 
     init();    
@@ -262,14 +263,14 @@ ImageView::ImageView(QWidget* parent,
                      bool fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    fromCameraUIFlag = fromCameraUI;
+    fromCameraUIFlag  = fromCameraUI;
     d = new ImageViewPrivate;
 
-    d->fullScreen = false;
-    d->preloadNext = true;
+    d->fullScreen     = false;
+    d->preloadNext    = true;
      
     d->urlList.append(urlCurrent);
-    d->urlCurrent = urlCurrent;
+    d->urlCurrent     = urlCurrent;
     d->singleItemMode = true;
 
     init();
@@ -351,11 +352,9 @@ ImageViewPrintDialogPage::~ImageViewPrintDialogPage()
 void ImageView::init()
 {
     initGui();
-
     setupActions();
     setupPopupMenu();
     setupButtons();
-
     setupConnections();
 
     IMEventFilter *efilter = new IMEventFilter(this);
@@ -366,7 +365,6 @@ void ImageView::init()
             this,    SLOT(slotKeyPress(int)));
     
     readSettings();
-
     loadCurrentItem();
 }
 
@@ -421,8 +419,8 @@ void ImageView::loadCurrentItem()
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
     int index = d->urlList.findIndex(d->urlCurrent);
 
-    if (it != d->urlList.end()) {
-
+    if (it != d->urlList.end()) 
+        {
         d->canvas->load(d->urlCurrent.path());
 
         QString text = i18n("%1 (%2 of %3)")
@@ -433,20 +431,21 @@ void ImageView::loadCurrentItem()
         d->nameLabel->setText(text);
             
         // Going up, Mr. Tyler?
-        if (d->preloadNext && (d->urlCurrent != d->urlList.last())) {
-
+        if (d->preloadNext && (d->urlCurrent != d->urlList.last())) 
+            {
             // preload the next item
             KURL urlNext = *(++it);
             d->canvas->preload(urlNext.path());
-        }
-        else if (d->urlCurrent != d->urlList.first()){
+            }
+        else if (d->urlCurrent != d->urlList.first())
+            {
             // No, going down
             // preload the prev item
 
             KURL urlPrev = *(--it);
             d->canvas->preload(urlPrev.path());
+            }
         }
-    }
 }
 
 
@@ -860,8 +859,8 @@ void ImageView::setupButtons()
     d->buttonLayout->addWidget(d->bPrev);
 
     d->bNext = new CButton(d->buttonBar,
-                           d->actions.find("next"),
-                           BarIcon("forward"));
+                             d->actions.find("next"),
+                             BarIcon("forward"));
     d->buttonLayout->addWidget(d->bNext);
 
     QHBox *labelBox = new QHBox(d->buttonBar);
@@ -1000,16 +999,16 @@ void ImageView::closeEvent(QCloseEvent *e)
 
 void ImageView::promptUserSave()
 {
-    if (d->bSave->isEnabled()) {
-
+    if (d->bSave->isEnabled()) 
+        {
         int result =
             KMessageBox::warningYesNo(this,                                      
                                       i18n("\"%1\" has been modified.\n"
-                                           "Do you want to save it?")
+                                           "Do you wish to want to save it?")
                                            .arg(d->urlCurrent.filename()));
         if (result == KMessageBox::Yes)
             slotSave();
-    }
+        }
 }
 
 
@@ -1019,10 +1018,12 @@ bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
                                   const QString& originalFileName )
 {
     QImage image( filename );
-    if ( image.isNull() ) {
+    
+    if ( image.isNull() ) 
+        {
         kdWarning() << "Can't load image: " << filename << " for printing.\n";
         return false;
-    }
+        }
 
     QPainter p;
     p.begin( &printer );
@@ -1286,12 +1287,12 @@ void ImageView::slotPrevImage()
 
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-    if (it != d->urlList.begin()) {
-
+    if (it != d->urlList.begin()) 
+         {
          d->preloadNext = true;
 
-         if (d->urlCurrent != d->urlList.first()) {
-
+         if (d->urlCurrent != d->urlList.first()) 
+             {
              KURL urlPrev = *(--it);
              d->urlCurrent = urlPrev;
              loadCurrentItem();
@@ -1303,8 +1304,8 @@ void ImageView::slotPrevImage()
              
              if (d->urlCurrent == d->urlList.first()) 
                  d->bPrev->setEnabled(false);
+             }
          }
-    }
 }
 
 
@@ -1322,13 +1323,13 @@ void ImageView::slotRemoveCurrentItemfromAlbum()
                                            warnMsg,
                                            i18n("Warning"),
                                            i18n("Delete"))
-        ==  KMessageBox::Continue) {
+        ==  KMessageBox::Continue) 
+           {
+           KIO::DeleteJob* job = KIO::del(currentImage, false, true);
 
-       KIO::DeleteJob* job = KIO::del(currentImage, false, true);
-
-       connect(job, SIGNAL(result(KIO::Job*)),
-               this, SLOT(slot_onDeleteCurrentItemFinished(KIO::Job*)));
-       }
+           connect(job, SIGNAL(result(KIO::Job*)),
+                   this, SLOT(slot_onDeleteCurrentItemFinished(KIO::Job*)));
+           }
 }
 
 
@@ -1397,14 +1398,13 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
          d->bPrev->setEnabled(false);    
          d->bNext->setEnabled(false);         
          KMessageBox::information(this,
-                                  i18n("There is no image to show in the current Album;\n"
-                                       "the ImageViewer will be closed...."),
-                                  i18n("No image in the current Album")
-                                  );
+                                  i18n("There is no image to show in the current Album!\n"
+                                       "The ImageViewer will be closed..."),
+                                  i18n("No image in the current Album"));
 
          slotClose();
          }
-       }
+      }
 }
 
 
@@ -1438,31 +1438,32 @@ void ImageView::slotSave()
 {
     if (!d->urlCurrent.isValid()) return;
     
-    QString tmpFile = locateLocal("tmp",
-                                  d->urlCurrent.filename());
+    QString tmpFile = locateLocal("tmp", d->urlCurrent.filename());
     
     int result = d->canvas->save(tmpFile);
 
-    if (result != 1) {
+    if (result != 1) 
+        {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                                  .arg(d->urlCurrent.filename())
                                  .arg(d->urlCurrent.path().section('/', -2, -2)));
-         return;
-    }
+        return;
+        }
 
     ExifRestorer exifHolder;
-    exifHolder.readFile(d->urlCurrent.path(),
-                        ExifRestorer::ExifOnly);
+    exifHolder.readFile(d->urlCurrent.path(), ExifRestorer::ExifOnly);
 
-    if (exifHolder.hasExif()) {
+    if (exifHolder.hasExif()) 
+        {
         ExifRestorer restorer;
         restorer.readFile(tmpFile, ExifRestorer::EntireImage);
         restorer.insertExifData(exifHolder.exifData());
         restorer.writeFile(tmpFile);
-    }
-    else {
+        }
+    else 
+        {
         qWarning("No Exif Data Found");
-    }
+        }
 
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), d->urlCurrent,
                                            -1, true, false, false);
@@ -1491,31 +1492,32 @@ void ImageView::slotSaveAs()
      
      if (!newFile.isValid()) return;
  
-     QString tmpFile = locateLocal("tmp",
-                                   d->urlCurrent.filename());
+     QString tmpFile = locateLocal("tmp", d->urlCurrent.filename());
      
-     int result = d->canvas->save(tmpFile);
+     int result = d->canvas->saveAs(tmpFile);
  
-     if (result != 1) {
+     if (result != 1) 
+         {
          KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                                  .arg(d->urlCurrent.filename())
                                  .arg(d->urlCurrent.path().section('/', -2, -2)));
          return;
-     }
+         }
      
      ExifRestorer exifHolder;
-     exifHolder.readFile(d->urlCurrent.path(),
-                         ExifRestorer::ExifOnly);
+     exifHolder.readFile(d->urlCurrent.path(), ExifRestorer::ExifOnly);
  
-     if (exifHolder.hasExif()) {
+     if (exifHolder.hasExif()) 
+         {
          ExifRestorer restorer;
          restorer.readFile(tmpFile, ExifRestorer::EntireImage);
          restorer.insertExifData(exifHolder.exifData());
          restorer.writeFile(tmpFile);
-     }
-     else {
+         }
+     else 
+         {
          qWarning("No Exif Data Found");
-     }
+         }
  
      KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), newFile,
                                             -1, true, false, false);
@@ -1559,6 +1561,8 @@ void ImageView::slotSaveAsResult(KIO::Job *job)
 
     if (targetAlbum && sourceAlbum)     // The target Album is in the database ?
        {
+       // Copy the comments from the original image to the target image.
+       
        sourceAlbum->openDB();
        QString comments = sourceAlbum->getItemComments(d->urlCurrent.filename());
        sourceAlbum->closeDB();
@@ -1569,13 +1573,15 @@ void ImageView::slotSaveAsResult(KIO::Job *job)
        
        if ( d->urlCurrent.directory() == newFile.directory() )    // Target Album = current Album ?
           {
+          d->canvas->slotRestore();
+          d->canvas->load(newFile.path());
           KURL::List::iterator it = d->urlList.find(d->urlCurrent);
           d->urlList.insert(it, newFile);
           d->urlCurrent = newFile;
           }
        }
 
-    loadCurrentItem();
+    loadCurrentItem(); // Load the new target images.
 }
  
 
@@ -1585,14 +1591,16 @@ void ImageView::slotToggleAutoZoom()
 {
     bool val;
     
-    if (d->canvas->autoZoomOn()) {
+    if (d->canvas->autoZoomOn()) 
+        {
         d->canvas->slotSetAutoZoom(false);
         val = true;
-    }
-    else {
+        }
+    else 
+        {
         d->canvas->slotSetAutoZoom(true);
         val = false;
-    }
+        }
 
     d->bZoomIn->setEnabled(val);
     d->bZoomOut->setEnabled(val);
@@ -1610,15 +1618,17 @@ void ImageView::slotToggleAutoZoom()
 
 void ImageView::slotToggleFullScreen()
 {
-    if (d->fullScreen) {
+    if (d->fullScreen) 
+        {
         showNormal();
         d->fullScreen = false;
         move(0, 0);
-    }
-    else {
+        }
+    else 
+        {
         showFullScreen();
         d->fullScreen = true;
-    }
+        }
 }
 
 
@@ -1719,12 +1729,12 @@ void ImageView::slotExifInfo()
     
     if (exif->loadFile(d->urlCurrent.path()) == 0)
         exif->show();
-    else {
+    else 
+        {
         delete exif;
         KMessageBox::sorry(this,
                            i18n("This item has no Exif Information"));
-    }
-
+        }
 }
 
 
@@ -1733,14 +1743,15 @@ void ImageView::slotExifInfo()
 void ImageView::slotKeyPress(int key)
 {
     QKeySequence keyPressed(key);
-
     CAction *action = d->actionKeys.find(QString(keyPressed));
+    
     if (!action) return;
 
-    if (action->button) {
+    if (action->button) 
+        {
         CButton *button = (CButton*) action->button;
         button->animateClick();
-    }
+        }
     else
         action->activate();
     
@@ -1781,5 +1792,3 @@ void ImageView::slotImageProperties()
 }
 
 
-
-#include "imageview.moc"

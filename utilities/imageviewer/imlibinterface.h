@@ -71,6 +71,7 @@ public:
                         int& contrast);
 
     int save(const QString& file);
+    int saveAs(const QString& file);
     void restore();
 
 private:

@@ -48,6 +48,7 @@ public:
     void load(const QString& filename);
     void preload(const QString& filename);
     int  save(const QString& filename);
+    int  saveAs(const QString& filename);
     void getBCGSettings(int& gamma, int& brightness,
                         int& contrast);
     bool autoZoomOn();

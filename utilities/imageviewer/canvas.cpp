@@ -69,20 +69,16 @@ public:
 Canvas::Canvas(QWidget *parent)
       : QScrollView(parent)
 {
-
-    
     viewport()->setBackgroundMode(Qt::NoBackground);
 
     iface = new ImlibInterface(viewport());
     d = new CanvasPrivate;
-    d->zoom = 1.0;
-    d->autoZoom = false;
-    d->rubber = 0;
+    d->zoom         = 1.0;
+    d->autoZoom     = false;
+    d->rubber       = 0;
     d->pressedMoved = false;
-    d->fullScreen = false;
-
-    counter = 0;
-    
+    d->fullScreen   = false;
+    counter         = 0;
 }
 
 
@@ -95,7 +91,6 @@ Canvas::~Canvas()
     
     delete d;
     delete iface;
-    
 }
 
 
@@ -103,11 +98,12 @@ Canvas::~Canvas()
 
 void Canvas::load(const QString& filename)
 {
-    if (d->rubber) {
+    if (d->rubber) 
+        {
         delete d->rubber;
         d->rubber = 0;
         emit signalCropSelected(false);
-    }
+        }
     
     emit signalChanged(false);
 
@@ -139,11 +135,18 @@ void Canvas::preload(const QString& filename)
 
 int Canvas::save(const QString& filename)
 {
-
     int result = iface->save(filename);
-
     emit signalChanged(false);
+    return result;
+}
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+int Canvas::saveAs(const QString& filename)
+{
+    int result = iface->saveAs(filename);
+    emit signalChanged(false);
     return result;
 }
 
@@ -201,8 +204,8 @@ void Canvas::updateContentsSize()
         emit signalCropSelected(false);
     }
     
-    if (d->autoZoom) {
-        
+    if (d->autoZoom) 
+        {
         // Center the image
         int wZ = int(iface->width());
         int hZ = int(iface->height());
@@ -220,12 +223,9 @@ void Canvas::updateContentsSize()
         viewport()->setUpdatesEnabled(false);
         resizeContents(wZ, hZ);
         viewport()->setUpdatesEnabled(true);
-
- 
-
-    }
-    else {
-
+        }
+    else 
+        {
         int wZ = int(iface->width());
         int hZ = int(iface->height());
         
@@ -793,5 +793,3 @@ void Canvas::slotRestore()
     emit signalChanged(false);
 }
 
-
-#include "canvas.moc"
