@@ -49,8 +49,32 @@ extern "C"
 
 class ImImage 
 {
-public:
+private:           // Variables.
 
+    Imlib_Image           im;
+    Imlib_Image           old_im;
+    
+    Imlib_Color_Modifier  mod;
+    
+    Pixmap                pixmap;
+    
+    Pixmap                mask;
+    
+    Imlib_Load_Error      errorRet;
+    
+    int                   w;
+    int                   h;
+    int                   ow;
+    int                   oh;
+    
+    bool                  changed;
+    bool                  dirty;
+    bool                  valid;
+    
+    QString               file;
+
+public:           // Fonctions.
+    
     ImImage(const QString& filename) 
         {
         w              = 0;
@@ -59,15 +83,12 @@ public:
         oh             = 0;
         
         im             = 0;
-        ajusted_im     = 0;
         
         pixmap         = 0;
-        ajusted_pixmap = 0;
         
         dirty          = true;
         changed        = false;
         valid          = false;
-        ajust          = false;
         
         file           = filename;
         
@@ -154,36 +175,18 @@ public:
 
     void render() 
         {
-        if ( ajust == true )
-           {
-           if (!ajusted_im || !dirty) return;
+        if ( !im || !dirty ) return;
 
-           if (ajusted_pixmap)
-              {
-              imlib_context_set_mask(ajusted_pixmap);
-              imlib_free_pixmap_and_mask(ajusted_pixmap); 
-              }
+        if (pixmap)
+            {
+            imlib_context_set_mask(pixmap);
+            imlib_free_pixmap_and_mask(pixmap); 
+            }
             
-           ajusted_pixmap = 0;
+        pixmap = 0;
         
-           imlib_context_set_image(ajusted_im);
-           imlib_render_pixmaps_for_whole_image_at_size(&ajusted_pixmap, &ajusted_mask, w, h);
-           }
-        else 
-           {
-           if (!im || !dirty) return;
-
-           if (pixmap)
-               {
-               imlib_context_set_mask(pixmap);
-               imlib_free_pixmap_and_mask(pixmap); 
-               }
-            
-           pixmap = 0;
-        
-           imlib_context_set_image(im);
-           imlib_render_pixmaps_for_whole_image_at_size(&pixmap, &mask, w, h);
-           }
+        imlib_context_set_image(im);
+        imlib_render_pixmaps_for_whole_image_at_size(&pixmap, &mask, w, h);
            
         dirty  = false;
         }
@@ -192,16 +195,7 @@ public:
         {
         if (dirty) render();
         
-        if ( ajust == true )
-           {
-           qDebug ("ajust render");
-           return ajusted_pixmap;       
-           }
-        else
-           { 
-           qDebug ("normal render");
-           return pixmap;       
-           }
+        return pixmap;       
         }
 
     int width() 
@@ -314,57 +308,38 @@ public:
     
     void ajustInit(void)
         {
-        imlib_context_set_image(im);        
-        ajusted_im = imlib_clone_image(); 
-        imlib_context_set_image(ajusted_im);        
-        ajusted_mod = imlib_create_color_modifier();
-        imlib_context_set_color_modifier(ajusted_mod);
-        ajusted_pixmap = 0;
-        ajusted_mask = 0;
-        imlib_context_set_mask(ajusted_pixmap);        
-        imlib_image_orientate(2);
+/*        imlib_context_set_image(im);        
+        old_im = imlib_create_cropped_image(0, 0,
+                 imlib_image_get_width(), imlib_image_get_height());
         dirty = true;        
-        ajust = true;
-        render();
+        render();*/
         }
         
     void ajustAccepted(void)
         {
-        imlib_context_set_image(ajusted_im);
-        im = imlib_clone_image(); 
-        ajusted_pixmap = 0;
-        ajusted_mask = 0;
-        imlib_context_set_mask(ajusted_pixmap);       
-        imlib_free_pixmap_and_mask(ajusted_pixmap); 
+/*        imlib_context_set_image(old_im);
         imlib_free_image();
-        imlib_free_color_modifier();
-        imlib_context_set_image(im);   
-        mod = imlib_create_color_modifier();
-        imlib_context_set_color_modifier(mod);
-        pixmap = 0;
-        mask = 0;
-        imlib_context_set_mask(pixmap);
+        imlib_context_set_image(im);*/
         changed = true;
         dirty   = true;             
-        ajust   = false;
         }
         
     void ajustRejected(void)
         {
-        imlib_context_set_image(ajusted_im);
-        imlib_free_pixmap_and_mask(ajusted_pixmap); 
+/*        imlib_context_set_image(old_im);
         imlib_free_image();
-        imlib_free_color_modifier();
-        imlib_context_set_image(im);   
+        imlib_context_set_image(im);*/
         changed = false;
-        ajust   = false;
         }
 
     void changeGamma(double val)  
         {
-        if (!ajusted_im) return;
-        
-        imlib_context_set_image(ajusted_im);        
+        if (!im) return;
+
+/*        imlib_context_set_image(old_im);        
+        im = imlib_create_cropped_image(0, 0,
+             imlib_image_get_width(), imlib_image_get_height());*/
+        imlib_context_set_image(im);        
         imlib_modify_color_modifier_gamma(val);
         imlib_apply_color_modifier();
         dirty   = true;
@@ -373,9 +348,12 @@ public:
 
     void changeBrightness(double val)  
         {
-        if (!ajusted_im) return;
+        if (!im) return;
         
-        imlib_context_set_image(ajusted_im);  
+/*        imlib_context_set_image(old_im);  
+        im = imlib_create_cropped_image(0, 0,
+             imlib_image_get_width(), imlib_image_get_height());*/
+        imlib_context_set_image(im);        
         imlib_modify_color_modifier_brightness(val);
         imlib_apply_color_modifier();
         dirty      = true;
@@ -384,9 +362,12 @@ public:
 
     void changeContrast(double val)  
         {
-        if (!ajusted_im) return;
+        if (!im) return;
 
-        imlib_context_set_image(ajusted_im);
+/*        imlib_context_set_image(old_im);
+        im = imlib_create_cropped_image(0, 0,
+             imlib_image_get_width(), imlib_image_get_height());*/
+        imlib_context_set_image(im);        
         imlib_modify_color_modifier_contrast(val);
         imlib_apply_color_modifier();
         dirty    = true;
@@ -415,7 +396,7 @@ public:
         return result;
         }
             
-private:
+private:           // Fonctions.
 
     int saveAction(const QString& saveFile) 
         {
@@ -446,6 +427,9 @@ private:
             
             imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &errorRet);
             result = (int)errorRet;
+            if (result) 
+               qDebug("error saving image '%s': %i", QFile::encodeName(saveFile).data(),(int)errorRet);
+ 
             }
 
         // Now kill the image and re-read it from the saved file
@@ -514,32 +498,6 @@ private:
             }
         return 0;  
         }
-    
-    Imlib_Image           im;
-    Imlib_Image           ajusted_im;
-    
-    Imlib_Color_Modifier  mod;
-    Imlib_Color_Modifier  ajusted_mod;
-    
-    Pixmap                pixmap;
-    Pixmap                ajusted_pixmap;
-    
-    Pixmap                mask;
-    Pixmap                ajusted_mask;
-    
-    Imlib_Load_Error      errorRet;
-    
-    int                   w;
-    int                   h;
-    int                   ow;
-    int                   oh;
-    
-    bool                  changed;
-    bool                  dirty;
-    bool                  valid;
-    bool                  ajust;
-    
-    QString               file;
 };
 
 // ----------------------------------------------------------------

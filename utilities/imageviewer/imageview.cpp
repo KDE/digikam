@@ -643,42 +643,6 @@ void ImageView::setupActions()
                                   SLOT(slotFlipVertical()),
                                   QKeySequence(Key_V)));
                                   
-    d->actions.insert("gamma+",
-                      new CAction(i18n("Increase Gamma"),
-                                  d->canvas,
-                                  SLOT(slotGammaPlus()),
-                                  QKeySequence(Key_G)));
-
-    d->actions.insert("gamma-",
-                      new CAction(i18n("Decrease Gamma"),
-                                  d->canvas,
-                                  SLOT(slotGammaMinus()),
-                                  QKeySequence(SHIFT+Key_G)));
-    
-    d->actions.insert("brightness+",
-                      new CAction(i18n("Increase Brightness"),
-                                  d->canvas,
-                                  SLOT(slotBrightnessPlus()),
-                                  QKeySequence(Key_B)));
-    
-    d->actions.insert("brightness-",
-                      new CAction(i18n("Decrease Brightness"),
-                                  d->canvas,
-                                  SLOT(slotBrightnessMinus()),
-                                  QKeySequence(SHIFT+Key_B)));
-
-    d->actions.insert("contrast+",
-                      new CAction(i18n("Increase Contrast"),
-                                  d->canvas,
-                                  SLOT(slotContrastPlus()),
-                                  QKeySequence(Key_C)));
-    
-    d->actions.insert("contrast-",
-                      new CAction(i18n("Decrease Contrast"),
-                                  d->canvas,
-                                  SLOT(slotContrastMinus()),
-                                  QKeySequence(SHIFT+Key_C)));
-
     d->actions.insert("bcgEdit",
                       new CAction(i18n("Adjust Image..."),
                                   this,
@@ -782,12 +746,6 @@ void ImageView::setupActions()
     addKeyInDict("flip");
     addKeyInDict("fliphorizontal");
     addKeyInDict("flipvertical");
-    addKeyInDict("gamma+");
-    addKeyInDict("gamma-");
-    addKeyInDict("brightness+");
-    addKeyInDict("brightness-");
-    addKeyInDict("contrast+");
-    addKeyInDict("contrast-");
     addKeyInDict("bcgEdit");
     
     if ( fromCameraUIFlag == false )
@@ -856,21 +814,6 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->contextMenu, d->actions.find("crop"));
 
     addMenuItem(d->contextMenu, d->actions.find("bcgEdit"));
-
-    QPopupMenu *brightnessMenu = new QPopupMenu(d->contextMenu);
-    addMenuItem(brightnessMenu, d->actions.find("brightness+"));
-    addMenuItem(brightnessMenu, d->actions.find("brightness-"));
-    d->contextMenu->insertItem(i18n("Brightness"), brightnessMenu);
-
-    QPopupMenu *contrastMenu = new QPopupMenu(d->contextMenu);
-    addMenuItem(contrastMenu, d->actions.find("contrast+"));
-    addMenuItem(contrastMenu, d->actions.find("contrast-"));
-    d->contextMenu->insertItem(i18n("Contrast"), contrastMenu);
-
-    QPopupMenu *gammaMenu = new QPopupMenu(d->contextMenu);
-    addMenuItem(gammaMenu, d->actions.find("gamma+"));
-    addMenuItem(gammaMenu, d->actions.find("gamma-"));
-    d->contextMenu->insertItem(i18n("Gamma"), gammaMenu);
 
     d->contextMenu->insertSeparator();
     
@@ -1556,6 +1499,7 @@ void ImageView::slotSave()
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                                  .arg(d->urlCurrent.filename())
                                  .arg(d->urlCurrent.path().section('/', -2, -2)));
+        loadCurrentItem();
         return;
         }
 
@@ -1608,8 +1552,9 @@ void ImageView::slotSaveAs()
      if (result != 1) 
          {
          KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
-                                 .arg(d->urlCurrent.filename())
-                                 .arg(d->urlCurrent.path().section('/', -2, -2)));
+                                 .arg(newFile.filename())
+                                 .arg(newFile.path().section('/', -2, -2)));
+         loadCurrentItem();                                 
          return;
          }
      
@@ -1943,8 +1888,8 @@ void ImageView::slotAbout( void )
                                   "Authors: Renchi Raju and Gilles Caulier\n\n"
                                   "Emails:\n"
                                   "renchi at pooh.tam.uiuc.edu\n"
-                                  "caulier dot gilles at free.fr\n"
-                                  "This program use 'imlib2' API for all images manipulations.\n"),
+                                  "caulier dot gilles at free.fr\n\n"
+                                  "This program use 'imlib2' API for all images rendering.\n"),
                                   i18n("About Digikam image viewer"));
 }
 
