@@ -142,7 +142,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     m_borderType = new QComboBox( false, plainPage() );
     m_borderType->insertItem( i18n("Solid") );
-    m_borderType->insertItem( i18n("Niepce") );
+    m_borderType->insertItem( "Niepce" );
     m_borderType->insertItem( i18n("Beveled") );
     m_borderType->insertItem( i18n("Decorative Pine") );
     m_borderType->insertItem( i18n("Decorative Wood") );
