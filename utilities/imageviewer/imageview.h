@@ -32,12 +32,17 @@
 #include <qwidget.h>
 #include <qfontmetrics.h>
 #include <qstring.h>
+#include <qguardedptr.h>
 
 // KDE lib includes
 
 #include <kurl.h>
 #include <kio/job.h>
 #include <kdeprint/kprintdialogpage.h>
+
+// local includes.
+
+#include "thumbnailjob.h"
 
 class QPopupMenu;
 class QCloseEvent;
@@ -99,6 +104,8 @@ private:
                                             // when the images are opened from the cameraUI 
                                             // interface (like 'Image Comments Editor'
                                             // and 'Remove From Album').
+                                            
+    QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;                                            
 
 protected:
 
@@ -129,9 +136,10 @@ private slots:
     void slotKeyPress(int key);
     void slotPrintImage();
     void slotImageProperties();
-    void slotImageNameActived( const QString & filename );
-    void slotHelp( void );
-    void slotAbout( void );
+    void slotImageNameActived(const QString & filename);
+    void slotHelp(void);
+    void slotAbout(void);
+    void slotGotPreview(const KURL &url, const QPixmap &pixmap);
 };
 
 

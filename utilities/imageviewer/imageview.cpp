@@ -251,10 +251,15 @@ public:
 ImageView::ImageView(QWidget* parent,
                      const KURL::List& urlList,
                      const KURL& urlCurrent,
-                     bool fromCameraUI)
+                     bool  fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     fromCameraUIFlag  = fromCameraUI;
+    
+    if (!fromCameraUIFlag)
+        setCaption(i18n("Digikam ImageViewer - Images from Album \"%1\"")
+                   .arg(urlCurrent.path().section('/', -2, -2)));
+
     d = new ImageViewPrivate;
     
     d->fullScreen     = false;
@@ -270,10 +275,15 @@ ImageView::ImageView(QWidget* parent,
 
 ImageView::ImageView(QWidget* parent,
                      const KURL& urlCurrent,
-                     bool fromCameraUI)
+                     bool  fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     fromCameraUIFlag  = fromCameraUI;
+    
+    if (!fromCameraUIFlag)
+       setCaption(i18n("Digikam ImageViewer - Image from Album \"%1\"")
+                  .arg(urlCurrent.path().section('/', -2, -2)));
+    
     d = new ImageViewPrivate;
 
     d->fullScreen     = false;
@@ -321,7 +331,9 @@ ImageViewPrintDialogPage::ImageViewPrintDialogPage( QWidget *parent, const char 
     m_scale->setEnabled( false ); // ###
     grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
     group->insert( m_scale );
-    connect( m_scale, SIGNAL( toggled( bool )), SLOT( toggleScaling( bool )));
+    
+    connect( m_scale, SIGNAL( toggled( bool )),
+             SLOT( toggleScaling( bool )));
 
     m_units = new KComboBox( false, widget, "unit combobox" );
     grid->addWidget( m_units, 0, 2, AlignLeft );
@@ -347,6 +359,10 @@ ImageView::~ImageView()
 {
     saveSettings();
     d->actions.clear();
+    
+    if (!m_thumbJob.isNull())
+        delete m_thumbJob;    
+    
     delete d;
 }
 
@@ -942,11 +958,10 @@ void ImageView::setupButtons()
     
     d->nameComboBox = new QComboBox(labelBox);
   
-    for ( KURL::List::iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it )
-        {
-        KURL url = *it;
-        d->nameComboBox->insertItem( url.filename() );
-        }
+    m_thumbJob = new Digikam::ThumbnailJob(d->urlList, 32, false);
+    
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+            SLOT(slotGotPreview(const KURL&, const QPixmap&)));
     
     labelBox->setStretchFactor(d->nameComboBox, 5);
     
@@ -1662,15 +1677,19 @@ void ImageView::slotSaveAsResult(KIO::Job *job)
        targetAlbum->setItemComments(newFile.filename(), comments);
        targetAlbum->closeDB();
        
-       if ( d->urlCurrent.directory() == newFile.directory() &&    // Target Album = current Album ?
-            d->urlList.find(newFile) == d->urlList.end() )         // The image file not already exist in le list.            
+       if ( d->urlCurrent.directory() == newFile.directory() &&  // Target Album = current Album ?
+            d->urlList.find(newFile) == d->urlList.end() )       // The image file not already exist
+                                                                 // in the list.            
           {
           d->canvas->slotRestore();
           d->canvas->load(newFile.path());
           KURL::List::iterator it = d->urlList.find(d->urlCurrent);
           d->urlList.insert(it, newFile);
           d->urlCurrent = newFile;
-          d->nameComboBox->insertItem( newFile.filename() );
+          m_thumbJob = new Digikam::ThumbnailJob(d->urlCurrent, 32, false, false);
+    
+          connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                  SLOT(slotGotPreview(const KURL&, const QPixmap&)));
           }
        }
 
@@ -1748,7 +1767,6 @@ void ImageView::slotCropSelected(bool val)
 void ImageView::slotChanged(bool val)
 {
     d->bSave->setEnabled(val);
-    d->bSaveAs->setEnabled(val);
     d->bRestore->setEnabled(val);
 
     CAction *action = 0;
@@ -1930,5 +1948,12 @@ void ImageView::slotAbout( void )
                                   i18n("About Digikam image viewer"));
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotGotPreview(const KURL &url, const QPixmap &pixmap)
+{
+    d->nameComboBox->insertItem( pixmap, url.filename() );
+}
 
 #include "imageview.moc"
