@@ -171,6 +171,7 @@ private:
     KAction *mQuitAction;
     KAction *mTipAction;
     KAction *mKipiHelpAction;
+    KAction *mGammaAdjustmentAction;
 
 private slots:
 
@@ -180,6 +181,7 @@ private slots:
     void slot_exit();
     void slotShowTip();
     void slotShowKipiHelp();
+    void slot_gammaAdjustment();
     
     void slotSetup();
     void slotSetupCamera();

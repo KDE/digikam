@@ -66,6 +66,7 @@
   </Menu>
   
   <Menu name="Tools"><text>Too&amp;ls</text>
+    <Action name="gamma_adjustment" />
     <ActionList name="tool_actions"/>
     <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
        <ActionList name="batch_actions"/>

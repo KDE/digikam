@@ -44,6 +44,8 @@
 #include <ktip.h>
 #include <kpopupmenu.h>
 #include <kdeversion.h>
+#include <kapplication.h>
+#include <kmessagebox.h>
 
 // Includes files for plugins support.
 
@@ -309,10 +311,10 @@ void DigikamApp::setupActions()
                                     "image_properties");
 
     mImageSortAction = new KSelectAction(i18n("&Sort Images"),
-                                         0,
-                                         0,
-                                         actionCollection(),
-                                         "image_sort");
+                                    0,
+                                    0,
+                                    actionCollection(),
+                                    "image_sort");
 
     connect(mImageSortAction, SIGNAL(activated(int)),
             mView, SLOT(slotSortImages(int)));
@@ -339,9 +341,11 @@ void DigikamApp::setupActions()
     mImageSetExifOrientation2Action = new KAction(i18n("Flipped horizontally"),0,actionCollection());
     mImageSetExifOrientation3Action = new KAction(i18n("Rotated 180 degrees"),0,actionCollection());
     mImageSetExifOrientation4Action = new KAction(i18n("Flipped vertically"),0,actionCollection());
-    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 degrees / horiz. flipped"),0,actionCollection());
+    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 degrees / horiz. flipped"),
+                                                       0, actionCollection());
     mImageSetExifOrientation6Action = new KAction(i18n("Rotated 90 degrees"),0,actionCollection());
-    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 90 degrees / vert. flipped"),0,actionCollection());
+    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 90 degrees / vert. flipped"),
+                                                       0, actionCollection());
     mImageSetExifOrientation8Action = new KAction(i18n("Rotated 270 degrees"),0,actionCollection());
 
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation1Action);
@@ -447,6 +451,14 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
+    mGammaAdjustmentAction = new KAction(i18n("Gamma Adjustment..."),
+                                   "kgamma",
+                                   0,
+                                   this,
+                                   SLOT(slot_gammaAdjustment()),
+                                   actionCollection(),
+                                   "gamma_adjustment");
+                                   
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
                                        
@@ -504,6 +516,20 @@ void DigikamApp::slot_imageSelected(bool val)
     mImageDeleteAction->setEnabled(val);
     mImagePropsAction->setEnabled(val);
     mImageExifOrientationActionMenu->setEnabled(val);
+}
+
+void DigikamApp::slot_gammaAdjustment()
+{
+   QStringList args;
+   QString *perror = 0;
+   int *ppid = 0;
+
+   args << "kgamma";
+   int ValRet = KApplication::kdeinitExec(QString::fromLatin1("kcmshell"), args, perror, ppid);
+
+   if ( ValRet != 0 )
+      KMessageBox::error(0, i18n("Cannot start \"KGamma\" extension from KDE control center;\n"
+                                 "please check your installation."));
 }
 
 void DigikamApp::slot_exit()
