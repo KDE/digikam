@@ -1,5 +1,6 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> ImageEditor: HSL balance correction plugin. 
         * <Gilles Caulier> ImageEditor: Free image rotation option. 
         * <Gilles Caulier> ImageEditor: Sharpen plugin. 
         * <Gilles Caulier> ImageEditor: Blur plugin. 

@@ -79,6 +79,7 @@ x Added dockable toolbars.                                         <Renchi Raju 
 x Added Plugins interface.                                         <Renchi Raju    - 0.7.0> 
 x Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.7.0>  
 x Added Color balance plugin.                                      <Gilles Caulier - 0.7.0>  
+x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
 x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
 o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 o Added Settings dialog.                                           
