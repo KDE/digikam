@@ -15,8 +15,8 @@ tip_DATA = tips
 tipdir = $(kde_datadir)/digikamimageplugins
 
 messages: rc.cpp
-	$(PREPARETIPS) > tips.cpp
-	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
+	$(PREPARETIPS) >> tips.cpp
+	LIST=`find . -name \tips.cpp`; \
 	if test -n "$$LIST"; then \
 		$(XGETTEXT) $$LIST -o $(podir)/digikamimageplugins.pot; \
 	fi
