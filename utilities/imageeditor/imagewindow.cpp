@@ -565,7 +565,7 @@ void ImageWindow::slotCommentsEdit()
 
         if (iconItem)
         {
-            ImageDescEdit descEdit(m_view, iconItem, this);
+            ImageDescEdit descEdit(m_view, iconItem, this, true);
             descEdit.exec();
         }
     }

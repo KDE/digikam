@@ -74,9 +74,10 @@ public:
     TAlbum* m_album;
 };
 
-ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent)
+ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, 
+                             QWidget *parent, bool singleMode)
              : KDialogBase(Plain, i18n("Image Comments/Tags"), 
-                           Help|User1|User2|Stretch|Ok|Apply|Cancel,
+                           singleMode ? Help|Stretch|Ok|Apply|Cancel : Help|User1|User2|Stretch|Ok|Apply|Cancel,
                            Ok, parent, 0, true, true, 
                            KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                            KStdGuiItem::guiItem(KStdGuiItem::Back))
@@ -115,6 +116,10 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, QWidg
                                        "when navigating between items"),
                                   plainPage());
     topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
+    
+    if (singleMode) 
+       m_autoSaveBox->hide();
+    
     kapp->config()->setGroup("Image Description Dialog");
     m_autoSaveBox->setChecked(kapp->config()->readBoolEntry("Auto Save", true));
     
