@@ -186,7 +186,7 @@ if test "$PKGCONFIGFOUND" = "yes" ; then
    # check for libkexif
    have_libkexif=no
 
-  KDE_PKG_CHECK_MODULES(LIBKEXIF, libkexif >= 0.1,
+  KDE_PKG_CHECK_MODULES(LIBKEXIF, libkexif >= 0.2,
    	                have_libkexif=yes, have_libkexif=no)
 
   if test "x$have_libkexif" = "xno"; then
