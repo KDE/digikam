@@ -151,7 +151,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     m_brushSizeInput = new QSpinBox(1, 5, 1, plainPage(), "m_brushSizeInput");
     
-    whatsThis = i18n("<p>Set here the brush size use for to simulate the oil painting.");
+    whatsThis = i18n("<p>Set here the brush size to use for simulating the oil painting.");
     QWhatsThis::add( m_brushSizeInput, whatsThis);
     QWhatsThis::add( m_brushSizeSlider, whatsThis);
     
