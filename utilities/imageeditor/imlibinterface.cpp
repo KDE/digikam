@@ -20,7 +20,9 @@
  * 
  * ============================================================ */
 
-// Lib TIFF includes. 
+#define PI 3.14159265
+ 
+// Lib Tiff includes.
 
 extern "C" 
 {
@@ -496,13 +498,39 @@ void ImlibInterface::rotate(double angle)
     imlib_context_set_image(d->image);
     
     // Imlib2 use an angle in Radian, not in Degrees. We must converting that !
-    Imlib_Image im = imlib_create_rotated_image( angle/(double)(57.295) );
-
-    // PENDING (Gilles) : Need to do an auto-crop operation after rotation
-    //                    (Renchi, How to do that with imlib2 ?)        
+    Imlib_Image im = imlib_create_rotated_image( angle * PI / 180.0 );
+    
+    int d1 = abs((int)((double)(d->origHeight)*sin( angle * PI / 180.0) ));
+    int d2 = abs((int)((double)(d->origWidth)*cos( angle * PI / 180.0) ));
+    int d3 = abs((int)((double)(d->origWidth)*sin( angle * PI / 180.0) ));
+    int d4 = abs((int)((double)(d->origHeight)*cos( angle * PI / 180.0) ));
     
     imlib_free_image();
-    d->image = im;
+    imlib_context_set_image(im);
+    
+    int center_x = (int)((float)(imlib_image_get_width()) / 2.0);
+    int center_y = (int)((float)(imlib_image_get_height()) / 2.0);
+        
+    Imlib_Image im2 = imlib_create_cropped_image(center_x - (int)((float)(d1 + d2) / 2.0),
+                                                 center_y - (int)((float)(d3 + d4) / 2.0),
+                                                 d1 + d2, d3 + d4);
+    
+/*    Imlib_Image im = imlib_create_image( d1 + d2, d3 + d4 );
+    imlib_context_set_image(im);
+     
+    imlib_context_set_blend(1);
+    imlib_blend_image_onto_image_skewed(
+                      d->image,                             // Source image.
+                      0,                                    // Alpha op.
+                      0, 0,                                 // (x,y) source.
+                      d->origWidth, d->origHeight,          // (w,h) source.
+                      0, d4,                                // (x,y) dest.
+                      d2, (-1)*d3,                          // h(x,y) angle.
+                      d1, d4);                              // v(x,y) angle.*/
+
+    imlib_context_set_image(im2);
+    d->image = im2;
+    
     imlib_context_set_image(d->image);
     
     d->origWidth = imlib_image_get_width();
