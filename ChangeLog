@@ -2,10 +2,12 @@ v0.6.3-beta1
 ----------------------------------------------------------------------------
         * Added plugins management settings (loaded/unloaded plugins).
         * Added Full Mime type support for images, movies, audio, and RAW files.
+        * Syncing with Sourceforge.net repository.
+        * Updated Splashscreen for 0.6.3 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
+        * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
 
 v0.6.2-RC            05/18/04    
 ----------------------------------------------------------------------------
-        * Syncing with Sourceforge.net repository.
         * Added a new toolsbar in ImageViewer with an images list selection
           and preview of images.
         * Added 'Image Properties' action button in ImageViewer.
@@ -15,8 +17,6 @@ v0.6.2-RC            05/18/04
         * Added 'Save as' action button in ImageViewer.
         * Added 'Exif info' action button in ImageViewer.
         * Added 'Comments Edit' action button in ImageViewer.
-        * Updated Splashscreen for 0.6.3 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
-        * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
 
 v0.6.2-pre-RC        05/07/04
 ----------------------------------------------------------------------------
