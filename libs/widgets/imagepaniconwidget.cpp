@@ -26,6 +26,7 @@
 
 #include <qregion.h>
 #include <qpainter.h>
+#include <qbrush.h> 
 #include <qpixmap.h>
 #include <qpen.h>
 
@@ -47,9 +48,11 @@
 namespace Digikam
 {
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, bool resizingSelMode)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_resizingSelMode = resizingSelMode;
+
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -114,7 +117,7 @@ void ImagePanIconWidget::setCenterSelection(void)
              m_regionSelection.height()));
 }
 
-void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
+void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
     int x = (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
                    ( (float)m_iface->originalWidth() / (float)m_w ));
@@ -150,13 +153,29 @@ void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
 
 void ImagePanIconWidget::paintEvent( QPaintEvent * )
 {
+    // Drawing background and image.
     m_pixmap->fill(colorGroup().background());
     m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                    m_rect.width(), m_rect.height());
     
     QPainter p(m_pixmap);
+    
+    if (m_resizingSelMode) 
+      {
+      // Drawing region outside selection grayed.
+      QRegion sel(m_localRegionSelection);    
+      QRegion img(m_rect);
+      p.setRasterOp(Qt::AndROP);
+      p.setClipRegion( img.eor(sel) );
+      p.fillRect(m_rect ,QBrush::QBrush(Qt::Dense6Pattern));
+      p.setRasterOp(Qt::CopyROP);
+      p.setClipping(false);
+      }
+    
+    // Drawing selection border
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
+    
     p.end();
 
     bitBlt(this, 0, 0, m_pixmap);                   
@@ -179,7 +198,7 @@ void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
     if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
        setCursor ( KCursor::arrowCursor() );
-       regionSelectionChanged(true);
+       regionSelectionMoved(true);
        }
 }
 
@@ -196,7 +215,7 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
      
        m_xpos = newxpos;
        m_ypos = newypos;
-       regionSelectionChanged(false);
+       regionSelectionMoved(false);
        return;
        }        
     else 

@@ -39,7 +39,10 @@ Q_OBJECT
 
 public:
 
-    ImagePanIconWidget(int width, int height, QWidget *parent=0);
+    // Note: 'resizingSelMode' flag is used for enable resizing selection capability 
+    // with the mouse. This mode is used in Ratio-crop tool.
+    ImagePanIconWidget(int width, int height, QWidget *parent=0, 
+                       bool resizingSelMode=false);               
     ~ImagePanIconWidget();
 
     void  setRegionSelection(QRect regionSelection);
@@ -76,7 +79,9 @@ private:
     int         m_xpos;
     int         m_ypos;
 
-    QRect       m_rect;       
+    bool        m_resizingSelMode;
+    
+    QRect       m_rect;                    
     QRect       m_regionSelection;         // Original size image selection.
     QRect       m_localRegionSelection;    // Thumbnail size selection.
     
@@ -84,7 +89,7 @@ private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
-    void ImagePanIconWidget::regionSelectionChanged( bool targetDone );
+    void ImagePanIconWidget::regionSelectionMoved( bool targetDone );
 
 };
 

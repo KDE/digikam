@@ -67,7 +67,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_imageSelectionWidget = new Digikam::ImagePanIconWidget(480, 320, frame);
+    m_imageSelectionWidget = new Digikam::ImagePanIconWidget(480, 320, frame, true);
     l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
  
