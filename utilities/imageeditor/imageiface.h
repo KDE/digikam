@@ -60,9 +60,14 @@ public:
     int  originalWidth();
     int  originalHeight();
 
+    // Get selected dimensions.
     int  selectedWidth();
     int  selectedHeight();
     
+    // Get selected (X, Y) position on the top/left corner.
+    int  selectedXOrg();
+    int  selectedYOrg();
+        
     void setPreviewBCG(double brightness, double contrast, double gamma);
     void setOriginalBCG(double brightness, double contrast, double gamma);
     

@@ -287,6 +287,20 @@ int ImageIface::selectedHeight()
     return h;
 }
 
+int ImageIface::selectedXOrg()
+{
+    int x, y, w, h;
+    ImlibInterface::instance()->getSelectedArea(x,y,w,h);
+    return x;
+}
+
+int ImageIface::selectedYOrg()
+{
+    int x, y, w, h;
+    ImlibInterface::instance()->getSelectedArea(x,y,w,h);
+    return y;
+}
+
 void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma)
 {
     imlib_context_push(d->context);
