@@ -54,27 +54,26 @@
 SetupCollections::SetupCollections(QWidget* parent )
             : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
+   QVBoxLayout *layout = new QVBoxLayout( parent, 5, 5 );
 
    // --------------------------------------------------------
 
    QGroupBox* collectionGroup = new QVGroupBox(parent);
    collectionGroup->setTitle(i18n("Albums Collection Types"));
-   collectionGroup->setColumnLayout(0, Qt::Horizontal );
-   collectionGroup->layout()->setSpacing( KDialog::spacingHint() );
-   collectionGroup->layout()->setMargin( KDialog::marginHint() );
+   collectionGroup->setColumnLayout(0, Qt::Vertical );
+   collectionGroup->layout()->setSpacing( 5 );
+   collectionGroup->layout()->setMargin( 5 );
    QGridLayout* collectionGroupLayout = new QGridLayout( collectionGroup->layout());
    collectionGroupLayout->setAlignment( Qt::AlignTop );
    
    albumCollectionBox_ = new QListBox(collectionGroup);
-   albumCollectionBox_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                                  QSizePolicy::Maximum));
+/*   albumCollectionBox_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
+                                                  QSizePolicy::Maximum));*/
 
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
   
    collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
-                                              0, 2, 0, 0 );
+                                              0, 4, 0, 0 );
 
    addCollectionButton_ = new QPushButton( i18n("&Add..."),
                                            collectionGroup);
@@ -94,8 +93,12 @@ SetupCollections::SetupCollections(QWidget* parent )
    connect(delCollectionButton_, SIGNAL(clicked()),
            this, SLOT(slotDelCollection()));
    
+   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
+                                           QSizePolicy::Expanding );
+   collectionGroupLayout->addItem( spacer, 4, 1 );
+   
    layout->addWidget(collectionGroup);
-
+    
    // --------------------------------------------------------
 
    readSettings();
