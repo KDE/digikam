@@ -40,6 +40,11 @@ class Canvas;
 class ImagePluginLoader;
 class SplashScreen;
 
+namespace KIO
+{
+class Job;
+}
+
 namespace Digikam
 {
 class ThumbBarView;
@@ -94,6 +99,8 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
+    
+    void slotDeleteCurrentItemResult( KIO::Job * job );
                
 private:
 

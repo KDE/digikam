@@ -103,15 +103,11 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    m_hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
    m_hideThumbBar = new QCheckBox(i18n("H&ide thumbbar in fullscreen mode"), interfaceOptionsGroup);
+   m_useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
+   m_showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
    
    layout->addWidget(interfaceOptionsGroup);
-   
-   m_useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
-   layout->addWidget(m_useTrashCheck);
-   
-   m_showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
-   layout->addWidget(m_showSplashCheck);
-   
+      
    // --------------------------------------------------------
 
    readSettings();

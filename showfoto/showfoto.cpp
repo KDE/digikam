@@ -51,6 +51,9 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kprotocolinfo.h>
+#include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kpopupmenu.h>
@@ -436,6 +439,16 @@ void ShowFoto::applySettings()
 
     // Current image deleted go to trash ?
     m_deleteItem2Trash = m_config->readBoolEntry("DeleteItem2Trash", true);
+    if (m_deleteItem2Trash)
+    {
+        m_fileDelete->setIcon("edittrash");
+        m_fileDelete->setText(i18n("Move to Trash"));
+    }
+    else
+    {
+        m_fileDelete->setIcon("editdelete");
+        m_fileDelete->setText(i18n("Delete File"));
+    }
     
     // Background color.
     QColor bgColor(Qt::black);
@@ -1182,7 +1195,6 @@ void ShowFoto::unLoadPlugins()
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-/*    
     KURL urlCurrent(m_bar->currentItem()->url());
 
     if (!m_deleteItem2Trash)
@@ -1197,20 +1209,42 @@ void ShowFoto::slotDeleteCurrentItem()
         {
             return;
         }
+        else
+        {
+        KIO::Job* job = KIO::del( urlCurrent );
+        connect( job, SIGNAL(result( KIO::Job* )),
+                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+        }
     }
-*/
-/*    if (!SyncJob::userDelete(urlCurrent))
+    else
     {
-        QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, errMsg);
+    KURL dest("trash:/");
+
+    if (!KProtocolInfo::isKnownProtocol(dest))
+    {
+        dest = KGlobalSettings::trashPath();
+    }
+
+    KIO::Job* job = KIO::move( urlCurrent, dest );
+    connect( job, SIGNAL(result( KIO::Job* )),
+             this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+    }
+}
+
+void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
+{
+    if (job->error() != 0)
+    {
+        QString errMsg(job->errorString());
+        KMessageBox::error(this, errMsg);
         return;
     }
 
-    // Remove item in thumbbar.
+    // No error, remove item in thumbbar.
     
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
      {
-        if (item->url().equals(urlCurrent))
+        if (item->url().equals(m_bar->currentItem()->url()))
         {
             m_bar->removeItem(item);
             break;
@@ -1219,34 +1253,9 @@ void ShowFoto::slotDeleteCurrentItem()
 
     // Update thumbbar item preview.
     m_bar->invalidateThumb(m_bar->currentItem());
-*/        
-/*    KURL CurrentToRemove = m_urlCurrent;
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-
-    if (it != m_urlList.end())
-    {
-        if (m_urlCurrent != m_urlList.last())
-        {
-            // Try to get the next image in the current Album...
-
-            KURL urlNext = *(++it);
-            m_urlCurrent = urlNext;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-        else if (m_urlCurrent != m_urlList.first())
-        {
-            // Try to get the previous image in the current Album...
-
-            KURL urlPrev = *(--it);
-            m_urlCurrent = urlPrev;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-    }
-*/
+    
+    if ( m_bar->countItems() == 0 )    
+       toogleActions(false);
 }
 
 #include "showfoto.moc"
