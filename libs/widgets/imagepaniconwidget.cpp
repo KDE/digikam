@@ -51,6 +51,7 @@ namespace Digikam
 ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_moveSelection = false;
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -63,6 +64,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
     setMouseTracking(true);
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
+    updatePixmap();
 }
 
 ImagePanIconWidget::~ImagePanIconWidget()
@@ -87,6 +89,7 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
     m_localRegionSelection.setHeight( (int)((float)m_regionSelection.height() *
                                            ( (float)m_h / (float)m_iface->originalHeight() )) );
     
+    updatePixmap();
     repaint(false);
 }
 
@@ -115,6 +118,7 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
        if (m_localRegionSelection.bottom() > m_rect.height()) 
           m_localRegionSelection.moveBottom(m_rect.height());
        
+       updatePixmap();          
        repaint(false);
        }
     
@@ -138,7 +142,7 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
     emit signalSelectionMoved( m_regionSelection, targetDone );
 }
 
-void ImagePanIconWidget::paintEvent( QPaintEvent * )
+void ImagePanIconWidget::updatePixmap( void )
 {
     // Drawing background and image.
     m_pixmap->fill(colorGroup().background());
@@ -152,7 +156,10 @@ void ImagePanIconWidget::paintEvent( QPaintEvent * )
     p.drawRect(m_localRegionSelection);
     
     p.end();
+}
 
+void ImagePanIconWidget::paintEvent( QPaintEvent * )
+{
     bitBlt(this, 0, 0, m_pixmap);                   
 }
 
@@ -163,29 +170,30 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
        {
        m_xpos = e->x();
        m_ypos = e->y();
-       
+       m_moveSelection = true;
        setCursor ( KCursor::sizeAllCursor() );
        }
 }
 
 void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
+    if ( m_moveSelection && m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
        setCursor ( KCursor::arrowCursor() );
        regionSelectionMoved(true);
+       m_moveSelection = false;
        }
 }
 
 void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton )
+    if ( m_moveSelection && e->state() == Qt::LeftButton )
        {
        int newxpos = e->x();
        int newypos = e->y();
        
        m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
-
+       updatePixmap();
        repaint(false);
      
        m_xpos = newxpos;
@@ -198,7 +206,7 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
            setCursor( KCursor::handCursor() );
        else
-           setCursor ( KCursor::arrowCursor() );
+           setCursor( KCursor::arrowCursor() );
        }
 }
 

@@ -71,7 +71,7 @@ private:
     int         m_xpos;
     int         m_ypos;
 
-    bool        m_resizingSelMode;
+    bool        m_moveSelection;
     
     QRect       m_rect;                    
     QRect       m_regionSelection;         // Original size image selection.
@@ -82,6 +82,7 @@ private:
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
     void regionSelectionMoved( bool targetDone );
+    void updatePixmap( void );
 
 };
 
