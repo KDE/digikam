@@ -153,7 +153,16 @@ void SplashScreen::drawContents( QPainter *painter )
     painter->setPen(currColor_);
     
     QFont fnt(KGlobalSettings::generalFont());
-    fnt.setPointSize(8);
+    int fntSize = fnt.pointSize();
+    if (fntSize > 0)
+    {
+        fnt.setPointSize(fntSize-2);
+    }
+    else
+    {
+        fntSize = fnt.pixelSize();
+        fnt.setPixelSize(fntSize-2);
+    }
     painter->setFont(fnt);
    
     QRect r = rect();
