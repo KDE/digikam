@@ -233,7 +233,7 @@ void CimgIface::startComputation()
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
           }
           
-       kdDebug() << "CimgIface::End of computation !!! ... ( " << startDate.secsTo(endDate) << " )" << endl;
+       kdDebug() << "CimgIface::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
     else
        {
@@ -246,7 +246,7 @@ void CimgIface::startComputation()
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
           }
           
-       kdDebug() << "CimgIface::Computation aborted... ( " << startDate.secsTo(endDate) << " )" << endl;
+       kdDebug() << "CimgIface::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
 }
 
