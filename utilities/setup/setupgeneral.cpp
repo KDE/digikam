@@ -91,9 +91,10 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    tagSettingBox->setTitle(i18n("Tag Settings"));
 
    recurseTagsBox_ = new QCheckBox(tagSettingBox);
-   recurseTagsBox_->setText(i18n("When showing items in a Tag, also "
-                                 "show items in sub-Tags"));
-   
+   recurseTagsBox_->setText(i18n("Show items in sub-Tags"));
+   QWhatsThis::add( recurseTagsBox_, i18n("<p>When showing items in a Tag, also "
+                                          "show items in sub-Tags."));
+
    layout->addWidget(tagSettingBox);
 
    
