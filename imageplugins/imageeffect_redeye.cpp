@@ -125,7 +125,8 @@ void ImageEffect_RedEye::removeRedEye()
     imlib_free_image_and_decache();
 
     imlib_context_pop();
-
+    imlib_context_free(context);
+    
     delete [] newData;
     
     iface.putSelectedData(data);
