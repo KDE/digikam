@@ -32,6 +32,9 @@
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
+#include <qrect.h> 
+#include <qfont.h> 
+#include <qfontmetrics.h> 
 
 // KDE includes.
 
@@ -385,36 +388,62 @@ void CurvesWidget::paintEvent( QPaintEvent * )
          }
       }
 
+   // Drawing black/middle/highlight tone grid separators.
+      
+   p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+   p1.drawLine(wWidth/3, 0, wWidth/3, wHeight);                 
+   p1.drawLine(2*wWidth/3, 0, 2*wWidth/3, wHeight);                 
+   p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
+   p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
+            
    // Drawing color guide.
 
    p1.setPen(QPen::QPen(Qt::black, 1, Qt::DotLine));      
-   
+   int guidePos;
+
    if (m_guideVisible)   
       {
       switch(m_channelType)
          {
          case CurvesWidget::RedChannelHistogram:      
-            p1.drawLine(m_colorGuide.red(), 0, m_colorGuide.red(), wHeight);  
+            guidePos = m_colorGuide.red();
             break;
          
          case CurvesWidget::GreenChannelHistogram:    
-            p1.drawLine(m_colorGuide.green(), 0, m_colorGuide.green(), wHeight);  
+            guidePos = m_colorGuide.green();
             break;
              
          case CurvesWidget::BlueChannelHistogram:     
-            p1.drawLine(m_colorGuide.blue(), 0, m_colorGuide.blue(), wHeight);  
+            guidePos = m_colorGuide.blue();
             break;
              
          case CurvesWidget::ValueHistogram:    
-            p1.drawLine(QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue()), 0,
-                        QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue()), wHeight);  
+            guidePos = QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue());
             break;
 
          default:                                     // Alpha.
             break;
          }  
+      
+      p1.drawLine(guidePos, 0, guidePos, wHeight);  
+
+      QString string = i18n("x:%1").arg(guidePos);
+      QFontMetrics fontMt( string );       
+      QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
+      rect.setBottom(wHeight - 10);
+      
+      if (guidePos < wWidth/2)
+         {
+         rect.moveLeft(guidePos + 3);
+         p1.drawText(rect, Qt::AlignLeft, string);
+         }
+      else
+         {
+         rect.moveRight(guidePos - 3);
+         p1.drawText(rect, Qt::AlignRight, string);
+         }
       }
-                     
+
    p1.end();
    bitBlt(this, 0, 0, &pm);
 }
