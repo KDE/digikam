@@ -117,7 +117,7 @@ void DigikamFirstRun::accept()
     config_->writeEntry("Version", 0.60);
 
     config_->setGroup("Album Settings");
-    config_->writeEntry("Album Path",
+    config_->writePathEntry("Album Path",
                         pathEdit_->text());
     config_->sync();
 

@@ -126,7 +126,7 @@ void AlbumSettings::readSettings()
     config->setGroup("Album Settings");
     
     d->albumLibraryPath = 
-            config->readEntry("Album Path",
+            config->readPathEntry("Album Path",
                               QString::null);
 
     QStringList collectionList =
@@ -217,7 +217,7 @@ void AlbumSettings::saveSettings()
 
     config->setGroup("Album Settings");
 
-    config->writeEntry("Album Path", d->albumLibraryPath);
+    config->writePathEntry("Album Path", d->albumLibraryPath);
 
     config->writeEntry("Album Collections",
                        d->albumCollectionNames);

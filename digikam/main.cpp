@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     double version = config->readDoubleNumEntry("Version");
 
     config->setGroup("Album Settings");
-    QString albumPath = config->readEntry("Album Path");
+    QString albumPath = config->readPathEntry("Album Path");
     QFileInfo dirInfo(albumPath);
 
     if (version < currentVersion || !dirInfo.exists()
