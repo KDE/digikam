@@ -57,10 +57,15 @@ public:
     double             zoom;
     bool               autoZoom;
     QRect              pixmapRect;
+    bool               fullScreen;
+
     QRect             *rubber;
     bool               pressedMoved;
     bool               pressedMoving;
-    bool               fullScreen;
+    bool               ltActive;
+    bool               rtActive;
+    bool               lbActive;
+    bool               rbActive;
     
     QTimer            *paintTimer;
 };
@@ -75,10 +80,15 @@ Canvas::Canvas(QWidget *parent)
     d->im = ImlibInterface::instance();
     d->zoom = 1.0;
     d->autoZoom = false;
+    d->fullScreen = false;
+
     d->rubber = 0;
     d->pressedMoved  = false;
     d->pressedMoving = false;
-    d->fullScreen = false;
+    d->ltActive      = false;
+    d->rtActive      = false;
+    d->lbActive      = false;
+    d->rbActive      = false;
     
     d->qpix   = 0;
     d->paintTimer = new QTimer;
@@ -97,6 +107,8 @@ Canvas::Canvas(QWidget *parent)
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
             SLOT(slotPaintSmooth()));
+
+    viewport()->setMouseTracking(false);
 }
 
 Canvas::~Canvas()
@@ -173,6 +185,7 @@ void Canvas::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
 
+    viewport()->setMouseTracking(false);
     d->paintTimer->stop();
     
     if (d->rubber) {
@@ -311,6 +324,39 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
+    
+    if (d->ltActive || d->rtActive ||
+        d->lbActive || d->rbActive) {
+
+        if (!d->rubber) {
+            qWarning("Canvas: d->rubber == 0");
+            return;
+        }
+
+        // Set diagonally oppposite corner as anchor
+        
+        QRect r(d->rubber->normalize());
+
+        if (d->ltActive) {
+            d->rubber->setTopLeft(r.bottomRight());
+            d->rubber->setBottomRight(r.topLeft());
+        }
+        else if (d->rtActive) {
+            d->rubber->setTopLeft(r.bottomLeft());
+            d->rubber->setBottomRight(r.topRight());
+        }
+        else if (d->lbActive) {
+            d->rubber->setTopLeft(r.topRight());
+            d->rubber->setBottomRight(r.bottomLeft());
+        }
+        else if (d->rbActive) {
+            d->rubber->setTopLeft(r.topLeft());
+            d->rubber->setBottomRight(r.bottomLeft());
+        }
+        
+        viewport()->setMouseTracking(false);
+        return;
+    }
 
     if (d->rubber) {
         delete d->rubber;
@@ -321,32 +367,71 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
     d->pressedMoved  = false;
     d->pressedMoving = true;
+
+    viewport()->setMouseTracking(false);
     viewport()->update();
 }
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    if (!e || !d->rubber) return;
+    if (!e || !d->rubber)
+        return;
 
-    if (e->state() != Qt::LeftButton) return;
+    if (!viewport()->hasMouseTracking()) {
 
-    QRect rt(d->rubber->normalize());
-    updateContents(rt);
+        if (e->state() != Qt::LeftButton &&
+            !(d->ltActive || d->rtActive ||
+              d->lbActive || d->rbActive))
+            return;
     
-    int r, b;
-    r = (e->x() > d->pixmapRect.left()) ? e->x() : d->pixmapRect.left();
-    r = (r < d->pixmapRect.right()) ? r : d->pixmapRect.right();
-    b = (e->y() > d->pixmapRect.top()) ? e->y() : d->pixmapRect.top();
-    b = (b < d->pixmapRect.bottom()) ? b : d->pixmapRect.bottom();
+        int r, b;
+        r = (e->x() > d->pixmapRect.left()) ? e->x() : d->pixmapRect.left();
+        r = (r < d->pixmapRect.right()) ? r : d->pixmapRect.right();
+        b = (e->y() > d->pixmapRect.top()) ? e->y() : d->pixmapRect.top();
+        b = (b < d->pixmapRect.bottom()) ? b : d->pixmapRect.bottom();
 
-    d->rubber->setRight(r);
-    d->rubber->setBottom(b);
+        d->rubber->setRight(r);
+        d->rubber->setBottom(b);
 
-    d->pressedMoved  = true;
-    d->pressedMoving = true;
-    viewport()->update();
+        d->pressedMoved  = true;
+        d->pressedMoving = true;
+        viewport()->update();
+    }
+    else {
+
+        QRect r(d->rubber->normalize());
+        
+        QRect lt(r.x()-5,r.y()-5,10,10);
+        QRect rt(r.x()+r.width()-5,r.y()-5,10,10);
+        QRect lb(r.x()-5,r.y()+r.height()-5,10,10);
+        QRect rb(r.x()+r.width()-5,r.y()+r.height()-5,10,10);
+
+        d->ltActive = false;
+        d->rtActive = false;
+        d->lbActive = false;
+        d->rbActive = false;
+        
+        if (lt.contains(e->x(), e->y())) {
+            viewport()->setCursor(Qt::SizeFDiagCursor);
+            d->ltActive = true;
+        }
+        else if (rb.contains(e->x(), e->y())) {
+            viewport()->setCursor(Qt::SizeFDiagCursor);
+            d->rbActive = true;
+        }
+        else if (lb.contains(e->x(), e->y())) {
+            viewport()->setCursor(Qt::SizeBDiagCursor);
+            d->lbActive = true;
+        }
+        else if (rt.contains(e->x(), e->y())) {
+            viewport()->setCursor(Qt::SizeBDiagCursor);
+            d->rtActive = true;
+        }
+        else
+            viewport()->unsetCursor();
+    }
 }
-
+    
 void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e)
@@ -357,13 +442,22 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         viewport()->update();
     }
 
-    if (e->button() == Qt::RightButton)
-        emit signalRightButtonClicked();
+    if (d->pressedMoved && d->rubber) {
+        viewport()->setMouseTracking(true);
+        emit signalSelected(true);
+    }
     else {
-        if (d->pressedMoved && d->rubber)
-            emit signalSelected(true);
-        else
-            emit signalSelected(false);
+        d->ltActive = false;
+        d->rtActive = false;
+        d->lbActive = false;
+        d->rbActive = false;
+        viewport()->setMouseTracking(false);
+        emit signalSelected(false);
+    }
+
+    if (e->button() == Qt::RightButton) {
+        viewport()->unsetCursor();
+        emit signalRightButtonClicked();
     }
 }
 
@@ -635,7 +729,7 @@ void Canvas::slotSelected()
 
 void Canvas::slotRequestUpdate()
 {
-    d->paintTimer->stop();	
+    updateContentsSize();
     viewport()->update();
     emit signalChanged(true);    
 }
