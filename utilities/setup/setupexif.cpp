@@ -61,6 +61,9 @@ SetupExif::SetupExif(QWidget* parent )
    iconExifRotateBox_ = new QCheckBox(iconExifGroup);
    iconExifRotateBox_->setText(i18n("Rotate images and thumbnails according to EXIF tag"));
 
+   iconExifSetOrientationBox_ = new QCheckBox(iconExifGroup);
+   iconExifSetOrientationBox_->setText(i18n("Set EXIF orientation tag to normal after rotate/flip"));
+
    layout->addWidget(iconExifGroup);
 
    // --------------------------------------------------------
@@ -82,6 +85,7 @@ void SetupExif::applySettings()
 
     settings->setSaveExifComments(iconSaveExifBox_->isChecked());
     settings->setExifRotate(iconExifRotateBox_->isChecked());
+    settings->setExifSetOrientation(iconExifSetOrientationBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -94,6 +98,7 @@ void SetupExif::readSettings()
 
     iconSaveExifBox_->setChecked(settings->getSaveExifComments());
     iconExifRotateBox_->setChecked(settings->getExifRotate());
+    iconExifSetOrientationBox_->setChecked(settings->getExifSetOrientation());
 }
 
 

@@ -96,6 +96,9 @@ public:
     void setExifRotate(bool val);
     bool getExifRotate() const;
 
+    void setExifSetOrientation(bool val);
+    bool getExifSetOrientation() const;
+
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 

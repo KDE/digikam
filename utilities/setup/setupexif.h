@@ -47,6 +47,7 @@ private:
 
     QCheckBox    *iconSaveExifBox_;
     QCheckBox    *iconExifRotateBox_;
+    QCheckBox    *iconExifSetOrientationBox_;
     
 };
 

@@ -60,6 +60,7 @@ public:
     bool iconShowResolution;
     bool saveExifComments;
     bool exifRotate;
+    bool exifSetOrientation;
 };
 
 
@@ -198,6 +199,11 @@ void AlbumSettings::readSettings()
         d->exifRotate =
             config->readBoolEntry("EXIF Rotate",
                                   true);
+    
+    if (config->hasKey("EXIF Set Orientation"))
+        d->exifSetOrientation =
+            config->readBoolEntry("EXIF Set Orientation",
+                                  true);
 }
 
 void AlbumSettings::saveSettings()
@@ -252,6 +258,9 @@ void AlbumSettings::saveSettings()
                        
     config->writeEntry("EXIF Rotate",
                        d->exifRotate);
+                       
+    config->writeEntry("EXIF Set Orientation",
+                       d->exifSetOrientation);
     config->sync();
 }
 
@@ -419,6 +428,16 @@ void AlbumSettings::setExifRotate(bool val)
 bool AlbumSettings::getExifRotate() const
 {
     return d->exifRotate;
+}
+
+void AlbumSettings::setExifSetOrientation(bool val)
+{
+    d->exifSetOrientation = val;
+}
+
+bool AlbumSettings::getExifSetOrientation() const
+{
+    return d->exifSetOrientation;
 }
 
 void AlbumSettings::setIconShowDate(bool val)
