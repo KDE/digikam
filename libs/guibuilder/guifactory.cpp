@@ -299,7 +299,10 @@ void GUIFactory::buildGUI(QWidget *w)
              if (obj)
                  toolBar = static_cast<KToolBar*>(obj);
              else
+             {
                  toolBar = new KToolBar(p,  Qt::DockTop);
+                 toolBar->setName("toolbar");
+             }
              toolBar->clear();
 
             GUIElement *gui = d->toolBarGUI->m_firstChild;
