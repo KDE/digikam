@@ -13,7 +13,10 @@
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
-    <ignoreparts/>
+    <ignoreparts>
+      <part>KDevClearCase</part>
+      <part>KDevPerforce</part>
+    </ignoreparts>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -79,7 +82,7 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>/home/kdedev/src/kde/build/kdeextragear-3/libtool</dbgshell>
+      <dbgshell>libtool</dbgshell>
       <programargs/>
       <gdbpath/>
       <configGdbScript/>
@@ -92,7 +95,6 @@
     <display>
       <staticmembers>false</staticmembers>
       <demanglenames>true</demanglenames>
-      <outputradix>10</outputradix>
     </display>
   </kdevdebugger>
   <kdevfilecreate>
@@ -113,12 +115,11 @@
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
       <makebin/>
-      <prio>0</prio>
     </make>
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>digikam/digikam</mainprogram>
+      <mainprogram>digikam/digikam/digikam</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
@@ -130,7 +131,7 @@
     <configurations>
       <default>
         <configargs>--enable-debug=full</configargs>
-        <builddir>/home/kdedev/src/kde/build/kdeextragear-3/digikam</builddir>
+        <builddir/>
         <topsourcedir>../</topsourcedir>
         <cppflags/>
         <ldflags/>
@@ -143,7 +144,6 @@
         <cflags/>
         <cxxflags/>
         <f77flags/>
-        <envvars/>
       </default>
       <usingkipi>
         <configargs>--enable-debug=full --enable-kipi</configargs>
@@ -165,14 +165,14 @@
   </kdevautoproject>
   <kdevcvs>
     <cvsoptions>-f</cvsoptions>
-    <commitoptions></commitoptions>
-    <addoptions></addoptions>
-    <logoptions></logoptions>
+    <commitoptions/>
+    <addoptions/>
+    <logoptions/>
     <updateoptions>-dP</updateoptions>
     <removeoptions>-f</removeoptions>
     <revertoptions>-C -d -P</revertoptions>
     <diffoptions>-u3 -p</diffoptions>
-    <rshoptions></rshoptions>
+    <rshoptions/>
   </kdevcvs>
   <kdevcppsupport>
     <codecompletion>
