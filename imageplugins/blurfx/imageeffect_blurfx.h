@@ -69,6 +69,7 @@ protected:
     void farBlur(uint *data, int Width, int Height, int Distance);
     void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance);
     void motionBlur(uint *data, int Width, int Height, int Distance, double Angle=0.0);
+    void focusBlur (uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, bool bInversed=false);
 
 private:
     
@@ -180,7 +181,7 @@ private:
        Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
        return (Y * GetLineWidth(Width) + 4 * X);
        };
-                     
+                            
 private slots:
 
     void slotHelp();

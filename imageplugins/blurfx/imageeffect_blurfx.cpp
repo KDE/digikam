@@ -159,6 +159,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Motion Blur") );
     m_effectType->insertItem( i18n("Softner Blur") );
     m_effectType->insertItem( i18n("Skake Blur") );
+    m_effectType->insertItem( i18n("Focus Blur") );
     m_effectType->insertItem( i18n("Frost Glass") );
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
                                         "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
@@ -175,6 +176,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "and subtle glow.<p>"
                                         "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
                                         "This simulates the blur of a random moving camera.<p>"
+                                        "<b>Focus Blur</b>: .<p>"       // TODO
                                         "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
                                         "a frosted glass."));
     gridBox2->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
@@ -291,7 +293,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
        
        case 1: // Radial Blur.
-       case 6: // Frost Glass
+       case 7: // Frost Glass.
           m_distanceInput->setRange(0, 10, 1, true);
           m_distanceInput->setValue(3);
           break;
@@ -315,6 +317,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
           
        case 5: // Skake Blur    
+       case 6: // Focus Blur.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           break;
@@ -329,6 +332,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
 void ImageEffect_BlurFX::slotEffect()
 {
     m_dirty = true;
+    m_parent->setCursor( KCursor::waitCursor() );
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
@@ -382,7 +386,11 @@ void ImageEffect_BlurFX::slotEffect()
           shakeBlur(data, w, h, d);
           break;
                               
-       case 6: // Frost Glass
+       case 6: // Focus Blur.
+          focusBlur(data, w, h, w/2, h/2, 10, d*10);
+          break;
+       
+       case 7: // Frost Glass.
           frostGlass(data, w, h, d);
           break;
        }
@@ -411,7 +419,8 @@ void ImageEffect_BlurFX::slotEffect()
        case 1: // Radial Blur.
        case 2: // Far Blur.
        case 5: // Shake Blur.
-       case 6: // Frost Glass
+       case 6: // Focus Blur.
+       case 7: // Frost Glass.
           break;
 
        case 3: // Motion Blur.
@@ -430,6 +439,7 @@ void ImageEffect_BlurFX::slotEffect()
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
     enableButton(Ok, true);
+    m_parent->setCursor( KCursor::arrowCursor() );
 }
 
 void ImageEffect_BlurFX::slotOk()
@@ -483,7 +493,11 @@ void ImageEffect_BlurFX::slotOk()
              shakeBlur(data, w, h, d);
              break;
           
-          case 6: // Frost Glass
+          case 6: // Focus Blur.
+             focusBlur(data, w, h, w/2, h/2, 10, d*10);
+             break;
+             
+          case 7: // Frost Glass
              frostGlass(data, w, h, d);
              break;
           }
@@ -631,7 +645,7 @@ void ImageEffect_BlurFX::farBlur(uint *data, int Width, int Height, int Distance
         }
 
     // now, we apply a convolution with kernel
-    MakeConvolution (data, Width, Height, Distance, nKern);
+    MakeConvolution(data, Width, Height, Distance, nKern);
 
     // we must delete to free memory
     delete [] nKern;
@@ -785,12 +799,12 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
 
     // we have reached the main loop
     
-    for (int h = 0; h < Height; h++, i += nStride)
+    for (int h = 0; !m_cancel && (h < Height); h++, i += nStride)
         {
-        for (int w = 0; w < Width; w++, i += 4)
+        for (int w = 0; !m_cancel && (w < Width); w++, i += 4)
             {
             // ...we enter this loop to sum the bits
-            for (int a = -Distance; a <= Distance; a++)
+            for (int a = -Distance; !m_cancel && (a <= Distance); a++)
                 {
                 // we need to calc the positions
                 nw = ((double)w + lpXArray[a + Distance]);
@@ -812,6 +826,8 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
             pResBits[i+2] = sumB / nCount;
             // we initialize the variables
             sumR = sumG = sumB = 0;
+            
+            pResBits[i+3] = pBits[i+3];         // Alpha channel.
             }
         
         // Update the progress bar in dialog.
@@ -825,6 +841,74 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
     delete [] pResBits;
     delete [] lpXArray;
     delete [] lpYArray;
+}
+
+/* Function to apply the focusBlur effect backported from ImageProcessing version 2                                              
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * BlurRadius       => Raduis of blured image. 
+ * Radius           => Focus distance.
+ * bInversed        => If true, invert focus effect.
+ *                                                                                 
+ */
+void ImageEffect_BlurFX::focusBlur (uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, bool bInversed)
+{
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    register int h, w, nh, nw, i=0;
+    int nStride = GetStride (Width);
+    int nBlendFactor;
+    double lfRadius;
+    
+    int    BitCount = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+            
+    // Gaussian blur using the BlurRadius parameter.
+    memcpy (pResBits, data, BitCount);        
+    Digikam::ImageFilters::gaussianBlurImage((uint *)pResBits, Width, Height, BlurRadius);
+    
+    // Blending result  
+    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+        {
+        nh = Y - h;
+
+        for (w = 0; !m_cancel && (w < Width); w++)
+            {
+            nw = X - w;
+
+            lfRadius = sqrt (nh * nh + nw * nw);
+
+            nBlendFactor = LimitValues ((int)(255.0 * lfRadius / (double)Radius));
+
+            if (bInversed)
+                {
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Red.
+                }
+            else
+                {
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
+                }
+                
+            pResBits[i++] = pBits[i];       // Alpha channel.
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
+        kapp->processEvents();             
+       }
+    
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;
 }
 
 /* Function to apply the softnerBlur effect                                            

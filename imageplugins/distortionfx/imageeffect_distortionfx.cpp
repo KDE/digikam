@@ -372,6 +372,7 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
 void ImageEffect_DistortionFX::slotEffect()
 {
     m_dirty = true;
+    m_parent->setCursor( KCursor::waitCursor() );
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
@@ -533,6 +534,7 @@ void ImageEffect_DistortionFX::slotEffect()
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
     enableButton(Ok, true);
+    m_parent->setCursor( KCursor::arrowCursor() );
 }
 
 void ImageEffect_DistortionFX::slotOk()
