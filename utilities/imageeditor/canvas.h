@@ -57,6 +57,7 @@ public:
     int  saveAsTmpFile(const QString& filename, int JPEGcompression, 
                        int PNGcompression, bool TIFFcompression, 
                        const QString& mimeType=0);
+    void setModified(bool val);
         
     bool  maxZoom();
     bool  minZoom();

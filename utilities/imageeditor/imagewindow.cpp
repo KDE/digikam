@@ -915,7 +915,7 @@ bool ImageWindow::save()
 
     bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, 
                                           m_PNGCompression, m_TIFFCompression);
-
+    
     if (!result)
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
@@ -943,10 +943,11 @@ bool ImageWindow::save()
     if(!SyncJob::file_move(KURL(tmpFile), m_urlCurrent))
     {
         QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, errMsg);
+        KMessageBox::error(this, errMsg, "Error Saving File");
         return false;
     }
 
+    m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
     

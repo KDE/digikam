@@ -399,6 +399,11 @@ int Canvas::saveAsTmpFile(const QString& filename, int JPEGcompression,
     return result;
 }
 
+void Canvas::setModified(bool val) 
+{
+    d->im->setModified(val); 
+}
+
 int Canvas::imageWidth()
 {
     return d->im->origWidth();  

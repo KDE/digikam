@@ -58,6 +58,7 @@ public:
     bool saveAs(const QString& file, int JPEGcompression, 
                 int PNGcompression, bool TIFFcompression,
                 const QString& mimeType=0);
+    void setModified (bool val);
         
     void zoom(double val);
 

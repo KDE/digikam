@@ -406,23 +406,30 @@ bool ImlibInterface::saveAs(const QString& file, int JPEGcompression,
     imlib_modify_color_modifier_contrast(d->contrast);
     imlib_modify_color_modifier_gamma(d->gamma);
     imlib_apply_color_modifier();
-    
+
     if (mimeType.isEmpty())
         result = saveAction(file, JPEGcompression, PNGcompression, 
                             TIFFcompression, imlib_image_format());
-    else 
-       result = saveAction(file, JPEGcompression, PNGcompression, 
+    else
+        result = saveAction(file, JPEGcompression, PNGcompression, 
                            TIFFcompression, mimeType);
-    
+
     imlib_context_pop();
 
-    if (result)
+    return result;
+}
+
+void ImlibInterface::setModified(bool val)
+{
+    if (val)
+    {
+        emit signalModified(true, true);
+    }
+    else 
     {
         d->undoMan->clear();
         emit signalModified(false, false);
     }
-
-    return result;    
 }
 
 int ImlibInterface::width()
