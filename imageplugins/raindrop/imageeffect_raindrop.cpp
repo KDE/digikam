@@ -88,7 +88,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
-                                       "http://digikam.sourceforge.net");
+                                       "http://extragear.kde.org/apps/digikamimageplugins.php");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
