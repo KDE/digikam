@@ -170,7 +170,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
     
-    m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins' Handbooks"),
+    m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins Handbooks"),
                                         "digikamimageplugins", 0, this,
                                         SIGNAL(signalShowImagePluginsHelp()),
                                         actionCollection(),
