@@ -28,6 +28,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumdb.h"
+#include "albumsettings.h"
 
 #include "albumlister.h"
 
@@ -109,10 +110,10 @@ void AlbumLister::openAlbum(Album *album)
         connect(d->dirLister, SIGNAL(refreshItems(const KFileItemList&)),
                 SIGNAL(signalRefreshItems(const KFileItemList&)));
 
-        //TODO: make recursive retrieval a setup option
         TAlbum *a = static_cast<TAlbum*>(album);
         KURL url(a->getKURL());
-        url.setQuery("?recurse=yes");
+        if (AlbumSettings::instance()->getRecurseTags())
+            url.setQuery("?recurse=yes");
         d->dirLister->openURL(url, false, true);
     }
     else
@@ -133,10 +134,10 @@ void AlbumLister::updateDirectory()
     }
     else if (d->currAlbum->type() == Album::TAG)
     {
-        //TODO: make recursive retrieval a setup option
         TAlbum *a = static_cast<TAlbum*>(d->currAlbum);
         KURL url(a->getKURL());
-        url.setQuery("?recurse=yes");
+        if (AlbumSettings::instance()->getRecurseTags())
+            url.setQuery("?recurse=yes");
         d->dirLister->updateDirectory(url);
     }        
 }

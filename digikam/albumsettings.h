@@ -93,6 +93,9 @@ public:
     void setIconShowTags(bool val);
     bool getIconShowTags() const;
     
+    void setIconShowDate(bool val);
+    bool getIconShowDate() const;
+
     void setSaveExifComments(bool val);
     bool getSaveExifComments() const;
 
@@ -102,9 +105,9 @@ public:
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
 
-    void setIconShowDate(bool val);
-    bool getIconShowDate() const;
-
+    void setRecurseTags(bool val);
+    bool getRecurseTags() const;
+    
     static AlbumSettings *instance();
 
 private:

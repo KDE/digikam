@@ -53,6 +53,8 @@ public:
     
     AlbumSettings::AlbumSortOrder albumSortOrder;
 
+    bool recurseTags;
+    
     bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
@@ -110,6 +112,8 @@ void AlbumSettings::init()
     d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
     d->thumbnailSize = ThumbnailSize::Medium;
 
+    d->recurseTags  = false;
+    
     d->iconShowName = false;
     d->iconShowSize = true;
     d->iconShowDate = false;
@@ -156,8 +160,9 @@ void AlbumSettings::readSettings()
     d->thumbnailSize = config->readNumEntry("Default Icon Size",
                              ThumbnailSize::Medium);
 
-    d->iconShowName = config->readBoolEntry("Icon Show Name",
-                              false);                                 
+    d->recurseTags   = config->readBoolEntry("Recurse Tags", false);
+    
+    d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
 
     d->iconShowResolution = config->readBoolEntry("Icon Show Resolution",
                                                   false);                                 
@@ -216,6 +221,8 @@ void AlbumSettings::saveSettings()
     
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
+
+    config->writeEntry("Recurse Tags", d->recurseTags);
     
     config->writeEntry("Icon Show Name",
                        d->iconShowName);
@@ -407,6 +414,16 @@ bool AlbumSettings::getIconShowTags() const
     return d->iconShowTags;
 }
 
+void AlbumSettings::setIconShowDate(bool val)
+{
+    d->iconShowDate = val;
+}
+
+bool AlbumSettings::getIconShowDate() const
+{
+    return d->iconShowDate;
+}
+
 void AlbumSettings::setSaveExifComments(bool val)
 {
     d->saveExifComments = val;
@@ -437,13 +454,12 @@ bool AlbumSettings::getExifSetOrientation() const
     return d->exifSetOrientation;
 }
 
-void AlbumSettings::setIconShowDate(bool val)
+void AlbumSettings::setRecurseTags(bool val)
 {
-    d->iconShowDate = val;
+    d->recurseTags = val;
 }
 
-bool AlbumSettings::getIconShowDate() const
+bool AlbumSettings::getRecurseTags() const
 {
-    return d->iconShowDate;
+    return d->recurseTags;
 }
-

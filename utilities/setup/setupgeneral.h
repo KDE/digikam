@@ -54,6 +54,8 @@ private:
     QRadioButton *largeIconButton_;
     QRadioButton *hugeIconButton_;
 
+    QCheckBox    *recurseTagsBox_;
+    
     QCheckBox    *iconShowNameBox_;
     QCheckBox    *iconShowSizeBox_;
     QCheckBox    *iconShowDateBox_;

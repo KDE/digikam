@@ -77,6 +77,17 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
+   QVGroupBox *tagSettingBox = new QVGroupBox(parent);
+   tagSettingBox->setTitle(i18n("Tag Settings"));
+
+   recurseTagsBox_ = new QCheckBox(tagSettingBox);
+   recurseTagsBox_->setText(i18n("When showing items in a Tag, also "
+                                 "show items in sub-Tags"));
+   
+   layout->addWidget(tagSettingBox);
+
+   // --------------------------------------------------------
+
    QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal, 
                                                         i18n("Default Thumbnail Size"),
                                                         parent);
@@ -158,6 +169,8 @@ void SetupGeneral::applySettings()
         iconSize = ThumbnailSize::Huge;
     
     settings->setDefaultIconSize(iconSize);
+    settings->setRecurseTags(recurseTagsBox_->isChecked());
+        
     settings->setIconShowName(iconShowNameBox_->isChecked());
     settings->setIconShowTags(iconShowTagsBox_->isChecked());
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
@@ -195,6 +208,8 @@ void SetupGeneral::readSettings()
         break;
     }
 
+    recurseTagsBox_->setChecked(settings->getRecurseTags());
+    
     iconShowNameBox_->setChecked(settings->getIconShowName());
     iconShowTagsBox_->setChecked(settings->getIconShowTags());
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
