@@ -116,14 +116,14 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
         
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    topLayout->addWidget(frame);
-    topLayout->addWidget(m_hGradient);
+    topLayout->addWidget(frame, 4);
+    topLayout->addWidget(m_hGradient, 0);
 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Intensity range :"), page);
-    label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, page);
     m_maxInterv = new QSpinBox(0, 255, 1, page);
     m_maxInterv->setValue(255);

@@ -134,14 +134,14 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
         
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, plainPage() );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    topLayout->addWidget(frame);
-    topLayout->addWidget(m_hGradient);
+    topLayout->addWidget(frame, 4);
+    topLayout->addWidget(m_hGradient, 0);
 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Intensity range :"), plainPage());
-    label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, plainPage());
     m_maxInterv = new QSpinBox(0, 255, 1, plainPage());
     m_maxInterv->setValue(255);
