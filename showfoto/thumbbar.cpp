@@ -121,6 +121,17 @@ ThumbBarItem* ThumbBarView::currentItem() const
     return d->currItem;    
 }
 
+ThumbBarItem* ThumbBarView::firstItem() const
+{
+    return d->firstItem;
+    
+}
+
+ThumbBarItem* ThumbBarView::lastItem() const
+{
+    return d->lastItem;
+}
+
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (d->currItem == item)
@@ -133,6 +144,24 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
         updateContents();
         emit signalURLSelected(item->url());
     }
+}
+
+void ThumbBarView::invalidateThumb(ThumbBarItem* item)
+{
+    if (!item)
+        return;
+
+    if (item->m_pixmap)
+    {
+        delete item->m_pixmap;
+        item->m_pixmap = 0;
+    }
+    KIO::PreviewJob* job = KIO::filePreview(item->url(),
+                                            d->tileSize);
+    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
+            SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
+    connect(job, SIGNAL(failed(const KFileItem *)),
+            SLOT(slotFailedPreview(const KFileItem *)));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -322,6 +351,12 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
     if (!item)
         return;
 
+    if (item->m_pixmap)
+    {
+        delete item->m_pixmap;
+        item->m_pixmap = 0;
+    }
+    
     item->m_pixmap = new QPixmap(pix);
     if (item->m_pos < height())
     {
@@ -338,6 +373,12 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup,
                                        d->tileSize);
+
+    if (item->m_pixmap)
+    {
+        delete item->m_pixmap;
+        item->m_pixmap = 0;
+    }
     
     item->m_pixmap = new QPixmap(pix);
     if (item->m_pos < height())

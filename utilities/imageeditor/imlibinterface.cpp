@@ -310,6 +310,14 @@ bool ImlibInterface::save(const QString& file, int JPEGcompression,
 {
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
+    imlib_context_set_color_modifier(d->cmod);
+    imlib_reset_color_modifier();
+    
+    imlib_modify_color_modifier_brightness(d->brightness);
+    imlib_modify_color_modifier_contrast(d->contrast);
+    imlib_modify_color_modifier_gamma(d->gamma);
+    imlib_apply_color_modifier();
     
     QString currentMimeType(imlib_image_format());
 
@@ -328,6 +336,14 @@ bool ImlibInterface::saveAs(const QString& file, int JPEGcompression,
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
+    imlib_context_set_color_modifier(d->cmod);
+    imlib_reset_color_modifier();
+
+    imlib_modify_color_modifier_brightness(d->brightness);
+    imlib_modify_color_modifier_contrast(d->contrast);
+    imlib_modify_color_modifier_gamma(d->gamma);
+    imlib_apply_color_modifier();
+    
     if (!mimeType)
         result = saveAction(file, JPEGcompression, PNGcompression, 
                             TIFFcompression, imlib_image_format());
@@ -437,7 +453,7 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
     imlib_context_set_drawable(p->handle());
     imlib_context_set_anti_alias(antialias);
 
-    imlib_context_set_color_modifier(d->cmod);
+    imlib_context_set_color_modifier(0);
 
     Imlib_Image bot = imlib_create_cropped_scaled_image(sx, sy, sw, sh,
                                                         dw, dh);
@@ -468,6 +484,7 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
                                  0, 0, dw, dh,
                                  0, 0, dw, dh);
 
+    imlib_context_set_color_modifier(d->cmod);
     imlib_render_image_on_drawable(dx, dy);
 
     imlib_context_set_image(bot);

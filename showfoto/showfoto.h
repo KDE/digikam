@@ -40,11 +40,17 @@ public:
     ShowFoto(const KURL::List& urlList);
     ~ShowFoto();
 
+protected:
+
+    void closeEvent(QCloseEvent* e);
+    
 private slots:
 
     void slotOpenFile();
     void slotNext();
     void slotPrev();
+    void slotSave();
+    void slotSaveAs();
     void slotAutoFit();
     void slotOpenURL(const KURL& url);
     void slotToggleFullScreen();
@@ -58,6 +64,8 @@ private:
     void setupActions();
     void applySettings();
     void saveSettings();
+    bool promptUserSave();
+    bool save();
 
 private:
 
@@ -72,6 +80,8 @@ private:
     KToggleAction*  m_showBarAction;
     KAction*        m_cropAction;
     KAction*        m_revertAction;
+    KAction*        m_saveAction;
+    KAction*        m_saveAsAction;
     
     bool            m_fullScreen;
 };

@@ -6,6 +6,8 @@
  <Menu name="file" >
    <text>&amp;File</text>
      <Action name="open_file" /> 
+     <Action name="save" />
+     <Action name="saveas" />
      <Action name="revert" /> 
      <Action name="file_properties" /> 
  </Menu>
@@ -52,10 +54,13 @@
 
 <ToolBar noMerge="1" name="mainToolBar">
   <text>Main Toolbar</text>
-  <Action name="open_file" />
-  <Action name="revert" /> 
   <Action name="go_bwd" />
   <Action name="go_fwd" />
+  <Separator />
+  <Action name="open_file" />
+  <Action name="save" />
+  <Action name="saveas" />
+  <Action name="revert" /> 
   <Separator />
   <Action name="zoom_plus" />
   <Action name="zoom_minus" />

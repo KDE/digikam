@@ -42,6 +42,11 @@ public:
 
     ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
+
+    ThumbBarItem* firstItem() const;
+    ThumbBarItem* lastItem()  const;
+
+    void invalidateThumb(ThumbBarItem* item);
     
 protected:
 

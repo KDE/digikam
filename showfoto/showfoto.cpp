@@ -22,6 +22,9 @@
 // Qt includes. 
  
 #include <qlayout.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -35,10 +38,19 @@
 #include <kaccel.h>
 #include <kpropertiesdialog.h>
 #include <kdeversion.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 #include <kio/netaccess.h>
+
+#include <libkexif/kexif.h>
+#include <libkexif/kexifdata.h>
+#include <libkexif/kexifutils.h>
+
+#include <cstdio>
 
 // Local includes.
 
+#include "exifrestorer.h"
 #include "canvas.h"
 #include "thumbbar.h"
 #include "showfoto.h"
@@ -64,6 +76,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
             SLOT(slotOpenURL(const KURL&)));
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             m_cropAction, SLOT(setEnabled(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool)),
+            m_saveAction, SLOT(setEnabled(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool)),
+            m_saveAsAction, SLOT(setEnabled(bool)));
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_revertAction, SLOT(setEnabled(bool)));
 
@@ -101,6 +117,19 @@ void ShowFoto::setupActions()
                 this, SLOT(slotFileProperties()),
                 actionCollection(), "file_properties");
 
+    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+                                        actionCollection(), "revert");
+
+    m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
+                                      actionCollection(), "save");
+    
+    m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
+                                         actionCollection(), "saveas");
+
+    m_revertAction->setEnabled(false);
+    m_saveAction->setEnabled(false);
+    m_saveAsAction->setEnabled(false);
+                     
     // ---------------------------------------------------------------
     
     m_zoomPlusAction =
@@ -157,11 +186,6 @@ void ShowFoto::setupActions()
                                actionCollection(), "crop");
     m_cropAction->setEnabled(false);
 
-    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
-                     actionCollection(), "revert");
-    m_revertAction->setEnabled(false);
-
-    
     // ---------------------------------------------------------------
 
     new KAction(i18n("Increase Gamma"), 0, Key_G,
@@ -241,8 +265,22 @@ void ShowFoto::saveSettings()
     m_config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
 }
 
+void ShowFoto::closeEvent(QCloseEvent* e)
+{
+    if (!e)
+        return;
+
+    if (!promptUserSave())
+        return;
+    
+    e->accept();
+}
+
 void ShowFoto::slotOpenFile()
 {
+    if (!promptUserSave())
+        return;
+    
     QString mimes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
     KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
                                                 mimes,
@@ -270,6 +308,9 @@ void ShowFoto::slotFileProperties()
 
 void ShowFoto::slotNext()
 {
+    if (!promptUserSave())
+        return;
+
     ThumbBarItem* curr = m_bar->currentItem();
     if (curr && curr->next())
     {
@@ -279,12 +320,227 @@ void ShowFoto::slotNext()
 
 void ShowFoto::slotPrev()
 {
+    if (!promptUserSave())
+        return;
+
     ThumbBarItem* curr = m_bar->currentItem();
     if (curr && curr->prev())
     {
         m_bar->setSelected(curr->prev());
     }
 }
+
+void ShowFoto::slotSave()
+{
+    save();
+}
+
+void ShowFoto::slotSaveAs()
+{
+    ThumbBarItem* curr = m_bar->currentItem();
+    if (!curr)
+    {
+        kdWarning() << k_funcinfo << "This should not happen" << endl;
+        return;
+    }
+    
+    KURL url(curr->url());
+    
+    // The typemines listed is the base imagefiles supported by imlib2.
+    QStringList mimetypes;
+    mimetypes << "image/jpeg" << "image/png" << "image/tiff" << "image/gif"
+              << "image/x-tga" << "image/x-bmp" <<  "image/x-xpm"
+              << "image/x-portable-anymap";
+
+    KFileDialog saveDialog(url.isLocalFile() ? url.directory() : QDir::homeDirPath(),
+                           QString::null,
+                           this,
+                           "imageFileSaveDialog",
+                           false);
+    saveDialog.setOperationMode( KFileDialog::Saving );
+    saveDialog.setMode( KFile::File );
+    saveDialog.setCaption( i18n("New Image File Name") );
+    saveDialog.setMimeFilter(mimetypes);
+
+    if ( saveDialog.exec() != KFileDialog::Accepted )
+    {
+       return;
+    }
+
+    KURL saveAsURL = saveDialog.selectedURL();
+    QString format = KImageIO::typeForMime(saveDialog.currentMimeFilter());
+
+    if (!saveAsURL.isValid())
+    {
+        KMessageBox::error(this, i18n("Invalid target selected"));
+        return;
+    }
+
+    url.cleanPath();
+    saveAsURL.cleanPath();
+
+    if (url.equals(saveAsURL))
+    {
+        slotSave();
+        return;
+    }
+
+    QFileInfo fi(saveAsURL.path());
+    if ( fi.exists() )
+    {
+        int result =
+            KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
+                                                  "Are you sure you want to continue?")
+                                       .arg(saveAsURL.filename()) );
+
+        if (result != KMessageBox::Yes)
+            return;
+    }
+
+    QString tmpFile = saveAsURL.directory() + QString("/.showfoto-tmp-")
+                      + saveAsURL.filename();
+    if (!m_canvas->saveAsTmpFile(tmpFile, 85, 1, true, format.lower()))
+    {
+        KMessageBox::error(this, i18n("Failed to save file '%1'")
+                           .arg(saveAsURL.filename()));
+        ::unlink(QFile::encodeName(tmpFile));
+        return;
+    }
+
+    // only try to write exif if both src and destination are jpeg files
+    if (QString(QImageIO::imageFormat(url.path())).upper() == "JPEG" &&
+        format.upper() == "JPEG")
+    {
+        ExifRestorer exifHolder;
+        exifHolder.readFile(url.path(), ExifRestorer::ExifOnly);
+
+        if (exifHolder.hasExif())
+        {
+            ExifRestorer restorer;
+            restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+            restorer.insertExifData(exifHolder.exifData());
+            restorer.writeFile(tmpFile);
+            KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+        }
+        else
+            kdDebug() << ("slotSaveAs::No Exif Data Found") << endl;
+    }
+
+    kdDebug() << "renaming to " << saveAsURL.path() << endl;
+    if (::rename(QFile::encodeName(tmpFile),
+                 QFile::encodeName(saveAsURL.path())) != 0)
+    {
+        KMessageBox::error(this, i18n("Failed to overwrite original file"));
+        ::unlink(QFile::encodeName(tmpFile));
+        return;
+    }
+
+    // add the file to the list of images if it's not there already
+    ThumbBarItem* foundItem = 0;
+    for (ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    {
+        if (item->url().equals(saveAsURL))
+        {
+            foundItem = item;
+            m_bar->invalidateThumb(item);
+            break;
+        }
+    }
+
+    if (!foundItem)
+    {
+        foundItem = new ThumbBarItem(m_bar, saveAsURL);
+    }
+
+    m_bar->setSelected(foundItem);
+}
+
+bool ShowFoto::promptUserSave()
+{
+    ThumbBarItem* curr = m_bar->currentItem();
+    if (!curr)
+        return true;
+    
+    if (m_saveAction->isEnabled())
+    {
+        int result =
+            KMessageBox::warningYesNoCancel(this,
+                                            i18n("The image '%1\' has been modified.\n"
+                                                 "Do you want to save it?")
+                                                 .arg(curr->url().filename()),
+                                            QString::null,
+                                            KStdGuiItem::save(),
+                                            KStdGuiItem::discard());
+        if (result == KMessageBox::Yes)
+        {
+            return save();
+        }
+        else if (result == KMessageBox::No)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    return true;
+}
+
+bool ShowFoto::save()
+{
+    ThumbBarItem* curr = m_bar->currentItem();
+    if (!curr)
+    {
+        kdWarning() << k_funcinfo << "This should not happen" << endl;
+        return true;
+    }
+
+    KURL url = curr->url();
+    if (!url.isLocalFile())
+    {
+        KMessageBox::sorry(this, i18n("No support for saving non-local files"));
+        return false;
+    }
+    
+    QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
+                      + url.filename();
+    if (!m_canvas->saveAsTmpFile(tmpFile, 85, 1, true))
+    {
+        KMessageBox::error(this, i18n("Failed to save file '%1'")
+                           .arg(url.filename()));
+        ::unlink(QFile::encodeName(tmpFile));
+        return false;
+    }
+
+    ExifRestorer exifHolder;
+    exifHolder.readFile(url.path(), ExifRestorer::ExifOnly);
+    if (exifHolder.hasExif())
+    {
+        ExifRestorer restorer;
+        restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+        restorer.insertExifData(exifHolder.exifData());
+        restorer.writeFile(tmpFile);
+    }
+    else
+        kdDebug() << ("slotSave::No Exif Data Found") << endl;
+
+    if ( m_canvas->exifRotated() )
+        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+
+    kdDebug() << "renaming to " << url.path() << endl;
+    if (::rename(QFile::encodeName(tmpFile),
+                 QFile::encodeName(url.path())) != 0)
+    {
+        KMessageBox::error(this, i18n("Failed to overwrite original file"));
+        ::unlink(QFile::encodeName(tmpFile));
+        return false;
+    }
+
+    slotOpenURL(curr->url());
+    m_bar->invalidateThumb(curr);
+    
+    return true;
+}
+
 
 void ShowFoto::slotOpenURL(const KURL& url)
 {
@@ -397,4 +653,3 @@ void ShowFoto::slotChangeBCG()
 }
 
 #include "showfoto.moc"
-
