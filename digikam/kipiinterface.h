@@ -146,7 +146,6 @@ public:
 
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
-    virtual KIPI::ImageCollection currentScope();
     virtual QValueList<KIPI::ImageCollection> allAlbums();
     virtual KIPI::ImageInfo info( const KURL& );
     virtual bool addImage( const KURL&, QString& errmsg );

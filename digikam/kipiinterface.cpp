@@ -309,8 +309,11 @@ KURL::List DigikamImageCollection::images()
     }
     case SelectedItems:
     {
-        QStringList items =
-            AlbumManager::instance()->getItemHandler()->selectedItemsPath();
+        QStringList items;
+        AlbumItemHandler* handler =
+            AlbumManager::instance()->getItemHandler();
+        if (handler)
+            items = handler->allItemsPath();
 
         return KURL::List(items);
               
@@ -330,8 +333,12 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     // just return whatevers visible in the albumitemhandler
     if ( album == AlbumManager::instance()->currentAlbum() )
     {
-        QStringList items =
-            AlbumManager::instance()->getItemHandler()->allItemsPath();
+        QStringList items;
+        AlbumItemHandler* handler =
+            AlbumManager::instance()->getItemHandler();
+        if (handler)
+            items = handler->allItemsPath();
+        
         return KURL::List(items);
     }
 
@@ -478,13 +485,6 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
     }
 }
 
-KIPI::ImageCollection DigikamKipiInterface::currentScope()
-{
-    // in digikam currentScope is always currentSelection
-
-    return currentSelection();
-}
-
 QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
     QValueList<KIPI::ImageCollection> result;
@@ -606,7 +606,6 @@ void DigikamKipiInterface::delImage( const KURL& url )
 void DigikamKipiInterface::slotSelectionChanged( bool b )
 {
     emit selectionChanged( b );
-    emit currentScopeChanged( b );
 }
 
 void DigikamKipiInterface::slotCurrentAlbumChanged( Album *album )
@@ -617,7 +616,6 @@ void DigikamKipiInterface::slotCurrentAlbumChanged( Album *album )
        b = true;
     
     emit currentAlbumChanged( b );
-    emit currentScopeChanged( b );
 }
 
 QString DigikamKipiInterface::fileExtensions()
