@@ -1638,7 +1638,8 @@ void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
 
     KExifData::ImageOrientation orientation = exifData->getImageOrientation();
 
-    bool doXform = (orientation != KExifData::NORMAL);
+    bool doXform = (orientation != KExifData::NORMAL &&
+                    orientation != KExifData::UNSPECIFIED);
 
     switch (orientation) {
        case KExifData::NORMAL:

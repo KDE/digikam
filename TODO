@@ -27,11 +27,11 @@ x Added subfolders Albums support.                                 <Renchi Raju 
 x Added tagging images feature.                                    <Renchi Raju    - 0.7.0> 
 x Option to hide image names.                                      <Renchi Raju    - 0.7.0> 
 x View/Hide main toolbar.                                          <Joern Ahrens   - 0.7.0>
+x Added config saving of Albums opened in Albums treeview.         
+- Custom thumbnail highlighting of album thumbnails.
 o Added a test for checking if a camera name is already in the 
   Digikam camera list when a new camera is added.
 o Add image date from EXIF data for each album item.               
-o Added config saving of Albums opened in Albums treeview.         
-o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
 o Backup and retrieve image comments and album properties.
 o Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
@@ -74,7 +74,7 @@ x Added Blur/Sharpen image filters.                                <Gilles Cauli
 x Added Color balance plugin.                                      <Gilles Caulier - 0.7.0>  
 x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
 x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
-* Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
+x Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 x Added image Histogram viewer.                                    <Gilles Caulier - 0.7.0>  
 x Added Colors autocorrection filter.                              <Gilles Caulier - 0.7.0>  
 
