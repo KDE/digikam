@@ -350,7 +350,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 3 , marginHint(), spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 1, 2 , marginHint(), spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -363,7 +363,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Lens Distortion Correction"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 3);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -389,17 +389,17 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                            "to guide you in adjusting the lens distortion correction. "
                                            "Press the left mouse button to freeze the dashed "
                                            "line's position."));
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 3);
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
                                                   
     QGroupBox *gbox2 = new QGroupBox(i18n("Filter Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 4, 6, 20, spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 4, 2, 20, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gbox2 );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the distortion correction "
                                               "applied to a cross pattern.") );
-    gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 3, 0, 0);
+    gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
         
     QLabel *label1 = new QLabel(i18n("Main:"), gbox2);
     m_mainSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_mainSlider");
@@ -415,9 +415,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_mainSpinBox, whatsThis);
     QWhatsThis::add( m_mainSlider, whatsThis);
     
-    gridBox2->addMultiCellWidget(label1, 0, 0, 1, 1);
-    gridBox2->addMultiCellWidget(m_mainSlider, 0, 0, 2, 5);
-    gridBox2->addMultiCellWidget(m_mainSpinBox, 0, 0, 6, 6);
+    gridBox2->addMultiCellWidget(label1, 1, 1, 0, 0);
+    gridBox2->addMultiCellWidget(m_mainSlider, 1, 1, 1, 1);
+    gridBox2->addMultiCellWidget(m_mainSpinBox, 1, 1, 2, 2);
     
     QLabel *label2 = new QLabel(i18n("Edge:"), gbox2);
     m_edgeSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_edgeSlider");
@@ -433,9 +433,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_edgeSpinBox, whatsThis);
     QWhatsThis::add( m_edgeSlider, whatsThis);                     
     
-    gridBox2->addMultiCellWidget(label2, 1, 1, 1, 1);
-    gridBox2->addMultiCellWidget(m_edgeSlider, 1, 1, 2, 5);
-    gridBox2->addMultiCellWidget(m_edgeSpinBox, 1, 1, 6, 6);
+    gridBox2->addMultiCellWidget(label2, 2, 2, 0, 0);
+    gridBox2->addMultiCellWidget(m_edgeSlider, 2, 2, 1, 1);
+    gridBox2->addMultiCellWidget(m_edgeSpinBox, 2, 2, 2, 2);
     
     QLabel *label3 = new QLabel(i18n("Zoom:"), gbox2);
     m_rescaleSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_rescaleSlider");
@@ -449,9 +449,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_rescaleSpinBox, whatsThis);
     QWhatsThis::add( m_rescaleSlider, whatsThis);                     
     
-    gridBox2->addMultiCellWidget(label3, 2, 2, 1, 1);
-    gridBox2->addMultiCellWidget(m_rescaleSlider, 2, 2, 2, 5);
-    gridBox2->addMultiCellWidget(m_rescaleSpinBox, 2, 2, 6, 6);
+    gridBox2->addMultiCellWidget(label3, 3, 3, 0, 0);
+    gridBox2->addMultiCellWidget(m_rescaleSlider, 3, 3, 1, 1);
+    gridBox2->addMultiCellWidget(m_rescaleSpinBox, 3, 3, 2, 2);
 
     QLabel *label4 = new QLabel(i18n("Brighten:"), gbox2);
     m_brightenSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_brightenSlider");
@@ -466,18 +466,18 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_brightenSpinBox, whatsThis);
     QWhatsThis::add( m_brightenSlider, whatsThis);                     
     
-    gridBox2->addMultiCellWidget(label4, 3, 3, 1, 1);
-    gridBox2->addMultiCellWidget(m_brightenSlider, 3, 3, 2, 5);
-    gridBox2->addMultiCellWidget(m_brightenSpinBox, 3, 3, 6, 6);
+    gridBox2->addMultiCellWidget(label4, 4, 4, 0, 0);
+    gridBox2->addMultiCellWidget(m_brightenSlider, 4, 4, 1, 1);
+    gridBox2->addMultiCellWidget(m_brightenSpinBox, 4, 4, 2, 2);
 
-    topLayout->addMultiCellWidget(gbox2, 2, 2, 0, 3);
+    topLayout->addMultiCellWidget(gbox2, 1, 1, 2, 2);
     
     // -------------------------------------------------------------
         
     m_progressBar = new KProgress(100, plainPage(), "progressbar");
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    topLayout->addMultiCellWidget(m_progressBar, 3, 3, 0, 3);
+    topLayout->addMultiCellWidget(m_progressBar, 2, 2, 0, 2);
 
     adjustSize();
     disableResize();  
