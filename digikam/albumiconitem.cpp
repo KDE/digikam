@@ -344,25 +344,28 @@ void AlbumIconItem::updateExtraText()
     
     // FIXME : using KIO/KFileMetaInfo instead for extract Width and Height values ! Qimage is too long !!!
                 
-    QImage im(fileItem_->url().path());
+    if ( settings->getIconShowResolution() )
+       {
+       QImage im(fileItem_->url().path());
 
-    if(im.isNull() == false)
-        {
-        imageWidth_= im.width();
-        imageHeight_= im.height();
-        }
+       if(im.isNull() == false)
+          {
+          imageWidth_= im.width();
+          imageHeight_= im.height();
+          }
     
-    if (imageWidth_ != 0 && imageHeight_ != 0 && settings->getIconShowResolution()) 
-        {
-        if (!firstLine)
-            extraText += "\n";
-        else
-            firstLine = false;
+       if (imageWidth_ != 0 && imageHeight_ != 0) 
+          {
+          if (!firstLine)
+              extraText += "\n";
+          else
+              firstLine = false;
         
-        extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
-                                         .arg(QString::number(imageHeight_));
-        }
-
+          extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
+                                           .arg(QString::number(imageHeight_));
+          }
+       }
+       
     extraText_ = extraText;
 }
 
