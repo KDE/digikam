@@ -64,17 +64,17 @@ namespace DigikamEmbossImagesPlugin
 {
 
 ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
-                  : KDialogBase(Plain, i18n("Emboss"),
+                  : KDialogBase(Plain, i18n("Emboss image"),
                                 Help|Ok|Cancel, Ok,
                                 parent, 0, true, true),
-                      m_parent(parent)
+                    m_parent(parent)
 {
     QString whatsThis;
     
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Emboss"), 
+                                       I18N_NOOP("Emboss image"), 
                                        "0.7.0-cvs",
                                        I18N_NOOP("An embossed image effect plugin for Digikam."),
                                        KAboutData::License_GPL,
@@ -88,7 +88,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Emboss handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Emboss image handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
