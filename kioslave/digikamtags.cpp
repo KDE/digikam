@@ -87,18 +87,14 @@ kio_digikamtagsProtocol::~kio_digikamtagsProtocol()
 
 void kio_digikamtagsProtocol::stat(const KURL& url)
 {
-    QString query(url.query());
-    
     if (url.equals(KURL("digikamtags:/")))
+    {
         statRoot();
-    else if (query.isEmpty())
-        statTag(url);
+    }
     else
     {
-        kdDebug() << "stat file" << url.prettyURL() << endl;
-
-        finished();
-        return;
+        // TODO: provide some protection here against rogue apps
+        statTag(url);
     }
 }
 
