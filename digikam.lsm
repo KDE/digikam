@@ -1,11 +1,11 @@
 Begin3
 Title:          Digikam 
-Version:        0.6.2
+Version:        0.6.3
 Entered-date:   
 Description:    KDE Photo Management
-Keywords:       Digital Camera, KDE, Graphics, Image Viewer 
-Author:         Renchi Raju <renchi@pooh.tam.uiuc.edu> 
-Maintained-by:  Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+Keywords:       Digital Camera, KDE, Graphics, Image Viewer, Image Editor, Gphoto 
+Author:         Renchi Raju <renchi at pooh.tam.uiuc.edu> 
+Maintained-by:  Gilles Caulier <caulier dot gilles at free.fr> 
 Primary-site:   	        
 Home-page:      http://digikam.sourceforge.net
 Original-site:  
