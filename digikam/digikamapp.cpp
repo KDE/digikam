@@ -335,7 +335,7 @@ void DigikamApp::setupActions()
 
     mThumbSizePlusAction = new KAction(i18n("Increase Thumbnail Size"),
                                    "viewmag+",
-                                   ALT+Key_Plus,
+                                   CTRL+Key_Plus,
                                    mView,
                                    SLOT(slot_thumbSizePlus()),
                                    actionCollection(),
@@ -343,7 +343,7 @@ void DigikamApp::setupActions()
 
     mThumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
                                    "viewmag-",
-                                   ALT+Key_Minus,
+                                   CTRL+Key_Minus,
                                    mView,
                                    SLOT(slot_thumbSizeMinus()),
                                    actionCollection(),

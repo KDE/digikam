@@ -500,7 +500,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     // --------------------------------------------------------
 
     QPopupMenu popmenu(this);
-    popmenu.insertItem(SmallIcon("image"),
+    popmenu.insertItem(SmallIcon("editimage"),
                        i18n("View/Edit"), 10);
     popmenu.insertItem(i18n("Open With ..."), openWithMenu, 11);
     popmenu.insertSeparator();
