@@ -26,7 +26,7 @@
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
-#include <qlabel.h>
+#include <qevent.h> 
 #include <qtextedit.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -36,6 +36,7 @@
 #include <qtooltip.h>
 #include <qdatetime.h>
 #include <qsize.h>
+#include <qpopupmenu.h>
 
 // KDE includes.
 
@@ -78,6 +79,102 @@
 
 #include "imageproperties.h"
 
+
+ExifThumbLabel::ExifThumbLabel(QWidget * parent, AlbumIconView* currItemView)
+               :QLabel(parent)
+{
+    m_IconView = currItemView;
+    
+    m_popmenu = new QPopupMenu(this);
+    m_popmenu->setCheckable(true);
+    m_popmenu->insertItem(i18n("Correct Exif Orientation Tag"), 10);
+    m_popmenu->setItemEnabled ( 10, false );
+    m_popmenu->insertSeparator();
+    m_popmenu->insertItem(i18n("Normal"), 11);
+    m_popmenu->insertItem(i18n("Flipped Horizontally"), 12);
+    m_popmenu->insertItem(i18n("Rotated 180 Degrees"), 13);
+    m_popmenu->insertItem(i18n("Flipped Vertically"), 14);
+    m_popmenu->insertItem(i18n("Rotated 90 Degrees / Horiz. Flipped"), 15);
+    m_popmenu->insertItem(i18n("Rotated 90 Degrees"), 16);
+    m_popmenu->insertItem(i18n("Rotated 90 Degrees / Vert. Flipped"), 17);
+    m_popmenu->insertItem(i18n("Rotated 270 Degrees"), 18);
+}
+
+ExifThumbLabel::~ExifThumbLabel()
+{
+    delete m_popmenu;
+}
+
+void ExifThumbLabel::setOrientationMenu(KExifData *currExifData)
+{
+    int orient = currExifData->getImageOrientation();
+    m_popmenu->setItemChecked(orient + 10, true);
+}
+
+void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
+{
+    if (e->button() !=  Qt::RightButton) return;
+
+    int sel = m_popmenu->exec(QCursor::pos());
+    
+    switch (sel)
+    {
+    case 11:
+    {
+        m_IconView->slotSetExifOrientation(1);
+        break;
+    }
+    case 12:
+    {
+        m_IconView->slotSetExifOrientation(2);
+        break;
+    }
+    case 13:
+    {
+        m_IconView->slotSetExifOrientation(3);
+        break;
+    }
+    case 14:
+    {
+        m_IconView->slotSetExifOrientation(4);
+        break;
+    }
+    case 15:
+    {
+        m_IconView->slotSetExifOrientation(5);
+        break;
+    }
+    case 16:
+    {
+        m_IconView->slotSetExifOrientation(6);
+        break;
+    }
+    case 17:
+    {
+        m_IconView->slotSetExifOrientation(7);
+        break;
+    }
+    case 18:
+    {
+        m_IconView->slotSetExifOrientation(8);
+        break;
+    }
+    case 19:
+    {
+        m_IconView->slotSetExifOrientation(9);
+        break;
+    }
+    default:
+        break;
+    }
+
+    for (int i = 11 ; i <= 19 ; ++i)
+        m_popmenu->setItemChecked(i, false);            
+        
+    m_popmenu->setItemChecked(sel, true);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
                : KDialogBase(Tabbed, i18n("Image Properties and Meta-Data"), 
@@ -292,6 +389,7 @@ void ImageProperties::slotItemChanged()
             {
             m_exifThumb->setFixedSize(thumbnail.size());
             m_exifThumb->setPixmap(QPixmap(thumbnail));
+            m_exifThumb->setOrientationMenu(mExifData);
             }        
         else
             {
@@ -656,8 +754,10 @@ void ImageProperties::setupExifViewer(void)
     m_listview = new KExifListView(page, true);
     
     QGroupBox *box = new QVGroupBox(i18n("Embedded thumbnail"), page);
-    m_exifThumb = new QLabel(box);
-    
+    m_exifThumb = new ExifThumbLabel(box, m_view);
+    QWhatsThis::add( m_exifThumb, i18n("<p>You can see here the Exif thumbnail embedded in image.<p>"
+                                       "If you press under with right mouse button, you can corrected the "
+                                       "Exif orientation tag by a popup menu."));
     layout->addWidget(m_listview, 0, 0);
     layout->addWidget(box, 1, 0);
 }

@@ -27,6 +27,7 @@
 #include <qstring.h>
 #include <qimage.h>
 #include <qguardedptr.h>
+#include <qlabel.h>
 
 // KDE includes.
 
@@ -39,8 +40,9 @@
 
 class QComboBox;
 class QSpinBox;
-class QLabel;
 class QTextEdit;
+class QMouseEvent;
+class QPopupMenu;
 
 class KSqueezedTextLabel;
 
@@ -56,6 +58,27 @@ namespace Digikam
 class HistogramWidget;
 class ColorGradientWidget;
 }
+
+class ExifThumbLabel : public QLabel
+{
+    Q_OBJECT
+
+public:
+    
+    ExifThumbLabel(QWidget * parent, AlbumIconView* currItemView);
+    ~ExifThumbLabel();
+    
+    void setOrientationMenu(KExifData *currExifData);
+
+protected:    
+    
+    QPopupMenu*    m_popmenu;
+    
+    AlbumIconView* m_IconView;
+    
+    virtual void mousePressEvent ( QMouseEvent * e );
+    
+};
 
 class ImageProperties : public KDialogBase
 {
@@ -105,7 +128,7 @@ private:
 
     // For Exif viever.
     
-    QLabel                       *m_exifThumb;
+    ExifThumbLabel               *m_exifThumb;
 
     KExifData                    *mExifData;
     
@@ -154,7 +177,7 @@ private slots:
 
     void slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
                                  const KFileMetaInfo*);  
-                                  
+
     // For histogram viever.
     
     void slotChannelChanged(int channel);
