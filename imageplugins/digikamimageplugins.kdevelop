@@ -31,6 +31,7 @@
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevdoctreeview>
@@ -91,11 +92,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs></programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -129,7 +130,7 @@
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>digikam/digikam/digikam</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>

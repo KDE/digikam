@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_FreeRotation
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+
+Comment=Free rotation plugin for digikam
+
+X-KDE-Library=digikamimageplugin_freerotation
+author=Gilles Caulier, caulier dot gilles at free dot fr
