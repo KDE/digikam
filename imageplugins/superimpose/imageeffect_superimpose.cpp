@@ -87,7 +87,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 {
     QString whatsThis;
            
-    setButtonWhatsThis ( User1, i18n("<p>Reset addition mode to the default settings.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset template composition to the default settings.") );
     
     // Read settings.
     
