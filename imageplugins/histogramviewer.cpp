@@ -101,7 +101,7 @@ HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, u
 
 void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
 {
-    setHelp("imageviewer.anchor", "digikam");
+    setHelp("imageeditor.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     // -------------------------------------------------------------

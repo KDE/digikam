@@ -57,7 +57,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                  parent, 0, true, true),
                      m_parent(parent)
 {
-    setHelp("imageviewer.anchor", "digikam");
+    setHelp("imageeditor.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
