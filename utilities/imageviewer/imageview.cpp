@@ -67,26 +67,27 @@
 
 /////////////////////////////////////// CLASS ////////////////////////////////////////////
 
-class CAction {
-
+class CAction 
+{
 public:
 
     CAction(const QString& text_, const QObject* receiver_,
-            const char* slot_, const QKeySequence& key_) {
+            const char* slot_, const QKeySequence& key_) 
+       {
+       text   = text_;
+       receiver = receiver_;
+       slot     = slot_;
+       menuID   = -1;
+       button   =  0;
+       key      = key_;
 
-        text   = text_;
-        receiver = receiver_;
-        slot     = slot_;
-        menuID   = -1;
-        button   =  0;
-        key      = key_;
+       signal.connect(receiver, slot);
+       }
 
-        signal.connect(receiver, slot);
-    }
-
-    void activate() {
-        signal.activate();
-    }
+    void activate() 
+       {
+       signal.activate();
+       }
 
     QString text;
     const QObject* receiver;
@@ -98,16 +99,16 @@ public:
     QSignal signal;
 };
 
-class CButton : public QToolButton {
-
+class CButton : public QToolButton 
+{
 public:
 
     CButton(QWidget *parent,
             CAction *action,
             const QPixmap& pix,
             bool enabled=true,
-            bool isToggle=false) : QToolButton(parent) {
-
+            bool isToggle=false) : QToolButton(parent) 
+        {
         setSizePolicy(QSizePolicy(QSizePolicy::Fixed,
                                   QSizePolicy::Fixed));
         setTextLabel(action->text);
@@ -120,13 +121,13 @@ public:
                 action->slot);
         
         action->button = this;
-    }
+        }
 
 protected:
 
     // override this to paint with no border
-    void drawButton( QPainter * p ) {
-
+    void drawButton( QPainter * p ) 
+        {
         QStyle::SCFlags controls = QStyle::SC_ToolButton;
         QStyle::SCFlags active = QStyle::SC_None;
 
@@ -143,14 +144,17 @@ protected:
             flags |= QStyle::Style_Down;
         if (isOn())
             flags |= QStyle::Style_On;
-        if (autoRaise()) {
+        if (autoRaise()) 
+            {
             flags |= QStyle::Style_AutoRaise;
-            if (uses3D()) {
+            if (uses3D()) 
+                {
                 flags |= QStyle::Style_MouseOver;
                 if (! isOn() && ! isDown())
                     flags |= QStyle::Style_Raised;
+                }
             }
-        } else if (! isOn() && ! isDown())
+        else if (! isOn() && ! isDown())
             flags |= QStyle::Style_Raised;
 
         if (isDown() || isOn())
@@ -159,11 +163,11 @@ protected:
                                    flags, controls, active,
                                    QStyleOption());
         drawButtonLabel(p);
-    }
+        }
 };
 
-class ImageViewPrivate {
-
+class ImageViewPrivate 
+{
 public:
 
     bool         singleItemMode;
@@ -211,9 +215,11 @@ public:
 
 ImageView::ImageView(QWidget* parent,
                      const KURL::List& urlList,
-                     const KURL& urlCurrent)
+                     const KURL& urlCurrent,
+                     bool fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    fromCameraUIFlag = fromCameraUI;
     d = new ImageViewPrivate;
     
     d->fullScreen = false;
@@ -227,9 +233,12 @@ ImageView::ImageView(QWidget* parent,
 }
 
 
-ImageView::ImageView(QWidget* parent, const KURL& urlCurrent)
+ImageView::ImageView(QWidget* parent,
+                     const KURL& urlCurrent,
+                     bool fromCameraUI)
          : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    fromCameraUIFlag = fromCameraUI;
     d = new ImageViewPrivate;
 
     d->fullScreen = false;
@@ -422,7 +431,7 @@ void ImageView::setupActions()
                       new CAction(i18n("Zoom 1:1"),
                                   d->canvas,
                                   SLOT(slotSetZoom1()),
-                                  QKeySequence(Key_1)));
+                                  QKeySequence(SHIFT+Key_1)));
 
     d->actions.insert("toggleAutoZoom",
                       new CAction(i18n("Toggle Auto Zoom"),
@@ -434,7 +443,7 @@ void ImageView::setupActions()
                       new CAction(i18n("Toggle Full Screen"),
                                   this,
                                   SLOT(slotToggleFullScreen()),
-                                  QKeySequence(Key_F)));
+                                  QKeySequence(CTRL+SHIFT+Key_F)));
 
     d->actions.insert("rotate",
                       new CAction(i18n("Rotate Image"),
@@ -522,11 +531,14 @@ void ImageView::setupActions()
                                   SLOT(slotBCGEdit()),
                                   QKeySequence(CTRL+Key_E)));
     
-    d->actions.insert("commentsEdit",
+    if ( fromCameraUIFlag == false )
+       {
+       d->actions.insert("commentsEdit",
                       new CAction(i18n("Edit Image Comments"),
                                   this,
                                   SLOT(slotCommentsEdit()),
                                   QKeySequence(Key_F3)));
+       }
     
     d->actions.insert("ExifInfo",
                       new CAction(i18n("View Exif Information"),
@@ -558,11 +570,14 @@ void ImageView::setupActions()
                                   SLOT(slotRestore()),
                                   QKeySequence(CTRL+Key_R)));
 
-    d->actions.insert("remove",
+    if ( fromCameraUIFlag == false )
+       {
+       d->actions.insert("remove",
                       new CAction(i18n("Remove from Album"),
                                   this,
                                   SLOT(slotRemoveCurrentItemfromAlbum()),
                                   QKeySequence(SHIFT+Key_Delete)));
+       }
 
     d->actions.insert("close",
                       new CAction(i18n("Close"),
@@ -579,6 +594,7 @@ void ImageView::setupActions()
     addKeyInDict("next");
     addKeyInDict("zoomIn");
     addKeyInDict("zoomOut");
+    addKeyInDict("zoom1");
     addKeyInDict("toggleAutoZoom");
     addKeyInDict("toggleFullScreen");
     addKeyInDict("rotate");
@@ -595,13 +611,19 @@ void ImageView::setupActions()
     addKeyInDict("contrast+");
     addKeyInDict("contrast-");
     addKeyInDict("bcgEdit");
-    addKeyInDict("commentsEdit");
+    
+    if ( fromCameraUIFlag == false )
+       addKeyInDict("commentsEdit");
+       
     addKeyInDict("ExifInfo");
     addKeyInDict("crop");
     addKeyInDict("save");
     addKeyInDict("saveas");
     addKeyInDict("restore");
-    addKeyInDict("remove");
+    
+    if ( fromCameraUIFlag == false )
+       addKeyInDict("remove");
+    
     addKeyInDict("close");
 
     d->actionKeys.insert(QKeySequence(Key_Escape),
@@ -613,7 +635,6 @@ void ImageView::setupActions()
 
 void ImageView::setupPopupMenu()
 {
-
     // Setup the rotate menu
 
     d->rotateMenu = new QPopupMenu(this);
@@ -640,7 +661,10 @@ void ImageView::setupPopupMenu()
 
     addMenuItem(d->contextMenu, d->actions.find("zoomIn"));
     addMenuItem(d->contextMenu, d->actions.find("zoomOut"));
-
+    addMenuItem(d->contextMenu, d->actions.find("zoom1"));
+    addMenuItem(d->contextMenu, d->actions.find("toggleAutoZoom"));
+    addMenuItem(d->contextMenu, d->actions.find("toggleFullScreen"));
+    
     d->contextMenu->insertSeparator();
 
     d->contextMenu->insertItem(i18n("Rotate Image"), d->rotateMenu);
@@ -667,7 +691,9 @@ void ImageView::setupPopupMenu()
 
     d->contextMenu->insertSeparator();
     
-    addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
+    if ( fromCameraUIFlag == false )
+       addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
+       
     addMenuItem(d->contextMenu, d->actions.find("ExifInfo"));
 
     d->contextMenu->insertSeparator();
@@ -675,7 +701,9 @@ void ImageView::setupPopupMenu()
     addMenuItem(d->contextMenu, d->actions.find("save"));
     addMenuItem(d->contextMenu, d->actions.find("saveas"));
     addMenuItem(d->contextMenu, d->actions.find("restore"));
-    addMenuItem(d->contextMenu, d->actions.find("remove"));
+    
+    if ( fromCameraUIFlag == false )
+       addMenuItem(d->contextMenu, d->actions.find("remove"));
 
     d->contextMenu->insertSeparator();
 
@@ -703,10 +731,11 @@ void ImageView::setupPopupMenu()
 
 void ImageView::addMenuItem(QPopupMenu *menu, CAction *action)
 {
-    if (action) {
-        action->menuID = menu->insertItem(action->text, action->receiver,
-                                          action->slot, action->key);
-    }
+    if (action) 
+       {
+       action->menuID = menu->insertItem(action->text, action->receiver,
+                                         action->slot, action->key);
+       }
 }
 
 
@@ -782,18 +811,7 @@ void ImageView::setupButtons()
                              d->actions.find("bcgEdit"),
                              BarIcon("blend"));
     d->buttonLayout->addWidget(d->bBCGEdit);
-
-    d->bCommentsEdit = new CButton(d->buttonBar,
-                             d->actions.find("commentsEdit"),
-                             BarIcon("imagecomment"));
-    d->buttonLayout->addWidget(d->bCommentsEdit);
-
-    d->bExifInfo = new CButton(d->buttonBar,
-                             d->actions.find("ExifInfo"),
-                             BarIcon("exifinfo"));
-    d->buttonLayout->addWidget(d->bExifInfo);
-
-    
+   
     d->bRotate = new CButton(d->buttonBar,
                              d->actions.find("rotate"),
                              BarIcon("rotate_cw"));
@@ -809,7 +827,20 @@ void ImageView::setupButtons()
                              BarIcon("crop"),
                              false);
     d->buttonLayout->addWidget(d->bCrop);
+        
+    if ( fromCameraUIFlag == false )
+       {
+       d->bCommentsEdit = new CButton(d->buttonBar,
+                             d->actions.find("commentsEdit"),
+                             BarIcon("imagecomment"));
+       d->buttonLayout->addWidget(d->bCommentsEdit);
+       }
 
+    d->bExifInfo = new CButton(d->buttonBar,
+                             d->actions.find("ExifInfo"),
+                             BarIcon("exifinfo"));
+    d->buttonLayout->addWidget(d->bExifInfo);
+    
     d->bSave  = new CButton(d->buttonBar,
                              d->actions.find("save"),
                              BarIcon("filesave"),
@@ -828,10 +859,13 @@ void ImageView::setupButtons()
                              false);
     d->buttonLayout->addWidget(d->bRestore);
 
-    d->bRemoveCurrent  = new CButton(d->buttonBar,
+    if ( fromCameraUIFlag == false )
+       {
+       d->bRemoveCurrent  = new CButton(d->buttonBar,
                              d->actions.find("remove"),
                              BarIcon("editdelete"));
-    d->buttonLayout->addWidget(d->bRemoveCurrent);
+       d->buttonLayout->addWidget(d->bRemoveCurrent);
+       }
 
     d->bClose = new CButton(d->buttonBar,
                              d->actions.find("close"),
@@ -850,25 +884,25 @@ void ImageView::slotNextImage()
 
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-    if (it != d->urlList.end()) {
+    if (it != d->urlList.end()) 
+        {
+        d->preloadNext = true;
 
-         d->preloadNext = true;
-
-         if (d->urlCurrent != d->urlList.last()) {
-
-             KURL urlNext = *(++it);
-             d->urlCurrent = urlNext;
-             loadCurrentItem();
+        if (d->urlCurrent != d->urlList.last()) 
+           {
+           KURL urlNext = *(++it);
+           d->urlCurrent = urlNext;
+           loadCurrentItem();
              
-             if (d->urlList.count() == 1)
-                d->bPrev->setEnabled(false);
-             else       
-                d->bPrev->setEnabled(true);
+           if (d->urlList.count() == 1)
+              d->bPrev->setEnabled(false);
+           else       
+              d->bPrev->setEnabled(true);
                           
-             if (d->urlCurrent == d->urlList.last()) 
-                 d->bNext->setEnabled(false);   
-         }
-    }
+           if (d->urlCurrent == d->urlList.last()) 
+               d->bNext->setEnabled(false);   
+           }
+        }
 }
 
 
@@ -908,7 +942,9 @@ void ImageView::slotRemoveCurrentItemfromAlbum()
 {
     KURL currentImage = d->urlCurrent;
 
-    QString warnMsg(i18n("About to delete this Image from current Album\nAre you sure?"));
+    QString warnMsg(i18n("About to delete \"%1\"\nfrom Album\n\"%2\"\nAre you sure?")
+                    .arg(d->urlCurrent.filename())
+                    .arg(d->urlCurrent.path().section('/', -2, -2)));
 
     if (KMessageBox::warningContinueCancel(this,
                                            warnMsg,
@@ -1036,8 +1072,9 @@ void ImageView::slotSave()
     int result = d->canvas->save(tmpFile);
 
     if (result != 1) {
-        KMessageBox::error(this, i18n("Failed to save file:")
-                           + d->urlCurrent.filename());
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                                 .arg(d->urlCurrent.filename())
+                                 .arg(d->urlCurrent.path().section('/', -2, -2)));
          return;
     }
 
@@ -1088,8 +1125,9 @@ void ImageView::slotSaveAs()
      int result = d->canvas->save(tmpFile);
  
      if (result != 1) {
-         KMessageBox::error(this, i18n("Failed to save file:")
-                            + d->urlCurrent.filename());
+         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                                 .arg(d->urlCurrent.filename())
+                                 .arg(d->urlCurrent.path().section('/', -2, -2)));
          return;
      }
      
@@ -1119,10 +1157,13 @@ void ImageView::slotSaveAs()
 
 void ImageView::slotSaveResult(KIO::Job *job)
 {
-    if (job->error()) {
-        job->showErrorDialog(this);
-        return;
-    }
+    if (job->error()) 
+       {
+       job->showErrorDialog(this);
+       return;
+       }
+    
+    loadCurrentItem();
 }
 
 
@@ -1130,10 +1171,11 @@ void ImageView::slotSaveResult(KIO::Job *job)
 
 void ImageView::slotSaveAsResult(KIO::Job *job)
 {
-    if (job->error()) {
-        job->showErrorDialog(this);
-        return;
-    }
+    if (job->error()) 
+       {
+       job->showErrorDialog(this);
+       return;
+       }
 
     // Added new file URL into list if the new file have been added in the current Album
     // and added the comments if exists.

@@ -319,7 +319,7 @@ void CameraUIView::cameraDeletedAllItems()
 
 void CameraUIView::cameraOpenedItem(const QString& fileName)
 {
-    ImageView *imgView = new ImageView(0, KURL(fileName));
+    ImageView *imgView = new ImageView(0, KURL(fileName), true);
     imgView->show();
 }
 

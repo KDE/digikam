@@ -39,18 +39,19 @@ class QCloseEvent;
 class CAction;
 class ImageViewPrivate;
 
-class ImageView : public QWidget {
-
+class ImageView : public QWidget 
+{
     Q_OBJECT
 
 public:
 
     // For a list of items
     ImageView(QWidget* parent, const KURL::List& urlList,
-              const KURL& urlCurrent);
+              const KURL& urlCurrent, bool fromCameraUI=false);
 
     // For a single item
-    ImageView(QWidget* parent, const KURL& urlCurrent);
+    ImageView(QWidget* parent, const KURL& urlCurrent,
+              bool fromCameraUI=false);
     
     ~ImageView();
 
@@ -72,6 +73,10 @@ private:
     ImageViewPrivate *d;
     
     KURL              newFile;
+    bool              fromCameraUIFlag;     // Flag used for limited ImageViewer options 
+                                            // when images are opened from the cameraUI 
+                                            // interface (like 'Image Comments Editor'
+                                            // and 'Remove From Album').
 
 protected:
 
