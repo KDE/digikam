@@ -29,6 +29,7 @@
 
 #include <kmdcodec.h>
 #include <kdebug.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -39,6 +40,12 @@ extern "C"
 }
 
 #include "thumbdb.h"
+
+void digikam_gdbm_fatal_func(char* val)
+{
+    kdWarning() << "GDBM fatal error occured: "
+                << val << endl;
+}
 
 class ThumbDBPriv
 {
@@ -69,7 +76,7 @@ ThumbDB::ThumbDB()
     
     const char* path = encPath; 
     d->db = gdbm_open((char*)path, 0, GDBM_WRCREAT|GDBM_FAST,
-                      0666, 0);
+                      0666, (void (*)()) digikam_gdbm_fatal_func);
      if (!d->db)
          kdWarning() << "Failed to open Thumbnail DB file: " << dbPath << endl;
 }
