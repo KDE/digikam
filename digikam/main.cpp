@@ -178,6 +178,11 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Various usability fixes and general application polishing"),
                           "aseigo at kde.org",
                           0);
+
+    aboutData.addCredit ( "Yves Chaufour",
+                          I18N_NOOP("digiKam website, Feedback"),
+                          "yves dot chaufour at wanadoo.fr",
+                          0);
     
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"),
                             I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
