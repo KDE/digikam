@@ -76,6 +76,10 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
 
     m_downloadSelAction->setEnabled(false);
     m_deleteSelAction->setEnabled(false);
+
+    new KAction(i18n("Camera &Information..."),
+                0, this, SIGNAL(signalCameraInfo()),
+                actionCollection(), "info");
     
     m_cancelAction = new KAction(i18n("Stop"),
                                  "stop",
@@ -134,6 +138,8 @@ QStringList CameraGUIClient::guiDefinition() const
     //guiDef.append("MenuBar/Menu/&Camera/ /Action/delete/ ");
     guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Camera/ /Action/cancel/ ");
+    guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&Camera/ /Action/info/ ");
     guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Camera/ /Action/exit/ ");
     

@@ -134,6 +134,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     connect(d->controller, SIGNAL(signalBusy(bool)),
             SLOT(slotBusy(bool)));
 
+    connect(d->guiClient, SIGNAL(signalCameraInfo()),
+            d->controller, SLOT(slotCameraInfo()));
+    
     connect(d->guiClient, SIGNAL(signalFileProps()),
             this, SLOT(slotFileProperties()));
     connect(d->guiClient, SIGNAL(signalFileExif()),

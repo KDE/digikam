@@ -83,6 +83,7 @@ signals:
 
 public slots:
 
+    void slotCameraInfo();
     void slotCancel();
     
 private slots:
@@ -101,6 +102,7 @@ private slots:
     void slotThumbnails();
 
     void slotExifData(KIO::Job *job, const QByteArray &data);
+    void slotInfoData(KIO::Job *job, const QByteArray &data);
 };
 
 #endif /* CAMERACONTROLLER_H */

@@ -38,6 +38,7 @@
 
 #include "camerathumbjob.h"
 #include "cameradownloaddlg.h"
+#include "camerainfodialog.h"
 #include "cameracontroller.h"
 
 class CameraControllerPriv
@@ -167,6 +168,36 @@ void CameraController::getExif(const KFileItem* item)
     emit signalBusy(true);
 }
 
+void CameraController::slotCameraInfo()
+{
+    slotCancel();
+
+    KURL url;
+    url.setProtocol("digikamcamera");
+    url.setPath("/");
+
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << 4;
+    KIO::TransferJob* job = new KIO::TransferJob(url, KIO::CMD_SPECIAL,
+                                                 ba, QByteArray(), false);
+    KIO::Scheduler::assignJobToSlave(d->slave, job);
+    job->setWindow(d->parent);
+    d->job = job;
+    d->state = ST_INFO;
+
+    connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
+            this, SLOT(slotInfoData(KIO::Job *, const QByteArray &)));
+    connect(job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotResult(KIO::Job*)));
+    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
+            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
+    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
+            SLOT(slotPercent(KIO::Job*, unsigned long)));
+
+    emit signalBusy(true);
+}
+
 void CameraController::slotCancel()
 {
     if (d->job.isNull())
@@ -266,7 +297,7 @@ void CameraController::slotResult(KIO::Job *job)
         }
         else
         {
-            job->showErrorDialog();
+            job->showErrorDialog(d->parent);
         }
         emit signalInfoMessage(i18n("Ready"));
         emit signalBusy(false);
@@ -387,6 +418,24 @@ void CameraController::slotExifData(KIO::Job *job, const QByteArray &data)
     delete [] edata;
 
     exif.exec();
+}
+
+void CameraController::slotInfoData(KIO::Job *, const QByteArray &data)
+{
+    if (data.isEmpty())
+        return;
+
+    QString summary;
+    QString manual;
+    QString about;
+
+    QDataStream ds(data, IO_ReadOnly);
+    ds >> summary;
+    ds >> manual;
+    ds >> about;
+
+    CameraInfoDialog dlg(summary, manual, about);
+    dlg.exec();
 }
 
 #include "cameracontroller.moc"

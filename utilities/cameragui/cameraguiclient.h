@@ -45,6 +45,7 @@ signals:
     void signalDeleteSelected();
     void signalDeleteAll();
     void signalCancel();
+    void signalCameraInfo();
     void signalExit();
 
     void signalFileView();

@@ -114,6 +114,13 @@ void DigikamCamera::closeConnection()
 
 void DigikamCamera::special(const QByteArray &da)
 {
+    /* Commands:
+       1 - initialize camera
+       2 - cancel current operation
+       3 - download item
+       4 - get camera information
+    */
+    
     if (da.size() < 1)
     {
         finished();
@@ -161,6 +168,26 @@ void DigikamCamera::special(const QByteArray &da)
         
         if (m_camera->downloadItem(folder, name, dest) != GPCamera::GPSuccess)
             error(KIO::ERR_UNKNOWN, i18n("Failed to download file %1").arg(name));
+    }
+    else if (cmd == 4)
+    {
+        infoMessage(i18n("Retrieving Camera Information..."));
+
+        QString summary;
+        QString manual;
+        QString about;
+
+        m_camera->cameraSummary(summary);
+        m_camera->cameraManual(manual);
+        m_camera->cameraAbout(about);
+
+        QByteArray ba;
+        QDataStream ds(ba, IO_WriteOnly);
+        ds << summary;
+        ds << manual;
+        ds << about;
+
+        data(ba);
     }
     else
     {
@@ -238,7 +265,7 @@ void DigikamCamera::get(const KURL& url )
 
         if (!edata || !esize)
         {
-            error(KIO::ERR_COULD_NOT_STAT,
+            error(KIO::ERR_DOES_NOT_EXIST,
                   i18n("Failed to get exif information for %1")
                   .arg(url.prettyURL()));
         }
@@ -310,7 +337,7 @@ void DigikamCamera::stat(const KURL& url)
 
 void DigikamCamera::slotErrorMsg(const QString& msg)
 {
-    warning(msg);
+    error(KIO::ERR_UNKNOWN, msg);
 }
 
 void DigikamCamera::slotInfoMsg(const QString& msg)
