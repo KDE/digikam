@@ -71,6 +71,7 @@ private:
                          const QString& name,
                          const QDate& date,
                          QString& errMsg);
+    void addFileExtension(const QString& ext);
     
     CameraIconView*   m_view;
 
@@ -129,7 +130,9 @@ private slots:
     void slotToggleAdvanced();
     
 signals:
+    
     void signalLastDestination(const KURL&);
+    void signalAlbumSettingsChanged();
 };
 
 #endif /* CAMERAUI_H */

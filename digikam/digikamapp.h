@@ -59,7 +59,6 @@ class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
-class Setup;
 
 class DigikamApp : public KMainWindow
 {
@@ -113,7 +112,6 @@ private:
     QPtrList<KAction>      m_kipiAlbumActions;
 
     KConfig               *m_config;    
-    Setup                 *m_setup;
     
     DigikamView           *mView;
     CameraList            *mCameraList;

@@ -47,7 +47,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                    name, true, true )
 {
-    setWFlags(Qt::WDestructiveClose);
     setHelp("setupdialog.anchor", "digikam");
 
     page_general = addPage(i18n("Albums"), i18n("Albums"),

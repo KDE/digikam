@@ -642,6 +642,8 @@ void DigikamApp::slotCameraConnect()
         cgui->show();
         connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
                 mView, SLOT(slotSelectAlbum(const KURL&)));
+        connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+                SLOT(slotSetupChanged()));
     }
 }
 
@@ -678,39 +680,42 @@ void DigikamApp::slotCameraAutoDetect()
 
 void DigikamApp::slotSetup()
 {
-    m_setup = new Setup;
-
-    connect(m_setup, SIGNAL(okClicked()),
-            this,  SLOT(slotSetupChanged()));
+    Setup setup(this);
 
     // For to show the number of KIPI plugins in the setup dialog.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
-    m_setup->pluginsPage_->initPlugins((int)list.count());
+    setup.pluginsPage_->initPlugins((int)list.count());
 
-    m_setup->show();
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    setup.pluginsPage_->applyPlugins();
+    m_ImagePluginsLoader->loadPluginsFromList(setup.editorPage_->getImagePluginsListEnable());
+
+    slotSetupChanged();
 }
 
 void DigikamApp::slotSetupCamera()
 {
-    m_setup = new Setup(this, 0, Setup::Camera);
-
-    connect(m_setup, SIGNAL(okClicked()),
-            this,  SLOT(slotSetupChanged()));
+    Setup setup(this, 0, Setup::Camera);
 
     // For to show the number of KIPI plugins in the setup dialog.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
-    m_setup->pluginsPage_->initPlugins((int)list.count());
+    setup.pluginsPage_->initPlugins((int)list.count());
 
-    m_setup->show();
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    setup.pluginsPage_->applyPlugins();
+    m_ImagePluginsLoader->loadPluginsFromList(setup.editorPage_->getImagePluginsListEnable());
+
+    slotSetupChanged();
 }
 
 void DigikamApp::slotSetupChanged()
 {
-    m_setup->pluginsPage_->applyPlugins();
-    m_ImagePluginsLoader->loadPluginsFromList(m_setup->editorPage_->getImagePluginsListEnable());
-
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();

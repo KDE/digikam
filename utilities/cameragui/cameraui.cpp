@@ -35,6 +35,7 @@
 #include <qprogressbar.h>
 #include <qtimer.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 
 #include <kmessagebox.h>
 #include <kglobal.h>
@@ -59,6 +60,7 @@ extern "C"
 }
 
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "album.h"
 #include "dirselectdialog.h"
 #include "renamecustomizer.h"
@@ -479,6 +481,7 @@ void CameraUI::slotDownload(bool onlySelected)
             u.addPath(downloadName.isEmpty() ? name : downloadName);
         }
         m_controller->download(folder, name, u.path(), autoRotate);
+        addFileExtension(QFileInfo(u.path()).extension(false));
         total++;
     }
 
@@ -689,6 +692,23 @@ bool CameraUI::createAutoAlbum(const KURL& parentURL,
 
     return aman->createPAlbum(parent, name, QString(""),
                               date, QString(""), errMsg);
+}
+
+void CameraUI::addFileExtension(const QString& ext)
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+
+    if (settings->getImageFileFilter().contains(ext) ||
+        settings->getMovieFileFilter().contains(ext) ||
+        settings->getAudioFileFilter().contains(ext) ||
+        settings->getRawFileFilter().contains(ext))
+        return;
+
+    settings->setImageFileFilter(settings->getImageFileFilter() +
+                                 QString(" *.") + ext);
+    emit signalAlbumSettingsChanged();
 }
 
 #include "cameraui.moc"
