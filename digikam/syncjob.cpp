@@ -150,10 +150,10 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
                                               const KFileMetaInfo*)));
         connect(job,
                 SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotLoadThumbnailFailed(const KURL&)));
+                SLOT(slotLoadThumbnailFailed()));
         connect(job,
                 SIGNAL(signalStatFailed(const KURL&, bool )),
-                SLOT(slotStatThumbnailFailed(const KURL&, bool)));
+                SLOT(slotLoadThumbnailFailed()));
 
                                 
         enter_loop();
@@ -168,12 +168,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     return *thumbnail_;
 }
 
-void SyncJob::slotLoadThumbnailFailed(const KURL&)
-{
-    qApp->exit_loop();
-}
-
-void SyncJob::slotStatThumbnailFailed(const KURL&, bool isDir)
+void SyncJob::slotLoadThumbnailFailed()
 {
     qApp->exit_loop();
 }

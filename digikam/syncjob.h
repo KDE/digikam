@@ -88,8 +88,7 @@ private slots:
     void slotResult( KIO::Job * job );
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix,
                                   const KFileMetaInfo*);
-    void slotLoadThumbnailFailed(const KURL&);
-    void slotStatThumbnailFailed(const KURL&, bool);
+    void slotLoadThumbnailFailed();
 };
 
 #endif /* SYNCJOB_H */
