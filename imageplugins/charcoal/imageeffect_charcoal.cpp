@@ -74,7 +74,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Charcoal"), 
+                                       I18N_NOOP("Charcoal drawing"), 
                                        "0.7.0-cvs",
                                        I18N_NOOP("A charcoal drawing image effect plugin for Digikam."),
                                        KAboutData::License_GPL,
@@ -88,7 +88,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Charcoal handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Charcoal drawing handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
