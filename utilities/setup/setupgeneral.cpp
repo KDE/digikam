@@ -123,15 +123,18 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    
    // --------------------------------------------------------
 
-   QGroupBox *iconCommentsGroup = new QGroupBox(1,
+   QGroupBox *iconExifGroup = new QGroupBox(1,
                                             Qt::Horizontal, 
-                                            i18n("Comments"),
+                                            i18n("EXIF"),
                                             parent);
 
-   iconSaveExifBox_ = new QCheckBox(iconCommentsGroup);
+   iconSaveExifBox_ = new QCheckBox(iconExifGroup);
    iconSaveExifBox_->setText(i18n("Save comments as EXIF Comments in Jpeg images"));
 
-   layout->addWidget(iconCommentsGroup);
+   iconExifRotateBox_ = new QCheckBox(iconExifGroup);
+   iconExifRotateBox_->setText(i18n("Rotate images and thumbnails according to EXIF tag"));
+
+   layout->addWidget(iconExifGroup);
 
    // --------------------------------------------------------
 
@@ -170,6 +173,7 @@ void SetupGeneral::applySettings()
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
     settings->setIconShowFileComments(iconShowFileCommentsBox_->isChecked());
     settings->setSaveExifComments(iconSaveExifBox_->isChecked());
+    settings->setExifRotate(iconExifRotateBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -206,6 +210,7 @@ void SetupGeneral::readSettings()
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
     iconShowFileCommentsBox_->setChecked(settings->getIconShowFileComments());
     iconSaveExifBox_->setChecked(settings->getSaveExifComments());
+    iconExifRotateBox_->setChecked(settings->getExifRotate());
 }
 
 void SetupGeneral::slotChangeAlbumPath()

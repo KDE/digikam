@@ -58,6 +58,7 @@ public:
     bool iconShowFileComments;
     bool iconShowResolution;
     bool saveExifComments;
+    bool exifRotate;
 
 };
 
@@ -187,6 +188,11 @@ void AlbumSettings::readSettings()
         d->saveExifComments =
             config->readBoolEntry("Save EXIF Comments",
                                   true);
+    
+    if (config->hasKey("EXIF Rotate"))
+        d->exifRotate =
+            config->readBoolEntry("EXIF Rotate",
+                                  true);
 }
 
 void AlbumSettings::saveSettings()
@@ -230,6 +236,8 @@ void AlbumSettings::saveSettings()
                        d->iconShowFileComments);
     config->writeEntry("Save EXIF Comments",
                        d->saveExifComments);
+    config->writeEntry("EXIF Rotate",
+                       d->exifRotate);
     config->sync();
 
 }
@@ -379,6 +387,16 @@ void AlbumSettings::setSaveExifComments(bool val)
 bool AlbumSettings::getSaveExifComments() const
 {
     return d->saveExifComments;
+}
+
+void AlbumSettings::setExifRotate(bool val)
+{
+    d->exifRotate = val;
+}
+
+bool AlbumSettings::getExifRotate() const
+{
+    return d->exifRotate;
 }
 
 void AlbumSettings::setIconShowDate(bool val)

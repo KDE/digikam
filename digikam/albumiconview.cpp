@@ -515,7 +515,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
         QString fileName(iconItem->fileItem()->url().path());
         KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
 
-        if(metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg" && settings->getSaveExifComments())
+        if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
         {
             // set Jpeg comment
             if (metaInfo.containsGroup("Jpeg EXIF Data"))
@@ -1081,10 +1081,21 @@ void AlbumIconView::refreshItems(const QStringList& itemList)
 
 void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
-    ThumbItem *item = findItem(url.filename());
-    if (!item) return;
-    AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(item);
-    iconItem->setPixmap(pix);
+   AlbumSettings *settings = AlbumSettings::instance();
+
+   if (!settings) return;
+
+   ThumbItem *item = findItem(url.filename());
+   if (!item) return;
+   AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(item);
+
+   if(settings->getExifRotate()) {
+      QPixmap rotPix(pix);
+      exifRotate(url.path(), rotPix);
+      iconItem->setPixmap(rotPix);
+   } else {
+      iconItem->setPixmap(pix);
+   }
 }
 
 // If we failed to generate a thumbnail using our thumbnail generator
@@ -1134,6 +1145,63 @@ void AlbumIconView::slotSelectionChanged()
 bool AlbumIconView::eventFilter(QObject *obj, QEvent *ev)
 {
     return ThumbView::eventFilter(obj, ev);    
+}
+
+
+void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
+{
+   // Rotate image based on EXIF rotate tag
+    QWMatrix matrix;
+
+    KExifData *exifData = new KExifData;
+
+    if(!exifData->readFromFile(filename)) return;
+
+    KExifData::ImageOrientation orientation = exifData->getImageOrientation();
+
+    bool doXform = (orientation != KExifData::NORMAL);
+
+    switch (orientation) {
+       case KExifData::NORMAL:
+          break;
+
+       case KExifData::HFLIP:
+          matrix.scale(-1,1);
+          break;
+
+       case KExifData::ROT_180:
+          matrix.rotate(180);
+          break;
+
+       case KExifData::VFlip:
+          matrix.scale(1,-1);
+          break;
+
+       case KExifData::ROT_90_HFLIP:
+          matrix.scale(-1,1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90:
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90_VFLIP:
+          matrix.scale(1,-1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_270:
+          matrix.rotate(270);
+          break;
+    }
+
+    //transform accordingly
+    if ( doXform )
+       pixmap = pixmap.xForm( matrix );
+
+    delete exifData;
+
 }
 
 

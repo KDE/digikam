@@ -90,6 +90,9 @@ public:
     void setSaveExifComments(bool val);
     bool getSaveExifComments() const;
 
+    void setExifRotate(bool val);
+    bool getExifRotate() const;
+
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 

@@ -60,6 +60,7 @@ private:
     QCheckBox    *iconShowCommentsBox_;
     QCheckBox    *iconShowFileCommentsBox_;
     QCheckBox    *iconSaveExifBox_;
+    QCheckBox    *iconExifRotateBox_;
     
 private slots:
 
