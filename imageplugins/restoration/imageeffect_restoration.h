@@ -37,6 +37,7 @@ class QCheckBox;
 class QTimer;
 class QComboBox;
 class QCustomEvent;
+class QTabWidget;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -110,7 +111,9 @@ private:
     QLabel          *m_angularStepLabel;
     QLabel          *m_integralStepLabel;
     QLabel          *m_gaussianLabel;
-    
+
+    QTabWidget      *m_mainTab;        
+            
     // Preset Settings.
     QComboBox       *m_restorationTypeCB;  
     

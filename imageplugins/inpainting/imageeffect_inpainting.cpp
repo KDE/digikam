@@ -198,11 +198,11 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     // -------------------------------------------------------------
     
     QVBoxLayout *vlay = new QVBoxLayout(topLayout);
-    QTabWidget* mainTab = new QTabWidget( plainPage() );
+    m_mainTab = new QTabWidget( plainPage() );
     
-    QWidget* firstPage = new QWidget( mainTab );
+    QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
-    mainTab->addTab( firstPage, i18n("Preset") );
+    m_mainTab->addTab( firstPage, i18n("Preset") );
 
     QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -228,9 +228,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     // -------------------------------------------------------------
     
     
-    QWidget* secondPage = new QWidget( mainTab );
+    QWidget* secondPage = new QWidget( m_mainTab );
     QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
-    mainTab->addTab( secondPage, i18n("Smoothing") );
+    m_mainTab->addTab( secondPage, i18n("Smoothing") );
     
     m_detailLabel = new QLabel(i18n("Detail Preservation:"), secondPage);
     m_detailLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -282,9 +282,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QWidget* thirdPage = new QWidget( mainTab );
+    QWidget* thirdPage = new QWidget( m_mainTab );
     QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, marginHint(), spacingHint());
-    mainTab->addTab( thirdPage, i18n("Advanced Settings") );
+    m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
     
     m_angularStepLabel = new QLabel(i18n("Angular Step:"), thirdPage);
     m_angularStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -321,7 +321,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
     
-    vlay->addWidget(mainTab);
+    vlay->addWidget(m_mainTab);
     
     // -------------------------------------------------------------
     
@@ -447,7 +447,8 @@ void ImageEffect_InPainting_Dialog::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
-
+    m_mainTab->setCurrentPage(0);
+    
     m_parent->setCursor( KCursor::waitCursor() );
     m_progressBar->setValue(0);
 

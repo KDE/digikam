@@ -38,6 +38,7 @@ class QCheckBox;
 class QTimer;
 class QCustomEvent;
 class QComboBox;
+class QTabWidget;
 
 class KDoubleNumInput;
 class KProgress;
@@ -129,6 +130,8 @@ private:
     
     QCheckBox       *m_linearInterpolationBox;
     QCheckBox       *m_normalizeBox;
+    
+    QTabWidget      *m_mainTab;
     
     KProgress       *m_progressBar;
     
