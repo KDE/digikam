@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="digikam" >
- 
+<kpartgui version="4" name="digikam" >
+
  <MenuBar>
-  
+
   <Menu name="Album" >
    <text>&amp;Album</text>
      <Action name="album_new" />
@@ -17,7 +17,7 @@
       </Menu>
       <Menu name="Export"><text>&amp;Export</text>
          <ActionList name="file_actions_export"/>
-      </Menu>         
+      </Menu>
    <Separator/>
      <Action name="album_remove" />
      <Action name="album_delete" />
@@ -31,7 +31,7 @@
      <Action name="tag_edit" />
      <Action name="tag_delete" />
   </Menu>
-  
+
   <Menu name="Image" >
    <text>&amp;Image</text>
      <Action name="image_view" />
@@ -45,14 +45,14 @@
      <Action name="image_rename" />
      <Action name="image_delete" />
   </Menu>
-  
+
   <Menu name="select" >
-   <text>&amp;Select</text>
+   <text>Se&amp;lect</text>
      <Action name="selectAll" />
      <Action name="selectNone" />
      <Action name="selectInvert" />
   </Menu>
-  
+
   <Menu name="View" >
    <text>&amp;View</text>
      <Action name="album_thumbSizeIncrease" />
@@ -61,49 +61,50 @@
      <Action name="album_sort" />
      <Action name="image_sort" />
   </Menu>
-  
-  <Menu name="Tools"><text>Too&amp;ls</text>
+
+  <Menu name="Tools"><text>&amp;Tools</text>
       <ActionList name="album_actions"/>
-   <Separator/>
-    <Action name="gamma_adjustment" />
-    <ActionList name="tool_actions"/>
-    <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
-       <ActionList name="batch_actions"/>
-    </Menu>
+      <Separator/>
+      <Action name="gamma_adjustment" />
+      <ActionList name="tool_actions"/>
+      <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
+        <ActionList name="batch_actions"/>
+      </Menu>
   </Menu>
-  
+
+  <Action name="camera_menu" />
+
+  <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
+     <Action name="options_show_toolbar"/>
+     <Merge name="StandardToolBarMenuHandler" />
+     <Separator/>
+     <Action name="full_screen" />
+     <Separator/>
+     <Action name="theme_menu" />
+     <Action name="options_configure_keybinding"/>
+     <Action name="options_configure_toolbars"/>
+     <Action name="options_configure"/>
+  </Menu>
+
   <Menu name="help"><Text>&amp;Help</Text>
     <Action name="help_kipi"/>
     <Action name="help_tipofday"/>
   </Menu>
-  
-  <Action name="camera_menu" />
-
-  <Menu name="settings" >
-     <Action name="theme_menu" />
-     <Separator/>
-     <Action name="full_screen" />
-  </Menu>
 
   <Merge/>
- 
+
  </MenuBar>
- 
+
  <ToolBar noMerge="1" name="ToolBar" >
   <text>Main Toolbar</text>
   <Action name="album_new" />
   <Action name="album_addImages" />
   <Action name="album_propsEdit" />
   <Separator/>
-  <Action name="album_sort" />
-  <Separator/>
   <Action name="image_view" />
   <Action name="image_comments" />
   <Action name="image_view_exif" />
   <Action name="image_rename" />
-  <Separator/>
-  <Action name="image_sort_label" />  
-  <Action name="image_sort" />  
   <Separator/>
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
