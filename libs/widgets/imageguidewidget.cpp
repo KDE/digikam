@@ -174,8 +174,10 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        {    
        m_freeze = !m_freeze;
        m_focus = false;
-       emit spotColorChanged( getSpotColor() );
        emit spotPositionChanged( getSpotPosition() );
+       
+       if (m_freeze) 
+          emit spotColorChanged( getSpotColor() );
        }
 }
 
