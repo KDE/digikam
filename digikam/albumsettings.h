@@ -119,6 +119,9 @@ public:
     void setRecurseTags(bool val);
     bool getRecurseTags() const;
 
+    void setShowToolTips(bool val);
+    bool getShowToolTips() const;
+    
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
     

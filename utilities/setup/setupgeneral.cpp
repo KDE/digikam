@@ -77,6 +77,16 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
+   QVGroupBox *tipSettingBox = new QVGroupBox(parent);
+   tipSettingBox->setTitle(i18n("ToolTips Settings"));
+
+   showToolTipsBox_ = new QCheckBox(tipSettingBox);
+   showToolTipsBox_->setText(i18n("Show Tooltips for Items"));
+   
+   layout->addWidget(tipSettingBox);
+
+   // --------------------------------------------------------
+
    QVGroupBox *tagSettingBox = new QVGroupBox(parent);
    tagSettingBox->setTitle(i18n("Tag Settings"));
 
@@ -86,6 +96,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    
    layout->addWidget(tagSettingBox);
 
+   
    // --------------------------------------------------------
 
    QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal, 
@@ -170,6 +181,7 @@ void SetupGeneral::applySettings()
     
     settings->setDefaultIconSize(iconSize);
     settings->setRecurseTags(recurseTagsBox_->isChecked());
+    settings->setShowToolTips(showToolTipsBox_->isChecked());
         
     settings->setIconShowName(iconShowNameBox_->isChecked());
     settings->setIconShowTags(iconShowTagsBox_->isChecked());
@@ -209,6 +221,7 @@ void SetupGeneral::readSettings()
     }
 
     recurseTagsBox_->setChecked(settings->getRecurseTags());
+    showToolTipsBox_->setChecked(settings->getShowToolTips());
     
     iconShowNameBox_->setChecked(settings->getIconShowName());
     iconShowTagsBox_->setChecked(settings->getIconShowTags());

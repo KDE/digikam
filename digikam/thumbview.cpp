@@ -337,8 +337,11 @@ void ThumbView::sort()
 void ThumbView::setEnableToolTips(bool val)
 {
     viewport()->setMouseTracking(val);
-    if (!val)
+    if (!val) {
+        d->toolTipItem = 0;
         d->toolTipTimer->stop();
+        slotToolTip();
+    }
 }
 
 void ThumbView::slotToolTip()

@@ -165,7 +165,7 @@ void AlbumFileTip::updateText()
            dateToString(date) + cellEnd;
            
     tip += cellBeg + i18n("Size:") + cellMid;
-    tip += QString::number(fi->size()) + QString(" bytes") + cellEnd;
+    tip += i18n("%1 bytes").arg(fi->size()) + cellEnd;
 
     tip += cellBeg + i18n("Owner:") + cellMid +
            fi->user() + QString(" - ") + fi->group() + cellEnd;
@@ -175,7 +175,7 @@ void AlbumFileTip::updateText()
 
     // Digikam properties  ------------------------------------------
 
-    tip += headBeg + QString("DigiKam properties") + headEnd;
+    tip += headBeg + i18n("%1 properties").arg("DigiKam") + headEnd;
 
     PAlbum* album = m_view->albumLister()->findParentAlbum(fi);
     if (album)
@@ -229,7 +229,7 @@ void AlbumFileTip::updateText()
 
     if (!metaStr.isEmpty())
     {
-        tip += headBeg + QString("Meta Information") + headEnd;
+        tip += headBeg + i18n("Meta Information") + headEnd;
         tip += metaStr;
     }
     

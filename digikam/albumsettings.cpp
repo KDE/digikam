@@ -55,6 +55,7 @@ public:
     AlbumSettings::ImageSortOrder  imageSortOrder;
 
     bool recurseTags;
+    bool showToolTips;
     
     bool iconShowName;
     bool iconShowSize;
@@ -117,6 +118,7 @@ void AlbumSettings::init()
     d->thumbnailSize = ThumbnailSize::Medium;
 
     d->recurseTags  = false;
+    d->showToolTips = true;
     
     d->iconShowName = false;
     d->iconShowSize = true;
@@ -169,6 +171,8 @@ void AlbumSettings::readSettings()
                              ThumbnailSize::Medium);
 
     d->recurseTags   = config->readBoolEntry("Recurse Tags", false);
+
+    d->showToolTips   = config->readBoolEntry("Show ToolTips", true);
     
     d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
 
@@ -237,6 +241,8 @@ void AlbumSettings::saveSettings()
                        QString::number(d->thumbnailSize));
 
     config->writeEntry("Recurse Tags", d->recurseTags);
+
+    config->writeEntry("Show ToolTips", d->showToolTips);
     
     config->writeEntry("Icon Show Name",
                        d->iconShowName);
@@ -488,6 +494,16 @@ void AlbumSettings::setRecurseTags(bool val)
 bool AlbumSettings::getRecurseTags() const
 {
     return d->recurseTags;
+}
+
+void AlbumSettings::setShowToolTips(bool val)
+{
+    d->showToolTips = val;
+}
+
+bool AlbumSettings::getShowToolTips() const
+{
+    return d->showToolTips;
 }
 
 void AlbumSettings::setCurrentTheme(const QString& theme)

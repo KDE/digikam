@@ -237,6 +237,8 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
 
     d->thumbSize = (ThumbnailSize::Size)d->albumSettings->getDefaultIconSize(); 
 
+    setEnableToolTips(d->albumSettings->getShowToolTips());
+    
     updateItemRectsPixmap();
 
     if (!d->thumbJob.isNull())
