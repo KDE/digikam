@@ -295,7 +295,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const QColor &, bool ))); 
     
     // -------------------------------------------------------------

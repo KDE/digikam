@@ -258,7 +258,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
                                                           Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
-                                                 "gains adjustments preview."));
+                                                 "gains adjustments preview. You can pick color on image "
+                                                 "to see the color level corresponding on histogram."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
     topLayout->addMultiCellWidget(gbox4, 1, 2, 1, 1);
@@ -279,7 +280,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewTargetWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+    connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const QColor &, bool, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const QColor & ))); 
                         
     // -------------------------------------------------------------

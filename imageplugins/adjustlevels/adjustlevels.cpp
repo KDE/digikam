@@ -332,7 +332,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
             
-    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const QColor &, bool )));             
 
     // -------------------------------------------------------------
