@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 SUBDIRS = patterns
 
-INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
+INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
 # Install this plugin in the KDE modules directory
