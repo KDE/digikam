@@ -38,7 +38,7 @@
 #include "imageplugin_despeckle.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_despeckle,
-                            KGenericFactory<ImagePlugin_Despeckle>("digikam"));
+                            KGenericFactory<ImagePlugin_Despeckle>("digikamimageplugin_despeckle"));
 
 ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
                                              const QStringList &)
@@ -46,7 +46,7 @@ ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
 {
     new KAction(i18n("Noise reduction..."), 0, 
                 this, SLOT(slotDespeckle()),
-                actionCollection(), "implugcore_despeckle");
+                actionCollection(), "imageplugin_despeckle");
 
     kdDebug() << "ImagePlugin_Despeckle plugin loaded" << endl;
 }
@@ -58,7 +58,7 @@ ImagePlugin_Despeckle::~ImagePlugin_Despeckle()
 QStringList ImagePlugin_Despeckle::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_despeckle/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_despeckle/ ");
     return guiDef;
 }
 

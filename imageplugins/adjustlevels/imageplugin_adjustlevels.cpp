@@ -38,7 +38,7 @@
 #include "imageplugin_adjustlevels.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
-                            KGenericFactory<ImagePlugin_AdjustLevels>("digikam"));
+                            KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"));
 
 ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
@@ -46,7 +46,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
 {
     new KAction(i18n("Levels adjust..."), 0, 
                 this, SLOT(slotLevelsAdjust()),
-                actionCollection(), "implugcore_levelsadjust");
+                actionCollection(), "imageplugin_adjustlevels");
 
     kdDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
 }
@@ -58,7 +58,7 @@ ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()
 QStringList ImagePlugin_AdjustLevels::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_levelsadjust/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/imageplugin_adjustlevels/ ");
     return guiDef;
 }
 

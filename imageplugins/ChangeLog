@@ -1,8 +1,9 @@
 v0.6.0 - 09/01/04
 ----------------------------------------------------------------------------
-    * Using QSlider/QSpinbox instead KIntNumInput an d KDoubleNumInput for 
-      Despeckle and Unsharped mask plugins : solving a problem with the preview 
-      calculation when the sliders are moved.
+    * Fixed internationalization problem (bad localization files name).
+    * Using QSlider/QSpinbox instead KIntNumInput and KDoubleNumInput for 
+      Despeckle, Unsharped mask, Charcoal, OilPaint, and Emboss plugins : 
+      solving a problem with the preview calculation when the sliders are moved.
     
 v0.5.0 - 08/27/04
 ----------------------------------------------------------------------------

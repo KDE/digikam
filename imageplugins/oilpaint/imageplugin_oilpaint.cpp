@@ -34,7 +34,7 @@
 #include "imageplugin_oilpaint.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_oilpaint,
-                            KGenericFactory<ImagePlugin_OilPaint>("digikam"));
+                            KGenericFactory<ImagePlugin_OilPaint>("digikamimageplugin_oilpaint"));
 
 ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
                                                    const QStringList &)
@@ -42,7 +42,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
 {
     new KAction(i18n("Oil paint..."), 0, 
                 this, SLOT(slotOilPaint()),
-                actionCollection(), "implugcore_oilpaint");
+                actionCollection(), "imageplugin_oilpaint");
                 
     
     kdDebug() << "ImagePlugin_OilPaint plugin loaded" << endl;
@@ -55,7 +55,7 @@ ImagePlugin_OilPaint::~ImagePlugin_OilPaint()
 QStringList ImagePlugin_OilPaint::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_oilpaint/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_oilpaint/ ");
     return guiDef;
 }
 

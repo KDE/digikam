@@ -34,7 +34,7 @@
 #include "imageplugin_emboss.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_emboss,
-                            KGenericFactory<ImagePlugin_Emboss>("digikam"));
+                            KGenericFactory<ImagePlugin_Emboss>("digikamimageplugin_emboss"));
 
 ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
                                                    const QStringList &)
@@ -42,7 +42,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
 {
     new KAction(i18n("Emboss..."), 0, 
                 this, SLOT(slotEmboss()),
-                actionCollection(), "implugcore_emboss");
+                actionCollection(), "imageplugin_emboss");
                 
     
     kdDebug() << "ImagePlugin_Emboss plugin loaded" << endl;
@@ -55,7 +55,7 @@ ImagePlugin_Emboss::~ImagePlugin_Emboss()
 QStringList ImagePlugin_Emboss::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_emboss/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_emboss/ ");
     return guiDef;
 }
 

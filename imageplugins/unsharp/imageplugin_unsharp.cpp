@@ -38,7 +38,7 @@
 #include "imageplugin_unsharp.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_unsharp,
-                            KGenericFactory<ImagePlugin_Unsharp>("digikam"));
+                            KGenericFactory<ImagePlugin_Unsharp>("digikamimageplugin_unsharp"));
 
 ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
                                              const QStringList &)
@@ -46,7 +46,7 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
 {
     new KAction(i18n("Unsharped mask..."), 0, 
                 this, SLOT(slotUnsharp()),
-                actionCollection(), "implugcore_unsharp");
+                actionCollection(), "imageplugin_unsharp");
 
     kdDebug() << "ImagePlugin_Unsharp plugin loaded" << endl;
 }
@@ -58,7 +58,7 @@ ImagePlugin_Unsharp::~ImagePlugin_Unsharp()
 QStringList ImagePlugin_Unsharp::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_unsharp/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_unsharp/ ");
     return guiDef;
 }
 

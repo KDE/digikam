@@ -34,7 +34,7 @@
 #include "imageplugin_charcoal.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_charcoal,
-                            KGenericFactory<ImagePlugin_Charcoal>("digikam"));
+                            KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
 
 ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
                                                    const QStringList &)
@@ -42,7 +42,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
 {
     new KAction(i18n("Charcoal drawing..."), 0, 
                 this, SLOT(slotCharcoal()),
-                actionCollection(), "implugcore_charcoal");
+                actionCollection(), "imageplugin_charcoal");
                 
     
     kdDebug() << "ImagePlugin_Charcoal plugin loaded" << endl;
@@ -55,7 +55,7 @@ ImagePlugin_Charcoal::~ImagePlugin_Charcoal()
 QStringList ImagePlugin_Charcoal::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_charcoal/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_charcoal/ ");
     return guiDef;
 }
 

@@ -34,7 +34,7 @@
 #include "imageplugin_solarize.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_solarize,
-                            KGenericFactory<ImagePlugin_Solarize>("digikam"));
+                            KGenericFactory<ImagePlugin_Solarize>("digikamimageplugin_solarize"));
 
 ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                                                    const QStringList &)
@@ -42,7 +42,7 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
 {
     new KAction(i18n("Solarize Image..."), 0, 
                 this, SLOT(slotSolarize()),
-                actionCollection(), "implugcore_solarize");
+                actionCollection(), "imageplugin_solarize");
                 
     
     kdDebug() << "ImagePlugin_Solarize plugin loaded" << endl;
@@ -55,7 +55,7 @@ ImagePlugin_Solarize::~ImagePlugin_Solarize()
 QStringList ImagePlugin_Solarize::guiDefinition() const
 {
     QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_solarize/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_solarize/ ");
     return guiDef;
 }
 
