@@ -27,6 +27,10 @@
 
 #include <qwidget.h>
 
+// Includes files for plugins support.
+
+#include <libkipi/pluginloader.h>
+
 class KListView;
 class QLabel;
 
@@ -40,11 +44,14 @@ public:
     ~SetupPlugins();
 
     void initPlugins(int kipiPluginsNumber);
+    void applyPlugins();
 
 private:
     
-    QLabel*    m_pluginsNumber;
-    KListView* m_pluginList;
+    QLabel*             m_pluginsNumber;
+    KListView*          m_pluginList;
+    KIPI::ConfigWidget* m_Kipiconfig;
 };
 
 #endif // SETUPPLUGINS_H 
+

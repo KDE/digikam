@@ -39,10 +39,6 @@
 #include <kdialog.h>
 #include <klistview.h>
 
-// Includes files for plugins support.
-
-#include <libkipi/pluginloader.h>
-
 // Local includes.
 
 #include "setupplugins.h"
@@ -59,9 +55,9 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    QString pluginsListHelp = i18n("<p>Here you can see the list of plugins who can be "
                                   "loaded or unloaded from the current Digikam instance.");
 
-   KIPI::ConfigWidget* Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
-   QWhatsThis::add( Kipiconfig, pluginsListHelp);
-   layout->addWidget( Kipiconfig );
+   m_Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
+   QWhatsThis::add( m_Kipiconfig, pluginsListHelp);
+   layout->addWidget( m_Kipiconfig );
 }
 
 SetupPlugins::~SetupPlugins()
@@ -71,6 +67,11 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::initPlugins(int kipiPluginsNumber)
 {
     m_pluginsNumber->setText(i18n("KIPI plugins found: %1").arg(kipiPluginsNumber));   
+}
+
+void SetupPlugins::applyPlugins()
+{
+    m_Kipiconfig->apply();
 }
 
 

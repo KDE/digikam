@@ -86,9 +86,5 @@
   <Action name="album_thumbSizeDecrease" />
   <Action name="full_screen" />
  </ToolBar>
-  <ToolBar noMerge="1" name="KIPIBatchProcessesBar" >
-  <text>KIPI Batch Processes Toolbar</text>
-  <ActionList name="batch_actions"/>
- </ToolBar>
  <ActionProperties/>
 </kpartgui>

@@ -434,6 +434,8 @@ void DigikamApp::slotSetup()
     connect(m_setup, SIGNAL(okClicked()),
             this,  SLOT(slotSetupChanged()));
     
+    // For to show the number of KIPI plugins in the setup dialog.
+                
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     m_setup->pluginsPage_->initPlugins((int)list.count());
     
@@ -442,7 +444,7 @@ void DigikamApp::slotSetup()
 
 void DigikamApp::slotSetupChanged()
 {
-    KipiPluginLoader_->loadPlugins();  
+    m_setup->pluginsPage_->applyPlugins();
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     m_config->sync();

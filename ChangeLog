@@ -5,7 +5,7 @@ v0.6.3-beta1
         * <Gilles Caulier> Added a new option in general setup for to show the 
           images resolution of Album items (using imlib2).
         * <Gilles Caulier> Added Exif actions settings tabs in Settings dialog.
-        * <Gilles Caulier> Added a new option in .configure for KIPI support.
+        * <Gilles Caulier> KIPI plugins can be loaded/unloaded dynamicly.
         * <Ralf Holzer> Moved KExif into a separate library in kextragear-libs-1
         * <Ralf Holzer> Added rotation of thumbnails according to EXIF Orientation 
         * <Ralf Holzer> Added saving of EXIF orientation on flip/rotate in imageviewer
@@ -14,8 +14,7 @@ v0.6.3-beta1
         * <Gilles Caulier> Added Albums Collections and plugins management 
           Settings tabs in Settings dialog.
         * <Gilles Caulier> New Settings dialog based on QFrame widget (KDE standard).
-        * <Gilles Caulier> Added plugins management settings 
-          (loaded/unloaded plugins).
+        * <Gilles Caulier> Added plugins management settings.
         * <Gilles Caulier> Added Full Mime type support for images, movies, 
           audio, and RAW files.
         * <Gilles Caulier> Syncing with Sourceforge.net repository.
