@@ -359,8 +359,8 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    int closest_point;
    int distance;
 
-   int x = CLAMP0255( (int)(e->pos().x()*(256.0/(float)width())) );
-   int y = CLAMP0255( (int)(e->pos().y()*(256.0/(float)height())) );
+   int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
+   int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
 
    distance = 65536;
    
@@ -452,8 +452,8 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    int x1, x2, y1, y2;
    int distance;
 
-   int x = CLAMP0255( (int)(e->pos().x()*(256.0/(float)width())) );
-   int y = CLAMP0255( (int)(e->pos().y()*(256.0/(float)height())) );
+   int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
+   int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
 
    distance = 65536;
    

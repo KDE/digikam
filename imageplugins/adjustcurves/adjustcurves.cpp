@@ -184,14 +184,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_typeCB->setCurrentText( i18n("Smooth") );
     QWhatsThis::add( m_typeCB, i18n("<p>Select here the curve type to draw for the current channel."));
 
-    QLabel *label6 = new QLabel(i18n("Position:"), gbox);
-    label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPos = new QLabel(gbox);
     m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
                                      
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
-    grid->addMultiCellWidget(label6, 1, 1, 4, 4);
     grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
     
     QFrame *frame = new QFrame(gbox);
