@@ -1063,16 +1063,7 @@ void AlbumFolderView::slotDoubleClicked(ListItem* item)
 {
      if (!item) return;
 
-     AlbumFolderItem *folderItem
-        = static_cast<AlbumFolderItem *>(item);
-
-     if (folderItem->isGroupItem() || folderItem->album()->isRoot())
-         return;
-
-     if (folderItem->album()->type() == Album::PHYSICAL)
-         albumEdit(dynamic_cast<PAlbum*>(folderItem->album()));
-     else
-         tagEdit(dynamic_cast<TAlbum*>(folderItem->album()));
+     item->setOpen(!item->isOpen());
 }
 
 void AlbumFolderView::slotRightButtonClicked(ListItem* item)
