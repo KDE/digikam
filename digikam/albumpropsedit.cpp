@@ -77,12 +77,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
 
     // --------------------------------------------------------
 
-/*    QGroupBox *titleBox = new QGroupBox( plainPage() );
-    titleBox->setTitle( i18n( "Album Description" ) );
-    titleBox->setColumnLayout( 0, Qt::Horizontal );
-    QGridLayout *titleBoxLayout =
-    new QGridLayout( topLayout, 2, 5, spacingHint() );*/
-
     QLabel *titleLabel = new QLabel( plainPage( ) );
     titleLabel->setText( i18n( "&Title:" ) );
     topLayout->addWidget( titleLabel, 2, 0 );
@@ -116,6 +110,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     datePicker_ = new KDatePicker( plainPage( ) );
     topLayout->addWidget( datePicker_, 5, 1 );
     dateLabel->setBuddy( datePicker_ );
+
+    setTabOrder(titleEdit_, collectionCombo_);
+    setTabOrder(collectionCombo_, commentsEdit_);
+    setTabOrder(commentsEdit_, datePicker_);
+    commentsEdit_->setTabChangesFocus(true);
+    titleEdit_->selectAll();
+    titleEdit_->setFocus();
 
     // Initialize ---------------------------------------------
 
