@@ -57,8 +57,8 @@ dnl Check if Imlib is installed properly
 KDE_FIND_IMLIB_CONFIG
 
 if test -z "$ac_imlib_config"; then
- AC_MSG_ERROR([You need to install Imlib 1.x, e.g. http://freshmeat.net/redir/imlib/4385/url_tgz/imlib-1.9.10.tar.gz if your distributor doesn't have a package])
- exit 1
+  AC_MSG_WARN([Imlib 1.x not found.])
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 fi
 
 #---------------------------------------------------------

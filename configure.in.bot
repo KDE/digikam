@@ -1,0 +1,16 @@
+dnl Put here things to be done at the very end - telling users
+dnl about additional packages to install.
+
+if test -z "$ac_imlib_config"; then
+  echo ""
+  echo "DigiKam needs imlib-config. You need to install Imlib 1.x, e.g. from"
+  echo "http://freshmeat.net/redir/imlib/4385/url_tgz/imlib-1.9.10.tar.gz"
+  echo ""
+fi
+
+if test -z "$GPHOTO_CONFIG" ; then
+  echo ""
+  echo "DigiKam needs gPhoto2. You need to install gPhoto2, e.g. from"
+  echo "http://www.gphoto.org/download.html"
+  echo ""
+fi

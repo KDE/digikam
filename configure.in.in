@@ -21,12 +21,8 @@ if test -n "${GPHOTO_CONFIG}"; then
   LIB_GPHOTO="`$GPHOTO_CONFIG --libs` `$GPHOTO_PORT_CONFIG --libs`"
   AC_SUBST(LIB_GPHOTO)
 else
-  AC_MSG_ERROR([
-***
-*** gPhoto2 is required. Available from gPhoto's Sourceforge CVS.
-*** Check http://www.gphoto.org/download.html for details
-***])
-  exit 1
+  AC_MSG_WARN([gPhoto2 not found.])
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 fi
 
 
