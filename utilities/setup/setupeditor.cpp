@@ -56,15 +56,14 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    m_JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
    m_JPEGcompression->setRange(10, 100, 1, true );
-   m_JPEGcompression->setLabel( i18n("&JPEG compression:"), AlignLeft|AlignVCenter );
+   m_JPEGcompression->setLabel( i18n("&JPEG quality:"), AlignLeft|AlignVCenter );
 
-   QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value for JPEG images:<p>"
-                                            "<b>10</b>: very high compression (low quality but "
-                                            "small file size)<p>"
-                                            "<b>25</b>: high compression <p>"
-                                            "<b>50</b>: medium compression<p>"
-                                            "<b>75</b>: low compression (default)<p>"
-                                            "<b>100</b>: no compression (large file size)"));
+   QWhatsThis::add( m_JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
+                                            "<b>10</b>: very low quality (very high compression and small file size)<p>"
+                                            "<b>25</b>: low quality <p>"
+                                            "<b>50</b>: medium quality<p>"
+                                            "<b>75</b>: high quality (default)<p>"
+                                            "<b>100</b>: very high quality (no compression and large file size)"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
    m_PNGcompression->setRange(1, 100, 1, true );
