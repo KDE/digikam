@@ -33,7 +33,7 @@ Currently implemented plugins are:
 21) BlurFX           : Blurring special effects package.
 22) DistortionFX     : Distortion special effects package. 
 23) Texture          : A tool to apply a decorative texture to an image.
-24) WhiteBalance     : A tool to correct image white balance.
+24) WhiteBalance     : A tool to correct image white color balance.
 
 Contact :
 -----------------------------------------------------------------------
