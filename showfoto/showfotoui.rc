@@ -8,11 +8,15 @@
      <Action name="open_file" /> 
      <Action name="save" />
      <Action name="saveas" />
-     <Action name="undo" /> 
-     <Action name="redo" />      
      <Action name="revert" /> 
      <Action name="file_properties" /> 
  </Menu>
+
+   <Menu name="Edit" >
+     <text>&amp;Edit</text>
+     <Action name="undo" /> 
+     <Action name="redo" />      
+  </Menu>
 
  <Menu name="Image" >
    <text>&amp;Image</text>
