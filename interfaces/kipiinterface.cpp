@@ -217,6 +217,9 @@ KURL DigikamImageCollection::path()
 KURL DigikamImageCollection::commonRoot()
 {
     KURL url;
+    
+    if (!album_) return url;
+        
     album_->openDB();
     url.setPath( album_->getPath() );
     album_->closeDB();        
@@ -230,7 +233,8 @@ KURL DigikamImageCollection::uploadPath()
 
 KURL DigikamImageCollection::uploadRoot()
 {
-    return commonRoot();
+    KURL libraryPath(Digikam::AlbumManager::instance()->getLibraryPath());
+    return (libraryPath);
 }
 
 
