@@ -50,7 +50,7 @@ void ImageEffect_ColorsEnhance::equalizeImage()
     Digikam::ImageIface iface(0, 0);
 
     uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
+    int   w    = iface.originalWidth(); 
     int   h    = iface.originalHeight();
 
     if (!data || !w || !h)

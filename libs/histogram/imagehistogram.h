@@ -52,7 +52,7 @@ public:
     EventData() 
        {
        starting = false;
-       success = false;
+       success = false; 
        }
     
     bool starting;    
