@@ -487,7 +487,27 @@ void ImlibInterface::resize(int w, int h)
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
+}
 
+void ImlibInterface::rotate(double angle)
+{
+    imlib_context_push(d->context);
+
+    imlib_context_set_image(d->image);
+    
+    // Imlib2 use an angle in Radian, not in Degrees. We must converting that !
+    Imlib_Image im = imlib_create_rotated_image( angle/(double)(57.295) );
+
+    // PENDING (Gilles) : Need to do an auto-crop operation after rotation
+    //                    (Renchi, How to do that with imlib2 ?)        
+    
+    imlib_free_image();
+    d->image = im;
+    imlib_context_set_image(d->image);
+    
+    d->origWidth = imlib_image_get_width();
+    d->origHeight = imlib_image_get_height();
+    imlib_context_pop();
 }
 
 void ImlibInterface::changeGamma(double gamma)

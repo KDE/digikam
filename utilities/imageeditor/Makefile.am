@@ -9,7 +9,7 @@ libimageeditor_la_SOURCES = guiclient.cpp  guifactory.cpp \
 			    imagewindow.cpp imageguiclient.cpp \
 			    canvas.cpp imageresizedlg.cpp \
 			    imagecommentedit.cpp imageprint.cpp \
-			    exifrestorer.cpp 
+			    exifrestorer.cpp imagerotatedlg.cpp 
 
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB2) $(LIB_KEXIF) -ltiff
 

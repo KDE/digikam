@@ -56,6 +56,7 @@ public:
     int  imageHeight();
 
     void resizeImage(int w, int h);
+    void rotateImage(double angle);
         
 protected:
     

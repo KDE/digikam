@@ -63,6 +63,7 @@ signals:
     void signalFlipVert();
     void signalCrop();
     void signalResize();
+    void signalRotate();
 
     void signalSave();
     void signalSaveAs();

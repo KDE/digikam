@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,20 +19,28 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+ 
 #include <qlayout.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <knuminput.h>
+
+// Local includes.
 
 #include "imageresizedlg.h"
 
 ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
-    : KDialogBase(Plain, i18n("Resize Image"), Ok|Cancel, Ok,
-                  parent, 0, true, true)
+              : KDialogBase(Plain, i18n("Resize Image"), Help|Ok|Cancel, Ok,
+                            parent, 0, true, true)
 {
+    setHelp("imageviewer.anchor", "digikam");
+    
     m_width  = width;
     m_height = height;
 
@@ -79,7 +87,6 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
 
 ImageResizeDlg::~ImageResizeDlg()
 {
-    
 }
 
 void ImageResizeDlg::slotOk()

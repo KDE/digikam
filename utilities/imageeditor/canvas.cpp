@@ -740,6 +740,20 @@ void Canvas::resizeImage(int w, int h)
     emit signalChanged(true);
 }
 
+void Canvas::rotateImage(double angle)
+{
+    d->im->rotate(angle);
+
+    if (d->autoZoom)
+        updateAutoZoom();
+    d->im->zoom(d->zoom);
+
+    updateContentsSize();
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
 void Canvas::slotRestore()
 {
     d->im->restore();

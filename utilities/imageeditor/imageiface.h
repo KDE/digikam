@@ -59,7 +59,7 @@ public:
     void setOriginalBCG(double brightness, double contrast, double gamma);
     
     void paint(QWidget* widget, int x, int y, int w, int h);
-
+    
 private:
 
     ImageIfacePriv* d;

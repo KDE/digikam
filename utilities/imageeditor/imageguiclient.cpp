@@ -119,7 +119,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
     new KAction(i18n("&Resize..."), 0, 0,
                      this, SIGNAL(signalResize()),
                      actionCollection(), "imageview_resize");
-                     
+                                          
     m_cropAction = new KAction(i18n("&Crop"), "crop",
                                CTRL+Key_C, 
                                this, SIGNAL(signalCrop()),
@@ -146,6 +146,11 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         actionCollection(),
                                         "rotate_270") );
 
+    m_rotateAction->insert( new KAction(i18n("&Free rotation..."),
+                                        0, 0, this, SIGNAL(signalRotate()),
+                                        actionCollection(),
+                                        "imageview_freeRotation") );
+                                        
     m_flipAction = new KActionMenu(i18n("Flip"),
                                         "flip_image",
                                         actionCollection(),

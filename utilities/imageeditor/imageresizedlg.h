@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,11 +22,14 @@
 #ifndef IMAGERESIZEDLG_H
 #define IMAGERESIZEDLG_H
 
+// KDE includes.
+
 #include <kdialogbase.h>
+
+class QCheckBox;
 
 class KIntSpinBox;
 class KDoubleSpinBox;
-class QCheckBox;
 
 class ImageResizeDlg : public KDialogBase
 {

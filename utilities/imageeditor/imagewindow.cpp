@@ -55,6 +55,7 @@
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
+#include "imagerotatedlg.h"
 #include "imageprint.h"
 #include "imagecommentedit.h"
 #include "albummanager.h"
@@ -188,6 +189,8 @@ ImageWindow::ImageWindow()
             m_canvas, SLOT(slotCrop()));
     connect(m_guiClient, SIGNAL(signalResize()),
             SLOT(slotResize()));
+    connect(m_guiClient, SIGNAL(signalRotate()),
+            SLOT(slotRotate()));
                             
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
@@ -380,6 +383,16 @@ void ImageWindow::slotResize()
         (width != m_canvas->imageWidth() ||
         height != m_canvas->imageHeight())) 
         m_canvas->resize(width, height);
+}
+
+void ImageWindow::slotRotate()
+{
+    double angle = 0;
+    
+    ImageRotateDlg dlg(this, &angle);
+    
+    if (dlg.exec() == QDialog::Accepted ) 
+        m_canvas->rotateImage(angle);
 }
 
 void ImageWindow::slotContextMenu()
