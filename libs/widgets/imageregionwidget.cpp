@@ -83,6 +83,12 @@ void ImageRegionWidget::setImage(void)
     delete [] data;
 }
 
+void ImageRegionWidget::setCenterClipPosition(void)
+{
+    center(contentsWidth()/2, contentsHeight()/2);    
+    emit contentsMovedEvent();
+}
+
 void ImageRegionWidget::setClipPosition(int x, int y, bool targetDone)
 {
     setContentsPos(x, y);    

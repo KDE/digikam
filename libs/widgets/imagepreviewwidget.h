@@ -49,6 +49,7 @@ public:
     QImage getOriginalClipImage(void);
     void   setPreviewImageData(QImage img);
     void   setPreviewImageWaitCursor(bool enable);
+    void   setCenterImageRegionPosition(void);
 
 public slots:
 

@@ -42,7 +42,7 @@ public:
     ~ImagePanIconWidget();
 
     void setRegionSelection(QRect regionSelection);
-    
+        
 signals:
 
     void signalSelectionMoved( QRect rect, bool targetDone );

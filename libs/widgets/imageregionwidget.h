@@ -42,8 +42,9 @@ public:
     ImageRegionWidget(int wp, int hp, QWidget *parent=0, bool scrollBar=true);
     ~ImageRegionWidget();
     
-    void setClipPosition(int x, int y, bool targetDone);    
-    QRect getImageRegion(void);
+    void   setClipPosition(int x, int y, bool targetDone);    
+    void   setCenterClipPosition(void);
+    QRect  getImageRegion(void);
     QImage getImageRegionData(void);
     
 signals:

@@ -60,7 +60,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
     QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
                                                 "who can help you to select the clip preview."
-                                                "<p>Cliked and moved the mouse cursor in the "
+                                                "<p>Clicked and moved the mouse cursor in the "
                                                 "red rectangle for to change the clip focus."));
     l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
     
@@ -77,11 +77,10 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     frame1->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
-    m_imageRegionWidget->setClipPosition(0, 0, true);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
                                                "who will be used for the preview computation."
-                                               "<p>Cliked and moved the mouse cursor in the "
+                                               "<p>Clicked and moved the mouse cursor in the "
                                                "image for to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0, Qt::AlignCenter);
     
@@ -104,6 +103,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved (QRect, bool)),
             this, SLOT(slotSetImageRegionPosition(QRect, bool)));
             
+    setCenterImageRegionPosition();
     QTimer::singleShot(0, this, SLOT(slotOriginalImageRegionChanged()));            
 }
 
@@ -136,12 +136,17 @@ void ImagePreviewWidget::setPreviewImageData(QImage img)
     m_previewTargetLabel->setPixmap(pix);
 }    
 
+void ImagePreviewWidget::setCenterImageRegionPosition(void)
+{
+    m_imageRegionWidget->setCenterClipPosition();
+    updateSelectionInfo(getOriginalImageRegion());
+}
+
 void ImagePreviewWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
 {
     m_imageRegionWidget->setClipPosition(rect.x(), rect.y(), targetDone);
     updateSelectionInfo(rect);
 }
-
 
 void ImagePreviewWidget::slotOriginalImageRegionChanged(void)
 {
@@ -153,10 +158,8 @@ void ImagePreviewWidget::slotOriginalImageRegionChanged(void)
 
 void ImagePreviewWidget::updateSelectionInfo(QRect rect)
 {
-    m_topLeftSelectionInfoLabel->setText(i18n("Top left: (%1, %2)")
-                                         .arg(rect.left()).arg(rect.top()));
-    m_BottomRightSelectionInfoLabel->setText(i18n("Bottom right: (%1, %2)")
-                                             .arg(rect.right()).arg(rect.bottom()));
+    m_topLeftSelectionInfoLabel->setText(i18n("Top left: (%1, %2)").arg(rect.left()).arg(rect.top()));
+    m_BottomRightSelectionInfoLabel->setText(i18n("Bottom right: (%1, %2)").arg(rect.right()).arg(rect.bottom()));
 }
     
 }  // NameSpace Digikam
