@@ -71,7 +71,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
 {
     QFrame *page = dialog->addPage( i18n("&Histogram"));
    
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0 );
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, dialog->spacingHint() );
 
     // -------------------------------------------------------------
                                               
@@ -133,7 +133,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     
     // -------------------------------------------------------------
     
-    QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Informations"), page);
+    QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
     
     QLabel *label4 = new QLabel(i18n("Mean :"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -166,7 +166,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
     topLayout->addWidget(gbox);
-    
+    topLayout->addStretch();
+
     // -------------------------------------------------------------
     
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -192,6 +193,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotIntervChanged(int)));
+    
+    
 }
 
 void HistogramPropsPlugin::slotChannelChanged(int channel)

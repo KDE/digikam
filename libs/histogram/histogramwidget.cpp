@@ -51,8 +51,7 @@ HistogramWidget::HistogramWidget(int w, int h, uint *i_data,
     m_scaleType      = LogScaleHistogram;
     m_inSelected     = false;
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h);
-    
-    
+        
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
 }

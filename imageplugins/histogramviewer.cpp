@@ -88,10 +88,8 @@ HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, u
 
 void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
 {
-
     setHelp("imageviewer.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     // -------------------------------------------------------------
                                               
@@ -153,7 +151,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     
     // -------------------------------------------------------------
     
-    QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Informations"), plainPage());
+    QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), plainPage());
     
     QLabel *label4 = new QLabel(i18n("Mean :"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -186,6 +184,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
     topLayout->addWidget(gbox);
+    topLayout->addStretch();
     
     // -------------------------------------------------------------
     
