@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : a widget for to display an image histogram.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : a widget for to display an image histogram.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Some code parts are inspired from from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -343,7 +343,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     QPainter p1;
     p1.begin(&pm, this);
        
-    for (x = 0 ; x < wWidth ; ++x)
+    for (x = 0 ; x < wWidth ; x++)
       {
       double value = 0.0; 
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
@@ -363,29 +363,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           switch(m_channelType)
              {
              case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
-                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
                 break;
              
              case Digikam::HistogramWidget::BlueChannelHistogram:     // Blue channel.
-                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i++);   
                 break;
              
              case Digikam::HistogramWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);    
+                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
                 break;
 
              case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i++);   
                 break;
 
              case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
-                vr = histogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);   
+                vr = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);   
                 vg = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);   
                 vb = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);   
                 break;
                                                 
              case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
-                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, i++);   
                 break;
              }            
             
