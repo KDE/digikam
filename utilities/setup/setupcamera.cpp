@@ -191,6 +191,9 @@ void SetupCamera::slotAutoDetectCamera()
         return;
     }
 
+    // NOTE: See note in digikam/digikam/cameralist.cpp
+    port = "usb:";
+    
     if (listView_->findItem(model,1))
     {
        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
