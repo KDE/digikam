@@ -331,7 +331,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
         QStringList vals;
         
         execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
-                 .arg(oldParentURL), &vals );
+                 .arg(escapeString(oldParentURL)), &vals );
         if (vals.isEmpty())
         {
             error(KIO::ERR_UNKNOWN,
@@ -344,7 +344,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
 
         vals.clear();
         execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
-                 .arg(newParentURL), &vals );
+                 .arg(escapeString(newParentURL)), &vals );
         if (vals.isEmpty())
         {
             error(KIO::ERR_UNKNOWN,
@@ -535,15 +535,15 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
 
             // update album url
             execSql( QString("UPDATE Albums SET url = '%1' WHERE url = '%2';")
-                     .arg(newURL)
-                     .arg(oldURL) );
+                     .arg(escapeString(newURL))
+                     .arg(escapeString(oldURL)) );
 
             // Now rename all the subalbums
 
             QStringList suburls;
             
             execSql( QString("SELECT url FROM Albums WHERE url LIKE '%1/%'")
-                     .arg(oldURL), &suburls );
+                     .arg(escapeString(oldURL)), &suburls );
             for (QStringList::iterator it = suburls.begin(); it != suburls.end();
                  ++it)
             {
@@ -555,11 +555,11 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
                 
                 // delete any stale albums left behind
                 execSql( QString("DELETE FROM Albums WHERE url = '%1'")
-                         .arg(url) );
+                         .arg(escapeString(url)) );
 
                 // update album url
                 execSql( QString("UPDATE Albums SET url = '%1' WHERE url = '%2';")
-                         .arg(url)
+                         .arg(escapeString(url))
                          .arg(escapeString(*it)) );
             }
         }
@@ -612,7 +612,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
         QStringList vals;
         
         execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
-                 .arg(oldParentURL), &vals );
+                 .arg(escapeString(oldParentURL)), &vals );
         if (vals.isEmpty())
         {
             error(KIO::ERR_UNKNOWN,
@@ -625,7 +625,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
 
         vals.clear();
         execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
-                 .arg(newParentURL), &vals );
+                 .arg(escapeString(newParentURL)), &vals );
         if (vals.isEmpty())
         {
             error(KIO::ERR_UNKNOWN,
@@ -728,7 +728,7 @@ void kio_digikamioProtocol::del(const KURL& url, bool isfile)
         QStringList vals;
         
         execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
-                 .arg(parentURL), &vals );
+                 .arg(escapeString(parentURL)), &vals );
         if (vals.isEmpty())
         {
             error(KIO::ERR_UNKNOWN,
@@ -839,7 +839,7 @@ QString kio_digikamioProtocol::albumURLFromKURL(const KURL& kurl)
 void kio_digikamioProtocol::removeDirFromDB(const QString& url)
 {
     execSql( QString("DELETE FROM Albums WHERE url = '%1'")
-             .arg(url) );
+             .arg(escapeString(url)) );
 }
 
 void kio_digikamioProtocol::removeFileFromDB(int dirid, const QString& name)
