@@ -52,7 +52,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    
    m_pluginsNumber = new QLabel(parent);
    layout->addWidget( m_pluginsNumber );
-   QString pluginsListHelp = i18n("<p>Here you can see the list of plugins who can be "
+   QString pluginsListHelp = i18n("<p>Here you can see the list of plugins which can be "
                                   "loaded or unloaded from the current Digikam instance.");
 
    m_Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
