@@ -1,5 +1,6 @@
 v0.7.0 - 09/10/04
 ----------------------------------------------------------------------------
+    * New OilPaint algorithm from Pieter Voloshyn. 
     * Add graphical banner with logo.
     * Fixed Digikam headers depencies.
 
