@@ -2,8 +2,8 @@
  * File  : syncjob.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-10-04
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
@@ -17,15 +17,16 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <kio/job.h>
+#include <kprotocolinfo.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -54,13 +55,13 @@ bool SyncJob::userDelete(const KURL::List& urls)
 bool SyncJob::del(const KURL::List& urls)
 {
     SyncJob sj;
-    return sj.delPriv(urls);    
+    return sj.delPriv(urls);
 }
 
 bool SyncJob::trash(const KURL::List& urls)
 {
     SyncJob sj;
-    return sj.trashPriv(urls);    
+    return sj.trashPriv(urls);
 }
 
 bool SyncJob::file_move(const KURL &src, const KURL &dest)
@@ -101,9 +102,13 @@ bool SyncJob::delPriv(const KURL::List& urls)
 bool SyncJob::trashPriv(const KURL::List& urls)
 {
     success_ = true;
+    KURL dest("trash:/");
 
-    KURL dest(KGlobalSettings::trashPath());
-    
+    if (!KProtocolInfo::isKnownProtocol(dest))
+    {
+        dest = KGlobalSettings::trashPath();
+    }
+
     KIO::Job* job = KIO::move( urls, dest );
     connect( job, SIGNAL(result( KIO::Job* )),
              SLOT(slotResult( KIO::Job*)) );
@@ -156,10 +161,10 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     if (thumbnail_)
         delete thumbnail_;
     thumbnail_ = new QPixmap;
-    
+
     if(name.startsWith("/"))
     {
-        Digikam::ThumbnailJob *job = new Digikam::ThumbnailJob(name, 
+        Digikam::ThumbnailJob *job = new Digikam::ThumbnailJob(name,
                                                                ThumbnailSize::Tiny,
                                                                false, false);
         connect(job,
@@ -176,7 +181,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
                 SIGNAL(signalStatFailed(const KURL&, bool )),
                 SLOT(slotLoadThumbnailFailed()));
 
-                                
+
         enter_loop();
         delete job;
     }
