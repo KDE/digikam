@@ -45,7 +45,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                         BarIcon("showfoto", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
 
-    page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins Settings"),
+    page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         

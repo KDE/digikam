@@ -23,7 +23,6 @@
 #include <qlayout.h>
 #include <qcolor.h>
 #include <qhbox.h>
-#include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qcheckbox.h>
@@ -47,15 +46,13 @@
 SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent );
+   QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
 
    // --------------------------------------------------------
 
-   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"), parent);
+   m_pluginsNumber = new QLabel(parent);
 
-   m_pluginsNumber = new QLabel(imagePluginsListGroup);
-
-   m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
+   m_pluginList = new KListView( parent, "pluginList" );
    m_pluginList->addColumn( i18n( "Name" ) );
    m_pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
    m_pluginList->addColumn( i18n( "Description" ) );
@@ -66,8 +63,9 @@ SetupPlugins::SetupPlugins(QWidget* parent )
                                        "digiKam image editor instances."
                                        "<p>Note: the core image plugin cannot be disabled."));
 
-   layout->addWidget( imagePluginsListGroup );
-
+   layout->addWidget( m_pluginsNumber );
+   layout->addWidget( m_pluginList );
+   
    // --------------------------------------------------------
 
    readSettings();
