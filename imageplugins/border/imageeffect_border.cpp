@@ -135,18 +135,18 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the border added to the image.") );
-    topLayout->addMultiCellWidget(gbox, 1, 4, 0, 0);
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
     
     // -------------------------------------------------------------
-                                                  
-    QLabel *label1 = new QLabel(i18n("Border Type:"), plainPage());
     
-    m_borderType = new QComboBox( false, plainPage() );
+    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, 20, spacingHint());
+                                                  
+    QLabel *label1 = new QLabel(i18n("Border Type:"), gbox2);
+    m_borderType = new QComboBox( false, gbox2 );
     m_borderType->insertItem( i18n("Solid") );
-
     // Niepce is Real name. This is the first guy in the world to have build a camera.
     m_borderType->insertItem( "Niepce" );     
-
     m_borderType->insertItem( i18n("Beveled") );
     m_borderType->insertItem( i18n("Decorative Pine") );
     m_borderType->insertItem( i18n("Decorative Wood") );
@@ -165,23 +165,25 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
-    topLayout->addMultiCellWidget(label1, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(m_borderType, 1, 1, 2, 2);
+    gridBox2->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridBox2->addMultiCellWidget(m_borderType, 0, 0, 1, 1);
     
-    QLabel *label2 = new QLabel(i18n("Width:"), plainPage());
-    m_borderWidth = new KIntNumInput(plainPage());
+    QLabel *label2 = new QLabel(i18n("Width:"), gbox2);
+    m_borderWidth = new KIntNumInput(gbox2);
     QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
-    topLayout->addMultiCellWidget(label2, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(m_borderWidth, 2, 2, 2, 2);
-        
-    m_labelForeground = new QLabel(plainPage());
-    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), plainPage() );
-    m_labelBackground = new QLabel(plainPage());
-    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), plainPage() );
-    topLayout->addMultiCellWidget(m_labelForeground, 3, 3, 1, 1);
-    topLayout->addMultiCellWidget(m_firstColorButton, 3, 3, 2, 2);
-    topLayout->addMultiCellWidget(m_labelBackground, 4, 4, 1, 1);
-    topLayout->addMultiCellWidget(m_secondColorButton, 4, 4, 2, 2);
+    gridBox2->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridBox2->addMultiCellWidget(m_borderWidth, 1, 1, 1, 1);
+            
+    m_labelForeground = new QLabel(gbox2);
+    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), gbox2 );
+    m_labelBackground = new QLabel(gbox2);
+    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gbox2 );
+    gridBox2->addMultiCellWidget(m_labelForeground, 2, 2, 0, 0);
+    gridBox2->addMultiCellWidget(m_firstColorButton, 2, 2, 1, 1);
+    gridBox2->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
+    gridBox2->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
+    
+    topLayout->addMultiCellWidget(gbox2, 1, 1, 2, 2);
     
     // -------------------------------------------------------------
 
