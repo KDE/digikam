@@ -1,25 +1,29 @@
 [Desktop Entry]
 Name=ImagePlugin_Despeckle
-Name[da]=Pletfjerning
+Name[da]=Billedplugin_Pletfjerning
 Name[it]=PluginImmagini_Smacchia
-Name[nl]=Afbeeldingplugin_RuisReductie
+Name[nl]=Afbeeldingsplugin_RuisReductie
 Name[pt]='Plugin' de Redução de Ruído
 Name[pt_BR]='Plugin' de Redução de Ruído
 Name[sr]=Сликовни прикључак — отклањање флека
 Name[sv]=Insticksprogram för ytutjämning
 Name[ta]=பிம்பசொருகுப்பொருள்_ 
+Name[xx]=xxImagePlugin_Despecklexx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Despeckle image filter plugin for digiKam
+Comment[da]=Pletfjernings-plugin til Digikam
 Comment[de]=digiKam Plugin zum Entfernen von Flecken
+Comment[et]=Digikami pildi punktitasandusfilter
 Comment[fr]=Module externe de digiKam pour réduire le bruit d'une image
 Comment[it]=Plugin filtro di smacchiatura delle immagini per digiKam
-Comment[nl]=Digikam-filterplugin voor afbeeldingen ontspikkelen
+Comment[nl]=digiKam-filterplugin voor afbeeldingen ontspikkelen
 Comment[pt]='Plugin' de filtro de redução de ruído da imagem para o digiKam
 Comment[pt_BR]='Plugin' de filtro de redução de ruído da imagem para o digiKam
 Comment[sv]=Digikam insticksprogram för ytutjämningsbildfilter
 Comment[ta]=டிஜிக்காமிற்கான மங்கலான படிம வடிகட்டி சொருகுபொருள்
+Comment[xx]=xxDespeckle image filter plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr

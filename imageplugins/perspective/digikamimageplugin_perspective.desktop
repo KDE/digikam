@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=ImagePlugin_Perspective
+Name[da]=Billedplugin_Perspektivværktøj
+Name[it]=PluginImmagini_Prospettiva
+Name[nl]=Afbeeldingsplugin_Perspectief
+Name[pt]='Plugin' de Perspectiva
+Name[pt_BR]='Plugin' de Perspectiva
+Name[sv]=Insticksprogram för perspektiv
+Name[xx]=xxImagePlugin_Perspectivexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Perspective tool plugin for digiKam
+Comment[da]=Perspektivværktøjs-plugin til Digikam
+Comment[de]=digiKam Plugin zum Justieren der Perspektive eines Bildes
+Comment[fr]=Module externe de digiKam, outil de perspective
+Comment[it]=Plugin per lo strumento di prospettiva per digiKam
+Comment[nl]=digiKam-plugin voor perspectief
+Comment[pt]='Plugin' de ferramenta de perspectiva para o digiKam
+Comment[pt_BR]='Plugin' de ferramenta de perspectiva para o digiKam
+Comment[sv]=Digikam insticksprogram med perspektivverktyg
+Comment[xx]=xxPerspective tool plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_perspective
 author=Gilles Caulier, caulier dot gilles at free dot fr

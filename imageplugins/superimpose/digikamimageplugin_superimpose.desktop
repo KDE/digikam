@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=ImagePlugin_SuperImpose
+Name[da]=Billedplugin_Indkopiering
+Name[it]=PluginImmagini_Sovrapposizione
+Name[nl]=Afbeeldingsplugin_SjabloonToevoegen
+Name[pt]='Plugin' de Sobreposição
+Name[pt_BR]='Plugin' de Sobreposição
+Name[sv]=Insticksprogram för överlagring
+Name[xx]=xxImagePlugin_SuperImposexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Template superimpose plugin for digiKam
+Comment[da]=Plugin til skabelon-indkopiering i Digikam
+Comment[de]=digKam Plugin zum Anwenden von Schablonen auf ein Bild
+Comment[fr]=Module externe de digiKam pour superposer des patrons
+Comment[it]=Plugin di sovrapposizione di modelli per digiKam
+Comment[nl]=digiKam-plugin voor het aanbrengen van een sjabloon op de afbeelding
+Comment[pt]='Plugin' de sobreposição de modelos para o digiKam
+Comment[pt_BR]='Plugin' de sobreposição de modelos para o digiKam
+Comment[sv]=Digikam insticksprogram för överlagringsmall
+Comment[xx]=xxTemplate superimpose plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at free dot fr

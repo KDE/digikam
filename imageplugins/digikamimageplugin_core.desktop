@@ -1,25 +1,30 @@
 [Desktop Entry]
 Name=ImagePlugin_Core
-Name[da]=Billed-plugin-kerne
+Name[da]=Billedplugin_kerne
 Name[it]=PluginImmagini_Nocciolo
-Name[nl]=Afbeeldingplugin_Kern
+Name[nl]=Afbeeldingsplugin_Kern
 Name[pt]='Plugin' Nuclear
 Name[pt_BR]='Plugin' Nuclear
 Name[sr]=Сликовни прикључак — језгро
 Name[sv]=Insticksprogram med bildkärna
 Name[ta]=பிம்ப சொருகுபொருள்_கோர்
+Name[xx]=xxImagePlugin_Corexx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam Core Image Plugin
+Comment[da]=Grundlæggende Digikam billed-plugin
 Comment[de]=digiKam Kernplugin
-Comment[fr]=Module externe principal de digiKam pour le traîtement des images
+Comment[et]=Digikami peamine pildiplugin
+Comment[fr]=Module d'image du noyau digiKam
 Comment[it]=Plugin delle immagini centrale di digiKam
-Comment[nl]=Digikam kernafbeeldingplugin
+Comment[nl]=digiKam kernafbeeldingsplugin
 Comment[pt]='Plugin' Nuclear de Imagem do digiKam
 Comment[pt_BR]='Plugin' Nuclear de Imagem do digiKam
+Comment[ru]=Модуль ядра изображений digiKam
 Comment[sv]=Insticksprogram med bildkärna för Digikam
 Comment[ta]=டிஜிகேம் கருவக படிம செருகு பொருள்
+Comment[xx]=xxdigiKam Core Image Pluginxx
 
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
