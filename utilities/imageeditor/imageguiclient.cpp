@@ -98,12 +98,12 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                      actionCollection(), "imageview_exit");
 
     m_zoomPlusAction = new KAction(i18n("Zoom &In"), "viewmag+",
-                                   Key_Plus,
+                                   CTRL+Key_Plus,
                                    this, SIGNAL(signalZoomPlus()),
                                    actionCollection(), "imageview_zoom_plus");
 
     m_zoomMinusAction = new KAction(i18n("Zoom &Out"), "viewmag-",
-                                    Key_Minus,
+                                    CTRL+Key_Minus,
                                     this, SIGNAL(signalZoomMinus()),
                                     actionCollection(), "imageview_zoom_minus");
 
