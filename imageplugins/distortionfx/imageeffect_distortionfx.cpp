@@ -470,9 +470,7 @@ void ImageEffect_DistortionFX::slotEffect()
     
     if ( !m_cancel ) 
        {
-       QImage newImg;
-       newImg.create( w, h, 32 );
-       memcpy(newImg.bits(), data, newImg.numBytes());
+       QImage newImg((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
        QImage destImg = newImg.smoothScale(wp, hp);
        iface->putPreviewData((uint*)destImg.bits());
        }
@@ -1222,12 +1220,10 @@ void ImageEffect_DistortionFX::waves(uint *data, int Width, int Height,
     if (Amplitude < 0) Amplitude = 0;
     if (Frequency < 0) Frequency = 0;
 
-    QImage PicDestDC, PicSrcDC;
-    PicSrcDC.create( Width, Height, 32 );
-    memcpy(PicSrcDC.bits(), data, PicSrcDC.numBytes());
-    PicDestDC.create( Width, Height, 32 );
+    QImage PicSrcDC((uchar*)data, Width, Height, 32, 0, 0, QImage::IgnoreEndian);
+    QImage PicDestDC(Width, Height, 32);
 
-    int h, w;
+    register int h, w;
     
     if (Direction)        // Horizontal
         {
@@ -1369,11 +1365,9 @@ void ImageEffect_DistortionFX::tile(uint *data, int Width, int Height,
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
     srand ((uint) dt.secsTo(Y2000));
     
-    QImage PicDestDC, PicSrcDC;
-    PicSrcDC.create( Width, Height, 32 );
-    memcpy(PicSrcDC.bits(), data, PicSrcDC.numBytes());
-    PicDestDC.create( Width, Height, 32 );
-
+    QImage PicSrcDC((uchar*)data, Width, Height, 32, 0, 0, QImage::IgnoreEndian);
+    QImage PicDestDC(Width, Height, 32);
+    
     int tx, ty, h, w;
     
     for (h = 0; !m_cancel && (h < Height); h += HSize)
