@@ -534,8 +534,8 @@ void ImageView::setupConnections()
     connect(d->canvas, SIGNAL(signalChanged(bool)),
             this, SLOT(slotChanged(bool)));
             
-    connect(d->canvas, SIGNAL(signalRotatedOrFlipped(bool)),
-            this, SLOT(slotRotatedOrFlipped(bool)));
+    connect(d->canvas, SIGNAL(signalRotatedOrFlipped()),
+            this, SLOT(slotRotatedOrFlipped()));
             
     connect(d->canvas, SIGNAL(signalCropSelected(bool)),
             this, SLOT(slotCropSelected(bool)));
@@ -1523,11 +1523,11 @@ void ImageView::slotSave()
         {
         qWarning("No Exif Data Found");
         }
-
+    
     if( rotatedOrFlipped )
     {
        KExifData *exifData = new KExifData;
-       exifData->writeOrientation(d->urlCurrent.path(), KExifData::NORMAL);
+       exifData->writeOrientation(tmpFile, KExifData::NORMAL);
        delete exifData;
     }
 
@@ -1536,6 +1536,7 @@ void ImageView::slotSave()
 
     connect(job, SIGNAL(result(KIO::Job *) ),
             this, SLOT(slotSaveResult(KIO::Job *)));
+
 }
 
 
@@ -1585,6 +1586,13 @@ void ImageView::slotSaveAs()
          {
          qWarning("No Exif Data Found");
          }
+    
+    if( rotatedOrFlipped )
+    {
+       KExifData *exifData = new KExifData;
+       exifData->writeOrientation(tmpFile, KExifData::NORMAL);
+       delete exifData;
+    }
  
      KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), newFile,
                                             -1, true, false, false);
@@ -1725,7 +1733,7 @@ void ImageView::slotCropSelected(bool val)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void ImageView::slotRotatedOrFlipped(bool val)
+void ImageView::slotRotatedOrFlipped()
 {
    rotatedOrFlipped = true;
 }

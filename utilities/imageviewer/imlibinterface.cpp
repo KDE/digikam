@@ -29,6 +29,8 @@
 #include <qfileinfo.h>
 #include <qptrlist.h>
 
+#include <kdebug.h>
+
 // X11 includes.
 
 #include <X11/Xlib.h>
@@ -426,10 +428,13 @@ private:           // Fonctions.
             //saveInfo.quality = 256;
             
             imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &errorRet);
-            result = (int)errorRet;
-            if (result) 
-               qDebug("error saving image '%s': %i", QFile::encodeName(saveFile).data(),(int)errorRet);
- 
+
+            if( errorRet != IMLIB_LOAD_ERROR_NONE ) {
+               kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " << (int)errorRet << endl;
+               result = 0;
+            } else {
+               result = 1;
+            }
             }
 
         // Now kill the image and re-read it from the saved file

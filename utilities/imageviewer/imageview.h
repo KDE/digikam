@@ -129,7 +129,7 @@ private slots:
     void slotZoomChanged(double zoom);
     void slotCropSelected(bool val);
     void slotChanged(bool val);
-    void slotRotatedOrFlipped(bool val);
+    void slotRotatedOrFlipped();
     void slotClose();
     void slotBCGEdit();
     void slotCommentsEdit();
