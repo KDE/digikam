@@ -63,9 +63,9 @@ public:
     
     void crop(int x, int y, int w, int h);
 
-    void changeGamma(double val);
-    void changeBrightness(double val);
-    void changeContrast(double val);
+    void changeGamma(int val);
+    void changeBrightness(int val);
+    void changeContrast(int val);
 
     int save(const QString& file);
     int saveAs(const QString& file);

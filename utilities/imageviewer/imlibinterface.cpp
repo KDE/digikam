@@ -80,8 +80,8 @@ public:
             
             ow = imlib_image_get_width();
             oh = imlib_image_get_height();
-            w     = ow;
-            h     = oh;
+            w  = ow;
+            h  = oh;
             
             mod = imlib_create_color_modifier();
             imlib_context_set_color_modifier(mod);
@@ -293,8 +293,25 @@ public:
         
         if ( nval <= 5.0 && nval >= 0.0 ) 
             {            
-            imlib_modify_color_modifier_gamma(nval);
+/*            imlib_context_set_image(im);        
+            Imlib_Image newIm = imlib_clone_image(); 
+            imlib_context_set_image(newIm);        
+            Imlib_Color_Modifier newMod = imlib_create_color_modifier();
+            imlib_context_set_color_modifier(newMod);
+  */          
+            imlib_modify_color_modifier_gamma(val);
             imlib_apply_color_modifier();
+    /*    
+            Pixmap newPixmap = 0;
+            Pixmap newMask = 0;
+            
+            imlib_context_set_mask(newPixmap);
+            imlib_render_pixmaps_for_whole_image_at_size(&newPixmap, &newMask, w, h);
+
+            imlib_free_pixmap_and_mask(newPixmap); 
+            imlib_free_image();
+            imlib_free_color_modifier();
+      */      
             gamma   = nval;
             changed = true;
             dirty   = true;
@@ -786,33 +803,33 @@ void ImlibInterface::crop(int x, int y, int w, int h)
 }
 
 
-void ImlibInterface::changeGamma(double val)
+void ImlibInterface::changeGamma(int val)
 {
     ImImage *im = d->cache->currentImage();
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeGamma(val);
+    if (im) im->changeGamma(val/20);
 }
 
 
-void ImlibInterface::changeBrightness(double val)
+void ImlibInterface::changeBrightness(int val)
 {
     ImImage *im = d->cache->currentImage();
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeBrightness(val);
+    if (im) im->changeBrightness(val/100);
 }
 
 
-void ImlibInterface::changeContrast(double val)
+void ImlibInterface::changeContrast(int val)
 {
     ImImage *im = d->cache->currentImage();
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeContrast(val);
+    if (im) im->changeContrast(val/100);
 }
 
 

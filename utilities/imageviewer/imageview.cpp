@@ -1796,23 +1796,14 @@ void ImageView::slotBCGEdit()
 {
     ImageBCGEdit *bcgEdit = new ImageBCGEdit(this);
     
-    connect(bcgEdit, SIGNAL(signalGammaIncrease()),
-            d->canvas, SLOT(slotGammaPlus()));
+    connect(bcgEdit, SIGNAL(signalGammaValueChanged(int)),
+            d->canvas, SLOT(slotGammaChanged(int)));
             
-    connect(bcgEdit, SIGNAL(signalGammaDecrease()),
-            d->canvas, SLOT(slotGammaMinus()));
+    connect(bcgEdit, SIGNAL(signalBrightnessValueChanged(int)),
+            d->canvas, SLOT(slotBrightnessChanged(int)));
             
-    connect(bcgEdit, SIGNAL(signalBrightnessIncrease()),
-            d->canvas, SLOT(slotBrightnessPlus()));
-            
-    connect(bcgEdit, SIGNAL(signalBrightnessDecrease()),
-            d->canvas, SLOT(slotBrightnessMinus()));
-            
-    connect(bcgEdit, SIGNAL(signalContrastIncrease()),
-            d->canvas, SLOT(slotContrastPlus()));
-            
-    connect(bcgEdit, SIGNAL(signalContrastDecrease()),
-            d->canvas, SLOT(slotContrastMinus()));
+    connect(bcgEdit, SIGNAL(signalContrastValueChanged(int)),
+            d->canvas, SLOT(slotContrastChanged(int)));
             
     bcgEdit->adjustSize();
     bcgEdit->show();

@@ -719,9 +719,9 @@ void Canvas::slotCrop()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void Canvas::slotGammaPlus()
+void Canvas::slotGammaChanged(int val)
 {
-    iface->changeGamma(0.01);
+    iface->changeGamma(val);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -730,9 +730,9 @@ void Canvas::slotGammaPlus()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void Canvas::slotGammaMinus()
+void Canvas::slotBrightnessChanged(int val)
 {
-    iface->changeGamma(-0.01);
+    iface->changeBrightness(val);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -741,42 +741,9 @@ void Canvas::slotGammaMinus()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void Canvas::slotBrightnessPlus()
+void Canvas::slotContrastChanged(int val)
 {
-    iface->changeBrightness(0.01);
-    viewport()->repaint();
-
-    emit signalChanged(true);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void Canvas::slotBrightnessMinus()
-{
-    iface->changeBrightness(-0.01);
-    viewport()->repaint();
-
-    emit signalChanged(true);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void Canvas::slotContrastPlus()
-{
-    iface->changeContrast(0.01);
-    viewport()->repaint();
-
-    emit signalChanged(true);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void Canvas::slotContrastMinus()
-{
-    iface->changeContrast(-0.01);
+    iface->changeContrast(val);
     viewport()->repaint();
 
     emit signalChanged(true);

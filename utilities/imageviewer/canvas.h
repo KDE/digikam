@@ -94,12 +94,9 @@ public slots:
 
     void slotCrop();
     
-    void slotGammaPlus();
-    void slotGammaMinus();
-    void slotBrightnessPlus();
-    void slotBrightnessMinus();
-    void slotContrastPlus();
-    void slotContrastMinus();
+    void slotGammaChanged(int val);
+    void slotBrightnessChanged(int val);
+    void slotContrastChanged(int val);
     
     void slotRestore();
 

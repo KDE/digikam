@@ -28,6 +28,8 @@
 
 #include <kdialogbase.h>
 
+class KIntNumInput;
+
 class ImageBCGEdit : public KDialogBase
 {
     Q_OBJECT
@@ -39,16 +41,15 @@ public:
 
 signals:
 
-    void signalBrightnessIncrease();
-    void signalBrightnessDecrease();
-    void signalContrastIncrease();
-    void signalContrastDecrease();
-    void signalGammaIncrease();
-    void signalGammaDecrease();
+    void signalGammaValueChanged(int);
+    void signalBrightnessValueChanged(int);
+    void signalContrastValueChanged(int);
 
-protected slots:
-    
-    void slotUser1();
+protected :
+
+    KIntNumInput *m_gammaValue;
+    KIntNumInput *m_brightnessValue;
+    KIntNumInput *m_contrastValue;
 };
 
 #endif  // IMAGEBCGEDIT_H 

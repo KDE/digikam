@@ -25,14 +25,14 @@
 
 #include <qstring.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
-#include <qtoolbutton.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
 #include <klocale.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -40,77 +40,58 @@
 
 
 ImageBCGEdit::ImageBCGEdit( QWidget *parent )
-            : KDialogBase( Plain, QString::null, User1, User1,
-                           parent, 0, true, true, i18n("Close") )
+            : KDialogBase( Plain, QString::null, Help|Ok|Cancel, Ok,
+                           parent, 0, true, true )
 {
     setCaption( i18n("Adjust Image" ));
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint() );
-
-    QLabel *topLabel = new QLabel( plainPage() );
-    topLabel->setText( i18n( "Edit Image Setting") );
-    topLayout->addWidget( topLabel  );
+    QWidget* box = new QWidget( this );
+    setMainWidget(box);
+    QVBoxLayout *dvlay = new QVBoxLayout( box, 10, spacingHint() );
 
     // --------------------------------------------------------
-
-    QGroupBox *groupBox = new QGroupBox( plainPage() );
-    groupBox->setColumnLayout( 0, Qt::Horizontal );
-    QGridLayout* gridLayout = new QGridLayout( groupBox->layout() );
-    gridLayout->setSpacing( spacingHint() );
-
-    QToolButton* gammaDecBtn = new QToolButton( groupBox );
-    gammaDecBtn->setText("-");
-    QLabel* gammaLabel = new QLabel(i18n("Gamma"), groupBox);
-    QToolButton* gammaIncBtn = new QToolButton( groupBox );
-    gammaIncBtn->setText("+");
-
-    gridLayout->addWidget(gammaDecBtn, 0, 0);
-    gridLayout->addWidget(gammaLabel,  0, 1);
-    gridLayout->addWidget(gammaIncBtn, 0, 2);
-
-    QToolButton* brightnessDecBtn = new QToolButton( groupBox );
-    brightnessDecBtn->setText("-");
-    QLabel* brightnessLabel = new QLabel(i18n("Brightness"), groupBox);
-    QToolButton* brightnessIncBtn = new QToolButton( groupBox );
-    brightnessIncBtn->setText("+");
-
-    gridLayout->addWidget(brightnessDecBtn, 1, 0);
-    gridLayout->addWidget(brightnessLabel,  1, 1);
-    gridLayout->addWidget(brightnessIncBtn, 1, 2);
-
-    QToolButton* contrastDecBtn = new QToolButton( groupBox );
-    contrastDecBtn->setText("-");
-    QLabel* contrastLabel = new QLabel(i18n("Contrast"), groupBox);
-    QToolButton* contrastIncBtn = new QToolButton( groupBox );
-    contrastIncBtn->setText("+");
-
-    gridLayout->addWidget(contrastDecBtn, 2, 0);
-    gridLayout->addWidget(contrastLabel,  2, 1);
-    gridLayout->addWidget(contrastIncBtn, 2, 2);
-
-    topLayout->addWidget( groupBox );
+        
+    QLabel *m_label_gammaValue = new QLabel (i18n("Gamma:"), box);
+    dvlay->addWidget( m_label_gammaValue );
+       
+    m_gammaValue = new KIntNumInput(10, box);
+    m_gammaValue->setRange(0, 200, 1, true );
+    QWhatsThis::add( m_gammaValue, i18n("<p>Select here the Gamma value of image.") );
+    m_label_gammaValue->setBuddy( m_gammaValue );
+    dvlay->addWidget( m_gammaValue );
     
     // --------------------------------------------------------
-
-    connect(gammaIncBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalGammaIncrease()));
+        
+    QLabel *m_label_brightnessValue = new QLabel (i18n("Brightness:"), box);
+    dvlay->addWidget( m_label_brightnessValue );
+       
+    m_brightnessValue = new KIntNumInput(0, box);
+    m_brightnessValue->setRange(-100, 100, 1, true );
+    QWhatsThis::add( m_brightnessValue, i18n("<p>Select here the brightness value of image.") );
+    m_label_brightnessValue->setBuddy( m_brightnessValue );
+    dvlay->addWidget( m_brightnessValue );
+    
+    // --------------------------------------------------------
+        
+    QLabel *m_label_contrastValue = new QLabel (i18n("Contrast:"), box);
+    dvlay->addWidget( m_label_contrastValue );
+       
+    m_contrastValue = new KIntNumInput(0, box);
+    m_contrastValue->setRange(-100, 100, 1, true );
+    QWhatsThis::add( m_contrastValue, i18n("<p>Select here the Gamma value of image.") );
+    m_label_contrastValue->setBuddy( m_contrastValue );
+    dvlay->addWidget( m_contrastValue );
+        
+    // --------------------------------------------------------
+    
+    connect(m_gammaValue, SIGNAL(valueChanged (int)),
+            this, SIGNAL(signalGammaValueChanged (int) ));
             
-    connect(gammaDecBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalGammaDecrease()));
-
-    connect(brightnessIncBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalBrightnessIncrease()));
+    connect(m_brightnessValue, SIGNAL(valueChanged (int)),
+            this, SIGNAL(signalContrastValueChanged (int) ));
             
-    connect(brightnessDecBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalBrightnessDecrease()));
-
-    connect(contrastIncBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalContrastIncrease()));
-            
-    connect(contrastDecBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalContrastDecrease()));
-
+    connect(m_contrastValue, SIGNAL(valueChanged (int)),
+            this, SIGNAL(signalContrastValueChanged (int) ));                        
 }
 
 ImageBCGEdit::~ImageBCGEdit()
@@ -118,9 +99,5 @@ ImageBCGEdit::~ImageBCGEdit()
     
 }
 
-void ImageBCGEdit::slotUser1()
-{
-    slotClose();
-}
 
 #include "imagebcgedit.moc"
