@@ -150,16 +150,13 @@ void UndoManager::clearRedoActions()
 
     // get the level of the first redo action
     int level = m_undoActions.size() + 1;
-    kdDebug() << "Level: " << level << endl;
     for(it = m_redoActions.begin(); it != m_redoActions.end(); ++it)
     {
         action = *it;
-        kdDebug() << "Level (erase): " << level << endl;
         m_cache->erase(level);
         delete action;
         level++;
     }
-    kdDebug() << "Level (end): " << level << endl;
     m_cache->erase(level);
     m_redoActions.clear();
 }
