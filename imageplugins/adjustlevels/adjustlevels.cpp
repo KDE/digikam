@@ -28,7 +28,6 @@
  
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qframe.h>
 #include <qgroupbox.h>
 #include <qhgroupbox.h> 
 #include <qvgroupbox.h> 
@@ -39,6 +38,8 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qpushbutton.h>
+#include <qlayout.h>
+#include <qframe.h>
 
 // KDE includes.
 
@@ -54,6 +55,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
+#include <kstandarddirs.h>
 
 // Digikam includes.
  
@@ -103,7 +105,30 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
     
     QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
-                                              
+                                        
+    QFrame *headerFrame = new QFrame( plainPage() );
+    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
+    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
+    pixmapLabelLeft->setScaledContents( false );
+    layout->addWidget( pixmapLabelLeft );
+    QLabel *labelTitle = new QLabel( i18n("Adjust Color Levels"), headerFrame, "labelTitle" );
+    layout->addWidget( labelTitle );
+    layout->setStretchFactor( labelTitle, 1 );
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    
+    QString directory;
+    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    
+    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
+    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    
+    // -------------------------------------------------------------
+          
     QGroupBox *gbox = new QGroupBox(plainPage());
     gbox->setFlat(false);
     gbox->setTitle(i18n("Input/output levels settings"));
@@ -218,7 +243,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_minOutput, 5, 5, 5, 5);
     grid->addMultiCellWidget(m_maxOutput, 6, 6, 5, 5);
     
-    topLayout->addMultiCellWidget(gbox, 0, 0, 0, 0);  
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);  
 
     // -------------------------------------------------------------
     
@@ -232,7 +257,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_resetButton = new QPushButton(i18n("&Reset all values"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
     
-    topLayout->addMultiCellWidget(gbox3, 2, 2, 0, 0);  
+    topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);  
     
     // -------------------------------------------------------------
     
@@ -256,7 +281,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
-    topLayout->addMultiCellWidget(gbox4, 0, 2, 1, 1);  
+    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);  
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.

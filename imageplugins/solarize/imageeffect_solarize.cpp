@@ -2,7 +2,8 @@
  * File  : imageeffect_solarize.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : 
+ * Description : a Digikam image plugin for to solarize 
+ *               an image.
  * 
  * Copyright 2004 by Renchi Raju
  *
@@ -21,12 +22,12 @@
 
 // Qt includes. 
  
-#include <qlayout.h>
-#include <qframe.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qlayout.h>
+#include <qframe.h>
 
 // KDE includes.
 
@@ -38,6 +39,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
+#include <kstandarddirs.h>
 
 // Digikam includes.
 
@@ -81,9 +83,31 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
+    QFrame *headerFrame = new QFrame( plainPage() );
+    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
+    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
+    pixmapLabelLeft->setScaledContents( false );
+    layout->addWidget( pixmapLabelLeft );
+    QLabel *labelTitle = new QLabel( i18n("Solarize Image"), headerFrame, "labelTitle" );
+    layout->addWidget( labelTitle );
+    layout->setStretchFactor( labelTitle, 1 );
+    topLayout->addWidget(headerFrame);
+    
+    QString directory;
+    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    
+    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
+    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    
+    // -------------------------------------------------------------
+                                                  
     QVGroupBox *gbox = new QVGroupBox(i18n("Solarize Image"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);

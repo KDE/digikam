@@ -2,7 +2,8 @@
  * File  : imageeffect_solarize.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : 
+ * Description : a Digikam image plugin for to solarize 
+ *               an image.
  * 
  * Copyright 2004 by Renchi Raju
  *

@@ -2,7 +2,8 @@
  * File  : imageeffect_emboss.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : 
+ * Description : a Digikam image editor plugin for to emboss 
+ *               an image.
  * 
  * Copyright 2004 by Gilles Caulier
  *

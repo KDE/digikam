@@ -2,7 +2,8 @@
  * File  : despeckle.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-24
- * Description : Despeckle image filter for ImageEditor
+ * Description : noise reduction image filter for Digikam 
+ *               image editor.
  * 
  * Copyright 2004 by Gilles Caulier
  *
@@ -37,8 +38,6 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qframe.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
@@ -49,6 +48,8 @@
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qimage.h>
+#include <qlayout.h>
+#include <qframe.h>
 
 // KDE includes.
 
@@ -62,6 +63,7 @@
 #include <kimageeffect.h>
 #include <kprogress.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 // Digikam includes.
 
@@ -112,6 +114,29 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    
+    QFrame *headerFrame = new QFrame( plainPage() );
+    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
+    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
+    pixmapLabelLeft->setScaledContents( false );
+    layout->addWidget( pixmapLabelLeft );
+    QLabel *labelTitle = new QLabel( i18n("Noise Reduction"), headerFrame, "labelTitle" );
+    layout->addWidget( labelTitle );
+    layout->setStretchFactor( labelTitle, 1 );
+    topLayout->addWidget(headerFrame);
+    
+    QString directory;
+    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    
+    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
+    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    
+    // -------------------------------------------------------------
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
