@@ -77,13 +77,16 @@ private:
 private:
 
     void FilmGrain(uint* data, int Width, int Height, int Sensibility);
-    inline uchar LimitValues (int ColorValue);
     
-    int randomize_value (int now, int min, int max, int mod_p, int rand_max, int holdness);
-    
-    void scatter_hsv_scatter (uchar *r, uchar *g, uchar *b, 
-                              int hue, int saturation, int value, int holdness);
-
+    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
+    // But R, G and B values has 256 values to be used so, this function analize 
+    // the value and limits to this range.
+    inline uchar LimitValues (int ColorValue)
+       {
+       if (ColorValue > 255) ColorValue = 255;        
+       if (ColorValue < 0) ColorValue = 0;
+       return ((uchar) ColorValue);
+       };
     
 private slots:
 

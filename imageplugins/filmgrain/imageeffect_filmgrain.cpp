@@ -271,14 +271,11 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
 
     uchar *Bits = (uchar*) data;
     
-    int RandValue;
-
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    
     srand ((uint) dt.secsTo(Y2000));
 
-    int i = 0, h, w;            
+    register int i = 0, h, w, RandValue;            
     
     for (h = 0 ; !m_cancel && (h < Height) ; ++h)
        {
@@ -288,8 +285,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
                         
           RandValue = (rand() % Graininess);
                     
-          if (RandValue % 2)
-             RandValue = 0;
+          if (RandValue % 2) RandValue = 0;
                     
           if (((Bits[i+2] + Bits[i+1] + Bits[i]) / 3) > 127)
              RandValue = -RandValue;
@@ -304,103 +300,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
        kapp->processEvents(); 
        }
 }
-       
-uchar ImageEffect_FilmGrain::LimitValues (int ColorValue)
-{
-    if (ColorValue > 255)        // MAX = 255
-        ColorValue = 255;        
-    if (ColorValue < 0)          // MIN = 0
-        ColorValue = 0;
-    return ((uchar) ColorValue);
-}
 
-// Not used actually !
-int ImageEffect_FilmGrain::randomize_value (int now, int min, int max, int mod_p, 
-                                            int rand_max, int holdness)
-{
-  int flag, newVal, steps, index;
-
-  steps = max - min + 1;
-  
-  QDateTime dt = QDateTime::currentDateTime();
-  QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-  srand ((uint) dt.secsTo(Y2000));
-  double rand_val = (double)(rand());
-  
-  for (index = 1 ; index < holdness ; ++index)
-     {
-     double tmp = (double)(rand());
-     
-     if ( tmp < rand_val ) rand_val = tmp;
-     }
-
-  if ((double)(rand()) < 0.5)
-     flag = -1;
-  else
-     flag = 1;
-
-  newVal = now + flag * ((int) (rand_max * rand_val) % steps);
-
-  if ( newVal < min )
-     {
-     if (mod_p == 1)
-        newVal += steps;
-     else
-        newVal = min;
-     }
-    
-  if ( max < newVal )
-     {
-     if (mod_p == 1)
-        newVal -= steps;
-     else
-        newVal = max;
-     }
-     
-  return newVal;
-}
-
-// Not used actually !
-void ImageEffect_FilmGrain::scatter_hsv_scatter (uchar *r, uchar *g, uchar *b, 
-                                                 int hue, int saturation, int value, int holdness)
-{
-  int h, s, v;
-  int h1, s1, v1;
-  int h2, s2, v2;
-
-  h = *r;
-  s = *g; 
-  v = *b;
-  
-  Digikam::rgb_to_hsl(h, s, v);
-  
-  if (0 < hue)
-     h = randomize_value (h, 0, 255, 1, hue, holdness);
-     
-  if ((0 < saturation))
-     s = randomize_value (s, 0, 255, 0, saturation, holdness);
-     
-  if ((0 < value))
-     v = randomize_value (v, 0, 255, 0, value, holdness);
-
-  h1 = h; s1 = s; v1 = v;
-
-  Digikam::hsl_to_rgb (h, s, v); // don't believe ! 
-
-  h2 = h; s2 = s; v2 = v;
-
-  Digikam::rgb_to_hsl (h2, s2, v2); // h2 should be h1. But... 
-  
-  if ((abs (h1 - h2) <= hue) &&
-      (abs (s1 - s2) <= saturation) &&
-      (abs (v1 - v2) <= value))
-     {
-     r = (uchar*)&h;
-     g = (uchar*)&s;
-     b = (uchar*)&v;
-     }
-}
-    
 }  // NameSpace DigikamFilmGrainImagesPlugin
 
 #include "imageeffect_filmgrain.moc"
