@@ -26,7 +26,8 @@
 #include <klocale.h>
 #include <kfiletreeview.h>
 #include <kaction.h>
-#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kdebug.h>
 
 #include <qlayout.h>
 #include <qpopupmenu.h>
@@ -108,6 +109,7 @@ DirSelectDialog::~DirSelectDialog()
 void DirSelectDialog::openNextDir( KFileTreeViewItem* parent)
 {
     KURL url = m_urlsToList.pop();
+    kdDebug() << "listing " << url.prettyURL() << endl;
 
     QListViewItem * child = parent->firstChild();
     while( child ) {
@@ -123,6 +125,12 @@ void DirSelectDialog::openNextDir( KFileTreeViewItem* parent)
             item->setOpen( true );
         else // already open -> go to next one
             slotNextDirToList( item );
+    }
+    else
+    {
+        kdWarning() << k_funcinfo <<  "Could not find item"
+                    << endl;
+        m_urlsToList.push(url);
     }
 }
 
@@ -198,8 +206,24 @@ void DirSelectDialog::slotUser1()
 
     KURL url(ftvItem->fileItem()->url());
     url.addPath(newDir);
-    
-    KIO::NetAccess::mkdir(url, this);
+
+    KIO::mkdir(url);
+
+    KURL dirToList(url);
+    m_urlsToList.clear();
+    while (!dirToList.equals(m_rootURL, true))
+    {
+        m_urlsToList.push( dirToList );
+        dirToList = dirToList.upURL();
+        dirToList.cleanPath();
+    }
+
+    m_branch->disconnect( SIGNAL( populateFinished( KFileTreeViewItem * )),
+                          this, SLOT( slotNextDirToList( KFileTreeViewItem *)));
+    connect( m_branch, SIGNAL( populateFinished( KFileTreeViewItem * )),
+             SLOT( slotNextDirToList( KFileTreeViewItem * ) ));
+
+    openNextDir(m_branch->root());
 }
 
 KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
