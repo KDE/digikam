@@ -32,6 +32,7 @@
 
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
+#include "imageeffect_cmy.h"
 #include "imageeffect_bcg.h"
 #include "imageeffect_solarize.h"
 #include "imageeffect_bwsepia.h"
@@ -66,6 +67,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     new KAction(i18n("HSL Balance..."), 0, 
                 this, SLOT(slotHSL()),
                 actionCollection(), "implugcore_hsl");
+    
+    new KAction(i18n("CMY Balance..."), 0, 
+                this, SLOT(slotCMY()),
+                actionCollection(), "implugcore_cmy");
                     
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
@@ -102,6 +107,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_bcg/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_rgb/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_hsl/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_cmy/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_sharpen/ ");
@@ -148,6 +154,12 @@ void ImagePlugin_Core::slotRGB()
 void ImagePlugin_Core::slotHSL()
 {
     ImageEffect_HSL dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_Core::slotCMY()
+{
+    ImageEffect_CMY dlg(parentWidget());
     dlg.exec();
 }
 

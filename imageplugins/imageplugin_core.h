@@ -55,6 +55,7 @@ private slots:
     void slotBCG();
     void slotRGB();
     void slotHSL();
+    void slotCMY();
     void slotBW();
     void slotSepia();
     void slotSolarize();
