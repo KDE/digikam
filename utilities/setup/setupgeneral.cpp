@@ -129,7 +129,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
                                                   QSizePolicy::MinimumExpanding));
 
    albumCollectionBox_->setMaximumHeight(80);
-   albumCollectionBox_->setScrollBar(true);
+   albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
 	  
    collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
                                               0, 2, 0, 0 );
