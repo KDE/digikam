@@ -153,11 +153,10 @@ QString CameraIconView::getTemplatedName(const QString& templ,
     else
         ext = ext.right( ext.length() - pos - 1);
 
-    struct tm* time_tm = gmtime(&itemInfo->mtime);
-    char* s = new char[100];
+    struct tm* time_tm = ::localtime(&itemInfo->mtime);
+    char s[100];
     strftime(s, 100, QFile::encodeName(dname), time_tm);
     dname  = s;
-    delete [] s;
 
     dname.sprintf(QFile::encodeName(dname), position+1);
     dname.replace("/","");
