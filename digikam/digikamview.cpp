@@ -34,6 +34,7 @@
 
 #include <kurl.h>
 #include <kfiledialog.h>
+#include <kpushbutton.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -408,11 +409,17 @@ void DigikamView::slot_albumAddImages()
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
-                                                AlbumSettings::instance()->getImageFileFilter(),
-                                                this,
-                                                i18n("Add Images"));
+    KFileDialog dlg(QString::null,
+                    AlbumSettings::instance()->getImageFileFilter(),
+                    this, "filedialog", true);
+    dlg.setOperationMode(KFileDialog::Opening );
+    dlg.setCaption(i18n("Add Images"));
+    dlg.setMode(KFile::Files);
+    dlg.okButton()->setText(i18n("&Add"));
+    dlg.exec();          
 
+    KURL::List urls = dlg.selectedURLs();
+    
     if (!urls.isEmpty())
     {
         KIO::CopyJob* job =
