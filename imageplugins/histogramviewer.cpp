@@ -47,6 +47,7 @@
 
 
 // Constructor using local image file name.
+
 HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
@@ -68,6 +69,7 @@ HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
 }
 
 // Constructor using QImage instance.
+
 HistogramViewer::HistogramViewer(QWidget *parent, QImage image)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
@@ -89,7 +91,8 @@ HistogramViewer::HistogramViewer(QWidget *parent, QImage image)
              m_image.height());
 }
 
-// Constructor using image RAW data 32 bits (RGBA).
+// Constructor using image RAW data 32 bits (RGBA) and without image selection.
+
 HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, uint height)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
@@ -99,7 +102,22 @@ HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, u
     setupGui(imageData, width, height);
 }
 
-void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
+// Constructor using image RAW data 32 bits (RGBA) and with image selection.
+
+HistogramViewer::HistogramViewer(QWidget* parent, 
+                                 uint *imageData, uint imageWidth, uint imageHeight,
+                                 uint *selectionData, uint selectionWidth, uint selectionheight)
+               : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
+                             parent, 0, true, true)
+{
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
+    setupGui(imageData, imageWidth, imageHeight, 
+             selectionData, selectionWidth, selectionheight);
+}
+
+void HistogramViewer::setupGui(uint *imageData, uint imageWidth, uint imageHeight,
+                               uint *selectionData, uint selectionWidth, uint selectionheight)
 {
     setHelp("histogramviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
@@ -111,7 +129,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     imagePreview->setFixedHeight( 48 );
     QImage image;
     QPixmap pix;
-    image.create( width, height, 32 );
+    image.create( imageWidth, imageHeight, 32 );
     image.setAlphaBuffer(true) ;
     memcpy(image.bits(), imageData, image.numBytes());
     image = image.smoothScale(48, 48, QImage::ScaleMin);
@@ -163,14 +181,32 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     QWhatsThis::add( m_colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
                                        "<b>Red</b>: drawing the red image channel on the foreground.<p>"
                                        "<b>Green</b>: drawing the green image channel on the foreground.<p>"
-                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
-                                     
+                                       "<b>Blue</b>: drawing the blue image channel on the foreground."));
+
+    QLabel *label11 = new QLabel(i18n("Rendering:"), plainPage());
+    label11->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_renderingCB = new QComboBox( false, plainPage() );
+    m_renderingCB->insertItem( i18n("Full Image") );
+    m_renderingCB->insertItem( i18n("Image Selection") );
+    m_renderingCB->setCurrentText( i18n("Full Image") );
+    
+    if (!selectionData || !selectionWidth || !selectionheight)
+       m_renderingCB->setEnabled( false );
+    else 
+       m_renderingCB->setEnabled( true );
+    
+    QWhatsThis::add( m_renderingCB, i18n("<p>Select here the histogram rendering method:<p>"
+                     "<b>Full Image</b>: drawing histogram using the full image.<p>"
+                     "<b>Image Selection</b>: drawing histogram using the current image selection."));
+                                                                            
     grid->addWidget(label1, 0, 0);
     grid->addWidget(m_channelCB, 0, 1);
     grid->addWidget(label2, 0, 2);
     grid->addWidget(m_scaleCB, 0, 3);
     grid->addWidget(label10, 1, 0);
     grid->addWidget(m_colorsCB, 1, 1);
+    grid->addWidget(label11, 1, 2);
+    grid->addWidget(m_renderingCB, 1, 3);
 
     // -------------------------------------------------------------
 
@@ -178,12 +214,21 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140,
-                                                     imageData,
-                                                     width,
-                                                     height,
-                                                     frame);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
+    if (!selectionData || !selectionWidth || !selectionheight)
+        {
+        m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, imageWidth, imageHeight, frame);
+        QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected "
+                                                 "image channel"));
+        }
+    else
+        {
+        m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, imageWidth, imageHeight,
+                                                         selectionData, selectionWidth, selectionheight, frame);
+        QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected "
+                                                 "image channel. You can choose an histogram rendering for "
+                                                 "the full image or the image selection."));
+        }
+                                                         
     l->addWidget(m_histogramWidget, 0);
 
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, plainPage() );
@@ -258,6 +303,9 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
 
     connect(m_colorsCB, SIGNAL(activated(int)),
             this, SLOT(slotColorsChanged(int)));
+
+    connect(m_renderingCB, SIGNAL(activated(int)),
+            this, SLOT(slotRenderingChanged(int)));            
                         
     connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
             this, SLOT(slotUpdateMinInterv(int)));
@@ -377,6 +425,22 @@ void HistogramViewer::slotColorsChanged(int color)
     m_histogramWidget->repaint(false);
 }
 
+void HistogramViewer::slotRenderingChanged(int rendering)
+{
+    switch(rendering)
+       {
+       case 1:           // Image Selection.
+          m_histogramWidget->m_renderingType = Digikam::HistogramWidget::ImageSelectionHistogram;
+          break;
+       
+       default:          // Full Image.
+          m_histogramWidget->m_renderingType = Digikam::HistogramWidget::FullImageHistogram;
+          break;
+       }
+
+    m_histogramWidget->repaint(false);
+    updateInformations();
+}
 
 void HistogramViewer::slotUpdateMinInterv(int min)
 {
@@ -403,22 +467,43 @@ void HistogramViewer::updateInformations()
     int min = m_minInterv->value();
     int max = m_maxInterv->value();
     int channel = m_channelCB->currentItem();
-
+    double mean, pixels, stddev, counts, median;
+    
     if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
        {
-       double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
+       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+          mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
+       else
+          mean = m_histogramWidget->m_selectionHistogram->getMean(channel, min, max);
+       
        m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
 
-       double pixels = m_histogramWidget->m_imageHistogram->getPixels();
+       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+          pixels = m_histogramWidget->m_imageHistogram->getPixels();
+       else
+          pixels = m_histogramWidget->m_selectionHistogram->getPixels();
+       
        m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
 
-       double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+          stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+       else 
+          stddev = m_histogramWidget->m_selectionHistogram->getStdDev(channel, min, max);
+       
        m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
 
-       double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+          counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+       else
+          counts = m_histogramWidget->m_selectionHistogram->getCount(channel, min, max);
+       
        m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
 
-       double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+          median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+       else
+          median = m_histogramWidget->m_selectionHistogram->getMedian(channel, min, max);
+       
        m_labelMedianValue->setText(value.setNum(median, 'f', 1));
 
        double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);

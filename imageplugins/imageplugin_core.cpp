@@ -95,9 +95,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Image menu actions.
 
-    new KAction(i18n("Histogram..."), 0,
+    KAction *histogramAction = new KAction(i18n("Histogram..."), 0,
                 this, SLOT(slotHistogramViewer()),
                 actionCollection(), "implugcore_histogramviewer");
+    histogramAction->setWhatsThis( i18n( "This option display the current image histogram. "
+                                         "If you have selected a region, you can choose an histogram "
+                                         "rendering for the full image or the current image selection."));
 
     //-------------------------------
     // Filters menu actions.
@@ -211,13 +214,28 @@ void ImagePlugin_Core::slotHistogramViewer()
 {
     Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
+    uint* i_data = iface.getOriginalData();
+    int i_w      = iface.originalWidth();
+    int i_h      = iface.originalHeight();
 
-    HistogramViewer dlg(parentWidget(), data, w, h);
-    dlg.exec();
-    delete [] data;
+    uint* s_data = iface.getSelectedData();
+    int s_w      = iface.selectedWidth();
+    int s_h      = iface.selectedHeight();
+     
+    if (!s_data || !s_w || !s_h)
+        {
+        HistogramViewer dlg(parentWidget(), i_data, i_w, i_h);
+        dlg.exec();
+        delete [] i_data;
+        }
+    else 
+        {
+        HistogramViewer dlg(parentWidget(), i_data, i_w, i_h, 
+                            s_data, s_w, s_h);
+        dlg.exec();
+        delete [] i_data;
+        delete [] s_data;
+        }
 }
 
 void ImagePlugin_Core::slotBW()

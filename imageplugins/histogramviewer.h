@@ -50,6 +50,10 @@ public:
     HistogramViewer(QWidget *parent, QString imageFile);
     HistogramViewer(QWidget *parent, QImage image);
     HistogramViewer(QWidget *parent, uint *imageData, uint width, uint height);
+    HistogramViewer(QWidget *parent, 
+                    uint *imageData, uint width, uint height,
+                    uint *selectionData, uint selectionWidth, uint selectionheight);
+
     ~HistogramViewer();
 
 public slots:    
@@ -65,7 +69,8 @@ private:
     
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
-    QComboBox                    *m_colorsCB;    
+    QComboBox                    *m_colorsCB;  
+    QComboBox                    *m_renderingCB;
     
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
@@ -82,7 +87,8 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::HistogramWidget     *m_histogramWidget;
     
-    void setupGui(uint *imageData, uint width, uint height);
+    void setupGui(uint *imageData, uint imageWidth, uint imageHeight,
+                  uint *selectionData=0L, uint selectionWidth=0, uint selectionheight=0);
     void updateInformations();
 
 private slots:
@@ -90,6 +96,7 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
+    void slotRenderingChanged(int rendering);
     void slotIntervChanged(int);
 };
 

@@ -49,20 +49,31 @@ enum HistogramType
     LogScaleHistogram,        // Logarithmic scale.
     RedColor,                 // Red color to foreground in All Colors Channel mode.
     GreenColor,               // Green color to foreground in All Colors Channel mode.
-    BlueColor                 // Blue color to foreground in All Colors Channel mode.
+    BlueColor,                // Blue color to foreground in All Colors Channel mode.
+    FullImageHistogram,       // Full image histogram rendering.
+    ImageSelectionHistogram   // Image selection histogram rendering.
 };
     
 public:
 
-    HistogramWidget(int w, int h, uint *i_data, uint i_w, uint i_h,
+    HistogramWidget(int w, int h,                              // Widget size.
+                    uint *i_data, uint i_w, uint i_h,          // Full image info.
                     QWidget *parent=0, bool selectMode=true);
+    
+    HistogramWidget(int w, int h,                              // Widget size.
+                    uint *i_data, uint i_w, uint i_h,          // Full image info.
+                    uint *s_data, uint s_w, uint s_h,          // Image selection info.
+                    QWidget *parent=0, bool selectMode=true);
+    
     ~HistogramWidget();
 
-    class ImageHistogram *m_imageHistogram;
-    
-    int    m_channelType;     // Channel type to draw.
-    int    m_scaleType;       // Scale to use for drawing.
-    int    m_colorType;       // Color to use for drawing in All Colors Channel mode.
+    int   m_channelType;     // Channel type to draw.
+    int   m_scaleType;       // Scale to use for drawing.
+    int   m_colorType;       // Color to use for drawing in All Colors Channel mode.
+    int   m_renderingType;   // Using full image or image selection for histogram rendering.
+
+    class ImageHistogram *m_imageHistogram;            // Full image.
+    class ImageHistogram *m_selectionHistogram;        // Image selection.
 
 signals:
     

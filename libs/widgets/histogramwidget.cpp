@@ -46,19 +46,50 @@
 namespace Digikam
 {
 
-HistogramWidget::HistogramWidget(int w, int h, uint *i_data,
-                                 uint i_w, uint i_h, QWidget *parent,
-                                 bool selectMode)
+// Constructor without image selection.
+
+HistogramWidget::HistogramWidget(int w, int h, 
+                                 uint *i_data, uint i_w, uint i_h, 
+                                 QWidget *parent, bool selectMode)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
     m_colorType      = RedColor;
+    m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
     m_selectMode     = selectMode;
     m_xmin           = 0;
     m_xmax           = 0;
-    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h);
+    
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
+    m_selectionHistogram = 0L;
+
+    setMouseTracking(true);
+    setPaletteBackgroundColor(Qt::NoBackground);
+    setMinimumSize(w, h);
+    emit signalMouseReleased(255);
+}
+
+// Constructor with image selection.
+
+HistogramWidget::HistogramWidget(int w, int h, 
+                                 uint *i_data, uint i_w, uint i_h, 
+                                 uint *s_data, uint s_w, uint s_h,
+                                 QWidget *parent, bool selectMode)
+               : QWidget(parent, 0, Qt::WDestructiveClose)
+{
+    m_channelType    = ValueHistogram;
+    m_scaleType      = LogScaleHistogram;
+    m_colorType      = RedColor;
+    m_renderingType  = FullImageHistogram;
+    m_inSelected     = false;
+    m_selectMode     = selectMode;
+    m_xmin           = 0;
+    m_xmax           = 0;
+    
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h);
 
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -70,10 +101,14 @@ HistogramWidget::~HistogramWidget()
 {
     if (m_imageHistogram)
        delete m_imageHistogram;
+
+    if (m_selectionHistogram)
+       delete m_selectionHistogram;
 }
 
 // This method is inspired of Gimp2.0 
 // app/widgets/gimphistogramview.c::gimp_histogram_view_expose 
+
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
     uint   x, y;
@@ -81,7 +116,13 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     uint   wWidth = width();
     uint   wHeight = height();
     double max;
-
+    class ImageHistogram *histogram; 
+    
+    if (m_renderingType == ImageSelectionHistogram && m_selectionHistogram)
+       histogram = m_selectionHistogram;
+    else 
+       histogram = m_imageHistogram;
+    
     x  = 0; y  = 0;
     yr = 0; yg = 0; yb = 0;
     max = 0.0;
@@ -89,29 +130,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     switch(m_channelType)
        {
        case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
-          max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::GreenChannel);  
+          max = histogram->getMaximum(Digikam::ImageHistogram::GreenChannel);  
           break;
              
        case Digikam::HistogramWidget::BlueChannelHistogram:     // Blue channel.
-          max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::BlueChannel);    
+          max = histogram->getMaximum(Digikam::ImageHistogram::BlueChannel);    
           break;
              
        case Digikam::HistogramWidget::RedChannelHistogram:      // Red channel.
-          max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::RedChannel); 
+          max = histogram->getMaximum(Digikam::ImageHistogram::RedChannel); 
           break;
 
        case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::AlphaChannel);  
+          max = histogram->getMaximum(Digikam::ImageHistogram::AlphaChannel);  
           break;
        
        case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
-          max = QMAX (QMAX (m_imageHistogram->getMaximum(Digikam::ImageHistogram::RedChannel),
-                            m_imageHistogram->getMaximum(Digikam::ImageHistogram::GreenChannel)),
-                      m_imageHistogram->getMaximum(Digikam::ImageHistogram::BlueChannel));  
+          max = QMAX (QMAX (histogram->getMaximum(Digikam::ImageHistogram::RedChannel),
+                            histogram->getMaximum(Digikam::ImageHistogram::GreenChannel)),
+                      histogram->getMaximum(Digikam::ImageHistogram::BlueChannel));  
           break;
                     
        case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
-          max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::ValueChannel); 
+          max = histogram->getMaximum(Digikam::ImageHistogram::ValueChannel); 
           break;
        }            
              
@@ -155,29 +196,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           switch(m_channelType)
              {
              case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
-                v = m_imageHistogram->getValue(Digikam::ImageHistogram::GreenChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, ++i);   
                 break;
              
              case Digikam::HistogramWidget::BlueChannelHistogram:     // Blue channel.
-                v = m_imageHistogram->getValue(Digikam::ImageHistogram::BlueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, ++i);   
                 break;
              
              case Digikam::HistogramWidget::RedChannelHistogram:      // Red channel.
-                v = m_imageHistogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);    
+                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);    
                 break;
 
              case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = m_imageHistogram->getValue(Digikam::ImageHistogram::AlphaChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, ++i);   
                 break;
 
              case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
-                vr = m_imageHistogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);   
-                vg = m_imageHistogram->getValue(Digikam::ImageHistogram::GreenChannel, i);   
-                vb = m_imageHistogram->getValue(Digikam::ImageHistogram::BlueChannel, i);   
+                vr = histogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);   
+                vg = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);   
+                vb = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);   
                 break;
                                                 
              case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
-                v = m_imageHistogram->getValue(Digikam::ImageHistogram::ValueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, ++i);   
                 break;
              }            
             
