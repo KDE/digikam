@@ -60,6 +60,10 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
         m_width  = w-2;
         m_height = h-2;
     }
+
+    if (m_width <= 0 || m_height <= 0)
+        return;
+    
     
     if (bevel & Theme::SUNKEN)
     {
@@ -108,6 +112,9 @@ Texture::~Texture()
 
 QPixmap Texture::renderPixmap() const
 {
+    if (m_width <= 0 || m_height <= 0)
+        return QPixmap();
+
     if (!m_border)
         return m_pixmap;
 
