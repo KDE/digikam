@@ -62,6 +62,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_clearFlag      = HistogramNone;
     m_curves         = curves;
     m_grab_point     = -1;    
+    m_last           = 0;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -81,6 +82,12 @@ CurvesWidget::~CurvesWidget()
 
     if (m_imageHistogram)
        delete m_imageHistogram;
+}
+
+void CurvesWidget::reset(void)
+{
+    m_grab_point = -1;    
+    repaint(false);
 }
 
 void CurvesWidget::customEvent(QCustomEvent *event)
@@ -375,9 +382,15 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
                break;
                }
             }
-               
+         
          m_grab_point = closest_point;
          m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
+         
+         kdDebug() << "m_leftmost=" << m_leftmost 
+                   << "  m_rightmost=" << m_rightmost 
+                   << "  m_grab_point=" << m_grab_point 
+                   << endl;    
+         
          break;
 
       case Digikam::ImageCurves::CURVE_FREE:
@@ -429,7 +442,10 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
          
    if (distance > 8)
       closest_point = (x + 8) / 16;   
-      
+   
+   kdDebug() << "closest_point=" << closest_point 
+             << endl;         
+             
    switch ( m_curves->getCurveType(m_channelType) )
       {
       case Digikam::ImageCurves::CURVE_SMOOTH:
@@ -447,6 +463,11 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
  
             m_curves->setCurvePointX(m_channelType, m_grab_point, -1);
             
+            kdDebug() << "m_leftmost=" << m_leftmost 
+                   << "  m_rightmost=" << m_rightmost 
+                   << "  x=" << x 
+                   << endl; 
+                   
             if (x > m_leftmost && x < m_rightmost)
                {
                closest_point = (x + 8) / 16;
@@ -455,6 +476,9 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
                   m_grab_point = closest_point;
 
                m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
+               
+               kdDebug() << "closest_point(2)=" << closest_point 
+                         << endl;   
                }
 
             m_curves->curvesCalculateCurve(m_channelType);

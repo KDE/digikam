@@ -311,9 +311,7 @@ void AdjustCurveDialog::slotResetAllChannels()
     for (int channel = 0 ; channel < 5 ; ++channel)
        m_curves->curvesChannelReset(channel);
 
-    // Refresh the current curves config.
-    slotChannelChanged(m_channelCB->currentItem());
-
+    m_curvesWidget->reset();
     slotEffect();
 }
 
@@ -321,9 +319,7 @@ void AdjustCurveDialog::slotUser1()
 {
     m_curves->curvesChannelReset(m_channelCB->currentItem());
 
-    // Refresh the current curves config.
-    slotChannelChanged(m_channelCB->currentItem());
-
+    m_curvesWidget->reset();
     slotEffect();
 }
 

@@ -76,6 +76,8 @@ public:
     // Stop current histogram computations.
     void stopHistogramComputation(void);
     
+    void reset(void);
+    
     int m_channelType;     // Channel type to draw.
     int m_scaleType;       // Scale to use for drawing.
 
