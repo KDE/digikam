@@ -355,6 +355,8 @@ void ListView::contentsMousePressEvent(QMouseEvent *e)
     if (!item)
         return;
 
+    setSelected(item);
+
     if (e->button() == Qt::RightButton) {
         emit signalRightButtonPressed(item);
         return;
@@ -376,8 +378,6 @@ void ListView::contentsMouseReleaseEvent(QMouseEvent *e)
             return;
         }
     }
-
-    setSelected(item);
 }
 
 void ListView::contentsMouseDoubleClickEvent(QMouseEvent *e)
