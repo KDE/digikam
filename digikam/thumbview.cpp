@@ -46,7 +46,8 @@ public:
     QRect *rubber;
     QPoint dragStartPos;
 
-    QPtrList<ThumbItem> selectedItems;
+    QPtrList<ThumbItem>    selectedItems;
+    QPtrList<ThumbItem>    prevSelectedItems;
 
     QTimer* updateTimer;
 
@@ -627,6 +628,15 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     {
         clearSelection();
     }
+    else
+    {
+        d->prevSelectedItems.clear();
+        for (ThumbItem* item = d->selectedItems.first();
+             item; item = d->selectedItems.next())
+        {
+            d->prevSelectedItems.append(item);
+        }
+    }
 
     // If not item then initiate rubber
     if ( d->rubber ) {
@@ -682,6 +692,8 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
 
 
     bool changed = false;
+
+    blockSignals(true);
     
     ThumbViewPrivate::ItemContainer *c = d->lastContainer;
     for (; c; c = c->prev) {
@@ -689,14 +701,17 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
             ThumbItem *item = c->items.last();
 	    for ( ; item; item = c->items.prev() ) {
                 if (nr.intersects(item->rect())) {
-                    if (!item->isSelected()) {
+                    if (!item->isSelected())
+                    {
                         item->setSelected(true, false);
                         changed = true;
                         paintRegion += QRect(item->rect());
                     }
                 }
                 else {
-                    if (item->isSelected()) {
+                    if (item->isSelected() &&
+                        d->prevSelectedItems.containsRef(item) == 0)
+                    {
                         item->setSelected(false, false);
                         changed = true;
                         paintRegion += QRect(item->rect());
@@ -706,7 +721,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
         }
     }
     
-
+    blockSignals(false);
     viewport()->setUpdatesEnabled(true);
 
     QRect r = *d->rubber;
@@ -739,7 +754,6 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     p.end();
 
     d->pressedMoved = true;
-
 }
 
 
@@ -764,8 +778,11 @@ void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
         delete d->rubber;
         d->rubber = 0;
 
+
     }
 
+    d->prevSelectedItems.clear();
+    
     if (e->button() == Qt::RightButton) {
         ThumbItem *item = findItem(e->pos());
         if (item) 
