@@ -74,6 +74,7 @@ private:
     
     QPushButton                  *m_helpButton;
     
+    QComboBox                    *m_channelCB;    
     QComboBox                    *m_targetColor;
     QComboBox                    *m_scaleCB;  
     
@@ -99,6 +100,7 @@ private slots:
     void slotUser1();
     void slotColorSelectedFromImage( const QColor &color );
     void slotScaleChanged(int scale);
+    void slotChannelChanged(int channel);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

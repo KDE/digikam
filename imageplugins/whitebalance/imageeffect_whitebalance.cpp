@@ -98,7 +98,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
 
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 4 , marginHint(), spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -111,7 +111,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QLabel *labelTitle = new QLabel( i18n("Image White Balance Correction"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 4);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -129,6 +129,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     gbox->setFlat(false);
     gbox->setTitle(i18n("Settings"));
     QGridLayout* grid = new QGridLayout( gbox, 4, 6, 20, spacingHint());
+    
+    QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
+    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_channelCB = new QComboBox( false, gbox );
+    m_channelCB->insertItem( i18n("Red") );
+    m_channelCB->insertItem( i18n("Green") );
+    m_channelCB->insertItem( i18n("Blue") );
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+                                       "<b>Red</b>: display the red image-channel values.<p>"
+                                       "<b>Green</b>: display the green image-channel values.<p>"
+                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
 
     QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -142,6 +153,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                      "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
 
+    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
     grid->addMultiCellWidget(label2, 0, 0, 4, 4);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
     
@@ -153,7 +166,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
-    m_whiteBalanceCurvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_whiteBalanceCurves, frame);
+    m_whiteBalanceCurvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, 
+                                                           m_whiteBalanceCurves, frame, true);
     QWhatsThis::add( m_whiteBalanceCurvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                                       "histogram channel"));
     l->addWidget(m_whiteBalanceCurvesWidget, 0);
@@ -191,7 +205,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(240, 160, frame2, true, Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. Click on image to select "
+                                                   "the foreground color to use for image's white-balance adjustments"));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
     QLabel *label6 = new QLabel(i18n("Target:"), gbox4);
@@ -200,10 +215,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white balance adjustments preview."));
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
-    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
+    topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
 
@@ -215,6 +230,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
 
     // -------------------------------------------------------------
  
+    connect(m_channelCB, SIGNAL(activated(int)),
+            this, SLOT(slotChannelChanged(int)));
+    
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
     
@@ -243,7 +261,9 @@ void ImageEffect_WhiteBalance::slotUser1()
 {
     blockSignals(true);
                    
-    // TODO
+    m_whiteBalanceCurves->curvesReset();
+    m_previewOriginalWidget->resetCrossPosition();    
+    m_targetColor->setCurrentItem(WhiteColor);
     
     blockSignals(false);
     slotEffect();  
@@ -270,6 +290,29 @@ void ImageEffect_WhiteBalance::slotScaleChanged(int scale)
 
        default:          // Lin.
           m_whiteBalanceCurvesWidget->m_scaleType = Digikam::CurvesWidget::LinScaleHistogram;
+          break;
+       }
+
+    m_whiteBalanceCurvesWidget->repaint(false);
+}
+
+void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
+{
+    switch(channel)
+       {
+       case 0:           // Red.
+          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
+          m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
+          break;
+
+       case 1:           // Green.
+          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
+          m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
+          break;
+
+       case 2:           // Blue.
+          m_whiteBalanceCurvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
+          m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
        }
 
@@ -335,8 +378,6 @@ void ImageEffect_WhiteBalance::bwBalance(uint *data, int w, int h, int tColor, Q
     
     uchar* pOutBits = new uchar[w*h*4];    
 
-    m_whiteBalanceCurves->curvesReset();
-    
     for (int i = 0 ; i < 256; i++)
        {
        m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::RedChannel, i, curvePoint(tColor, red, i));
