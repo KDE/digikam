@@ -108,8 +108,6 @@ DigikamApp::~DigikamApp()
     if (mView)
         delete mView;
 
-    delete m_config;
-    
     mAlbumSettings->saveSettings();
     delete mAlbumSettings;
     
