@@ -1,7 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-//    DIGIKAMVIEW.CPP
-//
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles Caulier <caulier dot gilles at free.fr>
 //
