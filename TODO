@@ -63,7 +63,7 @@ o Thumnails generation for RAW files.
 * EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
 
   
-Image Viever/Editor:
+Image Viewer/Editor:
 --------------------
 
 * Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
@@ -79,6 +79,16 @@ o Added Plugins interface.
 o Added Blur/Sharpen image filters.
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.
+
+
+Handbook :
+----------
+
+o Updated screenshoots.
+o New screenshoots for dialog (setup, Album properties, 
+  Exif viewer, ImageViewer).
+o Added new sections for Album properties, Exif viewer and 
+  ImageViewer.
 
 
 Plugins (LibKIPI):
