@@ -79,6 +79,12 @@ private:
     void FilmGrain(uint* data, int Width, int Height, int Sensibility);
     inline uchar LimitValues (int ColorValue);
     
+    int randomize_value (int now, int min, int max, int mod_p, int rand_max, int holdness);
+    
+    void scatter_hsv_scatter (uchar *r, uchar *g, uchar *b, 
+                              int hue, int saturation, int value, int holdness);
+
+    
 private slots:
 
     void slotHelp();
