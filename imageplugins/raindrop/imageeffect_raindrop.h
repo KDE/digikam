@@ -53,11 +53,7 @@ public:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    
-    void   rainDrops(uint *data, int Width, int Height, int DropSize, int Amount, int Coeff);
-    bool** CreateBoolArray (uint Columns, uint Rows);
-    void   FreeBoolArray (bool** lpbArray, uint Columns);
-    inline uchar LimitValues (int ColorValue);
+    void rainDrops(uint *data, int Width, int Height, int DropSize, int Amount, int Coeff);
     
 private:
     
@@ -79,6 +75,10 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
 
+    inline bool** CreateBoolArray (uint Columns, uint Rows);
+    inline void FreeBoolArray (bool** lpbArray, uint Columns);
+    inline uchar LimitValues (int ColorValue);
+    
 private slots:
 
     void slotHelp();
