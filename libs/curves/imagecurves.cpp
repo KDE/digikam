@@ -112,8 +112,8 @@ void ImageCurves::curvesChannelReset(int channel)
     
     // All curve type init.
     
-    m_curves->curve_type[channel] = CURVE_SMOOTH;
-    curvesCalculateCurve(channel);  
+    //m_curves->curve_type[channel] = CURVE_SMOOTH;
+    //curvesCalculateCurve(channel);  
 }
 
 void ImageCurves::curvesCalculateCurve(int channel)
