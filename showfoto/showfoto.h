@@ -64,6 +64,7 @@ private slots:
     void slotToggleShowBar();
     void slotViewHistogram();
     void slotChangeBCG();
+    void slotImagePluginsHelp();
         
 private:
 
@@ -75,24 +76,29 @@ private:
 
 private:
 
-    Canvas*                m_canvas;
-    Digikam::ThumbBarView* m_bar;
-    KConfig*               m_config;
+    Canvas                *m_canvas;
     
-    KToggleAction*  m_zoomFitAction;
-    KAction*        m_zoomPlusAction;
-    KAction*        m_zoomMinusAction;
-    KToggleAction*  m_fullScreenAction;
-    KToggleAction*  m_showBarAction;
-    KSelectAction*  m_viewHistogramAction;
-    KAction*        m_cropAction;
-    KAction*        m_revertAction;
-    KAction*        m_saveAction;
-    KAction*        m_saveAsAction;
-    KAction*        m_undoAction;
-    KAction*        m_redoAction;
+    Digikam::ThumbBarView *m_bar;
     
-    bool            m_fullScreen;
+    KConfig               *m_config;
+    
+    KToggleAction         *m_zoomFitAction;
+    KToggleAction         *m_fullScreenAction;
+    KToggleAction         *m_showBarAction;
+    
+    KAction               *m_zoomPlusAction;
+    KAction               *m_zoomMinusAction;
+    KAction               *m_cropAction;
+    KAction               *m_revertAction;
+    KAction               *m_saveAction;
+    KAction               *m_saveAsAction;
+    KAction               *m_undoAction;
+    KAction               *m_redoAction;
+    KAction               *m_imagePluginsHelp;
+
+    KSelectAction         *m_viewHistogramAction;
+    
+    bool                   m_fullScreen;
 };
 
 #endif /* SHOWFOTO_H */

@@ -256,6 +256,13 @@ void ShowFoto::setupActions()
     new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
                 this, SLOT(slotChangeBCG()),
                 actionCollection(), "contrast_minus");
+                
+    // -- help actions -----------------------------------------------
+    
+    m_imagePluginsHelp = new KAction(i18n("Image Plugins Handbooks"), 
+                                     "digikamimageplugins", 0, 
+                                     this, SLOT(slotImagePluginsHelp()),
+                                     actionCollection(), "imageview_imagepluginshelp");
     
     // ---------------------------------------------------------------
     
@@ -725,6 +732,11 @@ void ShowFoto::slotChangeBCG()
     {
         m_canvas->decreaseContrast();
     }
+}
+
+void ShowFoto::slotImagePluginsHelp()
+{
+    KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
 }
 
 #include "showfoto.moc"

@@ -54,6 +54,11 @@
      <Action name="view_histogram" /> 
  </Menu>
 
+ <Menu name="help" >
+    <text>&amp;Help</text>
+     <Action name="imageview_imagepluginshelp" />
+ </Menu>
+ 
  <Merge/>
  
 </MenuBar>
