@@ -43,22 +43,21 @@
 SetupMime::SetupMime(QWidget* parent )
          : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
+   QVBoxLayout *layout = new QVBoxLayout( parent );
 
    // --------------------------------------------------------
 
    QGroupBox *imageFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Image Files"), parent);
 
    QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
-   imageFileFilterLabel->setText(i18n("Show only image files with extensions:"));
+   imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
 
    m_imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
    QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
                                                 "to be displayed in Albums (such as JPEG or TIFF); "
                                                 "when these files are double-clicked on "
                                                 "they will be opened with the Digikam ImageViewer."));
-
+   imageFileFilterLabel->setBuddy(m_imageFileFilterEdit);
    layout->addWidget(imageFileFilterBox);
 
    // --------------------------------------------------------
@@ -66,13 +65,14 @@ SetupMime::SetupMime(QWidget* parent )
    QGroupBox *movieFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Movie Files"), parent);
 
    QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
-   movieFileFilterLabel->setText(i18n("Show only movie files with extensions:"));
+   movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
 
    m_movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
    QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
                                                 "to be displayed in Albums (such as MPEG or AVI); "
                                                 "when these files are double-clicked on they will "
                                                 "be opened with the default KDE movie player."));
+   movieFileFilterLabel->setBuddy(m_movieFileFilterEdit);
    layout->addWidget(movieFileFilterBox);
 
    // --------------------------------------------------------
@@ -80,7 +80,7 @@ SetupMime::SetupMime(QWidget* parent )
    QGroupBox *audioFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Audio Files"), parent);
 
    QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
-   audioFileFilterLabel->setText(i18n("Show only audio files with extensions:"));
+   audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
 
    m_audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
    QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
@@ -88,6 +88,7 @@ SetupMime::SetupMime(QWidget* parent )
                                                 "when these files are double-clicked on they will "
                                                 "be opened with the default KDE audio player."));
 
+   audioFileFilterLabel->setBuddy(m_audioFileFilterEdit);
 
    layout->addWidget(audioFileFilterBox);
 
@@ -96,13 +97,13 @@ SetupMime::SetupMime(QWidget* parent )
    QGroupBox *rawFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Raw Files"), parent);
 
    QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
-   rawFileFilterLabel->setText(i18n("Show only raw files with extensions:"));
+   rawFileFilterLabel->setText(i18n("Show only &raw files with extensions:"));
 
    m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
    QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
                                               "to be displayed in Albums (such as CRW, for Canon cameras, "
                                               "or NEF, for Nikon cameras)."));
-
+   rawFileFilterLabel->setBuddy(m_rawFileFilterEdit);
    layout->addWidget(rawFileFilterBox);
 
    // --------------------------------------------------------

@@ -32,36 +32,26 @@
 SetupMisc::SetupMisc(QWidget* parent)
     : QWidget( parent )
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+
+    QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint() );
 
    // --------------------------------------------------------
-
-   QGroupBox *trashGroupBox = new QGroupBox(i18n("Delete Settings"),
-                                               parent);
-   trashGroupBox->setColumnLayout(0, Qt::Vertical);
-   trashGroupBox->layout()->setSpacing(5);
-   trashGroupBox->layout()->setMargin(5);
-
-   QGridLayout* lay = new QGridLayout(trashGroupBox->layout());
-
-   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash"),
-                                   trashGroupBox);
-   lay->addMultiCellWidget(m_useTrashCheck, 0, 0, 0, 1);
-   layout->addWidget(trashGroupBox);
+   m_useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"),
+                                   this);
+   layout->addWidget(m_useTrashCheck);
 
    // --------------------------------------------------------
-
-   QVGroupBox *splashGroupBox = new QVGroupBox(i18n("Splash Screen Settings"),
-                                               parent);
-   m_showSplashCheck = new QCheckBox(i18n("Show splash screen at startup"),
-                                     splashGroupBox);
-   layout->addWidget(splashGroupBox);
+   m_showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"),
+                                     this);
+   layout->addWidget(m_showSplashCheck);
 
    // --------------------------------------------------------
 
    layout->addStretch();
    readSettings();
+   adjustSize();
+   mainLayout->addWidget(this);
 }
 
 SetupMisc::~SetupMisc()

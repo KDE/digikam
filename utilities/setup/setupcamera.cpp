@@ -46,16 +46,12 @@
 SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
-    QVBoxLayout* vbox = new QVBoxLayout( parent, 5, 5 );
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
-    QGroupBox* groupBox = new QGroupBox( parent, "groupBox" );
-    groupBox->setColumnLayout(0, Qt::Vertical );
-    groupBox->layout()->setSpacing( 5 );
-    groupBox->layout()->setMargin( 5 );
-    QGridLayout* groupBoxLayout = new QGridLayout( groupBox->layout() );
+    QGridLayout* groupBoxLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
-    listView_ = new QListView( groupBox );
+    listView_ = new QListView( this );
     listView_->addColumn( i18n("Title") );
     listView_->addColumn( i18n("Model") );
     listView_->addColumn( i18n("Port") );
@@ -65,29 +61,31 @@ SetupCamera::SetupCamera( QWidget* parent )
     QWhatsThis::add( listView_, i18n("<p>You can see here the digital camera list used by Digikam "
                                      "via the Gphoto interface."));
 
-    addButton_ = new QPushButton( groupBox );
+    addButton_ = new QPushButton( this );
     groupBoxLayout->addWidget( addButton_, 0, 1 );
 
-    removeButton_ = new QPushButton( groupBox );
+    removeButton_ = new QPushButton( this );
     groupBoxLayout->addWidget( removeButton_, 1, 1 );
 
-    editButton_ = new QPushButton( groupBox );
+    editButton_ = new QPushButton( this );
     groupBoxLayout->addWidget( editButton_, 2, 1 );
 
-    autoDetectButton_ = new QPushButton( groupBox );
+    autoDetectButton_ = new QPushButton( this );
     groupBoxLayout->addWidget( autoDetectButton_, 3, 1 );
 
-    addButton_->setText( i18n( "Add..." ) );
-    removeButton_->setText( i18n( "Remove" ) );
-    editButton_->setText( i18n( "Edit..." ) );
-    autoDetectButton_->setText( i18n( "Auto-Detect" ) );
+    addButton_->setText( i18n( "&Add..." ) );
+    removeButton_->setText( i18n( "&Remove" ) );
+    editButton_->setText( i18n( "&Edit..." ) );
+    autoDetectButton_->setText( i18n( "Auto-&Detect" ) );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding );
     groupBoxLayout->addItem( spacer, 4, 1 );
-    vbox->addWidget( groupBox );
 
-    // Initialize buttons
+    adjustSize();
+    mainLayout->addWidget(this);
+
+   // Initialize buttons
 
     removeButton_->setEnabled(false);
     editButton_->setEnabled(false);

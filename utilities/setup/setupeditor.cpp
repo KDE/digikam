@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-03
  * Description : setup tab for ImageEditor.
- * 
+ *
  * Copyright 2004 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,14 +11,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // QT includes.
 
 #include <qlayout.h>
@@ -49,8 +49,7 @@
 SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
+   QVBoxLayout *layout = new QVBoxLayout( parent );
 
    // --------------------------------------------------------
 
@@ -59,7 +58,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    m_JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
    m_JPEGcompression->setRange(1, 100, 1, true );
-   m_JPEGcompression->setLabel( i18n("JPEG compression:") );
+   m_JPEGcompression->setLabel( i18n("&JPEG compression:") );
 
    QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value of the JPEG images:<p>"
                                             "<b>1</b>: very high compression<p>"
@@ -67,34 +66,34 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             "<b>50</b>: medium compression<p>"
                                             "<b>75</b>: low compression (default value)<p>"
                                             "<b>100</b>: no compression"));
-
    layout->addWidget(savingOptionsGroup);
-   
+
    // --------------------------------------------------------
-   
+
    QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"),
                                                       parent);
 
    QHBox* colorBox = new QHBox(interfaceOptionsGroup);
-   
-   QLabel *backgroundColorlabel = new QLabel( i18n("Background color:"),
+
+   QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"),
                                              colorBox );
 
    m_backgroundColor = new KColorButton(colorBox);
+   backgroundColorlabel->setBuddy(m_backgroundColor);
    QWhatsThis::add( m_backgroundColor, i18n("<p>Select here the background color to use "
                                             "for image editor area.") );
    backgroundColorlabel->setBuddy( m_backgroundColor );
 
-   m_hideToolBar = new QCheckBox(i18n("Hide toolbar in fullscreen mode"),
+   m_hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
                                  interfaceOptionsGroup);
-   
+
    layout->addWidget(interfaceOptionsGroup);
 
    // --------------------------------------------------------
-   
+
    QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"),
                                                       parent);
-   
+
    m_pluginsNumber = new QLabel(imagePluginsListGroup);
 
    m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
@@ -107,9 +106,9 @@ SetupEditor::SetupEditor(QWidget* parent )
                                        "which must be enabled/disabled for the future "
                                        "Digikam image editor instances."
                                        "<p>Nota: the core image plugin cannot be disabled."));
-   
+
    layout->addWidget( imagePluginsListGroup );
-   
+
    // --------------------------------------------------------
 
    readSettings();
@@ -125,7 +124,7 @@ void SetupEditor::initImagePluginsList()
 {
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
-    
+
     for(iter = offers.begin(); iter != offers.end(); ++iter)
         {
         KService::Ptr service = *iter;
@@ -140,7 +139,7 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
     QStringList::Iterator it = lista.begin();
     m_pluginsNumber->setText(i18n("Plugins found: %1")
                              .arg(lista.count()/3));
-    
+
     while( it != lista.end() )
         {
         QString pluginName = *it;
@@ -149,16 +148,16 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
         it++;
         QString pluginComments = *it;
         QCheckListItem *item = new QCheckListItem (m_pluginList, pluginName, QCheckListItem::CheckBox);
-        
-        if (listl.contains(libraryName)) 
+
+        if (listl.contains(libraryName))
            item->setOn(true);
-        
+
         if (libraryName == "digikamimageplugin_core")  // Always enable the Digikam core plugin.
            {
            item->setOn(true);
            item->setEnabled(false);
            }
-        
+
         item->setText(0, pluginName);        // Added plugin name.
         item->setText(1, libraryName);       // Added library plugin name.
         item->setText(2, pluginComments);    // Added plugin comments.
@@ -170,7 +169,7 @@ QStringList SetupEditor::getImagePluginsListEnable()
 {
     QStringList imagePluginList;
     QCheckListItem *item = (QCheckListItem*)m_pluginList->firstChild();
-        
+
     while( item )
         {
         if (item->isOn())
@@ -188,7 +187,7 @@ void SetupEditor::applySettings()
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
-    config->writeEntry("ImagePlugins List", getImagePluginsListEnable());            
+    config->writeEntry("ImagePlugins List", getImagePluginsListEnable());
     config->writeEntry("FullScreen Hide ToolBar", m_hideToolBar->isChecked());
     config->sync();
 }
@@ -198,12 +197,12 @@ void SetupEditor::readSettings()
     KConfig* config = kapp->config();
     QColor *Black = new QColor(Qt::black);
 
-    config->setGroup("ImageViewer Settings");  
+    config->setGroup("ImageViewer Settings");
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    
+
     delete Black;
 }
 

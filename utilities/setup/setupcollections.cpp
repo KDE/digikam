@@ -61,55 +61,48 @@
 SetupCollections::SetupCollections(QWidget* parent )
             : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 5, 5 );
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+
+    QGridLayout *collectionGroupLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
+    collectionGroupLayout->setAlignment( Qt::AlignTop );
 
    // --------------------------------------------------------
 
-   QGroupBox* collectionGroup = new QVGroupBox(parent);
-   collectionGroup->setTitle(i18n("Album Collection Types"));
-   collectionGroup->setColumnLayout(0, Qt::Vertical );
-   collectionGroup->layout()->setSpacing( 5 );
-   collectionGroup->layout()->setMargin( 5 );
-   QGridLayout* collectionGroupLayout = new QGridLayout( collectionGroup->layout());
-   collectionGroupLayout->setAlignment( Qt::AlignTop );
-   
-   albumCollectionBox_ = new QListBox(collectionGroup);
-   QWhatsThis::add( albumCollectionBox_, i18n("<p>Here you can add or remove some Album "
-                                              "collection types to improve the Album sorting "
-                                              "in Digikam."));
-                                                
+   albumCollectionBox_ = new QListBox(this);
+   QWhatsThis::add( albumCollectionBox_, i18n("<p>You can add or remove Album "
+                                              "collection types here to improve how "
+                                              "your Albums are sorted in Digikam."));
+
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
-  
+
    collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
                                               0, 4, 0, 0 );
 
-   addCollectionButton_ = new QPushButton( i18n("&Add..."),
-                                           collectionGroup);
+   addCollectionButton_ = new QPushButton( i18n("&Add..."), this);
    collectionGroupLayout->addWidget( addCollectionButton_, 0, 1);
 
-   delCollectionButton_ = new QPushButton( i18n("&Delete"),
-                                           collectionGroup);
+   delCollectionButton_ = new QPushButton( i18n("&Delete"), this);
    collectionGroupLayout->addWidget( delCollectionButton_, 1, 1);
    delCollectionButton_->setEnabled(false);
 
    connect(albumCollectionBox_, SIGNAL(selectionChanged()),
            this, SLOT(slotCollectionSelectionChanged()));
-           
+
    connect(addCollectionButton_, SIGNAL(clicked()),
            this, SLOT(slotAddCollection()));
-           
+
    connect(delCollectionButton_, SIGNAL(clicked()),
            this, SLOT(slotDelCollection()));
-   
+
    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding );
    collectionGroupLayout->addItem( spacer, 4, 1 );
-   
-   layout->addWidget(collectionGroup);
-    
+
    // --------------------------------------------------------
 
    readSettings();
+   adjustSize();
+   mainLayout->addWidget(this);
 }
 
 SetupCollections::~SetupCollections()
@@ -119,26 +112,26 @@ SetupCollections::~SetupCollections()
 void SetupCollections::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     QStringList collectionList;
-    
+
     for (QListBoxItem *item = albumCollectionBox_->firstItem();
-         item; item = item->next()) 
+         item; item = item->next())
          {
          collectionList.append(item->text());
          }
-         
+
     settings->setAlbumCollectionNames(collectionList);
-    
+
     settings->saveSettings();
 }
 
 void SetupCollections::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     albumCollectionBox_->insertStringList(settings->getAlbumCollectionNames());
@@ -167,7 +160,7 @@ void SetupCollections::slotAddCollection()
                               i18n("Enter new collection name:"),
                               QString::null, &ok, this);
 #endif
-    
+
     if (!ok) return;
 
     bool found = false;
@@ -188,7 +181,7 @@ void SetupCollections::slotDelCollection()
     int index = albumCollectionBox_->currentItem();
     if (index == -1)
         return;
-    
+
     QListBoxItem* item = albumCollectionBox_->item(index);
     if (!item) return;
     delete item;

@@ -23,6 +23,7 @@
 // QT includes.
 
 #include <qlayout.h>
+#include <qcombobox.h>
 #include <qvbuttongroup.h>
 #include <qvgroupbox.h>
 #include <qhgroupbox.h>
@@ -57,13 +58,12 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
             : QWidget(parent)
 {
    mainDialog_ = dialog;
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
+   QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
 
    // --------------------------------------------------------
 
    QHGroupBox *albumPathBox = new QHGroupBox(parent);
-   albumPathBox->setTitle(i18n("Album Library Path"));
+   albumPathBox->setTitle(i18n("Album &Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
@@ -85,7 +85,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    tipSettingBox->setTitle(i18n("Tooltips Settings"));
 
    showToolTipsBox_ = new QCheckBox(tipSettingBox);
-   showToolTipsBox_->setText(i18n("Show tooltips for items"));
+   showToolTipsBox_->setText(i18n("Show toolti&ps for items"));
 
    layout->addWidget(tipSettingBox);
 
@@ -95,7 +95,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    tagSettingBox->setTitle(i18n("Tag Settings"));
 
    recurseTagsBox_ = new QCheckBox(tagSettingBox);
-   recurseTagsBox_->setText(i18n("Show items in sub-tags"));
+   recurseTagsBox_->setText(i18n("Show items in su&b-tags"));
    QWhatsThis::add( recurseTagsBox_, i18n("<p>When showing items in a Tag, also "
                                           "show items in sub-Tags."));
 
@@ -103,54 +103,52 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
 
    // --------------------------------------------------------
+   QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
+   iconTextGroup->setColumnLayout(0, Qt::Vertical );
+   iconTextGroup->layout()->setMargin(KDialog::marginHint());
+   QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 3, 8,
+                                                    KDialog::spacingHint());
 
-   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                                        i18n("Default Thumbnail Size"),
-                                                        parent);
-
-   iconSizeButtonGroup->setRadioButtonExclusive(true);
-
-   smallIconButton_ = new QRadioButton(iconSizeButtonGroup);
-   smallIconButton_->setText( i18n( "Small (64x64)" ) );
-
-   mediumIconButton_ = new QRadioButton(iconSizeButtonGroup);
-   mediumIconButton_->setText( i18n( "Medium (100x100)" ) );
-
-   largeIconButton_ = new QRadioButton(iconSizeButtonGroup);
-   largeIconButton_->setText( i18n( "Large (160x160)" ) );
-
-   hugeIconButton_ = new QRadioButton(iconSizeButtonGroup);
-   hugeIconButton_->setText( i18n( "Huge (256x256)" ) );
-
-   layout->addWidget(iconSizeButtonGroup);
-
-   // --------------------------------------------------------
-
-   QGroupBox *iconTextGroup = new QGroupBox(1,
-                                            Qt::Horizontal,
-                                            i18n("Extra Information in Thumbnails View"),
-                                            parent);
+   QLabel* thumbnailSizeLabel = new QLabel(i18n("Default &Size:"), iconTextGroup);
+   tagSettingsLayout->addWidget(thumbnailSizeLabel , 0, 0);
+   thumbnailSize_ = new QComboBox(iconTextGroup);
+   //thumbnailSize_->insertItem(i18n("Tiny (32x32)"));
+   thumbnailSize_->insertItem(i18n("Small (64x64)"));
+   thumbnailSize_->insertItem(i18n("Medium (100x100)"));
+   thumbnailSize_->insertItem(i18n("Large (160x160)"));
+   thumbnailSize_->insertItem(i18n("Huge (256x256)"));
+   thumbnailSizeLabel->setBuddy(thumbnailSize_);
+   tagSettingsLayout->addWidget(thumbnailSize_, 0, 1);
+   QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+   tagSettingsLayout->addItem(spacer, 0, 2);
 
    iconShowNameBox_ = new QCheckBox(iconTextGroup);
-   iconShowNameBox_->setText(i18n("Show file name"));
+   iconShowNameBox_->setText(i18n("Show file &name"));
+   tagSettingsLayout->addMultiCellWidget(iconShowNameBox_, 1, 1, 0, 2);
 
    iconShowTagsBox_ = new QCheckBox(iconTextGroup);
-   iconShowTagsBox_->setText(i18n("Show file tags"));
+   iconShowTagsBox_->setText(i18n("Show file &tags"));
+   tagSettingsLayout->addMultiCellWidget(iconShowTagsBox_, 2, 2, 0, 2);
 
    iconShowSizeBox_ = new QCheckBox(iconTextGroup);
-   iconShowSizeBox_->setText(i18n("Show file size"));
+   iconShowSizeBox_->setText(i18n("Show file si&ze"));
+   tagSettingsLayout->addMultiCellWidget(iconShowSizeBox_, 3, 3, 0, 2);
 
    iconShowDateBox_ = new QCheckBox(iconTextGroup);
-   iconShowDateBox_->setText(i18n("Show file modification date"));
+   iconShowDateBox_->setText(i18n("Show file &modification date"));
+   tagSettingsLayout->addMultiCellWidget(iconShowDateBox_, 4, 4, 0, 2);
 
    iconShowCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowCommentsBox_->setText(i18n("Show Digikam comments"));
+   iconShowCommentsBox_->setText(i18n("Show &digiKam comments"));
+   tagSettingsLayout->addMultiCellWidget(iconShowCommentsBox_, 5, 5, 0, 2);
 
    iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (warning: slow)"));
+   iconShowFileCommentsBox_->setText(i18n("Sho&w comments stored in file (warning: slow)"));
+   tagSettingsLayout->addMultiCellWidget(iconShowFileCommentsBox_, 6, 6, 0, 2);
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
-   iconShowResolutionBox_->setText(i18n("Show image dimensions (warning: slow)"));
+   iconShowResolutionBox_->setText(i18n("Show ima&ge dimensions (warning: slow)"));
+   tagSettingsLayout->addMultiCellWidget(iconShowResolutionBox_, 7, 7, 0, 2);
 
    layout->addWidget(iconTextGroup);
 
@@ -159,6 +157,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    layout->addStretch();
 
    readSettings();
+   adjustSize();
 }
 
 SetupGeneral::~SetupGeneral()
@@ -174,15 +173,21 @@ void SetupGeneral::applySettings()
     settings->setAlbumLibraryPath(albumPathEdit->text());
 
     int iconSize = ThumbnailSize::Medium;
-
-    if (smallIconButton_->isChecked())
-        iconSize = ThumbnailSize::Small;
-
-    if (largeIconButton_->isChecked())
-        iconSize = ThumbnailSize::Large;
-
-    if (hugeIconButton_->isChecked())
-        iconSize = ThumbnailSize::Huge;
+    switch(thumbnailSize_->currentItem())
+    {
+//         case(TinyThumb):
+//             iconSize = ThumbnailSize::Tiny;
+//             break;
+        case(SmallThumb):
+            iconSize = ThumbnailSize::Small;
+            break;
+        case(LargeThumb):
+            iconSize = ThumbnailSize::Large;
+            break;
+        case(HugeThumb):
+            iconSize = ThumbnailSize::Huge;
+            break;
+    }
 
     settings->setDefaultIconSize(iconSize);
     settings->setRecurseTags(recurseTagsBox_->isChecked());
@@ -207,22 +212,23 @@ void SetupGeneral::readSettings()
 
     albumPathEdit->setText(settings->getAlbumLibraryPath());
 
-    switch(settings->getDefaultIconSize()) {
-    case(ThumbnailSize::Small): {
-        smallIconButton_->setChecked(true);
-        break;
-    }
-    case(ThumbnailSize::Large): {
-        largeIconButton_->setChecked(true);
-        break;
-    }
-    case(ThumbnailSize::Huge): {
-        hugeIconButton_->setChecked(true);
-        break;
-    }
-    default:
-        mediumIconButton_->setChecked(true);
-        break;
+    switch(settings->getDefaultIconSize())
+    {
+//         case(ThumbnailSize::Tiny):
+//             thumbnailSize_->setCurrentItem(TinyThumb);
+//             break;
+        case(ThumbnailSize::Small):
+            thumbnailSize_->setCurrentItem(SmallThumb);
+            break;
+        case(ThumbnailSize::Large):
+            thumbnailSize_->setCurrentItem(LargeThumb);
+            break;
+        case(ThumbnailSize::Huge):
+            thumbnailSize_->setCurrentItem(HugeThumb);
+            break;
+        default: // Medium
+            thumbnailSize_->setCurrentItem(MediumThumb);
+            break;
     }
 
     recurseTagsBox_->setChecked(settings->getRecurseTags());

@@ -52,22 +52,21 @@
 SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent, 10);
-   layout->setSpacing( KDialog::spacingHint() );
-   
+   QVBoxLayout *layout = new QVBoxLayout( parent );
+
    QHBoxLayout *hlay = new QHBoxLayout(layout);
    m_pluginsNumber = new QLabel(parent);
-   
+
    QLabel *KipiVersion = new QLabel(i18n("Kipi version: %1").arg(kipi_version), parent);
    KipiVersion->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-   
+
    hlay->addWidget(m_pluginsNumber, 1);
    hlay->addStretch(1);
    hlay->addWidget(KipiVersion, 1);
-    
+
    m_Kipiconfig = KIPI::PluginLoader::instance()->configWidget( parent );
-   QString pluginsListHelp = i18n("<p>Here you can see the list of Kipi plugins which can be "
-                                  "loaded or unloaded from the current Digikam instance.");
+   QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
+                                  "appears below.");
    QWhatsThis::add( m_Kipiconfig, pluginsListHelp);
    layout->addWidget( m_Kipiconfig );
 }
@@ -78,7 +77,9 @@ SetupPlugins::~SetupPlugins()
 
 void SetupPlugins::initPlugins(int kipiPluginsNumber)
 {
-    m_pluginsNumber->setText(i18n("Kipi plugins found: %1").arg(kipiPluginsNumber));   
+    m_pluginsNumber->setText(i18n("1 Kipi plugin found",
+                                  "%n Kipi plugins found",
+                                  kipiPluginsNumber));
 }
 
 void SetupPlugins::applyPlugins()
