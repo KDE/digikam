@@ -35,13 +35,13 @@ CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
 
 AC_MSG_CHECKING(if Digikam should be compiled with KIPI support)
 AC_ARG_ENABLE(kipi,
-[  --enable-kipi           Use KIPI instead DigikamPlugins, 'KDE Image Plugin Interface'],
+[  --enable-kipi           Use KIPI instead DigikamPlugins, 'KDE Image Plugin Interface' (default=yes)],
 [if test "$enableval" = yes; then
   AC_MSG_RESULT(yes)
   want_kipi="yes"
 else
   AC_MSG_RESULT(no)
-fi], [AC_MSG_RESULT(no); want_kipi="no"])
+fi], [AC_MSG_RESULT(yes); want_kipi="yes"])
 
 if test "$want_kipi" = "yes"; then
   KDE_CHECK_HEADER(libkipi/interface.h,
