@@ -2,11 +2,11 @@
  * File  : unsharp.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-27
- * Description : Unsharped mask image filter for ImageEditor
+ * Description : Unsharp mask image filter for ImageEditor
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
- * Unsharped mask algorithm come from plug-ins/common/unsharp.c 
+ * Unsharp mask algorithm come from plug-ins/common/unsharp.c 
  * Gimp 2.0 source file and copyrighted 
  * 1999 by Winston Chang (winstonc at cs.wisc.edu)
  * 
@@ -71,7 +71,7 @@ namespace DigikamUnsharpFilterImagesPlugin
 {
 
 UnsharpDialog::UnsharpDialog(QWidget* parent)
-             : KDialogBase(Plain, i18n("Unsharped Mask"), Help|User1|Ok|Cancel, Ok,
+             : KDialogBase(Plain, i18n("Unsharp Mask"), Help|User1|Ok|Cancel, Ok,
                            parent, 0, true, true, i18n("&Reset Values")),
                m_parent(parent)
 {
@@ -83,9 +83,9 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Unsharped Mask"), 
+                                       I18N_NOOP("Unsharp Mask"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("An unsharped mask image filter plugin for digiKam."),
+                                       I18N_NOOP("An unsharp mask image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier", 
                                        0,
@@ -94,13 +94,13 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    about->addAuthor("Winston Chang", I18N_NOOP("Unsharped mask algorithm author from Gimp"),
+    about->addAuthor("Winston Chang", I18N_NOOP("Unsharp mask algorithm author from Gimp"),
                      "winstonc at cs.wisc.edu");
                          
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Unsharped Mask Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Unsharp Mask Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -115,7 +115,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Unsharped Mask"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Unsharp Mask"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);

@@ -4,7 +4,7 @@
  * Date  : 2004-08-27
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
                                          const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Unsharp")
 {
-    new KAction(i18n("Unsharped Mask..."), "unsharpedmask", 0, 
+    new KAction(i18n("Unsharp Mask..."), "unsharpedmask", 0, 
                 this, SLOT(slotUnsharp()),
                 actionCollection(), "imageplugin_unsharp");
 
