@@ -332,7 +332,7 @@ void ImageEffect_RainDrop::slotEffect()
        bitBlt( &newImg, selectedX, selectedY, 
                &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
     
-       QImage destImg = newImg.scale(wp, hp);
+       QImage destImg = newImg.smoothScale(wp, hp);
        iface->putPreviewData((uint*)destImg.bits());
        }
     else 
@@ -342,7 +342,7 @@ void ImageEffect_RainDrop::slotEffect()
        newImg.create( w, h, 32 );
        memcpy(newImg.bits(), data, newImg.numBytes());
     
-       QImage destImg = newImg.scale(wp, hp);
+       QImage destImg = newImg.smoothScale(wp, hp);
        iface->putPreviewData((uint*)destImg.bits());
        }
            
@@ -401,7 +401,7 @@ void ImageEffect_RainDrop::slotOk()
           memcpy(newImg.bits(), data, newImg.numBytes());
 
           bitBlt( &newImg, selectedX, selectedY, 
-               &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
+                  &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
                
           if ( !m_cancel ) iface->putOriginalData((uint*)newImg.bits());
           }
