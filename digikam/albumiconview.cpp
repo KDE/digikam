@@ -24,6 +24,10 @@
 #include <config.h>
 #endif
 
+// C++ includes.
+
+#include <cstdio>
+
 // Qt includes.
 
 #include <qpixmap.h>
@@ -63,11 +67,7 @@
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <libkexif/kexif.h>
-#include <libkexif/kexifutils.h>
-#include <libkexif/kexifdata.h>
-
-#include <cstdio>
+#include <kcursor.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -76,6 +76,12 @@
 #else
 #include <klineeditdlg.h>
 #endif
+
+// LibKexif includes.
+
+#include <libkexif/kexif.h>
+#include <libkexif/kexifutils.h>
+#include <libkexif/kexifdata.h>
 
 // Local includes.
 
@@ -523,7 +529,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("text_block"),
                        i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(i18n("Properties"), 14);
+    popmenu.insertItem(i18n("Properties && &Meta-data..."), 14);
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
         popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
@@ -880,7 +886,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;
-
+    
+    parentWidget()->setCursor( KCursor::waitCursor() );
     KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
     ExifPropsPlugin *exifProps = new ExifPropsPlugin(&dlg, item->fileItem()->url().path());
     HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(&dlg, item->fileItem()->url().path());
@@ -892,7 +899,9 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
     // Adding Histogram Viewer tab in properties dialog       
     if (histogramProps)
        dlg.insertPlugin(histogramProps);
-       
+    
+    parentWidget()->setCursor( KCursor::arrowCursor() );
+           
     if (dlg.exec())
     {
         item->repaint();
