@@ -214,11 +214,11 @@ void DigikamView::slotAlbumHistoryForward(int steps)
     
     if(album && album->getViewItem())
     {
-        AlbumFolderItem *item;    
+        AlbumFolderItem *item;
         item = static_cast<AlbumFolderItem*>(album->getViewItem());
         mFolderView->setSelected(item);
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
+        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
     }
     return;    
 }
@@ -231,6 +231,22 @@ void DigikamView::getBackwardHistory(QStringList &titles)
 void DigikamView::getForwardHistory(QStringList &titles)
 {
     mAlbumHistory->getForwardHistory(titles);
+}
+
+void DigikamView::slotSelectAlbum(const KURL &url)
+{
+    if(url.isEmpty())
+        return;
+    
+    Album *album = mAlbumMan->findPAlbum(url);
+    if(album && album->getViewItem())
+    {
+        AlbumFolderItem *item;
+        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        mFolderView->setSelected(item);
+        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
+        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
+    }
 }
 
 // ----------------------------------------------------------------
