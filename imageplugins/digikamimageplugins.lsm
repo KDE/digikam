@@ -1,14 +1,14 @@
 Begin4
-Title:          digikamimageplugins -- Some description
-Version:        0.1.0
+Title:          digikamimageplugins
+Version:        0.7.2-beta1
 Entered-date:   2004-11-08
-Description:    
-Keywords:       KDE3, Qt, Digikam, Digital Camera 
+Description:    Plugins collection for digiKam Image Editor
+Keywords:       KDE, Qt, digiKam, Digital Camera 
 Author:         Caulier Gilles <caulier dot gilles at free.fr>
 Maintained-by:  Caulier Gilles <caulier dot gilles at free.fr>
 Home-page:      
 Alternate-site: 
 Primary-site:   http://extragear.kde.org/apps/digikamimageplugins
-Platform:       Linux. Needs KDE 3.x and digikam 0.7.1
+Platform:       Linux. Needs KDE 3.x and digikam 0.7.x
 Copying-policy: GPL
 End
