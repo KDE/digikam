@@ -799,16 +799,14 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;    
 
-    KPropertiesDialog *dlg = new KPropertiesDialog(item->fileItem()->url(), this, 0, true, false);
-    HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(dlg, item->fileItem()->url().path());
-    dlg->insertPlugin(histogramProps);
+    KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
+    HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(&dlg, item->fileItem()->url().path());
+    dlg.insertPlugin(histogramProps);
     
-    if (dlg->exec())
+    if (dlg.exec())
     {
         item->repaint();
     }
-    
-    delete dlg;
 }
 
 // ------------------------------------------------------------------------------
