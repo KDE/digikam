@@ -295,7 +295,7 @@ void AlbumIconItem::updateExtraText()
         QString comments;
         view_->getItemComments(text(), comments);
         
-        if(jpegComments != comments)
+        if(!settings->getIconShowComments() || jpegComments != comments)
           extraText += jpegComments;
       }  
     }
