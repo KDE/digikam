@@ -56,6 +56,8 @@ extern "C"
 
 // Local includes.
 
+#include "undomanager.h"
+#include "undoaction.h"
 #include "imlibinterface.h"
 
 namespace Digikam
@@ -96,6 +98,8 @@ public:
     Imlib_Color_Modifier cmod;
     Imlib_Load_Error     errorRet;
     QString              filename;
+
+    UndoManager*         undoMan;
 };
 
 ImlibInterface::ImlibInterface()
@@ -105,6 +109,8 @@ ImlibInterface::ImlibInterface()
     
     d = new ImlibInterfacePrivate;
 
+    d->undoMan = new UndoManager(this);
+    
     d->display = QPaintDevice::x11AppDisplay();
 
     d->vis   = DefaultVisual(d->display, DefaultScreen(d->display));
@@ -151,6 +157,7 @@ ImlibInterface::ImlibInterface()
 ImlibInterface::~ImlibInterface()
 {
     imlib_context_free(d->context);
+    delete d->undoMan;
     delete d;
 
     m_instance = 0;
@@ -184,6 +191,8 @@ bool ImlibInterface::load(const QString& filename)
 
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
+
+    d->undoMan->clear();
     
     Imlib_Load_Error errorReturn;
     d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
@@ -248,11 +257,12 @@ bool ImlibInterface::exifRotated()
 void ImlibInterface::exifRotate(const QString& filename)
 {
    // Rotate image based on EXIF rotate tag
-    KExifData *exifData = new KExifData;
+    KExifData exifData;
 
-    if(!exifData->readFromFile(filename)) return;
+    if(!exifData.readFromFile(filename))
+        return;
 
-    KExifData::ImageOrientation orientation = exifData->getImageOrientation();
+    KExifData::ImageOrientation orientation = exifData.getImageOrientation();
 
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
@@ -299,8 +309,6 @@ void ImlibInterface::exifRotate(const QString& filename)
     }
 
     imlib_context_pop();
-    
-    delete exifData;
 }
 
 
@@ -321,9 +329,24 @@ void ImlibInterface::setExifOrient(bool exifOrient)
     d->exifOrient = exifOrient;    
 }
 
-bool ImlibInterface::restore()
+void ImlibInterface::undo()
 {
-    return ( load(d->filename) );
+    if (!d->undoMan->anyMoreUndo())
+    {
+        emit signalModified(false);
+        return;
+    }
+
+    d->undoMan->undo();
+    emit signalModified(d->undoMan->anyMoreUndo());
+}
+
+void ImlibInterface::restore()
+{
+    d->undoMan->clear();
+    
+    load(d->filename);
+    emit signalModified(false);
 }
 
 bool ImlibInterface::save(const QString& file, int JPEGcompression, 
@@ -344,8 +367,15 @@ bool ImlibInterface::save(const QString& file, int JPEGcompression,
 
     bool result = saveAction(file, JPEGcompression, PNGcompression, 
                              TIFFcompression, currentMimeType);
-    
+
     imlib_context_pop();
+
+    if (result)
+    {
+        d->undoMan->clear();
+        emit signalModified(false);
+    }
+    
     return result;
 }
 
@@ -371,8 +401,15 @@ bool ImlibInterface::saveAs(const QString& file, int JPEGcompression,
     else 
        result = saveAction(file, JPEGcompression, PNGcompression, 
                            TIFFcompression, mimeType);
-
+    
     imlib_context_pop();
+
+    if (result)
+    {
+        d->undoMan->clear();
+        emit signalModified(false);
+    }
+
     return result;    
 }
 
@@ -523,72 +560,112 @@ void ImlibInterface::zoom(double val)
     d->height = (int)(d->origHeight * val);
 }
 
-void ImlibInterface::rotate90()
+void ImlibInterface::rotate90(bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));    
+    }
+    
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
     imlib_image_orientate(1);
 
     d->origWidth = imlib_image_get_width();
-    d->origHeight = imlib_image_get_height();
+    d->origHeight = imlib_image_get_height();    
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
-void ImlibInterface::rotate180()
+void ImlibInterface::rotate180(bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));    
+    }
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
     imlib_image_orientate(2);
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
-void ImlibInterface::rotate270()
+void ImlibInterface::rotate270(bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));    
+    }
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+    
     imlib_image_orientate(3);
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
-void ImlibInterface::flipHoriz()
+void ImlibInterface::flipHoriz(bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));    
+    }
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
     imlib_image_flip_horizontal();
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
     
+    emit signalModified(true);
 }
 
-void ImlibInterface::flipVert()
+void ImlibInterface::flipVert(bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Vertical));
+    }
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+    
     imlib_image_flip_vertical();
 
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
 void ImlibInterface::crop(int x, int y, int w, int h)
 {
+    d->undoMan->addAction(new UndoActionIrreversible(this));
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
-    QString format(imlib_image_format());
     
+    QString format(imlib_image_format());
     Imlib_Image im = imlib_create_cropped_image(x, y, w, h);
     imlib_free_image();
     d->image = im;
-
     imlib_context_set_image(d->image);
     imlib_image_set_format(format.ascii());
     
@@ -596,14 +673,17 @@ void ImlibInterface::crop(int x, int y, int w, int h)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
+    emit signalModified(true);
 }
 
 void ImlibInterface::resize(int w, int h)
 {
-    imlib_context_push(d->context);
-    QString format(imlib_image_format());
+    d->undoMan->addAction(new UndoActionIrreversible(this));
 
+    imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
+    QString format(imlib_image_format());
     Imlib_Image im =
         imlib_create_cropped_scaled_image(0, 0, d->origWidth, d->origHeight,
                                           w, h);
@@ -616,6 +696,8 @@ void ImlibInterface::resize(int w, int h)
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
 void ImlibInterface::changeGamma(double gamma)
@@ -633,6 +715,8 @@ void ImlibInterface::changeGamma(double gamma)
     imlib_context_set_color_modifier(0);
     
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
 void ImlibInterface::changeBrightness(double brightness)
@@ -650,6 +734,8 @@ void ImlibInterface::changeBrightness(double brightness)
     imlib_context_set_color_modifier(0);
 
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
 void ImlibInterface::changeContrast(double contrast)
@@ -667,16 +753,19 @@ void ImlibInterface::changeContrast(double contrast)
     imlib_context_set_color_modifier(0);
 
     imlib_context_pop();
+
+    emit signalModified(true);
 }
 
 void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 {
+    d->undoMan->addAction(new UndoActionIrreversible(this));
 
     imlib_context_push(d->context);
 
     imlib_context_set_image(d->image);
+
     bool alpha = imlib_image_has_alpha();
-    
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
     
@@ -699,7 +788,7 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 
     imlib_context_pop();
 
-    emit signalRequestUpdate();
+    emit signalModified(true);
 }
 
 uint* ImlibInterface::getData()
@@ -715,10 +804,17 @@ uint* ImlibInterface::getData()
         return 0;
 }
 
-void ImlibInterface::putData(uint* data, int w, int h)
+void ImlibInterface::putData(uint* data, int w, int h,
+                             bool saveUndo)
 {
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionIrreversible(this));
+    }
+    
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+
     QString format(imlib_image_format());
     
     if (w != -1 && h != -1) {
@@ -749,7 +845,8 @@ void ImlibInterface::putData(uint* data, int w, int h)
     }
     
     imlib_context_pop();
-    emit signalRequestUpdate();
+
+    emit signalModified(true);
 }
 
 uint* ImlibInterface::getSelectedData()
@@ -782,10 +879,15 @@ uint* ImlibInterface::getSelectedData()
         return 0;
 }
 
-void ImlibInterface::putSelectedData(uint* data)
+void ImlibInterface::putSelectedData(uint* data, bool saveUndo)
 {
     if (!data || !d->image)
         return;
+
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionIrreversible(this));
+    }
     
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
@@ -804,7 +906,7 @@ void ImlibInterface::putSelectedData(uint* data)
 
     imlib_context_pop();
 
-    emit signalRequestUpdate();
+    emit signalModified(true);
 }
 
 bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression,

@@ -112,12 +112,13 @@ public slots:
     void slotCrop();
     
     void slotRestore();
+    void slotUndo();
 
 private slots:
 
     void slotSelected();
     void slotPaintSmooth();
-    void slotRequestUpdate();
+    void slotModified(bool anyMoreUndo);
     
 signals:
 

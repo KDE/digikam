@@ -207,8 +207,11 @@ void ImageWindow::buildGUI()
                                         actionCollection(), "imageview_saveas");
     m_restoreAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "imageview_restore");
+    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
+                                    actionCollection(), "imageview_undo");
     m_saveAction->setEnabled(false);
     m_restoreAction->setEnabled(false);
+    m_undoAction->setEnabled(false);
 
     m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
                               CTRL+Key_P,
@@ -365,6 +368,7 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     
     m_saveAction->setEnabled(false);
     m_restoreAction->setEnabled(false);
+    m_undoAction->setEnabled(false);
 
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
@@ -630,6 +634,7 @@ void ImageWindow::slotChanged(bool val)
                         i18n("pixels"));
 
     m_restoreAction->setEnabled(val);
+    m_undoAction->setEnabled(val);
     if (m_allowSaving)
     {
         m_saveAction->setEnabled(val);

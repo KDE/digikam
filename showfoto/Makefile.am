@@ -8,7 +8,8 @@ showfoto_SOURCES = main.cpp showfoto.cpp thumbbar.cpp
 
 showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
 		   $(LIB_KFILE) $(LIB_KPARTS) \
-		   $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la 
+		   $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \
+		   $(LIB_GDBM)
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 

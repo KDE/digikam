@@ -13,6 +13,7 @@
      <Separator/>
      <Action name="imageview_save" />
      <Action name="imageview_saveas" />
+     <Action name="imageview_undo" />
      <Action name="imageview_restore" />
      <Separator/>
      <Action name="imageview_delete" />
@@ -74,6 +75,7 @@
      <Action name="imageview_last" />
      <Separator/>     
      <Action name="imageview_save" />
+     <Action name="imageview_undo" />
      <Action name="imageview_restore" />
      <Separator/>     
      <Action name="imageview_zoom_plus" /> 

@@ -98,6 +98,7 @@ private:
     KAction       *m_saveAction;
     KAction       *m_saveAsAction;
     KAction       *m_restoreAction;
+    KAction       *m_undoAction;
     
     KAction       *m_zoomPlusAction;
     KAction       *m_zoomMinusAction;

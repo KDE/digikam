@@ -125,8 +125,8 @@ Canvas::Canvas(QWidget *parent)
     p.fillRect(8, 0, 8, 8, QColor(100,100,100));
     p.end();
     
-    connect(d->im, SIGNAL(signalRequestUpdate()),
-            SLOT(slotRequestUpdate()));
+    connect(d->im, SIGNAL(signalModified(bool)),
+            SLOT(slotModified(bool)));
     connect(this, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
@@ -752,71 +752,26 @@ void Canvas::slotToggleAutoZoom()
 void Canvas::slotRotate90()
 {
     d->im->rotate90();
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotRotate180()
 {
     d->im->rotate180();
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotRotate270()
 {
     d->im->rotate270();
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotFlipHoriz()
 {
     d->im->flipHoriz();
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotFlipVert()
 {
     d->im->flipVert();
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotCrop()
@@ -847,30 +802,11 @@ void Canvas::slotCrop()
      h = QMIN(imageHeight(), h);
 
      d->im->crop(x, y, w, h);
-
-     if (d->autoZoom)
-         updateAutoZoom();
-     d->im->zoom(d->zoom);
-  
-     updateContentsSize();
-     viewport()->update();
-  
-
-     emit signalChanged(true);
 }
 
 void Canvas::resizeImage(int w, int h)
 {
     d->im->resize(w, h);
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-
-    updateContentsSize();
-    viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::setBackgroundColor(const QColor& color)
@@ -893,8 +829,6 @@ void Canvas::increaseGamma()
     d->im->changeGamma(1);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::decreaseGamma()
@@ -902,8 +836,6 @@ void Canvas::decreaseGamma()
     d->im->changeGamma(-1);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::increaseBrightness()
@@ -911,8 +843,6 @@ void Canvas::increaseBrightness()
     d->im->changeBrightness(1);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::decreaseBrightness()
@@ -920,8 +850,6 @@ void Canvas::decreaseBrightness()
     d->im->changeBrightness(-1);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::increaseContrast()
@@ -929,8 +857,6 @@ void Canvas::increaseContrast()
     d->im->changeContrast(5);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::decreaseContrast()
@@ -938,22 +864,16 @@ void Canvas::decreaseContrast()
     d->im->changeContrast(-5);    
     d->tileCache.clear();    
     viewport()->update();
-
-    emit signalChanged(true);
 }
 
 void Canvas::slotRestore()
 {
     d->im->restore();
-    
-    if (d->autoZoom)
-        updateAutoZoom();
-    d->im->zoom(d->zoom);
-  
-    updateContentsSize();
-    viewport()->update();
-  
-    emit signalChanged(false);
+}
+
+void Canvas::slotUndo()
+{
+    d->im->undo();
 }
 
 void Canvas::slotSelected()
@@ -991,15 +911,15 @@ void Canvas::slotSelected()
     d->im->setSelectedArea(x, y, w, h);
 }
 
-void Canvas::slotRequestUpdate()
+void Canvas::slotModified(bool anyMoreUndo)
 {
     if (d->autoZoom)
         updateAutoZoom();
     d->im->zoom(d->zoom);
-    
+
     updateContentsSize();
     viewport()->update();
-    emit signalChanged(true);    
+    emit signalChanged(anyMoreUndo);
 }
 
 void Canvas::slotPaintSmooth()

@@ -49,7 +49,8 @@ public:
     bool load(const QString& filename);
     void preload(const QString& filename);
     void setExifOrient(bool exifOrient);
-    bool restore();
+    void undo();
+    void restore();
     bool save(const QString& file, int JPEGcompression, 
               int PNGcompression, bool TIFFcompression);
     bool saveAs(const QString& file, int JPEGcompression, 
@@ -78,12 +79,12 @@ public:
     void setSelectedArea(int x, int y, int w, int h);
     void getSelectedArea(int& x, int& y, int& w, int& h);
     
-    void rotate90();
-    void rotate180();
-    void rotate270();
+    void rotate90(bool saveUndo=true);
+    void rotate180(bool saveUndo=true);
+    void rotate270(bool saveUndo=true);
     
-    void flipHoriz();
-    void flipVert();
+    void flipHoriz(bool saveUndo=true);
+    void flipVert(bool saveUndo=true);
     
     void crop(int x, int y, int w, int h);
 
@@ -96,13 +97,13 @@ public:
     void setBCG(double brightness, double contrast, double gamma);
     
     uint* getData();
-    void  putData(uint* data, int w, int h);
+    void  putData(uint* data, int w, int h, bool saveUndo=true);
     uint* getSelectedData();
-    void  putSelectedData(uint* data);
+    void  putSelectedData(uint* data, bool saveUndo=true);
     
 signals:
 
-    void signalRequestUpdate();
+    void signalModified(bool moreUndo);
     
 private:
 
