@@ -162,8 +162,9 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 
 ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
     : KDialogBase(Plain, i18n("Red Eye Correction"),
-                  Ok|Cancel, Ok, parent, 0, true, true)
+                  Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
+    setHelp("imageviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
