@@ -677,6 +677,14 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
                      .arg(escapeString(newFileName))
                      .arg(oldDirID)
                      .arg(escapeString(oldFileName)) );
+
+            // if the image is used for the tag icon, the tags.icon column
+            // has to be updated
+
+            execSql( QString("UPDATE Tags SET icon='%1' "
+                             "WHERE icon='%2';")
+                     .arg(escapeString(QDir::cleanDirPath(dest.path())))
+                     .arg(escapeString(QDir::cleanDirPath(src.path()))) );
         }
         
         // unlock the database
