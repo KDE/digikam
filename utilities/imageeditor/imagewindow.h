@@ -37,6 +37,9 @@ class QLabel;
 class KAccel;
 class KAction;
 
+class AlbumIconView;
+class AlbumIconItem;
+
 class ImageGUIClient;
 class Canvas;
 
@@ -55,7 +58,9 @@ public:
 
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                  const QString& caption=QString::null,
-                 bool allowSaving=true);
+                 bool allowSaving=true, 
+                 AlbumIconView* view=0L);
+                 
     void applySettings();
     
     static ImageWindow* instance();
@@ -80,6 +85,8 @@ private:
     KURL                 m_urlCurrent;
     KURL                 m_newFile;
     
+    // Allow to use Image properties and Comments/Tags dialogs from main window.
+    AlbumIconView*       m_view;
     
     int                  m_JPEGCompression;
     int                  m_PNGCompression;
@@ -100,6 +107,7 @@ private:
     void promptUserSave();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
+    AlbumIconItem* getCurrItemFromUrlList(void);
 
 signals:
 
@@ -136,7 +144,6 @@ private slots:
     
     void slotFilePrint();
     void slotFileProperties();
-    void slotExifInfo();
     void slotCommentsEdit();
     
     void slotDeleteCurrentItem();

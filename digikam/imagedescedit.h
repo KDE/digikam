@@ -54,7 +54,7 @@ class ImageDescEdit : public KDialogBase
 
 public:
 
-    ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem);
+    ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent=0);
     ~ImageDescEdit();
 
     static bool editDescription(AlbumIconView* view, AlbumIconItem* currItem);

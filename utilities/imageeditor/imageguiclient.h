@@ -71,7 +71,6 @@ signals:
     void signalFilePrint();
     void signalFileProperties();
     void signalDeleteCurrentItem();
-    void signalExifInfo();
     void signalCommentsEdit();
     
     void signalShowImagePluginsHelp();
@@ -109,7 +108,6 @@ private:
     KAction       *m_fileprint;    
     KAction       *m_fileproperties;
     KAction       *m_fileDelete;
-    KAction       *m_exifinfo;
     KAction       *m_commentedit;
     
     KAction       *m_ImagePluginsHelpAction;

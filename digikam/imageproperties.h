@@ -85,7 +85,7 @@ class ImageProperties : public KDialogBase
 
 public:
 
-    ImageProperties(AlbumIconView* view, AlbumIconItem* currItem);
+    ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent=0);
     ~ImageProperties();
 
 public slots:    

@@ -12,7 +12,7 @@ libimageeditor_la_SOURCES = imageiface.cpp imagewidget.cpp imageplugin.cpp \
 			    imagepluginloader.cpp \
 			    imagewindow.cpp imageguiclient.cpp \
 			    imageresizedlg.cpp \
-			    imagecommentedit.cpp imageprint.cpp \
+			    imageprint.cpp \
 			    imagerotatedlg.cpp 
 
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \

@@ -175,10 +175,10 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
+ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent)
                : KDialogBase(Tabbed, QString::null, 
                              Help|User1|User2|Stretch|Close,
-                             Close, view, 0, true, true, 
+                             Close, parent, 0, true, true, 
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {

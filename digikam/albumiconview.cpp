@@ -689,7 +689,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
 
 void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
 {
-    ImageDescEdit descEdit(this, iconItem);
+    ImageDescEdit descEdit(this, iconItem, this);
     descEdit.exec();
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
@@ -856,7 +856,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
        return;
     }
 
-    // Run Digikam ImageViewer with all image files in the current Album.
+    // Run Digikam ImageEditor with all image files in the current Album.
 
     KURL::List urlList;
 
@@ -869,12 +869,10 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
             urlList.append(iconItem->fileItem()->url());
     }
 
-    //ImageView *view = new ImageView(0, urlList, item->fileItem()->url());
-    //view->show();
-
     ImageWindow *imview = ImageWindow::instance();
 
     imview->disconnect(this);
+    
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
             SLOT(slotFilesModified()));
     connect(imview, SIGNAL(signalFileModified(const KURL&)),
@@ -882,10 +880,16 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             SLOT(slotFilesModified()));
 
-    imview->loadURL(urlList, item->fileItem()->url(),
-                    d->currentAlbum ? d->currentAlbum->getTitle():QString());
+    imview->loadURL(urlList, 
+                    item->fileItem()->url(),
+                    d->currentAlbum ? d->currentAlbum->getTitle():QString(),
+                    true,
+                    this       // Allow to use image properties and coments/tags dialogs
+                   );
+                   
     if (imview->isHidden())
         imview->show();
+        
     imview->raise();
     imview->setFocus();
 }
@@ -894,7 +898,7 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;
 
-    ImageProperties properties(this, item);
+    ImageProperties properties(this, item, this);
     
     properties.exec();
 

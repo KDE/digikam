@@ -80,7 +80,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                               this, SIGNAL(signalFilePrint()),
                               actionCollection(), "file_print");
 
-    m_fileproperties = new KAction(i18n("File Properties"), "image",
+    m_fileproperties = new KAction(i18n("Properties && &Meta-Data..."), "image",
                                    ALT+Key_Return,
                                    this, SIGNAL(signalFileProperties()),
                                    actionCollection(), "file_properties");
@@ -90,12 +90,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                    this, SIGNAL(signalDeleteCurrentItem()),
                                    actionCollection(), "file_delete");
 
-    m_exifinfo = new KAction(i18n("Exif Information"), "exifinfo",
-                             Key_F6,
-                             this, SIGNAL(signalExifInfo()),
-                             actionCollection(), "exif_info");
-
-    m_commentedit = new KAction(i18n("Edit Image Comments..."), "imagecomment",
+    m_commentedit = new KAction(i18n("Edit Comments && Tags..."), "imagecomment",
                                 Key_F3,
                                 this, SIGNAL(signalCommentsEdit()),
                                 actionCollection(), "comments_edit");
@@ -179,7 +174,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
     
-    m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins Handbooks"),
+    m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins Handbook"),
                                         "digikamimageplugins", 0, this,
                                         SIGNAL(signalShowImagePluginsHelp()),
                                         actionCollection(),
@@ -215,7 +210,6 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
 
     guiDef.append("MenuBar/Menu/&Image/ /Action/comments_edit/ ");
-    guiDef.append("MenuBar/Menu/&Image/ /Action/exif_info/ ");
     guiDef.append("MenuBar/Menu/&Image/ /Action/file_properties/ ");
     guiDef.append("MenuBar/Menu/&Image/ /Separator/ / ");
 

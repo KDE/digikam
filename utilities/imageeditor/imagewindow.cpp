@@ -48,6 +48,8 @@
 #include <ktoolbar.h>
 #include <kaccel.h>
 
+// LibKexif includes.
+
 #include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
@@ -63,13 +65,17 @@
 #include "imageresizedlg.h"
 #include "imagerotatedlg.h"
 #include "imageprint.h"
-#include "imagecommentedit.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "syncjob.h"
 #include "imagewindow.h"
+#include "albumiconview.h"
+#include "albumiconitem.h"
+#include "imageproperties.h"
+#include "imagedescedit.h"
+
 
 ImageWindow* ImageWindow::instance()
 {
@@ -84,12 +90,13 @@ ImageWindow* ImageWindow::m_instance = 0;
 ImageWindow::ImageWindow()
            : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
 {
-    m_instance           = this;
-    m_rotatedOrFlipped   = false;
-    m_allowSaving        = true;
+    m_instance              = this;
+    m_rotatedOrFlipped      = false;
+    m_allowSaving           = true;
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
-
+    m_view                  = 0L;
+    
     // -- build the gui -------------------------------------
 
     m_guiFactory = new Digikam::GUIFactory();
@@ -161,8 +168,6 @@ ImageWindow::ImageWindow()
             SLOT(slotFileProperties()));
     connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
             SLOT(slotDeleteCurrentItem()));
-    connect(m_guiClient, SIGNAL(signalExifInfo()),
-            SLOT(slotExifInfo()));
     connect(m_guiClient, SIGNAL(signalCommentsEdit()),
             SLOT(slotCommentsEdit()));
 
@@ -251,13 +256,16 @@ ImageWindow::~ImageWindow()
 void ImageWindow::loadURL(const KURL::List& urlList,
                           const KURL& urlCurrent,
                           const QString& caption,
-                          bool  allowSaving)
+                          bool  allowSaving,
+                          AlbumIconView* view)
 {
     setCaption(i18n("Digikam Image Editor - Album \"%1\"").arg(caption));
 
-    m_urlList    = urlList;
-    m_urlCurrent = urlCurrent;
+    m_view        = view;
+    m_urlList     = urlList;
+    m_urlCurrent  = urlCurrent;
     m_allowSaving = allowSaving;
+    
     m_guiClient->m_saveAction->setEnabled(false);
     m_guiClient->m_restoreAction->setEnabled(false);
 
@@ -547,53 +555,32 @@ void ImageWindow::slotRotatedOrFlipped()
 
 void ImageWindow::slotFileProperties()
 {
-    (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
-}
-
-void ImageWindow::slotExifInfo()
-{
-    KExif exif(this);
-
-    if (exif.loadFile(m_urlCurrent.path()))
-        exif.exec();
+    if (!m_view)
+        (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
     else
-    {
-        KMessageBox::sorry(this,
-                           i18n("This item has no Exif information."));
-    }
+        {
+        AlbumIconItem *iconItem = getCurrItemFromUrlList();                 
+       
+        if (iconItem)
+           {
+           ImageProperties properties(m_view, iconItem, this);
+           properties.exec();
+           }
+        }
 }
 
 void ImageWindow::slotCommentsEdit()
 {
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-
-    if (!palbum)
-        return;
-
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    QString comments( db->getItemCaption(palbum, m_urlCurrent.fileName()) );
-
-    if (ImageCommentEdit::editComments(m_urlCurrent.filename(), comments, this))
-    {
-        db->setItemCaption(palbum, m_urlCurrent.fileName(), comments);
-
-        AlbumSettings *settings = AlbumSettings::instance();
-
-        if (settings->getSaveExifComments())
-        {
-            KFileMetaInfo metaInfo(m_urlCurrent.path(), "image/jpeg", KFileMetaInfo::Fastest);
-            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
-            {
-                // store as JPEG JFIF comment
-                if (metaInfo.containsGroup("Jpeg EXIF Data"))
-                {
-                    metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
-                    metaInfo.applyChanges();
-                }
-            }
-        }
-    }
+    if (m_view)
+       {
+       AlbumIconItem *iconItem = getCurrItemFromUrlList();                 
+       
+       if (iconItem)
+          {
+          ImageDescEdit descEdit(m_view, iconItem, this);
+          descEdit.exec();
+          }
+       }
 }
 
 void ImageWindow::slotDeleteCurrentItem()
@@ -944,7 +931,6 @@ void ImageWindow::slotToggleFullScreen()
         unplugActionAccel(m_guiClient->m_fileprint);
         unplugActionAccel(m_guiClient->m_fileproperties);
         unplugActionAccel(m_guiClient->m_fileDelete);
-        unplugActionAccel(m_guiClient->m_exifinfo);
         unplugActionAccel(m_guiClient->m_commentedit);
 
         m_fullScreen = false;
@@ -980,7 +966,6 @@ void ImageWindow::slotToggleFullScreen()
         plugActionAccel(m_guiClient->m_fileprint);
         plugActionAccel(m_guiClient->m_fileproperties);
         plugActionAccel(m_guiClient->m_fileDelete);
-        plugActionAccel(m_guiClient->m_exifinfo);
         plugActionAccel(m_guiClient->m_commentedit);
 
         showFullScreen();
@@ -1039,6 +1024,22 @@ void ImageWindow::unplugActionAccel(KAction* action)
 void ImageWindow::slotImagePluginsHelp()
 {
     KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
+}
+
+AlbumIconItem* ImageWindow::getCurrItemFromUrlList(void)
+{
+    if (m_view)
+       {
+       for (ThumbItem *it = m_view->firstItem() ; it ; it = it->nextItem())
+          {
+          AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+          
+          if (iconItem->fileItem()->url() == m_urlCurrent) 
+             return iconItem;
+          }
+       }
+    
+    return 0L;
 }
 
 #include "imagewindow.moc"

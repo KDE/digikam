@@ -74,11 +74,12 @@ public:
     TAlbum* m_album;
 };
 
-ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
-    : KDialogBase(Plain, i18n("Image Comments/Tags"), Help|User1|User2|Stretch|Ok|Apply|Cancel,
-                  Ok, view, 0, true, true, 
-                  KStdGuiItem::guiItem(KStdGuiItem::Forward), 
-                  KStdGuiItem::guiItem(KStdGuiItem::Back))
+ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent)
+             : KDialogBase(Plain, i18n("Image Comments/Tags"), 
+                           Help|User1|User2|Stretch|Ok|Apply|Cancel,
+                           Ok, parent, 0, true, true, 
+                           KStdGuiItem::guiItem(KStdGuiItem::Forward), 
+                           KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
     setHelp("tagscommentsedit.anchor", "digikam");
     m_view     = view;
