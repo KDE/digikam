@@ -312,8 +312,8 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
     
     // We modify only global luminosity of the grain.
     grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 9,  QPoint::QPoint(128, 128));
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 17, QPoint::QPoint(255, 0));
+    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
+    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
     
     // Calculate curves and lut to apply on grain.
     grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
