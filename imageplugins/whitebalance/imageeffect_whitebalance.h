@@ -38,7 +38,6 @@ class QPushButton;
 class QCheckBox;
 
 class KDoubleNumInput;
-class KIntNumInput;
 
 namespace Digikam
 {

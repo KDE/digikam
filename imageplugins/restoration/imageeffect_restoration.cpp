@@ -25,8 +25,6 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
-#include <cstdlib>
-#include <cerrno>
 
 // Qt includes.
 
@@ -43,6 +41,7 @@
 #include <qtimer.h>
 #include <qevent.h>
 #include <qfile.h>
+#include <qtextstream.h>
 
 // KDE includes.
 
@@ -573,7 +572,9 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                 
                  setButtonText(User1, i18n("&Reset Values"));
                  setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-                 enableButton(Ok, true);    
+                 enableButton(Ok, true);  
+                 enableButton(User2, true);
+                 enableButton(User3, true);  
                  m_imagePreviewWidget->setEnabled(true);                 
                  m_restorationTypeCB->setEnabled(true);
                  m_detailInput->setEnabled(true);
@@ -614,6 +615,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                     setButtonText(User1, i18n("&Reset Values"));
                     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
                     enableButton(Ok, true);    
+                    enableButton(User2, true);
+                    enableButton(User3, true);                      
                     m_imagePreviewWidget->setEnabled(true);                 
                     m_restorationTypeCB->setEnabled(true);
                     m_detailInput->setEnabled(true);
@@ -639,117 +642,76 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
 
 void ImageEffect_Restoration::slotUser2()
 {
-    KURL loadRestorationFile;
-    FILE *fp = 0L;
-
-    loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                  QString( "*" ), this,
-                                                  QString( i18n("Photograph Restoration Settings File to Load")) );
+    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Restoration Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(loadRestorationFile.path()), "r");   
+    QFile file(loadRestorationFile.path());
     
-    if ( fp )
+    if ( file.open(IO_ReadOnly) )   
         {
-        char buf1[1024];
-        char buf2[1024];
-        char buf3[1024];
-        char buf4[1024];
-        char buf5[1024];
-
-        buf1[0] = '\0';
-
-        fgets(buf1, 1023, fp);
-
-        fscanf (fp, "%*s %s", buf1);
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Restoration Configuration File" )
+           {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" isn't Photograph Restoration settings text file.")
+                        .arg(loadRestorationFile.fileName()));
+           file.close();            
+           return;
+           }
         
-        // Normalize setting.
-        fscanf (fp, "%*s %s", buf1);
-          
-        if (strcmp (buf1, "TRUE") == 0)
-            m_normalizeBox->setChecked(true);
-        else
-            m_normalizeBox->setChecked(false);
-
-        // Linear interpolation settings.     
-        fscanf (fp, "%*s %s", buf1);
+        blockSignals(true);
+        m_normalizeBox->setChecked( stream.readLine().toInt() );
+        m_linearInterpolationBox->setChecked( stream.readLine().toInt() );
         
-        if (strcmp (buf1, "TRUE") == 0)
-            m_linearInterpolationBox->setChecked(true);
-        else
-            m_linearInterpolationBox->setChecked(false);
-
-        // Smoothing settings.
-        fscanf (fp, "%*s %s %s %s %s %s", buf1, buf2, buf3, buf4, buf5);
-        m_detailInput->setValue( atof(buf1) );
-        m_gradientInput->setValue( atof(buf2) );
-        m_timeStepInput->setValue( atof(buf3) );
-        m_blurInput->setValue( atof(buf4) );
-        m_blurItInput->setValue( atof(buf5) );
-        
-        // Advanced settings.
-        fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        m_angularStepInput->setValue( atof(buf1) );
-        m_integralStepInput->setValue( atof(buf2) );
-        m_gaussianInput->setValue( atof(buf3) );
-
-        fclose(fp);
+        m_detailInput->setValue( stream.readLine().toDouble() );
+        m_gradientInput->setValue( stream.readLine().toDouble() );
+        m_timeStepInput->setValue( stream.readLine().toDouble() );
+        m_blurInput->setValue( stream.readLine().toDouble() );
+        m_blurItInput->setValue( stream.readLine().toDouble() );
+        m_angularStepInput->setValue( stream.readLine().toDouble() );
+        m_integralStepInput->setValue( stream.readLine().toDouble() );
+        m_gaussianInput->setValue( stream.readLine().toDouble() );
+        blockSignals(false);
+        slotEffect();  
         }
     else
-        {
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Restoration text file."));
-        return;
-        }
+
+    file.close();             
 }
 
 void ImageEffect_Restoration::slotUser3()
 {
-    KURL saveRestorationFile;
-    FILE *fp = 0L;
-
-    saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                  QString( "*" ), this,
-                                                  QString( i18n("Photograph Restoration Settings File to Save")) );
+    KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                             QString( "*" ), this,
+                                             QString( i18n("Photograph Restoration Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(saveRestorationFile.path()), "w");   
+    QFile file(saveRestorationFile.path());
     
-    if ( fp )
-        {       
-        char        buf1[256];
-        char        buf2[256];
-        char        buf3[256];
-        char        buf4[256];
-        char        buf5[256];
-
-        fprintf (fp, "# Photograph Restoration Configuration File\n");
-
-        fprintf (fp, "NORMALIZE: %s\n",
-                 m_normalizeBox->isChecked() ? "TRUE" : "FALSE");
-        fprintf (fp, "LINEAR_INTERPOLATION: %s\n",
-                 m_linearInterpolationBox->isChecked() ? "TRUE" : "FALSE");
-
-        sprintf (buf1, "%5.3f", m_detailInput->value());                 
-        sprintf (buf2, "%5.3f", m_gradientInput->value());
-        sprintf (buf3, "%5.3f", m_timeStepInput->value());
-        sprintf (buf4, "%5.3f", m_blurInput->value());
-        sprintf (buf5, "%5.3f", m_blurItInput->value());
-        fprintf (fp, "SMOOTHING: %s %s %s %s %s\n", buf1, buf2, buf3, buf4, buf5);
-
-        sprintf (buf1, "%5.3f", m_angularStepInput->value());
-        sprintf (buf2, "%5.3f", m_integralStepInput->value());
-        sprintf (buf3, "%5.3f", m_gaussianInput->value());
-        fprintf (fp, "ADVANCED: %s %s %s\n", buf1, buf2, buf3);
-
-        fclose (fp);
+    if ( file.open(IO_WriteOnly) )   
+        {
+        QTextStream stream( &file );        
+        stream << "# Photograph Restoration Configuration File\n";    
+        stream << m_normalizeBox->isChecked() << "\n";    
+        stream << m_linearInterpolationBox->isChecked() << "\n";    
+        stream << m_detailInput->value() << "\n";    
+        stream << m_gradientInput->value() << "\n";    
+        stream << m_timeStepInput->value() << "\n";    
+        stream << m_blurInput->value() << "\n";    
+        stream << m_blurItInput->value() << "\n";    
+        stream << m_angularStepInput->value() << "\n";    
+        stream << m_integralStepInput->value() << "\n";    
+        stream << m_gaussianInput->value() << "\n";    
         }
     else
-        {
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Restoration text file."));
-        return;
-        }
+    
+    file.close();        
 }
 
 }  // NameSpace DigikamRestorationImagesPlugin

@@ -34,8 +34,6 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
-#include <cstdlib>
-#include <cerrno>
  
 // Qt includes. 
  
@@ -52,6 +50,7 @@
 #include <qpixmap.h>
 #include <qcheckbox.h>
 #include <qfile.h>
+#include <qtextstream.h>
 
 // KDE includes.
 
@@ -875,96 +874,70 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height)
 
 void ImageEffect_WhiteBalance::slotUser2()
 {
-    KURL loadWhiteBalanceFile;
-    FILE *fp = 0L;
-
-    loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                 QString( "*" ), this,
-                                                 QString( i18n("White Color Balance Settings File to Load")) );
+    KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                             QString( "*" ), this,
+                                             QString( i18n("White Color Balance Settings File to Load")) );
     if( loadWhiteBalanceFile.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(loadWhiteBalanceFile.path()), "r");   
+    QFile file(loadWhiteBalanceFile.path());
     
-    if ( fp )
+    if ( file.open(IO_ReadOnly) )   
         {
-        char buf1[1024];
-        char buf2[1024];
-        char buf3[1024];
-        char buf4[1024];
-        char buf5[1024];
-        char buf6[1024];
-        char buf7[1024];
-
-        buf1[0] = '\0';
-
-        fgets(buf1, 1023, fp);
-
-        fscanf (fp, "%*s %s", buf1);
-
-        fscanf (fp, "%*s %s %s %s %s %s %s %s", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
-        fclose(fp);
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# White Color Balance Configuration File" )
+           {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" isn't White Color Balance settings text file.")
+                        .arg(loadWhiteBalanceFile.fileName()));
+           file.close();            
+           return;
+           }
         
         blockSignals(true);
-        m_temperatureInput->setValue( atof(buf1) );
-        m_darkInput->setValue( atof(buf2) );
-        m_blackInput->setValue( atof(buf3) );
-        m_exposureInput->setValue( atof(buf4) );
-        m_gammaInput->setValue( atof(buf5) );
-        m_saturationInput->setValue( atof(buf6) );
-        m_greenInput->setValue( atof(buf7) );
+        m_temperatureInput->setValue( stream.readLine().toDouble() );
+        m_darkInput->setValue( stream.readLine().toDouble() );
+        m_blackInput->setValue( stream.readLine().toDouble() );
+        m_exposureInput->setValue( stream.readLine().toDouble() );
+        m_gammaInput->setValue( stream.readLine().toDouble() );
+        m_saturationInput->setValue( stream.readLine().toDouble() );
+        m_greenInput->setValue( stream.readLine().toDouble() );
         m_histogramWidget->reset();
         blockSignals(false);
         slotEffect();  
         }
     else
-        {
         KMessageBox::error(this, i18n("Cannot load settings from the White Color Balance text file."));
-        return;
-        }
+
+    file.close();            
 }
 
 void ImageEffect_WhiteBalance::slotUser3()
 {
-    KURL saveWhiteBalanceFile;
-    FILE *fp = 0L;
-
-    saveWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                  QString( "*" ), this,
-                                                  QString( i18n("White Color Balance Settings File to Save")) );
+    KURL saveWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                             QString( "*" ), this,
+                                             QString( i18n("White Color Balance Settings File to Save")) );
     if( saveWhiteBalanceFile.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(saveWhiteBalanceFile.path()), "w");   
+    QFile file(saveWhiteBalanceFile.path());
     
-    if ( fp )
-        {       
-        char        buf1[256];
-        char        buf2[256];
-        char        buf3[256];
-        char        buf4[256];
-        char        buf5[256];
-        char        buf6[256];
-        char        buf7[256];
-
-        fprintf (fp, "# White Color Balance Configuration File\n");
-
-        sprintf (buf1, "%5.3f", m_temperatureInput->value());                 
-        sprintf (buf2, "%5.3f", m_darkInput->value());
-        sprintf (buf3, "%5.3f", m_blackInput->value());
-        sprintf (buf4, "%5.3f", m_exposureInput->value());
-        sprintf (buf5, "%5.3f", m_gammaInput->value());
-        sprintf (buf6, "%5.3f", m_saturationInput->value());
-        sprintf (buf7, "%5.3f", m_greenInput->value());
-        fprintf (fp, "SETTINGS: %s %s %s %s %s %s %s\n", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
-
-        fclose (fp);
+    if ( file.open(IO_WriteOnly) )   
+        {
+        QTextStream stream( &file );        
+        stream << "# White Color Balance Configuration File\n";    
+        stream << m_temperatureInput->value() << "\n";    
+        stream << m_darkInput->value() << "\n";    
+        stream << m_blackInput->value() << "\n";    
+        stream << m_exposureInput->value() << "\n";    
+        stream << m_gammaInput->value() << "\n";    
+        stream << m_saturationInput->value() << "\n";    
+        stream << m_greenInput->value() << "\n";    
         }
     else
-        {
         KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
-        return;
-        }
+    
+    file.close();        
 }
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
