@@ -103,6 +103,9 @@ void ThumbDB::putThumb(const QString& path, const QImage& image)
 
 void ThumbDB::getThumb(const QString& path, QPixmap& pix, int w, int h)
 {
+    if (!d->db)
+        return;
+
     QCString keyStr(getKey(path));    
 
     datum key, content;
@@ -126,6 +129,14 @@ void ThumbDB::getThumb(const QString& path, QPixmap& pix, int w, int h)
     ds >> thumb;
     ba.resetRawData( content.dptr, content.dsize );
     
+    free(content.dptr);
+
+    if (thumb.isNull())
+    {
+        gdbm_delete(d->db, key);
+        return;
+    }
+    
     thumb = thumb.scale(w,h,QImage::ScaleMin);
     pix = QPixmap(thumb);
 
@@ -140,12 +151,13 @@ void ThumbDB::getThumb(const QString& path, QPixmap& pix, int w, int h)
         p.drawRect(1,1,w-2,h-2);
         p.end();
     }
-    
-    free(content.dptr);
 }
 
 bool ThumbDB::hasThumb(const QString& path)
 {
+    if (!d->db)
+        return false;
+    
     QCString keyStr(getKey(path));    
 
     datum key;
