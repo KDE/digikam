@@ -1,5 +1,16 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> ImageEditor: Sharpen plugin. 
+        * <Gilles Caulier> ImageEditor: Blur plugin. 
+        * <Gilles Caulier> ImageEditor: Color balance plugin. 
+        * <Gilles Caulier> Restored features from old ImageViewer to the new 
+	  ImageEditor:
+	  - Save and SaveAs file.
+	  - File properties dialog.
+	  - Exif Viewer.
+	  - Remove image from current Album.
+	  - Edit comments.
+	  - Printing support.
         * <Gilles Caulier> LibKipi support instead DigikamPlugins.
         * <Gilles Caulier> Updated the menu and popup menu in according with 
           KIPI plugins actions. 
