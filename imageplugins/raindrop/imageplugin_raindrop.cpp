@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_raindrop,
 ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const char*, const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_RainDrop")
 {
-    new KAction(i18n("Raindrops..."), 0, 
+    new KAction(i18n("Raindrops..."), "raindrop", 0, 
                 this, SLOT(slotRainDrop()),
                 actionCollection(), "imageplugin_raindrop");
                 
