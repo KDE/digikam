@@ -34,6 +34,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
+#include "thumbdb.h"
 #include "thumbnailjob.h"
 
 extern "C"
@@ -297,6 +298,12 @@ bool ThumbnailJob::statThumbnail()
         return false;
     }
 
+    if (!ThumbDB::instance()->hasThumb(d->curr_item->url().path(1)))
+    {
+        QImage thumb(file);
+        ThumbDB::instance()->putThumb(d->curr_item->url().path(1), thumb);
+    }
+    
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
     imlib_context_pop();
@@ -450,6 +457,8 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
     }
         
     thumb.save(d->thumbRoot + d->curr_thumb, "PNG", 0);
+
+    ThumbDB::instance()->putThumb( d->curr_item->url().path(1), thumb );
 
     d->image = imlib_create_image(thumb.width(), thumb.height());
     imlib_context_push(d->context);

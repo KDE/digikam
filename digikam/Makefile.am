@@ -24,10 +24,11 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        albumsettings.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamcameraprocess.cpp digikamfirstrun.cpp \
-			kipiinterface.cpp tagcreatedlg.cpp
+			kipiinterface.cpp tagcreatedlg.cpp \
+			thumbdb.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
+		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
@@ -35,7 +36,7 @@ libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(top_builddir)/digikam/utilities/setup/libsetup.la
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
-			-lkipi -no-undefined 
+			-lkipi -no-undefined
 
 
 digikam_SOURCES = main.cpp

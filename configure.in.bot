@@ -22,6 +22,12 @@ if test "$have_kexif" = "no"; then
   echo ""
 fi
 
+if test "$have_gdbm" = "no"; then
+  echo ""
+  echo "DigiKam needs gdbm. You need to install the gdbm development package."
+  echo ""
+fi
+
 if test x$have_kipi = xno; then
     echo ""
     echo ""

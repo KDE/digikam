@@ -52,6 +52,8 @@
 
 // Local includes.
 
+#include "thumbdb.h"
+#include "thumbnailsize.h"
 #include "albumsettings.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -213,6 +215,13 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
     QPainter p(&pix);
     p.setPen(isSelected() ? cg.highlightedText() : cg.text());
 
+    if (thumbnail_.isNull())
+    {
+        int w = view_->thumbnailSize().size();
+        ThumbDB::instance()->getThumb(fileItem_->url().path(1),  thumbnail_,
+                                      w, w);
+    }
+            
     r = view_->itemPixmapRect();
     p.drawPixmap(r.x() + (r.width()-thumbnail_.width())/2,
                  r.y() + (r.height()-thumbnail_.height())/2,
