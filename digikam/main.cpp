@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
                           0);
 
     aboutData.addCredit ( "Achim Bohnet",
-                          I18N_NOOP("Bugs reports and patches"),
+                          I18N_NOOP("Bug reports and patches"),
                           "ach at mpe.mpg.de",
                           0);
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
                           0);
 
     aboutData.addCredit ( "Richard Groult",
-                          I18N_NOOP("Plugins contributor and beta tester"),
+                          I18N_NOOP("Plugin contributor and beta tester"),
                           "Richard dot Groult at jalix.org",
                           0);
 

@@ -124,7 +124,7 @@ int main(int argc, char **argv)
                       0);
 
     about.addCredit ( "Achim Bohnet",
-                      I18N_NOOP("Bugs reports and patches"),
+                      I18N_NOOP("Bug reports and patches"),
                       "ach at mpe.mpg.de",
                       0);
 
