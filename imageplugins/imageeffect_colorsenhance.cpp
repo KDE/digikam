@@ -500,6 +500,7 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
 
 void ImageEffect_ColorsEnhance::testKImageEffect()
 {
+    /*
     Digikam::ImageIface iface(0, 0);
 
     uint* data = iface.getOriginalData();
@@ -520,5 +521,6 @@ void ImageEffect_ColorsEnhance::testKImageEffect()
     memcpy(data, image.bits(), image.numBytes());
     iface.putOriginalData(data);
     delete [] data;
+    */
 }
 
