@@ -1,25 +1,25 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    KIPIINTERFACE.H
-//
-//    Copyright (C) 2004 Gilles Caulier <caulier dot gilles at free.fr>
-//                       Ralf Holzer <ralf at well.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * File   : kipiinterface.h
+ * Authors: Gilles Caulier <caulier dot gilles at free.fr>
+ *          Ralf Holzer <ralf at well.com>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-08-02
+ * Description : 
+ * 
+ * Copyright 2004 by Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 
 #ifndef DIGIKAM_KIPIINTERFACE_H
@@ -155,21 +155,12 @@ public:
     virtual int features() const;
     virtual QString fileExtensions();
 
-private slots:
-
-    void slot_onAddImageFinished(KIO::Job* job);
-
 public slots:
 
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Album *palbum );
     
 private:
-    
-    // For Add images operations.
-    PAlbum       *m_sourceAlbum;
-    PAlbum       *m_targetAlbum;
-    QString       m_imageFileName;
     
     AlbumManager *albumManager_;
     AlbumDB      *albumDB_;

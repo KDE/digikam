@@ -1,25 +1,25 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    KIPIINTERFACE.CPP
-//
-//    Copyright (C) 2004 Gilles Caulier <caulier dot gilles at free.fr>
-//                       Ralf Holzer <ralf at well.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * File   : kipiinterface.cpp
+ * Authors: Gilles Caulier <caulier dot gilles at free.fr>
+ *          Ralf Holzer <ralf at well.com>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-08-02
+ * Description : 
+ * 
+ * Copyright 2004 by Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 
 #ifdef HAVE_CONFIG_H
@@ -150,14 +150,17 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
     if ( !time.isValid() )
     {
-        kdWarning() << k_funcinfo << "Invalid datetime specified"
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamImageInfo::setTime:Invalid datetime specified"
                     << endl;
     }
 
     QFileInfo fi(_url.path());
     if ( !fi.exists() || !fi.isReadable() )
     {
-        kdWarning() << k_funcinfo << "Target does not exist or is unreadable"
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamImageInfo::setTime:Target does not exist "
+                       "or is unreadable"
                     << endl;
     }
     
@@ -167,7 +170,9 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
     if ( ::utime( QFile::encodeName(_url.path()), &t ) != 0 )
     {
-        kdWarning() << k_funcinfo << "Failed to change image file date and time"
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamImageInfo::setTime:Failed to change "
+                       "image file date and time"
                     << endl;
     }
 }
@@ -222,7 +227,8 @@ DigikamImageCollection::DigikamImageCollection( Type tp, Album* album,
     if (!album)           
     {
         kdWarning() << k_funcinfo
-                    << "This should not happen. No album specified"
+                    << "kipiinterface::DigikamImageCollection::DigikamImageCollection:"
+                       "This should not happen. No album specified"
                     << endl;
     }
 }
@@ -288,7 +294,9 @@ KURL::List DigikamImageCollection::images()
         }
         else
         {
-            kdWarning() << k_funcinfo << "Unknown album type" << endl;
+            kdWarning() << k_funcinfo 
+                        << "kipiinterface::DigikamImageCollection::images:Unknown album type" 
+                        << endl;
             return KURL::List();
         }
 
@@ -378,7 +386,9 @@ KURL DigikamImageCollection::path()
     }
     else
     {
-        kdWarning() << k_funcinfo << "Requesting kurl from a virtual album"
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamImageCollection::path:Requesting kurl "
+                       "from a virtual album"
                     << endl;
         return KURL(album_->getURL());
     }
@@ -393,7 +403,9 @@ KURL DigikamImageCollection::uploadPath()
     }
     else
     {
-        kdWarning() << k_funcinfo << "Requesting kurl from a virtual album"
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamImageCollection::uploadPath:Requesting kurl "
+                       "from a virtual album"
                     << endl;
         return KURL(album_->getURL());
     }
@@ -402,7 +414,7 @@ KURL DigikamImageCollection::uploadPath()
 
 KURL DigikamImageCollection::uploadRoot()
 {
-    return KURL(AlbumManager::instance()->getLibraryPath());
+    return KURL(AlbumManager::instance()->getLibraryPath() + "/");
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -517,79 +529,38 @@ int DigikamKipiInterface::features() const
            KIPI::AlbumsUseFirstImagePreview;
 }
 
-bool DigikamKipiInterface::addImage( const KURL& , QString&  )
+bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
-    /* TODO:
-       
-    m_sourceAlbum = 0;
-    m_targetAlbum = 0;
+    // Nota : All copy/move operations are processed by the plugins.
     
-    // The root path is the Digikam Album library path ?
-    // If it's true, do nothing because the image is already in the Albums library.
-    
-    if ( url.path().section('/', 0, -3) == albumManager_->getLibraryPath() )
-       return true;    
-    
-    m_sourceAlbum = albumManager_->findPAlbum(KURL::KURL(url.directory()));
-    
-    // PENDING (Gilles) : Renchi, there is no way for to get a PAlbum instead Album with currentAlbum() method ?
-    Album *current = albumManager_->currentAlbum();
-    m_targetAlbum = albumManager_->findPAlbum(KURL::KURL(current->getURL()));
-    
-    if ( !m_targetAlbum ) 
-       {
-       errmsg = i18n("No current Album selected.");
-       return false;
-       }
-    
-    m_imageFileName = url.path().section('/', -1);                            
-        
     if ( url.isValid() == false )
        {
-       errmsg = i18n("'%1' is not a valid URL.").arg(url.path());
+       errmsg = i18n("Target URL isn't valid!").arg(url.path());
        return false;
        }
-    else 
+    
+    PAlbum *targetAlbum = albumManager_->findPAlbum(url.directory());
+    
+    if ( !targetAlbum ) 
        {
-       KIO::CopyJob* job = KIO::copy(url, KURL(m_targetAlbum->getURL() + "/" + m_imageFileName), true);
-       
-       connect(job, SIGNAL(result(KIO::Job*)),
-               this, SLOT(slot_onAddImageFinished(KIO::Job*)));
-       
-       return true;
-       }
-    */
-    return false;
-}
-
-void DigikamKipiInterface::slot_onAddImageFinished(KIO::Job* )
-{
-    /* TODO
-    if (job->error())
-        job->showErrorDialog(0);
-    else
-       {  
-       // Copy the image comments if the source image is in the Albums library.
-       
-       if (m_sourceAlbum)
-          {
-          QString comments = albumDB_->getItemCaption( m_sourceAlbum, m_imageFileName );
-
-          albumDB_->setItemCaption( m_targetAlbum, m_imageFileName, comments );
-          }
+       errmsg = i18n("Target album isn't in the Albums library!");
+       return false;
        }
     
-    albumManager_->refreshItemHandler( m_targetAlbum->getURL() + "/" + m_imageFileName ); 
-    */
+    // Renchi: No need to have an 'AlbumDB::addItem()' method ?       
+       
+    albumManager_->refreshItemHandler( QStringList::QStringList(url.path()) ); 
+    
+    return true;
 }
-
 
 void DigikamKipiInterface::delImage( const KURL& url )
 {
     KURL rootURL(albumManager_->getLibraryPath());
     if ( !rootURL.isParentOf(url) )
     {
-        kdWarning() << k_funcinfo << "URL not in the Digikam Album library" 
+        kdWarning() << k_funcinfo 
+                    << "kipiinterface::DigikamKipiInterface::delImage:URL not in the Digikam Album library" 
                     << endl;
     }
     
@@ -605,7 +576,8 @@ void DigikamKipiInterface::delImage( const KURL& url )
     else 
     {
         kdWarning() << k_funcinfo
-                    << "Cannot find Parent album in Digikam Album library" 
+                    << "kipiinterface::DigikamKipiInterface::delImage:Cannot find Parent album "
+                       "in Digikam Album library" 
                     << endl;
     }   
 }
