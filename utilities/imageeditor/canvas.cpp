@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : canvas.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-01-09
  * Description : 
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,6 +20,13 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
+#include <cstdio>
+#include <cmath>
+ 
+// Qt includes.
+ 
 #include <qfile.h>
 #include <qstring.h>
 #include <qevent.h>
@@ -36,11 +44,10 @@
 #include <qtimer.h>
 #include <qvaluelist.h>
 
+// Local includes.
+
 #include "imlibinterface.h"
 #include "canvas.h"
-
-#include <cstdio>
-#include <cmath>
 
 using namespace Digikam;
 
@@ -148,6 +155,20 @@ void Canvas::load(const QString& filename)
 
     emit signalChanged(false);
     emit signalZoomChanged(d->zoom);
+}
+
+int Canvas::save(const QString& filename)
+{
+    int result = d->im->save(filename);
+    emit signalChanged(false);
+    return result;
+}
+
+int Canvas::saveAs(const QString& filename)
+{
+    int result = d->im->saveAs(filename);
+    emit signalChanged(false);
+    return result;
 }
 
 int Canvas::imageWidth()

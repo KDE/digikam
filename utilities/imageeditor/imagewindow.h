@@ -100,12 +100,12 @@ private slots:
     void slotChanged(bool);
     void slotSelected(bool);
     
+    void slotFilePrint();
     void slotFileProperties();
     void slotExifInfo();
     void slotCommentsEdit();
     
     void slotDeleteCurrentItem();
-
 };
 
 #endif /* IMAGEWINDOW_H */

@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imlibinterface.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2003-01-15
  * Description : 
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -45,6 +46,10 @@ public:
     ~ImlibInterface();
 
     void load(const QString& filename);
+    void restore();
+    bool save(const QString& file);
+    bool saveAs(const QString& file);
+        
     void zoom(double val);
 
     void paint(QPaintDevice* p, int sx, int sy,
@@ -76,10 +81,6 @@ public:
 
     void resize(int w, int h);
     
-    void restore();
-    void save(const QString& file);
-    void saveAs(const QString& file);
-
     void changeGamma(double gamma);
     void changeBrightness(double brightness);
     void changeContrast(double contrast);
@@ -96,6 +97,8 @@ signals:
     void signalRequestUpdate();
     
 private:
+    bool saveAction(const QString& saveFile); 
+    bool saveTIFF(const QString& saveFile, bool compress=false);
 
     ImlibInterface();
 

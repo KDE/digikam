@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : canvas.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-01-09
  * Description : 
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,6 +23,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+// Qt includes.
+
 #include <qscrollview.h>
 
 class QString;
@@ -30,6 +33,7 @@ class QPaintEvent;
 class QResizeEvent;
 class QWheelEvent;
 class QKeyEvent;
+
 class CanvasPrivate;
 
 class Canvas : public QScrollView {
@@ -42,7 +46,9 @@ public:
     ~Canvas();
 
     void load(const QString& filename);
-
+    int  save(const QString& filename);
+    int  saveAs(const QString& filename);
+    
     bool maxZoom();
     bool minZoom();
     int  imageWidth();

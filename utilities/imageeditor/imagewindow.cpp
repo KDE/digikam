@@ -39,6 +39,8 @@
 #include <kio/netaccess.h>
 #include <libkexif/kexif.h>
 #include <libkexif/kexifutils.h>
+#include <kprinter.h>
+#include <ktempfile.h>
 
 // Local includes.
 
@@ -48,12 +50,13 @@
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
-#include "imagewindow.h"
+#include "imageprint.h"
 #include "imagecommentedit.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "imagewindow.h"
 
 ImageWindow* ImageWindow::instance()
 {
@@ -146,6 +149,8 @@ ImageWindow::ImageWindow()
     connect(m_guiClient, SIGNAL(signalRestore()),
             m_canvas, SLOT(slotRestore()));
 
+    connect(m_guiClient, SIGNAL(signalFilePrint()),
+            SLOT(slotFilePrint()));
     connect(m_guiClient, SIGNAL(signalFileProperties()),
             SLOT(slotFileProperties()));
     connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
@@ -498,10 +503,32 @@ void ImageWindow::slotDeleteCurrentItem()
     // No image in the current Album -> Quit ImageEditor...
     KMessageBox::information(this,
                              i18n("There is no image to show in the current Album!\n"
-                                  "The ImageViewer will be closed..."),
+                                  "The ImageEditor will be closed..."),
                              i18n("No image in the current Album"));
     
     close();
+}
+
+void ImageWindow::slotFilePrint()
+{
+    KPrinter printer;
+    printer.setDocName( m_urlCurrent.filename() );
+    printer.setCreator( "Digikam-ImageEditor");
+
+    KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ImageEditor page"));
+
+    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
+        {
+        KTempFile tmpFile( "digikam_imageeditor", ".png" );
+        
+        if ( tmpFile.status() == 0 )
+            {
+            tmpFile.setAutoDelete( true );
+            
+            if ( m_canvas->save(tmpFile.name()) )
+               ImagePrint printOperations(tmpFile.name(), printer, m_urlCurrent.filename());
+            }
+        }
 }
 
 #include "imagewindow.moc"

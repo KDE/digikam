@@ -67,6 +67,32 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
     m_saveAction->setEnabled(false);
     m_restoreAction->setEnabled(false);
 
+    m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
+                              CTRL+Key_P, 
+                              this, SIGNAL(signalFilePrint()),
+                              actionCollection(), "file_print");                                        
+                                        
+    m_fileproperties = new KAction(i18n("File Properties..."), "image",
+                                   ALT+Key_Return, 
+                                   this, SIGNAL(signalFileProperties()),
+                                   actionCollection(), "file_properties");
+
+    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
+                                   SHIFT+Key_Delete, 
+                                   this, SIGNAL(signalDeleteCurrentItem()),
+                                   actionCollection(), "file_delete");
+                                                                      
+    m_exifinfo = new KAction(i18n("Exif Information..."), "exifinfo",
+                             Key_F6, 
+                             this, SIGNAL(signalExifInfo()),
+                             actionCollection(), "exif_info");
+                             
+    m_commentedit = new KAction(i18n("Edit Image Comments..."), "imagecomment",
+                                Key_F3, 
+                                this, SIGNAL(signalCommentsEdit()),
+                                actionCollection(), "comments_edit");
+
+    
     KStdAction::quit(this, SIGNAL(signalExit()), 
                      actionCollection(), "imageview_exit");
 
@@ -129,26 +155,6 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         this, SIGNAL(signalFlipVert()),
                                         actionCollection(),
                                         "flip_vertical") );
-
-    m_fileproperties = new KAction(i18n("File Properties..."), "image",
-                                   ALT+Key_Return, 
-                                   this, SIGNAL(signalFileProperties()),
-                                   actionCollection(), "file_properties");
-
-    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
-                                   SHIFT+Key_Delete, 
-                                   this, SIGNAL(signalDeleteCurrentItem()),
-                                   actionCollection(), "file_delete");
-                                                                      
-    m_exifinfo = new KAction(i18n("Exif Information..."), "exifinfo",
-                             Key_F6, 
-                             this, SIGNAL(signalExifInfo()),
-                             actionCollection(), "exif_info");
-                             
-    m_commentedit = new KAction(i18n("Edit Image Comments..."), "imagecomment",
-                                Key_F3, 
-                                this, SIGNAL(signalCommentsEdit()),
-                                actionCollection(), "comments_edit");
                                                                                                          
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
@@ -172,6 +178,8 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_saveas/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_restore/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/file_delete/ ");        
+    guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&File/ /Action/file_print/ ");        
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/comments_edit/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/exif_info/ ");

@@ -66,7 +66,8 @@ signals:
     void signalSave();
     void signalSaveAs();
     void signalRestore();
-
+    
+    void signalFilePrint();
     void signalFileProperties();
     void signalDeleteCurrentItem();
     void signalExifInfo();
@@ -99,6 +100,7 @@ private:
     KActionMenu   *m_flipAction;
     KAction       *m_cropAction;
     
+    KAction       *m_fileprint;    
     KAction       *m_fileproperties;
     KAction       *m_fileDelete;
     KAction       *m_exifinfo;
