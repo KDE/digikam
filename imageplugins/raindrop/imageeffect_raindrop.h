@@ -57,7 +57,7 @@ protected:
     void   rainDrops(uint *data, int Width, int Height, int DropSize, int Amount, int Coeff);
     bool** CreateBoolArray (uint Columns, uint Rows);
     void   FreeBoolArray (bool** lpbArray, uint Columns);
-    uchar  LimitValues (int ColorValue);
+    inline uchar LimitValues (int ColorValue);
     
 private:
     
