@@ -76,7 +76,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     label    = new QLabel(i18n("Contrast :"), plainPage());
     m_cInput = new KDoubleNumInput(plainPage());
     m_cInput->setPrecision(2);
-    m_cInput->setRange(0.0, 2.0, 0.01, true);
+    m_cInput->setRange(-1.0, 1.0, 0.01, true);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
     hlay->addWidget(label,1);
     hlay->addWidget(m_cInput,5);
@@ -85,14 +85,14 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     label    = new QLabel(i18n("Gamma :"), plainPage());
     m_gInput = new KDoubleNumInput(plainPage());
     m_gInput->setPrecision(2);
-    m_gInput->setRange(0.0, 2.0, 0.01, true);
+    m_gInput->setRange(-1.0, 1.0, 0.01, true);
     QWhatsThis::add( m_gInput, i18n("<p>Set here the gamma adjustment of the image."));
     hlay->addWidget(label,1);
     hlay->addWidget(m_gInput,5);
 
     m_bInput->setValue(0.0);
-    m_cInput->setValue(1.0);
-    m_gInput->setValue(1.0);
+    m_cInput->setValue(0.0);
+    m_gInput->setValue(0.0);
 
     connect(m_bInput, SIGNAL(valueChanged (double)),
             SLOT(slotEffect()));
@@ -114,8 +114,8 @@ void ImageEffect_BCG::slotUser1()
 {
     blockSignals(true);	
     m_bInput->setValue(0.0);
-    m_cInput->setValue(1.0);
-    m_gInput->setValue(1.0);
+    m_cInput->setValue(0.0);
+    m_gInput->setValue(0.0);
     blockSignals(false);	
     slotEffect();
 } 
@@ -126,8 +126,8 @@ void ImageEffect_BCG::slotEffect()
         m_previewWidget->imageIface();
 
     double b = m_bInput->value();
-    double c = m_cInput->value();    
-    double g = m_gInput->value();
+    double c = m_cInput->value() + (double)(1.0);    
+    double g = m_gInput->value() + (double)(1.0);
 
     iface->setPreviewBCG(b, c, g);
     m_previewWidget->update();
@@ -139,8 +139,8 @@ void ImageEffect_BCG::slotOk()
         m_previewWidget->imageIface();
 
     double b = m_bInput->value();
-    double c = m_cInput->value();    
-    double g = m_gInput->value();
+    double c = m_cInput->value() + (double)(1.0);    
+    double g = m_gInput->value() + (double)(1.0);
 
     iface->setOriginalBCG(b, c, g);
 
