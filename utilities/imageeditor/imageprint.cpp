@@ -207,6 +207,10 @@ bool ImagePrint::printImageWithQt()
 
     // ### need a GUI for this in ImagePrintDialogPage!
     // x - alignment
+
+    kdDebug() << "Width: " << w << ", Height: " << h
+              << ", Rescaled Image Width: " << image.width()
+              << ", Rescaled Image Height: " << image.height() << endl;
     
     if ( alignment & Qt::AlignHCenter )
         x = (w - image.width())/2;
@@ -224,6 +228,9 @@ bool ImagePrint::printImageWithQt()
         y = h - image.height();
 
     // Perform the actual drawing.
+
+    kdDebug() << "Printing at x, y : "
+              << x << ", " << y << endl;
     
     p.drawImage( x, y, image );
 
