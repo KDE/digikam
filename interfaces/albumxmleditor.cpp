@@ -171,7 +171,7 @@ bool AlbumXMLEditor::save()
         std::cerr <<
             "AlbumXMLEditor:save:"
             "Failed to open xmlFile "
-                  << d->xmlFile << std::endl;
+                  << d->xmlFile.latin1() << std::endl;
         return false;
     }
     
