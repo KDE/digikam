@@ -216,7 +216,7 @@
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that because PNG file format use a no lossless compression algorithm, you can use the max compression level with this file format ?
+<p>Did you know that because PNG file format use a lossless compression algorithm, you can use the max compression level with this file format ?
 </p>
 <br>
 <center>
