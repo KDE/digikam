@@ -144,9 +144,9 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
 
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_bw/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_sepia/ ");
+    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_solarize/ ");
 
     // For testing. Will be removed...
     //guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_test/ ");
@@ -155,7 +155,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
 
     i18n( "&Image" );
     i18n( "Fi&x" );
-    i18n( "&Filters" );
+    i18n( "Fi&lters" );
     
     return guiDef;
 }
