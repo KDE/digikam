@@ -89,7 +89,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     KConfig *config = kapp->config();
     config->setGroup("Album Settings");
     KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( config->readPathEntry("Templates Root URL", albumDBUrl.path()) );
     m_templatesUrl.setPath( config->readPathEntry("Templates URL", albumDBUrl.path()) );
     
@@ -223,7 +223,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 {
     KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("Template Superimpose Tool Settings");
     config->writePathEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
     config->writePathEntry( "Templates URL", m_templatesUrl.path() );
     config->sync();
