@@ -176,7 +176,7 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 ////////////////////////////////////////////////////////////////////////////////////////
 
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
-               : KDialogBase(Tabbed, i18n("Image Properties and Meta-Data"), 
+               : KDialogBase(Tabbed, QString::null, 
                              Help|User1|User2|Stretch|Close,
                              Close, view, 0, true, true, 
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
@@ -266,8 +266,6 @@ void ImageProperties::slotItemChanged()
     if (!m_currItem)
         return;
 
-    setCursor( KCursor::waitCursor() );
-            
     if (!m_HistogramThumbJob.isNull())
     {
         m_HistogramThumbJob->kill();
@@ -289,7 +287,8 @@ void ImageProperties::slotItemChanged()
     }
 
     KURL fileURL(m_currItem->fileItem()->url());    
- 
+    setCaption(i18n("Properties and Meta-Data - %1").arg(fileURL.fileName()));
+    
     // Update General tab.
     
     m_filename->clear();
@@ -313,6 +312,10 @@ void ImageProperties::slotItemChanged()
             SLOT(slotGotGeneralThumbnail(const KURL&,
                                          const QPixmap&,
                                          const KFileMetaInfo*)));
+
+    connect(m_generalThumbJob,
+            SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedGeneralThumbnail(const KURL&)));       
 
     const KFileItem* fi = m_currItem->fileItem();    
     m_filename->setText( fileURL.fileName() );
@@ -410,23 +413,24 @@ void ImageProperties::slotItemChanged()
             SLOT(slotGotHistogramThumbnail(const KURL&,
                                            const QPixmap&,
                                            const KFileMetaInfo*)));
-    
+   
+    connect(m_HistogramThumbJob,
+            SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedHistogramThumbnail(const KURL&)));     
+                                                       
+    m_image.reset();                                            
     m_image.load(fileURL.path());
     
-    if (m_image.isNull() == false)
-       {
-       if(m_image.depth() < 32)                 // we works always with 32bpp.
-          m_image = m_image.convertDepth(32);
+    if(m_image.depth() < 32)                 // we works always with 32bpp.
+        m_image = m_image.convertDepth(32);
        
-       m_image.setAlphaBuffer(true);
-       m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
-       }
+    m_image.setAlphaBuffer(true);
+    m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
                
     // Setup buttons.
            
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
-    setCursor( KCursor::arrowCursor() );       
 }
 
 
@@ -737,7 +741,15 @@ void ImageProperties::updateInformations()
 void ImageProperties::slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
                                                 const KFileMetaInfo*)
 {
-    m_histogramThumb->setPixmap(pix);
+    m_histogramThumb->clear();
+    
+    if (!pix.isNull())
+       m_histogramThumb->setPixmap(pix);
+}
+
+void ImageProperties::slotFailedHistogramThumbnail(const KURL&)
+{
+    m_histogramThumb->clear();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -863,7 +875,16 @@ void ImageProperties::setupGeneralTab()
 void ImageProperties::slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
                                               const KFileMetaInfo*)
 {
-    m_generalThumb->setPixmap(pix);
+    m_generalThumb->clear();
+
+    if (!pix.isNull())
+       m_generalThumb->setPixmap(pix);
+}
+
+void ImageProperties::slotFailedGeneralThumbnail(const KURL&)
+{
+    m_generalThumb->clear();
+    m_generalThumb->setText(i18n("Thumnail unavailable"));
 }
 
 #include "imageproperties.moc"

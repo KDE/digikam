@@ -176,6 +176,8 @@ private slots:
 
     void slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,
                                  const KFileMetaInfo*);  
+    
+    void slotFailedGeneralThumbnail(const KURL&);
 
     // For histogram viever.
     
@@ -185,6 +187,7 @@ private slots:
     void slotIntervChanged(int);
     void slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
                                    const KFileMetaInfo*);  
+    void slotFailedHistogramThumbnail(const KURL&);
   
 };
 
