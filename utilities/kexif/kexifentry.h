@@ -5,6 +5,7 @@
 
 extern "C" {
 #include <libexif/exif-entry.h>
+#include <stdlib.h>
 }
 
 class KExifEntry {
