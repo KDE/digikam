@@ -197,8 +197,9 @@ void ImageWindow::readSettings()
     resize(width, height);
 
     if (autoZoom) {
-        m_guiClient->m_zoomFitAction->setChecked(true);
-        slotToggleAutoZoom();
+        m_guiClient->m_zoomFitAction->activate();
+        m_guiClient->m_zoomPlusAction->setEnabled(false);
+        m_guiClient->m_zoomMinusAction->setEnabled(false);
     }
 //     if (fullScreen)
 //         d->bFullScreen->animateClick();
@@ -302,6 +303,7 @@ void ImageWindow::slotLoadLast()
 void ImageWindow::slotToggleAutoZoom()
 {
     bool checked = m_guiClient->m_zoomFitAction->isChecked();
+
     m_guiClient->m_zoomPlusAction->setEnabled(!checked);
     m_guiClient->m_zoomMinusAction->setEnabled(!checked);
 
@@ -331,8 +333,12 @@ void ImageWindow::slotZoomChanged(float zoom)
                          QString::number(zoom*100, 'f', 2) +
                          QString("%"));
 
-    m_guiClient->m_zoomPlusAction->setEnabled(!m_canvas->maxZoom());
-    m_guiClient->m_zoomMinusAction->setEnabled(!m_canvas->minZoom());
+    m_guiClient->m_zoomPlusAction->
+        setEnabled(!m_canvas->maxZoom() &&
+                   !m_guiClient->m_zoomFitAction->isChecked());
+    m_guiClient->m_zoomMinusAction->
+        setEnabled(!m_canvas->minZoom() &&
+                   !m_guiClient->m_zoomFitAction->isChecked());
 }
 
 void ImageWindow::slotChanged(bool val)

@@ -169,7 +169,6 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("ToolBar/Action/imageview_last/ ");
     guiDef.append("ToolBar/Separator/ / ");
     guiDef.append("ToolBar/Action/imageview_save/ ");
-    guiDef.append("ToolBar/Action/imageview_saveas/ ");
     guiDef.append("ToolBar/Action/imageview_restore/ ");
     guiDef.append("ToolBar/Separator/ / ");
     guiDef.append("ToolBar/Action/imageview_zoom_plus/ ");
