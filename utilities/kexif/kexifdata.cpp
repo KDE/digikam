@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "kexififd.h"
 #include "kexifdata.h"
+#include "kexifentry.h"
 #include "kdebug.h"
 
 #include <qfile.h>
@@ -12,6 +13,7 @@ KExifData::KExifData()
     ifdVector.clear();
     mExifData = 0;
     mExifByteOrder = "";
+    mUserComment = "";
 }
 
 KExifData::~KExifData()
@@ -118,6 +120,33 @@ int KExifData::getThumbnail(QImage& thumb)
 
     thumb = mThumbnail;
     return SUCCESS;
+}
+
+QString KExifData::getUserComment()
+{
+   if(mUserComment == "")
+   {
+      QValueVector<KExifIfd>::iterator ifdIterator;
+      for (ifdIterator = ifdVector.begin();
+            ifdIterator != ifdVector.end();
+            ++ifdIterator) {
+
+         if( ifdIterator->getName() == "EXIF" )
+         {
+            QPtrListIterator<KExifEntry> entryIterator((*ifdIterator).entryList);
+
+            KExifEntry *exifEntry = 0;
+
+            while( (exifEntry = entryIterator.current()) != 0 ) {
+               ++entryIterator;
+               if(exifEntry->getName() == "UserComment") mUserComment = exifEntry->getValue();
+            }
+         }
+      }
+   }
+
+   return mUserComment;
+
 }
 
 

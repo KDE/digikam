@@ -27,6 +27,7 @@ public:
     int readFromFile(const QString& filename);
     int readFromData(char* data, int size);
     int getThumbnail(QImage& thumb);
+    QString KExifData::getUserComment();
 
     QValueVector<KExifIfd> ifdVector;
 
@@ -37,6 +38,7 @@ private:
 
     ExifData *mExifData;
     QString   mExifByteOrder;
+    QString   mUserComment;
     QImage mThumbnail;
 
 };
