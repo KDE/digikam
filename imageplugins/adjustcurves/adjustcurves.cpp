@@ -366,6 +366,8 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 220));      
        m_pickWhite->setOn(false);
        }
+    else
+       m_curvesWidget->setCurveGuide(color);
 
     // Calculate Red, green, blue curves.
     
