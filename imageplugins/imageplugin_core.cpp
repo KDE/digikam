@@ -123,7 +123,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Filters menu actions.
 
-    m_convertToAction = new KActionMenu(i18n("&Convert to"), "bwtonal", 0,
+    m_convertToAction = new KActionMenu(i18n("&Convert to"), "bwtonal",
                                         actionCollection(),
                                         "implugcore_convert_to");
     m_convertToAction->setDelayed(false);
