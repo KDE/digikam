@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,8 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
 }
 
 
-ImageProperties::ImageProperties(QWidget *parent, const KURL& url, QRect *selectionArea)
+ImageProperties::ImageProperties(QWidget *parent, const KURL& url, QRect *selectionArea, 
+                                 uint* imageData, int imageWidth, int imageHeight)
                : KDialogBase(Tabbed, QString::null, 
                              Help|Stretch|Close,
                              Close, parent, 0, true, true)
@@ -76,7 +77,11 @@ ImageProperties::ImageProperties(QWidget *parent, const KURL& url, QRect *select
     m_currItem      = 0L;
     m_currURL       = url;
     m_mode          = SINGLE;
-                      
+    
+    m_imageData     = imageData;
+    m_imageWidth    = imageWidth;
+    m_imageHeight   = imageHeight;
+    
     m_selectionArea = selectionArea;
     
     setupGui();
@@ -177,7 +182,7 @@ void ImageProperties::slotItemChanged()
     setCaption(i18n("Properties for '%1'").arg(m_currURL.fileName()));
 
     m_generalPage->setCurrentURL(m_currURL);
-    m_histogramPage->setCurrentURL(m_currURL);
+    m_histogramPage->setData(m_currURL, m_imageData, m_imageWidth, m_imageHeight);
     m_exifPage->setCurrentURL(m_currURL);
 
     setCursor( KCursor::arrowCursor() );

@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,6 +18,14 @@
  * 
  * ============================================================ */
 
+// C++ include.
+
+#include <cstring>
+#include <cmath>
+#include <cstdlib>
+
+// Qt Includes.
+ 
 #include <qlayout.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
@@ -25,15 +33,18 @@
 #include <qwhatsthis.h>
 #include <qgroupbox.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
+
+// Local includes.
 
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "thumbnailjob.h"
-
 #include "imagepropertieshistogram.h"
 
 ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page,
@@ -252,11 +263,8 @@ ImagePropertiesHistogram::~ImagePropertiesHistogram()
 
 }
 
-void ImagePropertiesHistogram::setCurrentURL(const KURL& url)
+void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int imageWidth, int imageHeight)
 {
-
-    // ----------------------------------------------------------------
-
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
@@ -279,36 +287,70 @@ void ImagePropertiesHistogram::setCurrentURL(const KURL& url)
     
     m_histogramWidget->stopHistogramComputation();
         
-    if ( m_image.load(url.path()) )
+    if (!imageData && !imageWidth && !imageHeight)
     {
-        if(m_image.depth() < 32)                 // we works always with 32bpp.
-            m_image = m_image.convertDepth(32);
-       
-        // If a selection area is done in Image Editor and if the current image is the same 
-        // in Image Editor, then compute too the histogram for this selection.
-        
-        if (m_selectionArea)
+        if ( m_image.load(url.path()) )
         {
-            m_imageSelection = m_image.copy(*m_selectionArea);
-            m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
-                                          (uint *)m_imageSelection.bits(), m_imageSelection.width(),
-                                          m_imageSelection.height());
-            m_labelRendering->show();                                         
-            m_renderingCB->show();                                         
+            if(m_image.depth() < 32)                 // we works always with 32bpp.
+                m_image = m_image.convertDepth(32);
+        
+            // If a selection area is done in Image Editor and if the current image is the same 
+            // in Image Editor, then compute too the histogram for this selection.
+            
+            if (m_selectionArea)
+            {
+                m_imageSelection = m_image.copy(*m_selectionArea);
+                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
+                                              (uint *)m_imageSelection.bits(), m_imageSelection.width(),
+                                              m_imageSelection.height());
+                m_labelRendering->show();                                         
+                m_renderingCB->show();                                         
+            }
+            else 
+            {
+                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+                m_labelRendering->hide();                                         
+                m_renderingCB->hide();
+            }
         }
         else 
         {
-            m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
-            m_labelRendering->hide();                                         
-            m_renderingCB->hide();
+            m_imageSelection.reset();
+            m_image.reset();
+            m_histogramWidget->updateData(0L, 0, 0);
         }
     }
     else 
     {
-        m_imageSelection.reset();
-        m_image.reset();
-        m_histogramWidget->updateData(0L, 0, 0);
-    }
+    if ( m_image.create(imageWidth, imageHeight, 32) )
+        {
+            memcpy( m_image.bits(), imageData, m_image.numBytes());
+            
+            // If a selection area is done in Image Editor and if the current image is the same 
+            // in Image Editor, then compute too the histogram for this selection.
+            
+            if (m_selectionArea)
+            {
+                m_imageSelection = m_image.copy(*m_selectionArea);
+                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
+                                              (uint *)m_imageSelection.bits(), m_imageSelection.width(),
+                                              m_imageSelection.height());
+                m_labelRendering->show();                                         
+                m_renderingCB->show();                                         
+            }
+            else 
+            {
+                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+                m_labelRendering->hide();                                         
+                m_renderingCB->hide();
+            }
+        }
+        else 
+        {
+            m_imageSelection.reset();
+            m_image.reset();
+            m_histogramWidget->updateData(0L, 0, 0);
+        }}
 }
 
 void ImagePropertiesHistogram::slotRefreshOptions()

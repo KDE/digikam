@@ -776,9 +776,13 @@ void ImageWindow::slotFileProperties()
     if (m_urlCurrent.isValid())
     {
         QRect sel = m_canvas->getSelectedArea();
+        uint* data   = Digikam::ImlibInterface::instance()->getData();
+        int   width  = Digikam::ImlibInterface::instance()->origWidth();
+        int   height = Digikam::ImlibInterface::instance()->origHeight();
             
         ImageProperties properties(this, m_urlCurrent, 
-                                   sel.isNull() ? 0 : &sel);
+                                   sel.isNull() ? 0 : &sel,
+                                   data, width, height);
         properties.exec();
     }
 }

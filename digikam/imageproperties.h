@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,8 @@ public:
     ImageProperties(AlbumIconView* view, AlbumIconItem* currItem);
 
     // Single file mode (to be called from elsewhere)
-    ImageProperties(QWidget* parent, const KURL& url, QRect* selectionArea=0);
+    ImageProperties(QWidget* parent, const KURL& url, QRect* selectionArea=0, 
+                    uint* imageData=0, int imageWidth=0, int imageHeight=0);
                     
     ~ImageProperties();
 
@@ -59,6 +60,11 @@ private:
     Mode                          m_mode;
     KURL                          m_currURL;
     QRect*                        m_selectionArea;
+    
+    // Image data when using from Image Editor.
+    uint                         *m_imageData;
+    int                           m_imageWidth;
+    int                           m_imageHeight;
 
     ImagePropertiesGeneral*       m_generalPage;
     ImagePropertiesEXIF*          m_exifPage;

@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,6 +19,8 @@
 
 #ifndef IMAGEPROPERTIESHISTOGRAM_H
 #define IMAGEPROPERTIESHISTOGRAM_H
+
+// Qt includes.
 
 #include <qobject.h>
 #include <qguardedptr.h>
@@ -49,7 +51,7 @@ public:
     ImagePropertiesHistogram(QWidget* page, QRect* selectionArea);
     ~ImagePropertiesHistogram();
 
-    void setCurrentURL(const KURL& url);
+    void setData(const KURL& url, uint* imageData=0, int imageWidth=0, int imageHeight=0);
 
 private:
 
