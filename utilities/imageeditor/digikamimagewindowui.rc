@@ -47,6 +47,11 @@
    <Action name="imageview_zoom_fit" /> 
   </Menu>
 
+  <Menu name="help" >
+  <text>&amp;Help</text>
+   <Action name="imageview_imagepluginshelp" />
+  </Menu>
+  
   <Merge/>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
@@ -78,7 +83,7 @@
      <Action name="imageview_rotate" /> 
      <Action name="imageview_crop" /> 
  </ToolBar>
-
+ 
  <ActionProperties/>
 
 </kpartgui>

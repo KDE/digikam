@@ -238,7 +238,6 @@ void ImageWindow::buildGUI()
                                 this, SLOT(slotCommentsEdit()),
                                 actionCollection(), "comments_edit");
 
-
     KStdAction::quit(this, SLOT(close()),
                      actionCollection(), "imageview_exit");
 
@@ -321,6 +320,13 @@ void ImageWindow::buildGUI()
                                    "flip_vertical");
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
+
+    // -- help actions ---------------------------------------------------------------
+    
+    m_imagePluginsHelp = new KAction(i18n("Image Plugins Handbooks"), 
+                                     "digikamimageplugins", 0, 
+                                     this, SLOT(slotImagePluginsHelp()),
+                                     actionCollection(), "imageview_imagepluginshelp");
 
     // -- Configure toolbar and shortcuts ---------------------------------------------
     

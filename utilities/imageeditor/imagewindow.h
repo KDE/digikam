@@ -120,6 +120,8 @@ private:
     KAction       *m_fileDelete;
     KAction       *m_commentedit;
     
+    KAction       *m_imagePluginsHelp;
+    
     static ImageWindow*  m_instance;
 
 private:
