@@ -188,6 +188,10 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(this, SIGNAL(contentsMoving(int, int)),
             SLOT(slotContentsMoving(int, int)));
 
+    // -- resource for broken image thumbnail ---------------------------
+    KGlobal::dirs()->addResourceType("digikam_imagebroken",
+                                     KGlobal::dirs()->kde_default("data") 
+                                     + "digikam/data");
 }
 
 AlbumIconView::~AlbumIconView() 
@@ -1342,28 +1346,33 @@ void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& p
 
 void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
 {
-    /*
-      //TODO: Move the kde thumbnail loading into thumbnailjob
-      
-    KIO::PreviewJob* job = KIO::filePreview(item->url(), (int)d->thumbSize.size());
+    KFileItemList itemList;
+    itemList.append(item);
+    
+    KIO::PreviewJob* job = KIO::filePreview(itemList, (int)d->thumbSize.size());
                                             
     connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
             SLOT(slotGotThumbnailKDE(const KFileItem*, const QPixmap&)));
     connect(job, SIGNAL(failed(const KFileItem*)),
             SLOT(slotFailedThumbnailKDE(const KFileItem*)));
-    */
-    /* todo
-    QImage img;
-    QPixmap pix;
-    KGlobal::dirs()->addResourceType("digikam_imagebroken", KGlobal::dirs()->kde_default("data") 
-                                                            + "digikam/data");
+}
+
+void AlbumIconView::slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix)
+{
+    slotGotThumbnail(item, pix, 0);
+}
+
+void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
+{
     QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken", "image_broken.png");
-    dir = dir + "image_broken.png";
-    img.load(dir);
-    const QImage scaleImg(img.smoothScale( (int)d->thumbSize.size(), (int)d->thumbSize.size() ));
-    pix.convertFromImage(scaleImg);
-    slotGotThumbnail(item->url(), pix);
-    */
+    dir = dir + "/image_broken.png";
+
+    int size = (int)d->thumbSize.size();
+    
+    QImage img(dir);
+    img = img.smoothScale(size, size);
+
+    slotGotThumbnail(item, QPixmap(img), 0);
 }
 
 void AlbumIconView::slotFinishedThumbnail()
@@ -1379,13 +1388,6 @@ void AlbumIconView::slotSelectionChanged()
     else
         emitItemsSelected(false);
 }
-
-/*
-bool AlbumIconView::eventFilter(QObject *obj, QEvent *ev)
-{
-    return ThumbView::eventFilter(obj, ev);    
-}
-*/
 
 void AlbumIconView::focusInEvent(QFocusEvent *)
 {

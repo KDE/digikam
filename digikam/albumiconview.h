@@ -116,7 +116,6 @@ protected:
     void contentsDropEvent(QDropEvent *e);
     void focusInEvent(QFocusEvent *e);
     void focusOutEvent(QFocusEvent *e);
-    //virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 private:
 
@@ -141,6 +140,8 @@ private slots:
     void slotGotThumbnail(const KFileItem* item, const QPixmap& pix,
                           const KFileMetaInfo* metaInfo);
     void slotFailedThumbnail(const KFileItem* item);
+    void slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix);
+    void slotFailedThumbnailKDE(const KFileItem* item);    
     void slotFinishedThumbnail();
     void slotSelectionChanged();
     void slotSetExifOrientation( const QString filename, int orientation );
