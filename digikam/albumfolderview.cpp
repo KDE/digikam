@@ -1,23 +1,27 @@
-/* ============================================================
- * File  : albumfolderview.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-08
- * Description :
- *
- * Copyright 2003 by Renchi Raju
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+//////////////////////////////////////////////////////////////////////////////
+//
+//    ALBUMFOLDERVIEW.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Qt includes.
 
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -31,12 +35,13 @@
 #include <qevent.h>
 #include <qpoint.h>
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kurl.h>
 #include <kurldrag.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -44,6 +49,8 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <klineeditdlg.h>
+
+// Local includes.
 
 #include "albummanager.h"
 #include "albuminfo.h"
@@ -362,22 +369,25 @@ void AlbumFolderView::albumNew()
         KLineEditDlg::getText(i18n("Enter New Album Name: "),
                               "", &ok, this);
     if (!ok) return;
+    
+    m_newAlbumURL = settings->getAlbumLibraryPath();
+    m_newAlbumURL.addPath(newDir);
 
-    KURL newAlbumURL(settings->getAlbumLibraryPath());
-    newAlbumURL.addPath(newDir);
-
-    KIO::SimpleJob* job = KIO::mkdir(newAlbumURL);
+    KIO::SimpleJob* job = KIO::mkdir(m_newAlbumURL);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slot_onAlbumCreate(KIO::Job*)));
 }
 
 void AlbumFolderView::slot_onAlbumCreate(KIO::Job* job)
 {
-    if (job->error()) {
+    if (job->error()) 
         job->showErrorDialog(this);
-    }
+    else 
+        {
+        Digikam::AlbumInfo* album =  albumMan_->findAlbum(m_newAlbumURL.path());
+        albumMan_->setCurrentAlbum(album);               // FIX ME  !!!
+        }        
 }
-
 
 void AlbumFolderView::albumDelete()
 {
@@ -514,7 +524,9 @@ void AlbumFolderView::slot_rightButtonClicked(QListViewItem* item,
 void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
 {
     if (!album || !album->getViewItem()) return;
-
+    
+    qDebug ("toto");
+    
     QString     oldTitle(album->getTitle());
     QString     oldComments(album->getComments());
     QString     oldCollection(album->getCollection());
