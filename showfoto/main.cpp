@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
                           "0.1",
                           Description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2004-2005 digiKam developers team"),
+                          I18N_NOOP("(c) 2004, digiKam developers team"),
                           0,
                           "http://digikam.sourceforge.net");
 

@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
                           digikam_version,        // Release number available in version.h to the top source dir.
                           Description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2005, Digikam developers team"),
+                          I18N_NOOP("(c) 2002-2004, Digikam developers team"),
                           0,
                           "http://digikam.sourceforge.net");
 
