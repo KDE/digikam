@@ -66,8 +66,8 @@ Setup::Setup(QWidget* parent, const char* name)
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    page_editor = addPage(i18n("Editor"), i18n("Image editor settings"),
-                        BarIcon("colorize", KIcon::SizeMedium));
+    page_editor = addPage(i18n("Image editor"), i18n("Image editor settings"),
+                        BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
     
     page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
