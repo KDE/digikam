@@ -43,6 +43,4 @@ if test "x$have_digikam_toplevel" == "xyes"; then
 fi
 
 
-dnl Check if Imlib2 is installed properly
-KDE_FIND_IMLIB2_CONFIG
 
