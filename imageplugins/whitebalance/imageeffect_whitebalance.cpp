@@ -263,7 +263,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
                                                  "<b>Tungsten</b>: tungsten lamp or light at 1 hour from dusk/dawn (3400K).<p>"
                                                  "<b>Neutral</b>: neutral color temperature (4750K).<p>"
-                                                 "<b>Xenon</b>: xenon lamp or light arc (500K).<p>"
+                                                 "<b>Xenon</b>: xenon lamp or light arc (5000K).<p>"
                                                  "<b>Sun</b>: sunny daylight around noon (5500K).<p>"
                                                  "<b>Flash</b>: electronic photo flash (5600K).<p>"
                                                  "<b>Sky</b>: overcast sky light (6500K).<p>"
