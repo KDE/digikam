@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent)
+ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool crossVisible)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_iface = new Digikam::ImageIface(w,h);
@@ -64,8 +64,11 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent)
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
     
-    m_freeze = false;
+    m_crossVisible = crossVisible;
+    m_freeze = true;
     m_focus = false;
+    m_xpos = m_w / 2;
+    m_ypos = m_h / 2;
 }
 
 ImageGuideWidget::~ImageGuideWidget()
@@ -82,18 +85,33 @@ Digikam::ImageIface* ImageGuideWidget::imageIface()
     return m_iface;
 }
 
+QPoint ImageGuideWidget::getCrossCenterPosition(void)
+{
+    return (QPoint::QPoint( (int)((float)m_xpos * (float)m_iface->originalWidth() / (float)m_w), 
+                            (int)((float)m_ypos * (float)m_iface->originalHeight() / (float)m_h)));
+}
+
+void ImageGuideWidget::setCrossVisible(bool crossVisible)
+{
+    m_crossVisible = crossVisible;
+    repaint(false);
+}
+
 void ImageGuideWidget::paintEvent( QPaintEvent * )
 {
     m_pixmap->fill(colorGroup().background());
     m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                    m_rect.width(), m_rect.height());
 
-    QPainter p(m_pixmap);
-    p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-    p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
-    p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
-    p.end();
-
+    if (m_crossVisible)
+       {
+       QPainter p(m_pixmap);
+       p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+       p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
+       p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
+       p.end();
+       }
+    
     bitBlt(this, 0, 0, m_pixmap);
 }
 

@@ -26,6 +26,7 @@
 
 #include <qwidget.h>
 #include <qrect.h>
+#include <qpoint.h>
 
 class QPixmap;
 
@@ -39,11 +40,13 @@ Q_OBJECT
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0);
+    ImageGuideWidget(int w, int h, QWidget *parent=0, bool crossVisible=true);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
-
+    QPoint getCrossCenterPosition(void);
+    void ImageGuideWidget::setCrossVisible(bool v);
+    
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -66,7 +69,8 @@ private:
     
     bool        m_focus;
     bool        m_freeze;
-
+    bool        m_crossVisible;
+    
     QPixmap*    m_pixmap;
 };
 
