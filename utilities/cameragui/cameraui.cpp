@@ -46,6 +46,8 @@
 #include "cameracontroller.h"
 #include "cameraui.h"
 
+#include "camerapropsplugin.h"
+
 class CameraUIPriv
 {
 public:
@@ -313,6 +315,8 @@ void CameraUI::slotFileProperties(CameraIconItem* item)
         return;
 
     KPropertiesDialog dlg(item->fileItem(), this, 0, true, false);
+    CameraPropsPlugin *plugin = new CameraPropsPlugin(&dlg);
+    dlg.insertPlugin(plugin);
     dlg.exec();
 }
 
