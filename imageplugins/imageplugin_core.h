@@ -46,7 +46,8 @@ public:
 
 private:
 
-    KAction *m_redeyeAction;
+    KAction     *m_redeyeAction;
+    KActionMenu *m_colorsAction;
     
 private slots:
 
@@ -55,7 +56,6 @@ private slots:
     void slotBCG();
     void slotRGB();
     void slotHSL();
-    void slotCMY();
     void slotBW();
     void slotSepia();
     void slotSolarize();

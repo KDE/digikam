@@ -32,7 +32,6 @@
 
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
-#include "imageeffect_cmy.h"
 #include "imageeffect_bcg.h"
 #include "imageeffect_solarize.h"
 #include "imageeffect_bwsepia.h"
@@ -55,23 +54,29 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     new KAction(i18n("Sharpen..."), 0, 
                 this, SLOT(slotSharpen()),
                 actionCollection(), "implugcore_sharpen");
-    
-    new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
-                this, SLOT(slotBCG()),
-                actionCollection(), "implugcore_bcg");
-    
-    new KAction(i18n("Red/Green/blue Balance..."), 0, 
-                this, SLOT(slotRGB()),
-                actionCollection(), "implugcore_rgb");
 
-    new KAction(i18n("Hue/Saturation/Lightness Balance..."), 0, 
-                this, SLOT(slotHSL()),
-                actionCollection(), "implugcore_hsl");
+    // Fix/Colors menu actions
     
-    new KAction(i18n("Cyan/Magenta/Yellow Balance..."), 0, 
-                this, SLOT(slotCMY()),
-                actionCollection(), "implugcore_cmy");
-                    
+    m_colorsAction = new KActionMenu(i18n("&Colors"), "blend",
+                                     actionCollection(),
+                                     "implugcore_colors");
+    m_colorsAction->setDelayed(false);
+
+    m_colorsAction->insert( 
+                new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
+                this, SLOT(slotBCG()),
+                actionCollection(), "implugcore_bcg") );
+                        
+    m_colorsAction->insert(
+                new KAction(i18n("Hue/Saturation/Lightness..."), 0, 
+                this, SLOT(slotHSL()),
+                actionCollection(), "implugcore_hsl") );
+    
+    m_colorsAction->insert(
+                new KAction(i18n("Color balance..."), 0, 
+                this, SLOT(slotRGB()),
+                actionCollection(), "implugcore_rgb") );
+
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
@@ -104,10 +109,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
 
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_bcg/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_rgb/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_hsl/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_cmy/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_sharpen/ ");
@@ -154,12 +156,6 @@ void ImagePlugin_Core::slotRGB()
 void ImagePlugin_Core::slotHSL()
 {
     ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotCMY()
-{
-    ImageEffect_CMY dlg(parentWidget());
     dlg.exec();
 }
 

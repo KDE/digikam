@@ -50,7 +50,15 @@ private:
     Digikam::ImageWidget *m_previewWidget;
 
     void adjustHSL(double hu, double sa, double lu, int al, uint *data, int w, int h);
-        
+
+
+    int htransfer[256];
+    int ltransfer[256];
+    int stransfer[256];
+    
+    void calculateTransfers(double hu, double sa, double li);
+    void applyHSL(uint *data, int w, int h);
+
 private slots:
 
     void slotUser1();

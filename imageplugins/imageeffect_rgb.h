@@ -26,7 +26,7 @@
 
 #include <kdialogbase.h>
 
-class KDoubleNumInput;
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -44,9 +44,9 @@ public:
 
 private:
 
-    KDoubleNumInput      *m_rInput;
-    KDoubleNumInput      *m_gInput;
-    KDoubleNumInput      *m_bInput;
+    KIntNumInput         *m_rInput;
+    KIntNumInput         *m_gInput;
+    KIntNumInput         *m_bInput;
     Digikam::ImageWidget *m_previewWidget;
 
     void adjustRGB(double r, double g, double b, double a, uint *data, int w, int h);

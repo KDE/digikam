@@ -69,43 +69,40 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel      *label = 0;
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Red:"), plainPage());
-    m_rInput = new KDoubleNumInput(plainPage());
-    m_rInput->setRange(0.0, 2.0, 0.01, true);
-    m_rInput->setPrecision(2);
-    QWhatsThis::add( m_rInput, i18n("<p>Set here the red color adjustment of the image."));
+    label    = new QLabel(i18n("Cyan/Red:"), plainPage());
+    m_rInput = new KIntNumInput(plainPage());
+    m_rInput->setRange(-100, 100, 1, true);
+    QWhatsThis::add( m_rInput, i18n("<p>Set here the cyan/red color adjustment of the image."));
     hlay->addWidget(label,1);
     hlay->addWidget(m_rInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Green:"), plainPage());
-    m_gInput = new KDoubleNumInput(plainPage());
-    m_gInput->setRange(0.0, 2.0, 0.01, true);
-    m_gInput->setPrecision(2);
-    QWhatsThis::add( m_gInput, i18n("<p>Set here the green color adjustment of the image."));
+    label    = new QLabel(i18n("Magenta/Green:"), plainPage());
+    m_gInput = new KIntNumInput(plainPage());
+    m_gInput->setRange(-100, 100, 1, true);
+    QWhatsThis::add( m_gInput, i18n("<p>Set here the magenta/green color adjustment of the image."));
     hlay->addWidget(label,1);
     hlay->addWidget(m_gInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Blue:"), plainPage());
-    m_bInput = new KDoubleNumInput(plainPage());
-    m_bInput->setRange(0.0, 2.0, 0.01, true);
-    m_bInput->setPrecision(2);
-    QWhatsThis::add( m_bInput, i18n("<p>Set here the blue color adjustment of the image."));    
+    label    = new QLabel(i18n("Yellow/blue:"), plainPage());
+    m_bInput = new KIntNumInput(plainPage());
+    m_bInput->setRange(-100, 100, 1, true);
+    QWhatsThis::add( m_bInput, i18n("<p>Set here the yellow/blue color adjustment of the image."));    
     hlay->addWidget(label,1);
     hlay->addWidget(m_bInput,5);
 
-    m_rInput->setValue(1.0);
-    m_gInput->setValue(1.0);
-    m_bInput->setValue(1.0);
+    m_rInput->setValue(0);
+    m_gInput->setValue(0);
+    m_bInput->setValue(0);
 
-    connect(m_rInput, SIGNAL(valueChanged (double)),
+    connect(m_rInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
-    connect(m_gInput, SIGNAL(valueChanged (double)),
+    connect(m_gInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
-    connect(m_bInput, SIGNAL(valueChanged (double)),
+    connect(m_bInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
 
     adjustSize();
@@ -118,9 +115,9 @@ ImageEffect_RGB::~ImageEffect_RGB()
 void ImageEffect_RGB::slotUser1()
 {
     blockSignals(true);
-    m_rInput->setValue(1.0);
-    m_gInput->setValue(1.0);
-    m_bInput->setValue(1.0);
+    m_rInput->setValue(0);
+    m_gInput->setValue(0);
+    m_bInput->setValue(0);
     blockSignals(false);
     slotEffect();
 } 
@@ -134,9 +131,9 @@ void ImageEffect_RGB::slotEffect()
     int   w     = iface->previewWidth();
     int   h     = iface->previewHeight();
         
-    double r = m_rInput->value();
-    double g = m_gInput->value();    
-    double b = m_bInput->value();
+    double r = ((double)m_rInput->value() + 100.0)/100.0;
+    double g = ((double)m_gInput->value() + 100.0)/100.0;  
+    double b = ((double)m_bInput->value() + 100.0)/100.0;
     double a = 1.0;
     
     adjustRGB(r, g, b, a, data, w, h);    
@@ -155,9 +152,9 @@ void ImageEffect_RGB::slotOk()
     int   w     = iface->originalWidth();
     int   h     = iface->originalHeight();
         
-    double r = m_rInput->value();
-    double g = m_gInput->value();    
-    double b = m_bInput->value();
+    double r = ((double)m_rInput->value() + 100.0)/100.0;
+    double g = ((double)m_gInput->value() + 100.0)/100.0;  
+    double b = ((double)m_bInput->value() + 100.0)/100.0;
     double a = 1.0;
 
     adjustRGB(r, g, b, a, data, w, h);    
