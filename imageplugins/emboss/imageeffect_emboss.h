@@ -27,8 +27,9 @@
 #include <kdialogbase.h>
 
 class QPushButton;
+class QSlider;
 
-class KDoubleNumInput;
+class KDoubleSpinBox;
 
 namespace Digikam
 {
@@ -57,9 +58,12 @@ private:
     
     QPushButton     *m_helpButton;
     
-    KDoubleNumInput *m_radiusInput;
-    KDoubleNumInput *m_sigmaInput;
-
+    QSlider         *m_radiusSlider;
+    QSlider         *m_sigmaSlider;
+    
+    KDoubleSpinBox  *m_radiusInput;
+    KDoubleSpinBox  *m_sigmaInput;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private slots:
@@ -67,6 +71,12 @@ private slots:
     void slotHelp();
     void slotEffect();
     void slotOk();
+    
+    void slotSliderRadiusChanged(int v);
+    void slotSpinBoxRadiusChanged(double v);
+    void slotSliderSigmaChanged(int v);
+    void slotSpinBoxSigmaChanged(double v);
+    
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin
