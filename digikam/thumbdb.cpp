@@ -82,7 +82,8 @@ ThumbDB::ThumbDB()
 ThumbDB::~ThumbDB()
 {
     m_instance = 0;
-    gdbm_close(d->db);
+    if (d->db)
+        gdbm_close(d->db);
 }
 
 void ThumbDB::putThumb(const QString& path, const QImage& image)
