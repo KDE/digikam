@@ -1137,7 +1137,7 @@ void ImageWindow::slotImagePluginsHelp()
 
 void ImageWindow::slotEditKeys()
 {
-    KKeyDialog dialog;
+    KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
     
     dialog.configure();
@@ -1146,7 +1146,7 @@ void ImageWindow::slotEditKeys()
 void ImageWindow::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
-    KEditToolbar dlg(factory());
+    KEditToolbar dlg(factory(), this);
     connect(&dlg, SIGNAL(newToolbarConfig()),
             SLOT(slotNewToolbarConfig()));
     dlg.exec();
