@@ -48,12 +48,15 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
                                  const QString& startDir,
                                  QWidget* parent,
                                  const QString& header,
-                                 const QString& newDirString)
+                                 const QString& newDirString,
+                                 bool allowRootSelection)
     : KDialogBase(parent, 0, true, i18n("Select Album"), Help|User1|Ok|Cancel)
 {
     setButtonText(User1, i18n("&New Album"));
     setHelp("targetalbumdialog.anchor", "digikam");
     enableButtonOK(false);
+
+    m_allowRootSelection = allowRootSelection;
     
     QFrame *page     = makeMainWidget();
     QVBoxLayout* lay = new QVBoxLayout(page, 5, 5);
@@ -239,7 +242,7 @@ void DirSelectDialog::slotSelectionChanged(QListViewItem* item)
     }
 
     KFileTreeViewItem* ftvItem = dynamic_cast<KFileTreeViewItem*>(item);
-    if (!ftvItem || ftvItem == m_branch->root())
+    if (!ftvItem || (ftvItem == m_branch->root() && !m_allowRootSelection))
     {
         enableButtonOK(false);
         return;
@@ -248,18 +251,21 @@ void DirSelectDialog::slotSelectionChanged(QListViewItem* item)
     enableButtonOK(true);
 }
 
-KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
+KURL DirSelectDialog::selectDir(const QString& rootDir,
+                                const QString& startDir,
                                 QWidget* parent,
-                                const QString& header, const QString& newDirString)
-
+                                const QString& header,
+                                const QString& newDirString,
+                                bool allowRootSelection)
 {
-    DirSelectDialog dlg(rootDir, startDir, parent, header, newDirString);
+    DirSelectDialog dlg(rootDir, startDir, parent, header, newDirString,
+                        allowRootSelection);
 
     if (dlg.exec() != QDialog::Accepted)
         return KURL();
 
     KFileTreeViewItem* ftvItem = (KFileTreeViewItem*) dlg.m_treeView->currentItem();
-    if (!ftvItem || ftvItem == dlg.m_branch->root())
+    if (!ftvItem || (ftvItem == dlg.m_branch->root() && !allowRootSelection))
         return KURL();
 
     return ftvItem->fileItem()->url();

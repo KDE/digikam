@@ -431,7 +431,8 @@ void CameraUI::slotDownload(bool onlySelected)
     }
     
     KURL url = DirSelectDialog::selectDir(libPath, currPath,
-                                          this, header, newDirName);
+                                          this, header, newDirName,
+                                          m_autoAlbumCheck->isChecked());
     if (!url.isValid())
         return;
     

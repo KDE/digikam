@@ -42,14 +42,16 @@ public:
     DirSelectDialog(const QString& rootDir, const QString& startDir,
                     QWidget *parent = 0,
                     const QString& header=QString::null,
-                    const QString& newDirString=QString::null);
+                    const QString& newDirString=QString::null,
+                    bool allowRootSelection=false);
     ~DirSelectDialog();
 
     static KURL selectDir(const QString& rootDir,
                           const QString& startDir,
                           QWidget* parent=0,
                           const QString& header=QString::null,
-                          const QString& newDirString=QString::null);
+                          const QString& newDirString=QString::null,
+                          bool allowRootSelection=false);
     
 private:
 
@@ -62,6 +64,7 @@ private:
     KURL              m_startURL;
     QValueStack<KURL> m_urlsToList;
     QString           m_newDirString;
+    bool              m_allowRootSelection;
 
 private slots:
 
