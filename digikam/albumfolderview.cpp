@@ -797,7 +797,7 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
             // Here is the absolute path  changed into an relative path 
             // in the album folder
             QString errMsg;
-            albumMan_->updatePAlbumIcon(album, iconURL.filename(false),
+            albumMan_->updatePAlbumIcon(album, iconURL.filename(),
                                         false, errMsg);
         }
         
@@ -1596,7 +1596,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             {
                 QString errMsg;
                 AlbumManager::instance()->updatePAlbumIcon(destAlbum, 
-                    urls.first().url(), true, errMsg);
+                    urls.first().path(), true, errMsg);
             }
             return;
         }
