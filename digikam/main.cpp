@@ -204,7 +204,11 @@ int main(int argc, char *argv[])
 
     splash->finish( digikam );
 
-    KTipDialog::showTip("digikam/tips");
+    QStringList tipsFiles;
+    tipsFiles.append("digikam/tips");
+    tipsFiles.append("kipi/tips");
+    
+    KTipDialog::showMultiTip(0, tipsFiles);
 
     return app.exec();
 }

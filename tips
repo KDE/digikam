@@ -96,20 +96,6 @@
 </tip>
 
 
-<tip category="Digikam|Slideshow">
-<html>
-<p>Did you know that you could abort a slideshow using <b>ESC</b>?
-</html>
-</tip>
-
-
-<tip category="Digikam|Scanner">
-<html>
-<p>Did you know that Digikam has a scanner plugin that gives you direct access to your scanner?
-</html>
-</tip>
-
-
 <tip category="Digikam|ImageViewer">
 <html>
 <p>Did you know that you could use <Page Down> and <Page Up> on your Keyboard to switch between the photos in the image viewer?
@@ -117,37 +103,9 @@
 </tip>
 
 
-<tip category="Digikam|Screenshot">
-<html>
-<p>Did you know that you can take a screenshoot with Digikam and save the result to an Album with some comments?
-</html>
-</tip>
-
-
 <tip category="Digikam|General">
 <html>
 <p>Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
-</html>
-</tip>
-
-
-<tip category="Digikam|ConvertImages">
-<html>
-<p>Did you know that you can use the <b>LZW</b> compression to reduce the size of the <b>TIFF</b> image files in the Convert Images plugin?
-</html>
-</tip>
-
-
-<tip category="Digikam|BatchProcessImages">
-<html>
-<p>Did you know that all images operations in the batch processing images plugins run without losing the <b>EXIF</b> information in the <b>JPEG</b> files?
-</html>
-</tip>
-
-
-<tip category="Digikam|FilterImages">
-<html>
-<p>Did you know that the <b>Noise Reduction</b> option in the <b>Filter Images</b> plugin can be used to improve the rendering of images taken with an analog camera?
 </html>
 </tip>
 
@@ -166,20 +124,6 @@
 </tip>
 
 
-<tip category="Digikam|SendImages">
-<html>
-<p>Did you know that you can use the drag and drop feature in e-mail images to add some items to the list?
-</html>
-</tip>
-
-
-<tip category="Digikam|RecompressImages">
-<html>
-<p>Did you know that if you want reduce the space disk used by your images in the Albums database, you could try using the recompressImages plugin?
-</html>
-</tip>
-
-
 <tip category="Digikam|General">
 <html>
 <p>Did you know that you can use the Digikam plugins with the showimg program (<a href="http://www.jalix.org/projects/showimg/">http://www.jalix.org/projects/showimg/</a>) ?
@@ -190,35 +134,6 @@
 <tip category="Digikam|General">
 <html>
 <p>Did you know that because PNG file format use a no lossless compression algorithm, you can use the max compression level with this file format ?
-</html>
-</tip>
-
-
-<tip category="Digikam|ResizeImages">
-<html>
-<p>Did you know that if you want to resize images to prepare them for printing on photographic paper sizes, you could use the resizeImages plugin?
-</html>
-</tip>
-
-
-<tip category="Digikam|BatchProcessImages">
-<html>
-<p>Did you know that you could use the images files from differents Albums in 'batch-process images' 
-plugins? The processed results will then be merged in the selected target Album.
-</html>
-</tip>
-
-
-<tip category="Digikam|BatchRenameImages">
-<html>
-<p>Did you know that you can change the timeStamp of the target images files in the batch-rename images plugin?
-</html>
-</tip>
-
-
-<tip category="Digikam|SlideShow">
-<html>
-<p>Did you know that you can navigate on the slideshow with the left and right mouse buttons?
 </html>
 </tip>
 
