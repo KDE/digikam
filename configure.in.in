@@ -39,7 +39,7 @@ KDE_CHECK_HEADER(libkipi/interface.h,  have_kipi=yes,  have_kipi=no)
 if test "$have_kipi" = "no"; then
   AC_MSG_WARN([Can't find KIPI (KDE Image Plugin Interface)
 Please install kdeextrager-libs-1 to get the most out of KimDaBa]);
-   DO_NOT_COMPILE="$DO_NOT_COMPILE kimdaba"
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 #------------------------------------------------------------------
