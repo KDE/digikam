@@ -173,7 +173,7 @@ fi
 #------------------------------------------------------------------
 
 have_tiff=no
-AC_CHECK_LIB(tiff, TIFFWriteScanline,
+KDE_CHECK_LIB(tiff, TIFFWriteScanline,
   have_tiff=yes,
   AC_MSG_WARN([TIFF library not found]), 
   -ljpeg -lz -lm)
