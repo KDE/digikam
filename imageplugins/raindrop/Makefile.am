@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
-	      $(all_includes)  
+	      $(all_includes) $(IMLIB2_CFLAGS)   
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_raindrop.la 
