@@ -130,5 +130,7 @@ void ImageEffect_RedEye::removeRedEye()
     delete [] newData;
     
     iface.putSelectedData(data);
+
+    delete [] data;
 }
 

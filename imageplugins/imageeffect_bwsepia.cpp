@@ -59,6 +59,8 @@ void ImageEffect_BWSepia::convertTOBW()
     }
 
     iface.putOriginalData(data);
+
+    delete [] data;
 }
 
 void ImageEffect_BWSepia::convertTOSepia()
@@ -101,4 +103,6 @@ void ImageEffect_BWSepia::convertTOSepia()
     }
 
     iface.putOriginalData(data);
+
+    delete [] data;
 }
