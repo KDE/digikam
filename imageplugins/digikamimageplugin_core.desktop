@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Core Image Plugin
+Comment=Digikam Core Image Plugin
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+X-KDE-Library=digikamimageplugin_core
+author=Renchi Raju, renchi@pooh.tam.uiuc.edu
