@@ -37,6 +37,10 @@
                                    (g) * GIMP_RGB_INTENSITY_GREEN + \
                                    (b) * GIMP_RGB_INTENSITY_BLUE)
 
+// Qt includes.
+
+#include <qpoint.h>
+                                   
 // KDE includes.
 
 #include <kurl.h>
@@ -44,32 +48,22 @@
 namespace Digikam
 {
 
-class ImageHistogram;
-
 class ImageCurves
 {
 
 private:
 
-enum PixelType
-{
-    RedPixel = 0,  
-    GreenPixel,
-    BluePixel, 
-    AlphaPixel
-};
-
 enum CurveType
 {
-  CURVE_SMOOTH = 0,   // Smooth curve type
-  CURVE_FREE          // Freehand curve type.
+    CURVE_SMOOTH = 0,            // Smooth curve type
+    CURVE_FREE                   // Freehand curve type.
 };
 
 struct _Curves
 {
-  CurveType curve_type[5];
-  int       points[5][17][2];
-  uchar     curve[5][256];
+    CurveType curve_type[5];     // Curve types by channels (Smooth or Free).
+    int       points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
+    uchar     curve[5][256];     // Curve values by channels.
 };
 
 struct _Lut
@@ -94,18 +88,14 @@ public:
     void   curvesLutProcess(uint *srcPR, uint *destPR, int w, int h);
 
     // Methods for to set manually the curves values.        
-    /*
-    void   setLevelGammaValue(int Channel, double val);
-    void   setLevelLowInputValue(int Channel, int val);
-    void   setLevelHighInputValue(int Channel, int val);
-    void   setLevelLowOutputValue(int Channel, int val);
-    void   setLevelHighOutputValue(int Channel, int val);    
     
-    double getLevelGammaValue(int Channel);
-    int    getLevelLowInputValue(int Channel);
-    int    getLevelHighInputValue(int Channel);
-    int    getLevelLowOutputValue(int Channel);
-    int    getLevelHighOutputValue(int Channel);    */
+    void   setCurveValue(int channel, int bin, int val);
+    void   setCurvePoint(int channel, int point, QPoint val);
+    void   setCurveType(int channel, CurveType type);
+    
+    int    getCurveValue(int channel, int bin);
+    QPoint getCurvePoint(int channel, int point);
+    int    getCurveType(int channel);
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.        
     

@@ -37,10 +37,6 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikam/imagehistogram.h>
-
 // Local includes.
 
 #include "imagecurves.h"
@@ -50,10 +46,10 @@ namespace Digikam
 
 ImageCurves::CRMatrix CR_basis =
 {
-  { -0.5,  1.5, -1.5,  0.5 },
-  {  1.0, -2.5,  2.0, -0.5 },
-  { -0.5,  0.0,  0.5,  0.0 },
-  {  0.0,  1.0,  0.0,  0.0 },
+   { -0.5,  1.5, -1.5,  0.5 },
+   {  1.0, -2.5,  2.0, -0.5 },
+   { -0.5,  0.0,  0.5,  0.0 },
+   {  0.0,  1.0,  0.0,  0.0 },
 };
 
 ImageCurves::ImageCurves()
@@ -94,19 +90,30 @@ void ImageCurves::curvesChannelReset(int channel)
     
     if (!m_curves) return;
 
+    // Contruct a linear curve.
+    
     for (j = 0 ; j < 256 ; ++j)
        m_curves->curve[channel][j] = j;
 
+    // Init coordinates points to null.
+       
     for (j = 0 ; j < 17 ; ++j)
        {
        m_curves->points[channel][j][0] = -1;
        m_curves->points[channel][j][1] = -1;
        }
 
+    // First and last point init.
+       
     m_curves->points[channel][0][0]  = 0;
     m_curves->points[channel][0][1]  = 0;
     m_curves->points[channel][16][0] = 255;
-    m_curves->points[channel][16][1] = 255;    
+    m_curves->points[channel][16][1] = 255;  
+    
+    // All curve type init.
+    
+    m_curves->curve_type[channel] = CURVE_SMOOTH;
+    curvesCalculateCurve(channel);  
 }
 
 void ImageCurves::curvesCalculateCurve(int channel)
@@ -124,23 +131,28 @@ void ImageCurves::curvesCalculateCurve(int channel)
           break;
 
        case CURVE_SMOOTH:
-          //  cycle through the curves  
+          
+          //  Cycle through the curves  
           
           num_pts = 0;
           
           for (i = 0 ; i < 17 ; ++i)
              if (m_curves->points[channel][i][0] != -1)
-                points[++num_pts] = i;
+                points[num_pts++] = i;
 
           //  Initialize boundary curve points 
           
           if (num_pts != 0)
              {
              for (i = 0 ; i < m_curves->points[channel][points[0]][0] ; ++i)
+                {
                 m_curves->curve[channel][i] = m_curves->points[channel][points[0]][1];
+                }
              
-             for (i = m_curves->points[channel][points[num_pts - 1]][0] ; i < 256; ++i)
+             for (i = m_curves->points[channel][points[num_pts - 1]][0] ; i < 256 ; ++i)
+                {
                 m_curves->curve[channel][i] = m_curves->points[channel][points[num_pts - 1]][1];
+                }
              }
 
           for (i = 0 ; i < num_pts - 1 ; ++i)
@@ -153,7 +165,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
              curvesPlotCurve(channel, p1, p2, p3, p4);
              }
 
-          // ensure that the control points are used exactly 
+          // Ensure that the control points are used exactly 
       
           for (i = 0 ; i < num_pts ; ++i)
              {
@@ -203,7 +215,7 @@ float ImageCurves::curvesLutFunc(int n_channels, int channel, float value)
           inten = m_curves->curve[j][255]/255.0;
        else       // interpolate the curve.
           {
-          index = floor(inten * 255.0);
+          index = (int)floor(inten * 255.0);
           f = inten * 255.0 - index;
           inten = ((1.0 - f) * m_curves->curve[j][index    ] + 
                    (      f) * m_curves->curve[j][index + 1] ) / 255.0;
@@ -227,7 +239,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
 
     if (!m_curves) return;
 
-    // construct the geometry matrix from the segment 
+    // Construct the geometry matrix from the segment.
   
     for (i = 0 ; i < 4 ; ++i)
        {
@@ -279,8 +291,8 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     dy2 = deltas[2][1];
     dy3 = deltas[3][1];
 
-    lastx = CLAMP (x, 0, 255);
-    lasty = CLAMP (y, 0, 255);
+    lastx = (int)CLAMP (x, 0, 255);
+    lasty = (int)CLAMP (y, 0, 255);
 
     m_curves->curve[channel][lastx] = lasty;
 
@@ -288,13 +300,13 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     
     for (i = 0 ; i < 1000 ; ++i)
        {
-       // increment the x values.
+       // Increment the x values.
        
        x   += dx;
        dx  += dx2;
        dx2 += dx3;
 
-       // increment the y values.
+       // Increment the y values.
       
        y   += dy;
        dy  += dy2;
@@ -303,7 +315,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
        newx = CLAMP0255 (ROUND (x));
        newy = CLAMP0255 (ROUND (y));
 
-       // if this point is different than the last one...then draw it.
+       // If this point is different than the last one...then draw it.
       
        if ((lastx != newx) || (lasty != newy))
           m_curves->curve[channel][newx] = newy;
@@ -354,9 +366,9 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
        for (v = 0 ; v < 256 ; ++v)
           {
-          // to add gamma correction use func(v ^ g) ^ 1/g instead. 
-          val = 255.0 * curvesLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
+          // To add gamma correction use func(v ^ g) ^ 1/g instead. 
           
+          val = 255.0 * curvesLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
           m_lut->luts[i][v] = (uchar)CLAMP (val, 0, 255);
           }
        }
@@ -444,79 +456,65 @@ void ImageCurves::curvesLutProcess(uint *srcPR, uint *destPR, int w, int h)
     }
 }
 
-
-
-/*
-void ImageCurves::setLevelGammaValue(int Channel, double val)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       m_levels->gamma[Channel] = val;
-}
-
-void ImageCurves::setLevelLowInputValue(int Channel, int val)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       m_levels->low_input[Channel] = val;
-}
-
-void ImageCurves::setLevelHighInputValue(int Channel, int val)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       m_levels->high_input[Channel] = val;
-}
-
-void ImageCurves::setLevelLowOutputValue(int Channel, int val)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       m_levels->low_output[Channel] = val;
-}
-
-void ImageCurves::setLevelHighOutputValue(int Channel, int val)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       m_levels->high_output[Channel] = val;
-}
-
-double ImageCurves::getLevelGammaValue(int Channel)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       return (m_levels->gamma[Channel]);
-    
-    return 0.0;
-}
-
-int ImageCurves::getLevelLowInputValue(int Channel)
-{
-    if ( m_levels && Channel>=0 && Channel<5 )
-       return (m_levels->low_input[Channel]);
+int ImageCurves::getCurveValue(int channel, int bin)
+{    
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         bin>=0 && bin<=255 )
+       return(m_curves->curve[channel][bin]);
     
     return 0;
 }
 
-int ImageCurves::getLevelHighInputValue(int Channel)
+QPoint ImageCurves::getCurvePoint(int channel, int point)
 {
-    if ( m_levels && Channel>=0 && Channel<5 )
-       return (m_levels->high_input[Channel]);
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 )
+       return(QPoint::QPoint(m_curves->points[channel][point][0],
+                             m_curves->points[channel][point][1]) );
     
-    return 0;
+    return QPoint::QPoint(-1, -1);
 }
 
-int ImageCurves::getLevelLowOutputValue(int Channel)
+int ImageCurves::getCurveType(int channel)
 {
-    if ( m_levels && Channel>=0 && Channel<5 )
-       return (m_levels->low_output[Channel]);
+    if ( m_curves && 
+         channel>=0 && channel<5 )
+       return ( m_curves->curve_type[channel] );
     
-    return 0;
+    return (-1);
 }
 
-int ImageCurves::getLevelHighOutputValue(int Channel)
+
+void ImageCurves::setCurveValue(int channel, int bin, int val)
 {
-    if ( m_levels && Channel>=0 && Channel<5 )
-       return (m_levels->high_output[Channel]);
-    
-    return 0;
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         bin>=0 && bin<=255 )
+       m_curves->curve[channel][bin] = val;
 }
-*/
+
+void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         point>=0 && point<=17 &&
+         val.x()>=0 && val.x()<=255 &&
+         val.y()>=0 && val.y()<=255)
+       {
+       m_curves->points[channel][point][0] = val.x();
+       m_curves->points[channel][point][1] = val.y();
+       }
+}
+
+void ImageCurves::setCurveType(int channel, CurveType type)
+{
+    if ( m_curves && 
+         channel>=0 && channel<5 && 
+         type>=CURVE_SMOOTH && type<CURVE_FREE )
+       m_curves->curve_type[channel] = type;
+}
 
 // This method is inspired of Gimp2.0 
 // app/base/gimpcurvestool.c::gimp_curves_tool_settings_load
