@@ -13,22 +13,6 @@ o Future task.
 Main Application:
 -----------------
 
-x Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.7.0>
-x Lauch the Albums properties when a new Album is added 
-  to the Database.                                                 <Gilles Caulier - 0.7.0>
-x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.7.0>
-x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.7.0>
-x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.7.0>
-x Added image sizes annotation for each album item.                <Gilles Caulier - 0.7.0>
-x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.7.0>
-x Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
-x Added image Histogram viewer in file properties.                 <Gilles Caulier - 0.7.0>  
-x Added subfolders Albums support.                                 <Renchi Raju    - 0.7.0> 
-x Added tagging images feature.                                    <Renchi Raju    - 0.7.0> 
-x Option to hide image names.                                      <Renchi Raju    - 0.7.0> 
-x View/Hide main toolbar.                                          <Joern Ahrens   - 0.7.0>
-x Added config saving of Albums opened in Albums treeview.         
-- Custom thumbnail highlighting of album thumbnails.
 o Added a test for checking if a camera name is already in the 
   Digikam camera list when a new camera is added.
 o Add image date from EXIF data for each album item.               
@@ -52,48 +36,16 @@ o Enable/Disable thumbnail generation (bandwith limitation
   in slow camera connection).
 
   
-Thumnails interface:
---------------------
-
-x Using imlib2 for to provide thumbnails if 
-  embedded image unavaible.                                        <Gilles Caulier - 0.7.0>  
-x EXIF autorotate.                                                 <Ralf Holzer    - 0.7.0>
-o Thumnails generation for RAW files.
-
-  
 Image Viewer/Editor :
 ---------------------
-
-x Port from imlib1 to imlib2.                                      <Renchi Raju    - 0.7.0> 
-x New BCG setting dialogs with slidders.                           <Renchi Raju    - 0.7.0> 
-x Using KApplication class and main menu.                          <Renchi Raju    - 0.7.0> 
-x Added RedEyes correction.                                        <Renchi Raju    - 0.7.0> 
-x Added dockable toolbars.                                         <Renchi Raju    - 0.7.0> 
-x Added Plugins interface.                                         <Renchi Raju    - 0.7.0> 
-x Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.7.0>  
-x Added Color balance plugin.                                      <Gilles Caulier - 0.7.0>  
-x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
-x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
-x Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
-x Added image Histogram viewer.                                    <Gilles Caulier - 0.7.0>  
-x Added Colors autocorrection filter.                              <Gilles Caulier - 0.7.0>  
 
 
 SplashScreen :
 -------------
 
-o Added plugins loading progress bar.
-
 
 Handbook :
 ----------
-
-- Updated screenshoots.                                            <Gilles Caulier - 0.7.0>
-- New screenshoots for dialog (setup, Album properties, 
-  ImageEditor).                                                    <Gilles Caulier - 0.7.0>
-- Added new sections for Album properties, and ImageEditor.        <Gilles Caulier - 0.7.0>
-x Extract plugins section and create new handbooks 
-  for KipiPlugins.                                                 <Gilles Caulier - 0.7.0>
 
 
 Plugins (LibKIPI):
