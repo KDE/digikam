@@ -661,11 +661,11 @@ void ImlibInterface::putData(uint* data, int w, int h)
         // New image size !
             
         Imlib_Image im = imlib_create_image_using_copied_data( w, h, data );
+        imlib_free_image();
         
         imlib_context_set_image(im);
         d->image = im;
         imlib_context_set_image(d->image);
-        //imlib_free_image();
         
         d->origWidth = imlib_image_get_width();
         d->origHeight = imlib_image_get_height();

@@ -208,8 +208,6 @@ ImageWindow::ImageWindow()
             m_canvas, SLOT(slotCrop()));
     connect(m_guiClient, SIGNAL(signalResize()),
             SLOT(slotResize()));
-    connect(m_guiClient, SIGNAL(signalRotate()),
-            SLOT(slotRotate()));
 
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
