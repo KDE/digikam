@@ -257,9 +257,11 @@ void AlbumDB::readPAlbum(PAlbum *album)
     }
 
     kdDebug() << "Album not in database : " << album->getURL() << endl;
-    
-    /* Album not in database. first check if it is an album which was in
-       database, but has been copied/moved/renamed */
+
+    // Turn of automatic renaming as it can create havoc if user changes locale
+    /* 
+    //  Album not in database. first check if it is an album which was in
+    //  database, but has been copied/moved/renamed 
 
     int id;
     if (readIdentifier(album, id) && checkAlbum(album, id))
@@ -268,10 +270,12 @@ void AlbumDB::readPAlbum(PAlbum *album)
                   << album->getURL() << endl;
         return;
     }
+    */
+    
+    // Smells like an entirely new album. go ahead and 
+    // and add to database 
 
-    /* Smells like an entirely new album. go ahead and 
-       and add to database */
-
+    
     execSql( QString("INSERT INTO Albums (url, date, caption, collection) "
                      "VALUES('%1', '%2', '%3', '%4');")
              .arg(escapeString(album->getURL()))
@@ -279,15 +283,18 @@ void AlbumDB::readPAlbum(PAlbum *album)
              .arg(escapeString(album->getCaption()))
              .arg(escapeString(album->getCollection())) );
 
-    /* Write the identifier of the album into the directory */
+    // Write the identifier of the album into the directory 
 
-    id = sqlite_last_insert_rowid(m_db);
-    writeIdentifier(album, id);
+    int id = sqlite_last_insert_rowid(m_db);
     album->setID(id);
-    
-    /* try importing any old digikam.xml file */
 
+    // Turn of automatic renaming as it can create havoc if user changes locale
+    /* writeIdentifier(album, id); */
+
+    
+    // try importing any old digikam.xml file 
     importXML(album);
+    
 }
 
 void AlbumDB::readTAlbum(TAlbum* album)
@@ -560,7 +567,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     int error;
     
     //compile SQL program to virtual machine
-    error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
+    error = sqlite_compile( m_db, sql.utf8(), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
         kdWarning() << k_funcinfo << "sqlite_compile error: "
@@ -580,7 +587,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
             break;
         //iterate over columns
         for ( int i = 0; values && i < number; i++ ) {
-            *values << QString::fromLocal8Bit( value [i] );
+            *values << QString::fromUtf8( value [i] );
         }
     }
     
