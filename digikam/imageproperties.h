@@ -89,6 +89,7 @@ private:
     
     KSqueezedTextLabel           *m_filename;
     KSqueezedTextLabel           *m_filetype;
+    KSqueezedTextLabel           *m_filedim;
     KSqueezedTextLabel           *m_filepath;
     KSqueezedTextLabel           *m_filedate;
     KSqueezedTextLabel           *m_filesize;

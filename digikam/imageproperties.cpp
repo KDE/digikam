@@ -35,6 +35,7 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qdatetime.h>
+#include <qsize.h>
 
 // KDE includes.
 
@@ -49,6 +50,7 @@
 #include <kseparator.h> 
 #include <ksqueezedtextlabel.h>
 #include <kglobal.h>
+#include <kfilemetainfo.h>
 
 // LibKexif includes.
 
@@ -80,7 +82,7 @@
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
                : KDialogBase(Tabbed, i18n("Image Properties and Meta-Data"), 
                              Help|User1|User2|Stretch|Close,
-                             Ok, view, 0, true, true, 
+                             Close, view, 0, true, true, 
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
@@ -93,7 +95,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     m_currItem = currItem;
     m_lister   = view->albumLister();
     KURL fileURL(m_currItem->fileItem()->url());
-    
+        
     //General tab init.
     
     setupGeneralTab(fileURL.path());
@@ -109,6 +111,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     
     m_histogramWidget = 0L;
     m_hGradient       = 0L;
+
     m_image.load(fileURL.path());
     
     if (m_image.isNull() == false)
@@ -168,11 +171,11 @@ void ImageProperties::slotUser2()
 
 void ImageProperties::slotItemChanged()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
     if (!m_currItem)
         return;
 
+    setCursor( KCursor::waitCursor() );
+            
     if (!m_HistogramThumbJob.isNull())
     {
         m_HistogramThumbJob->kill();
@@ -197,6 +200,18 @@ void ImageProperties::slotItemChanged()
  
     // Update General tab.
     
+    m_filename->clear();
+    m_filetype->clear();
+    m_filedim->clear();
+    m_filepath->clear();
+    m_filedate->clear();
+    m_filesize->clear();
+    m_fileowner->clear();
+    m_filepermissions->clear();
+    m_filealbum->clear();
+    m_filecomments->clear();
+    m_filetags->clear();
+    
     m_generalThumbJob = new ThumbnailJob(fileURL, 128);
     
     connect(m_generalThumbJob,
@@ -206,6 +221,48 @@ void ImageProperties::slotItemChanged()
             SLOT(slotGotGeneralThumbnail(const KURL&,
                                          const QPixmap&,
                                          const KFileMetaInfo*)));
+
+    const KFileItem* fi = m_currItem->fileItem();    
+    m_filename->setText( fileURL.fileName() );
+    m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
+    KFileMetaInfo meta(fileURL);
+    
+    if (meta.isValid())
+        {
+        QSize dims;
+        
+        if (meta.containsGroup("Jpeg EXIF Data"))
+            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+        else if (meta.containsGroup("General"))
+            dims = meta.group("General").item("Dimensions").value().toSize();
+        else if (meta.containsGroup("Technical"))
+            dims = meta.group("Technical").item("Dimensions").value().toSize();
+        
+        m_filedim->setText( QString("%1x%2 %3").arg(dims.width())
+                            .arg(dims.height()).arg(i18n("pixels")) );
+        }
+   
+    m_filepath->setText( fileURL.path() );
+    QDateTime dateurl;
+    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
+    m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
+    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
+                                        .arg(KGlobal::locale()->formatNumber(fi->size(), 0)) );
+    m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
+    m_filepermissions->setText( fi->permissionsString() );
+
+    PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
+    
+    if (palbum)
+        m_filealbum->setText( palbum->getURL().remove(0,1) );
+    
+    m_filecomments->setText( m_view->itemComments(m_currItem) );
+    QStringList tagPaths(m_view->itemTagPaths(m_currItem));
+    
+    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+        (*it).remove(0,1);
+    
+    m_filetags->setText( tagPaths.join(", "));
                                          
     // Update Exif Viewer tab.
        
@@ -236,7 +293,12 @@ void ImageProperties::slotItemChanged()
             m_exifThumb->setFixedSize(thumbnail.size());
             m_exifThumb->setPixmap(QPixmap(thumbnail));
             }        
-    
+        else
+            {
+            m_exifThumb->setFixedSize(0, 0);
+            m_exifThumb->setPixmap(QPixmap::QPixmap(0, 0));
+            }
+            
         QToolTip::add( m_listview, i18n("Select an item to see its description"));
         }
        
@@ -263,36 +325,11 @@ void ImageProperties::slotItemChanged()
        m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
        }
         
-    // Update General tab.
-    
-    const KFileItem* fi = m_currItem->fileItem();    
-    m_filename->setText( fileURL.fileName() );
-    m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
-    m_filepath->setText( fileURL.path() );
-    QDateTime dateurl;
-    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
-    m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
-    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
-                                        .arg(KGlobal::locale()->formatNumber(fi->size(), 0)) );
-    m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
-    m_filepermissions->setText( fi->permissionsString() );
-
-    PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
-    
-    if (palbum)
-        m_filealbum->setText( palbum->getURL().remove(0,1) );
-    
-    m_filecomments->setText( m_view->itemComments(m_currItem) );
-    QStringList tagPaths(m_view->itemTagPaths(m_currItem));
-    
-    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-        (*it).remove(0,1);
-    
-    m_filetags->setText( tagPaths.join(", "));
-    
+    // Setup buttons.
+           
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
-    parentWidget()->setCursor( KCursor::arrowCursor() );       
+    setCursor( KCursor::arrowCursor() );       
 }
 
 
@@ -655,6 +692,11 @@ void ImageProperties::setupExifViewer(void)
         m_exifThumb->setFixedSize(thumbnail.size());
         m_exifThumb->setPixmap(QPixmap(thumbnail));
         }        
+    else
+        {
+        m_exifThumb->setFixedSize(0, 0);
+        m_exifThumb->setPixmap(QPixmap::QPixmap(0, 0));
+        }
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -665,24 +707,18 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     QFrame *page = addPage( i18n("General") );
     QVBoxLayout *vlay = new QVBoxLayout( page, 0, spacingHint() );
     
+    // Setup thumbnail.
+    
     m_generalThumb = new QLabel( page );
     m_generalThumb->setFixedHeight( 128 );
     vlay->addWidget(m_generalThumb, 0, Qt::AlignHCenter);
     
-    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
-    
-    connect(m_generalThumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)),
-            SLOT(slotGotGeneralThumbnail(const KURL&,
-                                         const QPixmap&,
-                                         const KFileMetaInfo*)));
-    
+    // Setup File properties infos.                                         
+                                         
     KSeparator *sep1 = new KSeparator (Horizontal, page);
     vlay->addWidget(sep1);
     
-    QGridLayout *hlay1 = new QGridLayout(7, 3);
+    QGridLayout *hlay1 = new QGridLayout(8, 3);
     vlay->addLayout( hlay1 );
     
     QLabel *name = new QLabel( i18n("Name:"), page);
@@ -696,40 +732,48 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     type->setBuddy( m_filetype );
     hlay1->addMultiCellWidget( type, 1, 1, 0, 0 );
     hlay1->addMultiCellWidget( m_filetype, 1, 1, 1, 2  );
+    
+    QLabel *dim = new QLabel( i18n("Dimenssions:"), page);
+    m_filedim = new KSqueezedTextLabel(page);
+    dim->setBuddy( m_filedim );
+    hlay1->addMultiCellWidget( dim, 2, 2, 0, 0 );
+    hlay1->addMultiCellWidget( m_filedim, 2, 2, 1, 2  );
 
     QLabel *path = new QLabel( i18n("Location:"), page);
     m_filepath = new KSqueezedTextLabel(page);
     path->setBuddy( m_filepath );
-    hlay1->addMultiCellWidget( path, 2, 2, 0, 0 );
-    hlay1->addMultiCellWidget( m_filepath, 2, 2, 1, 2  );
+    hlay1->addMultiCellWidget( path, 3, 3, 0, 0 );
+    hlay1->addMultiCellWidget( m_filepath, 3, 3, 1, 2  );
     
     QLabel *date = new QLabel( i18n("Modification Date:"), page);
     m_filedate = new KSqueezedTextLabel(page);
     date->setBuddy( m_filedate );
-    hlay1->addMultiCellWidget( date, 3, 3, 0, 0 );
-    hlay1->addMultiCellWidget( m_filedate, 3, 3, 1, 2  );
+    hlay1->addMultiCellWidget( date, 4, 4, 0, 0 );
+    hlay1->addMultiCellWidget( m_filedate, 4, 4, 1, 2  );
     
     QLabel *size = new QLabel( i18n("Size:"), page);
     m_filesize = new KSqueezedTextLabel(page);
     size->setBuddy( m_filesize );
-    hlay1->addMultiCellWidget( size, 4, 4, 0, 0 );
-    hlay1->addMultiCellWidget( m_filesize, 4, 4, 1, 2  );
+    hlay1->addMultiCellWidget( size, 5, 5, 0, 0 );
+    hlay1->addMultiCellWidget( m_filesize, 5, 5, 1, 2  );
 
     QLabel *owner = new QLabel( i18n("Owner:"), page);
     m_fileowner = new KSqueezedTextLabel(page);
     owner->setBuddy( m_fileowner );
-    hlay1->addMultiCellWidget( owner, 5, 5, 0, 0 );
-    hlay1->addMultiCellWidget( m_fileowner, 5, 5, 1, 2  );
+    hlay1->addMultiCellWidget( owner, 6, 6, 0, 0 );
+    hlay1->addMultiCellWidget( m_fileowner, 6, 6, 1, 2  );
 
     QLabel *permissions = new QLabel( i18n("Permissions:"), page);
     m_filepermissions = new KSqueezedTextLabel(page);
     permissions->setBuddy( m_filepermissions );
-    hlay1->addMultiCellWidget( permissions, 6, 6, 0, 0 );
-    hlay1->addMultiCellWidget( m_filepermissions, 6, 6, 1, 2  );
+    hlay1->addMultiCellWidget( permissions, 7, 7, 0, 0 );
+    hlay1->addMultiCellWidget( m_filepermissions, 7, 7, 1, 2  );
         
     KSeparator *sep2 = new KSeparator (Horizontal, page);
     vlay->addWidget(sep2);
 
+    // Setup Digikam infos.
+    
     QGridLayout *hlay2 = new QGridLayout(3, 3);
     vlay->addLayout( hlay2 );
     
@@ -753,9 +797,38 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
                     
     vlay->addStretch(1);
 
+    // Update general info.
+    
+    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
+    
+    connect(m_generalThumbJob,
+            SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                                           const QPixmap&,
+                                           const KFileMetaInfo*)),
+            SLOT(slotGotGeneralThumbnail(const KURL&,
+                                         const QPixmap&,
+                                         const KFileMetaInfo*)));
+
     const KFileItem* fi = m_currItem->fileItem();    
     m_filename->setText( fileURL.fileName() );
     m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
+    KFileMetaInfo meta(fileURL);
+    
+    if (meta.isValid())
+        {
+        QSize dims;
+        
+        if (meta.containsGroup("Jpeg EXIF Data"))
+            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+        else if (meta.containsGroup("General"))
+            dims = meta.group("General").item("Dimensions").value().toSize();
+        else if (meta.containsGroup("Technical"))
+            dims = meta.group("Technical").item("Dimensions").value().toSize();
+        
+        m_filedim->setText( QString("%1x%2 %3").arg(dims.width())
+                            .arg(dims.height()).arg(i18n("pixels")) );
+        }
+   
     m_filepath->setText( fileURL.path() );
     QDateTime dateurl;
     dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
@@ -768,7 +841,7 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
     
     if (palbum)
-        m_filealbum->setText( palbum->getURL().remove(0,1) );
+        m_filealbum->setText( palbum->getURL().remove(0, 1) );
     
     m_filecomments->setText( m_view->itemComments(m_currItem) );
     QStringList tagPaths(m_view->itemTagPaths(m_currItem));
