@@ -54,6 +54,8 @@ private:
     KURL           m_destURL;
     
     QLabel*        m_label;
+    QLabel*        m_currLabel;
+    QLabel*        m_totLabel;
     QProgressBar*  m_currProgress;
     QProgressBar*  m_totalProgress;
 

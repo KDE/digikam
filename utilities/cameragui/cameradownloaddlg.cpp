@@ -60,17 +60,20 @@ CameraDownloadDlg::CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
 
     QGridLayout* glay = new QGridLayout(lay);
 
-    QLabel *curLab = new QLabel(plainPage());
-    curLab->setText(i18n("Current : "));
-    glay->addWidget(curLab, 0, 0);
+    m_currLabel = new QLabel(plainPage());
+    m_currLabel->setText(i18n("Current : "));
+    glay->addWidget(m_currLabel, 0, 0);
 
     m_currProgress = new QProgressBar(plainPage());
     m_currProgress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     glay->addWidget(m_currProgress, 0, 1);
 
-    QLabel *totLab = new QLabel(plainPage());
-    totLab->setText(i18n("Total : "));
-    glay->addWidget(totLab, 1, 0);
+    m_currLabel->hide();
+    m_currProgress->hide();
+
+    m_totLabel = new QLabel(plainPage());
+    m_totLabel->setText(i18n("Total : "));
+    glay->addWidget(m_totLabel, 1, 0);
     
     m_totalProgress = new QProgressBar(plainPage());
     m_totalProgress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -227,6 +230,12 @@ void CameraDownloadDlg::slotResult(KIO::Job* job)
 
 void CameraDownloadDlg::slotPercent(KIO::Job*, unsigned long val)
 {
+    if (m_currProgress->isHidden())
+    {
+        m_currLabel->show();
+        m_currProgress->show();
+    }
+        
     m_currProgress->setProgress(val);    
 }
 
