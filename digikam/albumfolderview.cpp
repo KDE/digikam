@@ -1176,7 +1176,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     
     // Do not allow an album to be dropped on it's child
     AlbumFolderItem *folderItem = dynamic_cast<AlbumFolderItem*>(dragItem_);
-    if (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album()))
+    if ((!TagItemsDrag::canDecode(event) && !AlbumItemsDrag::canDecode(event)) &&
+        (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album())))
     {
         event->ignore();
         return;
