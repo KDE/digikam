@@ -76,10 +76,10 @@ AlbumFileCopyMove::AlbumFileCopyMove(PAlbum *srcAlbum, PAlbum *destAlbum,
                 SLOT(slotCanceled()));
         
         if (m_move)
-            m_progress->setLabelText(i18n("Moving file %1")
+            m_progress->setLabelText(i18n("Moving file\n%1")
                                      .arg(m_srcFileList.first()));
         else
-            m_progress->setLabelText(i18n("Copying file %1")
+            m_progress->setLabelText(i18n("Copying file\n%1")
                                      .arg(m_srcFileList.first()));
         m_progress->setProgress(m_count, m_countTotal);
         m_progress->show();
@@ -142,7 +142,7 @@ bool AlbumFileCopyMove::rename(PAlbum* album, const QString& srcFile,
         return true;
     }
 
-    KMessageBox::error(0, i18n("Failed to Rename File %1")
+    KMessageBox::error(0, i18n("Failed to Rename File\n%1")
                        .arg(srcFile), i18n("Rename Failed"));
     return false;    
 }
@@ -239,7 +239,7 @@ void AlbumFileCopyMove::slotNext()
             else
             {
                 int result = KMessageBox::
-                             warningContinueCancel(0, i18n("Failed to Move File %1")
+                             warningContinueCancel(0, i18n("Failed to Move File\n%1")
                                                    .arg(srcFile), i18n("Move Failed"));
                 if (result == KMessageBox::Cancel)
                 {
@@ -259,7 +259,7 @@ void AlbumFileCopyMove::slotNext()
             else
             {
                 int result = KMessageBox::
-                             warningContinueCancel(0, i18n("Failed to Copy File %1")
+                             warningContinueCancel(0, i18n("Failed to Copy File\n%1")
                                                    .arg(srcFile), i18n("Copy Failed"));
                 if (result == KMessageBox::Cancel)
                 {
@@ -278,10 +278,10 @@ void AlbumFileCopyMove::slotNext()
     }
 
     if (m_move)
-        m_progress->setLabelText(i18n("Moving file %1")
+        m_progress->setLabelText(i18n("Moving file\n%1")
                                  .arg(m_srcFileList.first()));
     else
-        m_progress->setLabelText(i18n("Copying file %1")
+        m_progress->setLabelText(i18n("Copying file\n%1")
                                  .arg(m_srcFileList.first()));
     m_progress->setProgress(m_count, m_countTotal);
     
