@@ -3,7 +3,7 @@
  * Date  : 2004-12-01
  * Description : image curves manipulation methods.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 
@@ -57,12 +57,7 @@ ImageCurves::ImageCurves()
     m_lut    = new _Lut;
     m_curves = new _Curves;
     
-    memset(m_curves, 0, sizeof(struct _Curves));    
-    m_lut->luts      = NULL;
-    m_lut->nchannels = 0;
-
-    for (int channel = 0 ; channel < 5 ; ++channel)
-       curvesChannelReset(channel);
+    curvesReset();
 }
 
 ImageCurves::~ImageCurves()
@@ -71,7 +66,7 @@ ImageCurves::~ImageCurves()
        {
        if (m_lut->luts)
           {
-          for (int i = 0 ; i < m_lut->nchannels ; ++i)
+          for (int i = 0 ; i < m_lut->nchannels ; i++)
               delete [] m_lut->luts[i];
 
           delete [] m_lut->luts;
@@ -84,6 +79,16 @@ ImageCurves::~ImageCurves()
        delete m_curves;
 }
 
+void ImageCurves::curvesReset(void)
+{
+    memset(m_curves, 0, sizeof(struct _Curves));    
+    m_lut->luts      = NULL;
+    m_lut->nchannels = 0;
+
+    for (int channel = 0 ; channel < 5 ; channel++)
+       curvesChannelReset(channel);
+}
+
 void ImageCurves::curvesChannelReset(int channel)
 {
     int j;
@@ -92,12 +97,12 @@ void ImageCurves::curvesChannelReset(int channel)
 
     // Contruct a linear curve.
     
-    for (j = 0 ; j < 256 ; ++j)
+    for (j = 0 ; j < 256 ; j++)
        m_curves->curve[channel][j] = j;
 
     // Init coordinates points to null.
        
-    for (j = 0 ; j < 17 ; ++j)
+    for (j = 0 ; j < 17 ; j++)
        {
        m_curves->points[channel][j][0] = -1;
        m_curves->points[channel][j][1] = -1;
@@ -131,7 +136,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
           
           num_pts = 0;
           
-          for (i = 0 ; i < 17 ; ++i)
+          for (i = 0 ; i < 17 ; i++)
              if (m_curves->points[channel][i][0] != -1)
                 points[num_pts++] = i;
 
@@ -139,18 +144,18 @@ void ImageCurves::curvesCalculateCurve(int channel)
           
           if (num_pts != 0)
              {
-             for (i = 0 ; i < m_curves->points[channel][points[0]][0] ; ++i)
+             for (i = 0 ; i < m_curves->points[channel][points[0]][0] ; i++)
                 {
                 m_curves->curve[channel][i] = m_curves->points[channel][points[0]][1];
                 }
              
-             for (i = m_curves->points[channel][points[num_pts - 1]][0] ; i < 256 ; ++i)
+             for (i = m_curves->points[channel][points[num_pts - 1]][0] ; i < 256 ; i++)
                 {
                 m_curves->curve[channel][i] = m_curves->points[channel][points[num_pts - 1]][1];
                 }
              }
 
-          for (i = 0 ; i < num_pts - 1 ; ++i)
+          for (i = 0 ; i < num_pts - 1 ; i++)
              {
              p1 = (i == 0) ? points[i] : points[(i - 1)];
              p2 = points[i];
@@ -162,7 +167,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
 
           // Ensure that the control points are used exactly 
       
-          for (i = 0 ; i < num_pts ; ++i)
+          for (i = 0 ; i < num_pts ; i++)
              {
              int x, y;
 
@@ -236,13 +241,13 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
 
     // Construct the geometry matrix from the segment.
   
-    for (i = 0 ; i < 4 ; ++i)
+    for (i = 0 ; i < 4 ; i++)
        {
        geometry[i][2] = 0;
        geometry[i][3] = 0;
        }
 
-    for (i = 0 ; i < 2 ; ++i)
+    for (i = 0 ; i < 2 ; i++)
        {
        geometry[0][i] = m_curves->points[channel][p1][i];
        geometry[1][i] = m_curves->points[channel][p2][i];
@@ -293,7 +298,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
 
     // Loop over the curve.
     
-    for (i = 0 ; i < 1000 ; ++i)
+    for (i = 0 ; i < 1000 ; i++)
        {
        // Increment the x values.
        
@@ -324,9 +329,9 @@ void ImageCurves::curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab)
 {
     int i, j;
 
-    for (i = 0 ; i < 4 ; ++i)
+    for (i = 0 ; i < 4 ; i++)
        {
-       for (j = 0 ; j < 4 ; ++j)
+       for (j = 0 ; j < 4 ; j++)
           {
           ab[i][j] = (a[i][0] * b[0][j] +
                       a[i][1] * b[1][j] +
@@ -346,7 +351,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
     if (m_lut->luts)
        {
-       for (i = 0 ; i < m_lut->nchannels ; ++i)
+       for (i = 0 ; i < m_lut->nchannels ; i++)
            delete [] m_lut->luts[i];
 
        delete [] m_lut->luts;
@@ -355,11 +360,11 @@ void ImageCurves::curvesLutSetup(int nchannels)
     m_lut->nchannels = nchannels;
     m_lut->luts      = new uchar*[m_lut->nchannels];
     
-    for (i = 0 ; i < m_lut->nchannels ; ++i)
+    for (i = 0 ; i < m_lut->nchannels ; i++)
        {
        m_lut->luts[i] = new uchar[256];
 
-       for (v = 0 ; v < 256 ; ++v)
+       for (v = 0 ; v < 256 ; v++)
           {
           // To add gamma correction use func(v ^ g) ^ 1/g instead. 
           
@@ -577,9 +582,9 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
     if (strcmp (buf, "# GIMP Curves File\n") != 0)
        return false;
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
        {
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < 17 ; j++)
           {
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
@@ -591,18 +596,18 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
           }
        }
 
-    for (i = 0  ; i < 5 ; ++i)
+    for (i = 0  ; i < 5 ; i++)
        {
        m_curves->curve_type[i] = CURVE_SMOOTH;
 
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < 17 ; j++)
           {
           m_curves->points[i][j][0] = index[i][j];
           m_curves->points[i][j][1] = value[i][j];
           }
        }
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
        curvesCalculateCurve(i);
 
     fclose(file);
@@ -624,13 +629,13 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(KURL fileUrl)
     if (!file)
        return false;
     
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
        {
        if (m_curves->curve_type[i] == CURVE_FREE)
           {
           //  Pick representative points from the curve and make them control points.
    
-          for (j = 0 ; j <= 8 ; ++j)
+          for (j = 0 ; j <= 8 ; j++)
              {
              index = CLAMP0255 (j * 32);
              m_curves->points[i][j * 2][0] = index;
@@ -641,9 +646,9 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(KURL fileUrl)
 
     fprintf (file, "# GIMP Curves File\n");
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
        {
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < 17 ; j++)
           {
           fprintf (file, "%d %d ",
                    m_curves->points[i][j][0],
