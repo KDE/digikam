@@ -117,10 +117,10 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    iconShowCommentsBox_->setText(i18n("Show Digikam comments"));
 
    iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (Warning: Slow!)"));
+   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (Warning: Slow)"));
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
-   iconShowResolutionBox_->setText(i18n("Show image resolution (Warning: Slow!)"));
+   iconShowResolutionBox_->setText(i18n("Show image resolution (Warning: Slow)"));
 
    layout->addWidget(iconTextGroup);
    
