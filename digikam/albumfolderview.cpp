@@ -788,18 +788,6 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
 
     if(!album->getIcon().isEmpty())
     {
-        KURL iconURL(album->getIcon());
-        if(iconURL.path().startsWith("/"))
-        {
-            // An older version saved the icon paths with an absolute path to the
-            // db. This caused trouble if the album was moved to another parent.
-            // Here is the absolute path  changed into an relative path
-            // in the album folder
-            QString errMsg;
-            albumMan_->updatePAlbumIcon(album, iconURL.filename(),
-                                        false, errMsg);
-        }
-
         if (iconThumbJob_.isNull())
         {
             iconThumbJob_ = new Digikam::ThumbnailJob(album->getIconKURL(),
