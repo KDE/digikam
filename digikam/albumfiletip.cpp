@@ -314,12 +314,6 @@ void AlbumFileTip::updateText()
            .arg(KGlobal::locale()->formatNumber(fi->size(), 0))
            + cellEnd;
 
-    tip += cellBeg + i18n("Owner:") + cellMid +
-           fi->user() + QString(" - ") + fi->group() + cellEnd;
-
-    tip += cellBeg + i18n("Permissions:") + cellMid +
-           fi->permissionsString() + cellEnd;
-
     // Digikam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
