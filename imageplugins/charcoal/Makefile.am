@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_charcoal_ui.rc
+       
+digikamimageplugin_charcoalicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_charcoalicon_ICON = AUTO

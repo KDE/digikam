@@ -37,10 +37,10 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_charcoal,
                             KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
 
 ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
-                                                   const QStringList &)
+                                           const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Charcoal")
 {
-    new KAction(i18n("Charcoal Drawing..."), 0, 
+    new KAction(i18n("Charcoal Drawing..."), "charcoaltool", 0, 
                 this, SLOT(slotCharcoal()),
                 actionCollection(), "imageplugin_charcoal");
                 
