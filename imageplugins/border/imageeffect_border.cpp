@@ -147,10 +147,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(m_borderType, 2, 2, 1, 1);
-    
     QLabel *label2 = new QLabel(i18n("Width:"), plainPage());
     m_borderWidth = new KIntNumInput(plainPage());
-    m_borderWidth->setRange(1, 1000, 1, true);
+
     QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width to add around the image."));
     
     topLayout->addMultiCellWidget(label2, 3, 3, 0, 0);
@@ -158,10 +157,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
         
     m_labelForeground = new QLabel(plainPage());
     m_foregroundColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), plainPage() );
-    QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the foreground color of the border."));
     m_labelBackground = new QLabel(plainPage());
     m_backgroundColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), plainPage() );
-    QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the foreground color of the border."));
 
     topLayout->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
     topLayout->addMultiCellWidget(m_foregroundColorButton, 4, 4, 1, 1);
@@ -174,6 +171,15 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     disableResize();  
     readSettings();
     
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    int w = iface->originalWidth();
+    int h = iface->originalHeight();
+    
+    if (w > h) 
+       m_borderWidth->setRange(1, h/2, 1, true);       
+    else 
+       m_borderWidth->setRange(1, w/2, 1, true);
+        
     // -------------------------------------------------------------
     
     connect(m_borderType, SIGNAL(activated(int)),
@@ -183,38 +189,62 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
             this, SLOT(slotEffect()));            
 
     connect(m_foregroundColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotEffect()));            
+            this, SLOT(slotColorForegroundChanged(const QColor &)));            
 
     connect(m_backgroundColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotEffect()));            
-                                    
+            this, SLOT(slotColorBackgroundChanged(const QColor &)));            
 }
 
 ImageEffect_Border::~ImageEffect_Border()
 {
-    writeSettings();
 }
 
 void ImageEffect_Border::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    m_borderType->setCurrentItem( config->readNumEntry("Border Type", 0) );
-    m_borderWidth->setValue( config->readNumEntry("Border Width", 10) );
-    m_foregroundColorButton->setColor( config->readColorEntry("Foreground Color", new QColor( 192, 192, 192 )));
-    m_backgroundColorButton->setColor( config->readColorEntry("Background Color", new QColor( 128, 128, 128 )));
+    config->setGroup("Add Border Tool Settings");
     
+    m_borderType->setCurrentItem( config->readNumEntry("Border Type", 0) );
+    m_borderWidth->setValue( config->readNumEntry("Border Width", 100) );
+    
+    QColor *black = new QColor( 0, 0, 0 );
+    QColor *white = new QColor( 255, 255, 255 );
+    QColor *gray1 = new QColor( 192, 192, 192 );
+    QColor *gray2 = new QColor( 128, 128, 128 );
+    
+    m_solidColor = config->readColorEntry("Solid Color", black);
+    m_niepceBorderColor = config->readColorEntry("Niepce Border Color", white);
+    m_niepceLineColor = config->readColorEntry("Niepce Line Color", black);
+    m_bevelUpperLeftColor = config->readColorEntry("Bevel Upper Left Color", gray1);
+    m_bevelLowerRightColor = config->readColorEntry("Bevel Lower Right Color", gray2);
+    m_liquidBackgroundColor = config->readColorEntry("Liquid Background Color", gray1);
+    m_liquidForegroundColor = config->readColorEntry("Liquid Foreground Color", gray2);
+    m_roundCornerBackgroundColor = config->readColorEntry("Round Corner Background Color", gray1);
+    
+    delete black;
+    delete white;
+    delete gray1;
+    delete gray2;
+              
     slotBorderTypeChanged(m_borderType->currentItem());
 }
     
 void ImageEffect_Border::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("Add Border Tool Settings");
+    
     config->writeEntry( "Border Width", m_borderWidth->value() );
     config->writeEntry( "Border Type", m_borderType->currentItem() );
-    config->writeEntry( "Foreground Color", m_foregroundColorButton->color() );
-    config->writeEntry( "Background Color", m_backgroundColorButton->color() );
+    
+    config->writeEntry( "Solid Color", m_solidColor );
+    config->writeEntry( "Niepce Border Color", m_niepceBorderColor );
+    config->writeEntry( "Niepce Line Color", m_niepceLineColor );
+    config->writeEntry( "Bevel Upper Left Color", m_bevelUpperLeftColor );
+    config->writeEntry( "Bevel Lower Right Color", m_bevelLowerRightColor );
+    config->writeEntry( "Liquid Background Color", m_liquidBackgroundColor );
+    config->writeEntry( "Liquid Foreground Color", m_liquidForegroundColor );
+    config->writeEntry( "Round Corner Background Color", m_roundCornerBackgroundColor );
     
     config->sync();
 }
@@ -238,22 +268,77 @@ void ImageEffect_Border::slotUser1()
     m_backgroundColorButton->blockSignals(true);
         
     m_borderType->setCurrentItem(0);    // Solid.
-    m_borderWidth->setValue(10);
-    m_foregroundColorButton->setColor( QColor::QColor( 192, 192, 192 ) );
-    m_backgroundColorButton->setColor( QColor::QColor( 128, 128, 128 ) );
+    m_borderWidth->setValue(100);
+    m_solidColor = QColor::QColor( 0, 0, 0 );
+    slotBorderTypeChanged(0);
 
     m_borderType->blockSignals(false);
     m_borderWidth->blockSignals(false);
     m_foregroundColorButton->blockSignals(false);
     m_backgroundColorButton->blockSignals(false);
-
-    slotEffect();
 } 
+
+void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
+{
+    switch (m_borderType->currentItem())
+       {
+       case 0: // Solid.
+          m_solidColor = color;
+          break;
+       
+       case 1: // Niepce.
+          m_niepceBorderColor = color;
+          break;
+
+       case 2: // Beveled.
+          m_bevelUpperLeftColor = color;
+          break;
+
+       case 3: // Liquid.
+          m_liquidForegroundColor = color;
+          break;
+
+       case 4: // Round Corners.
+          break;
+       }
+       
+    slotEffect();       
+}
+
+void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
+{
+    switch (m_borderType->currentItem())
+       {
+       case 0: // Solid.
+          m_solidColor = color;
+          break;
+       
+       case 1: // Niepce.
+          m_niepceLineColor = color;
+          break;
+
+       case 2: // Beveled.
+          m_bevelLowerRightColor = color;
+          break;
+
+       case 3: // Liquid.
+          m_liquidBackgroundColor = color;
+          break;
+
+       case 4: // Round Corners.
+          m_roundCornerBackgroundColor = color;
+          break;
+       }
+       
+    slotEffect();       
+}
 
 void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 {
     m_labelForeground->setText(i18n("Foreground:"));
     m_labelBackground->setText(i18n("Background:"));    
+    QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the foreground color of the border."));
+    QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the foreground color of the border."));
     m_foregroundColorButton->setEnabled(true);
     m_backgroundColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
@@ -263,9 +348,8 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
     switch (borderType)
        {
        case 0: // Solid.
-          m_foregroundColorButton->setEnabled(true);
+          m_foregroundColorButton->setColor( m_solidColor );
           m_backgroundColorButton->setEnabled(false);
-          m_labelForeground->setEnabled(true);
           m_labelBackground->setEnabled(false);
           m_borderWidth->setEnabled(true);
           break;
@@ -273,21 +357,30 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case 1: // Niepce.
           m_labelForeground->setText(i18n("Main:"));
           m_labelBackground->setText(i18n("Line:"));
+          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the main border."));
+          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the line."));
+          m_foregroundColorButton->setColor( m_niepceBorderColor );
+          m_backgroundColorButton->setColor( m_niepceLineColor );
           break;
 
        case 2: // Beveled.
           m_labelForeground->setText(i18n("Upper Left:"));
           m_labelBackground->setText(i18n("Lower Right:"));
+          QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the color of the upper left area."));
+          QWhatsThis::add( m_backgroundColorButton, i18n("<p>Set here the color of the lower right area."));
+          m_foregroundColorButton->setColor( m_bevelUpperLeftColor );
+          m_backgroundColorButton->setColor( m_bevelLowerRightColor );
           break;
 
        case 3: // Liquid.
+          m_foregroundColorButton->setColor( m_liquidForegroundColor );
+          m_backgroundColorButton->setColor( m_liquidBackgroundColor );
           break;
 
        case 4: // Round Corners.
           m_foregroundColorButton->setEnabled(false);
-          m_backgroundColorButton->setEnabled(true);
+          m_backgroundColorButton->setColor( m_roundCornerBackgroundColor );
           m_labelForeground->setEnabled(false);
-          m_labelBackground->setEnabled(true);
           m_borderWidth->setEnabled(false);
           break;
        }
@@ -307,7 +400,7 @@ void ImageEffect_Border::slotEffect()
     float ratio = (float)w/(float)iface->originalWidth();
     int borderWidth = (int)((float)m_borderWidth->value()*ratio);
     
-    QImage src, temp, dest;
+    QImage src, dest;
     src.create( w, h, 32 );
     src.setAlphaBuffer(true);
     memcpy(src.bits(), data, src.numBytes());
@@ -315,29 +408,26 @@ void ImageEffect_Border::slotEffect()
     switch (borderType)
        {
        case 0: // Solid.
-          solid(src, dest, m_foregroundColorButton->color(), borderWidth);
+          solid(src, dest, m_solidColor, borderWidth);
           break;
        
        case 1: // Niepce.
-          solid(src, dest, m_backgroundColorButton->color(), (int)(10.0*ratio));
-          temp.create( dest.width(), dest.height(), 32 );
-          temp.setAlphaBuffer(true);
-          memcpy(temp.bits(), dest.bits(), dest.numBytes());
-          solid(temp, dest, m_foregroundColorButton->color(), borderWidth);
+          niepce(src, dest, m_niepceBorderColor, borderWidth, 
+                 m_niepceLineColor, (int)(10.0*ratio));
           break;
 
        case 2: // Beveled.
-          bevel(src, dest, m_foregroundColorButton->color(),
-                m_backgroundColorButton->color(), borderWidth);
+          bevel(src, dest, m_bevelUpperLeftColor,
+                m_bevelLowerRightColor, borderWidth);
           break;
 
        case 3: // Liquid.
-          liquid(src, dest, m_foregroundColorButton->color(), 
-                 m_backgroundColorButton->color(), borderWidth);
+          liquid(src, dest, m_liquidForegroundColor, 
+                 m_liquidBackgroundColor, borderWidth);
           break;
 
        case 4: // Round Corners.
-          roundCorner(src, dest, m_backgroundColorButton->color());
+          roundCorner(src, dest, m_roundCornerBackgroundColor);
           break;
        }
 
@@ -351,8 +441,8 @@ void ImageEffect_Border::slotEffect()
 void ImageEffect_Border::slotOk()
 {
     accept();
-    
     m_parent->setCursor( KCursor::waitCursor() );
+    
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
@@ -361,7 +451,7 @@ void ImageEffect_Border::slotOk()
     
     int borderType = m_borderType->currentItem();
     
-    QImage src, temp, dest;
+    QImage src, dest;
     src.create( w, h, 32 );
     src.setAlphaBuffer(true);
     memcpy(src.bits(), data, src.numBytes());
@@ -369,35 +459,35 @@ void ImageEffect_Border::slotOk()
     switch (borderType)
        {
        case 0: // Solid.
-          solid(src, dest, m_foregroundColorButton->color(), m_borderWidth->value());
+          solid(src, dest, m_solidColor, m_borderWidth->value());
           break;
        
        case 1: // Niepce.
-          solid(src, dest, m_backgroundColorButton->color(), 10);
-          temp.create( dest.width(), dest.height(), 32 );
-          temp.setAlphaBuffer(true);
-          memcpy(temp.bits(), dest.bits(), dest.numBytes());
-          solid(temp, dest, m_foregroundColorButton->color(), m_borderWidth->value());
+          niepce(src, dest, m_niepceBorderColor, m_borderWidth->value(), 
+                 m_niepceLineColor, 10);
           break;
 
        case 2: // Beveled.
-          bevel(src, dest, m_foregroundColorButton->color(),
-                m_backgroundColorButton->color(), m_borderWidth->value());
+          bevel(src, dest, m_bevelUpperLeftColor,
+                m_bevelLowerRightColor, m_borderWidth->value());
           break;
 
        case 3: // Liquid.
-          liquid(src, dest, m_foregroundColorButton->color(), 
-                 m_backgroundColorButton->color(), m_borderWidth->value());
+          liquid(src, dest, m_liquidForegroundColor, 
+                 m_liquidBackgroundColor, m_borderWidth->value());
           break;
 
        case 4: // Round Corners.
-          roundCorner(src, dest, m_backgroundColorButton->color());
+          roundCorner(src, dest, m_roundCornerBackgroundColor);
           break;
        }
 
     iface->putOriginalData((uint*)dest.bits(), dest.width(), dest.height());
        
     delete [] data;    
+    
+    writeSettings();
+
     m_parent->setCursor( KCursor::arrowCursor() );        
 }
 
@@ -405,46 +495,127 @@ void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int 
 {
     unsigned int *output;
     int x, y;
+    
     dest.reset();
-    
-    dest.create(src.width()+borderWidth*2, src.height()+borderWidth*2, 32);
+    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
     dest.setAlphaBuffer(true);
-    
+   
     // top
     
-    for(y=0; y < borderWidth; ++y)
+    for(y = 0; y < borderWidth; ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
        
-       for(x=0; x < dest.width(); ++x)
+       for(x = 0; x < dest.width(); ++x)
           output[x] = fg.rgb();
        }
-       
+    
     // left and right
     
-    for(; y < dest.height()-borderWidth; ++y)
+    for(y = 0; y < dest.height(); ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
         
-       for(x=0; x < borderWidth; ++x)
+       for(x = 0; x < borderWidth; ++x)
             output[x] = fg.rgb();
             
-       for(x = dest.width()-1; x > dest.width()-borderWidth-1; --x)
+       for(x = dest.width()-borderWidth; x < dest.width(); ++x)
             output[x] = fg.rgb();
        }
     
     // bottom
     
-    for(; y < dest.height(); ++y)
+    for(y = dest.height()-borderWidth; y < dest.height(); ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
         
-       for(x=0; x < dest.width(); ++x)
+       for(x = 0; x < dest.width(); ++x)
           output[x] = fg.rgb();
        }
-        
+       
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
 }
+
+void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth)
+{
+    unsigned int *output;
+    int x, y;
+    
+    dest.reset();
+    dest.create(src.width() + borderWidth*2 + lineWidth*2, src.height() + borderWidth*2 + lineWidth*2, 32);
+    dest.setAlphaBuffer(true);
+    
+    // Drawing fine line at first.
+    // top
+
+    for(y=borderWidth; y < borderWidth+lineWidth; ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+       
+       for(x=borderWidth; x < dest.width()-borderWidth; ++x)
+          output[x] = bg.rgb();
+       }
+      
+    // left and right
+    
+    for(y=borderWidth; y < dest.height()-borderWidth; ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+        
+       for(x=borderWidth; x < borderWidth+lineWidth; ++x)
+            output[x] = bg.rgb();
+            
+       for(x = dest.width()-borderWidth-lineWidth; x < dest.width()-borderWidth; ++x)
+            output[x] = bg.rgb();
+       }
+    
+    // bottom
+    
+    for(y=dest.height()-borderWidth-lineWidth; y < dest.height()-borderWidth; ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+        
+       for(x=borderWidth; x < dest.width()-borderWidth; ++x)
+          output[x] = bg.rgb();
+       }
+    
+    // Drawing Main border.
+    // top
+    
+    for(y = 0; y < borderWidth; ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+       
+       for(x = 0; x < dest.width(); ++x)
+          output[x] = fg.rgb();
+       }
+    
+    // left and right
+    
+    for(y = 0; y < dest.height(); ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+        
+       for(x = 0; x < borderWidth; ++x)
+            output[x] = fg.rgb();
+            
+       for(x = dest.width()-borderWidth; x < dest.width(); ++x)
+            output[x] = fg.rgb();
+       }
+    
+    // bottom
+    
+    for(y = dest.height()-borderWidth; y < dest.height(); ++y)
+       {
+       output = (unsigned int *)dest.scanLine(y);
+        
+       for(x = 0; x < dest.width(); ++x)
+          output[x] = fg.rgb();
+       }
+              
+    KImageEffect::blendOnLower(borderWidth + lineWidth, borderWidth + lineWidth, src, dest);
+}
+
 
 void ImageEffect_Border::liquid(QImage &src, QImage &dest, const QColor &fg,
                                 const QColor &bg, int borderWidth)
@@ -453,10 +624,10 @@ void ImageEffect_Border::liquid(QImage &src, QImage &dest, const QColor &fg,
     int x, y;
 
     dest.reset();
-    dest.create(src.width()+borderWidth*2, src.height()+borderWidth*2, 32);
+    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
     dest.setAlphaBuffer(true);
     
-    QColor darkColor = fg.dark(130);
+    QColor darkColor   = fg.dark(130);
     QColor lightColor1 = fg.light(110);
     QColor lightColor2 = fg.light(115);
 
@@ -589,7 +760,7 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
     int wc;
     
     dest.reset();
-    dest.create(src.width()+borderWidth*2, src.height()+borderWidth*2, 32);
+    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
     dest.setAlphaBuffer(true);
     
     // top
@@ -654,10 +825,9 @@ void ImageEffect_Border::roundCorner(QImage &src, QImage &dest, const QColor &bg
     QString path;
     QImage img;
     
-    dest.reset();
-    
     // round corners adds 1 pixel on top and left, 8 on bottom and right
     
+    dest.reset();
     //dest.create(src.width()+9, src.height()+9, 32);
     dest.create(src.width(), src.height(), 32);
     dest.setAlphaBuffer(true);

@@ -70,6 +70,15 @@ private:
 
     QComboBox            *m_borderType;
     
+    QColor                m_solidColor;
+    QColor                m_niepceBorderColor;
+    QColor                m_niepceLineColor;
+    QColor                m_bevelUpperLeftColor; 
+    QColor                m_bevelLowerRightColor;
+    QColor                m_liquidBackgroundColor;
+    QColor                m_liquidForegroundColor;
+    QColor                m_roundCornerBackgroundColor;
+    
     KIntNumInput         *m_borderWidth;
     
     KColorButton         *m_foregroundColorButton;
@@ -99,6 +108,8 @@ private slots:
     void slotOk();
     void slotUser1();
     void slotBorderTypeChanged(int borderType);
+    void slotColorForegroundChanged(const QColor &color);
+    void slotColorBackgroundChanged(const QColor &color);
     
 };
 
