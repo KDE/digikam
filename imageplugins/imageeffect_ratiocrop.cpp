@@ -250,12 +250,9 @@ void ImageEffect_RatioCrop::slotHeightChanged(int h)
     m_imageSelectionWidget->setRegionSelection(currentPos);
 }
 
-void ImageEffect_RatioCrop::slotOrientChanged(int o)
+void ImageEffect_RatioCrop::slotOrientChanged(int)
 {
-    if ( o )
-       slotWidthChanged(m_widthInput->value());    // Landscape.
-    else
-       slotHeightChanged(m_heightInput->value());  // Portrait.    
+    slotWidthChanged(m_widthInput->value());    // Landscape.
 }
 
 void ImageEffect_RatioCrop::slotRatioChanged(void)

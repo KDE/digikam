@@ -57,11 +57,11 @@ private:
     
     enum RatioAspect           // Standard photograph paper ratio.
     {
-    RATIO03X04 = 0,            //  3 x  4
-    RATIO02x03,                //  2 x  3
-    RATIO05x07,                //  5 x  7
-    RATIO04X05,                //  4 x  5
-    RATIO07x10,                //  7 x 10
+    RATIO03X04 = 0,            // 3:4
+    RATIO02x03,                // 2:3
+    RATIO05x07,                // 5:7
+    RATIO04X05,                // 4:5
+    RATIO07x10,                // 7:10
     };
     
 private slots:
@@ -70,7 +70,7 @@ private slots:
     void slotOk();
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
-    void slotOrientChanged(int o);
+    void slotOrientChanged(int);
     void slotRatioChanged(void);
     void slotSelectionChanged(QRect rect);
 };
