@@ -28,6 +28,8 @@
 #include <qpainter.h>
 #include <qpen.h>
 
+#include <cmath>
+
 // KDE includes.
 
 #include <kdebug.h>
