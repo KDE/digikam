@@ -174,6 +174,10 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
                        "image file date and time"
                     << endl;
     }
+    else
+    {
+        AlbumManager::instance()->refreshItemHandler( _url );
+    }
 }
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )

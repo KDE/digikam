@@ -39,6 +39,7 @@
 #include <qpopupmenu.h>
 #include <qdatetime.h>
 #include <qfileinfo.h>
+#include <qfile.h>
 #include <qguardedptr.h>
 #include <qdragobject.h>
 #include <qcursor.h>
@@ -80,6 +81,13 @@
 
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}
 
 // Local includes.
 
@@ -1493,6 +1501,24 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
     if (!d->currentAlbum || urlList.empty())
         return;
 
+    // we do two things here:
+    // 1. refresh the timestamp
+    // 2. refresh the thumbnails
+    
+    for (KURL::List::const_iterator it = urlList.begin();
+         it != urlList.end(); ++it)
+    {
+        AlbumIconItem* iconItem = findItem((*it).url());
+        if (!iconItem)
+            continue;
+
+        struct stat st;
+        if (::stat(QFile::encodeName((*it).path()), &st) == 0)
+        {
+            iconItem->time_ = st.st_mtime;
+        }
+    }
+    
     if (d->thumbJob.isNull())
     {
         d->thumbJob =
@@ -1515,6 +1541,9 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
     {
         d->thumbJob->addItems(urlList);
     }
+
+    // trigger a delayed update, in case we need to resort items
+    triggerUpdate();
 }
 
 void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
