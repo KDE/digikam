@@ -1287,15 +1287,16 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 
     ListItem* item = itemAt(e->pos());
 
-    if( e->state() == NoButton )
+    if ( e->state() == NoButton )
     {
-        if(KGlobalSettings::changeCursorOverIcon())
+        if (KGlobalSettings::changeCursorOverIcon())
         {
-            if(item)
+            if (item)
                 setCursor(KCursor::handCursor());
             else
                 unsetCursor();
         }
+        dragItem_ = 0;
         return;
     }
 
