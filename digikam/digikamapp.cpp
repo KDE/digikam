@@ -129,6 +129,11 @@ const QPtrList<KAction>& DigikamApp::menuBatchActions()
     return m_kipiBatchActions;
 }
 
+const QPtrList<KAction>& DigikamApp::menuAlbumActions()
+{
+    return m_kipiAlbumActions;
+}
+
 bool DigikamApp::queryClose()
 {
     return true;
@@ -525,12 +530,14 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList( QString::fromLatin1("image_actions") );
     unplugActionList( QString::fromLatin1("tool_actions") );
     unplugActionList( QString::fromLatin1("batch_actions") );
+    unplugActionList( QString::fromLatin1("album_actions") );
     
     m_kipiImageActions.clear();
     m_kipiFileActionsExport.clear();
     m_kipiFileActionsImport.clear();
     m_kipiToolsActions.clear();
     m_kipiBatchActions.clear();
+    m_kipiAlbumActions.clear();
        
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
@@ -558,6 +565,9 @@ void DigikamApp::slotKipiPluginPlug()
 
         else if ( plugin->category() == KIPI::BATCHPLUGIN )
             popup = &m_kipiBatchActions;
+        
+        else if ( plugin->category() == KIPI::COLLECTIONSPLUGIN )
+            popup = &m_kipiAlbumActions;
 
         if ( popup ) 
             {
@@ -583,6 +593,7 @@ void DigikamApp::slotKipiPluginPlug()
     plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
     plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
     plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
+    plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
 }
 
     

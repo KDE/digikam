@@ -10,9 +10,9 @@
    <Action name="album_addImages" />
    <Action name="album_propsEdit" />
    <Separator/>
-      <DefineGroup name="album_plugins_merge" />
       <ActionList name="file_actions_import"/>
       <ActionList name="file_actions_export"/>
+      <ActionList name="album_actions"/>
    <Separator/>
    <Action name="album_remove" />
    <Action name="album_delete" />
@@ -25,9 +25,7 @@
    <Action name="image_comments" />
    <Action name="image_exif" />
    <Action name="image_properties" />
-   <DefineGroup name="image_plugins_merge" />
    <Separator />
-      <DefineGroup name="image_transform_plugins_merge" />
       <ActionList name="image_actions"/>  
    <Separator />
    <Action name="image_rename" />

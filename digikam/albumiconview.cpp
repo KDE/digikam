@@ -446,7 +446,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertItem(i18n("Properties"), 14);
     popmenu.insertSeparator();
 
-    // Merge in the plugin actions ----------------------------
+    // Merge in the KIPI plugins actions ----------------------------
 
     const QPtrList<KAction>& ImageActions = DigikamApp::getinstance()->menuImageActions();
     

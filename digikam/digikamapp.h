@@ -74,8 +74,10 @@ public:
     
     static DigikamApp* getinstance();
 
+    // KIPI Actions collections access.
     const QPtrList<KAction>& menuImageActions();
     const QPtrList<KAction>& menuBatchActions();
+    const QPtrList<KAction>& menuAlbumActions();
 
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);
@@ -95,6 +97,7 @@ private:
     static DigikamApp     *m_instance;
     Digikam::AlbumManager *mAlbumManager;
     
+    // For KIPI plugins support 
     KIPI::PluginLoader    *KipiPluginLoader_;
     DigikamKipiInterface  *KipiInterface_;
     QPtrList<KAction>      m_kipiFileActionsExport;
@@ -102,6 +105,7 @@ private:
     QPtrList<KAction>      m_kipiImageActions;
     QPtrList<KAction>      m_kipiToolsActions;
     QPtrList<KAction>      m_kipiBatchActions;
+    QPtrList<KAction>      m_kipiAlbumActions;
      
     KConfig               *m_config;    
     Setup                 *m_setup;

@@ -532,26 +532,44 @@ void AlbumFolderView::slot_rightButtonClicked(QListViewItem* item,
      popmenu.insertItem(SmallIcon("edittrash"),
                         i18n("Delete Album from HardDisk"), 11);
 
-     // Added KIPI Batch processes plugins Actions
+     // Added KIPI Albums plugins Actions
                              
      KAction *action;
-     KActionMenu* menu = new KActionMenu(i18n("Batch processes"));  
+     const QPtrList<KAction>& AlbumActions = DigikamApp::getinstance()->menuAlbumActions();
+     QPtrListIterator<KAction> it3(AlbumActions);
+     bool count = 0;
+    
+     while ( (action = it3.current()) != 0 ) 
+        {
+        action->plug(&popmenu);
+        ++it3;
+        count = 1;
+        }
+
+     if (count != 0)
+        popmenu.insertSeparator();
+     
+     // Added KIPI Batch processes plugins Actions
+     
+     KActionMenu* menuKIPIBatch = new KActionMenu(i18n("Batch processes"));  
      const QPtrList<KAction>& BatchActions = DigikamApp::getinstance()->menuBatchActions();
      QPtrListIterator<KAction> it2(BatchActions);
-     bool count =0;
+     count = 0;
     
      while ( (action = it2.current()) != 0 ) 
         {
-        menu->insert(action);
+        menuKIPIBatch->insert(action);
         ++it2;
         count = 1;
         }
 
      if (count != 0)
         {
-        menu->plug(&popmenu);
+        menuKIPIBatch->plug(&popmenu);
         }
-                                   
+        
+     // Checking Digikam standard actions for Albums.
+     
      int id = popmenu.exec(QCursor::pos());
 
      switch(id) {
