@@ -27,6 +27,9 @@
 #include <kdialogbase.h>
 
 class QPushButton;
+class QCheckBox;
+
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -48,17 +51,30 @@ public:
 protected:
 
     void closeEvent(QCloseEvent *e);
+   
     
 private:
 
     QWidget      *m_parent;
     QPushButton  *m_helpButton;
     
+    KIntNumInput *m_radiusInput;
+    KIntNumInput *m_blackLevelInput;
+    KIntNumInput *m_whiteLevelInput;
+    
+    QCheckBox    *m_useAdaptativeMethod;
+    QCheckBox    *m_useRecursiveMethod;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    
+    void despeckle(uint* data, int w, int h, int despeckle_radius, 
+                   int black_level, int white_level, 
+                   bool adaptativeFilter, bool recursiveFilter);
     
 private slots:
 
     void slotHelp();
+    void slotUser1();
     void slotEffect();
     void slotOk();
 };
