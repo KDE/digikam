@@ -56,7 +56,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent)
        for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
           {
           KService::Ptr service = *iter;
-          imagePluginsList2Load.append(service->name());
+          imagePluginsList2Load.append(service->library());
           }
        }
     else
@@ -75,7 +75,7 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
         KService::Ptr service = *iter;
         Digikam::ImagePlugin *plugin;
 
-        if(!list.contains(service->name()) && service->name() != "ImagePlugin_Core")
+        if(!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
             {
             if((plugin = pluginIsLoaded(service->name())) != NULL)
                 m_pluginList.remove(plugin);

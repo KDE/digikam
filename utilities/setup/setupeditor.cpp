@@ -96,7 +96,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
    m_pluginList->addColumn( i18n( "Name" ) );
    m_pluginList->addColumn( i18n( "Description" ) );
-   m_pluginList->setResizeMode( QListView::LastColumn );
+   m_pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
    m_pluginList->setAllColumnsShowFocus( true );
    QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
                                        "which must be enabled/disabled for the future "
@@ -124,8 +124,9 @@ void SetupEditor::initImagePluginsList()
     for(iter = offers.begin(); iter != offers.end(); ++iter)
         {
         KService::Ptr service = *iter;
-        m_availableImagePluginList.append(service->name());
-        m_availableImagePluginList.append(service->comment());
+        m_availableImagePluginList.append(service->name());      // Plugin name translated.
+        m_availableImagePluginList.append(service->comment());   // Plugin comments translated.
+        m_availableImagePluginList.append(service->library());   // Plugin system library name.
         }
 }
 
@@ -133,21 +134,29 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
     m_pluginsNumber->setText(i18n("Plugins found: %1")
-                             .arg(lista.count()/2));
+                             .arg(lista.count()/3));
     
-    while(  it != lista.end() )
+    while( it != lista.end() )
         {
-        QCheckListItem *item = new QCheckListItem (m_pluginList, *it, QCheckListItem::CheckBox);
-        item->setText(0, *it);
+        QString pluginName = *it;
+        it++;
+        QString pluginComments = *it;
+        it++;
+        QString libraryName = *it;
+        QCheckListItem *item = new QCheckListItem (m_pluginList, pluginName, QCheckListItem::CheckBox);
         
-        if (listl.contains(*it)) 
+        if (listl.contains(libraryName)) 
            item->setOn(true);
         
-        if (*it == "ImagePlugin_Core")  // Always enable the Digikam core plugin.
+        if (libraryName == "digikamimageplugin_core")  // Always enable the Digikam core plugin.
+           {
+           item->setOn(true);
            item->setEnabled(false);
+           }
         
-        it++;
-        item->setText(1, *it);
+        item->setText(0, pluginName);        // Added plugin name.
+        item->setText(1, pluginComments);    // Added plugin comments.
+        item->setText(2, libraryName);       // Added library plugin name.
         it++;
         }
 }
@@ -160,7 +169,7 @@ QStringList SetupEditor::getImagePluginsListEnable()
     while( item )
         {
         if (item->isOn())
-        imagePluginList.append(item->text(0));
+        imagePluginList.append(item->text(2));        // Get the plugin library name.
         item = (QCheckListItem*)item->nextSibling();
         }
 
