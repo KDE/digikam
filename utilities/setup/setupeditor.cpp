@@ -59,23 +59,21 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_JPEGcompression->setLabel( i18n("&JPEG quality:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
-                                            "<b>1</b>: very low quality (very high compression and small file size)<p>"
-                                            "<b>25</b>: low quality <p>"
+                                            "<b>1</b>: low quality (high compression and small file size)<p>"
                                             "<b>50</b>: medium quality<p>"
-                                            "<b>75</b>: high quality (default)<p>"
-                                            "<b>100</b>: very high quality (no compression and large file size)<p>"
-                                            "<b>Note: JPEG is a lossless image compression format!</b>"));
+                                            "<b>100</b>: high quality (no compression and large file size)<p>"
+                                            "<b>Note: JPEG is a lossless image compression format! Default quality is 75.</b>"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
    m_PNGcompression->setRange(1, 9, 1, true );
    m_PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_PNGcompression, i18n("<p>The compression value for PNG images:<p>"
-                                           "<b>1</b>: no compression (large file size but "
-                                           "short decompression duration - default)<p>"
+                                           "<b>1</b>: low compression (large file size but "
+                                           "short compression duration - default)<p>"
                                            "<b>5</b>: medium compression<p>"
-                                           "<b>9</b>: very high compression (small file size but "
-                                           "long decompression duration)<p>"
+                                           "<b>9</b>: high compression (small file size but "
+                                           "long compression duration)<p>"
                                            "<b>Note: PNG is always a lossless image compression format!</b>"));
 
    m_TIFFcompression = new QCheckBox(i18n("Compress TIFF files"),
