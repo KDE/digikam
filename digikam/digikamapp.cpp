@@ -553,6 +553,9 @@ void DigikamApp::loadPlugins()
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin(); it != list.end(); ++it ) 
         {
         KIPI::Plugin* plugin = (*it)->plugin;
+        if ( !plugin || !(*it)->shouldLoad )
+            continue;
+
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
         
