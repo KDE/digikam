@@ -45,7 +45,6 @@
 #include <kmenubar.h>
 #include <kimageio.h>
 #include <kaccel.h>
-#include <kpropertiesdialog.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -76,6 +75,7 @@
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
 #include "imageprint.h"
+#include "imageproperties.h"
 #include "imlibinterface.h"
 #include "splashscreen.h"
 #include "setup.h"
@@ -557,7 +557,20 @@ void ShowFoto::slotFileProperties()
     Digikam::ThumbBarItem* curr = m_bar->currentItem();
     
     if (curr)
-        (void) new KPropertiesDialog( curr->url(), this, "props dialog", true );
+    {
+        if (curr->url().isValid())
+        {
+            QRect sel = m_canvas->getSelectedArea();
+            uint* data   = Digikam::ImlibInterface::instance()->getData();
+            int   width  = Digikam::ImlibInterface::instance()->origWidth();
+            int   height = Digikam::ImlibInterface::instance()->origHeight();
+                
+            ImageProperties properties(this, curr->url(), 
+                                    sel.isNull() ? 0 : &sel,
+                                    data, width, height);
+            properties.exec();
+        }
+    }
 }
 
 void ShowFoto::slotFirst()
