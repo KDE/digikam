@@ -239,6 +239,9 @@ void ImageEffect_FilmGrain::slotEffect()
 
 void ImageEffect_FilmGrain::slotOk()
 {
+    m_sensibilitySlider->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );

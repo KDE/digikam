@@ -241,6 +241,10 @@ void ImageEffect_Emboss::slotEffect()
 
 void ImageEffect_Emboss::slotOk()
 {
+    m_depthInput->setEnabled(false);
+    m_depthSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );

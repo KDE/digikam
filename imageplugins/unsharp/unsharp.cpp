@@ -317,6 +317,14 @@ void UnsharpDialog::slotEffect()
 
 void UnsharpDialog::slotOk()
 {
+    m_radiusInput->setEnabled(false);
+    m_radiusSlider->setEnabled(false);
+    m_amountInput->setEnabled(false);
+    m_amountSlider->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_thresholdSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );

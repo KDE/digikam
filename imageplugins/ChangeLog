@@ -1,5 +1,7 @@
 v0.7.1 - 12/xx/04
 ----------------------------------------------------------------------------
+    * All plugins: disable filter setup widgets when Ok button is pressed.
+    * Fixed 'Reset Values' dialog buttons effect with ImagePreviewWidget instance.
     * Update and fix handbooks by Göran Jartin.
 
 v0.7.0 - 11/08/04

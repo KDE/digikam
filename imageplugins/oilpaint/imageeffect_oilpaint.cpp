@@ -271,6 +271,12 @@ void ImageEffect_OilPaint::slotEffect()
 
 void ImageEffect_OilPaint::slotOk()
 {
+    m_brushSizeInput->setEnabled(false);
+    m_brushSizeSlider->setEnabled(false);
+    m_smoothInput->setEnabled(false);
+    m_smoothSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );

@@ -347,8 +347,16 @@ void ImageEffect_RainDrop::slotEffect()
 
 void ImageEffect_RainDrop::slotOk()
 {
+    m_dropSlider->setEnabled(false);
+    m_dropSpinBox->setEnabled(false);
+    m_amountSlider->setEnabled(false);
+    m_amountSpinBox->setEnabled(false);
+    m_coeffSlider->setEnabled(false);
+    m_coeffSpinBox->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
+    
     m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 

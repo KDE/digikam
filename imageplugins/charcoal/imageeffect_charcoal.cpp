@@ -261,6 +261,12 @@ void ImageEffect_Charcoal::slotEffect()
 
 void ImageEffect_Charcoal::slotOk()
 {
+    m_pencilInput->setEnabled(false);
+    m_pencilSlider->setEnabled(false);
+    m_smoothInput->setEnabled(false);
+    m_smoothSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );

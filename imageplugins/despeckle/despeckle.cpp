@@ -334,6 +334,16 @@ void DespeckleDialog::slotEffect()
 
 void DespeckleDialog::slotOk()
 {
+    m_radiusInput->setEnabled(false);
+    m_radiusSlider->setEnabled(false);
+    m_blackLevelInput->setEnabled(false);
+    m_blackLevelSlider->setEnabled(false);
+    m_whiteLevelInput->setEnabled(false);
+    m_whiteLevelSlider->setEnabled(false);
+    m_useAdaptativeMethod->setEnabled(false);
+    m_useRecursiveMethod->setEnabled(false);
+    m_imagePreviewWidget->setEnabled(false);
+    
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
