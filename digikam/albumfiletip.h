@@ -46,6 +46,7 @@ public:
 protected:
 
     bool event(QEvent *e);
+    void resizeEvent(QResizeEvent* e);
     void drawContents(QPainter *p);
 
 private:

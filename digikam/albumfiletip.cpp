@@ -90,6 +90,9 @@ void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
 
 void AlbumFileTip::reposition()
 {
+    if (!m_iconItem)
+        return;
+    
     QRect rect = m_iconItem->rect();
     QPoint off = m_view->mapToGlobal( m_view->contentsToViewport( QPoint( 0, 0 ) ) );
     rect.moveBy( off.x(), off.y() );
@@ -129,7 +132,8 @@ void AlbumFileTip::reposition()
         pos.setY( rect.top() - height() );
         m_corner += 2;
     }
-    else pos.setY( rect.bottom() );
+    else
+        pos.setY( rect.bottom() + 5 );
 
     move( pos );
     
@@ -221,6 +225,12 @@ bool AlbumFileTip::event(QEvent *e)
         break;
     }
     return QFrame::event(e);
+}
+
+void AlbumFileTip::resizeEvent(QResizeEvent* e)
+{
+    QFrame::resizeEvent(e);
+    reposition();
 }
 
 void AlbumFileTip::drawContents(QPainter *p)
