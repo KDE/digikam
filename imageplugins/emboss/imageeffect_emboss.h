@@ -33,8 +33,8 @@
 
 class QPushButton;
 class QSlider;
+class QSpinBox;
 
-class KDoubleSpinBox;
 class KProgress;
 
 namespace Digikam
@@ -60,33 +60,25 @@ protected:
     
 private:
 
-    bool             m_cancel;
+    bool         m_cancel;
 
-    QWidget         *m_parent;
+    QWidget     *m_parent;
     
-    QPushButton     *m_helpButton;
+    QPushButton *m_helpButton;
     
-    QSlider         *m_radiusSlider;
-    QSlider         *m_sigmaSlider;
+    QSlider     *m_depthSlider;
     
-    KDoubleSpinBox  *m_radiusInput;
-    KDoubleSpinBox  *m_sigmaInput;
+    QSpinBox    *m_depthInput;
     
-    KProgress    *m_progressBar;
+    KProgress   *m_progressBar;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
 
-    void Emboss(uint* data, int w, int h, float Depth);
+    void Emboss(uint* data, int Width, int Height, int d);
     inline int Lim_Max (int Now, int Up, int Max);
     inline uchar LimitValues (int ColorValue);
-    
-    /*
-    QImage Emboss(QImage &image, double radius, double sigma);    
-    int getOptimalKernelWidth(double radius, double sigma);
-    bool convolveImage(QImage *image, QImage *dest, const unsigned int order, const double *kernel);
-    */
     
 private slots:
 
@@ -95,12 +87,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
-    
-    void slotSliderRadiusChanged(int v);
-    void slotSpinBoxRadiusChanged(double v);
-    void slotSliderSigmaChanged(int v);
-    void slotSpinBoxSigmaChanged(double v);
-    
+   
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin
