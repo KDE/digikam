@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at free.fr>
  * Date   : 2003-02-03
- * Description : Digikam setup dialog.
+ * Description : digiKam setup dialog.
  * 
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
  *

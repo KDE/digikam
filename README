@@ -7,25 +7,25 @@ See AUTHORS file for details.
 
 About :
 ----------------------------------------------------------------------
- Digikam is an easy to use and powerful digital photo management
+ digiKam is an easy to use and powerful digital photo management
  application, which makes importing, organizing and manipulating
  digital photos a "snap".  An easy to use interface is provided
  to connect to your digital camera, preview the images and download
  and/or delete them.
 
- Digikams buildin image editor makes the common photo correction
+ digiKam buildin image editor makes the common photo correction
  a simple task.  The image editor is extensible via plugins.
  The digikamimageplugins package contains many useful image editor
  plugins.
 
- Digikam can also make use of the KIPI image handling plugins to
+ digiKam can also make use of the KIPI image handling plugins to
  extend it's capabilities even further for photo manipulations,
  import and export, etc.  The kipi-plugins package contains many
  very useful extentions.
 
  Homepage: http://digikam.sourceforge.net/
 
-digikam is based in part on the work of the Independent JPEG Group.
+ digiKam is based in part on the work of the Independent JPEG Group.
 
 
 Contact :
@@ -36,12 +36,12 @@ digikam-users@list.sourceforge.net
 
 
 IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
-system who can be contacted by the standard Kde help menu of Digikam. 
+system who can be contacted by the standard Kde help menu of digiKam. 
 A mail will be automaticly sent to the digikam development mailing list.
 There is no need to contact directly the digikam mailing list for a bug report 
 or a devel wish.
 
-The current Digikam bugs and devel wish reported to the Kde bugs report can be see 
+The current digiKam bugs and devel wish reported to the Kde bugs report can be see 
 at this url :
 
 http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED

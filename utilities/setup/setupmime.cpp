@@ -55,7 +55,7 @@ SetupMime::SetupMime(QWidget* parent )
    QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
                                                 "to be displayed in Albums (such as JPEG or TIFF); "
                                                 "when these files are double-clicked on "
-                                                "they will be opened with the Digikam ImageViewer."));
+                                                "they will be opened with the digiKam Image Editor."));
    imageFileFilterLabel->setBuddy(m_imageFileFilterEdit);
    layout->addWidget(imageFileFilterBox);
 

@@ -370,7 +370,7 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     if (!promptUserSave())
         return;
     
-    setCaption(i18n("Digikam Image Editor - Album \"%1\"").arg(caption));
+    setCaption(i18n("digiKam Image Editor - Album \"%1\"").arg(caption));
 
     m_view        = view;
     m_urlList     = urlList;
@@ -525,7 +525,7 @@ void ImageWindow::slotLoadCurrent()
     }
 
     // Disable some menu actions if the current root image URL
-    // isn't include in the Digikam Albums library database.
+    // isn't include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KURL u(m_urlCurrent.directory());
@@ -782,7 +782,7 @@ void ImageWindow::slotFilePrint()
 
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );
-    printer.setCreator( "Digikam-ImageEditor");
+    printer.setCreator( "digiKam-ImageEditor");
 #if KDE_IS_VERSION(3,2,0)
     printer.setUsePrinterResolution(true);
 #endif

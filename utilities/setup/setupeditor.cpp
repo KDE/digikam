@@ -172,7 +172,7 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
         if (listl.contains(libraryName))
            item->setOn(true);
 
-        if (libraryName == "digikamimageplugin_core")  // Always enable the Digikam core plugin.
+        if (libraryName == "digikamimageplugin_core")  // Always enable the digiKam core plugin.
            {
            item->setOn(true);
            item->setEnabled(false);

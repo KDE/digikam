@@ -71,7 +71,7 @@ SetupCollections::SetupCollections(QWidget* parent )
    albumCollectionBox_ = new QListBox(this);
    QWhatsThis::add( albumCollectionBox_, i18n("<p>You can add or remove Album "
                                               "collection types here to improve how "
-                                              "your Albums are sorted in Digikam."));
+                                              "your Albums are sorted in digiKam."));
 
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
 
