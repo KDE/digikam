@@ -85,7 +85,14 @@ static int listviewCmpItems(const void *n1, const void *n2 )
 
 ListView::ListView(QWidget* parent, const char* name,
                    WFlags f)
-    : QScrollView(parent, name, f | WStaticContents | WNoAutoErase)
+    : QScrollView(parent, name, f | WStaticContents |
+#if QT_VERSION < 0x030200
+                  WResizeNoErase | WRepaintNoErase
+#else
+                  WNoAutoErase
+#endif
+        )
+    
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
     viewport()->setBackgroundMode(Qt::NoBackground);
