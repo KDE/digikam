@@ -54,11 +54,12 @@ private:
     QRadioButton *largeIconButton_;
     QRadioButton *hugeIconButton_;
 
-    QCheckBox    *iconShowMimeBox_;
+    QCheckBox    *iconShowNameBox_;
     QCheckBox    *iconShowSizeBox_;
     QCheckBox    *iconShowDateBox_;
     QCheckBox    *iconShowResolutionBox_;
     QCheckBox    *iconShowCommentsBox_;
+    QCheckBox    *iconShowTagsBox_;
     QCheckBox    *iconShowFileCommentsBox_;
     
 private slots:

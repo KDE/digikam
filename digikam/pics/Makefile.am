@@ -4,7 +4,8 @@ digikamimagebrokenpic_DATA = image_broken.png
 EXTRA_DIST = hi16-app-digikam.png hi22-app-digikam.png hi32-app-digikam.png hi48-app-digikam.png \
              lo16-app-digikam.png lo22-app-digikam.png lo32-app-digikam.png lo48-app-digikam.png \
              digitalcam.png albumfoldernew.png importfolders2albums.png exifinfo.png \
-             addimagefolder.png albumfoldercomment.png imagecomment.png editimage.png
+             addimagefolder.png albumfoldercomment.png imagecomment.png editimage.png \
+	     tag.png tag-folder.png tag-events.png tag-people.png tag-places.png
 
 install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
@@ -32,6 +33,11 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/albumfoldercomment.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/albumfoldercomment.png
 	$(INSTALL_DATA) $(srcdir)/imagecomment.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/imagecomment.png
 	$(INSTALL_DATA) $(srcdir)/editimage.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/editimage.png
+	$(INSTALL_DATA) $(srcdir)/tag.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag.png
+	$(INSTALL_DATA) $(srcdir)/tag-folder.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-folder.png
+	$(INSTALL_DATA) $(srcdir)/tag-events.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-events.png
+	$(INSTALL_DATA) $(srcdir)/tag-places.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-places.png
+	$(INSTALL_DATA) $(srcdir)/tag-people.png $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-people.png
 
 uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/16x16/apps/digikam.png
@@ -50,4 +56,9 @@ uninstall-local:
 	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/albumfoldercomment.png
 	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/imagecomment.png
 	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/editimage.png
+	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag.png
+	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-folder.png
+	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-events.png
+	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-places.png
+	-rm -f $(kde_datadir)/digikam/icons/hicolor/32x32/actions/tag-people.png
 

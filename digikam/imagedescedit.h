@@ -2,10 +2,21 @@
 #define IMAGEDESCEDIT_H
 
 #include <kdialogbase.h>
-#include <qstring.h>
+#include <qguardedptr.h>
+#include <qpixmap.h>
+
+#include "thumbnailjob.h"
 
 class QLabel;
 class QTextEdit;
+class QListView;
+class QPixmap;
+class QCheckListItem;
+class KFileMetaInfo;
+class AlbumIconView;
+class AlbumIconItem;
+class AlbumLister;
+class TAlbum;
 
 class ImageDescEdit : public KDialogBase
 {
@@ -13,25 +24,37 @@ class ImageDescEdit : public KDialogBase
 
 public:
 
-    ImageDescEdit(const QString& itemName,
-                  const QString& itemComments,
-                  QWidget *parent=0);
+    ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem);
     ~ImageDescEdit();
 
-    static bool editComments(const QString& itemName,
-                             QString& itemComments,
-                             QWidget *parent=0);
+    static bool editDescription(AlbumIconView* view, AlbumIconItem* currItem);
 
 private:
 
-    QLabel* mNameLabel;
-    QTextEdit* mCommentsEdit;
-    QString mItemName;
+    AlbumIconView *m_view;
+    AlbumIconItem *m_currItem;
+    AlbumLister   *m_lister;
+    QLabel        *m_thumbLabel;
+    QLabel        *m_nameLabel;
+    QTextEdit     *m_commentsEdit;
+    QListView     *m_tagsView;
+    bool           m_modified;
 
+    QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;
+
+    void populateTags();
+    void populateTags(QCheckListItem* parItem, TAlbum* parAlbum);
+    
 private slots:
 
-    void slot_textChanged();
-
+    void slotItemChanged();
+    void slotModified();
+    void slotUser1();
+    void slotUser2();
+    void slotApply();
+    void slotOk();
+    void slotGotThumbnail(const KFileItem*, const QPixmap& pix,
+                          const KFileMetaInfo*);    
 };
 
 #endif

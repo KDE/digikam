@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="1" name="digikam" >
+<kpartgui version="2" name="digikam" >
  
  <MenuBar>
   
@@ -25,6 +25,13 @@
      <Action name="album_delete" />
    <Separator/>
      <Action name="app_exit" />
+  </Menu>
+
+  <Menu name="Tag" >
+   <text>&amp;Tag</text>
+     <Action name="tag_new" />
+     <Action name="tag_edit" />
+     <Action name="tag_delete" />
   </Menu>
   
   <Menu name="Image" >

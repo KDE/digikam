@@ -104,8 +104,11 @@ SetupGeneral::SetupGeneral(QWidget* parent )
                                             i18n("Extra Information in Thumbnails View"),
                                             parent);
 
-   iconShowMimeBox_ = new QCheckBox(iconTextGroup);
-   iconShowMimeBox_->setText(i18n("Show file type (e.g. image/jpeg)"));
+   iconShowNameBox_ = new QCheckBox(iconTextGroup);
+   iconShowNameBox_->setText(i18n("Show file name"));
+
+   iconShowTagsBox_ = new QCheckBox(iconTextGroup);
+   iconShowTagsBox_->setText(i18n("Show file tags"));
 
    iconShowSizeBox_ = new QCheckBox(iconTextGroup);
    iconShowSizeBox_->setText(i18n("Show file size"));
@@ -155,7 +158,8 @@ void SetupGeneral::applySettings()
         iconSize = ThumbnailSize::Huge;
     
     settings->setDefaultIconSize(iconSize);
-    settings->setIconShowMime(iconShowMimeBox_->isChecked());
+    settings->setIconShowName(iconShowNameBox_->isChecked());
+    settings->setIconShowTags(iconShowTagsBox_->isChecked());
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowResolution(iconShowResolutionBox_->isChecked());
@@ -191,7 +195,8 @@ void SetupGeneral::readSettings()
         break;
     }
 
-    iconShowMimeBox_->setChecked(settings->getIconShowMime());
+    iconShowNameBox_->setChecked(settings->getIconShowName());
+    iconShowTagsBox_->setChecked(settings->getIconShowTags());
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowResolutionBox_->setChecked(settings->getIconShowResolution());

@@ -50,7 +50,6 @@
 #include <kio/previewjob.h>
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <kdirlister.h>
 #include <kurl.h>
 #include <kurldrag.h>
 #include <klocale.h>
@@ -68,17 +67,24 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
+#include <cstdio>
+
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
 #endif
 
 // Local includes.
 
-#include "albuminfo.h"
+#include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "thumbnailjob.h"
-#include "digikamio.h"
+#include "albumfilecopymove.h"
+#include "albumlister.h"
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -87,6 +93,7 @@
 
 #include "cameratype.h"
 #include "cameradragobject.h"
+#include "dragobjects.h"
 
 #include "albumiconitem.h"
 #include "digikamapp.h"
@@ -102,8 +109,8 @@ public:
         albumSettings = 0;
     }
     
-    KDirLister          *imageLister;
-    Digikam::AlbumInfo  *currentAlbum;
+    AlbumLister         *imageLister;
+    Album               *currentAlbum;
     const AlbumSettings *albumSettings;
     QGuardedPtr<Digikam::ThumbnailJob> thumbJob;
 
@@ -113,8 +120,22 @@ public:
     QString albumDate;
     QString albumComments;
 
-    QString itemRenamedOld;
-    QString itemRenamedNew;
+    QRect itemRect;
+    QRect itemDateRect;
+    QRect itemPixmapRect;
+    QRect itemNameRect;
+    QRect itemCommentsRect;
+    QRect itemFileCommentsRect;
+    QRect itemResolutionRect;
+    QRect itemSizeRect;
+    QRect itemTagRect;
+
+    QPixmap itemRegPixmap;
+    QPixmap itemSelPixmap;
+
+    QFont fnReg;
+    QFont fnCom;
+    QFont fnXtra;
 };
 
 
@@ -123,26 +144,26 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 {
     d = new AlbumIconViewPrivate;
     d->init();
-    d->imageLister = new KDirLister();
+    d->imageLister = new AlbumLister();
 
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
     // -- ImageLister connections -------------------------------------
 
-    connect(d->imageLister, SIGNAL(newItems(const KFileItemList&)),
+    connect(d->imageLister, SIGNAL(signalNewItems(const KFileItemList&)),
             this, SLOT(slotImageListerNewItems(const KFileItemList&)));
 
-    connect(d->imageLister, SIGNAL(deleteItem(KFileItem*)),
+    connect(d->imageLister, SIGNAL(signalDeleteItem(KFileItem*)),
             this, SLOT(slotImageListerDeleteItem(KFileItem*)) );
 
-    connect(d->imageLister, SIGNAL(clear()),
+    connect(d->imageLister, SIGNAL(signalClear()),
             this, SLOT(slotImageListerClear()));
 
-    connect(d->imageLister, SIGNAL(completed()),
+    connect(d->imageLister, SIGNAL(signalCompleted()),
             this, SLOT(slotImageListerCompleted()));
 
-    connect(d->imageLister, SIGNAL(refreshItems(const KFileItemList&)),
+    connect(d->imageLister, SIGNAL(signalRefreshItems(const KFileItemList&)),
             this, SLOT(slotImageListerRefreshItems(const KFileItemList&)));
 
     // -- Icon connections --------------------------------------------
@@ -156,19 +177,22 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(this, SIGNAL(signalRightButtonClicked(ThumbItem *, const QPoint &)),
             this, SLOT(slotRightButtonClicked(ThumbItem *, const QPoint &)));
             
-    connect(this, SIGNAL(signalItemRenamed(ThumbItem *)),
-            this, SLOT(slotItemRenamed(ThumbItem *)));
-            
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
+
+    // -- Self connections ----------------------------------------------
+
+    connect(this, SIGNAL(contentsMoving(int, int)),
+            SLOT(slotContentsMoving(int, int)));
+
 }
 
 AlbumIconView::~AlbumIconView() 
 {
     if (!d->thumbJob.isNull()) 
-        {
+    {
         d->thumbJob->kill();
-        }
+    }
 
     if (!d->thumbJob.isNull())
         delete d->thumbJob;
@@ -179,7 +203,8 @@ AlbumIconView::~AlbumIconView()
 
 void AlbumIconView::applySettings(const AlbumSettings* settings)
 {
-    if (!settings) return;
+    if (!settings)
+        return;
     
     d->albumSettings = settings;
 
@@ -187,26 +212,24 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
                                   d->albumSettings->getMovieFileFilter() + " " +
                                   d->albumSettings->getAudioFileFilter() + " " +
                                   d->albumSettings->getRawFileFilter());
-    
-    ThumbnailSize thumbSize((ThumbnailSize::Size)
-                            d->albumSettings->getDefaultIconSize()); 
 
-    setThumbnailSize(thumbSize);
+    d->thumbSize = (ThumbnailSize::Size)d->albumSettings->getDefaultIconSize(); 
 
-    setUpdatesEnabled(false);
-    viewport()->setUpdatesEnabled(false);
+    updateItemRectsPixmap();
 
-    for (ThumbItem *it = firstItem(); it ; it=it->nextItem()) 
+    if (!d->thumbJob.isNull())
     {
-        AlbumIconItem *item = static_cast<AlbumIconItem *>(it);
-        item->updateExtraText();
-        item->calcRect();
+        d->thumbJob->kill();
     }
 
-    setUpdatesEnabled(true);
-    viewport()->setUpdatesEnabled(true);
+    d->imageLister->stop();
+    clear();
 
-    slotUpdate();
+    if (d->currentAlbum)
+    {
+        updateBanner();
+        d->imageLister->openAlbum(d->currentAlbum);
+    }
 }
 
 
@@ -217,54 +240,62 @@ void AlbumIconView::albumDescChanged()
 
 void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
-    if ( d->thumbSize != thumbSize) {
+    if ( d->thumbSize != thumbSize)
+    {
 
         if (!d->thumbJob.isNull())
+        {
             d->thumbJob->kill();
+        }
 
         d->imageLister->stop();
         clear();
-
+        
         d->thumbSize = thumbSize;
 
-        KURL url;
-        if (d->currentAlbum)
-            url = KURL(d->currentAlbum->getPath());
-
-        if (url.isValid())
-            d->imageLister->openURL(url);
+        updateItemRectsPixmap();
+        
+        d->imageLister->openAlbum(d->currentAlbum);
     }
 }
 
-void AlbumIconView::setAlbum(Digikam::AlbumInfo* album)
+void AlbumIconView::setAlbum(Album* album)
 {
     if (!album) 
-        {
+    {
         d->currentAlbum = 0;
         clear();
-        return;
-        }
+
+        d->imageLister->stop();
     
-    if (d->currentAlbum == album) return;
+        if (!d->thumbJob.isNull())
+        {
+            d->thumbJob->kill();
+        }
+        return;
+    }
+    
+    if (d->currentAlbum == album)
+        return;
 
     d->imageLister->stop();
     
     if (!d->thumbJob.isNull())
+    {
         d->thumbJob->kill();
+    }
     
     d->currentAlbum = album;
+    d->imageLister->openAlbum(d->currentAlbum); 
 
-    if (KURL(album->getPath()).isValid()) 
-        {
-        d->imageLister->openURL(KURL(album->getPath())); 
-        }
-
+    updateItemRectsPixmap();
     updateBanner();
 }
 
 void AlbumIconView::refreshIcon(AlbumIconItem* item)
 {
-    if (!item) return;
+    if (!item)
+        return;
 
     emit signalSelectionChanged();
 }
@@ -272,26 +303,15 @@ void AlbumIconView::refreshIcon(AlbumIconItem* item)
 
 void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 {
-    QPixmap thumbnail(d->thumbSize.size(), d->thumbSize.size());
-    QPainter painter(&thumbnail);
-    painter.fillRect(0, 0, d->thumbSize.size(),
-                     d->thumbSize.size(),
-                     QBrush(colorGroup().base()));
-    painter.setPen(Qt::black);
-    painter.drawRect(0, 0, d->thumbSize.size(), d->thumbSize.size());
-    painter.end();
-
     KFileItem* item;
 
-    for (KFileItemListIterator it(itemList);
-         (item = it.current()); ++it) {
+    for (KFileItemListIterator it(itemList); (item = it.current()); ++it)
+    {
+        if (item->isDir())
+            continue;
 
-        if (item->isDir()) continue;
-
-        AlbumIconItem* iconItem =         
-            new AlbumIconItem(this, item->url().filename(),
-                              thumbnail, d->thumbSize.size(),
-                              item);
+        AlbumIconItem* iconItem = new AlbumIconItem(this, item->url().filename(),
+                                                    item);
         item->setExtraData(this, iconItem);
     }
 
@@ -299,43 +319,62 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 
     slotUpdate();
 
-    KURL::List urlList;
-    
+    // create a new list with items sorted according to the view
+    KFileItemList fileList;
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
-        AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(it);
-        urlList.append(iconItem->fileItem()->url());
+        AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+        fileList.append(iconItem->fileItem());
     }
+    
+    if (d->thumbJob.isNull())
+    {
+        d->thumbJob = new Digikam::ThumbnailJob(fileList,
+                                                (int)d->thumbSize.size(),
+                                                showMetaInfo());
+        connect(d->thumbJob, 
+                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                                               const QPixmap&,
+                                               const KFileMetaInfo*)),
+                SLOT(slotGotThumbnail(const KFileItem*,
+                                      const QPixmap&,
+                                      const KFileMetaInfo*)));
+        connect(d->thumbJob,
+                SIGNAL(signalFailed(const KFileItem*)),
+                SLOT(slotFailedThumbnail(const KFileItem*)));
 
-    if (d->thumbJob.isNull()) {
-        d->thumbJob =
-            new Digikam::ThumbnailJob(urlList,
-                                      (int)d->thumbSize.size());
         connect(d->thumbJob,
-                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
-                
-        connect(d->thumbJob,
-                SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotFailedThumbnail(const KURL&)));
+                SIGNAL(signalCompleted()),
+                SLOT(slotFinishedThumbnail()));
     }
     else
-        d->thumbJob->addItems(urlList);
+    {
+        d->thumbJob->addItems(fileList);
+    }
     
     emit signalItemsAdded();
 }
 
 void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
 {
-    if (item->isDir()) return;
+    if (item->isDir())
+        return;
 
     AlbumIconItem* iconItem =
         static_cast<AlbumIconItem*>(item->extraData(this));
         
-    if (!iconItem) return;
+    if (!iconItem)
+        return;
 
-    if (d->currentAlbum)
-        d->currentAlbum->deleteItemComments(iconItem->text());
+    if (!d->thumbJob.isNull())
+        d->thumbJob->removeItem(item);
 
+    PAlbum* album = d->imageLister->findParentAlbum(item);
+    if (album)
+    {
+        AlbumManager::instance()->albumDB()->deleteItem(album,
+                                                        item->url().fileName());
+    }
+    
     delete iconItem;
     item->removeExtraData(this);
     rearrangeItems();
@@ -353,8 +392,7 @@ void AlbumIconView::slotImageListerCompleted()
 
 }
 
-void AlbumIconView::slotImageListerRefreshItems(const
-                                                 KFileItemList& itemList)
+void AlbumIconView::slotImageListerRefreshItems(const KFileItemList& itemList)
 {
     KFileItemListIterator iterator(itemList);
     KFileItem *fileItem;
@@ -366,11 +404,13 @@ void AlbumIconView::slotImageListerRefreshItems(const
         
         if (fileItem->isDir()) continue;
         
-        if (!fileItem->extraData(this)) {
+        if (!fileItem->extraData(this))
+        {
             // hey - a new item
             newItemList.append(fileItem);
         }
-        else {
+        else
+        {
             AlbumIconItem* iconItem =
                 static_cast<AlbumIconItem*>(fileItem->extraData(this));
             iconItem->setText(fileItem->text());
@@ -423,12 +463,12 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     int index = 100;
     
     for( iter = offers.begin(); iter != offers.end(); ++iter ) 
-        {
+    {
         ptr = *iter;
         openWithMenu->insertItem( ptr->pixmap(KIcon::Small),
                                   ptr->name(), index++);
         serviceVector.push_back(ptr);
-        }
+    }
     
     // --------------------------------------------------------
 
@@ -474,19 +514,19 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     count = 0;
     
     while ( (action = it2.current()) != 0 ) 
-        {
+    {
         menu->insert(action);
         ++it2;
         count = 1;
-        }
+    }
 
     // Don't insert a separator if we didn't plug in any actions
     
     if (count != 0)
-        {
+    {
         menu->plug(&popmenu);
         popmenu.insertSeparator();
-        }
+    }
 
     // --------------------------------------------------------
 
@@ -505,12 +545,12 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     }
 
     case 12: {
-        slot_editImageComments(iconItem);
+        slotEditImageComments(iconItem);
         break;
     }
 
     case 13: {
-        slot_showExifInfo(iconItem);
+        slotShowExifInfo(iconItem);
         break;
     }
 
@@ -525,7 +565,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     }
 
     case 16: {
-        slot_deleteSelectedItems();
+        slotDeleteSelectedItems();
         break;
     }
 
@@ -547,49 +587,24 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     delete exifOrientationMenu;
 }
 
-void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
+void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    ImageDescEdit descEdit(this, iconItem);
+    descEdit.exec();
 
-    if (!settings) return;
-
-    if (!iconItem || !d->currentAlbum) return;
-    
-    QString comments(d->currentAlbum->getItemComments(iconItem->text()));
-    
-    if (ImageDescEdit::editComments(iconItem->text(), comments)) {
-
-        d->currentAlbum->setItemComments(iconItem->text(), comments);
-        
-       // store as JPEG Exif comment
-        QString fileName(iconItem->fileItem()->url().path());
-        KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
-
-        if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
-        {
-            // set Jpeg comment
-            if (metaInfo.containsGroup("Jpeg EXIF Data"))
-            {
-                kdDebug() << "Contains JPEG Exif data, setting comment" << endl;
-                metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
-                metaInfo.applyChanges();
-            }
-
-            // set EXIF UserComment
-            KExifUtils::writeComment(fileName,comments);
-        }
-
-        int h = iconItem->height();
-        iconItem->updateExtraText();
-        iconItem->calcRect();
-        iconItem->repaint();
-        if (iconItem->height() != h)
-            rearrangeItems();
-
+    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    {
+        d->imageLister->stop();
+        clear();
+        d->imageLister->openAlbum(d->currentAlbum);
+    }
+    else
+    {
+        updateContents();
     }
 }
 
-void AlbumIconView::slot_showExifInfo(AlbumIconItem* item)
+void AlbumIconView::slotShowExifInfo(AlbumIconItem* item)
 {
     if ( !item ) return;
 
@@ -598,43 +613,48 @@ void AlbumIconView::slot_showExifInfo(AlbumIconItem* item)
     if ( exif->loadFile(item->fileItem()->url().path()) == 0 )
         exif->show();
     else 
-        {
+    {
         delete exif;
         KMessageBox::sorry(0, i18n("This item has no Exif Information"));
-        }
+    }
 }
 
 void AlbumIconView::slotRename(AlbumIconItem* item)
 {
-    if (!item) return;
-    item->rename();
-}
+    if (!item)
+        return;
 
-void AlbumIconView::slotItemRenamed(ThumbItem *item)
-{
-    if (!item) return;
-
-    AlbumIconItem *albumItem =
-        static_cast<AlbumIconItem *>(item);
-    if (!albumItem) return;
-
-    QString oldName(albumItem->fileItem()->url().fileName());
-    QString newName(albumItem->text());
-
-    albumItem->setText(oldName);
-
-    ThumbItem *existingItem = findItem(newName);
-
-    if (DigikamIO::rename(d->currentAlbum, oldName, newName)) {
-        if (existingItem) {
-            ((AlbumIconItem*)existingItem)->updateExtraText();
-            ((AlbumIconItem*)existingItem)->calcRect();
-            ((AlbumIconItem*)existingItem)->repaint();
-        }
+    PAlbum* album = d->imageLister->findParentAlbum(item->fileItem());
+    if (!album)
+    {
+        kdWarning() << "Failed to find parent album for "
+                    << item->fileItem()->url().prettyURL()
+                    << endl;
+        return;
     }
+
+    bool ok;
+    
+#if KDE_IS_VERSION(3,2,0)
+    QString newName = KInputDialog::getText(i18n("Rename Item"),
+                                            i18n("Enter New Name"),
+                                            item->fileItem()->url().fileName(),
+                                            &ok, this);
+#else
+    QString newName = KLineEditDlg::getText(i18n("Rename Item"),
+                                            i18n("Enter New Name"),
+                                            item->fileItem()->url().fileName(),
+                                            &ok, this);
+#endif
+
+    if (!ok)
+        return;
+    
+   AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
+                             newName);
 }
 
-void AlbumIconView::slot_deleteSelectedItems()
+void AlbumIconView::slotDeleteSelectedItems()
 {
 
     KURL::List urlList;
@@ -662,11 +682,11 @@ void AlbumIconView::slot_deleteSelectedItems()
        KIO::DeleteJob* job = KIO::del(urlList, false, true);
 
        connect(job, SIGNAL(result(KIO::Job*)),
-               this, SLOT(slot_onDeleteSelectedItemsFinished(KIO::Job*)));
+               this, SLOT(slotOnDeleteSelectedItemsFinished(KIO::Job*)));
        }
 }
 
-void AlbumIconView::slot_onDeleteSelectedItemsFinished(KIO::Job* job)
+void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
@@ -731,30 +751,51 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
     if (!item) return;    
 
     KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
-    if (dlg.exec()) {
-        int h = item->height();
-        item->updateExtraText();
-        item->calcRect();
+    if (dlg.exec())
+    {
         item->repaint();
-        if (item->height() != h)
-            rearrangeItems();
     }
 }
 
-// ---------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-void AlbumIconView::getItemComments(const QString& itemName,
-                                    QString& comments)
+QString AlbumIconView::itemComments(AlbumIconItem *item)
 {
-    if (!d->currentAlbum) return;
-    comments = d->currentAlbum->getItemComments(itemName);
+    PAlbum* album = d->imageLister->findParentAlbum(item->fileItem());
+    if (!album)
+    {
+        kdWarning() << "Failed to find parent album for "
+                    << item->fileItem()->url().prettyURL()
+                    << endl;
+        return QString("");
+    }
+
+    AlbumDB* db  = AlbumManager::instance()->albumDB();
+    return db->getItemCaption(album, item->text());
+}
+
+QStringList AlbumIconView::itemTagNames(AlbumIconItem* item)
+{
+    PAlbum* album = d->imageLister->findParentAlbum(item->fileItem());
+    if (!album)
+    {
+        kdWarning() << "Failed to find parent album for "
+                    << item->fileItem()->url().prettyURL()
+                    << endl;
+        return QString("");
+    }
+
+    AlbumDB* db  = AlbumManager::instance()->albumDB();
+    return db->getItemTagNames(album, item->text());
 }
 
 AlbumIconItem* AlbumIconView::firstSelectedItem()
 {
     AlbumIconItem *iconItem = 0;
-    for (ThumbItem *it = firstItem(); it; it = it->nextItem()) {
-        if (it->isSelected()) {
+    for (ThumbItem *it = firstItem(); it; it = it->nextItem())
+    {
+        if (it->isSelected())
+        {
             iconItem = static_cast<AlbumIconItem *>(it);
             break;
         }
@@ -763,6 +804,10 @@ AlbumIconItem* AlbumIconView::firstSelectedItem()
     return iconItem;
 }
 
+AlbumLister* AlbumIconView::albumLister() const
+{
+    return d->imageLister;
+}
 
 const AlbumSettings* AlbumIconView::settings()
 {
@@ -778,7 +823,8 @@ void AlbumIconView::calcBanner()
 {
     QRect banner(0, 0, 0, 0);
     
-    if (!d->currentAlbum) {
+    if (!d->currentAlbum)
+    {
         setBannerRect(banner);
         return;
     }
@@ -788,11 +834,13 @@ void AlbumIconView::calcBanner()
     QFont fn(font());
     int fnSize = fn.pointSize();
     bool usePointSize;
-    if (fnSize > 0) {
+    if (fnSize > 0)
+    {
         fn.setPointSize(fnSize+10);
         usePointSize = true;
     }
-    else {
+    else
+    {
         fnSize = fn.pixelSize();
         fn.setPixelSize(fnSize+10);
         usePointSize = false;
@@ -842,7 +890,6 @@ void AlbumIconView::paintBanner(QPainter *p)
         return;
 
     p->save();
-
 
     QRegion oR(r);
 
@@ -905,33 +952,49 @@ void AlbumIconView::paintBanner(QPainter *p)
                 dateAndComments);
     
     p->restore();
-   
-    
 }
 
 void AlbumIconView::updateBanner()
 {
-    if (!d->currentAlbum) {
+    if (!d->currentAlbum)
+    {
         setBannerRect(QRect(0, 0, 0, 0));
         return;
     }
 
     d->albumTitle = d->currentAlbum->getTitle();
-    d->albumComments = d->currentAlbum->getComments();
+    d->albumComments = "";
+    QDate date;
 
-    QDate date = d->currentAlbum->getDate();
+    if (d->currentAlbum->type() == Album::PHYSICAL)
+    {
+        PAlbum* album = dynamic_cast<PAlbum*>(d->currentAlbum);
+        
+        d->albumComments = album->getCaption();
+        date             = album->getDate();
 
 #if KDE_IS_VERSION(3,2,0)
-    d->albumDate = i18n("%1 %2 - %3 Items")
-                   .arg(KGlobal::locale()->calendar()->monthName(date, false))
-                   .arg(KGlobal::locale()->calendar()->year(date))
-                   .arg(QString::number(count()));
+        d->albumDate = i18n("%1 %2 - %3 Items")
+                       .arg(KGlobal::locale()->calendar()->monthName(date, false))
+                       .arg(KGlobal::locale()->calendar()->year(date))
+                       .arg(QString::number(count()));
 #else
-    d->albumDate = i18n("%1 %2 - %3 Items")
-                   .arg(KGlobal::locale()->monthName(date.month()))
-                   .arg(QString::number(date.year()))
-                   .arg(QString::number(count()));
+        d->albumDate = i18n("%1 %2 - %3 Items")
+                       .arg(KGlobal::locale()->monthName(date.month()))
+                       .arg(QString::number(date.year()))
+                       .arg(QString::number(count()));
 #endif
+    }
+    else if (d->currentAlbum->type() == Album::TAG)
+    {
+        d->albumComments = (static_cast<TAlbum*>(d->currentAlbum))->getURL();
+        d->albumDate     = i18n("%1 Items").arg(QString::number(count()));
+    }
+    else
+    {
+        d->albumComments = QString("");
+        d->albumDate     = i18n("%1 Items").arg(QString::number(count()));
+    }
     
     calcBanner();
     repaintBanner();
@@ -941,28 +1004,44 @@ void AlbumIconView::updateBanner()
 
 void AlbumIconView::startDrag()
 {
-    KURL::List urlList;
+    if (!d->currentAlbum)
+        return;
 
+    KURL::List      urls;
+    QValueList<int> dirIDs;
+
+    
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
-        if (it->isSelected()) {
-            AlbumIconItem *albumItem =
-                static_cast<AlbumIconItem *>(it);
-            urlList.append(albumItem->fileItem()->url());
+        if (it->isSelected())
+        {
+            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+            urls.append(albumItem->fileItem()->url());
+            PAlbum* album = d->imageLister->findParentAlbum(albumItem->fileItem());
+            if (album)
+                dirIDs.append(album->getID());
         }
     }
 
-    if (urlList.isEmpty()) return;
+    if (urls.isEmpty())
+        return;
 
+    if (urls.size() != dirIDs.size())
+    {
+        kdWarning() << "Mismatch between sizes of lists for urls and dirids"
+                    << endl;
+        return;
+    }
+        
     QPixmap icon(DesktopIcon("image", 48));
     int w = icon.width();
     int h = icon.height();
 
     QPixmap pix(w+4,h+4);
-    QString text(QString::number(urlList.count()));
+    QString text(QString::number(urls.count()));
     
     QPainter p(&pix);
     p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
-    p.setPen(QPen(Qt::black, 2));
+    p.setPen(QPen(Qt::black, 1));
     p.drawRect(0, 0, w+4, h+4);
     p.drawPixmap(2, 2, icon);
     QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
@@ -976,9 +1055,18 @@ void AlbumIconView::startDrag()
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    KURLDrag* drag = new KURLDrag( urlList, this);
-    drag->setPixmap(pix);
-    drag->dragCopy();
+    QDragObject* drag = 0;
+
+    if (d->currentAlbum->type() == Album::PHYSICAL)
+        drag = new AlbumItemsDrag(urls, dirIDs, this);
+    else if (d->currentAlbum->type() == Album::TAG)
+        drag = new TagItemsDrag(urls, dirIDs, this);
+
+    if (drag)
+    {
+        drag->setPixmap(pix);
+        drag->dragCopy();
+    }
 }
 
 void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
@@ -1004,7 +1092,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
     if (QUriDrag::canDecode(event)) {
 
-        KURL destURL(d->currentAlbum->getPath());
+        KURL destURL(d->currentAlbum->getURL());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
@@ -1061,6 +1149,28 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             break;
         }
 
+    }
+}
+
+// make sure that we load thumbnail for items which are visible first
+void AlbumIconView::slotContentsMoving(int x, int y)
+{
+    if (d->thumbJob.isNull())
+        return;
+    QRect r(x, y, visibleWidth(), visibleHeight());
+    ThumbItem *fItem = findFirstVisibleItem(r);
+    ThumbItem *lItem = findLastVisibleItem(r);
+    if (!fItem || !lItem)
+        return;
+    AlbumIconItem* firstItem = static_cast<AlbumIconItem*>(fItem);
+    AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
+    AlbumIconItem* item = firstItem;
+    while (item) {
+        if (d->thumbJob->setNextItemToLoad(item->fileItem()))
+            return;
+        if (item == lastItem)
+            return;
+        item = (AlbumIconItem*)item->nextItem();
     }
 }
 
@@ -1124,24 +1234,21 @@ void AlbumIconView::refresh()
     d->imageLister->stop();
     clear();
     
-    KURL url;
-    if (d->currentAlbum)
-        url = KURL(d->currentAlbum->getPath());
-    
-    if (url.isValid()) {
-        d->imageLister->openURL(url);
-    }
+    d->imageLister->openAlbum(d->currentAlbum);
 }
 
 void AlbumIconView::refreshItems(const QStringList& itemList)
 {
-    if (!d->currentAlbum || itemList.empty()) return;
+    /* todo
+       
+    if (!d->currentAlbum || itemList.empty())
+        return;
     
     KURL::List urlList;
     for ( QStringList::const_iterator it = itemList.begin();
-          it != itemList.end(); ++it ) {
-        urlList.append(d->currentAlbum->getPath() + QString("/")
-                       + (*it));
+          it != itemList.end(); ++it )
+    {
+        urlList.append(d->currentA1lbum->getURL().path(1) + *it);
     }
 
     if (d->thumbJob.isNull()) {
@@ -1155,51 +1262,48 @@ void AlbumIconView::refreshItems(const QStringList& itemList)
     }
     else
         d->thumbJob->addItems(urlList);
+    */
 }
 
-void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
+void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& pix,
+                                     const KFileMetaInfo* metaInfo)
 {
    AlbumSettings *settings = AlbumSettings::instance();
 
-   if (!settings) return;
+   if (!settings || !fileItem)
+       return;
 
-   ThumbItem *item = findItem(url.filename());
-   if (!item) return;
-   AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(item);
+   AlbumIconItem *iconItem = (AlbumIconItem *)fileItem->extraData(this);
+   if (!iconItem)
+       return;
 
-   if(settings->getExifRotate()) {
+   if(settings->getExifRotate())
+   {
       QPixmap rotPix(pix);
-      exifRotate(url.path(), rotPix);
-      iconItem->setPixmap(rotPix);
-   } else {
-      iconItem->setPixmap(pix);
+      exifRotate(fileItem->url().path(), rotPix);
+      iconItem->setPixmap(rotPix, metaInfo);
+   }
+   else
+   {
+      iconItem->setPixmap(pix, metaInfo);
    }
 }
 
 // If we failed to generate a thumbnail using our thumbnail generator
 // use kde thumbnail generator to generate one
 
-void AlbumIconView::slotFailedThumbnail(const KURL& url)
+void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
 {
-    KIO::PreviewJob* job = KIO::filePreview(KURL::List(url),
-                                            (int)d->thumbSize.size());
+    /*
+      todo
+    KIO::PreviewJob* job = KIO::filePreview(item->url(), (int)d->thumbSize.size());
                                             
     connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
             SLOT(slotGotThumbnailKDE(const KFileItem*, const QPixmap&)));
     connect(job, SIGNAL(failed(const KFileItem*)),
-            SLOT(slotFailedThumbnailKDE(const KFileItem*)));            
-}
-
-void AlbumIconView::slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix)
-{
-    slotGotThumbnail(item->url(), pix);    
-}
-
-// If we failed to generate a thumbnail using kde thumbnail generator, 
-// use a broken image instead.
-
-void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
-{
+            SLOT(slotFailedThumbnailKDE(const KFileItem*)));
+    */
+    /* todo
     QImage img;
     QPixmap pix;
     KGlobal::dirs()->addResourceType("digikam_imagebroken", KGlobal::dirs()->kde_default("data") 
@@ -1209,7 +1313,14 @@ void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
     img.load(dir);
     const QImage scaleImg(img.smoothScale( (int)d->thumbSize.size(), (int)d->thumbSize.size() ));
     pix.convertFromImage(scaleImg);
-    slotGotThumbnail(item->url(), pix);    
+    slotGotThumbnail(item->url(), pix);
+    */
+}
+
+void AlbumIconView::slotFinishedThumbnail()
+{
+    if (!d->thumbJob.isNull())
+        delete d->thumbJob;    
 }
 
 void AlbumIconView::slotSelectionChanged()
@@ -1220,9 +1331,26 @@ void AlbumIconView::slotSelectionChanged()
         emitItemsSelected(false);
 }
 
+/*
 bool AlbumIconView::eventFilter(QObject *obj, QEvent *ev)
 {
     return ThumbView::eventFilter(obj, ev);    
+}
+*/
+
+void AlbumIconView::focusInEvent(QFocusEvent *)
+{
+    unsetPalette();
+}
+
+void AlbumIconView::focusOutEvent(QFocusEvent *)
+{
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, QColor(245,245,245));
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
 }
 
 void AlbumIconView::slotSetExifOrientation( const QString filename, int orientation )
@@ -1231,7 +1359,7 @@ void AlbumIconView::slotSetExifOrientation( const QString filename, int orientat
 
     KExifUtils::writeOrientation(filename, o);
 
-    refresh(); 
+    refreshItems(filename); 
 }
 
 void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
@@ -1291,5 +1419,209 @@ void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
 
 }
 
+
+QRect AlbumIconView::itemRect() const
+{
+    return d->itemRect;    
+}
+
+QRect AlbumIconView::itemDateRect() const
+{
+    return d->itemDateRect;    
+}
+
+QRect AlbumIconView::itemPixmapRect() const
+{
+    return d->itemPixmapRect;
+}
+
+QRect AlbumIconView::itemNameRect() const
+{
+    return d->itemNameRect;
+}
+
+QRect AlbumIconView::itemCommentsRect() const
+{
+    return d->itemCommentsRect;
+}
+
+QRect AlbumIconView::itemFileCommentsRect() const
+{
+    return d->itemFileCommentsRect;    
+}
+
+QRect AlbumIconView::itemResolutionRect() const
+{
+    return d->itemResolutionRect;
+}
+
+QRect AlbumIconView::itemTagRect() const
+{
+    return d->itemTagRect;
+}
+
+
+QRect AlbumIconView::itemSizeRect() const
+{
+    return d->itemSizeRect;
+}
+
+QPixmap* AlbumIconView::itemBaseRegPixmap() const
+{
+    return &d->itemRegPixmap;
+}
+
+QPixmap* AlbumIconView::itemBaseSelPixmap() const
+{
+    return &d->itemSelPixmap;
+}
+
+QFont AlbumIconView::itemFontReg() const
+{
+    return d->fnReg;    
+}
+
+QFont AlbumIconView::itemFontCom() const
+{
+    return d->fnCom;    
+}
+
+QFont AlbumIconView::itemFontXtra() const
+{
+    return d->fnXtra;
+}
+
+void AlbumIconView::updateItemRectsPixmap()
+{
+    d->itemRect = QRect(0,0,0,0);
+    d->itemDateRect = QRect(0,0,0,0);
+    d->itemPixmapRect = QRect(0,0,0,0);
+    d->itemNameRect = QRect(0,0,0,0);
+    d->itemCommentsRect = QRect(0,0,0,0);
+    d->itemResolutionRect = QRect(0,0,0,0);
+    d->itemSizeRect = QRect(0,0,0,0);
+    d->itemTagRect = QRect(0,0,0,0);
+
+    d->fnReg  = font();
+    d->fnCom  = font();
+    d->fnXtra = font();
+    d->fnCom.setItalic(true);
+
+    int fnSz = d->fnReg.pointSize();
+    if (fnSz > 0)
+    {
+        d->fnCom.setPointSize(fnSz-1);
+        d->fnXtra.setPointSize(fnSz-2);
+    }
+    else
+    {
+        fnSz = d->fnReg.pixelSize();
+        d->fnCom.setPixelSize(fnSz-1);
+        d->fnXtra.setPixelSize(fnSz-2);
+    }
+
+    int margin  = 2;
+    int w = QMAX(d->thumbSize.size(), 100) + 2*margin;
+
+    QFontMetrics fm(d->fnReg);
+    QRect oneRowRegRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
+                                          Qt::AlignTop | Qt::AlignHCenter,
+                                          "XXXXXXXXX");
+    fm = QFontMetrics(d->fnCom);
+    QRect oneRowComRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
+                                          Qt::AlignTop | Qt::AlignHCenter,
+                                          "XXXXXXXXX");
+    fm = QFontMetrics(d->fnXtra);
+    QRect oneRowXtraRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
+                                           Qt::AlignTop | Qt::AlignHCenter,
+                                           "XXXXXXXXX");
+
+    int y = margin;
+
+    d->itemPixmapRect = QRect(margin, y, w, d->thumbSize.size()+margin);
+    y = d->itemPixmapRect.bottom();
+
+    if (d->albumSettings->getIconShowName())
+    {
+        d->itemNameRect = QRect(margin, y, w, oneRowRegRect.height());
+        y = d->itemNameRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowComments())
+    {
+        d->itemCommentsRect = QRect(margin, y, w, oneRowComRect.height());
+        y = d->itemCommentsRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowFileComments())
+    {
+        d->itemFileCommentsRect = QRect(margin, y, w, oneRowComRect.height());
+        y = d->itemFileCommentsRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowDate())
+    {
+        d->itemDateRect = QRect(margin, y, w, oneRowXtraRect.height());
+        y = d->itemDateRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowResolution())
+    {
+        d->itemResolutionRect = QRect(margin, y, w, oneRowXtraRect.height());
+        y = d->itemResolutionRect.bottom() ;
+    }
+    
+    if (d->albumSettings->getIconShowSize())
+    {
+        d->itemSizeRect = QRect(margin, y, w, oneRowXtraRect.height());
+        y = d->itemSizeRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowTags())
+    {
+        d->itemTagRect = QRect(margin, y, w, oneRowComRect.height());
+        y = d->itemTagRect.bottom();
+    }
+
+    d->itemRect = QRect(0, 0, w+2*margin, y+margin);
+
+    d->itemRegPixmap.resize(d->itemRect.width(), d->itemRect.height());
+    d->itemRegPixmap.fill(Qt::white);
+
+    QRegion reg(d->itemRect);
+    reg -= d->itemPixmapRect;
+
+    {
+        QPainter p(&d->itemRegPixmap);
+        p.setClipRegion(reg);
+        p.fillRect(d->itemRect, QColor("#ededed"));
+        p.setPen(QColor("#fdfdfd"));
+        p.drawLine(0,0,0,d->itemRect.height()-1);
+        p.drawLine(0,0,d->itemRect.width()-1,0);
+        p.setPen(QColor("#adadad"));
+        p.drawLine(0,d->itemRect.height()-1,d->itemRect.width()-1,d->itemRect.height()-1);
+        p.drawLine(d->itemRect.width()-1,0,d->itemRect.width()-1,d->itemRect.height()-1);
+        p.end();
+    }
+
+    d->itemSelPixmap.resize(d->itemRect.width(), d->itemRect.height());
+    d->itemSelPixmap.fill(Qt::white);
+
+    {
+        QPainter p(&d->itemSelPixmap);
+        p.setClipRegion(reg);
+        p.fillRect(d->itemRect, colorGroup().highlight());
+        p.setPen(QColor("#666666"));
+        p.drawRect(d->itemRect);
+        p.end();
+    }
+}
+
+
+bool AlbumIconView::showMetaInfo()
+{
+    return (d->albumSettings->getIconShowResolution() ||
+            d->albumSettings->getIconShowFileComments());
+}
 
 #include "albumiconview.moc"

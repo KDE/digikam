@@ -61,54 +61,55 @@
 // Local includes.
 
 #include "albummanager.h"
-#include "albuminfo.h"
+#include "album.h"
+#include "albumdb.h"
 #include "thumbnailjob.h"
-#include "digikamio.h"
+#include "albumfilecopymove.h"
 #include "digikamapp.h"
 
 #include "thumbnailsize.h"
 #include "albumfolderitem.h"
 #include "albumfolderview.h"
 #include "albumpropsedit.h"
+#include "tagcreatedlg.h"
 #include "albumsettings.h"
+
+#include "dirselectdialog.h"
 
 #include "cameratype.h"
 #include "cameradragobject.h"
+#include "dragobjects.h"
+
+#include <qpainter.h>
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-               : QListView(parent)
+               : ListView(parent)
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
-    setSelectionMode(QListView::Single);
 
     dropTarget_     = 0;
-    albumSortOrder_ = (int) AlbumSettings::ByCollection;
+    albumSortOrder_ = (int) AlbumSettings::ByFolder;
     groupItems_.setAutoDelete(false);
     groupItems_.clear();
-
-    addColumn(i18n("My Albums"));
-    setResizeMode(QListView::LastColumn);
-    setRootIsDecorated(true);
-    setItemMargin(5);
-
-    connect(this, SIGNAL(selectionChanged()),
-            this, SLOT(slot_selectionChanged()));
-    connect(this, SIGNAL(doubleClicked(QListViewItem*)),
-            this, SLOT(slot_doubleClicked(QListViewItem*)));
-    connect(this, SIGNAL(rightButtonPressed(QListViewItem*,
-                                            const QPoint&, int)),
-            this, SLOT(slot_rightButtonClicked(QListViewItem*,
-                                               const QPoint&, int)));
-
-    albumMan_ = Digikam::AlbumManager::instance();
+    phyRootItem_ = 0;
+    tagRootItem_ = 0;
     
-    connect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
-            this, SLOT(slot_albumAdded(Digikam::AlbumInfo*)));
-    connect(albumMan_, SIGNAL(signalAlbumDeleted(Digikam::AlbumInfo*)),
-            this, SLOT(slot_albumDeleted(Digikam::AlbumInfo*)));
+    connect(this, SIGNAL(signalSelectionChanged(ListItem*)),
+            SLOT(slotSelectionChanged(ListItem*)));
+    connect(this, SIGNAL(signalDoubleClicked(ListItem*)),
+            SLOT(slotDoubleClicked(ListItem*)));
+    connect(this, SIGNAL(signalRightButtonPressed(ListItem*)),
+            SLOT(slotRightButtonClicked(ListItem*)));
+
+    albumMan_ = AlbumManager::instance();
+    
+    connect(albumMan_, SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+    connect(albumMan_, SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slot_albumsCleared()));
+            this, SLOT(slotAlbumsCleared()));
 }
 
 AlbumFolderView::~AlbumFolderView()
@@ -120,134 +121,133 @@ AlbumFolderView::~AlbumFolderView()
 void AlbumFolderView::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    if (!settings)
+        return;
 
-    albumSortOrder_ = settings->getAlbumSortOrder();
-    resort();
+    if (albumSortOrder_ != settings->getAlbumSortOrder())
+    {
+        albumSortOrder_ = settings->getAlbumSortOrder();
+        resort();
+    }
 }
 
 void AlbumFolderView::resort()
 {
-    QListViewItem* prevSelectedItem = selectedItem();
+    AlbumFolderItem* prevSelectedItem =
+        dynamic_cast<AlbumFolderItem*>(getSelected());
+    if (prevSelectedItem && prevSelectedItem->isGroupItem())
+        prevSelectedItem = 0;
+    
 
-    for (Digikam::AlbumInfo *album = albumMan_->firstAlbum();
-         album; album = album->nextAlbum()) {
-        if (album->getViewItem()) {
-            AlbumFolderItem *folderItem =
-                static_cast<AlbumFolderItem*>(album->getViewItem());
-            reparentItem(folderItem);
+    PAlbumList pList(AlbumManager::instance()->pAlbums());
+    for (PAlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum *album = *it;
+        if (!album->isRoot() && album->getViewItem())
+        {
+            reparentItem(static_cast<AlbumFolderItem*>(album->getViewItem()));
+        }
+    }
+
+    TAlbumList tList(AlbumManager::instance()->tAlbums());
+    for (TAlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum *album = *it;
+        if (!album->isRoot() && album->getViewItem())
+        {
+            reparentItem(static_cast<AlbumFolderItem*>(album->getViewItem()));
         }
     }
     
-    // Clear any groupitems which have been
-    // left empty
+    // Clear any groupitems which have been left empty
     clearEmptyGroupItems();
 
-    if (prevSelectedItem) {
-        setSelected(prevSelectedItem, true);
+    if (prevSelectedItem)
+    {
         ensureItemVisible(prevSelectedItem);
+        setSelected(prevSelectedItem);
     }
 }
 
 void AlbumFolderView::reparentItem(AlbumFolderItem* folderItem)
 {
-    if (!folderItem || !folderItem->albumInfo())
+    if (!folderItem)
         return;
 
-    switch (albumSortOrder_) {
-
-    case(AlbumSettings::Flat): {
-        reparentItemFlat(folderItem);
-        break;
-    }
-
-    case(AlbumSettings::ByDate): {
-        reparentItemByDate(folderItem);
-        break;
-    }
-
-    case(AlbumSettings::ByCollection): {
-        reparentItemByCollection(folderItem);
-        break;
-    }
-
-    default:
-        break;
-    }
-}
-
-void AlbumFolderView::reparentItemByDate(AlbumFolderItem* folderItem)
-{
-    if (!folderItem || !folderItem->albumInfo())
+    Album* album = folderItem->album();
+    if (!album || album->isRoot())
         return;
-    
-    QListViewItem *oldParent = folderItem->parent();
-    QListViewItem* newParent = findParentByDate(folderItem);
 
-    if (!newParent) {
-        kdWarning() << "AlbumFolderView: Couldn't find new parent by Date: "
-                    << folderItem->albumInfo()->getPath() << endl;
+    ListItem *oldParent = folderItem->parent();
+    ListItem* newParent = findParent(album);
+
+    if (!oldParent) {
+        // FolderItem was a top-level item -  Don't touch
         return;
     }
-    
-    if (!oldParent) 
-        // FolderItem was a top-level item
-        takeItem(folderItem);
-    else
-        // Has a parent
-        oldParent->takeItem(folderItem);
+
+    // Has a parent
+    oldParent->removeChild(folderItem);
 
     // insert into new parent
-    newParent->insertItem(folderItem);
+    newParent->insertChild(folderItem);
 }
 
-void AlbumFolderView::reparentItemByCollection(AlbumFolderItem* folderItem)
+AlbumFolderItem* AlbumFolderView::findParent(Album *album)
 {
-    if (!folderItem || !folderItem->albumInfo())
-        return;
+    if (!album || album->isRoot())
+        return 0;
 
-    QListViewItem *oldParent = folderItem->parent();
-    QListViewItem* newParent = findParentByCollection(folderItem);
+    if (album->type() == Album::PHYSICAL)
+    {
+        switch (albumSortOrder_)
+        {
+        case(AlbumSettings::ByFolder):
+        {
+            return findParentByFolder(album);
+        }
+        case(AlbumSettings::ByCollection):
+        {
+            return findParentByCollection(dynamic_cast<PAlbum*>(album));
+        }
+        case(AlbumSettings::ByDate):
+        {
+            return findParentByDate(dynamic_cast<PAlbum*>(album));
+        }
+        }
 
-    if (!newParent) {
-        kdWarning() << "AlbumFolderView: Couldn't find new parent by collection: "
-                    << folderItem->albumInfo()->getPath() << endl;
-        return;
+        return 0;
+    }
+    else if (album->type() == Album::TAG)
+    {
+        return findParentByFolder(album);
+    }
+
+    return 0;
+}
+
+AlbumFolderItem* AlbumFolderView::findParentByFolder(Album *album)
+{
+    if (!album)
+        return 0;
+
+    Album* parent = album->getParent();
+
+    if (parent)
+    {
+        AlbumFolderItem *pItem = (AlbumFolderItem*)parent->getViewItem();
+        return pItem;
     }
     
-    if (!oldParent) 
-        // FolderItem was a top-level item
-        takeItem(folderItem);
-    else
-        // Has a parent
-        oldParent->takeItem(folderItem);
-
-    // insert into new parent
-    newParent->insertItem(folderItem);
+    return 0;    
 }
 
-void AlbumFolderView::reparentItemFlat(AlbumFolderItem* folderItem)
+AlbumFolderItem* AlbumFolderView::findParentByDate(PAlbum* album)
 {
-    if (!folderItem || !folderItem->albumInfo())
-        return;
-
-    QListViewItem *oldParent = folderItem->parent();
-
-    // Already a toplevel item
-    if (!oldParent) return;
-
-    // Remove from old parent and insert
-    // as toplevel item
-    oldParent->takeItem(folderItem);
-    insertItem(folderItem);
-}
-
-AlbumFolderItem* AlbumFolderView::findParentByDate(AlbumFolderItem* folderItem)
-{
-    if (!folderItem || !folderItem->albumInfo())
+    if (!album)
         return 0;
     
-    QDate date = folderItem->albumInfo()->getDate();
+    QDate date = album->getDate();
     
     QString timeString = QString::number(date.year()) + ", " +
 #if KDE_IS_VERSION(3,2,0)
@@ -259,18 +259,21 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(AlbumFolderItem* folderItem)
     AlbumFolderItem* parentItem = 0;
     
     for (AlbumFolderItem* groupItem = groupItems_.first();
-         groupItem; groupItem = groupItems_.next()) {
-        if (groupItem->text(0) == timeString) {
+         groupItem; groupItem = groupItems_.next())
+    {
+        if (groupItem->text() == timeString)
+        {
             parentItem = groupItem;
             break;
         }
     }
 
     // Need to create a new parent item
-    if (!parentItem) {
-        parentItem = new AlbumFolderItem(this, timeString,
+    if (!parentItem)
+    {
+        parentItem = new AlbumFolderItem(phyRootItem_, timeString,
                                          date.year(), date.month());
-        parentItem->setOpen(true);
+        parentItem->setOpen(false);
         groupItems_.append(parentItem);
     }
     
@@ -278,16 +281,16 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(AlbumFolderItem* folderItem)
 }
 
 
-AlbumFolderItem* AlbumFolderView::findParentByCollection(AlbumFolderItem* folderItem)
+AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
 {
-    if (!folderItem || !folderItem->albumInfo())
+    if (!album)
         return 0;
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return 0;
     
     QStringList collectionList = settings->getAlbumCollectionNames();
-    QString collection = folderItem->albumInfo()->getCollection();
+    QString collection = album->getCollection();
 
     if (!collectionList.contains(collection))
         collection = i18n( "Unknown" );
@@ -296,7 +299,7 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(AlbumFolderItem* folder
     
     for (AlbumFolderItem* groupItem = groupItems_.first();
          groupItem; groupItem = groupItems_.next()) {
-        if (groupItem->text(0) == collection) {
+        if (groupItem->text() == collection) {
             parentItem = groupItem;
             break;
         }
@@ -304,9 +307,9 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(AlbumFolderItem* folder
 
     // Need to create a new parent item
     if (!parentItem) {
-        parentItem = new AlbumFolderItem(this, collection,
+        parentItem = new AlbumFolderItem(phyRootItem_, collection,
                                          0, 0);
-        parentItem->setOpen(true);
+        parentItem->setOpen(false);
         groupItems_.append(parentItem);
     }
     
@@ -326,24 +329,122 @@ void AlbumFolderView::clearEmptyGroupItems()
     }
 }
 
-
-void AlbumFolderView::slot_albumAdded(Digikam::AlbumInfo *album)
+QPixmap AlbumFolderView::getBlendedIcon(TAlbum* album) const
 {
-    if (!album) return;
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    QString icon(album->getIcon());
 
-    AlbumFolderItem* folderItem = new AlbumFolderItem(this, album);
-    album->setViewItem(folderItem);
-    reparentItem(folderItem);
-
-    slot_albumHighlight(album);
+    QPixmap baseIcon(iconLoader->loadIcon("tag",
+                                          KIcon::NoGroup,
+                                          32,
+                                          KIcon::DefaultState,
+                                          0, true));
+    if (!icon.isEmpty())
+    {
+        QPixmap pix(iconLoader->loadIcon(icon,
+                                         KIcon::NoGroup,
+                                         20,
+                                         KIcon::DefaultState,
+                                         0, true));
+        if (!pix.isNull())
+        {
+            QPainter p(&baseIcon);
+            p.drawPixmap(6,9, pix, 0, 0, -1, -1);
+            p.end();
+        }
+    }
+    return baseIcon;
 }
 
-void AlbumFolderView::slot_albumDeleted(Digikam::AlbumInfo *album)
+void AlbumFolderView::slotAlbumAdded(Album *album)
 {
-    if (!album) return;
-
-    if (!album->getViewItem())
+    if (!album)
         return;
+
+    if (album->isRoot()) {
+
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+        switch (album->type()) {
+        case(Album::PHYSICAL): {
+            phyRootItem_ = new AlbumFolderItem(this, album);
+            phyRootItem_->setPixmap(iconLoader->loadIcon("folder_image",
+                                                         KIcon::NoGroup,
+                                                         32,
+                                                         KIcon::DefaultState,
+                                                         0, true));
+            phyRootItem_->setOpen(true);
+            album->setViewItem(phyRootItem_);
+            break;
+        }
+        case(Album::TAG): {
+            tagRootItem_= new AlbumFolderItem(this, album);
+            tagRootItem_->setPixmap(iconLoader->loadIcon("tag-folder",
+                                                         KIcon::NoGroup,
+                                                         32,
+                                                         KIcon::DefaultState,
+                                                         0, true));
+
+            tagRootItem_->setOpen(true);
+            album->setViewItem(tagRootItem_);
+            break;
+        }
+        default: {
+            kdWarning() << k_funcinfo << "Unknown album type: "
+                        << album->type() << endl;
+            return;
+        }
+        }
+
+    }
+    else {
+
+        AlbumFolderItem *pItem = findParent(album);
+        if (!pItem) {
+            kdWarning() << k_funcinfo << "No parent viewitem for album: "
+                        << album->getURL() << endl;
+            return;
+        }
+
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+        AlbumFolderItem* folderItem = new AlbumFolderItem(pItem, album);
+        if (album->type() == Album::PHYSICAL)
+        {
+            
+            folderItem->setPixmap(iconLoader->loadIcon("folder",
+                                                       KIcon::NoGroup,
+                                                       32,
+                                                       KIcon::DefaultState,
+                                                       0, true));
+            PAlbum* p = dynamic_cast<PAlbum*>(album);
+            p->setViewItem(folderItem);
+            p->fileItem()->setExtraData(this, folderItem);
+
+            folderItem->highlighted_ = false;
+            albumHighlight(p);
+        }
+        else if (album->type() == Album::TAG)
+        {
+            TAlbum* t = dynamic_cast<TAlbum*>(album);
+            folderItem->setPixmap(getBlendedIcon(t));
+            album->setViewItem(folderItem);
+        }
+    }
+}
+
+void AlbumFolderView::slotAlbumDeleted(Album *album)
+{
+    if (!album || !album->getViewItem())
+        return;
+
+    if (album->type() == Album::PHYSICAL) 
+    {
+        PAlbum* p = dynamic_cast<PAlbum*>(album);
+        p->fileItem()->removeExtraData(this);
+        if (!thumbJob_.isNull())
+            thumbJob_->removeItem(p->fileItem());
+    }
     
     AlbumFolderItem* folderItem =
         static_cast<AlbumFolderItem*>(album->getViewItem());
@@ -352,253 +453,147 @@ void AlbumFolderView::slot_albumDeleted(Digikam::AlbumInfo *album)
     clearEmptyGroupItems();
 }
 
-void AlbumFolderView::slot_albumsCleared()
+void AlbumFolderView::slotAlbumsCleared()
 {
     groupItems_.clear();
     clear();
+
+    phyRootItem_ = 0;
+    tagRootItem_ = 0;
 }
 
 void AlbumFolderView::albumNew()
 {
+    PAlbum* album = 0;
+    
+    if (getSelected())
+    {
+        AlbumFolderItem *folderItem =
+            dynamic_cast<AlbumFolderItem*>(getSelected());
+        Album *a = folderItem->album();
+        if (a && a->type() == Album::PHYSICAL)
+        {
+            album = dynamic_cast<PAlbum*>(a);
+        }
+    }
+
+    if (!album)
+        album = dynamic_cast<PAlbum*>(phyRootItem_->album());
+
+    albumNew(album);
+}
+
+void AlbumFolderView::albumNew(PAlbum* parent)
+{
     AlbumSettings* settings = AlbumSettings::instance();
     
     if (!settings) 
-        {
+    {
         kdWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
         return;
-        }
+    }
 
     QDir libraryDir(settings->getAlbumLibraryPath());
     
     if (!libraryDir.exists()) 
-        {
+    {
         KMessageBox::error(0,
                            i18n("Album Library has not been set correctly\n"
                                 "Please run Setup"));
         return;
-        }
+    }
 
     bool ok;
 
 #if KDE_IS_VERSION(3,2,0)
     QString newDir = KInputDialog::getText(i18n("New Album Name"),
-                                           i18n("Enter New Album Name: "),
+                                           i18n("Creating New Album in 'My Albums%1'\n"
+                                                "Enter Album Name")
+                                           .arg(parent->getURL()),
                                            QString::null, &ok, this);
 #else
     QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
-                                           i18n("Enter New Album Name: "),
+                                           i18n("Creating New Album in 'My Albums%1'\n"
+                                                "Enter Album Name")
+                                           .arg(parent->getURL()),
                                            QString::null, &ok, this);
 #endif
     
-    if (!ok) return;
-    
-    KURL newAlbumURL = settings->getAlbumLibraryPath();
-    newAlbumURL.addPath(newDir);
+    if (!ok)
+        return;
 
-    KIO::SimpleJob* job = KIO::mkdir(newAlbumURL);
-    
-    connect(job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slot_onAlbumCreate(KIO::Job*)));
-
-    connect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
-            this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
+    QString errMsg;
+    if (albumMan_->createPAlbum(parent, newDir, errMsg))
+    {
+        connect(albumMan_, SIGNAL(signalAlbumAdded(Album*)),
+                this, SLOT(slotNewAlbumCreated(Album*)));
+    }
+    else
+    {
+        KMessageBox::error(0, errMsg);
+    }
 }
 
-void AlbumFolderView::slot_onAlbumCreate(KIO::Job* job)
+
+void AlbumFolderView::slotNewAlbumCreated(Album* album)
 {
-    if (job->error()) 
-       {
-       job->showErrorDialog(this);
-       
-       disconnect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
-                  this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
-       }
-}
+    disconnect(albumMan_, SIGNAL(signalAlbumAdded(Album*)),
+               this, SLOT(slotNewAlbumCreated(Album*)));
 
-void AlbumFolderView::slot_newAlbumCreated(Digikam::AlbumInfo* album)
-{    
-    albumMan_->setCurrentAlbum(album);              
-    slot_albumPropsEdit(album);
-    
-    disconnect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
-               this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
+    if (!album || !album->getViewItem() ||
+        album->type() != Album::PHYSICAL) {
+        return;
+    }
+
+    PAlbum* pa = dynamic_cast<PAlbum*>(album);
+    AlbumFolderItem* folderItem =
+        static_cast<AlbumFolderItem*>(pa->getViewItem());
+
+    ensureItemVisible(folderItem);
+    setSelected(folderItem);
+
+    albumEdit(pa);
 }
 
 void AlbumFolderView::albumDelete()
 {
-    Digikam::AlbumInfo *album = albumMan_->currentAlbum();
-    if (!album) return;
+    Album *album = albumMan_->currentAlbum();
+    if (!album)
+        return;
 
-    albumDelete(album);
+    if (album->isRoot())
+        return;
+    
+    if (album->type() == Album::PHYSICAL)
+        albumDelete(dynamic_cast<PAlbum*>(album));
 }
 
-void AlbumFolderView::albumDelete(Digikam::AlbumInfo* album)
+void AlbumFolderView::albumDelete(PAlbum* album)
 {
-    if (!album) return;
+    if (!album || album->isRoot())
+        return;
+
     int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' Album from HardDisk").arg(album->getTitle()));
+        KMessageBox::questionYesNo(0, i18n("Delete '%1' Album from HardDisk")
+                                   .arg(album->getTitle()));
 
-    if (result == KMessageBox::Yes) {
-        KIO::Job* job = KIO::del(album->getPath());
-        connect(job, SIGNAL(result(KIO::Job*)),
-                this, SLOT(slot_onAlbumDelete(KIO::Job*)));
-    }
-}
-
-void AlbumFolderView::slot_onAlbumDelete(KIO::Job* job)
-{
-    if (job->error()) {
-        job->showErrorDialog(this);
-    }
-}
-
-void AlbumFolderView::slot_albumHighlight(Digikam::AlbumInfo* album)
-{
-    if (!album || !album->getViewItem()) {
-        return;
-    }
-
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
-
-    if (folderItem->isGroupItem() || folderItem->isHighlighted()) {
-        return;
-    }
-
-    if (thumbJob_.isNull()) {
-        thumbJob_ = new Digikam::ThumbnailJob(KURL(album->getPath()),
-                                              (int)ThumbnailSize::Tiny,
-                                              true);
-        connect(thumbJob_,
-                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
-    }
-    else
-        thumbJob_->addItem(KURL(album->getPath()));
-}
-
-void AlbumFolderView::slot_selectionChanged()
-{
-    QListViewItem* item = selectedItem();
-
-    if (!item) {
-        albumMan_->setCurrentAlbum(0);
-        return;
-    }
-
-    AlbumFolderItem *folderItem
-        = static_cast<AlbumFolderItem *>(item);
-
-    if (folderItem->isGroupItem()) {
-        albumMan_->setCurrentAlbum(0);
-        return;
-    }
-
-    if (folderItem->albumInfo_) {
-        albumMan_->setCurrentAlbum(
-            const_cast<Digikam::AlbumInfo *>(folderItem->albumInfo_));
-    }
-}
-
-void AlbumFolderView::slot_doubleClicked(QListViewItem* item)
-{
-     if (!item) return;
-
-     AlbumFolderItem *folderItem
-        = static_cast<AlbumFolderItem *>(item);
-
-     if (folderItem->isGroupItem())
-         return;
-
-     Digikam::AlbumInfo* album = const_cast<Digikam::AlbumInfo *>(folderItem->albumInfo_);
-     slot_albumPropsEdit(album);
-}
-
-void AlbumFolderView::slot_rightButtonClicked(QListViewItem* item,
-                                              const QPoint&,
-                                              int)
-{
-    if (!item) return;
-
-     AlbumFolderItem *folderItem
-         = static_cast<AlbumFolderItem *>(item);
-
-     if (folderItem->isGroupItem())
-         return;
-
-     QPopupMenu popmenu(this);
-     popmenu.insertItem(SmallIcon("pencil"),
-                        i18n("Edit Album Properties"), 10);
-     popmenu.insertItem(SmallIcon("edittrash"),
-                        i18n("Delete Album from HardDisk"), 11);
-
-     // Added KIPI Albums plugins Actions
-                             
-     KAction *action;
-     const QPtrList<KAction>& AlbumActions = DigikamApp::getinstance()->menuAlbumActions();
-     QPtrListIterator<KAction> it3(AlbumActions);
-     bool count = 0;
-    
-     while ( (action = it3.current()) != 0 ) 
+    if (result == KMessageBox::Yes)
+    {
+        QString errMsg;
+        if (!albumMan_->deletePAlbum(album, errMsg))
         {
-        action->plug(&popmenu);
-        ++it3;
-        count = 1;
+            KMessageBox::error(0, errMsg);
         }
-
-     if (count != 0)
-        popmenu.insertSeparator();
-     
-     // Added KIPI Batch processes plugins Actions
-     
-     KActionMenu* menuKIPIBatch = new KActionMenu(i18n("Batch processes"));  
-     const QPtrList<KAction>& BatchActions = DigikamApp::getinstance()->menuBatchActions();
-     QPtrListIterator<KAction> it2(BatchActions);
-     count = 0;
-    
-     while ( (action = it2.current()) != 0 ) 
-        {
-        menuKIPIBatch->insert(action);
-        ++it2;
-        count = 1;
-        }
-
-     if (count != 0)
-        {
-        menuKIPIBatch->plug(&popmenu);
-        }
-        
-     // Checking Digikam standard actions for Albums.
-     
-     int id = popmenu.exec(QCursor::pos());
-
-     switch(id) {
-
-     case 10: {
-         Digikam::AlbumInfo* album = const_cast<Digikam::AlbumInfo *>(folderItem->albumInfo_);
-         slot_albumPropsEdit(album);
-         break;
-     }
-
-     case 11: {
-         Digikam::AlbumInfo *album =
-             const_cast<Digikam::AlbumInfo *>(folderItem->albumInfo());
-         albumDelete(album);
-         break;
-     }
-
-     default:
-        break;
     }
-
 }
 
-void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
+void AlbumFolderView::albumEdit(PAlbum* album)
 {
-    if (!album || !album->getViewItem()) return;
-    
+    if (!album || !album->getViewItem())
+        return;
+
     QString     oldTitle(album->getTitle());
-    QString     oldComments(album->getComments());
+    QString     oldComments(album->getCaption());
     QString     oldCollection(album->getCollection());
     QDate       oldDate(album->getDate());
     QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
@@ -610,9 +605,9 @@ void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
     if (AlbumPropsEdit::editProps(album, title, comments,
                                   date, collection,
                                   albumCollections)) 
-        {
+    {
         if (comments != oldComments)
-            album->setComments(comments);
+            album->setCaption(comments);
 
         if (date != oldDate && date.isValid()) 
             album->setDate(date);
@@ -624,13 +619,350 @@ void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
         resort();
 
         // Do this last : so that if anything else changed we can
-        // successfully save the db and reopen it
-        
+        // successfully save to the db with the old name
+
+        // todo
+        /*
         if (title != oldTitle) 
-           {
-           albumMan_->renameAlbum(album, title);
-           }
+        {
+            albumMan_->renameAlbum(album, title);
+        }
+        */
     }
+}
+
+void AlbumFolderView::albumHighlight(PAlbum* album)
+{
+    if (!album || !album->getViewItem()) {
+        return;
+    }
+
+    AlbumFolderItem *folderItem =
+        static_cast<AlbumFolderItem*>(album->getViewItem());
+
+    if (folderItem->isGroupItem() || folderItem->isHighlighted())
+    {
+        return;
+    }
+
+    if (thumbJob_.isNull())
+    {
+        thumbJob_ = new Digikam::ThumbnailJob(album->fileItem(),
+                                              (int)ThumbnailSize::Tiny,
+                                              true);
+        connect(thumbJob_,
+                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                                               const QPixmap&,
+                                               const KFileMetaInfo*)),
+                SLOT(slotGotThumbnail(const KFileItem*,
+                                      const QPixmap&,
+                                      const KFileMetaInfo*)));
+    }
+    else
+    {
+        thumbJob_->addItem(album->fileItem());
+    }
+}
+
+
+void AlbumFolderView::tagNew()
+{
+    TAlbum *album = 0;
+    
+    if (getSelected())
+    {
+        AlbumFolderItem *folderItem = static_cast<AlbumFolderItem*>(getSelected());
+        Album *a = folderItem->album();
+        if (a && a->type() == Album::TAG)
+        {
+            album = dynamic_cast<TAlbum*>(a);
+        }
+    }
+
+    if (!album)
+        album = dynamic_cast<TAlbum*>(tagRootItem_->album());
+
+    tagNew(album);
+}
+
+void AlbumFolderView::tagNew(TAlbum* parent)
+{
+    QString title, icon;
+
+    if (!TagCreateDlg::tagCreate(parent, title, icon))
+        return;
+
+    QString errMsg;
+    if (!albumMan_->createTAlbum(parent, title, icon, errMsg))
+        KMessageBox::error(0, errMsg);
+}
+
+void AlbumFolderView::tagDelete()
+{
+    Album *album = albumMan_->currentAlbum();
+    if (!album || album->isRoot() || album->type() != Album::TAG)
+        return;
+
+    tagDelete(dynamic_cast<TAlbum*>(album));
+}
+
+void AlbumFolderView::tagDelete(TAlbum *album)
+{
+    if (!album || album->isRoot())
+        return;
+
+    int result =
+        KMessageBox::questionYesNo(0, i18n("Delete '%1' Tag")
+                                   .arg(album->getTitle()));
+
+    if (result == KMessageBox::Yes)
+    {
+        QString errMsg;
+        if (!albumMan_->deleteTAlbum(album, errMsg)) 
+            KMessageBox::error(0, errMsg);
+    }
+}
+
+void AlbumFolderView::tagEdit()
+{
+    Album *album = albumMan_->currentAlbum();
+    if (!album || album->isRoot() || album->type() != Album::TAG)
+        return;
+
+    tagEdit(dynamic_cast<TAlbum*>(album));
+}
+
+void AlbumFolderView::tagEdit(TAlbum* album)
+{
+    if (!album || album->isRoot())
+        return;
+
+    QString title, icon;
+    if (!TagEditDlg::tagEdit(album, title, icon))
+    {
+        return;
+    }
+
+    AlbumFolderItem *folderItem =
+        static_cast<AlbumFolderItem*>(album->getViewItem());
+    
+    if (album->getTitle() != title)
+    {
+        QString errMsg;
+        if (!albumMan_->renameTAlbum(album, title, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            folderItem->setText(title);
+    }
+
+    if (album->getIcon() != icon)
+    {
+        QString errMsg;
+        if (!albumMan_->updateTAlbumIcon(album, icon, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            folderItem->setPixmap(getBlendedIcon(album));
+    }
+    
+    emit signalTagsAssigned();
+}
+
+void AlbumFolderView::slotSelectionChanged(ListItem* item)
+{
+    if (!item)
+    {
+        albumMan_->setCurrentAlbum(0);
+        return;
+    }
+
+    AlbumFolderItem *folderItem
+        = static_cast<AlbumFolderItem *>(item);
+
+    if (folderItem->isGroupItem())
+    {
+        albumMan_->setCurrentAlbum(0);
+        return;
+    }
+
+    if (folderItem->album_)
+    {
+        albumMan_->setCurrentAlbum(folderItem->album_);
+    }
+}
+
+void AlbumFolderView::slotDoubleClicked(ListItem* item)
+{
+     if (!item) return;
+
+     AlbumFolderItem *folderItem
+        = static_cast<AlbumFolderItem *>(item);
+
+     if (folderItem->isGroupItem() || folderItem->album()->isRoot())
+         return;
+
+     if (folderItem->album()->type() == Album::PHYSICAL)
+         albumEdit(dynamic_cast<PAlbum*>(folderItem->album()));
+     else
+         tagEdit(dynamic_cast<TAlbum*>(folderItem->album()));
+}
+
+void AlbumFolderView::slotRightButtonClicked(ListItem* item)
+{
+    if (!item)
+        return;
+
+     AlbumFolderItem *folderItem = dynamic_cast<AlbumFolderItem*>(item);
+
+     if (!folderItem || folderItem->isGroupItem() || !folderItem->album())
+         return;
+
+     Album* a = folderItem->album();
+     
+     switch (a->type())
+     {
+     case (Album::PHYSICAL):
+     {
+         contextMenuPAlbum(dynamic_cast<PAlbum*>(a));
+         break;
+     }
+     case (Album::TAG):
+     {
+         contextMenuTAlbum(dynamic_cast<TAlbum*>(a));
+         break;
+     }
+     default:
+         break;
+     }
+             
+}
+
+void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
+{
+    QPopupMenu popmenu(this);
+
+    popmenu.insertItem(SmallIcon("albumfoldernew"),
+                       i18n("New Album"), 10);
+
+    if (!album->isRoot())
+    {
+        popmenu.insertItem(SmallIcon("pencil"),
+                           i18n("Edit Album Properties"), 11);
+        popmenu.insertItem(SmallIcon("edittrash"),
+                           i18n("Delete Album from HardDisk"), 12);
+
+        // Add KIPI Albums plugins Actions
+                             
+        KAction *action;
+        const QPtrList<KAction>& AlbumActions =
+            DigikamApp::getinstance()->menuAlbumActions();
+        QPtrListIterator<KAction> it(AlbumActions);
+
+        int count = 0;
+        while ((action = it.current()) != 0) 
+        {
+            action->plug(&popmenu);
+            ++it;
+            count++;
+        }
+
+        if (count != 0)
+            popmenu.insertSeparator();
+     
+        // Add KIPI Batch processes plugins Actions
+     
+        KActionMenu* menuKIPIBatch = new KActionMenu(i18n("Batch processes"));  
+        const QPtrList<KAction>& BatchActions =
+            DigikamApp::getinstance()->menuBatchActions();
+        QPtrListIterator<KAction> it2(BatchActions);
+
+        count = 0;
+        while ( (action = it2.current()) != 0 ) 
+        {
+            menuKIPIBatch->insert(action);
+            ++it2;
+            count++;
+        }
+     
+        if (count != 0)
+        {
+            menuKIPIBatch->plug(&popmenu);
+        }
+    }
+        
+    switch (popmenu.exec(QCursor::pos()))
+    {
+    case 10:
+    {
+        albumNew(album);
+        break;
+    }
+    case 11: {
+        if (!album->isRoot())
+            albumEdit(album);
+        break;
+    }
+    case 12: {
+        if (!album->isRoot())
+            albumDelete(album);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void AlbumFolderView::contextMenuTAlbum(TAlbum* album)
+{
+    QPopupMenu popmenu(this);
+
+    popmenu.insertItem(SmallIcon("tag"),
+                       i18n("New Tag"), 10);
+
+    if (!album->isRoot())
+    {
+        popmenu.insertItem(SmallIcon("pencil"),
+                           i18n("Edit Tag Properties"), 11);
+        popmenu.insertItem(SmallIcon("edittrash"),
+                           i18n("Delete Tag"), 12);
+    }
+    
+    switch (popmenu.exec(QCursor::pos()))
+    {
+    case 10:
+    {
+        tagNew(album);
+        break;
+    }
+    case 11:
+    {
+        if (!album->isRoot())
+            tagEdit(album);
+        break;
+    }
+    case 12:
+    {
+        if (!album->isRoot())
+            tagDelete(album);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void AlbumFolderView::focusInEvent(QFocusEvent*)
+{
+    unsetPalette();
+}
+
+void AlbumFolderView::focusOutEvent(QFocusEvent*)
+{
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, QColor(245,245,245));
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
 }
 
 // Drag and Drop -----------------------------------------
@@ -644,24 +976,45 @@ void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
 
 void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 {
-    if (!QUriDrag::canDecode(event) &&
-        !CameraDragObject::canDecode(event)) {
+    if (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event))
+    {
         event->ignore();
         return;
     }
 
     // Get a pointer to the new drop item
     QPoint point(0, event->pos().y());
-    AlbumFolderItem* newDropTarget =
-        static_cast<AlbumFolderItem*>(
-            itemAt(contentsToViewport(point)) );
-    if (!newDropTarget || newDropTarget->isGroupItem()) {
+    AlbumFolderItem* newDropTarget = static_cast<AlbumFolderItem*>(itemAt(point));
+    if (!newDropTarget ||  newDropTarget->isGroupItem() ||
+        !newDropTarget->album() ||  newDropTarget->album()->isRoot())
+    {
         event->ignore();
         return;
     }
 
+    if (newDropTarget->album()->type() == Album::PHYSICAL)
+    {
+        // do not allow DnD from tags onto a physical album
+        if (TagItemsDrag::canDecode(event))
+        {
+            event->ignore();
+            return;
+        }
+    }
+    else if (newDropTarget->album()->type() == Album::TAG)
+    {
+        // only allow DnD onto a tag album if its being dragged
+        // from a physical album or a tag album
+        if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event)))
+        {
+            event->ignore();
+            return;
+        }
+    }
+
     event->accept();
-    if (dropTarget_ == newDropTarget) return;
+    if (dropTarget_ == newDropTarget)
+        return;
 
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
@@ -669,7 +1022,6 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
     dropTarget_ = newDropTarget;
     dropTarget_->addDropHighlight();
-
 }
 
 void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent*)
@@ -681,117 +1033,185 @@ void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent*)
 
 void AlbumFolderView::contentsDropEvent(QDropEvent* event)
 {
-    if (!dropTarget_) return;
+    if (!dropTarget_||  dropTarget_->isGroupItem())
+        return;
 
-    if (QUriDrag::canDecode(event)) {
+    Album* a = dropTarget_->album();
+    if (!a || a->isRoot())
+        return;
 
-        Digikam::AlbumInfo *destAlbum =
-            const_cast<Digikam::AlbumInfo*>(dropTarget_->albumInfo());
-        KURL destURL = KURL(destAlbum->getPath());
+    if (a->type() == Album::PHYSICAL) {
+        PAlbum *album = static_cast<PAlbum*>(a);
+        phyAlbumDropEvent(event, album);
+    }
+    else if (a->type() == Album::TAG) {
+        TAlbum *album = static_cast<TAlbum*>(a);
+        tagAlbumDropEvent(event, album);
+    }
+        
+    dropTarget_->removeDropHighlight();
+    dropTarget_ = 0;
+}
 
-        KURL::List srcURLs;
-        KURLDrag::decode(event, srcURLs);
+void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
+{
+    if (TagItemsDrag::canDecode(event))
+        return;
+    
+    if (AlbumItemsDrag::canDecode(event))
+    {
+        // Internal drag from one album to another
+        
+        PAlbum* srcAlbum  = 0;
+        PAlbum* destAlbum = album;
 
-        KURL firstSrcURL(srcURLs.first());
-        Digikam::AlbumInfo* srcAlbum =
-            albumMan_->findAlbum(firstSrcURL.upURL().filename());
+        KURL::List      urls;
+        QValueList<int> dirIDs;
+        
+        if (!AlbumItemsDrag::decode(event, urls, dirIDs))
+            return;
 
+        if (urls.isEmpty() || dirIDs.isEmpty())
+            return;
+
+        // all the dirids will be the same
+        int dirID = dirIDs.first();
+        srcAlbum = AlbumManager::instance()->findPAlbum(dirID);
+        if (!srcAlbum)
+        {
+            kdWarning() << "Could not find source album of drag"
+                        << endl;
+            return;
+        }
+
+        if (srcAlbum == destAlbum)
+            return;
+        
         QPopupMenu popMenu(this);
         popMenu.insertItem( i18n("&Copy"), 10 );
         popMenu.insertItem( i18n("&Move"), 11 );
 
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
-        switch(id) {
-        case 10: {
-
-            if (!srcAlbum) {
-                KIO::copy(srcURLs,destURL,true);
-            }
-            else {
-
-                QStringList fileList;
-                KURL::List::iterator it;
-                for ( it = srcURLs.begin(); it != srcURLs.end(); ++it )
-                    fileList.append((*it).filename());
+        switch(id)
+        {
+        case 10:
+        {
+            QStringList fileList;
+            KURL::List::iterator it;
+            for ( it = urls.begin(); it != urls.end(); ++it )
+                fileList.append((*it).filename());
                 
-                DigikamIO::copy(srcAlbum, destAlbum, fileList);
-            }
-            
+            AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
+                                                          fileList, false);
             break;
         }
-        case 11: {
-
-            if (!srcAlbum) {
-                KIO::move(srcURLs,destURL,true);
-            }
-            else {
-
-                QStringList fileList;
-                KURL::List::iterator it;
-                for ( it = srcURLs.begin(); it != srcURLs.end(); ++it )
-                    fileList.append((*it).filename());
+        case 11:
+        {
+            QStringList fileList;
+            KURL::List::iterator it;
+            for ( it = urls.begin(); it != urls.end(); ++it )
+                fileList.append((*it).filename());
                 
-                DigikamIO::move(srcAlbum, destAlbum, fileList);
-            }
-
+            AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
+                                                          fileList, true);
             break;
         }
         default:
             break;
         }
     }
-    else if (CameraDragObject::canDecode(event)) {
-
-        QPopupMenu popMenu(this);
-        popMenu.insertItem( i18n("&Download"), 10 );
-        popMenu.setMouseTracking(true);
-
-        int id = popMenu.exec(QCursor::pos());
-        switch(id) {
-        case 10: {
-
-            CameraType ctype;
-            CameraDragObject::decode(event, ctype);
-
-            QByteArray arg1;
-            QDataStream stream1(arg1, IO_WriteOnly);
-            stream1 << dropTarget_->albumInfo()->getTitle();
-
-            DCOPClient *client = kapp->dcopClient();
-            client->send("digikamcameraclient", "DigikamCameraClient",
-                         "cameraChangeDownloadAlbum(QString)",
-                         arg1);
+    else if (QUriDrag::canDecode(event))
+    {
+        // DnD from an external source
             
-            QByteArray arg2;
-
-            client->send("digikamcameraclient", "DigikamCameraClient",
-                         "cameraDownloadSelected()",
-                         arg2);
-
-            break;
-        }
-        default:
-            break;
-        }
-
     }
+    else if (CameraDragObject::canDecode(event))
+    {
+        // todo
+        /*
+          QPopupMenu popMenu(this);
+          popMenu.insertItem( i18n("&Download"), 10 );
+          popMenu.setMouseTracking(true);
 
-    dropTarget_->removeDropHighlight();
-    dropTarget_ = 0;
+          int id = popMenu.exec(QCursor::pos());
+          switch(id) {
+          case 10: {
+
+          CameraType ctype;
+          CameraDragObject::decode(event, ctype);
+
+          QByteArray arg1;
+          QDataStream stream1(arg1, IO_WriteOnly);
+          stream1 << dropTarget_->album()->getTitle();
+
+          DCOPClient *client = kapp->dcopClient();
+          client->send("digikamcameraclient", "DigikamCameraClient",
+          "cameraChangeDownloadAlbum(QString)",
+          arg1);
+            
+          QByteArray arg2;
+
+          client->send("digikamcameraclient", "DigikamCameraClient",
+          "cameraDownloadSelected()",
+          arg2);
+
+          break;
+          }
+          default:
+          break;
+          }
+        */
+    }
 }
 
-void AlbumFolderView::slotGotThumbnail(const KURL& url, const QPixmap& thumbnail)
+void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
-    QString title(url.fileName());
-    if (title.isEmpty()) return;
+    if (!(TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event)))
+        return;
 
-    Digikam::AlbumInfo *album =
-        Digikam::AlbumManager::instance()->findAlbum(title);
-    if (!album) return;
+    QPopupMenu popmenu(this);
+    popmenu.insertItem(SmallIcon("tag"), 
+                       i18n("Assign Tag '%1' to dropped items")
+                       .arg(album->getURL()), 10);
+
+    if (popmenu.exec(QCursor::pos()) != 10)
+        return;
+    
+    KURL::List      urls;
+    QValueList<int> dirIDs;
+    
+    if (!TagItemsDrag::decode(event, urls, dirIDs))
+        return;
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+
+    db->beginTransaction();
+    KURL::List::const_iterator      itU = urls.begin();
+    QValueList<int>::const_iterator itD = dirIDs.begin();
+    for ( ; itU != urls.end() || itD != dirIDs.end(); ++itU, ++itD)
+    {
+        PAlbum* pa = AlbumManager::instance()->findPAlbum(*itD);
+        if (pa)
+        {
+            db->setItemTag(pa, (*itU).fileName(), album);
+        }
+    }
+    db->commitTransaction();
+
+    emit signalTagsAssigned();
+}
+
+void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,
+                                       const QPixmap& thumbnail,
+                                       const KFileMetaInfo*)
+{
+    if (!fileItem->extraData(this))
+        return;
 
     AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+        (AlbumFolderItem*)(fileItem->extraData(this));    
+
     folderItem->setPixmap(thumbnail);
 }
 

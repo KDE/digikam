@@ -6,7 +6,7 @@ class ThumbnailSize {
 public:
 
     enum Size {
-        Tiny   = 48,
+        Tiny   = 32,
         Small  = 64,
         Medium = 100,
         Large  = 160,

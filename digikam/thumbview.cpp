@@ -96,7 +96,7 @@ ThumbView::ThumbView(QWidget* parent, const char* name,
     setBackgroundMode(Qt::NoBackground);
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
-    viewport()->setFocusPolicy(QWidget::TabFocus);
+    viewport()->setFocusPolicy(QWidget::WheelFocus);
 
     renamingItem = 0;
     
@@ -157,6 +157,7 @@ void ThumbView::clear(bool update)
 
     viewport()->setUpdatesEnabled(false);
     resizeContents(0, 0);
+    setContentsPos(0, 0);
     viewport()->setUpdatesEnabled(true);
 
     if (update)
@@ -274,7 +275,6 @@ void ThumbView::takeItem(ThumbItem *item)
 
 void ThumbView::slotUpdate()
 {
-
     d->updateTimer->stop();
     sort();
     rearrangeItems();

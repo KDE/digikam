@@ -1,4 +1,4 @@
-SUBDIRS = interfaces kioslave utilities digikam digikamcameraclient imageplugins
+SUBDIRS = sqlite utilities digikam kioslave imageplugins #digikamcameraclient 
 
 EXTRA_DIST = Digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 

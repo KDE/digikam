@@ -22,7 +22,7 @@
 #ifndef ALBUMFOLDERITEM_H
 #define ALBUMFOLDERITEM_H
 
-#include <qlistview.h>
+#include <listitem.h>
 #include <qpixmap.h>
 
 class QPainter;
@@ -31,55 +31,43 @@ class QString;
 class QRect;
 
 class AlbumFolderView;
+class Album;
 
-namespace Digikam
-{
-class AlbumInfo;
-}
-
-class AlbumFolderItem : public QListViewItem {
+class AlbumFolderItem : public ListItem {
 
     friend class AlbumFolderView;
 
 public:
 
-    AlbumFolderItem(AlbumFolderView *parent, const QString& name,
+    AlbumFolderItem(AlbumFolderView *parent, Album* album);
+
+    AlbumFolderItem(AlbumFolderItem *parent, Album* album);
+
+    AlbumFolderItem(AlbumFolderItem *parent, const QString& name,
                     int year, int month);
 
-    AlbumFolderItem(AlbumFolderView *parent, const Digikam::AlbumInfo* album);
-
-    AlbumFolderItem(AlbumFolderItem *parent, const Digikam::AlbumInfo* album);
-
     bool isGroupItem();
-
     bool isHighlighted();
     void setPixmap(const QPixmap& pixmap);
 
-    const Digikam::AlbumInfo* albumInfo() {
-        return albumInfo_;
-    }
+    Album* album() const;
 
-    void paintCell(QPainter *p, const QColorGroup &cg,
-                   int column, int width, int align);
-    void paintFocus(QPainter *p, const QColorGroup &cg,
-                    const QRect &r);
-
-    int compare(QListViewItem *i, int col, bool ascending) const;
+    int  compare(ListItem *item) const;
 
     void addDropHighlight();
     void removeDropHighlight();
 
+protected:
+
+    void paint(QPainter *p, const QColorGroup &cg, const QRect& r);
+
 private:
 
-    void paint(QPainter *p, const QString& s,
-               const QColorGroup &cg);
-
-private:
-
-    const Digikam::AlbumInfo* albumInfo_;
-    bool isGroup_;
-    int  year_;
-    int  month_;
+    Album*  album_;
+    bool    isGroup_;
+    bool    isRoot_;
+    int     year_;
+    int     month_;
     QPixmap pix_;
     bool    highlighted_;
 };

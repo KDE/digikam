@@ -33,10 +33,7 @@ class QLineEdit;
 class QCheckBox;
 class QCheckListItem;
 
-namespace Digikam
-{
-class AlbumInfo;
-}
+class PAlbum;
 
 class AlbumPropsEdit : public KDialogBase
 {
@@ -44,7 +41,7 @@ class AlbumPropsEdit : public KDialogBase
 
 public:
 
-    AlbumPropsEdit(const Digikam::AlbumInfo* albumInfo);
+    AlbumPropsEdit(PAlbum* album);
     ~AlbumPropsEdit();
 
     QString     title() const;
@@ -53,7 +50,7 @@ public:
     QString     collection() const;
     QStringList albumCollections() const;
 
-    static bool editProps(const Digikam::AlbumInfo *albumInfo,
+    static bool editProps(PAlbum *album,
                           QString& title,
                           QString& comments,
                           QDate& date,
@@ -64,7 +61,7 @@ private:
 
     void  populateCollections();
 
-    const Digikam::AlbumInfo *albumInfo_;
+    PAlbum         *album_;
     QStringList     albumCollections_;
     
     QLineEdit      *titleEdit_;

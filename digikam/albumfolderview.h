@@ -27,9 +27,10 @@
 
 // Qt includes.
 
-#include <qlistview.h>
+#include <listview.h>
 #include <qptrlist.h>
 #include <qguardedptr.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -39,19 +40,23 @@ class QDate;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
-class QPixmap;
 class KURL;
+class KFileItem;
+class KFileMetaInfo;
 
+class ListItem;
+class Album;
+class PAlbum;
+class TAlbum;
 class AlbumFolderItem;
+class AlbumManager;
 
 namespace Digikam
 {
-class AlbumInfo;
-class AlbumManager;
 class ThumbnailJob;
 }
 
-class AlbumFolderView : public QListView 
+class AlbumFolderView : public ListView 
 {
     Q_OBJECT
 
@@ -63,24 +68,40 @@ public:
     void applySettings();
 
     void albumNew();
+    void albumNew(PAlbum* parent);
     void albumDelete();
-    void albumDelete(Digikam::AlbumInfo* album);
-
+    void albumDelete(PAlbum* album);
+    void albumEdit(PAlbum* album);
+    void albumHighlight(PAlbum* album);
+    
+    void tagNew();
+    void tagNew(TAlbum* album);
+    void tagDelete();
+    void tagDelete(TAlbum* album);
+    void tagEdit();
+    void tagEdit(TAlbum* album);
+    
 private:
 
     void resort();
 
     void reparentItem(AlbumFolderItem* folderItem);
-    void reparentItemByDate(AlbumFolderItem* folderItem);
-    void reparentItemByCollection(AlbumFolderItem* folderItem);
-    void reparentItemFlat(AlbumFolderItem* folderItem);
-    AlbumFolderItem* findParentByCollection(AlbumFolderItem* folderItem);
-    AlbumFolderItem* findParentByDate(AlbumFolderItem* folderItem);
+
+    AlbumFolderItem* findParent(Album *album);
+    AlbumFolderItem* findParentByFolder(Album *album);
+    AlbumFolderItem* findParentByCollection(PAlbum *album);
+    AlbumFolderItem* findParentByDate(PAlbum *album);
 
     void clearEmptyGroupItems();
-    
-    bool hasAlbum(const QString& path);
 
+    QPixmap getBlendedIcon(TAlbum* album) const;
+
+    void contextMenuPAlbum(PAlbum* album);
+    void contextMenuTAlbum(TAlbum* album);
+    
+    void phyAlbumDropEvent(QDropEvent* e, PAlbum *album);
+    void tagAlbumDropEvent(QDropEvent* e, TAlbum *album);
+    
 protected:
 
     void contentsDragEnterEvent(QDragEnterEvent*);
@@ -88,35 +109,37 @@ protected:
     void contentsDragLeaveEvent(QDragLeaveEvent*);
     void contentsDropEvent(QDropEvent*);
 
+    void focusInEvent(QFocusEvent*);
+    void focusOutEvent(QFocusEvent*);
+    
 private:
 
     AlbumFolderItem*                   dropTarget_;
     int                                albumSortOrder_;
     QPtrList<AlbumFolderItem>          groupItems_;
-    Digikam::AlbumManager*             albumMan_;
+    AlbumManager*                      albumMan_;
     QGuardedPtr<Digikam::ThumbnailJob> thumbJob_;
+    AlbumFolderItem*                   phyRootItem_;
+    AlbumFolderItem*                   tagRootItem_;
+
+signals:
+
+    void signalTagsAssigned();
     
-public slots:
-
-    void slot_albumPropsEdit(Digikam::AlbumInfo* album);
-    void slot_albumHighlight(Digikam::AlbumInfo* album);
-    void slotGotThumbnail(const KURL& url, const QPixmap& thumbnail);
-
 private slots:
 
-    void slot_selectionChanged();
-    void slot_doubleClicked(QListViewItem* item);
-    void slot_rightButtonClicked(QListViewItem* item,
-                                 const QPoint& pos,
-                                 int column);
+    void slotSelectionChanged(ListItem *item);
+    void slotDoubleClicked(ListItem* item);
+    void slotRightButtonClicked(ListItem* item);
 
-    void slot_onAlbumDelete(KIO::Job* job);
-    void slot_onAlbumCreate(KIO::Job* job);
-    void slot_newAlbumCreated(Digikam::AlbumInfo*);
+    void slotNewAlbumCreated(Album* album);
         
-    void slot_albumAdded(Digikam::AlbumInfo *album);
-    void slot_albumDeleted(Digikam::AlbumInfo *album);
-    void slot_albumsCleared();
+    void slotAlbumAdded(Album *album);
+    void slotAlbumDeleted(Album *album);
+    void slotAlbumsCleared();
+
+    void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
+                          const KFileMetaInfo*);
 };
 
 #endif  // ALBUMFOLDERVIEW_H

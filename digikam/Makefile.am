@@ -4,30 +4,36 @@ lib_LTLIBRARIES = libdigikam.la
 bin_PROGRAMS = digikam
 
 INCLUDES = \
+	-I$(top_srcdir)/digikam/sqlite \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
 	-I$(top_srcdir)/digikam/utilities/setup \
-	-I$(top_srcdir)/digikam/interfaces \
 	$(all_includes)
 
-libdigikam_la_SOURCES = digikamapp.cpp digikamview.cpp \
+libdigikam_la_SOURCES = albummanager.cpp album.cpp \
+			albumitemhandler.cpp albumdb.cpp \
+			albumlister.cpp albumfilecopymove.cpp \
+			thumbnailjob.cpp dragobjects.cpp \
+			listview.cpp listitem.cpp \
+			thumbview.cpp thumbitem.cpp \
+			digikamapp.cpp digikamview.cpp \
 		        albumfolderview.cpp albumfolderitem.cpp \
 		        albumiconview.cpp albumiconitem.cpp \
-		        thumbview.cpp thumbitem.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
 		        albumsettings.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        digikamcameraprocess.cpp \
-		        digikamfirstrun.cpp
+		        digikamcameraprocess.cpp digikamfirstrun.cpp \
+			kipiinterface.cpp tagcreatedlg.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) \
+		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		        $(top_builddir)/digikam/utilities/setup/libsetup.la \
-		        $(top_builddir)/digikam/interfaces/libdigikaminterfaces.la
+		        $(top_builddir)/digikam/utilities/setup/libsetup.la 
 
-libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
+libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
+			-lkipi -no-undefined 
 
 
 digikam_SOURCES = main.cpp
@@ -35,7 +41,7 @@ digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
 		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KEXIF) \
 		  libdigikam.la
 
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) -lkipi
+digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2)
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp

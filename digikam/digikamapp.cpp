@@ -52,7 +52,7 @@
 // Local includes.
 
 #include "albummanager.h"
-#include "albuminfo.h"
+#include "album.h"
 #include "cameralist.h"
 #include "cameratype.h"
 #include "albumsettings.h"
@@ -74,7 +74,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     mAlbumSettings = new AlbumSettings();
     mAlbumSettings->readSettings();
 
-    mAlbumManager = new Digikam::AlbumManager(this);
+    mAlbumManager = new AlbumManager();
 
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
@@ -98,8 +98,11 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     loadPlugins();
               
     // Start the camera process
-    DigikamCameraProcess *process = new DigikamCameraProcess(this);
-    process->start();
+    // todo:
+    //DigikamCameraProcess *process = new DigikamCameraProcess(this);
+    //process->start();
+
+    mView->setInitialSizes();
 }
 
 DigikamApp::~DigikamApp()
@@ -109,6 +112,8 @@ DigikamApp::~DigikamApp()
 
     mAlbumSettings->saveSettings();
     delete mAlbumSettings;
+
+    delete mAlbumManager;
     
     m_instance = 0;
 }
@@ -180,9 +185,9 @@ void DigikamApp::setupActions()
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;
+    sortActionList.append(i18n("By Folder"));
     sortActionList.append(i18n("By Collection"));
     sortActionList.append(i18n("By Date"));
-    sortActionList.append(i18n("Flat"));
     mAlbumSortAction->setItems(sortActionList);
 
     mDeleteAction = new KAction(i18n("Delete Album from HardDisk"),
@@ -211,6 +216,20 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    mNewTagAction = new KAction(i18n("New &Tag"), "tag",
+                                0, mView, SLOT(slotNewTag()),
+                                actionCollection(), "tag_new");
+
+    mDeleteTagAction = new KAction(i18n("Delete Tag"), "tag",
+                                   0, mView, SLOT(slotDeleteTag()),
+                                   actionCollection(), "tag_delete");
+
+    mEditTagAction = new KAction( i18n("Edit Tag Properties"), "tag",
+                                  0, mView, SLOT(slotEditTag()),
+                                  actionCollection(), "tag_edit");
+
+    // -----------------------------------------------------------
+    
     mImageViewAction = new KAction(i18n("View/Edit"),
                                     "editimage",
                                     Key_F4,
@@ -378,10 +397,12 @@ void DigikamApp::slot_exit()
 
 void DigikamApp::slotCameraConnect()
 {
+    /* TODO:
+     *
     CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
     
     if (ctype) 
-        {
+    {
         QString selectedAlbum = "";
         if (mAlbumManager->currentAlbum())
             selectedAlbum = mAlbumManager->currentAlbum()->getTitle();
@@ -400,13 +421,14 @@ void DigikamApp::slotCameraConnect()
         if (!client->send("digikamcameraclient", "DigikamCameraClient",
                           "cameraOpen(QString,QString,QString,QString,QString,QString)",
                           arg))
-            qWarning("DigikamApp: DCOP Communication Error");
+            kdWarning() << "DigikamApp: DCOP Communication Error" << endl;
         
         if (!client->send("digikamcameraclient", "DigikamCameraClient",
                           "cameraConnect()",
                           arg2))
-            qWarning("DigikamApp: DCOP Communication Error");
-        }
+            kdWarning() << "DigikamApp: DCOP Communication Error" << endl;
+    }
+    */
 }
 
 void DigikamApp::slotCameraAdded(CameraType *ctype)
@@ -439,21 +461,27 @@ void DigikamApp::slotSetup()
             this,  SLOT(slotSetupChanged()));
     
     // For to show the number of KIPI plugins in the setup dialog.
-                
+
+    // todo
+    /*
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     m_setup->pluginsPage_->initPlugins((int)list.count());
+    */
     
     m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
-    m_setup->pluginsPage_->applyPlugins();
+    // todo
+    //m_setup->pluginsPage_->applyPlugins();
     
-    mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
+    mView->applySettings(mAlbumSettings);
     m_config->sync();
-    KipiInterface_->readSettings();
+
+    // todo
+    //KipiInterface_->readSettings();
 }
 
 void DigikamApp::slotEditKeys()
@@ -461,13 +489,15 @@ void DigikamApp::slotEditKeys()
     KKeyDialog* dialog = new KKeyDialog();
     dialog->insert( actionCollection(), i18n( "General" ) );
     
+    /* todo
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
-        {
+    {
         KIPI::Plugin* plugin = (*it)->plugin;
         dialog->insert( plugin->actionCollection(), (*it)->comment );
-        }
+    }
+    */
     
     dialog->configure();
 
@@ -514,23 +544,25 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::loadPlugins()
 {
+    // todo
+    /*
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
     connect( mAlbumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
              KipiInterface_, SLOT( slotSelectionChanged( bool ) ) );
 
-    connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( Digikam::AlbumInfo * ) ),
-             KipiInterface_, SLOT( slotCurrentAlbumChanged( Digikam::AlbumInfo * ) ) );
+    connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( AlbumInfo * ) ),
+             KipiInterface_, SLOT( slotCurrentAlbumChanged( AlbumInfo * ) ) );
                  
-    ignores.append(QString::fromLatin1( "HelloWorld" ));
-    ignores.append(QString::fromLatin1( "KameraKlient" ));    
+    ignores << QString::fromLatin1( "HelloWorld" );    
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );
     
     connect( KipiPluginLoader_, SIGNAL( replug() ),
              this, SLOT( slotKipiPluginPlug() ) );
 
     KipiPluginLoader_->loadPlugins();                             
+    */
     
     new ImagePluginLoader(this);
 }

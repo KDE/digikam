@@ -56,24 +56,74 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 
+void dateToString(const QDateTime& datetime, QString& str)
+{
+    int hr = datetime.time().hour();
+    hr = (hr > 12) ? (hr - 12) : hr;
+
+    str.sprintf("%4d/%2.2d/%2.2d, %2.2d:%2.2d%s",
+                datetime.date().year(),
+                datetime.date().month(),
+                datetime.date().day(),
+                hr,
+                datetime.time().minute(),
+                datetime.time() > QTime(12,0) ? "PM" : "AM");
+}
+
+QString squeezedText(QPainter* p, int width, const QString& fullText)
+{
+    QFontMetrics fm(p->fontMetrics());
+    int textWidth = fm.width(fullText);
+    if (textWidth > width) {
+        // start with the dots only
+        QString squeezedText = "...";
+        int squeezedWidth = fm.width(squeezedText);
+
+        // estimate how many letters we can add to the dots on both sides
+        int letters = fullText.length() * (width - squeezedWidth) / textWidth;
+        if (width < squeezedWidth) letters=1;
+        squeezedText = fullText.left(letters) + "...";
+        squeezedWidth = fm.width(squeezedText);
+
+        if (squeezedWidth < width) {
+            // we estimated too short
+            // add letters while text < label
+            do {
+                letters++;
+                squeezedText = fullText.left(letters) + "..."; 
+                squeezedWidth = fm.width(squeezedText);
+            } while (squeezedWidth < width);
+            letters--;
+            squeezedText = fullText.left(letters) + "..."; 
+        } else if (squeezedWidth > width) {
+            // we estimated too long
+            // remove letters while text > label
+            do {
+                letters--;
+                squeezedText = fullText.left(letters) + "...";
+                squeezedWidth = fm.width(squeezedText);
+            } while (letters && squeezedWidth > width);
+        }
+
+
+        if (letters >= 5) {
+            return squeezedText;
+        }
+    }
+    
+    return fullText;   
+}
 
 AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
                              const QString& text,
-                             const QPixmap& pix,
-                             int size,
-                             const KFileItem* fileItem,
-                             int imageWidth, int imageHeight)
-             : ThumbItem(parent, text, pix)
+                             const KFileItem* fileItem)
+             : ThumbItem(parent, text, *parent->itemBaseRegPixmap())
 {
     view_        = parent;
-    size_        = size;
     fileItem_    = fileItem;
-    imageWidth_  = imageWidth;
-    imageHeight_ = imageHeight;
     metaInfo_    = 0;
-    
-    updateExtraText();
-    calcRect();
+
+    setRect(view_->itemRect());
 }
 
 
@@ -83,355 +133,149 @@ AlbumIconItem::~AlbumIconItem()
         delete metaInfo_;
 }
 
-
-void AlbumIconItem::setPixmap(const QImage& thumbnail)
+void AlbumIconItem::setPixmap(const QPixmap& thumbnail,
+                              const KFileMetaInfo* metaInfo)
 {
-    QPainter painter;
-    painter.begin(pixmap());
-    painter.fillRect(0, 0, size_, size_,
-                     QBrush(iconView()->colorGroup().base()));
-    painter.drawImage((size_-thumbnail.width())/2,
-                      (size_-thumbnail.height())/2,
-                      thumbnail);
-    painter.end();
-
-    QRect pRect(iconView()->contentsRectToViewport(pixmapRect(false)));
-    if (pRect.intersects(iconView()->visibleRect())) {
-        pRect.moveBy(-1,-1);
-        pRect.setWidth(pRect.width()+2);
-        pRect.setHeight(pRect.height()+2);
-        painter.begin(iconView()->viewport());
-        painter.drawPixmap(pRect.x()+1, pRect.y()+1, *pixmap());
-        painter.end();
+    thumbnail_ = thumbnail;
+    if (metaInfo_)
+    {
+        delete metaInfo_;
+        metaInfo_ = 0;
     }
+    metaInfo_  = metaInfo;
 
-}
-
-void AlbumIconItem::setPixmap(const QPixmap& thumbnail)
-{
-    QPainter painter;
-    painter.begin(pixmap());
-    painter.fillRect(0, 0, size_, size_,
-                     QBrush(iconView()->colorGroup().base()));
-    painter.drawPixmap((size_-thumbnail.width())/2,
-                      (size_-thumbnail.height())/2,
-                      thumbnail);
-    painter.end();
-
-    QRect pRect(iconView()->contentsRectToViewport(pixmapRect(false)));
-    if (pRect.intersects(iconView()->visibleRect())) {
-        pRect.moveBy(-1,-1);
-        pRect.setWidth(pRect.width()+2);
-        pRect.setHeight(pRect.height()+2);
-        bitBlt(iconView()->viewport(), pRect.x()+1, pRect.y()+1,
-               pixmap(), 0, 0, pRect.width(), pRect.height());
-        //painter.begin(iconView()->viewport());
-        //painter.drawPixmap(pRect.x()+1, pRect.y()+1, *pixmap());
-        //painter.end();
+    QRect r(view_->contentsX(), view_->contentsY(),
+            view_->visibleWidth(), view_->visibleHeight());
+    if (r.intersects(rect()))
+    {
+        repaint();
     }
 }
 
 void AlbumIconItem::calcRect()
 {
-    QRect itemIconRect = QRect(0,0,0,0);
-    QRect itemTextRect = QRect(0,0,0,0);
-    itemExtraRect_ = QRect(0,0,0,0);
-    QRect itemRect = rect();
-
-    itemRect.setWidth(100);
-    itemRect.setHeight(0xFFFFFFFF);
-
-    // set initial pixrect
-    int pw = pixmap()->width();
-    int ph = pixmap()->height();
-
-    itemIconRect.setWidth(pw);
-    itemIconRect.setHeight(ph);
-
-    // word wrap main text
-    QFontMetrics fm(view_->font());
-    QRect r = QRect(fm.boundingRect(0, 0, itemIconRect.width(),
-                                    0xFFFFFFFF, Qt::AlignHCenter |
-                                    Qt::WordBreak | Qt::BreakAnywhere
-                                    | Qt::AlignTop,
-                                    text()));
-    r.setWidth(r.width() + 2);
-
-    itemTextRect.setWidth(r.width());
-    itemTextRect.setHeight(r.height());
-
-    // word wrap extra Text
-    if (!extraText_.isEmpty()) {
-
-        QFont font(view_->font());
-        int fontSize = font.pointSize();
-        if (fontSize > 0) {
-            font.setPointSize(fontSize-2);
-        }
-        else {
-            fontSize = font.pixelSize();
-            font.setPixelSize(fontSize-2);
-        }
-        
-        fm = QFontMetrics(font);
-
-        r = QRect(fm.boundingRect(0, 0, itemIconRect.width(),
-                                  0xFFFFFFFF, Qt::AlignHCenter |
-                                  Qt::WordBreak | Qt::BreakAnywhere
-                                  | Qt::AlignTop,
-                                  extraText_));
-        r.setWidth(r.width() + 2);
-
-        itemExtraRect_.setWidth(r.width());
-        itemExtraRect_.setHeight(r.height());
-
-        itemTextRect.setWidth(QMAX(itemTextRect.width(), itemExtraRect_.width()));
-        itemTextRect.setHeight(itemTextRect.height() + itemExtraRect_.height());
-    }
-
-
-    // Now start updating the rects
-    int w = QMAX(itemTextRect.width(), itemIconRect.width() );
-    int h = itemTextRect.height() + itemIconRect.height() + 1;
-
-    itemRect.setWidth(w);
-    itemRect.setHeight(h);
-
-    // Center the pix and text rect
-
-    itemIconRect = QRect((itemRect.width() - itemIconRect.width())/2,
-                         0,
-                         itemIconRect.width(), itemIconRect.height());
-    itemTextRect = QRect((itemRect.width() - itemTextRect.width())/2,
-                         itemRect.height() - itemTextRect.height(),
-                         itemTextRect.width(), itemTextRect.height());
-    if (!itemExtraRect_.isEmpty()) {
-        itemExtraRect_ = QRect((itemRect.width() - itemExtraRect_.width())/2,
-                               itemRect.height() - itemExtraRect_.height(),
-                               itemExtraRect_.width(), itemExtraRect_.height());
-    }
-
-    // Update rects
-    if ( itemIconRect != pixmapRect() )
-        setPixmapRect( itemIconRect );
-    if ( itemTextRect != textRect() )
-        setTextRect( itemTextRect );
-    if ( itemRect != rect() )
-        setRect( itemRect );
 
 }
 
 void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
 {
-
-    QRect pRect=pixmapRect(true);
-    QRect tRect=textRect(true);
-
-    QPixmap pix(rect().width(), rect().height());
-    pix.fill(cg.base());
-    QPainter painter(&pix);
-    painter.drawPixmap(pRect.x(), pRect.y(), *pixmap() );
-
-    if (isSelected()) {
-        QPen pen;
-        pen.setColor(cg.highlight());
-        painter.setPen(pen);
-        painter.drawRect(0, 0, pix.width(), pix.height());
-        painter.fillRect(0, tRect.y(), pix.width(),
-                     tRect.height(), cg.highlight() );
-        painter.setPen( QPen( cg.highlightedText() ) );
-    }
+    QPixmap pix;
+    QRect   r;
+    const AlbumSettings *settings = view_->settings();
+    
+    if (isSelected())
+        pix = *(view_->itemBaseSelPixmap());
     else
-        painter.setPen( cg.text() );
+        pix = *(view_->itemBaseRegPixmap());
 
-    painter.drawText(tRect, Qt::WordBreak|Qt::BreakAnywhere|
-                     Qt::AlignHCenter|Qt::AlignTop,text());
+    QPainter p(&pix);
+    p.setPen(isSelected() ? cg.highlightedText() : cg.text());
 
-    if (!extraText_.isEmpty()) {
-        QFont font(view_->font());
-        int fontSize = font.pointSize();
-        if (fontSize > 0) {
-            font.setPointSize(fontSize-2);
-        }
-        else {
-            fontSize = font.pixelSize();
-            font.setPixelSize(fontSize-2);
-        }
-        painter.setFont(font);
-        if (!isSelected())
-            painter.setPen(QPen("steelblue"));
-        painter.drawText(itemExtraRect_, Qt::WordBreak|
-                         Qt::BreakAnywhere|Qt::AlignHCenter|
-                         Qt::AlignTop,extraText_);
+    r = view_->itemPixmapRect();
+    p.drawPixmap(r.x() + (r.width()-thumbnail_.width())/2,
+                 r.y() + (r.height()-thumbnail_.height())/2,
+                 thumbnail_);
+    
+    if (settings->getIconShowName())
+    {
+        r = view_->itemNameRect();
+        p.setFont(view_->itemFontReg());
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), text()));
     }
 
-    painter.end();
+    p.setFont(view_->itemFontCom());
+    
+    if (settings->getIconShowComments())
+    {
+        QString comments(view_->itemComments(this));
+        
+        r = view_->itemCommentsRect();
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
+    }
 
-    QRect r(rect());
+    if (settings->getIconShowFileComments())
+    {
+        if (metaInfo_ && metaInfo_->isValid() &&
+            metaInfo_->containsGroup("Jpeg EXIF Data"))
+        {
+            QString jpegComments = metaInfo_->group("Jpeg EXIF Data").
+                                   item("Comment").value().toString();
+        
+            r = view_->itemFileCommentsRect();
+            p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
+                                                        jpegComments));
+        }
+    }
+    
+    p.setFont(view_->itemFontXtra());
+
+    if (settings->getIconShowDate())
+    {
+        QDateTime date;
+        date.setTime_t(fileItem_->time(KIO::UDS_MODIFICATION_TIME));
+
+        r = view_->itemDateRect();    
+        p.setFont(view_->itemFontXtra());
+        QString str;
+        dateToString(date, str);
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
+    }
+    
+    if (settings->getIconShowResolution())
+    {
+        if (metaInfo_ && metaInfo_->isValid())
+        {
+            QSize dims;
+            if (metaInfo_->containsGroup("Jpeg EXIF Data"))
+            {
+                dims = metaInfo_->group("Jpeg EXIF Data").
+                       item("Dimensions").value().toSize();
+            }
+            else if (metaInfo_->containsGroup("General"))
+            {
+                dims = metaInfo_->group("General").
+                       item("Dimensions").value().toSize();
+            }
+            else if (metaInfo_->containsGroup("Technical"))
+            {
+                dims = metaInfo_->group("Technical").
+                       item("Dimensions").value().toSize();
+            }
+            QString resolution = QString("%1x%2 %3")
+                                 .arg(dims.width())
+                                 .arg(dims.height())
+                                 .arg(i18n("pixels"));
+            r = view_->itemResolutionRect();    
+            p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), resolution));
+        }
+    }
+
+    if (settings->getIconShowSize())
+    {
+        r = view_->itemSizeRect();    
+        p.drawText(r, Qt::AlignCenter,
+                   squeezedText(&p, r.width(), KIO::convertSize(fileItem_->size())));
+    }
+
+    p.setFont(view_->itemFontCom());
+    if (!isSelected())
+        p.setPen(QColor("steelblue"));
+
+    if (settings->getIconShowTags())
+    {
+        QString tags(view_->itemTagNames(this).join(", "));
+        
+        r = view_->itemTagRect();    
+        p.drawText(r, Qt::AlignCenter, 
+                   squeezedText(&p, r.width(), tags));
+    }
+    
+    p.end();
+    
+    r = rect();
     r = QRect(view_->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
     bitBlt(view_->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
-
-
-void AlbumIconItem::updateExtraText()
-{
-    QString extraText;
-    bool firstLine = true;
-
-    const AlbumSettings *settings = view_->settings();
-    if (!settings) return;
-
-    if (settings->getIconShowMime()) {
-        firstLine = false;
-        KMimeType::Ptr mimePtr =
-            KMimeType::findByURL(fileItem_->url());
-        extraText += mimePtr->name();
-    }
-
-    if (settings->getIconShowSize()) {
-        if (!firstLine)
-            extraText += "\n";
-        else
-            firstLine = false;
-        extraText += KIO::convertSize(fileItem_->size());
-    }
-
-    if (settings->getIconShowDate()) {
-        if (!firstLine)
-            extraText += "\n";
-        else
-            firstLine = false;
-        QDateTime date;
-        date.setTime_t(fileItem_->time(KIO::UDS_MODIFICATION_TIME));
-        extraText += date.toString();
-    }
-
-    if (settings->getIconShowComments()) {
-        QString comments;
-        view_->getItemComments(text(), comments);
-        if (!comments.isEmpty()) {
-            if (!firstLine)
-                extraText += "\n";
-            else
-                firstLine = false;
-            extraText += comments;
-        }
-    }
-
-    bool metaInfoRead = false;
-    
-    if(settings->getIconShowFileComments())
-    {
-        if (metaInfo_)
-            delete metaInfo_;
-        metaInfo_ = new KFileMetaInfo(fileItem_->url(), "image/jpeg",
-                                      KFileMetaInfo::Fastest);
-        metaInfoRead = true;
-        
-        // read and display JPEG COM comment and JPEG EXIF UserComment
-        if(metaInfo_->isValid() && metaInfo_->mimeType() == "image/jpeg"
-           && metaInfo_->containsGroup("Jpeg EXIF Data"))
-        {
-            KExifData *exifData = new KExifData;
-            exifData->readFromFile(fileItem_->url().path());
-
-            QString jpegComments = metaInfo_->group("Jpeg EXIF Data").
-                                   item("Comment").value().toString();
-            QString exifComments = exifData->getUserComment();
-
-            QString comments;
-            view_->getItemComments(text(), comments);
-
-            jpegComments = jpegComments.stripWhiteSpace();
-            exifComments = exifComments.stripWhiteSpace();
-
-
-            // Only append comments if they are different from the regular comment
-            if( !settings->getIconShowComments() || jpegComments != comments ) {
-                if( jpegComments != "" ) {
-                    if (!firstLine)
-                        extraText += "\n";
-                    else
-                        firstLine = false;
-                
-                    extraText += jpegComments;
-                }
-            }
-
-            if( !settings->getIconShowComments() || exifComments != comments ) {
-                if( jpegComments != exifComments && exifComments != "" ) {
-                    if (!firstLine)
-                        extraText += "\n";
-                    else
-                        firstLine = false;
-                
-                    extraText += exifComments;
-                }
-            }
-
-            delete exifData;
-        }  
-
-    }
-    
-    if ( settings->getIconShowResolution() )
-    {
-
-        if (metaInfo_ && !metaInfoRead) {
-            delete metaInfo_;
-            metaInfo_ = 0;
-        }
-
-        if (!metaInfo_) {
-            metaInfo_ = new KFileMetaInfo(fileItem_->url(), "image/jpeg",
-                                          KFileMetaInfo::Fastest);
-        }
-
-        // get image dimensions from JPEG meta info if possible
-       
-        if ( metaInfo_->isValid() &&
-             metaInfo_->mimeType() == "image/jpeg" &&
-             metaInfo_->containsGroup("Jpeg EXIF Data")) 
-        {
-            QSize jpegDimensions =  metaInfo_->group("Jpeg EXIF Data").
-                                    item("Dimensions").value().toSize();
-       
-            imageWidth_ = jpegDimensions.width();
-            imageHeight_ = jpegDimensions.height();
-        }
-        else   // Else using imlib2 API.
-        {
-            Imlib_Image imlib2_im = 0;
-            imlib2_im = imlib_load_image(fileItem_->url().path().latin1());
-
-            if (imlib2_im)
-            {
-                imlib_context_set_image(imlib2_im);
-                imageWidth_= imlib_image_get_width();
-                imageHeight_= imlib_image_get_height();
-                imlib_free_image();
-            }
-        }
-       
-        if (imageWidth_ != 0 && imageHeight_ != 0) 
-        {
-            if (!firstLine) extraText += "\n";
-            else firstLine = false;
-
-            extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
-                         .arg(QString::number(imageHeight_));
-        }
-    }
-    
-    extraText_ = extraText;
-}
-
-void AlbumIconItem::setImageDimensions(int width, int height)
-{
-    imageWidth_  = width;
-    imageHeight_ = height;
-}
-

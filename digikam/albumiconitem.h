@@ -28,6 +28,7 @@
 
 #include <qstring.h>
 #include <qrect.h>
+#include <qpixmap.h>
 
 // Local includes.
 
@@ -53,20 +54,14 @@ class AlbumIconItem : public ThumbItem
 public:
 
     AlbumIconItem(AlbumIconView* parent, const QString& text,
-                  const QPixmap& pix, int size, 
-                  const KFileItem* fileItem,
-                  int imageWidth=0, int imageHeight=0);
+                  const KFileItem* fileItem);
     ~AlbumIconItem();
 
-
-    const KFileItem* fileItem() 
-        {
+    const KFileItem* fileItem() {
         return fileItem_;
-        }
+    }
 
-    void setPixmap(const QImage& thumb);
-    void setPixmap(const QPixmap& thumb);
-    void setImageDimensions(int width, int height);
+    void setPixmap(const QPixmap& thumb, const KFileMetaInfo* metaInfo);
 
 protected:
 
@@ -74,20 +69,12 @@ protected:
     virtual void calcRect();
     virtual void paintItem(QPainter* p, const QColorGroup& cg);
 
-    void updateExtraText();
-
 private:
 
-    int size_;
-    int imageWidth_;
-    int imageHeight_;
+    const KFileItem     *fileItem_;
     const KFileMetaInfo *metaInfo_;
-
-    QString extraText_;
-    QRect   itemExtraRect_;
-
-    const KFileItem *fileItem_;
-    AlbumIconView *view_;
+    AlbumIconView       *view_;
+    QPixmap              thumbnail_;
 };
 
 

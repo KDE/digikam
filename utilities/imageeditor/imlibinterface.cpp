@@ -23,12 +23,14 @@
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qapplication.h>
+#include <qfile.h>
 
 #include <X11/Xlib.h>
 #include <Imlib2.h>
 
 #include <cmath>
 #include <cstdio>
+#include <kdebug.h>
 
 #include "imlibinterface.h"
 
@@ -149,7 +151,10 @@ void ImlibInterface::load(const QString& filename)
     d->selW = 0;
     d->selH = 0;
 
-    d->image = imlib_load_image(filename.latin1());
+    //d->image = imlib_load_image(filename.latin1());
+    Imlib_Load_Error errorReturn;
+    d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
+                                                  &errorReturn);
 
     if (d->image) {
         imlib_context_set_image(d->image);
@@ -167,6 +172,11 @@ void ImlibInterface::load(const QString& filename)
         d->contrast   = 1.0;
         d->brightness = 0.0;
     }
+    else {
+        kdWarning() << k_funcinfo << "Failed to load image: error number: "
+                    << errorReturn << endl;
+    }
+        
     imlib_context_pop();
 }
 

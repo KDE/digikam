@@ -43,12 +43,8 @@ class AlbumFolderView;
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumSettings;
-
-namespace Digikam
-{
 class AlbumManager;
-class AlbumInfo;
-}
+class Album;
 
 class DigikamView : public QSplitter {
 
@@ -60,7 +56,8 @@ public:
     ~DigikamView();
 
     void applySettings(const AlbumSettings* settings);
-
+    void setInitialSizes();
+    
 private:
 
     void setupConnections();
@@ -70,7 +67,7 @@ private:
     DigikamApp               *mParent;
     AlbumFolderView          *mFolderView;
     AlbumIconView            *mIconView;
-    Digikam::AlbumManager    *mAlbumMan;
+    AlbumManager             *mAlbumMan;
 
 public slots:
 
@@ -84,6 +81,11 @@ public slots:
     void slot_albumPropsEdit();
     void slot_albumAddImages();
 
+    // Tag action slots
+    void slotNewTag();
+    void slotDeleteTag();
+    void slotEditTag();
+    
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);
     void slot_imageCommentsEdit(AlbumIconItem* iconItem=0);
@@ -95,11 +97,10 @@ public slots:
     void slotSelectNone();
     void slotSelectInvert();
   
-
 private slots:
 
     void slot_imageSelected();
-    void slot_albumSelected(Digikam::AlbumInfo* album);
+    void slot_albumSelected(Album* album);
 
     void slot_albumsCleared();
     void slot_albumHighlight();

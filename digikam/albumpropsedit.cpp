@@ -40,23 +40,23 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
-#include "albuminfo.h"
+#include "album.h"
 
 #include "albumsettings.h"
 #include "albumpropsedit.h"
 
-AlbumPropsEdit::AlbumPropsEdit(const Digikam::AlbumInfo* albumInfo)
-    : KDialogBase( Plain, QString::null, Help|Ok|Cancel, Ok,
+AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
+    : KDialogBase( Plain, i18n("Edit Album"), Help|Ok|Cancel, Ok,
                    0, 0, true, true )
 {
     setHelp("albumpropsedit.anchor", "digikam");
-    albumInfo_ = albumInfo;
+    album_ = album;
     
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint() );
 
     QLabel *topLabel = new QLabel( plainPage() );
-    topLabel->setText( i18n( "Edit '%1' Album Properties").arg(albumInfo->getTitle()));
+    topLabel->setText( i18n( "Edit '%1' Album Properties").arg(album->getTitle()));
     topLayout->addWidget( topLabel  );
 
     // --------------------------------------------------------
@@ -131,12 +131,12 @@ AlbumPropsEdit::AlbumPropsEdit(const Digikam::AlbumInfo* albumInfo)
 
     populateCollections();
 
-    titleEdit_->setText( albumInfo->getTitle() );
-    commentsEdit_->setText( albumInfo->getComments() );
-    dateEdit_->setDate( albumInfo->getDate() );
+    titleEdit_->setText( album->getTitle() );
+    commentsEdit_->setText( album->getCaption() );
+    dateEdit_->setDate( album->getDate() );
 
     QCheckListItem *checkItem =
-        (QCheckListItem*) collectionEdit_->findItem(albumInfo->getCollection(), 0);
+        (QCheckListItem*) collectionEdit_->findItem(album->getCollection(), 0);
     if (checkItem) checkItem->setOn(true);
 
     // Connections -------------------------------------------
@@ -251,11 +251,11 @@ void AlbumPropsEdit::slotDelCollection()
     delete checkItem;
 }
 
-bool AlbumPropsEdit::editProps(const Digikam::AlbumInfo *albumInfo, QString& title,
+bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
                                QString& comments, QDate& date, QString& collection,
                                QStringList& albumCollections)
 {
-    AlbumPropsEdit dlg(albumInfo);
+    AlbumPropsEdit dlg(album);
 
     bool ok = dlg.exec() == QDialog::Accepted;
 

@@ -36,11 +36,11 @@ class AlbumSettings
 public:
 
     enum AlbumSortOrder
-        {
-        ByCollection = 0,
-        ByDate,
-        Flat
-        };
+    {
+        ByFolder = 0,
+        ByCollection,
+        ByDate
+    };
 
     AlbumSettings();
     ~AlbumSettings();
@@ -75,9 +75,9 @@ public:
     void setDefaultIconSize(int val);
     int  getDefaultIconSize() const;
 
-    void setIconShowMime(bool val);
-    bool getIconShowMime() const;
-
+    void setIconShowName(bool val);
+    bool getIconShowName() const;
+    
     void setIconShowSize(bool val);
     bool getIconShowSize() const;
 
@@ -89,6 +89,9 @@ public:
 
     void setIconShowResolution(bool val);
     bool getIconShowResolution() const;
+
+    void setIconShowTags(bool val);
+    bool getIconShowTags() const;
     
     void setSaveExifComments(bool val);
     bool getSaveExifComments() const;

@@ -26,6 +26,9 @@
 
 // KDE includes.
 
+#include <qrect.h>
+#include <qfont.h>
+
 #include <thumbview.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -47,14 +50,11 @@ class AlbumIconItem;
 class AlbumSettings;
 class AlbumIconViewPrivate;
 class ThumbnailSize;
-
-namespace Digikam
-{
-class AlbumInfo;
-}
+class Album;
+class AlbumLister;
 
 class AlbumIconView : public ThumbView,
-                      public Digikam::AlbumItemHandler
+                      public AlbumItemHandler
 {
     Q_OBJECT
 
@@ -63,19 +63,21 @@ public:
     AlbumIconView(QWidget* parent);
     ~AlbumIconView();
 
-    void setAlbum(Digikam::AlbumInfo* album);
+    void setAlbum(Album* album);
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     ThumbnailSize thumbnailSize();
 
     void applySettings(const AlbumSettings* settings);
     const AlbumSettings* settings();
 
-    void refreshIcon(AlbumIconItem* item);
-    void getItemComments(const QString& itemName,
-                         QString& comments);
-    void albumDescChanged();
+    QString     itemComments(AlbumIconItem *item);
+    QStringList itemTagNames(AlbumIconItem* item);
+
+    void    refreshIcon(AlbumIconItem* item);
+    void    albumDescChanged();
 
     AlbumIconItem* firstSelectedItem();
+    AlbumLister*   albumLister() const;
 
     QStringList allItems();
     QStringList selectedItems();
@@ -84,6 +86,23 @@ public:
 
     void refresh();
     void refreshItems(const QStringList& itemList);
+
+    QRect    itemRect() const;
+    QRect    itemDateRect() const;
+    QRect    itemPixmapRect() const;
+    QRect    itemNameRect() const;
+    QRect    itemCommentsRect() const;
+    QRect    itemFileCommentsRect() const;
+    QRect    itemResolutionRect() const;
+    QRect    itemSizeRect() const;
+    QRect    itemTagRect() const;
+
+    QPixmap* itemBaseRegPixmap() const;
+    QPixmap* itemBaseSelPixmap() const;
+
+    QFont    itemFontReg() const;
+    QFont    itemFontCom() const;
+    QFont    itemFontXtra() const;
     
 protected:
 
@@ -95,13 +114,17 @@ protected:
     void startDrag();
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDropEvent(QDropEvent *e);
-    virtual bool eventFilter(QObject *obj, QEvent *ev);
+    void focusInEvent(QFocusEvent *e);
+    void focusOutEvent(QFocusEvent *e);
+    //virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 private:
 
     AlbumIconViewPrivate *d;
     
-    void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap);
+    void exifRotate(QString filename, QPixmap& pixmap);
+    void updateItemRectsPixmap();
+    bool showMetaInfo();
 
 private slots:
 
@@ -113,29 +136,29 @@ private slots:
 
     void slotDoubleClicked(ThumbItem *item);
     void slotRightButtonClicked(ThumbItem *item, const QPoint& pos);
-    void slotItemRenamed(ThumbItem *item);
 
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
-    void slotFailedThumbnail(const KURL& url);
-    void slotGotThumbnailKDE(const KFileItem*, const QPixmap&);
-    void slotFailedThumbnailKDE(const KFileItem* item);
+    void slotGotThumbnail(const KFileItem* item, const QPixmap& pix,
+                          const KFileMetaInfo* metaInfo);
+    void slotFailedThumbnail(const KFileItem* item);
+    void slotFinishedThumbnail();
     void slotSelectionChanged();
     void slotSetExifOrientation( const QString filename, int orientation );
 
-    void slot_onDeleteSelectedItemsFinished(KIO::Job* job);
+    void slotOnDeleteSelectedItemsFinished(KIO::Job* job);
 
+    void slotContentsMoving(int x, int y);
+    
 public slots:
 
-    void slot_editImageComments(AlbumIconItem* item);
-    void slot_showExifInfo(AlbumIconItem* item);
+    void slotEditImageComments(AlbumIconItem* item);
+    void slotShowExifInfo(AlbumIconItem* item);
     void slotRename(AlbumIconItem* item);
-    void slot_deleteSelectedItems();
+    void slotDeleteSelectedItems();
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotProperties(AlbumIconItem* item);
 
 signals:
 
-    void signal_albumCountChanged(const Digikam::AlbumInfo*);
     void signalItemsAdded();
 
 };

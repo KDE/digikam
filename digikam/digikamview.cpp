@@ -30,17 +30,20 @@
 #include <qdir.h>
 #include <qimage.h>
 #include <qevent.h>
+#include <qapplication.h>
 
 // KDE includes.
 
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "albummanager.h"
-#include "albuminfo.h"
+#include "album.h"
 
 #include "albumfolderview.h"
 #include "albumfolderitem.h"
@@ -57,7 +60,7 @@ DigikamView::DigikamView(QWidget *parent)
 {
     mParent = static_cast<DigikamApp *>(parent);
 
-    mAlbumMan = Digikam::AlbumManager::instance();
+    mAlbumMan = AlbumManager::instance();
     
     mFolderView = new AlbumFolderView(this);
     mIconView = new AlbumIconView(this);
@@ -65,8 +68,8 @@ DigikamView::DigikamView(QWidget *parent)
     mFolderView->setSizePolicy(QSizePolicy::Preferred,
                                QSizePolicy::Expanding);
     mIconView->setSizePolicy(QSizePolicy::Expanding,
-                               QSizePolicy::Expanding);
-    
+                             QSizePolicy::Expanding);
+
     setOpaqueResize(false);
 
     setupConnections();
@@ -79,7 +82,6 @@ DigikamView::~DigikamView()
     mAlbumMan->setItemHandler(0);
 }
 
-
 void DigikamView::applySettings(const AlbumSettings* settings)
 {
     mIconView->applySettings(settings);
@@ -90,8 +92,8 @@ void DigikamView::setupConnections()
 {
     // -- AlbumManager connections --------------------------------
 
-    connect(mAlbumMan, SIGNAL(signalAlbumCurrentChanged(Digikam::AlbumInfo*)),
-            this, SLOT(slot_albumSelected(Digikam::AlbumInfo*)));
+    connect(mAlbumMan, SIGNAL(signalAlbumCurrentChanged(Album*)),
+            this, SLOT(slot_albumSelected(Album*)));
     connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slot_albumsCleared()));
     
@@ -102,6 +104,28 @@ void DigikamView::setupConnections()
 
     connect(mIconView,  SIGNAL(signalItemsAdded()),
             this, SLOT(slot_albumHighlight()));
+
+    connect(mFolderView, SIGNAL(signalTagsAssigned()),
+            mIconView->viewport(), SLOT(update()));
+}
+
+
+void DigikamView::setInitialSizes()
+{
+    int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+    KConfig* config = kapp->config();
+    QSize size( config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 0 ),
+                config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 0 ) );
+
+    if (!size.isEmpty() )
+    {
+        QValueList<int> sz;
+        sz.append(size.width()/3);
+        sz.append(size.width()*2/3);
+        setSizes(sz);
+    }
 }
 
 
@@ -124,9 +148,24 @@ void DigikamView::slot_deleteAlbum()
     mFolderView->albumDelete();
 }
 
+void DigikamView::slotNewTag()
+{
+    mFolderView->tagNew();    
+}
+
+void DigikamView::slotDeleteTag()
+{
+    mFolderView->tagDelete();
+}
+
+void DigikamView::slotEditTag()
+{
+    mFolderView->tagEdit();
+}
+
 // ----------------------------------------------------------------
 
-void DigikamView::slot_albumSelected(Digikam::AlbumInfo* album)
+void DigikamView::slot_albumSelected(Album* album)
 {
     if (!album) {
         mIconView->setAlbum(0);
@@ -243,14 +282,16 @@ void DigikamView::slot_thumbSizeMinus()
 
 void DigikamView::slot_albumPropsEdit()
 {
-    Digikam::AlbumInfo *album = mAlbumMan->currentAlbum();
-    if (!album) return;
-    mFolderView->slot_albumPropsEdit(album);
+    Album *album = mAlbumMan->currentAlbum();
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    mFolderView->albumEdit(dynamic_cast<PAlbum*>(album));
 }
 
 void DigikamView::slot_albumAddImages()
 {
-    Digikam::AlbumInfo *album = mAlbumMan->currentAlbum();
+    Album *album = mAlbumMan->currentAlbum();
     if (!album) return;
 
     QStringList list =
@@ -270,8 +311,7 @@ void DigikamView::slot_albumAddImages()
 
     if (!urls.isEmpty()) {
         KIO::CopyJob* job =
-            KIO::copy(urls,
-                      KURL(album->getPath()), true);
+            KIO::copy(urls, album->getURL(), true);
         connect(job, SIGNAL(result(KIO::Job *) ),
                 this, SLOT(slot_imageCopyResult(KIO::Job *)));
     }
@@ -279,9 +319,11 @@ void DigikamView::slot_albumAddImages()
 
 void DigikamView::slot_albumHighlight()
 {
-    Digikam::AlbumInfo *album = mAlbumMan->currentAlbum();
-    if (!album) return;
-    mFolderView->slot_albumHighlight(album);
+    Album *album = mAlbumMan->currentAlbum();
+    if (!album || !album->type() == Album::PHYSICAL)
+        return;
+
+    mFolderView->albumHighlight(dynamic_cast<PAlbum*>(album));
 }
 
 void DigikamView::slot_imageCopyResult(KIO::Job* job)
@@ -319,7 +361,7 @@ void DigikamView::slot_imageCommentsEdit(AlbumIconItem *iconItem)
         item = iconItem;
     }
 
-    mIconView->slot_editImageComments(item);
+    mIconView->slotEditImageComments(item);
 }
 
 void DigikamView::slot_imageExifInfo(AlbumIconItem *iconItem)
@@ -334,7 +376,7 @@ void DigikamView::slot_imageExifInfo(AlbumIconItem *iconItem)
         item = iconItem;
     }
 
-    mIconView->slot_showExifInfo(item);
+    mIconView->slotShowExifInfo(item);
 }
 
 void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
@@ -354,7 +396,7 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 
 void DigikamView::slot_imageDelete()
 {
-    mIconView->slot_deleteSelectedItems();
+    mIconView->slotDeleteSelectedItems();
 }
 
 void DigikamView::slotImageProperties()
@@ -380,6 +422,5 @@ void DigikamView::slotSelectInvert()
 {
     mIconView->invertSelection();
 }
-
 
 #include "digikamview.moc"

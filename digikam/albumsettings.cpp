@@ -53,12 +53,13 @@ public:
     
     AlbumSettings::AlbumSortOrder albumSortOrder;
 
-    bool iconShowMime;
+    bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
     bool iconShowComments;
     bool iconShowFileComments;
     bool iconShowResolution;
+    bool iconShowTags;
     bool saveExifComments;
     bool exifRotate;
     bool exifSetOrientation;
@@ -109,15 +110,16 @@ void AlbumSettings::init()
     d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
     d->thumbnailSize = ThumbnailSize::Medium;
 
-    d->iconShowMime = false;
+    d->iconShowName = false;
     d->iconShowSize = true;
     d->iconShowDate = false;
     d->iconShowComments = true;
     d->iconShowFileComments = false;
     d->iconShowResolution = false;
-    d->saveExifComments = true;
-    d->exifRotate = true;
-    d->exifSetOrientation = true;
+    d->iconShowTags = false;
+    d->saveExifComments = false;
+    d->exifRotate = false;
+    d->exifSetOrientation = false;
 }
 
 void AlbumSettings::readSettings()
@@ -139,77 +141,51 @@ void AlbumSettings::readSettings()
         AlbumSettings::AlbumSortOrder (config->readNumEntry("Album Sort Order",
                                                             (int)AlbumSettings::ByCollection));
     
-    if (config->hasKey("File Filter"))
-        d->imageFilefilter =
-            config->readEntry("File Filter",
-                              d->imageFilefilter);
+    d->imageFilefilter = config->readEntry("File Filter",
+                                           d->imageFilefilter);
 
-    if (config->hasKey("Movie File Filter"))
-        d->movieFilefilter =
-            config->readEntry("Movie File Filter",
-                              d->movieFilefilter);
+    d->movieFilefilter = config->readEntry("Movie File Filter",
+                                           d->movieFilefilter);
 
-    if (config->hasKey("Audio File Filter"))
-        d->audioFilefilter =
-            config->readEntry("Audio File Filter",
-                              d->audioFilefilter);
+    d->audioFilefilter = config->readEntry("Audio File Filter",
+                                           d->audioFilefilter);
                               
-    if (config->hasKey("Raw File Filter"))
-        d->rawFilefilter =
-            config->readEntry("Raw File Filter",
-                              d->rawFilefilter);
+    d->rawFilefilter = config->readEntry("Raw File Filter",
+                                         d->rawFilefilter);
                               
-    if (config->hasKey("Default Icon Size"))
-        d->thumbnailSize =
-            config->readNumEntry("Default Icon Size",
-                                 ThumbnailSize::Medium);
+    d->thumbnailSize = config->readNumEntry("Default Icon Size",
+                             ThumbnailSize::Medium);
 
-    if (config->hasKey("Icon Show Resolution"))
-        d->iconShowResolution =
-            config->readBoolEntry("Icon Show Resolution",
-                                  false);                                 
+    d->iconShowName = config->readBoolEntry("Icon Show Name",
+                              false);                                 
 
-    if (config->hasKey("Icon Show Mime"))
-        d->iconShowMime =
-            config->readBoolEntry("Icon Show Mime",
-                                  false);
+    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution",
+                                                  false);                                 
 
-    if (config->hasKey("Icon Show Size"))
-        d->iconShowSize =
-            config->readBoolEntry("Icon Show Size",
-                                  true);
+    d->iconShowSize = config->readBoolEntry("Icon Show Size",
+                              true);
 
-    if (config->hasKey("Icon Show Date"))
-        d->iconShowDate =
-            config->readBoolEntry("Icon Show Date",
-                                  false);
+    d->iconShowDate = config->readBoolEntry("Icon Show Date",
+                                            false);
 
-    if (config->hasKey("Icon Show Comments"))
-        d->iconShowComments =
-            config->readBoolEntry("Icon Show Comments",
-                                  true);
+    d->iconShowComments = config->readBoolEntry("Icon Show Comments",
+                                                true);
 
-    if (config->hasKey("Icon Show File Comments"))
-        d->iconShowFileComments =
-            config->readBoolEntry("Icon Show File Comments",
-                                  true);
+    d->iconShowFileComments = config->readBoolEntry("Icon Show File Comments",
+                                                    false);
 
+    d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
+    
     config->setGroup("EXIF Settings");
 
-    if (config->hasKey("Save EXIF Comments"))
-        d->saveExifComments =
-            config->readBoolEntry("Save EXIF Comments",
-                                  true);
+    d->saveExifComments = config->readBoolEntry("Save EXIF Comments",
+                                                false);
     
-    if (config->hasKey("EXIF Rotate"))
-        d->exifRotate =
-            config->readBoolEntry("EXIF Rotate",
-                                  true);
+    d->exifRotate = config->readBoolEntry("EXIF Rotate",
+                                          false);
     
-    if (config->hasKey("EXIF Set Orientation"))
-        d->exifSetOrientation =
-            config->readBoolEntry("EXIF Set Orientation",
-                                  true);
+    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation",
+                                                  false);
 }
 
 void AlbumSettings::saveSettings()
@@ -241,12 +217,12 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
     
+    config->writeEntry("Icon Show Name",
+                       d->iconShowName);
+
     config->writeEntry("Icon Show Resolution",
                        d->iconShowResolution);
                                                       
-    config->writeEntry("Icon Show Mime",
-                       d->iconShowMime);
-                       
     config->writeEntry("Icon Show Size",
                        d->iconShowSize);
                        
@@ -259,6 +235,9 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show File Comments",
                        d->iconShowFileComments);
                        
+    config->writeEntry("Icon Show Tags",
+                       d->iconShowTags);
+
     config->setGroup("EXIF Settings");
 
     config->writeEntry("Save EXIF Comments",
@@ -368,15 +347,14 @@ int AlbumSettings::getDefaultIconSize() const
     return d->thumbnailSize;
 }
 
-
-void AlbumSettings::setIconShowMime(bool val)
+void AlbumSettings::setIconShowName(bool val)
 {
-    d->iconShowMime = val;
+    d->iconShowName = val;
 }
 
-bool AlbumSettings::getIconShowMime() const
+bool AlbumSettings::getIconShowName() const
 {
-    return d->iconShowMime;
+    return d->iconShowName;
 }
 
 void AlbumSettings::setIconShowSize(bool val)
@@ -419,6 +397,16 @@ bool AlbumSettings::getIconShowResolution() const
     return d->iconShowResolution;
 }
 
+void AlbumSettings::setIconShowTags(bool val)
+{
+    d->iconShowTags = val;    
+}
+
+bool AlbumSettings::getIconShowTags() const
+{
+    return d->iconShowTags;
+}
+
 void AlbumSettings::setSaveExifComments(bool val)
 {
     d->saveExifComments = val;
@@ -458,3 +446,4 @@ bool AlbumSettings::getIconShowDate() const
 {
     return d->iconShowDate;
 }
+

@@ -38,16 +38,13 @@
 #include <kapp.h>
 #include <kmainwindow.h>
 
-namespace Digikam
-{
-class AlbumManager;
-}
 
 namespace KIPI
 {
 class PluginLoader;
 }
 
+class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
 class DigikamKipiInterface;
 
@@ -95,7 +92,7 @@ protected:
 private:
 
     static DigikamApp     *m_instance;
-    Digikam::AlbumManager *mAlbumManager;
+    AlbumManager          *mAlbumManager;
     
     // For KIPI plugins support 
     KIPI::PluginLoader    *KipiPluginLoader_;
@@ -128,6 +125,11 @@ private:
     KAction *mAddImagesAction;
     KAction *mPropsEditAction;
 
+    // Tag Actions
+    KAction *mNewTagAction;
+    KAction *mDeleteTagAction;
+    KAction *mEditTagAction;
+    
     // Image Actions
     KAction *mImageViewAction;
     KAction *mImageCommentsAction;
