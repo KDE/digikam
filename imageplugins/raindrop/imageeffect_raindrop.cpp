@@ -236,7 +236,7 @@ ImageEffect_RainDrop::~ImageEffect_RainDrop()
 
 void ImageEffect_RainDrop::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("raindrop",
+    KApplication::kApplication()->invokeHelp("raindrops",
                                              "digikamimageplugins");
 }
 
