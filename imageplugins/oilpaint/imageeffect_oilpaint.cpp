@@ -171,7 +171,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     m_smoothInput = new QSpinBox(10, 255, 1, plainPage(), "m_SmoothInput");
     
-    whatsThis = i18n("<p>This value controls the smoothing effect used for to simulate the oil painting.");
+    whatsThis = i18n("<p>This value controls the smoothing effect of the brush under the canvas.");
     QWhatsThis::add( m_smoothInput, whatsThis);
     QWhatsThis::add( m_smoothSlider, whatsThis);                     
     
