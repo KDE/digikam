@@ -1,5 +1,6 @@
 v0.4.0 - 08/26/04
 ----------------------------------------------------------------------------
+    * Added new Charcoal drawing effect plugin using KDEImageEffect API.
     * Added new Emboss effect plugin using KDEImageEffect API.
     * Added new Oil painting effect plugin using KDEImageEffect API.
     

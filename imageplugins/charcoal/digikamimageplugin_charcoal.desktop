@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Charcoal Image Plugin
+Comment=Charcoal drawing image effect plugin for digikam
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+X-KDE-Library=digikamimageplugin_charcoal
+author=Gilles Caulier, caulier dot gilles at free dot fr

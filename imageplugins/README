@@ -10,6 +10,7 @@ Currently implemented plugins are:
  3) Despeckle          : A noise reduction filter.
  4) OilPaint           : An oil painting effect filter.
  5) Emboss             : An embossed image effect filter.
+ 6) Charcoal           : A charcoal drawing image effect filter.
 
 Contact :
 -----------------------------------------------------------------------
