@@ -21,7 +21,7 @@ x Types MIME support (image, audio, video, RAW files).             <Gilles Cauli
 x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.7.0>
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.7.0>
 x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.7.0>
-* Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
+x Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
 o Add image date from EXIF data for each album item.               <Ralf Holzer    - 0.7.0>
 o Added config saving of Albums opened in Albums treeview.         
 o Added dockable main widgets like ShowImg.                        
