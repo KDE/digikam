@@ -59,6 +59,8 @@
 #include <krun.h>
 #include <kaction.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
+#include <kexifdata.h>
 
 // Local includes.
 
@@ -79,6 +81,8 @@
 
 #include "albumiconitem.h"
 #include "albumiconview.h"
+#include "../utilities/kexif/jpeg-data.h"
+#include "../utilities/kexif/jpeg-marker.h"
 
 class AlbumIconViewPrivate {
 
@@ -497,6 +501,10 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
 void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 {
+    AlbumSettings *settings = AlbumSettings::instance();
+
+    if (!settings) return;
+
     if (!iconItem || !d->currentAlbum) return;
     
     QString comments(d->currentAlbum->getItemComments(iconItem->text()));
@@ -504,13 +512,36 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
     if (ImageDescEdit::editComments(iconItem->text(), comments)) {
 
         d->currentAlbum->setItemComments(iconItem->text(), comments);
-
+        
         int h = iconItem->height();
         iconItem->updateExtraText();
         iconItem->calcRect();
         iconItem->repaint();
         if (iconItem->height() != h)
             rearrangeItems();
+
+        // store as JPEG Exif comment
+        QString fileName(iconItem->fileItem()->url().path());
+        KFileMetaInfo metaInfo(fileName,"image/jpeg",KFileMetaInfo::Fastest);
+
+        if(metaInfo.mimeType() == "image/jpeg" && settings->getSaveExifComments())
+        {
+            // set Jpeg comment
+            if (metaInfo.containsGroup("Jpeg EXIF Data"))
+            {
+                kdDebug() << "Contains JPEG Exif data, setting comment" << endl;
+                metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
+                metaInfo.applyChanges();
+            }
+
+            // set EXIF UserComment
+            KExifData *exifData = new KExifData;
+            exifData->readFromFile(fileName);
+            exifData->setUserComment(comments);
+            exifData->saveExifData(fileName);
+            delete exifData;
+        }
+
     }
 }
 
