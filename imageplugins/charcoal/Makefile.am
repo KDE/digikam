@@ -1,6 +1,7 @@
 METASOURCES = AUTO
 
-INCLUDES    = $(all_includes) 
+INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
+	      $(all_includes) 
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_charcoal.la

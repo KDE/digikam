@@ -58,6 +58,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "imageeffect_charcoal.h"
 
 namespace DigikamCharcoalImagesPlugin
@@ -75,7 +76,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Charcoal Drawing"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("A charcoal drawing image effect plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

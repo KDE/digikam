@@ -70,6 +70,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "despeckle.h"
 
 namespace DigikamDespeckleFilterImagesPlugin
@@ -89,7 +90,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Noise Reduction"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("A despeckle image filter plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

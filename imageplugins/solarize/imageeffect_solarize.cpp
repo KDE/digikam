@@ -46,6 +46,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "imageeffect_solarize.h"
 
 
@@ -62,7 +63,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Solarize Image"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("A solarize image plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Renchi Raju", 

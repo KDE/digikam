@@ -58,6 +58,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "imageeffect_emboss.h"
 
 namespace DigikamEmbossImagesPlugin
@@ -75,7 +76,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Emboss Image"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("An embossed image effect plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

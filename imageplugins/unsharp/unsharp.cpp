@@ -71,6 +71,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "unsharp.h"
 
 namespace DigikamUnsharpFilterImagesPlugin
@@ -90,7 +91,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Unsharped Mask"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("An unsharped mask image filter plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

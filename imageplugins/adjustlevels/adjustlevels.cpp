@@ -65,6 +65,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "adjustlevels.h"
 
 namespace DigikamAdjustLevelsImagesPlugin
@@ -83,7 +84,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Adjust Levels"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-levels adjustment plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 

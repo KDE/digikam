@@ -58,6 +58,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "imageeffect_oilpaint.h"
 
 namespace DigikamOilPaintImagesPlugin
@@ -75,7 +76,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Oil Paint"), 
-                                       "0.7.0-cvs",
+                                       digikamimageplugins_version,
                                        I18N_NOOP("An oil painting image effect plugin for Digikam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
