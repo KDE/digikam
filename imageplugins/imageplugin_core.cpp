@@ -98,13 +98,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotEqualize()),
                 actionCollection(), "implugcore_equalize") );                
     
-    m_colorsAction->insert(new KActionSeparator());  
-    
-    m_colorsAction->insert(
-                new KAction(i18n("Histogram viewer..."), 0, 
+    new KAction(i18n("Histogram..."), 0, 
                 this, SLOT(slotHistogramViewer()),
-                actionCollection(), "implugcore_histogramviewer") );                
-    
+                actionCollection(), "implugcore_histogramviewer");
+
     //-------------------------------                
     // Filters menu actions.
                                     
@@ -138,6 +135,8 @@ QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
 
+    guiDef.append("MenuBar/Menu/&Image/Image/Action/implugcore_histogramviewer/ ");
+
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
@@ -154,8 +153,9 @@ QStringList ImagePlugin_Core::guiDefinition() const
     
     // enable i18n
 
-    i18n( "&Filters" );
+    i18n( "&Image" );
     i18n( "Fi&x" );
+    i18n( "&Filters" );
     
     return guiDef;
 }
@@ -215,6 +215,7 @@ void ImagePlugin_Core::slotHistogramViewer()
     
     HistogramViewer dlg(parentWidget(), data, w, h);
     dlg.exec();
+    delete [] data;
 }
 
 void ImagePlugin_Core::slotSolarize()

@@ -191,11 +191,12 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/file_print/ ");        
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
-    guiDef.append("MenuBar/Menu/&File/ /Action/comments_edit/ ");
-    guiDef.append("MenuBar/Menu/&File/ /Action/exif_info/ ");
-    guiDef.append("MenuBar/Menu/&File/ /Action/file_properties/ ");
-    guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
+    
+    guiDef.append("MenuBar/Menu/&Image/ /Action/comments_edit/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Action/exif_info/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Action/file_properties/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Separator/ / ");
     
     guiDef.append("MenuBar/Menu/Fi&x/ /DefineGroup/Fix/ ");
     
@@ -240,12 +241,12 @@ QStringList ImageGUIClient::guiDefinition() const
     // enable i18n
 
     i18n( "&File" );
+    i18n( "&Image" );
     i18n( "Fi&x" );
     i18n( "&Transform" );
     i18n( "&View" );
     i18n( "&Help" );
-    
-    
+        
     return guiDef;
 }
 
