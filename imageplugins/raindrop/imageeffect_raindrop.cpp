@@ -76,8 +76,9 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 {
     QString whatsThis;
     
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
     m_cancel = false;
+    m_dirty = false;
     
     // About data and help button.
     
@@ -265,31 +266,50 @@ void ImageEffect_RainDrop::slotCancel()
 
 void ImageEffect_RainDrop::slotUser1()
 {
-    m_dropSlider->blockSignals(true);
-    m_dropSpinBox->blockSignals(true);
-    m_amountSlider->blockSignals(true);
-    m_amountSpinBox->blockSignals(true);
-    m_coeffSlider->blockSignals(true);
-    m_coeffSpinBox->blockSignals(true);
+    if (m_dirty)
+       {
+       m_cancel = true;
+       }
+    else
+       {    
+       m_dropSlider->blockSignals(true);
+       m_dropSpinBox->blockSignals(true);
+       m_amountSlider->blockSignals(true);
+       m_amountSpinBox->blockSignals(true);
+       m_coeffSlider->blockSignals(true);
+       m_coeffSpinBox->blockSignals(true);
       
-    m_dropSlider->setValue(80);
-    m_dropSpinBox->setValue(80);
-    m_amountSlider->setValue(150);
-    m_amountSpinBox->setValue(150);
-    m_coeffSlider->setValue(30);
-    m_coeffSpinBox->setValue(30);
+       m_dropSlider->setValue(80);
+       m_dropSpinBox->setValue(80);
+       m_amountSlider->setValue(150);
+       m_amountSpinBox->setValue(150);
+       m_coeffSlider->setValue(30);
+       m_coeffSpinBox->setValue(30);
 
-    m_dropSlider->blockSignals(false);
-    m_dropSpinBox->blockSignals(false);
-    m_amountSlider->blockSignals(false);
-    m_amountSpinBox->blockSignals(false);
-    m_coeffSlider->blockSignals(false);
-    m_coeffSpinBox->blockSignals(false);
-    slotEffect();
+       m_dropSlider->blockSignals(false);
+       m_dropSpinBox->blockSignals(false);
+       m_amountSlider->blockSignals(false);
+       m_amountSpinBox->blockSignals(false);
+       m_coeffSlider->blockSignals(false);
+       m_coeffSpinBox->blockSignals(false);
+       slotEffect();
+       }
 } 
 
 void ImageEffect_RainDrop::slotEffect()
 {
+    m_dirty = true;
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+    
+    m_dropSlider->setEnabled(false);
+    m_dropSpinBox->setEnabled(false);
+    m_amountSlider->setEnabled(false);
+    m_amountSpinBox->setEnabled(false);
+    m_coeffSlider->setEnabled(false);
+    m_coeffSpinBox->setEnabled(false);
+    
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     // Preview image size.
@@ -349,6 +369,19 @@ void ImageEffect_RainDrop::slotEffect()
     delete [] data;
     m_progressBar->setValue(0); 
     m_previewWidget->update();
+
+    m_dropSlider->setEnabled(true);
+    m_dropSpinBox->setEnabled(true);
+    m_amountSlider->setEnabled(true);
+    m_amountSpinBox->setEnabled(true);
+    m_coeffSlider->setEnabled(true);
+    m_coeffSpinBox->setEnabled(true);
+        
+    m_cancel = false;
+    m_dirty = false;
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
+    enableButton(Ok, true);    
 }
 
 void ImageEffect_RainDrop::slotOk()

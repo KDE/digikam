@@ -58,6 +58,7 @@ protected:
 private:
     
     bool                  m_cancel;
+    bool                  m_dirty;
     
     QWidget              *m_parent;
     
