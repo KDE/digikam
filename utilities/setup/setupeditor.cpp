@@ -60,12 +60,12 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_JPEGcompression->setLabel( i18n("&JPEG compression:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value for JPEG images:<p>"
-                                            "<b>10</b>: very high compression (quality less but "
+                                            "<b>10</b>: very high compression (low quality but "
                                             "small file size)<p>"
                                             "<b>25</b>: high compression <p>"
                                             "<b>50</b>: medium compression<p>"
                                             "<b>75</b>: low compression (default)<p>"
-                                            "<b>100</b>: no compression (lossless but large file size)"));
+                                            "<b>100</b>: no compression (large file size)"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
    m_PNGcompression->setRange(1, 100, 1, true );
@@ -81,14 +81,14 @@ SetupEditor::SetupEditor(QWidget* parent )
                                            "short decompression)<p>"
                                            "<b>Note: PNG is always a lossless compression format!</b>"));
 
-   m_TIFFcompression = new QCheckBox(i18n("Using TIFF compression"),
+   m_TIFFcompression = new QCheckBox(i18n("Compress TIFF files"),
                                      savingOptionsGroup);
    
-   QWhatsThis::add( m_TIFFcompression, i18n("<p>Toggle LZW compression algorithm with TIFF images.<p>"
-                                            "If you enable this option, you can reduce the TIFF image "
-                                            "files size.<p>"
-                                            "<b>Note: because LZW patent issues, some systems don't "
-                                            "include LZW library and this option cannot be used.</b>"));
+   QWhatsThis::add( m_TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
+                                            "If you enable this option, you can reduce "
+                                            "the final file size of the TIFF image.</p>"
+                                            "<p>A lossless compression format (Adobe Deflate) "
+                                            "is used to save the file<p>"));
 
    layout->addWidget(savingOptionsGroup);
 
