@@ -34,13 +34,13 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     : KDialogBase( Plain, QString::null, User1, User1,
                    parent, 0, true, true, i18n("Close") )
 {
-    setCaption( i18n("Improving the image" ));
+    setCaption( i18n("Adjust Image" ));
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint() );
 
     QLabel *topLabel = new QLabel( plainPage() );
-    topLabel->setText( i18n( "Edit Image Properties") );
+    topLabel->setText( i18n( "Edit Image Setting") );
     topLayout->addWidget( topLabel  );
 
     // --------------------------------------------------------
