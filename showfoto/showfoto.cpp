@@ -1205,7 +1205,7 @@ void ShowFoto::slotDeleteCurrentItem()
         KMessageBox::error(this, errMsg, errMsg);
         return;
     }
-*/
+
     // Remove item in thumbbar.
     
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
@@ -1219,8 +1219,7 @@ void ShowFoto::slotDeleteCurrentItem()
 
     // Update thumbbar item preview.
     m_bar->invalidateThumb(m_bar->currentItem());
-
-        
+*/        
 /*    KURL CurrentToRemove = m_urlCurrent;
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
