@@ -147,7 +147,19 @@ private:
 };
 
 /* Iterate over all children of this Album.
-   Note: It doesn't include the specified album */
+   Note: It doesn't include the specified album
+
+   Example usage:
+   
+   AlbumIterator it(album);
+   while ( it.current() )
+   {
+      kdDebug() << "Album: " << it.current() ->getTitle() << endl;
+      ++it;
+   }
+
+   Do not delete albums using this iterator.
+*/
 
 class AlbumIterator
 {
