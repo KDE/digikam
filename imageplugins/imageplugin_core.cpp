@@ -1,10 +1,11 @@
 /* ============================================================
  * File  : imageplugin_core.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004 by Renchi Raju and Gilles Caulier
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +30,8 @@
 #include "imageeffect_solarize.h"
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_redeye.h"
-
+#include "imageeffect_blur.h"
+#include "imageeffect_sharpen.h"
 #include "imageplugin_core.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
@@ -39,6 +41,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                    const QStringList &)
     : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
+    new KAction(i18n("Blur..."), 0, 
+                this, SLOT(slotBlur()),
+                actionCollection(), "implugcore_blur");
+    new KAction(i18n("Sharpen..."), 0, 
+                this, SLOT(slotSharpen()),
+                actionCollection(), "implugcore_sharpen");
     new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
@@ -68,6 +76,8 @@ QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
 
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_blur/ ");
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sharpen/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bcg/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
@@ -81,6 +91,18 @@ void ImagePlugin_Core::setEnabledSelectionActions(bool enable)
 {
     m_redeyeAction->setEnabled(enable);
 }    
+
+void ImagePlugin_Core::slotBlur()
+{
+    ImageEffect_Blur dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_Core::slotSharpen()
+{
+    ImageEffect_Sharpen dlg(parentWidget());
+    dlg.exec();
+}
 
 void ImagePlugin_Core::slotBCG()
 {

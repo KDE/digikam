@@ -6,7 +6,8 @@ kde_module_LTLIBRARIES = digikamimageplugin_core.la
 
 digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp \
 	imageeffect_solarize.cpp imageeffect_bwsepia.cpp \
-	imageeffect_bcg.cpp imageeffect_redeye.cpp
+	imageeffect_bcg.cpp imageeffect_redeye.cpp \
+	imageeffect_blur.cpp imageeffect_sharpen.cpp 
 
 digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
 	$(top_builddir)/digikam/digikam/libdigikam.la

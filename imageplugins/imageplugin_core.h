@@ -46,6 +46,8 @@ private:
     
 private slots:
 
+    void slotBlur();
+    void slotSharpen();
     void slotBCG();
     void slotBW();
     void slotSepia();
