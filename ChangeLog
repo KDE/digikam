@@ -1,4 +1,8 @@
-v0.6.2-RC        05/xx/04
+v0.6.3 (usingLibKIPI)-Alpha1 
+----------------------------------------------------------------------------
+        * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
+
+v0.6.2-RC        05/07/04
 ----------------------------------------------------------------------------
         * Tag CVS for to export Digikam core to KDE-Extragears-3 module on KDE CVS.
         * Updated 'admin' directory from KDE CVS.

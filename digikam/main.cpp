@@ -45,8 +45,9 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 
-    KAboutData aboutData( "digikam", I18N_NOOP("Digikam"),
-                          VERSION,
+    KAboutData aboutData( "digikam", 
+                          I18N_NOOP("Digikam"),
+                          "0.6.3 (using LibKIPI)",
 			  description,
 			  KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2003, Digikam developers team"),
