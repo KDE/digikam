@@ -157,7 +157,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Pink") );
     m_borderType->insertItem( i18n("Decorative Stone") );
     m_borderType->insertItem( i18n("Decorative Chalk") );
-    m_borderType->insertItem( i18n("Decorative Granit") );
+    m_borderType->insertItem( i18n("Decorative Granite") );
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
 
