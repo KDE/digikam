@@ -35,7 +35,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
-#include <qimage.h>
 #include <qslider.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -52,6 +51,7 @@
 #include <kimageeffect.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
+#include <kprogress.h>
 
 // Digikam includes.
 
@@ -68,11 +68,14 @@ namespace DigikamCharcoalImagesPlugin
 
 ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                     : KDialogBase(Plain, i18n("Charcoal Drawing"),
-                                  Help|Ok|Cancel, Ok,
-                                  parent, 0, true, true),
+                                  Help|User1|Ok|Cancel, Ok,
+                                  parent, 0, true, true, i18n("&Reset values")),
                       m_parent(parent)
 {
     QString whatsThis;
+    
+    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    m_cancel = false;
     
     // About data and help button.
     
@@ -131,96 +134,88 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Pencil size:"), plainPage());
     
-    m_radiusSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_radiusSlider");
-    m_radiusSlider->setTickmarks(QSlider::Below);
-    m_radiusSlider->setTickInterval(10);
-    m_radiusSlider->setTracking ( false );
+    m_pencilSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_pencilSlider");
+    m_pencilSlider->setTickmarks(QSlider::Below);
+    m_pencilSlider->setTickInterval(10);
+    m_pencilSlider->setTracking ( false );
     
-    m_radiusInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_radiusInput");
-    whatsThis = i18n("<p>Set here the radius of the Gaussian, not counting the center pixel.");
+    m_pencilInput = new QSpinBox(1, 100, 1, plainPage(), "m_pencilInput");
+    whatsThis = i18n("<p>Set here the charcoal pencil size used for to simulate the drawing.");
         
-    QWhatsThis::add( m_radiusInput, whatsThis);
-    QWhatsThis::add( m_radiusSlider, whatsThis);
+    QWhatsThis::add( m_pencilInput, whatsThis);
+    QWhatsThis::add( m_pencilSlider, whatsThis);
 
     hlay->addWidget(label1, 1);
-    hlay->addWidget(m_radiusSlider, 3);
-    hlay->addWidget(m_radiusInput, 1);
+    hlay->addWidget(m_pencilSlider, 3);
+    hlay->addWidget(m_pencilInput, 1);
     
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Sigma:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
     
-    m_sigmaSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_sigmaSlider");
-    m_sigmaSlider->setTickmarks(QSlider::Below);
-    m_sigmaSlider->setTickInterval(10);
-    m_sigmaSlider->setTracking ( false );
+    m_smoothSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_smoothSlider");
+    m_smoothSlider->setTickmarks(QSlider::Below);
+    m_smoothSlider->setTickInterval(10);
+    m_smoothSlider->setTracking ( false );
     
-    m_sigmaInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_sigmaInput");
-    whatsThis = i18n("<p>Set here the standard deviation of the Gaussian.");
+    m_smoothInput = new QSpinBox(1, 100, 1, plainPage(), "m_smoothInput");
+    whatsThis = i18n("<p>This value controls the smoothing effect of the pencil under the canvas.");
     
-    QWhatsThis::add( m_sigmaSlider, whatsThis);
-    QWhatsThis::add( m_sigmaInput, whatsThis);
+    QWhatsThis::add( m_smoothSlider, whatsThis);
+    QWhatsThis::add( m_smoothInput, whatsThis);
                  
     hlay2->addWidget(label2, 1);
-    hlay2->addWidget(m_sigmaSlider, 3);
-    hlay2->addWidget(m_sigmaInput, 1);
+    hlay2->addWidget(m_smoothSlider, 3);
+    hlay2->addWidget(m_smoothInput, 1);
+
+    // -------------------------------------------------------------
+        
+    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
+    m_progressBar = new KProgress(100, plainPage(), "progressbar");
+    m_progressBar->setValue(0);
+    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
+    hlay6->addWidget(m_progressBar, 1);
 
     // -------------------------------------------------------------
     
     adjustSize();
+    slotUser1();    // Reset all parameters to the default values.
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotSliderRadiusChanged(int)));
-    connect(m_radiusInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSpinBoxRadiusChanged(double)));            
-    connect(m_radiusInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));   
-
-    connect(m_sigmaSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotSliderSigmaChanged(int)));
-    connect(m_sigmaInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSpinBoxSigmaChanged(double)));            
-    connect(m_sigmaInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));        
+    connect(m_pencilSlider, SIGNAL(valueChanged(int)),
+            m_pencilInput, SLOT(setValue(int)));
+    connect(m_pencilInput, SIGNAL(valueChanged(int)),
+            m_pencilSlider, SLOT(setValue(int)));            
+    connect(m_pencilInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));  
+                
+    connect(m_smoothSlider, SIGNAL(valueChanged(int)),
+            m_smoothInput, SLOT(setValue(int)));
+    connect(m_smoothInput, SIGNAL(valueChanged(int)),
+            m_smoothSlider, SLOT(setValue(int)));            
+    connect(m_smoothInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));  
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
 {
 }
 
-void ImageEffect_Charcoal::slotSliderRadiusChanged(int v)
+void ImageEffect_Charcoal::slotUser1()
 {
     blockSignals(true);
-    m_radiusInput->setValue((double)v/10.0);
+    m_pencilInput->setValue(30);
+    m_pencilSlider->setValue(30);
+    m_smoothInput->setValue(10);
+    m_smoothSlider->setValue(10);
+    slotEffect();
     blockSignals(false);
-}
-
-void ImageEffect_Charcoal::slotSpinBoxRadiusChanged(double v)
-{
-    blockSignals(true);
-    m_radiusSlider->setValue((int)(v*10.0));
-    blockSignals(false);
-}
-
-void ImageEffect_Charcoal::slotSliderSigmaChanged(int v)
-{
-    blockSignals(true);
-    m_sigmaInput->setValue((double)v/10.0);
-    blockSignals(false);
-}
-
-void ImageEffect_Charcoal::slotSpinBoxSigmaChanged(double v)
-{
-    blockSignals(true);
-    m_sigmaSlider->setValue((int)(v*10.0));
-    blockSignals(false);
-}
+} 
 
 void ImageEffect_Charcoal::slotHelp()
 {
@@ -230,36 +225,48 @@ void ImageEffect_Charcoal::slotHelp()
 
 void ImageEffect_Charcoal::closeEvent(QCloseEvent *e)
 {
+    m_cancel = true;
     e->accept();    
+}
+
+void ImageEffect_Charcoal::slotCancel()
+{
+    m_cancel = true;
+    done(Cancel);
 }
 
 void ImageEffect_Charcoal::slotEffect()
 {
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    double radius = m_radiusInput->value();
-    double sigma  = m_sigmaInput->value();
+    int pencil = m_pencilInput->value();
+    int smooth  = m_smoothInput->value();
+    m_progressBar->setValue(0); 
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-#if KDE_VERSION >= 0x30200
-    QImage newImage = KImageEffect::charcoal(image, radius, sigma);
-#else
-    QImage newImage = KImageEffect::charcoal(image, radius);
-#endif
+    QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
+
+    if (m_cancel) return;
+    
+    m_progressBar->setValue(0);  
     m_imagePreviewWidget->setPreviewImageData(newImage);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
 
 void ImageEffect_Charcoal::slotOk()
 {
-    accept();
+    enableButton(Ok, false);
+    enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
     
-    uint* data    = iface.getOriginalData();
-    int w         = iface.originalWidth();
-    int h         = iface.originalHeight();
-    double radius = m_radiusInput->value();
-    double sigma  = m_sigmaInput->value();
+    uint* data = iface.getOriginalData();
+    int w      = iface.originalWidth();
+    int h      = iface.originalHeight();
+    int pencil = m_pencilInput->value();
+    int smooth  = m_smoothInput->value();
 
+    m_progressBar->setValue(0); 
+        
     if (data) 
         {
         QImage image;
@@ -267,19 +274,75 @@ void ImageEffect_Charcoal::slotOk()
         image.setAlphaBuffer(true) ;
         memcpy(image.bits(), data, image.numBytes());
 
-#if KDE_VERSION >= 0x30200
-        QImage newImage = KImageEffect::charcoal(image, radius, sigma);
-#else
-        QImage newImage = KImageEffect::charcoal(image, radius);
-#endif
-    
+        QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
         memcpy(data, newImage.bits(), newImage.numBytes());
-        iface.putOriginalData(data);
+        
+        if ( !m_cancel )
+           iface.putOriginalData(data);
+        
         delete [] data;
         }
     
     m_parent->setCursor( KCursor::arrowCursor() );        
+    accept();
 }
+
+QImage ImageEffect_Charcoal::charcoal(QImage &src, double pencil, double smooth)
+{
+    if (m_cancel) return src;
+    m_progressBar->setValue(10); 
+    kapp->processEvents();    
+    
+    // Detects edges in an image using pixel neighborhoods and an edge
+    // detection mask.
+    QImage img(KImageEffect::edge(src, pencil));
+    m_progressBar->setValue(20); 
+    kapp->processEvents();    
+           
+    if (m_cancel) return src;
+    m_progressBar->setValue(20); 
+    kapp->processEvents();    
+    
+    // Blurs an image by convolving pixel neighborhoods.
+    img = KImageEffect::blur(img, pencil, smooth);
+    m_progressBar->setValue(30); 
+    kapp->processEvents();    
+    
+    if (m_cancel) return src;
+    m_progressBar->setValue(40); 
+    kapp->processEvents();    
+    
+    // Normalises the pixel values to span the full range of color values.
+    // This is a contrast enhancement technique.
+    KImageEffect::normalize(img);
+    m_progressBar->setValue(50); 
+    kapp->processEvents();    
+    
+    if (m_cancel) return src;
+    m_progressBar->setValue(60); 
+    kapp->processEvents();    
+    
+    // Invert the pixels values.
+    img.invertPixels(false);
+    m_progressBar->setValue(70); 
+    kapp->processEvents();    
+    
+    if (m_cancel) return src;
+    m_progressBar->setValue(80); 
+    kapp->processEvents();    
+    
+    // Convert image to grayscale.
+    KImageEffect::toGray(img);
+    m_progressBar->setValue(90); 
+    kapp->processEvents();    
+    
+    if (m_cancel) return src;
+    m_progressBar->setValue(100); 
+    kapp->processEvents();    
+    
+    return(img);
+}
+
 
 }  // NameSpace DigikamCharcoalImagesPlugin
 

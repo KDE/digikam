@@ -23,14 +23,19 @@
 #ifndef IMAGEEFFECT_CHARCOAL_H
 #define IMAGEEFFECT_CHARCOAL_H
 
+// Qt include.
+
+#include <qimage.h>
+
 // KDE include.
 
 #include <kdialogbase.h>
 
 class QPushButton;
 class QSlider;
+class QSpinBox;
 
-class KDoubleSpinBox;
+class KProgress;
 
 namespace Digikam
 {
@@ -55,29 +60,34 @@ protected:
     
 private:
 
-    QWidget         *m_parent;
+    bool         m_cancel;
     
-    QPushButton     *m_helpButton;
+    QWidget     *m_parent;
     
-    QSlider         *m_radiusSlider;
-    QSlider         *m_sigmaSlider;
+    QPushButton *m_helpButton;
     
-    KDoubleSpinBox  *m_radiusInput;
-    KDoubleSpinBox  *m_sigmaInput;
+    QSlider     *m_pencilSlider;
+    QSlider     *m_smoothSlider;
+    
+    QSpinBox    *m_pencilInput;
+    QSpinBox    *m_smoothInput;
 
+    KProgress   *m_progressBar;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    
+private:
+
+    QImage charcoal(QImage &src, double pencil, double smooth);
     
 private slots:
 
     void slotHelp();
     void slotEffect();
     void slotOk();
-    
-    void slotSliderRadiusChanged(int v);
-    void slotSpinBoxRadiusChanged(double v);
-    void slotSliderSigmaChanged(int v);
-    void slotSpinBoxSigmaChanged(double v);
-    
+    void slotCancel();
+    void slotUser1();
+        
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin
