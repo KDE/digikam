@@ -49,7 +49,6 @@
 
 // LibKexif includes.
 
-#include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
 
@@ -548,43 +547,13 @@ void ImageWindow::slotRotatedOrFlipped()
 
 void ImageWindow::slotFileProperties()
 {
-    if (!m_view)         // Stand Alone mode. 
+    if (m_urlCurrent.isValid())
     {
-       if (m_urlCurrent.isValid())
-       {
-          QRect sel = m_canvas->getSelectedArea();
+        QRect sel = m_canvas->getSelectedArea();
             
-          if (sel.isNull())
-          {
-             ImageProperties properties(m_urlList, m_urlCurrent, this);
-             properties.exec();
-          }
-          else
-          {
-             ImageProperties properties(m_urlList, m_urlCurrent, this, &sel);
-             properties.exec();
-          }
-       }
-    }
-    else                 // Digikam embeded mode.
-    {
-        AlbumIconItem *iconItem = m_view->findItem(m_urlCurrent.url());
-        
-        if (iconItem)
-        {
-            QRect sel = m_canvas->getSelectedArea();
-            
-            if (sel.isNull())
-            {
-                ImageProperties properties(m_view, iconItem, this);
-                properties.exec();
-            }
-            else
-            {
-                ImageProperties properties(m_view, iconItem, this, &sel);
-                properties.exec();
-            }
-        }
+        ImageProperties properties(this, m_urlCurrent, 
+                                   sel.isNull() ? 0 : &sel);
+        properties.exec();
     }
 }
 

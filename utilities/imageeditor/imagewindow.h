@@ -38,10 +38,9 @@ class QLabel;
 class KAccel;
 class KAction;
 
-class AlbumIconView;
-
 class ImageGUIClient;
 class Canvas;
+class AlbumIconView;
 
 namespace Digikam
 {
@@ -58,7 +57,7 @@ public:
 
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                  const QString& caption=QString::null,
-                 bool allowSaving=true, 
+                 bool allowSaving=true,
                  AlbumIconView* view=0L);
                  
     void applySettings();

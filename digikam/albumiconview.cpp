@@ -78,7 +78,6 @@
 
 // LibKexif includes.
 
-#include <libkexif/kexif.h>
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
@@ -902,7 +901,7 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;
 
-    ImageProperties properties(this, item, this);
+    ImageProperties properties(this, item);
     
     properties.exec();
 

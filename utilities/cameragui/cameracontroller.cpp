@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-#include <libkexif/kexif.h>
+#include <libkexif/kexifdialog.h>
 
 extern "C"
 {
@@ -663,7 +663,7 @@ void CameraController::customEvent(QCustomEvent* e)
         QString file   = QDeepCopy<QString>(event->map["file"].asString());
         QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
 
-        KExif exif(d->parent);
+        KExifDialog exif(d->parent);
         if (exif.loadData(file, ba.data(), ba.size()))
         {
             exif.exec();

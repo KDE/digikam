@@ -42,7 +42,6 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 
-#include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
 
