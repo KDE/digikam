@@ -103,7 +103,7 @@ Class, file and Variable names:
 
 - member variable names should always be of the form m_varName. 
 - Captilize logically so that it becomes easy to read it. Do not capitalize
-  the first letter after _ (Use m_varName nor m_VarName)
+  the first letter after _ (Use m_varName not m_VarName)
 - variable names should be indicative of their functionality and also of 
   the type they belong too if they are instances of qt widgets.
   for eg, QCheckBox* m_autoRotateCheckBox;
@@ -111,7 +111,7 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 * Non-Member variables
 -------------------------------------------------------------------------
-- non-member variables should follow the same namimg convention as the member 
+- non-member variables should follow the same naming convention as the member 
   variables, except for the leading m_
 
 ========================================================================
