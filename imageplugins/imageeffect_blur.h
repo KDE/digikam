@@ -30,7 +30,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImagePreviewWidget;
 }
 
 class ImageEffect_Blur : public KDialogBase
@@ -48,7 +48,7 @@ private:
     
     KIntNumInput *m_radiusInput;
     
-    //Digikam::ImageWidget *m_previewWidget;
+    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
     void blur(uint* data, int w, int h, int r);
     

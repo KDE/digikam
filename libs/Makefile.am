@@ -1,1 +1,1 @@
-SUBDIRS = guibuilder histogram levels themeengine
+SUBDIRS = guibuilder histogram levels themeengine widgets 

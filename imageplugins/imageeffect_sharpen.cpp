@@ -35,6 +35,7 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -45,7 +46,7 @@
 // Digikam includes.
 
 #include <imageiface.h>
-#include <imagewidget.h>
+#include <imagepreviewwidget.h>
 
 // Local includes.
 
@@ -58,25 +59,16 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                      m_parent(parent)
 {
     setHelp("imageeditor.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    /*QVGroupBox *gbox = new QVGroupBox(i18n("Sharpen image"),
-                                      plainPage());
-    QFrame *frame = new QFrame(gbox);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image sharpen preview."));
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);*/
-                                                  
-    QHBoxLayout *hlay  = 0;
-    QLabel      *label = 0;
+    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
+                                                           i18n("Sharpen image preview effect"), 
+                                                           plainPage());
+    hlay1->addWidget(m_imagePreviewWidget);
 
-    hlay          = new QHBoxLayout(topLayout);
-    label         = new QLabel(i18n("Radius :"), plainPage());
+    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
+    QLabel *label = new QLabel(i18n("Radius :"), plainPage());
     
     m_radiusInput = new KIntNumInput(plainPage());
     m_radiusInput->setRange(0, 10, 1, true);
@@ -84,15 +76,20 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
     
-    hlay->addWidget(label, 1);
-    hlay->addWidget(m_radiusInput, 5);
+    hlay2->addWidget(label, 1);
+    hlay2->addWidget(m_radiusInput, 5);
 
     m_radiusInput->setValue(0);
     
-/*    connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));*/
-                
     adjustSize();
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
+    
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));
+    
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
 }
 
 ImageEffect_Sharpen::~ImageEffect_Sharpen()
@@ -101,19 +98,17 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
 
 void ImageEffect_Sharpen::slotEffect()
 {
-/*    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
-    uint* data = iface->getPreviewData();
-    int   w    = iface->previewWidth();
-    int   h    = iface->previewHeight();
+    uint* data = (uint *)img.bits();
+    int   w    = img.width();
+    int   h    = img.height();
     int   r    = m_radiusInput->value();
         
     sharpen(data, w, h, r);
-           
-    iface->putPreviewData(data);
-    delete [] data;
-    m_previewWidget->update();*/
+
+    memcpy(img.bits(), (uchar *)data, img.numBytes());
+    m_imagePreviewWidget->setPreviewImageData(img);
 }
 
 void ImageEffect_Sharpen::slotOk()

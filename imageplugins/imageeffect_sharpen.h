@@ -30,7 +30,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImagePreviewWidget;
 }
 
 class ImageEffect_Sharpen : public KDialogBase
@@ -48,7 +48,7 @@ private:
     
     KIntNumInput *m_radiusInput;
     
-//    Digikam::ImageWidget *m_previewWidget;
+    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
     void sharpen(uint* data, int w, int h, int r);
 
