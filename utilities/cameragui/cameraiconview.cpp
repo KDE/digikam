@@ -194,7 +194,7 @@ void CameraIconView::slotContextMenu(QIconViewItem * item, const QPoint&)
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
     QPopupMenu menu;
-    menu.insertItem(SmallIcon("editimage"), i18n("View"), 0);
+    menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator();
     menu.insertItem(i18n("Properties"), 1);
     menu.insertItem(SmallIcon("text_block"), i18n("EXIF Information"), 2);
