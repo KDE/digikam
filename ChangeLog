@@ -1,5 +1,8 @@
 v0.7.0-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> ImageEditor: Auto-correction of levels plugin. 
+        * <Gilles Caulier> ImageEditor: Equalize image plugin. 
+        * <Gilles Caulier> ImageEditor: Normalize image plugin. 
         * <Gilles Caulier> ImageEditor and main window: image histogram viewer. 
         * <Gilles Caulier> ImageEditor: HSL balance correction plugin. 
         * <Gilles Caulier> ImageEditor: Free image rotation option. 
