@@ -50,6 +50,10 @@ protected :
     KIntNumInput *m_gammaValue;
     KIntNumInput *m_brightnessValue;
     KIntNumInput *m_contrastValue;
+    
+    QLabel *m_label_gammaValue;
+    QLabel *m_label_brightnessValue;
+    QLabel *m_label_contrastValue;
 };
 
 #endif  // IMAGEBCGEDIT_H 

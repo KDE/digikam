@@ -40,18 +40,16 @@
 
 
 ImageBCGEdit::ImageBCGEdit( QWidget *parent )
-            : KDialogBase( Plain, QString::null, Help|Ok|Cancel, Ok,
-                           parent, 0, true, true )
+            : KDialogBase( parent, "AdjustImage", true,
+                           i18n("Adjust Image"), Help|Ok|Cancel, Ok, false)                  
 {
-    setCaption( i18n("Adjust Image" ));
-
     QWidget* box = new QWidget( this );
     setMainWidget(box);
     QVBoxLayout *dvlay = new QVBoxLayout( box, 10, spacingHint() );
 
     // --------------------------------------------------------
         
-    QLabel *m_label_gammaValue = new QLabel (i18n("Gamma:"), box);
+    m_label_gammaValue = new QLabel (i18n("Gamma:"), box);
     dvlay->addWidget( m_label_gammaValue );
        
     m_gammaValue = new KIntNumInput(10, box);
@@ -62,7 +60,7 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     
     // --------------------------------------------------------
         
-    QLabel *m_label_brightnessValue = new QLabel (i18n("Brightness:"), box);
+    m_label_brightnessValue = new QLabel (i18n("Brightness:"), box);
     dvlay->addWidget( m_label_brightnessValue );
        
     m_brightnessValue = new KIntNumInput(0, box);
@@ -73,7 +71,7 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     
     // --------------------------------------------------------
         
-    QLabel *m_label_contrastValue = new QLabel (i18n("Contrast:"), box);
+    m_label_contrastValue = new QLabel (i18n("Contrast:"), box);
     dvlay->addWidget( m_label_contrastValue );
        
     m_contrastValue = new KIntNumInput(0, box);

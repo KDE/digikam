@@ -1805,8 +1805,11 @@ void ImageView::slotBCGEdit()
     connect(bcgEdit, SIGNAL(signalContrastValueChanged(int)),
             d->canvas, SLOT(slotContrastChanged(int)));
             
-    bcgEdit->adjustSize();
-    bcgEdit->show();
+    if ( bcgEdit->exec() == KMessageBox::Ok )
+       {
+       }
+       
+    delete bcgEdit;
 }
 
 
