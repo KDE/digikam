@@ -140,9 +140,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     // -------------------------------------------------------------
     
     QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, 20, spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, marginHint(), spacingHint());
                                                   
-    QLabel *label1 = new QLabel(i18n("Border Type:"), gbox2);
+    QLabel *label1 = new QLabel(i18n("Type:"), gbox2);
     m_borderType = new QComboBox( false, gbox2 );
     m_borderType->insertItem( i18n("Solid") );
     // Niepce is Real name. This is the first guy in the world to have build a camera.
