@@ -49,6 +49,7 @@
 #include <qstring.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -222,9 +223,6 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -248,6 +246,11 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
             m_thresholdSlider, SLOT(setValue(int)));
     connect(m_thresholdInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                                                
+    
+    // -------------------------------------------------------------
+        
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.        
 }
 
 UnsharpDialog::~UnsharpDialog()
@@ -275,6 +278,15 @@ void UnsharpDialog::slotCancel()
 void UnsharpDialog::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotEffect()));    
+    disconnect(m_radiusInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));  
+    disconnect(m_amountInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect())); 
+    disconnect(m_thresholdInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));                                                
+                           
     m_radiusInput->setValue(50);
     m_radiusSlider->setValue(50);
     m_amountInput->setValue(5);
@@ -282,6 +294,15 @@ void UnsharpDialog::slotUser1()
     m_thresholdInput->setValue(0);
     m_thresholdSlider->setValue(0);
     slotEffect();
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));  
+    connect(m_amountInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));             
+    connect(m_thresholdInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                                                
     blockSignals(false);
 } 
 

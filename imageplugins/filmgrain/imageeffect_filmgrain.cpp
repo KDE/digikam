@@ -42,6 +42,7 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qdatetime.h> 
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -69,9 +70,26 @@ namespace DigikamFilmGrainImagesPlugin
 {
 
 ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Film Grain"),
-                                Help|User1|Ok|Cancel, Ok,
-                                parent, 0, true, true, i18n("&Reset values")),
+                     : KDialogBase(Plain,
+                                   i18n("Film Grain"),
+                                   Help|User1|Ok|Cancel,
+                                   Ok,
+                                   parent,
+                                   0,
+                                   true,
+                                   true,
+                                   i18n("&Reset values")),
+/*                     : KDialogBase(Plain,
+                                   WStyle_Customize | WStyle_Minimize | WType_TopLevel,
+                                   parent,
+                                   0,
+                                   true,
+                                   i18n("Film Grain"),
+                                   Help|User1|Ok|Cancel,
+                                   Ok,
+                                   true,
+                                   i18n("&Reset values")),*/
+                       
                        m_parent(parent)
 {
     QString whatsThis;
@@ -165,15 +183,16 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
                        
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
@@ -183,7 +202,14 @@ ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotEffect()));    
+               
     m_sensibilitySlider->setValue(2);
+    slotEffect();    
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
     blockSignals(false);
 } 
 

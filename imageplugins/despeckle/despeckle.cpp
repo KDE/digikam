@@ -50,6 +50,7 @@
 #include <qimage.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -233,8 +234,6 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     hlay6->addWidget(m_progressBar, 1);
     
     // -------------------------------------------------------------
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
@@ -265,6 +264,11 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     
     connect(m_useRecursiveMethod, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));             
+            
+    // -------------------------------------------------------------
+        
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 DespeckleDialog::~DespeckleDialog()
@@ -292,6 +296,15 @@ void DespeckleDialog::slotCancel()
 void DespeckleDialog::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotEffect()));
+    disconnect(m_radiusInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));
+    disconnect(m_blackLevelInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));  
+    disconnect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));                        
+            
     m_radiusInput->setValue(3);
     m_radiusSlider->setValue(3);
     m_blackLevelInput->setValue(7);
@@ -299,6 +312,15 @@ void DespeckleDialog::slotUser1()
     m_whiteLevelInput->setValue(248);
     m_whiteLevelSlider->setValue(248);
     slotEffect();
+
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));    
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));
+    connect(m_blackLevelInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));
+    connect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                          
     blockSignals(false);
 } 
 

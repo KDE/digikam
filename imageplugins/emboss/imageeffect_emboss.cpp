@@ -44,6 +44,7 @@
 #include <qslider.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -168,9 +169,6 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -180,7 +178,11 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
             m_depthSlider, SLOT(setValue(int)));            
     connect(m_depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect())); 
-                        
+   
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_Emboss::~ImageEffect_Emboss()
@@ -190,9 +192,18 @@ ImageEffect_Emboss::~ImageEffect_Emboss()
 void ImageEffect_Emboss::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotEffect()));
+    disconnect(m_depthInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect())); 
     m_depthInput->setValue(30);
     m_depthSlider->setValue(30);
     slotEffect();
+
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));        
+    connect(m_depthInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));     
     blockSignals(false);
 } 
 

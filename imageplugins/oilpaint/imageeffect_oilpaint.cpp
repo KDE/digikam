@@ -43,6 +43,7 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -189,9 +190,6 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
-        
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -208,6 +206,11 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
             m_smoothSlider, SLOT(setValue(int)));   
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));         
+    
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
@@ -217,11 +220,25 @@ ImageEffect_OilPaint::~ImageEffect_OilPaint()
 void ImageEffect_OilPaint::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+              this, SLOT(slotEffect()));
+    disconnect(m_brushSizeInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));            
+    disconnect(m_smoothInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));         
+    
     m_brushSizeInput->setValue(1);
     m_brushSizeSlider->setValue(1);
     m_smoothInput->setValue(30);
     m_smoothSlider->setValue(30);
     slotEffect();
+
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
+    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));            
+    connect(m_smoothInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));         
     blockSignals(false);
 } 
 

@@ -38,6 +38,7 @@
 #include <qslider.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -181,9 +182,6 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.
-    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -200,6 +198,11 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
             m_smoothSlider, SLOT(setValue(int)));            
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));  
+            
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
@@ -209,11 +212,25 @@ ImageEffect_Charcoal::~ImageEffect_Charcoal()
 void ImageEffect_Charcoal::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotEffect()));    
+    disconnect(m_pencilInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));  
+    disconnect(m_smoothInput, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));             
+            
     m_pencilInput->setValue(30);
     m_pencilSlider->setValue(30);
     m_smoothInput->setValue(10);
     m_smoothSlider->setValue(10);
     slotEffect();
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));    
+    connect(m_pencilInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect())); 
+    connect(m_smoothInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                  
     blockSignals(false);
 } 
 
