@@ -104,6 +104,7 @@ private:
 
     bool saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType); 
     bool saveTIFF(const QString& saveFile, bool compress);
+    void ImlibInterface::exifRotate(QString filename);
         
     ImlibInterface();
     ImlibInterfacePrivate *d;

@@ -47,6 +47,7 @@ extern "C"
 // KDE includes.
 
 #include <kdebug.h>
+#include <libkexif/kexifdata.h>
 
 // Imlib2 includes.
 
@@ -202,9 +203,65 @@ bool ImlibInterface::load(const QString& filename)
     }
         
     imlib_context_pop();
+
+    exifRotate(filename);
     
     return (valRet);
 }
+
+
+void ImlibInterface::exifRotate(QString filename)
+{
+   // Rotate image based on EXIF rotate tag
+    KExifData *exifData = new KExifData;
+
+    if(!exifData->readFromFile(filename)) return;
+
+    KExifData::ImageOrientation orientation = exifData->getImageOrientation();
+
+    if(orientation != KExifData::NORMAL) {
+
+        switch (orientation) {
+            case KExifData::NORMAL:
+            case KExifData::UNSPECIFIED:
+                break;
+
+            case KExifData::HFLIP:
+                imlib_image_flip_horizontal();
+                break;
+
+            case KExifData::ROT_180:
+                rotate180();
+                break;
+
+            case KExifData::VFLIP:
+                imlib_image_flip_vertical();
+                break;
+
+            case KExifData::ROT_90_HFLIP:
+                imlib_image_flip_horizontal();
+                rotate90();
+                break;
+
+            case KExifData::ROT_90:
+                rotate90();
+                break;
+
+            case KExifData::ROT_90_VFLIP:
+                imlib_image_flip_vertical();
+                rotate90();
+                break;
+
+            case KExifData::ROT_270:
+                rotate270();
+                break;
+        }
+    }
+
+    delete exifData;
+
+}
+
 
 void ImlibInterface::preload(const QString& filename)
 {
