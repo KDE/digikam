@@ -63,8 +63,9 @@ public:
 
     void setPixmap(const QPixmap& thumb, const KFileMetaInfo* metaInfo);
 
+    virtual int compare(ThumbItem *item);
+    
 protected:
-
 
     virtual void calcRect();
     virtual void paintItem(QPainter* p, const QColorGroup& cg);

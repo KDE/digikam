@@ -58,6 +58,9 @@
    <text>&amp;View</text>
      <Action name="album_thumbSizeIncrease" />
      <Action name="album_thumbSizeDecrease" />
+     <Separator />
+     <Action name="image_sort" />
+     <Separator />
      <Action name="full_screen" />
   </Menu>
   

@@ -152,6 +152,48 @@ void AlbumIconItem::setPixmap(const QPixmap& thumbnail,
     }
 }
 
+int AlbumIconItem::compare(ThumbItem *item)
+{
+    const AlbumSettings *settings = view_->settings();
+    AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(item);
+    
+    switch (settings->getImageSortOrder())
+    {
+    case(AlbumSettings::ByIName):
+    {
+        return ThumbItem::compare(item);
+    }
+    case(AlbumSettings::ByIPath):
+    {
+        return fileItem_->url().path().compare(iconItem->fileItem_->url().path());
+    }
+    case(AlbumSettings::ByIDate):
+    {
+        time_t mytime(fileItem_->time(KIO::UDS_MODIFICATION_TIME));
+        time_t histime(iconItem->fileItem_->time(KIO::UDS_MODIFICATION_TIME));
+        if (mytime < histime)
+            return -1;
+        else if (mytime > histime)
+            return 1;
+        else
+            return 0;
+    }
+    case(AlbumSettings::ByISize):
+    {
+        int mysize(fileItem_->size());
+        int hissize(iconItem->fileItem_->size());
+        if (mysize < hissize)
+            return -1;
+        else if (mysize > hissize)
+            return 1;
+        else
+            return 0;
+    }
+    }
+
+    return 0;
+}
+
 void AlbumIconItem::calcRect()
 {
 
@@ -279,3 +321,4 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
     bitBlt(view_->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
+

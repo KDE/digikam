@@ -42,6 +42,14 @@ public:
         ByDate
     };
 
+    enum ImageSortOrder
+    {
+        ByIName = 0,
+        ByIPath,
+        ByIDate,
+        ByISize
+    };
+    
     AlbumSettings();
     ~AlbumSettings();
 
@@ -58,7 +66,10 @@ public:
     bool delAlbumCollectionName(const QString& name);
     
     void setAlbumSortOrder(const AlbumSortOrder order);
-    AlbumSortOrder getAlbumSortOrder();
+    AlbumSortOrder getAlbumSortOrder() const;
+
+    void setImageSortOder(const ImageSortOrder order);
+    ImageSortOrder getImageSortOrder() const;
 
     void setImageFileFilter(const QString& filter);
     QString getImageFileFilter() const;

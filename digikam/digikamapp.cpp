@@ -276,6 +276,23 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_properties");
 
+    mImageSortAction = new KSelectAction(i18n("&Sort Images"),
+                                         0,
+                                         0,
+                                         actionCollection(),
+                                         "image_sort");
+
+    connect(mImageSortAction, SIGNAL(activated(int)),
+            mView, SLOT(slotSortImages(int)));
+
+    // Use same list order as in albumsettings enum
+    QStringList sortImagesActionList;
+    sortImagesActionList.append(i18n("By Name"));
+    sortImagesActionList.append(i18n("By Path"));
+    sortImagesActionList.append(i18n("By Date"));
+    sortImagesActionList.append(i18n("By File Size"));
+    mImageSortAction->setItems(sortImagesActionList);
+
     // -----------------------------------------------------------------
     mSelectAllAction = new KAction(i18n("Select All"),
                                     0,
@@ -368,6 +385,7 @@ void DigikamApp::setupActions()
     mImagePropsAction->setEnabled(false);
 
     mAlbumSortAction->setCurrentItem((int)mAlbumSettings->getAlbumSortOrder());
+    mImageSortAction->setCurrentItem((int)mAlbumSettings->getImageSortOrder());
 }
 
 

@@ -424,4 +424,13 @@ void DigikamView::slotSelectInvert()
     mIconView->invertSelection();
 }
 
+void DigikamView::slotSortImages(int order)
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+    settings->setImageSortOder((AlbumSettings::ImageSortOrder) order);
+    mIconView->slotUpdate();
+}
+
 #include "digikamview.moc"

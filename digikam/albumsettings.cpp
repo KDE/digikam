@@ -49,9 +49,10 @@ public:
     QString     audioFilefilter;
     QString     rawFilefilter;
 
-    int            thumbnailSize;
+    int         thumbnailSize;
     
     AlbumSettings::AlbumSortOrder albumSortOrder;
+    AlbumSettings::ImageSortOrder  imageSortOrder;
 
     bool recurseTags;
     
@@ -105,6 +106,7 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
 
     d->albumSortOrder = AlbumSettings::ByCollection;
+    d->imageSortOrder  = AlbumSettings::ByIName;
                                           
     d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
@@ -142,8 +144,12 @@ void AlbumSettings::readSettings()
         d->albumCollectionNames = collectionList;
 
     d->albumSortOrder =
-        AlbumSettings::AlbumSortOrder (config->readNumEntry("Album Sort Order",
-                                                            (int)AlbumSettings::ByCollection));
+        AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
+                                                           (int)AlbumSettings::ByCollection));
+
+    d->imageSortOrder =
+        AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
+                                                          (int)AlbumSettings::ByIName));
     
     d->imageFilefilter = config->readEntry("File Filter",
                                            d->imageFilefilter);
@@ -206,6 +212,9 @@ void AlbumSettings::saveSettings()
 
     config->writeEntry("Album Sort Order",
                        (int)d->albumSortOrder);
+
+    config->writeEntry("Image Sort Order",
+                       (int)d->imageSortOrder);
     
     config->writeEntry("File Filter",
                        d->imageFilefilter);
@@ -299,9 +308,19 @@ void AlbumSettings::setAlbumSortOrder(const AlbumSettings::AlbumSortOrder order)
     d->albumSortOrder = order;
 }
 
-AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder()
+AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
 {
     return d->albumSortOrder;
+}
+
+void AlbumSettings::setImageSortOder(const ImageSortOrder order)
+{
+    d->imageSortOrder = order;    
+}
+
+AlbumSettings::ImageSortOrder AlbumSettings::getImageSortOrder() const
+{
+    return d->imageSortOrder;
 }
 
 void AlbumSettings::setImageFileFilter(const QString& filter)

@@ -100,6 +100,7 @@ public slots:
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();
+    void slotSortImages(int order);
   
 private slots:
 

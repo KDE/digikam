@@ -137,6 +137,7 @@ private:
     KAction *mImageRenameAction;
     KAction *mImageDeleteAction;
     KAction *mImagePropsAction;
+    KSelectAction *mImageSortAction;
 
     // Selection Actions
     KAction *mSelectAllAction;
