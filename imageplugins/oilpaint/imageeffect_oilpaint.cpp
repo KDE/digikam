@@ -144,12 +144,12 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Brush size:"), plainPage());
     
-    m_brushSizeSlider = new QSlider(0, 20, 1, 1, Qt::Horizontal, plainPage(), "m_brushSizeSlider");
+    m_brushSizeSlider = new QSlider(1, 10, 1, 1, Qt::Horizontal, plainPage(), "m_brushSizeSlider");
     m_brushSizeSlider->setTickmarks(QSlider::Below);
     m_brushSizeSlider->setTickInterval(1);
     m_brushSizeSlider->setTracking ( false );
     
-    m_brushSizeInput = new QSpinBox(1, 20, 1, plainPage(), "m_brushSizeInput");
+    m_brushSizeInput = new QSpinBox(1, 10, 1, plainPage(), "m_brushSizeInput");
     
     whatsThis = i18n("<p>Set here the brush size use for to simulate the oil painting.");
     QWhatsThis::add( m_brushSizeInput, whatsThis);
@@ -164,12 +164,12 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
     
-    m_smoothSlider = new QSlider(0, 20, 1, 1, Qt::Horizontal, plainPage(), "m_smoothSlider");
+    m_smoothSlider = new QSlider(10, 255, 1, 1, Qt::Horizontal, plainPage(), "m_smoothSlider");
     m_smoothSlider->setTickmarks(QSlider::Below);
-    m_smoothSlider->setTickInterval(1);
+    m_smoothSlider->setTickInterval(20);
     m_smoothSlider->setTracking ( false );  
     
-    m_smoothInput = new QSpinBox(0, 20, 1, plainPage(), "m_SmoothInput");
+    m_smoothInput = new QSpinBox(10, 255, 1, plainPage(), "m_SmoothInput");
     
     whatsThis = i18n("<p>This value controls the smoothing effect used for to simulate the oil painting.");
     QWhatsThis::add( m_smoothInput, whatsThis);
@@ -217,10 +217,10 @@ ImageEffect_OilPaint::~ImageEffect_OilPaint()
 void ImageEffect_OilPaint::slotUser1()
 {
     blockSignals(true);
-    m_brushSizeInput->setValue(3);
-    m_brushSizeSlider->setValue(3);
-    m_smoothInput->setValue(2);
-    m_smoothSlider->setValue(2);
+    m_brushSizeInput->setValue(2);
+    m_brushSizeSlider->setValue(2);
+    m_smoothInput->setValue(20);
+    m_smoothSlider->setValue(20);
     slotEffect();
     blockSignals(false);
 } 
@@ -304,9 +304,6 @@ void ImageEffect_OilPaint::slotOk()
     
 void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness)
 {
-    BrushSize = (BrushSize < 1) ? 1 : (BrushSize > 5) ? 5 : BrushSize;
-    Smoothness = (Smoothness < 10) ? 10 : (Smoothness > 255) ? 255 : Smoothness;
-
     int LineWidth = w * 4;
     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
