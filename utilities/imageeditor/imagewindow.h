@@ -89,6 +89,7 @@ signals:
 
     void signalFileDeleted(const KURL& url);
     void signalFileAdded(const KURL& url);
+    void signalFileModified(const KURL& url);
     
 private slots:
 

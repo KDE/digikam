@@ -27,6 +27,7 @@
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qlabel.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -644,6 +645,8 @@ void ImageWindow::slotSaveResult(KIO::Job *job)
        return;
        }
     
+    emit signalFileModified(m_urlCurrent);
+
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                                   
 }
 
@@ -698,23 +701,28 @@ void ImageWindow::slotSaveAs()
        
        return;
        }
-     
-    ExifRestorer exifHolder;
-    exifHolder.readFile(m_urlCurrent.path(), ExifRestorer::ExifOnly);
+
+    // only try to write exif if both src and destination are jpeg files
+    if (QString(QImageIO::imageFormat(m_urlCurrent.path())).upper() == "JPEG" &&
+        format.upper() == "JPEG")
+    {
+        ExifRestorer exifHolder;
+        exifHolder.readFile(m_urlCurrent.path(), ExifRestorer::ExifOnly);
  
-    if (exifHolder.hasExif()) 
-       {
-       ExifRestorer restorer;
-       restorer.readFile(tmpFile, ExifRestorer::EntireImage);
-       restorer.insertExifData(exifHolder.exifData());
-       restorer.writeFile(tmpFile);
-       }
-    else 
-       kdWarning() << ("slotSaveAs::No Exif Data Found") << endl;
+        if (exifHolder.hasExif()) 
+        {
+            ExifRestorer restorer;
+            restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+            restorer.insertExifData(exifHolder.exifData());
+            restorer.writeFile(tmpFile);
+        }
+        else 
+            kdWarning() << ("slotSaveAs::No Exif Data Found") << endl;
     
-    if( m_rotatedOrFlipped )
-       KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
-    
+        if( m_rotatedOrFlipped )
+            KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+    }
+        
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_newFile,
                                            -1, true, false, false);
   
