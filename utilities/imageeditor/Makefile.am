@@ -10,11 +10,12 @@ libimageeditor_la_SOURCES = imlibinterface.cpp imageiface.cpp \
 			    imagecommentedit.cpp imageprint.cpp \
 			    exifrestorer.cpp imagerotatedlg.cpp 
 
-libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB2) $(LIB_KEXIF) -ltiff
+libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
+			    $(LIB_IMLIB2) $(LIBKEXIF_LIBS) -ltiff
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/guibuilder \
-	  $(IMLIB2_CFLAGS) $(all_includes) 
+	  $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageiface.h imagewidget.h imageplugin.h
 

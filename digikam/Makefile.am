@@ -15,7 +15,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
 	-I$(top_srcdir)/digikam/utilities/setup \
 	-I$(top_srcdir)/digikam/ \
-	$(all_includes)
+	$(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp \
@@ -36,7 +36,8 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			syncjob.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \
+		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_GDBM) \
+			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
@@ -49,12 +50,12 @@ libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(top_builddir)/digikam/utilities/setup/libsetup.la
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
-			-lkipi -no-undefined
+			-no-undefined
 
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KEXIF) \
+		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) \
 		  libdigikam.la
 
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2)

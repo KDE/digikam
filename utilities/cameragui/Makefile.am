@@ -10,11 +10,11 @@ libcameragui_la_SOURCES = cameraui.cpp   cameraiconview.cpp  \
 			exifrotate.cpp transupp.cpp 
 
 libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
-libcameragui_la_LIBADD  = $(LIB_GPHOTO) -ljpeg
+libcameragui_la_LIBADD  = $(LIB_GPHOTO) $(LIBKEXIF_LIBS) -ljpeg
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
-	$(all_includes) $(GPHOTO_CFLAGS)
+	$(all_includes) $(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS)
 
 digikamcameraguiicondir = $(kde_datadir)/digikam/icons
 digikamcameraguiicon_ICON = AUTO

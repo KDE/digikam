@@ -3,14 +3,129 @@
 AM_INIT_AUTOMAKE(digikam,0.7.0)
 
 dnl ------------------------------------------------------------
-dnl libraries needed
+dnl pkg-config check
 dnl ------------------------------------------------------------
+
+
+dnl KDE_PKG_CHECK_MODULES(GSTUFF, gtk+-2.0 >= 1.3 glib = 1.3.4, action-if, action-not)
+dnl defines GSTUFF_LIBS, GSTUFF_CFLAGS, see pkg-config man page
+dnl also defines GSTUFF_PKG_ERRORS on error
+AC_DEFUN([KDE_PKG_CHECK_MODULES], [
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+  fi
+
+  if test "$PKG_CONFIG" != "no" ; then
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        AC_MSG_CHECKING(for $2)
+
+        if $PKG_CONFIG --exists "$2" ; then
+            AC_MSG_RESULT(yes)
+            succeeded=yes
+
+            AC_MSG_CHECKING($1_CFLAGS)
+            $1_CFLAGS=`$PKG_CONFIG --cflags "$2"`
+            AC_MSG_RESULT($$1_CFLAGS)
+
+            AC_MSG_CHECKING($1_LIBS)
+            $1_LIBS=`$PKG_CONFIG --libs "$2"`
+            AC_MSG_RESULT($$1_LIBS)
+        else
+            $1_CFLAGS=""
+            $1_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            $1_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$2"`
+            ifelse([$4], ,echo $$1_PKG_ERRORS,)
+        fi
+
+        AC_SUBST($1_CFLAGS)
+        AC_SUBST($1_LIBS)
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+  if test $succeeded = yes; then
+     ifelse([$3], , :, [$3])
+  else
+     ifelse([$4], , AC_MSG_WARN([Library requirements ($2) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them.]), [$4])
+  fi
+])
+
+AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
+AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 
 # -----------------------------------------------------------------
 # sqlite type check
 # -----------------------------------------------------------------
 KDE_CHECK_TYPES
 
+
+#---------------------------------------------------------
+# imlib2-detection
+#---------------------------------------------------------
+
+AC_DEFUN([KDE_FIND_IMLIB2_CONFIG],
+   [AC_MSG_CHECKING([for imlib2-config])
+
+imlib2_config_given=NO
+ac_imlib2_config=""
+
+AC_ARG_WITH(imlib2-config,
+        [  --with-imlib2-config     directory where \"imlib2-config\" lies ],
+        [  ac_imlib2_config="$withval/imlib2-config"
+           imlib2_config_given=yes
+        ])
+
+if test "$imlib2_config_given" = "yes"; then
+  if test ! -r $ac_imlib2_config; then
+    AC_MSG_RESULT(wrong file specified)
+    ac_imlib2_config=""
+  else
+    IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
+    LIB_IMLIB2=`$ac_imlib2_config --libs`
+    AC_SUBST(LIB_IMLIB2)
+    AC_SUBST(IMLIB2_CFLAGS)
+    AC_MSG_RESULT($ac_imlib2_config)
+  fi
+else
+  ac_imlib2_config=`which imlib2-config 2>/dev/null`
+  if test -z "$ac_imlib2_config"; then
+    AC_MSG_RESULT(no)
+  else
+    dummy=`echo "$ac_imlib2_config" | grep '/imlib2-config'`
+    if test -z "$dummy"; then
+      AC_MSG_RESULT(no)
+      ac_imlib2_config=""
+    else
+      LIB_IMLIB2=`$ac_imlib2_config --libs`
+      IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
+      imlib2_config=`echo "$LIB_IMLIB2" | grep lImlib2`
+      if test -z "$imlib2_config"; then
+        AC_MSG_RESULT(no)
+        ac_imlib2_config=""
+      else
+        AC_SUBST(LIB_IMLIB2)
+        AC_SUBST(IMLIB2_CFLAGS)
+        AC_MSG_RESULT($ac_imlib2_config)
+      fi
+    fi
+  fi
+fi
+
+])
+
+dnl Check if Imlib2 is installed properly
+KDE_FIND_IMLIB2_CONFIG
+     
+if test -z "$ac_imlib2_config"; then
+  AC_MSG_WARN([Imlib 2.x not found.])
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+fi
 
 #------------------------------------------------------------------
 # gphoto2 detection
@@ -30,35 +145,67 @@ else
   DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 fi
 
-
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
-
 
 #------------------------------------------------------------------
 # KIPI support (KDE Image Plugin Interface) 
 #------------------------------------------------------------------
 
-AC_MSG_CHECKING(if KIPI is installed)
-KDE_CHECK_HEADER(libkipi/interface.h,  have_kipi=yes,  have_kipi=no)
+if test "$PKGCONFIGFOUND" = "yes" ; then
+   # check for libkipi
+   have_libkipi=no
 
-if test "$have_kipi" = "no"; then
-  AC_MSG_WARN([Can't find KIPI (KDE Image Plugin Interface)
-Please install kdeextrager-libs-1 to get the most out of Digikam]);
-   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
+   KDE_PKG_CHECK_MODULES(LIBKIPI, libkipi >= 0.1,
+	 	         have_libkipi=yes, have_libkipi=no)
+
+   if test "x$have_libkipi" = "xno"; then
+	LIBKIPI_CFLAGS=""
+	LIBKIPI_LIBS=""
+        AC_MSG_RESULT([not found])
+   else
+	AC_MSG_RESULT([found])
+   fi
+else
+   LIBKIPI_CFLAGS=""
+   LIBKIPI_LIBS=""
+   AC_MSG_RESULT([not found])
+fi 
+AC_SUBST(LIBKIPI_CFLAGS)
+AC_SUBST(LIBKIPI_LIBS)
+
+if test "x$have_libkipi" != "xyes"; then
+     DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 #------------------------------------------------------------------
-# Check for Libkexif
+# Check for libkexif
 #------------------------------------------------------------------
 
-KDE_CHECK_HEADER(libkexif/kexif.h, have_kexif=yes, have_kexif=no)
 
-if test "$have_kexif" = "no"; then
-  AC_WARN([Can't find Libkexif headers, Digikam won't be compiled.])
-  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+if test "$PKGCONFIGFOUND" = "yes" ; then
+   # check for libkexif
+   have_libkexif=no
+
+  KDE_PKG_CHECK_MODULES(LIBKEXIF, libkexif >= 0.1,
+   	                have_libkexif=yes, have_libkexif=no)
+
+  if test "x$have_libkexif" = "xno"; then
+       LIBKEXIF_CFLAGS=""
+       LIBKEXIF_LIBS=""
+       AC_MSG_RESULT([not found])
+  else
+       AC_MSG_RESULT([found])
+  fi
 else
-  LIB_KEXIF="-lkexif"
-  AC_SUBST(LIB_KEXIF)
+   LIBKEXIF_CFLAGS=""
+   LIBKEXIF_LIBS=""
+   AC_MSG_RESULT([not found])
+fi 
+AC_SUBST(LIBKEXIF_CFLAGS)
+AC_SUBST(LIBKEXIF_LIBS)
+
+if test "x$have_libkexif" != "xyes"; then
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 #------------------------------------------------------------------
@@ -68,7 +215,7 @@ fi
 KDE_CHECK_HEADER(gdbm.h, have_gdbm=yes, have_gdbm=no)
 
 if test "$have_gdbm" = "no"; then
-  AC_WARN([Can't find gdbm headers, Digikam won't be compiled.])
+  AC_WARN([Can't find gdbm headers, digiKam will not be compiled.])
   DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 else
   LIB_GDBM="-lgdbm"
