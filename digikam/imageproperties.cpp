@@ -119,7 +119,9 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     
     kapp->config()->setGroup("Image Properties Dialog");
     showPage(kapp->config()->readNumEntry("Tab Actived", 0));
-
+    
+    resize(configDialogSize("Image Properties Dialog"));
+    
     parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
 
