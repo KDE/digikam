@@ -170,6 +170,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 
 void SyncJob::slotLoadThumbnailFailed()
 {
+    // TODO: setting _lastError*
     qApp->exit_loop();
 }
 
