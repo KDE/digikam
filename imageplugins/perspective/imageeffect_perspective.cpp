@@ -138,9 +138,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 4);
     
-    QLabel *label1 = new QLabel(i18n("New Width: "), plainPage());
+    QLabel *label1 = new QLabel(i18n("New width: "), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height: "), plainPage());
+    QLabel *label2 = new QLabel(i18n("New height: "), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
     QLabel *label3 = new QLabel(i18n("Top left angle: "), plainPage());
     m_topLeftAngleLabel = new QLabel(plainPage());
