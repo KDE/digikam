@@ -56,6 +56,7 @@ extern "C"
 
 // Local includes.
 
+#include "albumsettings.h"
 #include "imlibinterface.h"
 
 namespace Digikam
@@ -206,7 +207,11 @@ bool ImlibInterface::load(const QString& filename)
         
     imlib_context_pop();
 
-    exifRotate(filename);
+    AlbumSettings *settings = AlbumSettings::instance();
+    if(settings->getExifRotate())
+    {
+        exifRotate(filename);
+    }
     
     return (valRet);
 }
@@ -226,6 +231,9 @@ void ImlibInterface::exifRotate(QString filename)
     if(!exifData->readFromFile(filename)) return;
 
     KExifData::ImageOrientation orientation = exifData->getImageOrientation();
+
+    imlib_context_push(d->context);
+    imlib_context_set_image(d->image);
 
     if(orientation != KExifData::NORMAL) {
 
@@ -268,8 +276,9 @@ void ImlibInterface::exifRotate(QString filename)
         m_rotatedOrFlipped = true;
     }
 
+    imlib_context_pop();
+    
     delete exifData;
-
 }
 
 
@@ -783,7 +792,6 @@ void ImlibInterface::putSelectedData(uint* data)
 
 bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, const QString& mimeType) 
 {
-    bool result;
     kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
               << mimeType.ascii() << ")" << endl;
     
