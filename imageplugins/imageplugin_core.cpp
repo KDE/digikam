@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
+ 
 // KDE includes.
   
 #include <klocale.h>
@@ -65,6 +65,9 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setEnabled(false);
+    m_redeyeAction->setToolTip( i18n( "This filter can be used for correct the red eyes in an image. "
+                                      "You must beforehand selected the eyes region with the editor before "
+                                      "to apply this filter." ) );
     
     new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
                 this, SLOT(slotBCG()),

@@ -33,6 +33,7 @@
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
+#include <qlabel.h>
 
 // KDE includes.
 
@@ -202,6 +203,12 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
                           buttonGroup ); 
 
     topLayout->addWidget( buttonGroup );
+    
+    QLabel *notaLabel = new QLabel( i18n("Note: you must have beforehand selected the eyes "
+                                         "region in the editor before to start this filter."),
+                               plainPage());
+    
+    topLayout->addWidget( notaLabel );
 
     connect( buttonGroup, SIGNAL(clicked(int)),
              SLOT(slotClicked(int)) );
