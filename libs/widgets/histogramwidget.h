@@ -60,7 +60,7 @@ private:
 enum RepaintType
 {
     HistogramNone = 0,        // No current histogram values calculation.
-    HistogramStarted = 0,     // Histogram values calculation started.
+    HistogramStarted,         // Histogram values calculation started.
     HistogramCompleted,       // Histogram values calculation completed.
     HistogramFailed           // Histogram values calculation failed.
 };    
