@@ -15,6 +15,7 @@
 #include <kurl.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kexifdata.h>
 
 #include "albumsettings.h"
 #include "albumiconview.h"
@@ -283,21 +284,32 @@ void AlbumIconItem::updateExtraText()
 
     if(settings->getIconShowFileComments())
     {
-      // read and display JPEG COM field
-      KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+       // read and display JPEG COM comment and JPEG EXIF UserComment
+       KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
 
-      if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
-      {
-        extraText += "\n";
-        QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
+       if(metaInfo.isValid() && metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+       {
+          KExifData *exifData = new KExifData;
+          exifData->readFromFile(fileItem_->url().path());
 
-        // Only append JPEG comments if they are different from the regular comment
-        QString comments;
-        view_->getItemComments(text(), comments);
-        
-        if(!settings->getIconShowComments() || jpegComments != comments)
-          extraText += jpegComments;
-      }  
+          extraText += "\n";
+          QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
+          QString exifComments = exifData->getUserComment();
+
+          QString comments;
+          view_->getItemComments(text(), comments);
+
+          // Only append comments if they are different from the regular comment
+          if( !settings->getIconShowComments() || jpegComments != comments ) {
+             extraText += jpegComments;
+          }
+
+          if( !settings->getIconShowComments() || exifComments != comments ) {
+             if( jpegComments != exifComments ) extraText += exifComments;
+          }
+
+       }  
+
     }
 
     if (imageWidth_ != 0 && imageHeight_ != 0) {
