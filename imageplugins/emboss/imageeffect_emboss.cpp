@@ -144,7 +144,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Depth:"), plainPage());
     
-    m_depthSlider = new QSlider(10, 300, 1, 10, Qt::Horizontal, plainPage(), "m_depthSlider");
+    m_depthSlider = new QSlider(10, 300, 1, 30, Qt::Horizontal, plainPage(), "m_depthSlider");
     m_depthSlider->setTickmarks(QSlider::Below);
     m_depthSlider->setTickInterval(20);
     m_depthSlider->setTracking ( false );
@@ -182,8 +182,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values. 
     disableResize();                 
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values. 
 }
 
 ImageEffect_Emboss::~ImageEffect_Emboss()
@@ -197,15 +197,16 @@ void ImageEffect_Emboss::slotUser1()
                this, SLOT(slotEffect()));
     disconnect(m_depthInput, SIGNAL(valueChanged (int)),
                this, SLOT(slotEffect())); 
+    
     m_depthInput->setValue(30);
     m_depthSlider->setValue(30);
-    slotEffect();
-
+    
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));        
     connect(m_depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));     
     blockSignals(false);
+    slotEffect();
 } 
 
 void ImageEffect_Emboss::slotCancel()
@@ -233,7 +234,7 @@ void ImageEffect_Emboss::slotEffect()
     uint* data  = (uint *)image.bits();
     int   w     = image.width();
     int   h     = image.height();
-    int   depth = m_depthInput->value();
+    int   depth = m_depthSlider->value();
             
     m_progressBar->setValue(0); 
     Emboss(data, w, h, depth);
@@ -256,7 +257,7 @@ void ImageEffect_Emboss::slotOk()
     uint* data = iface.getOriginalData();
     int w      = iface.originalWidth();
     int h      = iface.originalHeight();
-    int depth  = m_depthInput->value();
+    int depth  = m_depthSlider->value();
     
     m_progressBar->setValue(0);
     Emboss(data, w, h, depth);

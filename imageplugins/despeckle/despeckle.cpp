@@ -268,8 +268,8 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
         
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.       
     disableResize();      
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.       
 }
 
 DespeckleDialog::~DespeckleDialog()
@@ -312,7 +312,6 @@ void DespeckleDialog::slotUser1()
     m_blackLevelSlider->setValue(7);
     m_whiteLevelInput->setValue(248);
     m_whiteLevelSlider->setValue(248);
-    slotEffect();
 
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));    
@@ -323,6 +322,7 @@ void DespeckleDialog::slotUser1()
     connect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                          
     blockSignals(false);
+    slotEffect();
 } 
 
 void DespeckleDialog::slotEffect()
@@ -333,9 +333,9 @@ void DespeckleDialog::slotEffect()
     uint* data = (uint *)img.bits();
     int   w    = img.width();
     int   h    = img.height();
-    int   r    = m_radiusInput->value();
-    int   bl   = m_blackLevelInput->value();
-    int   wl   = m_whiteLevelInput->value();
+    int   r    = m_radiusSlider->value();
+    int   bl   = m_blackLevelSlider->value();
+    int   wl   = m_whiteLevelSlider->value();
     bool  af   = m_useAdaptativeMethod->isChecked();
     bool  rf   = m_useRecursiveMethod->isChecked();
     
@@ -360,9 +360,9 @@ void DespeckleDialog::slotOk()
     uint* data = iface.getOriginalData();
     int   w     = iface.originalWidth();
     int   h     = iface.originalHeight();
-    int   r     = m_radiusInput->value();
-    int   bl    = m_blackLevelInput->value();
-    int   wl    = m_whiteLevelInput->value();
+    int   r     = m_radiusSlider->value();
+    int   bl    = m_blackLevelSlider->value();
+    int   wl    = m_whiteLevelSlider->value();
     bool  af    = m_useAdaptativeMethod->isChecked();
     bool  rf    = m_useRecursiveMethod->isChecked();
 

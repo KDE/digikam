@@ -137,7 +137,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Pencil size:"), plainPage());
     
-    m_pencilSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_pencilSlider");
+    m_pencilSlider = new QSlider(1, 100, 1, 30, Qt::Horizontal, plainPage(), "m_pencilSlider");
     m_pencilSlider->setTickmarks(QSlider::Below);
     m_pencilSlider->setTickInterval(10);
     m_pencilSlider->setTracking ( false );
@@ -202,8 +202,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.     
     disableResize();        
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.     
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
@@ -224,7 +224,6 @@ void ImageEffect_Charcoal::slotUser1()
     m_pencilSlider->setValue(30);
     m_smoothInput->setValue(10);
     m_smoothSlider->setValue(10);
-    slotEffect();
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));    
@@ -233,6 +232,7 @@ void ImageEffect_Charcoal::slotUser1()
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                  
     blockSignals(false);
+    slotEffect();
 } 
 
 void ImageEffect_Charcoal::slotHelp()
@@ -256,8 +256,8 @@ void ImageEffect_Charcoal::slotCancel()
 void ImageEffect_Charcoal::slotEffect()
 {
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    int pencil = m_pencilInput->value();
-    int smooth  = m_smoothInput->value();
+    int pencil = m_pencilSlider->value();
+    int smooth  = m_smoothSlider->value();
     m_progressBar->setValue(0); 
     
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
@@ -280,8 +280,8 @@ void ImageEffect_Charcoal::slotOk()
     uint* data = iface.getOriginalData();
     int w      = iface.originalWidth();
     int h      = iface.originalHeight();
-    int pencil = m_pencilInput->value();
-    int smooth  = m_smoothInput->value();
+    int pencil = m_pencilSlider->value();
+    int smooth  = m_smoothSlider->value();
 
     m_progressBar->setValue(0); 
         

@@ -181,8 +181,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
     disableResize(); 
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
@@ -196,11 +196,11 @@ void ImageEffect_FilmGrain::slotUser1()
                this, SLOT(slotEffect()));    
                
     m_sensibilitySlider->setValue(2);
-    slotEffect();    
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     blockSignals(false);
+    slotEffect();    
 } 
 
 void ImageEffect_FilmGrain::slotCancel()

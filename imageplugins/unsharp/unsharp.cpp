@@ -196,7 +196,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Threshold:"), plainPage());
     
-    m_thresholdSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_thresholdSlider");
+    m_thresholdSlider = new QSlider(0, 255, 1, 0, Qt::Horizontal, plainPage(), "m_thresholdSlider");
     m_thresholdSlider->setTickmarks(QSlider::Below);
     m_thresholdSlider->setTickInterval(20);
     m_thresholdSlider->setTracking ( false );  
@@ -250,8 +250,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // -------------------------------------------------------------
         
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
     disableResize();          
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
 }
 
 UnsharpDialog::~UnsharpDialog()
@@ -294,7 +294,6 @@ void UnsharpDialog::slotUser1()
     m_amountSlider->setValue(5);
     m_thresholdInput->setValue(0);
     m_thresholdSlider->setValue(0);
-    slotEffect();
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
@@ -305,6 +304,7 @@ void UnsharpDialog::slotUser1()
     connect(m_thresholdInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                                                
     blockSignals(false);
+    slotEffect();
 } 
 
 void UnsharpDialog::slotEffect()
@@ -315,9 +315,9 @@ void UnsharpDialog::slotEffect()
     uint*  data = (uint *)img.bits();
     int    w    = img.width();
     int    h    = img.height();
-    int    r    = m_radiusInput->value();
-    int    a    = m_amountInput->value();
-    int    th   = m_thresholdInput->value();
+    int    r    = m_radiusSlider->value();
+    int    a    = m_amountSlider->value();
+    int    th   = m_thresholdSlider->value();
     
     m_progressBar->setValue(0);            
     unsharp(data, w, h, r, a, th);   
@@ -339,9 +339,9 @@ void UnsharpDialog::slotOk()
     uint*  data = iface.getOriginalData();
     int    w     = iface.originalWidth();
     int    h     = iface.originalHeight();
-    int    r     = m_radiusInput->value();
-    int    a     = m_amountInput->value();
-    int    th    = m_thresholdInput->value();
+    int    r     = m_radiusSlider->value();
+    int    a     = m_amountSlider->value();
+    int    th    = m_thresholdSlider->value();
     
     m_progressBar->setValue(0);        
     unsharp(data, w, h, r, a, th);   

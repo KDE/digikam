@@ -133,7 +133,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
     
@@ -142,7 +142,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Drop size:"), plainPage());
     
-    m_dropSlider = new QSlider(1, 200, 1, 1, Qt::Horizontal, plainPage(), "m_dropSlider");
+    m_dropSlider = new QSlider(1, 200, 1, 80, Qt::Horizontal, plainPage(), "m_dropSlider");
     m_dropSlider->setTickmarks(QSlider::Below);
     m_dropSlider->setTickInterval(20);
     m_dropSlider->setTracking ( false );
@@ -162,7 +162,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Number:"), plainPage());
     
-    m_amountSlider = new QSlider(1, 500, 1, 1, Qt::Horizontal, plainPage(), "m_amountSlider");
+    m_amountSlider = new QSlider(1, 500, 1, 150, Qt::Horizontal, plainPage(), "m_amountSlider");
     m_amountSlider->setTickmarks(QSlider::Below);
     m_amountSlider->setTickInterval(50);
     m_amountSlider->setTracking ( false );  
@@ -182,7 +182,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Fish eyes:"), plainPage());
     
-    m_coeffSlider = new QSlider(1, 100, 1, 1, Qt::Horizontal, plainPage(), "m_coeffSlider");
+    m_coeffSlider = new QSlider(1, 100, 1, 30, Qt::Horizontal, plainPage(), "m_coeffSlider");
     m_coeffSlider->setTickmarks(QSlider::Below);
     m_coeffSlider->setTickInterval(10);
     m_coeffSlider->setTracking ( false );  
@@ -231,8 +231,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
     disableResize();      
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -269,13 +269,10 @@ void ImageEffect_RainDrop::slotUser1()
           
     m_dropSlider->setValue(80);
     m_dropSpinBox->setValue(80);
-    
     m_amountSlider->setValue(150);
     m_amountSpinBox->setValue(150);
-    
     m_coeffSlider->setValue(30);
     m_coeffSpinBox->setValue(30);
-    slotEffect();
     
     connect(m_dropSpinBox, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));  
@@ -284,6 +281,7 @@ void ImageEffect_RainDrop::slotUser1()
     connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));     
     blockSignals(false);
+    slotEffect();
 } 
 
 void ImageEffect_RainDrop::slotEffect()
@@ -298,9 +296,9 @@ void ImageEffect_RainDrop::slotEffect()
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
-    int d       = m_dropSpinBox->value();
-    int a       = m_amountSpinBox->value();
-    int c       = m_coeffSpinBox->value();
+    int d       = m_dropSlider->value();
+    int a       = m_amountSlider->value();
+    int c       = m_coeffSlider->value();
 
     // Selected data from the image
     int selectedX = iface->selectedXOrg();
@@ -361,9 +359,9 @@ void ImageEffect_RainDrop::slotOk()
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
-    int d       = m_dropSpinBox->value();
-    int a       = m_amountSpinBox->value();
-    int c       = m_coeffSpinBox->value();
+    int d       = m_dropSlider->value();
+    int a       = m_amountSlider->value();
+    int c       = m_coeffSlider->value();
 
     // Selected data from the image
     int selectedX = iface->selectedXOrg();

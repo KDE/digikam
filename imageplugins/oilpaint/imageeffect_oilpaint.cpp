@@ -165,7 +165,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
     
-    m_smoothSlider = new QSlider(10, 255, 1, 1, Qt::Horizontal, plainPage(), "m_smoothSlider");
+    m_smoothSlider = new QSlider(10, 255, 1, 30, Qt::Horizontal, plainPage(), "m_smoothSlider");
     m_smoothSlider->setTickmarks(QSlider::Below);
     m_smoothSlider->setTickInterval(20);
     m_smoothSlider->setTracking ( false );  
@@ -210,8 +210,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     // -------------------------------------------------------------
     
     adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.   
     disableResize();               
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.   
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
@@ -232,7 +232,6 @@ void ImageEffect_OilPaint::slotUser1()
     m_brushSizeSlider->setValue(1);
     m_smoothInput->setValue(30);
     m_smoothSlider->setValue(30);
-    slotEffect();
 
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
@@ -241,6 +240,7 @@ void ImageEffect_OilPaint::slotUser1()
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));         
     blockSignals(false);
+    slotEffect();
 } 
 
 void ImageEffect_OilPaint::slotHelp()
@@ -268,8 +268,8 @@ void ImageEffect_OilPaint::slotEffect()
     uint* data = (uint *)image.bits();
     int   w    = image.width();
     int   h    = image.height();
-    int   b    = m_brushSizeInput->value();
-    int   s    = m_smoothInput->value();
+    int   b    = m_brushSizeSlider->value();
+    int   s    = m_smoothSlider->value();
         
     m_progressBar->setValue(0); 
     OilPaint(data, w, h, b, s);
@@ -292,8 +292,8 @@ void ImageEffect_OilPaint::slotOk()
     uint* data = iface.getOriginalData();
     int   w    = iface.originalWidth();
     int   h    = iface.originalHeight();
-    int   b    = m_brushSizeInput->value();
-    int   s    = m_smoothInput->value();
+    int   b    = m_brushSizeSlider->value();
+    int   s    = m_smoothSlider->value();
         
     m_progressBar->setValue(0); 
     OilPaint(data, w, h, b, s);
