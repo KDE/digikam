@@ -95,6 +95,14 @@
      <Merge />
  </ToolBar>
  
+<Menu name="RMBMenu">
+    <Action name="imageview_prev" />
+    <Action name="imageview_next" />
+    <Separator/>
+    <Action name="imageview_rotate" /> 
+    <Action name="imageview_crop" />    
+</Menu>
+ 
  <ActionProperties/>
 
 </gui>

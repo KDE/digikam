@@ -127,10 +127,7 @@ ImageWindow::ImageWindow()
         }
     }
 
-    // TODO: build context menu
-    //m_contextMenu = new QPopupMenu(this);
-    //m_guiFactory->buildGUI(this);
-    //m_guiFactory->buildGUI(m_contextMenu);
+    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this)); 
     
     // -- Some Accels not available from actions -------------
 
@@ -664,8 +661,7 @@ void ImageWindow::slotResize()
 
 void ImageWindow::slotContextMenu()
 {
-    //m_contextMenu->exec(QCursor::pos());
-    kdDebug() << "TODO: implement" << endl;
+    m_contextMenu->exec(QCursor::pos());
 }
 
 void ImageWindow::slotZoomChanged(float zoom)
