@@ -460,22 +460,22 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
           if ( m_currentResizing == ResizingTopLeft &&
                pm.x() < m_localRegionSelection.right() - 5 &&
                pm.y() < m_localRegionSelection.bottom() - 5 )
-              m_localRegionSelection.setTopLeft(QPoint::QPoint(e->x(), e->y()));             
+              m_localRegionSelection.setTopLeft(pm);             
              
           else if ( m_currentResizing == ResizingTopRight  &&
                pm.x() > m_localRegionSelection.left() + 5 &&
                pm.y() < m_localRegionSelection.bottom() - 5 )
-             m_localRegionSelection.setTopRight(QPoint::QPoint(e->x(), e->y()));
+             m_localRegionSelection.setTopRight(pm);
           
           else if ( m_currentResizing == ResizingBottomLeft  &&
                pm.x() < m_localRegionSelection.right() - 5 &&
                pm.y() > m_localRegionSelection.top() + 5 )
-             m_localRegionSelection.setBottomLeft(QPoint::QPoint(e->x(), e->y()));
+             m_localRegionSelection.setBottomLeft(pm);
              
           else if ( m_currentResizing == ResizingBottomRight  &&
                pm.x() > m_localRegionSelection.left() + 5 &&
                pm.y() > m_localRegionSelection.top() + 5 )
-             m_localRegionSelection.setBottomRight(QPoint::QPoint(e->x(), e->y()));
+             m_localRegionSelection.setBottomRight(pm);
           
           applyAspectRatio(false, false);
           applyAspectRatio(true);
