@@ -93,6 +93,7 @@ private slots:
     void slotSlaveConnectFailed();
     void slotSlaveError(KIO::Slave *slave, int error,
                         const QString &errorMsg);
+    void slotSlaveDied();
 
     void slotResult(KIO::Job *job);
     void slotInfoMessage (KIO::Job *job, const QString &msg);

@@ -93,6 +93,10 @@ CameraController::CameraController(QWidget *parent, const QString& model,
         QTimer::singleShot(0, this, SLOT(slotSlaveConnectFailed()));
         return;
     }
+
+    // ref the slave so that scheduler doesn't kill off the slave
+    // while we are still holding a pointer to it
+    d->slave->ref();
     
     KIO::Scheduler::
         connect(SIGNAL(slaveError(KIO::Slave *, int, const QString&)),
@@ -114,6 +118,9 @@ CameraController::~CameraController()
     if (d->slave)
     {
         KIO::Scheduler::disconnectSlave(d->slave);
+
+        // deref the slave so that it dies on its own
+        d->slave->deref();
     }
     delete d;
 }
@@ -122,9 +129,16 @@ void CameraController::downloadAll(const QString& destFolder)
 {
     slotCancel();
 
+    bool slaveDied;
+    
     CameraDownloadDlg dlg(d->parent, d->slave, d->itemList,
-                          destFolder);
+                          destFolder, &slaveDied);
     dlg.exec();
+
+    if (slaveDied)
+    {
+        QTimer::singleShot(0, this, SLOT(slotSlaveDied()));
+    }
 }
 
 void CameraController::downloadSel(const KFileItemList& items,
@@ -132,9 +146,18 @@ void CameraController::downloadSel(const KFileItemList& items,
 {
     slotCancel();
 
+    bool slaveDied;
+
     CameraDownloadDlg dlg(d->parent, d->slave, items,
-                          destFolder);
+                          destFolder, &slaveDied);
+    connect(&dlg, SIGNAL(signalSlaveDied()),
+            SLOT(slotSlaveDied()));
     dlg.exec();
+
+    if (slaveDied)
+    {
+        QTimer::singleShot(0, this, SLOT(slotSlaveDied()));
+    }
 }
 
 void CameraController::deleteAll()
@@ -304,6 +327,14 @@ void CameraController::slotSlaveConnectFailed()
                           "Please check your installation"));
 }
 
+void CameraController::slotSlaveDied()
+{
+    emit signalFatal(i18n("The connection to the camera is lost. "
+                          "Please try again. If this problem persists, "
+                          "please contact %1 to report this problem")
+                     .arg("digikam-users@list.sourceforge.net"));
+}
+
 void CameraController::slotSlaveError(KIO::Slave *slave, int error,
                                       const QString &errorMsg)
 {
@@ -318,6 +349,11 @@ void CameraController::slotSlaveError(KIO::Slave *slave, int error,
         case(KIO::ERR_SERVICE_NOT_AVAILABLE):
         {
             emit signalFatal(errorMsg);
+            break;
+        }
+        case(KIO::ERR_SLAVE_DIED):
+        {
+            slotSlaveDied();
             break;
         }
         default:

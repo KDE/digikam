@@ -25,6 +25,7 @@
 #include <kio/slave.h>
 #include <kio/jobclasses.h>
 #include <kio/renamedlg.h>
+#include <kdebug.h>
 
 #include <qcstring.h>
 #include <qdatastream.h>
@@ -45,11 +46,14 @@ extern "C" {
 
 CameraDownloadDlg::CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
                                      const KFileItemList& items,
-                                     const KURL& destURL)
+                                     const KURL& destURL, bool* slaveDied)
     : KDialogBase(Plain, i18n("Downloading..."), Cancel, Cancel,
                   parent, 0, false, true),
-      m_slave(slave), m_itemList(items), m_destURL(destURL)
+      m_slave(slave), m_itemList(items), m_destURL(destURL),
+      m_slaveDied(slaveDied)
 {
+    *m_slaveDied = false;
+    
     QVBoxLayout* lay = new QVBoxLayout(plainPage(), 5, 5);
 
     m_label = new QLabel(plainPage());
@@ -208,8 +212,16 @@ void CameraDownloadDlg::slotProcessNext()
 
 void CameraDownloadDlg::slotResult(KIO::Job* job)
 {
-    if (job->error())
+    int err = job->error();
+    if (err)
     {
+        if (err == KIO::ERR_SLAVE_DIED)
+        {
+            *m_slaveDied = true;
+            close();
+            return;
+        }
+        
         QString msg(i18n("The following error occurred; "
                          "would you like to continue?\n"));
         msg += job->errorString();

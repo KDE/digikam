@@ -43,7 +43,7 @@ public:
 
     CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
                       const KFileItemList& items,
-                      const KURL& destURL);
+                      const KURL& destURL, bool* slaveDied);
     ~CameraDownloadDlg();
 
 private:
@@ -52,6 +52,7 @@ private:
     KIO::Slave*    m_slave;
     KFileItemList  m_itemList;
     KURL           m_destURL;
+    bool*          m_slaveDied;
     
     QLabel*        m_label;
     QLabel*        m_currLabel;
@@ -62,7 +63,7 @@ private:
     int            m_count;
     bool           m_overwriteAll;
     bool           m_autoSkip;
-
+    
 protected slots:
 
     void slotCancel();
