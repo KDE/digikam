@@ -53,6 +53,7 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
 {
     setButtonText(User1, i18n("&New Album"));
     setHelp("targetalbumdialog.anchor", "digikam");
+    enableButtonOK(false);
     
     QFrame *page     = makeMainWidget();
     QVBoxLayout* lay = new QVBoxLayout(page, 5, 5);
@@ -99,6 +100,8 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
                                     const QPoint & )));
     connect( m_branch, SIGNAL( populateFinished( KFileTreeViewItem * )),
              SLOT( slotNextDirToList( KFileTreeViewItem * ) ));
+    connect( m_treeView, SIGNAL( selectionChanged(QListViewItem*) ),
+             SLOT( slotSelectionChanged(QListViewItem*)) );
 
     m_branch->setOpen(true);
 }
@@ -153,7 +156,7 @@ void DirSelectDialog::slotNextDirToList( KFileTreeViewItem* item )
         m_branch->disconnect( SIGNAL( populateFinished( KFileTreeViewItem * )),
                                this, SLOT( slotNextDirToList( KFileTreeViewItem *)));
         m_treeView->setCurrentItem( item );
-        item->setSelected( true );
+        m_treeView->setSelected( item, true );
     }
 }
 
@@ -227,6 +230,24 @@ void DirSelectDialog::slotUser1()
     openNextDir(m_branch->root());
 }
 
+void DirSelectDialog::slotSelectionChanged(QListViewItem* item)
+{
+    if (!item)
+    {
+        enableButtonOK(false);
+        return;
+    }
+
+    KFileTreeViewItem* ftvItem = dynamic_cast<KFileTreeViewItem*>(item);
+    if (!ftvItem || ftvItem == m_branch->root())
+    {
+        enableButtonOK(false);
+        return;
+    }
+
+    enableButtonOK(true);
+}
+
 KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
                                 QWidget* parent,
                                 const QString& header, const QString& newDirString)
@@ -238,7 +259,7 @@ KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
         return KURL();
 
     KFileTreeViewItem* ftvItem = (KFileTreeViewItem*) dlg.m_treeView->currentItem();
-    if (!ftvItem)
+    if (!ftvItem || ftvItem == dlg.m_branch->root())
         return KURL();
 
     return ftvItem->fileItem()->url();

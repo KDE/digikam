@@ -69,6 +69,7 @@ private slots:
     void slotContextMenu(KListView*, QListViewItem*,
                          const QPoint& );
     void slotUser1();
+    void slotSelectionChanged(QListViewItem* item);
 };
 
 #endif /* DIRSELECTDIALOG_H */
