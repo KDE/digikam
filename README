@@ -5,15 +5,25 @@ Authors :
 See AUTHORS file for details.
 
 
-Resume :
+About :
 ----------------------------------------------------------------------
-Digikam is a kde application which acts as a frontend to gphoto2 for
-communicating with your digital camera and download pictures from
-it. I was never able to get kamera working properly with my Canon
-PowerShot A20 and couldn't find any other good frontend for
-gphoto2. So digikam was born. It should be able to communicate with
-your camera and preview images and download pictures.  It is also able
-to autodetect the camera connected to the computer.
+ Digikam is an easy to use and powerful digital photo management
+ application, which makes importing, organizing and manipulating
+ digital photos a "snap".  An easy to use interface is provided
+ to connect to your digital camera, preview the images and download
+ and/or delete them.
+
+ Digikams buildin image editor makes the common photo correction
+ a simple task.  The image editor is extensible via plugins.
+ The digikamimageplugins package contains many useful image editor
+ plugins.
+
+ Digikam can also make use of the KIPI image handling plugins to
+ extend it's capabilities even further for photo manipulations,
+ import and export, etc.  The kipi-plugins package contains many
+ very useful extentions.
+
+ Homepage: http://digikam.sourceforge.net/
 
 digikam is based in part on the work of the Independent JPEG Group.
 
