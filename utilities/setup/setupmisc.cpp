@@ -2,8 +2,8 @@
  * File  : setupmisc.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-08-23
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -11,12 +11,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <qlayout.h>
@@ -44,8 +44,8 @@ SetupMisc::SetupMisc(QWidget* parent)
    trashGroupBox->layout()->setMargin(5);
 
    QGridLayout* lay = new QGridLayout(trashGroupBox->layout());
-   
-   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash."),
+
+   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash"),
                                    trashGroupBox);
    lay->addMultiCellWidget(m_useTrashCheck, 0, 0, 0, 1);
    layout->addWidget(trashGroupBox);
@@ -54,19 +54,19 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    QVGroupBox *splashGroupBox = new QVGroupBox(i18n("Splash Screen Settings"),
                                                parent);
-   m_showSplashCheck = new QCheckBox(i18n("Show Splash Screen at startup"),
+   m_showSplashCheck = new QCheckBox(i18n("Show splash screen at startup"),
                                      splashGroupBox);
    layout->addWidget(splashGroupBox);
 
    // --------------------------------------------------------
 
    layout->addStretch();
-   readSettings();   
+   readSettings();
 }
 
 SetupMisc::~SetupMisc()
 {
-    
+
 }
 
 void SetupMisc::applySettings()

@@ -51,7 +51,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
 {
     QHBoxLayout* mainLayout = new QHBoxLayout(this, 0, KDialog::spacingHint());
     
-    QVGroupBox *gbox1 = new QVGroupBox(i18n("Image preview selection"), this);
+    QVGroupBox *gbox1 = new QVGroupBox(i18n("Image Preview Selection"), this);
     QLabel *label3 = new QLabel(i18n("Original image panel:"), gbox1);
     label3->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame3 = new QFrame(gbox1);

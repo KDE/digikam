@@ -106,7 +106,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     m_tagsView = new QListView(tagsBox);
     topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
 
-    m_autoSaveBox = new QCheckBox(i18n("Automatically save Comments and Tags "
+    m_autoSaveBox = new QCheckBox(i18n("Automatically save comments and tags "
 			               "when navigating between items"),
 		                  plainPage());
     topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
@@ -479,7 +479,7 @@ void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
     AlbumManager *albumMan_ = AlbumManager::instance();
     
     int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' Tag")
+        KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
                                    .arg(album->getTitle()));
 
     if (result == KMessageBox::Yes)

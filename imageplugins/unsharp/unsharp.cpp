@@ -80,7 +80,7 @@ namespace DigikamUnsharpFilterImagesPlugin
 
 UnsharpDialog::UnsharpDialog(QWidget* parent)
                : KDialogBase(Plain, i18n("Unsharped Mask"), Help|User1|Ok|Cancel, Ok,
-                             parent, 0, true, true, i18n("&Reset values")),
+                             parent, 0, true, true, i18n("&Reset Values")),
                  m_parent(parent)
 {
     QString whatsThis;
@@ -108,7 +108,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Unsharped Mask handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Unsharped Mask Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -142,7 +142,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Unsharped mask image preview"),
+                                                           i18n("Unsharped Mask Image Preview"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     

@@ -59,7 +59,7 @@ kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
     m_libraryPath = config.readPathEntry("Album Path", QString::null);
     if (m_libraryPath.isEmpty() || !QFileInfo(m_libraryPath).exists())
     {
-        error(KIO::ERR_UNKNOWN, i18n("Digikam Library path not set correctly"));
+        error(KIO::ERR_UNKNOWN, i18n("Digikam library path not set correctly."));
         return;
     }
 
@@ -69,7 +69,7 @@ kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        error(KIO::ERR_UNKNOWN, i18n("Failed to open Digikam Database"));
+        error(KIO::ERR_UNKNOWN, i18n("Failed to open Digikam database."));
         free(errMsg);
         return;
     }

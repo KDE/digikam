@@ -3,8 +3,8 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -12,16 +12,16 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // KDE includes.
-  
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -50,66 +50,66 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                    const QStringList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
-    //-------------------------------                
+    //-------------------------------
     // Fix/Colors menu actions
 
-    new KAction(i18n("Blur..."), 0, 
+    new KAction(i18n("Blur..."), 0,
                 this, SLOT(slotBlur()),
                 actionCollection(), "implugcore_blur");
-    
-    new KAction(i18n("Sharpen..."), 0, 
+
+    new KAction(i18n("Sharpen..."), 0,
                 this, SLOT(slotSharpen()),
                 actionCollection(), "implugcore_sharpen");
 
-    m_redeyeAction = new KAction(i18n("Red Eye Reduction"), 0, 
+    m_redeyeAction = new KAction(i18n("Red Eye Reduction..."), 0,
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setEnabled(false);
     m_redeyeAction->setToolTip( i18n( "This filter can be used to correct red eyes in a photo. "
                                       "Select a region including the eyes to enable this action.") );
-    
-    new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
+
+    new KAction(i18n("Brightness/Contrast/Gamma..."), 0,
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
 
-    new KAction(i18n("Hue/Saturation/Lightness..."), 0, 
+    new KAction(i18n("Hue/Saturation/Lightness..."), 0,
                 this, SLOT(slotHSL()),
-                actionCollection(), "implugcore_hsl");                
+                actionCollection(), "implugcore_hsl");
 
-    new KAction(i18n("Color balance..."), 0, 
+    new KAction(i18n("Color Balance..."), 0,
                 this, SLOT(slotRGB()),
-                actionCollection(), "implugcore_rgb");                
+                actionCollection(), "implugcore_rgb");
 
-    new KAction(i18n("Normalize"), 0, 
+    new KAction(i18n("Normalize"), 0,
                 this, SLOT(slotNormalize()),
-                actionCollection(), "implugcore_normalize");                
+                actionCollection(), "implugcore_normalize");
 
-    new KAction(i18n("Equalize"), 0, 
+    new KAction(i18n("Equalize"), 0,
                 this, SLOT(slotEqualize()),
-                actionCollection(), "implugcore_equalize");                
+                actionCollection(), "implugcore_equalize");
 
-    new KAction(i18n("Auto levels"), 0, 
+    new KAction(i18n("Auto Levels"), 0,
                 this, SLOT(slotAutoLevels()),
-                actionCollection(), "implugcore_autolevels");                
+                actionCollection(), "implugcore_autolevels");
 
-    //-------------------------------                
+    //-------------------------------
     // Image menu actions.
-                                    
-    new KAction(i18n("Histogram..."), 0, 
+
+    new KAction(i18n("Histogram..."), 0,
                 this, SLOT(slotHistogramViewer()),
                 actionCollection(), "implugcore_histogramviewer");
 
-    //-------------------------------                
+    //-------------------------------
     // Filters menu actions.
-                                    
-    new KAction(i18n("Convert to Black-White"), 0, 
+
+    new KAction(i18n("Convert to Black-White"), 0,
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
-    
-    new KAction(i18n("Convert to Sepia"), 0, 
+
+    new KAction(i18n("Convert to Sepia"), 0,
                 this, SLOT(slotSepia()),
                 actionCollection(), "implugcore_sepia");
-    
+
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
@@ -130,7 +130,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_normalize/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_equalize/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_autolevels/ ");
-    
+
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
@@ -147,14 +147,14 @@ QStringList ImagePlugin_Core::guiDefinition() const
     i18n( "Fi&x" );
     i18n( "Fi&lters" );
     i18n( "&Colors" );
-    
+
     return guiDef;
 }
 
 void ImagePlugin_Core::setEnabledSelectionActions(bool enable)
 {
     m_redeyeAction->setEnabled(enable);
-}    
+}
 
 void ImagePlugin_Core::slotBlur()
 {
@@ -214,7 +214,7 @@ void ImagePlugin_Core::slotHistogramViewer()
     uint* data = iface.getOriginalData();
     int w      = iface.originalWidth();
     int h      = iface.originalHeight();
-    
+
     HistogramViewer dlg(parentWidget(), data, w, h);
     dlg.exec();
     delete [] data;
@@ -223,20 +223,20 @@ void ImagePlugin_Core::slotHistogramViewer()
 void ImagePlugin_Core::slotBW()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::convertTOBW();    
+    ImageEffect_BWSepia::convertTOBW();
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotSepia()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::convertTOSepia();    
+    ImageEffect_BWSepia::convertTOSepia();
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotRedEye()
 {
-    ImageEffect_RedEye::removeRedEye(parentWidget());    
+    ImageEffect_RedEye::removeRedEye(parentWidget());
 }
 
 

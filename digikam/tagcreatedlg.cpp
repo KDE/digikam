@@ -2,8 +2,8 @@
  * File  : tagcreatedlg.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-07-01
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -11,12 +11,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <klocale.h>
@@ -42,7 +42,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
 
     QLabel *topLabel = new QLabel(plainPage());
     topLabel->setText( i18n("Create New Tag in '%1'").arg(parent->getPrettyURL()) );
-    topLayout->addWidget(topLabel);    
+    topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
 
@@ -56,16 +56,16 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
-    titleLabel->setText(i18n("Title: "));
+    titleLabel->setText(i18n("Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
     m_titleEdit = new QLineEdit(plainPage());
     gl->addWidget(m_titleEdit, 0, 1);
 
     setFocusProxy(m_titleEdit);
-    
+
     QLabel *iconTextLabel = new QLabel(plainPage());
-    iconTextLabel->setText(i18n("Set Icon: "));
+    iconTextLabel->setText(i18n("Set icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
     m_iconButton = new QPushButton(plainPage());
@@ -86,12 +86,12 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
 
 TagCreateDlg::~TagCreateDlg()
 {
-    
+
 }
 
 QString TagCreateDlg::title() const
 {
-    return m_titleEdit->text();    
+    return m_titleEdit->text();
 }
 
 
@@ -103,14 +103,14 @@ QString TagCreateDlg::icon() const
 void TagCreateDlg::slotIconChange()
 {
     m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));              
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
 bool TagCreateDlg::tagCreate(TAlbum* parent, QString& title,
                              QString& icon)
 {
     TagCreateDlg dlg(parent);
-    
+
     bool ok = dlg.exec() == QDialog::Accepted;
 
     title    = dlg.title();
@@ -128,8 +128,8 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("Edit Tag '%1' properties").arg(album->getPrettyURL()) );
-    topLayout->addWidget(topLabel);    
+    topLabel->setText( i18n("Edit Tag '%1' Properties").arg(album->getPrettyURL()) );
+    topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
 
@@ -143,7 +143,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
-    titleLabel->setText(i18n("Title: "));
+    titleLabel->setText(i18n("Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
     m_titleEdit = new QLineEdit(plainPage());
@@ -153,7 +153,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     setFocusProxy(m_titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
-    iconTextLabel->setText(i18n("Set Icon: "));
+    iconTextLabel->setText(i18n("Set icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
     m_iconButton = new QPushButton(plainPage());
@@ -170,12 +170,12 @@ TagEditDlg::TagEditDlg(TAlbum* album)
 
 TagEditDlg::~TagEditDlg()
 {
-    
+
 }
 
 QString TagEditDlg::title() const
 {
-    return m_titleEdit->text();    
+    return m_titleEdit->text();
 }
 
 QString TagEditDlg::icon() const
@@ -197,7 +197,7 @@ bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
                          QString& icon)
 {
     TagEditDlg dlg(album);
-    
+
     bool ok = (dlg.exec() == QDialog::Accepted);
 
     title    = dlg.title();

@@ -73,7 +73,7 @@ namespace DigikamOilPaintImagesPlugin
 ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                     : KDialogBase(Plain, i18n("Oil Paint"),
                                   Help|User1|Ok|Cancel, Ok,
-                                  parent, 0, true, true, i18n("&Reset values")),
+                                  parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
     QString whatsThis;
@@ -101,7 +101,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Oil Paint handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Oil Paint Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -136,7 +136,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Oil painting image preview"),
+                                                           i18n("Oil Painting Image Preview"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     

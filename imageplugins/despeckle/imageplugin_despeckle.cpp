@@ -44,7 +44,7 @@ ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
                                              const QStringList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Despeckle")
 {
-    new KAction(i18n("Noise reduction..."), 0, 
+    new KAction(i18n("Noise Reduction..."), 0, 
                 this, SLOT(slotDespeckle()),
                 actionCollection(), "imageplugin_despeckle");
 

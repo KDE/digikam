@@ -52,13 +52,13 @@
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                : KDialogBase(Plain, i18n("Hue/Saturation/Lightness"),
                              Help|User1|Ok|Cancel, Ok,
-                             parent, 0, true, true, i18n("&Reset values"))
+                             parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("imageeditor.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness adjustments"),
+    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness Adjustments"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);

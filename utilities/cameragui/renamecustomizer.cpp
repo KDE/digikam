@@ -37,7 +37,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 {
     // -- setup view --------------------------------------------------
     
-    setTitle(i18n("Renaming options"));
+    setTitle(i18n("Renaming Options"));
     setRadioButtonExclusive(true);
     
     setColumnLayout(0, Qt::Vertical);

@@ -51,35 +51,35 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setWFlags(Qt::WDestructiveClose);
     setHelp("setupwindow.anchor", "digikam");
     
-    page_general = addPage(i18n("Albums"), i18n("Album settings"),
+    page_general = addPage(i18n("Albums"), i18n("Album Settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
     generalPage_ = new SetupGeneral(page_general, this);
 
-    page_exif = addPage(i18n("Embedded info"), i18n("Embedded images informations settings"),
+    page_exif = addPage(i18n("Embedded Info"), i18n("Embedded Images Informations Settings"),
                         BarIcon("exifinfo", KIcon::SizeMedium));
     exifPage_ = new SetupExif(page_exif);
         
-    page_collections = addPage(i18n("Collections"), i18n("Album collection settings"),
+    page_collections = addPage(i18n("Collections"), i18n("Album Collection Settings"),
                                BarIcon("fileopen", KIcon::SizeMedium));
     collectionsPage_ = new SetupCollections(page_collections);
 
-    page_mime = addPage(i18n("Mime types"), i18n("Album items' MIME types settings"),
+    page_mime = addPage(i18n("Mime Types"), i18n("Album Items' MIME Types Settings"),
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    page_editor = addPage(i18n("Image editor"), i18n("Image editor settings"),
+    page_editor = addPage(i18n("Image Editor"), i18n("Image Editor Settings"),
                         BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
     
-    page_plugins = addPage(i18n("Kipi plugins"), i18n("Kipi plugin management settings"),
+    page_plugins = addPage(i18n("Kipi Plugins"), i18n("Kipi Plugin Management Settings"),
                            BarIcon("kipi", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
-    page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
+    page_camera = addPage(i18n("Cameras"), i18n("Camera Settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
     cameraPage_ = new SetupCamera(page_camera);
 
-    page_misc   = addPage(i18n("Miscellaneous"), i18n("Miscellaneous settings"),
+    page_misc   = addPage(i18n("Miscellaneous"), i18n("Miscellaneous Settings"),
                           BarIcon("misc", KIcon::SizeMedium));
     miscPage_ = new SetupMisc(page_misc);
     

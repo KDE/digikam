@@ -1,12 +1,12 @@
 /* ============================================================
  * File  : albumfiletip.cpp
  * Date  : 2004-08-19
- * Description : 
- * 
+ * Description :
+ *
  * Adapted from kfiletip (konqueror - konq_iconviewwidget.cc)
  *
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>  
+ * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004 by Renchi Raju<renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -14,12 +14,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <qtooltip.h>
@@ -92,7 +92,7 @@ void AlbumFileTip::reposition()
 {
     if (!m_iconItem)
         return;
-    
+
     QRect rect = m_iconItem->rect();
     QPoint off = m_view->mapToGlobal( m_view->contentsToViewport( QPoint( 0, 0 ) ) );
     rect.moveBy( off.x(), off.y() );
@@ -106,7 +106,7 @@ void AlbumFileTip::reposition()
 
     m_corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
-    
+
 #if KDE_IS_VERSION(3,2,0)
     QRect desk = KGlobalSettings::desktopGeometry(rect.center());
 #else
@@ -136,7 +136,7 @@ void AlbumFileTip::reposition()
         pos.setY( rect.bottom() + 5 );
 
     move( pos );
-    
+
 }
 
 void AlbumFileTip::renderArrows()
@@ -205,7 +205,7 @@ void AlbumFileTip::renderArrows()
         {
             p.drawLine(w-j-1,j,w-1,j);
         }
-        
+
         p.end();
     }
 }
@@ -280,13 +280,13 @@ void AlbumFileTip::updateText()
     QString cellSpecMid("</font></nobr></td>"
                         "<td><nobr><font size=-1 color=\"steelblue\"><i>");
     QString cellSpecEnd("</i></font></nobr></td></tr>");
-    
+
     tip = "<table cellspacing=0 cellpadding=0>";
 
     const KFileItem* fi = m_iconItem->fileItem();
-    
+
     // File properties ----------------------------------------------
-    
+
     tip += headBeg + i18n("File Properties") + headEnd;
 
     tip += cellBeg + i18n("Name:") + cellMid;
@@ -297,7 +297,7 @@ void AlbumFileTip::updateText()
     tip += cellBeg + i18n("Modification Date:") + cellMid +
            KGlobal::locale()->formatDateTime(date, true, true)
            + cellEnd;
-           
+
     tip += cellBeg + i18n("Size:") + cellMid;
     tip += i18n("%1 (%2)")
            .arg(KIO::convertSize(fi->size()))
@@ -312,7 +312,7 @@ void AlbumFileTip::updateText()
 
     // Digikam properties  ------------------------------------------
 
-    tip += headBeg + i18n("digiKam properties") + headEnd;
+    tip += headBeg + i18n("digiKam Properties") + headEnd;
 
     PAlbum* album = m_view->albumLister()->findParentAlbum(fi);
     if (album)
@@ -320,7 +320,7 @@ void AlbumFileTip::updateText()
         tip += cellBeg + i18n("Album:") + cellMid +
                album->getURL().remove(0,1) + cellEnd;
     }
-    
+
     tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +
            breakString( m_view->itemComments(m_iconItem) ) + cellSpecEnd;
 
@@ -342,7 +342,7 @@ void AlbumFileTip::updateText()
         QStringList keys = info.preferredKeys();
         int maxCount = 5;
         int count = 0;
-        
+
         for (QStringList::iterator it = keys.begin();
              count < maxCount && it!=keys.end() ; ++it)
         {
@@ -369,23 +369,23 @@ void AlbumFileTip::updateText()
         tip += headBeg + i18n("Meta Information") + headEnd;
         tip += metaStr;
     }
-    
+
     tip += "</table>";
 
-    
+
     m_label->setText(tip);
 }
 
 QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
-    
+
     uint maxLen = 30;
-    
+
     if (str.length() <= maxLen)
         return str;
 
-    
+
     QString br;
 
     uint i = 0;

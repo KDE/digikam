@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
  * Description : an image histogram viewer dialog.
- * 
+ *
  * Copyright 2004 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,16 +11,16 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qlayout.h>
 #include <qcolor.h>
 #include <qframe.h>
@@ -42,7 +42,7 @@
 
 #include <imagehistogram.h>
 #include <histogramwidget.h>
-#include <colorgradientwidget.h> 
+#include <colorgradientwidget.h>
 #include "histogramviewer.h"
 
 
@@ -54,15 +54,15 @@ HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
     m_histogramWidget = 0L;
     m_hGradient       = 0L;
     m_image.load(imageFile);
-    
+
     if (m_image.isNull() == false)
        {
        if(m_image.depth() < 32)           // we works always with 32bpp.
           m_image = m_image.convertDepth(32);
-       
+
        m_image.setAlphaBuffer(true);
        setupGui((uint *)m_image.bits(),
-                m_image.width(), 
+                m_image.width(),
                 m_image.height());
        }
 }
@@ -71,25 +71,25 @@ HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
 HistogramViewer::HistogramViewer(QWidget *parent, QImage image)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
-{                             
+{
     m_histogramWidget = 0L;
     m_hGradient       = 0L;
-    
+
     if (image.isNull() == true)
        return;
-       
+
     m_image = image;
-    
+
     if(m_image.depth() < 32)           // we works always with 32bpp.
        m_image = m_image.convertDepth(32);
 
     m_image.setAlphaBuffer(true);
     setupGui((uint *)m_image.bits(),
-             m_image.width(), 
+             m_image.width(),
              m_image.height());
-}                            
+}
 
-// Constructor using image RAW data 32 bits (RGBA).                          
+// Constructor using image RAW data 32 bits (RGBA).
 HistogramViewer::HistogramViewer(QWidget* parent, uint *imageData, uint width, uint height)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
@@ -105,7 +105,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     // -------------------------------------------------------------
-                                              
+
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *imagePreview = new QLabel( plainPage());
     imagePreview->setFixedHeight( 48 );
@@ -133,11 +133,11 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
                                        "<b>Red</b>: drawing the red image channel values.<p>"
                                        "<b>Green</b>: drawing the green image channel values.<p>"
                                        "<b>Blue</b>: drawing the blue image channel values.<p>"
-                                       "<b>Alpha</b>: drawing the alpha image channel values. " 
+                                       "<b>Alpha</b>: drawing the alpha image channel values. "
                                        "This channel corresponding to the transparency value and "
                                        "is supported by some image formats such as PNG or GIF.<p>"
                                        "<b>Colors</b>: drawing all color channels values at the same time."));
-    
+
     QLabel *label2 = new QLabel(i18n("Scale:"), plainPage());
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_scaleCB = new QComboBox( false, plainPage() );
@@ -148,27 +148,27 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
                                      "If the image maximal counts is small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts is big. "
                                      "Like this all values (small and big) will be visible on the graph."));
-    
+
     hlay->addWidget(imagePreview);
     hlay->addWidget(label1);
     hlay->addWidget(m_channelCB);
     hlay->addWidget(label2);
     hlay->addWidget(m_scaleCB);
-    
+
     // -------------------------------------------------------------
-    
+
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, 
+
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140,
                                                      imageData,
                                                      width,
                                                      height,
                                                      frame);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
-        
+
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, plainPage() );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     topLayout->addWidget(frame, 4);
@@ -190,25 +190,25 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     hlay2->addWidget(label3);
     hlay2->addWidget(m_minInterv);
     hlay2->addWidget(m_maxInterv);
-    
+
     // -------------------------------------------------------------
-    
+
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), plainPage());
     QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
                                 "selected histogram part. These values are available for all channels, "
                                 "except for when all color channels are displayed at the same time."));
-    
+
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelMeanValue = new QLabel(gbox);
     m_labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPixelsValue = new QLabel(gbox);
     m_labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
-    QLabel *label6 = new QLabel(i18n("Std Dev.:"), gbox);
+
+    QLabel *label6 = new QLabel(i18n("Std dev.:"), gbox);
     label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelStdDevValue = new QLabel(gbox);
     m_labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -217,31 +217,31 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     label7->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelCountValue = new QLabel(gbox);
     m_labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label8 = new QLabel(i18n("Median:"), gbox);
     label8->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelMedianValue = new QLabel(gbox);
     m_labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
     label9->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPercentileValue = new QLabel(gbox);
     m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     topLayout->addWidget(gbox);
     topLayout->addStretch();
-    
+
     // -------------------------------------------------------------
-    
+
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
-    
+
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
- 
+
     connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
             this, SLOT(slotUpdateMinInterv(int)));
-       
+
     connect(m_histogramWidget, SIGNAL(signalMouseReleased( int )),
             this, SLOT(slotUpdateMaxInterv(int)));
 
@@ -256,7 +256,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotIntervChanged(int)));
-                                                           
+
     adjustSize();
     updateInformations();
 }
@@ -269,11 +269,11 @@ void HistogramViewer::closeEvent(QCloseEvent *e)
 {
     if ( m_histogramWidget )
        delete m_histogramWidget;
-    
-    if ( m_hGradient )        
+
+    if ( m_hGradient )
        delete m_hGradient;
-    
-    e->accept();    
+
+    e->accept();
 }
 
 void HistogramViewer::slotChannelChanged(int channel)
@@ -284,12 +284,12 @@ void HistogramViewer::slotChannelChanged(int channel)
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           break;
-       
+
        case 2:           // Green.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           break;
-          
+
        case 3:           // Blue.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
@@ -304,13 +304,13 @@ void HistogramViewer::slotChannelChanged(int channel)
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           break;
-                              
+
        default:          // Luminosity.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           break;
        }
-   
+
     m_histogramWidget->repaint(false);
     updateInformations();
 }
@@ -322,12 +322,12 @@ void HistogramViewer::slotScaleChanged(int scale)
        case 1:           // Log.
           m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
           break;
-          
+
        default:          // Lin.
           m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
           break;
        }
-   
+
     m_histogramWidget->repaint(false);
 }
 
@@ -356,23 +356,23 @@ void HistogramViewer::updateInformations()
     int min = m_minInterv->value();
     int max = m_maxInterv->value();
     int channel = m_channelCB->currentItem();
-    
+
     if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
        {
        double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
        m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
-    
+
        double pixels = m_histogramWidget->m_imageHistogram->getPixels();
        m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
-    
+
        double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
        m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
-      
+
        double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
        m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
-    
+
        double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
-       m_labelMedianValue->setText(value.setNum(median, 'f', 1)); 
+       m_labelMedianValue->setText(value.setNum(median, 'f', 1));
 
        double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
        m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));

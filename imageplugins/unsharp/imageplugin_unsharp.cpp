@@ -44,7 +44,7 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
                                              const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Unsharp")
 {
-    new KAction(i18n("Unsharped mask..."), 0, 
+    new KAction(i18n("Unsharped Mask..."), 0, 
                 this, SLOT(slotUnsharp()),
                 actionCollection(), "imageplugin_unsharp");
 

@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -56,7 +56,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
 {
     setHelp("albumpropsedit.anchor", "digikam");
     album_ = album;
-    
+
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint() );
 
@@ -72,13 +72,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     topLayout->addWidget( topLine );
 
     // --------------------------------------------------------
-    
+
     QGroupBox *titleBox = new QGroupBox( plainPage() );
     titleBox->setTitle( i18n( "Edit Album Description" ) );
     titleBox->setColumnLayout( 0, Qt::Horizontal );
     QGridLayout *titleBoxLayout =
         new QGridLayout( titleBox->layout(), 2, 2, spacingHint() );
-                                                   
+
     QLabel *titleLabel = new QLabel( titleBox );
     titleLabel->setText( i18n( "Title: " ) );
     titleBoxLayout->addWidget( titleLabel, 0, 0 );
@@ -92,7 +92,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
 
     commentsEdit_ = new QLineEdit( titleBox );
     titleBoxLayout->addWidget( commentsEdit_, 2, 1 );
-    
+
     topLayout->addWidget( titleBox );
 
     // ------------------------------------------------------
@@ -122,16 +122,16 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     collectionBoxLayout->addMultiCellWidget( collectionEdit_,
                                              0, 2, 0, 0 );
 
-    QPushButton *addCollectionBtn = new QPushButton( i18n("Add"),
+    QPushButton *addCollectionBtn = new QPushButton( i18n("Add..."),
                                                      collectionBox );
     collectionBoxLayout->addWidget( addCollectionBtn, 0, 1);
-    
+
     QPushButton *delCollectionBtn = new QPushButton( i18n("Delete"),
                                                      collectionBox );
     collectionBoxLayout->addWidget( delCollectionBtn, 1, 1);
 
     topLayout->addWidget( collectionBox );
-        
+
     // Initialize ---------------------------------------------
 
     populateCollections();
@@ -151,7 +151,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
 
     connect(delCollectionBtn, SIGNAL(clicked()),
             this, SLOT(slotDelCollection()));
-    
+
     //resize(500, 400);
     adjustSize();
 }
@@ -173,19 +173,19 @@ void AlbumPropsEdit::populateCollections()
         new QCheckListItem(collectionEdit_, i18n("Collections"));
     rootCollectionItem_->setSelectable(false);
     rootCollectionItem_->setOpen(true);
-    
+
     albumCollections_ = settings->getAlbumCollectionNames();
     for (QStringList::const_iterator it = albumCollections_.begin();
          it != albumCollections_.end(); ++it ) {
         new QCheckListItem(rootCollectionItem_, *it,
                            QCheckListItem::RadioButton);
     }
-    
+
 }
 
 QString AlbumPropsEdit::title() const
 {
-    return titleEdit_->text();    
+    return titleEdit_->text();
 }
 
 QString AlbumPropsEdit::comments() const
@@ -213,13 +213,13 @@ QString AlbumPropsEdit::collection() const
     }
 
     if (name.isNull()) name = i18n( "Unknown" );
-    
+
     return name;
 }
 
 QStringList AlbumPropsEdit::albumCollections() const
 {
-    return albumCollections_;    
+    return albumCollections_;
 }
 
 void AlbumPropsEdit::slotAddCollection()
@@ -228,11 +228,11 @@ void AlbumPropsEdit::slotAddCollection()
 
 #if KDE_IS_VERSION(3,2,0)
     QString newCollection = KInputDialog::getText(i18n("New Collection Name"),
-                                                  i18n("Enter New Collection Name: "),
+                                                  i18n("Enter new collection name:"),
                                                   QString::null, &ok, this);
 #else
     QString newCollection = KLineEditDlg::getText(i18n("New Collection Name"),
-                                                  i18n("Enter New Collection Name: "),
+                                                  i18n("Enter new collection name:"),
                                                   QString::null, &ok, this);
 #endif
     if (!ok) return;
@@ -247,7 +247,7 @@ void AlbumPropsEdit::slotAddCollection()
 void AlbumPropsEdit::slotDelCollection()
 {
     QListViewItem *item = collectionEdit_->selectedItem();
-    if (!item) return;    
+    if (!item) return;
 
     QCheckListItem *checkItem = (QCheckListItem*) item;
     if (!checkItem || checkItem == rootCollectionItem_)

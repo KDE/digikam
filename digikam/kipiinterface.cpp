@@ -580,7 +580,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     
     if ( !targetAlbum ) 
        {
-       errmsg = i18n("Target album is not in the Albums library.");
+       errmsg = i18n("Target album is not in the albums library.");
        return false;
        }
     

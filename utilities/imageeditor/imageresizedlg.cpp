@@ -73,7 +73,7 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
     topLayout->addWidget(label, 1, 2);
     topLayout->addWidget(m_hpInput, 1, 3);
 
-    m_constrainCheck = new QCheckBox(i18n("Maintain Aspect Ratio"),
+    m_constrainCheck = new QCheckBox(i18n("Maintain aspect ratio"),
                                      plainPage());
     topLayout->addMultiCellWidget(m_constrainCheck, 2, 2, 0, 3);
 

@@ -51,12 +51,12 @@ SetupExif::SetupExif(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, 
-                                            i18n("Exif actions"),
+   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal,
+                                            i18n("Exif Actions"),
                                             parent);
 
    iconSaveExifBox_ = new QCheckBox(iconExifGroup);
-   iconSaveExifBox_->setText(i18n("Save Album items' comments as Exif Comments in JPEG images"));
+   iconSaveExifBox_->setText(i18n("Save album items' comments as Exif comments in JPEG images"));
 
    iconExifRotateBox_ = new QCheckBox(iconExifGroup);
    iconExifRotateBox_->setText(i18n("Rotate images and thumbnails according to Exif tag"));
@@ -80,7 +80,7 @@ SetupExif::~SetupExif()
 void SetupExif::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     settings->setSaveExifComments(iconSaveExifBox_->isChecked());
@@ -93,7 +93,7 @@ void SetupExif::applySettings()
 void SetupExif::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     iconSaveExifBox_->setChecked(settings->getSaveExifComments());

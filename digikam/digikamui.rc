@@ -40,7 +40,7 @@
      <Action name="image_set_exif_orientation"/>
      <Action name="image_properties" />
    <Separator />
-     <ActionList name="image_actions"/>  
+     <ActionList name="image_actions"/>
    <Separator />
      <Action name="image_rename" />
      <Action name="image_delete" />
@@ -67,7 +67,7 @@
       <Separator/>
       <Action name="gamma_adjustment" />
       <ActionList name="tool_actions"/>
-      <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
+      <Menu name="BatchProcesses"><text>&amp;Batch Processes</text>
         <ActionList name="batch_actions"/>
       </Menu>
   </Menu>

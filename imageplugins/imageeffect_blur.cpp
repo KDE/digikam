@@ -64,7 +64,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Blur image preview effect"),
+                                                           i18n("Blur Image Preview Effect"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
  

@@ -40,7 +40,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
                                                    const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Charcoal")
 {
-    new KAction(i18n("Charcoal drawing..."), 0, 
+    new KAction(i18n("Charcoal Drawing..."), 0, 
                 this, SLOT(slotCharcoal()),
                 actionCollection(), "imageplugin_charcoal");
                 

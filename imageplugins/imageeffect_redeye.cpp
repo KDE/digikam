@@ -2,8 +2,8 @@
  * File  : imageeffect_redeye.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-06
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -11,25 +11,25 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cstring>
- 
+
 // Imlib2 includes.
 
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
- 
+
 // Qt includes.
- 
+
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
@@ -55,10 +55,10 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     // -- run the dlg ----------------------------------------------
 
     ImageEffect_RedEyeDlg dlg(parent);
-    
+
     if (dlg.exec() != QDialog::Accepted)
         return;
-    
+
     parent->setCursor( KCursor::waitCursor() );
 
     // -- save settings ----------------------------------------------
@@ -69,9 +69,9 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     config->writeEntry("Red Eye Correction Plugin (Mild)",
                        !aggressive);
     config->sync();
-    
+
     // -- do the actual operations -----------------------------------
-    
+
     Digikam::ImageIface iface(0, 0);
 
     uint* data = iface.getSelectedData();
@@ -113,14 +113,14 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     red_norm = 1.0/(red_chan.red_gain + red_chan.green_gain + red_chan.blue_gain);
     green_norm = 1.0/(green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
     blue_norm = 1.0/(blue_chan.red_gain + blue_chan.green_gain + blue_chan.blue_gain);
-    
+
     uint* ptr  = data;
     uint* nptr = newData;
 
     int r1, g1, b1;
-    
+
     for (int i=0; i<w*h; i++) {
-        
+
         a = (*ptr >> 24) & 0xff;
         r = (*ptr >> 16) & 0xff;
         g = (*ptr >> 8)  & 0xff;
@@ -137,7 +137,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
             g1 = (int) QMIN(255, blue_norm * (blue_chan.red_gain   * r +
                                         blue_chan.green_gain * g +
                                         blue_chan.blue_gain  * b));
-            
+
             *nptr = QMIN(int((r-g)/150.0*255.0),255) << 24 | r1 << 16 | g1 << 8 | b1;
         }
 
@@ -166,15 +166,15 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 
     imlib_context_set_image(imTop);
     imlib_free_image_and_decache();
-    
+
     imlib_context_set_image(imBot);
     imlib_free_image_and_decache();
 
     imlib_context_pop();
     imlib_context_free(context);
-    
+
     delete [] newData;
-    
+
     iface.putSelectedData(data);
 
     delete [] data;
@@ -195,19 +195,19 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
     buttonGroup->setRadioButtonExclusive( true );
 
     QRadioButton* mildBtn =
-        new QRadioButton( i18n("Mild (Use if other parts of the face are also selected)"),
+        new QRadioButton( i18n("Mild (use if other parts of the face are also selected)"),
                           buttonGroup );
     QRadioButton* aggrBtn =
-        new QRadioButton( i18n("Aggressive (Use if Eye(s) have been selected exactly)" ),
-                          buttonGroup ); 
+        new QRadioButton( i18n("Aggressive (use if eye(s) have been selected exactly)" ),
+                          buttonGroup );
 
     topLayout->addWidget( buttonGroup );
     
     connect( buttonGroup, SIGNAL(clicked(int)),
              SLOT(slotClicked(int)) );
-    
+
     bool mild;
-    
+
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
     mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
@@ -226,12 +226,12 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
 
 ImageEffect_RedEyeDlg::Result ImageEffect_RedEyeDlg::result() const
 {
-    return (Result)m_selectedId;    
+    return (Result)m_selectedId;
 }
 
 void ImageEffect_RedEyeDlg::slotClicked(int id)
 {
     m_selectedId = id;
 }
-    
+
 #include "imageeffect_redeye.moc"

@@ -188,14 +188,14 @@ void DirSelectDialog::slotUser1()
 
 #if KDE_IS_VERSION(3,2,0)
     QString newDir = KInputDialog::getText(i18n("New Album Name"),
-                                           i18n("Creating New Album in 'My Albums%1'\n"
-                                                "Enter Album Name")
+                                           i18n("Creating new album in 'My Albums%1'\n"
+                                                "Enter album name:")
                                            .arg(relPath),
                                            QString::null, &ok, this);
 #else
     QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
-                                           i18n("Creating New Album in 'My Albums%1'\n"
-                                                "Enter Album Name")
+                                           i18n("Creating new album in 'My Albums%1'\n"
+                                                "Enter album name:")
                                            .arg(relPath),
                                            QString::null, &ok, this);
 #endif

@@ -3,8 +3,8 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-02-01
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2003-2004 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -12,12 +12,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // QT includes.
@@ -69,24 +69,24 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                         "library in your computer.\n"
                                         "Write access is required for this path."));
-                                                
+
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
                                                    albumPathBox);
    connect(changePathButton, SIGNAL(clicked()),
            this, SLOT(slotChangeAlbumPath()));
    connect( albumPathEdit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(slotPathEdited(const QString&)) );           
+             this, SLOT(slotPathEdited(const QString&)) );
 
    layout->addWidget(albumPathBox);
 
    // --------------------------------------------------------
 
    QVGroupBox *tipSettingBox = new QVGroupBox(parent);
-   tipSettingBox->setTitle(i18n("ToolTips Settings"));
+   tipSettingBox->setTitle(i18n("Tooltips Settings"));
 
    showToolTipsBox_ = new QCheckBox(tipSettingBox);
-   showToolTipsBox_->setText(i18n("Show Tooltips for Items"));
-   
+   showToolTipsBox_->setText(i18n("Show tooltips for items"));
+
    layout->addWidget(tipSettingBox);
 
    // --------------------------------------------------------
@@ -95,19 +95,19 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    tagSettingBox->setTitle(i18n("Tag Settings"));
 
    recurseTagsBox_ = new QCheckBox(tagSettingBox);
-   recurseTagsBox_->setText(i18n("Show items in sub-Tags"));
+   recurseTagsBox_->setText(i18n("Show items in sub-tags"));
    QWhatsThis::add( recurseTagsBox_, i18n("<p>When showing items in a Tag, also "
                                           "show items in sub-Tags."));
 
    layout->addWidget(tagSettingBox);
 
-   
+
    // --------------------------------------------------------
 
-   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal, 
+   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal,
                                                         i18n("Default Thumbnail Size"),
                                                         parent);
-   
+
    iconSizeButtonGroup->setRadioButtonExclusive(true);
 
    smallIconButton_ = new QRadioButton(iconSizeButtonGroup);
@@ -115,7 +115,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
    mediumIconButton_ = new QRadioButton(iconSizeButtonGroup);
    mediumIconButton_->setText( i18n( "Medium (100x100)" ) );
-   
+
    largeIconButton_ = new QRadioButton(iconSizeButtonGroup);
    largeIconButton_->setText( i18n( "Large (160x160)" ) );
 
@@ -127,7 +127,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    // --------------------------------------------------------
 
    QGroupBox *iconTextGroup = new QGroupBox(1,
-                                            Qt::Horizontal, 
+                                            Qt::Horizontal,
                                             i18n("Extra Information in Thumbnails View"),
                                             parent);
 
@@ -147,13 +147,13 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    iconShowCommentsBox_->setText(i18n("Show Digikam comments"));
 
    iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (Warning: Slow)"));
+   iconShowFileCommentsBox_->setText(i18n("Show comments stored in file (warning: slow)"));
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
-   iconShowResolutionBox_->setText(i18n("Show image dimensions (Warning: Slow)"));
+   iconShowResolutionBox_->setText(i18n("Show image dimensions (warning: slow)"));
 
    layout->addWidget(iconTextGroup);
-   
+
    // --------------------------------------------------------
 
    layout->addStretch();
@@ -168,26 +168,26 @@ SetupGeneral::~SetupGeneral()
 void SetupGeneral::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     settings->setAlbumLibraryPath(albumPathEdit->text());
-    
+
     int iconSize = ThumbnailSize::Medium;
-    
+
     if (smallIconButton_->isChecked())
         iconSize = ThumbnailSize::Small;
-    
+
     if (largeIconButton_->isChecked())
         iconSize = ThumbnailSize::Large;
-    
+
     if (hugeIconButton_->isChecked())
         iconSize = ThumbnailSize::Huge;
-    
+
     settings->setDefaultIconSize(iconSize);
     settings->setRecurseTags(recurseTagsBox_->isChecked());
     settings->setShowToolTips(showToolTipsBox_->isChecked());
-        
+
     settings->setIconShowName(iconShowNameBox_->isChecked());
     settings->setIconShowTags(iconShowTagsBox_->isChecked());
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
@@ -202,11 +202,11 @@ void SetupGeneral::applySettings()
 void SetupGeneral::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    
+
     if (!settings) return;
 
     albumPathEdit->setText(settings->getAlbumLibraryPath());
-    
+
     switch(settings->getDefaultIconSize()) {
     case(ThumbnailSize::Small): {
         smallIconButton_->setChecked(true);
@@ -227,7 +227,7 @@ void SetupGeneral::readSettings()
 
     recurseTagsBox_->setChecked(settings->getRecurseTags());
     showToolTipsBox_->setChecked(settings->getShowToolTips());
-    
+
     iconShowNameBox_->setChecked(settings->getIconShowName());
     iconShowTagsBox_->setChecked(settings->getIconShowTags());
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
@@ -245,7 +245,7 @@ void SetupGeneral::slotChangeAlbumPath()
             this);
 
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) {
-        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as Albums library."));
+        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as albums library."));
         return;
     }
 
@@ -254,7 +254,7 @@ void SetupGeneral::slotChangeAlbumPath()
         KMessageBox::information(0, i18n("No write access for this path.\n"
                                          "Warning: the comments and tag features will not work!"));
     }
-    
+
     if (!result.isEmpty()) {
         albumPathEdit->setText(result);
     }
@@ -273,7 +273,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
     QFileInfo targetPath(newPath);
     QDir dir(newPath);
-    mainDialog_->enableButtonOK(dir.exists() && 
+    mainDialog_->enableButtonOK(dir.exists() &&
                                 dir != QDir(QDir::homeDirPath ()));
 }
 

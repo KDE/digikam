@@ -159,12 +159,12 @@ void SetupCollections::slotAddCollection()
 #if KDE_IS_VERSION(3,2,0)
     QString newCollection =
         KInputDialog::getText(i18n("New Collection Name"),
-                              i18n("Enter New Collection Name: "),
+                              i18n("Enter new collection name:"),
                               QString::null, &ok, this);
 #else
     QString newCollection =
         KLineEditDlg::getText(i18n("New Collection Name"),
-                              i18n("Enter New Collection Name: "),
+                              i18n("Enter new collection name:"),
                               QString::null, &ok, this);
 #endif
     

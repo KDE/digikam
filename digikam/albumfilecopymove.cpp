@@ -239,7 +239,7 @@ void AlbumFileCopyMove::slotNext()
             else
             {
                 int result = KMessageBox::
-                             warningContinueCancel(0, i18n("Failed to Move File\n%1")
+                             warningContinueCancel(0, i18n("Failed to move file\n%1")
                                                    .arg(srcFile), i18n("Move Failed"));
                 if (result == KMessageBox::Cancel)
                 {
@@ -259,7 +259,7 @@ void AlbumFileCopyMove::slotNext()
             else
             {
                 int result = KMessageBox::
-                             warningContinueCancel(0, i18n("Failed to Copy File\n%1")
+                             warningContinueCancel(0, i18n("Failed to copy file\n%1")
                                                    .arg(srcFile), i18n("Copy Failed"));
                 if (result == KMessageBox::Cancel)
                 {

@@ -78,7 +78,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                    0,
                                    true,
                                    true,
-                                   i18n("&Reset values")),
+                                   i18n("&Reset Values")),
                        m_parent(parent)
 {
     QString whatsThis;
@@ -103,7 +103,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Film Grain handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Film Grain Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -118,7 +118,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Film Grain To Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Film Grain to Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);

@@ -73,7 +73,7 @@ namespace DigikamRainDropImagesPlugin
 ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                     : KDialogBase(Plain, i18n("Raindrops"),
                                   Help|User1|Ok|Cancel, Ok,
-                                  parent, 0, true, true, i18n("&Reset values")),
+                                  parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
     QString whatsThis;
@@ -101,7 +101,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Raindrops handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Raindrops Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -116,7 +116,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Raindrops To Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Raindrops to Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);

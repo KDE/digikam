@@ -186,7 +186,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     m_labelPixelsValue = new QLabel(gbox);
     m_labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
-    QLabel *label6 = new QLabel(i18n("Std Dev.:"), gbox);
+    QLabel *label6 = new QLabel(i18n("Std dev.:"), gbox);
     label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelStdDevValue = new QLabel(gbox);
     m_labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);

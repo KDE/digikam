@@ -54,7 +54,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QVGroupBox *savingOptionsGroup = new QVGroupBox(i18n("Saving images options"),
+   QVGroupBox *savingOptionsGroup = new QVGroupBox(i18n("Saving Images Options"),
                                                    parent);
 
    m_JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
@@ -72,7 +72,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    
    // --------------------------------------------------------
    
-   QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface options"),
+   QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"),
                                                       parent);
 
    QHBox* colorBox = new QHBox(interfaceOptionsGroup);
@@ -92,7 +92,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
    
-   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image plugins list"),
+   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"),
                                                       parent);
    
    m_pluginsNumber = new QLabel(imagePluginsListGroup);
