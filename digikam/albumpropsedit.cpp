@@ -26,7 +26,6 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
 #include <qlistview.h>
 #include <qframe.h>
 #include <qpushbutton.h>
@@ -36,6 +35,7 @@
 
 #include <klocale.h>
 #include <kurl.h>
+#include <kdatepicker.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -103,8 +103,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     QVBoxLayout *dateBoxLayout =
         new QVBoxLayout( dateBox->layout(), spacingHint() );
 
-    dateEdit_ = new QDateEdit( dateBox );
-    dateBoxLayout->addWidget( dateEdit_ );
+    datePicker_ = new KDatePicker( dateBox );
+    dateBoxLayout->addWidget( datePicker_ );
 
     topLayout->addWidget( dateBox );
 
@@ -138,7 +138,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
 
     titleEdit_->setText( album->getTitle() );
     commentsEdit_->setText( album->getCaption() );
-    dateEdit_->setDate( album->getDate() );
+    datePicker_->setDate( album->getDate() );
 
     QCheckListItem *checkItem =
         (QCheckListItem*) collectionEdit_->findItem(album->getCollection(), 0);
@@ -152,7 +152,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     connect(delCollectionBtn, SIGNAL(clicked()),
             this, SLOT(slotDelCollection()));
     
-    resize(500, 400);
+    //resize(500, 400);
+    adjustSize();
 }
 
 AlbumPropsEdit::~AlbumPropsEdit()
@@ -194,7 +195,7 @@ QString AlbumPropsEdit::comments() const
 
 QDate AlbumPropsEdit::date() const
 {
-    return dateEdit_->date();
+    return datePicker_->date();
 }
 
 QString AlbumPropsEdit::collection() const

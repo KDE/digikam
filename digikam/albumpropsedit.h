@@ -32,7 +32,7 @@
 
 #include <kdialogbase.h>
 
-class QDateEdit;
+class KDatePicker;
 class QListView;
 class QLineEdit;
 class QCheckBox;
@@ -72,7 +72,7 @@ private:
     QLineEdit      *titleEdit_;
     QLineEdit      *commentsEdit_;
     
-    QDateEdit      *dateEdit_;
+    KDatePicker    *datePicker_;
 
     QListView      *collectionEdit_;
     QCheckListItem *rootCollectionItem_;
