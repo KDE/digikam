@@ -79,6 +79,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
                  m_parent(parent)
 {
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    m_cancel = false;
     
     // About data and help button.
     
@@ -205,7 +206,14 @@ void DespeckleDialog::slotHelp()
 
 void DespeckleDialog::closeEvent(QCloseEvent *e)
 {
+    m_cancel = true;
     e->accept();    
+}
+
+void DespeckleDialog::slotCancel()
+{
+    m_cancel = true;
+    done(Cancel);
 }
 
 void DespeckleDialog::slotUser1()
@@ -235,8 +243,10 @@ void DespeckleDialog::slotEffect()
     
     m_progressBar->setValue(0);              
     despeckle(data, w, h, r, bl, wl, af, rf);   
-    m_progressBar->setValue(0);  
     
+    if (m_cancel) return;
+    
+    m_progressBar->setValue(0);  
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
@@ -244,6 +254,8 @@ void DespeckleDialog::slotEffect()
 
 void DespeckleDialog::slotOk()
 {
+    enableButton(Ok, false);
+    enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
     
@@ -258,8 +270,10 @@ void DespeckleDialog::slotOk()
 
     m_progressBar->setValue(0);               
     despeckle(data, w, h, r, bl, wl, af, rf);   
-           
-    iface.putOriginalData(data);
+    
+    if ( !m_cancel )
+       iface.putOriginalData(data);
+       
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();
@@ -350,7 +364,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
      // Despeckle...
  
-     for (y = sel_y1 ; y < sel_y2; y ++)
+     for (y = sel_y1 ; !m_cancel && (y < sel_y2) ; y ++)
         {
         if ((y + despeckle_radius) >= lasty && lasty < sel_y2)
            {
@@ -377,7 +391,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
         if (y >= (sel_y1 + radius) && y < (sel_y2 - radius))
            {
-           for (x = 0; x < width; x ++)
+           for (x = 0 ; !m_cancel && (x < width) ; x ++)
               {
               hist0   = 0;
               hist255 = 0;

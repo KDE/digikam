@@ -65,9 +65,11 @@ private:
     KIntNumInput    *m_thresholdInput;
     
     KProgress       *m_progressBar;
+        
+    bool             m_cancel;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
+
     void unsharp(uint* data, int w, int h, double radius, 
                  double amount, int threshold);
                  
@@ -84,6 +86,7 @@ private slots:
     void slotUser1();
     void slotEffect();
     void slotOk();
+    void slotCancel();
 };
 
 }  // NameSpace DigikamUnsharpFilterImagesPlugin

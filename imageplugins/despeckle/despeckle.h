@@ -68,6 +68,8 @@ private:
     QCheckBox    *m_useAdaptativeMethod;
     QCheckBox    *m_useRecursiveMethod;
     
+    bool          m_cancel;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
     void despeckle(uint* data, int w, int h, int despeckle_radius, 
@@ -80,6 +82,7 @@ private slots:
     void slotUser1();
     void slotEffect();
     void slotOk();
+    void slotCancel();
 };
 
 }  // NameSpace DigikamDespeckleFilterImagesPlugin

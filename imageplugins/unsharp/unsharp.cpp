@@ -79,6 +79,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
                  m_parent(parent)
 {
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    m_cancel = false;
     
     // About data and help button.
     
@@ -189,7 +190,14 @@ void UnsharpDialog::slotHelp()
 
 void UnsharpDialog::closeEvent(QCloseEvent *e)
 {
+    m_cancel = true;
     e->accept();    
+}
+
+void UnsharpDialog::slotCancel()
+{
+    m_cancel = true;
+    done(Cancel);
 }
 
 void UnsharpDialog::slotUser1()
@@ -217,8 +225,9 @@ void UnsharpDialog::slotEffect()
     
     m_progressBar->setValue(0);            
     unsharp(data, w, h, r, a, th);   
-    m_progressBar->setValue(0);    
     
+    if (m_cancel) return;
+    m_progressBar->setValue(0);    
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
@@ -226,6 +235,8 @@ void UnsharpDialog::slotEffect()
 
 void UnsharpDialog::slotOk()
 {
+    enableButton(Ok, false);
+    enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
     
@@ -239,7 +250,9 @@ void UnsharpDialog::slotOk()
     m_progressBar->setValue(0);        
     unsharp(data, w, h, r, a, th);   
            
-    iface.putOriginalData(data);
+    if ( !m_cancel )
+       iface.putOriginalData(data);
+    
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();
@@ -294,7 +307,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
 
     // blank out a region of the destination memory area, I think 
     
-    for (row = 0; row < y; row++)
+    for (row = 0 ; !m_cancel && (row < y) ; row++)
       {
       memcpy(dest_row, newData + x1 + (y1+row)*w, (x2-x1)*bytes); 
       memset(dest_row, 0, x*bytes);
@@ -303,7 +316,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
 
     // blur the rows 
     
-    for (row = 0; row < y; row++)
+    for (row = 0 ; !m_cancel && (row < y) ; row++)
       {
       memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
       memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
@@ -323,7 +336,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
 
     // blur the cols 
   
-    for (col = 0; col < x; col++)
+    for (col = 0 ; !m_cancel && (col < x) ; col++)
       {
       for (int n = 0 ; n < y ; ++n)
           memcpy(cur_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
@@ -345,7 +358,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
 
     // merge the source and destination (which currently contains the blurred version) images 
   
-    for (row = 0; row < y; row++)
+    for (row = 0 ; !m_cancel && (row < y) ; row++)
       {
       value = 0;
       // get source row 
