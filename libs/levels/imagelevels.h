@@ -56,16 +56,16 @@ enum PixelType
 
 struct _Levels
 {
-    double gamma[5];
+    double  gamma[5];
     
-    int    low_input[5];
-    int    high_input[5];
+    int     low_input[5];
+    int     high_input[5];
     
-    int    low_output[5];
-    int    high_output[5];
+    int     low_output[5];
+    int     high_output[5];
     
-    uchar  input[5][256]; // This is used only by the gui : rebuild the color gradient 
-                          // widget colors in according with the new input levels.
+    uchar   input[5][256]; // This is used only by the gui : rebuild the color gradient 
+                           // widget colors in according with the new input levels.
 };
 
 struct _Lut
@@ -116,7 +116,7 @@ private:
     struct _Levels *m_levels;
     
     // Lut data.
-    struct _Lut *m_lut;
+    struct _Lut    *m_lut;
 };
 
 }  // NameSpace Digikam

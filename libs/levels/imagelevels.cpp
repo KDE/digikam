@@ -434,7 +434,7 @@ void ImageLevels::levelLutProcess(uint *srcPR, uint *destPR, int w, int h)
         }
       break;
     default:
-      kdWarning() << "ImageLevels::levelLutProcess: Error: nchannels = " << m_lut->nchannels << endl;
+      kdWarning() << k_funcinfo << "nchannels = " << m_lut->nchannels << endl;
     }
 
     width = w;
