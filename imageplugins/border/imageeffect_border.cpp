@@ -147,6 +147,11 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Wood") );
     m_borderType->insertItem( i18n("Decorative Paper") );
     m_borderType->insertItem( i18n("Decorative Parque") );
+    m_borderType->insertItem( i18n("Decorative Ice") );
+    m_borderType->insertItem( i18n("Decorative Leaf") );
+    m_borderType->insertItem( i18n("Decorative Marble") );
+    m_borderType->insertItem( i18n("Decorative Rain") );
+
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
     
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
@@ -309,15 +314,13 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
           break;
 
        case 3: // Decorative Pine.
-          break;
-
        case 4: // Decorative Wood.
-          break;
-          
        case 5: // Decorative Paper.
-          break;
-       
        case 6: // Decorative Parque.
+       case 7: // Decorative Ice.
+       case 8: // Decorative Leaf.
+       case 9: // Decorative Marble.
+       case 10:// Decorative Rain.
           break;
        }
        
@@ -341,15 +344,13 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
           break;
 
        case 3: // Decorative Pine.
-          break;
-
        case 4: // Decorative Wood.
-          break;
-          
        case 5: // Decorative Paper.
-          break;
-       
        case 6: // Decorative Parque.
+       case 7: // Decorative Ice.
+       case 8: // Decorative Leaf.
+       case 9: // Decorative Marble.
+       case 10:// Decorative Rain.
           break;          
        }
        
@@ -398,6 +399,10 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case 4: // Decorative Wood.
        case 5: // Decorative Paper.
        case 6: // Decorative Parque.
+       case 7: // Decorative Ice.
+       case 8: // Decorative Leaf.
+       case 9: // Decorative Marble.
+       case 10:// Decorative Rain.
           m_foregroundColorButton->setEnabled(false);
           m_backgroundColorButton->setEnabled(false);
           m_labelForeground->setEnabled(false);
@@ -445,6 +450,10 @@ void ImageEffect_Border::slotEffect()
        case 4: // Decorative Wood.
        case 5: // Decorative Paper.
        case 6: // Decorative Parque.
+       case 7: // Decorative Ice.
+       case 8: // Decorative Leaf.
+       case 9: // Decorative Marble.
+       case 10:// Decorative Rain.
           setCursor( KCursor::waitCursor() );
           pattern(src, dest, borderWidth);
           setCursor( KCursor::arrowCursor() );        
@@ -495,6 +504,10 @@ void ImageEffect_Border::slotOk()
        case 4: // Decorative Wood.
        case 5: // Decorative Paper.
        case 6: // Decorative Parque.
+       case 7: // Decorative Ice.
+       case 8: // Decorative Leaf.
+       case 9: // Decorative Marble.
+       case 10:// Decorative Rain.
           pattern(src, dest, m_borderWidth->value());
           break;
        }
@@ -641,6 +654,23 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
        case 6: // Decorative Parque.
           pattern = "parque-pattern";
           break;
+       
+       case 7: // Decorative Ice.
+          pattern = "ice-pattern";
+          break;
+       
+       case 8: // Decorative Leaf.
+          pattern = "leaf-pattern";
+          break;
+
+       case 9: // Decorative Marble.
+          pattern = "marble-pattern";
+          break;
+       
+       case 10:// Decorative Rain.
+          pattern = "rain-pattern";
+          break;
+
        }
     
     QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + borderWidth*2,
