@@ -318,10 +318,11 @@ void DigikamApp::setupActions()
     mImageSetExifOrientation1Action = new KAction(i18n("Normal"),0,actionCollection());
     mImageSetExifOrientation2Action = new KAction(i18n("Flipped horizontally"),0,actionCollection());
     mImageSetExifOrientation3Action = new KAction(i18n("Rotated 180 degrees"),0,actionCollection());
-    mImageSetExifOrientation4Action = new KAction(i18n("Rotated 90 degrees / horiz. flipped"),0,actionCollection());
-    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 degrees"),0,actionCollection());
-    mImageSetExifOrientation6Action = new KAction(i18n("Rotated 90 degrees / vert. flipped"),0,actionCollection());
-    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 270 degrees"),0,actionCollection());
+    mImageSetExifOrientation4Action = new KAction(i18n("Flipped vertically"),0,actionCollection());
+    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 degrees / horiz. flipped"),0,actionCollection());
+    mImageSetExifOrientation6Action = new KAction(i18n("Rotated 90 degrees"),0,actionCollection());
+    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 90 degrees / vert. flipped"),0,actionCollection());
+    mImageSetExifOrientation8Action = new KAction(i18n("Rotated 270 degrees"),0,actionCollection());
 
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation1Action);
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation2Action);
@@ -330,6 +331,7 @@ void DigikamApp::setupActions()
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation5Action);
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation6Action);
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation7Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation8Action);
 
     connect( mImageSetExifOrientation1Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
     connect( mImageSetExifOrientation2Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
@@ -338,6 +340,7 @@ void DigikamApp::setupActions()
     connect( mImageSetExifOrientation5Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
     connect( mImageSetExifOrientation6Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
     connect( mImageSetExifOrientation7Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation8Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
 
     exifOrientationMapper->setMapping( mImageSetExifOrientation1Action, 1);
     exifOrientationMapper->setMapping( mImageSetExifOrientation2Action, 2);
@@ -346,6 +349,7 @@ void DigikamApp::setupActions()
     exifOrientationMapper->setMapping( mImageSetExifOrientation5Action, 5);
     exifOrientationMapper->setMapping( mImageSetExifOrientation6Action, 6);
     exifOrientationMapper->setMapping( mImageSetExifOrientation7Action, 7);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation8Action, 8);
  
     // -----------------------------------------------------------------
     

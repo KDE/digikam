@@ -255,8 +255,8 @@ void ImlibInterface::exifRotate(QString filename)
                 break;
 
             case KExifData::ROT_90_HFLIP:
-                imlib_image_flip_horizontal();
                 rotate90();
+                imlib_image_flip_horizontal();
                 break;
 
             case KExifData::ROT_90:
@@ -264,8 +264,8 @@ void ImlibInterface::exifRotate(QString filename)
                 break;
 
             case KExifData::ROT_90_VFLIP:
-                imlib_image_flip_vertical();
                 rotate90();
+                imlib_image_flip_vertical();
                 break;
 
             case KExifData::ROT_270:

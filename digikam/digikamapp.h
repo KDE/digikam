@@ -145,6 +145,7 @@ private:
     KAction *mImageSetExifOrientation5Action;
     KAction *mImageSetExifOrientation6Action;
     KAction *mImageSetExifOrientation7Action;
+    KAction *mImageSetExifOrientation8Action;
     KAction *mImageRenameAction;
     KAction *mImageDeleteAction;
     KAction *mImagePropsAction;
