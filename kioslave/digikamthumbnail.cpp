@@ -266,21 +266,24 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
 bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path)
 {
-    Imlib_Image imlib2_im = imlib_load_image_without_cache(path.latin1());
+    Imlib_Image imlib2_im =
+        imlib_load_image_immediately_without_cache(path.latin1());
         
-    if (imlib2_im == NULL) return false;
+    if (imlib2_im == NULL) {
+        return false;
+    }
     
     imlib_context_set_image(imlib2_im);     
     
     org_width_  = imlib_image_get_width();
     org_height_ = imlib_image_get_height();
-    
+
     if ( QMAX(org_width_, org_height_) != size_ )
-        {
+    {
         imlib2_im = imlib_create_cropped_scaled_image(0, 0, 
                                                       org_width_, org_height_, 
                                                       size_, size_); 
-        }
+    }
 
     new_width_  = imlib_image_get_width();
     new_height_ = imlib_image_get_height(); 
@@ -288,13 +291,16 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
     image.create( new_width_, new_height_, 32 );
     image.setAlphaBuffer(true) ;
     
-    DATA32 *data;
+    DATA32 *data = imlib_image_get_data();
+    if (!data)
+        return false;
+
     
     for (int y = 0 ; y < new_height_ ; ++y)
-       {
-       data = imlib_image_get_data() + (DATA32)( y * new_width_ );
-       memcpy(image.scanLine(y), data, new_width_ * 4 );
-       }
+    {
+        data = imlib_image_get_data() + (DATA32)( y * new_width_ );
+        memcpy(image.scanLine(y), data, new_width_ * 4 );
+    }
     
     imlib_free_image();        
     return true;
