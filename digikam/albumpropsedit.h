@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,10 +22,15 @@
 #ifndef ALBUMPROPSEDIT_H
 #define ALBUMPROPSEDIT_H
 
-#include <kdialogbase.h>
+// Qt includes.
+
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qstringlist.h>
+
+// KDE includes.
+
+#include <kdialogbase.h>
 
 class QDateEdit;
 class QListView;

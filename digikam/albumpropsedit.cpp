@@ -19,16 +19,8 @@
  *
  * ============================================================ */
 
-#include <klocale.h>
-#include <kurl.h>
-
-#include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
-#include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
-
+// Qt includes. 
+ 
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -40,14 +32,27 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
-#include "album.h"
+// KDE includes.
 
+#include <klocale.h>
+#include <kurl.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
+
+// Local includes.
+
+#include "album.h"
 #include "albumsettings.h"
 #include "albumpropsedit.h"
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
-    : KDialogBase( Plain, i18n("Edit Album"), Help|Ok|Cancel, Ok,
-                   0, 0, true, true )
+              : KDialogBase( Plain, i18n("Edit Album"), Help|Ok|Cancel, Ok,
+                             0, 0, true, true )
 {
     setHelp("albumpropsedit.anchor", "digikam");
     album_ = album;
@@ -72,7 +77,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     titleBox->setTitle( i18n( "Edit Album Description" ) );
     titleBox->setColumnLayout( 0, Qt::Horizontal );
     QGridLayout *titleBoxLayout =
-        new QGridLayout( titleBox->layout(), spacingHint() );
+        new QGridLayout( titleBox->layout(), 2, 2, spacingHint() );
                                                    
     QLabel *titleLabel = new QLabel( titleBox );
     titleLabel->setText( i18n( "Title: " ) );
@@ -109,7 +114,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     collectionBox->setTitle( i18n( "Change Album Collection" ) );
     collectionBox->setColumnLayout(0, Qt::Horizontal );
     QGridLayout *collectionBoxLayout =
-        new QGridLayout( collectionBox->layout(), spacingHint() );
+        new QGridLayout( collectionBox->layout(), 2, 2, spacingHint() );
 
     collectionEdit_ = new QListView( collectionBox );
     collectionEdit_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
