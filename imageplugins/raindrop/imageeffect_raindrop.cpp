@@ -2,8 +2,8 @@
  * File  : imageeffect_raindrop.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-09-30
- * Description : a Digikam image plugin for to simulate 
- *               a rain droppping on an image.
+ * Description : a Digikam image plugin for to add
+ *               raindrops on an image.
  * 
  * Copyright 2004 by Gilles Caulier
  *
@@ -40,6 +40,7 @@
 #include <qslider.h>
 #include <qimage.h>
 #include <qspinbox.h>
+#include <qdatetime.h> 
 
 // KDE includes.
 
@@ -68,7 +69,7 @@ namespace DigikamRainDropImagesPlugin
 {
 
 ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
-                    : KDialogBase(Plain, i18n("Rain Dropping Image"),
+                    : KDialogBase(Plain, i18n("Raindrops"),
                                   Help|User1|Ok|Cancel, Ok,
                                   parent, 0, true, true, i18n("&Reset values")),
                       m_parent(parent)
@@ -81,9 +82,9 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Rain Dropping"), 
+                                       I18N_NOOP("Raindrops"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A rain dropping image effect plugin for Digikam."),
+                                       I18N_NOOP("A Digikam image plugin for to add raindrops on an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -92,13 +93,13 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Rain dropping algorithm"), 
+    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"), 
                      "pieter_voloshyn at ame.com.br"); 
     
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Rain Dropping handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Raindrops handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -113,7 +114,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Rain Dropping Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Raindrops On Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -126,7 +127,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Rain Dropping Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Raindrops Effect Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -146,7 +147,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     m_dropSpinBox = new QSpinBox(1, 200, 1, plainPage(), "m_dropSpinBox");
     
-    whatsThis = i18n("<p>Set here the raindrop size.");
+    whatsThis = i18n("<p>Set here the raindrops size.");
     QWhatsThis::add( m_dropSpinBox, whatsThis);
     QWhatsThis::add( m_dropSlider, whatsThis);
     
@@ -351,7 +352,7 @@ void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int Drop
     
     if (Coeff > 100) Coeff = 100;
 
-    int LineWidth = Width * 4;                     // ??
+    int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
 
     BitCount = LineWidth * Height;
@@ -377,188 +378,201 @@ void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int Drop
     double    R, G, B;
 
     bool      FindAnother = false;              // To search for good coordinates
-
-    srand ((uint) 100000);
     
-        for (i = 0 ; !m_cancel && (i < Width) ; ++i)
-            for (j = 0 ; !m_cancel && (j < Height) ; ++j)
-            {
-                p = j * LineWidth + 4 * i;            // ??
-                NewBits[p+2] = Bits[p+2];
-                NewBits[p+1] = Bits[p+1];
-                NewBits[ p ] = Bits[ p ];
-                BoolMatrix[i][j] = false;
-            }
+    QDateTime dt = QDateTime::currentDateTime();
+    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
+    
+    srand ((uint) dt.secsTo(Y2000));
+    
+    // Init booleen Matrix.
+    
+    for (i = 0 ; !m_cancel && (i < Width) ; ++i)
+       {
+       for (j = 0 ; !m_cancel && (j < Height) ; ++j)
+          {
+          p = j * LineWidth + 4 * i;         
+          NewBits[p+2] = Bits[p+2];
+          NewBits[p+1] = Bits[p+1];
+          NewBits[ p ] = Bits[ p ];
+          BoolMatrix[i][j] = false;
+          }
+       }
 
-        for (int NumBlurs = 0 ; !m_cancel && (NumBlurs <= Amount) ; ++NumBlurs)
+    for (int NumBlurs = 0 ; !m_cancel && (NumBlurs <= Amount) ; ++NumBlurs)
         {
-            NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
-            halfSize = NewSize / 2;
-            Radius = halfSize;
-            s = Radius / log (NewCoeff * Radius + 1);
+        NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
+        halfSize = NewSize / 2;
+        Radius = halfSize;
+        s = Radius / log (NewCoeff * Radius + 1);
 
-            Counter = 0;
-            do
+        Counter = 0;
+        
+        do
             {
-                FindAnother = false;
-                y = (int)(rand() * ((double)( Width - 1) / RAND_MAX));
-                x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
+            FindAnother = false;
+            y = (int)(rand() * ((double)( Width - 1) / RAND_MAX));
+            x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
 
-                if (BoolMatrix[y][x])
-                    FindAnother = true;
-                else
-                    for (i = x - halfSize ; !m_cancel && (i <= x + halfSize) ; i++)
-                        for (j = y - halfSize ; !m_cancel && (j <= y + halfSize) ; j++)
-                            if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
-                                if (BoolMatrix[j][i])
-                                    FindAnother = true;
+            if (BoolMatrix[y][x])
+                FindAnother = true;
+            else
+                for (i = x - halfSize ; !m_cancel && (i <= x + halfSize) ; i++)
+                    for (j = y - halfSize ; !m_cancel && (j <= y + halfSize) ; j++)
+                        if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
+                            if (BoolMatrix[j][i])
+                                FindAnother = true;
 
-                Counter++;
-            } while (!m_cancel && (FindAnother && (Counter < 10000)) );
+            Counter++;
+            } 
+        while (!m_cancel && (FindAnother && (Counter < 10000)) );
 
-            if (Counter >= 10000)
+        if (Counter >= 10000)
             {
-                NumBlurs = Amount;
-                break;
+            NumBlurs = Amount;
+            break;
             }
 
-            for (i = -1 * halfSize ; !m_cancel && (i < NewSize - halfSize) ; i++)
+        for (i = -1 * halfSize ; !m_cancel && (i < NewSize - halfSize) ; i++)
             {
-                for (j = -1 * halfSize ; !m_cancel && (j < NewSize - halfSize) ; j++)
+            for (j = -1 * halfSize ; !m_cancel && (j < NewSize - halfSize) ; j++)
                 {
-                    r = sqrt (i * i + j * j);
-                    a = atan2 (i, j);
+                r = sqrt (i * i + j * j);
+                a = atan2 (i, j);
 
-                    if (r <= Radius)
+                if (r <= Radius)
                     {
-                        OldRadius = r;
-                        r = (exp (r / s) - 1) / NewCoeff;
+                    OldRadius = r;
+                    r = (exp (r / s) - 1) / NewCoeff;
 
-                        k = x + (int)(r * sin (a));
-                        l = y + (int)(r * cos (a));
+                    k = x + (int)(r * sin (a));
+                    l = y + (int)(r * cos (a));
 
-                        m = x + i;
-                        n = y + j;
+                    m = x + i;
+                    n = y + j;
 
-                        if ((k >= 0) && (k < Height) && (l >= 0) && (l < Width))
+                    if ((k >= 0) && (k < Height) && (l >= 0) && (l < Width))
                         {
-                            if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                        if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                             {
-                                p = k * LineWidth + 4 * l;        // ??
-                                q = m * LineWidth + 4 * n;        // ??
-                                NewBits[q+2] = Bits[p+2];
-                                NewBits[q+1] = Bits[p+1];
-                                NewBits[ q ] = Bits[ p ];
-                                BoolMatrix[n][m] = true;
-                                Bright = 0;
+                            p = k * LineWidth + 4 * l;        
+                            q = m * LineWidth + 4 * n;        
+                            NewBits[q+2] = Bits[p+2];
+                            NewBits[q+1] = Bits[p+1];
+                            NewBits[ q ] = Bits[ p ];
+                            BoolMatrix[n][m] = true;
+                            Bright = 0;
                                 
-                                if (OldRadius >= 0.9 * Radius)
+                            if (OldRadius >= 0.9 * Radius)
                                 {
-                                    if ((a <= 0) && (a > -2.25))
-                                        Bright = -80;
-                                    else if ((a <= -2.25) && (a > -2.5))
-                                        Bright = -40;
-                                    else if ((a <= 0.25) && (a > 0))
-                                        Bright = -40;
+                                if ((a <= 0) && (a > -2.25))
+                                   Bright = -80;
+                                else if ((a <= -2.25) && (a > -2.5))
+                                   Bright = -40;
+                                else if ((a <= 0.25) && (a > 0))
+                                   Bright = -40;
                                 }
 
-                                else if (OldRadius >= 0.8 * Radius)
+                            else if (OldRadius >= 0.8 * Radius)
                                 {
-                                    if ((a <= -0.75) && (a > -1.50))
-                                        Bright = -40;
-                                    else if ((a <= 0.10) && (a > -0.75))
-                                        Bright = -30;
-                                    else if ((a <= -1.50) && (a > -2.35))
-                                        Bright = -30;
+                                if ((a <= -0.75) && (a > -1.50))
+                                    Bright = -40;
+                                else if ((a <= 0.10) && (a > -0.75))
+                                    Bright = -30;
+                                else if ((a <= -1.50) && (a > -2.35))
+                                    Bright = -30;
                                 }
 
-                                else if (OldRadius >= 0.7 * Radius)
+                            else if (OldRadius >= 0.7 * Radius)
                                 {
-                                    if ((a <= -0.10) && (a > -2.0))
-                                        Bright = -20;
-                                    else if ((a <= 2.50) && (a > 1.90))
-                                        Bright = 60;
+                                if ((a <= -0.10) && (a > -2.0))
+                                    Bright = -20;
+                                else if ((a <= 2.50) && (a > 1.90))
+                                    Bright = 60;
                                 }
                                 
-                                else if (OldRadius >= 0.6 * Radius)
+                            else if (OldRadius >= 0.6 * Radius)
                                 {
-                                    if ((a <= -0.50) && (a > -1.75))
-                                        Bright = -20;
-                                    else if ((a <= 0) && (a > -0.25))
-                                        Bright = 20;
-                                    else if ((a <= -2.0) && (a > -2.25))
-                                        Bright = 20;
+                                if ((a <= -0.50) && (a > -1.75))
+                                    Bright = -20;
+                                else if ((a <= 0) && (a > -0.25))
+                                    Bright = 20;
+                                else if ((a <= -2.0) && (a > -2.25))
+                                    Bright = 20;
                                 }
 
-                                else if (OldRadius >= 0.5 * Radius)
+                            else if (OldRadius >= 0.5 * Radius)
                                 {
-                                    if ((a <= -0.25) && (a > -0.50))
-                                        Bright = 30;
-                                    else if ((a <= -1.75 ) && (a > -2.0))
-                                        Bright = 30;
+                                if ((a <= -0.25) && (a > -0.50))
+                                    Bright = 30;
+                                else if ((a <= -1.75 ) && (a > -2.0))
+                                    Bright = 30;
                                 }
 
-                                else if (OldRadius >= 0.4 * Radius)
+                            else if (OldRadius >= 0.4 * Radius)
                                 {
-                                    if ((a <= -0.5) && (a > -1.75))
-                                        Bright = 40;
+                                if ((a <= -0.5) && (a > -1.75))
+                                    Bright = 40;
                                 }
 
-                                else if (OldRadius >= 0.3 * Radius)
+                            else if (OldRadius >= 0.3 * Radius)
                                 {
-                                    if ((a <= 0) && (a > -2.25))
-                                        Bright = 30;
+                                if ((a <= 0) && (a > -2.25))
+                                    Bright = 30;
                                 }
 
-                                else if (OldRadius >= 0.2 * Radius)
+                            else if (OldRadius >= 0.2 * Radius)
                                 {
-                                    if ((a <= -0.5) && (a > -1.75))
-                                        Bright = 20;
+                                if ((a <= -0.5) && (a > -1.75))
+                                    Bright = 20;
                                 }
 
-                                NewBits[q+2] = LimitValues (NewBits[q+2] + Bright);
-                                NewBits[q+1] = LimitValues (NewBits[q+1] + Bright);
-                                NewBits[ q ] = LimitValues (NewBits[ q ] + Bright);
+                            NewBits[q+2] = LimitValues (NewBits[q+2] + Bright);
+                            NewBits[q+1] = LimitValues (NewBits[q+1] + Bright);
+                            NewBits[ q ] = LimitValues (NewBits[ q ] + Bright);
                             }
                         }
                     }
                 }
             }
 
-            BlurRadius = NewSize / 25 + 1;
+        BlurRadius = NewSize / 25 + 1;
             
-            for (i = -1 * halfSize - BlurRadius ; !m_cancel && (i < NewSize - halfSize + BlurRadius) ; i++)
+        for (i = -1 * halfSize - BlurRadius ; !m_cancel && (i < NewSize - halfSize + BlurRadius) ; i++)
             {
-                for (j = -1 * halfSize - BlurRadius ; !m_cancel && (j < NewSize - halfSize + BlurRadius) ; j++)
+            for (j = -1 * halfSize - BlurRadius ; !m_cancel && (j < NewSize - halfSize + BlurRadius) ; j++)
                 {
-                    r = sqrt (i * i + j * j);
-                    if (r <= Radius * 1.1)
+                r = sqrt (i * i + j * j);
+                
+                if (r <= Radius * 1.1)
                     {
-                        R = G = B = 0;
-                        BlurPixels = 0;
-                        for (k = -1 * BlurRadius; k < BlurRadius + 1; k++)
-                            for (l = -1 * BlurRadius; l < BlurRadius + 1; l++)
+                    R = G = B = 0;
+                    BlurPixels = 0;
+                        
+                    for (k = -1 * BlurRadius; k < BlurRadius + 1; k++)
+                        for (l = -1 * BlurRadius; l < BlurRadius + 1; l++)
                             {
-                                m = x + i + k;
-                                n = y + j + l;
-                                if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                            m = x + i + k;
+                            n = y + j + l;
+                            
+                            if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                                 {
-                                    p = m * LineWidth + 4 * n;           // ??
-                                    R += NewBits[p+2];
-                                    G += NewBits[p+1];
-                                    B += NewBits[ p ];
-                                    BlurPixels++;
+                                p = m * LineWidth + 4 * n;           
+                                R += NewBits[p+2];
+                                G += NewBits[p+1];
+                                B += NewBits[ p ];
+                                BlurPixels++;
                                 }
                             }
 
-                        m = x + i;
-                        n = y + j;
-                        if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                    m = x + i;
+                    n = y + j;
+                        
+                    if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                         {
-                            p = m * LineWidth + 4 * n;                  // ??
-                            NewBits[p+2] = (uchar)(R / BlurPixels);
-                            NewBits[p+1] = (uchar)(G / BlurPixels);
-                            NewBits[ p ] = (uchar)(B / BlurPixels);
+                        p = m * LineWidth + 4 * n;                  
+                        NewBits[p+2] = (uchar)(R / BlurPixels);
+                        NewBits[p+1] = (uchar)(G / BlurPixels);
+                        NewBits[ p ] = (uchar)(B / BlurPixels);
                         }
                     }
                 }
