@@ -82,7 +82,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Add Border"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to add border to an image."),
+                                       I18N_NOOP("A digiKam image plugin to add a border to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
