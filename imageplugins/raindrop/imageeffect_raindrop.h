@@ -65,9 +65,7 @@ private:
     
     QPushButton          *m_helpButton;
 
-    QTimer               *m_timerDrop;
-    QTimer               *m_timerAmount;
-    QTimer               *m_timerCoeff;
+    QTimer               *m_timer;
             
     KIntNumInput         *m_dropInput;
     KIntNumInput         *m_amountInput;
@@ -87,18 +85,39 @@ private:
     
     bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
                         
-    inline uchar LimitValues(int ColorValue);
+    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
+    // But R, G and B values has 256 values to be used so, this function analize 
+    // the value and limits to this range.
+    inline uchar LimitValues (int ColorValue)
+       {
+       if (ColorValue > 255) ColorValue = 255;        
+       if (ColorValue < 0) ColorValue = 0;
+       return ((uchar) ColorValue);
+       };
     
-    inline bool IsInside (int Width, int Height, int X, int Y);
+    inline bool IsInside (int Width, int Height, int X, int Y)
+       {
+       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+       return (bIsWOk && bIsHOk);
+       };
     
-    inline int GetStride (int Width){ int LineWidth = Width * 4;
-                                      if (LineWidth % 4) 
-                                         return (4 - (LineWidth % 4)); 
-                                      return (0); };
+    inline int GetStride (int Width)
+       { 
+       int LineWidth = Width * 4;
+       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
+       return (0); 
+       };
 
-    inline int GetLineWidth (int Width){ return ((Width * 4) + GetStride (Width)); };
+    inline int GetLineWidth (int Width)
+       {
+       return ((Width * 4) + GetStride (Width)); 
+       };
             
-    inline int SetPosition (int Width, int X, int Y){ return (Y * GetLineWidth(Width) + 4 * X); };
+    inline int SetPosition (int Width, int X, int Y)
+       {
+       return (Y * GetLineWidth(Width) + 4 * X); 
+       };
     
 private slots:
 
@@ -107,9 +126,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
-    void slotTimerDrop();
-    void slotTimerAmount();    
-    void slotTimerCoeff();    
+    void slotTimer();
 };
 
 }  // NameSpace DigikamRainDropImagesPlugin

@@ -75,9 +75,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                   parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
-    m_timerDrop   = 0;
-    m_timerAmount = 0;
-    m_timerCoeff  = 0;
+    m_timer = 0;
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
@@ -201,25 +199,19 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
     
     connect(m_dropInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimerDrop()));  
+            this, SLOT(slotTimer()));  
     
     connect(m_amountInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimerAmount()));  
+            this, SLOT(slotTimer()));  
     
     connect(m_coeffInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimerCoeff()));  
+            this, SLOT(slotTimer()));  
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
 {
-    if (m_timerDrop)
-       delete m_timerDrop;
-    
-    if (m_timerAmount)
-       delete m_timerAmount;
-    
-    if (m_timerCoeff)
-       delete m_timerCoeff;
+    if (m_timer)
+       delete m_timer;
 }
 
 void ImageEffect_RainDrop::slotHelp()
@@ -263,48 +255,19 @@ void ImageEffect_RainDrop::slotUser1()
        }
 } 
 
-void ImageEffect_RainDrop::slotTimerDrop()
+void ImageEffect_RainDrop::slotTimer()
 {
-    if (m_timerDrop)
+    if (m_timer)
        {
-       m_timerDrop->stop();
-       delete m_timerDrop;
+       m_timer->stop();
+       delete m_timer;
        }
     
-    m_timerDrop = new QTimer( this );
-    connect( m_timerDrop, SIGNAL(timeout()),
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
-    m_timerDrop->start(500, true);
+    m_timer->start(500, true);
 }
-
-void ImageEffect_RainDrop::slotTimerAmount()
-{
-    if (m_timerAmount)
-       {
-       m_timerAmount->stop();
-       delete m_timerAmount;
-       }
-    
-    m_timerAmount = new QTimer( this );
-    connect( m_timerAmount, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timerAmount->start(500, true);
-}
-
-void ImageEffect_RainDrop::slotTimerCoeff()
-{
-    if (m_timerCoeff)
-       {
-       m_timerCoeff->stop();
-       delete m_timerCoeff;
-       }
-    
-    m_timerCoeff = new QTimer( this );
-    connect( m_timerCoeff, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timerCoeff->start(500, true);
-}
-
 
 void ImageEffect_RainDrop::slotEffect()
 {
@@ -575,7 +538,6 @@ void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int MinD
        memcpy (data, pResBits, BitCount);        
                 
     delete [] pResBits;
-
 }
 
 bool ImageEffect_RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits,
@@ -782,14 +744,6 @@ bool ImageEffect_RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBit
     return (true);
 }
 
-bool ImageEffect_RainDrop::IsInside (int Width, int Height, int X, int Y)
-{
-    bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-    bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-
-    return (bIsWOk && bIsHOk);
-}
-
 bool ImageEffect_RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize)
 {
     register int w, h, i = 0;
@@ -811,24 +765,6 @@ bool ImageEffect_RainDrop::SetDropStatusBits (int Width, int Height, uchar *pSta
         }
 
     return (true);
-}
-
-/* This function limits the RGB values                        
- *                                                                         
- * ColorValue        => Here, is an RGB value to be analized                   
- *                                                                             
- * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is     
- *                      white color). But R, G and B values has 256 values to be used   
- *                      so, this function analize the value and limits to this range   
- */   
-                     
-uchar ImageEffect_RainDrop::LimitValues (int ColorValue)
-{
-    if (ColorValue > 255)        // MAX = 255
-        ColorValue = 255;        
-    if (ColorValue < 0)          // MIN = 0
-        ColorValue = 0;
-    return ((uchar) ColorValue);
 }
 
 }  // NameSpace DigikamRainDropImagesPlugin
