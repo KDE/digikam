@@ -103,6 +103,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_gInput, SIGNAL(valueChanged (double)),
             SLOT(slotEffect()));
 
+    enableButtonOK( false );
     adjustSize();
 }
 
@@ -122,13 +123,15 @@ void ImageEffect_BCG::slotUser1()
 
 void ImageEffect_BCG::slotEffect()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
-
     double b = m_bInput->value();
     double c = m_cInput->value() + (double)(1.00);    
     double g = m_gInput->value() + (double)(1.00);
+
+    enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
+    Digikam::ImageIface* iface =
+        m_previewWidget->imageIface();
+
     iface->setPreviewBCG(b, c, g);
     m_previewWidget->update();
 }

@@ -26,7 +26,7 @@
 
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
- 
+
 // Qt includes.
  
 #include <qlayout.h>
@@ -111,6 +111,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     connect(m_lInput, SIGNAL(valueChanged (double)),
             SLOT(slotEffect()));
 
+    enableButtonOK( false );
     adjustSize();
 }
 
@@ -130,6 +131,12 @@ void ImageEffect_HSL::slotUser1()
 
 void ImageEffect_HSL::slotEffect()
 {
+    double hu = m_hInput->value();
+    double sa = m_sInput->value();    
+    double lu = m_lInput->value();
+    
+    enableButtonOK( hu != 0.0  || sa != 0.0 || lu != 0.0);
+    
     Digikam::ImageIface* iface =
         m_previewWidget->imageIface();
 
@@ -137,12 +144,6 @@ void ImageEffect_HSL::slotEffect()
     int   w     = iface->previewWidth();
     int   h     = iface->previewHeight();
         
-    double hu = m_hInput->value();
-    double sa = m_sInput->value();    
-    double lu = m_lInput->value();
-    int    al = 0;
-    
-    //adjustHSL(hu, sa, lu, al, data, w, h);
     calculateTransfers(hu, sa, lu);
     applyHSL(data, w, h);
                 
@@ -163,103 +164,13 @@ void ImageEffect_HSL::slotOk()
     double hu = m_hInput->value();
     double sa = m_sInput->value();    
     double lu = m_lInput->value();
-    int    al = 0;
 
-    //adjustHSL(hu, sa, lu, al, data, w, h);    
     calculateTransfers(hu, sa, lu);
     applyHSL(data, w, h);
 
     iface->putOriginalData(data);
     delete [] data;
     accept();
-}
-
-void ImageEffect_HSL::adjustHSL(double hu, double sa, double lu, int al, uint *data, int w, int h)
-{
-    int red, green, blue, alpha;
-    uint* newData = new uint[w*h];
-    memcpy(newData, data, w*h*sizeof(unsigned int));
-    
-    Imlib_Context context = imlib_context_new();
-    imlib_context_push(context);
-
-    Imlib_Image imTop = imlib_create_image_using_copied_data(w, h, newData);
-    imlib_context_set_image(imTop);
-    
-    imlib_context_set_color_hlsa((float)hu, (float)lu, (float)sa, al);
-    imlib_context_get_color(&red, &green, &blue, &alpha); 
-    
-    double r = (double)red   * (2.0 / 255.0);
-    double g = (double)green * (2.0 / 255.0);
-    double b = (double)blue  * (2.0 / 255.0);
-    double a = (double)alpha * (2.0 / 255.0);
-        
-    Imlib_Color_Modifier modifier;
-    DATA8 r_table[256];
-    DATA8 g_table[256];
-    DATA8 b_table[256];
-    DATA8 a_table[256];
-    DATA8 dummy_table[256];
-        
-    if (r == 1.0 && g == 1.0 && b == 1.0 && a == 1.0) 
-        return ;
-    
-    modifier = imlib_create_color_modifier();
-    
-    imlib_context_set_color_modifier(modifier);
-    imlib_reset_color_modifier();
-    
-    if (r == g && r == b && r == a) 
-       {
-       imlib_modify_color_modifier_gamma(r);
-       }
-    else 
-       {
-       imlib_get_color_modifier_tables(r_table, g_table, b_table, a_table);
-
-       if(r != 1.0) 
-          {
-          imlib_modify_color_modifier_gamma(r);
-          imlib_get_color_modifier_tables(r_table, dummy_table, dummy_table, dummy_table);
-          imlib_reset_color_modifier();
-          }
-
-       if(g != 1.0) 
-          {
-          imlib_modify_color_modifier_gamma(g);
-          imlib_get_color_modifier_tables(dummy_table, g_table, dummy_table, dummy_table);
-          imlib_reset_color_modifier();
-          }
-
-       if(b != 1.0) 
-          {
-          imlib_modify_color_modifier_gamma(b);
-          imlib_get_color_modifier_tables(dummy_table, dummy_table, b_table, dummy_table);
-          imlib_reset_color_modifier();
-          }
-
-       if(a != 1.0) 
-          {
-          imlib_modify_color_modifier_gamma(a);
-          imlib_get_color_modifier_tables(dummy_table, dummy_table, dummy_table, a_table);
-          imlib_reset_color_modifier();
-          }
-
-       imlib_set_color_modifier_tables(r_table, g_table, b_table, a_table);
-       }
-
-    imlib_apply_color_modifier();
-    imlib_free_color_modifier();
-
-    uint* ptr = imlib_image_get_data_for_reading_only();
-    memcpy(data, ptr, w*h*sizeof(unsigned int));
-    
-    imlib_context_set_image(imTop);
-    imlib_free_image_and_decache();
-    
-    imlib_context_pop();
-    imlib_context_free(context);
-    delete [] newData;
 }
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))

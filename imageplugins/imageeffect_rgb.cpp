@@ -133,6 +133,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_bInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
 
+    enableButtonOK( false );
     adjustSize();
 }
 
@@ -148,6 +149,10 @@ void ImageEffect_RGB::slotUser1()
 
 void ImageEffect_RGB::slotEffect()
 {
+    enableButtonOK(m_rInput->value() != 0 ||
+                   m_gInput->value() != 0 ||
+                   m_bInput->value() != 0);
+    
     Digikam::ImageIface* iface =
         m_previewWidget->imageIface();
 
@@ -155,8 +160,6 @@ void ImageEffect_RGB::slotEffect()
     int   w     = iface->previewWidth();
     int   h     = iface->previewHeight();
 
-    adjustSliders(m_rInput->value(), m_gInput->value(), m_bInput->value());
-                
     double r = ((double)m_rInput->value() + 100.0)/100.0;
     double g = ((double)m_gInput->value() + 100.0)/100.0;  
     double b = ((double)m_bInput->value() + 100.0)/100.0;
@@ -178,8 +181,6 @@ void ImageEffect_RGB::slotOk()
     int   w     = iface->originalWidth();
     int   h     = iface->originalHeight();
 
-    adjustSliders(m_rInput->value(), m_gInput->value(), m_bInput->value());
-            
     double r = ((double)m_rInput->value() + 100.0)/100.0;
     double g = ((double)m_gInput->value() + 100.0)/100.0;  
     double b = ((double)m_bInput->value() + 100.0)/100.0;
