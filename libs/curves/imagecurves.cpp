@@ -103,17 +103,12 @@ void ImageCurves::curvesChannelReset(int channel)
        m_curves->points[channel][j][1] = -1;
        }
 
-    // First and last point init.
+    // First and last points init.
        
     m_curves->points[channel][0][0]  = 0;
     m_curves->points[channel][0][1]  = 0;
     m_curves->points[channel][16][0] = 255;
     m_curves->points[channel][16][1] = 255;  
-    
-    // All curve type init.
-    
-    //m_curves->curve_type[channel] = CURVE_SMOOTH;
-    //curvesCalculateCurve(channel);  
 }
 
 void ImageCurves::curvesCalculateCurve(int channel)
