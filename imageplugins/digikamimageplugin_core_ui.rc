@@ -5,7 +5,7 @@
 
   <Menu name="Fix" >
    <text>Fi&amp;x</text>
-   <Menu name="Colors">
+   <Menu name="Colors" icon="blend">
      <text>&amp;Colors</text>
       <Action name="implugcore_bcg" /> 
       <Action name="implugcore_hsl" /> 
