@@ -339,12 +339,13 @@ KFileItem* PAlbum::fileItem() const
     return m_fileItem;    
 }
 
-QString PAlbum::getIconAbsolute() const
+KURL PAlbum::getIconKURL() const
 {
     KURL u(getKURL());
     u.addPath(m_icon);
+    u.cleanPath();
     
-    return u.prettyURL();
+    return u;
 }
 
 // --------------------------------------------------------------------------

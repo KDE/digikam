@@ -414,12 +414,11 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
     {
         PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
-        if(album && (album->getIconAbsolute() == 
-                     iconItem->fileItem()->url().prettyURL()))
+        if(album && (album->getIconKURL().equals(iconItem->fileItem()->url())))
         {
             QString err;
-            AlbumManager::instance()->updatePAlbumIcon( album,  
-                                                        "", true, err );        
+            AlbumManager::instance()->updatePAlbumIcon( album,  "",
+                                                        true, err );        
         }
     }
         
