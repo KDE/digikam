@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=Digikam tags kioslave
+Description[da]=Digikam tag-kioslave
 Description[et]=Digikami siltide I/O-moodul
 Description[fr]=kioslave tags de Digikam
 Description[it]=Kioslave dei tag di Digikam

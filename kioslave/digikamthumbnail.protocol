@@ -6,6 +6,7 @@ output=stream
 reading=true
 source=false
 Description=Digikam thumbnail kioslave
+Description[da]=Digikam miniature-kioslave
 Description[et]=Digikami pisipiltide I/O-moodul
 Description[fr]=kioslave vignettes de Digikam
 Description[it]=Kioslave delle miniature di Digikam
