@@ -110,7 +110,7 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Todo"));
     d->albumCollectionNames.append(i18n("Miscellaneous"));
 
-    d->albumSortOrder = AlbumSettings::ByCollection;
+    d->albumSortOrder = AlbumSettings::ByFolder;
     d->imageSortOrder  = AlbumSettings::ByIName;
                                           
     d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.xcf *.pcx";
@@ -153,7 +153,7 @@ void AlbumSettings::readSettings()
 
     d->albumSortOrder =
         AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
-                                                           (int)AlbumSettings::ByCollection));
+                                                           (int)AlbumSettings::ByFolder));
 
     d->imageSortOrder =
         AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
