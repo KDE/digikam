@@ -34,6 +34,7 @@
 #include <kglobal.h>
 #include <kfilemetainfo.h>
 #include <kdebug.h>
+#include <ktempfile.h>
 
 #include "thumbdb.h"
 #include "thumbnailjob.h"
@@ -413,9 +414,15 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         thumb.setText(QString("Software").latin1(),
                       0, QString("Digikam Thumbnail Generator"));
     }
-        
-    thumb.save(d->thumbRoot + d->curr_thumb, "PNG", 0);
 
+    KTempFile temp(d->thumbRoot + "digikam-tmp-", ".png");
+    if (temp.status() == 0)
+    {
+        thumb.save(temp.name(), "PNG", 0);
+        ::rename(QFile::encodeName(temp.name()),
+                 QFile::encodeName(d->thumbRoot + d->curr_thumb));
+    }
+    
     ThumbDB::instance()->putThumb( d->curr_url.path(1), thumb );
     
     emitThumbnail(thumb);
