@@ -128,11 +128,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                         "implugcore_convert_to");
     m_convertToAction->setDelayed(false);
 
-    m_convertToAction->insert( new KAction(i18n("Black-White"), "neutralbw", 0,
+    m_convertToAction->insert( new KAction(i18n("Neutral Black-White"), "neutralbw", 0,
                                this, SLOT(slotBW()),
                                actionCollection(), "implugcore_bw") );
 
-    m_convertToAction->insert( new KAction(i18n("Brown"), "browntonal", 0,
+    m_convertToAction->insert( new KAction(i18n("Brown"), "browntone", 0,
                                this, SLOT(slotBrown()),
                                actionCollection(), "implugcore_brown") );
 
