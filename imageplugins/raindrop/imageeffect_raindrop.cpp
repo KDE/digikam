@@ -130,7 +130,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Raindrop Effect Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);

@@ -128,7 +128,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Free Rotation Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);

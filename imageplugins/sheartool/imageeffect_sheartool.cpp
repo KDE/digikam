@@ -125,7 +125,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Shearing Image Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);

@@ -132,7 +132,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Film Grain Preview"),
+                                                           i18n("Preview"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     

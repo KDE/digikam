@@ -129,7 +129,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Charcoal Drawing Image Preview"),
+                                                           i18n("Preview"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     

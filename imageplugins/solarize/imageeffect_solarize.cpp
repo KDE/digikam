@@ -109,7 +109,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Solarize Image Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
