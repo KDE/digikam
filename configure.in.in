@@ -205,7 +205,7 @@ AC_SUBST(LIBKEXIF_CFLAGS)
 AC_SUBST(LIBKEXIF_LIBS)
 
 if test "x$have_libkexif" != "xyes"; then
-   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
 fi
 
 #------------------------------------------------------------------
