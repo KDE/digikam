@@ -171,7 +171,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
     {
         // a. dir in library being copied to another location
 
-        infoMessage(i18n("Copying folder %1 ...")
+        infoMessage(i18n("Copying folder\n%1")
                     .arg(src.path()));
         
         // lock the database
@@ -257,7 +257,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
     {
         // b. external dir being copied into library
 
-        infoMessage(i18n("Copying folder %1 ...")
+        infoMessage(i18n("Copying folder\n%1")
                     .arg(src.path()));
         
         bool success = true;
@@ -317,7 +317,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
     {
         // c. file from one album being copied to another album
 
-        infoMessage(i18n("Copying file %1 ...")
+        infoMessage(i18n("Copying file\n%1")
                     .arg(src.path()));
         
         // find the parent albums
@@ -410,7 +410,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
     {
         // d. external file being copied into an album
 
-        infoMessage(i18n("Copying file %1 ...")
+        infoMessage(i18n("Copying file\n%1")
                     .arg(src.path()));
 
         // first copy to a tmp file
@@ -501,7 +501,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
     {
         // moving or renaming an album;
 
-        infoMessage(i18n("Moving folder %1 ...")
+        infoMessage(i18n("Moving folder\n%1")
                     .arg(src.path()));
 
         // lock the database
@@ -575,7 +575,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
         // moving an external folder into album library
         // nothing to do here. just rename the folder
 
-        infoMessage(i18n("Moving folder %1 ...")
+        infoMessage(i18n("Moving folder\n%1")
                     .arg(src.path()));
         
         if (::rename( _src.data(), _dest.data()))
@@ -598,7 +598,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
     {
         // moving a file within the album library
 
-        infoMessage(i18n("Moving file %1 ...")
+        infoMessage(i18n("Moving file\n%1")
                     .arg(src.path()));
 
         // find the parent albums
@@ -689,7 +689,7 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
         // external file being moved into album library 
         // nothing to do here. just rename the file
 
-        infoMessage(i18n("Moving file %1 ...")
+        infoMessage(i18n("Moving file\n%1")
                     .arg(src.path()));
 
         if ( ::rename( _src.data(), _dest.data()))

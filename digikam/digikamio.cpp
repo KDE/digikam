@@ -116,10 +116,10 @@ void DigikamIO::slotProcessNext()
         if ( KDE_stat( QFile::encodeName(src.path()), &buff_src ) == -1 )
         {
             if ( errno == EACCES )
-                KMessageBox::error(0, i18n("Access denied to source %1")
+                KMessageBox::error(0, i18n("Access denied to source\n%1")
                                    .arg(src.prettyURL()));
             else
-                KMessageBox::error(0, i18n("Source %1 does not exist")
+                KMessageBox::error(0, i18n("Source\n%1\ndoes not exist")
                                    .arg(src.prettyURL()));
             emitResult();
             return;
@@ -130,10 +130,10 @@ void DigikamIO::slotProcessNext()
         if ( KDE_stat( QFile::encodeName(dest.path()), &buff_dest ) == -1 )
         {
             if ( errno == EACCES )
-                KMessageBox::error(0, i18n("Access denied to destination %1")
+                KMessageBox::error(0, i18n("Access denied to destination\n%1")
                                    .arg(dest.prettyURL()));
             else
-                KMessageBox::error(0, i18n("Destination folder %1 does not exist")
+                KMessageBox::error(0, i18n("Destination folder\n%1\ndoes not exist")
                                    .arg(dest.prettyURL()));
             emitResult();
             return;
@@ -311,7 +311,7 @@ void DigikamIO::slotCopying(KIO::Job*, const KURL& from, const KURL&)
     if (!m_showProgress || !m_progress)
         return;
 
-    m_progress->setLabelText(i18n("Copying %1 ...")
+    m_progress->setLabelText(i18n("Copying\n%1")
                              .arg(from.prettyURL()));
 }
 
@@ -320,7 +320,7 @@ void DigikamIO::slotMoving(KIO::Job*, const KURL& from, const KURL&)
     if (!m_showProgress || !m_progress)
         return;
     
-    m_progress->setLabelText(i18n("Moving %1 ...")
+    m_progress->setLabelText(i18n("Moving\n%1")
                              .arg(from.prettyURL()));
 }
 
