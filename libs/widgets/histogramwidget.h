@@ -70,20 +70,23 @@ public:
     // Constructor without image data (needed to use updateData() method after instance created).
     
     HistogramWidget(int w, int h,                              // Widget size.
-                    QWidget *parent=0, bool selectMode=true);
+                    QWidget *parent=0, bool selectMode=true,
+                    bool blinkComputation=true);
 
     // Constructor with image data and without image selection data.
     
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
-                    QWidget *parent=0, bool selectMode=true);
+                    QWidget *parent=0, bool selectMode=true,
+                    bool blinkComputation=true);
     
     // Constructor with image data and image selection data.
     
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     uint *s_data, uint s_w, uint s_h,          // Image selection info.
-                    QWidget *parent=0, bool selectMode=true);
+                    QWidget *parent=0, bool selectMode=true,
+                    bool blinkComputation=true);
     
     ~HistogramWidget();
 
@@ -92,7 +95,8 @@ public:
     
     // Update histogram data method.
     void updateData(uint *i_data, uint i_w, uint i_h, 
-                    uint *s_data=0, uint s_w=0, uint s_h=0);
+                    uint *s_data=0, uint s_w=0, uint s_h=0, 
+                    bool blinkComputation=true);
     
     int   m_channelType;     // Channel type to draw.
     int   m_scaleType;       // Scale to use for drawing.
@@ -135,7 +139,9 @@ private:
     
     bool    m_inSelected;
     bool    m_selectMode;         // If true, a part of the histogram can be selected !
-    bool    m_blinkFlag;         
+    bool    m_blinkFlag; 
+    bool    m_blinkComputation;   // If true, a message will be displayed during histogram computation,
+                                  // else nothing (limit flicker effect in widget especially for small image/computation time).       
     
     QTimer *m_blinkTimer;
     

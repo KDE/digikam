@@ -53,19 +53,20 @@ namespace Digikam
 // Constructor without image data (needed to use updateData() method after instance created).
 
 HistogramWidget::HistogramWidget(int w, int h, 
-                                 QWidget *parent, bool selectMode)
+                                 QWidget *parent, bool selectMode, bool blinkComputation)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType    = ValueHistogram;
-    m_scaleType      = LogScaleHistogram;
-    m_colorType      = RedColor;
-    m_renderingType  = FullImageHistogram;
-    m_inSelected     = false;
-    m_blinkFlag      = false;
-    m_clearFlag      = HistogramNone;
-    m_selectMode     = selectMode;
-    m_xmin           = 0;
-    m_xmax           = 0;
+    m_channelType      = ValueHistogram;
+    m_scaleType        = LogScaleHistogram;
+    m_colorType        = RedColor;
+    m_renderingType    = FullImageHistogram;
+    m_inSelected       = false;
+    m_blinkFlag        = false;
+    m_clearFlag        = HistogramNone;
+    m_selectMode       = selectMode;
+    m_xmin             = 0;
+    m_xmax             = 0;
+    m_blinkComputation = blinkComputation;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -84,19 +85,20 @@ HistogramWidget::HistogramWidget(int w, int h,
 
 HistogramWidget::HistogramWidget(int w, int h, 
                                  uint *i_data, uint i_w, uint i_h, 
-                                 QWidget *parent, bool selectMode)
+                                 QWidget *parent, bool selectMode, bool blinkComputation)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType    = ValueHistogram;
-    m_scaleType      = LogScaleHistogram;
-    m_colorType      = RedColor;
-    m_renderingType  = FullImageHistogram;
-    m_inSelected     = false;
-    m_blinkFlag      = false;
-    m_clearFlag      = HistogramNone;
-    m_selectMode     = selectMode;
-    m_xmin           = 0;
-    m_xmax           = 0;
+    m_channelType      = ValueHistogram;
+    m_scaleType        = LogScaleHistogram;
+    m_colorType        = RedColor;
+    m_renderingType    = FullImageHistogram;
+    m_inSelected       = false;
+    m_blinkFlag        = false;
+    m_clearFlag        = HistogramNone;
+    m_selectMode       = selectMode;
+    m_xmin             = 0;
+    m_xmax             = 0;
+    m_blinkComputation = blinkComputation;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -116,19 +118,20 @@ HistogramWidget::HistogramWidget(int w, int h,
 HistogramWidget::HistogramWidget(int w, int h, 
                                  uint *i_data, uint i_w, uint i_h, 
                                  uint *s_data, uint s_w, uint s_h,
-                                 QWidget *parent, bool selectMode)
+                                 QWidget *parent, bool selectMode, bool blinkComputation)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType    = ValueHistogram;
-    m_scaleType      = LogScaleHistogram;
-    m_colorType      = RedColor;
-    m_renderingType  = FullImageHistogram;
-    m_inSelected     = false;
-    m_blinkFlag      = false;
-    m_clearFlag      = HistogramNone;
-    m_selectMode     = selectMode;
-    m_xmin           = 0;
-    m_xmax           = 0;
+    m_channelType      = ValueHistogram;
+    m_scaleType        = LogScaleHistogram;
+    m_colorType        = RedColor;
+    m_renderingType    = FullImageHistogram;
+    m_inSelected       = false;
+    m_blinkFlag        = false;
+    m_clearFlag        = HistogramNone;
+    m_selectMode       = selectMode;
+    m_xmin             = 0;
+    m_xmax             = 0;
+    m_blinkComputation = blinkComputation;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -215,8 +218,11 @@ void HistogramWidget::stopHistogramComputation(void)
 }
 
 void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
-                                 uint *s_data, uint s_w, uint s_h)
+                                 uint *s_data, uint s_w, uint s_h,
+                                 bool blinkComputation)
 {
+    m_blinkComputation = blinkComputation;
+    
     // Remove old histogram data from memory.
     if (m_imageHistogram)
        delete m_imageHistogram;
@@ -245,7 +251,7 @@ void HistogramWidget::slotBlinkTimerDone( void )
 
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
-    if (m_clearFlag == HistogramStarted)
+    if (m_clearFlag == HistogramStarted && m_blinkComputation)
        {
        QPixmap pm(size());
        QPainter p1;
