@@ -1617,7 +1617,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             {
                 QString errMsg;
                 AlbumManager::instance()->updatePAlbumIcon(destAlbum,
-                    urls.first().path(), true, errMsg);
+                    urls.first().filename(), true, errMsg);
             }
             return;
         }
