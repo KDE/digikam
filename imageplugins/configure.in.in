@@ -1,6 +1,20 @@
 #MIN_CONFIG(3.1)
 CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
 
+#------------------------------------------------------------------
+# Digikam headers detection
+#------------------------------------------------------------------
+
+AC_MSG_CHECKING(if Digikam is installed)
+KDE_CHECK_HEADER(digikam/imageplugin.h,  have_digikam=yes,  have_digikam=no)
+
+if test "$have_digikam" = "no"; then
+  AC_MSG_WARN([Can't find Digikam headers. 
+Please install Digikam from kdeextrager-3 to get the most out of DigikamImagePlugins]);
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
+fi
+
+
 #---------------------------------------------------------
 # imlib2-detection
 #---------------------------------------------------------
