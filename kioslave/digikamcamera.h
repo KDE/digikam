@@ -45,6 +45,8 @@ public:
     void listDir(const KURL& url);
     void stat(const KURL& url);
     void special(const QByteArray &data);
+    void copy (const KURL& src, const KURL& dest,
+               int  permissions, bool  overwrite);
 
     void openConnection();
     void closeConnection();

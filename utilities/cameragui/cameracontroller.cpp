@@ -24,6 +24,7 @@
 #include <kio/jobclasses.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
@@ -36,6 +37,7 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
+#include <imagewindow.h>
 #include "camerathumbjob.h"
 #include "cameradownloaddlg.h"
 #include "camerainfodialog.h"
@@ -118,6 +120,8 @@ CameraController::~CameraController()
 
 void CameraController::downloadAll(const QString& destFolder)
 {
+    slotCancel();
+
     CameraDownloadDlg dlg(d->parent, d->slave, d->itemList,
                           destFolder);
     dlg.exec();
@@ -126,6 +130,8 @@ void CameraController::downloadAll(const QString& destFolder)
 void CameraController::downloadSel(const KFileItemList& items,
                                    const QString& destFolder)
 {
+    slotCancel();
+
     CameraDownloadDlg dlg(d->parent, d->slave, items,
                           destFolder);
     dlg.exec();
@@ -139,6 +145,39 @@ void CameraController::deleteAll()
 void CameraController::deleteSel(const KFileItemList& )
 {
     
+}
+
+void CameraController::openFile(const KFileItem* item)
+{
+    if (!item)
+        return;
+
+    slotCancel();
+
+    KURL url;
+    url.setProtocol("digikamcamera");
+    url.setPath("/");
+
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << item->url() << KURL(locateLocal("tmp", "digikamcamera.tmp"))
+       << -1 << (Q_INT8) true;
+
+    KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_COPY, ba, false);
+    KIO::Scheduler::assignJobToSlave(d->slave, job);
+
+    job->setWindow(d->parent);
+    d->job = job;
+    d->state = ST_OPEN;
+
+    connect(job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotResult(KIO::Job*)));
+    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
+            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
+    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
+            SLOT(slotPercent(KIO::Job*, unsigned long)));
+
+    emit signalBusy(true);
 }
 
 void CameraController::getExif(const KFileItem* item)
@@ -315,6 +354,24 @@ void CameraController::slotResult(KIO::Job *job)
     {
         /* listing finished. start getting thumbnails */
         QTimer::singleShot(0, this, SLOT(slotThumbnails()));
+    }
+    if (d->state == ST_OPEN)
+    {
+        KURL url(locateLocal("tmp", "digikamcamera.tmp"));
+        KURL::List urlList;
+        urlList << url;
+
+        ImageWindow *im = ImageWindow::instance();
+        im->loadURL(urlList, url, d->model);
+        if (im->isHidden())
+            im->show();
+        else
+            im->raise();
+        im->setFocus();
+
+        // TODO: if the image is modified by the imageviewer
+        // try and upload the image back into the camera
+        // or disable saving the image completely for a camera image
     }
 
     d->state = ST_NONE;

@@ -64,6 +64,7 @@ public:
     void deleteAll();
     void deleteSel(const KFileItemList& items);
 
+    void openFile(const KFileItem* item);
     void getExif(const KFileItem* item);
     
 private:

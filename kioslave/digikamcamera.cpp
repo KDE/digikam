@@ -335,6 +335,28 @@ void DigikamCamera::stat(const KURL& url)
     }
 }
 
+void DigikamCamera::copy(const KURL& src, const KURL& dest,
+                         int , bool )
+{
+    if (src.protocol() != "digikamcamera")
+    {
+        error(KIO::ERR_COULD_NOT_READ, i18n("File not present on camera"));
+    }
+    else if (dest.protocol() != "file")
+    {
+        error(KIO::ERR_COULD_NOT_READ, i18n("Destination file is not a local file"));
+    }
+    else
+    {
+        QString folder(src.directory());
+        QString name(src.fileName());
+        if (m_camera->downloadItem(folder, name, dest.path()) != GPCamera::GPSuccess)
+            error(KIO::ERR_COULD_NOT_READ, i18n("Failed to download file %1").arg(name));
+    }
+
+    finished();
+}
+
 void DigikamCamera::slotErrorMsg(const QString& msg)
 {
     error(KIO::ERR_UNKNOWN, msg);

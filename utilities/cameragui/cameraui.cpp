@@ -137,6 +137,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     connect(d->guiClient, SIGNAL(signalCameraInfo()),
             d->controller, SLOT(slotCameraInfo()));
     
+    connect(d->guiClient, SIGNAL(signalFileView()),
+            this, SLOT(slotFileView()));
     connect(d->guiClient, SIGNAL(signalFileProps()),
             this, SLOT(slotFileProperties()));
     connect(d->guiClient, SIGNAL(signalFileExif()),
@@ -203,7 +205,7 @@ void CameraUI::slotSelectionChanged()
 
     d->guiClient->m_downloadSelAction->setEnabled(selected);
     d->guiClient->m_deleteSelAction->setEnabled(selected);
-    //d->guiClient->m_fileViewAction->setEnabled(selected);
+    d->guiClient->m_fileViewAction->setEnabled(selected);
     d->guiClient->m_filePropsAction->setEnabled(selected);
     d->guiClient->m_fileExifAction->setEnabled(selected);
 }
@@ -283,6 +285,19 @@ void CameraUI::slotProgressHide()
 {
     d->progressBar->setProgress(0);
     d->progressBar->hide();
+}
+
+void CameraUI::slotFileView()
+{
+    slotFileView(d->view->firstSelectedItem());
+}
+
+void CameraUI::slotFileView(CameraIconItem* item)
+{
+    if (!item)
+        return;
+
+    d->controller->openFile(item->fileItem());
 }
 
 void CameraUI::slotFileProperties()
