@@ -11,7 +11,7 @@ Name[sv]=Insticksprogram för solarisering
 Name[ta]=பிம்பசொருகுப்பொருள்_சாலரைஸ்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Image solarize effect plugin for digikam
 Comment[da]=Solariséreffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Solarisierungseffektes

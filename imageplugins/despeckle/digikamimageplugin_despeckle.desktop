@@ -10,7 +10,7 @@ Name[sv]=Insticksprogram för ytutjämning
 Name[ta]=பிம்பசொருகுப்பொருள்_ 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Despeckle image filter plugin for digikam
 Comment[da]=Pletfjernings-plugin til Digikam
 Comment[de]=Digikam Plugin zum Entfernen von Flecken

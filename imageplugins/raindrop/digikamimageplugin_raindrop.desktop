@@ -9,7 +9,7 @@ Name[sv]=Insticksprogram för regndroppar
 Name[ta]=பிம்பசொருகுப்பொருள்_மழைத்துளி
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digikam
 Comment[da]=Regndråbeeffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Regentropfeneffektes

@@ -10,6 +10,7 @@ Name[sv]=Insticksprogram för nivåjustering
 Name[ta]=பிம்பசொருகுப்பொருள்_சரிசெய்யும் நிலைகள்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digikam
 Comment[da]=Histogramniveaujustering-plugin til Digikam

@@ -3,7 +3,7 @@ Name=ImagePlugin_FreeRotation
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Free rotation plugin for digikam
 
 X-KDE-Library=digikamimageplugin_freerotation

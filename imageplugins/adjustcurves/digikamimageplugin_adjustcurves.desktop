@@ -2,6 +2,7 @@
 Name=ImagePlugin_AdjustCurves
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
 
 Comment=Image histogram adjust curves plugin for digikam
 

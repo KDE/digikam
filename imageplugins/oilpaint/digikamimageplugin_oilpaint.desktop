@@ -10,7 +10,7 @@ Name[sv]=Insticksprogram för oljemålning
 Name[ta]=பிம்பசொருகுபொருள்_ஆயில்பெயிண்ட்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Oil paint image effect plugin for digikam
 Comment[da]=Oliemalerieffekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Ölgemäldeeffektes

@@ -10,7 +10,7 @@ Name[ta]=பிம்பசொருகுப்பொருள்_ ஃபில
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Film grain image effect plugin for digikam
 Comment[da]=Kornet film-effekt-plugin til Digikam
 Comment[de]=Digikam Plugin zum Erzeugen eines Effektes von Körnigen Film

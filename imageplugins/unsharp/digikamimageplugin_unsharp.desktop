@@ -1,26 +1,26 @@
 [Desktop Entry]
 Name=ImagePlugin_Unsharp
 Name[da]=Formindsk skarphed
-Name[it]=PluginImmagini_RiduzioneContrasto
+Name[it]=PluginImmagini_MascheraContrasto
 Name[nl]=Afbeeldingplugin_Onscherp
 Name[pt]='Plugin' de Desafiar
 Name[pt_BR]='Plugin' de Desafiar
 Name[sr]=Сликовни прикључак — ублажавање
-Name[sv]=Insticksprogram för oskärpa
+Name[sv]=Insticksprogram för oskarp mask
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
-
+Encoding=UTF-8
 Comment=Unsharped mask image filter plugin for digikam
 Comment[da]=Formindsk skarphed-filter til Digikam
 Comment[de]=Digikam Plugin zum Filtern mit einer Unschärfemaske
 Comment[et]=Digikami teravustamise pildimaskifilter
 Comment[fr]=Module externe de Digikam pour renforcer la netteté d'une image
-Comment[it]=Plugin di effetto di riduzione del contrasto delle immagini per Digikam
+Comment[it]=Plugin di effetto di maschera di contrasto delle immagini per Digikam
 Comment[nl]=Digikam-filterplugin voor onscherp afbeeldingmasker
 Comment[pt]='Plugin' de filtro de imagem não afiada para o digikam
 Comment[pt_BR]='Plugin' de filtro de imagem não afiada para o digikam
 Comment[sr]=Digikam-ов прикључак за филтер маске ублажавања слика
-Comment[sv]=Digikam insticksprogram för bildfiltrering med mask för oskärpa
+Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
 Comment[ta]=டிஜிகாமிற்கான மழுங்கப்பட்ட மூடி பிம்ப அலங்கார சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_unsharp
