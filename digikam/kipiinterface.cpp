@@ -239,12 +239,12 @@ DigikamImageCollection::~DigikamImageCollection()
 
 QString DigikamImageCollection::name()
 {
-    if ( album_->type() == Album::PHYSICAL )
+    if ( album_->type() == Album::TAG )
+    {
+        return i18n("Tag:") + album_->getTitle();
+    }
+    else
         return album_->getTitle();
-    else if ( album_->type() == Album::TAG )
-        return (i18n("Tag:") + album_->getURL());
-
-    return QString::null;
 }
 
 QString DigikamImageCollection::category()
@@ -253,6 +253,11 @@ QString DigikamImageCollection::category()
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
         return p->getCollection();
+    }
+    else if ( album_->type() == Album::TAG )
+    {
+        TAlbum *p = dynamic_cast<TAlbum*>(album_);
+        return (i18n("Tag:") + p->getURL());
     }
     else
         return QString::null;
@@ -434,6 +439,18 @@ QString DigikamImageCollection::uploadRootName()
     return (i18n("My Albums"));
 }
 
+bool DigikamImageCollection::isDirectory()
+{
+    if (album_->type() == Album::PHYSICAL)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// KIPI INTERFACE IMPLEMENTATION CLASS //////////////////////////////////////////
@@ -507,6 +524,7 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 
     /*
      * Disable this till the imagesgallery plugin is fixed
+     */
       
     TAlbumList talbumList = albumManager_->tAlbums();
     for ( QValueList<TAlbum*>::Iterator it = talbumList.begin();
@@ -521,8 +539,6 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
                                         *it, fileFilter );
         result.append( KIPI::ImageCollection( col ) );
     }
-
-    */
     
     
     return result;

@@ -121,6 +121,7 @@ public:
     virtual KURL uploadPath();
     virtual KURL uploadRoot();
     virtual QString uploadRootName();
+    virtual bool    isDirectory();
     
 private:
 
