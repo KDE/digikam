@@ -161,7 +161,7 @@ void CameraThread::run()
         {
         case(CameraCommand::gp_connect):
         {
-            sendInfo(i18n("Connecting to camera ..."));
+            sendInfo(i18n("Connecting to camera..."));
         
             bool result = d->camera->connect();
 
@@ -178,7 +178,7 @@ void CameraThread::run()
         }
         case(CameraCommand::gp_listfolders):
         {
-            sendInfo(i18n("Listing folders ..."));
+            sendInfo(i18n("Listing folders..."));
 
             QStringList folderList;
             folderList.append(d->camera->path());
@@ -188,7 +188,7 @@ void CameraThread::run()
             event->map.insert("folders", QVariant(folderList));
             QApplication::postEvent(parent, event);
         
-            sendInfo(i18n("Finished listing folders ..."));
+            sendInfo(i18n("Finished listing folders..."));
 
             break;
         }
@@ -196,7 +196,7 @@ void CameraThread::run()
         {
             QString folder = cmd->map["folder"].asString();
             
-            sendInfo(i18n("Listing files in %1 ...")
+            sendInfo(i18n("Listing files in %1...")
                      .arg(folder));
 
             GPItemInfoList itemsList;
@@ -229,7 +229,7 @@ void CameraThread::run()
             QString folder = cmd->map["folder"].asString();
             QString file   = cmd->map["file"].asString();
 
-            sendInfo(i18n("Getting thumbnail for %1/%2 ...")
+            sendInfo(i18n("Getting thumbnail for %1/%2...")
                      .arg(folder)
                      .arg(file));
 
@@ -254,7 +254,7 @@ void CameraThread::run()
             QString file   = cmd->map["file"].asString();
             QString dest   = cmd->map["dest"].asString();
 
-            sendInfo(i18n("Downloading file %1 ...")
+            sendInfo(i18n("Downloading file %1...")
                      .arg(file));
 
             bool result = d->camera->downloadItem(folder, file, dest);
@@ -282,7 +282,7 @@ void CameraThread::run()
             QString folder = cmd->map["folder"].asString();
             QString file   = cmd->map["file"].asString();
 
-            sendInfo(i18n("Deleting file %1 ...")
+            sendInfo(i18n("Deleting file %1...")
                      .arg(file));
 
             bool result = d->camera->deleteItem(folder, file);
