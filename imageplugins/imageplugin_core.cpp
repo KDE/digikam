@@ -78,7 +78,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
 
-    KAction *stretchContrastAction = new KAction(i18n("Stretch Contrast"), 0,
+    KAction *stretchContrastAction = new KAction(i18n("Stretch Contrast"), "stretchcontrast", 0,
                 this, SLOT(slotNormalize()),
                 actionCollection(), "implugcore_stretch_contrast");
     stretchContrastAction->setWhatsThis( i18n( "This option enhances the contrast and brightness "
@@ -87,7 +87,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                                "everything in between." ));                
 
     
-    KAction *normalizeAction = new KAction(i18n("Normalize"), 0,
+    KAction *normalizeAction = new KAction(i18n("Normalize"), "normalize", 0,
                 this, SLOT(slotNormalize()),
                 actionCollection(), "implugcore_normalize");
     normalizeAction->setWhatsThis( i18n( "This option scales brightness values across the active "
@@ -96,7 +96,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                          "altering its hue. This is often a \"magic fix\" for "
                                          "images that are dim or washed out."));                
 
-    KAction *equalizeAction = new KAction(i18n("Equalize"), 0,
+    KAction *equalizeAction = new KAction(i18n("Equalize"), "equalize", 0,
                 this, SLOT(slotEqualize()),
                 actionCollection(), "implugcore_equalize");
     equalizeAction->setWhatsThis( i18n( "This option adjusts the brightness of colors across the "
@@ -108,7 +108,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                         "garbage. It is a very powerful operation, which can either work "
                                         "miracles on an image or destroy it."));  
                                          
-    KAction *autolevelseAction = new KAction(i18n("Auto Levels"), 0,
+    KAction *autolevelseAction = new KAction(i18n("Auto Levels"), "autolevels", 0,
                 this, SLOT(slotAutoLevels()),
                 actionCollection(), "implugcore_autolevels");
     autolevelseAction->setWhatsThis( i18n( "This option maximizes the tonal range in the Red, Green, "
