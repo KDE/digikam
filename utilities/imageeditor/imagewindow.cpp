@@ -129,12 +129,12 @@ ImageWindow::ImageWindow()
 
     // -- Some Accels not available from actions -------------
 
-    KAccel* accel = new KAccel(this);
-    accel->insert("Exit fullscreen", i18n("Exit fullscreen"),
-                  i18n("Exit out of the fullscreen mode"),
-                  Key_Escape, this, SLOT(slotEscapePressed()),
-                  false, true);
-    
+    m_accel = new KAccel(this);
+    m_accel->insert("Exit fullscreen", i18n("Exit fullscreen"),
+                    i18n("Exit out of the fullscreen mode"),
+                    Key_Escape, this, SLOT(slotEscapePressed()),
+                    false, true);
+
     // -- setup connections ---------------------------
     
     connect(m_guiClient, SIGNAL(signalNext()),
@@ -892,6 +892,24 @@ void ImageWindow::slotToggleFullScreen()
                 toolBar->show();
         }
 
+        // -- remove the imageguiclient action accels ----
+
+        unplugActionAccel(m_guiClient->m_navNextAction);
+        unplugActionAccel(m_guiClient->m_navPrevAction);
+        unplugActionAccel(m_guiClient->m_navFirstAction);
+        unplugActionAccel(m_guiClient->m_navLastAction);
+        unplugActionAccel(m_guiClient->m_saveAction);
+        unplugActionAccel(m_guiClient->m_saveAsAction);
+        unplugActionAccel(m_guiClient->m_zoomPlusAction);
+        unplugActionAccel(m_guiClient->m_zoomMinusAction);
+        unplugActionAccel(m_guiClient->m_zoomFitAction);
+        unplugActionAccel(m_guiClient->m_cropAction);
+        unplugActionAccel(m_guiClient->m_fileprint);
+        unplugActionAccel(m_guiClient->m_fileproperties);
+        unplugActionAccel(m_guiClient->m_fileDelete);
+        unplugActionAccel(m_guiClient->m_exifinfo);
+        unplugActionAccel(m_guiClient->m_commentedit);
+        
         m_fullScreen = false;
     }
     else 
@@ -910,6 +928,24 @@ void ImageWindow::slotToggleFullScreen()
                 m_guiClient->m_fullScreenAction->plug(toolBar);
         }
 
+        // -- Insert all the imageguiclient actions into the accel --
+
+        plugActionAccel(m_guiClient->m_navNextAction);
+        plugActionAccel(m_guiClient->m_navPrevAction);
+        plugActionAccel(m_guiClient->m_navFirstAction);
+        plugActionAccel(m_guiClient->m_navLastAction);
+        plugActionAccel(m_guiClient->m_saveAction);
+        plugActionAccel(m_guiClient->m_saveAsAction);
+        plugActionAccel(m_guiClient->m_zoomPlusAction);
+        plugActionAccel(m_guiClient->m_zoomMinusAction);
+        plugActionAccel(m_guiClient->m_zoomFitAction);
+        plugActionAccel(m_guiClient->m_cropAction);
+        plugActionAccel(m_guiClient->m_fileprint);
+        plugActionAccel(m_guiClient->m_fileproperties);
+        plugActionAccel(m_guiClient->m_fileDelete);
+        plugActionAccel(m_guiClient->m_exifinfo);
+        plugActionAccel(m_guiClient->m_commentedit);
+        
         showFullScreen();
         m_fullScreen = true;
     }
@@ -943,6 +979,24 @@ void ImageWindow::closeEvent(QCloseEvent *e)
 
     promptUserSave();
     e->accept();
+}
+
+void ImageWindow::plugActionAccel(KAction* action)
+{
+    if (!action)
+        return;
+    
+    m_accel->insert(action->text(),
+                    action->text(),
+                    action->whatsThis(),
+                    action->shortcut(),
+                    action,
+                    SLOT(activate()));
+}
+
+void ImageWindow::unplugActionAccel(KAction* action)
+{
+    m_accel->remove(action->text());    
 }
 
 void ImageWindow::slotImagePluginsHelp()

@@ -35,6 +35,8 @@
 
 class QPopupMenu;
 class QLabel;
+class KAccel;
+class KAction;
 
 class ImageGUIClient;
 class Canvas;
@@ -65,6 +67,7 @@ private:
     Digikam::GUIFactory* m_guiFactory;
     Canvas*              m_canvas;
     QPopupMenu*          m_contextMenu;
+    KAccel*              m_accel;
 
     QLabel*              m_nameLabel;
     QLabel*              m_zoomLabel;
@@ -90,6 +93,8 @@ private:
     void readSettings();
     void saveSettings();
     void promptUserSave();
+    void plugActionAccel(KAction* action);
+    void unplugActionAccel(KAction* action);
 
 signals:
 
