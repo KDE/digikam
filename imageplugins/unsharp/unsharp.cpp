@@ -191,6 +191,7 @@ void UnsharpDialog::slotUser1()
 
 void UnsharpDialog::slotEffect()
 {
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     uint*  data = (uint *)img.bits();
@@ -204,6 +205,7 @@ void UnsharpDialog::slotEffect()
     
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
 
 void UnsharpDialog::slotOk()
@@ -314,20 +316,20 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, double radius,
       {
       //gimp_pixel_rgn_get_col(&destPR, cur_col, x1+col, y1, y);
 
-      for (int pxit = 0 ; pxit < y ; ++pxit)
-          memcpy(cur_col + (pxit*bytes), newData + (x1+col+pxit+(y1*w))*bytes, bytes);
+      for (int n = 0 ; n < y ; ++n)
+          memcpy(cur_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
             
       //gimp_pixel_rgn_get_col(&destPR, dest_col, x1+col, y1, y);
       
-      for (int pxit = 0 ; pxit < y ; ++pxit)
-          memcpy(dest_col + (pxit*bytes), newData + (x1+col+pxit+(y1*w))*bytes, bytes);
+      for (int n = 0 ; n < y ; ++n)
+          memcpy(dest_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
       
       blur_line(ctable, cmatrix, cmatrix_length, cur_col, dest_col, y, bytes);
       
       //gimp_pixel_rgn_set_col(&destPR, dest_col, x1+col, y1, y);
       
-      for (int pxit = 0 ; pxit < y ; ++pxit)
-          memcpy(newData + (x1+col+pxit+(y1*w))*bytes, dest_col + (pxit*bytes), bytes);
+      for (int n = 0 ; n < y ; ++n)
+          memcpy(newData + x1+col+w*(n+y1), dest_col + (n*bytes), bytes);
       }
 
     // merge the source and destination (which currently contains the blurred version) images 

@@ -208,6 +208,7 @@ void DespeckleDialog::slotUser1()
 
 void DespeckleDialog::slotEffect()
 {
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     uint* data = (uint *)img.bits();
@@ -223,6 +224,7 @@ void DespeckleDialog::slotEffect()
 
     memcpy(img.bits(), (uchar *)data, img.numBytes());
     m_imagePreviewWidget->setPreviewImageData(img);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
 
 void DespeckleDialog::slotOk()
