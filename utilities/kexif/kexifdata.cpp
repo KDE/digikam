@@ -197,7 +197,10 @@ void KExifData::writeComment(const QString& filename, const QString& comment)
 
 void KExifData::writeFile(const QString& filename, const QString& comment, ImageOrientation orientation)
 {
-    unsigned int count = 0;
+    // position from start of exifsection
+    unsigned int position = 0; 
+
+    // stores single bytes read
     Q_UINT8 byte;
 
     /* Write to new Jpeg file and replace the EXIF data with the new data on the fly */
@@ -206,11 +209,13 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
 
     QDataStream stream( &file );
 
+    // JPEG data is little endian
     stream.setByteOrder(QDataStream::LittleEndian);
  
     Q_UINT16 header;
     stream >> header;
 
+    // check for valid JPEG header
     if(header != 0xd8ff)
     {
        kdDebug() << "No JPEG file." << endl;
@@ -241,9 +246,11 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
       return;
     }
     
+    // get length of EXIF section
     Q_UINT16 sectionLen;
     stream >> sectionLen;
 
+    // check for 'Exif' header
     Q_UINT8 exifHead[6];
     for( int i = 0; i < 6 ; i++ )
         stream >> exifHead[i];
@@ -267,17 +274,42 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
       return;
     } 
 
-    // TODO handle both byte orders
+    // switch to Motorola byte order
     if(byteOrder == 0x4D4D)
     {
-      kdDebug() << "Cannot currently handle Motorola byte order in EXIF data." << endl;
-      file.close();
-      return;
+        stream.setByteOrder(QDataStream::BigEndian);
     } 
 
-    // use counter to find byte offsets
-    count = 0;
+    // Check tag mark
+    Q_UINT16 tagMark;
+    stream >> tagMark;
 
+    if( tagMark != 0x002A ) {
+      kdDebug() << "could not read EXIF tag mark." << endl;
+      file.close();
+      return;
+    }
+
+    // get offset of first IFD
+    Q_UINT32 ifdOffset;
+    stream >> ifdOffset;
+
+    if( (Q_UINT16)ifdOffset > sectionLen - 2 || (Q_UINT16)ifdOffset < 2) {
+      kdDebug() << "Invalid IFD offset in EXIF data." << endl;
+      file.close();
+      return;
+    }
+
+    // We now read 8 bytes after start of Exif data
+    position = 8;
+
+    // seek forward to first IFD
+    for(int i = 0 ; i < (Q_UINT16)ifdOffset - 8 ; i++ ) {
+        stream >> byte;
+        position++;
+    }
+
+    
     QMemArray<unsigned char> buf(sectionLen);
 
     if( comment != "" ) 
@@ -286,20 +318,23 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
        Q_UINT32 userCommentOffset = 0;
        Q_UINT32 oldCommentLength = 0;
 
-       for(int i=0 ; i < (sectionLen - 2) ; i++)
+       int currentPosition = position;
+
+       for(int i=0 ; i < (sectionLen - currentPosition) ; i++)
        {
           stream >> byte;
           buf[i] = byte;
-          count++;
+          position++;
 
           // search for UserComment tag
           // this code is not perfect, but the probability that the sequence below is not
           // the UserComment tag is very small.
-          if(i > 4 && buf[i]==0x00 && buf[i-1]==0x07 && buf[i-2]==0x92 && buf[i-3]==0x86)
+          if(i > 4 && ((buf[i]==0x00 && buf[i-1]==0x07 && buf[i-2]==0x92 && buf[i-3]==0x86)
+                   || (buf[i]==0x07 && buf[i-1]==0x00 && buf[i-2]==0x86 && buf[i-3]==0x92)))
           {
              stream >> oldCommentLength;
              stream >> userCommentOffset;
-             count+=8;
+             position+=8;
              kdDebug() << "Found UserComment offset: " << userCommentOffset << endl;
              kdDebug() << "Found oldCommentLength: " << oldCommentLength << endl;
              break;
@@ -312,10 +347,10 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
           return;
        }
 
-       while(count < userCommentOffset + 6)
+       while(position < userCommentOffset)
        {
           stream >> byte;
-          count++;
+          position++;
        }
 
        // write character code ASCII into offset position
@@ -340,21 +375,43 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
     else 
     {
        // replace EXIF orientation tag
-       for(int i=0 ; i < (sectionLen - 2) ; i++)
+        
+       Q_UINT16 numberOfTags;
+       stream >> numberOfTags;
+       position += 2;
+       kdDebug() << "Number of EXIF tags in IFD0 section:" << numberOfTags << endl;
+       
+       int currentPosition = position;
+
+       for(int i=0 ; i < (sectionLen - currentPosition) ; i++)
        {
           stream >> byte;
+          position++;
           buf[i] = byte;
-          count++;
 
           // search for Orientation tag
           // this code is not perfect, but the probability that the sequence below is not
           // the Orientation tag is very small.
-          if(i > 8 && buf[i]==0x00 && buf[i-1]==0x00 && buf[i-2]==0x00 && buf[i-3]==0x01 
-                 && buf[i-4]==0x00 && buf[i-5]==0x03 && buf[i-6]==0x01 && buf[i-7]==0x12)
-          {
-             stream << orientation;
-             kdDebug() << "Wrote Image Orientation: " << orientation << endl;
-             break;
+          if( byteOrder == 0x4D4D ) {
+              if(i > 8  && buf[i]==0x01 && buf[i-1]==0x00 && buf[i-2]==0x00 && buf[i-3]==0x00 
+                      && buf[i-4]==0x03 && buf[i-5]==0x00 && buf[i-6]==0x12 && buf[i-7]==0x01)
+              {
+                  stream << (Q_UINT8)0x00;
+                  stream << (Q_UINT8)orientation;
+
+                  kdDebug() << "Wrote Image Orientation: " << orientation << endl;
+                  break;
+              }
+          } else {
+              if(i > 8 && buf[i]==0x00 && buf[i-1]==0x00 && buf[i-2]==0x00 && buf[i-3]==0x01 
+                     && buf[i-4]==0x00 && buf[i-5]==0x03 && buf[i-6]==0x01 && buf[i-7]==0x12)
+              {
+                  stream << (Q_UINT8)orientation;
+                  stream << (Q_UINT8)0x00;
+
+                  kdDebug() << "Wrote Image Orientation: " << orientation << endl;
+                  break;
+              }
           }
        }
     }
