@@ -44,12 +44,14 @@ namespace Digikam
 {
 
 HistogramWidget::HistogramWidget(int w, int h, uint *i_data,
-                                 uint i_w, uint i_h, QWidget *parent)
+                                 uint i_w, uint i_h, QWidget *parent,
+                                 bool selectMode)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
     m_inSelected     = false;
+    m_selectMode     = selectMode;
     m_xmin           = 0;
     m_xmax           = 0;
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h);
@@ -175,14 +177,24 @@ void HistogramWidget::paintEvent( QPaintEvent * )
         }
 
       // Drawing the histogram + selection or only the histogram.
-       
-      if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
-           x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+      
+      if ( m_selectMode == true )   // Selection mode enable ?
          {
-         p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight, x, 0);
-         p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight, x, wHeight - y);                 
+         if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
+              x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+            {
+            p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, 0);
+            p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, wHeight - y);                 
+            }
+         else 
+            {
+            p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, wHeight - y);                 
+            p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight - y, x, 0);                 
+            }
          }
       else 
          {
@@ -199,45 +211,27 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if (!m_inSelected) 
+    if ( m_selectMode == true ) // Selection mode enable ?
        {
-       m_inSelected = true;
-       m_xmin = 0;
-       m_xmax = 0;
-       repaint(false);
-       }
+       if (!m_inSelected) 
+          {
+          m_inSelected = true;
+          m_xmin = 0;
+          m_xmax = 0;
+          repaint(false);
+          }
        
-    m_xmin = (int)(e->pos().x()*(256.0/(float)width()));
-    m_xminOrg = m_xmin;
-    emit signalMousePressed( m_xmin );
+       m_xmin = (int)(e->pos().x()*(256.0/(float)width()));
+       m_xminOrg = m_xmin;
+       emit signalMousePressed( m_xmin );
+       }
 }
 
 void HistogramWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
-    m_inSelected = false;
-    int max = (int)(e->pos().x()*(256.0/(float)width()));
-    
-    if (max < m_xminOrg) 
+    if ( m_selectMode == true ) // Selection mode enable ?
        {
-       m_xmax = m_xminOrg;
-       m_xmin = max;
-       emit signalMousePressed( m_xmin );
-       }
-    else 
-       {
-       m_xmin = m_xminOrg;
-       m_xmax = max;
-       }
-    
-    emit signalMouseReleased( m_xmax );
-}
-
-void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
-{
-    setCursor( KCursor::crossCursor() );
-    
-    if (m_inSelected)
-       {
+       m_inSelected = false;
        int max = (int)(e->pos().x()*(256.0/(float)width()));
     
        if (max < m_xminOrg) 
@@ -251,10 +245,37 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
           m_xmin = m_xminOrg;
           m_xmax = max;
           }
-
+    
        emit signalMouseReleased( m_xmax );
+       }
+}
+
+void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
+{
+    if ( m_selectMode == true ) // Selection mode enable ?
+       {
+       setCursor( KCursor::crossCursor() );
+    
+       if (m_inSelected)
+          {
+          int max = (int)(e->pos().x()*(256.0/(float)width()));
+    
+          if (max < m_xminOrg) 
+             {
+             m_xmax = m_xminOrg;
+             m_xmin = max;
+             emit signalMousePressed( m_xmin );
+             }
+          else 
+             {
+             m_xmin = m_xminOrg;
+             m_xmax = max;
+             }
+
+          emit signalMouseReleased( m_xmax );
                  
-       repaint(false);
+          repaint(false);
+          }
        }
 }
 

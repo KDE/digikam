@@ -50,7 +50,8 @@ enum HistogramType
     
 public:
 
-    HistogramWidget(int w, int h, uint *i_data, uint i_w, uint i_h, QWidget *parent=0);
+    HistogramWidget(int w, int h, uint *i_data, uint i_w, uint i_h,
+                    QWidget *parent=0, bool selectMode=true);
     ~HistogramWidget();
 
     class ImageHistogram *m_imageHistogram;
@@ -82,6 +83,7 @@ private:
     int  m_xminOrg; 
     int  m_xmax;
     bool m_inSelected;
+    bool m_selectMode;         // If true, a part of the histogram can be selected !
 };
 
 }
