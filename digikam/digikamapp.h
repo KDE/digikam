@@ -149,8 +149,9 @@ private:
     KAction *mFullScreenAction;
 
     // Application Actions
-    KAction* mQuitAction;
-    KAction* mTipAction;
+    KAction *mQuitAction;
+    KAction *mTipAction;
+    KAction *mKipiHelpAction;
 
 private slots:
 
@@ -158,6 +159,7 @@ private slots:
     void slot_imageSelected(bool val);
     void slot_exit();
     void slotShowTip();
+    void slotShowKipiHelp();
     
     void slotSetup();
     void slotSetupChanged();

@@ -340,11 +340,20 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
+    mKipiHelpAction = new KAction(i18n("Plugins help"),
+                                   "kipi",
+                                   0,
+                                   this,
+                                   SLOT(slotShowKipiHelp()),
+                                   actionCollection(),
+                                   "help_kipi");
+
     mTipAction = KStdAction::tipOfDay(this,
                                    SLOT(slotShowTip()),
                                    actionCollection(),
                                    "help_tipofday");
-    
+
+                                       
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
     
     // Initialize Actions ---------------------------------------
@@ -534,6 +543,11 @@ void DigikamApp::slotShowTip()
     tipsFiles.append("kipi/tips");
     
     KTipDialog::showMultiTip(0, tipsFiles, true);
+}
+
+void DigikamApp::slotShowKipiHelp()
+{
+    KApplication::kApplication()->invokeHelp( QString::null, "kipi-plugins" ); 
 }
 
 void DigikamApp::loadPlugins()

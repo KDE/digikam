@@ -69,6 +69,7 @@
   </Menu>
   
   <Menu name="help"><Text>&amp;Help</Text>
+    <Action name="help_kipi"/>
     <Action name="help_tipofday"/>
   </Menu>
   
