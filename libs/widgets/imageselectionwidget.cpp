@@ -89,6 +89,12 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
 
 ImageSelectionWidget::~ImageSelectionWidget()
 {
+    if (m_timerW)
+       delete m_timerW;
+
+    if (m_timerH)
+       delete m_timerH;
+           
     delete [] m_data;
     delete m_iface;
     delete m_pixmap;

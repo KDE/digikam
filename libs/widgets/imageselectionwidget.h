@@ -27,6 +27,7 @@
 #include <qrect.h>
 
 class QPixmap;
+class QTimer;
 
 namespace Digikam
 {
