@@ -342,13 +342,14 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           break;
        }
     
-    // Drawing selection or all histogram values.
     // A QPixmap is used for enable the double buffering.
    
     QPixmap pm(size());
     QPainter p1;
     p1.begin(&pm, this);
-       
+    
+    // Drawing selection or all histogram values.
+           
     for (x = 0 ; x < wWidth ; x++)
       {
       double value = 0.0; 
@@ -475,7 +476,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);                 
-               p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+               
+               if ( x == wWidth/3 || x == 2*wWidth/3 )
+                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+               else
+                  p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+               
                p1.drawLine(x, wHeight - y, x, 0);                 
                }
             }
@@ -483,7 +489,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
             {
             p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
             p1.drawLine(x, wHeight, x, wHeight - y);                 
-            p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+            
+            if ( x == wWidth/3 || x == 2*wWidth/3 )
+               p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+            else
+               p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+            
             p1.drawLine(x, wHeight - y, x, 0);                 
             }
          }
@@ -526,7 +537,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yb);                 
                     p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
@@ -541,7 +557,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yr);                 
                     p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
@@ -556,7 +577,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yg);                 
                     p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);                 
-                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                    
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
@@ -578,7 +604,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
                  p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 
+                 if ( x == wWidth/3 || x == 2*wWidth/3 )
+                    p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                 else
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
@@ -593,7 +624,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yr);                 
                  p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 
+                 if ( x == wWidth/3 || x == 2*wWidth/3 )
+                    p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                 else
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
@@ -608,7 +644,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yg);                 
                  p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
-                 p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 
+                 if ( x == wWidth/3 || x == 2*wWidth/3 )
+                    p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                 else
+                    p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+                 
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
