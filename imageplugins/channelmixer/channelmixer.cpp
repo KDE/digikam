@@ -725,7 +725,7 @@ void ChannelMixerDialog::slotLoadGains()
         }
     else
         {
-        KMessageBox::error(this, i18n("Cannot load from the Gains Mixer text file."));
+        KMessageBox::error(this, i18n("Cannot load settings from the Gains Mixer text file."));
         return;
         }
 }
@@ -799,7 +799,7 @@ void ChannelMixerDialog::slotSaveGains()
         }
     else
         {
-        KMessageBox::error(this, i18n("Cannot save to the Gains Mixer text file."));
+        KMessageBox::error(this, i18n("Cannot save settings to the Gains Mixer text file."));
         return;
         }
 }
