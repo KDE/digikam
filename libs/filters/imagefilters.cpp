@@ -562,7 +562,7 @@ void ImageFilters::invertImage(uint *data, int w, int h)
 //////////////////////////////////////////////////////////////////////////////
 // Performs image antialiasing. This is a blur with less pixels.
 
-void ImageFilters::antiAliasImage(uint *data, int Width, int Height, int Sensibility)
+void ImageFilters::antiAliasImage(uint *data, int Width, int Height, int /*Sensibility*/)
 {
     if (!data || !Width || !Height)
        {
