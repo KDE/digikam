@@ -71,7 +71,7 @@ private:    // Private methods used internally.
     static inline int** Alloc2DArray (int Columns, int Rows)
        {
        // First, we declare our future 2d array to be returned
-       int** lpcArray = NULL;
+       int** lpcArray = 0L;
 
        // Now, we alloc the main pointer with Columns
        lpcArray = new int*[Columns];
@@ -145,6 +145,7 @@ public:   // Public methods.
                                   float rrGain, float rgGain, float rbGain,
                                   float grGain, float ggGain, float gbGain,
                                   float brGain, float bgGain, float bbGain);
+    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);                                  
 };
 
 }  // NameSpace Digikam

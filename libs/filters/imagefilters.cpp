@@ -46,6 +46,7 @@
  
 #include <imagehistogram.h>
 #include <imagelevels.h>
+#include <imageiface.h>
 
 // Local includes.
 
@@ -777,6 +778,13 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
                                      float grGain, float ggGain, float gbGain,
                                      float brGain, float bgGain, float bbGain)
 {
+    if (!data || !Width || !Height)
+       {
+       kdWarning() << ("ImageFilters::channelMixerImage: no image data available!")
+                   << endl;
+       return;
+       }
+        
     register int h, w, i = 0;
     uchar nGray, red, green , blue;
     int nStride = GetStride(Width);
@@ -818,6 +826,55 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
 
     memcpy (data, pResBits, BitCount);
     delete [] pResBits;
+}
+
+// Change color tonality of an image to appling a RGB color mask.
+
+void ImageFilters::changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask)
+{
+    if (!data || !width || !height)
+       {
+       kdWarning() << ("ImageFilters::changeTonality: no image data available!")
+                   << endl;
+       return;
+       }
+
+    int            r, g, b, h, s, v;
+    float          gray;
+    unsigned char *c;
+    unsigned int  *ptr = data;
+
+    h = redMask;
+    s = greenMask;
+    v = blueMask;
+    
+    Digikam::rgb_to_hsl(h, s, v);
+
+    for (int i = 0; i < width*height; i++) 
+       {
+       c = (unsigned char*) ptr;
+
+       b = c[0];
+       g = c[1];
+       r = c[2];
+        
+       // Convert to grayscale using tonal mask
+        
+       gray = 0.3 * r + 0.59 * g + 0.11 * b;
+       r = ROUND (gray);
+       g = r;
+       b = r;
+
+       r = h;
+       g = s;
+        
+       Digikam::hsl_to_rgb(r, g, b);
+        
+       c[0] = b;
+       c[1] = g;
+       c[2] = r;
+       ptr++;
+       }
 }
 
 }  // NameSpace Digikam

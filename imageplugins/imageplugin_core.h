@@ -60,11 +60,6 @@ private slots:
     void slotInvert();
     
     void slotBW();
-    void slotSepia();
-    void slotBrown();
-    void slotColdTone();
-    void slotSelenium();
-    void slotPlatinum();
     
     void slotRedEye();
     void slotRatioCrop();

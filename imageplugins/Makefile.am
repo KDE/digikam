@@ -1,27 +1,32 @@
-SUBDIRS = adjustlevels solarize despeckle oilpaint emboss charcoal unsharp \
-	  raindrop filmgrain freerotation adjustcurves sheartool antivignetting \
-	  lensdistortion superimpose perspective border blurfx distortionfx \
-	  inserttext infrared channelmixer 
+METASOURCES = AUTO
+SUBDIRS = pics
 
-AUTOMAKE_OPTIONS = foreign 
+INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor \
+	-I$(top_srcdir)/digikam/libs/histogram \
+	-I$(top_srcdir)/digikam/libs/levels \
+	-I$(top_srcdir)/digikam/libs/filters \
+	-I$(top_srcdir)/digikam/libs/widgets \
+	$(all_includes) $(IMLIB2_CFLAGS)
 
-MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
+# Install this plugin in the KDE modules directory
+kde_module_LTLIBRARIES = digikamimageplugin_core.la
 
-picsdir = $(kde_datadir)/digikamimageplugins/data
-pics_DATA = digikamimageplugins_banner_left.png
+digikamimageplugin_core_la_SOURCES = \
+	imageplugin_core.cpp \
+	imageeffect_bwsepia.cpp imageeffect_ratiocrop.cpp \
+	imageeffect_bcg.cpp imageeffect_redeye.cpp \
+	imageeffect_blur.cpp imageeffect_sharpen.cpp \
+	imageeffect_rgb.cpp imageeffect_hsl.cpp 
 
-iconsdir = $(kde_datadir)/digikamimageplugins/icons/hicolor/32x32/actions
+digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
+	$(top_builddir)/digikam/digikam/libdigikam.la
 
-KDE_ICON = digikamimageplugins
+digikamimageplugin_core_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
-tip_DATA = tips
-tipdir = $(kde_datadir)/digikamimageplugins
+kde_services_DATA = digikamimageplugin_core.desktop
 
-messages: rc.cpp
-	$(PREPARETIPS) >> tips.cpp
-	LIST=`find . -name \tips.cpp`; \
-	if test -n "$$LIST"; then \
-		$(XGETTEXT) $$LIST -o $(podir)/digikamimageplugins.pot; \
-	fi
-	rm -f tips.cpp
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_core_ui.rc
 
+digikamimageplugin_coreicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_coreicon_ICON = AUTO

@@ -123,35 +123,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Filters menu actions.
 
-    m_convertToAction = new KActionMenu(i18n("&Convert to"), "bwtonal",
-                                        actionCollection(),
-                                        "implugcore_convert_to");
-    m_convertToAction->setDelayed(false);
+    new KAction(i18n("Black& White..."), "bwtonal", 0,
+                this, SLOT(slotBW()),
+                actionCollection(), "implugcore_convert_to");
 
-    m_convertToAction->insert( new KAction(i18n("Neutral Black-White"), "neutralbw", 0,
-                               this, SLOT(slotBW()),
-                               actionCollection(), "implugcore_bw") );
-
-    m_convertToAction->insert( new KAction(i18n("Brown"), "browntone", 0,
-                               this, SLOT(slotBrown()),
-                               actionCollection(), "implugcore_brown") );
-
-    m_convertToAction->insert( new KAction(i18n("Sepia"), "sepia", 0,
-                               this, SLOT(slotSepia()),
-                               actionCollection(), "implugcore_sepia") );
- 
-    m_convertToAction->insert( new KAction(i18n("Cold Tone"), "coldtone", 0,
-                               this, SLOT(slotColdTone()),
-                               actionCollection(), "implugcore_coldtone") );
-
-    m_convertToAction->insert( new KAction(i18n("Platinum"), "platinium", 0,
-                               this, SLOT(slotPlatinum()),
-                               actionCollection(), "implugcore_platinum") );
-                               
-    m_convertToAction->insert( new KAction(i18n("Selenium"), "selenium", 0,
-                               this, SLOT(slotSelenium()),
-                               actionCollection(), "implugcore_selenium") );
-    
     //-------------------------------
     // Transform menu actions.
     
@@ -297,44 +272,8 @@ void ImagePlugin_Core::slotInvert()
 
 void ImagePlugin_Core::slotBW()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::convertTOBW();
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotSepia()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::changeTonality(162, 132, 101);
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotBrown()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::changeTonality(129, 115, 104);
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotColdTone()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::changeTonality(102, 109, 128);
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotSelenium()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::changeTonality(122, 115, 122);
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotPlatinum()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_BWSepia::changeTonality(115, 110, 106);
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    ImageEffect_BWSepia dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotRedEye()
