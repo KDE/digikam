@@ -41,6 +41,8 @@
 #include <qtimer.h>
 #include <qcache.h>
 #include <qcolor.h>
+#include <qdragobject.h> 
+#include <qclipboard.h>
 
 // Local includes.
 
@@ -874,6 +876,27 @@ void Canvas::slotRestore()
 void Canvas::slotUndo()
 {
     d->im->undo();
+}
+
+void Canvas::slotCopy()
+{
+    int x, y, w, h;
+    d->im->getSelectedArea(x, y, w, h);
+
+    if (!w && !h )  // No current selection.
+        return;
+
+    QApplication::setOverrideCursor (Qt::waitCursor);
+    uint* data = d->im->getSelectedData();
+    
+    QImage selImg;
+    selImg.create(w, h, 32);
+    memcpy(selImg.bits(), data, selImg.numBytes());
+    
+    QApplication::clipboard()->setData(new QImageDrag(selImg), QClipboard::Clipboard);
+
+    delete [] data;
+    QApplication::restoreOverrideCursor ();
 }
 
 void Canvas::slotSelected()

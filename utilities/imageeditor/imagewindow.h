@@ -98,7 +98,6 @@ private:
     KAction       *m_saveAction;
     KAction       *m_saveAsAction;
     KAction       *m_restoreAction;
-    KAction       *m_undoAction;
     
     KAction       *m_zoomPlusAction;
     KAction       *m_zoomMinusAction;
@@ -120,6 +119,9 @@ private:
     KAction       *m_fileproperties;
     KAction       *m_fileDelete;
     KAction       *m_commentedit;
+    
+    KAction       *m_copyAction;
+    KAction       *m_undoAction;
     
     KAction       *m_imagePluginsHelp;
     

@@ -13,7 +13,6 @@
      <Separator/>
      <Action name="imageview_save" />
      <Action name="imageview_saveas" />
-     <Action name="imageview_undo" />
      <Action name="imageview_restore" />
      <Separator/>
      <Action name="imageview_delete" />
@@ -22,7 +21,14 @@
      <Separator/>
      <Action name="imageview_exit" />
   </Menu>
-
+    
+  <Menu name="Edit" >
+     <text>&amp;Edit</text>
+     <Action name="imageview_copy" />
+     <Separator/>
+     <Action name="imageview_undo" />
+  </Menu>
+  
   <Menu name="Image" >
    <text>&amp;Image</text>
    <Action name="comments_edit" /> 

@@ -207,12 +207,9 @@ void ImageWindow::buildGUI()
                                         actionCollection(), "imageview_saveas");
     m_restoreAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "imageview_restore");
-    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
-                                    actionCollection(), "imageview_undo");
     m_saveAction->setEnabled(false);
     m_restoreAction->setEnabled(false);
-    m_undoAction->setEnabled(false);
-
+    
     m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
                               CTRL+Key_P,
                               this, SLOT(slotFilePrint()),
@@ -241,6 +238,17 @@ void ImageWindow::buildGUI()
     KStdAction::quit(this, SLOT(close()),
                      actionCollection(), "imageview_exit");
 
+    // -- Edit actions ----------------------------------------------------------------                     
+
+    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
+                                    actionCollection(), "imageview_copy");
+    m_copyAction->setEnabled(false);
+        
+    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
+                                    actionCollection(), "imageview_undo");
+    m_undoAction->setEnabled(false);
+          
+           
     // -- View actions ----------------------------------------------------------------
     
     m_zoomPlusAction = new KAction(i18n("Zoom &In"), "viewmag+",
@@ -647,6 +655,7 @@ void ImageWindow::slotChanged(bool val)
 void ImageWindow::slotSelected(bool val)
 {
     m_cropAction->setEnabled(val);
+    m_copyAction->setEnabled(val);
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();

@@ -113,6 +113,8 @@ public slots:
     
     void slotRestore();
     void slotUndo();
+    
+    void slotCopy();
 
 private slots:
 
