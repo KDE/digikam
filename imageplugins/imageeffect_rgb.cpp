@@ -71,7 +71,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Cyan"), plainPage());
-    label->setAlignment ( Qt::AlignRight );
+    label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_rSlider");
     m_rSlider->setTickmarks(QSlider::Below);
@@ -79,13 +79,14 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
     hlay->addWidget(m_rSlider, 5);
     label    = new QLabel(i18n("Red"), plainPage());
+    label->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_rInput = new QSpinBox(-100, 100, 1, plainPage(), "m_rInput");
     hlay->addWidget(m_rInput, 1);
     
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Magenta"), plainPage());
-    label->setAlignment ( Qt::AlignRight );
+    label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_gSlider");
     m_gSlider->setTickmarks(QSlider::Below);
@@ -93,13 +94,14 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
     hlay->addWidget(m_gSlider, 5);
     label    = new QLabel(i18n("Green"), plainPage());
+    label->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_gInput = new QSpinBox(-100, 100, 1, plainPage(), "m_gInput");
     hlay->addWidget(m_gInput, 1);
  
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Yellow"), plainPage());
-    label->setAlignment ( Qt::AlignRight );
+    label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, plainPage(), "m_bSlider");
     m_bSlider->setTickmarks(QSlider::Below);
@@ -107,6 +109,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));    
     hlay->addWidget(m_bSlider, 5);
     label    = new QLabel(i18n("blue"), plainPage());
+    label->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     hlay->addWidget(label, 1);
     m_bInput = new QSpinBox(-100, 100, 1, plainPage(), "m_bInput");
     hlay->addWidget(m_bInput, 1);
