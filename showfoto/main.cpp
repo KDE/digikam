@@ -43,11 +43,11 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Description = i18n("digiKam Photo Viewer");
+    QString Description = i18n("digiKam Photo Viewer and editor");
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.1",
+                          "0.2",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2005, digiKam developers team"),
