@@ -133,7 +133,7 @@ HistogramWidget::~HistogramWidget()
 void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
                                  uint *s_data, uint s_w, uint s_h)
 {
-    // Remove form memory old histogram data.
+    // Remove old histogram data from memory.
     if (m_imageHistogram)
        delete m_imageHistogram;
 
@@ -148,7 +148,11 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
     repaint(false);
     
     // Send signal to refresh information if necessary.
-    emit signalMouseReleased( m_xmax );
+    if ( m_xmax == 0 && m_xmin == 0)
+       emit signalMouseReleased( 255 );      // No current selection.
+    else
+       emit signalMouseReleased( m_xmax );   // Current selection available.
+    
 }
 
 
