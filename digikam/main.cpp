@@ -214,9 +214,9 @@ int main(int argc, char *argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
     
-    KTipDialog::showMultiTip(0, tipsFiles, true);
+    KTipDialog::showMultiTip(0, tipsFiles, false);
 #else
-    KTipDialog::showTip(0, "digikam/tips", true);
+    KTipDialog::showTip(0, "digikam/tips", false);
 #endif
 
     return app.exec();
