@@ -1,3 +1,594 @@
+v0.7.2-beta1			08/02/05
+----------------------------------------------------------------------------
+2005-02-08 10:29  cgilles
+
+	* digikam.lsm, version.h: UPdate
+
+2005-02-07 22:06  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  fix conflict between accels for crop and copy
+
+2005-02-07 21:34  adridg
+
+	* configure.in.in: Obey settings
+
+2005-02-07 17:17  cgilles
+
+	* utilities/imageeditor/: canvas.cpp, canvas.h,
+	  digikamimagewindowui.rc, imagewindow.cpp, imagewindow.h: digiKam
+	  image editor : -Add new 'Edit' menu entry.  -Move 'undo' action
+	  in (standard KDE) -Add new 'copy' action to copy current
+	  selection to clipboard. You can paste this selection in other
+	  application like Kolorpaint, Gimp, Kword, etc...
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-07 16:57  cgilles
+
+	* imageplugins/imageplugin_core.cpp: fix broken slot
+
+2005-02-07 08:14  pahlibar
+
+	* showfoto/Makefile.am, utilities/imageeditor/undocache.cpp:
+	  in retrospect, storing the undolevels in a gdbm database was a
+	  bad idea. by storing the individual undo levels in plain binary
+	  cache files, a 10x speedup in saving/restoring undo level is
+	  gained CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-07 03:56  pahlibar
+
+	* imageplugins/: imageplugin_core.cpp, imageplugin_core.h:
+	  platinum spelled incorrectly
+
+2005-02-06 19:36  pahlibar
+
+	* utilities/imageeditor/undocache.cpp:
+	  use a unique name for the undocache db file, using the appname
+	  and pid
+
+2005-02-06 19:08  pahlibar
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/undoaction.cpp,
+	  utilities/imageeditor/undoaction.h:
+	  * Add changing brightness, contrast, gamma (used in showfoto)
+	  also as reversible actions.  * Add undo capability for showfoto
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-06 18:50  pahlibar
+
+	* showfoto/Makefile.am, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/digikamimagewindowui.rc,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/undoaction.cpp,
+	  utilities/imageeditor/undoaction.h,
+	  utilities/imageeditor/undocache.cpp,
+	  utilities/imageeditor/undocache.h,
+	  utilities/imageeditor/undomanager.cpp,
+	  utilities/imageeditor/undomanager.h:
+	  Undo for digiKam image-editor. The undo-stack design is very
+	  simple: actions are either reversible (rotate,flip) or
+	  irreversible (rest of the actions and all of the plugin actions).
+	  The reversible undos are implemented by just saving the commands
+	  and for the irreversible undos image copies are saved into a
+	  temporary database.
+
+	  At some later stage, this will be improved and redos & "History
+	  based undo-redo" will be implemented BUG: 87105
+
+2005-02-05 22:01  pahlibar
+
+	* imageplugins/imageeffect_ratiocrop.cpp:
+	  optimize by avoiding one image copy
+
+2005-02-05 19:41  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+	  when we create a new image using data created on the fly and set
+	  it as the main image, replacing the existing image, make sure to
+	  copy the image format over. otherwise the image format is empty
+	  and in some cases, the compression values will not be applied
+	  correctly CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-05 19:23  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp: simplify crop
+	  implementation. remove imlib2 depency
+
+2005-02-05 16:38  pahlibar
+
+	* digikam/digikamapp.cpp:
+	  that should be add images and not import folders
+
+2005-02-05 00:20  toma
+
+	* digikam/digikamapp.cpp: This adds "Import folders..." to the
+	  context menu of the album.  Solution idea by Renchi, reviewed by
+	  Renchi & approved by Renchi.	BUG: 96369
+
+2005-02-03 18:58  cgilles
+
+	* imageplugins/digikamimageplugin_core_ui.rc: Added action icon
+
+2005-02-03 13:05  cgilles
+
+	* imageplugins/: hi32-action-neutralbw.png, imageplugin_core.cpp:
+	  Fix icon
+
+2005-02-03 12:47  cgilles
+
+	* imageplugins/: hi32-action-browntone.png,
+	  hi32-action-coldtone.png, hi32-action-neutralbw.png,
+	  hi32-action-platinium.png, hi32-action-selenium.png,
+	  hi32-action-sepia.png, imageplugin_core.cpp: Add more icon
+	  actions yet
+
+2005-02-03 10:21  cgilles
+
+	* imageplugins/: hi32-action-autolevels.png,
+	  hi32-action-equalize.png, hi32-action-normalize.png,
+	  hi32-action-stretchcontrast.png, imageplugin_core.cpp: Added more
+	  action icons
+
+2005-02-03 09:15  ach
+
+	* libs/widgets/Makefile.am: exporting .h instead of .cpp. Fixes
+	  digikamimageplugins build outside cvs.
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-03 08:10  cgilles
+
+	* imageplugins/: hi32-action-blurimage.png,
+	  hi32-action-bwtonal.png, hi32-action-invertimage.png,
+	  hi32-action-ratiocrop.png, hi32-action-sharpenimage.png,
+	  imageplugin_core.cpp: Add new icon actions
+
+2005-02-02 19:01  pahlibar
+
+	* imageplugins/digikamimageplugin_core_ui.rc,
+	  utilities/imageeditor/digikamimagewindowui.rc:
+	  allow plugging of plugin actions into imagewindow toolbar
+
+2005-02-02 17:57  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  allow setting of shortcuts for the plugins. toolbar is proving to
+	  be a fight CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-02-02 17:19  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  manually read/save the mainwindowsettings to force flushing the
+	  config properly, so that the window size is correctly restored
+
+2005-02-02 17:00  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  make sure imageviewer windowsize is correctly restored everytime
+
+2005-02-02 16:51  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  popupmenu temporarily disabled. don't crash
+
+2005-02-02 16:34  cgilles
+
+	* imageplugins/hi32-action-adjustbcg.png,
+	  imageplugins/hi32-action-adjusthsl.png,
+	  imageplugins/hi32-action-adjustrgb.png,
+	  imageplugins/imageplugin_core.cpp,
+	  utilities/imageeditor/hi32-action-flip_image.png,
+	  utilities/imageeditor/hi32-action-resize_image.png,
+	  utilities/imageeditor/imagewindow.cpp: Add menu icons
+
+2005-02-02 13:42  cgilles
+
+	* imageplugins/: Makefile.am, hi32-action-redeyes.png,
+	  imageplugin_core.cpp: redeyes correction icon
+
+2005-02-02 12:56  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp: Fix blank line
+
+2005-02-02 10:03  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp: Always use image editor
+	  windows instance for child dialogs creation
+
+2005-02-02 09:53  cgilles
+
+	* utilities/imageeditor/: digikamimagewindowui.rc, imagewindow.cpp,
+	  imagewindow.h: Restored image plugins help menu entry
+
+2005-02-01 23:17  pahlibar
+
+	* digikam/Makefile.am, digikam/albumiconview.cpp,
+	  digikam/digikamapp.cpp, imageplugins/Makefile.am,
+	  imageplugins/digikamimageplugin_core_ui.rc,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, libs/Makefile.am,
+	  libs/guibuilder/.cvsignore, libs/guibuilder/Makefile.am,
+	  libs/guibuilder/guiclient.cpp, libs/guibuilder/guiclient.h,
+	  libs/guibuilder/guifactory.cpp, libs/guibuilder/guifactory.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/digikamimagewindowui.rc,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imageguiclient.h,
+	  utilities/imageeditor/imageplugin.cpp,
+	  utilities/imageeditor/imageplugin.h,
+	  utilities/imageeditor/imagepluginloader.cpp,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h:
+	  * Replaced native dynamic guibuilder system with kde xmlgui one *
+	  Core plugin ported to use the new system * Toolbars and shortcuts
+	  are now configurable within the imageviewer BUG: 96940
+
+2005-02-01 11:23  cgilles
+
+	* libs/widgets/: imageselectionwidget.cpp, imageselectionwidget.h:
+	  Fix missing delete timer in destructor
+
+2005-02-01 00:01  jahrens
+
+	* digikam/digikamapp.cpp: Yep Achim, you're right.
+
+	  BUG: 98305
+
+2005-01-31 20:21  pahlibar
+
+	* digikam/: albumiconview.cpp, kipiinterface.cpp:
+	  hold the file dates separately from the kfileitems and on
+	  refresh, reread the file dates and resort the items.	BUG: 98189
+
+2005-01-31 20:04  pahlibar
+
+	* digikam/: albumiconitem.cpp, albumiconitem.h, albumiconview.cpp,
+	  albumiconview.h, albumitemhandler.h, albummanager.cpp,
+	  albummanager.h, kipiinterface.cpp:
+	  clean up. use kurl everywhere to prevent unnecessary
+	  kurl::list<->qstringlist conversions.  use a separate member
+	  variable for time in albumiconitem. to be used for fixing 98189
+
+2005-01-31 18:53  pahlibar
+
+	* digikam/thumbview.cpp, digikam/thumbview.h,
+	  utilities/cameragui/cameraiconview.cpp:
+	  * expose delayed update function in thumbview * make use of it in
+	  camera icon view
+
+2005-01-31 18:51  pahlibar
+
+	* utilities/splashscreen/splashscreen.cpp:
+	  don't hardcode fontsizes in
+
+2005-01-31 00:52  jahrens
+
+	* utilities/splashscreen/: splashscreen.cpp, splashscreen.h:
+	  Additional animation while displaying messages on the splash
+	  screen.
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net,
+	  joern.ahrens@kdemail.net
+
+2005-01-30 22:13  cgilles
+
+	* digikam/digikamapp.cpp,
+	  utilities/imageeditor/imagepluginloader.cpp: Showing the real
+	  plugins number loaded at starting time to the splashcreen
+	  (plugins list set in setup dialog) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-30 21:46  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/imagepluginloader.cpp,
+	  utilities/imageeditor/imagepluginloader.h: Launching loading
+	  ImagePlugins progress in Splashcreen like kipi-plugins.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-30 06:13  scripty
+
+	* digikam/digikam.desktop,
+	  imageplugins/digikamimageplugin_core.desktop,
+	  kioslave/digikamio.protocol, kioslave/digikamtags.protocol,
+	  kioslave/digikamthumbnail.protocol, showfoto/showfoto.desktop,
+	  utilities/imageeditor/digikamimageplugin.desktop: CVS_SILENT made
+	  messages (.desktop file)
+
+2005-01-30 01:53  jahrens
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h, digikam/main.cpp,
+	  utilities/splashscreen/splashscreen.cpp,
+	  utilities/splashscreen/splashscreen.h: Display status messages on
+	  the splash screen while initializing digikam.
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net,
+	  joern.ahrens@kdemail.net
+
+2005-01-28 21:55  pahlibar
+
+	* configure.in.in:
+	  remove local pkg-config checks. its in kde-common now with better
+	  checking for pc files in the kde prefix and destination prefix
+	  (thanks, dfaure)
+
+2005-01-28 13:53  cgilles
+
+	* imageplugins/: imageeffect_bwsepia.cpp, imageeffect_bwsepia.h,
+	  imageplugin_core.cpp, imageplugin_core.h: digiKam filters : new
+	  classic Black and White photograph tonal Convertion: - Neutral
+	  BW.  - Sepia.  - Selenium.  - Platinium - Cold-Tone.	- Brown.
+
+	  Re-organize 'Convert to' filters option with a sub-menu.
+
+	  CCMAIl:digikam-devel@lists.sourceforge.net
+
+2005-01-28 09:23  cgilles
+
+	* utilities/splashscreen/digikam-splash.png: Update spashcreen for
+	  0.7.2
+
+2005-01-27 23:39  jahrens
+
+	* digikam/albumfolderview.cpp: BUG: 98026
+
+2005-01-27 15:43  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Finalize digiKam ratio crop
+	  tool
+
+2005-01-27 11:21  amantia
+
+	* digikam/Makefile.am, digikam/imagedescedit.cpp,
+	  utilities/cameragui/Makefile.am,
+	  utilities/imageeditor/Makefile.am, utilities/setup/Makefile.am:
+	  Most of digikam does not compile with --enable-final.
+
+2005-01-27 11:16  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  libs/widgets/imageselectionwidget.cpp: Aspect ratio crop digiKam
+	  tool : -fix minimum selection area to a visible size (50x50).
+	  -auto-correction of selection area width/height when mouse resize
+	  event CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-01-25 08:57  cgilles
+
+	* utilities/imageeditor/imagepluginloader.cpp: BugFix : digiKam
+	  image plugin core must be loaded at the before all others image
+	  plugins for create a consistant menu contruction in Image Editor.
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-01-25 07:51  cgilles
+
+	* utilities/: imageeditor/imagewindow.cpp, setup/setupeditor.cpp:
+	  Fix PNG compression and JPEG quality min and max values
+
+2005-01-24 22:35  cgilles
+
+	* libs/: filters/imagefilters.cpp, histogram/imagehistogram.cpp,
+	  histogram/imagehistogram.h: digikam histogram computation
+	  implementation : no need to have a bool flag for indicate to use
+	  a threaded/unthreaded computation method. We can use parent
+	  instance id instead.
+
+2005-01-24 21:42  cgilles
+
+	* imageplugins/imageplugin_core.cpp: Fix menu entries order
+
+2005-01-24 16:25  cgilles
+
+	* utilities/: imageeditor/imagewindow.cpp, setup/setupeditor.cpp:
+	  Bug #97777 : digikam image editor PNG compression settings use
+	  same limit that Photoshop and gimp CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-24 15:04  cgilles
+
+	* utilities/setup/setupeditor.cpp: Bug #97777: digiKam image editor
+	  setup : fixed 'JPEG Compression' by 'JPEG Quality' CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-24 14:46  cgilles
+
+	* digikam/Makefile.am, imageplugins/Makefile.am,
+	  imageplugins/imageeffect_colorsenhance.cpp,
+	  imageplugins/imageeffect_colorsenhance.h,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, libs/Makefile.am,
+	  libs/filters/.cvsignore, libs/filters/Makefile.am,
+	  libs/filters/imagefilters.cpp, libs/filters/imagefilters.h:
+	  digiKam image editor: - Add Image colors enhance filter in shared
+	  lib for DigikamImagePlugins.	- Fix old Normalize option like
+	  Stretch Contrast.  - Add new option Normalize using Gimp 2.x
+	  algorithm.
+
+	  Digikamimageplugins : - Fixed configure tests for using new
+	  digiKam filters lib.	- AntiVignetting plugin use new Normalize
+	  filter for digiKam core.
+
+	  CCMAIL : digikam-devel@lists.sourceforge.net
+
+2005-01-24 08:58  cgilles
+
+	* imageplugins/: imageeffect_ratiocrop.cpp,
+	  imageeffect_ratiocrop.h: digiKam ratio Crop tool: reset selection
+	  area with ratio properties are changed.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-24 08:53  cgilles
+
+	* libs/widgets/: Makefile.am, imageguidewidget.cpp,
+	  imageguidewidget.h, imageselectionwidget.cpp,
+	  imageselectionwidget.h: Added common guide widget (from
+	  FreeRotation tool) used in : - FreeRotation plugin.  - ShearTool
+	  plugin.  - LensDistortion plugin.
+
+2005-01-22 14:50  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: digiKam Aspect Ratio Crop
+	  tool : Added a new option for to set the selection area to the
+	  max. size accordinly with the current aspect ratio.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-22 11:56  cgilles
+
+	* libs/widgets/imageselectionwidget.cpp: digiKam Aspect Ratio crop
+	  tool : improve draging selection area control
+
+2005-01-22 10:30  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  libs/widgets/imageselectionwidget.cpp: digiKam Aspect Ratio Crop
+	  tool : remember X/Y position and width/height selection CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-01-21 16:29  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Bug fix in digiKam Aspect
+	  ratio crop tool : separate width and height "selection change"
+	  signals for to update dialog informations.
+
+2005-01-21 12:51  cgilles
+
+	* libs/widgets/imageselectionwidget.cpp: Increase drag corner sizes
+
+2005-01-21 08:03  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Aspect Ratio Crop tool
+	  digiKam image editor: added 'Rule Third Lines' guides for to help
+	  users to compose a photograph.
+
+	  'Rule Third Lines' guides are based on the 'golden rule' therory
+	  used by the most popular photographers (this theory is based on
+	  the Fibonacci works).
+
+	  If you want more informations about to use 'Rule Third Lines',
+	  please read at this url :
+	  http://www.megapixel.net/html/issueindex.php?lang=en
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-01-20 06:01  scripty
+
+	* kioslave/: digikamio.protocol, digikamtags.protocol,
+	  digikamthumbnail.protocol: CVS_SILENT made messages (.desktop
+	  file)
+
+2005-01-19 07:58  cgilles
+
+	* libs/widgets/imageselectionwidget.cpp: minor fix
+
+2005-01-19 00:21  pahlibar
+
+	* showfoto/thumbbar.cpp:
+	  this should be at the bottom
+
+2005-01-18 01:03  pahlibar
+
+	* showfoto/: thumbbar.cpp, thumbbar.h:
+	  tooltip support for showfoto
+
+2005-01-17 22:41  jahrens
+
+	* digikam/digikamapp.cpp: setAutoSaveSettings() was called too
+	  early. for imagewindow we need another solution.
+
+	  CCBUG: 96940
+
+2005-01-17 15:41  coles
+
+	* digikam/cameralist.cpp, imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_redeye.cpp,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  kioslave/digikamthumbnail.cpp:
+
+	  CVS_SILENT
+
+	  Corrected typos.
+
+2005-01-17 06:04  mueller
+
+	* configure.in.in, libs/widgets/imageselectionwidget.h: fix
+	  compilation
+
+2005-01-15 12:37  cgilles
+
+	* digikam/albumiconitem.cpp: Apply patch from Carsten GroB
+	  <carsten@siski.de> for fix album icon item date i18n using kde
+	  API.	CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-01-15 01:42  jahrens
+
+	* digikam/: digikamapp.cpp, digikamapp.h: BUG: 96941
+
+2005-01-13 21:30  pahlibar
+
+	* digikam/kipiinterface.cpp:
+	  pick image list sorted as in current view for tag albums, when
+	  the list is sent to kipi-plugins BUG: 96895
+
+2005-01-07 05:44  pahlibar
+
+	* imageplugins/imageeffect_sharpen.cpp:
+	  imlib2 sharpen function is broken. replaced with sharpening
+	  filter fudged from gimp BUG: 96290
+
+2005-01-06 22:13  pahlibar
+
+	* kioslave/: Makefile.am, digikamthumbnail.cpp, parse.c:
+	  partial fix for #96459. try parse.c from dave coffin before
+	  trying dcraw to see if we can actually extract the thumbnail from
+	  the images. the speed difference doesn't seem too substantial
+	  though CCBUG: 96459
+
+2005-01-05 18:06  pahlibar
+
+	* digikam/: cameralist.cpp, cameralist.h, digikamapp.cpp:
+	  if we fail to auto-detect the camera at the initial startup, give
+	  an option to the user to retry
+
+2005-01-05 17:48  pahlibar
+
+	* utilities/cameragui/cameraiconview.cpp:
+	  fixed broken selection for "undownloaded" (new) images BUG: 92977
+
+2005-01-04 22:53  deller
+
+	* version.h: micro-optimization, aproved by Caulier Gilles CCMAIL:
+	  Caulier Gilles <caulier.gilles@free.fr>
+
+2005-01-03 18:48  pahlibar
+
+	* ChangeLog:
+	  update changelog for release
+
+2005-01-03 18:43  pahlibar
+
+	* version.h:
+	  bump up version number
+
 v0.7.1				03/01/05
 ----------------------------------------------------------------------------
 2004-12-29 19:06  pahlibar
