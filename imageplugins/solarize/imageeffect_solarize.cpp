@@ -59,9 +59,14 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
                       m_parent(parent)
 {
     // About data and help button.
-    KAboutData* about = new KAboutData("solarizeimage", I18N_NOOP("Solarize Image"), "1.0",
-                                       I18N_NOOP("Solarize image plugin for Digikam."),
-                                       KAboutData::License_GPL, "(c) 2004, Renchi Raju", "",
+    
+    KAboutData* about = new KAboutData("digikamimageplugins",
+                                       I18N_NOOP("Solarize Image"), 
+                                       "0.7.0-cvs",
+                                       I18N_NOOP("A solarize image plugin for Digikam."),
+                                       KAboutData::License_GPL,
+                                       "(c) 2004, Renchi Raju", 
+                                       0,
                                        "http://digikam.sourceforge.net");
     
     about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),

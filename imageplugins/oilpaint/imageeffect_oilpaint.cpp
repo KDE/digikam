@@ -69,11 +69,16 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                       m_parent(parent)
 {
     // About data and help button.
-    KAboutData* about = new KAboutData("oilpaint", I18N_NOOP("Oil Paint"), "1.0",
-                                       I18N_NOOP("Oil painting image effect plugin for Digikam."),
-                                       KAboutData::License_GPL, "(c) 2004, Gilles Caulier", "",
-                                       "http://digikam.sourceforge.net");
     
+    KAboutData* about = new KAboutData("digikamimageplugins",
+                                       I18N_NOOP("Oil Paint"), 
+                                       "0.7.0-cvs",
+                                       I18N_NOOP("An oil painting image effect plugin for Digikam."),
+                                       KAboutData::License_GPL,
+                                       "(c) 2004, Gilles Caulier", 
+                                       0,
+                                       "http://digikam.sourceforge.net");
+                                       
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     

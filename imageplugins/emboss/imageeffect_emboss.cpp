@@ -69,9 +69,14 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
                       m_parent(parent)
 {
     // About data and help button.
-    KAboutData* about = new KAboutData("emboss", I18N_NOOP("Emboss"), "1.0",
-                                       I18N_NOOP("Emboss image effect plugin for Digikam."),
-                                       KAboutData::License_GPL, "(c) 2004, Gilles Caulier", "",
+    
+    KAboutData* about = new KAboutData("digikamimageplugins",
+                                       I18N_NOOP("Emboss"), 
+                                       "0.7.0-cvs",
+                                       I18N_NOOP("An embossed image effect plugin for Digikam."),
+                                       KAboutData::License_GPL,
+                                       "(c) 2004, Gilles Caulier", 
+                                       0,
                                        "http://digikam.sourceforge.net");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),

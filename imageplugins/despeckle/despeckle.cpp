@@ -80,9 +80,14 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
     
     // About data and help button.
-    KAboutData* about = new KAboutData("despeckle", I18N_NOOP("Noise reduction"), "1.0",
+    
+    KAboutData* about = new KAboutData("digikamimageplugins",
+                                       I18N_NOOP("Noise reduction"), 
+                                       "0.7.0-cvs",
                                        I18N_NOOP("A despeckle image filter plugin for Digikam."),
-                                       KAboutData::License_GPL, "(c) 2004, Gilles Caulier", "",
+                                       KAboutData::License_GPL,
+                                       "(c) 2004, Gilles Caulier", 
+                                       0,
                                        "http://digikam.sourceforge.net");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
