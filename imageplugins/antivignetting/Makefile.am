@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_antivignetting_ui.rc
+
+digikamimageplugin_antivignettingicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_antivignettingicon_ICON = AUTO
