@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qlabel.h>
+#include <qvbox.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qwhatsthis.h>
@@ -46,39 +47,41 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     QWidget* box = new QWidget( this );
     setMainWidget(box);
     QVBoxLayout *dvlay = new QVBoxLayout( box, 10, spacingHint() );
-
+    QGridLayout *grid = new QGridLayout( 2, 3 );
+    dvlay->addLayout( grid );
+    
     // --------------------------------------------------------
         
     m_label_gammaValue = new QLabel (i18n("Gamma:"), box);
-    dvlay->addWidget( m_label_gammaValue );
+    grid->addWidget( m_label_gammaValue, 0, 0 );
        
     m_gammaValue = new KIntNumInput(10, box);
     m_gammaValue->setRange(0, 200, 1, true );
     QWhatsThis::add( m_gammaValue, i18n("<p>Select here the Gamma value of image.") );
     m_label_gammaValue->setBuddy( m_gammaValue );
-    dvlay->addWidget( m_gammaValue );
+    grid->addWidget( m_gammaValue, 0, 1 );
     
     // --------------------------------------------------------
         
     m_label_brightnessValue = new QLabel (i18n("Brightness:"), box);
-    dvlay->addWidget( m_label_brightnessValue );
+    grid->addWidget( m_label_brightnessValue, 1, 0 );
        
     m_brightnessValue = new KIntNumInput(0, box);
     m_brightnessValue->setRange(-100, 100, 1, true );
     QWhatsThis::add( m_brightnessValue, i18n("<p>Select here the brightness value of image.") );
     m_label_brightnessValue->setBuddy( m_brightnessValue );
-    dvlay->addWidget( m_brightnessValue );
+    grid->addWidget( m_brightnessValue, 1, 1 );
     
     // --------------------------------------------------------
         
     m_label_contrastValue = new QLabel (i18n("Contrast:"), box);
-    dvlay->addWidget( m_label_contrastValue );
+    grid->addWidget( m_label_contrastValue, 2, 0 );
        
     m_contrastValue = new KIntNumInput(0, box);
     m_contrastValue->setRange(-100, 100, 1, true );
     QWhatsThis::add( m_contrastValue, i18n("<p>Select here the Gamma value of image.") );
     m_label_contrastValue->setBuddy( m_contrastValue );
-    dvlay->addWidget( m_contrastValue );
+    grid->addWidget( m_contrastValue, 2, 1 );
         
     // --------------------------------------------------------
     
