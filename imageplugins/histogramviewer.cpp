@@ -128,7 +128,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->insertItem( i18n("Colors") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display.<p>"
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: drawing the image luminosity values.<p>"
                                        "<b>Red</b>: drawing the red image channel values.<p>"
                                        "<b>Green</b>: drawing the green image channel values.<p>"
