@@ -28,6 +28,8 @@
 #include <kimageio.h>
 #include <kaccel.h>
 
+#include <kdeversion.h>
+
 #include "canvas.h"
 #include "thumbbar.h"
 #include "showfoto.h"
@@ -92,8 +94,14 @@ void ShowFoto::setupActions()
                             this, SLOT(slotAutoFit()),
                             actionCollection(), "zoom_fit");
 
+#if KDE_VERSION >= 0x30200
     KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                            actionCollection(), this, "full_screen");
+#else
+    KAction("Fullscreen",Key_F,
+                           this,SLOT(slotToggleFullScreen()),
+                           actionCollection(), "full_screen");
+#endif
     
     createGUI("showfotoui.rc", false);
 
