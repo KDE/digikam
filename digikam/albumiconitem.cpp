@@ -41,6 +41,7 @@
 #include <kfilemetainfo.h>
 #include <kurl.h>
 #include <kio/global.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <libkexif/kexifdata.h>
 
@@ -61,16 +62,7 @@
 
 void dateToString(const QDateTime& datetime, QString& str)
 {
-    int hr = datetime.time().hour();
-    hr = (hr > 12) ? (hr - 12) : hr;
-
-    str.sprintf("%4d/%2.2d/%2.2d, %2.2d:%2.2d%s",
-                datetime.date().year(),
-                datetime.date().month(),
-                datetime.date().day(),
-                hr,
-                datetime.time().minute(),
-                datetime.time() > QTime(12,0) ? "PM" : "AM");
+	str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
 QString squeezedText(QPainter* p, int width, const QString& text)
