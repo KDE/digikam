@@ -72,19 +72,19 @@ Image Viewer/Editor :
 ---------------------
 
 x Port from imlib1 to imlib2.                                      <Renchi Raju    - 0.7.0> 
-x New BCG and RGB setting dialogs with slidders.                   <Renchi Raju    - 0.7.0> 
+x New BCG setting dialogs with slidders.                           <Renchi Raju    - 0.7.0> 
 x Using KApplication class and main menu.                          <Renchi Raju    - 0.7.0> 
 x Added RedEyes correction.                                        <Renchi Raju    - 0.7.0> 
-o Added Blur/Sharpen image filters.                                
-o Added Settings dialog.                                           
-o Added progress bar during loadin/save action.
-o Added multithread interface for printing.
 x Added dockable toolbars.                                         <Renchi Raju    - 0.7.0> 
 x Added Plugins interface.                                         <Renchi Raju    - 0.7.0> 
-o Added Blur/Sharpen image filters.
+x Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.7.0>  
+x Added Color balance plugin.                                      <Gilles Caulier - 0.7.0>  
+* Added multithread interface for printing.                        <Gilles Caulier - 0.7.0>  
+o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
+o Added Settings dialog.                                           
+o Added progress bar during loadin/save action.
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.                              
-o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 
 
 SplashScreen :
