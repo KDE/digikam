@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=ImagePlugin_RainDrop
-Type=Service
-ServiceTypes=Digikam/ImagePlugin
-
-Comment=Rain dropping image effect plugin for digikam
-
-X-KDE-Library=digikamimageplugin_raindrop
-author=Gilles Caulier, caulier dot gilles at free dot fr
