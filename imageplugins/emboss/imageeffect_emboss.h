@@ -23,6 +23,10 @@
 #ifndef IMAGEEFFECT_EMBOSS_H
 #define IMAGEEFFECT_EMBOSS_H
 
+// Qt include.
+
+#include <qimage.h>
+
 // KDE include.
 
 #include <kdialogbase.h>
@@ -31,6 +35,7 @@ class QPushButton;
 class QSlider;
 
 class KDoubleSpinBox;
+class KProgress;
 
 namespace Digikam
 {
@@ -55,6 +60,8 @@ protected:
     
 private:
 
+    bool             m_cancel;
+
     QWidget         *m_parent;
     
     QPushButton     *m_helpButton;
@@ -65,13 +72,29 @@ private:
     KDoubleSpinBox  *m_radiusInput;
     KDoubleSpinBox  *m_sigmaInput;
     
+    KProgress    *m_progressBar;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    
+private:
+
+    void Emboss(uint* data, int w, int h, float Depth);
+    inline int Lim_Max (int Now, int Up, int Max);
+    inline uchar LimitValues (int ColorValue);
+    
+    /*
+    QImage Emboss(QImage &image, double radius, double sigma);    
+    int getOptimalKernelWidth(double radius, double sigma);
+    bool convolveImage(QImage *image, QImage *dest, const unsigned int order, const double *kernel);
+    */
     
 private slots:
 
     void slotHelp();
     void slotEffect();
     void slotOk();
+    void slotCancel();
+    void slotUser1();
     
     void slotSliderRadiusChanged(int v);
     void slotSpinBoxRadiusChanged(double v);
