@@ -963,6 +963,9 @@ void ImageView::setupButtons()
     connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
             SLOT(slotGotPreview(const KURL&, const QPixmap&)));
     
+    connect(m_thumbJob, SIGNAL(signalCompleted()),
+            SLOT(slotPreviewCompleted()));            
+            
     labelBox->setStretchFactor(d->nameComboBox, 5);
     
     d->countLabel = new QLabel(labelBox);
@@ -1954,6 +1957,14 @@ void ImageView::slotAbout( void )
 void ImageView::slotGotPreview(const KURL &url, const QPixmap &pixmap)
 {
     d->nameComboBox->insertItem( pixmap, url.filename() );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotPreviewCompleted(void)
+{
+    loadCurrentItem();
 }
 
 #include "imageview.moc"

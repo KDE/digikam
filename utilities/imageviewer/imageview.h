@@ -140,6 +140,7 @@ private slots:
     void slotHelp(void);
     void slotAbout(void);
     void slotGotPreview(const KURL &url, const QPixmap &pixmap);
+    void slotPreviewCompleted(void);
 };
 
 
