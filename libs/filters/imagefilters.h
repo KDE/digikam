@@ -33,7 +33,7 @@ class ImageFilters
 
 private:    // Private structures used internally.
 
-struct double_packet
+    struct double_packet
     {
     double red;
     double green;
@@ -41,7 +41,7 @@ struct double_packet
     double alpha;
     };
 
-struct short_packet
+    struct short_packet
     {
     unsigned short int red;
     unsigned short int green;
@@ -49,13 +49,20 @@ struct short_packet
     unsigned short int alpha;
     };
 
-struct NormalizeParam 
+    struct NormalizeParam 
     {
     uchar  lut[256];
     double min;
     double max;
     };
 
+    struct HSLParam 
+    {
+    int htransfer[256];
+    int ltransfer[256];
+    int stransfer[256];
+    };
+            
 private:    // Private methods used internally.
     
     // Methods for Gaussian blur.   
@@ -145,7 +152,10 @@ public:   // Public methods.
                                   float rrGain, float rgGain, float rbGain,
                                   float grGain, float ggGain, float gbGain,
                                   float brGain, float bgGain, float bbGain);
-    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);                                  
+    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);     
+    static void sharpenImage(uint* data, int w, int h, int r);
+    static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);
+
 };
 
 }  // NameSpace Digikam

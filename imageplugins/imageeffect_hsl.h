@@ -3,7 +3,7 @@
  * Date  : 2004-07-16
  * Description : HSL adjustement plugin for ImageEditor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,15 +46,9 @@ private:
     KDoubleNumInput      *m_hInput;
     KDoubleNumInput      *m_sInput;
     KDoubleNumInput      *m_lInput;
-    Digikam::ImageWidget *m_previewWidget;
-
-    int htransfer[256];
-    int ltransfer[256];
-    int stransfer[256];
     
-    void calculateTransfers(double hu, double sa, double li);
-    void applyHSL(uint *data, int w, int h);
-
+    Digikam::ImageWidget *m_previewWidget;
+    
 private slots:
 
     void slotUser1();

@@ -3,11 +3,8 @@
  * Date  : 2004-07-16
  * Description : HSL adjustement plugin for ImageEditor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
- * Includes code from gimp
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
- * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -20,11 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// Imlib2 include.
-
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
 
 // Qt includes.
  
@@ -43,6 +35,7 @@
 
 #include <imageiface.h>
 #include <imagewidget.h>
+#include <imagefilters.h>
 
 // Local includes.
 
@@ -131,21 +124,19 @@ void ImageEffect_HSL::slotUser1()
 
 void ImageEffect_HSL::slotEffect()
 {
-    double hu = m_hInput->value();
-    double sa = m_sInput->value();    
-    double lu = m_lInput->value();
+    double hu  = m_hInput->value();
+    double sa  = m_sInput->value();    
+    double lu  = m_lInput->value();
     
     enableButtonOK( hu != 0.0  || sa != 0.0 || lu != 0.0);
     
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
-    uint* data  = iface->getPreviewData();
-    int   w     = iface->previewWidth();
-    int   h     = iface->previewHeight();
+    uint* data = iface->getPreviewData();
+    int   w    = iface->previewWidth();
+    int   h    = iface->previewHeight();
         
-    calculateTransfers(hu, sa, lu);
-    applyHSL(data, w, h);
+    Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
                 
     iface->putPreviewData(data);
     delete [] data;
@@ -154,97 +145,21 @@ void ImageEffect_HSL::slotEffect()
 
 void ImageEffect_HSL::slotOk()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
-    uint* data  = iface->getOriginalData();
-    int   w     = iface->originalWidth();
-    int   h     = iface->originalHeight();
+    uint* data = iface->getOriginalData();
+    int   w    = iface->originalWidth();
+    int   h    = iface->originalHeight();
         
-    double hu = m_hInput->value();
-    double sa = m_sInput->value();    
-    double lu = m_lInput->value();
+    double hu  = m_hInput->value();
+    double sa  = m_sInput->value();    
+    double lu  = m_lInput->value();
 
-    calculateTransfers(hu, sa, lu);
-    applyHSL(data, w, h);
+    Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
 
     iface->putOriginalData(data);
     delete [] data;
     accept();
-}
-
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
-void ImageEffect_HSL::calculateTransfers(double hu, double sa, double li)
-{
-  int value;
-  int i;
-
-  /*  Calculate transfers  */
-  for (i = 0; i < 256; i++)
-  {
-      value = (int)(hu * 255.0 / 360.0);
-      if ((i + value) < 0)
-	  htransfer[i] = 255 + (i + value);
-      else if ((i + value) > 255)
-	  htransfer[i] = i + value - 255;
-      else
-	  htransfer[i] = i + value;
-
-      /*  Lightness  */
-      value = (int)(li * 127.0 / 100.0);
-      value = CLAMP (value, -255, 255);
-
-      if (value < 0)
-	  ltransfer[i] = ((i * (255 + value)) / 255);
-      else
-	  ltransfer[i] = (i + ((255 - i) * value) / 255);
-
-      /*  Saturation  */
-      value = (int)(sa * 255.0 / 100.0);
-      value = CLAMP (value, -255, 255);
-
-      /* This change affects the way saturation is computed. With the
-         old code (different code for value < 0), increasing the
-         saturation affected muted colors very much, and bright colors
-         less. With the new code, it affects muted colors and bright
-         colors more or less evenly. For enhancing the color in photos,
-         the new behavior is exactly what you want. It's hard for me
-         to imagine a case in which the old behavior is better.
-      */
-      stransfer[i] = CLAMP ((i * (255 + value)) / 255, 0, 255);
-  }
-}
-
-void ImageEffect_HSL::applyHSL(uint *data, int w, int h)
-{
-    uchar* c;
-    int    r,g,b;
-
-    unsigned int* ptr = data;
-
-    for (int i=0; i<w*h; i++) {
-
-         c = (unsigned char*) ptr;
-
-         b = c[0];
-         g = c[1];
-         r = c[2];
-
-         Digikam::rgb_to_hsl(r, g, b);
-         
-         r = htransfer[r];
-         g = stransfer[g];
-         b = ltransfer[b];
-
-         Digikam::hsl_to_rgb (r, g, b);
-
-         c[0] = b;
-         c[1] = g;
-         c[2] = r;
-
-         ptr++;
-    }
 }
 
 
