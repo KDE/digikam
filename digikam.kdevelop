@@ -1,7 +1,7 @@
 <!DOCTYPE kdevelop>
 <kdevelop>
   <general>
-    <author>Digikam team</author>
+    <author>digiKam team</author>
     <email>digikam-devel@lists.sourceforge.net</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
@@ -85,11 +85,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -117,14 +117,14 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
     </make>
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
       <mainprogram>digikam/digikam/digikam</mainprogram>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -150,22 +150,6 @@
         <f77flags/>
         <envvars/>
       </default>
-      <usingkipi>
-        <configargs>--enable-debug=full --enable-kipi</configargs>
-        <builddir>usingkipi</builddir>
-        <topsourcedir>../</topsourcedir>
-        <cppflags/>
-        <ldflags/>
-        <ccompiler>kdevgccoptions</ccompiler>
-        <cxxcompiler>kdevgppoptions</cxxcompiler>
-        <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags/>
-        <cxxflags/>
-        <f77flags/>
-      </usingkipi>
     </configurations>
   </kdevautoproject>
   <kdevcvs>
@@ -209,9 +193,9 @@
   </kdevcvsservice>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl/>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
 </kdevelop>
