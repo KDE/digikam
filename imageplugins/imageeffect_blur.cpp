@@ -115,17 +115,16 @@ void ImageEffect_Blur::slotEffect()
 
 void ImageEffect_Blur::slotOk()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
-
-    uint* data = iface->getOriginalData();
-    int w      = iface->originalWidth();
-    int h      = iface->originalHeight();
+    Digikam::ImageIface iface(0, 0);
+    
+    uint* data = iface.getOriginalData();
+    int w      = iface.originalWidth();
+    int h      = iface.originalHeight();
     int r      = m_radiusInput->value();
             
     blur(data, w, h, r);
            
-    iface->putOriginalData(data);
+    iface.putOriginalData(data);
     delete [] data;
     accept();
 }

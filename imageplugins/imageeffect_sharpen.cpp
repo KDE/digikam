@@ -115,17 +115,16 @@ void ImageEffect_Sharpen::slotEffect()
 
 void ImageEffect_Sharpen::slotOk()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface->getOriginalData();
-    int w      = iface->originalWidth();
-    int h      = iface->originalHeight();
+    uint* data = iface.getOriginalData();
+    int w      = iface.originalWidth();
+    int h      = iface.originalHeight();
     int r      = m_radiusInput->value();
             
     sharpen(data, w, h, r);
            
-    iface->putOriginalData(data);
+    iface.putOriginalData(data);
     delete [] data;
     accept();
 }

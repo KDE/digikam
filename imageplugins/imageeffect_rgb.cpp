@@ -117,9 +117,11 @@ ImageEffect_RGB::~ImageEffect_RGB()
 
 void ImageEffect_RGB::slotUser1()
 {
+    blockSignals(true);
     m_rInput->setValue(1.0);
     m_gInput->setValue(1.0);
     m_bInput->setValue(1.0);
+    blockSignals(false);
     slotEffect();
 } 
 
