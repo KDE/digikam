@@ -1087,9 +1087,11 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             return;
         
         QPopupMenu popMenu(this);
-        popMenu.insertItem( i18n("&Copy"), 10 );
-        popMenu.insertItem( i18n("&Move"), 11 );
-
+        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+        popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+        
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
         switch(id)
@@ -1102,7 +1104,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
                 fileList.append((*it).filename());
                 
             AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                                          fileList, false);
+                                                          fileList, true);
             break;
         }
         case 11:
@@ -1113,7 +1115,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
                 fileList.append((*it).filename());
                 
             AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                                          fileList, true);
+                                                          fileList, false);
             break;
         }
         default:
@@ -1131,18 +1133,20 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         KURLDrag::decode(event, srcURLs);
         
         QPopupMenu popMenu(this);
-        popMenu.insertItem( i18n("&Copy"), 10 );
-        popMenu.insertItem( i18n("&Move"), 11 );
-
+        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+        popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+        
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
         switch(id) {
         case 10: {
-            KIO::copy(srcURLs,destURL,true);
+            KIO::move(srcURLs,destURL,true);
             break;
         }
         case 11: {
-            KIO::move(srcURLs,destURL,true);
+            KIO::copy(srcURLs,destURL,true);
             break;
         }
         default:
