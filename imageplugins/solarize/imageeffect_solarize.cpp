@@ -130,6 +130,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
             SLOT(slotEffect()));
 
     adjustSize();
+    disableResize();      
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
