@@ -65,8 +65,8 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
-#include <imagepreviewwidget.h>
+#include <digikam/imageiface.h>
+#include <digikam/imagepreviewwidget.h>
 
 // Local includes.
 

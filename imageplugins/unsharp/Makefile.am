@@ -1,19 +1,17 @@
 METASOURCES = AUTO
 
-INCLUDES    = $(KDE_INCLUDES)/digikam \
-	$(all_includes)
+INCLUDES    = $(all_includes) 
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_unsharp.la
 
 digikamimageplugin_unsharp_la_SOURCES = \
 	imageplugin_unsharp.cpp \
-	unsharp.cpp
+	unsharp.cpp 
 
-digikamimageplugin_unsharp_la_LIBADD = $(LIB_KPARTS) \
-	$(kde_libraries)/libdigikam.la
+digikamimageplugin_unsharp_la_LIBADD = $(LIB_KPARTS) -ldigikam
 
-digikamimageplugin_unsharp_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+digikamimageplugin_unsharp_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
 kde_services_DATA = digikamimageplugin_unsharp.desktop
 

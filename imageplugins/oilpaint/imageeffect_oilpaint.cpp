@@ -37,6 +37,7 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qimage.h>
+#include <qslider.h>
 
 // KDE includes.
 
@@ -52,8 +53,8 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
-#include <imagepreviewwidget.h>
+#include <digikam/imageiface.h>
+#include <digikam/imagepreviewwidget.h>
 
 // Local includes.
 
@@ -68,6 +69,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                   parent, 0, true, true),
                       m_parent(parent)
 {
+    QString whatsThis;
+    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -101,13 +104,22 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Radius:"), plainPage());
-    m_numInput = new KDoubleNumInput(plainPage());
-    m_numInput->setPrecision(1);
-    m_numInput->setRange(0.1, 10.0, 0.1, true);
-    m_numInput->setValue(1.0);
-    hlay->addWidget(label, 1);
-    hlay->addWidget(m_numInput, 5);
+    
+    m_radiusSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_radiusSlider");
+    m_radiusSlider->setTickmarks(QSlider::Below);
+    m_radiusSlider->setTickInterval(10);
+    m_radiusSlider->setTracking ( false );
+    
+    m_radiusInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_radiusInput");
+    whatsThis = i18n("<p>Set here the radius of the gaussian not counting the center pixel.");
+    
+    QWhatsThis::add( m_radiusInput, whatsThis);
+    QWhatsThis::add( m_radiusSlider, whatsThis);
 
+    hlay->addWidget(label, 1);
+    hlay->addWidget(m_radiusSlider, 3);
+    hlay->addWidget(m_radiusInput, 1);
+    
     // -------------------------------------------------------------
     
     adjustSize();
@@ -115,12 +127,31 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_numInput, SIGNAL(valueChanged (double)),
+    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderRadiusChanged(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSpinBoxRadiusChanged(double)));            
+    connect(m_radiusInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));            
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
 {
+}
+
+
+void ImageEffect_OilPaint::slotSliderRadiusChanged(int v)
+{
+    blockSignals(true);
+    m_radiusInput->setValue((double)v/10.0);
+    blockSignals(false);
+}
+
+void ImageEffect_OilPaint::slotSpinBoxRadiusChanged(double v)
+{
+    blockSignals(true);
+    m_radiusSlider->setValue((int)(v*10.0));
+    blockSignals(false);
 }
 
 void ImageEffect_OilPaint::slotHelp()
@@ -131,15 +162,13 @@ void ImageEffect_OilPaint::slotHelp()
 
 void ImageEffect_OilPaint::closeEvent(QCloseEvent *e)
 {
-    delete m_numInput;
-    delete m_imagePreviewWidget;
     e->accept();    
 }
 
 void ImageEffect_OilPaint::slotEffect()
 {
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    double factor = m_numInput->value();
+    double factor = m_radiusInput->value();
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     QImage newImage = KImageEffect::oilPaintConvolve(image, factor);
     m_imagePreviewWidget->setPreviewImageData(newImage);
@@ -155,7 +184,7 @@ void ImageEffect_OilPaint::slotOk()
     uint* data    = iface.getOriginalData();
     int w         = iface.originalWidth();
     int h         = iface.originalHeight();
-    double factor = m_numInput->value();
+    double factor = m_radiusInput->value();
 
     if (data) 
         {

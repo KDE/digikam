@@ -1,19 +1,17 @@
 METASOURCES = AUTO
 
-INCLUDES    = $(KDE_INCLUDES)/digikam \
-	$(all_includes)   
+INCLUDES    = $(all_includes) 
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_charcoal.la
 
 digikamimageplugin_charcoal_la_SOURCES = \
 	imageplugin_charcoal.cpp \
-	imageeffect_charcoal.cpp
+	imageeffect_charcoal.cpp 
 
-digikamimageplugin_charcoal_la_LIBADD = $(LIB_KPARTS) \
-	$(kde_libraries)/libdigikam.la
+digikamimageplugin_charcoal_la_LIBADD = $(LIB_KPARTS) -ldigikam
 
-digikamimageplugin_charcoal_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+digikamimageplugin_charcoal_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
 kde_services_DATA = digikamimageplugin_charcoal.desktop
 

@@ -24,7 +24,7 @@
 
 // Digikam includes.
 
-#include <imageplugin.h>
+#include <digikam/imageplugin.h>
 
 class ImagePlugin_Unsharp : public Digikam::ImagePlugin
 {

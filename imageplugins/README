@@ -60,8 +60,5 @@ Notes :
 - More specifics compilation and installation options can be used with '.configure' script.
 Checked this with './configure --help' command line.
 
-- Some plugins can be disabled during the build process. Checked the end of 'configure.in.in' file
-and decomments the plugins lines corresponding. Then start the installation procedure.
-
 - You must build and install the 'digikam' source code before trying build this module.
 

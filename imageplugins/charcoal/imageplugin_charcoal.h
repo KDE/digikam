@@ -25,7 +25,7 @@
 
 // Digikam includes.
 
-#include <imageplugin.h>
+#include <digikam/imageplugin.h>
 
 class ImagePlugin_Charcoal : public Digikam::ImagePlugin
 {

@@ -57,11 +57,11 @@
 
 // Digikam includes.
  
-#include <imagehistogram.h>
-#include <imagelevels.h>
-#include <imageiface.h>
-#include <histogramwidget.h>
-#include <imagewidget.h>
+#include <digikam/imagehistogram.h>
+#include <digikam/imagelevels.h>
+#include <digikam/imageiface.h>
+#include <digikam/histogramwidget.h>
+#include <digikam/imagewidget.h>
 
 // Local includes.
 

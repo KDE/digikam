@@ -1,19 +1,17 @@
 METASOURCES = AUTO
 
-INCLUDES    = $(KDE_INCLUDES)/digikam \
-	$(all_includes)    
+INCLUDES    = $(all_includes) 
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_emboss.la
 
 digikamimageplugin_emboss_la_SOURCES = \
 	imageplugin_emboss.cpp \
-	imageeffect_emboss.cpp
+	imageeffect_emboss.cpp 
 
-digikamimageplugin_emboss_la_LIBADD = $(LIB_KPARTS) \
-	$(kde_libraries)/libdigikam.la
+digikamimageplugin_emboss_la_LIBADD = $(LIB_KPARTS) -ldigikam 
 
-digikamimageplugin_emboss_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+digikamimageplugin_emboss_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
 kde_services_DATA = digikamimageplugin_emboss.desktop
 
