@@ -59,6 +59,9 @@ public:
     void setAlbumLibraryPath(const QString& path);
     QString getAlbumLibraryPath() const;
 
+    void setShowSplashScreen(bool val);
+    bool getShowSplashScreen() const;
+    
     void setAlbumCollectionNames(const QStringList& list);
     QStringList getAlbumCollectionNames();
 

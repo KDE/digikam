@@ -40,6 +40,7 @@
 #include "setupeditor.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
+#include "setupmisc.h"
 #include "setup.h"
 
 
@@ -77,6 +78,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
     cameraPage_ = new SetupCamera(page_camera);
+
+    page_misc   = addPage(i18n("Miscellaneous"), i18n("Miscellaneous settings"),
+                          BarIcon("misc", KIcon::SizeMedium));
+    miscPage_ = new SetupMisc(page_misc);
     
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
@@ -98,6 +103,7 @@ void Setup::slotOkClicked()
     cameraPage_->applySettings();
     exifPage_->applySettings();
     editorPage_->applySettings();
+    miscPage_->applySettings();
     close();
 }
 

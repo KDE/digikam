@@ -182,6 +182,8 @@ int main(int argc, char *argv[])
     config->setGroup("General Settings");
     double version = config->readDoubleNumEntry("Version");
 
+    bool showSplash = config->readBoolEntry("Show Splash", true);
+
     config->setGroup("Album Settings");
     QString albumPath = config->readPathEntry("Album Path");
     QFileInfo dirInfo(albumPath);
@@ -199,14 +201,19 @@ int main(int argc, char *argv[])
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 
-    SplashScreen *splash = new SplashScreen();
+    SplashScreen *splash = 0; 
+    if (showSplash)
+    {
+        splash = new SplashScreen();
+    }
 
     DigikamApp *digikam = new DigikamApp();
 
     app.setMainWidget(digikam);
     digikam->show();
 
-    splash->finish( digikam );
+    if (showSplash && splash)
+        splash->finish( digikam );
 
 #if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;

@@ -31,8 +31,7 @@
 
 
 SplashScreen::SplashScreen()
-//    : QWidget( 0, 0, WStyle_Customize | WStyle_Splash )
-    : QWidget(0, 0, WStyle_Customize|WStyle_NoBorder|WStyle_StaysOnTop|WX11BypassWM)
+    : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
 {
     QString file = locate( "appdata", "digikam-splash.png" );
 

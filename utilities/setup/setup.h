@@ -36,6 +36,7 @@ class SetupMime;
 class SetupEditor;
 class SetupPlugins;
 class SetupCamera;
+class SetupMisc;
 
 class Setup : public KDialogBase 
 {
@@ -50,7 +51,8 @@ public:
         Mime,
         Editor,
         Plugins,
-        Camera
+        Camera,
+        Miscellaneous
     };
     
     Setup(QWidget* parent=0, const char* name=0,
@@ -68,6 +70,7 @@ private:
     QFrame           *page_editor;
     QFrame           *page_plugins;
     QFrame           *page_camera;
+    QFrame           *page_misc;
     
     SetupGeneral     *generalPage_;
     SetupExif        *exifPage_;
@@ -75,6 +78,7 @@ private:
     SetupMime        *mimePage_;
     SetupEditor      *editorPage_;
     SetupCamera      *cameraPage_;
+    SetupMisc        *miscPage_;
 
 private slots:
 

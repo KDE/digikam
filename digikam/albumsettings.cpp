@@ -56,6 +56,7 @@ public:
 
     bool recurseTags;
     bool showToolTips;
+    bool showSplash;
     
     bool iconShowName;
     bool iconShowSize;
@@ -119,6 +120,7 @@ void AlbumSettings::init()
 
     d->recurseTags  = false;
     d->showToolTips = true;
+    d->showSplash   = true;
     
     d->iconShowName = false;
     d->iconShowSize = true;
@@ -206,6 +208,10 @@ void AlbumSettings::readSettings()
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation",
                                                   false);
 
+    config->setGroup("General Settings");
+    
+    d->showSplash =
+        config->readBoolEntry("Show Splash", true);
 }
 
 void AlbumSettings::saveSettings()
@@ -278,6 +284,10 @@ void AlbumSettings::saveSettings()
     config->writeEntry("EXIF Set Orientation",
                        d->exifSetOrientation);
 
+    config->setGroup("General Settings");
+    
+    config->writeEntry("Show Splash", d->showSplash);
+
     config->sync();
 }
 
@@ -289,6 +299,16 @@ void AlbumSettings::setAlbumLibraryPath(const QString& path)
 QString AlbumSettings::getAlbumLibraryPath() const
 {
     return d->albumLibraryPath;
+}
+
+void AlbumSettings::setShowSplashScreen(bool val)
+{
+    d->showSplash = val;    
+}
+
+bool AlbumSettings::getShowSplashScreen() const
+{
+    return d->showSplash;
 }
 
 void AlbumSettings::setAlbumCollectionNames(const QStringList& list)
