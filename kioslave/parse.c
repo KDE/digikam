@@ -15,10 +15,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <config.h>
+
 #ifdef WIN32
 #include <winsock2.h>
 typedef __int64 INT64;
 #else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 #include <netinet/in.h>
 typedef long long INT64;
 #endif
