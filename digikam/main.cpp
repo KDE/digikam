@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("(c) 2002-2004, Digikam developers team"),
                           0,
                           "http://digikam.sourceforge.net",
-                          "digikam-users@list.sourceforge.net");
+                          "digikam-users@lists.sourceforge.net");
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Main coordinator and developer"),
