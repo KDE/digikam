@@ -47,6 +47,7 @@
 #include <qcheckbox.h>
 #include <qslider.h>
 #include <qspinbox.h>
+#include <qstring.h>
 #include <qimage.h>
 
 // KDE includes.
@@ -122,7 +123,6 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
-    //label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_radiusSlider = new QSlider(1, 20, 1, 1, Qt::Horizontal, plainPage(), "m_radiusSlider");
     m_radiusSlider->setTickmarks(QSlider::Below);
     m_radiusSlider->setTickInterval(1);
@@ -141,7 +141,6 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
-    //label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );  
     m_blackLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_blackLevelSlider");
     m_blackLevelSlider->setTickmarks(QSlider::Below);
     m_blackLevelSlider->setTickInterval(20);
@@ -160,7 +159,6 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
-    //label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );  
     m_whiteLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_whiteLevelSlider");
     m_whiteLevelSlider->setTickmarks(QSlider::Below);
     m_whiteLevelSlider->setTickInterval(20);
