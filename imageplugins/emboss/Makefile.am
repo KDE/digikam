@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_emboss_ui.rc        
+
+digikamimageplugin_embossicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_embossicon_ICON = AUTO
