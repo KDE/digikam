@@ -135,10 +135,10 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                    this, SIGNAL(signalFileProperties()),
                                    actionCollection(), "file_properties");
 
-    m_fileremovefromalbum = new KAction(i18n("Remove from Album"), "editdelete",
+    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
                                    SHIFT+Key_Delete, 
-                                   this, SIGNAL(signalRemoveCurrentItemfromAlbum()),
-                                   actionCollection(), "file_remove");
+                                   this, SIGNAL(signalDeleteCurrentItem()),
+                                   actionCollection(), "file_delete");
                                                                       
     m_exifinfo = new KAction(i18n("Exif Information..."), "exifinfo",
                              Key_F6, 
@@ -171,7 +171,7 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_save/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_saveas/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_restore/ ");
-    guiDef.append("MenuBar/Menu/&File/ /Action/file_remove/ ");        
+    guiDef.append("MenuBar/Menu/&File/ /Action/file_delete/ ");        
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/comments_edit/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/exif_info/ ");

@@ -36,6 +36,7 @@
 #include <kapplication.h>
 #include <kpropertiesdialog.h>
 #include <kmessagebox.h>
+#include <kio/netaccess.h>
 #include <libkexif/kexif.h>
 #include <libkexif/kexifutils.h>
 
@@ -147,8 +148,8 @@ ImageWindow::ImageWindow()
 
     connect(m_guiClient, SIGNAL(signalFileProperties()),
             SLOT(slotFileProperties()));
-    connect(m_guiClient, SIGNAL(signalRemoveCurrentItemfromAlbum()),
-            SLOT(slotRemoveCurrentItemfromAlbum()));            
+    connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
+            SLOT(slotDeleteCurrentItem()));            
     connect(m_guiClient, SIGNAL(signalExifInfo()),
             SLOT(slotExifInfo()));            
     connect(m_guiClient, SIGNAL(signalCommentsEdit()),
@@ -444,81 +445,63 @@ void ImageWindow::slotCommentsEdit()
     }       
 }
 
-void ImageWindow::slotRemoveCurrentItemfromAlbum()
+void ImageWindow::slotDeleteCurrentItem()
 {
-    QString warnMsg(i18n("About to delete \"%1\"\nfrom Album\n\"%2\"\nAre you sure?")
-                    .arg(m_urlCurrent.filename())
-                    .arg(m_urlCurrent.path().section('/', -2, -2)));
+    QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                    .arg(m_urlCurrent.filename()));
 
     if (KMessageBox::warningContinueCancel(this,
                                            warnMsg,
                                            i18n("Warning"),
                                            i18n("Delete"))
-        ==  KMessageBox::Continue) 
-          {
-          PAlbum *palbum = AlbumManager::instance()->findPAlbum( KURL(m_urlCurrent.directory()) );
-          
-          if (!palbum)
-              return;
-          
-          AlbumDB* db = AlbumManager::instance()->albumDB();
-          db->deleteItem( palbum, m_urlCurrent.fileName() );
-          
-          // PENDING (gilles): Renchi, it's really necessary to do that ? 
-          // (if i don't do it, the image file isn't deleted from album !)
-          
-          KIO::DeleteJob* job = KIO::del(m_urlCurrent, false, true);
-
-          connect(job, SIGNAL(result(KIO::Job*)),
-                  this, SLOT(slot_onDeleteCurrentItemFinished(KIO::Job*)));
-          }
-}    
-          
-void ImageWindow::slot_onDeleteCurrentItemFinished(KIO::Job* job)
-{
-    if (job->error())
-        {
-        job->showErrorDialog(this);
+        !=  KMessageBox::Continue)
+    {
         return;
-        }          
-          
+    }
+
+    if (!KIO::NetAccess::del(m_urlCurrent, this))
+    {
+        QString errMsg(KIO::NetAccess::lastErrorString());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    emit signalFileDeleted(m_urlCurrent);
+    
     KURL CurrentToRemove = m_urlCurrent;
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
     if (it != m_urlList.end())
-       {
-       if (m_urlCurrent != m_urlList.last())
-          {
-          // Try to get the next image in the current Album...
+    {
+        if (m_urlCurrent != m_urlList.last())
+        {
+            // Try to get the next image in the current Album...
           
-          KURL urlNext = *(++it);
-          m_urlCurrent = urlNext;
-          m_urlList.remove(CurrentToRemove);
-          slotLoadCurrent();
-          return;
-          }
-       else if (m_urlCurrent != m_urlList.first())
-          {
-          // Try to get the preview image in the current Album...
+            KURL urlNext = *(++it);
+            m_urlCurrent = urlNext;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+        else if (m_urlCurrent != m_urlList.first())
+        {
+            // Try to get the previous image in the current Album...
 
-          KURL urlPrev = *(--it);
-          m_urlCurrent = urlPrev;
-          m_urlList.remove(CurrentToRemove);
-          slotLoadCurrent();
-          return;
-          }
-       }
-    else
-       {
-       // No image in the current Album -> Quit ImageEditor...
-              
-       KMessageBox::information(this,
-                                i18n("There is no image to show in the current Album!\n"
-                                     "The ImageViewer will be closed..."),
-                                i18n("No image in the current Album"));
+            KURL urlPrev = *(--it);
+            m_urlCurrent = urlPrev;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+    }
 
-       close();
-       }
+    // No image in the current Album -> Quit ImageEditor...
+    KMessageBox::information(this,
+                             i18n("There is no image to show in the current Album!\n"
+                                  "The ImageViewer will be closed..."),
+                             i18n("No image in the current Album"));
+    
+    close();
 }
 
 #include "imagewindow.moc"

@@ -146,6 +146,7 @@ private slots:
     void slotSetExifOrientation( const QString filename, int orientation );
 
     void slotOnDeleteSelectedItemsFinished(KIO::Job* job);
+    void slotFilesModified();
 
     void slotContentsMoving(int x, int y);
     

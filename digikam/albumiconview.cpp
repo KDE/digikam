@@ -717,6 +717,10 @@ void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
 
     updateBanner();
 }
+void AlbumIconView::slotFilesModified()
+{
+    d->imageLister->updateDirectory();
+}
 
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
@@ -763,6 +767,11 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     //view->show();
 
     ImageWindow *imview = ImageWindow::instance();
+
+    imview->disconnect(this);
+    connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
+            SLOT(slotFilesModified()));
+        
     imview->loadURL(urlList, item->fileItem()->url(),
 		    d->currentAlbum ? d->currentAlbum->getTitle():QString());
     if (imview->isHidden())
