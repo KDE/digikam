@@ -6,6 +6,7 @@
  <Menu name="file" >
    <text>&amp;File</text>
      <Action name="open_file" /> 
+     <Action name="revert" /> 
      <Action name="file_properties" /> 
  </Menu>
 
@@ -52,6 +53,7 @@
 <ToolBar noMerge="1" name="mainToolBar">
   <text>Main Toolbar</text>
   <Action name="open_file" />
+  <Action name="revert" /> 
   <Action name="go_bwd" />
   <Action name="go_fwd" />
   <Separator />

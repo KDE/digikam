@@ -64,6 +64,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
             SLOT(slotOpenURL(const KURL&)));
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             m_cropAction, SLOT(setEnabled(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool)),
+            m_revertAction, SLOT(setEnabled(bool)));
 
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
@@ -154,6 +156,11 @@ void ShowFoto::setupActions()
                                m_canvas, SLOT(slotCrop()),
                                actionCollection(), "crop");
     m_cropAction->setEnabled(false);
+
+    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+                     actionCollection(), "revert");
+    m_revertAction->setEnabled(false);
+
     
     // ---------------------------------------------------------------
 

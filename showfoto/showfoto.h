@@ -71,6 +71,7 @@ private:
     KToggleAction*  m_fullScreenAction;
     KToggleAction*  m_showBarAction;
     KAction*        m_cropAction;
+    KAction*        m_revertAction;
     
     bool            m_fullScreen;
 };
