@@ -1020,6 +1020,8 @@ void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
     
     dragStartPos_ = e->pos();
     dragItem_ = itemAt( e->pos() );
+
+    ListView::contentsMousePressEvent(e);
 }
 
 void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
