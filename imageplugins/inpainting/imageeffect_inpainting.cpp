@@ -455,7 +455,18 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
     memcpy(m_originalImage.bits(), iface.getOriginalData(), m_originalImage.numBytes());
     
-    // Selected area from the image and mask creation.
+    // Selected area from the image and mask creation:
+    //
+    // We optimize the computation time to use the current selected area in image editor
+    // and to create an inpainting mask with it. Because inpainting is done by interpolation 
+    // neighboor pixels which can be located far from the selected area, we need to ajust the 
+    // mask size in according with the parameter algorithms, especially 'dt' (m_timeStepInput).
+    // Mask size is computed like this :
+    //
+    // (mask_radius_x + 2*dt , mask_radius_y + 2*dt)
+    //
+    // Where mask_radius_x is the 'width' of the mask, and mask_radius_y is the 'height' of the mask.
+    
     
     QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
                                 iface.selectedWidth(), iface.selectedHeight());
@@ -471,6 +482,14 @@ void ImageEffect_InPainting_Dialog::slotOk()
     int x2 = (int)(selectionRect.right()  + 2*m_timeStepInput->value());
     int y2 = (int)(selectionRect.bottom() + 2*m_timeStepInput->value());
     m_maskRect = QRect(x1, y1, x2-x1, y2-y1);
+    
+    // Mask area normalization. 
+    // We need to check if mask area is out of image size else inpainting give strange results.
+    
+    if (m_maskRect.left()   < 0) m_maskRect.setLeft(0);
+    if (m_maskRect.top()    < 0) m_maskRect.setTop(0);
+    if (m_maskRect.right()  > iface.originalWidth())  m_maskRect.setRight(iface.originalWidth());
+    if (m_maskRect.bottom() > iface.originalHeight()) m_maskRect.setBottom(iface.originalHeight());
     
     m_maskImage = inPaintingMask.convertToImage().copy(m_maskRect);
     m_cropImage = m_originalImage.copy(m_maskRect);
