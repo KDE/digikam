@@ -159,8 +159,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
     QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
-                                "selected histogram part. This values are available for all channels "
-                                "excepted when you displayed all color channels at the same time."));
+                                "selected histogram part. These values are available for all channels, "
+                                "except for when all color channels are displayed at the same time."));
                                 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);

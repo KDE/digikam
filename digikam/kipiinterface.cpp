@@ -535,7 +535,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     
     if ( url.isValid() == false )
        {
-       errmsg = i18n("Target URL isn't valid!").arg(url.path());
+       errmsg = i18n("Target URL is not valid.").arg(url.path());
        return false;
        }
     
@@ -543,7 +543,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     
     if ( !targetAlbum ) 
        {
-       errmsg = i18n("Target album isn't in the Albums library!");
+       errmsg = i18n("Target album is not in the Albums library.");
        return false;
        }
     
