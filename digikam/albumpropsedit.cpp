@@ -34,7 +34,7 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
-#include <interfaces/albuminfo.h>
+#include "albuminfo.h"
 
 #include "albumsettings.h"
 #include "albumpropsedit.h"
