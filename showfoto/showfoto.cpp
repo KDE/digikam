@@ -64,7 +64,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
     m_canvas = new Canvas(widget);
-    m_bar    = new ThumbBarView(widget);
+    m_bar    = new Digikam::ThumbBarView(widget);
     lay->addWidget(m_canvas);
     lay->addWidget(m_bar);
 
@@ -88,7 +88,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        new ThumbBarItem(m_bar, *it);
+        new Digikam::ThumbBarItem(m_bar, *it);
     }
 
     resize(640,480);
@@ -337,14 +337,14 @@ void ShowFoto::slotOpenFile()
         for (KURL::List::const_iterator it = urls.begin();
              it != urls.end(); ++it)
         {
-            new ThumbBarItem(m_bar, *it);
+            new Digikam::ThumbBarItem(m_bar, *it);
         }
     }
 }
 
 void ShowFoto::slotFileProperties()
 {
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     
     if (curr)
         (void) new KPropertiesDialog( curr->url(), this, "props dialog", true );
@@ -355,7 +355,7 @@ void ShowFoto::slotNext()
     if (!promptUserSave())
         return;
 
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     if (curr && curr->next())
     {
         m_bar->setSelected(curr->next());
@@ -367,7 +367,7 @@ void ShowFoto::slotPrev()
     if (!promptUserSave())
         return;
 
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     if (curr && curr->prev())
     {
         m_bar->setSelected(curr->prev());
@@ -381,7 +381,7 @@ void ShowFoto::slotSave()
 
 void ShowFoto::slotSaveAs()
 {
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     if (!curr)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
@@ -480,8 +480,8 @@ void ShowFoto::slotSaveAs()
     }
 
     // add the file to the list of images if it's not there already
-    ThumbBarItem* foundItem = 0;
-    for (ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    Digikam::ThumbBarItem* foundItem = 0;
+    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
     {
         if (item->url().equals(saveAsURL))
         {
@@ -493,7 +493,7 @@ void ShowFoto::slotSaveAs()
 
     if (!foundItem)
     {
-        foundItem = new ThumbBarItem(m_bar, saveAsURL);
+        foundItem = new Digikam::ThumbBarItem(m_bar, saveAsURL);
     }
 
     m_bar->setSelected(foundItem);
@@ -501,7 +501,7 @@ void ShowFoto::slotSaveAs()
 
 bool ShowFoto::promptUserSave()
 {
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     if (!curr)
         return true;
     
@@ -531,7 +531,7 @@ bool ShowFoto::promptUserSave()
 
 bool ShowFoto::save()
 {
-    ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
     if (!curr)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;

@@ -39,6 +39,9 @@
 
 #include "thumbbar.h"
 
+namespace Digikam
+{
+
 class ThumbBarViewPriv
 {
 public:
@@ -520,5 +523,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
     
     tip(r, tipText);
 }
+
+}  // NameSpace Digikam
 
 #include "thumbbar.moc"

@@ -26,6 +26,9 @@
 class QPixmap;
 class KFileItem;
 
+namespace Digikam
+{
+
 class ThumbBarItem;
 class ThumbBarViewPriv;
 
@@ -123,5 +126,6 @@ private:
     ThumbBarView* m_view;
 };
 
+}  // NameSpace Digikam
 
 #endif /* THUMBBAR_H */

@@ -30,7 +30,11 @@ class KSelectAction;
 class KConfig;
 
 class Canvas;
+
+namespace Digikam
+{
 class ThumbBarView;
+}
 
 class ShowFoto : public KMainWindow
 {
@@ -71,9 +75,9 @@ private:
 
 private:
 
-    Canvas*         m_canvas;
-    ThumbBarView*   m_bar;
-    KConfig*        m_config;
+    Canvas*                m_canvas;
+    Digikam::ThumbBarView* m_bar;
+    KConfig*               m_config;
     
     KToggleAction*  m_zoomFitAction;
     KAction*        m_zoomPlusAction;
