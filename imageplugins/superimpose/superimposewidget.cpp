@@ -59,13 +59,11 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     m_img.create( m_w, m_h, 32 );
     m_img.setAlphaBuffer(true);
     memcpy(m_img.bits(), m_data, m_img.numBytes());
-    
-    
+        
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h);
     setMouseTracking(true);
-
-    m_rect = QRect(0, 0, w, h);
+    
     resetEdit();
 }
 
@@ -87,6 +85,7 @@ QImage SuperImposeWidget::makeSuperImpose(void)
 {
     QSize size = getTemplateSize();
     QPixmap target(size);
+    
     target.fill(colorGroup().background());
     
     QPainter p(&target);
@@ -104,7 +103,7 @@ QImage SuperImposeWidget::makeSuperImpose(void)
 void SuperImposeWidget::resetEdit(void)
 {
     m_zoomFactor = 100;
-    m_currentSelection = QRect(m_w/2 - width()/2, m_h/2 - height()/2, width(), height());
+    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, m_rect.width(), m_rect.height());
     makePixmap();
     repaint(false);
 }
@@ -116,15 +115,15 @@ void SuperImposeWidget::makePixmap(void)
     QPainter p(m_pixmap);
     QPixmap pix(m_img.copy(m_currentSelection.x(), m_currentSelection.y(),
                            m_currentSelection.width(), m_currentSelection.height())
-                .scale(width(), height()));
-    p.drawPixmap(0, 0, pix, 0, 0, width(), height());
-    p.drawPixmap(0, 0, m_templatePix, 0, 0, width(), height());
+                .scale(m_rect.width(), m_rect.height()));
+    p.drawPixmap(m_rect.x(), m_rect.y(), pix, 0, 0, m_rect.width(), m_rect.height());
+    p.drawPixmap(m_rect.x(), m_rect.y(), m_templatePix, 0, 0, m_rect.width(), m_rect.height());
     p.end();
 }
 
 void SuperImposeWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, m_pixmap, 0, 0, width(), height());
+    bitBlt(this, 0, 0, m_pixmap);
 }
 
 void SuperImposeWidget::slotEditModeChanged(int mode)
@@ -135,15 +134,23 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
 void SuperImposeWidget::slotSetCurrentTemplate(const KURL& url)
 {
     m_template.load(url.path());
-    m_templatePix.convertFromImage(m_template.scale(width(), height()));
-    makePixmap();
-    repaint(true);
+    
+    QSize size = m_template.size();
+    int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
+    m_rect = QRect(width()/2-neww/2, 0, neww, height());
+    
+    m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
+    
+    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, m_rect.width(), m_rect.height());
+    int z = m_zoomFactor;
+    m_zoomFactor = 100;
+    zoomSelection(z-100);
 }
 
 void SuperImposeWidget::moveSelection(int dx, int dy)
 {
-    float wf = (float)m_currentSelection.width() / (float)width();
-    float hf = (float)m_currentSelection.height() / (float)height();
+    float wf = (float)m_currentSelection.width() / (float)m_rect.width();
+    float hf = (float)m_currentSelection.height() / (float)m_rect.height();
     
     m_currentSelection.moveBy( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
 }
@@ -151,8 +158,8 @@ void SuperImposeWidget::moveSelection(int dx, int dy)
 void SuperImposeWidget::zoomSelection(int deltaZoomFactor)
 {
     m_zoomFactor = m_zoomFactor + deltaZoomFactor;
-    int wf = (int)((float)width()  * (100-(float)m_zoomFactor) / 100);
-    int hf = (int)((float)height() * (100-(float)m_zoomFactor) / 100);
+    int wf = (int)((float)m_rect.width()  * (100-(float)m_zoomFactor) / 100);
+    int hf = (int)((float)m_rect.height() * (100-(float)m_zoomFactor) / 100);
     
     if (deltaZoomFactor > 0)  // Zoom in.
        {
@@ -176,7 +183,7 @@ void SuperImposeWidget::zoomSelection(int deltaZoomFactor)
 void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton &&
-         m_rect.contains( e->x(), e->y() ) )
+         rect().contains( e->x(), e->y() ) )
        {
        switch (m_editMode)
            {
@@ -211,7 +218,7 @@ void SuperImposeWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) )
+    if ( rect().contains( e->x(), e->y() ) )
        {
        if ( e->state() == Qt::LeftButton )
           {
