@@ -66,16 +66,14 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             "<b>100</b>: very high quality (no compression and large file size)"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
-   m_PNGcompression->setRange(1, 100, 1, true );
+   m_PNGcompression->setRange(1, 9, 1, true );
    m_PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignVCenter );
 
    QWhatsThis::add( m_PNGcompression, i18n("<p>The compression value for PNG images:<p>"
                                            "<b>1</b>: very high compression (small file size but "
                                            "long decompression - default)<p>"
-                                           "<b>25</b>: high compression<p>"
-                                           "<b>50</b>: medium compression<p>"
-                                           "<b>75</b>: low compression<p>"
-                                           "<b>100</b>: no compression (large file size but "
+                                           "<b>5</b>: medium compression<p>"
+                                           "<b>9</b>: no compression (large file size but "
                                            "short decompression)<p>"
                                            "<b>Note: PNG is always a lossless compression format!</b>"));
 
@@ -224,7 +222,7 @@ void SetupEditor::readSettings()
     config->setGroup("ImageViewer Settings");
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
-    m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 1) );
+    m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));

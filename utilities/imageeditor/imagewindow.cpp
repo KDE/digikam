@@ -283,7 +283,7 @@ void ImageWindow::applySettings()
     m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
 
     // PNG compression value.
-    m_PNGCompression = config->readNumEntry("PNGCompression", 1);
+    m_PNGCompression = -11*config->readNumEntry("PNGCompression", 1) + 111;
 
     // TIFF compression.
     m_TIFFCompression = config->readBoolEntry("TIFFCompression", false);
