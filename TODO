@@ -9,6 +9,7 @@ Main Application:
 * Added config saving of Albums opened in Albums treeview.         <planed by Gilles Caulier for 0.6.3>
 * Added dockable main widgets like Showimg.                        <planed by Gilles Caulier for 0.6.3>
 * Custom thumbnail highlighting of album thumbnails.
+* Added Albums protection with password capability.
 * View/Hide main toolbar/statusbar.
 * Backup and retrieve image comments and album properties.
 * Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
