@@ -60,8 +60,6 @@
      <Action name="album_thumbSizeDecrease" />
      <Separator />
      <Action name="image_sort" />
-     <Separator />
-     <Action name="full_screen" />
   </Menu>
   
   <Menu name="Tools"><text>Too&amp;ls</text>
@@ -77,7 +75,11 @@
   </Menu>
   
   <Action name="camera_menu" />
-    <Menu name="settings" />
+
+  <Menu name="settings" >
+     <Action name="full_screen" />
+  </Menu>
+
   <Merge/>
  
  </MenuBar>
