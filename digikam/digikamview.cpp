@@ -62,7 +62,7 @@ DigikamView::DigikamView(QWidget *parent)
     mParent = static_cast<DigikamApp *>(parent);
 
     mAlbumMan = AlbumManager::instance();
-    
+
     mFolderView = new AlbumFolderView(this);
     mIconView = new AlbumIconView(this);
 
@@ -72,9 +72,6 @@ DigikamView::DigikamView(QWidget *parent)
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding,
                               2, 1);
-    
-    mFolderView->setSizePolicy(leftSzPolicy);
-    mIconView->setSizePolicy(rightSzPolicy);
 
     setOpaqueResize(false);
 
@@ -84,10 +81,24 @@ DigikamView::DigikamView(QWidget *parent)
 
     mFolderView->setInFocus(true);
     mIconView->setInFocus(false);
+
+    KConfig *config = kapp->config();
+    config->setGroup("MainWindow");
+    if(config->hasKey("SplitterSizes"))
+        setSizes(config->readIntListEntry("SplitterSizes"));
+    else {
+        mFolderView->setSizePolicy(leftSzPolicy);
+        mIconView->setSizePolicy(rightSzPolicy);
+    }
+
 }
 
 DigikamView::~DigikamView()
 {
+    KConfig *config = kapp->config();
+    config->setGroup("MainWindow");
+    config->writeEntry("SplitterSizes", sizes());
+
     mAlbumMan->setItemHandler(0);
 }
 
@@ -105,7 +116,7 @@ void DigikamView::setupConnections()
             this, SLOT(slot_albumSelected(Album*)));
     connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slot_albumsCleared()));
-    
+
     // -- IconView Connections -------------------------------------
 
     connect(mIconView,  SIGNAL(signalSelectionChanged()),
@@ -116,7 +127,7 @@ void DigikamView::setupConnections()
 
     connect(mIconView, SIGNAL(signalInFocus()),
             SLOT(slotIconViewInFocus()));
-    
+
     connect(mFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
 
@@ -148,7 +159,7 @@ void DigikamView::slot_deleteAlbum()
 
 void DigikamView::slotNewTag()
 {
-    mFolderView->tagNew();    
+    mFolderView->tagNew();
 }
 
 void DigikamView::slotDeleteTag()
