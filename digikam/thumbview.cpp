@@ -77,6 +77,7 @@ public:
 
     ThumbItem* toolTipItem;
     QTimer*    toolTipTimer;
+    bool       showTips;
 };
 
 
@@ -404,7 +405,6 @@ void ThumbView::viewportPaintEvent(QPaintEvent *pe)
 void ThumbView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
-    //d->updateTimer->start(0, true);
     rearrangeItems();
 }
 
@@ -558,6 +558,17 @@ void ThumbView::drawRubber(QPainter *p)
                           colorGroup(), QStyle::Style_Default,
                           QStyleOption(colorGroup().base()));
 
+}
+
+void ThumbView::focusOutEvent(QFocusEvent *e)
+{
+    // hide tooltip
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    QScrollView::focusOutEvent(e);
 }
 
 void ThumbView::contentsMousePressEvent(QMouseEvent *e)
