@@ -236,6 +236,9 @@ void AlbumDB::deleteAlbum(Album *a)
 
 void AlbumDB::readPAlbum(PAlbum *album)
 {
+    if (!m_db)
+        return;
+    
     QStringList values;
 
     execSql( QString("SELECT id, date, caption, collection, icon "
