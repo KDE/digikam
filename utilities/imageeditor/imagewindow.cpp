@@ -402,7 +402,7 @@ void ImageWindow::slotResize()
     if (dlg.exec() == QDialog::Accepted && 
         (width != m_canvas->imageWidth() ||
         height != m_canvas->imageHeight())) 
-        m_canvas->resize(width, height);
+        m_canvas->resizeImage(width, height);
 }
 
 void ImageWindow::slotRotate()
