@@ -24,7 +24,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
 		        albumsettings.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        digikamcameraprocess.cpp digikamfirstrun.cpp \
+		        digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			thumbdb.cpp texture.cpp
 
