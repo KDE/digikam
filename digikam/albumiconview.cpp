@@ -3,7 +3,7 @@
  * Author: Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2002-02-21
- * Description : an image histogram viewer dialog.
+ * Description : 
  * 
  * Copyright 2002-2004 by Renchi Raju and Gilles Caulier
  *
@@ -801,7 +801,9 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 
     KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
     HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(&dlg, item->fileItem()->url().path());
-    dlg.insertPlugin(histogramProps);
+    
+    if (histogramProps)
+       dlg.insertPlugin(histogramProps);
     
     if (dlg.exec())
     {

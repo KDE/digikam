@@ -48,7 +48,11 @@
 HistogramPropsPlugin::HistogramPropsPlugin( KPropertiesDialog *propsDlg, QString fileName )
                     : KPropsDlgPlugin(propsDlg)
 {    
-    if (m_image.load(fileName) == true)
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
+    m_image.load(fileName);
+    
+    if (m_image.isNull() == false)
        {
        if(m_image.depth() < 32)                 // we works always with 32bpp.
           m_image = m_image.convertDepth(32);
@@ -63,8 +67,11 @@ HistogramPropsPlugin::HistogramPropsPlugin( KPropertiesDialog *propsDlg, QString
 
 HistogramPropsPlugin::~HistogramPropsPlugin()
 {
-    delete m_histogramWidget;
-    delete m_hGradient;
+    if ( m_histogramWidget )
+       delete m_histogramWidget;
+    
+    if ( m_hGradient )        
+       delete m_hGradient;
 }
 
 void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, uint width, uint height)
