@@ -39,6 +39,7 @@ extern "C"
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
+#include <qimage.h>
 #include <qapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -187,6 +188,26 @@ bool ImlibInterface::load(const QString& filename)
     Imlib_Load_Error errorReturn;
     d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
                                                   &errorReturn);
+
+    // try to load with kde imageio
+    if (!d->image)
+    {
+        QImage qtimage(filename);
+        if (!qtimage.isNull())
+        {
+            if (!qtimage.depth() == 32)
+                qtimage.convertDepth(32);
+
+            d->image = imlib_create_image(qtimage.width(), qtimage.height());
+            imlib_context_set_image(d->image);
+            DATA32* data = imlib_image_get_data_for_reading_only();
+            memcpy(data, qtimage.bits(), qtimage.numBytes());
+            kdDebug() << "Loaded image with kde imageio resources: "
+                      << filename
+                      << ", width="  << qtimage.width()
+                      << ", height=" << qtimage.height() << endl;
+        }
+    }
 
     if (d->image) {
         imlib_context_set_image(d->image);
