@@ -475,7 +475,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     
     if ( m_targetAlbum ) 
        {
-       errmsg = i18n("No current Album selected!");
+       errmsg = i18n("No current Album selected.");
        return false;
        }
     
