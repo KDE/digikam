@@ -286,7 +286,7 @@ void DigikamCamera::get(const KURL& url )
 
 void DigikamCamera::listDir(const KURL& url)
 {
-    kdDebug() << "DigikamCamera::listDir " << url << endl ;
+    kdDebug() << "DigikamCamera::listDir " << url.prettyURL() << endl ;
 
     if (m_camera)
     {
@@ -304,7 +304,7 @@ void DigikamCamera::listDir(const KURL& url)
 
 void DigikamCamera::stat(const KURL& url)
 {
-    kdDebug() << k_funcinfo << url << endl;
+    kdDebug() << k_funcinfo << url.prettyURL() << endl;
 
     if (QDir::cleanDirPath(url.path(1)) == "/")
     {
