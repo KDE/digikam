@@ -1,0 +1,15 @@
+[Protocol]
+exec=kio_digikamio
+protocol=digikamio
+input=none
+output=filesystem
+listing=Name,Type
+reading=true
+writing=true
+makedir=false
+linking=false
+deleting=false
+moving=true
+maxInstances=4
+Description=Digikam IO kioslave
+Class=:local
