@@ -107,7 +107,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     commentsEdit_ = new KTextEdit( plainPage( ) );
     topLayout->addWidget( commentsEdit_, 4, 1 );
     commentsLabel->setBuddy( commentsEdit_ );
-    commentsEdit_->setMaximumHeight(commentsEdit_->fontMetrics().height() * 2.5);
+    commentsEdit_->setMaximumHeight(int(commentsEdit_->fontMetrics().height() * 2.5));
 
     QLabel *dateLabel = new QLabel( plainPage( ) );
     dateLabel->setText( i18n( "Album &Date:" ) );
