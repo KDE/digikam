@@ -90,7 +90,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Painting image preview"),
+                                                           i18n("Oil painting image preview"),
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     
