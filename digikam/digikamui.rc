@@ -47,7 +47,9 @@
   </Menu>
   <Menu name="Tools"><text>&amp;Tools</text>
       <ActionList name="tool_actions"/>
-      <ActionList name="batch_actions"/>
+      <Menu name="Batch processes" >
+         <ActionList name="batch_actions"/>
+      </Menu>
   </Menu>
   <Menu name="help"><Text>&amp;Help</Text>
    <Action name="help_tipofday"/>
@@ -83,6 +85,10 @@
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
   <Action name="full_screen" />
+ </ToolBar>
+  <ToolBar noMerge="1" name="KIPIBatchProcessesBar" >
+  <text>KIPI Batch Processes Toolbar</text>
+  <ActionList name="batch_actions"/>
  </ToolBar>
  <ActionProperties/>
 </kpartgui>

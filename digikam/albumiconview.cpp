@@ -455,33 +455,38 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     bool count =0;
     
     while ( (action = it1.current()) != 0 ) 
-    {
+        {
         action->plug(&popmenu);
         ++it1;
         count = 1;
-    }
+        }
 
     // Don't insert a separator if we didn't plug in any actions
     
     if (count != 0)
         popmenu.insertSeparator();
-    
+
+    KActionMenu* menu = new KActionMenu(i18n("Batch processes"));  
+            
     const QPtrList<KAction>& BatchActions = DigikamApp::getinstance()->menuBatchActions();
 
     QPtrListIterator<KAction> it2(BatchActions);
     count = 0;
     
     while ( (action = it2.current()) != 0 ) 
-    {
-        action->plug(&popmenu);
+        {
+        menu->insert(action);
         ++it2;
         count = 1;
-    }
+        }
 
     // Don't insert a separator if we didn't plug in any actions
     
     if (count != 0)
+        {
+        menu->plug(&popmenu);
         popmenu.insertSeparator();
+        }
 
     // --------------------------------------------------------
 
