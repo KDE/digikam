@@ -255,7 +255,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
+    m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
+                                                          Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
                                                  "gains adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
@@ -278,6 +279,9 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
 
+    connect(m_previewTargetWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+            this, SLOT(slotColorSelectedFromTarget( const QColor & ))); 
+                        
     // -------------------------------------------------------------
     // Gains settings slots.
 
@@ -358,6 +362,8 @@ void ChannelMixerDialog::slotResetAllGains()
     m_preserveLuminosity->blockSignals(false);
     m_channelCB->setEnabled(true);
     
+    m_histogramWidget->reset();
+
     slotEffect();
 }
 
@@ -395,6 +401,12 @@ void ChannelMixerDialog::slotUser1()
     
     adjustSliders();
     slotEffect();
+    m_histogramWidget->reset();
+}
+
+void ChannelMixerDialog::slotColorSelectedFromTarget( const QColor &color )
+{
+    m_histogramWidget->setHistogramGuide(color);
 }
 
 void ChannelMixerDialog::slotGainsChanged()

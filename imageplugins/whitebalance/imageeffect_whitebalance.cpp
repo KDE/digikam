@@ -324,7 +324,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
+    m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
+                                                          Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
@@ -346,8 +347,11 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
-            this, SLOT(slotColorSelectedFromImage( const QColor &, bool ))); 
+            this, SLOT(slotColorSelectedFromOriginal( const QColor &, bool ))); 
 
+    connect(m_previewTargetWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+            this, SLOT(slotColorSelectedFromTarget( const QColor & ))); 
+                        
     connect(m_autoAdjustExposure, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustExposure()));
 
@@ -410,6 +414,8 @@ void ImageEffect_WhiteBalance::slotUser1()
     m_previewOriginalWidget->resetSpotPosition();    
     m_channelCB->setCurrentItem(RedChannel);
     slotChannelChanged(RedChannel);
+    
+    m_histogramWidget->reset();
     
     blockSignals(false);
     slotEffect();  
@@ -564,7 +570,7 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
     slotEffect();  
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color, bool release )
+void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const QColor &color, bool release )
 {
     if ( m_pickTemperature->isOn() )
        {
@@ -609,6 +615,11 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color, 
        }
 
     slotEffect();  
+}
+
+void ImageEffect_WhiteBalance::slotColorSelectedFromTarget( const QColor &color )
+{
+    m_histogramWidget->setHistogramGuide(color);
 }
 
 void ImageEffect_WhiteBalance::slotScaleChanged(int scale)

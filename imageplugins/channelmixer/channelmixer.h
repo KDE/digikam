@@ -34,6 +34,7 @@ class KDoubleNumInput;
 
 namespace Digikam
 {
+class ImageGuideWidget;
 class HistogramWidget;
 class ImageWidget;
 class ColorGradientWidget;
@@ -105,7 +106,7 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;
     
     Digikam::ImageWidget         *m_previewOriginalWidget;
-    Digikam::ImageWidget         *m_previewTargetWidget;
+    Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
     uint                         *m_destinationPreviewData;
 
@@ -124,6 +125,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
+    void slotColorSelectedFromTarget(const QColor &color);    
 };
 
 }  // NameSpace DigikamChannelMixerImagesPlugin

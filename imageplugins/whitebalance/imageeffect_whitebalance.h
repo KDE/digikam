@@ -42,7 +42,6 @@ class KIntNumInput;
 namespace Digikam
 {
 class ImageGuideWidget;
-class ImageWidget;
 class ColorGradientWidget;
 class HistogramWidget;
 }
@@ -150,7 +149,7 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageWidget         *m_previewTargetWidget; 
+    Digikam::ImageGuideWidget    *m_previewTargetWidget; 
 
 private:
         
@@ -164,7 +163,8 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotUser1();
-    void slotColorSelectedFromImage(const QColor &color, bool release);
+    void slotColorSelectedFromOriginal(const QColor &color, bool release);
+    void slotColorSelectedFromTarget(const QColor &color);
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
     void slotTemperatureChanged(double temperature);
