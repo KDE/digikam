@@ -31,9 +31,11 @@
  
 // C++ includes.
 
-#include <cmath>
 #include <cstdio>
+#include <cmath>
+#include <cstring>
 #include <cstdlib>
+#include <cerrno>
  
 // Qt includes. 
  
@@ -49,6 +51,7 @@
 #include <qtooltip.h>
 #include <qpixmap.h>
 #include <qcheckbox.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -61,8 +64,11 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
+#include <kmessagebox.h>
 #include <knuminput.h>
+#include <kglobalsettings.h>
 #include <kdebug.h>
+#include <kfiledialog.h>
 
 // Digikam includes.
 
@@ -79,14 +85,18 @@ namespace DigikamWhiteBalanceImagesPlugin
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
                         : KDialogBase(Plain, i18n("White Balance"),
-                                      Help|User1|Ok|Cancel, Ok,
+                                      Help|User1|User2|User3|Ok|Cancel, Ok,
                                       parent, 0, true, true,
-                                      i18n("&Reset Values")),
+                                      i18n("&Reset Values"),
+                                      i18n("&Load..."),
+                                      i18n("&Save...")),
                           m_parent(parent)
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
     QString whatsThis;
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
+    setButtonWhatsThis ( User2, i18n("<p>Load all parameters from settings text file.") );
+    setButtonWhatsThis ( User3, i18n("<p>Save all parameters to settings text file.") );    
 
     m_originalImageData = imageData;
     m_originalWidth     = width;
@@ -140,7 +150,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     layout->addWidget( pixmapLabelLeft );
     QLabel *labelTitle = new QLabel( i18n("White Color Balance Correction"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    lqiout=>sudCdredchFqsdob( |qbelTitle, 1 );
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
 
     QString directory;
@@ -861,6 +871,97 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height)
     memcpy (data, pOutBits, width*height*4);       
             
     delete [] pOutBits;    
+}
+
+void ImageEffect_WhiteBalance::slotUser2()
+{
+    KURL loadWhiteBalanceFile;
+    FILE *fp = 0L;
+
+    loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                                 QString( "*" ), this,
+                                                 QString( i18n("White Color Balance Settings File to Load")) );
+    if( loadWhiteBalanceFile.isEmpty() )
+       return;
+
+    fp = fopen(QFile::encodeName(loadWhiteBalanceFile.path()), "r");   
+    
+    if ( fp )
+        {
+        char buf1[1024];
+        char buf2[1024];
+        char buf3[1024];
+        char buf4[1024];
+        char buf5[1024];
+        char buf6[1024];
+        char buf7[1024];
+
+        buf1[0] = '\0';
+
+        fgets(buf1, 1023, fp);
+
+        fscanf (fp, "%*s %s", buf1);
+
+        // Smoothing settings.
+        fscanf (fp, "%*s %s %s %s %s %s", buf1, buf2, buf3, buf4, buf5);
+        m_temperatureInput->setValue( atof(buf1) );
+        m_darkInput->setValue( atof(buf2) );
+        m_blackInput->setValue( atof(buf3) );
+        m_exposureInput->setValue( atof(buf4) );
+        m_gammaInput->setValue( atof(buf5) );
+        m_saturationInput->setValue( atof(buf6) );
+        m_greenInput->setValue( atof(buf7) );
+
+        fclose(fp);
+        }
+    else
+        {
+        KMessageBox::error(this, i18n("Cannot load settings from the White Color Balance text file."));
+        return;
+        }
+}
+
+void ImageEffect_WhiteBalance::slotUser3()
+{
+    KURL saveWhiteBalanceFile;
+    FILE *fp = 0L;
+
+    saveWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                                  QString( "*" ), this,
+                                                  QString( i18n("White Color Balance Settings File to Save")) );
+    if( saveWhiteBalanceFile.isEmpty() )
+       return;
+
+    fp = fopen(QFile::encodeName(saveWhiteBalanceFile.path()), "w");   
+    
+    if ( fp )
+        {       
+        char        buf1[256];
+        char        buf2[256];
+        char        buf3[256];
+        char        buf4[256];
+        char        buf5[256];
+        char        buf6[256];
+        char        buf7[256];
+
+        fprintf (fp, "# White Color Balance Configuration File\n");
+
+        sprintf (buf1, "%5.3f", m_temperatureInput->value());                 
+        sprintf (buf2, "%5.3f", m_darkInput->value());
+        sprintf (buf3, "%5.3f", m_blackInput->value());
+        sprintf (buf4, "%5.3f", m_exposureInput->value());
+        sprintf (buf5, "%5.3f", m_gammaInput->value());
+        sprintf (buf6, "%5.3f", m_saturationInput->value());
+        sprintf (buf7, "%5.3f", m_greenInput->value());
+        fprintf (fp, "SETTINGS: %s %s %s\n", buf1, buf2, buf3, buf4, buf5, buf6, buf7);
+
+        fclose (fp);
+        }
+    else
+        {
+        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
+        return;
+        }
 }
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

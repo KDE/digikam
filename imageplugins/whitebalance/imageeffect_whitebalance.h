@@ -167,6 +167,8 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotUser1();
+    void slotUser2();
+    void slotUser3();
     void slotColorSelectedFromOriginal(const QColor &color, bool release);
     void slotColorSelectedFromTarget(const QColor &color);
     void slotScaleChanged(int scale);
