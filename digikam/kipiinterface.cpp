@@ -365,6 +365,21 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
 KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 {
+    // if this album is the current album, then its already open
+    // just return whatevers visible in the albumitemhandler
+    if ( album == AlbumManager::instance()->currentAlbum() )
+    {
+        QStringList items;
+        AlbumItemHandler* handler =
+            AlbumManager::instance()->getItemHandler();
+        if (handler)
+            items = handler->allItemsPath();
+        
+        return KURL::List(items);
+    }
+
+    // else get the images from the database and return the items found
+
     AlbumDB* db = AlbumManager::instance()->albumDB();
 
     QStringList     urls;
@@ -570,18 +585,18 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     // Nota : All copy/move operations are processed by the plugins.
     
     if ( url.isValid() == false )
-       {
-       errmsg = i18n("Target URL is not valid.").arg(url.path());
-       return false;
-       }
+    {
+        errmsg = i18n("Target URL is not valid.").arg(url.path());
+        return false;
+    }
     
     PAlbum *targetAlbum = albumManager_->findPAlbum(url.directory());
     
     if ( !targetAlbum ) 
-       {
-       errmsg = i18n("Target album is not in the albums library.");
-       return false;
-       }
+    {
+        errmsg = i18n("Target album is not in the albums library.");
+        return false;
+    }
     
     // Renchi: No need to have an 'AlbumDB::addItem()' method ?       
        
@@ -625,12 +640,7 @@ void DigikamKipiInterface::slotSelectionChanged( bool b )
 
 void DigikamKipiInterface::slotCurrentAlbumChanged( Album *album )
 {
-    bool b = false;
-    
-    if ( album )
-       b = true;
-    
-    emit currentAlbumChanged( b );
+    emit currentAlbumChanged( album != 0 );
 }
 
 QString DigikamKipiInterface::fileExtensions()
