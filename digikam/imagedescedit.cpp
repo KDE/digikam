@@ -41,7 +41,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 
-#include <libkexif/kexif.h>
+#include <libkexif/kexifwidget.h>
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
