@@ -1,7 +1,7 @@
 /* ============================================================
  * File   : version.h
  * Authors: Gilles Caulier <caulier dot gilles at free.fr>
- * Date   : 2002-09-09
+ * Date   : 2004-09-09
  * Description : Digikam release ID header.
  * 
  * Copyright 2004 by Gilles Caulier
