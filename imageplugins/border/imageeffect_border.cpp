@@ -431,8 +431,7 @@ void ImageEffect_Border::slotEffect()
           break;
        }
 
-    QImage destImg = dest.scale(w, h);
-    iface->putPreviewData((uint*)destImg.bits());
+    iface->putPreviewData((uint*)dest.scale(w, h).bits());
     
     delete [] data;
     m_previewWidget->update();
@@ -493,45 +492,10 @@ void ImageEffect_Border::slotOk()
 
 void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth)
 {
-    unsigned int *output;
-    int x, y;
-    
     dest.reset();
     dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
     dest.setAlphaBuffer(true);
-   
-    // top
-    
-    for(y = 0; y < borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x = 0; x < dest.width(); ++x)
-          output[x] = fg.rgb();
-       }
-    
-    // left and right
-    
-    for(y = 0; y < dest.height(); ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = 0; x < borderWidth; ++x)
-            output[x] = fg.rgb();
-            
-       for(x = dest.width()-borderWidth; x < dest.width(); ++x)
-            output[x] = fg.rgb();
-       }
-    
-    // bottom
-    
-    for(y = dest.height()-borderWidth; y < dest.height(); ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = 0; x < dest.width(); ++x)
-          output[x] = fg.rgb();
-       }
+    dest.fill(fg.rgb());
        
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
 }
@@ -544,41 +508,8 @@ void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int
     dest.reset();
     dest.create(src.width() + borderWidth*2 + lineWidth*2, src.height() + borderWidth*2 + lineWidth*2, 32);
     dest.setAlphaBuffer(true);
+    dest.fill(fg.rgb());
     
-    // Drawing Main border.
-    // top
-    
-    for(y = 0; y < borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x = 0; x < dest.width(); ++x)
-          output[x] = fg.rgb();
-       }
-    
-    // left and right
-    
-    for(y = 0; y < dest.height(); ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = 0; x < borderWidth; ++x)
-            output[x] = fg.rgb();
-            
-       for(x = dest.width()-borderWidth; x < dest.width(); ++x)
-            output[x] = fg.rgb();
-       }
-    
-    // bottom
-    
-    for(y = dest.height()-borderWidth; y < dest.height(); ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = 0; x < dest.width(); ++x)
-          output[x] = fg.rgb();
-       }
-
     // Copy original image.
                          
     KImageEffect::blendOnLower(borderWidth + lineWidth, borderWidth + lineWidth, src, dest);
@@ -586,21 +517,21 @@ void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int
     // Drawing fine line.
     // top
 
-    for(y=borderWidth; y < borderWidth+lineWidth; ++y)
+    for(y = borderWidth; y < borderWidth+lineWidth; ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
        
-       for(x=borderWidth; x < dest.width()-borderWidth; ++x)
+       for(x = borderWidth; x < dest.width()-borderWidth; ++x)
           output[x] = bg.rgb();
        }
       
     // left and right
     
-    for(y=borderWidth; y < dest.height()-borderWidth; ++y)
+    for(y = borderWidth; y < dest.height()-borderWidth; ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
         
-       for(x=borderWidth; x < borderWidth+lineWidth; ++x)
+       for(x = borderWidth; x < borderWidth+lineWidth; ++x)
             output[x] = bg.rgb();
             
        for(x = dest.width()-borderWidth-lineWidth; x < dest.width()-borderWidth; ++x)
@@ -609,11 +540,11 @@ void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int
     
     // bottom
     
-    for(y=dest.height()-borderWidth-lineWidth; y < dest.height()-borderWidth; ++y)
+    for(y = dest.height()-borderWidth-lineWidth; y < dest.height()-borderWidth; ++y)
        {
        output = (unsigned int *)dest.scanLine(y);
         
-       for(x=borderWidth; x < dest.width()-borderWidth; ++x)
+       for(x = borderWidth; x < dest.width()-borderWidth; ++x)
           output[x] = bg.rgb();
        }        
 }
@@ -751,7 +682,6 @@ void ImageEffect_Border::liquid(QImage &src, QImage &dest, const QColor &fg,
     
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
 }
-
 
 void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor, 
                                const QColor &btmColor, int borderWidth)
