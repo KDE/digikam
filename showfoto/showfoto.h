@@ -27,6 +27,8 @@
 #include <kmainwindow.h>
 #include <kurl.h>
 
+class QLabel;
+
 class KAction;
 class KActionMenu;
 class KToggleAction;
@@ -73,6 +75,7 @@ private slots:
     
     void slotToggleFullScreen();
     void slotAutoFit();
+    void slotZoomChanged(float zoom);
     void slotResize();
     void slotEscapePressed();
     void slotToggleShowBar();
@@ -154,6 +157,10 @@ private:
     KToolBarPopupAction   *m_redoAction;
         
     KSelectAction         *m_viewHistogramAction;
+    
+    QLabel*                m_nameLabel;
+    QLabel*                m_zoomLabel;
+    QLabel*                m_resLabel;
     
     bool                   m_fullScreen;
 };

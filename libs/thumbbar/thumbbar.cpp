@@ -100,6 +100,11 @@ ThumbBarView::~ThumbBarView()
     delete d;
 }
 
+int ThumbBarView::countItems()
+{
+    return d->count;
+}
+
 void ThumbBarView::clear(bool updateView)
 {
     d->clearing = true;
@@ -135,8 +140,7 @@ ThumbBarItem* ThumbBarView::currentItem() const
 
 ThumbBarItem* ThumbBarView::firstItem() const
 {
-    return d->firstItem;
-    
+    return d->firstItem;    
 }
 
 ThumbBarItem* ThumbBarView::lastItem() const

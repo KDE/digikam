@@ -25,7 +25,8 @@
 #include <unistd.h> 
  
 // Qt includes. 
- 
+
+#include <qlabel.h> 
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -51,6 +52,7 @@
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <ktoolbar.h>
+#include <kstatusbar.h>
 #include <kpopupmenu.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
@@ -81,6 +83,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_fullScreen = false;
     
     m_splash     = new SplashScreen("showfoto-splash.png");
+    
+    // -- construct the view ---------------------------------
+    
     QWidget* widget  = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -90,6 +95,19 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     lay->addWidget(m_bar);
 
     setCentralWidget(widget);
+    
+    m_nameLabel = new QLabel(statusBar());
+    m_nameLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_nameLabel,1);
+    m_zoomLabel = new QLabel(statusBar());
+    m_zoomLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_zoomLabel,1);
+    m_resLabel  = new QLabel(statusBar());
+    m_resLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_resLabel,1);
+    
+    // -- build the gui -------------------------------------
+    
     setupActions();
 
     KGlobal::dirs()->addResourceType("data",
@@ -117,10 +135,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     applySettings();
 
-    //-------------------------------------------------------------
+    // -- setup connections ---------------------------
     
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
+    
+    connect(m_canvas, SIGNAL(signalZoomChanged(float)),
+            this, SLOT(slotZoomChanged(float)));
             
     connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
             this, SLOT(slotChanged(bool, bool)));
@@ -749,7 +770,6 @@ bool ShowFoto::save()
     return true;
 }
 
-
 void ShowFoto::slotOpenURL(const KURL& url)
 {
     if(!promptUserSave())
@@ -762,6 +782,22 @@ void ShowFoto::slotOpenURL(const KURL& url)
     KIO::NetAccess::download(url, localFile);
 #endif
     m_canvas->load(localFile);
+    
+    int index = 0;
+    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    {
+        if (item->url().equals(m_bar->currentItem()->url()))
+            {
+            break;
+            }
+    index++;
+    }
+    
+    QString text = m_bar->currentItem()->url().filename() +
+                   i18n(" (%2 of %3)")
+                   .arg(QString::number(index+1))
+                   .arg(QString::number(m_bar->countItems()));
+    m_nameLabel->setText(text);
 }
 
 void ShowFoto::slotAutoFit()
@@ -785,6 +821,8 @@ void ShowFoto::slotToggleFullScreen()
         showNormal();
 #endif
         menuBar()->show();
+        statusBar()->show();
+
         
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
@@ -803,7 +841,8 @@ void ShowFoto::slotToggleFullScreen()
     {
         // hide the menubar and the statusbar
         menuBar()->hide();
-        
+        statusBar()->hide();
+
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
            m_bar->hide();
@@ -885,6 +924,12 @@ void ShowFoto::slotImagePluginsHelp()
 
 void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
 {
+    m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
+                        QString("x") +
+                        QString::number(m_canvas->imageHeight()) +
+                        QString(" ") +
+                        i18n("pixels"));
+    
     m_revertAction->setEnabled(moreUndo);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
@@ -1042,5 +1087,18 @@ void ShowFoto::show()
     }
     KMainWindow::show();
 }
+
+void ShowFoto::slotZoomChanged(float zoom)
+{
+    m_zoomLabel->setText(i18n("Zoom: ") +
+                         QString::number(zoom*100, 'f', 2) +
+                         QString("%"));
+
+    m_zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
+                                 !m_zoomFitAction->isChecked());
+    m_zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
+                                  !m_zoomFitAction->isChecked());
+}
+
 
 #include "showfoto.moc"

@@ -19,11 +19,17 @@
 #ifndef THUMBBAR_H
 #define THUMBBAR_H
 
+// Qt includes.
+
 #include <qscrollview.h>
 #include <qtooltip.h>
+
+// KDE includes.
+
 #include <kurl.h>
 
 class QPixmap;
+
 class KFileItem;
 
 namespace Digikam
@@ -41,6 +47,8 @@ public:
     ThumbBarView(QWidget* parent);
     ~ThumbBarView();
 
+    int  countItems();
+    
     void clear(bool updateView=true);
     void triggerUpdate();
 
@@ -54,7 +62,7 @@ public:
     ThumbBarItem* findItem(const QPoint& pos) const;
 
     void invalidateThumb(ThumbBarItem* item);
-    
+        
 protected:
 
     void viewportPaintEvent(QPaintEvent* e);
