@@ -72,6 +72,10 @@ extern "C"
 
 using namespace KIO;
 
+extern "C"
+{
+int dcraw_identify(const char* infile, const char* outfile);
+}
 
 static void exifRotate(const QString& filePath, QImage& thumb)
 {
@@ -311,14 +315,18 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     // stat the original file
     struct stat st;
-    if (::stat(QFile::encodeName(url.path(-1)), &st) == 0)
+    if (::stat(QFile::encodeName(url.path(-1)), &st) != 0)
     {
-        img = loadPNG(thumbPath);
-        if (!img.isNull())
-        {
-            if (img.text("Thumb::MTime") == QString::number(st.st_mtime))
-                regenerate = false;
-        }
+        error(KIO::ERR_INTERNAL, i18n("File doesnot exist"));
+        return;
+    }
+
+    
+    img = loadPNG(thumbPath);
+    if (!img.isNull())
+    {
+        if (img.text("Thumb::MTime") == QString::number(st.st_mtime))
+            regenerate = false;
     }
 
     if (regenerate)
@@ -563,6 +571,23 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
+    // first try with Dave Coffin's "parse" utility
+
+    kdDebug() << k_funcinfo << "Parsing file: " << path << endl;
+
+    KTempFile thumbFile(QString::null, "rawthumb");
+    thumbFile.setAutoDelete(true);
+    if (thumbFile.status() == 0)
+    {
+        if (dcraw_identify(QFile::encodeName(path),
+                           QFile::encodeName(thumbFile.name())) == 0)
+        {
+            image.load(thumbFile.name());
+            if (!image.isNull())
+                return true;
+        }
+    }
+    
     QCString command;
 
     // run dcraw with options:

@@ -1,10 +1,11 @@
 INCLUDES    = $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) -I$(top_srcdir)/digikam/sqlite $(all_includes) 
 METASOURCES = AUTO  
+KDE_CFLAGS =  -w
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 			 kio_digikamio.la
 
-kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp
+kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp parse.c
 kio_digikamthumbnail_la_LIBADD = $(LIB_KIO) -ljpeg $(LIBPNG) 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(all_libraries) \
 	$(KDE_PLUGIN) $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
