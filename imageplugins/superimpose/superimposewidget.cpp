@@ -48,8 +48,8 @@ namespace DigikamSuperImposeImagesPlugin
 SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_pixmap     = new QPixmap(w, h);
-    m_editMode   = MOVE;
+    m_pixmap   = new QPixmap(w, h);
+    m_editMode = MOVE;
     
     m_iface  = new Digikam::ImageIface(0, 0);
     m_data   = m_iface->getOriginalData();
@@ -83,32 +83,42 @@ QSize SuperImposeWidget::getTemplateSize(void)
     return m_template.size();
 }
 
-void SuperImposeWidget::makeSuperImpose(QPixmap *target, int w, int h)
+QImage SuperImposeWidget::makeSuperImpose(void)
 {
-    makePixmap(target, w, h);
+    QSize size = getTemplateSize();
+    QPixmap target(size);
+    target.fill(colorGroup().background());
+    
+    QPainter p(&target);
+    QPixmap pix(m_img.copy(m_currentSelection.x(), m_currentSelection.y(),
+                           m_currentSelection.width(), m_currentSelection.height())
+                .scale(size));
+    p.drawPixmap(0, 0, pix, 0, 0, size.width(), size.height());
+    QPixmap pixTemplate(m_template);
+    p.drawPixmap(0, 0, pixTemplate, 0, 0, size.width(), size.height());
+    p.end();    
+    
+    return ( target.convertToImage() );
 }
 
 void SuperImposeWidget::resetEdit(void)
 {
     m_zoomFactor = 100;
     m_currentSelection = QRect(m_w/2 - width()/2, m_h/2 - height()/2, width(), height());
-    makePixmap(m_pixmap, width(), height());
+    makePixmap();
     repaint(false);
 }
 
-void SuperImposeWidget::makePixmap(QPixmap *pixmap, int w, int h)
+void SuperImposeWidget::makePixmap(void)
 {
-    pixmap->fill(colorGroup().background());
+    m_pixmap->fill(colorGroup().background());
     
-    QPainter p(pixmap);
+    QPainter p(m_pixmap);
     QPixmap pix(m_img.copy(m_currentSelection.x(), m_currentSelection.y(),
                            m_currentSelection.width(), m_currentSelection.height())
-                .scale(w, h));
-    p.drawPixmap(0, 0, pix, 0, 0, w, h);
-    
-    QPixmap tem(m_template.scale(w, h));
-    
-    p.drawPixmap(0, 0, tem, 0, 0, w, h);
+                .scale(width(), height()));
+    p.drawPixmap(0, 0, pix, 0, 0, width(), height());
+    p.drawPixmap(0, 0, m_templatePix, 0, 0, width(), height());
     p.end();
 }
 
@@ -125,11 +135,20 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
 void SuperImposeWidget::slotSetCurrentTemplate(const KURL& url)
 {
     m_template.load(url.path());
-    makePixmap(m_pixmap, width(), height());
+    m_templatePix.convertFromImage(m_template.scale(width(), height()));
+    makePixmap();
     repaint(true);
 }
 
-void SuperImposeWidget::setZoomSelection(int deltaZoomFactor)
+void SuperImposeWidget::moveSelection(int dx, int dy)
+{
+    float wf = (float)m_currentSelection.width() / (float)width();
+    float hf = (float)m_currentSelection.height() / (float)height();
+    
+    m_currentSelection.moveBy( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
+}
+
+void SuperImposeWidget::zoomSelection(int deltaZoomFactor)
 {
     m_zoomFactor = m_zoomFactor + deltaZoomFactor;
     int wf = (int)((float)width()  * (100-(float)m_zoomFactor) / 100);
@@ -150,7 +169,7 @@ void SuperImposeWidget::setZoomSelection(int deltaZoomFactor)
        m_currentSelection.setHeight(m_currentSelection.height() + hf);
        }
         
-    makePixmap(m_pixmap, width(), height());
+    makePixmap();
     repaint(false);
 }
 
@@ -164,14 +183,16 @@ void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
            case ZOOMIN:
               if (m_zoomFactor < 100)
                  {
-                 setZoomSelection(+5);
+                 moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                 zoomSelection(+5);
                  }
               break;
               
            case ZOOMOUT:
               if (m_zoomFactor > 1)
                  {
-                 setZoomSelection(-5);
+                 moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                 zoomSelection(-5);
                  }
               break;
            
@@ -205,15 +226,9 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
            case MOVE:
               uint newxpos = e->x();
               uint newypos = e->y();
-              float wf = (float)m_currentSelection.width() / (float)width();
-              float hf = (float)m_currentSelection.height() / (float)height();
-
-              kdDebug() << "wf = " << wf << "   hf = " << hf 
-                        << "   dx = " << -(int)(wf*((float)newxpos - (float)m_xpos)) << "   dy = " << -(int)(hf*((float)newypos - (float)m_ypos))
-                        << endl;                    
               
-              m_currentSelection.moveBy( -(int)(wf*((float)newxpos - (float)m_xpos)), -(int)(hf*((float)newypos - (float)m_ypos)) );
-              makePixmap(m_pixmap, width(), height());
+              moveSelection(newxpos - m_xpos, newypos - m_ypos);
+              makePixmap();
               repaint(false);
                
               m_xpos = newxpos;

@@ -246,7 +246,8 @@ void ImageEffect_SuperImpose::slotHelp()
 
 void ImageEffect_SuperImpose::slotTemplateDirChanged(void)
 {
-    KURL url = KFileDialog::getExistingDirectory(m_templatesUrl.path(), 0, i18n("Select Template Directory to Browse..."));
+    KURL url = KFileDialog::getExistingDirectory(m_templatesUrl.path(), 0,
+                                                i18n("Select Template Directory to Browse..."));
     
     if( url.isValid() )
        {
@@ -260,12 +261,11 @@ void ImageEffect_SuperImpose::slotOk()
     m_parent->setCursor( KCursor::waitCursor() );
     
     Digikam::ImageIface iface(0, 0);
-    QSize size = m_previewWidget->getTemplateSize();    
-    QPixmap target( size );
-    m_previewWidget->makeSuperImpose(&target, size.width(), size.height());
-    QImage img = target.convertToImage();
+    QImage img = m_previewWidget->makeSuperImpose();
     img.setAlphaBuffer(true);
-    iface.putOriginalData((uint*)img.bits(), size.width(), size.height());   
+    iface.putOriginalData( (uint*)img.bits(),
+                           m_previewWidget->getTemplateSize().width(),
+                           m_previewWidget->getTemplateSize().height() );   
     
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();       

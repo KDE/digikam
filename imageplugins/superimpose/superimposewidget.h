@@ -62,11 +62,12 @@ public:
     ~SuperImposeWidget();
 
     Digikam::ImageIface* imageIface();
-    void  setEditMode(int mode);
-    void  resetEdit(void);
-    QRect getCurrentSelection(void);
-    QSize getTemplateSize(void);
-    void makeSuperImpose(QPixmap *target, int w, int h);
+    
+    void   setEditMode(int mode);
+    void   resetEdit(void);
+    QRect  getCurrentSelection(void);
+    QSize  getTemplateSize(void);
+    QImage makeSuperImpose(void);
     
 public slots:
 
@@ -87,6 +88,7 @@ protected:
     int         m_zoomFactor;
     
     QPixmap    *m_pixmap;              // For image region selection manipulations.
+    QPixmap     m_templatePix;         // Template scaled to widget size.
     
     QImage      m_img;                 // Full image data.
     QImage      m_template;            // Full template data.
@@ -100,8 +102,9 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );    
     
-    void setZoomSelection(int deltaZoomFactor);    
-    void makePixmap(QPixmap* pixmap, int w, int h);
+    void zoomSelection(int deltaZoomFactor);    
+    void moveSelection(int x, int y);  
+    void makePixmap(void);
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
