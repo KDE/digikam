@@ -74,12 +74,15 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     iconTextLabel->setBuddy(m_iconButton);
     gl->addWidget(m_iconButton, 1, 1);
 
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
+                                          QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
     connect(m_iconButton, SIGNAL(clicked()),
             SLOT(slotIconChange()));
-
+    connect(m_titleEdit, SIGNAL(textChanged(const QString&)),
+            SLOT(slotTitleChanged(const QString&)));
+    
     // by default assign the icon of the parent (if not root)
     // to this new tag
     if (!parent->isRoot())
@@ -88,6 +91,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
         m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
     }
 
+    enableButtonOK(!m_titleEdit->text().isEmpty());
     adjustSize();
 }
 
@@ -113,6 +117,12 @@ void TagCreateDlg::slotIconChange()
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
+
+void TagCreateDlg::slotTitleChanged(const QString& newtitle)
+{
+    enableButtonOK(!newtitle.isEmpty());
+}
+
 bool TagCreateDlg::tagCreate(TAlbum* parent, QString& title,
                              QString& icon)
 {
@@ -135,7 +145,8 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>").arg(album->getPrettyURL()) );
+    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>")
+                       .arg(album->getPrettyURL()) );
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -170,15 +181,19 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     iconTextLabel->setBuddy(m_iconButton);
     gl->addWidget(m_iconButton, 1, 1);
 
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
+                                          QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
     connect(m_iconButton, SIGNAL(clicked()),
             SLOT(slotIconChange()));
+    connect(m_titleEdit, SIGNAL(textChanged(const QString&)),
+            SLOT(slotTitleChanged(const QString&)));
 
     m_icon = album->getIcon();
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 
+    enableButtonOK(!m_titleEdit->text().isEmpty());
     adjustSize();
 }
 
@@ -207,6 +222,11 @@ void TagEditDlg::slotIconChange()
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
+void TagEditDlg::slotTitleChanged(const QString& newtitle)
+{
+    enableButtonOK(!newtitle.isEmpty());
+}
+
 bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
                          QString& icon)
 {
@@ -222,3 +242,4 @@ bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
 
 
 #include "tagcreatedlg.moc"
+
