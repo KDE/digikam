@@ -53,6 +53,8 @@
 #include <ksqueezedtextlabel.h>
 #include <kglobal.h>
 #include <kfilemetainfo.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
 
 // LibKexif includes.
 
@@ -61,6 +63,8 @@
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexiflistview.h>
 #include <libkexif/kexiflistviewitem.h>
+#include <libkexif/kexif.h>
+#include <libkexif/kexifutils.h>
 
 // Local includes.
 
@@ -81,10 +85,10 @@
 #include "imageproperties.h"
 
 
-ExifThumbLabel::ExifThumbLabel(QWidget * parent, AlbumIconView* currItemView)
+ExifThumbLabel::ExifThumbLabel(QWidget * parent, KURL currentUrl)
                :QLabel(parent)
 {
-    m_IconView = currItemView;
+    m_currentUrl = currentUrl;
     
     m_popmenu = new QPopupMenu(this);
     m_popmenu->setCheckable(true);
@@ -116,63 +120,23 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 {
     if (e->button() !=  Qt::RightButton) return;
 
-    int sel = m_popmenu->exec(QCursor::pos());
+    int orientation = m_popmenu->exec(QCursor::pos()) - 10;
     
-    switch (sel)
-    {
-    case 11:
-    {
-        m_IconView->slotSetExifOrientation(1);
-        break;
-    }
-    case 12:
-    {
-        m_IconView->slotSetExifOrientation(2);
-        break;
-    }
-    case 13:
-    {
-        m_IconView->slotSetExifOrientation(3);
-        break;
-    }
-    case 14:
-    {
-        m_IconView->slotSetExifOrientation(4);
-        break;
-    }
-    case 15:
-    {
-        m_IconView->slotSetExifOrientation(5);
-        break;
-    }
-    case 16:
-    {
-        m_IconView->slotSetExifOrientation(6);
-        break;
-    }
-    case 17:
-    {
-        m_IconView->slotSetExifOrientation(7);
-        break;
-    }
-    case 18:
-    {
-        m_IconView->slotSetExifOrientation(8);
-        break;
-    }
-    case 19:
-    {
-        m_IconView->slotSetExifOrientation(9);
-        break;
-    }
-    default:
-        break;
-    }
+    kdDebug() << "Setting Exif Orientation to " << orientation << endl;
 
-    for (int i = 11 ; i <= 19 ; ++i)
-        m_popmenu->setItemChecked(i, false);            
+    KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
+
+    if (!KExifUtils::writeOrientation(m_currentUrl.path(), o))
+        {
+        KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1.")
+                          .arg(m_currentUrl.filename()));
+        return;
+        }
         
-    m_popmenu->setItemChecked(sel, true);
+    for (int i = 11 ; i <= 18 ; ++i)
+        m_popmenu->setItemChecked(i, false);            
+                
+    m_popmenu->setItemChecked(orientation + 10, true);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -901,7 +865,7 @@ void ImageProperties::setupExifViewer(void)
     m_listview = new KExifListView(page, true);
     
     m_embeddedThumbnail = new QVGroupBox(i18n("Embedded Exif thumbnail"), page);
-    m_exifThumb = new ExifThumbLabel(m_embeddedThumbnail, m_view);
+    m_exifThumb = new ExifThumbLabel(m_embeddedThumbnail, m_currItem->fileItem()->url());
     QWhatsThis::add( m_exifThumb, i18n("<p>You can see here the Exif thumbnail embedded in image.<p>"
                                        "If you press under with right mouse button, you can corrected the "
                                        "Exif orientation tag by a popup menu."));

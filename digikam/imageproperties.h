@@ -66,7 +66,7 @@ class ExifThumbLabel : public QLabel
 
 public:
     
-    ExifThumbLabel(QWidget * parent, AlbumIconView* currItemView);
+    ExifThumbLabel(QWidget * parent, KURL currentUrl);
     ~ExifThumbLabel();
     
     void setOrientationMenu(KExifData *currExifData);
@@ -75,7 +75,7 @@ protected:
     
     QPopupMenu*    m_popmenu;
     
-    AlbumIconView* m_IconView;
+    KURL           m_currentUrl;
     
     virtual void mousePressEvent ( QMouseEvent * e );
     
