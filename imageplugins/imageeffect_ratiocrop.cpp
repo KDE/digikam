@@ -35,7 +35,6 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
-#include <qtimer.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 
@@ -195,7 +194,6 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
                 
     readSettings();             
-    QTimer::singleShot(0, this, SLOT(slotUser1()));
     adjustSize();
     disableResize();     
 }
@@ -209,14 +207,31 @@ void ImageEffect_RatioCrop::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 1) );
-    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );
+    
+    m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
+    m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
+    
+    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 3) );                 // 3:4 per default.
     m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
     m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
-    m_useRuleThirdLines->setChecked( config->readBoolEntry("Use Rule Third Lines", false) );
-
     slotRatioChanged(m_ratioCB->currentItem());
+
+    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    // Paysage per default.
+    
+    if ( m_orientCB->currentItem() == Digikam::ImageSelectionWidget::Paysage )
+       {
+       m_widthInput->setValue( config->readNumEntry("Custom Aspect Ratio Width", 800) );
+       m_heightInput->setValue( 1 );
+       }
+    else       
+       {
+       m_widthInput->setValue( 1 );
+       m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
+       }
+    
     slotOrientChanged(m_orientCB->currentItem());
+    
+    m_useRuleThirdLines->setChecked( config->readBoolEntry("Use Rule Third Lines", false) );
 }
     
 void ImageEffect_RatioCrop::writeSettings(void)
@@ -227,6 +242,12 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Aspect Ratio Orientation", m_orientCB->currentItem() );
     config->writeEntry( "Custom Aspect Ratio Num", m_customRatioNInput->value() );
     config->writeEntry( "Custom Aspect Ratio Den", m_customRatioDInput->value() );
+    
+    config->writeEntry( "Custom Aspect Ratio Xpos", m_xInput->value() );
+    config->writeEntry( "Custom Aspect Ratio Ypos", m_yInput->value() );
+    config->writeEntry( "Custom Aspect Ratio Width", m_widthInput->value() );
+    config->writeEntry( "Custom Aspect Ratio Height", m_heightInput->value() );
+    
     config->writeEntry( "Use Rule Third Lines", m_useRuleThirdLines->isChecked() );
     config->sync();
 }

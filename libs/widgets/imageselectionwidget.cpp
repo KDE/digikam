@@ -18,10 +18,10 @@
  * 
  * ============================================================ */
  
-#define OPACITY          0.7
-#define RCOL             0xAA
-#define GCOL             0xAA
-#define BCOL             0xAA
+#define OPACITY 0.7
+#define RCOL    0xAA
+#define GCOL    0xAA
+#define BCOL    0xAA
  
 // C++ includes.
 
