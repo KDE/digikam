@@ -39,6 +39,7 @@ extern "C"
 #include <qobject.h>
 #include <qevent.h>
 #include <qfile.h>
+#include <qdatetime.h> 
 
 // KDE includes.
 
@@ -152,6 +153,9 @@ void CimgIface::startComputation()
 {
     CimgIface::EventData *d;
     
+    QDateTime startDate = QDateTime::currentDateTime();
+    kdDebug() << "CimgIface::Initialization..." << endl;
+    
     if (m_parent)
        {
        d = new CimgIface::EventData;
@@ -159,7 +163,6 @@ void CimgIface::startComputation()
        d->success  = false;
        d->progress = 0;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       kdDebug() << "CimgIface::Initialization..." << endl;
        }
         
     // Copy the src data into a CImg type image with three channels and no alpha. This means that a CImg is always rgba.
@@ -217,26 +220,33 @@ void CimgIface::startComputation()
           }
        }
     
-    if (m_parent)
+    QDateTime endDate = QDateTime::currentDateTime();
+    
+    if (!m_cancel)
        {
-       if (!m_cancel)
+       if (m_parent)
           {
           d = new CimgIface::EventData;
           d->starting = false;
           d->success  = true;
           d->progress = 0;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          kdDebug() << "CimgIface::End of computation..." << endl;
           }
-       else
+          
+       kdDebug() << "CimgIface::End of computation !!! ... ( " << endDate.secsTo(startDate) << " )" << endl;
+       }
+    else
+       {
+       if (m_parent)
           {
           d = new CimgIface::EventData;
           d->starting = false;
           d->success  = false;
           d->progress = 0;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          kdDebug() << "CimgIface::Computation aborted..." << endl;
           }
+          
+       kdDebug() << "CimgIface::Computation aborted... ( " << endDate.secsTo(startDate) << " )" << endl;
        }
 }
 
@@ -246,9 +256,9 @@ bool CimgIface::process()
 
     // Begin regularization PDE iterations
         
-     int counter = 0;
+    int counter = 0;
      
-     for (unsigned int iter = 0; !m_cancel && (iter < m_nb_iter); iter++)
+    for (unsigned int iter = 0; !m_cancel && (iter < m_nb_iter); iter++)
         {
         // Compute smoothed structure tensor field G
         compute_smoothed_tensor();
