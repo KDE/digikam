@@ -389,11 +389,13 @@ void ImageEffect_RatioCrop::slotOk()
     int h            = iface.originalHeight();
     QRect currentPos = m_imageSelectionWidget->getRegionSelection();
 
-    QImage imOrg, imDest;
-    imOrg.create(w, h, 32);
-    memcpy(imOrg.bits(), data, imOrg.numBytes());
-    imDest = imOrg.copy(currentPos);
-    iface.putOriginalData((uint*)imDest.bits(), imDest.width(), imDest.height());   
+    QImage* imOrg;
+    QImage  imDest;
+    imOrg = new QImage((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
+    imDest = imOrg->copy(currentPos);
+    delete imOrg;
+
+    iface.putOriginalData((uint*)imDest.bits(), imDest.width(), imDest.height());
     
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
