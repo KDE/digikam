@@ -109,7 +109,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Perpective"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Perpective Adjustment"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 4);
@@ -200,8 +200,8 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
                                              float bottomLeftAngle, float bottomRightAngle)
 {
     QString temp;
-    m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" pixels") );
-    m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" pixels") );
+    m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
+    m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
     
     m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ) + "°" );
     m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ) + "°" );
