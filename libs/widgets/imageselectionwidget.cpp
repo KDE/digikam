@@ -18,6 +18,11 @@
  * 
  * ============================================================ */
 
+#define opacity 0.7
+#define rcol    255
+#define gcol    255
+#define bcol    255
+ 
 // C++ includes.
 
 #include <cstdio>
@@ -29,6 +34,7 @@
 #include <qpainter.h>
 #include <qbrush.h> 
 #include <qpixmap.h>
+#include <qimage.h>
 #include <qpen.h>
 #include <qpoint.h> 
 
@@ -69,6 +75,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)
     setMouseTracking(true);
     
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
+    updatePixmap();
 }
 
 ImageSelectionWidget::~ImageSelectionWidget()
@@ -288,7 +295,10 @@ void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget)
     regionSelectionChanged();
     
     if (repaintWidget)
+       {
+       updatePixmap();
        repaint(false);
+       }
 }
 
 void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
@@ -302,6 +312,7 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
        if (m_localRegionSelection.bottom() > m_rect.height()) 
           m_localRegionSelection.moveBottom(m_rect.height());
        
+       updatePixmap();
        repaint(false);
        }
     
@@ -341,34 +352,61 @@ void ImageSelectionWidget::regionSelectionChanged(void)
     emit signalSelectionChanged( m_regionSelection );   
 }
 
-void ImageSelectionWidget::paintEvent( QPaintEvent * )
+void ImageSelectionWidget::updatePixmap(void)
 {
     m_localTopLeftCorner.setRect(m_localRegionSelection.left(), 
                                  m_localRegionSelection.top(), 10, 10);
     m_localBottomLeftCorner.setRect(m_localRegionSelection.left(), 
-                                    m_localRegionSelection.bottom() - 10, 10, 10);   
-    m_localTopRightCorner.setRect(m_localRegionSelection.right() - 10, 
+                                    m_localRegionSelection.bottom() - 9, 10, 10);   
+    m_localTopRightCorner.setRect(m_localRegionSelection.right() - 9, 
                                   m_localRegionSelection.top(), 10, 10);
-    m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 10, 
-                                     m_localRegionSelection.bottom() - 10, 10, 10);
-    
+    m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 9, 
+                                     m_localRegionSelection.bottom() - 9, 10, 10);
     // Drawing background and image.
     m_pixmap->fill(colorGroup().background());
-    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
-                   m_rect.width(), m_rect.height());
-    
-    QPainter p(m_pixmap);
+
+    if (!m_data)
+        return;
     
     // Drawing region outside selection grayed.
-    QRegion sel(m_localRegionSelection);    
-    QRegion img(m_rect);
-    p.setRasterOp(Qt::AndROP);
-    p.setClipRegion( img.eor(sel) );
-    p.fillRect(m_rect ,QBrush::QBrush(Qt::Dense5Pattern));
-    p.setRasterOp(Qt::CopyROP);
-    p.setClipping(false);
+    QImage image((uchar*)m_data, m_w, m_h, 32, 0, 0, QImage::IgnoreEndian);
+    image = image.copy();
+
+    uint* ptr = (uint*)image.bits();
+    uchar r, g, b, a;
+
+    int lx = m_localRegionSelection.x();
+    int rx = m_localRegionSelection.x() + m_localRegionSelection.width();
+    int ty = m_localRegionSelection.y();
+    int by = m_localRegionSelection.y() + m_localRegionSelection.height();
     
+    for (int j=0; j<m_h; j++)
+    {
+        for (int i=0; i<m_w; i++)
+        {
+            if (i < lx || i >= rx || j < ty || j >= by)
+            {
+                a = (*ptr >> 24) & 0xff;
+                r = (*ptr >> 16) & 0xff;
+                g = (*ptr >> 8)  & 0xff;
+                b = (*ptr)       & 0xff;
+                
+                r += (uchar)((rcol - r) * opacity);
+                g += (uchar)((gcol - g) * opacity);
+                b += (uchar)((bcol - b) * opacity);
+                
+                *ptr = a << 24 | r << 16 | g << 8 | b;
+            }
+                
+            ptr++;
+        }
+    }
+
+    QPixmap pix(image);
+    bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
+
     // Drawing selection borders.
+    QPainter p(m_pixmap);
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
@@ -377,8 +415,12 @@ void ImageSelectionWidget::paintEvent( QPaintEvent * )
     p.drawRect(m_localBottomLeftCorner);
     p.drawRect(m_localTopRightCorner);
     p.drawRect(m_localBottomRightCorner);
-    p.end();
 
+    p.end();
+}
+
+void ImageSelectionWidget::paintEvent( QPaintEvent * )
+{
     bitBlt(this, 0, 0, m_pixmap);                   
 }
 
@@ -429,6 +471,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
        
           m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
 
+          updatePixmap();
           repaint(false);
      
           m_xpos = newxpos;

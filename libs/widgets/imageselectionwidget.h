@@ -126,6 +126,7 @@ private:
     void regionSelectionChanged(void);
     void realToLocalRegion(void);
     void applyAspectRatio(bool WOrH, bool repaintWidget=true);
+    void updatePixmap(void);
 };
 
 }  // NameSpace Digikam
