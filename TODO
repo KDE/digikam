@@ -14,7 +14,7 @@ Main Application:
 -----------------
 
 * Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.6.3>
-* Lauch the Albums properties when a new Album is added 
+x Lauch the Albums properties when a new Album is added 
   to the Database.                                                 <Gilles Caulier - 0.6.3>
 - Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
 - Add image sizes annotation for each album item.                  <Gilles Caulier - 0.6.3>
