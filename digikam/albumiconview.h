@@ -125,6 +125,7 @@ private:
     void           exifRotate(QString filename, QPixmap& pixmap);
     void           updateItemRectsPixmap();
     bool           showMetaInfo();
+    AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
     QPopupMenu*    getTagsPopup(int addToID, QWidget* parent=0, int tagid=0);
 

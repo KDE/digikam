@@ -1057,8 +1057,10 @@ void AlbumFolderView::startDrag()
     // Start dragging a tag        
     TagDrag *tagDrag = new TagDrag(folderItem->album()->getID(), 
                                    this);
-    tagDrag->setPixmap(*folderItem->pixmap());
-    tagDrag->drag();
+    if(tagDrag) {
+        tagDrag->setPixmap(*folderItem->pixmap());
+        tagDrag->dragCopy();
+    }
 }
 
 void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
@@ -1319,7 +1321,9 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
         popmenu.insertItem(SmallIcon("tag"), 
                         i18n("Assign Tag '%1' to dropped items")
                         .arg(album->getPrettyURL()), 10);
-    
+        popmenu.insertSeparator(-1);
+        popmenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );    
+        
         if (popmenu.exec(QCursor::pos()) != 10)
             return;
         

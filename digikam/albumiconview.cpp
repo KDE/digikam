@@ -44,6 +44,7 @@
 #include <qptrlist.h>
 #include <qguardedptr.h>
 #include <qdict.h>
+#include <qdatastream.h>
 
 // KDE includes.
 
@@ -1225,7 +1226,8 @@ void AlbumIconView::startDrag()
 void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 {
     if (!d->currentAlbum || (!QUriDrag::canDecode(event) &&
-                             !CameraDragObject::canDecode(event))
+                             !CameraDragObject::canDecode(event) &&
+                             !TagDrag::canDecode(event))
         || event->source() == this) {
         event->ignore();
         return;
@@ -1236,16 +1238,18 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
     
-    if (!d->currentAlbum || d->currentAlbum->type() != Album::PHYSICAL
-        || (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event))
-        || event->source() == this)
+    if (!d->currentAlbum || (!QUriDrag::canDecode(event) &&
+                             !CameraDragObject::canDecode(event) &&
+                             !TagDrag::canDecode(event))
+         || event->source() == this)
     {
         event->ignore();
         return;
     }
 
-    if (QUriDrag::canDecode(event)) {
-
+    if (QUriDrag::canDecode(event) && 
+        d->currentAlbum->type() == Album::PHYSICAL) 
+    {
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
         KURL destURL(palbum->getKURL());
 
@@ -1273,7 +1277,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             break;
         }
     }
-    else if (CameraDragObject::canDecode(event)) {
+    else if (CameraDragObject::canDecode(event) &&
+             d->currentAlbum->type() == Album::PHYSICAL) 
+    {
 
         QPopupMenu popMenu(this);
         popMenu.insertItem( i18n("&Download"), 10 );
@@ -1305,7 +1311,70 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         default:
             break;
         }
-
+    }
+    else if(TagDrag::canDecode(event)) 
+    {
+        QByteArray ba = event->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+            
+        AlbumManager* man = AlbumManager::instance();
+        AlbumDB* db = man->albumDB();
+          
+        TAlbum* talbum = man->findTAlbum(tagID);
+            
+        if(talbum) 
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem(i18n("&Assign Tag '%1' to selected images")
+                .arg(talbum->getPrettyURL()), 10 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+    
+            popMenu.setMouseTracking(true);
+            int id = popMenu.exec(QCursor::pos());
+            switch(id) {
+            case 10: 
+            {
+                AlbumIconItem *albumItem = findItem(event->pos());
+                if(albumItem)
+                {
+                    PAlbum* palbum =
+                        d->imageLister->findParentAlbum(albumItem->fileItem());
+                    if (palbum)
+                    {
+                        db->setItemTag(palbum, albumItem->text(), talbum);
+                    }   
+                }
+                
+                for (ThumbItem *it = firstItem(); it; it = it->nextItem())
+                {
+                    if (it->isSelected())
+                    {
+                        AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                        PAlbum* palbum =
+                            d->imageLister->findParentAlbum(albumItem->fileItem());
+                        if (palbum)
+                        {
+                            db->setItemTag(palbum, albumItem->text(), talbum);
+                        }
+                    }
+                }
+                if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+                {
+                    d->imageLister->updateDirectory();        
+                }
+                updateContents();            
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
+    else {
+        event->ignore();
     }
 }
 
@@ -1792,6 +1861,11 @@ bool AlbumIconView::showMetaInfo()
 {
     return (d->albumSettings->getIconShowResolution() ||
             d->albumSettings->getIconShowFileComments());
+}
+
+AlbumIconItem* AlbumIconView::findItem(const QPoint& pos)
+{
+    return dynamic_cast<AlbumIconItem*>(ThumbView::findItem(pos));
 }
 
 AlbumIconItem* AlbumIconView::findItem(const QString& url) const
