@@ -39,7 +39,7 @@ class CameraPropsPlugin : public KPropsDlgPlugin
 public:
 
     CameraPropsPlugin(KPropertiesDialog *_props);
-   	virtual ~CameraPropsPlugin();
+   	virtual ~CameraPropsPlugin() {};
     
 };
 

@@ -92,7 +92,3 @@ CameraPropsPlugin::CameraPropsPlugin(KPropertiesDialog *_props ) :
 	}
 }
 
-CameraPropsPlugin::~CameraPropsPlugin()
-{
-}
-
