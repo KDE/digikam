@@ -345,10 +345,10 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        {
        // Black tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1, 
-                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 35));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(color.red(), 35));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(color.green(), 35));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(color.blue(), 35));      
+                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 42));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(color.red(), 42));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(color.green(), 42));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(color.blue(), 42));      
        m_pickBlack->setOn(false);
        }
     else if ( m_pickGray->isOn() )
@@ -365,10 +365,10 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        {
        // White tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 15, 
-                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 220));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(color.red(), 220));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(color.green(), 220));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 220));      
+                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 213));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(color.red(), 213));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(color.green(), 213));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 213));      
        m_pickWhite->setOn(false);
        }
     else
