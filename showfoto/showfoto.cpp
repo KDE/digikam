@@ -88,10 +88,10 @@ void ShowFoto::setupActions()
     KStdAction::back(this, SLOT(slotPrev()),
                      actionCollection(), "go_bwd");
 
-    m_fileproperties = new KAction(i18n("Properties"), "exifinfo",
-                                   ALT+Key_Return,
-                                   this, SLOT(slotFileProperties()),
-                                   actionCollection(), "file_properties");
+    new KAction(i18n("Properties"), 0,
+                ALT+Key_Return,
+                this, SLOT(slotFileProperties()),
+                actionCollection(), "file_properties");
                      
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
