@@ -14,3 +14,10 @@ if test -z "$GPHOTO_CONFIG" ; then
   echo "http://www.gphoto.org/download.html"
   echo ""
 fi
+
+if test "$NO_LIBEXIF" = "yes"; then
+  echo ""
+  echo "DigiKam needs libexif. You need to install libexif, e.g. from"
+  echo "http://libexif.sourceforge.net"
+  echo ""
+fi

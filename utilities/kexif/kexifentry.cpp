@@ -66,11 +66,15 @@ void KExifEntry::readEntry()
     mTitle = QString(exif_tag_get_title(mExifEntry->tag));
     mDescription = QString(exif_tag_get_description(mExifEntry->tag));
 
+#ifdef HAVE_EXIF06
     char val[1024];
     exif_entry_get_value(mExifEntry, val, 1023);
     // just in case we don't get a null-terminated string
     val[1024] = '\0'; 
     mValue = QString((const char*)&val);
+#else
+    mValue = QString(exif_entry_get_value(mExifEntry));
+#endif
 }
 
 QString KExifEntry::getName()
