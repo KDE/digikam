@@ -63,8 +63,8 @@ o Thumnails generation for RAW files.
 * EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
 
   
-Image Viewer/Editor:
---------------------
+Image Viewer/Editor :
+---------------------
 
 * Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
 * New BCG and RGB setting dialogs with slidders.                   <Gilles Caulier - 0.6.3>
@@ -79,6 +79,20 @@ o Added Plugins interface.
 o Added Blur/Sharpen image filters.
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.
+
+
+Exif Viewer :
+-------------
+
+o Make Exif editor.
+o Using KDialogBase.
+o Added help access.
+
+
+SplashScreen :
+-------------
+
+o Added plugins loading progress bar.
 
 
 Handbook :
