@@ -45,18 +45,13 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                 this, SLOT(slotLevelsAdjust()),
                 actionCollection(), "imageplugin_adjustlevels");
 
+    setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
+    
     kdDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
 }
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()
 {
-}
-
-QStringList ImagePlugin_AdjustLevels::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/imageplugin_adjustlevels/ ");
-    return guiDef;
 }
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()

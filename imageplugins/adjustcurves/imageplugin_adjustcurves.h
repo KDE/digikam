@@ -37,8 +37,6 @@ public:
                              const QStringList &args);
     ~ImagePlugin_AdjustCurves();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotCurvesAdjust();

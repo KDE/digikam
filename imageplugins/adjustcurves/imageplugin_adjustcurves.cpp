@@ -44,18 +44,13 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                 this, SLOT(slotCurvesAdjust()),
                 actionCollection(), "imageplugin_adjustcurves");
 
+    setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
+
     kdDebug() << "ImagePlugin_AdjustCurves plugin loaded" << endl;
 }
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()
 {
-}
-
-QStringList ImagePlugin_AdjustCurves::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/imageplugin_adjustcurves/ ");
-    return guiDef;
 }
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()

@@ -37,8 +37,6 @@ public:
                              const QStringList &args);
     ~ImagePlugin_AdjustLevels();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotLevelsAdjust();

@@ -22,8 +22,6 @@
 
 #ifdef HAVE_DIGIKAM_TOPLEVEL
 
-#include <guiclient.h>
-#include <guifactory.h>
 #include <colorgradientwidget.h>
 #include <histogramwidget.h>
 #include <imagecurves.h>
@@ -41,8 +39,6 @@
 
 #else
 
-#include <digikam/guiclient.h>
-#include <digikam/guifactory.h>
 #include <digikam/colorgradientwidget.h>
 #include <digikam/histogramwidget.h>
 #include <digikam/imagecurves.h>

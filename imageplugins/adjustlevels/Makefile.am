@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_adjustlevels.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_adjustlevels.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_adjustlevels_ui.rc
