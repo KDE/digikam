@@ -107,7 +107,6 @@ public:
 
     void restore() 
         {
-        qDebug ("%i", changed);
         if (im && changed) 
             {
             if (pixmap)
