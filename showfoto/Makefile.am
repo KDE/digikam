@@ -17,5 +17,7 @@ METASOURCES = AUTO
 rcdir = $(kde_datadir)/showfoto
 rc_DATA = showfotoui.rc
 
+xdg_apps_DATA = showfoto.desktop
+
 
 

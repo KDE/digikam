@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=showFoto
+GenericName=Image Viewer
+Comment=digiKam photo viewer
+Exec=showfoto %i %m -caption "%c" %U
+Icon=
+Type=Application
+MimeType=image/gif;image/x-xpm;image/x-xbm;image/jpeg;image/png;image/tiff;image/x-bmp;image/x-psd;image/x-eim;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-greymap
+Terminal=false
+Categories=Qt;KDE;Graphics
