@@ -1,5 +1,7 @@
 v0.7.3-Beta1 - 08/02/05
 ----------------------------------------------------------------------------
+    * 'AdjustCurves' plugin : add option to see over-exposed pixels in 
+       preview area.
     * 'AdjustCurves' plugins : add black/gray/white tone picker color tools
     * New plugin 'WhiteBalance'.
     * New plugin 'Texture'.
