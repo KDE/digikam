@@ -1,9 +1,8 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-//    SETUPGENERAL.H
+//    SETUPCOLLECTIONS.H
 //
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//    Copyright (C) 2004 Gilles CAULIER <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -21,47 +20,41 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef SETUPGENERAL_H
-#define SETUPGENERAL_H
+#ifndef SETUPCOLLECTIONS_H
+#define SETUPCOLLECTIONS_H
 
 // Qt includes.
 
 #include <qwidget.h>
 
-class QRadioButton;
-class QCheckBox;
-class QLineEdit;
+class QPushButton;
+class QListBox;
+class QListBoxItem;
 
-class SetupGeneral : public QWidget
+class SetupCollections : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupGeneral(QWidget* parent = 0);
-    ~SetupGeneral();
+    SetupCollections(QWidget* parent = 0);
+    ~SetupCollections();
 
     void applySettings();
 
 private:
 
     void readSettings();
-
-    QLineEdit    *albumPathEdit;
-
-    QRadioButton *smallIconButton_;
-    QRadioButton *mediumIconButton_;
-    QRadioButton *largeIconButton_;
-    QRadioButton *hugeIconButton_;
-
-    QCheckBox    *iconShowMimeBox_;
-    QCheckBox    *iconShowSizeBox_;
-    QCheckBox    *iconShowDateBox_;
-    QCheckBox    *iconShowCommentsBox_;
+    
+    QListBox     *albumCollectionBox_;
+    QPushButton  *addCollectionButton_;
+    QPushButton  *delCollectionButton_;
     
 private slots:
 
-    void slotChangeAlbumPath();
+    void slotCollectionSelectionChanged();
+    void slotAddCollection();
+    void slotDelCollection();
 };
 
-#endif // SETUPGENERAL_H 
+#endif // SETUPCOLLECTIONS_H 

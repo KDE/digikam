@@ -61,7 +61,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    // --------------------------------------------------------
 
    QHGroupBox *albumPathBox = new QHGroupBox(parent);
-   albumPathBox->setTitle(i18n("Album Library Path"));
+   albumPathBox->setTitle(i18n("Albums Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
@@ -73,10 +73,10 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(2,
-                                           Qt::Horizontal, 
-                                           i18n("Default Thumbnail Size"),
-                                           parent);
+   QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1,
+                                                        Qt::Horizontal, 
+                                                        i18n("Default Thumbnails Size"),
+                                                        parent);
    
    iconSizeButtonGroup->setRadioButtonExclusive(true);
 
@@ -96,8 +96,9 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QGroupBox *iconTextGroup = new QGroupBox(2, Qt::Horizontal, 
-                                            i18n("Extra Information in Thumbnail View"),
+   QGroupBox *iconTextGroup = new QGroupBox(1,
+                                            Qt::Horizontal, 
+                                            i18n("Extra Information in Thumbnails View"),
                                             parent);
 
    iconShowMimeBox_ = new QCheckBox(iconTextGroup);
@@ -114,46 +115,6 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    layout->addWidget(iconTextGroup);
    
-   // --------------------------------------------------------
-
-   QGroupBox* collectionGroup = new QVGroupBox(parent);
-   collectionGroup->setTitle(i18n("Album Collection Types"));
-   collectionGroup->setColumnLayout(0, Qt::Vertical );
-   collectionGroup->layout()->setSpacing( KDialog::spacingHint() );
-   collectionGroup->layout()->setMargin( KDialog::marginHint() );
-   QGridLayout* collectionGroupLayout = new QGridLayout( collectionGroup->layout() );
-   collectionGroupLayout->setAlignment( Qt::AlignTop );
-   
-   albumCollectionBox_ = new QListBox(collectionGroup);
-   albumCollectionBox_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                                  QSizePolicy::MinimumExpanding));
-
-   albumCollectionBox_->setMaximumHeight(80);
-   albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
-	  
-   collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
-                                              0, 2, 0, 0 );
-
-   addCollectionButton_ = new QPushButton( i18n("&Add..."),
-                                           collectionGroup);
-   collectionGroupLayout->addWidget( addCollectionButton_, 0, 1);
-
-   delCollectionButton_ = new QPushButton( i18n("&Delete"),
-                                           collectionGroup);
-   collectionGroupLayout->addWidget( delCollectionButton_, 1, 1);
-   delCollectionButton_->setEnabled(false);
-
-   connect(albumCollectionBox_, SIGNAL(selectionChanged()),
-           this, SLOT(slotCollectionSelectionChanged()));
-           
-   connect(addCollectionButton_, SIGNAL(clicked()),
-           this, SLOT(slotAddCollection()));
-           
-   connect(delCollectionButton_, SIGNAL(clicked()),
-           this, SLOT(slotDelCollection()));
-   
-   layout->addWidget(collectionGroup);
-
    // --------------------------------------------------------
 
    layout->addStretch();
@@ -190,16 +151,6 @@ void SetupGeneral::applySettings()
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
 
-    QStringList collectionList;
-    
-    for (QListBoxItem *item = albumCollectionBox_->firstItem();
-         item; item = item->next()) 
-         {
-         collectionList.append(item->text());
-         }
-         
-    settings->setAlbumCollectionNames(collectionList);
-    
     settings->saveSettings();
 }
 
@@ -233,8 +184,6 @@ void SetupGeneral::readSettings()
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
-
-    albumCollectionBox_->insertStringList(settings->getAlbumCollectionNames());
 }
 
 void SetupGeneral::slotChangeAlbumPath()
@@ -245,7 +194,7 @@ void SetupGeneral::slotChangeAlbumPath()
             this);
 
     if (KURL(result).cmp(KURL(QDir::homeDirPath()), true)) {
-        KMessageBox::sorry(0, i18n("Sorry Cannot Use Home Directory as Album Library"));
+        KMessageBox::sorry(0, i18n("Sorry Cannot Use Home Directory as Albums Library"));
         return;
     }
 
@@ -254,44 +203,5 @@ void SetupGeneral::slotChangeAlbumPath()
     }
 }
 
-void SetupGeneral::slotCollectionSelectionChanged()
-{
-    if (albumCollectionBox_->currentItem() != -1)
-        delCollectionButton_->setEnabled(true);
-    else
-        delCollectionButton_->setEnabled(false);
-}
-
-void SetupGeneral::slotAddCollection()
-{
-    bool ok;
-    QString newCollection =
-        KLineEditDlg::getText(i18n("Enter New Collection Name: "),
-                              "", &ok, this);
-    if (!ok) return;
-
-    bool found = false;
-    for (QListBoxItem *item = albumCollectionBox_->firstItem();
-         item; item = item->next()) {
-        if (newCollection == item->text()) {
-            found = true;
-            break;
-        }
-    }
-
-    if (!found)
-        albumCollectionBox_->insertItem(newCollection);
-}
-
-void SetupGeneral::slotDelCollection()
-{
-    int index = albumCollectionBox_->currentItem();
-    if (index == -1)
-        return;
-    
-    QListBoxItem* item = albumCollectionBox_->item(index);
-    if (!item) return;
-    delete item;
-}
 
 #include "setupgeneral.moc"

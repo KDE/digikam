@@ -30,6 +30,7 @@
 
 class QFrame;
 class SetupGeneral;
+class SetupCollections;
 class SetupMime;
 class SetupPlugins;
 class SetupCamera;
@@ -48,13 +49,15 @@ public:
 private:
 
     QFrame * page_general;
+    QFrame * page_collections;
     QFrame * page_mime;
     QFrame * page_plugins;
     QFrame * page_camera;
     
-    SetupGeneral* generalPage_;
-    SetupMime*    mimePage_;
-    SetupCamera*  cameraPage_;
+    SetupGeneral*     generalPage_;
+    SetupCollections* collectionsPage_;
+    SetupMime*        mimePage_;
+    SetupCamera*      cameraPage_;
 
 private slots:
 

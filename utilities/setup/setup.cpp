@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "setupgeneral.h"
+#include "setupcollections.h"
 #include "setupmime.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
@@ -48,19 +49,23 @@ Setup::Setup(QWidget* parent, const char* name)
     setWFlags(Qt::WDestructiveClose);
     setHelp("setupwindow.anchor", "digikam");
     
-    page_general = addPage(i18n("Albums"), i18n("Album settings"),
+    page_general = addPage(i18n("Albums"), i18n("Albums settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
     generalPage_ = new SetupGeneral(page_general);
+    
+    page_collections = addPage(i18n("Collections"), i18n("Albums collections settings"),
+                               BarIcon("fileopen", KIcon::SizeMedium));
+    collectionsPage_ = new SetupCollections(page_collections);
 
-    page_mime = addPage(i18n("Mime types"), i18n("Album items' MIME types settings"),
+    page_mime = addPage(i18n("Mime types"), i18n("Albums items MIME types settings"),
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
-                        BarIcon("run", KIcon::SizeMedium));
+    page_plugins = addPage(i18n("Plugins"), i18n("Plugins management settings"),
+                           BarIcon("run", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
-    page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
+    page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
     cameraPage_ = new SetupCamera(page_camera);
     
@@ -77,6 +82,7 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     generalPage_->applySettings();
+    collectionsPage_->applySettings();
     mimePage_->applySettings();
     cameraPage_->applySettings();
     close();
