@@ -832,7 +832,7 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     folderItem->setPixmap(thumbnail);
 }
 
-void::AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
+void AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
 {
     if(isDir)
         return;
