@@ -76,7 +76,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     // -------------------------------------------------------------
                                               
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Channel :"), page);
+    QLabel *label1 = new QLabel(i18n("Channel:"), page);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, page );
     m_channelCB->insertItem( i18n("Luminosity") );
@@ -85,15 +85,25 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display"));
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display.<p>"
+                                       "<b>Luminosity</b>: drawing the image luminosity values.<p>"
+                                       "<b>Red</b>: drawing the red image channel values.<p>"
+                                       "<b>Green</b>: drawing the green image channel values.<p>"
+                                       "<b>Blue</b>: drawing the blue image channel values.<p>"
+                                       "<b>Alpha</b>: drawing the alpha image channel values. " 
+                                       "This channel corresponding to the transparency value and "
+                                       "is supported by some image formats like PNG or GIF."));
     
-    QLabel *label2 = new QLabel(i18n("Scale :"), page);
+    QLabel *label2 = new QLabel(i18n("Scale:"), page);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_scaleCB = new QComboBox( false, page );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
-    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale"));
+    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+                                     "If the image maximal counts is small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts is big. "
+                                     "Like this all values (small and big) will be visible on the graph."));
     
     hlay->addWidget(label1);
     hlay->addWidget(m_channelCB);
@@ -111,7 +121,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
                                                      width,
                                                      height,
                                                      frame);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram of the selected image channel"));
+    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
         
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
@@ -122,12 +132,14 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("Intensity range :"), page);
+    QLabel *label3 = new QLabel(i18n("Intensity range:"), page);
     label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, page);
     m_minInterv->setValue(0);
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the minimal intensity value of the histogram selection."));    
     m_maxInterv = new QSpinBox(0, 255, 1, page);
     m_maxInterv->setValue(255);
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the maximal intensity value of the histogram selection."));
     hlay2->addWidget(label3);
     hlay2->addWidget(m_minInterv);
     hlay2->addWidget(m_maxInterv);
@@ -135,33 +147,35 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     // -------------------------------------------------------------
     
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
-    
-    QLabel *label4 = new QLabel(i18n("Mean :"), gbox);
+    QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
+                                "selected histogram part."));
+                                
+    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelMeanValue = new QLabel(gbox);
     m_labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
-    QLabel *label5 = new QLabel(i18n("Pixels :"), gbox);
+    QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPixelsValue = new QLabel(gbox);
     m_labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
-    QLabel *label6 = new QLabel(i18n("Std Dev :"), gbox);
+    QLabel *label6 = new QLabel(i18n("Std Dev.:"), gbox);
     label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelStdDevValue = new QLabel(gbox);
     m_labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
-    QLabel *label7 = new QLabel(i18n("Count :"), gbox);
+    QLabel *label7 = new QLabel(i18n("Count:"), gbox);
     label7->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelCountValue = new QLabel(gbox);
     m_labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
-    QLabel *label8 = new QLabel(i18n("Median :"), gbox);
+    QLabel *label8 = new QLabel(i18n("Median:"), gbox);
     label8->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelMedianValue = new QLabel(gbox);
     m_labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
-    QLabel *label9 = new QLabel(i18n("Percentile :"), gbox);
+    QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
     label9->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPercentileValue = new QLabel(gbox);
     m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
