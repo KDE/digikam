@@ -33,8 +33,8 @@
 #include <kedittoolbar.h>
 #include <ktip.h>
 
-#include "albummanager.h"
-#include "albuminfo.h"
+#include <interfaces/albummanager.h>
+#include <interfaces/albuminfo.h>
 
 #include "cameralist.h"
 #include "cameratype.h"
@@ -211,7 +211,7 @@ void DigikamApp::setupActions()
                                     "image_delete");
 
     mImagePropsAction = new KAction(i18n("Properties"),
-                                    0,
+                                    "image",
                                     ALT+Key_Return,
                                     mView,
                                     SLOT(slotImageProperties()),
