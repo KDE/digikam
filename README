@@ -54,7 +54,7 @@ In the source directory do :
 
 1) export WANT_AUTOCONF_2_5=1
 2) export KDEDIR=KDE_installation_dir_on_your_system
-5) if you are installing libkipi/libkexif in a non-standard location
+3) if you are installing libkipi/libkexif in a non-standard location
   let pkg-config know about their paths:
   export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/path/to/installation/lib/pkgconfig
 4) make -f Makefile.cvs
