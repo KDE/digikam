@@ -1,6 +1,8 @@
 v0.7.0 - xx/10/04
 ----------------------------------------------------------------------------
-    * 'Raindrop' plugin : added disable filter effect on region pre-selection.
+    * Add 'FilmGrain', 'Emboss', and 'SolarizeImage' handbooks by Gerhard Kulzer.
+    * Add 'AdjustLevels', 'Despeckle', and 'unsharp' handbooks.
+    * 'Raindrop' plugin : add disable filter effect on region pre-selection.
     * New 'FilmGrain' plugin.
     * New 'RainDrop image' plugin using Pieter Voloshyn algorithm. 
     * New Emboss algorithm from Pieter Voloshyn. 
