@@ -320,8 +320,7 @@ void AlbumFolderView::slot_albumAdded(Digikam::AlbumInfo *album)
 {
     if (!album) return;
 
-    AlbumFolderItem* folderItem =
-        new AlbumFolderItem(this, album);
+    AlbumFolderItem* folderItem = new AlbumFolderItem(this, album);
     album->setViewItem(folderItem);
     reparentItem(folderItem);
 
@@ -351,18 +350,22 @@ void AlbumFolderView::slot_albumsCleared()
 void AlbumFolderView::albumNew()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) {
+    
+    if (!settings) 
+        {
         kdWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
         return;
-    }
+        }
 
     QDir libraryDir(settings->getAlbumLibraryPath());
-    if (!libraryDir.exists()) {
+    
+    if (!libraryDir.exists()) 
+        {
         KMessageBox::error(0,
                            i18n("Album Library has not been set correctly\n"
                                 "Please run Setup"));
         return;
-    }
+        }
 
     bool ok;
     QString newDir =
@@ -370,23 +373,36 @@ void AlbumFolderView::albumNew()
                               "", &ok, this);
     if (!ok) return;
     
-    m_newAlbumURL = settings->getAlbumLibraryPath();
-    m_newAlbumURL.addPath(newDir);
+    KURL newAlbumURL = settings->getAlbumLibraryPath();
+    newAlbumURL.addPath(newDir);
 
-    KIO::SimpleJob* job = KIO::mkdir(m_newAlbumURL);
+    KIO::SimpleJob* job = KIO::mkdir(newAlbumURL);
+    
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slot_onAlbumCreate(KIO::Job*)));
+
+    connect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
+            this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
+                        
 }
 
 void AlbumFolderView::slot_onAlbumCreate(KIO::Job* job)
 {
     if (job->error()) 
-        job->showErrorDialog(this);
-    else 
-        {
-        Digikam::AlbumInfo* album =  albumMan_->findAlbum(m_newAlbumURL.path());
-        albumMan_->setCurrentAlbum(album);               // FIX ME  !!!
-        }        
+       {
+       job->showErrorDialog(this);
+       
+       disconnect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
+                  this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
+       }
+}
+
+void AlbumFolderView::slot_newAlbumCreated(Digikam::AlbumInfo* album)
+{    
+    albumMan_->setCurrentAlbum(album);              
+    slot_albumPropsEdit(album);
+    disconnect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
+               this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
 }
 
 void AlbumFolderView::albumDelete()
@@ -525,8 +541,6 @@ void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
 {
     if (!album || !album->getViewItem()) return;
     
-    qDebug ("toto");
-    
     QString     oldTitle(album->getTitle());
     QString     oldComments(album->getComments());
     QString     oldCollection(album->getCollection());
@@ -539,8 +553,8 @@ void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
 
     if (AlbumPropsEdit::editProps(album, title, comments,
                                   date, collection,
-                                  albumCollections)) {
-
+                                  albumCollections)) 
+        {
         if (comments != oldComments)
             album->setComments(comments);
 
@@ -555,10 +569,11 @@ void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
 
         // Do this last : so that if anything else changed we can
         // successfully save the db and reopen it
-        if (title != oldTitle) {
-            albumMan_->renameAlbum(album, title);
-        }
-
+        
+        if (title != oldTitle) 
+           {
+           albumMan_->renameAlbum(album, title);
+           }
     }
 }
 

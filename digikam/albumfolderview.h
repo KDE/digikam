@@ -34,7 +34,6 @@
 // KDE includes.
 
 #include <kio/job.h>
-#include <kurl.h>
 
 class QDate;
 class QDragMoveEvent;
@@ -52,8 +51,8 @@ class AlbumManager;
 class ThumbnailJob;
 }
 
-class AlbumFolderView : public QListView {
-
+class AlbumFolderView : public QListView 
+{
     Q_OBJECT
 
 public:
@@ -96,7 +95,6 @@ private:
     QPtrList<AlbumFolderItem>          groupItems_;
     Digikam::AlbumManager*             albumMan_;
     QGuardedPtr<Digikam::ThumbnailJob> thumbJob_;
-    KURL                               m_newAlbumURL;
     
 public slots:
 
@@ -114,11 +112,11 @@ private slots:
 
     void slot_onAlbumDelete(KIO::Job* job);
     void slot_onAlbumCreate(KIO::Job* job);
-    
+    void slot_newAlbumCreated(Digikam::AlbumInfo*);
+        
     void slot_albumAdded(Digikam::AlbumInfo *album);
     void slot_albumDeleted(Digikam::AlbumInfo *album);
     void slot_albumsCleared();
-    
 };
 
-#endif
+#endif  // ALBUMFOLDERVIEW_H
