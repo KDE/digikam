@@ -139,6 +139,7 @@ public:
     virtual void delImage( const KURL& );
     virtual void refreshImages( const KURL::List& urls );
     virtual int features() const;
+    virtual QString fileExtensions();
 
 protected slots:
     void slot_onAddImageFinished(KIO::Job* job);

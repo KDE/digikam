@@ -37,9 +37,14 @@ extern "C"
 #include <sys/stat.h>
 }
 
+// Qt includes.
+
+#include <qstring.h>
+
 // KDE includes.
 
 #include <klocale.h>
+#include <kconfig.h>
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
@@ -334,22 +339,33 @@ DigikamKipiInterface::~DigikamKipiInterface()
 
 KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 {
-    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AllAlbumItems ) );
+    if ( albumManager_->currentAlbum() )
+       return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AllAlbumItems ) );
+    else
+       return KIPI::ImageCollection(0);
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
-    return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection ) );
+    if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
+       return KIPI::ImageCollection(0);
+    else
+       return KIPI::ImageCollection( new DigikamImageCollection(DigikamImageCollection::AlbumItemsSelection) );
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentScope()
 {
-    DigikamImageCollection *images = new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection );
+    if ( albumManager_->currentAlbum() )
+       {
+       DigikamImageCollection *images = new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection );
     
-    if ( images->images().isEmpty() == false )
-        return currentSelection();
+       if ( images->images().isEmpty() == false )
+           return currentSelection();
+       else
+           return currentAlbum();
+       }       
     else
-        return currentAlbum();
+       return KIPI::ImageCollection(0);
 }
 
 QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
@@ -463,6 +479,17 @@ void DigikamKipiInterface::slotSelectionChanged( bool b )
     emit selectionChanged( b );
 }
 
+QString DigikamKipiInterface::fileExtensions()
+{
+  // Read File Filter settings in digikamrc file.
+
+  KConfig *config = new KConfig("digikamrc");
+  config->setGroup("Album Settings");
+  QString Temp = config->readEntry("File Filter", "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp");
+  delete config;
+  
+  return ( Temp.lower() + " " + Temp.upper() );
+}
 
 #include "kipiinterface.moc"
 
