@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_superimpose,
 ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const char*, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_SuperImpose")
 {
-    new KAction(i18n("Template Superimpose..."), 0, 
+    new KAction(i18n("Template Superimpose..."), "superimpose", 0, 
                 this, SLOT(slotSuperImpose()),
                 actionCollection(), "imageplugin_superimpose");
 
