@@ -213,21 +213,18 @@ static QImage loadPNG(const QString& path)
 
     if (QImage::systemByteOrder() == QImage::LittleEndian)
     {
-        png_set_bgr(png_ptr);
         png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+        png_set_bgr(png_ptr);
     }
     else
     {
-        png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
         png_set_swap_alpha(png_ptr);
+        png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
     }
 
+    /* 16bit color -> 8bit color */
     if ( bit_depth == 16 )
         png_set_strip_16(png_ptr);         
-
-    png_set_bgr(png_ptr);
-    png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
-    png_set_strip_16(png_ptr);
 
     /* pack all pixels to byte boundaires */
 
