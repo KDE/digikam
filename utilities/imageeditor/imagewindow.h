@@ -130,6 +130,8 @@ private slots:
     
     void slotDeleteCurrentItem();
 
+    void slotImagePluginsHelp();
+    
 protected:
 
     void closeEvent(QCloseEvent *e);

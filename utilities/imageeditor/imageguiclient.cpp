@@ -168,6 +168,13 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                                                                                          
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
+    
+    m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins' handbooks"),
+                                        0, 0, this,
+                                        SIGNAL(signalShowImagePluginsHelp()),
+                                        actionCollection(),
+                                        "imageview_helpimageplugins");
+                         
     KStdAction::aboutApp(this, SLOT(slotAboutApp()), actionCollection(),
                          "imageview_aboutapp");
     KStdAction::aboutKDE(this, SLOT(slotAboutKDE()), actionCollection(),
@@ -214,6 +221,7 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/DefineGroup/Generic/ ");
     
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_help/ ");
+    guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_helpimageplugins/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutapp/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutkde/ ");
     

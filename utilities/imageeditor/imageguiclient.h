@@ -75,6 +75,8 @@ signals:
     void signalExifInfo();
     void signalCommentsEdit();
     
+    void signalShowImagePluginsHelp();
+    
 private slots:
 
     void slotHelp();
@@ -108,6 +110,8 @@ private:
     KAction       *m_fileDelete;
     KAction       *m_exifinfo;
     KAction       *m_commentedit;
+    
+    KAction       *m_ImagePluginsHelpAction;
     
     friend class ImageWindow;
 };

@@ -210,6 +210,9 @@ ImageWindow::ImageWindow()
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             SLOT(slotLoadPrev()));
 
+    connect(m_guiClient, SIGNAL(signalShowImagePluginsHelp()),
+            SLOT(slotImagePluginsHelp()));            
+            
     // -- read settings --------------------------------
     readSettings();
 }
@@ -878,6 +881,10 @@ void ImageWindow::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
+void ImageWindow::slotImagePluginsHelp()
+{
+    KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" ); 
+}
 
 #include "imagewindow.moc"
 
