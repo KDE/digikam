@@ -416,6 +416,8 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           break;
        }
 
+    m_typeCB->setCurrentItem(m_curves->getCurveType(channel));  
+                
     m_curvesWidget->repaint(false);
 }
 

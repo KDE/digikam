@@ -367,6 +367,9 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    int closest_point;
    int distance;
 
+   if (e->button() != Qt::LeftButton || m_clearFlag == HistogramStarted)
+      return;
+
    int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
    int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
 
@@ -387,9 +390,6 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    if (distance > 8)
       closest_point = (x + 8) / 16;   
    
-   if (e->button() != Qt::LeftButton)
-      return;
-
    setCursor( KCursor::crossCursor() );
 
    switch( m_curves->getCurveType(m_channelType) )
@@ -438,8 +438,8 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 
 void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
-   if (e->button() != Qt::LeftButton)
-      return;      
+   if (e->button() != Qt::LeftButton || m_clearFlag == HistogramStarted)
+      return;
    
    setCursor( KCursor::arrowCursor() );    
    m_grab_point = -1;
@@ -455,6 +455,9 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    int x1, x2, y1, y2;
    int distance;
 
+   if (m_clearFlag == HistogramStarted)
+      return;
+   
    int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
    int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
 
