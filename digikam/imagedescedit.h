@@ -50,7 +50,7 @@ private:
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album, QCheckListItem *item);
     
-    QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;
+    QGuardedPtr<ThumbnailJob> m_thumbJob;
 
     void populateTags();
     void populateTags(QCheckListItem* parItem, TAlbum* parAlbum);

@@ -785,9 +785,9 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
     {
         if (iconThumbJob_.isNull())
         {
-            iconThumbJob_ = new Digikam::ThumbnailJob(album->getIconKURL(),
-                                                (int)ThumbnailSize::Tiny,
-                                                false);
+            iconThumbJob_ = new ThumbnailJob(album->getIconKURL(),
+                                             (int)ThumbnailSize::Tiny,
+                                             true);
             connect(iconThumbJob_,
                     SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                 const QPixmap&,

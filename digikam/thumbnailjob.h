@@ -30,9 +30,6 @@ class QPixmap;
 class QImage;
 class KFileMetaInfo;
 
-namespace Digikam
-{
-
 class ThumbnailJobPriv;
 
 class ThumbnailJob : public KIO::Job
@@ -41,7 +38,7 @@ class ThumbnailJob : public KIO::Job
 
 public:
 
-    ThumbnailJob(const KURL& url, int size, bool dir=false,
+    ThumbnailJob(const KURL& url, int size,
                  bool highlight=true);
     ThumbnailJob(const KURL::List& urlList, int size,
                  bool metainfo=true, bool highlight=true);
@@ -68,22 +65,14 @@ private:
 
 private:
 
-    void createThumbnailDirs();
     void processNext();
-    bool statThumbnail();
-    void createThumbnail();
-    void createFolderThumbnail();
     void emitThumbnail(QImage& thumb);
     void createShmSeg();
-    void exifRotate(const QString& filePath, QImage& thumb);
 
 protected slots:
 
     void slotResult(KIO::Job *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
-    void slotTimeout();
 };
-
-}
 
 #endif /* THUMBNAILJOB_H */

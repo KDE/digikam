@@ -52,11 +52,7 @@ class PAlbum;
 class TAlbum;
 class AlbumFolderItem;
 class AlbumManager;
-
-namespace Digikam
-{
 class ThumbnailJob;
-}
 
 class AlbumFolderView : public ListView 
 {
@@ -135,7 +131,7 @@ private:
     int                                albumSortOrder_;
     QPtrList<AlbumFolderItem>          groupItems_;
     AlbumManager*                      albumMan_;
-    QGuardedPtr<Digikam::ThumbnailJob> iconThumbJob_;    
+    QGuardedPtr<ThumbnailJob>          iconThumbJob_;    
     AlbumFolderItem*                   phyRootItem_;
     AlbumFolderItem*                   tagRootItem_;
 

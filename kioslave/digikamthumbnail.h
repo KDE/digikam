@@ -46,13 +46,17 @@ private:
 
     bool loadJPEG(QImage& image, const QString& path);
     bool loadImlib2(QImage& image, const QString& path);
+    void createThumbnailDirs();
     
-    int size_;
+    int  cachedSize_;
     
     int org_width_;
     int org_height_;
     int new_width_;
     int new_height_;
+
+    QString smallThumbPath_;
+    QString bigThumbPath_;
 };
 
 #endif  // _digikamthumbnail_H_

@@ -30,6 +30,8 @@
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qfile.h>
+#include <qdir.h>
+#include <qwmatrix.h>
 
 // KDE includes.
 
@@ -40,6 +42,9 @@
 #include <kimageio.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kmdcodec.h>
+#include <ktempfile.h>
 
 // C Ansi includes.
 
@@ -50,14 +55,15 @@ extern "C"
 #include <jpeglib.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#include <setjmp.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <png.h>
 }
 
 // Local includes
 
+#include "exiforientation_p.h"
 #include "digikamthumbnail.h"
 
 #define X_DISPLAY_MISSING 1
@@ -66,10 +72,200 @@ extern "C"
 using namespace KIO;
 
 
+static void exifRotate(const QString& filePath, QImage& thumb)
+{
+    // Rotate thumbnail based on EXIF rotate tag
+    QWMatrix matrix;
+
+    KExifData::ImageOrientation orientation
+        = getExifOrientation(filePath);
+    
+    bool doXform = (orientation != KExifData::NORMAL &&
+                    orientation != KExifData::UNSPECIFIED);
+
+    switch (orientation) {
+       case KExifData::NORMAL:
+       case KExifData::UNSPECIFIED:
+          break;
+
+       case KExifData::HFLIP:
+          matrix.scale(-1,1);
+          break;
+
+       case KExifData::ROT_180:
+          matrix.rotate(180);
+          break;
+
+       case KExifData::VFLIP:
+          matrix.scale(1,-1);
+          break;
+
+       case KExifData::ROT_90_HFLIP:
+          matrix.scale(-1,1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90:
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_90_VFLIP:
+          matrix.scale(1,-1);
+          matrix.rotate(90);
+          break;
+
+       case KExifData::ROT_270:
+          matrix.rotate(270);
+          break;
+    }
+
+    //transform accordingly
+    if ( doXform )
+       thumb = thumb.xForm( matrix );
+}
+
+#define PNG_BYTES_TO_CHECK 4
+
+static QImage loadPNG(const QString& path)
+{
+    png_uint_32         w32, h32;
+    int                 w, h;
+    bool                has_alpha;
+    bool                has_grey;
+    FILE               *f;
+    png_structp         png_ptr = NULL;
+    png_infop           info_ptr = NULL;
+    int                 bit_depth, color_type, interlace_type;
+
+    has_alpha = 0;
+    has_grey = 0;
+    
+    QImage qimage;
+    
+    f = fopen(path.latin1(), "rb");
+    if (!f)
+        return qimage;
+
+    unsigned char       buf[PNG_BYTES_TO_CHECK];
+
+    fread(buf, 1, PNG_BYTES_TO_CHECK, f);
+    if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
+    {
+        fclose(f);
+        return qimage;
+    }
+    rewind(f);
+
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_ptr)
+    {
+        fclose(f);
+        return qimage;
+    }
+
+    info_ptr = png_create_info_struct(png_ptr);
+    if (!info_ptr)
+    {
+        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        fclose(f);
+        return qimage;
+    }
+
+    if (setjmp(png_ptr->jmpbuf))
+    {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        fclose(f);
+        return qimage;
+    }
+
+    png_init_io(png_ptr, f);
+    png_read_info(png_ptr, info_ptr);
+    png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&w32),
+                 (png_uint_32 *) (&h32), &bit_depth, &color_type,
+                 &interlace_type, NULL, NULL);
+
+    w = w32;
+    h = h32;
+    
+    qimage.create(w, h, 32);
+    
+    if (color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_expand(png_ptr);
+
+    if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+        has_alpha = 1;
+
+    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+    {
+        has_alpha = 1;
+        has_grey = 1;
+    }
+
+    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY)
+        has_grey = 1;
+
+
+    unsigned char     **lines;
+    int                 i;
+
+    if (has_alpha)
+        png_set_expand(png_ptr);
+
+    png_set_bgr(png_ptr);
+    png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+    png_set_strip_16(png_ptr);
+
+    /* pack all pixels to byte boundaires */
+
+    png_set_packing(png_ptr);
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        png_set_expand(png_ptr);
+
+    lines = (unsigned char **)malloc(h * sizeof(unsigned char *));
+    if (!lines)
+    {
+        png_read_end(png_ptr, info_ptr);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+        fclose(f);
+        return qimage;
+    }
+
+    if (has_grey)
+    {
+        png_set_gray_to_rgb(png_ptr);
+        if (png_get_bit_depth(png_ptr, info_ptr) < 8)
+            png_set_gray_1_2_4_to_8(png_ptr);
+    }
+
+    int sizeOfUint = sizeof(unsigned int);
+    for (i = 0; i < h; i++)
+        lines[i] = ((unsigned char *)(qimage.bits())) +
+                   (i * w * sizeOfUint);
+
+    png_read_image(png_ptr, lines);
+    free(lines);
+
+    png_textp text_ptr;
+    int num_text=0;
+    png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
+    while (num_text--) {
+        qimage.setText(text_ptr->key,0,text_ptr->text);
+        text_ptr++;
+    }
+    
+    
+    png_read_end(png_ptr, info_ptr);
+    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+    fclose(f);
+
+    return qimage;
+}
+
 kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(const QCString &pool_socket,
                                                            const QCString &app_socket)
     : SlaveBase("kio_digikamthumbnail", pool_socket, app_socket)
 {
+    createThumbnailDirs();
 }
 
 
@@ -80,41 +276,78 @@ kio_digikamthumbnailProtocol::~kio_digikamthumbnailProtocol()
 
 void kio_digikamthumbnailProtocol::get(const KURL& url )
 {
-    size_ = metaData("size").toInt();
+    int  size =  metaData("size").toInt();
+    bool exif = (metaData("exif") == "yes");
+
+    cachedSize_ = (size <= 128) ? 128 : 256;
     
-    if (size_ <= 0) 
-        {
+    if (cachedSize_ <= 0) 
+    {
         error(KIO::ERR_INTERNAL, i18n("No or invalid size specified"));
         kdWarning() << "No or invalid size specified" << endl;
         return;
-        }
+    }
+
+    // generate the thumbnail path
+    QString uri = "file://" + QDir::cleanDirPath(url.path(-1));
+    KMD5 md5( QFile::encodeName(uri) );
+    QString thumbPath = (cachedSize_ == 128) ? smallThumbPath_ : bigThumbPath_;
+    thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
 
     QImage img;
-    
-    // Try JPEG loading...
-    if ( !loadJPEG(img, url.path()) )
+    bool regenerate = true;
+
+    // stat the original file
+    struct stat st;
+    if (::stat(QFile::encodeName(url.path(-1)), &st) == 0)
     {
-        // Try to load with imlib2 API...
-        if ( !loadImlib2(img, url.path()) ) 
+        img = loadPNG(thumbPath);
+        if (!img.isNull())
         {
-            // Try to load with QT/KDELib API...
-            img.load(url.path());            
+            if (img.text("Thumb::MTime") == QString::number(st.st_mtime))
+                regenerate = false;
         }
     }
-    
-    if (img.isNull()) 
+
+    if (regenerate)
     {
-        error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
-              .arg(url.prettyURL()));
-        kdWarning() << "Cannot create thumbnail for " << url.path() << endl;
-        return;
+        // Try JPEG loading...
+        if ( !loadJPEG(img, url.path()) )
+        {
+            // Try to load with imlib2 API...
+            if ( !loadImlib2(img, url.path()) ) 
+            {
+                // Try to load with QT/KDELib API...
+                img.load(url.path());            
+            }
+        }
+    
+        if (img.isNull()) 
+        {
+            error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
+                  .arg(url.prettyURL()));
+            kdWarning() << "Cannot create thumbnail for " << url.path() << endl;
+            return;
+        }
+
+        if (QMAX(img.width(),img.height()) != cachedSize_)
+            img = img.smoothScale(cachedSize_, cachedSize_, QImage::ScaleMin);
+
+        if (img.depth() != 32)
+            img = img.convertDepth(32);
+
+        img.setText(QString("Thumb::URI").latin1(),
+                     0, uri);
+        img.setText(QString("Thumb::MTime").latin1(),
+                     0, QString::number(st.st_mtime));
+        img.setText(QString("Software").latin1(),
+                     0, QString("Digikam Thumbnail Generator"));
+        img.save(thumbPath, "PNG", 0);
     }
 
-    if (QMAX(img.width(),img.height()) != size_)
-        img = img.smoothScale(size_, size_, QImage::ScaleMin);
-
-    if (img.depth() != 32)
-        img = img.convertDepth(32);
+    img = img.smoothScale(size, size, QImage::ScaleMin);
+    if (exif)
+        exifRotate(url.path(), img);
     
     QByteArray imgData;
     QDataStream stream( imgData, IO_WriteOnly );
@@ -136,7 +369,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
             return;
         }
             
-        if (img.width() * img.height() > size_ * size_)
+        if (img.width() * img.height() > cachedSize_ * cachedSize_)
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
             kdWarning() << "Image is too big for the shared memory segment" << endl;
@@ -164,16 +397,16 @@ struct myjpeg_error_mgr : public jpeg_error_mgr
 
 extern "C"
 {
-  static void myjpeg_error_exit(j_common_ptr cinfo)
-  {
-    myjpeg_error_mgr* myerr = 
-      (myjpeg_error_mgr*) cinfo->err;
+    static void myjpeg_error_exit(j_common_ptr cinfo)
+    {
+        myjpeg_error_mgr* myerr = 
+            (myjpeg_error_mgr*) cinfo->err;
 
-    char buffer[JMSG_LENGTH_MAX];
-    (*cinfo->err->format_message)(cinfo, buffer);
-    kdWarning() << buffer << endl;
-    longjmp(myerr->setjmp_buffer, 1);
-  }
+        char buffer[JMSG_LENGTH_MAX];
+        (*cinfo->err->format_message)(cinfo, buffer);
+        kdWarning() << buffer << endl;
+        longjmp(myerr->setjmp_buffer, 1);
+    }
 }
 
 bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
@@ -193,9 +426,9 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     cinfo.err->error_exit = myjpeg_error_exit;
 
     if (setjmp(jerr.setjmp_buffer)) {
-      jpeg_destroy_decompress(&cinfo);
-      fclose(inputFile);
-      return false;
+        jpeg_destroy_decompress(&cinfo);
+        fclose(inputFile);
+        return false;
     }
 
     jpeg_create_decompress(&cinfo);
@@ -205,7 +438,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
     int scale=1;
-    while(size_*scale*2<=imgSize) {
+    while(cachedSize_*scale*2<=imgSize) {
         scale*=2;
     }
     if(scale>8) scale=8;
@@ -225,7 +458,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
         break;
     case 1: // B&W image
         img.create( cinfo.output_width, cinfo.output_height,
-                      8, 256 );
+                    8, 256 );
         for (int i=0; i<256; i++)
             img.setColor(i, qRgb(i,i,i));
         break;
@@ -253,8 +486,8 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     }
 
     int newMax = QMAX(cinfo.output_width, cinfo.output_height);
-    int newx = size_*cinfo.output_width / newMax;
-    int newy = size_*cinfo.output_height / newMax;
+    int newx = cachedSize_*cinfo.output_width / newMax;
+    int newy = cachedSize_*cinfo.output_height / newMax;
 
     jpeg_destroy_decompress(&cinfo);
     fclose(inputFile);
@@ -282,11 +515,11 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
     org_width_  = imlib_image_get_width();
     org_height_ = imlib_image_get_height();
 
-    if ( QMAX(org_width_, org_height_) != size_ )
+    if ( QMAX(org_width_, org_height_) != cachedSize_ )
     {
         imlib2_im = imlib_create_cropped_scaled_image(0, 0, 
                                                       org_width_, org_height_, 
-                                                      size_, size_); 
+                                                      cachedSize_, cachedSize_); 
     }
 
     new_width_  = imlib_image_get_width();
@@ -303,6 +536,17 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
 
     imlib_free_image();        
     return true;
+}
+
+void kio_digikamthumbnailProtocol::createThumbnailDirs()
+{
+    QString path = QDir::homeDirPath() + "/.thumbnails/";
+
+    smallThumbPath_ = path + "normal/";
+    bigThumbPath_   = path + "large/";
+
+    KStandardDirs::makeDir(smallThumbPath_, 0700);
+    KStandardDirs::makeDir(bigThumbPath_, 0700);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

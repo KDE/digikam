@@ -126,7 +126,7 @@ public:
     AlbumLister         *imageLister;
     Album               *currentAlbum;
     const AlbumSettings *albumSettings;
-    QGuardedPtr<Digikam::ThumbnailJob> thumbJob;
+    QGuardedPtr<ThumbnailJob> thumbJob;
 
     ThumbnailSize thumbSize;
 
@@ -378,9 +378,9 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 
     if (d->thumbJob.isNull())
     {
-        d->thumbJob = new Digikam::ThumbnailJob(urlList,
-                                                (int)d->thumbSize.size(),
-                                                showMetaInfo());
+        d->thumbJob = new ThumbnailJob(urlList,
+                                       (int)d->thumbSize.size(),
+                                       showMetaInfo());
         connect(d->thumbJob,
                 SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,
@@ -1535,7 +1535,7 @@ void AlbumIconView::refreshItems(const QStringList& itemList)
     if (d->thumbJob.isNull())
     {
         d->thumbJob =
-            new Digikam::ThumbnailJob(urlList, (int)d->thumbSize.size());
+            new ThumbnailJob(urlList, (int)d->thumbSize.size());
         connect(d->thumbJob,
                 SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,

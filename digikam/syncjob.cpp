@@ -164,9 +164,9 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 
     if(name.startsWith("/"))
     {
-        Digikam::ThumbnailJob *job = new Digikam::ThumbnailJob(name,
-                                                               ThumbnailSize::Tiny,
-                                                               false, false);
+        ThumbnailJob *job = new ThumbnailJob(name,
+                                             ThumbnailSize::Tiny,
+                                             false);
         connect(job,
                 SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,

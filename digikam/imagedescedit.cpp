@@ -333,7 +333,7 @@ void ImageDescEdit::slotItemChanged()
 
     KURL fileURL(m_currItem->fileItem()->url());    
     
-    m_thumbJob = new Digikam::ThumbnailJob(fileURL, 256);
+    m_thumbJob = new ThumbnailJob(fileURL, 256);
     connect(m_thumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
