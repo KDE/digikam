@@ -31,15 +31,12 @@
 
 #include <kdialogbase.h>
 
-// Local include.
-
-#include "CImg.h"
-
 class QPushButton;
 class QLabel;
 class QCheckBox;
 class QTimer;
 class QComboBox;
+class QCustomEvent;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -48,6 +45,11 @@ class KProgress;
 namespace Digikam
 {
 class ImagePreviewWidget;
+}
+
+namespace DigikamImagePlugins
+{
+class CimgIface;
 }
 
 namespace DigikamRestorationImagesPlugin
@@ -74,9 +76,21 @@ private:
     InPaintingMode
     };
 
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+
     bool             m_cancel;
     bool             m_dirty;
     
+    int              m_currentRenderingMode;
+    
+    uint            *m_originalData;
+    
+    QImage           m_previewImage;
     QWidget         *m_parent;
     
     QPushButton     *m_helpButton;
@@ -108,9 +122,11 @@ private:
     
     KProgress       *m_progressBar;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    DigikamImagePlugins::CimgIface       *m_cimgInterface;
     
-    void processRestoration(uint* data, int width, int height);
+    Digikam::ImagePreviewWidget          *m_imagePreviewWidget;
+    
+    void customEvent(QCustomEvent *event);
     
 private slots:
 
@@ -121,64 +137,8 @@ private slots:
     void slotUser1();
     void slotTimer();
     void slotRestorationTypeChanged(int type);
-    
-private:  // CImg filter interface.
-
-    bool process();
-    
-    // Compute smoothed structure tensor field G
-    void compute_smoothed_tensor();
-
-    // Compute normalized tensor field sqrt(T) in G
-    void compute_normalized_tensor();
-
-    // Compute LIC's along different angle projections a_\alpha
-    void compute_LIC(int &counter);
-    void compute_LIC_back_forward(int x, int y);
-    void compute_W(float cost, float sint);
-
-    // Average all the LIC's
-    void compute_average_LIC();
-
-    // Prepare datas
-    bool prepare();
-    bool prepare_restore();
-    bool prepare_inpaint();
-    bool prepare_resize();
-    bool prepare_visuflow();
-
-    // Check arguments
-    bool check_args();
-
-    // Clean up memory (CImg datas) to save memory
-    void cleanup();
-
-    void get_geom(const char *geom, int &geom_w, int &geom_h);
-    
-private:  // CImg filter data.
-    
-    unsigned int nb_iter; // Number of smoothing iterations
-    float dt;             // Time step
-    float dlength;        // Integration step
-    float dtheta;         // Angular step (in degrees)
-    float sigma;          // Structure tensor blurring
-    float power1;         // Diffusion limiter along isophote
-    float power2;         // Diffusion limiter along gradient
-    float gauss_prec;     // Precision of the gaussian function
-    bool  onormalize;     // Output image normalization (in [0,255])
-    bool  linear;         // Use linear interpolation for integration
-
-    // internal use
-    bool restore;
-    bool inpaint;
-    bool resize;
-    const char* visuflow;
-    cimg_library::CImg<> dest, sum, W;
-    cimg_library::CImg<> img, img0, flow,G;
-    cimg_library::CImgl<> eigen;
-    cimg_library::CImg<unsigned char> mask;
 };
-
+    
 }  // NameSpace DigikamRestorationImagesPlugin
 
 #endif /* IMAGEEFFECT_RESTORATION_H */

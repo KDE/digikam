@@ -1,2 +1,2 @@
-SUBDIRS = icons pics tips 
+SUBDIRS = icons pics tips cimgiface 
 
