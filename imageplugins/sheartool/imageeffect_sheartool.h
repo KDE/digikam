@@ -33,7 +33,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImageGuideWidget;
 }
 
 namespace DigikamShearToolImagesPlugin
@@ -52,15 +52,15 @@ private:
 
     float                m_ratioW, m_ratioH;   // Ratio coef. between preview and original image.
 
-    QWidget              *m_parent;
+    QWidget             *m_parent;
     
-    QPushButton          *m_helpButton;
-    
-    Digikam::ImageWidget *m_previewWidget;
-    
-    KIntNumInput          *m_magnitudeX;
-    KIntNumInput          *m_magnitudeY;
+    QPushButton         *m_helpButton;
+   
+    KIntNumInput        *m_magnitudeX;
+    KIntNumInput        *m_magnitudeY;
 
+    Digikam::ImageGuideWidget *m_previewWidget;
+    
 private slots:
 
     void slotHelp();

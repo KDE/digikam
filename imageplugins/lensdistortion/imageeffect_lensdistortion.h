@@ -49,7 +49,7 @@ class KProgress;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImageGuideWidget;
 }
 
 namespace DigikamLensDistortionImagesPlugin
@@ -144,7 +144,7 @@ private:
 
     QLabel               *m_maskPreviewLabel;
     
-    Digikam::ImageWidget *m_previewWidget;
+    Digikam::ImageGuideWidget *m_previewWidget;
     
 protected:
 

@@ -35,10 +35,13 @@ class QPushButton;
 
 class KDoubleNumInput;
 
+namespace Digikam
+{
+class ImageGuideWidget;
+}
+
 namespace DigikamFreeRotationImagesPlugin
 {
-
-class FreeRotationWidget;
 
 class ImageEffect_FreeRotation : public KDialogBase
 {
@@ -55,10 +58,10 @@ private:
     
     QPushButton        *m_helpButton;
     
-    FreeRotationWidget *m_previewWidget;
-    
     KDoubleNumInput    *m_angleInput;
 
+    Digikam::ImageGuideWidget *m_previewWidget;
+    
 private slots:
 
     void slotHelp();

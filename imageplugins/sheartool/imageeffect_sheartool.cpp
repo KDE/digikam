@@ -129,8 +129,13 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the shearing image operation preview."));
+    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the shearing image operation preview. "
+                                           "If you move the mouse cursor on this preview, "
+                                           "a vertical and horizontal dashed line will be draw "
+                                           "for guide you to adjust the shearing correction. "
+                                           "Press the mouse left button to freeze the dashed "
+                                           "lines position."));
                                            
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);

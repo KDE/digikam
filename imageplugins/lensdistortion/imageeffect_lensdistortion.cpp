@@ -381,9 +381,14 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the spherical aberration correction.") );
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the spherical aberration correction. "
+                                           "If you move the mouse cursor on this preview, "
+                                           "a vertical and horizontal dashed line will be draw "
+                                           "for guide you to adjust lens distortion correction . "
+                                           "Press the mouse left button to freeze the dashed "
+                                           "lines position."));
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
