@@ -197,8 +197,12 @@ void CameraThread::run()
             folderList.append(d->camera->path());
             d->camera->getAllFolders(d->camera->path(), folderList);
 
+            /* TODO: ugly hack since qt <= 3.1.2 does not define
+               QStringList with QDeepCopy as a friend. */
+            QValueList<QString> flist(folderList);
+            
             CameraEvent* event = new CameraEvent(CameraEvent::gp_listedfolders);
-            event->map.insert("folders", QVariant(folderList));
+            event->map.insert("folders", QVariant(flist));
             QApplication::postEvent(parent, event);
         
             sendInfo(i18n("Finished listing folders..."));
@@ -622,8 +626,18 @@ void CameraController::customEvent(QCustomEvent* e)
     }
     case (CameraEvent::gp_listedfolders) :
     {
-        QStringList folderList =
-            QDeepCopy<QStringList>(event->map["folders"].asStringList());
+        /* TODO: ugly hack since qt <= 3.1.2 does not define
+           QStringList with QDeepCopy as a friend. */
+        QValueList<QVariant> flist =
+            QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
+
+        QStringList folderList;
+        QValueList<QVariant>::Iterator it;
+        for (it = flist.begin(); it != flist.end(); ++it )
+        {
+            folderList.append(QDeepCopy<QString>((*it).asString()));
+        }
+        
         emit signalFolderList(folderList);
         break;
     }
