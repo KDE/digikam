@@ -33,6 +33,7 @@
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -186,28 +187,25 @@ void ImageProperties::slotItemChanged()
     if (mExifData->readFromFile(fileURL.path()))
         {
         QPtrList<KExifIfd> ifdList(mExifData->ifdList());
-    
+
         for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
             {
-            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), ifd->getName());
+            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(),
+                                                            ifd->getName());
             m_listview->addItems(ifd->entryList(), item );
             }
         
-        connect(m_listview, SIGNAL(signal_itemDescription(const QString&)),
-                m_textEdit, SLOT(setText(const QString&)));
-
-        // Exif embedded thumbnails listview entry creation.
+        // Exif embedded thumbnails creation.
     
         QImage thumbnail(mExifData->getThumbnail());
         
         if (!thumbnail.isNull()) 
             {
-            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), i18n("Thumbnail"));
-            KExifListViewItem *item2 = new KExifListViewItem(item, m_listview->lastItem(), "");
-            item2->setPixmap(1, QPixmap(thumbnail));
+            m_exifThumb->setFixedSize(thumbnail.size());
+            m_exifThumb->setPixmap(QPixmap(thumbnail));
             }        
     
-        m_textEdit->setText(i18n("Select an item to see its description"));
+        QToolTip::add( m_listview, i18n("Select an item to see its description"));
         }
        
     // Update Histogram Viewer tab.
@@ -345,7 +343,8 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
                                                      width,
                                                      height,
                                                      frame);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
+    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the "
+                                             "selected image channel"));
     l->addWidget(m_histogramWidget, 0);
         
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
@@ -374,7 +373,8 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
     
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
     QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
-                                "selected histogram part. These values are available for all channels."));
+                                "selected histogram part. These values are available for all "
+                                "channels."));
                                 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -587,38 +587,30 @@ void ImageProperties::setupExifViewer(void)
     QGridLayout* layout = new QGridLayout(page);
     m_listview = new KExifListView(page, true);
     
-    QGroupBox *textBox = new QGroupBox(1, Qt::Vertical, page);
-    m_textEdit = new QTextEdit(textBox);
-    m_textEdit->setReadOnly(true);
-    m_textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
-    textBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    QGroupBox *box = new QGroupBox(1, Qt::Vertical, i18n("Embedded thumnail"), page);
+    m_exifThumb = new QLabel(box);
     
     layout->addWidget(m_listview, 0, 0);
-    layout->addWidget(textBox, 1, 0);
-    
+    layout->addWidget(box, 1, 0);
+        
     QPtrList<KExifIfd> ifdList(mExifData->ifdList());
 
     for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
         {
-        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), ifd->getName());
+        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(),
+                                                        ifd->getName());
         m_listview->addItems(ifd->entryList(), item );
         }
         
-    connect(m_listview, SIGNAL(signal_itemDescription(const QString&)),
-            m_textEdit, SLOT(setText(const QString&)));
-
-    // Exif embedded thumbnails listview entry creation.
+    // Exif embedded thumbnails creation.
     
     QImage thumbnail(mExifData->getThumbnail());
         
     if (!thumbnail.isNull()) 
         {
-        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), i18n("Thumbnail"));
-        KExifListViewItem *item2 = new KExifListViewItem(item, m_listview->lastItem(), "");
-        item2->setPixmap(1, QPixmap(thumbnail));
+        m_exifThumb->setFixedSize(thumbnail.size());
+        m_exifThumb->setPixmap(QPixmap(thumbnail));
         }        
-    
-    m_textEdit->setText(i18n("Select an item to see its description"));
 }
 
 

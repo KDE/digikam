@@ -65,7 +65,7 @@ public:
     ~ImageProperties();
 
 public slots:    
-
+    
     // For histogram viever.
     
     void slotUpdateMinInterv(int min);
@@ -75,15 +75,16 @@ private:
 
     // For main dialog.    
     
-    AlbumIconView *m_view;
-    AlbumIconItem *m_currItem;
-    AlbumLister   *m_lister;
+    AlbumIconView                *m_view;
+    AlbumIconItem                *m_currItem;
+    AlbumLister                  *m_lister;
 
     // For Exif viever.
     
-    QTextEdit     *m_textEdit;
-    KExifData     *mExifData;
-    KExifListView *m_listview;
+    QLabel                       *m_exifThumb;
+    QTextEdit                    *m_textEdit;
+    KExifData                    *mExifData;
+    KExifListView                *m_listview;
     
     void setupExifViewer(void);
     
@@ -125,6 +126,7 @@ private slots:
     void slotUser2();
     
     // For histogram viever.
+    
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
