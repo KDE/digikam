@@ -57,10 +57,7 @@ extern "C"
 
 #include "digikamthumbnail.h"
 
-// X11 includes.
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
 
 using namespace KIO;
@@ -91,20 +88,23 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     QImage img;
     
-    if ( !loadJPEG(img, url.path()) )      // Try JPEG loading...
-       {
-       if ( !loadImlib2(img, url.path()) ) // Try to load with imlib2 API...
-          {
-          img.load(url.path());            // Try to load with QT/KDELib API...
-          }
-       }
+    // Try JPEG loading...
+    if ( !loadJPEG(img, url.path()) )
+    {
+        // Try to load with imlib2 API...
+        if ( !loadImlib2(img, url.path()) ) 
+        {
+            // Try to load with QT/KDELib API...
+            img.load(url.path());            
+        }
+    }
     
     if (img.isNull()) 
-        {
+    {
         error(KIO::ERR_INTERNAL, "Cannot create thumbnail for " + url.path());
         kdWarning() << "Cannot create thumbnail for " << url.path() << endl;
         return;
-        }
+    }
 
     if (QMAX(img.width(),img.height()) != size_)
         img = img.smoothScale(size_, size_, QImage::ScaleMin);
@@ -118,32 +118,32 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     QString shmid = metaData("shmid");
     
     if (shmid.isEmpty()) 
-        {
+    {
         stream << img;
-        }
+    }
     else
-        {
+    {
         void *shmaddr = shmat(shmid.toInt(), 0, 0);
         
         if (shmaddr == (void *)-1)
-            {
+        {
             error(KIO::ERR_INTERNAL, "Failed to attach to shared memory segment " + shmid);
             kdWarning() << "Failed to attach to shared memory segment " << shmid << endl;
             return;
-            }
+        }
             
         if (img.width() * img.height() > size_ * size_)
-            {
+        {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
             kdWarning() << "Image is too big for the shared memory segment" << endl;
             shmdt((char*)shmaddr);
             return;
-            }
+        }
             
         stream << img.width() << img.height() << img.depth();
         memcpy(shmaddr, img.bits(), img.numBytes());
         shmdt((char*)shmaddr);
-        }
+    }
     
     data(imgData);
     finished();
@@ -295,22 +295,8 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
     if (!data)
         return false;
 
-    uint a,r,g,b;
-    uint* imgData = (uint*) image.bits();
+    memcpy(image.bits(), data, image.numBytes());
 
-    for (int i = 0; i < new_width_*new_height_; i++) {
-
-        a = (*data & 0xff000000) >> 24;
-        r = (*data & 0xff0000)   >> 16;
-        g = (*data & 0xff00)     >> 8;
-        b = (*data & 0xff);
-
-        *imgData = qRgba(r,g,b,a);
-
-        data++;
-        imgData++;
-    }
-    
     imlib_free_image();        
     return true;
 }
@@ -327,7 +313,8 @@ extern "C"
         kdDebug() << "*** Starting kio_digikamthumbnail " << endl;
         
         if (argc != 4) {
-            kdDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2" << endl;
+            kdDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2"
+                      << endl;
             exit(-1);
         }
 
