@@ -268,7 +268,7 @@ bool ThumbnailJob::statThumbnail()
     QImage thumb(file);
     if (thumb.isNull())
         return false;
-
+        
     if (!ThumbDB::instance()->hasThumb(d->curr_url.path(1)))
     {
         QImage thumb(file);
@@ -472,6 +472,7 @@ void ThumbnailJob::slotTimeout()
     {
         kdWarning() << k_funcinfo << "Stat failed for url "
                     << d->curr_url.prettyURL() << endl;
+        emit signalStatFailed(d->curr_url, d->dir);
         processNext();
         return;
     }

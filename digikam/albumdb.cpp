@@ -958,7 +958,7 @@ void AlbumDB::setIcon(PAlbum *album, const QString& icon)
     execSql( QString("UPDATE Albums SET icon='%1' WHERE id=%2;")
              .arg(escapeString(icon))
              .arg(album->getID()) );
-
+    
     album->setIcon(icon);
 }
 

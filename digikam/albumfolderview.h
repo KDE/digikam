@@ -135,7 +135,7 @@ private:
     int                                albumSortOrder_;
     QPtrList<AlbumFolderItem>          groupItems_;
     AlbumManager*                      albumMan_;
-    QGuardedPtr<Digikam::ThumbnailJob> thumbJob_;
+    QGuardedPtr<Digikam::ThumbnailJob> iconThumbJob_;    
     AlbumFolderItem*                   phyRootItem_;
     AlbumFolderItem*                   tagRootItem_;
 
@@ -174,9 +174,11 @@ private slots:
 
     void slotOpenAlbumFolderItem();
         
-    void slotGotThumbnail(const KURL& url, const QPixmap& thumbnail,
-                          const KFileMetaInfo*);
-
+    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
+                                  const KFileMetaInfo*);
+    void slotThumbnailLost(const KURL&, bool isDir);
+    void slotPAlbumIconChanged(PAlbum*);    
+    
     void slotThemeChanged();
 };
 

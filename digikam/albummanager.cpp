@@ -592,6 +592,28 @@ void AlbumManager::removePAlbum(PAlbum *album)
     emit signalAlbumDeleted(album);
 }
 
+bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon, 
+                                    bool emitSignalChanged, QString& errMsg)
+{
+    if (!album)
+    {
+        errMsg = i18n("No such album");
+        return false;
+    }
+
+    if (album == d->rootPAlbum)
+    {
+        errMsg = i18n("Cannot edit root album");
+        return false;
+    }
+
+    d->db->setIcon(album, icon);
+
+    if(emitSignalChanged)
+        emit signalPAlbumIconChanged(album);    
+    return true;
+}
+
 void AlbumManager::insertTAlbum(TAlbum *album)
 {
     if (!album)

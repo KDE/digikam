@@ -174,7 +174,8 @@ public slots:
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotProperties(AlbumIconItem* item);
     void slotAlbumModified();
-
+    void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
+    
 signals:
 
     void signalItemsAdded();

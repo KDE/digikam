@@ -119,6 +119,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             this, SLOT(slotAlbumsCleared()));
     connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
+    connect(albumMan_, SIGNAL(signalPAlbumIconChanged(PAlbum*)),
+            this, SLOT(slotPAlbumIconChanged(PAlbum*)));
 
     connect(openAlbumTimer_, SIGNAL(timeout()),
             this, SLOT(slotOpenAlbumFolderItem()));
@@ -133,8 +135,8 @@ AlbumFolderView::~AlbumFolderView()
 {
     saveAlbumState();
     
-    if (!thumbJob_.isNull())
-        thumbJob_->kill();
+    if (!iconThumbJob_.isNull())
+        iconThumbJob_->kill();        
 }
 
 void AlbumFolderView::applySettings()
@@ -469,8 +471,8 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
     {
         PAlbum* p = dynamic_cast<PAlbum*>(album);
         p->fileItem()->removeExtraData(this);
-        if (!thumbJob_.isNull())
-            thumbJob_->removeItem(p->getKURL());
+        if(!p->getIcon().isEmpty() && !iconThumbJob_.isNull())
+            iconThumbJob_->removeItem(p->getIcon());
     }
     
     AlbumFolderItem* folderItem =
@@ -727,7 +729,7 @@ void AlbumFolderView::albumEdit(PAlbum* album)
     }
 }
 
-void AlbumFolderView::albumHighlight(PAlbum* album)
+void AlbumFolderView::slotPAlbumIconChanged(PAlbum* album)
 {
     if (!album || !album->getViewItem()) {
         return;
@@ -735,30 +737,100 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
 
     AlbumFolderItem *folderItem =
         static_cast<AlbumFolderItem*>(album->getViewItem());
+    folderItem->highlighted_ = false;
+    
+    albumHighlight(album);
+}
+
+void AlbumFolderView::albumHighlight(PAlbum* album)
+{
+    if (!album || !album->getViewItem()) {
+        return;
+    }
+        
+    AlbumFolderItem *folderItem =
+        static_cast<AlbumFolderItem*>(album->getViewItem());
 
     if (folderItem->isGroupItem() || folderItem->isHighlighted())
     {
         return;
     }
-
-    if (thumbJob_.isNull())
+    
+    if(!album->getIcon().isEmpty())
     {
-        thumbJob_ = new Digikam::ThumbnailJob(album->getKURL(),
-                                              (int)ThumbnailSize::Tiny,
-                                              true);
-        connect(thumbJob_,
-                SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                               const QPixmap&,
-                                               const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KURL&,
-                                      const QPixmap&,
-                                      const KFileMetaInfo*)));
+        if (iconThumbJob_.isNull())
+        {
+            iconThumbJob_ = new Digikam::ThumbnailJob(album->getIcon(),
+                                                (int)ThumbnailSize::Tiny,
+                                                false);
+            connect(iconThumbJob_,
+                    SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                                                const QPixmap&,
+                                                const KFileMetaInfo*)),
+                    this,
+                    SLOT(slotGotThumbnailFromIcon(const KURL&,
+                                        const QPixmap&,
+                                        const KFileMetaInfo*)));
+            connect(iconThumbJob_, 
+                    SIGNAL(signalStatFailed(const KURL&, bool)),
+                    this,
+                    SLOT(slotThumbnailLost(const KURL&, bool)));
+        }
+        else
+        {
+             iconThumbJob_->addItem(album->getIcon());
+        }    
     }
     else
     {
-        thumbJob_->addItem(album->getKURL());
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+        folderItem->setPixmap(iconLoader->loadIcon("folder",
+                                                KIcon::NoGroup,
+                                                32,
+                                                KIcon::DefaultState,
+                                                0, true));
     }
 }
+
+void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
+                                       const QPixmap& thumbnail,
+                                       const KFileMetaInfo*)
+{
+    PAlbum* album = albumMan_->findPAlbum(url.directory());
+
+    if (!album || !album->getViewItem())
+        return;
+    
+    AlbumFolderItem *folderItem =
+        (AlbumFolderItem*)(album->getViewItem());    
+
+    folderItem->setPixmap(thumbnail);
+}
+
+void::AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
+{
+    if(isDir)
+        return;
+         
+    PAlbum *album = AlbumManager::instance()->findPAlbum( url.directory() );
+    if(!album)
+        return;
+            
+    album->deleteIcon();
+    
+    AlbumFolderItem *folderItem = 
+        static_cast<AlbumFolderItem*>(album->getViewItem());    
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    folderItem->setPixmap(iconLoader->loadIcon("folder",
+                                               KIcon::NoGroup,
+                                               32,
+                                               KIcon::DefaultState,
+                                               0, true));
+
+     QString errMsg;
+     AlbumManager::instance()->updatePAlbumIcon(album, "", false, errMsg);
+}
+
 
 void AlbumFolderView::albumImportFolder()
 {
@@ -1628,20 +1700,6 @@ void AlbumFolderView::slotOpenAlbumFolderItem()
     openAlbumTimer_->stop();
     if(dropTarget_ && !dropTarget_->isOpen())
         dropTarget_->setOpen(true);
-}
-
-void AlbumFolderView::slotGotThumbnail(const KURL& url,
-                                       const QPixmap& thumbnail,
-                                       const KFileMetaInfo*)
-{
-    PAlbum* album = albumMan_->findPAlbum(url);
-    if (!album || !album->getViewItem())
-        return;
-    
-    AlbumFolderItem *folderItem =
-        (AlbumFolderItem*)(album->getViewItem());    
-
-    folderItem->setPixmap(thumbnail);
 }
 
 void AlbumFolderView::paintItemBase(QPainter* p, const QColorGroup&,

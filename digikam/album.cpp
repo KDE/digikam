@@ -38,6 +38,7 @@ Album::Album(Album::Type type, int id, const QString& title, bool root)
     m_firstChild = 0;
     m_lastChild  = 0;
     m_clearing   = false;
+    m_icon = QString::null;
 
     m_type  = type;
     m_id    = id;
@@ -237,6 +238,11 @@ void Album::setIcon(const QString& icon)
 QString Album::getIcon() const
 {
     return m_icon;    
+}
+
+void Album::deleteIcon()
+{
+    m_icon = QString::null;
 }
 
 // ------------------------------------------------------------------------------

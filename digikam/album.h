@@ -75,6 +75,7 @@ public:
     bool    isAncestorOf(Album* album) const;
     
     void    setIcon(const QString& icon);
+    void    deleteIcon();
     virtual QString getIcon() const;
     
 protected:

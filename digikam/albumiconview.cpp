@@ -409,7 +409,18 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
 
     if (!d->thumbJob.isNull())
         d->thumbJob->removeItem(item->url());
-    
+
+    if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
+    {
+        PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
+        if(album && (album->getIcon() == iconItem->fileItem()->url().prettyURL()))
+        {
+            QString err;
+            AlbumManager::instance()->updatePAlbumIcon( album,  
+                                                        "", true, err );        
+        }
+    }
+        
     delete iconItem;
     item->removeExtraData(this);
 
@@ -512,6 +523,10 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertItem(SmallIcon("text_italic"),
                        i18n("View Exif Information"), 13);
     popmenu.insertItem(i18n("Properties"), 14);
+    
+    if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
+        popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+    
     popmenu.insertSeparator();
 
     // Bulk assignment/removal of tags --------------------------
@@ -610,6 +625,11 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
         slotDeleteSelectedItems();
         break;
     }
+    
+    case 17: {
+        slotSetAlbumThumbnail(iconItem);
+        break;
+    }
 
     default:
         break;
@@ -626,6 +646,21 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     delete assignTagsPopup;
     delete removeTagsPopup;
     delete batchMenu;
+}
+
+void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
+{
+    if(!d->currentAlbum)
+        return;
+        
+    if(d->currentAlbum->type() == Album::PHYSICAL)
+    {
+        PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
+
+        QString err;
+        AlbumManager::instance()->updatePAlbumIcon( album, 
+            iconItem->fileItem()->url().prettyURL(), true, err );
+    }
 }
 
 void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
@@ -672,6 +707,12 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
         return;
     }
 
+    bool renameAlbumIcon = false;
+    if(album->getIcon() == item->fileItem()->url().prettyURL())
+    {
+        renameAlbumIcon = true;
+    }
+    
     bool ok;
     
 #if KDE_IS_VERSION(3,2,0)
@@ -689,15 +730,22 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
     
-   AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
-                             newName);
-   if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
+                              newName);
+   
+    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
        d->imageLister->updateDirectory();
+    
+    if( renameAlbumIcon )
+    {
+        QString err;
+        AlbumManager::instance()->updatePAlbumIcon( album,  
+            item->fileItem()->url().prettyURL(), false, err );        
+    }       
 }
 
 void AlbumIconView::slotDeleteSelectedItems()
 {
-
     KURL::List  urlList;
     QStringList nameList;
 
@@ -1479,25 +1527,37 @@ void AlbumIconView::refreshItems(const QStringList& itemList)
 void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
                                      const KFileMetaInfo* metaInfo)
 {
-   AlbumSettings *settings = AlbumSettings::instance();
+    if(!d->currentAlbum)
+        return;
 
-   if (!settings)
-       return;
-
-   AlbumIconItem *iconItem = d->itemDict.find(url.url());
-   if (!iconItem)
-       return;
-
-   if(settings->getExifRotate())
-   {
-      QPixmap rotPix(pix);
-      exifRotate(url.path(), rotPix);
-      iconItem->setPixmap(rotPix, metaInfo);
-   }
-   else
-   {
-      iconItem->setPixmap(pix, metaInfo);
-   }
+    AlbumSettings *settings = AlbumSettings::instance();
+    
+    if (!settings)
+        return;
+    
+    AlbumIconItem *iconItem = d->itemDict.find(url.url());
+    if (!iconItem)
+        return;
+    
+    if(settings->getExifRotate())
+    {
+        QPixmap rotPix(pix);
+        exifRotate(url.path(), rotPix);
+        iconItem->setPixmap(rotPix, metaInfo);
+    }
+    else
+    {
+        iconItem->setPixmap(pix, metaInfo);
+    }
+    
+    if( d->currentAlbum->type() == Album::PHYSICAL && 
+        d->currentAlbum->getIcon().isEmpty())
+    {
+        QString err;
+        PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
+        AlbumManager::instance()->updatePAlbumIcon( album,
+            iconItem->fileItem()->url().prettyURL(), true, err );
+    }
 }
 
 // If we failed to generate a thumbnail using our thumbnail generator
