@@ -129,7 +129,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
             
     slotItemChanged();
 
-    resize(configDialogSize(*(kapp->config()),"Image Description Dialog"));
+    resize(configDialogSize("Image Description Dialog"));
 
     m_commentsEdit->installEventFilter(this);
     m_tagsView->installEventFilter(this);
