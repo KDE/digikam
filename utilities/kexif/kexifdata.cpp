@@ -206,13 +206,12 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
 
     QDataStream stream( &file );
 
-    // TODO get byte order from jpeg file!
     stream.setByteOrder(QDataStream::LittleEndian);
  
     Q_UINT16 header;
     stream >> header;
 
-    if(header != 0xffd8 && header != 0xd8ff)
+    if(header != 0xd8ff)
     {
        kdDebug() << "No JPEG file." << endl;
        file.close();
@@ -241,10 +240,40 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
       file.close();
       return;
     }
-
+    
     Q_UINT16 sectionLen;
     stream >> sectionLen;
 
+    Q_UINT8 exifHead[6];
+    for( int i = 0; i < 6 ; i++ )
+        stream >> exifHead[i];
+
+    if( exifHead[0] != 0x45 || exifHead[1] != 0x78 || 
+        exifHead[2] != 0x69 || exifHead[3] != 0x66 ||
+        exifHead[4] != 0x00 || exifHead[5] != 0x00 ) {
+      kdDebug() << "No valid EXIF header found." << endl;
+      file.close();
+      return;
+    }
+
+    // get byte order of exif data
+    Q_UINT16 byteOrder;
+    stream >> byteOrder;
+
+    if(byteOrder != 0x4949 && byteOrder != 0x4D4D)
+    {
+      kdDebug() << "EXIF byte order could not be determined." << endl;
+      file.close();
+      return;
+    } 
+
+    // TODO handle both byte orders
+    if(byteOrder == 0x4D4D)
+    {
+      kdDebug() << "Cannot currently handle Motorola byte order in EXIF data." << endl;
+      file.close();
+      return;
+    } 
 
     // use counter to find byte offsets
     count = 0;
