@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_LensDistortion
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Spherical aberration image correction plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_lensdistortion
+author=Gilles Caulier, caulier dot gilles at free dot fr

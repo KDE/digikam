@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_AntiVignetting
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Anti Vignetting image effect plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_antivignetting
+author=Gilles Caulier, caulier dot gilles at free dot fr

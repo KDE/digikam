@@ -10,17 +10,20 @@ Resume :
 Digikam uses a plugin architecture for additional functionality in ImageEditor.
 Currently implemented plugins are:
 
- 1) AdjustLevels       : A plugin for to adjust the image histogram levels manually.
- 2) SolarizeImage      : A plugin for to solarize an image.
- 3) Despeckle          : A noise reduction filter (based on Gimp 2.0 algorithm).
- 4) OilPaint           : An oil painting effect filter.
- 5) Emboss             : An embossed image effect filter.
- 6) Charcoal           : A charcoal drawing image effect filter.
- 7) Unsharp            : An unsharped mask image filter (based on Gimp 2.0 algorithm).
- 8) RainDrop           : Adding Raindrops randomly in an image.
- 9) FilmGrain          : Adding film grain in an image.
-10) FreeRotation       : Perform an image rotation with a free angle in degrees.
-11) AdjustCurves       : A plugin for to adjust the image histogram curves.
+ 1) AdjustLevels     : A plugin for to adjust the image histogram levels manually.
+ 2) SolarizeImage    : A plugin for to solarize an image.
+ 3) Despeckle        : A noise reduction filter (based on Gimp 2.0 algorithm).
+ 4) OilPaint         : An oil painting effect filter.
+ 5) Emboss           : An embossed image effect filter.
+ 6) Charcoal         : A charcoal drawing image effect filter.
+ 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.0 algorithm).
+ 8) RainDrop         : Adding Raindrops randomly in an image.
+ 9) FilmGrain        : Adding film grain in an image.
+10) FreeRotation     : Perform an image rotation with a free angle in degrees.
+11) AdjustCurves     : A plugin for to adjust the image histogram curves.
+12) ShearTool        : A tool for shearing an image.
+13) AntiVignetting   : A tool for to reduce image vignetting.
+14) LensDistortion   : A tool for to reduce optical lens distortions.
 
 Contact :
 -----------------------------------------------------------------------
