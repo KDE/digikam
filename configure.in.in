@@ -35,7 +35,7 @@ CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
 
 
 #------------------------------------------------------------------
-# KIPI support (KDE Image Plugin Interface) instead DigikamPlugins
+# KIPI support (KDE Image Plugin Interface) 
 #------------------------------------------------------------------
 
 AC_MSG_CHECKING(if KIPI is installed)
@@ -43,7 +43,7 @@ KDE_CHECK_HEADER(libkipi/interface.h,  have_kipi=yes,  have_kipi=no)
 
 if test "$have_kipi" = "no"; then
   AC_MSG_WARN([Can't find KIPI (KDE Image Plugin Interface)
-Please install kdeextrager-libs-1 to get the most out of KimDaBa]);
+Please install kdeextrager-libs-1 to get the most out of Digikam]);
    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
