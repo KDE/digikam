@@ -146,7 +146,7 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
  
     stream >> byte;
 
-    // skip un until EXIF marker is found
+    // skip until EXIF marker is found
     while(!stream.atEnd())
     {
       while(byte != 0xff) {
@@ -178,7 +178,6 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
 
     QMemArray<unsigned char> buf(sectionLen);
 
-    unsigned int pos;
     Q_UINT32 userCommentOffset = 0;
     Q_UINT32 oldCommentLength = 0;
 
