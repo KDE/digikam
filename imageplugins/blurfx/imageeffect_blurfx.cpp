@@ -176,7 +176,8 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "and subtle glow.<p>"
                                         "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
                                         "This simulates the blur of a random moving camera.<p>"
-                                        "<b>Focus Blur</b>: .<p>"       // TODO
+                                        "<b>Focus Blur</b>: blur the image corners to reproduce the astigmatism distortion "
+                                        "of a lens.<p>"
                                         "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
                                         "a frosted glass."));
     gridBox2->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
