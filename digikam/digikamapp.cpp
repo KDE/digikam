@@ -933,7 +933,7 @@ void DigikamApp::slotKipiPluginPlug()
     }
     
     if(mSplash)
-        mSplash->message(i18n("%1 Plugins loaded").arg(list.count()));
+        mSplash->message(i18n("%1 Kipi Plugins loaded").arg(list.count()));
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
