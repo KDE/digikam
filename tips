@@ -4,7 +4,7 @@
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror 
@@ -22,7 +22,7 @@ to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could use the album collection feature to get your Photos sorted into two levels? First, the collection; then, the album.
@@ -39,7 +39,7 @@ Did you know that you could use the album collection feature to get your Photos 
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that the Properties entry of each photo gives you access to the properties entry of Konqueror?
@@ -56,7 +56,7 @@ Did you know that the Properties entry of each photo gives you access to the pro
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could edit the <b>Exif</b> information of a photo by using its properties dialog?
@@ -73,7 +73,7 @@ Did you know that you could edit the <b>Exif</b> information of a photo by using
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that each photo has a context menu that can be reached by clicking on it with the right mouse button?
@@ -90,7 +90,7 @@ Did you know that each photo has a context menu that can be reached by clicking 
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that albums in Digikam are Folders in your Album Library? So you could easily imported your Photos by simply copying them to your Album Library.
@@ -107,7 +107,7 @@ Did you know that albums in Digikam are Folders in your Album Library? So you co
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could customize your digikam toolbars using Settings -> Configure Toolbars...?
@@ -124,7 +124,7 @@ Did you know that you could customize your digikam toolbars using Settings -> Co
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating Digikam.
@@ -141,7 +141,7 @@ Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that there is a Digikam hotplugging howto available at
@@ -159,7 +159,7 @@ Did you know that there is a Digikam hotplugging howto available at
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could reach other users and Digikam developers using the digikam-users mailing list? Subscribe yourself to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
@@ -176,7 +176,7 @@ Did you know that you could reach other users and Digikam developers using the d
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://extragear.kde.org/apps/kipi.php">http://extragear.kde.org/apps/kipi.php</a>.
@@ -192,7 +192,7 @@ Did you know that Digikam has multiple Plugins with extra features like <b>HTML 
 <p>
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
-<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td><img src="crystalsvg/32x32/apps/digikam.png"></td>
 <td>
 Did you know that you have direct access to the KDE Gamma Configuration using Tools -> Gamma calibration?
 </td>
@@ -208,7 +208,7 @@ Did you know that you have direct access to the KDE Gamma Configuration using To
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
@@ -224,7 +224,7 @@ Did you know that you could print images using the Print Wizard? You can start i
 <p>
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
-<td><img src="hicolor/48x48/apps/digikam.png">
+<td><img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
@@ -241,7 +241,7 @@ Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for 
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png"></td>
+<img src="crystalsvg/32x32/apps/digikam.png"></td>
 <td>
 Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
 </td>
@@ -257,7 +257,7 @@ Did you know that the all options in a dialog box have <b>What's this?</b> infor
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that because PNG file format use a lossless compression algorithm, you can use the max compression level with this file format?
@@ -274,7 +274,7 @@ Did you know that because PNG file format use a lossless compression algorithm, 
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you can print the current image opened in the Digikam image editor?
@@ -291,7 +291,7 @@ Did you know that you can print the current image opened in the Digikam image ed
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you can edit the comments of the current image opened in the Digikam image editor?
@@ -308,7 +308,7 @@ Did you know that you can edit the comments of the current image opened in the D
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/48x48/apps/digikam.png">
+<img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
 Did you know that you could use <Page Down> and <Page Up> on your Keyboard to switch between the photos in the image editor?
