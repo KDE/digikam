@@ -96,6 +96,8 @@ ImageEffect_Blur::~ImageEffect_Blur()
 
 void ImageEffect_Blur::slotEffect()
 {
+    enableButtonOK(m_radiusInput->value() > 0);
+    
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     uint* data = (uint *)img.bits();

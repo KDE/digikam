@@ -98,6 +98,8 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
 
 void ImageEffect_Sharpen::slotEffect()
 {
+    enableButtonOK(m_radiusInput->value() > 0);
+
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     uint* data = (uint *)img.bits();
