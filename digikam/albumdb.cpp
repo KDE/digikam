@@ -214,7 +214,7 @@ void AlbumDB::deleteAlbum(Album *a)
         PAlbum *album = dynamic_cast<PAlbum*>(a);
         // deleting album
         execSql( QString("DELETE FROM Albums WHERE id='%1'")
-                 .arg(QString::number(album->getID())) );
+                 .arg(album->getID()) );
         // deleting subalbums
         execSql( QString("DELETE FROM Albums WHERE url LIKE '%1/%'")
                  .arg(escapeString(album->getURL())) );
@@ -225,7 +225,7 @@ void AlbumDB::deleteAlbum(Album *a)
         TAlbum *album = dynamic_cast<TAlbum*>(a);
         // deleting tag
         execSql( QString("DELETE FROM Tags WHERE id='%1'")
-                 .arg(QString::number(album->getID())) );
+                 .arg(album->getID()) );
 	// no need to delete subtags. trigger takes care of it
         break;
     }
@@ -324,21 +324,21 @@ void AlbumDB::setCaption(PAlbum *album)
 {
     execSql( QString("UPDATE Albums SET caption='%1' WHERE id=%2;")
              .arg(escapeString(album->getCaption()))
-             .arg(QString::number(album->getID())) );
+             .arg(album->getID()) );
 }
 
 void AlbumDB::setCollection(PAlbum *album)
 {
     execSql( QString("UPDATE Albums SET collection='%1' WHERE id=%2;")
              .arg(escapeString(album->getCollection()))
-             .arg(QString::number(album->getID())) );
+             .arg(album->getID()) );
 }
 
 void AlbumDB::setDate(PAlbum *album)
 {
     execSql( QString("UPDATE Albums SET date='%1' WHERE id = %2;")
              .arg(album->getDate().toString(Qt::ISODate))
-             .arg(QString::number(album->getID())) );
+             .arg(album->getID()) );
 }
 
 bool AlbumDB::importXML(PAlbum *album)
@@ -399,7 +399,7 @@ bool AlbumDB::importXML(PAlbum *album)
                 execSql( QString("INSERT INTO Images (name, dirid, caption) "
                                  "VALUES('%1','%2','%3');")
                          .arg(name)
-                         .arg(QString::number(album->getID()))
+                         .arg(album->getID())
                          .arg(escapeString(caption)) );
             }
         }
@@ -465,7 +465,7 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
     QStringList values;
 
     execSql( QString("SELECT url FROM Albums WHERE id = %1;")
-                  .arg(QString::number(id)), &values );
+                  .arg(id), &values );
 
     if ( !values.isEmpty() ) 
     {
@@ -486,7 +486,7 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
                              "SELECT '%1', date, caption, collection, icon FROM Albums "
                              "WHERE id = %2;")
                      .arg(escapeString(album->getURL()))
-                     .arg(QString::number(id)) );
+                     .arg(id) );
             
 	    // find identifier and write out the new identifier
 	    
@@ -498,16 +498,16 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
             execSql( QString("INSERT INTO Images (name, dirid, caption, datetime) "
                              "SELECT name, %1, caption, datetime FROM Images "
                              "WHERE dirid = %2;")
-                     .arg(QString::number(newId))
-                     .arg(QString::number(id)) );
+                     .arg(newId)
+                     .arg(id) );
 
             // also copy the tags
             
             execSql( QString("INSERT INTO ImageTags (name, dirid, tagid) "
                              "SELECT name, %1, id FROM ImageTags "
                              "WHERE dirid = %2;")
-                     .arg(QString::number(newId))
-                     .arg(QString::number(id)) );
+                     .arg(newId)
+                     .arg(id) );
 
 	    id = newId;
         }
@@ -517,7 +517,7 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
             // just update the url for the album
             execSql( QString("UPDATE Albums SET url = '%1' WHERE id = %2;")
                      .arg(escapeString(album->getURL()))
-                     .arg(QString::number(id)) );
+                     .arg(id) );
 
         }
 
@@ -525,7 +525,7 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
         values.clear();
         execSql( QString("SELECT date, caption, collection "
                          "FROM Albums WHERE id = %1;")
-                 .arg(QString::number(id)), &values );
+                 .arg(id), &values );
         
 	album->setID(id);
         album->setDate(QDate::fromString(values[0], Qt::ISODate), false);
@@ -631,7 +631,7 @@ QString AlbumDB::getItemCaption(PAlbum *album, const QString& name)
 
     execSql( QString("SELECT caption FROM Images "
                      "WHERE dirid='%1' AND name='%2';")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(name)),
              &values );
 
@@ -649,7 +649,7 @@ QStringList AlbumDB::getItemTagNames(PAlbum *album, const QString& name)
                      "ON (ImageTags.dirid=%1 AND ImageTags.name='%2') "
                      "WHERE Tags.id=ImageTags.tagid "
                      "ORDER BY Tags.name;")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(name)),
              &values );
 
@@ -662,7 +662,7 @@ IntList AlbumDB::getItemTagIDs(PAlbum *album, const QString& name)
 
     execSql( QString("SELECT tagid FROM ImageTags "
                      "WHERE dirid=%1 AND name='%2';")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(name)),
              &values );
 
@@ -683,12 +683,12 @@ void AlbumDB::setItemCaption(PAlbum *album, const QString& name, const QString& 
     QStringList values;
 
     // TODO: find a better way to do this
-    
-    QString idString = QString::number(album->getID());
+
+    int id = album->getID();
     
     execSql( QString("SELECT COUNT(name) FROM Images "
                      "WHERE dirid='%1' AND name='%2';")
-             .arg(idString)
+             .arg(id)
              .arg(escapeString(name)), &values );
 
     if (values[0] == "0")
@@ -696,7 +696,7 @@ void AlbumDB::setItemCaption(PAlbum *album, const QString& name, const QString& 
         execSql( QString("INSERT INTO Images (name, dirid, caption) "
                          "VALUES('%1', '%2', '%3'); ")
                  .arg(escapeString(name))
-                 .arg(idString)
+                 .arg(id)
                  .arg(escapeString(caption)) );
     }
     else
@@ -704,7 +704,7 @@ void AlbumDB::setItemCaption(PAlbum *album, const QString& name, const QString& 
         execSql( QString("UPDATE Images SET caption='%1' "
                          "WHERE dirid='%1' AND name='%2';")
                  .arg(escapeString(caption))
-                 .arg(idString)
+                 .arg(id)
                  .arg(escapeString(name)) );
     }
 
@@ -714,15 +714,15 @@ void AlbumDB::setItemTag(PAlbum *album, const QString& name, TAlbum* tag)
 {
     execSql( QString("REPLACE INTO ImageTags VALUES('%1', %2, %3);")
                  .arg(escapeString(name))
-                 .arg(QString::number(album->getID()))
-                 .arg(QString::number(tag->getID())) );
+                 .arg(album->getID())
+                 .arg(tag->getID()) );
 }
 
 void AlbumDB::removeItemTags(PAlbum *album, const QString& name)
 {
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE dirid=%1 AND name='%2';")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(name)) );
 }
 
@@ -734,7 +734,7 @@ QStringList AlbumDB::getItemsURL(TAlbum* album)
                      "FROM Albums JOIN ImageTags LEFT JOIN Images "
                      "ON ImageTags.tagid=%1 AND Albums.id=ImageTags.dirid "
                      "AND Images.dirid=ImageTags.dirid AND Images.name=ImageTags.name;")
-             .arg(QString::number(album->getID())), &values );
+             .arg(album->getID()), &values );
 
     QStringList urls;
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -754,7 +754,7 @@ void AlbumDB::getItemsInTAlbum(TAlbum* album, QStringList& urls,
     execSql( QString("SELECT Albums.url||'/'||ImageTags.name, ImageTags.dirid "
                      "FROM Albums JOIN ImageTags "
                      "ON ImageTags.tagid=%1 AND Albums.id=ImageTags.dirid;")
-             .arg(QString::number(album->getID())), &values );
+             .arg(album->getID()), &values );
 
     urls.clear();
     dirids.clear();
@@ -773,7 +773,7 @@ void AlbumDB::scanTags(TAlbum *parent)
     QStringList values;
     execSql( QString("SELECT id, name, icon "
 		     "FROM Tags where pid=%1 ORDER by name;").
-             arg(QString::number(pid)), 
+             arg(pid), 
              &values );
 
     if (values.isEmpty())
@@ -807,17 +807,17 @@ void AlbumDB::copyItem(PAlbum *srcAlbum,  const QString& srcFile,
     execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
                      "SELECT %1, '%2', caption, datetime FROM Images "
                      "WHERE dirid=%3 AND name='%4';")
-             .arg(QString::number(destAlbum->getID()))
+             .arg(destAlbum->getID())
              .arg(escapeString(destFile))
-             .arg(QString::number(srcAlbum->getID()))
+             .arg(srcAlbum->getID())
              .arg(escapeString(srcFile)) );
 
     execSql( QString("INSERT INTO ImageTags (dirid, name, tagid) "
                      "SELECT %1, '%2', tagid FROM ImageTags "
                      "WHERE dirid=%3 AND name='%4';")
-             .arg(QString::number(destAlbum->getID()))
+             .arg(destAlbum->getID())
              .arg(escapeString(destFile))
-             .arg(QString::number(srcAlbum->getID()))
+             .arg(srcAlbum->getID())
              .arg(escapeString(srcFile)) );
 }
 
@@ -829,16 +829,16 @@ void AlbumDB::moveItem(PAlbum *srcAlbum,  const QString& srcFile,
 
     execSql( QString("UPDATE Images SET dirid=%1, name='%2' "
                      "WHERE dirid=%3 AND name='%4';")
-             .arg(QString::number(destAlbum->getID()))
+             .arg(destAlbum->getID())
              .arg(escapeString(destFile))
-             .arg(QString::number(srcAlbum->getID()))
+             .arg(srcAlbum->getID())
              .arg(escapeString(srcFile)) );
 
     execSql( QString("UPDATE ImageTags SET dirid=%1, name='%2' "
                      "WHERE dirid=%3 AND name='%4';")
-             .arg(QString::number(destAlbum->getID()))
+             .arg(destAlbum->getID())
              .arg(escapeString(destFile))
-             .arg(QString::number(srcAlbum->getID()))
+             .arg(srcAlbum->getID())
              .arg(escapeString(srcFile)) );
 }
 
@@ -846,12 +846,12 @@ void AlbumDB::deleteItem(PAlbum *album, const QString& file)
 {
     execSql( QString("DELETE FROM Images "
                      "WHERE dirid=%1 AND name='%2';")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(file)) );
 
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE dirid=%1 AND name='%2';")
-             .arg(QString::number(album->getID()))
+             .arg(album->getID())
              .arg(escapeString(file)) );
 }
 
@@ -868,7 +868,7 @@ void AlbumDB::renameTAlbum(TAlbum* album, const QString& name)
 {
     execSql( QString("UPDATE Tags SET name='%1' WHERE id=%2;")
              .arg(escapeString(name))
-             .arg(QString::number(album->getID())) );
+             .arg(album->getID()) );
 
     album->setTitle(name);
 }
@@ -877,7 +877,7 @@ void AlbumDB::setIcon(TAlbum *album, const QString& icon)
 {
     execSql( QString("UPDATE Tags SET icon='%1' WHERE id=%2;")
              .arg(escapeString(icon))
-             .arg(QString::number(album->getID())) );
+             .arg(album->getID()) );
 
     album->setIcon(icon);
 }
@@ -890,7 +890,7 @@ bool AlbumDB::createTAlbum(TAlbum* parent, const QString& name,
 
     if (!execSql( QString("INSERT INTO Tags (pid, name, icon) "
                           "VALUES( %1, '%2', '%3')")
-                  .arg(QString::number(parent->getID()))
+                  .arg(parent->getID())
                   .arg(escapeString(name))
                   .arg(escapeString(icon)) ))
     {
