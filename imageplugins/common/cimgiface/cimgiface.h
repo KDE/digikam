@@ -25,12 +25,14 @@
 // Qt includes.
 
 #include <qthread.h>
+#include <qimage.h>
 
 // Local include.
 
 #include "CImg.h"
 
 class QObject;
+class QImage;
 
 namespace DigikamImagePlugins
 {
@@ -62,7 +64,7 @@ public:
               double angularStep, double blur, double detail,
               double gradient, double gaussian, bool normalize, bool normalize, 
               bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
-              char* visuflowMode=NULL, QObject *parent=0);
+              char* visuflowMode=NULL, QImage *inPaintingMask=0, QObject *parent=0);
     
     ~CimgIface();
     
@@ -74,6 +76,8 @@ private:
     uint     *m_imageData;
     int       m_imageWidth;
     int       m_imageHeight;
+    
+    QImage    m_inPaintingMask;
     
     bool      m_cancel;   // Used to stop thread during calculations.
     

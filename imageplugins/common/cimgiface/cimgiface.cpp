@@ -52,7 +52,7 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
                      double gradient, double gaussian, 
                      bool normalize, bool linearInterpolation, 
                      bool restoreMode, bool inpaintMode, bool resizeMode, 
-                     char* visuflowMode, QObject *parent)
+                     char* visuflowMode, QImage *inPaintingMask, QObject *parent)
          : QThread()
 { 
     m_imageData   = data;
@@ -78,7 +78,13 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     m_gauss_prec  = gaussian;
     m_onormalize  = normalize;
     m_linear      = linearInterpolation;
-    
+
+    if (inPaintingMask)
+       {
+       m_inPaintingMask = inPaintingMask->copy();
+       m_inPaintingMask.save("/tmp/mask.png", "PNG");
+       }
+        
     if (m_imageData && m_imageWidth && m_imageHeight)
        {
        if (m_parent)
@@ -315,7 +321,8 @@ bool CimgIface::prepare_restore()
 
 bool CimgIface::prepare_inpaint()
 {
-    const char *file_m = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
+    //const char *file_m = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
+    const char *file_m = "/tmp/mask.png";
     
     if (!file_m) 
        {
