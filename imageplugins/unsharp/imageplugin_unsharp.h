@@ -36,8 +36,6 @@ public:
                         const QStringList &args);
     ~ImagePlugin_Unsharp();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotUnsharp();

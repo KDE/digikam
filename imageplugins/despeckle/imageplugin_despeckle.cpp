@@ -43,19 +43,14 @@ ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
     new KAction(i18n("Noise Reduction..."), 0, 
                 this, SLOT(slotDespeckle()),
                 actionCollection(), "imageplugin_despeckle");
+                
+    setXMLFile("digikamimageplugin_despeckle_ui.rc");                
 
     kdDebug() << "ImagePlugin_Despeckle plugin loaded" << endl;
 }
 
 ImagePlugin_Despeckle::~ImagePlugin_Despeckle()
 {
-}
-
-QStringList ImagePlugin_Despeckle::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_despeckle/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Despeckle::slotDespeckle()

@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_despeckle.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_despeckle.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_despeckle_ui.rc

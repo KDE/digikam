@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="digikamimageplugin_unsharp" >
+
+ <MenuBar>
+
+  <Menu name="Fix" >
+   <text>Fi&amp;x</text>
+      <Action name="imageplugin_unsharp" /> 
+  </Menu>
+
+ </MenuBar>
+
+</kpartgui>

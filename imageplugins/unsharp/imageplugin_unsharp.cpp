@@ -48,6 +48,8 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
                 this, SLOT(slotUnsharp()),
                 actionCollection(), "imageplugin_unsharp");
 
+    setXMLFile("digikamimageplugin_unsharp_ui.rc");               
+                    
     kdDebug() << "ImagePlugin_Unsharp plugin loaded" << endl;
 }
 
@@ -55,18 +57,10 @@ ImagePlugin_Unsharp::~ImagePlugin_Unsharp()
 {
 }
 
-QStringList ImagePlugin_Unsharp::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_unsharp/ ");
-    return guiDef;
-}
-
 void ImagePlugin_Unsharp::slotUnsharp()
 {
     DigikamUnsharpFilterImagesPlugin::UnsharpDialog dlg(parentWidget());
     dlg.exec();
 }
-
 
 #include "imageplugin_unsharp.moc"

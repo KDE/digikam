@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_unsharp.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_unsharp.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_unsharp_ui.rc
