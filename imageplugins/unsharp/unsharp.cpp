@@ -23,12 +23,6 @@
  * 
  * ============================================================ */
 
-
-// Imlib2 include.
-
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
-
 // C++ include.
 
 #include <cstring>
