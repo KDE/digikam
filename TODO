@@ -21,7 +21,8 @@ x Lauch the Albums properties when a new Album is added
 - Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
 - Added dockable main widgets like Showimg.                        <Gilles Caulier - 0.6.3>
 x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.6.3>
-x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer - 0.6.3>
+x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.6.3>
+x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.6.3>
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
 o View/Hide main toolbar/statusbar.
