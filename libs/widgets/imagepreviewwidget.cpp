@@ -95,14 +95,14 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     
     mainLayout->addWidget(gbox2);
 
+    setCenterImageRegionPosition();
+    slotOriginalImageRegionChanged();
+    
     connect(m_imageRegionWidget, SIGNAL(contentsMovedEvent()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
     connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved (QRect, bool)),
             this, SLOT(slotSetImageRegionPosition(QRect, bool)));
-            
-    setCenterImageRegionPosition();
-    QTimer::singleShot(0, this, SLOT(slotOriginalImageRegionChanged()));            
 }
 
 ImagePreviewWidget::~ImagePreviewWidget()
