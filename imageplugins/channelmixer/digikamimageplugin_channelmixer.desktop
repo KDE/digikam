@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_ChannelMixer
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+
+Comment=Image color channels mixer plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_channelmixer
+author=Caulier Gilles, caulier dot gilles at free dot fr
