@@ -302,9 +302,9 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
         kapp->processEvents(); 
         }
 
-    // Blur grain mask without using Alpha.    
+    // Smooth grain mask using gaussian blur.    
     
-    Digikam::ImageFilters::smartBlurImage((uint *)pGrainBits, Width, Height);
+    Digikam::ImageFilters::gaussianBlurImage((uint *)pGrainBits, Width, Height, 3);
             
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
