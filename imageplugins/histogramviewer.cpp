@@ -30,7 +30,6 @@
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qimage.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
@@ -66,16 +65,15 @@ HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
 {
-    QImage image;
-
-    if (image.load(imageFile) == true)
+    if (m_image.load(imageFile) == true)
        {
-       if(image.depth() < 32)           // we works always with 32bpp.
-          image = image.convertDepth(32);
+       if(m_image.depth() < 32)           // we works always with 32bpp.
+          m_image = m_image.convertDepth(32);
        
-       setupGui((uint *)image.bits(),
-                image.width(), 
-                image.height());
+       m_image.setAlphaBuffer(true);
+       setupGui((uint *)m_image.bits(),
+                m_image.width(), 
+                m_image.height());
        }
 }
 
@@ -84,14 +82,15 @@ HistogramViewer::HistogramViewer(QWidget *parent, QImage image)
                : KDialogBase(Plain, i18n("Histogram"), Help|Ok, Ok,
                              parent, 0, true, true)
 {                             
-    QImage img = image;
+    m_image = image;
     
-    if(image.depth() < 32)           // we works always with 32bpp.
-       img = img.convertDepth(32);
-       
-    setupGui((uint *)img.bits(),
-             img.width(), 
-             img.height());
+    if(m_image.depth() < 32)           // we works always with 32bpp.
+       m_image = m_image.convertDepth(32);
+
+    m_image.setAlphaBuffer(true);
+    setupGui((uint *)m_image.bits(),
+             m_image.width(), 
+             m_image.height());
 }                            
 
 // Constructor using image RAW data 32 bits (RGBA).                          

@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -75,7 +76,9 @@ private:
     QLabel                   *m_labelCountValue;
     QLabel                   *m_labelMedianValue;
     QLabel                   *m_labelPercentileValue;
-                
+
+    QImage                    m_image;
+                    
     ColorGradientWidget      *m_hGradient;
     
     Digikam::HistogramWidget *m_histogramWidget;
