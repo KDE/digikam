@@ -135,6 +135,10 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the Raindrop effect."
+                                           "<p>Note: if you have previously selected an image part on Digikam editor, "
+                                           "this part will be unused by the filter. You can use this way for disable "
+					   "the Raindrops effect on a human face for example.") );
     topLayout->addWidget(gbox);
     
     // -------------------------------------------------------------
