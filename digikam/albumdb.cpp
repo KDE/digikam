@@ -567,7 +567,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     int error;
     
     //compile SQL program to virtual machine
-    error = sqlite_compile( m_db, sql.utf8(), &tail, &vm, &errorStr );
+    error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
         kdWarning() << k_funcinfo << "sqlite_compile error: "
@@ -587,7 +587,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
             break;
         //iterate over columns
         for ( int i = 0; values && i < number; i++ ) {
-            *values << QString::fromUtf8( value [i] );
+            *values << QString::fromLocal8Bit( value [i] );
         }
     }
     
