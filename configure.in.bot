@@ -29,6 +29,9 @@ if test "x$have_libkexif" != "xyes"; then
   echo ""
   echo "digiKam needs libkexif. You need to install libkexif first"
   echo "libkexif website is at http://digikam.sourceforge.net"
+  echo "Note: You need to export PKG_CONFIG_PATH if not already done so"
+  echo "Example:"
+  echo "export PKG_CONFIG_PATH=$KDEDIR/lib/pkgconfig/"
   echo ""
 else
   echo "-- libkexif found................. YES"
