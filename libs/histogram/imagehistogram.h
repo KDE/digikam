@@ -73,7 +73,7 @@ struct double_packet
 
 public:
     
-    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0);
+    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0, bool threaded=true);
     ~ImageHistogram();
     
     // Method to stop threaded calculations.

@@ -68,7 +68,7 @@ void ImageEffect_ColorsEnhance::equalizeImage()
     unsigned char         r, g, b, a;
     
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, 0, false);
     
     // Memory allocation.
     map                                = new double_packet[256];
@@ -188,7 +188,7 @@ void ImageEffect_ColorsEnhance::normalizeImage()
     unsigned char         r, g, b, a;
         
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, 0, false);
     
     // Memory allocation.
     normalize_map = new short_packet[256];
@@ -462,7 +462,7 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     uint* desData = new uint[w*h];
        
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h);
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h, 0, false);
   
     // Create an empty instance of levels to use.
     Digikam::ImageLevels *levels = new Digikam::ImageLevels();      

@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent)
+ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent, bool threaded)
               : QThread()
 { 
     m_imageData   = i_data;
@@ -55,7 +55,12 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent
     m_runningFlag = true;   
     
     if (m_imageData && m_imageWidth && m_imageHeight)
-       start();
+       {
+       if (threaded)
+          start();
+       else
+          calcHistogramValues();
+       }
     else
        {
        if (m_parent)
