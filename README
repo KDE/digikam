@@ -43,10 +43,9 @@ AutoMake >= 1.7.0
 KDE 3.x
 gphoto2 2.x
 imlib2 >= 1.1.0
-libexif >= 0.5.7
 libgdbm >= 1.8.0
-libKIPI from kdeextragear-libs-1
-libKexif from kdeextragear-libs-1
+libkipi from http://extragear.kde.org/apps/kipi.php
+libkexif from http://digikam.sourceforge.net
 libtiff >= 3.5.x
 
 Installation :
@@ -55,11 +54,14 @@ In the source directory do :
 
 1) export WANT_AUTOCONF_2_5=1
 2) export KDEDIR=KDE_installation_dir_on_your_system
-3) make -f Makefile.cvs
-4) ./configure
-5) make
-6) su
-7) make install
+5) if you are installing libkipi/libkexif in a non-standard location
+  let pkg-config know about their paths:
+  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/path/to/installation/lib/pkgconfig
+4) make -f Makefile.cvs
+5) ./configure
+6) make
+7) su
+8) make install
 
 More specifics compilations and installations options can be used with '.configure' script.
 Check it with './configure --help' command line.
