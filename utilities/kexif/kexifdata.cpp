@@ -1,5 +1,11 @@
+#include <stdlib.h>
 #include "kexififd.h"
 #include "kexifdata.h"
+#include "kdebug.h"
+
+#include <qfile.h>
+#include <qdir.h>
+
 
 KExifData::KExifData()
 {
@@ -122,3 +128,101 @@ void KExifData::saveFile(const QString& filename)
     fwrite (mExifData->data, 1, mExifData->size, f);
     fclose (f);
 }
+
+int KExifData::setUserComment(QString& comment)
+{
+    ExifEntry *e;
+    
+    e = exif_content_get_entry (mExifData->ifd[EXIF_IFD_EXIF], EXIF_TAG_USER_COMMENT); 
+
+    kdDebug() << "Got EXIF tag: " << e->tag << endl;
+
+    if (!e) {
+        e = exif_entry_new ();
+        exif_entry_initialize (e, EXIF_TAG_USER_COMMENT);
+        kdDebug() << "No UserComment field. Creating it. " << endl;
+    }
+
+    if (e->data)
+        free (e->data);
+
+    e->size = comment.length() + 8;
+    e->data = (unsigned char *)malloc ((sizeof (char) * e->size) + 1);
+
+    if (!e->data) {
+         kdDebug() << "Not enough memory for EXIF data." << endl;
+         return (0);
+    }
+
+    char characterCode[8] = "ASCII";
+    characterCode[5] = 0;
+    characterCode[6] = 0;
+    characterCode[7] = 0;
+
+    strncpy((char *)e->data, characterCode, 8);
+    strncpy(((char *)e->data) + 8, comment.latin1(), comment.length());
+    e->components = comment.length() + 8;
+
+    return 1;
+}
+
+
+void KExifData::saveExifData(QString& filename)
+{
+    unsigned char *d = NULL;
+    unsigned int ds;
+
+
+    /* Make sure the EXIF data is not too big. */
+    exif_data_save_data (mExifData, &d, &ds);
+    if (ds) {
+        if (ds > 0xffff) {
+            kdDebug() << "Too much EXIF data (" << ds << " bytes). Only 0xffff bytes are allowed." << endl;
+            return;
+        }
+    };
+
+    /* Write to new Jpeg file and replace the EXIF data with the new data on the fly */
+    QFile file( filename );
+    QFile fileOut( filename + ".exiftmp" );
+    file.open( IO_ReadOnly );
+    fileOut.open( IO_WriteOnly );
+    QDataStream instream( &file );
+    QDataStream outstream( &fileOut );
+
+    Q_UINT16 twobytes = 0x0000;
+    while(twobytes != 0xffe1) {
+      instream >> twobytes;
+      outstream << twobytes;
+    }
+
+    Q_UINT16 sectionLen;
+    instream >> sectionLen;
+
+    // skip old EXIF data
+    Q_UINT8 byte;
+    for(Q_UINT16 i=0 ; i < (sectionLen - 4) ; i++)
+      instream >> byte;
+
+    kdDebug() << "EXIF data is of length " << ds << endl;
+    outstream << (Q_INT16)(ds + 4);
+    outstream.writeRawBytes((char *)d, ds);
+
+    kdDebug() << "Found section of length " << sectionLen << endl;
+
+    while(!instream.atEnd()) {
+      instream >> byte;
+      outstream << byte;
+    }
+
+    file.close();
+    fileOut.close();
+    file.remove();
+    QDir dir;
+    dir.rename( filename + ".exiftmp", filename ,TRUE );
+
+    kdDebug() << "Wrote file '" << filename.latin1() << "'." << endl;
+
+    return;
+}
+
