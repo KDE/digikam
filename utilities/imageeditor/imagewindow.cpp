@@ -43,6 +43,7 @@
 #include <ktempfile.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
+#include <kdebug.h>
 #include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
@@ -478,16 +479,15 @@ void ImageWindow::slotFileProperties()
 
 void ImageWindow::slotExifInfo()
 {
-    KExif *exif = new KExif(this);
+    KExif exif(this);
     
-    if (exif->loadFile(m_urlCurrent.path()) == 0)
-        exif->show();
+    if (exif.loadFile(m_urlCurrent.path()))
+        exif.exec();
     else 
-        {
-        delete exif;
+    {
         KMessageBox::sorry(this,
                            i18n("This item has no Exif Information"));
-        }
+    }
 }
 
 void ImageWindow::slotCommentsEdit()

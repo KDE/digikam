@@ -627,13 +627,14 @@ void AlbumIconView::slotShowExifInfo(AlbumIconItem* item)
 {
     if ( !item ) return;
 
-    KExif *exif = new KExif(0);
+    KExif exif(this);
     
-    if ( exif->loadFile(item->fileItem()->url().path()) == 0 )
-        exif->show();
+    if (exif.loadFile(item->fileItem()->url().path()))
+    {
+        exif.exec();
+    }
     else 
     {
-        delete exif;
         KMessageBox::sorry(0, i18n("This item has no Exif Information"));
     }
 }
