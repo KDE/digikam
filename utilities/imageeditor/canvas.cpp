@@ -505,16 +505,21 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() == Qt::ControlButton ||
-        e->state() == Qt::ShiftButton) {
+    if (e->state() == Qt::ControlButton) {
 
         if (e->delta() < 0)
             emit signalShowNextImage();
         else if (e->delta() > 0)
             emit signalShowPrevImage();
-
         return;
-        
+    }
+    else if (e->state() == Qt::ShiftButton) {
+
+        if (e->delta() < 0)
+            slotIncreaseZoom();
+        else if (e->delta() > 0)
+            slotDecreaseZoom();
+        return;
     }
 
     QScrollView::contentsWheelEvent(e);
@@ -522,12 +527,12 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 
 bool Canvas::maxZoom()
 {
-    return (d->zoom >= maxZoom_);
+    return ((d->zoom + 0.1) >= maxZoom_);
 }
 
 bool Canvas::minZoom()
 {
-    return (d->zoom <= 1.0/maxZoom_);
+    return ((d->zoom - 0.1) <= 0.1);
 }
 
 void Canvas::slotIncreaseZoom()
@@ -535,12 +540,7 @@ void Canvas::slotIncreaseZoom()
     if (d->autoZoom || maxZoom())
         return;
 
-    if (d->zoom >= 1.0) {
-        d->zoom = d->zoom + 0.25;
-    }
-    else {
-        d->zoom = 1.0/( ceil(1/d->zoom)-1.0 );
-    }
+    d->zoom = d->zoom + 0.1;
 
     d->im->zoom(d->zoom);
     
@@ -555,11 +555,7 @@ void Canvas::slotDecreaseZoom()
     if (d->autoZoom || minZoom())
         return;
 
-    if (d->zoom > 1.0) {
-        d->zoom = d->zoom - 0.25;    
-    } else {
-        d->zoom=1/( floor(1/d->zoom)+1.0 );
-    }
+    d->zoom = d->zoom - 0.1;    
 
     d->im->zoom(d->zoom);
 
