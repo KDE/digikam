@@ -25,7 +25,7 @@
 
 // Qt include.
 
-#include <qimage.h>
+#include <qcolor.h>
 
 // KDE include.
 
@@ -34,8 +34,7 @@
 class QPushButton;
 class QLabel;
 class QComboBox;
-
-class KColorButton;
+class QPushButton;
 
 namespace Digikam
 {
@@ -75,10 +74,13 @@ private:
     QPushButton                  *m_helpButton;
     
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_targetColor;
     QComboBox                    *m_scaleCB;  
     
-    KColorButton                 *m_foregroundColorButton;
+    QPushButton                  *m_blackColorButton;
+    QPushButton                  *m_whiteColorButton;
+    
+    QColor                        m_blackColor;
+    QColor                        m_whiteColor;
     
     Digikam::CurvesWidget        *m_whiteBalanceCurvesWidget;
     Digikam::ImageCurves         *m_whiteBalanceCurves;
@@ -88,9 +90,12 @@ private:
     
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageWidget         *m_previewTargetWidget; 
-    
-    void bwBalance(uint *data, int w, int h, int tColor, QColor fColor);
-    inline uchar curvePoint(int target, uchar channel, int i);
+
+private:
+        
+    void setWhiteColor(QColor color);
+    void setBlackColor(QColor color);
+    void whiteBalance(uint *data, int w, int h, QColor bColor, QColor wColor);
 
 private slots:
 
