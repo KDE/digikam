@@ -5,7 +5,13 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
+ * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
+ *   This file is part of the KDE libraries
+ *   Copyright (C) 1997 Torben Weis (weis@kde.org)
+ *   Copyright (C) 1998 Matthias Ettrich (ettrich@kde.org)
+ *   Copyright (C) 1999 David Faure (faure@kde.org)
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
