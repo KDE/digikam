@@ -27,12 +27,11 @@ public:
     int readFromFile(const QString& filename);
     int readFromData(char* data, int size);
     int getThumbnail(QImage& thumb);
-    int KExifData::setUserComment(QString& comment);
 
     QValueVector<KExifIfd> ifdVector;
 
     void saveFile(const QString& filename);
-    void KExifData::saveExifData(QString& filename);
+    void KExifData::saveExifComment(QString& filename, QString& comment);
 
 private:
 

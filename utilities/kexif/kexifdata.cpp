@@ -4,7 +4,7 @@
 #include "kdebug.h"
 
 #include <qfile.h>
-#include <qdir.h>
+#include <kio/job.h>
 
 
 KExifData::KExifData()
@@ -129,97 +129,99 @@ void KExifData::saveFile(const QString& filename)
     fclose (f);
 }
 
-int KExifData::setUserComment(QString& comment)
+
+void KExifData::saveExifComment(QString& filename, QString& comment)
 {
-    ExifEntry *e;
-    
-    e = exif_content_get_entry (mExifData->ifd[EXIF_IFD_EXIF], EXIF_TAG_USER_COMMENT); 
-
-    kdDebug() << "Got EXIF tag: " << e->tag << endl;
-
-    if (!e) {
-        e = exif_entry_new ();
-        exif_entry_initialize (e, EXIF_TAG_USER_COMMENT);
-        kdDebug() << "No UserComment field. Creating it. " << endl;
-    }
-
-    if (e->data)
-        free (e->data);
-
-    e->size = comment.length() + 8;
-    e->data = (unsigned char *)malloc ((sizeof (char) * e->size) + 1);
-
-    if (!e->data) {
-         kdDebug() << "Not enough memory for EXIF data." << endl;
-         return (0);
-    }
-
-    char characterCode[8] = "ASCII";
-    characterCode[5] = 0;
-    characterCode[6] = 0;
-    characterCode[7] = 0;
-
-    strncpy((char *)e->data, characterCode, 8);
-    strncpy(((char *)e->data) + 8, comment.latin1(), comment.length());
-    e->components = comment.length() + 8;
-
-    return 1;
-}
-
-
-void KExifData::saveExifData(QString& filename)
-{
-    unsigned char *d = NULL;
-    unsigned int ds;
-
-
-    /* Make sure the EXIF data is not too big. */
-    exif_data_save_data (mExifData, &d, &ds);
-    if (ds) {
-        if (ds > 0xffff) {
-            kdDebug() << "Too much EXIF data (" << ds << " bytes). Only 0xffff bytes are allowed." << endl;
-            return;
-        }
-    };
+    unsigned int count = 0;
 
     /* Write to new Jpeg file and replace the EXIF data with the new data on the fly */
     QFile file( filename );
-    QFile fileOut( filename + ".exiftmp" );
-    file.open( IO_ReadOnly );
-    fileOut.open( IO_WriteOnly );
-    QDataStream instream( &file );
-    QDataStream outstream( &fileOut );
+    file.open( IO_ReadWrite );
+
+    QDataStream stream( &file );
+
+    // TODO get byte order from jpeg file!
+    stream.setByteOrder(QDataStream::LittleEndian);
 
     Q_UINT16 twobytes = 0x0000;
-    while(twobytes != 0xffe1) {
-      instream >> twobytes;
-      outstream << twobytes;
+    while(twobytes != 0xe1ff) {
+      stream >> twobytes;
+      count++;
+      if(count > 30)
+      {
+        kdDebug() << "No EXIF information found." << endl;
+        file.close();
+        return;
+      }
     }
 
     Q_UINT16 sectionLen;
-    instream >> sectionLen;
+    stream >> sectionLen;
 
-    // skip old EXIF data
-    Q_UINT8 byte;
-    for(Q_UINT16 i=0 ; i < (sectionLen - 4) ; i++)
-      instream >> byte;
 
-    kdDebug() << "EXIF data is of length " << ds << endl;
-    outstream << (Q_INT16)(ds + 4);
-    outstream.writeRawBytes((char *)d, ds);
+    // use counter to find byte offsets
+    count = 0;
 
-    kdDebug() << "Found section of length " << sectionLen << endl;
+    // read old EXIF data into buffer
+    QMemArray<unsigned char> buf(sectionLen);
 
-    while(!instream.atEnd()) {
-      instream >> byte;
-      outstream << byte;
+    unsigned char byte;
+    unsigned int pos;
+    Q_UINT32 userCommentOffset = 0;
+    Q_UINT32 oldCommentLength = 0;
+
+    for(int i=0 ; i < (sectionLen - 2) ; i++)
+    {
+      stream >> byte;
+      buf[i] = byte;
+      count++;
+
+      // search for UserComment tag
+      if(i > 4 && buf[i]==0x00 && buf[i-1]==0x07 && buf[i-2]==0x92 && buf[i-3]==0x86)
+      {
+        stream >> oldCommentLength;
+        stream >> userCommentOffset;
+        count+=8;
+        kdDebug() << "Found UserComment offset: " << userCommentOffset << endl;
+        kdDebug() << "Found oldCommentLength: " << oldCommentLength << endl;
+        break;
+      }
+    }
+    if(!userCommentOffset)
+    {
+      kdDebug() << "No EXIF UserComment found." << endl;
+      file.close();
+      return;
     }
 
+    while(count < userCommentOffset + 6)
+    {
+      stream >> byte;
+      count++;
+    }
+
+    // write comment into offset position
+    stream << 0x49435341;
+    stream << 0x00000049;
+
+    // don't write more than the old field length
+    unsigned int writeLen = (oldCommentLength < comment.length()) ? oldCommentLength : comment.length(); 
+
+    // write comment into stream
+    for(unsigned int i = 0 ; i < writeLen ; i++)
+    {
+      stream << (Q_UINT8)comment.at(i).latin1();
+    }
+
+    // overwrite rest of old comment 
+
+    for(unsigned int i=0 ; i < oldCommentLength - comment.length() - 8 ; i++)
+    {
+      stream << (Q_UINT8)0x00;
+    }
+
+    delete buf;
     file.close();
-    fileOut.close();
-    file.remove();
-    QDir dir;
-    dir.rename( filename + ".exiftmp", filename ,TRUE );
 
     kdDebug() << "Wrote file '" << filename.latin1() << "'." << endl;
 
