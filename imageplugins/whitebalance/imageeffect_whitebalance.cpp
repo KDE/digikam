@@ -311,9 +311,11 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image to select "
-                                                   "the tone to ajust image's white-balance with <b>Color Picker</b> method."));
+    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
+                                                            Digikam::ImageGuideWidget::PickColorMode);
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image "
+                                                   "to select the tone to ajust image's white-balance with "
+                                                   "<b>Color Picker</b> method."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
     grid2->addMultiCellWidget(frame2, 0, 0, 0, 1);
     

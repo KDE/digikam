@@ -22,6 +22,10 @@
 #ifndef ADJUSTCURVES_H
 #define ADJUSTCURVES_H
 
+// Qt include.
+
+#include <qcolor.h>
+
 // KDE includes.
 
 #include <kdialogbase.h>
@@ -34,6 +38,7 @@ namespace Digikam
 {
 class ImageCurves;
 class ImageWidget;
+class ImageGuideWidget;
 class ColorGradientWidget;
 class CurvesWidget;
 }
@@ -56,6 +61,13 @@ protected:
     
 private:
     
+    enum ColorPicker
+    {
+    BlackTonal=0,
+    GrayTonal,
+    WhiteTonal
+    };
+
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
     QComboBox                    *m_typeCB;  
@@ -66,13 +78,16 @@ private:
     QPushButton                  *m_saveButton;
     QPushButton                  *m_helpButton;
     QPushButton                  *m_resetButton;
+    QPushButton                  *m_pickBlack;
+    QPushButton                  *m_pickGray;
+    QPushButton                  *m_pickWhite;
     
     Digikam::CurvesWidget        *m_curvesWidget;
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;
             
-    Digikam::ImageWidget         *m_previewOriginalWidget;
+    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageWidget         *m_previewTargetWidget;
     
     Digikam::ImageCurves         *m_curves;
@@ -95,6 +110,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotPositionChanged(int x, int y);
+    void slotSpotColorChanged( const QColor &color );
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
