@@ -118,23 +118,23 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     topLayout->addMultiCellLayout(l2, 2, 2, 0, 2);
 
     m_xInput = new KIntNumInput(plainPage());
-    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for croping."));
+    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     m_widthInput = new KIntNumInput(plainPage());
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for croping."));
+    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
     topLayout->addMultiCellWidget(m_widthInput, 3, 3, 3, 4);
     
     m_yInput = new KIntNumInput(plainPage());
     m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for croping."));
+    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
     m_heightInput = new KIntNumInput(plainPage());
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for croping."));
+    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
     topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);

@@ -317,7 +317,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     struct stat st;
     if (::stat(QFile::encodeName(url.path(-1)), &st) != 0)
     {
-        error(KIO::ERR_INTERNAL, i18n("File doesnot exist"));
+        error(KIO::ERR_INTERNAL, i18n("File does not exist"));
         return;
     }
 

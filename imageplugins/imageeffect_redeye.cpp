@@ -85,9 +85,9 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     if (!data || !w || !h)
     {
         RedEyePassivePopup* popup = new RedEyePassivePopup(parent);
-        popup->setView(i18n("Redeye Correction Tool"),
+        popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
-                            "the redeye correction tool"));
+                            "the red-eye correction tool"));
         popup->setAutoDelete(true);
         popup->setTimeout(2500);
         popup->show();
@@ -220,7 +220,7 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
                                               0, spacingHint());
 
     QVButtonGroup* buttonGroup =
-        new QVButtonGroup( i18n("Level of Red Eye Correction"),
+        new QVButtonGroup( i18n("Level of Red-Eye Correction"),
                            plainPage() );
     buttonGroup->setRadioButtonExclusive( true );
 
@@ -240,7 +240,7 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
 
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
+    mild = config->readBoolEntry("Red-Eye Correction Plugin (Mild)", true);
 
     if (mild)
     {
