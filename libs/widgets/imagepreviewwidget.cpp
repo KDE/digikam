@@ -59,9 +59,9 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
     QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
-                                                "who can help you to select the clip preview."
-                                                "<p>Clicked and moved the mouse cursor in the "
-                                                "red rectangle for to change the clip focus."));
+                                                "which can help you to select the clip preview."
+                                                "<p>Click and drag the mouse cursor in the "
+                                                "red rectangle to change the clip focus."));
     l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
     
     m_topLeftSelectionInfoLabel = new QLabel(gbox1);
@@ -79,9 +79,9 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
-                                               "who will be used for the preview computation."
-                                               "<p>Clicked and moved the mouse cursor in the "
-                                               "image for to change the clip focus."));
+                                               "which will be used for the preview computation."
+                                               "<p>Click and drag the mouse cursor in the "
+                                               "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0, Qt::AlignCenter);
     
     QLabel *label2 = new QLabel(i18n("Target:"), gbox2);
