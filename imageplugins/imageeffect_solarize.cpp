@@ -33,17 +33,18 @@
 #include "imageeffect_solarize.h"
 
 ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
-    : KDialogBase(Plain, i18n("Solarize Image"), Ok|Cancel, Ok,
-                  parent, 0, true, true)
+                    : KDialogBase(Plain, i18n("Solarize Image"), Help|Ok|Cancel, Ok,
+                                  parent, 0, true, true)
 {
+    setHelp("imageviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Solarize Image"),plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Solarize Image"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480,320,frame);
+    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
 
