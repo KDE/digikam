@@ -191,17 +191,8 @@ void SetupCamera::slotAutoDetectCamera()
         return;
     }
 
-    bool found = false;
-
-    if(listView_->findItem(model,1)) {
-       CameraList* clist = CameraList::instance();
-       if (clist) {
-          if (clist->find(model))
-             found = true;
-       }
-    }
-
-    if (found) {
+    if (listView_->findItem(model,1))
+    {
        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
     }
     else {
