@@ -74,23 +74,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
-    m_ratioCB->insertItem( i18n("6 x 8 cm") );
-    m_ratioCB->insertItem( i18n("9 x 13 cm") );
-    m_ratioCB->insertItem( i18n("10 x 15 cm") );
-    m_ratioCB->insertItem( i18n("11 x 15 cm") );
-    m_ratioCB->insertItem( i18n("13 x 18 cm") );
-    m_ratioCB->insertItem( i18n("13 x 19 cm") );
-    m_ratioCB->insertItem( i18n("15 x 20 cm") );
-    m_ratioCB->insertItem( i18n("15 x 21 cm") );
-    m_ratioCB->insertItem( i18n("18 x 24 cm") );
-    m_ratioCB->insertItem( i18n("18 x 25 cm") );
-    m_ratioCB->insertItem( i18n("20 x 27 cm") );
-    m_ratioCB->insertItem( i18n("20 x 30 cm") );
-    m_ratioCB->insertItem( i18n("21 x 30 cm") );
-    m_ratioCB->insertItem( i18n("25 x 38 cm") );
-    m_ratioCB->insertItem( i18n("30 x 40 cm") );
-    m_ratioCB->insertItem( i18n("30 x 45 cm") );
-    m_ratioCB->insertItem( i18n("40 x 50 cm") );
+    m_ratioCB->insertItem( i18n("3 x 4") );
+    m_ratioCB->insertItem( i18n("2 x 3") );
+    m_ratioCB->insertItem( i18n("5 x 7") );
+    m_ratioCB->insertItem( i18n("4 x 5") );
+    m_ratioCB->insertItem( i18n("7 x 10") );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your aspect ratio for cropping."));
     
     QLabel *label2 = new QLabel(i18n("Orientation:"), plainPage());
@@ -188,89 +176,35 @@ void ImageEffect_RatioCrop::slotWidthChanged(int w)
     
     switch(r)
        {
-       case CMS06X08:  
-       case CMS15x20:   
-       case CMS18x24:             
-       case CMS30x40:
+       case RATIO03X04:  
           if ( o )  
              currentPos.setHeight((int)(w * 1.3333333333333));   // Landscape
           else                       
              currentPos.setHeight((int)(w * 0.75));              // Portrait
           break;
        
-       case CMS09X13:           
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.4444444444444));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.69230769230769));  // Portrait
-          break;
-       
-       case CMS10x15:           
-       case CMS20x30: 
-       case CMS30x45:          
+       case RATIO02x03:           
           if ( o )  
              currentPos.setHeight((int)(w * 1.5));               // Landscape
           else                       
              currentPos.setHeight((int)(w * 0.66666666666667));  // Portrait
           break;
 
-       case CMS11x15:           
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.3636363636364));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.73333333333333));  // Portrait
-          break;
-                 
-       case CMS13x18:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.3846153846154));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.72222222222222));  // Portrait
-          break;
-          
-       case CMS13x19:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.4615384615385));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.68421052631579));  // Portrait
-          break;
-          
-       case CMS15x21:          
+       case RATIO05x07:          
           if ( o )  
              currentPos.setHeight((int)(w * 1.4));               // Landscape
           else                       
              currentPos.setHeight((int)(w * 0.71428571428571));  // Portrait
           break;          
        
-       case CMS18x25:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.3888888888889));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.72));              // Portrait
-          break;    
-
-       case CMS20x27:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.35));              // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.74074074074074));  // Portrait
-          break;                            
-       
-       case CMS21x30:          
+       case RATIO07x10:          
           if ( o )  
              currentPos.setHeight((int)(w * 1.4285714285714));   // Landscape
           else                       
              currentPos.setHeight((int)(w * 0.7));               // Portrait
           break;                            
 
-       case CMS25x38:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.52));              // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.65789473684211));  // Portrait
-          break;                  
-
-       case CMS40x50:          
+       case RATIO04X05:          
           if ( o )  
              currentPos.setHeight((int)(w * 1.25));              // Landscape
           else                       
@@ -291,89 +225,36 @@ void ImageEffect_RatioCrop::slotHeightChanged(int h)
     
     switch(r)
        {
-       case CMS06X08:      
-       case CMS15x20:   
-       case CMS18x24: 
-       case CMS30x40:
+       case RATIO03X04:      
           if ( o )  
              currentPos.setWidth((int)(h * 0.75));             // Landscape
           else                       
              currentPos.setWidth((int)(h * 1.3333333333333));  // Portrait
           break;
        
-       case CMS09X13:         
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.69230769230769)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.4444444444444));  // Portrait
-          break;
-          
-       case CMS10x15:    
-       case CMS20x30:                     
-       case CMS30x45:          
+       case RATIO02x03:    
           if ( o )  
              currentPos.setWidth((int)(h * 0.66666666666667)); // Landscape
           else                       
              currentPos.setWidth((int)(h * 1.5));              // Portrait
           break;
        
-       case CMS11x15:       
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.73333333333333)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.3636363636364));  // Portrait
-          break;
-                    
-       case CMS13x18:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.72222222222222)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.3846153846154));  // Portrait
-          break;
-          
-       case CMS13x19:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.68421052631579)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.4615384615385));  // Portrait
-          break;
-          
-       case CMS15x21:          
+       case RATIO05x07:          
           if ( o )  
              currentPos.setWidth((int)(h * 0.71428571428571)); // Landscape
           else                       
              currentPos.setWidth((int)(h * 1.4));              // Portrait
           break; 
 
-       case CMS18x25:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.72));             // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.3888888888889));  // Portrait
-          break;          
-
-       case CMS20x27:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.74074074074074)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.35));             // Portrait
-          break;                                                 
-       
-       case CMS21x30:          
+       case RATIO07x10:          
           if ( o )  
              currentPos.setWidth((int)(h * 0.7));              // Landscape
           else                       
              currentPos.setWidth((int)(h * 1.4285714285714));  // Portrait
           break;           
        
-       case CMS25x38:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.65789473684211)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.52));             // Portrait
-          break;        
        
-       case CMS40x50:          
+       case RATIO04X05:          
           if ( o )  
              currentPos.setWidth((int)(h * 0.8));              // Landscape
           else                       

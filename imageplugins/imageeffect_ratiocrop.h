@@ -55,27 +55,16 @@ private:
     
     Digikam::ImagePanIconWidget *m_imageSelectionWidget;
     
-    enum RatioAspect           // Standard photograph paper sizes.
+    enum RatioAspect           // Standard photograph paper ratio.
     {
-    CMS06X08 = 0,              //  6 x  8 cm
-    CMS09X13,                  //  9 x 13 cm
-    CMS10x15,                  // 10 x 15 cm
-    CMS11x15,                  // 11 x 15 cm
-    CMS13x18,                  // 13 x 18 cm
-    CMS13x19,                  // 13 x 19 cm
-    CMS15x20,                  // 15 x 20 cm
-    CMS15x21,                  // 15 x 21 cm
-    CMS18x24,                  // 18 x 24 cm
-    CMS18x25,                  // 18 x 25 cm
-    CMS20x27,                  // 20 x 27 cm
-    CMS20x30,                  // 20 x 30 cm
-    CMS21x30,                  // 21 x 30 cm
-    CMS25x38,                  // 25 x 38 cm
-    CMS30x40,                  // 30 x 40 cm
-    CMS30x45,                  // 30 x 45 cm
-    CMS40x50,                  // 40 x 50 cm
+    RATIO03X04 = 0,            //  3 x  4
+    RATIO02x03,                //  2 x  3
+    RATIO05x07,                //  5 x  7
+    RATIO04X05,                //  4 x  5
+    RATIO07x10,                //  7 x 10
     };
     
+        
     void updateSelectionSize(QRect rect);
     
 private slots:
