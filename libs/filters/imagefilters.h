@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-07-20
- * Description : image colors tools. 
+ * Date  : 2005-24-01
+ * Description : image filters. 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,10 +18,13 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_COLORSENHANCE_H
-#define IMAGEEFFECT_COLORSENHANCE_H
+#ifndef IMAGE_FILTERS_H
+#define IMAGE_FILTERS_H
 
-class ImageEffect_ColorsEnhance
+namespace Digikam
+{
+
+class ImageFilters
 {
 
 private:
@@ -42,13 +45,23 @@ struct short_packet
     unsigned short int alpha;
 };
 
+struct NormalizeParam 
+    {
+    uchar  lut[256];
+    double min;
+    double max;
+    };
+    
 public:
 
-    static void equalizeImage();
-    static void normalizeImage();
-    static void autoLevelsCorrectionImage();
-    static void invertImage();
+    static void equalizeImage(uint *data, int w, int h);
+    static void stretchContrastImage(uint *data, int w, int h);
+    static void normalizeImage(uint *data, int w, int h);
+    static void autoLevelsCorrectionImage(uint *data, int w, int h);
+    static void invertImage(uint *data, int w, int h);
 
 };
 
-#endif /* IMAGEEFFECT_COLORSENHANCE_H */
+}  // NameSpace Digikam
+
+#endif /* IMAGE_FILTERS_H */

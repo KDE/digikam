@@ -58,18 +58,9 @@ protected:
     void antiVignetting(uint *data, int Width, int Height, 
                         double density, double power, double radius,
                         int xshift, int yshift, bool progress=true);
-
-    void normalizeImage(uint *data, int w, int h);
     
 private:
     
-    struct NormalizeParam 
-    {
-    uchar  lut[256];
-    double min;
-    double max;
-    };
-
     bool                  m_cancel;
     
     QWidget              *m_parent;

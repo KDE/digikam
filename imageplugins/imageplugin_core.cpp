@@ -4,7 +4,7 @@
  * Date  : 2004-06-04
  * Description :
  *
- * Copyright 2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 // Local includes.
 
 #include <imageiface.h>
+#include <imagefilters.h>
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
@@ -38,7 +39,6 @@
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
-#include "imageeffect_colorsenhance.h"
 #include "imageeffect_ratiocrop.h"
 #include "imageplugin_core.h"
 
@@ -78,6 +78,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
 
+    KAction *stretchContrastAction = new KAction(i18n("Stretch Contrast"), 0,
+                this, SLOT(slotNormalize()),
+                actionCollection(), "implugcore_stretch_contrast");
+    stretchContrastAction->setWhatsThis( i18n( "This option enhances the contrast and brightness "
+                                               "of the RGB values of an image by stretching the lowest "
+                                               "and highest values to their fullest range, adjusting "
+                                               "everything in between." ));                
+
+    
     KAction *normalizeAction = new KAction(i18n("Normalize"), 0,
                 this, SLOT(slotNormalize()),
                 actionCollection(), "implugcore_normalize");
@@ -150,6 +159,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Separator/ /  ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_normalize/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_equalize/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_stretch_contrast/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_autolevels/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_invert/ ");
 
@@ -215,31 +225,93 @@ void ImagePlugin_Core::slotHSL()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotStretchContrast()
+{
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth(); 
+    int   h    = iface.originalHeight();
+    
+    Digikam::ImageFilters::stretchContrastImage(data, w, h);
+    
+    iface.putOriginalData(data);
+    delete [] data;
+
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
+}
+
 void ImagePlugin_Core::slotNormalize()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_ColorsEnhance::normalizeImage();
+    
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth(); 
+    int   h    = iface.originalHeight();
+    
+    Digikam::ImageFilters::normalizeImage(data, w, h);
+    
+    iface.putOriginalData(data);
+    delete [] data;
+
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotEqualize()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_ColorsEnhance::equalizeImage();
+        
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth(); 
+    int   h    = iface.originalHeight();
+    
+    Digikam::ImageFilters::equalizeImage(data, w, h);
+    
+    iface.putOriginalData(data);
+    delete [] data;
+
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotAutoLevels()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_ColorsEnhance::autoLevelsCorrectionImage();
+        
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth(); 
+    int   h    = iface.originalHeight();
+    
+    Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h);
+    
+    iface.putOriginalData(data);
+    delete [] data;
+
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotInvert()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-    ImageEffect_ColorsEnhance::invertImage();
+        
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth(); 
+    int   h    = iface.originalHeight();
+    
+    Digikam::ImageFilters::invertImage(data, w, h);
+    
+    iface.putOriginalData(data);
+    delete [] data;
+
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 

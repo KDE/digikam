@@ -4,7 +4,7 @@
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@ private slots:
     void slotBCG();
     void slotRGB();
     void slotHSL();
+    void slotStretchContrast();
     void slotNormalize();
     void slotEqualize();
     void slotAutoLevels();

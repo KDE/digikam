@@ -1,14 +1,17 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-07-20
- * Description : image colors tools. 
+ * Date  : 2005-24-01
+ * Description : image filters. 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  * Normalize an Equalize algorithms fixed and adapted for to work with Raw 
  * data image (ARGB).
  * 
  * Algorithms are taken from KImageEffect API of KDE project.
  * Copyright (C) 1998, 1999, 2001, 2002 Daniel M. Duley <mosfet@kde.org>
+ *
+ * Original Normalize Image algorithm copyrighted 1997 by 
+ * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +30,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <cstdlib>
 
 // KDE includes.
 
@@ -36,26 +40,22 @@
  
 #include <imagehistogram.h>
 #include <imagelevels.h>
-#include <imageiface.h>
 
 // Local includes.
 
-#include "imageeffect_colorsenhance.h"
+#include "imagefilters.h"
+
+namespace Digikam
+{
 
 /////////////////////////////////////////////////////////////////////////////////
 // Performs an histogram equalisation of the image.
 
-void ImageEffect_ColorsEnhance::equalizeImage()
+void ImageFilters::equalizeImage(uint *data, int w, int h)
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-
     if (!data || !w || !h)
        {
-       kdWarning() << ("ImageEffect_ColorsEnhance::equalizeImage: no image data available!") << endl;
+       kdWarning() << ("ImageFilters::equalizeImage: no image data available!") << endl;
        return;
        }
        
@@ -85,7 +85,7 @@ void ImageEffect_ColorsEnhance::equalizeImage()
        if(equalize_map)
            delete [] equalize_map;
         
-       kdWarning() << ("ImageEffect_ColorsEnhance::equalizeImage: Unable to allocate memory!") << endl;
+       kdWarning() << ("ImageFilters::equalizeImage: Unable to allocate memory!") << endl;
        return;
        }
     
@@ -154,9 +154,6 @@ void ImageEffect_ColorsEnhance::equalizeImage()
        }
     
     delete [] equalize_map;
-    
-    iface.putOriginalData(data);
-    delete [] data;       
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -164,17 +161,11 @@ void ImageEffect_ColorsEnhance::equalizeImage()
 // the pixel values from an image for to span the full range 
 // of color values. This is a contrast enhancement technique. 
 
-void ImageEffect_ColorsEnhance::normalizeImage()
+void ImageFilters::stretchContrastImage(uint *data, int w, int h)
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
-
     if (!data || !w || !h)
        {
-       kdWarning() << ("ImageEffect_ColorsEnhance::normalizeImage: no image data available!") << endl;
+       kdWarning() << ("ImageFilters::stretchContrastImage: no image data available!") << endl;
        return;
        }
 
@@ -201,7 +192,7 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        if(normalize_map)
            delete [] normalize_map;
         
-       kdWarning() << ("ImageEffect_ColorsEnhance::normalizeImage: Unable to allocate memory!") << endl;
+       kdWarning() << ("ImageFilters::stretchContrastImage: Unable to allocate memory!") << endl;
        return;
        }
 
@@ -435,25 +426,69 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        }
     
     delete [] normalize_map;
+}
 
-    iface.putOriginalData(data);
-    delete [] data;
+//////////////////////////////////////////////////////////////////////////////
+// Simple image normalization fonction inspired from Gimp 2.0
+
+void ImageFilters::normalizeImage(uint *data, int w, int h)
+{
+    NormalizeParam param;
+    int    x, i, b;
+    uchar  range;
+    uchar *p;
+
+    // Find min. and max. values.
+    
+    param.min   = 255;
+    param.max   = 0;
+
+    for (i = 0 ; i < h*w ; ++i)
+        {
+        p = (uchar *)(data + i);
+        
+        for (b = 0 ; b < 3 ; ++b)
+           {
+           if (p[b] < param.min)
+              param.min = p[b];
+           if (p[b] > param.max)
+              param.max = p[b];
+           }
+        }
+    
+    // Calculate LUT. 
+
+    range = (uchar)(param.max - param.min);
+
+    if (range != 0)
+       {
+       for (x = (int)param.min ; x <= (int)param.max ; ++x)
+          param.lut[x] = (uchar)(255 * (x - param.min) / range);
+       }
+    else
+       param.lut[(int)param.min] = (uchar)param.min;
+
+    // Apply LUT to image.
+       
+    for (i = 0 ; i < h*w ; ++i)
+        {
+        p = (uchar *)(data + i);
+        
+        for (b = 0 ; b < 3 ; ++b)
+           p[b] = param.lut[p[b]];
+  
+        p[3] = p[3];
+        }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // Performs histogram auto correction of levels.
 
-void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
+void ImageFilters::autoLevelsCorrectionImage(uint *data, int w, int h)
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* orgData = iface.getOriginalData();
-    int   w       = iface.originalWidth();
-    int   h       = iface.originalHeight();
-
-    if (!orgData || !w || !h)
+    if (!data || !w || !h)
        {
-       kdWarning() << ("ImageEffect_ColorsEnhance::autoLevelsCorrectionImage: no image data available!")
+       kdWarning() << ("ImageFilters::autoLevelsCorrectionImage: no image data available!")
                    << endl;
        return;
        }
@@ -462,7 +497,7 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     uint* desData = new uint[w*h];
        
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h, 0, false);
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, 0, false);
   
     // Create an empty instance of levels to use.
     Digikam::ImageLevels *levels = new Digikam::ImageLevels();      
@@ -474,11 +509,10 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
   
     // Apply the lut to the image.
-    levels->levelsLutProcess(orgData, desData, w, h);
+    levels->levelsLutProcess(data, desData, w, h);
   
-    iface.putOriginalData(desData);
-  
-    delete [] orgData;
+    memcpy (data, desData, w*h*4);
+
     delete [] desData;
     delete histogram;
     delete levels;
@@ -488,37 +522,31 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
 // Performs image colors inversion. This tool is used for negate image 
 // resulting of a positive film scanned.
 
-void ImageEffect_ColorsEnhance::invertImage()
+void ImageFilters::invertImage(uint *data, int w, int h)
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* orgData = iface.getOriginalData();
-    int   width   = iface.originalWidth();
-    int   height  = iface.originalHeight();
-
-    if (!orgData || !width || !height)
+    if (!data || !w || !h)
        {
-       kdWarning() << ("ImageEffect_ColorsEnhance::invertImage: no image data available!")
+       kdWarning() << ("ImageFilters::invertImage: no image data available!")
                    << endl;
        return;
        }
        
     // Create the new empty destination image data space.
-    uint* desData = new uint[width*height];
+    uint* desData = new uint[w*h];
 
-    int LineWidth = width * 4;
+    int LineWidth = w * 4;
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
       
-    uchar* bits    = (uchar*)orgData;
+    uchar* bits    = (uchar*)data;
     uchar* newBits = (uchar*)desData;
 
     int i = 0;
     
-    for (int h = 0 ; h < height ; ++h)
+    for (int y = 0 ; y < h ; ++y)
         {
-        for (int w = 0 ; w < width ; ++w)
+        for (int x = 0 ; x < w ; ++x)
             {
-            i = h * LineWidth + 4 * w;
+            i = y * LineWidth + 4 * x;
 
             newBits[i+3] = 255 - bits[i+3];
             newBits[i+2] = 255 - bits[i+2];
@@ -527,9 +555,8 @@ void ImageEffect_ColorsEnhance::invertImage()
             }
         }
                         
-    iface.putOriginalData(desData);
-    
-    delete [] orgData;
+    memcpy (data, desData, w*h*4);
     delete [] desData;
 }
 
+}  // NameSpace Digikam

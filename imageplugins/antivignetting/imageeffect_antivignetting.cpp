@@ -12,9 +12,6 @@
  * http://www.fourmilab.ch/netpbm/pnmctrfilt for more 
  * informations.
  *
- * Original Normalize Image algorithm copyrighted 1997 by 
- * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -433,7 +430,7 @@ void ImageEffect_AntiVignetting::slotEffect()
     antiVignetting(data, w, h, d, p, r, 0, 0);
     
     // Normalize colors for a best rendering.   
-    normalizeImage(data, w, h);
+    Digikam::ImageFilters::normalizeImage(data, w, h);
 
     iface->putPreviewData(data);
            
@@ -485,7 +482,7 @@ void ImageEffect_AntiVignetting::slotOk()
        antiVignetting(data, w, h, d, p, r, 0, 0);
            
        // Normalize colors for a best rendering.   
-       normalizeImage(data, w, h);
+       Digikam::ImageFilters::normalizeImage(data, w, h);
 
        if ( !m_cancel ) 
           {
@@ -583,57 +580,6 @@ void ImageEffect_AntiVignetting::antiVignetting(uint *data, int Width, int Heigh
         
     delete [] ldens;        
     delete [] NewBits;
-}
-
-// Simple image normalization fonction inspired from Gimp 2.0
-void ImageEffect_AntiVignetting::normalizeImage(uint *data, int w, int h)
-{
-    NormalizeParam param;
-    int    x, i, b;
-    uchar  range;
-    uchar *p;
-
-    // Find min. and max. values.
-    
-    param.min   = 255;
-    param.max   = 0;
-
-    for (i = 0 ; !m_cancel && (i < h*w) ; ++i)
-        {
-        p = (uchar *)(data + i);
-        
-        for (b = 0 ; b < 3 ; ++b)
-           {
-           if (p[b] < param.min)
-              param.min = p[b];
-           if (p[b] > param.max)
-              param.max = p[b];
-           }
-        }
-    
-    // Calculate LUT. 
-
-    range = (uchar)(param.max - param.min);
-
-    if (range != 0)
-       {
-       for (x = (int)param.min ; x <= (int)param.max ; ++x)
-          param.lut[x] = (uchar)(255 * (x - param.min) / range);
-       }
-    else
-       param.lut[(int)param.min] = (uchar)param.min;
-
-    // Apply LUT to image.
-       
-    for (i = 0 ; !m_cancel && (i < h*w) ; ++i)
-        {
-        p = (uchar *)(data + i);
-        
-        for (b = 0 ; b < 3 ; ++b)
-           p[b] = param.lut[p[b]];
-  
-        p[3] = p[3];
-        }
 }
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin

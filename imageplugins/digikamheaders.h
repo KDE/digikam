@@ -28,6 +28,7 @@
 #include <histogramwidget.h>
 #include <imagecurves.h>
 #include <imagehistogram.h>
+#include <imagefilters.h>
 #include <imageiface.h>
 #include <imagelevels.h>
 #include <imagepaniconwidget.h>
@@ -46,6 +47,7 @@
 #include <digikam/histogramwidget.h>
 #include <digikam/imagecurves.h>
 #include <digikam/imagehistogram.h>
+#include <digikam/imagefilters.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagelevels.h>
 #include <digikam/imagepaniconwidget.h>
