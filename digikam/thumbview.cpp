@@ -12,6 +12,7 @@
 #include <qdragobject.h>
 #include <qstrlist.h>
 #include <qapplication.h>
+#include <qdrawutil.h>
 
 #include <kiconloader.h>
 
@@ -585,6 +586,17 @@ void ThumbView::focusOutEvent(QFocusEvent *e)
     slotToolTip();
 
     QScrollView::focusOutEvent(e);
+}
+
+void ThumbView::drawFrame(QPainter* p)
+{
+    QRect       r      = frameRect();
+    int         lwidth = lineWidth();
+
+    const QColorGroup & g = colorGroup();
+
+    qDrawShadeRect( p, r, g, !hasFocus(), lwidth,
+                    midLineWidth() );
 }
 
 void ThumbView::contentsMousePressEvent(QMouseEvent *e)

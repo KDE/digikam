@@ -32,6 +32,7 @@
 #include <qstyle.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+#include <qdrawutil.h>
 
 #include "listitem.h"
 #include "listview_p.h"
@@ -317,6 +318,17 @@ void ListView::drawArrow(QPainter* p, const QRect& r, bool open,
     p->drawPoint( a[8] );
 
     p->restore();
+}
+
+void ListView::drawFrame(QPainter *p)
+{
+    QRect       r      = frameRect();
+    int         lwidth = lineWidth();
+
+    const QColorGroup & g = colorGroup();
+
+    qDrawShadeRect( p, r, g, !hasFocus(), lwidth,
+                    midLineWidth() );
 }
 
 void ListView::contentsMousePressEvent(QMouseEvent *e)
