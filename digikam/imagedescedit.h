@@ -12,6 +12,7 @@ class QTextEdit;
 class QListView;
 class QPixmap;
 class QCheckListItem;
+class QCheckBox;
 class KFileMetaInfo;
 class AlbumIconView;
 class AlbumIconItem;
@@ -38,6 +39,7 @@ private:
     QLabel        *m_nameLabel;
     QTextEdit     *m_commentsEdit;
     QListView     *m_tagsView;
+    QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
     QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;
