@@ -1250,10 +1250,18 @@ void ThumbView::ensureItemVisible(ThumbItem *item)
     if ( !item )
 	return;
 
-    int w = item->width();
-    int h = item->height();
-    ensureVisible( item->x() + w / 2, item->y() + h / 2,
-		   w / 2 + 1, h / 2 + 1 );
+    if ( item->y() == d->firstItem->y() )
+    {
+        int w = item->width();
+        ensureVisible( item->x() + w / 2, 0, w/2+1, 0 );
+    }
+    else
+    {
+        int w = item->width();
+        int h = item->height();
+        ensureVisible( item->x() + w / 2, item->y() + h / 2,
+                       w / 2 + 1, h / 2 + 1 );
+    }
 }
 
 ThumbItem* ThumbView::findFirstVisibleItem(const QRect &r ) const
