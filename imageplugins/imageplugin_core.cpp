@@ -66,15 +66,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to enable this action.") );
 
-    new KAction(i18n("Brightness/Contrast/Gamma..."), 0,
+    new KAction(i18n("Brightness/Contrast/Gamma..."), "adjustbcg", 0,
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
 
-    new KAction(i18n("Hue/Saturation/Lightness..."), 0,
+    new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 0,
                 this, SLOT(slotHSL()),
                 actionCollection(), "implugcore_hsl");
 
-    new KAction(i18n("Color Balance..."), 0,
+    new KAction(i18n("Color Balance..."), "adjustrgb", 0,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
 

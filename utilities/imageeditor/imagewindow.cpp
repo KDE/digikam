@@ -263,7 +263,7 @@ void ImageWindow::buildGUI()
 
     // -- Transform actions ----------------------------------------------------------
     
-    m_resizeAction = new KAction(i18n("&Resize..."), 0, 0,
+    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
                                  this, SLOT(slotResize()),
                                  actionCollection(), "imageview_resize");
 
