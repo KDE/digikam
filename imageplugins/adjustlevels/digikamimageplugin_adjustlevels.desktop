@@ -1,7 +1,14 @@
 [Desktop Entry]
-Name=Adjust Levels Image Plugin
-Comment=Image histogram adjust levels plugin for digikam
+Name=ImagePlugin_AdjustLevels
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+
+Comment=Image histogram adjust levels plugin for digikam
+Comment[fr]=Module externe pour l'ajustement des niveaux d'une image
+Comment[it]=Plugin di regolazione dei livelli degli istogrammi delle immagini per Digikam
+Comment[pt]='Plugin' de ajustar os níveis do histograma da imagem para o digikam
+Comment[pt_BR]='Plugin' de ajustar os níveis do histograma da imagem para o digikam
+Comment[sv]=Digikam insticksprogram för justering av histogramnivåer i bilder
+
 X-KDE-Library=digikamimageplugin_adjustlevels
 author=Caulier Gilles, caulier dot gilles at free dot fr

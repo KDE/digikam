@@ -1,7 +1,10 @@
 [Desktop Entry]
-Name=Charcoal Image Plugin
-Comment=Charcoal drawing image effect plugin for digikam
+Name=ImagePlugin_Charcoal
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+
+Comment=Charcoal drawing image effect plugin for digikam
+Comment[fr]=Module externe pour simuler le dessin au fusain
+
 X-KDE-Library=digikamimageplugin_charcoal
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -1,7 +1,10 @@
 [Desktop Entry]
-Name=Despeckle Filter Image Plugin
-Comment=Despeckle image filter plugin for digikam
+Name=ImagePlugin_Despeckle
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+
+Comment=Despeckle image filter plugin for digikam
+Comment[fr]=Module externe pour reduire le bruit dans une image
+
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr

@@ -1,7 +1,15 @@
 [Desktop Entry]
-Name=Solarize Image Plugin
-Comment=Image solarize effect plugin for digikam
+Name=ImagePlugin_Solarize
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+
+Comment=Image solarize effect plugin for digikam
+Comment[fr]=Module externe pour solariser une image
+Comment[en_GB]=Image solarise effect plugin for digikam
+Comment[it]=Plugin di effetto di solarizzazione delle immagini per Digikam
+Comment[pt]='Plugin' de solarizar imagem para o digikam
+Comment[pt_BR]='Plugin' de solarizar imagem para o digikam
+Comment[sv]=Digikam insticksprogram för att solarisera bild
+
 X-KDE-Library=digikamimageplugin_solarize
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu

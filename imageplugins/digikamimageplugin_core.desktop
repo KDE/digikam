@@ -1,7 +1,24 @@
 [Desktop Entry]
-Name=Core Image Plugin
-Comment=Digikam Core Image Plugin
+Name=ImagePlugin_Core
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
+
+Comment=Digikam Core Image Plugin
+Comment[bg]=Основна приставка за изображение на Digikam
+Comment[da]=Et digikam kerne billedplugin
+Comment[es]=Complemento central de imagen de Digikam
+Comment[et]=Digikami peamine pildiplugin
+Comment[fr]=Module externe principal pour le traitement des images
+Comment[it]=Plugin delle immagini centrali di Digikam
+Comment[nl]=Basis-plugin voor Digikam
+Comment[pt]='Plugin' Nuclear de Imagem do Digikam
+Comment[pt_BR]=Plug-in Principal de Imagens do Digikam
+Comment[ru]=Движок Digikam
+Comment[sr]=Прикључак Digikam језгра слика
+Comment[sr@Latn]=Прикључак Digikam језгра слика
+Comment[sv]=Insticksprogram med bildkärna för Digikam
+Comment[ta]=டிஜிகேம் கருவக படிம செருகி
+Comment[xx]=xxDigikam Core Image Pluginxx
+
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
