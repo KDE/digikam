@@ -1294,6 +1294,7 @@ void AlbumFolderView::loadAlbumState()
     {
         kdWarning() << k_funcinfo << "Failed to open albumtreestate.bin"
                     << endl;
+        return;
     }
     
     QDataStream ds(&file);
@@ -1355,6 +1356,7 @@ void AlbumFolderView::saveAlbumState()
     {
         kdWarning() << k_funcinfo << "Failed to open albumtreestate.bin"
                     << endl;
+        return;
     }
     
     QDataStream ds(&file);
