@@ -4,7 +4,7 @@
  * Date  : 2004-11-16
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool crossVisible)
+ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool crossVisible, int guideMode)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_iface = new Digikam::ImageIface(w,h);
@@ -65,10 +65,10 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool crossVisi
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
     
     m_crossVisible = crossVisible;
+    m_guideMode = guideMode;
     m_freeze = true;
     m_focus = false;
-    m_xpos = m_w / 2;
-    m_ypos = m_h / 2;
+    resetCrossPosition();
 }
 
 ImageGuideWidget::~ImageGuideWidget()
@@ -85,10 +85,32 @@ Digikam::ImageIface* ImageGuideWidget::imageIface()
     return m_iface;
 }
 
+void ImageGuideWidget::resetCrossPosition(void)
+{
+    m_xpos = m_w / 2;
+    m_ypos = m_h / 2;
+    repaint(false);
+}
+
 QPoint ImageGuideWidget::getCrossCenterPosition(void)
 {
     return (QPoint::QPoint( (int)((float)m_xpos * (float)m_iface->originalWidth() / (float)m_w), 
                             (int)((float)m_ypos * (float)m_iface->originalHeight() / (float)m_h)));
+}
+
+QColor ImageGuideWidget::getCrossCenterColor(void)
+{
+    // Get cross position in real image.
+    QPoint currentPointPosition = getCrossCenterPosition();
+    
+    uint *currentPointData = m_iface->getOriginalData() + currentPointPosition.x() + 
+                             (m_iface->originalWidth() * currentPointPosition.y());
+    QColor currentPointColor(
+                             (*currentPointData >> 16) & 0xff,        // Red.
+                             (*currentPointData >>  8) & 0xff,        // Green.
+                             (*currentPointData)       & 0xff         // Blue.
+                             );
+    return(currentPointColor);
 }
 
 void ImageGuideWidget::setCrossVisible(bool crossVisible)
@@ -105,11 +127,29 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
 
     if (m_crossVisible)
        {
-       QPainter p(m_pixmap);
-       p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-       p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
-       p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
-       p.end();
+       switch (m_guideMode)
+          {
+          case HVGuideMode:
+             {
+             QPainter p(m_pixmap);
+             p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+             p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
+             p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
+             p.end();
+             break;
+             }
+            
+          case PickColorMode:
+             {
+             QPainter p(m_pixmap);
+             p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+             p.drawLine(m_xpos-10, m_ypos-10, m_xpos+10, m_ypos+10);
+             p.drawLine(m_xpos+10, m_ypos-10, m_xpos-10, m_ypos+10);
+             p.drawEllipse( m_xpos-5, m_ypos-5, 11, 11 );
+             p.end();
+             break;
+             }
+          }
        }
     
     bitBlt(this, 0, 0, m_pixmap);
@@ -130,6 +170,8 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        {    
        m_freeze = !m_freeze;
        m_focus = false;
+       emit crossCenterColorChanged( getCrossCenterColor() );
+       emit crossCenterPositionChanged( getCrossCenterPosition() );
        }
 }
 

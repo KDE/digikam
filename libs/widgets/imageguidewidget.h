@@ -4,7 +4,7 @@
  * Date  : 2004-08-20
  * Description : 
  * 
- * Copyright 2004 Gilles Caulier
+ * Copyright 2004-2005 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,7 @@
 #include <qwidget.h>
 #include <qrect.h>
 #include <qpoint.h>
+#include <qcolor.h>
 
 class QPixmap;
 
@@ -40,12 +41,27 @@ Q_OBJECT
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0, bool crossVisible=true);
+    enum GuideToolMode 
+    {
+    HVGuideMode=0,
+    PickColorMode
+    };
+
+public:
+
+    ImageGuideWidget(int w, int h, QWidget *parent=0, bool crossVisible=true, int guideMode=HVGuideMode);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
     QPoint getCrossCenterPosition(void);
-    void ImageGuideWidget::setCrossVisible(bool v);
+    QColor getCrossCenterColor(void);
+    void setCrossVisible(bool v);
+    void resetCrossPosition(void);
+
+signals:
+
+    void crossCenterColorChanged( const QColor &color ); 
+    void crossCenterPositionChanged( const QPoint &position ); 
     
 protected:
     
@@ -64,6 +80,8 @@ private:
     
     int         m_xpos;
     int         m_ypos;
+    
+    int         m_guideMode;
 
     QRect       m_rect;       
     
