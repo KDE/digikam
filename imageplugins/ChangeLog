@@ -1,5 +1,6 @@
-v0.7.1 - 12/xx/04
+v0.7.1-beta1 - 12/17/04
 ----------------------------------------------------------------------------
+    * New plugin 'AdjustCurves'.
     * Moved 'FreeRotation' tool from Image editor core to new ImagePlugin.
     * All plugins: disable filter setup widgets when Ok button is pressed.
     * Fixed 'Reset Values' dialog buttons effect with ImagePreviewWidget instance.
