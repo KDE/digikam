@@ -145,7 +145,7 @@ ImageDescEdit::~ImageDescEdit()
     kapp->config()->setGroup("Image Description Dialog");
     kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
-    saveDialogSize(*(kapp->config()), "Image Description Dialog");
+    saveDialogSize("Image Description Dialog");
 }
 
 bool ImageDescEdit::eventFilter(QObject *, QEvent *e)
