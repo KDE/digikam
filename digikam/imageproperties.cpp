@@ -262,8 +262,6 @@ ImageProperties::~ImageProperties()
 
     saveDialogSize("Image Properties Dialog");
     
-    kapp->config()->sync();
-    
     // For Exif viewer.
     
     if (m_ExifData)
