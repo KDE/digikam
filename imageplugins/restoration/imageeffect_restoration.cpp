@@ -490,7 +490,7 @@ void ImageEffect_Restoration::slotEffect()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, this);
+                                    true, false, false, NULL, 0, this);
 }
 
 void ImageEffect_Restoration::slotOk()
@@ -527,7 +527,7 @@ void ImageEffect_Restoration::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, this);
+                                    true, false, false, NULL, 0, this);
 }
 
 void ImageEffect_Restoration::customEvent(QCustomEvent *event)
