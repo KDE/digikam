@@ -142,13 +142,20 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     
     m_textureType = new QComboBox( false, plainPage() );
     m_textureType->insertItem( i18n("Paper") );
+    m_textureType->insertItem( i18n("Paper 2") );
     m_textureType->insertItem( i18n("Fabric") );
     m_textureType->insertItem( i18n("Burlap") );
     m_textureType->insertItem( i18n("Bricks") );
-    m_textureType->insertItem( i18n("Bricks2") );
+    m_textureType->insertItem( i18n("Bricks 2") );
     m_textureType->insertItem( i18n("Canvas") );
     m_textureType->insertItem( i18n("Marble") );
-    m_textureType->insertItem( i18n("Marble2") );
+    m_textureType->insertItem( i18n("Marble 2") );
+    m_textureType->insertItem( i18n("Blue Jean") );
+    m_textureType->insertItem( i18n("Cell Wood") );
+    m_textureType->insertItem( i18n("Metal Wire") );
+    m_textureType->insertItem( i18n("Modern") );
+    m_textureType->insertItem( i18n("Wall") );
+    m_textureType->insertItem( i18n("Moss") );
     m_textureType->insertItem( i18n("Stone") );
     QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply on image."));
     
@@ -299,6 +306,10 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
           pattern = "paper-texture";
           break;
           
+       case Paper2Texture: 
+          pattern = "paper2-texture";
+          break;
+
        case FabricTexture: 
           pattern = "fabric-texture";
           break;
@@ -326,7 +337,31 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
        case Marble2Texture:
           pattern = "marble2-texture";
           break;
-                           
+
+       case BlueJeanTexture:
+          pattern = "bluejean-texture";
+          break;
+                                     
+       case CellWoodTexture:
+          pattern = "cellwood-texture";
+          break;
+       
+       case MetalWireTexture:
+          pattern = "metalwire-texture";
+          break;
+       
+       case ModernTexture:
+          pattern = "modern-texture";
+          break;
+       
+       case WallTexture:
+          pattern = "wall-texture";
+          break;
+
+       case MossTexture:
+          pattern = "moss-texture";
+          break;
+                    
        case StoneTexture:
           pattern = "stone-texture";
           break;

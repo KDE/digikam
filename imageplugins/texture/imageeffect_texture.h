@@ -60,6 +60,7 @@ private:
     enum TextureTypes 
     {
     PaperTexture=0,
+    Paper2Texture,
     FabricTexture,
     BurlapTexture,
     BricksTexture,
@@ -67,6 +68,12 @@ private:
     CanvasTexture,
     MarbleTexture,
     Marble2Texture,
+    BlueJeanTexture,
+    CellWoodTexture,
+    MetalWireTexture,
+    ModernTexture,
+    WallTexture,
+    MossTexture,
     StoneTexture
     };
         
