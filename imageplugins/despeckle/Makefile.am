@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_despeckle_ui.rc
+       
+digikamimageplugin_despeckleicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_despeckleicon_ICON = AUTO

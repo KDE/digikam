@@ -38,9 +38,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_despeckle,
 
 ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
                                              const QStringList &)
-                : Digikam::ImagePlugin(parent, "ImagePlugin_Despeckle")
+                     : Digikam::ImagePlugin(parent, "ImagePlugin_Despeckle")
 {
-    new KAction(i18n("Noise Reduction..."), 0, 
+    new KAction(i18n("Noise Reduction..."), "despeckle", 0, 
                 this, SLOT(slotDespeckle()),
                 actionCollection(), "imageplugin_despeckle");
                 
