@@ -793,3 +793,4 @@ void Canvas::slotRestore()
     emit signalChanged(false);
 }
 
+#include "canvas.moc"

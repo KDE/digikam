@@ -1003,8 +1003,8 @@ void ImageView::promptUserSave()
         {
         int result =
             KMessageBox::warningYesNo(this,                                      
-                                      i18n("\"%1\" has been modified.\n"
-                                           "Do you wish to want to save it?")
+                                      i18n("The image \"%1\" has been modified.\n"
+                                           "Do you want to save it?")
                                            .arg(d->urlCurrent.filename()));
         if (result == KMessageBox::Yes)
             slotSave();
