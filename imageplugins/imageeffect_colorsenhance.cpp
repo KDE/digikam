@@ -474,7 +474,7 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
   
     // Apply the lut to the image.
-    levels->levelLutProcess(orgData, desData, w, h);
+    levels->levelsLutProcess(orgData, desData, w, h);
   
     iface.putOriginalData(desData);
   

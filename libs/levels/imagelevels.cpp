@@ -363,7 +363,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
 
 // This method is inspired of Gimp2.0 
 // app/base/gimplut.c::gimp_lut_process
-void ImageLevels::levelLutProcess(uint *srcPR, uint *destPR, int w, int h)
+void ImageLevels::levelsLutProcess(uint *srcPR, uint *destPR, int w, int h)
 {
     uint   height, width, src_r_i, dest_r_i;
     uchar *src, *dest;
