@@ -47,7 +47,7 @@
 // Digikam includes.
 
 #include <imageiface.h>
-#include <imagepaniconwidget.h>
+#include <imageselectionwidget.h>
 
 // Local includes.
 
@@ -67,17 +67,18 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_imageSelectionWidget = new Digikam::ImagePanIconWidget(480, 320, frame, true);
+    m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
     l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
  
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
-    m_ratioCB->insertItem( "3:4" );
+    m_ratioCB->insertItem( "1:1" );
     m_ratioCB->insertItem( "2:3" );
-    m_ratioCB->insertItem( "5:7" );
+    m_ratioCB->insertItem( "3:4" );
     m_ratioCB->insertItem( "4:5" );
+    m_ratioCB->insertItem( "5:7" );
     m_ratioCB->insertItem( "7:10" );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your aspect ratio for cropping."));
     
@@ -106,7 +107,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     hlay3->addWidget(m_heightInput, 5);
     
     connect(m_ratioCB, SIGNAL(activated(int)),
-            this, SLOT(slotRatioChanged()));
+            this, SLOT(slotRatioChanged(int)));
     
     connect(m_orientCB, SIGNAL(activated(int)),
             this, SLOT(slotOrientChanged(int)));
@@ -131,14 +132,10 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 
 void ImageEffect_RatioCrop::slotUser1()
 {
-    m_widthInput->blockSignals(true);
-    m_heightInput->blockSignals(true);
+    m_imageSelectionWidget->setSelectionX(0);
+    m_imageSelectionWidget->setSelectionY(0);
     m_widthInput->setValue((int)(m_imageSelectionWidget->getOriginalImageWidth() / 2.0));
-    m_heightInput->setValue((int)(m_imageSelectionWidget->getOriginalImageHeight() / 2.0));
-    slotWidthChanged((int)(m_imageSelectionWidget->getOriginalImageWidth() / 2.0));
     m_imageSelectionWidget->setCenterSelection();
-    m_widthInput->blockSignals(false);
-    m_heightInput->blockSignals(false);
 } 
 
 void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
@@ -153,114 +150,22 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
 
 void ImageEffect_RatioCrop::slotWidthChanged(int w)
 {
-    QRect currentPos = m_imageSelectionWidget->getRegionSelection();
-    int r = m_ratioCB->currentItem();
-    int o = m_orientCB->currentItem();
-
-    currentPos.setWidth(w);
-    
-    switch(r)
-       {
-       case RATIO03X04:  
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.3333333333333));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.75));              // Portrait
-          break;
-       
-       case RATIO02x03:           
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.5));               // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.66666666666667));  // Portrait
-          break;
-
-       case RATIO05x07:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.4));               // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.71428571428571));  // Portrait
-          break;          
-       
-       case RATIO07x10:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.4285714285714));   // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.7));               // Portrait
-          break;                            
-
-       case RATIO04X05:          
-          if ( o )  
-             currentPos.setHeight((int)(w * 1.25));              // Landscape
-          else                       
-             currentPos.setHeight((int)(w * 0.8));               // Portrait
-          break;                                         
-       }
-    
-    m_imageSelectionWidget->setRegionSelection(currentPos);
+    m_imageSelectionWidget->setSelectionWidth(w);
 }
 
 void ImageEffect_RatioCrop::slotHeightChanged(int h)
 {
-    QRect currentPos = m_imageSelectionWidget->getRegionSelection();
-    int r = m_ratioCB->currentItem();
-    int o = m_orientCB->currentItem();
-
-    currentPos.setHeight(h);
-    
-    switch(r)
-       {
-       case RATIO03X04:      
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.75));             // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.3333333333333));  // Portrait
-          break;
-       
-       case RATIO02x03:    
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.66666666666667)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.5));              // Portrait
-          break;
-       
-       case RATIO05x07:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.71428571428571)); // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.4));              // Portrait
-          break; 
-
-       case RATIO07x10:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.7));              // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.4285714285714));  // Portrait
-          break;           
-       
-       
-       case RATIO04X05:          
-          if ( o )  
-             currentPos.setWidth((int)(h * 0.8));              // Landscape
-          else                       
-             currentPos.setWidth((int)(h * 1.25));             // Portrait
-          break;        
-          }
-    
-    m_imageSelectionWidget->setRegionSelection(currentPos);
+    m_imageSelectionWidget->setSelectionHeight(h);
 }
 
-void ImageEffect_RatioCrop::slotOrientChanged(int)
+void ImageEffect_RatioCrop::slotOrientChanged(int o)
 {
-    slotWidthChanged(m_widthInput->value());    // Landscape.
+    m_imageSelectionWidget->setSelectionOrientation(o);
 }
 
-void ImageEffect_RatioCrop::slotRatioChanged(void)
+void ImageEffect_RatioCrop::slotRatioChanged(int a)
 {
-    if ( m_orientCB->currentItem() )
-       slotWidthChanged(m_widthInput->value());    // Landscape.
-    else
-       slotHeightChanged(m_heightInput->value());  // Portrait.    
+    m_imageSelectionWidget->setSelectionAspectRatio(a);
 }
 
 void ImageEffect_RatioCrop::slotOk()

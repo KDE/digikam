@@ -31,7 +31,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePanIconWidget;
+class ImageSelectionWidget;
 }
 
 class ImageEffect_RatioCrop : public KDialogBase
@@ -53,16 +53,7 @@ private:
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;
     
-    Digikam::ImagePanIconWidget *m_imageSelectionWidget;
-    
-    enum RatioAspect           // Standard photograph paper ratio.
-    {
-    RATIO03X04 = 0,            // 3:4
-    RATIO02x03,                // 2:3
-    RATIO05x07,                // 5:7
-    RATIO04X05,                // 4:5
-    RATIO07x10,                // 7:10
-    };
+    Digikam::ImageSelectionWidget *m_imageSelectionWidget;
     
 private slots:
 
@@ -70,8 +61,8 @@ private slots:
     void slotOk();
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
-    void slotOrientChanged(int);
-    void slotRatioChanged(void);
+    void slotOrientChanged(int o);
+    void slotRatioChanged(int a);
     void slotSelectionChanged(QRect rect);
 };
 

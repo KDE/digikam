@@ -48,11 +48,9 @@
 namespace Digikam
 {
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, bool resizingSelMode)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_resizingSelMode = resizingSelMode;
-
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -74,16 +72,6 @@ ImagePanIconWidget::~ImagePanIconWidget()
     delete m_pixmap;
 }
 
-int ImagePanIconWidget::getOriginalImageWidth(void)
-{
-    return m_iface->originalWidth();
-}
-
-int ImagePanIconWidget::getOriginalImageHeight(void)
-{
-    return m_iface->originalHeight();
-}
-
 void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
 {
     m_regionSelection = regionSelection;
@@ -100,7 +88,6 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
                                            ( (float)m_h / (float)m_iface->originalHeight() )) );
     
     repaint(false);
-    emit signalSelectionChanged( m_regionSelection );
 }
 
 QRect ImagePanIconWidget::getRegionSelection(void)
@@ -159,18 +146,6 @@ void ImagePanIconWidget::paintEvent( QPaintEvent * )
                    m_rect.width(), m_rect.height());
     
     QPainter p(m_pixmap);
-    
-    if (m_resizingSelMode) 
-      {
-      // Drawing region outside selection grayed.
-      QRegion sel(m_localRegionSelection);    
-      QRegion img(m_rect);
-      p.setRasterOp(Qt::AndROP);
-      p.setClipRegion( img.eor(sel) );
-      p.fillRect(m_rect ,QBrush::QBrush(Qt::Dense6Pattern));
-      p.setRasterOp(Qt::CopyROP);
-      p.setClipping(false);
-      }
     
     // Drawing selection border
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));

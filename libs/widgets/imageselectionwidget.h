@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-22
+ * Date  : 2004-12-09
  * Description : 
  * 
  * Copyright 2004 by Gilles Caulier
@@ -18,8 +18,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEPANICONWIDGET_H
-#define IMAGEPANICONWIDGET_H
+#ifndef IMAGESELECTIONWIDGET_H
+#define IMAGESELECTIONWIDGET_H
 
 // Qt includes.
 
@@ -33,26 +33,48 @@ namespace Digikam
 
 class ImageIface;
 
-class ImagePanIconWidget : public QWidget
+class ImageSelectionWidget : public QWidget
 {
 Q_OBJECT
 
 public:
 
-    ImagePanIconWidget(int width, int height, QWidget *parent=0);
-    ~ImagePanIconWidget();
+    ImageSelectionWidget(int width, int height, QWidget *parent=0);
+    ~ImageSelectionWidget();
 
-    void  setRegionSelection(QRect regionSelection);
-    QRect getRegionSelection(void);
     void  setCenterSelection(void);
-        
+    void  setSelectionX(int x);
+    void  setSelectionY(int y);
+    void  setSelectionWidth(int w);
+    void  setSelectionHeight(int h);
+    void  setSelectionOrientation(int orient);
+    void  setSelectionAspectRatio(int aspectRatio);
+    
+    int   getOriginalImageWidth(void);
+    int   getOriginalImageHeight(void);
+    QRect getRegionSelection(void);
+    
+    enum RatioAspect           // Contrained Aspect Ratio list.
+    {
+    RATIO01X01 = 0,            // 1:1
+    RATIO02x03,                // 2:3
+    RATIO03X04,                // 3:4
+    RATIO04X05,                // 4:5
+    RATIO05x07,                // 5:7
+    RATIO07x10,                // 7:10
+    };
+
+    enum Orient  
+    {
+    Landscape = 0,            
+    Paysage,                
+    };
+            
 signals:
 
-    // Used with ImagePreview widget. 
-    // Emit when selection have been moved with mouse. 'targetDone' booleen 
-    // value is used for indicate if the mouse have been released.
     void signalSelectionMoved( QRect rect, bool targetDone );     
-    
+    void signalSelectionChanged( QRect rect );   
+
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -79,12 +101,16 @@ private:
     
     QPixmap*    m_pixmap;
     
+    int         m_currentOrientation;
+    int         m_currentAspectRatio;
+    
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
     void regionSelectionMoved( bool targetDone );
+    void applyAspectRatio(bool WOrH);
 
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPANICONWIDGET_H */
+#endif /* IMAGESELECTIONWIDGET_H */
