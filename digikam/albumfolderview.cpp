@@ -1184,7 +1184,8 @@ void AlbumFolderView::startDrag()
         // Start dragging an album        
         AlbumDrag *albumDrag = new AlbumDrag(palbum->getKURL(), 
                                              palbum->getID(), this);
-        albumDrag->setPixmap(*folderItem->pixmap());
+        if(folderItem->pixmap())                                             
+            albumDrag->setPixmap(*folderItem->pixmap());
         albumDrag->drag();
     }
     else if (album->type() == Album::TAG)
@@ -1192,7 +1193,8 @@ void AlbumFolderView::startDrag()
         // Start dragging a tag        
         TagDrag *tagDrag = new TagDrag(album->getID(), this);
         if(tagDrag) {
-            tagDrag->setPixmap(*folderItem->pixmap());
+            if(folderItem->pixmap())
+                tagDrag->setPixmap(*folderItem->pixmap());
             tagDrag->drag();
         }
     }
@@ -1253,7 +1255,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         if( folderDragItem &&
             !newDropTarget->isGroupItem() &&
             newDropTarget->album()->type() == Album::PHYSICAL &&
-            !folderDragItem->album()->isAncestorOf(newDropTarget->album()) )
+            !folderDragItem->album()->isAncestorOf(newDropTarget->album()) &&
+            settings->getAlbumSortOrder() == AlbumSettings::ByFolder )
         {
             validDrag = true;
         }

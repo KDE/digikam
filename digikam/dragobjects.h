@@ -95,7 +95,7 @@ private:
 class AlbumDrag : public KURLDrag
 {
 public:
-    AlbumDrag(const KURL::List &urls, int albumid, 
+    AlbumDrag(const KURL &url, int albumid, 
               QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
     static bool     decode(const QMimeSource* e, KURL::List &urls, 

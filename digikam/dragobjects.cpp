@@ -148,10 +148,10 @@ QByteArray TagDrag::encodedData( const char* ) const
     return ba;
 }
 
-AlbumDrag::AlbumDrag(const KURL::List &urls, int albumid, 
+AlbumDrag::AlbumDrag(const KURL &url, int albumid, 
                      QWidget *dragSource, 
                      const char *name) :
-    KURLDrag(urls, dragSource, name)
+    KURLDrag(url, dragSource, name)
 {
     mAlbumID = albumid;
 }
