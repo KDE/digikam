@@ -146,6 +146,7 @@ ImlibInterface::ImlibInterface()
 
 ImlibInterface::~ImlibInterface()
 {
+    imlib_context_free(d->context);
     delete d;
 
     m_instance = 0;
