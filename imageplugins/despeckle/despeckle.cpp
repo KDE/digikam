@@ -189,7 +189,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay5 = new QHBoxLayout(topLayout);
-    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptative"), plainPage());
+    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), plainPage());
     m_useAdaptativeMethod->setChecked( true );
     QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
     m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), plainPage());

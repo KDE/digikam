@@ -111,7 +111,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     m_radiusSlider->setTracking ( false );
     
     m_radiusInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_radiusInput");
-    whatsThis = i18n("<p>Set here the radius of the gaussian not counting the center pixel.");
+    whatsThis = i18n("<p>Set here the radius of the Gaussian, not counting the center pixel.");
     
     QWhatsThis::add( m_radiusInput, whatsThis);
     QWhatsThis::add( m_radiusSlider, whatsThis);
