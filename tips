@@ -1,40 +1,40 @@
 <tip category="Digikam|General">
 <html>
-<p>Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror to Digikam or from Digikam to K3b by simply "Drag'n'Drop" them.
+<p>Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could use the album collection feature go get your Photos sorted into two level? 1st, the collection than the album!
+<p>Did you know that you could use the album collection feature go get your Photos sorted into two level? First, the collection; then, the album.
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that the Properties entry of each photo gives you access to the properties entry of the Konqueror?
+<p>Did you know that the Properties entry of each photo gives you access to the properties entry of Konqueror?
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could edit the <b>EXIF</b> Informations of your photos by using the properties dialog of the photo?
+<p>Did you know that you could edit the <b>EXIF</b> Information of a photo by using its properties dialog?
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that each photo has a context menu that could be reached by clicking on it with the right mouse button?
+<p>Did you know that each photo has a context menu that can be reached by clicking on it with the right mouse button?
 </html>
 </tip>
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could use the keys <b>1</b>, <b>2</b> and <b>3</b> for rotating your images?
+<p>Did you know that you could use the keys <b>1</b>, <b>2</b>, and <b>3</b> for rotating your images?
 </html>
 </tip>
 
@@ -70,7 +70,7 @@
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could reach other users and Digikam developers using the digikam-users mailinglist? Subscribe your self to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a> !
+<p>Did you know that you could reach other users and Digikam developers using the digikam-users mailinglist? Subscribe yourself to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
 </html>
 </tip>
 
@@ -91,14 +91,14 @@
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could print images using the Print Wizard? You could start him using Image -> Print Wizard.
+<p>Did you know that you could print images using the Print Wizard? You can start it using Image -> Print Wizard.
 </html>
 </tip>
 
 
 <tip category="Digikam|Slideshow">
 <html>
-<p>Did you know that you could abort the slideshow using <b>ESC</b> or a simple Mouseclick?
+<p>Did you know that you could abort a slideshow using <b>ESC</b> or a simple Mouseclick?
 </html>
 </tip>
 
@@ -126,56 +126,56 @@
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for a good compression without loosing image quality?
+<p>Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without loosing image quality?
 </html>
 </tip>
 
 
 <tip category="Digikam|ConvertImages">
 <html>
-<p>Did you know that you can use the <b>LZW</b> compression for to reduce the size of the <b>TIFF</b> image files in the Convert Images plugin?
+<p>Did you know that you can use the <b>LZW</b> compression to reduce the size of the <b>TIFF</b> image files in the Convert Images plugin?
 </html>
 </tip>
 
 
 <tip category="Digikam|BatchProcessImages">
 <html>
-<p>Did you know that all images operations in the batch processing images plugins run without loosing the <b>EXIF</b> informations in the <b>JPEG</b> files?
+<p>Did you know that all images operations in the batch processing images plugins run without losing the <b>EXIF</b> information in the <b>JPEG</b> files?
 </html>
 </tip>
 
 
 <tip category="Digikam|FilterImages">
 <html>
-<p>Did you know that the <b>Noise Reduction</b> option in the <b>Filter Images</b> plugin can be used for improve the images rendering taken with an analog camera?
+<p>Did you know that the <b>Noise Reduction</b> option in the <b>Filter Images</b> plugin can be used to improve the rendering of images taken with an analog camera?
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that the all options in a dialog box have a <b>What's this?</b> information available with the right mouse button?
+<p>Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
 </html>
 </tip>
 
 
 <tip category="Digikam|General">
 <html>
-<p>Did you know that you could brigthen up your images using Tools -> Batch -> Color Images -> Increase Contrast?
+<p>Did you know that you could brighten up your images using Tools -> Batch -> Color Images -> Increase Contrast?
 </html>
 </tip>
 
 
 <tip category="Digikam|SendImages">
 <html>
-<p>Did you know that you can use the drag and drop feature in e-mail images for to add some items to the list?
+<p>Did you know that you can use the drag and drop feature in e-mail images to add some items to the list?
 </html>
 </tip>
 
 
 <tip category="Digikam|RecompressImages">
 <html>
-<p>Did you know that if you want reduce the space disk used by your images in the Albums database, you could try to use the recompressImages plugin?
+<p>Did you know that if you want reduce the space disk used by your images in the Albums database, you could try using the recompressImages plugin?
 </html>
 </tip>
 
@@ -196,21 +196,22 @@
 
 <tip category="Digikam|ResizeImages">
 <html>
-<p>Did you know that if you want resizing images for to prepare to print on photographic paper size, you could use the resizeImages plugin?
+<p>Did you know that if you want to resize images to prepare them for printing on photographic paper sizes, you could use the resizeImages plugin?
 </html>
 </tip>
 
 
 <tip category="Digikam|BatchProcessImages">
 <html>
-<p>Did you know that you can use the images files from differents Albums in batch process images plugins? The process result will be merged in the selected target Album!
+<p>Did you know that you could use the images files from differents Albums in 'batch-process images' 
+plugins? The processed results will then be merged in the selected target Album.
 </html>
 </tip>
 
 
 <tip category="Digikam|BatchRenameImages">
 <html>
-<p>Did you know that you can change the timeStamp of the target images files in the batch rename images plugin?
+<p>Did you know that you can change the timeStamp of the target images files in the batch-rename images plugin?
 </html>
 </tip>
 

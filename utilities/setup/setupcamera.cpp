@@ -173,7 +173,7 @@ void SetupCamera::slotAutoDetectCamera()
     QString model, port;
 
     if (GPIface::autoDetect(model, port) != 0) {
-        KMessageBox::error(this,i18n("Failed to auto-detect camera!\n"
+        KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
                                      "Please retry or try setting manually."));
         return;
     }

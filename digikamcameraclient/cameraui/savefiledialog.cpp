@@ -23,7 +23,7 @@ SavefileDialog::SavefileDialog(const QString& file, QWidget *parent,
     QFileInfo fileInfo(file);
 
     setCaption(i18n("File already exists"));
-    QLabel *descLbl = new QLabel(i18n("The file '%1' already exists!").arg(fileInfo.absFilePath()), this);
+    QLabel *descLbl = new QLabel(i18n("The file '%1' already exists.").arg(fileInfo.absFilePath()), this);
 
     renameEdit = new QLineEdit(this);
     renameEdit->setText(fileInfo.fileName());

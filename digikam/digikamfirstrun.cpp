@@ -128,7 +128,7 @@ void DigikamFirstRun::accept()
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
     	std::cout << ErrorMsg;
-	KMessageBox::sorry(0, i18n("Cannot restart Digikam like a KDE service!\nPlease restart Digikam manually"));
+	KMessageBox::sorry(0, i18n("Cannot restart Digikam like a KDE service.\nPlease restart Digikam manually."));
     }
 
 }
@@ -141,7 +141,7 @@ void DigikamFirstRun::slotChangePath()
             this);
 
     if (KURL(result).cmp(KURL(QDir::homeDirPath()), true)) {
-        KMessageBox::sorry(0, i18n("Sorry Cannot Use Home Directory as Album Library"));
+        KMessageBox::sorry(0, i18n("Cannot Use Home Directory as Album Library"));
         return;
     }
 

@@ -33,7 +33,7 @@
 
 
 static const char *description =
-	I18N_NOOP("A Photo Management Application for KDE");
+	I18N_NOOP("A Photo-Management Application for KDE");
 
 
 static KCmdLineOptions options[] =

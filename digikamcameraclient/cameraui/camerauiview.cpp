@@ -880,7 +880,7 @@ bool CameraUIView::cameraReadyForUpload(QString& reason)
     bool result = false;
 
     if (!cameraConnected_) {
-        reason = i18n("Camera Not Initialised");
+        reason = i18n("Camera Not Initialized");
         return result;
     }
 

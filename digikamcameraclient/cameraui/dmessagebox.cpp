@@ -110,7 +110,7 @@ void DMessageBox::appendMsg(const QString& msg)
         msgBox_->setText(msg);
     }
     else {
-        QString text(i18n("More errors occurred and are show below:"));
+        QString text(i18n("More errors occurred and are shown below:"));
         msgBox_->setText(text);
         
         extraMsgBox_->append(msg);

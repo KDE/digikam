@@ -100,7 +100,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    iconTextGroup->setTitle(i18n("Extra Information  in Thumbnail View"));
 
    iconShowMimeBox_ = new QCheckBox(iconTextGroup);
-   iconShowMimeBox_->setText(i18n("Show file type (eg. image/jpeg)"));
+   iconShowMimeBox_->setText(i18n("Show file type (e.g. image/jpeg)"));
 
    iconShowSizeBox_ = new QCheckBox(iconTextGroup);
    iconShowSizeBox_->setText(i18n("Show file size"));

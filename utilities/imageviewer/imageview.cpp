@@ -1005,7 +1005,7 @@ void ImageView::promptUserSave()
         int result =
             KMessageBox::warningYesNo(this,                                      
                                       i18n("\"%1\" has been modified.\n"
-                                           "Do you wish to want to save it?")
+                                           "Do you want to save it?")
                                            .arg(d->urlCurrent.filename()));
         if (result == KMessageBox::Yes)
             slotSave();
@@ -1397,8 +1397,8 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
          d->bPrev->setEnabled(false);    
          d->bNext->setEnabled(false);         
          KMessageBox::information(this,
-                                  i18n("There is no image to show in the current Album!\n"
-                                       "The ImageViewer will be closed..."),
+                                  i18n("There is no image to show in the current Album;\n"
+                                       "the ImageViewer will be closed...."),
                                   i18n("No image in the current Album")
                                   );
 
