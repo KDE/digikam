@@ -777,7 +777,7 @@ void ImageWindow::slotSaveAs()
     QString format = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
     delete imageFileSaveDialog; 
 
-    if (m_newFile.isValid())
+    if (!m_newFile.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                            .arg(m_newFile.filename())
@@ -795,8 +795,18 @@ void ImageWindow::slotSaveAs()
         slotSave();
         return;
     }
-    
-    // TODO: ask for confirmation from user before overwriting existing file
+
+    QFileInfo fi(m_newFile.path());
+    if ( fi.exists() )
+    {
+        int result =
+            KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
+                                                  "Are you sure you want to continue?")
+                                       .arg(m_newFile.filename()) );
+
+        if (result != KMessageBox::Yes)
+            return;
+    }
 
     QString tmpFile = locateLocal("tmp", m_newFile.filename());
      
