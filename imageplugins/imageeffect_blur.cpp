@@ -84,7 +84,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     hlay->addWidget(label,1);
     hlay->addWidget(m_radiusInput, 5);
 
-    m_radiusInput->setValue(1);
+    m_radiusInput->setValue(0);
     
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
@@ -131,13 +131,10 @@ void ImageEffect_Blur::slotOk()
 
 void ImageEffect_Blur::blur(uint* data, int w, int h, int r)
 {
-    uint* newData = new uint[w*h];
-    memcpy(newData, data, w*h*sizeof(unsigned int));
-    
     Imlib_Context context = imlib_context_new();
     imlib_context_push(context);
 
-    Imlib_Image imTop = imlib_create_image_using_copied_data(w, h, newData);
+    Imlib_Image imTop = imlib_create_image_using_copied_data(w, h, data);
     imlib_context_set_image(imTop);
     
     imlib_image_blur( r );
@@ -150,7 +147,6 @@ void ImageEffect_Blur::blur(uint* data, int w, int h, int r)
     
     imlib_context_pop();
     imlib_context_free(context);
-    delete [] newData;
 }
 
 #include "imageeffect_blur.moc"
