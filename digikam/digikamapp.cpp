@@ -362,7 +362,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    // Provides menu entries that allows showing/hiding the menu-/toolbar
+    // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
                                        
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
