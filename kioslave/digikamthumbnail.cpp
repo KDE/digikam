@@ -342,7 +342,14 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
                      0, QString::number(st.st_mtime));
         img.setText(QString("Software").latin1(),
                      0, QString("Digikam Thumbnail Generator"));
-        img.save(thumbPath, "PNG", 0);
+
+        KTempFile temp(thumbPath + "-digikam-", ".png");
+        if (temp.status() == 0)
+        {
+            img.save(temp.name(), "PNG", 0);
+            ::rename(QFile::encodeName(temp.name()),
+                     QFile::encodeName(thumbPath));
+        }
     }
 
     img = img.smoothScale(size, size, QImage::ScaleMin);
