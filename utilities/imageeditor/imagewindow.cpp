@@ -410,6 +410,7 @@ void ImageWindow::applySettings()
 
 void ImageWindow::readSettings()
 {
+    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
     setAutoSaveSettings("ImageViewer Settings");
 
     KConfig* config = kapp->config();
