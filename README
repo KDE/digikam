@@ -1,0 +1,54 @@
+DIGIKAM
+
+Authors :
+----------------------------------------------------------------------
+Renchi Raju    <renchi at pooh.tam.uiuc.edu>
+Gilles Caulier <caulier dot gilles at free.fr>
+
+
+Resume :
+----------------------------------------------------------------------
+Digikam is a kde application which acts as a frontend to gphoto2 for
+communicating with your digital camera and download pictures from
+it. I was never able to get kamera working properly with my Canon
+PowerShot A20 and couldn't find any other good frontend for
+gphoto2. So digikam was born. It should be able to communicate with
+your camera and preview images and download pictures.  It is also able
+to autodetect the camera connected to the computer.
+
+
+Contact :
+-----------------------------------------------------------------------
+If you have questions, comments, suggestions, requests, bug reports to
+make do email at :
+
+digikam-users@list.sourceforge.net
+
+
+Dependencies :
+-----------------------------------------------------------------------
+
+AutoConf >= 2.5
+AutoMake >= 1.7.0
+KDE 3.x
+gphoto2 2.x
+imlib1 >= 1.90
+libexif >= 0.5.7
+
+
+Installation :
+------------------------------------------------------------------------
+In the source directory do :
+
+1) export WANT_AUTOCONF_2_5=1
+2) export KDEDIR=KDE_installation_dir_on_your_system
+3) make -f Makefile.cvs
+4) ./configure
+5) make
+6) su
+7) make install
+
+More specifics compilations and installations options can be used with '.configure' script.
+Check it with './configure --help' command line.
+
+Don't forget the 'digikamplugins' module for more functionnality.

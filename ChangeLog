@@ -1,0 +1,247 @@
+v0.6.2-RC        05/xx/04
+----------------------------------------------------------------------------
+        * Tag CVS for to export Digikam core to KDE-Extragears-3 module on KDE CVS.
+        * Updated 'admin' directory from KDE CVS.
+        * Added 'Remove current images from Album' action in ImageViewer.
+        * Updated Handbook.
+        * Fixed abug reported by Carsten Niehaus about Album banner not updated when
+          items are removed or are moved to another Album.
+        * Move TipOfDay from DigikamPlugins module to Digikam3 module.
+        * Move 'Prev' and 'Next' buttons in ImageViewer before the image name and
+          the zoom level box.
+        * Patch from Alex Gontmakher <gsasha at cs.technion.ac.il> for
+          ImageViewer: restore the zoom value when toggle off the
+          autozoom. Added 1:1 zoom button.
+        * Updated main GUI icons from Sebastian Roder <seppelrockt at web.de>
+        * Updated Splashscreen for 0.6.2 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
+        * Fixed contributors list.
+
+v0.6.1-Final     04/05/04
+----------------------------------------------------------------------------
+        * Updated i18n (*.po and *.desktop files).
+        * Updated ES and IT handbooks translations.
+        * Prepared Polish and Dutch Handbooks files for translations.
+        * Added Polish translations by Anna Sawicka.
+        * Added Dutch translations (main GUI) by Jasper van der Marel.
+        * Fixed UTF-8 encoding in *.desktop files by Janusz.
+
+v0.6.1-RC        03/22/04
+----------------------------------------------------------------------------
+        * Updated handbooks
+        * Updated translations.
+
+v0.6.0-Final     02/08/04
+----------------------------------------------------------------------------
+        * Added Danish i18n. 
+        * Patch from Achim Bohnet : printwizard and sendimages use group
+          images_plugins. digikamui.rc only has only image_transfrom_plugins entry.
+          Appended patch add image_plugins back.
+        * Bugfix when moving image between source and destination folders.
+        * BugFix in ImageViewer with Crop operation.
+
+v0.6.0-RC        11/27/03
+----------------------------------------------------------------------------
+        * Added plugins submenu 'Transform' in 'images' main menu.
+        * Added Czech and Hungarian i18n.
+        * Removed jpeglossless code from main application. Moved to a plugin
+        * Added kioslave based thumbnail generation code. there were
+          problems with the threaded version and some qt/kde versions.
+        * Drag and drop copy/move of images between albums will also copy/move
+          comments. these use wrappers around kde kio classes to move/copy 
+          comments along with the files
+        * Plugins can merge their actions into the right-click menu of the
+          thumbnailview by just adding "X-Digikam-MergeMenu=true" in their
+          desktop file
+        * Removed a source of flicker in the albumiconview
+        * Thumbnail Generator added to interfaces. more robust (with
+          jpeg error checking - thanks to Marcus Meissner) and simpler to
+          use (using signals/slots). Provides a non-blocking thumbnail
+          generation interface compliant with freedesktop.org
+          standards (which is used by the main application and also can be
+          used by any of the plugins).
+        * Now instead of download to directory in the cameraclient, we
+          have download to album. also new albums can be created directly
+          from the cameraclient.
+        * Fixed selection problem in albumfolderview in case of DnD.
+        * Fixed a bug in Album::getPath() API plugins implementation.
+        * Plugins can refresh the view if they change the comments of the items.
+        * Now, the album library is the only place where you add or delete albums.
+        * All the information for an album (collection,date,comments) and for the
+          items in the album (currently only comments) are stored in a single xml
+          file ( called digikam.xml ) inside the album itself.
+        * Now albums are directly detected in the album library path, no need
+          for manual addition and deletion.
+        * The comments.xml file has been changed to digikam.xml and its format
+          also has changed.
+        * Added a doxyfile to generate documentation for the plugin API.
+        * Now we have a new clean API and its well documented.
+        * Fix 3 no named actions for image rotation in Digikam.
+        * Improve shorcuts rendering in documentation.
+        * Add 'Selection' menu actions in Digikam.
+        * Bug fix with "ad-hoc" protection for image comments in album folders.
+        * Fix a bug with null pointer and libexif.
+        * Update Toolbar in Digikam.
+        * Add default shortcuts in Digikam and Digikamcameraclient.
+        * Add FullScreen mode in Digikam and Digikamcameraclient.
+        * Fix FR translations by Michel Grentzinger <mic.grentz@online.fr>.
+        * Fix and update Doc.
+
+v0.6.0-beta2        09/13/03
+----------------------------------------------------------------------------
+        * Add new i18n screenshots in handbooks.
+        * Add new toolbars icons in Digikam and Digikamcameraclient.
+        * Improve GUI i18n.
+        * Digikam Setup and Exif informations dialog box auto center on the desktop.
+        * Resize CameraInfo dialog box.
+        * Add 'Friends', 'Holidays', and 'Todo' album types.
+        * Fix 'dmessagebox' showing.
+        * Update default .rc files with news toolbars icons.
+        * Fix size problem in general setup dialog box with Album types list.
+        * Fix toolbar icons with KDE standard icons in 'imageviewer'.
+        * MPEG images converter plugin. Author : Gilles Caulier. From 'kvcdtools' project
+          (http://kvcdtools.free.fr).
+        * HTML export plugin. Author : Gilles Caulier. From 'kimgalleryplugin' konqueror plugin
+          (KDE CVS HEAD branch).
+        * Add some Album informations interfaces for the plugins implementations.
+        * Add automatic i18n HTML handbooks convertions fonctionnality.
+        * Add new default shortcuts.
+
+v0.6.0-beta1        09/01/03
+----------------------------------------------------------------------------
+        * Remove some build '.in' files on CVS.
+        * KDE UI standard:
+          Menu Setup ==> Settings.
+          Menuitem Preferences ==> Configure Digikam...
+        * Standard 'Configure Shortcuts...' in Settings menu (digikam & digikamcameraclient).
+        * Standard 'Configure ToolBars...' in Settings menu (digikam & digikamcameraclient).
+        * Add a error messagebox when a error is encoured for the first time Digikam start
+          like a KDE service.
+        * Add Kdevelop 3.0 (alpha5 - 09/01/2003) project.
+
+v0.6.0-beta0        02/26/03
+----------------------------------------------------------------------------
+        * Moved the camera interface to separate application with dcop
+          communications.
+        * New GUI for the main interface.
+        * Simple Plugin architecture so that new plugins can be written
+          for added functionality (currently added plugins: raw image
+          converter, slideshow (with effects stolen from kslideshow)).
+        * QIconView trashed (too much flicker). Use a custom iconview
+          with banners and extra text display and of course, much less
+          flicker.
+        * ThumbnailView in the main interface can show file size, date,
+          comments.
+        * Thumbnail sizes have changed (64 Small, 100 Medium, 160 Large,
+            256 Huge).
+        * Thumbnail generation based on the new thumbnail generation standard
+          (freedesktop.org).
+        * Multiple camera support.
+        * Comments can be added for images.
+        * Use XML for cameralists and commentslists.
+        * Image Folders are shown as albums with thumnail icons.
+        * Albums can be sorted: chronologically, by collections, flat list.
+        * New collections can be added and each album can be assigned to
+          one collection.
+        * Album Dates can be modified through a gui.
+        * Albums can have different titles/comments than the actual dirname.
+        * New improved splash screen.
+        * Image Viewer/Editor based on imlib1 with image caching. Basic
+          image editing features: rotation, gamma/contrast/brightness
+          correction, cropping; all without losing exif info.
+        * Exif Viewer (based on libexif).
+        * Lossless JPEG rotation support.
+
+
+v0.5.1              09/04/02
+----------------------------------------------------------------------------
+        * New GUI: Added AlbumBrowser
+        * Albums can be created, renamed, deleted.
+        * Threaded Thumbnail generator for albumbrowser
+        * Status Bar updated to show thumbnail generation progress
+        * Thumbnail sizes now 64x64, 90x90, 120x120
+        * ImageViewer added (opens on doubleclick)
+        * Slideshow added (with or without sliding effects)
+        * By Default Show All Images on camera
+        * By Default Get Thumbnails for all camera items
+        * Experimental Support for USB MassStorage Cameras
+        * New Camera Items are marked with a "new" sign
+        * CameraItem Information Dialog Updated
+        * Camera Images Display can have different colored background for
+          easy distinguishing from Album Images Display
+        * Setup updated to show new features
+        * Ability to set Default Thumbnail Size
+        * While Downloading Images from camera, cache thumbnails
+        * Camera Upload Functionality
+        * Camera Information Dialog
+        * Drag and Drop To and From Camera and  Album Browser
+        * French Translation Added (Caulier Gilles)
+
+v0.5.0               07/15/02
+----------------------------------------------------------------------------
+        * Ported to KDE3
+        * Removed photobrowser (will introduced back only if there's
+          enough demand from users)
+        * Multithreaded (using QThread/QMutex) now for non-blocking operation
+        * Menubar added
+        * Use xmlgui for toolbars/menubars actions
+        * Ability to disconnect from camera
+        * Ability to hide camera folders and statusbar
+        * Context specific menus for icons in camerabrowser
+        * Ability to resize thumbnails for display
+        * Added documentation
+        * Added debian rules
+        * Added suse rpm spec file
+
+v0.4.1               06/01/02
+----------------------------------------------------------------------------
+        * Updated API to gphoto2-2.0-final
+        * Exif Support in photobrowser
+
+v0.4                 01/17/2002
+-----------------------------------------------------------------------------
+        * Photo Browser added
+        * Drag n' drop capabilities added for photo browser
+        * context specific menus for directories and photos
+        * file/directory renaming, deleting, moving support
+        * image viewer added
+
+v0.4                 01/13/2002
+-----------------------------------------------------------------------------
+        * New Interface : to be added - photo browser
+        * Support for folder creations
+        * Fixed bugs which caused app to crash on exit
+        * Added camera info dialog
+        * Added global folder to view all images on camera in one folder
+        * Added additional setup options:
+          - select default download directory
+          - can connect to camera on start
+          - can choose not to have thumbnails on connect
+        * Configure now automatically searches for gphoto2-config
+
+v0.3                 01/03/2002
+-----------------------------------------------------------------------------
+        * New Interface
+        * Fixed bugs which prevented display of images in camera with
+          subfolders
+        * Support for file deletion on camera
+        * Support for non-thumbnail views
+        * Added about box
+
+
+v0.2.1               12/29/01
+------------------------------------------------------------------------------
+        * Support for cameras with pictures
+          stored in subfolders
+
+
+v0.2                 12/26/01
+------------------------------------------------------------------------------
+        * Compiles and runs with gphoto2-beta3
+          This version won't run with gphoto2-beta2
+        * Cosmetic Enhancements: Display file name
+          while downloading
+        * Experimental Support for serial port cameras
+
+v0.1                 12/23/01
+------------------------------------------------------------------------------
+        * Initial Public release

@@ -1,0 +1,8 @@
+[Protocol]
+exec=kio_digikamthumbnail
+protocol=digikamthumbnail
+input=stream
+output=stream
+reading=true
+source=false
+Description=Digikam thumbnail kioslave

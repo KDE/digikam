@@ -1,0 +1,70 @@
+#---------------------------------------------------------
+# imlib-detection from kuickshow
+#---------------------------------------------------------
+# checking for Imlib...
+
+AC_DEFUN(KDE_FIND_IMLIB_CONFIG,
+   [AC_MSG_CHECKING([for imlib-config])
+
+imlib_config_given=NO
+ac_imlib_config=""
+
+AC_ARG_WITH(imlib-config,
+        [  --with-imlib-config     directory where \"imlib-config\" lies ],
+        [  ac_imlib_config="$withval/imlib-config"
+           imlib_config_given=yes
+        ])
+
+if test "$imlib_config_given" = "yes"; then
+  if test ! -r $ac_imlib_config; then
+    AC_MSG_RESULT(wrong file specified)
+    ac_imlib_config=""
+  else
+    IMLIB_CFLAGS=`$ac_imlib_config --cflags`
+    LIB_IMLIB=`$ac_imlib_config --libs`
+    AC_SUBST(LIB_IMLIB)
+    AC_SUBST(IMLIB_CFLAGS)
+    AC_MSG_RESULT($ac_imlib_config)
+  fi
+else
+  ac_imlib_config=`which imlib-config 2>/dev/null`
+  if test -z "$ac_imlib_config"; then
+    AC_MSG_RESULT(no)
+  else
+    dummy=`echo "$ac_imlib_config" | grep '/imlib-config'`
+    if test -z "$dummy"; then
+      AC_MSG_RESULT(no)
+      ac_imlib_config=""
+    else
+      LIB_IMLIB=`$ac_imlib_config --libs`
+      IMLIB_CFLAGS=`$ac_imlib_config --cflags`
+      imlib_config=`echo "$LIB_IMLIB" | grep lImlib`
+      if test -z "$imlib_config"; then
+        AC_MSG_RESULT(no)
+        ac_imlib_config=""
+      else
+        AC_SUBST(LIB_IMLIB)
+        AC_SUBST(IMLIB_CFLAGS)
+        AC_MSG_RESULT($ac_imlib_config)
+      fi
+    fi
+  fi
+fi
+
+])
+
+dnl Check if Imlib is installed properly
+KDE_FIND_IMLIB_CONFIG
+
+if test -z "$ac_imlib_config"; then
+ AC_MSG_ERROR([You need to install Imlib 1.x, e.g. http://freshmeat.net/redir/imlib/4385/url_tgz/imlib-1.9.10.tar.gz if your distributor doesn't have a package])
+ exit 1
+fi
+
+#---------------------------------------------------------
+# libexif detection
+#---------------------------------------------------------
+
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.7)
+AC_SUBST(LIBEXIF_LIBS)
+AC_SUBST(LIBEXIF_CFLAGS)

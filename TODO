@@ -1,0 +1,39 @@
+TODO:
+===========================================
+
+Main Application:
+
+* Backup and retrieve image comments and album properties.
+* Add image sizes annotation for each album image.
+* Custom thumbnail highlighting of album thumbnails.
+* View/Hide main toolbar/statusbar.
+* Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar with
+  KURLBar::writeItem API (settings is in ~/.kde/share/config/kdeglobals file).
+* Save relative sizes of treeview and thumbnailview
+* Option to hide header in thumbnail view
+* Option to hide image names
+
+CameraClient:
+
+* Make Folder Ability.
+* Delete Folder Ability.
+* Camera Configure Dialog.
+* Camera Capture Support.
+* DnD Upload (moved to wishlist. in case of the future parts
+  implementation there can be no DnD upload).
+* View/Hide main toolbar/statusbar.
+
+ImageViever (for 0.7.0):
+
+* Add Plugins interface.
+* Add RedEyes correction.
+* Add Blur/Sharpen image filters (in plugin).
+* Add image Histogram viewer (in plugin).
+* Add Color autocorrection filter (in plugin).
+* Add image file format export (in plugin)..
+* Add delete image option
+
+Plugins:
+
+==> see the TODO file in 'digikamplugins' CVS module.
+

@@ -1,0 +1,81 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="digikam" >
+ <MenuBar>
+  <Menu name="Album" >
+   <text>&amp;Album</text>
+   <Action name="album_new" />
+   <Action name="album_add" />
+   <Action name="album_sort" />
+   <Separator/>
+   <Action name="album_addImages" />
+   <Action name="album_propsEdit" />
+   <Separator/>
+      <DefineGroup name="album_plugins_merge" />
+   <Separator/>
+   <Action name="album_remove" />
+   <Action name="album_delete" />
+   <Separator/>
+   <Action name="app_exit" />
+  </Menu>
+  <Menu name="Image" >
+   <text>&amp;Image</text>
+   <Action name="image_view" />
+   <Action name="image_comments" />
+   <Action name="image_exif" />
+   <Action name="image_properties" />
+   <DefineGroup name="image_plugins_merge" />
+   <Separator />
+      <DefineGroup name="image_transform_plugins_merge" />
+   <Separator />
+   <Action name="image_rename" />
+   <Action name="image_delete" />
+  </Menu>
+  <Menu name="select" >
+   <text>&amp;Select</text>
+   <Action name="selectAll" />
+   <Action name="selectNone" />
+   <Action name="selectInvert" />
+  </Menu>
+  <Menu name="View" >
+   <text>&amp;View</text>
+   <Action name="album_thumbSizeIncrease" />
+   <Action name="album_thumbSizeDecrease" />
+   <Action name="full_screen" />
+  </Menu>
+  <Menu name="help"><Text>&amp;Help</Text>
+   <Action name="help_tipofday"/>
+  </Menu>
+  <Action name="camera_menu" />
+  <Menu name="settings" />
+  <Merge/>
+ </MenuBar>
+ <ToolBar noMerge="1" name="ToolBar" >
+  <text>Main Toolbar</text>
+  <Action name="album_new" />
+  <Action name="album_addImages" />
+  <Action name="album_add" />
+  <Action name="album_propsEdit" />
+  <Separator name="separator_1" />
+  <Separator name="separator_2" />
+  <Separator name="separator_3" />
+  <Action name="album_sort" />
+  <Separator name="separator_4" />
+  <Separator name="separator_5" />
+  <Separator name="separator_6" />
+  <Action name="camera_menu" />
+  <Separator name="separator_7" />
+  <Separator name="separator_8" />
+  <Separator name="separator_9" />
+  <Action name="image_view" />
+  <Action name="image_comments" />
+  <Action name="image_exif" />
+  <Action name="image_rename" />
+  <Separator name="separator_10" />
+  <Separator name="separator_11" />
+  <Separator name="separator_12" />
+  <Action name="album_thumbSizeIncrease" />
+  <Action name="album_thumbSizeDecrease" />
+  <Action name="full_screen" />
+ </ToolBar>
+ <ActionProperties/>
+</kpartgui>

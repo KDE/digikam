@@ -1,0 +1,26 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=digikam -caption "%c" %i %m
+Icon=digikam.png
+DocPath=digikam/index.html
+Name=Digikam
+Name[de]=Digikam
+Name[es]=Digikam
+Name[fr]=Digikam
+Name[da]=Digikam
+Name[it]=Digikam
+Name[hu]=Digikam
+Name[pl]=Digikam
+Name[nl]=Digikam
+Comment=KDE Photo Management
+Comment[de]=KDE Fotomanagement Programm
+Comment[es]=Programa de gestión de fotografías para KDE
+Comment[fr]=Interface KDE pour GPhoto2
+Comment[it]=Interfacchia KDE per la gestione di fotografie
+Comment[da]=KDE fotohåndtering
+Comment[hu]=Digitális fotózás
+Comment[pl]=Program do zarządzania zdjęciami
+Comment[nl]=Foto beheerprogramma
+Terminal=0
