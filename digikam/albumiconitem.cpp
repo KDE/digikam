@@ -73,8 +73,10 @@ void dateToString(const QDateTime& datetime, QString& str)
                 datetime.time() > QTime(12,0) ? "PM" : "AM");
 }
 
-QString squeezedText(QPainter* p, int width, const QString& fullText)
+QString squeezedText(QPainter* p, int width, const QString& text)
 {
+    QString fullText(text);
+    fullText.replace("\n"," ");
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
     if (textWidth > width) {
