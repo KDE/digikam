@@ -50,11 +50,11 @@ namespace Digikam
 ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_iface = new ImageIface(w,h);
+    m_iface  = new ImageIface(w,h);
 
-    m_data = m_iface->getPreviewData();
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
+    m_data   = m_iface->getPreviewData();
+    m_w      = m_iface->previewWidth();
+    m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
     
     setBackgroundMode(Qt::NoBackground);
@@ -69,6 +69,16 @@ ImagePanIconWidget::~ImagePanIconWidget()
     delete [] m_data;
     delete m_iface;
     delete m_pixmap;
+}
+
+int ImagePanIconWidget::getOriginalImageWidth(void)
+{
+    return m_iface->originalWidth();
+}
+
+int ImagePanIconWidget::getOriginalImageHeight(void)
+{
+    return m_iface->originalHeight();
 }
 
 void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
@@ -87,6 +97,21 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
                                            ( (float)m_h / (float)m_iface->originalHeight() )) );
     
     repaint(false);
+    emit signalSelectionMoved( m_regionSelection, true );
+}
+
+QRect ImagePanIconWidget::getRegionSelection(void)
+{
+    return (m_regionSelection);
+}
+
+void ImagePanIconWidget::setCenterSelection(void)
+{
+    setRegionSelection(QRect::QRect( 
+             (int)(((float)m_iface->originalWidth() / 2.0)  - ((float)m_regionSelection.width() / 2.0)),
+             (int)(((float)m_iface->originalHeight() / 2.0) - ((float)m_regionSelection.height() / 2.0)),
+             m_regionSelection.width(),
+             m_regionSelection.height()));
 }
 
 void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
@@ -108,6 +133,18 @@ void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
     m_regionSelection.setWidth(w);                                     
     m_regionSelection.setHeight(h);
     
+    if (targetDone)
+       {
+       if (m_regionSelection.left() < 0) m_regionSelection.moveLeft(0);
+       if (m_regionSelection.top() < 0) m_regionSelection.moveTop(0);
+       if (m_regionSelection.right() > m_iface->originalWidth())
+          m_regionSelection.moveRight(m_iface->originalWidth());
+       if (m_regionSelection.bottom() > m_iface->originalHeight()) 
+          m_regionSelection.moveBottom(m_iface->originalHeight());
+       
+       setRegionSelection(m_regionSelection);
+       }
+       
     emit signalSelectionMoved( m_regionSelection, targetDone );
 }
 

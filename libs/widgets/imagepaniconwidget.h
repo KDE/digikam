@@ -42,7 +42,11 @@ public:
     ImagePanIconWidget(int width, int height, QWidget *parent=0);
     ~ImagePanIconWidget();
 
-    void setRegionSelection(QRect regionSelection);
+    void  setRegionSelection(QRect regionSelection);
+    QRect getRegionSelection(void);
+    void  setCenterSelection(void);
+    int   getOriginalImageWidth(void);
+    int   getOriginalImageHeight(void);
         
 signals:
 
