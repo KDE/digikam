@@ -69,7 +69,7 @@ public:
                           QString& collection,
                           QStringList& albumCollections);
 
-    QDate averageDate( bool const basedOnExif );
+    QDate averageDate( bool basedOnExif ) const;
 
 
 private:

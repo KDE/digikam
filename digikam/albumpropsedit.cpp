@@ -298,7 +298,7 @@ void AlbumPropsEdit::slotAverageButtonClicked()
     }
 }
 
-QDate AlbumPropsEdit::averageDate( bool const basedOnExif )
+QDate AlbumPropsEdit::averageDate( bool basedOnExif ) const
 {
     int differenceInSecs = 0;
     int amountOfImages = 0;
