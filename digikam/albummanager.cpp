@@ -87,7 +87,7 @@ AlbumManager::AlbumManager()
     d = new AlbumManagerPriv;
     
     d->db = new AlbumDB;
-    
+
     d->rootPAlbum = 0;
     d->rootTAlbum = 0;
 
@@ -103,8 +103,16 @@ AlbumManager::~AlbumManager()
 {
     if (d->albumLister)
         delete d->albumLister;
+
     if (d->rootPAlbum)
+    {
+        KFileItem *fileItem = d->rootPAlbum->fileItem();
+        if (fileItem)
+        {
+            delete fileItem;
+        }
         delete d->rootPAlbum;
+    }
     if (d->rootTAlbum)
         delete d->rootTAlbum;
 

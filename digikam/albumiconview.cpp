@@ -542,7 +542,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     if (count != 0)
         popmenu.insertSeparator();
 
-    KActionMenu* menu = new KActionMenu(i18n("Batch processes"));  
+    KActionMenu* batchMenu = new KActionMenu(i18n("Batch processes"));  
             
     const QPtrList<KAction>& BatchActions =
         DigikamApp::getinstance()->menuBatchActions();
@@ -552,7 +552,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     
     while ( (action = it2.current()) != 0 ) 
     {
-        menu->insert(action);
+        batchMenu->insert(action);
         ++it2;
         count = 1;
     }
@@ -561,7 +561,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     
     if (count != 0)
     {
-        menu->plug(&popmenu);
+        batchMenu->plug(&popmenu);
         popmenu.insertSeparator();
     }
 
@@ -680,6 +680,7 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     serviceVector.clear();
     delete assignTagsPopup;
     delete removeTagsPopup;
+    delete batchMenu;
 }
 
 void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)

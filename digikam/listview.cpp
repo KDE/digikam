@@ -91,7 +91,7 @@ ListView::ListView(QWidget* parent, const char* name,
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(QWidget::WheelFocus);
 
-    new ListViewToolTip(viewport(), this);
+    //new ListViewToolTip(viewport(), this);
     
     // --------------------------------------------------
 
