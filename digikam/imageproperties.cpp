@@ -149,20 +149,19 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
-    // Main init.
-    
-    setHelp("propertiesmetadatahistogram.anchor", "digikam");
-    m_view          = view;
-    m_selectionArea = selectionArea;
+    m_view          = view;               // Needed for PAlbum using.
     
     m_IEcurrentItem = currItem;           // In Image Editor mode, save current idem (used if 
                                           // an image selection area is passed in constructor).
     m_currItem      = currItem;
-    m_lister        = view->albumLister();
+    
     KURL fileURL(m_currItem->fileItem()->url());
-        
+    
+    m_selectionArea = selectionArea;
+    
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    setHelp("propertiesmetadatahistogram.anchor", "digikam");        
+    
     //General tab init.
     
     setupGeneralTab();

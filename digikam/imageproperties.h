@@ -107,8 +107,6 @@ private:
     
     AlbumIconItem                *m_currItem;
     
-    AlbumLister                  *m_lister;
-    
     // For General tab.
     
     QLabel                       *m_generalThumb;
