@@ -56,8 +56,10 @@ o Sorting the download Album list in the QComboBox Widget.
 Thumnails interface:
 --------------------
 
-o Using embedded image for thumnails generation.
-o Provide an interface for RAW files thumbs.
+o Using embedded image for thumnails generation.                   
+* Using imlib2 for to provide thumbnails if 
+  embedded image unavaible.                                        <Gilles Caulier - 0.6.3>
+o Thumnails generation for RAW files.
 * EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
 
   
