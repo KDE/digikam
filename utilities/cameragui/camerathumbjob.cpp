@@ -127,7 +127,7 @@ void CameraThumbJob::slotResult(KIO::Job *job)
     
     if (job->error() && d->curr_item)
     {
-        kdWarning() << "Failed result " << d->curr_item->url()
+        kdWarning() << "Failed result " << d->curr_item->url().prettyURL()
                     << endl;
         //emit signalFailed(d->curr_item);
     }
