@@ -33,6 +33,7 @@ KDE 3.x
 gphoto2 2.x
 imlib2 >= 1.0.x
 libexif >= 0.5.7
+libgdbm
 libKIPI from kdeextragear-libs-1
 libKexif from kdeextragear-libs-1
 
