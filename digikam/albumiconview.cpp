@@ -1900,10 +1900,18 @@ QPopupMenu* AlbumIconView::getTagsPopup(int addToID, QWidget* parent, int tagid)
     TAlbum* album = man->findTAlbum(tagid);
     if (!album)
         return 0;
-
+    
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     
     QPopupMenu* popup = new QPopupMenu(parent);
+
+    if (!album->isRoot())
+    {
+        QPixmap pix(iconLoader->loadIcon(album->getIcon(),KIcon::Small));
+        popup->insertItem(pix, album->getTitle(), addToID + album->getID());
+        popup->insertSeparator();
+    }
+    
     for (Album* a = album->firstChild(); a; a = a->next())
     {
         QPixmap pix(iconLoader->loadIcon(a->getIcon(),KIcon::Small));
@@ -1914,8 +1922,7 @@ QPopupMenu* AlbumIconView::getTagsPopup(int addToID, QWidget* parent, int tagid)
         }
         else
         {
-            popup->insertItem(pix, a->getTitle(),
-                              addToID+a->getID());
+            popup->insertItem(pix, a->getTitle(), addToID+a->getID());
         }
     }
 
