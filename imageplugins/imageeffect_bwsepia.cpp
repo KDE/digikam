@@ -67,13 +67,14 @@ void ImageEffect_BWSepia::convertTOSepia()
 {
     Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
+    uint* data   = iface.getOriginalData();
+    int   width  = iface.originalWidth();
+    int   height = iface.originalHeight();
 
-    if (!data || !w || !h)
+    if (!data || !width || !height)
         return;
 
+    /*
     int   r1,g1,b1,a1;
     int   r2,g2,b2;
     float gr;
@@ -99,6 +100,43 @@ void ImageEffect_BWSepia::convertTOSepia()
         b2 = QMIN((int)(gr * 0.52),255);
 
         *ptr = a1 << 24 | r2 << 16 | g2 << 8 | b2; 
+        ptr++;
+    }
+    */
+
+    int   r,g,b,h,s,v;
+    float gr;
+    unsigned char* c;
+
+    unsigned int* ptr = data;
+
+    h = 162;
+    s = 132;
+    v = 101;
+    Digikam::rgb_to_hsl(h, s, v);
+
+    for (int i=0; i<width*height; i++) {
+
+         c = (unsigned char*) ptr;
+
+         b = c[0];
+         g = c[1];
+         r = c[2];
+        
+        // grayscale 
+        gr = 0.3 * r + 0.59 * g + 0.11 * b;
+        r = ROUND (gr);
+        g = r;
+        b = r;
+
+        r = h;
+        g = s;
+        
+        Digikam::hsl_to_rgb(r, g, b);
+        
+        c[0] = b;
+        c[1] = g;
+        c[2] = r;
         ptr++;
     }
 
