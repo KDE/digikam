@@ -235,7 +235,7 @@ void DigikamApp::setupActions()
 
     mPropsEditAction = new KAction( i18n("Edit Album Properties..."),
                                     "albumfoldercomment",
-                                    CTRL+Key_F3,
+                                    0,
                                     mView,
                                     SLOT(slot_albumPropsEdit()),
                                     actionCollection(),
