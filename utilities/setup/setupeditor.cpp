@@ -61,8 +61,9 @@ SetupEditor::SetupEditor(QWidget* parent )
    QWhatsThis::add( m_JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
                                             "<b>1</b>: low quality (high compression and small file size)<p>"
                                             "<b>50</b>: medium quality<p>"
+					    "<b>75</b>: good quality (default)<p>"
                                             "<b>100</b>: high quality (no compression and large file size)<p>"
-                                            "<b>Note: JPEG is not a lossless image compression format. Default quality is 75.</b>"));
+                                            "<b>Note: JPEG is not a lossless image compression format.</b>"));
    
    m_PNGcompression = new KIntNumInput(1, savingOptionsGroup);
    m_PNGcompression->setRange(1, 9, 1, true );
