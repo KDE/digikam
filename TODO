@@ -21,7 +21,7 @@ x Types MIME support (image, audio, video, RAW files).             <Gilles Cauli
 x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.6.3>
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.6.3>
 * Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
-- Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
+o Added config saving of Albums opened in Albums treeview.         
 o LibExif 0.6.x support.
 o Added dockable main widgets like ShowImg.                        
 o Added subfolders Albums support.
@@ -42,7 +42,7 @@ CameraClient:
 -------------
 
 o Lauch the Albums properties when a new Album is added 
-  to the Database (using DCOP).                                    <Gilles Caulier - 0.6.3>
+  to the Database (using DCOP).                                    
 o Make Folder Ability.
 o Delete Folder Ability.
 o Camera Configure Dialog.
@@ -62,18 +62,18 @@ o Using embedded image for thumnails generation.
 x Using imlib2 for to provide thumbnails if 
   embedded image unavaible.                                        <Gilles Caulier - 0.6.3>  
 o Thumnails generation for RAW files.
-* EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
+x EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
 
   
 Image Viewer/Editor :
 ---------------------
 
-* Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
-* New BCG and RGB setting dialogs with slidders.                   <Gilles Caulier - 0.6.3>
-* Build a main popup menu like the Gimp.                           <Gilles Caulier - 0.6.3>
-- Added RedEyes correction.                                        <Gilles Caulier - 0.6.3>
-- Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.6.3>
-- Added Settings dialog.                                           <Gilles Caulier - 0.6.3>
+o Port from imlib1 to imlib2.                                      
+o New BCG and RGB setting dialogs with slidders.                   
+o Build a main popup menu like the Gimp.                           
+o Added RedEyes correction.                                        
+o Added Blur/Sharpen image filters.                                
+o Added Settings dialog.                                           
 o Added progress bar during loadin/save action.
 o Added multithread interface for printing.
 o Added dockable toolbars.
