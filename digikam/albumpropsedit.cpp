@@ -208,6 +208,7 @@ QStringList AlbumPropsEdit::albumCollections() const
         collections.append(currentCollection);
     }
 
+    collections.sort();
     return collections;
 }
 

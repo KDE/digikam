@@ -321,7 +321,7 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
     QStringList collectionList = settings->getAlbumCollectionNames();
     QString collection = album->getCollection();
 
-    if (!collectionList.contains(collection))
+    if (collection.isEmpty() || !collectionList.contains(collection))
         collection = i18n("Uncategorized Albums");
 
     AlbumFolderItem* parentItem = 0;

@@ -109,6 +109,7 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Party"));
     d->albumCollectionNames.append(i18n("Todo"));
     d->albumCollectionNames.append(i18n("Miscellaneous"));
+    d->albumCollectionNames.sort();
 
     d->albumSortOrder = AlbumSettings::ByFolder;
     d->imageSortOrder  = AlbumSettings::ByIName;
@@ -149,7 +150,10 @@ void AlbumSettings::readSettings()
     QStringList collectionList =
         config->readListEntry("Album Collections");
     if (!collectionList.isEmpty())
+    {
+        collectionList.sort();
         d->albumCollectionNames = collectionList;
+    }
 
     d->albumSortOrder =
         AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
