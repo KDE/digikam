@@ -306,8 +306,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image using picker "
-                                                   "color tools to select shadow, middle, and highlight tones for ajust levels point in Red, "
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick a color on the image using the color "
+                                                   "picker tools to select shadow, middle, and highlight tones to adjust the level points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
@@ -319,8 +319,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
     
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
-                                                      "will be will be over-colored. This haven't effect to final rendering."));
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
+                                                      "will be over-colored. This will not have an effect on the final rendering."));
                                                       
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
