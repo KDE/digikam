@@ -194,11 +194,11 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     viewport()->setUpdatesEnabled(false);
 
     for (ThumbItem *it = firstItem(); it ; it=it->nextItem()) 
-        {
+    {
         AlbumIconItem *item = static_cast<AlbumIconItem *>(it);
         item->updateExtraText();
         item->calcRect();
-        }
+    }
 
     setUpdatesEnabled(true);
     viewport()->setUpdatesEnabled(true);
@@ -263,16 +263,12 @@ void AlbumIconView::refreshIcon(AlbumIconItem* item)
 {
     if (!item) return;
 
-//     d->thumbGen->addFile(item->fileItem()->url().path(),
-//                          (int) d->thumbSize.size());
     emit signalSelectionChanged();
 }
 
 
 void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 {
-
-
     QPixmap thumbnail(d->thumbSize.size(), d->thumbSize.size());
     QPainter painter(&thumbnail);
     painter.fillRect(0, 0, d->thumbSize.size(),
@@ -701,7 +697,15 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;    
 
-    (void)new KPropertiesDialog(item->fileItem()->url());
+    KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
+    if (dlg.exec()) {
+        int h = item->height();
+        item->updateExtraText();
+        item->calcRect();
+        item->repaint();
+        if (item->height() != h)
+            rearrangeItems();
+    }
 }
 
 // ---------------------------------------------------------------

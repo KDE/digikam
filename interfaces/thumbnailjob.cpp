@@ -427,44 +427,35 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
 
 void ThumbnailJob::highlight(QImage& thumb)
 {
-    QColor darkColor(48, 48, 48);
-    QColor lightColor(215, 215, 215);
+    QColor darkColor(0, 0, 0);
+    QColor lightColor(255, 255, 255);
 
     int w = thumb.width();
     int h = thumb.height();
 
     // Right
-    for (int y=0; y<h; y++) {
-        if (y > 1 && y < h-2)
-            thumb.setPixel(w-3, y, lightColor.rgb());
+    for (int y=0; y<h; y++) 
         thumb.setPixel(w-1, y, darkColor.rgb());
-        thumb.setPixel(w-2, y, darkColor.rgb());
-    }
+    for (int y=1; y<h-1; y++)
+        thumb.setPixel(w-2, y, lightColor.rgb());
 
     // Bottom
-    for (int x=0; x<w; x++) {
-        if (x > 1 && x < w-2)
-            thumb.setPixel(x, h-3, lightColor.rgb());
+    for (int x=0; x<w; x++) 
         thumb.setPixel(x, h-1, darkColor.rgb());
-        thumb.setPixel(x, h-2, darkColor.rgb());
-    }
+    for (int x=1; x<w-1; x++) 
+        thumb.setPixel(x, h-2, lightColor.rgb());
 
     // Top
-    for (int x=0; x<w; x++) {
-        if (x > 1 && x < w-2)
-            thumb.setPixel(x, 2, lightColor.rgb());
+    for (int x=0; x<w; x++) 
         thumb.setPixel(x, 0, darkColor.rgb());
-        thumb.setPixel(x, 1, darkColor.rgb());
-    }
+    for (int x=1; x<w-1; x++) 
+        thumb.setPixel(x, 1, lightColor.rgb());
 
     // Left
-    for (int y=0; y<h; y++) {
-        if (y > 1 && y < h-2)
-            thumb.setPixel(2, y, lightColor.rgb());
+    for (int y=0; y<h; y++) 
         thumb.setPixel(0, y, darkColor.rgb());
-        thumb.setPixel(1, y, darkColor.rgb());
-    }
-    
+    for (int y=1; y<h-1; y++) 
+        thumb.setPixel(1, y, lightColor.rgb());
 }
 
 
