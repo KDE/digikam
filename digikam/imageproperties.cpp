@@ -133,7 +133,7 @@ void ImageProperties::slotUser1()
     m_currItem  = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currURL   = m_currItem->fileItem()->url();    
     m_currItem->setSelected(true);
-
+    m_view->ensureItemVisible(m_currItem);
     
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
@@ -158,6 +158,7 @@ void ImageProperties::slotUser2()
     m_currItem    = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currURL     = m_currItem->fileItem()->url();    
     m_currItem->setSelected(true);
+    m_view->ensureItemVisible(m_currItem);
     
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);

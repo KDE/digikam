@@ -239,6 +239,7 @@ void ImageDescEdit::slotUser1()
        
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currItem->setSelected(true);    
+    m_view->ensureItemVisible(m_currItem);
     
     slotItemChanged();
 }
@@ -253,6 +254,7 @@ void ImageDescEdit::slotUser2()
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currItem->setSelected(true);
+    m_view->ensureItemVisible(m_currItem);
         
     slotItemChanged();
 }

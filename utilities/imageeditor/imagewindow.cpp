@@ -354,7 +354,10 @@ void ImageWindow::slotLoadCurrent()
     {
         ThumbItem* item = m_view->findItem((*it).url());
         if (item)
+        {
             item->setSelected(true);
+            m_view->ensureItemVisible(item);
+        }
     }
     
     uint index = m_urlList.findIndex(m_urlCurrent);
