@@ -128,27 +128,27 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                         "implugcore_convert_to");
     m_convertToAction->setDelayed(false);
 
-    m_convertToAction->insert( new KAction(i18n("Black-White"), 0,
+    m_convertToAction->insert( new KAction(i18n("Black-White"), "neutralbw", 0,
                                this, SLOT(slotBW()),
                                actionCollection(), "implugcore_bw") );
 
-    m_convertToAction->insert( new KAction(i18n("Brown"), 0,
+    m_convertToAction->insert( new KAction(i18n("Brown"), "browntonal", 0,
                                this, SLOT(slotBrown()),
                                actionCollection(), "implugcore_brown") );
 
-    m_convertToAction->insert( new KAction(i18n("Sepia"), 0,
+    m_convertToAction->insert( new KAction(i18n("Sepia"), "sepia", 0,
                                this, SLOT(slotSepia()),
                                actionCollection(), "implugcore_sepia") );
  
-    m_convertToAction->insert( new KAction(i18n("Cold Tone"), 0,
+    m_convertToAction->insert( new KAction(i18n("Cold Tone"), "coldtone", 0,
                                this, SLOT(slotColdTone()),
                                actionCollection(), "implugcore_coldtone") );
 
-    m_convertToAction->insert( new KAction(i18n("Platinium"), 0,
+    m_convertToAction->insert( new KAction(i18n("Platinium"), "platinium", 0,
                                this, SLOT(slotPlatinium()),
                                actionCollection(), "implugcore_platinium") );
                                
-    m_convertToAction->insert( new KAction(i18n("Selenium"), 0,
+    m_convertToAction->insert( new KAction(i18n("Selenium"), "selenium", 0,
                                this, SLOT(slotSelenium()),
                                actionCollection(), "implugcore_selenium") );
     
