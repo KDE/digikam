@@ -12,3 +12,4 @@ deleting=false
 moving=false
 maxInstances=1
 Description=Digikam tags kioslave
+Class=:local
