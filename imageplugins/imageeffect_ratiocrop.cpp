@@ -116,7 +116,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
     m_useRuleThirdLines = new QCheckBox( i18n("Rule Third Lines"), plainPage());
-    QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can diplay the rule third lines "
+    QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can display the rule third lines "
                                                "who help you to compose your photograph."));
     
     l2->addWidget( m_customLabel1 );
