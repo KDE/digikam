@@ -490,10 +490,11 @@ void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 
 int DigikamKipiInterface::features() const
 {
-    return KIPI::ImagesHasComments    | KIPI::AcceptNewImages |
-           KIPI::AlbumEQDir           | KIPI::AlbumsHaveComments |
-           KIPI::ImageTitlesWritable  | KIPI::ImagesHasTime |
-           KIPI::AlbumsHaveCategory   | KIPI::AlbumsHaveCreationDate;
+    return KIPI::ImagesHasComments          | KIPI::AcceptNewImages        |
+           KIPI::AlbumEQDir                 | KIPI::AlbumsHaveComments     |
+           KIPI::ImageTitlesWritable        | KIPI::ImagesHasTime          |
+           KIPI::AlbumsHaveCategory         | KIPI::AlbumsHaveCreationDate |
+           KIPI::AlbumsUseFirstImagePreview;
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
