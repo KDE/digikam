@@ -324,7 +324,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
     
     // Merge src image with grain using shade coefficient.
 
-    int Shade =32; // This value control the shading pixel effect between original image and grain mask.
+    int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
     i = 0;
         
     for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
