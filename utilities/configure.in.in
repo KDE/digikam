@@ -1,51 +1,51 @@
 #---------------------------------------------------------
-# imlib-detection from kuickshow
+# imlib2-detection
 #---------------------------------------------------------
-# checking for Imlib...
+# checking for Imlib2...
 
-AC_DEFUN([KDE_FIND_IMLIB_CONFIG],
-   [AC_MSG_CHECKING([for imlib-config])
+AC_DEFUN([KDE_FIND_IMLIB2_CONFIG],
+   [AC_MSG_CHECKING([for imlib2-config])
 
-imlib_config_given=NO
-ac_imlib_config=""
+imlib2_config_given=NO
+ac_imlib2_config=""
 
-AC_ARG_WITH(imlib-config,
-        [  --with-imlib-config     directory where \"imlib-config\" lies ],
-        [  ac_imlib_config="$withval/imlib-config"
-           imlib_config_given=yes
+AC_ARG_WITH(imlib2-config,
+        [  --with-imlib2-config     directory where \"imlib2-config\" lies ],
+        [  ac_imlib2_config="$withval/imlib2-config"
+           imlib2_config_given=yes
         ])
 
-if test "$imlib_config_given" = "yes"; then
-  if test ! -r $ac_imlib_config; then
+if test "$imlib2_config_given" = "yes"; then
+  if test ! -r $ac_imlib2_config; then
     AC_MSG_RESULT(wrong file specified)
-    ac_imlib_config=""
+    ac_imlib2_config=""
   else
-    IMLIB_CFLAGS=`$ac_imlib_config --cflags`
-    LIB_IMLIB=`$ac_imlib_config --libs`
-    AC_SUBST(LIB_IMLIB)
-    AC_SUBST(IMLIB_CFLAGS)
-    AC_MSG_RESULT($ac_imlib_config)
+    IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
+    LIB_IMLIB2=`$ac_imlib2_config --libs`
+    AC_SUBST(LIB_IMLIB2)
+    AC_SUBST(IMLIB2_CFLAGS)
+    AC_MSG_RESULT($ac_imlib2_config)
   fi
 else
-  ac_imlib_config=`which imlib-config 2>/dev/null`
-  if test -z "$ac_imlib_config"; then
+  ac_imlib2_config=`which imlib2-config 2>/dev/null`
+  if test -z "$ac_imlib2_config"; then
     AC_MSG_RESULT(no)
   else
-    dummy=`echo "$ac_imlib_config" | grep '/imlib-config'`
+    dummy=`echo "$ac_imlib2_config" | grep '/imlib2-config'`
     if test -z "$dummy"; then
       AC_MSG_RESULT(no)
-      ac_imlib_config=""
+      ac_imlib2_config=""
     else
-      LIB_IMLIB=`$ac_imlib_config --libs`
-      IMLIB_CFLAGS=`$ac_imlib_config --cflags`
-      imlib_config=`echo "$LIB_IMLIB" | grep lImlib`
-      if test -z "$imlib_config"; then
+      LIB_IMLIB2=`$ac_imlib2_config --libs`
+      IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
+      imlib2_config=`echo "$LIB_IMLIB2" | grep lImlib2`
+      if test -z "$imlib2_config"; then
         AC_MSG_RESULT(no)
-        ac_imlib_config=""
+        ac_imlib2_config=""
       else
-        AC_SUBST(LIB_IMLIB)
-        AC_SUBST(IMLIB_CFLAGS)
-        AC_MSG_RESULT($ac_imlib_config)
+        AC_SUBST(LIB_IMLIB2)
+        AC_SUBST(IMLIB2_CFLAGS)
+        AC_MSG_RESULT($ac_imlib2_config)
       fi
     fi
   fi
@@ -53,11 +53,11 @@ fi
 
 ])
 
-dnl Check if Imlib is installed properly
-KDE_FIND_IMLIB_CONFIG
-
-if test -z "$ac_imlib_config"; then
-  AC_MSG_WARN([Imlib 1.x not found.])
+dnl Check if Imlib2 is installed properly
+KDE_FIND_IMLIB2_CONFIG
+     
+if test -z "$ac_imlib2_config"; then
+  AC_MSG_WARN([Imlib 2.x not found.])
   DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 fi
 

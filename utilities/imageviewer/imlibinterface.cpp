@@ -33,7 +33,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <Imlib.h>
+#include <Imlib2.h>
 
 // C Ansi include.
 
@@ -51,7 +51,7 @@ class ImImage
 {
 public:
 
-    ImImage(ImlibData *id, const QString& filename) 
+    ImImage(const QString& filename) 
         {
         w          = 0;
         h          = 0;
@@ -64,17 +64,18 @@ public:
         valid      = false;
 
         file  = filename;
-        idata = id;
-        im = Imlib_load_image(idata, QFile::encodeName(file).data());
+        im = imlib_load_image(QFile::encodeName(file).data());
         
         if (im) 
             {
             valid = true;
-            ow    = im->rgb_width;
-            oh    = im->rgb_height;
+            imlib_context_set_image(im);
+            
+            
             w     = ow;
             h     = oh;
-            Imlib_get_image_modifier(idata, im, &mod);
+            
+            mod = imlib_context_get_color_modifier();
             render();
             }
 
@@ -84,14 +85,19 @@ public:
         {
         if (im) 
             {
-            if (changed)
+            /*if (changed)
                 Imlib_kill_image(idata, im);
             else
-                Imlib_destroy_image(idata, im);
+                Imlib_destroy_image(idata, im);*/
+                
+            imlib_context_set_image(im);
+            imlib_free_image();
             }
         if (pixmap) 
             {
-            Imlib_free_pixmap(idata, pixmap);
+            //Imlib_free_pixmap(idata, pixmap);
+            imlib_context_set_mask(pixmap);
+            imlib_free_pixmap_and_mask(pixmap); 
             }
         }
 
@@ -110,17 +116,28 @@ public:
         if (im && changed) 
             {
             if (pixmap)
-                Imlib_free_pixmap(idata, pixmap);
+                {
+                //Imlib_free_pixmap(idata, pixmap);
+                imlib_context_set_mask(pixmap);
+                imlib_free_pixmap_and_mask(pixmap); 
+                }
             
             pixmap = 0;
-            Imlib_kill_image(idata, im);
-            im = Imlib_load_image(idata,
-                                  QFile::encodeName(file).data());
-            ow = im->rgb_width;
-            oh = im->rgb_height;
+            //Imlib_kill_image(idata, im);
+            
+            imlib_context_set_image(im);
+            imlib_free_image();
+            
+            im = imlib_load_image(QFile::encodeName(file).data());
+            imlib_context_set_image(im);
+            
+            ow = imlib_image_get_width();
+            oh = imlib_image_get_height();
             w  = ow;
             h  = oh;
-            Imlib_get_image_modifier(idata, im, &mod);
+            
+            mod = imlib_context_get_color_modifier();
+            
             changed = false;
             dirty = true;
             }
@@ -131,11 +148,22 @@ public:
         if (!im || !dirty) return;
 
         if (pixmap)
-            Imlib_free_pixmap(idata, pixmap);
+            {
+//            Imlib_free_pixmap(idata, pixmap);
+            imlib_context_set_mask(pixmap);
+            imlib_free_pixmap_and_mask(pixmap); 
+            }
+            
         pixmap = 0;
-
-        Imlib_render(idata, im, w, h);
-        pixmap = Imlib_move_image(idata, im);
+        
+        //Imlib_render(idata, im, w, h);
+        
+        imlib_context_set_image(im);
+        imlib_render_image_on_drawable_at_size(0, 0, w, h);
+        
+        //pixmap = Imlib_move_image(idata, im);
+        
+        imlib_render_pixmaps_for_whole_image(&pixmap, &mask);
         dirty  = false;
         }
 
@@ -179,10 +207,19 @@ public:
         {
         if (!im) return;
 
-        Imlib_rotate_image(idata, im, -1);
-        Imlib_flip_image_horizontal(idata, im);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+        //Imlib_rotate_image(idata, im, -1);
+        //Imlib_flip_image_horizontal(idata, im);
+        
+        imlib_context_set_image(im);
+        imlib_image_orientate(-1);
+        imlib_image_flip_horizontal();
+        
+        //ow  = im->rgb_width;
+        //oh = im->rgb_height;
+        
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+        
         changed = true;
         dirty = true;
         }
@@ -191,10 +228,19 @@ public:
         {
         if (!im) return;
 
-        Imlib_flip_image_horizontal(idata, im);
-        Imlib_flip_image_vertical(idata, im);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+//        Imlib_flip_image_horizontal(idata, im);
+  //      Imlib_flip_image_vertical(idata, im);
+  
+        imlib_context_set_image(im);
+        imlib_image_flip_horizontal();
+        imlib_image_flip_vertical();
+
+//        ow  = im->rgb_width;
+//        oh = im->rgb_height;
+
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+        
         changed = true;
         dirty = true;
         }
@@ -203,10 +249,18 @@ public:
         {
         if (!im) return;
 
-        Imlib_rotate_image(idata, im, -1);
-        Imlib_flip_image_vertical(idata, im);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+        //Imlib_rotate_image(idata, im, -1);
+        //Imlib_flip_image_vertical(idata, im);
+        
+        imlib_context_set_image(im);
+        imlib_image_orientate(-1);
+        imlib_image_flip_vertical();
+
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+                
+        //ow  = im->rgb_width;
+        //oh = im->rgb_height;
         changed = true;
         dirty = true;
         }
@@ -215,9 +269,17 @@ public:
         {
         if (!im) return;
 
-        Imlib_flip_image_horizontal(idata, im);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+        //Imlib_flip_image_horizontal(idata, im);
+        
+        imlib_context_set_image(im);
+        imlib_image_flip_horizontal();
+        
+//        ow  = im->rgb_width;
+//        oh = im->rgb_height;
+
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+
         changed = true;
         dirty = true;
         }
@@ -226,9 +288,17 @@ public:
         {
         if (!im) return;
 
-        Imlib_flip_image_vertical(idata, im);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+        //Imlib_flip_image_vertical(idata, im);
+        
+        imlib_context_set_image(im);
+        imlib_image_flip_vertical();
+        
+        //ow  = im->rgb_width;
+        //oh = im->rgb_height;
+        
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+        
         changed = true;
         dirty = true;
         }
@@ -237,9 +307,17 @@ public:
         {
         if (!im) return;
 
-        Imlib_crop_image(idata, im, x, y, w, h);
-        ow  = im->rgb_width;
-        oh = im->rgb_height;
+//        Imlib_crop_image(idata, im, x, y, w, h);
+
+        imlib_context_set_image(im);
+        im = imlib_create_cropped_image(x, y, w, h);
+        
+        //ow  = im->rgb_width;
+        //oh = im->rgb_height;
+        
+        ow = imlib_image_get_width();
+        oh = imlib_image_get_height();
+        
         changed = true;
         dirty = true;
         }
@@ -248,6 +326,8 @@ public:
         {
         if (!im) return;
 
+        //FIX
+        /*
         int nval = mod.gamma + val;
         if (nval <= 512 && nval >= 0) 
             {
@@ -255,12 +335,14 @@ public:
             Imlib_set_image_modifier(idata, im, &mod);
             changed = true;
             dirty = true;
-            }
+            }*/
         }
 
     void changeBrightness(int val)  
         {
         if (!im) return;
+        //FIX
+        /*
 
         int nval = mod.brightness + val;
         if (nval <= 512 && nval >= 0) 
@@ -269,13 +351,15 @@ public:
             Imlib_set_image_modifier(idata, im, &mod);
             changed = true;
             dirty = true;
-            }
+            }*/
         }
 
     void changeContrast(int val)  
         {
         if (!im) return;
 
+        //FIX
+        /*
         int nval = mod.contrast + val;
         if (nval <= 512 && nval >= 0) 
             {
@@ -283,7 +367,7 @@ public:
             Imlib_set_image_modifier(idata, im, &mod);
             changed = true;
             dirty = true;
-            }
+            }*/
         }
 
     int save(const QString& saveFile) 
@@ -313,8 +397,12 @@ private:
     int saveAction(const QString& saveFile) 
         {
         // Apply the modifiers to the image
-        Imlib_apply_modifiers_to_rgb(idata, im);
-
+        
+        //Imlib_apply_modifiers_to_rgb(idata, im);
+        
+        imlib_context_set_image(im);
+        imlib_apply_color_modifier(); 
+        
         QFileInfo fileInfo(saveFile);
         QString ext = fileInfo.extension(false);
         int result;
@@ -331,29 +419,41 @@ private:
             {
             // Always save at 100 % quality for jpeg files
             // TODO: maybe change this later
-            ImlibSaveInfo saveInfo;
-            saveInfo.quality = 256;
-        
-            result =
-                Imlib_save_image(idata, im,
-                                 QFile::encodeName(saveFile).data(),
-                                 &saveInfo);
+            
+            //ImlibSaveInfo saveInfo;
+            //saveInfo.quality = 256;
+            
+            Imlib_Load_Error valRet;
+            imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &valRet);
+            result = (int)valRet;
             }
 
         // Now kill the image and re-read it from the saved file
         
         if (pixmap)
-            Imlib_free_pixmap(idata, pixmap);
+            {
+            //Imlib_free_pixmap(idata, pixmap);
+            
+            imlib_context_set_mask(pixmap);
+            imlib_free_pixmap_and_mask(pixmap); 
+            }
         
         pixmap = 0;
-        Imlib_kill_image(idata, im);
-        im = Imlib_load_image(idata,
-                              QFile::encodeName(saveFile).data());
-        ow = im->rgb_width;
-        oh = im->rgb_height;
+//        Imlib_kill_image(idata, im);
+
+        imlib_context_set_image(im);
+        imlib_free_image();
+        
+        im = imlib_load_image(QFile::encodeName(saveFile).data());
+        imlib_context_set_image(im);
+        
+        ow    = imlib_image_get_width();
+        oh    = imlib_image_get_height();
         w  = ow;
         h  = oh;
-        Imlib_get_image_modifier(idata, im, &mod);
+
+//        Imlib_get_image_modifier(idata, im, &mod);
+        mod = imlib_context_get_color_modifier();
 
         return result;
         }
@@ -366,10 +466,11 @@ private:
         int                 w;
 
         tif = TIFFOpen(QFile::encodeName(saveFile).data(), "w");
+        
         if (tif)
             {
-            TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, im->rgb_width);
-            TIFFSetField(tif, TIFFTAG_IMAGELENGTH, im->rgb_height);
+            TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, imlib_image_get_width());
+            TIFFSetField(tif, TIFFTAG_IMAGELENGTH, imlib_image_get_height());
             TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
             TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
             TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -385,9 +486,10 @@ private:
                     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
                                  TIFFDefaultStripSize(tif, 0));
                 
-                    for (y = 0; y < im->rgb_height; y++)
+                    for (y = 0 ; y < imlib_image_get_height() ; y++)
                         {
-                        data = im->rgb_data + (y * im->rgb_width * 3);
+                        //data = im->rgb_data + (y * im->rgb_width * 3);
+                        //data = im->rgb_data + (y * imlib_image_get_width() * 3);   //FIXME
                         TIFFWriteScanline(tif, data, y, 0);
                         }
                     }
@@ -398,19 +500,19 @@ private:
         return 0;  
         }
     
-    ImlibData          *idata;
-    ImlibImage         *im;
-    ImlibColorModifier  mod;
-    Pixmap              pixmap;
-    int                 w;
-    int                 h;
-    int                 ow;
-    int                 oh;
-    bool                changed;
-    bool                dirty;
-    bool                valid;
-    QString             file;
-    
+    //ImlibData          *idata;
+    Imlib_Image           im;
+    Imlib_Color_Modifier  mod;
+    Pixmap                pixmap;
+    Pixmap                mask;
+    int                   w;
+    int                   h;
+    int                   ow;
+    int                   oh;
+    bool                  changed;
+    bool                  dirty;
+    bool                  valid;
+    QString               file;
 };
 
 // ----------------------------------------------------------------
@@ -419,10 +521,9 @@ class ImCache
 {
 public:
 
-    ImCache(ImlibData* id, unsigned int size) 
+    ImCache(unsigned int size) 
         {
         cache.setAutoDelete(true);
-        idata = id;
         cacheSize = size;
         current = 0;
         }
@@ -440,7 +541,7 @@ public:
                 cache.removeFirst();
             }
             
-        ImImage *im = new ImImage(idata, file);
+        ImImage *im = new ImImage(file);
 
         cache.append(im);
 
@@ -485,7 +586,6 @@ private:
 
     QPtrList<ImImage>  cache;
     unsigned int       cacheSize;
-    ImlibData         *idata;
     ImImage           *current;
     
 };
@@ -496,13 +596,14 @@ class ImlibInterfacePrivate
 {
 public:
     
-    ImlibData *idata;
     Display   *display;
     Window     win;
     GC         gc;
+    Visual    *vis;
+    Colormap   cm;
+    
     QString    file;
     ImCache   *cache;
-
 };
 
 ImlibInterface::ImlibInterface(QWidget *parent)
@@ -511,14 +612,20 @@ ImlibInterface::ImlibInterface(QWidget *parent)
 
     d->display = parent->x11Display();
     d->win     = parent->handle();
-    d->gc = XCreateGC(parent->x11Display(),
-                      RootWindow(parent->x11Display(),
-                                 parent->x11Screen()),
-                      0, 0);
+    d->gc      = XCreateGC(parent->x11Display(),
+                           RootWindow(parent->x11Display(),
+                           parent->x11Screen()),
+                           0, 0);
 
     // Fix this parameters for now
     // TODO: Provide options for changing these settings
-    ImlibInitParams par;
+    
+    uint maxcache       = 10240;
+    
+    d->vis   = DefaultVisual(d->display, DefaultScreen(d->display));
+    d->cm    = DefaultColormap(d->display, DefaultScreen(d->display));
+    
+    /* ImlibInitParams par;
     par.flags = ( PARAMS_REMAP |
                   PARAMS_FASTRENDER | PARAMS_HIQUALITY |
                   PARAMS_DITHER |
@@ -527,12 +634,24 @@ ImlibInterface::ImlibInterface(QWidget *parent)
     par.fastrender      = 1;
     par.hiquality       = 1;
     par.dither          = 1;
-    uint maxcache       = 10240;
     par.imagecachesize  = maxcache * 1024;
     par.pixmapcachesize = maxcache * 1024;
-    d->idata = Imlib_init_with_params(d->display, &par );
-    
-    d->cache = new ImCache(d->idata, 4);
+    d->idata = Imlib_init_with_params(d->display, &par );*/
+   
+    /* set our cache to maxcache (Mb) so it doesn't have to go hit the disk as long as */
+    /* the images we use use less than maxcache of RAM (that is uncompressed) */ 
+    imlib_set_cache_size(maxcache * 1024);
+    /* set the maximum number of colors to allocate for 8bpp and less to 128 */
+    imlib_set_color_usage(128);
+    /* dither for depths < 24bpp */
+    imlib_context_set_dither(1);
+    /* set the display , visual, colormap and drawable we are using */
+    imlib_context_set_display(d->display);
+    imlib_context_set_visual(d->vis);
+    imlib_context_set_colormap(d->cm);
+    imlib_context_set_drawable(d->win);
+   
+    d->cache = new ImCache(4);
 }
 
 

@@ -1,10 +1,10 @@
 dnl Put here things to be done at the very end - telling users
 dnl about additional packages to install.
 
-if test -z "$ac_imlib_config"; then
+if test -z "$ac_imlib2_config"; then
   echo ""
-  echo "DigiKam needs imlib-config. You need to install Imlib 1.x, e.g. from"
-  echo "http://freshmeat.net/redir/imlib/4385/url_tgz/imlib-1.9.10.tar.gz"
+  echo "DigiKam needs imlib2-config. You need to install Imlib 2.x, e.g. from"
+  echo "http://prdownloads.sourceforge.net/enlightenment/imlib2-1.0.6.tar.gz"
   echo ""
 fi
 
