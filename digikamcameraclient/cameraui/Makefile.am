@@ -19,7 +19,7 @@ INCLUDES= \
 	-I$(top_srcdir)/digikam/digikam \
 	-I$(top_srcdir)/digikam/interfaces \
 	-I$(top_srcdir)/digikam/utilities/kexif \
-	-I$(top_srcdir)/digikam/utilities/imageviewer \
+	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	$(GPHOTO_CFLAGS) $(all_includes)
 
 

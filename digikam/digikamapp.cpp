@@ -66,6 +66,7 @@
 #include "digikampluginmanager.h"
 #endif
 
+#include "imagepluginloader.h"
  
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 {
@@ -324,11 +325,11 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
     
-    #ifdef HAVE_KIPI    // For KIPI plugins.
+#ifdef HAVE_KIPI    // For KIPI plugins.
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
-    #else               // For DigikamPlugins.
+#else               // For DigikamPlugins.
     createGUI();
-    #endif
+#endif
     
     // Initialize Actions ---------------------------------------
     mDeleteAction->setEnabled(false);
@@ -440,27 +441,27 @@ void DigikamApp::slotSetup()
     connect(m_setup, SIGNAL(okClicked()),
             this,  SLOT(slotSetupChanged()));
     
-    #ifdef HAVE_KIPI    // KIPI plugins.
+#ifdef HAVE_KIPI    // KIPI plugins.
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     m_setup->pluginsPage_->initPlugins((int)list.count());
-    #else   // DigikamPlugins        
+#else   // DigikamPlugins        
     m_setup->pluginsPage_->initPlugins(pluginManager_->availablePluginList(),
                                        pluginManager_->loadedPluginList());
-    #endif                                   
+#endif                                   
     
     m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
-    #ifdef HAVE_KIPI    // KIPI plugins.
+#ifdef HAVE_KIPI    // KIPI plugins.
     KipiPluginLoader_->loadPlugins();  
-    #else               // DigikamPlugins 
+#else               // DigikamPlugins 
     
     // Get the plugins list who must be loaded for the instance.
     QStringList pluginsList = m_setup->pluginsPage_->getPluginList();
     m_config->writeEntry( "Digikam Plugins List", pluginsList );
-    #endif     
+#endif     
     
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
@@ -472,7 +473,7 @@ void DigikamApp::slotEditKeys()
     KKeyDialog* dialog = new KKeyDialog();
     dialog->insert( actionCollection(), i18n( "General" ) );
     
-    #ifdef HAVE_KIPI    // KIPI plugins.
+#ifdef HAVE_KIPI    // KIPI plugins.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
@@ -482,7 +483,7 @@ void DigikamApp::slotEditKeys()
         dialog->insert( plugin->actionCollection(), (*it)->comment );
         }
     
-    #endif 
+#endif 
     
     dialog->configure();
 
@@ -525,7 +526,7 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::loadPlugins()
 {
-    #ifdef HAVE_KIPI    // Loading KIPI plugins.
+#ifdef HAVE_KIPI    // Loading KIPI plugins.
    
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
@@ -538,7 +539,7 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_->loadPlugins();                             
     
-    #else   // Loading DigikamPlugins
+#else   // Loading DigikamPlugins
     
     pluginManager_ = new DigikamPluginManager(this);
     
@@ -547,7 +548,9 @@ void DigikamApp::loadPlugins()
     else 
        pluginManager_->loadPlugins(m_config->readListEntry("Digikam Plugins List"));
     
-    #endif    
+#endif    
+
+    new ImagePluginLoader(this);
 }
 
 void DigikamApp::slotKipiPluginPlug()

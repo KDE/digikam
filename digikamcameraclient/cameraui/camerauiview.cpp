@@ -60,7 +60,7 @@
 #include "camerauiview.h"
 #include "dmessagebox.h"
 
-#include "imageview.h"
+#include "imagewindow.h"
 
 CameraUIView::CameraUIView(QWidget* parent,
                            const CameraType& ctype)
@@ -319,8 +319,17 @@ void CameraUIView::cameraDeletedAllItems()
 
 void CameraUIView::cameraOpenedItem(const QString& fileName)
 {
-    ImageView *imgView = new ImageView(0, KURL(fileName), true);
-    imgView->show();
+    KURL::List urlList;
+    KURL url(fileName);
+    urlList.append(url);
+    
+    ImageWindow *imview = ImageWindow::instance();
+    imview->loadURL(urlList, url);
+    if (imview->isHidden())
+        imview->show();
+    imview->raise();
+    //ImageView *imgView = new ImageView(0, KURL(fileName), true);
+    //imgView->show();
 }
 
 void CameraUIView::cameraOpenedItem(const QString& fileName,

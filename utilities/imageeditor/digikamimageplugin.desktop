@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Digikam/ImagePlugin
+X-KDE-DerivedName=Digikam ImagePlugin
+Comment=A Digikam Image Plugin

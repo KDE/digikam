@@ -77,7 +77,7 @@
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
-#include "imageview.h"
+#include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "digikampluginmanager.h"
 
@@ -92,12 +92,11 @@ class AlbumIconViewPrivate
 {
 public:
 
-    void init() 
-        {
+    void init() {
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
-        }
+    }
     
     KDirLister          *imageLister;
     Digikam::AlbumInfo  *currentAlbum;
@@ -663,34 +662,47 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     
     if (!item) return;
     
-    QString currentFileExtension = item->fileItem()->url().fileName().section( '.', -1 );
-    QString imagefilter = settings->getImageFileFilter().lower() + settings->getImageFileFilter().upper();
+    QString currentFileExtension =
+        item->fileItem()->url().fileName().section( '.', -1 );
+    QString imagefilter = settings->getImageFileFilter().lower() +
+                          settings->getImageFileFilter().upper();
 
-    if ( imagefilter.find(currentFileExtension) == -1 )     // If the current item isn't an image file.
-       {
+    // If the current item isn't an image file.
+    if ( imagefilter.find(currentFileExtension) == -1 )     
+    {
        KTrader::OfferList offers = KTrader::self()->query(item->fileItem()->mimetype(),
                                                           "Type == 'Application'");          
+
+       if (offers.isEmpty())
+           return;
        
        KService::Ptr ptr = offers.first();
-       KRun::run(*ptr, item->fileItem()->url());     // Run the dedicaced app for to show the item.
+       // Run the dedicated app to show the item.
+       KRun::run(*ptr, item->fileItem()->url());     
        return;                                                  
-       }
+    }
 
     // Run Digikam ImageViewer with all image files in the current Album.
     
     KURL::List urlList;
 
     for (ThumbItem *it = firstItem() ; it ; it = it->nextItem()) 
-        {
+    {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
         QString fileExtension = iconItem->fileItem()->url().fileName().section( '.', -1 );
         
         if ( imagefilter.find(fileExtension) != -1 )
-           urlList.append(iconItem->fileItem()->url());
-        }
-               
-    ImageView *view = new ImageView(0, urlList, item->fileItem()->url());
-    view->show();
+            urlList.append(iconItem->fileItem()->url());
+    }
+
+    //ImageView *view = new ImageView(0, urlList, item->fileItem()->url());
+    //view->show();
+
+    ImageWindow *imview = ImageWindow::instance();
+    imview->loadURL(urlList, item->fileItem()->url());
+    if (imview->isHidden())
+        imview->show();
+    imview->raise();
 }
 
 void AlbumIconView::slotProperties(AlbumIconItem* item)

@@ -1,0 +1,28 @@
+METASOURCES = AUTO
+
+noinst_LTLIBRARIES = libimageeditor.la
+
+libimageeditor_la_SOURCES = guiclient.cpp  guifactory.cpp \
+			imlibinterface.cpp imageiface.cpp \
+			imagewidget.cpp imageplugin.cpp \
+			imagepluginloader.cpp \
+			imagewindow.cpp imageguiclient.cpp \
+			canvas.cpp imageresizedlg.cpp
+
+libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB2)
+
+INCLUDES= -I$(top_srcdir)/digikam/digikam \
+	  -I$(top_srcdir)/digikam/interfaces \
+	  -I$(top_srcdir)/digikam/utilities/kexif \
+	  $(IMLIB2_CFLAGS) $(all_includes) 
+
+digikaminclude_HEADERS = guiclient.h guifactory.h imageiface.h \
+			imagewidget.h imageplugin.h
+
+digikamincludedir = $(includedir)/digikam
+
+digikamimageeditoricondir = $(kde_datadir)/digikam/icons
+digikamimageeditoricon_ICON = AUTO
+
+kde_servicetypes_DATA = digikamimageplugin.desktop
+

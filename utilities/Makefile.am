@@ -1,1 +1,1 @@
-SUBDIRS = imageviewer splashscreen setup 
+SUBDIRS = imageeditor splashscreen setup 
