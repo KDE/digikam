@@ -117,6 +117,11 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     slotItemChanged();
 
     resize(configDialogSize(*(kapp->config()),"Image Description Dialog"));
+
+    m_commentsEdit->installEventFilter(this);
+    m_tagsView->installEventFilter(this);
+    
+    m_commentsEdit->setFocus();
 }
 
 ImageDescEdit::~ImageDescEdit()
@@ -129,6 +134,42 @@ ImageDescEdit::~ImageDescEdit()
 
     saveDialogSize(*(kapp->config()), "Image Description Dialog");
 }
+
+bool ImageDescEdit::eventFilter(QObject *, QEvent *e)
+{
+    if ( e->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *k = (QKeyEvent *)e;
+        if (k->state() == Qt::ControlButton &&
+            (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
+        {
+            slotApply();
+            AlbumIconItem* item =
+                dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
+            if (item)
+            {
+                slotUser1();
+            }
+            return true;
+        }
+        else if (k->state() == Qt::ShiftButton &&
+                 (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
+        {
+            slotApply();
+            AlbumIconItem* item =
+                dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
+            if (item)
+            {
+                slotUser2();
+            }
+            return true;
+        }
+        
+        return false;
+    }
+    return false;
+}
+
 
 void ImageDescEdit::populateTags()
 {

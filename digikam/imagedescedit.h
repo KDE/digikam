@@ -30,6 +30,10 @@ public:
 
     static bool editDescription(AlbumIconView* view, AlbumIconItem* currItem);
 
+protected:
+
+    bool eventFilter(QObject *o, QEvent *e);
+
 private:
 
     AlbumIconView *m_view;
