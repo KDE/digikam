@@ -111,59 +111,32 @@ void DigikamImageInfo::setDescription( const QString& description )
 {
     if (album_)
        {
-           album_->openDB();
-           album_->setItemComments(imageName_, description);
-           album_->closeDB();    
+       album_->openDB();
+       album_->setItemComments(imageName_, description);
+       album_->closeDB();    
 
-           // store as JPEG Exif comment
-           AlbumSettings *settings = AlbumSettings::instance();
+       // store as JPEG Exif comment
+           
+       AlbumSettings *settings = AlbumSettings::instance();
 
-           QString fileName(imageUrl_);
-           KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
+       QString fileName(imageUrl_);
+       KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
 
-           if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
+       if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
            {
-               // set Jpeg comment
-               if (metaInfo.containsGroup("Jpeg EXIF Data"))
+           // set Jpeg comment
+               
+           if (metaInfo.containsGroup("Jpeg EXIF Data"))
                {
-                   metaInfo["Jpeg EXIF Data"].item("Comment").setValue(description);
-                   metaInfo.applyChanges();
+               metaInfo["Jpeg EXIF Data"].item("Comment").setValue(description);
+               metaInfo.applyChanges();
                }
 
-               // set EXIF UserComment
-               KExifUtils::writeComment(fileName,description);
+           // set EXIF UserComment
+              
+           KExifUtils::writeComment(fileName,description);
            }
-
        }
-}
-
-QMap<QString,QVariant> DigikamImageInfo::attributes()
-{
-    QMap<QString,QVariant> res;
-    
-    // TODO !
-    
-    return res;
-}
-
-void DigikamImageInfo::clearAttributes()
-{
-    // TODO !
-}
-
-void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
-{
-    // TODO !
-}
-
-int DigikamImageInfo::angle()
-{
-    // TODO !
-}
-
-void DigikamImageInfo::setAngle( int angle )
-{
-    // TODO !
 }
 
 void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
@@ -219,6 +192,42 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
     if( utime(imageUrl_.ascii(), t ) != 0 )
        kdWarning() << "DigikamImageInfo::setTime() : Cannot change image file date and time !!!" << endl;
 }
+
+void DigikamImageInfo::cloneData( ImageInfoShared* other )
+{
+    setDescription( other->description() );
+    setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
+}
+
+QMap<QString,QVariant> DigikamImageInfo::attributes()
+{
+    QMap<QString,QVariant> res;
+    
+    // TODO !
+    
+    return res;
+}
+
+void DigikamImageInfo::clearAttributes()
+{
+    // TODO !
+}
+
+void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
+{
+    // TODO !
+}
+
+int DigikamImageInfo::angle()
+{
+    // TODO !
+}
+
+void DigikamImageInfo::setAngle( int angle )
+{
+    // TODO !
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -283,7 +292,7 @@ KURL::List DigikamImageCollection::images()
 
               album_->closeDB();        
           
-	      if ( items.isEmpty() == true )
+              if ( items.isEmpty() == true )
                  kdWarning() << "DigikamImageCollection::images()::AllAlbumItems : images list is empty!!!" << endl;
 
               break;
@@ -295,7 +304,7 @@ KURL::List DigikamImageCollection::images()
               items = album_->getSelectedItemsPath();
               album_->closeDB();        
 
-	      if ( items.isEmpty() == true )
+           if ( items.isEmpty() == true )
                  kdWarning() << "DigikamImageCollection::images()::AlbumItemsSelection : images list is empty!!!" << endl;
 
               break;
@@ -318,6 +327,11 @@ KURL DigikamImageCollection::path()
     return commonRoot();
 }
 
+KURL DigikamImageCollection::uploadPath()
+{
+    return commonRoot();
+}
+
 KURL DigikamImageCollection::commonRoot()
 {
     KURL url;
@@ -330,15 +344,12 @@ KURL DigikamImageCollection::commonRoot()
     return url;
 }
 
-KURL DigikamImageCollection::uploadPath()
-{
-    return commonRoot();
-}
-
 KURL DigikamImageCollection::uploadRoot()
 {
-    KURL libraryPath(Digikam::AlbumManager::instance()->getLibraryPath());
-    return (libraryPath);
+    KURL url;
+    
+    url.setPath( Digikam::AlbumManager::instance()->getLibraryPath() );
+    return (url);
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -454,8 +465,19 @@ int DigikamKipiInterface::features() const
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
+    m_sourceAlbum = 0;
+    m_targetAlbum = 0;
     m_sourceAlbum = albumManager_->findAlbum(url.path().section('/', -2, -2));
+    
+    if ( m_sourceAlbum ) return true;    // Do nothing because the image is already in the Albums library.
+    
     m_targetAlbum = albumManager_->currentAlbum();
+    
+    if ( m_targetAlbum ) 
+       {
+       errmsg = i18n("No current Album selected!");
+       return false;
+       }
     
     m_imageFileName = url.path().section('/', -1);                            
         

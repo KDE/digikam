@@ -74,15 +74,17 @@ public:
     virtual QString description();
     virtual void setDescription( const QString& );
 
-    virtual QMap<QString,QVariant> attributes();
+    virtual void cloneData( ImageInfoShared* other );
+
+    virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
+    
+    virtual QMap<QString,QVariant> attributes();                    
     virtual void clearAttributes();
     virtual void addAttributes( const QMap<QString,QVariant>& );
     
-    virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
-    
     virtual int DigikamImageInfo::angle();
     virtual void setAngle( int angle );
-       
+    
 private:
     QString             imageName_;
     QString             imageUrl_;
