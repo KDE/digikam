@@ -130,12 +130,12 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         actionCollection(),
                                         "flip_vertical") );
 
-    m_fileproperties = new KAction(i18n("View Image properties..."), "ImageProperties",
+    m_fileproperties = new KAction(i18n("File Properties..."), 0,
                                    ALT+Key_Return, 
                                    this, SIGNAL(signalFileProperties()),
                                    actionCollection(), "file_properties");
 
-    m_exifinfo = new KAction(i18n("View Exif Information..."), "ExifInfo",
+    m_exifinfo = new KAction(i18n("Exif Information..."), "ExifInfo",
                              Key_F6, 
                              this, SIGNAL(signalExifInfo()),
                              actionCollection(), "exif_info");
@@ -167,13 +167,13 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_saveas/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_restore/ ");
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&File/ /Action/comments_edit/ ");
+    guiDef.append("MenuBar/Menu/&File/ /Action/exif_info/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/file_properties/ ");
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
     
-    guiDef.append("MenuBar/Menu/&Image/ /Action/exif_info/ ");
-    guiDef.append("MenuBar/Menu/&Image/ /Action/comments_edit/ ");
-    guiDef.append("MenuBar/Menu/&Image/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/Fi&x/ /DefineGroup/Fix/ ");
     
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_rotate/ ");
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_flip/ ");
@@ -209,7 +209,6 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("PopupMenu/Action/imageview_next/ ");
     guiDef.append("PopupMenu/Separator/ / ");
     guiDef.append("PopupMenu/Action/imageview_rotate/ ");
-    guiDef.append("PopupMenu/Action/imageview_flip/ ");
     guiDef.append("PopupMenu/Action/imageview_crop/ ");
 
     return guiDef;

@@ -58,7 +58,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
     
-    new KAction(i18n("Colors balance..."), 0, 
+    new KAction(i18n("Color Balance..."), 0, 
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
     
@@ -90,15 +90,17 @@ QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
 
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_blur/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sharpen/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_redeye/ ");
 
-    guiDef.append("MenuBar/Menu/&Image/Generic/Action/implugcore_bcg/ ");
-    guiDef.append("MenuBar/Menu/&Image/Generic/Action/implugcore_rgb/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_bcg/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_rgb/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_sharpen/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
 
     return guiDef;
 }
