@@ -27,10 +27,11 @@
 #include <kdialogbase.h>
 
 class QPushButton;
+class QSpinBox;
+class QSlider;
 
-class KDoubleNumInput;
-class KIntNumInput;
 class KProgress;
+class KDoubleSpinBox;
 
 namespace Digikam
 {
@@ -59,10 +60,13 @@ private:
     QWidget         *m_parent;
     QPushButton     *m_helpButton;
     
-    KDoubleNumInput *m_radiusInput;
-    KDoubleNumInput *m_amountInput;
+    KDoubleSpinBox  *m_radiusInput;
+    KDoubleSpinBox  *m_amountInput;
+    QSpinBox        *m_thresholdInput;
     
-    KIntNumInput    *m_thresholdInput;
+    QSlider         *m_radiusSlider;
+    QSlider         *m_amountSlider;
+    QSlider         *m_thresholdSlider;
     
     KProgress       *m_progressBar;
         
@@ -87,6 +91,11 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotCancel();
+    
+    void slotSliderRadiusChanged(int v);
+    void slotSpinBoxRadiusChanged(double v);
+    void slotSliderAmountChanged(int v);
+    void slotSpinBoxAmountChanged(double v);
 };
 
 }  // NameSpace DigikamUnsharpFilterImagesPlugin

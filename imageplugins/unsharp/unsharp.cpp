@@ -46,10 +46,12 @@
 #include <qtooltip.h>
 #include <qpushbutton.h>
 #include <qimage.h>
+#include <qslider.h>
+#include <qspinbox.h>
+#include <qstring.h>
 
 // KDE includes.
 
-#include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -59,6 +61,7 @@
 #include <kpopupmenu.h>
 #include <kimageeffect.h>
 #include <kprogress.h>
+#include <knuminput.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -78,6 +81,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset values")),
                  m_parent(parent)
 {
+    QString whatsThis;
+    
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
     m_cancel = false;
     
@@ -119,38 +124,67 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
-    m_radiusInput = new KDoubleNumInput(plainPage());
-    m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(0.1, 120.0, 0.1, true);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
-                                         "1 and above determine the blur matrix radius "
-                                         "that determines how much to blur the image."));
+    
+    m_radiusSlider = new QSlider(1, 1200, 1, 50, Qt::Horizontal, plainPage(), "m_radiusSlider");
+    m_radiusSlider->setTickmarks(QSlider::Below);
+    m_radiusSlider->setTickInterval(50);
+    m_radiusSlider->setTracking ( false );
+    
+    m_radiusInput = new KDoubleSpinBox(0.1, 120.0, 0.1, 5.0, 1, plainPage(), "m_radiusInput");
+    whatsThis = i18n("<p>A radius of 0 has no effect, "
+                     "1 and above determine the blur matrix radius "
+                     "that determines how much to blur the image.");
+    
+    QWhatsThis::add( m_radiusInput, whatsThis);
+    QWhatsThis::add( m_radiusSlider, whatsThis);
+
     hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_radiusInput, 5);
+    hlay2->addWidget(m_radiusSlider, 3);
+    hlay2->addWidget(m_radiusInput, 1);
     
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Amount:"), plainPage());
-    m_amountInput = new KDoubleNumInput(plainPage());
-    m_amountInput->setPrecision(1);
-    m_amountInput->setRange(0.0, 5.0, 0.1, true);
-    QWhatsThis::add( m_amountInput, i18n("<p>The percentage of the difference between the "
-                                         "original and the blur image that is added back "      
-                                         "into the original."));
+    
+    m_amountSlider = new QSlider(0, 50, 1, 5, Qt::Horizontal, plainPage(), "m_amountSlider");
+    m_amountSlider->setTickmarks(QSlider::Below);
+    m_amountSlider->setTickInterval(5);
+    m_amountSlider->setTracking ( false );
+    
+    m_amountInput = new KDoubleSpinBox(0.0, 5.0, 0.1, 0.5, 1, plainPage(), "m_amountInput");
+    whatsThis = i18n("<p>The percentage of the difference between the "
+                     "original and the blur image that is added back "      
+                     "into the original.");
+    
+    QWhatsThis::add( m_amountSlider, whatsThis);
+    QWhatsThis::add( m_amountInput, whatsThis);
+                 
     hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_amountInput, 5);
+    hlay3->addWidget(m_amountSlider, 3);
+    hlay3->addWidget(m_amountInput, 1);
 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Threshold:"), plainPage());
-    m_thresholdInput = new KIntNumInput(plainPage());
-    m_thresholdInput->setRange(0, 255, 1, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum RGB value, "
-                                            "needed to apply the difference amount."));
+    
+    m_thresholdSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_thresholdSlider");
+    m_thresholdSlider->setTickmarks(QSlider::Below);
+    m_thresholdSlider->setTickInterval(20);
+    m_thresholdSlider->setTracking ( false );  
+    
+    m_thresholdInput = new QSpinBox(0, 255, 1, plainPage(), "m_thresholdInput");
+    
+    whatsThis = i18n("<p>The threshold, as a fraction of the maximum RGB value, "
+                     "needed to apply the difference amount.");
+    
+    QWhatsThis::add( m_thresholdInput, whatsThis);
+    QWhatsThis::add( m_thresholdSlider, whatsThis);                    
+    
     hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_thresholdInput, 5);
+    hlay4->addWidget(m_thresholdSlider, 3);
+    hlay4->addWidget(m_thresholdInput, 1);
 
     // -------------------------------------------------------------
     
@@ -168,18 +202,58 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
+    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderRadiusChanged(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSpinBoxRadiusChanged(double)));            
     connect(m_radiusInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotEffect()));   
 
+    connect(m_amountSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderAmountChanged(int)));
+    connect(m_amountInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSpinBoxAmountChanged(double)));            
     connect(m_amountInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
 
+    connect(m_thresholdSlider, SIGNAL(valueChanged(int)),
+            m_thresholdInput, SLOT(setValue(int)));
+    connect(m_thresholdInput, SIGNAL(valueChanged(int)),
+            m_thresholdSlider, SLOT(setValue(int)));
     connect(m_thresholdInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                                                
 }
 
 UnsharpDialog::~UnsharpDialog()
 {
+}
+
+void UnsharpDialog::slotSliderRadiusChanged(int v)
+{
+    blockSignals(true);
+    m_radiusInput->setValue((double)v/10.0);
+    blockSignals(false);
+}
+
+void UnsharpDialog::slotSpinBoxRadiusChanged(double v)
+{
+    blockSignals(true);
+    m_radiusSlider->setValue((int)(v*10.0));
+    blockSignals(false);
+}
+
+void UnsharpDialog::slotSliderAmountChanged(int v)
+{
+    blockSignals(true);
+    m_amountInput->setValue((double)v/10.0);
+    blockSignals(false);
+}
+
+void UnsharpDialog::slotSpinBoxAmountChanged(double v)
+{
+    blockSignals(true);
+    m_amountSlider->setValue((int)(v*10.0));
+    blockSignals(false);
 }
 
 void UnsharpDialog::slotHelp()
@@ -204,11 +278,13 @@ void UnsharpDialog::slotUser1()
 {
     blockSignals(true);
     m_radiusInput->setValue(5.0);
+    m_radiusSlider->setValue(50);
     m_amountInput->setValue(0.5);
+    m_amountSlider->setValue(5);
     m_thresholdInput->setValue(0);
-    blockSignals(false);
-    
+    m_thresholdSlider->setValue(0);
     slotEffect();
+    blockSignals(false);
 } 
 
 void UnsharpDialog::slotEffect()
