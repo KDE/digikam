@@ -58,10 +58,6 @@ public:
         ow             = 0;
         oh             = 0;
         
-        gamma          = 1.0;
-        brightness     = 0.0;
-        contrast       = 1.0;
-        
         im             = 0;
         ajusted_im     = 0;
         
@@ -172,7 +168,6 @@ public:
         
            imlib_context_set_image(ajusted_im);
            imlib_render_pixmaps_for_whole_image_at_size(&ajusted_pixmap, &ajusted_mask, w, h);
-           qDebug ("ajust render");
            }
         else 
            {
@@ -188,7 +183,6 @@ public:
         
            imlib_context_set_image(im);
            imlib_render_pixmaps_for_whole_image_at_size(&pixmap, &mask, w, h);
-           qDebug ("normal render");
            }
            
         dirty  = false;
@@ -198,7 +192,16 @@ public:
         {
         if (dirty) render();
         
-        return pixmap;       
+        if ( ajust == true )
+           {
+           qDebug ("ajust render");
+           return ajusted_pixmap;       
+           }
+        else
+           { 
+           qDebug ("normal render");
+           return pixmap;       
+           }
         }
 
     int width() 
@@ -318,9 +321,11 @@ public:
         imlib_context_set_color_modifier(ajusted_mod);
         ajusted_pixmap = 0;
         ajusted_mask = 0;
-        imlib_context_set_mask(ajusted_pixmap);
-        imlib_context_set_image(im);
+        imlib_context_set_mask(ajusted_pixmap);        
+        imlib_image_orientate(2);
+        dirty = true;        
         ajust = true;
+        render();
         }
         
     void ajustAccepted(void)
@@ -357,56 +362,38 @@ public:
 
     void changeGamma(double val)  
         {
-        if (!im) return;
+        if (!ajusted_im) return;
         
-        double nval = gamma + val;
-        
-        if ( nval <= 5.0 && nval >= 0.0 ) 
-            {            
-            imlib_context_set_image(ajusted_im);        
-            imlib_modify_color_modifier_gamma(val);
-            imlib_apply_color_modifier();
-            gamma   = nval;
-            changed = true;
-            dirty   = true;
-            qDebug("gamma:%f", (float)nval);
-            }
+        imlib_context_set_image(ajusted_im);        
+        imlib_modify_color_modifier_gamma(val);
+        imlib_apply_color_modifier();
+        changed = true;
+        dirty   = true;
+        qDebug("gamma:%f", (float)val);
         }
 
     void changeBrightness(double val)  
         {
-        if (!im) return;
+        if (!ajusted_im) return;
         
-        double nval = brightness + val;
-        
-        if ( nval <= 1.0 && nval >= -1.0 ) 
-            {
-            imlib_context_set_image(ajusted_im);  
-            imlib_modify_color_modifier_brightness(val);
-            imlib_apply_color_modifier();
-            brightness = nval;
-            changed    = true;
-            dirty      = true;
-            qDebug("brightness:%f", (float)nval);
-            }
+        imlib_context_set_image(ajusted_im);  
+        imlib_modify_color_modifier_brightness(val);
+        imlib_apply_color_modifier();
+        changed    = true;
+        dirty      = true;
+        qDebug("brightness:%f", (float)val);
         }
 
     void changeContrast(double val)  
         {
-        if (!im) return;
+        if (!ajusted_im) return;
 
-        double nval = contrast + val;
-        
-        if ( nval <= 10.0 && nval >= -10.0 ) 
-            {
-            imlib_context_set_image(ajusted_im);
-            imlib_modify_color_modifier_contrast(val);
-            imlib_apply_color_modifier();
-            contrast = nval;
-            changed  = true;
-            dirty    = true;
-            qDebug("contrast:%f", (float)nval);
-            }
+        imlib_context_set_image(ajusted_im);
+        imlib_modify_color_modifier_contrast(val);
+        imlib_apply_color_modifier();
+        changed  = true;
+        dirty    = true;
+        qDebug("contrast:%f", (float)val);
         }
 
     int save(const QString& saveFile) 
@@ -550,10 +537,6 @@ private:
     int                   ow;
     int                   oh;
     
-    double                gamma;
-    double                brightness;
-    double                contrast;
-        
     bool                  changed;
     bool                  dirty;
     bool                  valid;
@@ -874,7 +857,7 @@ void ImlibInterface::changeGamma(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeGamma(val/20);
+    if (im) im->changeGamma((double)val/20.0);
 }
 
 
@@ -884,7 +867,7 @@ void ImlibInterface::changeBrightness(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeBrightness(val/100);
+    if (im) im->changeBrightness((double)val/100.0);
 }
 
 
@@ -894,7 +877,7 @@ void ImlibInterface::changeContrast(int val)
     
     if (!im) d->cache->image(d->file);
     
-    if (im) im->changeContrast(val/100);
+    if (im) im->changeContrast((double)val/100.0);
 }
 
 
