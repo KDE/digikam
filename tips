@@ -94,7 +94,7 @@ Did you know that you could reach other users and Digikam developers using the d
 <html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
 <td><img src="hicolor/48x48/apps/digikam.png"></td>
 <td>
-Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://digikam.sourceforge.net/plugins.html">http://digikam.sourceforge.net/plugins.html</a>.
+Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://extragear.kde.org/apps/kipi.php">http://extragear.kde.org/apps/kipi.php</a>.
 </td>
 </tr></table></p></html>
 </tip>
@@ -131,15 +131,6 @@ Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for 
 <td><img src="hicolor/48x48/apps/digikam.png"></td>
 <td>
 Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
-</td>
-</tr></table></p></html>
-</tip>
-
-<tip category="Digikam|General">
-<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
-<td><img src="hicolor/48x48/apps/digikam.png"></td>
-<td>
-Did you know that Digikam use Kipi plugins who can be used also in Kimdaba, Showimg, and Gwenview programs?
 </td>
 </tr></table></p></html>
 </tip>
