@@ -1,20 +1,27 @@
-/***************************************************************************
-                          kexif.cpp  -  description
-                             -------------------
-    begin                : Tue Aug 27 18:41:58 CDT 2002
-    copyright            : (C) 2002 by Renchi Raju
-    email                : renchi@green.tam.uiuc.edu
+//////////////////////////////////////////////////////////////////////////////
+//
+//    KEXIF.CPP
+//
+//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+// Qt includes.
 
 #include <qtabwidget.h>
 #include <qlayout.h>
@@ -29,20 +36,24 @@
 #include <qpushbutton.h>
 #include <qapplication.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <klistview.h>
 #include <kurl.h>
+
+// Local includes.
 
 #include "kexififd.h"
 #include "kexifentry.h"
 #include "kexifdata.h"
 #include "kexiflistview.h"
 #include "kexiflistviewitem.h"
-
 #include "kexif.h"
 
+
 KExif::KExif(QWidget *parent, const char *name, WFlags fl)
-    : QWidget(parent, name, fl|Qt::WShowModal)
+     : QWidget(parent, name, fl|Qt::WShowModal)
 {
     int W=400, H=400;
     resize(W, H);
@@ -90,9 +101,7 @@ KExif::KExif(QWidget *parent, const char *name, WFlags fl)
 
     // ------------------------------------------------------
 
-
     mExifData = 0;
-
 }
 
 KExif::~KExif()
@@ -104,35 +113,40 @@ KExif::~KExif()
 int KExif::loadFile(const QString& filename)
 {
     if (filename.isNull()) return -1;
+    
     mFileName = QString(filename);
 
     mMainBox->setTitle(KURL(filename).filename());
 
-    if (mExifData) {
+    if (mExifData) 
+        {
         delete mExifData;
         mExifData = 0;
-    }
+        }
 
     mExifData = new KExifData;
     int result = mExifData->readFromFile(filename);
 
-    if (result == KExifData::SUCCESS) {
-
+    if (result == KExifData::SUCCESS) 
+        {
         QValueVector<KExifIfd>::iterator ifdIterator;
+        
         for (ifdIterator = mExifData->ifdVector.begin();
              ifdIterator != mExifData->ifdVector.end();
-             ++ifdIterator) {
-
+             ++ifdIterator) 
+            {
             KExifListView* listview = new KExifListView(mTabWidget);
             listview->addItems((*ifdIterator).entryList);
             mTabWidget->addTab(listview, (*ifdIterator).getName());
 
             connect(listview, SIGNAL(signal_itemDescription(const QString&)),
                     this, SLOT(slot_showItemDescription(const QString&)));
-        }
+            }
 
         QImage thumbnail;
-        if (mExifData->getThumbnail(thumbnail) == KExifData::SUCCESS) {
+        
+        if (mExifData->getThumbnail(thumbnail) == KExifData::SUCCESS) 
+            {
             QWidget* widget = new QWidget(mTabWidget);
             mTabWidget->addTab(widget,i18n("Thumbnail"));
             QGridLayout* layout = new QGridLayout(widget);
@@ -140,14 +154,12 @@ int KExif::loadFile(const QString& filename)
             label->setFixedSize(thumbnail.size());
             label->setPixmap(QPixmap(thumbnail));
             layout->addWidget(label, 0, 0);
-        }
+            }
 
         return 0;
-
-    }
+        }
 
     return -1;
-
 }
 
 int KExif::loadData(const QString& filename, char *data, int size)
