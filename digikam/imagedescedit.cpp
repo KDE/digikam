@@ -30,9 +30,10 @@
 
 
 ImageDescEdit::ImageDescEdit(const QString& itemName,
-                             const QString& itemComments)
+                             const QString& itemComments,
+                             QWidget *parent)
     : KDialogBase( Plain, i18n("Image Comments"), Ok|Cancel, Ok,
-                   0, 0, true, true )
+                   parent, 0, true, true )
 {
     mItemName = itemName;
 
@@ -88,9 +89,11 @@ void ImageDescEdit::slot_textChanged()
 
 
 bool ImageDescEdit::editComments(const QString& itemName,
-                                 QString& itemComments)
+                                 QString& itemComments,
+                                 QWidget *parent
+                                )
 {
-    ImageDescEdit dlg(itemName, itemComments);
+    ImageDescEdit dlg(itemName, itemComments, parent);
 
     bool ok = dlg.exec() == QDialog::Accepted;
     itemComments = dlg.mCommentsEdit->text();

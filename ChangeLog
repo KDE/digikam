@@ -1,5 +1,6 @@
 v0.6.3 (usingLibKIPI)-Alpha1 
 ----------------------------------------------------------------------------
+        * Added 'Comments Edit' action in ImageViewer.
         * Updated Splashscreen for 0.6.3 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
         * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
 
@@ -9,8 +10,8 @@ v0.6.2-RC        05/07/04
         * Updated 'admin' directory from KDE CVS.
         * Added 'Remove current images from Album' action in ImageViewer.
         * Updated Handbook.
-        * Fixed abug reported by Carsten Niehaus about Album banner not updated when
-          items are removed or are moved to another Album.
+        * Fixed a bug reported by Carsten Niehaus about Album banner not updated when
+          items are removed from an Album or are moved to another Album.
         * Move TipOfDay from DigikamPlugins module to Digikam3 module.
         * Move 'Prev' and 'Next' buttons in ImageViewer before the image name and
           the zoom level box.

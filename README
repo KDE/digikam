@@ -51,4 +51,4 @@ In the source directory do :
 More specifics compilations and installations options can be used with '.configure' script.
 Check it with './configure --help' command line.
 
-Don't forget the 'digikamplugins' module for more functionnalities.
+Don't forget the 'digikamplugins' module available on SourceForge.net projet for more functionnalities.

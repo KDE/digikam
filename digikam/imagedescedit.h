@@ -9,17 +9,18 @@ class QTextEdit;
 
 class ImageDescEdit : public KDialogBase
 {
-
     Q_OBJECT
 
 public:
 
     ImageDescEdit(const QString& itemName,
-                  const QString& itemComments);
+                  const QString& itemComments,
+                  QWidget *parent=0);
     ~ImageDescEdit();
 
     static bool editComments(const QString& itemName,
-                             QString& itemComments);
+                             QString& itemComments,
+                             QWidget *parent=0);
 
 private:
 
