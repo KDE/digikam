@@ -245,15 +245,6 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
                                   const QPixmap&,
                                   const KFileMetaInfo*)));
     
-    /*QImage image;
-    QPixmap pix;
-    image.create( width, height, 32 );
-    image.setAlphaBuffer(true) ;
-    memcpy(image.bits(), imageData, image.numBytes());
-    image = image.smoothScale(48, 48, QImage::ScaleMin);
-    pix.convertFromImage(image);
-    m_thumbLabel->setPixmap(pix);*/
-           
     QGridLayout *grid = new QGridLayout(hlay, 2, 4);
     
     QLabel *label1 = new QLabel(i18n("Channel:"), page);
