@@ -98,7 +98,7 @@
 
 <tip category="Digikam|Slideshow">
 <html>
-<p>Did you know that you could abort a slideshow using <b>ESC</b> or a simple Mouseclick?
+<p>Did you know that you could abort a slideshow using <b>ESC</b>?
 </html>
 </tip>
 
@@ -219,5 +219,21 @@ plugins? The processed results will then be merged in the selected target Album.
 <tip category="Digikam|SlideShow">
 <html>
 <p>Did you know that you can navigate on the slideshow with the left and right mouse buttons?
+</html>
+</tip>
+
+
+<tip category="Digikam|ImageViewer">
+<html>
+<p>Did you know that you can print the current image opened in the Digikam imageViewer with the 
+contextual menu?
+</html>
+</tip>
+
+
+<tip category="Digikam|ImageViewer">
+<html>
+<p>Did you know that you can edit the comments of the current image opened in the Digikam imageViewer with 
+the contextual menu?
 </html>
 </tip>
