@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qcolor.h>
+#include <qrect.h>
 
 // KDE includes.
 
@@ -34,13 +35,14 @@ class QPushButton;
 class QComboBox;
 class QLabel;
 class QTimer;
+class QRect;
 
 class KProgress;
 class KIntNumInput;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImagePreviewWidget;
 }
 
 namespace DigikamBlurFXImagesPlugin
@@ -65,37 +67,38 @@ protected:
     void frostGlass(uint *data, int Width, int Height, int Frost);
     
     // Backported from ImageProcessing version 2
-    void zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance);
+    void zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
+    void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
+    void focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, 
+                   bool bInversed=false, QRect pArea=QRect::QRect());
     void farBlur(uint *data, int Width, int Height, int Distance);
-    void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance);
     void motionBlur(uint *data, int Width, int Height, int Distance, double Angle=0.0);
-    void focusBlur (uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, bool bInversed=false);
     void smartBlur(uint *data, int Width, int Height, int Radius, int Strenght);
     void mosaic(uint *data, int Width, int Height, int SizeW, int SizeH);
 
 private:
     
-    bool                  m_cancel;
-    bool                  m_dirty;
+    bool                         m_cancel;
+    bool                         m_dirty;
 
-    QWidget              *m_parent;
+    QWidget                     *m_parent;
     
-    QPushButton          *m_helpButton;
+    QPushButton                 *m_helpButton;
 
-    QComboBox            *m_effectType;
+    QComboBox                   *m_effectType;
     
-    QTimer               *m_timer;
+    QTimer                      *m_timer;
     
-    QLabel               *m_effectTypeLabel;
-    QLabel               *m_distanceLabel;
-    QLabel               *m_levelLabel;
+    QLabel                      *m_effectTypeLabel;
+    QLabel                      *m_distanceLabel;
+    QLabel                      *m_levelLabel;
     
-    KIntNumInput         *m_distanceInput;
-    KIntNumInput         *m_levelInput;
+    KIntNumInput                *m_distanceInput;
+    KIntNumInput                *m_levelInput;
     
-    KProgress            *m_progressBar;
+    KProgress                   *m_progressBar;
     
-    Digikam::ImageWidget *m_previewWidget;
+    Digikam::ImagePreviewWidget *m_previewWidget;
 
 private:
 

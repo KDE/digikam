@@ -109,7 +109,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 5, 5 , marginHint(), spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -122,7 +122,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Apply Blurring Special Effect to Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 5);
     
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -136,23 +136,14 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the blurring special effect.") );
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    
+    m_previewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage());
+    topLayout->addMultiCellWidget(m_previewWidget, 1, 1, 0, 5);
+   
     // -------------------------------------------------------------
     
-    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, marginHint(), spacingHint());
+    m_effectTypeLabel = new QLabel(i18n("Type:"), plainPage());
     
-    m_effectTypeLabel = new QLabel(i18n("Type:"), gbox2);
-    
-    m_effectType = new QComboBox( false, gbox2 );
+    m_effectType = new QComboBox( false, plainPage() );
     m_effectType->insertItem( i18n("Zoom Blur") );
     m_effectType->insertItem( i18n("Radial Blur") );
     m_effectType->insertItem( i18n("Far Blur") );
@@ -163,7 +154,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Smart Blur") );
     m_effectType->insertItem( i18n("Frost Glass") );
     m_effectType->insertItem( i18n("Mosaic") );
-    QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
+    QWhatsThis::add( m_effectType, i18n("<p>Select here the blurring effect to apply on image.<p>"
                                         "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                         "a specified center point. This simulates the blur of a zooming camera.<p>"
                                         "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
@@ -186,31 +177,29 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "a frosted glass.<p>"
                                         "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
                                         "recreates it by filling those cells with average pixel value."));
-    gridBox2->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
-    gridBox2->addMultiCellWidget(m_effectType, 0, 0, 1, 2);
+    topLayout->addMultiCellWidget(m_effectTypeLabel, 2, 2, 0, 0);
+    topLayout->addMultiCellWidget(m_effectType, 2, 2, 4, 5);
                                                   
-    m_distanceLabel = new QLabel(i18n("Distance:"), gbox2);
-    m_distanceInput = new KIntNumInput(gbox2);
+    m_distanceLabel = new QLabel(i18n("Distance:"), plainPage());
+    m_distanceInput = new KIntNumInput(plainPage());
     m_distanceInput->setRange(0, 100, 1, true);    
     QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
     
-    gridBox2->addMultiCellWidget(m_distanceLabel, 1, 1, 0, 0);
-    gridBox2->addMultiCellWidget(m_distanceInput, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(m_distanceLabel, 3, 3, 0, 0);
+    topLayout->addMultiCellWidget(m_distanceInput, 3, 3, 1, 5);
         
-    m_levelLabel = new QLabel(i18n("Level:"), gbox2);
-    m_levelInput = new KIntNumInput(gbox2);
+    m_levelLabel = new QLabel(i18n("Level:"), plainPage());
+    m_levelInput = new KIntNumInput(plainPage());
     m_levelInput->setRange(0, 360, 1, true);
     QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
     
-    gridBox2->addMultiCellWidget(m_levelLabel, 2, 2, 0, 0);
-    gridBox2->addMultiCellWidget(m_levelInput, 2, 2, 1, 1);
+    topLayout->addMultiCellWidget(m_levelLabel, 4, 4, 0, 0);
+    topLayout->addMultiCellWidget(m_levelInput, 4, 4, 1, 5);
     
-    m_progressBar = new KProgress(100, gbox2, "progressbar");
+    m_progressBar = new KProgress(100, plainPage(), "progressbar");
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    gridBox2->addMultiCellWidget(m_progressBar, 3, 3, 0, 1);
-
-    topLayout->addMultiCellWidget(gbox2, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(m_progressBar, 5, 5, 0, 5);
 
     // -------------------------------------------------------------
     
@@ -220,6 +209,9 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
         
     // -------------------------------------------------------------
     
+    connect(m_previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));
+            
     connect(m_effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
     
@@ -238,8 +230,7 @@ ImageEffect_BlurFX::~ImageEffect_BlurFX()
 
 void ImageEffect_BlurFX::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("blurfx",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("blurfx", "digikamimageplugins");
 }
 
 void ImageEffect_BlurFX::closeEvent(QCloseEvent *e)
@@ -262,8 +253,8 @@ void ImageEffect_BlurFX::slotUser1()
        }
     else
        {
-       m_effectType->setCurrentItem(5); // Shake blur
-       slotEffectTypeChanged(5);
+       m_effectType->setCurrentItem(0); // Zoom blur
+       slotEffectTypeChanged(0);
        }
 } 
 
@@ -327,7 +318,6 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           
        case 5: // Skake Blur    
        case 6: // Focus Blur.
-       case 9: // Mosaic.
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           break;
@@ -339,6 +329,11 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           m_levelLabel->setEnabled(true);
           m_levelInput->setRange(0, 255, 1, true);
           m_levelInput->setValue(128);
+          break;
+       
+       case 9: // Mosaic.
+          m_distanceInput->setRange(0, 50, 1, true);
+          m_distanceInput->setValue(3);
           break;
        }
 
@@ -363,72 +358,88 @@ void ImageEffect_BlurFX::slotEffect()
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    // Preview image size.
-    int wp      = iface->previewWidth();
-    int hp      = iface->previewHeight();
-    
-    // All data from the image
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-    
-    int d       = m_distanceInput->value();
-    int l       = m_levelInput->value();
+    m_previewWidget->setPreviewImageWaitCursor(true);
+    QRect pRect = m_previewWidget->getOriginalImageRegion();
+    QImage pImg = m_previewWidget->getOriginalClipImage();
+    Digikam::ImageIface iface(0, 0);
+        
+    uint* data = iface.getOriginalData();
+    int w      = iface.originalWidth();
+    int h      = iface.originalHeight();
+    int d      = m_distanceInput->value();
+    int l      = m_levelInput->value();
 
     m_progressBar->setValue(0); 
 
     switch (m_effectType->currentItem())
        {
        case 0: // Zoom Blur.
-          zoomBlur(data, w, h, w/2, h/2, d);
+          zoomBlur(data, w, h, w/2, h/2, d, pRect);
           break;
 
        case 1: // Radial Blur.
-          radialBlur(data, w, h, w/2, h/2, d);
+          radialBlur(data, w, h, w/2, h/2, d, pRect);
           break;
        
        case 2: // Far Blur.
-          farBlur(data, w, h, d);
+          farBlur((uint *)pImg.bits(), pRect.width(), pRect.height(), d);
           break;
 
        case 3: // Motion Blur.
-          motionBlur(data, w, h, d, (double)l);
+          motionBlur((uint *)pImg.bits(), pRect.width(), pRect.height(), d, (double)l);
           break;
 
        case 4: // Softner Blur.
-          softnerBlur(data, w, h);
+          softnerBlur((uint *)pImg.bits(), pRect.width(), pRect.height());
           break;
 
        case 5: // Shake Blur.
-          shakeBlur(data, w, h, d);
+          shakeBlur((uint *)pImg.bits(), pRect.width(), pRect.height(), d);
           break;
                               
        case 6: // Focus Blur.
-          focusBlur(data, w, h, w/2, h/2, 10, d*10);
+          focusBlur(data, w, h, w/2, h/2, 10, d*10, false, pRect);
           break;
        
        case 7: // Smart Blur.
-          smartBlur(data, w, h, d, l);
+          smartBlur((uint *)pImg.bits(), pRect.width(), pRect.height(), d, l);
           break;
        
        case 8: // Frost Glass.
-          frostGlass(data, w, h, d);
+          frostGlass((uint *)pImg.bits(), pRect.width(), pRect.height(), d);
           break;
 
        case 9: // Mosaic.
-          mosaic(data, w, h, d, d);
+          mosaic((uint *)pImg.bits(), pRect.width(), pRect.height(), d, d);
           break;                    
        }
     
     if ( !m_cancel ) 
        {
-       QImage newImg;
-       newImg.create( w, h, 32 );
-       memcpy(newImg.bits(), data, newImg.numBytes());
-       QImage destImg = newImg.smoothScale(wp, hp);
-       iface->putPreviewData((uint*)destImg.bits());
+       switch (m_effectType->currentItem())
+          {
+          case 0: // Zoom Blur.
+          case 1: // Radial Blur.
+          case 6: // Focus Blur.
+             {
+             QImage newImg((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
+             QImage destImg = newImg.copy(pRect);
+             m_previewWidget->setPreviewImageData(destImg);
+             break;
+             }
+                       
+          case 2: // Far Blur.
+          case 3: // Motion Blur.
+          case 4: // Soft Blur
+          case 5: // Shake Blur.
+          case 7: // Smart BLur.
+          case 8: // Frost Glass.
+          case 9: // Mosaic.
+             m_previewWidget->setPreviewImageData(pImg);
+             break;
+          }
+
+       m_previewWidget->setPreviewImageWaitCursor(false);
        }
                   
     delete [] data;
@@ -484,11 +495,11 @@ void ImageEffect_BlurFX::slotOk()
     enableButton(User1, false);
     
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
+    Digikam::ImageIface iface(0, 0);
+    
+    uint* data  = iface.getOriginalData();
+    int w       = iface.originalWidth();
+    int h       = iface.originalHeight();
     int d       = m_distanceInput->value();
     int l       = m_levelInput->value();
 
@@ -539,12 +550,372 @@ void ImageEffect_BlurFX::slotOk()
              break;                    
           }
        
-       if ( !m_cancel ) iface->putOriginalData(i18n("Blur Effects"), data);
+       if ( !m_cancel ) iface.putOriginalData(i18n("Blur Effects"), data);
        }
     
     delete [] data;    
     m_parent->setCursor( KCursor::arrowCursor() );        
     accept();
+}
+
+/* Function to apply the ZoomBlur effect backported from ImageProcessing version 2                                           
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.  
+ * X, Y             => Center of zoom in the image
+ * Distance         => Distance value         
+ * pArea            => Preview area.
+ *                                                                                  
+ * Theory           => Here we have a effect similar to RadialBlur mode Zoom from  
+ *                     Photoshop. The theory is very similar to RadialBlur, but has one
+ *                     difference. Instead we use pixels with the same radius and      
+ *                     near angles, we take pixels with the same angle but near radius 
+ *                     This radius is always from the center to out of the image, we   
+ *                     calc a proportional radius from the center.
+ */
+void ImageEffect_BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
+{
+    if (Distance <= 1) return;
+
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    // We working on full image.
+    int xMin = 0;
+    int xMax = Width;
+    int yMin = 0;
+    int yMax = Height;
+    int nStride = GetStride(Width);
+            
+    // If we working in preview mode, else we using the preview area.
+    if ( pArea.isValid() )   
+       {
+       xMin = pArea.x();
+       xMax = pArea.x() + pArea.width();
+       yMin = pArea.y();
+       yMax = pArea.y() + pArea.height();
+       nStride = (Width - xMax + xMin)*4;
+       }
+       
+    int    BitCount = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+
+    register int h, w, nh, nw, i, j, r;
+    int sumR, sumG, sumB, nCount;
+    double lfRadius, lfNewRadius, lfRadMax, lfAngle;
+    
+    lfRadMax = sqrt (Height * Height + Width * Width);
+
+    // total of bits to be taken is given by this formula
+    nCount = 0;
+
+    // we have to initialize all loop and positions valiables
+    i = yMin * LineWidth + xMin * 4;
+    j = sumR = sumG = sumB = 0;
+
+    // we have reached the main loop
+    for (h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
+        {
+        for (w = xMin; !m_cancel && (w < xMax); w++, i += 4)
+            {
+            // ...we enter this loop to sum the bits
+            nw = X - w;
+            nh = Y - h;
+
+            lfRadius = sqrt (nw * nw + nh * nh);
+            lfAngle = atan2 (nh, nw);
+            lfNewRadius = (lfRadius * Distance) / lfRadMax;
+
+            for (r = 0; !m_cancel && (r <= lfNewRadius); r++)
+                {
+                // we need to calc the positions
+                nw = (int)(X - (lfRadius - r) * cos (lfAngle));
+                nh = (int)(Y - (lfRadius - r) * sin (lfAngle));
+
+                if (IsInside(Width, Height, nw, nh))
+                    {
+                    // we adjust the positions
+                    j = SetPosition(Width, nw, nh);
+                    // finally we sum the bits
+                    sumR += pBits[ j ];
+                    sumG += pBits[j+1];
+                    sumB += pBits[j+2];
+                    nCount++;
+                    }
+                }
+            
+            if (nCount == 0) nCount = 1;                    
+
+            // now, we have to calc the arithmetic average
+            pResBits[ i ] = sumR / nCount;
+            pResBits[i+1] = sumG / nCount;
+            pResBits[i+2] = sumB / nCount;
+            // we initialize the variables
+            sumR = sumG = sumB = nCount = 0;
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)(h - yMin) * 100.0) / (yMax - yMin)));
+        kapp->processEvents();             
+        }
+
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;
+}
+
+/* Function to apply the radialBlur effect backported from ImageProcessing version 2                                           
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.     
+ * X, Y             => Center of radial in the image                       
+ * Distance         => Distance value                                            
+ * pArea            => Preview area.
+ *                                                                                  
+ * Theory           => Similar to RadialBlur from Photoshop, its an amazing effect    
+ *                     Very easy to understand but a little hard to implement.           
+ *                     We have all the image and find the center pixel. Now, we analize
+ *                     all the pixels and calc the radius from the center and find the 
+ *                     angle. After this, we sum this pixel with others with the same  
+ *                     radius, but different angles. Here I'm using degrees angles.
+ */
+void ImageEffect_BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
+{
+    if (Distance <= 1) return;
+
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    // We working on full image.
+    int xMin = 0;
+    int xMax = Width;
+    int yMin = 0;
+    int yMax = Height;
+    int nStride = GetStride(Width);
+            
+    // If we working in preview mode, else we using the preview area.
+    if ( pArea.isValid() )   
+       {
+       xMin = pArea.x();
+       xMax = pArea.x() + pArea.width();
+       yMin = pArea.y();
+       yMax = pArea.y() + pArea.height();
+       nStride = (Width - xMax + xMin)*4;
+       }
+    
+    int    BitCount = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+
+    register int sumR, sumG, sumB, i, j, nw, nh;
+    double Radius, Angle, AngleRad;
+    
+    double *nMultArray = new double[Distance * 2 + 1];
+    
+    for (i = -Distance; i <= Distance; i++)
+        nMultArray[i + Distance] = i * ANGLE_RATIO;
+
+    // total of bits to be taken is given by this formula
+    int nCount = 0;
+
+    // we have to initialize all loop and positions valiables
+    i = yMin * LineWidth + xMin * 4;
+    j = sumR = sumG = sumB = 0;
+
+    // we have reached the main loop
+    
+    for (int h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
+        {
+        for (int w = xMin; !m_cancel && (w < xMax); w++, i += 4)
+            {
+            // ...we enter this loop to sum the bits
+            nw = X - w;
+            nh = Y - h;
+
+            Radius = sqrt (nw * nw + nh * nh);
+            AngleRad = atan2 (nh, nw);
+            
+            for (int a = -Distance; !m_cancel && (a <= Distance); a++)
+                {
+                Angle = AngleRad + nMultArray[a + Distance];
+                // we need to calc the positions
+                nw = (int)(X - Radius * cos (Angle));
+                nh = (int)(Y - Radius * sin (Angle));
+
+                if (IsInside(Width, Height, nw, nh))
+                    {
+                    // we adjust the positions
+                    j = SetPosition (Width, nw, nh);
+                    // finally we sum the bits
+                    sumR += pBits[ j ];
+                    sumG += pBits[j+1];
+                    sumB += pBits[j+2];
+                    nCount++;
+                    }
+                }
+
+            if (nCount == 0) nCount = 1;                    
+                
+            // now, we have to calc the arithmetic average
+            pResBits[ i ] = sumR / nCount;
+            pResBits[i+1] = sumG / nCount;
+            pResBits[i+2] = sumB / nCount;
+            // we initialize the variables
+            sumR = sumG = sumB = nCount = 0;
+            }
+
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)(h - yMin) * 100.0) / (yMax - yMin)));
+        kapp->processEvents();             
+        }
+
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;
+    delete [] nMultArray;
+}
+
+/* Function to apply the focusBlur effect backported from ImageProcessing version 2                                              
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * BlurRadius       => Raduis of blured image. 
+ * Radius           => Focus distance.
+ * bInversed        => If true, invert focus effect.
+ * pArea            => Preview area.
+ *                                                                                 
+ */
+void ImageEffect_BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, 
+                                   bool bInversed, QRect pArea)
+{
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    // We working on full image.
+    int xMin = 0;
+    int xMax = Width;
+    int yMin = 0;
+    int yMax = Height;
+    int nStride = GetStride(Width);
+            
+    // If we working in preview mode, else we using the preview area.
+    if ( pArea.isValid() )   
+       {
+       xMin = pArea.x();
+       xMax = pArea.x() + pArea.width();
+       yMin = pArea.y();
+       yMax = pArea.y() + pArea.height();
+       nStride = (Width - xMax + xMin)*4;
+       }
+    
+    register int h, w, nh, nw = 0;
+    register int i = yMin * LineWidth + xMin * 4;
+    
+    int nBlendFactor;
+    double lfRadius;
+    
+    int    BitCount = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+            
+    // Gaussian blur using the BlurRadius parameter.
+    memcpy (pResBits, data, BitCount);        
+    Digikam::ImageFilters::gaussianBlurImage((uint *)pResBits, Width, Height, BlurRadius);
+    
+    // Blending result  
+    for (h = yMin; !m_cancel && (h < yMax); h++, i += nStride)
+        {
+        nh = Y - h;
+
+        for (w = xMin; !m_cancel && (w < xMax); w++)
+            {
+            nw = X - w;
+
+            lfRadius = sqrt (nh * nh + nw * nw);
+
+            nBlendFactor = LimitValues ((int)(255.0 * lfRadius / (double)Radius));
+
+            if (bInversed)
+                {
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Red.
+                }
+            else
+                {
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
+                }
+                
+            pResBits[i++] = pBits[i];       // Alpha channel.
+            }
+        
+        // Update the progress bar in dialog.
+        m_progressBar->setValue((int) (((double)(h - yMin) * 100.0) / (yMax - yMin)));
+        kapp->processEvents();             
+       }
+    
+    if (!m_cancel) 
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;
+}
+
+/* Function to apply the farBlur effect backported from ImageProcessing version 2                                            
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * Distance         => Distance value                                            
+ *                                                                                  
+ * Theory           => This is an interesting effect, the blur is applied in that   
+ *                     way: (the value "1" means pixel to be used in a blur calc, ok?)
+ *                     e.g. With distance = 2 
+ *                                            |1|1|1|1|1| 
+ *                                            |1|0|0|0|1| 
+ *                                            |1|0|C|0|1| 
+ *                                            |1|0|0|0|1| 
+ *                                            |1|1|1|1|1| 
+ *                     We sum all the pixels with value = 1 and apply at the pixel with*
+ *                     the position "C".
+ */
+void ImageEffect_BlurFX::farBlur(uint *data, int Width, int Height, int Distance)
+{
+    if (Distance < 1) return;
+
+    // we need to create our kernel
+    // e.g. distance = 3, so kernel={3 1 1 2 1 1 3}
+    
+    int *nKern = new int[Distance * 2 + 1];
+    
+    for (int i = 0; i < Distance * 2 + 1; i++)
+        {
+        // the first element is 3
+        if (i == 0)
+            nKern[i] = 2;
+        // the center element is 2
+        else if (i == Distance)
+            nKern[i] = 3;
+        // the last element is 3
+        else if (i == Distance * 2)
+            nKern[i] = 3;
+        // all other elements will be 1
+        else
+            nKern[i] = 1;
+        }
+
+    // now, we apply a convolution with kernel
+    MakeConvolution(data, Width, Height, Distance, nKern);
+
+    // we must delete to free memory
+    delete [] nKern;
 }
 
 /* Function to apply the SmartBlur effect                                           
@@ -700,242 +1071,6 @@ void ImageEffect_BlurFX::smartBlur(uint *data, int Width, int Height, int Radius
     delete [] pResBits;
 }
 
-/* Function to apply the ZoomBlur effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.  
- * X, Y             => Center of zoom in the image
- * Distance         => Distance value                                            
- *                                                                                  
- * Theory           => Here we have a effect similar to RadialBlur mode Zoom from  
- *                     Photoshop. The theory is very similar to RadialBlur, but has one
- *                     difference. Instead we use pixels with the same radius and      
- *                     near angles, we take pixels with the same angle but near radius 
- *                     This radius is always from the center to out of the image, we   
- *                     calc a proportional radius from the center.
- */
-void ImageEffect_BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance)
-{
-    if (Distance <= 1) return;
-
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
-
-    register int h, w, nh, nw, i, j, r;
-    int nStride = GetStride(Width);
-    int sumR, sumG, sumB, nCount;
-    double lfRadius, lfNewRadius, lfRadMax, lfAngle;
-    
-    lfRadMax = sqrt (Height * Height + Width * Width);
-
-    // total of bits to be taken is given by this formula
-    nCount = 0;
-
-    // we have to initialize all loop and positions valiables
-    i = j = sumR = sumG = sumB = 0;
-
-    // we have reached the main loop
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++, i += 4)
-            {
-            // ...we enter this loop to sum the bits
-            nw = X - w;
-            nh = Y - h;
-
-            lfRadius = sqrt (nw * nw + nh * nh);
-            lfAngle = atan2 (nh, nw);
-            lfNewRadius = (lfRadius * Distance) / lfRadMax;
-
-            for (r = 0; !m_cancel && (r <= lfNewRadius); r++)
-                {
-                // we need to calc the positions
-                nw = (int)(X - (lfRadius - r) * cos (lfAngle));
-                nh = (int)(Y - (lfRadius - r) * sin (lfAngle));
-
-                if (IsInside(Width, Height, nw, nh))
-                    {
-                    // we adjust the positions
-                    j = SetPosition(Width, nw, nh);
-                    // finally we sum the bits
-                    sumR += pBits[ j ];
-                    sumG += pBits[j+1];
-                    sumB += pBits[j+2];
-                    nCount++;
-                    }
-                }
-            
-            if (nCount == 0) nCount = 1;                    
-
-            // now, we have to calc the arithmetic average
-            pResBits[ i ] = sumR / nCount;
-            pResBits[i+1] = sumG / nCount;
-            pResBits[i+2] = sumB / nCount;
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-            }
-        
-        // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-        kapp->processEvents();             
-        }
-
-    if (!m_cancel) 
-       memcpy (data, pResBits, BitCount);        
-                
-    delete [] pResBits;
-}
-
-/* Function to apply the farBlur effect backported from ImageProcessing version 2                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Distance         => Distance value                                            
- *                                                                                  
- * Theory           => This is an interesting effect, the blur is applied in that   
- *                     way: (the value "1" means pixel to be used in a blur calc, ok?)
- *                     e.g. With distance = 2 
- *                                            |1|1|1|1|1| 
- *                                            |1|0|0|0|1| 
- *                                            |1|0|C|0|1| 
- *                                            |1|0|0|0|1| 
- *                                            |1|1|1|1|1| 
- *                     We sum all the pixels with value = 1 and apply at the pixel with*
- *                     the position "C".
- */
-void ImageEffect_BlurFX::farBlur(uint *data, int Width, int Height, int Distance)
-{
-    if (Distance < 1) return;
-
-    // we need to create our kernel
-    // e.g. distance = 3, so kernel={3 1 1 2 1 1 3}
-    
-    int *nKern = new int[Distance * 2 + 1];
-    
-    for (int i = 0; i < Distance * 2 + 1; i++)
-        {
-        // the first element is 3
-        if (i == 0)
-            nKern[i] = 2;
-        // the center element is 2
-        else if (i == Distance)
-            nKern[i] = 3;
-        // the last element is 3
-        else if (i == Distance * 2)
-            nKern[i] = 3;
-        // all other elements will be 1
-        else
-            nKern[i] = 1;
-        }
-
-    // now, we apply a convolution with kernel
-    MakeConvolution(data, Width, Height, Distance, nKern);
-
-    // we must delete to free memory
-    delete [] nKern;
-}
-
-/* Function to apply the radialBlur effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.     
- * X, Y             => Center of radial in the image                       
- * Distance         => Distance value                                            
- *                                                                                  
- * Theory           => Similar to RadialBlur from Photoshop, its an amazing effect    
- *                     Very easy to understand but a little hard to implement.           
- *                     We have all the image and find the center pixel. Now, we analize
- *                     all the pixels and calc the radius from the center and find the 
- *                     angle. After this, we sum this pixel with others with the same  
- *                     radius, but different angles. Here I'm using degrees angles.
- */
-void ImageEffect_BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance)
-{
-    if (Distance <= 1) return;
-
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
-
-    int nStride = GetStride(Width);
-    register int sumR, sumG, sumB, i, j, nw, nh;
-    double Radius, Angle, AngleRad;
-    
-    double *nMultArray = new double[Distance * 2 + 1];
-    
-    for (i = -Distance; i <= Distance; i++)
-        nMultArray[i + Distance] = i * ANGLE_RATIO;
-
-    // total of bits to be taken is given by this formula
-    int nCount = 0;
-
-    // we have to initialize all loop and positions valiables
-    i = j = sumR = sumG = sumB = 0;
-
-    // we have reached the main loop
-    
-    for (int h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (int w = 0; !m_cancel && (w < Width); w++, i += 4)
-            {
-            // ...we enter this loop to sum the bits
-            nw = X - w;
-            nh = Y - h;
-
-            Radius = sqrt (nw * nw + nh * nh);
-            AngleRad = atan2 (nh, nw);
-            
-            for (int a = -Distance; !m_cancel && (a <= Distance); a++)
-                {
-                Angle = AngleRad + nMultArray[a + Distance];
-                // we need to calc the positions
-                nw = (int)(X - Radius * cos (Angle));
-                nh = (int)(Y - Radius * sin (Angle));
-
-                if (IsInside(Width, Height, nw, nh))
-                    {
-                    // we adjust the positions
-                    j = SetPosition (Width, nw, nh);
-                    // finally we sum the bits
-                    sumR += pBits[ j ];
-                    sumG += pBits[j+1];
-                    sumB += pBits[j+2];
-                    nCount++;
-                    }
-                }
-
-            if (nCount == 0) nCount = 1;                    
-                
-            // now, we have to calc the arithmetic average
-            pResBits[ i ] = sumR / nCount;
-            pResBits[i+1] = sumG / nCount;
-            pResBits[i+2] = sumB / nCount;
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-            }
-
-        // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-        kapp->processEvents();             
-        }
-
-    if (!m_cancel) 
-       memcpy (data, pResBits, BitCount);        
-                
-    delete [] pResBits;
-    delete [] nMultArray;
-}
-
 /* Function to apply the motionBlur effect backported from ImageProcessing version 2                                              
  *                                                                                  
  * data             => The image data in RGBA mode.                            
@@ -1031,74 +1166,6 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
     delete [] pResBits;
     delete [] lpXArray;
     delete [] lpYArray;
-}
-
-/* Function to apply the focusBlur effect backported from ImageProcessing version 2                                              
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * BlurRadius       => Raduis of blured image. 
- * Radius           => Focus distance.
- * bInversed        => If true, invert focus effect.
- *                                                                                 
- */
-void ImageEffect_BlurFX::focusBlur (uint *data, int Width, int Height, int X, int Y, int BlurRadius, int Radius, bool bInversed)
-{
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    register int h, w, nh, nw, i=0;
-    int nStride = GetStride (Width);
-    int nBlendFactor;
-    double lfRadius;
-    
-    int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
-            
-    // Gaussian blur using the BlurRadius parameter.
-    memcpy (pResBits, data, BitCount);        
-    Digikam::ImageFilters::gaussianBlurImage((uint *)pResBits, Width, Height, BlurRadius);
-    
-    // Blending result  
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        nh = Y - h;
-
-        for (w = 0; !m_cancel && (w < Width); w++)
-            {
-            nw = X - w;
-
-            lfRadius = sqrt (nh * nh + nw * nw);
-
-            nBlendFactor = LimitValues ((int)(255.0 * lfRadius / (double)Radius));
-
-            if (bInversed)
-                {
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Red.
-                }
-            else
-                {
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
-                }
-                
-            pResBits[i++] = pBits[i];       // Alpha channel.
-            }
-        
-        // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-        kapp->processEvents();             
-       }
-    
-    if (!m_cancel) 
-       memcpy (data, pResBits, BitCount);        
-                
-    delete [] pResBits;
 }
 
 /* Function to apply the softnerBlur effect                                            
