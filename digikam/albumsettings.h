@@ -84,6 +84,9 @@ public:
     void setIconShowComments(bool val);
     bool getIconShowComments() const;
 
+    void setSaveExifComments(bool val);
+    bool getSaveExifComments() const;
+
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 

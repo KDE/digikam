@@ -56,6 +56,7 @@ public:
     bool iconShowDate;
     bool iconShowComments;
     bool iconShowResolution;
+    bool saveExifComments;
 
 };
 
@@ -175,6 +176,11 @@ void AlbumSettings::readSettings()
         d->iconShowComments =
             config->readBoolEntry("Icon Show Comments",
                                   true);
+
+    if (config->hasKey("Save EXIF Comments"))
+        d->saveExifComments =
+            config->readBoolEntry("Save EXIF Comments",
+                                  true);
 }
 
 void AlbumSettings::saveSettings()
@@ -214,6 +220,8 @@ void AlbumSettings::saveSettings()
                        d->iconShowDate);
     config->writeEntry("Icon Show Comments",
                        d->iconShowComments);
+    config->writeEntry("Save EXIF Comments",
+                       d->saveExifComments);
     config->sync();
 
 }
@@ -343,6 +351,16 @@ void AlbumSettings::setIconShowComments(bool val)
 bool AlbumSettings::getIconShowComments() const
 {
     return d->iconShowComments;
+}
+
+void AlbumSettings::setSaveExifComments(bool val)
+{
+    d->saveExifComments = val;
+}
+
+bool AlbumSettings::getSaveExifComments() const
+{
+    return d->saveExifComments;
 }
 
 void AlbumSettings::setIconShowDate(bool val)
