@@ -46,7 +46,7 @@
 SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
-    QVBoxLayout* vbox = new QVBoxLayout( parent, 5, 5 ); 
+    QVBoxLayout* vbox = new QVBoxLayout( parent, 5, 5 );
 
     QGroupBox* groupBox = new QGroupBox( parent, "groupBox" );
     groupBox->setColumnLayout(0, Qt::Vertical );
@@ -60,11 +60,11 @@ SetupCamera::SetupCamera( QWidget* parent )
     listView_->addColumn( i18n("Model") );
     listView_->addColumn( i18n("Port") );
     listView_->addColumn( i18n("Path") );
-    listView_->setAllColumnsShowFocus(true); 
+    listView_->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( listView_, 0, 4, 0, 0 );
     QWhatsThis::add( listView_, i18n("<p>You can see here the digital camera list used by Digikam "
                                      "via the Gphoto interface."));
-                                     
+
     addButton_ = new QPushButton( groupBox );
     groupBoxLayout->addWidget( addButton_, 0, 1 );
 
@@ -96,16 +96,16 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     connect(listView_, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
-    
+
     connect(addButton_, SIGNAL(clicked()),
             this, SLOT(slotAddCamera()));
-    
+
     connect(removeButton_, SIGNAL(clicked()),
             this, SLOT(slotRemoveCamera()));
-    
+
     connect(editButton_, SIGNAL(clicked()),
             this, SLOT(slotEditCamera()));
-    
+
     connect(autoDetectButton_, SIGNAL(clicked()),
             this, SLOT(slotAutoDetectCamera()));
 
@@ -130,7 +130,7 @@ SetupCamera::~SetupCamera()
 void SetupCamera::slotSelectionChanged()
 {
     QListViewItem *item = listView_->selectedItem();
-    
+
     if (!item) {
         removeButton_->setEnabled(false);
         editButton_->setEnabled(false);
@@ -168,7 +168,7 @@ void SetupCamera::slotEditCamera()
 {
     QListViewItem *item = listView_->currentItem();
     if (!item) return;
-    
+
     CameraSelection *select = new CameraSelection;
     select->setCamera(item->text(0), item->text(1),
                       item->text(2), item->text(3));
@@ -189,24 +189,25 @@ void SetupCamera::slotAutoDetectCamera()
 
     if (GPIface::autoDetect(model, port) != 0) {
         KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
-                                     "Please retry or try setting manually."));
+                                     "Please check if your camera is turned on and retry or try setting it manually."));
         return;
     }
 
     bool found = false;
-    CameraList* clist = CameraList::instance();
-    if (clist) {
-        if (clist->find(model))
-            found = true;
+
+    if(listView_->findItem(model,1)) {
+      CameraList* clist = CameraList::instance();
+       if (clist) {
+          if (clist->find(model))
+             found = true;
+       }
     }
 
     if (found) {
-        KMessageBox::information(this, i18n("Already added camera: ")
-                                 + model + " (" + port + ")");
+       KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
     }
     else {
-        KMessageBox::information(this, i18n("Found camera: ") + model
-                                 + " (" + port + ")");
+       KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.").arg(model).arg(port));
         new QListViewItem(listView_, model, model, port, "/");
     }
 }
