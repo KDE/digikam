@@ -36,7 +36,7 @@ o Option to hide image names.
 CameraClient:
 -------------
 
-* Lauch the Albums properties when a new Album is added 
+o Lauch the Albums properties when a new Album is added 
   to the Database.                                                 <Gilles Caulier - 0.6.3>
 o Make Folder Ability.
 o Delete Folder Ability.
@@ -47,6 +47,7 @@ o DnD Upload (moved to wishlist. in case of the future parts
 o View/Hide main toolbar/statusbar.
 o Enable/Disable thumnails generation (bandwith limitation
   in slow camera connexion).
+o Sorting the download Album list in the QComboBox Widget.
 
   
 Thumnails interface:
