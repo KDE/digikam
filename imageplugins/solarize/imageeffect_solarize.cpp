@@ -2,9 +2,9 @@
  * File  : imageeffect_solarize.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : a Digikam image plugin for to solarize 
+ * Description : a Digikam image plugin for to solarize
  *               an image.
- * 
+ *
  * Copyright 2004 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -12,16 +12,16 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -62,27 +62,27 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
                       m_parent(parent)
 {
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Solarize Image"), 
+                                       I18N_NOOP("Solarize Image"),
                                        digikamimageplugins_version,
                                        I18N_NOOP("A solarize image plugin for Digikam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Renchi Raju", 
+                                       "(c) 2004, Renchi Raju",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins.php");
-    
+
     about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),
                      "renchi@pooh.tam.uiuc.edu");
-    
+
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Solarize Image handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Solarize Image Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
-    
+
     // -------------------------------------------------------------
-        
+
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
@@ -97,18 +97,18 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
-    
+
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
-    
+
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
+
     // -------------------------------------------------------------
-                                                  
+
     QVGroupBox *gbox = new QVGroupBox(i18n("Solarize Image Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -126,17 +126,17 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     hlay->addWidget(m_numInput,5);
 
     // -------------------------------------------------------------
-        
+
     connect(m_numInput, SIGNAL(valueChanged (double)),
             SLOT(slotEffect()));
 
     adjustSize();
-    disableResize();      
+    disableResize();
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
 {
-    
+
 }
 
 void ImageEffect_Solarize::slotHelp()
@@ -149,8 +149,8 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
 {
     delete m_numInput;
     delete m_previewWidget;
-    
-    e->accept();    
+
+    e->accept();
 }
 
 void ImageEffect_Solarize::slotEffect()
@@ -186,15 +186,15 @@ void ImageEffect_Solarize::slotOk()
     if (data) {
 
         double factor = m_numInput->value();
-    
+
         solarize(factor, data, w, h);
 
         iface->putOriginalData(data);
-        
+
         delete [] data;
     }
-    
-    m_parent->setCursor( KCursor::arrowCursor() );        
+
+    m_parent->setCursor( KCursor::arrowCursor() );
     accept();
 }
 
@@ -202,11 +202,11 @@ void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
 {
     uint *ptr  = data;
     uint a,r,g,b;
-    
+
     uint threshold = (uint)((100-factor)*(255+1)/100);
     threshold = QMAX(1,threshold);
     bool stretch = true;
-    
+
     for (int x=0; x<w*h; x++) {
 
         a = (*ptr >> 24) & 0xff;
@@ -223,7 +223,7 @@ void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
 
         }
         else {
-            
+
             if (r > threshold)
                 r = (255-r);
             if (g > threshold)
@@ -232,7 +232,7 @@ void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
                 b = (255-b);
         }
 
-        *ptr = a << 24 | r << 16 | g << 8 | b; 
+        *ptr = a << 24 | r << 16 | g << 8 | b;
         ptr++;
     }
 }

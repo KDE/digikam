@@ -44,7 +44,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
-    new KAction(i18n("Levels adjust..."), 0, 
+    new KAction(i18n("Levels Adjust..."), 0, 
                 this, SLOT(slotLevelsAdjust()),
                 actionCollection(), "imageplugin_adjustlevels");
 
