@@ -1,0 +1,57 @@
+DIGIKAMIMAGEPLUGINS
+
+Authors :
+----------------------------------------------------------------------
+- Gilles Caulier    <caulier dot gilles at free.fr>
+
+
+Resume :
+----------------------------------------------------------------------
+Digikam uses a plugin architecture for additional functionality in ImageEditor.
+Currently implemented plugins are:
+
+ 1) AdjustLevels       : A plugins for to adjust the image histogram levels manually.
+
+
+
+Contact :
+-----------------------------------------------------------------------
+If you have questions, comments, suggestions, requests, bug reports to
+make do email at :
+
+digikam-users@list.sourceforge.net
+
+
+Depencies :
+-----------------------------------------------------------------------
+AutoConf >= 2.5
+AutoMake >= 1.7.0
+KDE 3.x
+Digikam >= 0.7.0
+imlib2 >= 1.1.0
+
+
+Installation :
+------------------------------------------------------------------------
+In the source directory do :
+
+1) export WANT_AUTOCONF_2_5=1
+2) export KDEDIR=KDE_installation_dir_on_your_system
+3) make -f Makefile.cvs
+4) ./configure
+5) make
+6) su
+7) make install
+
+
+Notes :
+------------------------------------------------------------------------
+
+- More specifics compilation and installation options can be used with '.configure' script.
+Checked this with './configure --help' command line.
+
+- Some plugins can be disabled during the build process. Checked the end of 'configure.in.in' file
+and decomments the plugins lines corresponding. Then start the installation procedure.
+
+- You must build and install the 'digikam' source code before trying build this module.
+
