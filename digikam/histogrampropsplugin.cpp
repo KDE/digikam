@@ -184,7 +184,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_labelPixelsValue = new QLabel(gbox);
-    m_labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    m_labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
     QLabel *label6 = new QLabel(i18n("Std Dev.:"), gbox);
     label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -322,22 +322,22 @@ void HistogramPropsPlugin::updateInformations()
     if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
        {
        double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
-       m_labelMeanValue->setText(value.sprintf("%3.1f", mean));
+       m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
     
        double pixels = m_histogramWidget->m_imageHistogram->getPixels();
-       m_labelPixelsValue->setText(value.sprintf("%8d", (int)pixels));
+       m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
     
        double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
-       m_labelStdDevValue->setText(value.sprintf("%3.1f", stddev));
+       m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
       
        double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
-       m_labelCountValue->setText(value.sprintf("%8d", (int)counts));
+       m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
     
        double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
-       m_labelMedianValue->setText(value.sprintf("%3.1f", median));
+       m_labelMedianValue->setText(value.setNum(median, 'f', 1)); 
 
        double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-       m_labelPercentileValue->setText(value.sprintf("%4.1f", percentile));
+       m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
        }
     else
        {
