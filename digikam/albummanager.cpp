@@ -22,12 +22,16 @@
 #include <kdirlister.h>
 #include <klocale.h>
 #include <kdeversion.h>
+#include <kstandarddirs.h>
 #include <kio/netaccess.h>
+#include <kio/global.h>
 
 #include <qfile.h>
 #include <qdir.h>
 #include <qdict.h>
 #include <qintdict.h>
+
+#include <config.h>
 
 #include "album.h"
 #include "albumdb.h"
@@ -165,7 +169,16 @@ void AlbumManager::setLibraryPath(const QString& path)
     }
 
     d->libraryPath = path;
-    d->db->setDBPath(path + "/digikam.db");
+
+    QString dbPath = path + "/digikam.db";
+
+#ifdef NFS_HACK
+    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
+#endif
+
+    kdDebug() << "Album libray path set to " << dbPath << endl;
+    
+    d->db->setDBPath(dbPath);
 
     d->albumLister->openURL(path, true);
 

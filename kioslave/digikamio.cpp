@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <klargefile.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kio/global.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -66,10 +68,15 @@ kio_digikamioProtocol::kio_digikamioProtocol(const QCString &pool_socket,
 
     m_libraryPath = QDir::cleanDirPath(m_libraryPath);
     
-    QString path = m_libraryPath + "/digikam.db";
+    QString dbPath = m_libraryPath + "/digikam.db";
+
+#ifdef NFS_HACK
+    dbPath = QDir::homeDirPath() + "/.kde/share/apps/digikam/"  +
+             KIO::encodeFileName(QDir::cleanDirPath(dbPath));
+#endif
     
     char *errMsg = 0;
-    m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
+    m_db = sqlite_open(QFile::encodeName(dbPath), 0, &errMsg);
     if (m_db == 0)
     {
         error(KIO::ERR_UNKNOWN, i18n("Failed to open Digikam Database"));

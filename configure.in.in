@@ -243,3 +243,27 @@ else
   LIB_TIFF="-ltiff"
   AC_SUBST(LIB_TIFF)
 fi
+
+#------------------------------------------------------------------
+# NFS is Evil (sqlite makes use of file locking for allowing 
+# multiple processes to access the database. but on many 
+# nfs implementations, this file locking is horribly broken and
+# can end up locking the app or not allowing access to the app. 
+# since we use kioslaves which access the db too)
+#------------------------------------------------------------------
+
+AC_ARG_ENABLE(nfs-hack,
+	AC_HELP_STRING([--enable-nfs-hack],
+[Enable a hack for album libraries on a nfs mount, 
+ which causes the database to be saved in 
+ $HOMEDIR/.kde/share/apps/digikam/directoryname.db [default=disable]]),
+ [enable_nfs_hack=$enableval],
+ [enable_nfs_hack=no]
+)
+
+if test "x$enable_nfs_hack" == "xyes"; then
+   AC_DEFINE(NFS_HACK, 1, [NFS hack enabled])
+   AC_MSG_NOTICE([NFS hack enabled. Make sure you know what you are doing])
+fi
+
+
