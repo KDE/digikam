@@ -39,8 +39,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			busyprogressbar.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp
 
-libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
-		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_GDBM) \
+libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
 			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
