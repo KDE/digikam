@@ -273,10 +273,6 @@ KURL::List DigikamImageCollection::images()
               {
               album_->openDB();
               
-              // items = album_->getAllItemsPath();   
-              // PENDING (Gilles) 06/18/04: Disable this call because it's don't work correctly.
-              // Using the code above instead... ( Q: there is a bug in the album interface ? )
-
               QDir albumDir(album_->getPath(), imgFilter_.latin1(),
                             QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
 
@@ -286,6 +282,10 @@ KURL::List DigikamImageCollection::images()
                   items.append(album_->getPath() + "/" + *it);
 
               album_->closeDB();        
+          
+	      if ( items.isEmpty() == true )
+                 kdWarning() << "DigikamImageCollection::images()::AllAlbumItems : images list is empty!!!" << endl;
+
               break;
               }
               
@@ -294,6 +294,10 @@ KURL::List DigikamImageCollection::images()
               album_->openDB();   
               items = album_->getSelectedItemsPath();
               album_->closeDB();        
+
+	      if ( items.isEmpty() == true )
+                 kdWarning() << "DigikamImageCollection::images()::AlbumItemsSelection : images list is empty!!!" << endl;
+
               break;
               }
               
@@ -303,10 +307,7 @@ KURL::List DigikamImageCollection::images()
         }
         
     if ( items.isEmpty() == true )
-       {
-       kdWarning() << "DigikamImageCollection::images() : images list is empty!!!" << endl;
        return KURL::List();
-       }
     else
        return KURL::List(items);
 }
@@ -370,13 +371,19 @@ KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
                                          imagesFileFilter_
                                          ) );
     else
+       {
+       kdWarning() << "DigikamKipiInterface::currentAlbum() : no current album!!!" << endl;
        return KIPI::ImageCollection(0);
+       }
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
     if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
+       {
+       kdWarning() << "DigikamKipiInterface::currentSelection() : no current selection!!!" << endl;
        return KIPI::ImageCollection(0);
+       }
     else
        return KIPI::ImageCollection( new DigikamImageCollection
                                          (
@@ -401,7 +408,10 @@ KIPI::ImageCollection DigikamKipiInterface::currentScope()
            return currentAlbum();
        }       
     else
+       {
+       kdWarning() << "DigikamKipiInterface::currentScope() : no current album!!!" << endl;
        return KIPI::ImageCollection(0);
+       }
 }
 
 QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
