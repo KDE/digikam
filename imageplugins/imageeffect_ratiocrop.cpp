@@ -54,7 +54,7 @@
 #include "imageeffect_ratiocrop.h"
 
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Ratio Crop"),
+                     : KDialogBase(Plain, i18n("Aspect Ratio Crop"),
                                    Help|User1|Ok|Cancel, Ok,
                                    parent, 0, true, true, 
                                    i18n("&Reset Values")),
@@ -63,7 +63,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     setHelp("ratiocroptool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Ratio Crop Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Aspect Ratio Crop Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -74,11 +74,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
-    m_ratioCB->insertItem( i18n("3 x 4") );
-    m_ratioCB->insertItem( i18n("2 x 3") );
-    m_ratioCB->insertItem( i18n("5 x 7") );
-    m_ratioCB->insertItem( i18n("4 x 5") );
-    m_ratioCB->insertItem( i18n("7 x 10") );
+    m_ratioCB->insertItem( "3:4" );
+    m_ratioCB->insertItem( "2:3" );
+    m_ratioCB->insertItem( "5:7" );
+    m_ratioCB->insertItem( "4:5" );
+    m_ratioCB->insertItem( "7:10" );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your aspect ratio for cropping."));
     
     QLabel *label2 = new QLabel(i18n("Orientation:"), plainPage());

@@ -122,7 +122,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Transform menu actions.
     
-    new KAction(i18n("Ratio Crop..."), 0,
+    new KAction(i18n("Aspect Ratio Crop..."), 0,
                 this, SLOT(slotRatioCrop()),
                 actionCollection(), "implugcore_ratiocrop");
     
