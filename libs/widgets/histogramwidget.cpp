@@ -742,20 +742,39 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
     if (m_statisticsVisible)   
        {
-       QToolTip::add( this, i18n("Mean: %1<br>"
-                                 "Pixels: %2<br>"
-                                 "Std dev.: %3<br>"
-                                 "Count: %4<br>"
-                                 "Median: %5<br>"
-                                 "Percent: %6")
-                                 .arg(histogram->getMean(m_channelType, 0, 255))
-                                 .arg(histogram->getPixels())
-                                 .arg(histogram->getStdDev(m_channelType, 0, 255))
-                                 .arg(histogram->getCount(m_channelType, 0, 255))
-                                 .arg(histogram->getMedian(m_channelType, 0, 255))
-                                 .arg((histogram->getPixels() > 0 ?
-                                      (100.0 * histogram->getCount(m_channelType, 0, 255) /
-                                       histogram->getPixels()) : 0.0)));
+       QString tipText, value;
+       QString cellBeg("<tr><td><nobr><font size=-1>");
+       QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
+       QString cellEnd("</font></nobr></td></tr>");
+       tipText  = "<table cellspacing=0 cellpadding=0>";
+       
+       tipText += cellBeg + i18n("Mean:") + cellMid;
+       double mean = histogram->getMean(m_channelType, 0, 255);
+       tipText += value.setNum(mean, 'f', 1) + cellEnd;
+
+       tipText += cellBeg + i18n("Pixels:") + cellMid;
+       double pixels = histogram->getPixels();
+       tipText += value.setNum((float)pixels, 'f', 0) + cellEnd;
+
+       tipText += cellBeg + i18n("Std dev.:") + cellMid;
+       double stddev = histogram->getStdDev(m_channelType, 0, 255);
+       tipText += value.setNum(stddev, 'f', 1) + cellEnd;
+
+       tipText += cellBeg + i18n("Count:") + cellMid;
+       double counts = histogram->getCount(m_channelType, 0, 255);
+       tipText += value.setNum((float)counts, 'f', 0) + cellEnd;
+       
+       tipText += cellBeg + i18n("Median:") + cellMid;
+       double median = histogram->getMedian(m_channelType, 0, 255);
+       tipText += value.setNum(median, 'f', 1) + cellEnd;
+
+       tipText += cellBeg + i18n("Percent:") + cellMid;
+       double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
+       tipText += value.setNum(percentile, 'f', 1) + cellEnd;
+                     
+       tipText += "</table>";
+    
+       QToolTip::add( this, tipText);
        }      
        
     p1.end();
