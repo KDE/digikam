@@ -25,6 +25,8 @@
 
 #include <qwidget.h>
 
+class QCustomEvent;
+
 namespace Digikam
 {
 
@@ -53,6 +55,16 @@ enum HistogramType
     ImageSelectionHistogram   // Image selection histogram rendering.
 };
     
+private:
+
+enum RepaintType
+{
+    HistogramNone = 0,        // No current histogram values calculation.
+    HistogramStarted = 0,     // Histogram values calculation started.
+    HistogramCompleted,       // Histogram values calculation completed.
+    HistogramFailed           // Histogram values calculation failed.
+};    
+
 public:
 
     // Constructor without image data (needed to use updateData() method after instance created).
@@ -75,6 +87,9 @@ public:
     
     ~HistogramWidget();
 
+    // Stop current histogram computations.
+    void stopHistogramComputation(void);
+    
     // Update histogram data method.
     void updateData(uint *i_data, uint i_w, uint i_h, 
                     uint *s_data=0, uint s_w=0, uint s_h=0);
@@ -105,13 +120,17 @@ protected:
     void mouseMoveEvent ( QMouseEvent * e );
     
 private:
-    
+
     // Current selection informations.
     int  m_xmin;
     int  m_xminOrg; 
     int  m_xmax;
+    int  m_clearFlag;          // Clear drawing zone with message.
+    
     bool m_inSelected;
     bool m_selectMode;         // If true, a part of the histogram can be selected !
+    
+    void customEvent(QCustomEvent *event);
 };
 
 }

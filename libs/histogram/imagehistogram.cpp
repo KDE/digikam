@@ -27,8 +27,14 @@
 #include <cmath>
 #include <cstring>
 
+// Qt includes.
+
+#include <qobject.h>
+#include <qevent.h>
+
 // KDE includes.
 
+#include <kapplication.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -38,46 +44,92 @@
 namespace Digikam
 {
 
-ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h)
+ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent)
+              : QThread()
 { 
     m_imageData   = i_data;
     m_imageWidth  = i_w;
     m_imageHeight = i_h;    
-    calcHistogramValues();
+    m_parent      = parent;
+    m_histogram   = 0L;
+    m_runningFlag = true;   
+    
+    if (m_imageData && m_imageWidth && m_imageHeight)
+       start();
+    else
+       {
+       if (m_parent)
+          {
+          ImageHistogram::EventData *d = new ImageHistogram::EventData;
+          d->starting = false;
+          d->success = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          }
+       }
 }
 
 ImageHistogram::~ImageHistogram()
 { 
+    stopCalcHistogramValues();
+    
     if (m_histogram)
        delete [] m_histogram;
+}
+
+void ImageHistogram::stopCalcHistogramValues(void)
+{
+    m_runningFlag = false;  
+    wait();
+}
+
+// List of threaded operations.
+
+void ImageHistogram::run()
+{
+    calcHistogramValues();
 }
 
 // This method is inspired of Gimp2.0 
 // app/base/gimphistogram.c::gimp_histogram_calculate_sub_region 
 
-bool ImageHistogram::calcHistogramValues()
+void ImageHistogram::calcHistogramValues()
 {
     register uint  i;                   
     unsigned char  blue, green, red, alpha;
     int            max;
     unsigned int  *p;
+    ImageHistogram::EventData *d;
     
+    if (m_parent)
+       {
+       d = new ImageHistogram::EventData;
+       d->starting = true;
+       d->success = false;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       }
+        
     m_histogram = new double_packet[256];
     
     if ( !m_histogram )
        {
        kdWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
-       return false;
+    
+       if (m_parent)
+          {
+          d = new ImageHistogram::EventData;
+          d->starting = false;
+          d->success = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          }
+           
+       return;
        }
     
     memset(m_histogram, 0, 256*sizeof(struct double_packet));
 
-    if (!m_imageData && !m_imageWidth && !m_imageHeight)
-       return false;
-          
     // Form histogram (RAW DATA32 ARGB extraction method).
 
-    for (i = 0 ; i < (m_imageHeight*m_imageWidth) ; ++i)
+    for (i = 0 ; (i < m_imageHeight*m_imageWidth) && m_runningFlag ; ++i)
       {
       p = m_imageData + i;
       
@@ -96,10 +148,15 @@ bool ImageHistogram::calcHistogramValues()
       if (red > max) m_histogram[red].value++;
       else m_histogram[max].value++;
       }
-    
-    return true;
-}
 
+    if (m_parent && m_runningFlag)
+       {
+       d = new ImageHistogram::EventData;
+       d->starting = false;
+       d->success = true;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       }
+}
 
 double ImageHistogram::getCount(int channel, int start, int end)
 {

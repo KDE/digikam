@@ -22,10 +22,16 @@
 #ifndef IMAGEHISTOGRAM_H
 #define IMAGEHISTOGRAM_H
 
+// Qt includes.
+
+#include <qthread.h>
+
+class QObject;
+
 namespace Digikam
 {
 
-class ImageHistogram
+class ImageHistogram : public QThread
 {
 
 public:
@@ -37,6 +43,20 @@ enum HistogramChannelType
     GreenChannel,
     BlueChannel, 
     AlphaChannel
+};
+
+class EventData
+{
+public:
+    
+    EventData() 
+       {
+       starting = false;
+       success = false;
+       }
+    
+    bool starting;    
+    bool success;
 };
 
 private:
@@ -53,8 +73,11 @@ struct double_packet
 
 public:
     
-    ImageHistogram(uint *i_data, uint i_w, uint i_h);
+    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0);
     ~ImageHistogram();
+    
+    // Method to stop threaded calculations.
+    void stopCalcHistogramValues(void);
 
     // Methods for to manipulate the histogram data.        
     double getCount(int channel, int start, int end);
@@ -71,11 +94,19 @@ private:
     struct double_packet *m_histogram;
 
     // Image informations.
-    uint  *m_imageData;
-    uint   m_imageWidth;
-    uint   m_imageHeight;
+    uint                 *m_imageData;
+    uint                  m_imageWidth;
+    uint                  m_imageHeight;
+
+    QObject              *m_parent;
+
+    bool m_runningFlag;                    // Used to stop thread during calculations.
+    void calcHistogramValues();       
     
-    bool calcHistogramValues();       
+protected:
+
+    virtual void run();
+
 };
 
 }  // NameSpace Digikam

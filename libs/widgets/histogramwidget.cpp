@@ -21,18 +21,22 @@
  * 
  * ============================================================ */
  
+// C++ includes.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpen.h>
-
-#include <cmath>
+#include <qevent.h>
 
 // KDE includes.
 
 #include <kdebug.h>
 #include <kcursor.h>
+#include <klocale.h>
 
 // Digikam includes.
 
@@ -56,16 +60,17 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
     m_xmax           = 0;
     
-    m_imageHistogram     = 0L;
-    m_selectionHistogram = 0L;
-
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
+    
+    m_imageHistogram     = 0L;
+    m_selectionHistogram = 0L;
 }
 
 // Constructor without image selection.
@@ -80,17 +85,17 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
     m_xmax           = 0;
     
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
-    m_selectionHistogram = 0L;
-
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
-    emit signalMouseReleased(255);
+    
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, this);
+    m_selectionHistogram = 0L;
 }
 
 // Constructor with image selection.
@@ -106,17 +111,17 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
     m_xmax           = 0;
     
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h);
-
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
-    emit signalMouseReleased(255);
+    
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, this);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
 }
 
 HistogramWidget::~HistogramWidget()
@@ -128,6 +133,58 @@ HistogramWidget::~HistogramWidget()
        delete m_selectionHistogram;
 }
 
+void HistogramWidget::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
+
+    ImageHistogram::EventData *d = (ImageHistogram::EventData*) event->data();
+
+    if (!d) return;
+
+    if (d->starting)
+        {
+        setCursor( KCursor::waitCursor() );
+        m_clearFlag = HistogramStarted;
+        repaint(false);
+        }  
+    else 
+        {
+        if (d->success)
+            {
+            // Repaint histogram 
+            m_clearFlag = HistogramCompleted;
+            repaint(false);
+            setCursor( KCursor::arrowCursor() );    
+            
+            // Send signal to refresh information if necessary.
+            if ( m_xmax == 0 && m_xmin == 0)
+               {
+               emit signalMouseReleased( 255 );      // No current selection.
+               }
+            else
+               {
+               emit signalMousePressed( m_xmin );
+               emit signalMouseReleased( m_xmax );   // Current selection available.
+               }
+            }
+        else
+            {
+            m_clearFlag = HistogramFailed;
+            repaint(false);
+            setCursor( KCursor::arrowCursor() );    
+            }
+        }
+}
+
+void HistogramWidget::stopHistogramComputation(void)
+{
+    if (m_imageHistogram)
+       m_imageHistogram->stopCalcHistogramValues();
+
+    if (m_selectionHistogram)
+       m_selectionHistogram->stopCalcHistogramValues();
+}
+
 void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
                                  uint *s_data, uint s_w, uint s_h)
 {
@@ -137,25 +194,12 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
 
     if (m_selectionHistogram)
        delete m_selectionHistogram;
-    
+           
     // Calc new histogram data   
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h);
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, this);
     
-    // Repaint histogram 
-    repaint(false);
-    
-    // Send signal to refresh information if necessary.
-    if ( m_xmax == 0 && m_xmin == 0)
-       {
-       emit signalMouseReleased( 255 );      // No current selection.
-       }
-    else
-       {
-       emit signalMousePressed( m_xmin );
-       emit signalMouseReleased( m_xmax );   // Current selection available.
-       }
-    
+    if (s_data && s_w && s_h)
+        m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
 }
 
 
@@ -164,6 +208,34 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
 
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
+    if (m_clearFlag == HistogramStarted)
+       {
+       QPixmap pm(size());
+       QPainter p1;
+       p1.begin(&pm, this);
+       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.setPen(Qt::green);
+       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                  i18n("Histogram\ncalculation\nin progress..."));
+       p1.end();
+       bitBlt(this, 0, 0, &pm);
+       return;
+       }
+             
+    if (m_clearFlag == HistogramFailed)
+       {
+       QPixmap pm(size());
+       QPainter p1;
+       p1.begin(&pm, this);
+       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.setPen(Qt::red);
+       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                  i18n("Histogram\ncalculation\nfailed!"));
+       p1.end();
+       bitBlt(this, 0, 0, &pm);
+       return;
+       }
+       
     uint   x, y;
     uint   yr, yg, yb;             // For all color channels.
     uint   wWidth = width();
@@ -506,7 +578,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( m_selectMode == true ) // Selection mode enable ?
+    if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
        {
        if (!m_inSelected) 
           {
@@ -524,7 +596,7 @@ void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 
 void HistogramWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
-    if ( m_selectMode == true ) // Selection mode enable ?
+    if ( m_selectMode == true  && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
        {
        m_inSelected = false;
        int max = (int)(e->pos().x()*(256.0/(float)width()));
@@ -547,7 +619,7 @@ void HistogramWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( m_selectMode == true ) // Selection mode enable ?
+    if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
        {
        setCursor( KCursor::crossCursor() );
     
@@ -576,14 +648,20 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
 
 void HistogramWidget::slotMinValueChanged( int min )
 {
-    m_xmin = min;
-    repaint(false);    
+    if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
+       {
+       m_xmin = min;
+       repaint(false);    
+       }
 }
 
 void HistogramWidget::slotMaxValueChanged( int max )
 {
-    m_xmax = max;
-    repaint(false);    
+    if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
+       {
+       m_xmax = max;
+       repaint(false);    
+       }
 }
 
 }
