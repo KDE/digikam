@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="digikamimageplugin_charcoal" >
+
+ <MenuBar>
+
+  <Menu name="Filters" >
+   <text>Fi&amp;lters</text>
+   <Action name="imageplugin_charcoal" /> 
+  </Menu>
+
+ </MenuBar>
+
+</kpartgui>

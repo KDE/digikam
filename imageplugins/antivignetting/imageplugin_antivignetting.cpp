@@ -42,20 +42,14 @@ ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const ch
     new KAction(i18n("Anti Vignetting..."), 0, 
                 this, SLOT(slotAntiVignetting()),
                 actionCollection(), "imageplugin_antivignetting");
-                
+
+    setXMLFile("digikamimageplugin_antivignetting_ui.rc");                
     
     kdDebug() << "ImagePlugin_AntiVignetting plugin loaded" << endl;
 }
 
 ImagePlugin_AntiVignetting::~ImagePlugin_AntiVignetting()
 {
-}
-
-QStringList ImagePlugin_AntiVignetting::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_antivignetting/ ");    
-    return guiDef;
 }
 
 void ImagePlugin_AntiVignetting::slotAntiVignetting()

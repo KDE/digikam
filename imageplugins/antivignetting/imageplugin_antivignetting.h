@@ -37,8 +37,6 @@ public:
                                const QStringList &args);
     ~ImagePlugin_AntiVignetting();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotAntiVignetting();

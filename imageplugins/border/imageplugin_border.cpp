@@ -42,20 +42,14 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const char*, const QStri
     new KAction(i18n("Add Border..."), 0, 
                 this, SLOT(slotBorder()),
                 actionCollection(), "imageplugin_border");
-                
+
+    setXMLFile("digikamimageplugin_border_ui.rc");
     
     kdDebug() << "ImagePlugin_Border plugin loaded" << endl;
 }
 
 ImagePlugin_Border::~ImagePlugin_Border()
 {
-}
-
-QStringList ImagePlugin_Border::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Image/Image/Action/imageplugin_border/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Border::slotBorder()

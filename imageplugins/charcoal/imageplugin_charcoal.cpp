@@ -44,19 +44,13 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
                 this, SLOT(slotCharcoal()),
                 actionCollection(), "imageplugin_charcoal");
                 
+    setXMLFile( "digikamimageplugin_charcoal_ui.rc" );
     
     kdDebug() << "ImagePlugin_Charcoal plugin loaded" << endl;
 }
 
 ImagePlugin_Charcoal::~ImagePlugin_Charcoal()
 {
-}
-
-QStringList ImagePlugin_Charcoal::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_charcoal/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Charcoal::slotCharcoal()

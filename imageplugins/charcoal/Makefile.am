@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_charcoal.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_charcoal.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_charcoal_ui.rc

@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Border();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotBorder();

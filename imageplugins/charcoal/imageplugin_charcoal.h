@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Charcoal();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotCharcoal();

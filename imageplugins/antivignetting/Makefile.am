@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
 	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS)   
-        
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_antivignetting.la 
 
@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_antivignetting.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_antivignetting.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_antivignetting_ui.rc
