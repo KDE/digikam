@@ -75,12 +75,13 @@ void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
     
     #ifdef HAVE_KIPI
     QString pluginsType = i18n("KIPI plugins");
+    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
+                                                 .arg(lista.count()));
     #else
     QString pluginsType = i18n("Digikam plugins");
-    #endif
-
     m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
                                                  .arg(lista.count()/2));
+    #endif
     
     while(  it != lista.end() )
         {
@@ -89,9 +90,12 @@ void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
         
         if (listl.contains(*it)) item->setOn(true);
         
-        it++;
+        ++it;
+        #ifdef HAVE_KIPI
+        #else
         item->setText(1, *it);
-        it++;
+        ++it;
+        #endif
         }
 }
 

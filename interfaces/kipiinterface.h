@@ -44,9 +44,17 @@
 #include <libkipi/imagecollection.h>
 #include <libkipi/imageinfo.h>
 
+namespace Digikam
+{
+class AlbumManager;
+class AlbumInfo;
+}
+
 namespace KIPI
 {
 class Interface;
+class ImageCollection;
+class ImageInfo;
 }
 
 class KipiInterface : public KIPI::Interface
@@ -54,7 +62,9 @@ class KipiInterface : public KIPI::Interface
     Q_OBJECT
 
 public:
-    KipiInterface( QObject *parent, const char *name=0);
+    KipiInterface( QObject *parent, const char *name=0, Digikam::AlbumManager *albumM=0);
+    ~KipiInterface();
+    
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
     virtual QValueList<KIPI::ImageCollection> allAlbums();
@@ -66,6 +76,8 @@ public:
 
 protected:
     QString askForCategory();
+    
+    Digikam::AlbumManager *m_albumManager;
 
 signals:
     void imagesChanged( const KURL::List& );

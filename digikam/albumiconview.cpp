@@ -3,7 +3,7 @@
 //    ALBUMICONVIEW.CPP
 //
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 //////////////////////////////////////////////////////////////////////////////
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 // Qt includes.
 
@@ -80,17 +84,19 @@
 #include "cameradragobject.h"
 
 #include "albumiconitem.h"
+#include "digikamapp.h"
 #include "albumiconview.h"
 
-class AlbumIconViewPrivate {
-
+class AlbumIconViewPrivate 
+{
 public:
 
-    void init() {
-        imageLister = 0;
-        currentAlbum = 0;
+    void init() 
+        {
+        imageLister   = 0;
+        currentAlbum  = 0;
         albumSettings = 0;
-    }
+        }
     
     KDirLister          *imageLister;
     Digikam::AlbumInfo  *currentAlbum;
@@ -105,13 +111,12 @@ public:
 
     QString itemRenamedOld;
     QString itemRenamedNew;
-
 };
 
 
 AlbumIconView::AlbumIconView(QWidget* parent)
-    : ThumbView(parent) {
-
+             : ThumbView(parent) 
+{
     d = new AlbumIconViewPrivate;
     d->init();
     d->imageLister = new KDirLister();
@@ -140,21 +145,26 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(this, SIGNAL(signalDoubleClicked(ThumbItem *)),
             this, SLOT(slotDoubleClicked(ThumbItem *)));
+            
     connect(this, SIGNAL(signalReturnPressed(ThumbItem *)),
             this, SLOT(slotDoubleClicked(ThumbItem *)));
+            
     connect(this, SIGNAL(signalRightButtonClicked(ThumbItem *, const QPoint &)),
             this, SLOT(slotRightButtonClicked(ThumbItem *, const QPoint &)));
+            
     connect(this, SIGNAL(signalItemRenamed(ThumbItem *)),
             this, SLOT(slotItemRenamed(ThumbItem *)));
+            
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 }
 
-AlbumIconView::~AlbumIconView() {
-
-    if (!d->thumbJob.isNull()) {
+AlbumIconView::~AlbumIconView() 
+{
+    if (!d->thumbJob.isNull()) 
+        {
         d->thumbJob->kill();
-    }
+        }
 
     if (!d->thumbJob.isNull())
         delete d->thumbJob;
@@ -163,12 +173,10 @@ AlbumIconView::~AlbumIconView() {
     delete d;
 }
 
-
-
-void AlbumIconView::applySettings(const AlbumSettings*
-                                  settings)
+void AlbumIconView::applySettings(const AlbumSettings* settings)
 {
     if (!settings) return;
+    
     d->albumSettings = settings;
 
     d->imageLister->setNameFilter(d->albumSettings->getImageFileFilter() + " " + 
@@ -184,13 +192,12 @@ void AlbumIconView::applySettings(const AlbumSettings*
     setUpdatesEnabled(false);
     viewport()->setUpdatesEnabled(false);
 
-    for (ThumbItem *it = firstItem(); it;
-         it=it->nextItem()) {
-        AlbumIconItem *item
-            = static_cast<AlbumIconItem *>(it);
+    for (ThumbItem *it = firstItem(); it ; it=it->nextItem()) 
+        {
+        AlbumIconItem *item = static_cast<AlbumIconItem *>(it);
         item->updateExtraText();
         item->calcRect();
-    }
+        }
 
     setUpdatesEnabled(true);
     viewport()->setUpdatesEnabled(true);
@@ -227,23 +234,26 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 
 void AlbumIconView::setAlbum(Digikam::AlbumInfo* album)
 {
-    if (!album) {
+    if (!album) 
+        {
         d->currentAlbum = 0;
         clear();
         return;
-    }
+        }
     
     if (d->currentAlbum == album) return;
 
     d->imageLister->stop();
+    
     if (!d->thumbJob.isNull())
         d->thumbJob->kill();
     
     d->currentAlbum = album;
 
-    if (KURL(album->getPath()).isValid()) {
+    if (KURL(album->getPath()).isValid()) 
+        {
         d->imageLister->openURL(KURL(album->getPath())); 
-    }
+        }
 
     updateBanner();
 }
@@ -290,6 +300,7 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
     slotUpdate();
 
     KURL::List urlList;
+    
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
         AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(it);
         urlList.append(iconItem->fileItem()->url());
@@ -319,6 +330,7 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
 
     AlbumIconItem* iconItem =
         static_cast<AlbumIconItem*>(item->extraData(this));
+        
     if (!iconItem) return;
 
     if (d->currentAlbum)
@@ -351,7 +363,9 @@ void AlbumIconView::slotImageListerRefreshItems(const
     
     while ((fileItem = iterator.current()) != 0) {
         ++iterator;
+        
         if (fileItem->isDir()) continue;
+        
         if (!fileItem->extraData(this)) {
             // hey - a new item
             newItemList.append(fileItem);
@@ -434,9 +448,12 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     // Merge in the plugin actions ----------------------------
 
-    const QPtrList<KAction>& mergeActions =
-        DigikamPluginManager::instance()->menuMergeActions();
-
+    #ifdef HAVE_KIPI
+    const QPtrList<KAction>& mergeActions = DigikamApp::getinstance()->menuMergeActions();
+    #else
+    const QPtrList<KAction>& mergeActions = DigikamPluginManager::instance()->menuMergeActions();
+    #endif
+    
     QPtrListIterator<KAction> it(mergeActions);
     KAction *action;
     bool count = 0;

@@ -37,23 +37,31 @@
 // Local includes.
 
 #include "kipiinterface.h"
+#include "albummanager.h"
+#include "albuminfo.h"
 
 
-
-KipiInterface::KipiInterface( QObject *parent, const char *name )
+KipiInterface::KipiInterface( QObject *parent, const char *name, Digikam::AlbumManager *albumM)
               :KIPI::Interface( parent, name )
+{
+    m_albumManager = albumM;
+}
+
+KipiInterface::~KipiInterface()
 {
 }
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-return 0;
+    Digikam::AlbumInfo *currentAlbum = m_albumManager->instance()->currentAlbum();
+    return 0;  // FIXME !                      
+    
 //    return KIPI::ImageCollection( new MyImageCollection( MyImageCollection::CurrentAlbum ) );
 }
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
-return 0;
+    return 0;  // FIXME ! 
 //    return KIPI::ImageCollection( new MyImageCollection( MyImageCollection::CurrentSelection ) );
 }
 
@@ -77,7 +85,7 @@ QValueList<KIPI::ImageCollection> KipiInterface::allAlbums()
 
 KIPI::ImageInfo KipiInterface::info( const KURL& url )
 {
-return 0;    
+    return 0;  // FIXME !    
     //return KIPI::ImageInfo( new MyImageInfo( this, url ) );
 }
 
@@ -88,9 +96,8 @@ void KipiInterface::refreshImages( const KURL::List& urls )
 
 int KipiInterface::features() const
 {
-/*    return KIPI::ImagesHasComments | KIPI::ImagesHasTime | KIPI::SupportsDateRanges |
-           KIPI::AcceptNewImages | KIPI::ImageTitlesWritable;*/
-      return 0;
+    return KIPI::ImagesHasComments | KIPI::ImagesHasTime | KIPI::SupportsDateRanges |
+           KIPI::AcceptNewImages   | KIPI::AlbumEQDir    | KIPI::AlbumsHaveComments;
 }
 
 bool KipiInterface::addImage( const KURL& url, QString& errmsg )
@@ -106,7 +113,7 @@ bool KipiInterface::addImage( const KURL& url, QString& errmsg )
     dir = dir.mid( root.length() );
     ImageInfo* info = new ImageInfo( dir );
     ImageDB::instance()->addImage( info );*/
-    return true;
+    return true;      // FIXME !
 }
 
 void KipiInterface::delImage( const KURL& url )
@@ -117,6 +124,8 @@ void KipiInterface::delImage( const KURL& url )
         list.append( info );
         ImageDB::instance()->deleteList( list );
     }*/
+    
+    // FIXME !
 }
 
 #include "kipiinterface.moc"

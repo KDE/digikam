@@ -82,7 +82,7 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>../libtool</dbgshell>
+      <dbgshell>libtool</dbgshell>
       <programargs></programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
@@ -119,8 +119,8 @@
     <run>
       <directoryradio>executable</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>digikam/digikam</mainprogram>
-      <programargs/>
+      <mainprogram>digkam/digikam</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -131,19 +131,19 @@
     <configurations>
       <default>
         <configargs>--enable-debug=full --enable-kipi</configargs>
-        <builddir></builddir>
+        <builddir/>
         <topsourcedir>../</topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
+        <cppflags/>
+        <ldflags/>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
-        <cflags></cflags>
-        <cxxflags></cxxflags>
-        <f77flags></f77flags>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
       </default>
       <usingkipi>
         <configargs>--enable-debug=full --enable-kipi</configargs>

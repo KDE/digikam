@@ -75,6 +75,9 @@ public:
 
     DigikamApp();
     ~DigikamApp();
+    
+    static DigikamApp* getinstance();
+    const  QPtrList<KAction>& menuMergeActions();
 
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);
@@ -91,11 +94,15 @@ protected:
 
 private:
 
+    static DigikamApp     *m_instance;
     Digikam::AlbumManager *mAlbumManager;
     
     #ifdef HAVE_KIPI
     KIPI::PluginLoader    *pluginLoader_;
     KipiInterface         *interface_;
+    QPtrList<KAction>      m_kipiFileActions;
+    QPtrList<KAction>      m_kipiImageActions;
+    QPtrList<KAction>      m_kipiToolsActions;
     #else
     DigikamPluginManager  *pluginManager_;
     #endif

@@ -3,7 +3,7 @@
 //    ALBUMICONVIEW.H
 //
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ class AlbumInfo;
 class AlbumIconView : public ThumbView,
                       public Digikam::AlbumItemHandler
 {
-
     Q_OBJECT
 
 public:

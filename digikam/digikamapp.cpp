@@ -65,9 +65,10 @@
 #include "digikampluginmanager.h"
 #endif
 
-
+ 
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 {
+    m_instance = this;
     m_config = kapp->config();
 
     mFullScreen = false;
@@ -78,8 +79,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 
     mAlbumManager = new Digikam::AlbumManager(this);
 
-    mCameraList   =
-        new CameraList(this, locateLocal("appdata", "cameras.xml"));
+    mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
     connect(mCameraList, SIGNAL(signalCameraAdded(CameraType *)),
             this, SLOT(slotCameraAdded(CameraType *)));
@@ -110,17 +110,22 @@ DigikamApp::~DigikamApp()
     if (mView)
         delete mView;
 
-    #ifdef HAVE_KIPI
-    m_config->writeEntry( "Plugin List", pluginLoader_->loadedPlugins() );
-    #else
-    m_config->writeEntry( "Plugin List", pluginManager_->loadedPluginList() );
-    #endif
-    
-    m_config->sync();
     delete m_config;
     
     mAlbumSettings->saveSettings();
     delete mAlbumSettings;
+    
+    m_instance = 0;
+}
+
+DigikamApp* DigikamApp::getinstance()
+{
+    return m_instance;
+}
+
+const QPtrList<KAction>& DigikamApp::menuMergeActions()
+{
+    return m_kipiImageActions;
 }
 
 bool DigikamApp::queryClose()
@@ -143,7 +148,6 @@ void DigikamApp::setupView()
 
 void DigikamApp::setupActions()
 {
-
     mCameraMenuAction = new KActionMenu(i18n("&Camera"),
                                     "digitalcam",
                                     actionCollection(),
@@ -302,12 +306,12 @@ void DigikamApp::setupActions()
                                    "album_thumbSizeDecrease");
 
     mFullScreenAction = new KAction(i18n("Toggle Full Screen"),
-                                    "window_fullscreen",
-                                    CTRL+SHIFT+Key_F,
-                                    this,
-                                    SLOT(slotToggleFullScreen()),
-                                    actionCollection(),
-                                    "full_screen");
+                                   "window_fullscreen",
+                                   CTRL+SHIFT+Key_F,
+                                   this,
+                                   SLOT(slotToggleFullScreen()),
+                                   actionCollection(),
+                                   "full_screen");
 
     mQuitAction = KStdAction::quit(this,
                                    SLOT(slot_exit()),
@@ -318,9 +322,13 @@ void DigikamApp::setupActions()
                                    SLOT(slotShowTip()),
                                    actionCollection(),
                                    "help_tipofday");
-
+    
+    #ifdef HAVE_KIPI    // For KIPI plugins.
+    createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
+    #else               // For DigikamPlugins.
     createGUI();
-
+    #endif
+    
     // Initialize Actions ---------------------------------------
     mDeleteAction->setEnabled(false);
     mAddImagesAction->setEnabled(false);
@@ -372,10 +380,10 @@ void DigikamApp::slot_exit()
 
 void DigikamApp::slotCameraConnect()
 {
-    CameraType* ctype =
-        mCameraList->find(QString::fromUtf8(sender()->name()));
-    if (ctype) {
-
+    CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
+    
+    if (ctype) 
+        {
         QString selectedAlbum = "";
         if (mAlbumManager->currentAlbum())
             selectedAlbum = mAlbumManager->currentAlbum()->getTitle();
@@ -390,15 +398,17 @@ void DigikamApp::slotCameraConnect()
         stream << ctype->path();
 
         DCOPClient *client = kapp->dcopClient();
+        
         if (!client->send("digikamcameraclient", "DigikamCameraClient",
                           "cameraOpen(QString,QString,QString,QString,QString,QString)",
                           arg))
             qWarning("DigikamApp: DCOP Communication Error");
+        
         if (!client->send("digikamcameraclient", "DigikamCameraClient",
                           "cameraConnect()",
                           arg2))
             qWarning("DigikamApp: DCOP Communication Error");
-    }
+        }
 }
 
 void DigikamApp::slotCameraAdded(CameraType *ctype)
@@ -418,6 +428,7 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
     if (!ctype) return;
 
     KAction *cAction = ctype->action();
+    
     if (cAction)
         mCameraMenuAction->remove(cAction);
 }
@@ -444,21 +455,24 @@ void DigikamApp::slotSetupChanged()
 {
     #ifdef HAVE_KIPI    // KIPI plugins.
     pluginLoader_->loadPlugins(m_setup->pluginsPage_->getPluginList());
-    #else   // DigikamPlugins 
+    m_config->writeEntry( "KIPI Plugins List", pluginLoader_->loadedPlugins() );
+    #else               // DigikamPlugins 
     pluginManager_->loadPlugins(m_setup->pluginsPage_->getPluginList());
+    m_config->writeEntry( "Digikam Plugins List", pluginManager_->loadedPluginList() );
     #endif     
+    
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
+    m_config->sync();
 }
 
 void DigikamApp::slotEditKeys()
 {
     KKeyDialog::configure( actionCollection()
-    
-    #if KDE_VERSION >= 306
-                           , true /*allow on-letter shortcuts*/
-    #endif
-        );
+                         #if KDE_VERSION >= 306
+                         , true /*allow on-letter shortcuts*/
+                         #endif
+                         );
 }
 
 void DigikamApp::slotConfToolbars()
@@ -501,64 +515,64 @@ void DigikamApp::loadPlugins()
     
     QStringList ignores;
 
-    interface_ = new KipiInterface( this, "KIPI interface" );
+    interface_ = new KipiInterface( this, "KIPI interface", mAlbumManager );
 
     pluginLoader_ = new KIPI::PluginLoader( ignores, interface_ );
-    pluginLoader_->loadPlugins();
-
-    QPtrList<KAction> fileActions;
-    QPtrList<KAction> imageActions;
-    QPtrList<KAction> toolsActions;
+    
+    if ( m_config->readEntry("KIPI Plugins List") == QString::null )         
+       pluginLoader_->loadPlugins();                             
+    else 
+       pluginLoader_->loadPlugins(m_config->readListEntry("KIPI Plugins List"));
 
     KIPI::PluginLoader::List list = pluginLoader_->pluginList();
     
-    for( QPtrListIterator<KIPI::Plugin> it( list ); *it; ++it ) 
+    for( QPtrListIterator<KIPI::Plugin> it( list ) ; *it ; ++it ) 
         {
         KIPI::Plugin* plugin = *it;
         QPtrList<KAction>* popup = 0;
         
         if ( plugin->category() == KIPI::IMAGESPLUGIN )
-            popup = &imageActions;
+            popup = &m_kipiImageActions;
 
         else if ( plugin->category() == KIPI::EXPORTPLUGIN  || plugin->category() == KIPI::IMPORTPLUGIN )
-            popup = &fileActions;
+            popup = &m_kipiFileActions;
 
         else if ( plugin->category() == KIPI::TOOLSPLUGIN )
-            popup = &toolsActions;
+            popup = &m_kipiToolsActions;
 
         if ( popup ) 
             {
             KActionCollection *actions = plugin->actionCollection();
             
-            for (unsigned int i=0; i < actions->count(); i++) 
+            for (unsigned int i=0 ; i < actions->count() ; ++i) 
                 {
                 popup->append( actions->action(i) );
                 }
             }
         else 
             {
-            // PENDING(blackie) need id!
-            qDebug("No menu found for a plugin" ); // , plugin->id().latin1());
+            qDebug("No menu found for a plugin !!!" );     // FIXME !
             }
         }
 
     // For this to work I need to pass false as second arg for createGUI
     
-    plugActionList( QString::fromLatin1("file_actions"), fileActions );
-    plugActionList( QString::fromLatin1("image_actions"), imageActions );
-    plugActionList( QString::fromLatin1("tool_actions"), toolsActions );
+    plugActionList( QString::fromLatin1("file_actions"), m_kipiFileActions );
+    plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
+    plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
 
     #else   // Loading DigikamPlugins
     
     pluginManager_ = new DigikamPluginManager(this);
     
-    if ( m_config->readEntry("Plugin List") == QString::null )         
+    if ( m_config->readEntry("Digikam Plugins List") == QString::null )         
        pluginManager_->loadPlugins();                             
     else 
-       pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
+       pluginManager_->loadPlugins(m_config->readListEntry("Digikam Plugins List"));
     
     #endif
     }
 
+DigikamApp* DigikamApp::m_instance = 0;    
 
 #include "digikamapp.moc"

@@ -11,6 +11,7 @@
    <Action name="album_propsEdit" />
    <Separator/>
       <DefineGroup name="album_plugins_merge" />
+      <ActionList name="file_actions"/>
    <Separator/>
    <Action name="album_remove" />
    <Action name="album_delete" />
@@ -26,6 +27,7 @@
    <DefineGroup name="image_plugins_merge" />
    <Separator />
       <DefineGroup name="image_transform_plugins_merge" />
+      <ActionList name="image_actions"/>  
    <Separator />
    <Action name="image_rename" />
    <Action name="image_delete" />
@@ -41,6 +43,9 @@
    <Action name="album_thumbSizeIncrease" />
    <Action name="album_thumbSizeDecrease" />
    <Action name="full_screen" />
+  </Menu>
+  <Menu name="Tools"><text>&amp;Tools</text>
+      <ActionList name="tool_actions"/>
   </Menu>
   <Menu name="help"><Text>&amp;Help</Text>
    <Action name="help_tipofday"/>
