@@ -25,10 +25,14 @@
 namespace Digikam
 {
 
-ColorGradientWidget::ColorGradientWidget(Orientation o, int height, QWidget *parent)
+ColorGradientWidget::ColorGradientWidget(Orientation o, int size, QWidget *parent)
                    : KGradientSelector (o, parent)
 {
-    setFixedHeight( height );
+    if ( o == KSelector::Horizontal )
+        setFixedHeight( size );
+    else
+        setFixedWidth( size );
+     
 }      
 
 ColorGradientWidget::~ColorGradientWidget()

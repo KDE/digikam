@@ -34,7 +34,7 @@ Q_OBJECT
 
 public:
 
-    ColorGradientWidget(Orientation o, int height, QWidget *parent=0);
+    ColorGradientWidget(Orientation o, int size, QWidget *parent=0);
     ~ColorGradientWidget();
     
 protected:
