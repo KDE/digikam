@@ -665,7 +665,9 @@ void ImageWindow::slotFilePrint()
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );
     printer.setCreator( "Digikam-ImageEditor");
+#if KDE_IS_VERSION(3,2,0)
     printer.setUsePrinterResolution(true);
+#endif    
 
     KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ImageEditor page"));
 
@@ -707,23 +709,23 @@ void ImageWindow::slotSave()
     bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression);
 
     if (result == false) 
-        {
+    {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
-                                 .arg(m_urlCurrent.filename())
-                                 .arg(m_urlCurrent.path().section('/', -2, -2)));
+                           .arg(m_urlCurrent.filename())
+                           .arg(m_urlCurrent.path().section('/', -2, -2)));
         return;
-        }
+    }
 
     ExifRestorer exifHolder;
     exifHolder.readFile(m_urlCurrent.path(), ExifRestorer::ExifOnly);
 
     if (exifHolder.hasExif()) 
-       {
-       ExifRestorer restorer;
-       restorer.readFile(tmpFile, ExifRestorer::EntireImage);
-       restorer.insertExifData(exifHolder.exifData());
-       restorer.writeFile(tmpFile);
-       }
+    {
+        ExifRestorer restorer;
+        restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+        restorer.insertExifData(exifHolder.exifData());
+        restorer.writeFile(tmpFile);
+    }
     else 
         kdWarning() << ("slotSave::No Exif Data Found") << endl;
     
@@ -765,35 +767,49 @@ void ImageWindow::slotSaveAs()
     imageFileSaveDialog->setMimeFilter(mimetypes);
 
     // Check for cancel.    
-    
     if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
     {
        delete imageFileSaveDialog; 
        return;   
     }
-       
-    m_newFile = imageFileSaveDialog->selectedURL().path();
+
+    m_newFile = imageFileSaveDialog->selectedURL();
     QString format = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
     delete imageFileSaveDialog; 
+
+    if (m_newFile.isValid())
+    {
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                           .arg(m_newFile.filename())
+                           .arg(m_newFile.path().section('/', -2, -2)));
+        kdWarning() << ("slotSaveAs:: target URL isn't valid !") << endl;
+        return;
+    }    
+
+    KURL currURL(m_urlCurrent);
+    currURL.cleanPath();
+    m_newFile.cleanPath();
+
+    if (currURL.equals(m_newFile))
+    {
+        slotSave();
+        return;
+    }
     
-    if ( !m_newFile.isValid() ) 
-       {
-       kdWarning() << ("slotSaveAs:: target URL isn't valid !") << endl;
-       return;
-       }
- 
+    // TODO: ask for confirmation from user before overwriting existing file
+
     QString tmpFile = locateLocal("tmp", m_newFile.filename());
      
     int result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, format.lower());
  
     if (result == false) 
-       {
-       KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
-                          .arg(m_newFile.filename())
-                          .arg(m_newFile.path().section('/', -2, -2)));
+    {
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+                           .arg(m_newFile.filename())
+                           .arg(m_newFile.path().section('/', -2, -2)));
        
-       return;
-       }
+        return;
+    }
 
     // only try to write exif if both src and destination are jpeg files
     if (QString(QImageIO::imageFormat(m_urlCurrent.path())).upper() == "JPEG" &&
@@ -826,10 +842,10 @@ void ImageWindow::slotSaveAs()
 void ImageWindow::slotSaveAsResult(KIO::Job *job)
 {
     if (job->error()) 
-      {
+    {
       job->showErrorDialog(this);
       return;
-      }
+    }
 
     // Added new file URL into list if the new file has been added in the current Album
 
@@ -837,19 +853,19 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     PAlbum *sourcepAlbum = AlbumManager::instance()->findPAlbum(su);
 
     if (!sourcepAlbum)
-       {
-       kdWarning() << ("slotSaveAsResult::Cannot found the source album!") << endl;
-       return;
-       }
+    {
+        kdWarning() << ("slotSaveAsResult::Cannot found the source album!") << endl;
+        return;
+    }
         
     KURL tu(m_newFile.directory());
     PAlbum *targetpAlbum = AlbumManager::instance()->findPAlbum(tu);
 
     if (!targetpAlbum)
-       {
-       kdWarning() << ("slotSaveAsResult::Cannot found the target album!") << endl;
-       return;
-       }
+    {
+        kdWarning() << ("slotSaveAsResult::Cannot found the target album!") << endl;
+        return;
+    }
 
     // Copy the metadata from the original image to the target image.
                     
@@ -859,11 +875,11 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     
     if ( sourcepAlbum == targetpAlbum &&                       // Target Album = current Album ?
          m_urlList.find(m_newFile) == m_urlList.end() )        // The image file not already exist
-       {                                                       // in the list.            
-       KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-       m_urlList.insert(it, m_newFile);
-       m_urlCurrent = m_newFile;
-       }
+    {                                                          // in the list.            
+        KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+        m_urlList.insert(it, m_newFile);
+        m_urlCurrent = m_newFile;
+    }
 
     emit signalFileAdded(m_newFile);
     
