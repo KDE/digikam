@@ -34,7 +34,7 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
-#include "albuminfo.h"
+#include <interfaces/albuminfo.h>
 
 #include "albumsettings.h"
 #include "albumpropsedit.h"
@@ -139,6 +139,8 @@ AlbumPropsEdit::AlbumPropsEdit(const Digikam::AlbumInfo* albumInfo)
 
     connect(delCollectionBtn, SIGNAL(clicked()),
             this, SLOT(slotDelCollection()));
+    
+    resize(500, 400);
 }
 
 AlbumPropsEdit::~AlbumPropsEdit()
@@ -249,6 +251,5 @@ bool AlbumPropsEdit::editProps(const Digikam::AlbumInfo *albumInfo, QString& tit
 
     return ok;
 }
-
 
 #include "albumpropsedit.moc"

@@ -75,6 +75,8 @@ ImageDescEdit::ImageDescEdit(const QString& itemName,
 
     connect(mCommentsEdit, SIGNAL(textChanged()),
             this, SLOT(slot_textChanged()));
+    
+    resize(400, 300);
 }
 
 ImageDescEdit::~ImageDescEdit()
