@@ -177,7 +177,7 @@ void ImagePlugin_Core::slotSepia()
 
 void ImagePlugin_Core::slotRedEye()
 {
-    ImageEffect_RedEye::removeRedEye();    
+    ImageEffect_RedEye::removeRedEye(parentWidget());    
 }
 
 #include "imageplugin_core.moc"

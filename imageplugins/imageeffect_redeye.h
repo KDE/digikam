@@ -22,11 +22,39 @@
 #ifndef IMAGEEFFECT_REDEYE_H
 #define IMAGEEFFECT_REDEYE_H
 
+#include <kdialogbase.h>
+
+class QRadioButton;
+
 class ImageEffect_RedEye
 {
 public:
 
-    static void removeRedEye();
+    static void removeRedEye(QWidget *parent);
+};
+
+class ImageEffect_RedEyeDlg : public KDialogBase
+{
+    Q_OBJECT
+    
+public:
+
+    enum Result
+    {
+        Mild = 0,
+        Aggressive = 1
+    };
+
+    ImageEffect_RedEyeDlg(QWidget* parent);
+    Result result() const;
+
+private slots:
+
+    void slotClicked(int id);
+    
+private:
+
+    int m_selectedId;
 };
 
 #endif /* IMAGEEFFECT_REDEYE_H */

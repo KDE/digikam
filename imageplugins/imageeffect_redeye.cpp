@@ -19,6 +19,15 @@
  * 
  * ============================================================ */
 
+#include <kdialogbase.h>
+#include <klocale.h>
+#include <kapplication.h>
+#include <kconfig.h>
+
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
+#include <qlayout.h>
+
 #include <imageiface.h>
 
 #define X_DISPLAY_MISSING 1
@@ -27,8 +36,25 @@
 
 #include "imageeffect_redeye.h"
 
-void ImageEffect_RedEye::removeRedEye()
+void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 {
+    // -- run the dlg ----------------------------------------------
+
+    ImageEffect_RedEyeDlg dlg(parent);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    // -- save settings ----------------------------------------------
+
+    bool aggressive = (dlg.result() == ImageEffect_RedEyeDlg::Aggressive);
+    KConfig *config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    config->writeEntry("Red Eye Correction Plugin (Mild)",
+                       !aggressive);
+    config->sync();
+    
+    // -- do the actual operations -----------------------------------
+    
     Digikam::ImageIface iface(0, 0);
 
     uint* data = iface.getSelectedData();
@@ -80,7 +106,7 @@ void ImageEffect_RedEye::removeRedEye()
         g = (*ptr >> 8)  & 0xff;
         b = (*ptr)       & 0xff;
 
-        if (r >= ( 2 * g))
+        if ( aggressive || r >= ( 2 * g) )
         {
             r1 = (int) QMIN(255, red_norm * (red_chan.red_gain   * r +
                                        red_chan.green_gain * g +
@@ -134,3 +160,56 @@ void ImageEffect_RedEye::removeRedEye()
     delete [] data;
 }
 
+ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
+    : KDialogBase(Plain, i18n("Red Eye Correction"),
+                  Ok|Cancel, Ok, parent, 0, true, true)
+{
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
+                                              0, spacingHint());
+
+    QVButtonGroup* buttonGroup =
+        new QVButtonGroup( i18n("Level of Red Eye Correction"),
+                           plainPage() );
+    buttonGroup->setRadioButtonExclusive( true );
+
+    QRadioButton* mildBtn =
+        new QRadioButton( i18n("Mild (Use if other parts of the face are also selected)"),
+                          buttonGroup );
+    QRadioButton* aggrBtn =
+        new QRadioButton( i18n("Aggressive (Use if Eye(s) have been selected exactly)" ),
+                          buttonGroup ); 
+
+    topLayout->addWidget( buttonGroup );
+
+    connect( buttonGroup, SIGNAL(clicked(int)),
+             SLOT(slotClicked(int)) );
+    
+    bool mild;
+    
+    KConfig *config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
+
+    if (mild)
+    {
+        mildBtn->setChecked(true);
+        m_selectedId = 0;
+    }
+    else
+    {
+        aggrBtn->setChecked(true);
+        m_selectedId = 1;
+    }
+}
+
+ImageEffect_RedEyeDlg::Result ImageEffect_RedEyeDlg::result() const
+{
+    return (Result)m_selectedId;    
+}
+
+void ImageEffect_RedEyeDlg::slotClicked(int id)
+{
+    m_selectedId = id;
+}
+    
+#include "imageeffect_redeye.moc"
