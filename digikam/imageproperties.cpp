@@ -35,7 +35,6 @@
 #include <qtooltip.h>
 #include <qdatetime.h>
 #include <qsize.h>
-#include <qpopupmenu.h>
 #include <qrect.h>
 #include <qcheckbox.h>
 
@@ -55,6 +54,7 @@
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kpopupmenu.h>
 
 // LibKexif includes.
 
@@ -88,11 +88,9 @@
 ExifThumbLabel::ExifThumbLabel(QWidget * parent)
                :QLabel(parent)
 {
-    m_popmenu = new QPopupMenu(this);
+    m_popmenu = new KPopupMenu(this);
     m_popmenu->setCheckable(true);
-    m_popmenu->insertItem(i18n("Correct Exif Orientation Tag"), 10);
-    m_popmenu->setItemEnabled ( 10, false );
-    m_popmenu->insertSeparator();
+    m_popmenu->insertTitle(i18n("Correct Exif Orientation Tag"));
     m_popmenu->insertItem(i18n("Normal"), 11);
     m_popmenu->insertItem(i18n("Flipped Horizontally"), 12);
     m_popmenu->insertItem(i18n("Rotated 180 Degrees"), 13);
@@ -111,6 +109,10 @@ ExifThumbLabel::~ExifThumbLabel()
 void ExifThumbLabel::setOrientationMenu(KExifData *currExifData, KURL currentUrl)
 {
     m_currentUrl = currentUrl;
+    
+    for (int i = 11 ; i <= 18 ; ++i)
+        m_popmenu->setItemChecked(i, false); 
+    
     int orient = currExifData->getImageOrientation();
     m_popmenu->setItemChecked(orient + 10, true);
 }
@@ -119,8 +121,13 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 {
     if (e->button() !=  Qt::RightButton) return;
 
-    int orientation = m_popmenu->exec(QCursor::pos()) - 10;
+    int orientation = m_popmenu->exec(QCursor::pos());
     
+    if (orientation == -1)
+       return;
+    
+    orientation = orientation - 10;
+          
     kdDebug() << "Setting Exif Orientation to " << orientation << endl;
 
     KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;

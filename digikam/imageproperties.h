@@ -41,11 +41,11 @@ class QComboBox;
 class QSpinBox;
 class QTextEdit;
 class QMouseEvent;
-class QPopupMenu;
 class QRect;
 class QCheckBox;
 
 class KSqueezedTextLabel;
+class KPopupMenu;
 
 class AlbumIconView;
 class AlbumIconItem;
@@ -73,7 +73,7 @@ public:
 
 protected:    
     
-    QPopupMenu*    m_popmenu;
+    KPopupMenu*    m_popmenu;
     
     KURL           m_currentUrl;
     
