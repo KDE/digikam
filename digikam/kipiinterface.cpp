@@ -241,7 +241,7 @@ QString DigikamImageCollection::name()
 {
     if ( album_->type() == Album::TAG )
     {
-        return i18n("Tag:") + album_->getTitle();
+        return i18n("Tag: %1").arg(album_->getTitle());
     }
     else
         return album_->getTitle();
