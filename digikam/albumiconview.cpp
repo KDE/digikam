@@ -1221,13 +1221,14 @@ void AlbumIconView::startDrag()
     if (drag)
     {
         drag->setPixmap(pix);
-        drag->dragCopy();
+        drag->drag();
     }
 }
 
 void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 {
-    if (!d->currentAlbum || (!QUriDrag::canDecode(event) &&
+    if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
+                             !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagDrag::canDecode(event))
         || event->source() == this) {
@@ -1240,7 +1241,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
     
-    if (!d->currentAlbum || (!QUriDrag::canDecode(event) &&
+    if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
+                             !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagDrag::canDecode(event))
          || event->source() == this)

@@ -147,3 +147,65 @@ QByteArray TagDrag::encodedData( const char* ) const
     ds << mAlbumID;
     return ba;
 }
+
+AlbumDrag::AlbumDrag(const KURL::List &urls, int albumid, 
+                     QWidget *dragSource, 
+                     const char *name) :
+    KURLDrag(urls, dragSource, name)
+{
+    mAlbumID = albumid;
+}
+
+bool AlbumDrag::canDecode( const QMimeSource* e )
+{
+    return e->provides("digikam/album-id");
+}
+
+const char* AlbumDrag::format( int i ) const
+{
+    if (i == 0)
+        return "text/uri-list";
+    else if ( i == 1 )
+        return "digikam/album-id";
+
+    return 0;
+}
+
+QByteArray AlbumDrag::encodedData(const char *mime) const
+{
+    QCString mimetype( mime );
+    if(mimetype == "digikam/album-id")
+    {
+        QByteArray ba;
+        QDataStream ds(ba, IO_WriteOnly);
+        ds << mAlbumID;
+        return ba;
+    }
+    else
+    {
+        return KURLDrag::encodedData(mime);
+    }
+}
+
+bool AlbumDrag::decode(const QMimeSource* e, KURL::List &urls, 
+                       int &albumID)
+{
+    urls.clear();
+    albumID = -1;
+    
+    if(KURLDrag::decode(e, urls))
+    {
+        QByteArray ba = e->encodedData("digikam/album-id");
+        if (ba.size())
+        {
+            QDataStream ds(ba, IO_ReadOnly);
+            if(!ds.atEnd())
+            {
+                ds >> albumID;
+            }
+            return true;
+        }
+    }
+
+    return false;
+}

@@ -65,7 +65,7 @@ protected:
 };
 
 /**
- * Provides an drag object for a tag
+ * Provides a drag object for a tag
  *
  * When a tag is moved through drag'n'drop an object of this class 
  * is created.
@@ -74,12 +74,35 @@ class TagDrag : public QDragObject
 {
 public:
 
-    TagDrag( int albumid, QWidget *dragSource = 0, const char *name = 0 );
+    TagDrag(int albumid, QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
     
 protected:
 
     QByteArray      encodedData( const char* ) const;
+    const char*     format(int i) const;
+    
+private:
+    int     mAlbumID;
+};
+
+/**
+ * Provides a drag object for an album
+ *
+ * When an album is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class AlbumDrag : public KURLDrag
+{
+public:
+    AlbumDrag(const KURL::List &urls, int albumid, 
+              QWidget *dragSource = 0, const char *name = 0);
+    static bool     canDecode(const QMimeSource* e);
+    static bool     decode(const QMimeSource* e, KURL::List &urls, 
+                           int &albumID);
+protected:
+
+    QByteArray      encodedData(const char*) const;
     const char*     format(int i) const;
     
 private:

@@ -1180,16 +1180,17 @@ void AlbumFolderView::startDrag()
 
     if (album->type() == Album::PHYSICAL)
     {
-        PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-        KURLDrag* kdrag = new KURLDrag(palbum->getKURL(), this);
-        kdrag->setPixmap(*folderItem->pixmap());
-        kdrag->drag();
+        PAlbum *palbum = dynamic_cast<PAlbum*>(album);
+        // Start dragging an album        
+        AlbumDrag *albumDrag = new AlbumDrag(palbum->getKURL(), 
+                                             palbum->getID(), this);
+        albumDrag->setPixmap(*folderItem->pixmap());
+        albumDrag->drag();
     }
     else if (album->type() == Album::TAG)
     {
         // Start dragging a tag        
-        TagDrag *tagDrag = new TagDrag(album->getID(), 
-                                       this);
+        TagDrag *tagDrag = new TagDrag(album->getID(), this);
         if(tagDrag) {
             tagDrag->setPixmap(*folderItem->pixmap());
             tagDrag->drag();
@@ -1206,8 +1207,9 @@ void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
 
 void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 {
-    if (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) &&
-        !TagDrag::canDecode(event))
+    if( !QUriDrag::canDecode(event) && 
+        !CameraDragObject::canDecode(event) &&
+        !TagDrag::canDecode(event) )
     {
         clearDropTarget();
         event->ignore();
@@ -1217,71 +1219,139 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     // Get a pointer to the new drop item
     QPoint point(0, event->pos().y());
     AlbumFolderItem* newDropTarget = dynamic_cast<AlbumFolderItem*>(itemAt(point));
-    if (!newDropTarget ||  newDropTarget->isGroupItem() ||
-        !newDropTarget->album())
-    {
-        clearDropTarget();
-        event->ignore();
-        return;
-    }
-
-    // Do not allow drop on root for certain events    
-    if (newDropTarget->album()->isRoot() &&
-       (QUriDrag::canDecode(event) || CameraDragObject::canDecode(event)))
+    if (!newDropTarget)
     {
         clearDropTarget();
         event->ignore();
         return;
     }
     
-    if (newDropTarget->album()->type() == Album::PHYSICAL)
+    if(!newDropTarget->album() && !newDropTarget->isGroupItem())
     {
-        // do not allow DnD from tags onto a physical album
-        if (TagItemsDrag::canDecode(event) || TagDrag::canDecode(event))
+        clearDropTarget();
+        event->ignore();    
+        return;
+    }
+
+    bool validDrag = false;
+
+    if( AlbumDrag::canDecode(event) ) 
+    {
+        // An album can be dragged on
+        //   - collections to attach the album
+        //   - another album, when the dragged tag isn't an ancestor of the
+        //     album, to move/copy it
+        //   - album root item to attach it directly under the root
+        // An album cannot be dragged on
+        //   - on tag root item
+        //   - group items other than collections
+        
+        AlbumFolderItem *folderDragItem = 
+            dynamic_cast<AlbumFolderItem*>(dragItem_);
+        AlbumSettings* settings = AlbumSettings::instance();        
+        
+        if( folderDragItem &&
+            !newDropTarget->isGroupItem() &&
+            newDropTarget->album()->type() == Album::PHYSICAL &&
+            !folderDragItem->album()->isAncestorOf(newDropTarget->album()) )
         {
-            clearDropTarget();
-            event->ignore();
-            return;
+            validDrag = true;
+        }
+        else if( folderDragItem && settings &&
+                 newDropTarget->isGroupItem() &&
+                 settings->getAlbumSortOrder() == AlbumSettings::ByCollection )
+        {
+            validDrag = true;
         }
     }
+    else if( TagItemsDrag::canDecode(event) )
+    {
+        // An tag item can be dropped on
+        //   - tags, to asign the tag
+        // Tag items cannot be dropped on
+        //   - physical albums
+        //   - any root item
+        //   - any group item like collections
+
+        if( newDropTarget->album()->type() == Album::TAG &&
+            !newDropTarget->isGroupItem() &&
+            !newDropTarget->album()->isRoot() )
+        {
+            validDrag = true;
+        }
+    }        
+    else if( AlbumItemsDrag::canDecode(event) )
+    {
+        // An album item can be dropped on
+        //   - albums, to move/copy the item
+        //   - tags, to asign the tag
+        // Album items cannot be dropped on
+        //   - any root item
+        //   - any group item like collections
+        
+        if( !newDropTarget->isGroupItem() &&
+            !newDropTarget->album()->isRoot() )
+        {
+            validDrag = true;
+        }
+    }
+    else if( TagDrag::canDecode(event) )
+    {        
+        // Tags can be dropped on
+        //   - other tags, when the dragged tag isn't an ancestor of the tag
+        //   - the tag root to attach the tag directly under the root
+        // Tags cannot be dropped on
+        //   - PAlbums
+        //   - GroupItems like collections
+        
+        AlbumFolderItem *folderDragItem = 
+            dynamic_cast<AlbumFolderItem*>(dragItem_);
+        
+        if( folderDragItem &&
+            !newDropTarget->isGroupItem() &&
+            newDropTarget->album()->type() == Album::TAG &&
+            !folderDragItem->album()->isAncestorOf(newDropTarget->album()))
+        {
+            validDrag = true;
+        }
+    }
+    else if( QUriDrag::canDecode(event) )
+    {
+        // Allow external objects to be dropped on
+        //   - palbums
+        // don't allow drop on
+        //   - tags
+        //   - group items like collections
+        //   - any root item
+        
+        if( !newDropTarget->isGroupItem() &&
+            newDropTarget->album()->type() == Album::PHYSICAL &&
+            !newDropTarget->album()->isRoot() )
+        {
+            validDrag = true;
+        }
+    }
+                
+    if(validDrag)
+    {
+        openAlbumTimer_->start(500, true);
+        
+        event->accept();
+        if (dropTarget_ == newDropTarget) {
+            return;
+        }
+        
+        if (dropTarget_)
+            dropTarget_->removeDropHighlight();
     
-    // Do not allow an album to be dropped on it's child
-    AlbumFolderItem *folderItem = dynamic_cast<AlbumFolderItem*>(dragItem_);
-    if ((!TagItemsDrag::canDecode(event) && !AlbumItemsDrag::canDecode(event)) &&
-        (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album())))
+        dropTarget_ = newDropTarget;
+        dropTarget_->addDropHighlight();
+    }
+    else
     {
         clearDropTarget();
         event->ignore();
-        return;
     }
-
-    if (newDropTarget->album()->type() == Album::TAG)
-    {
-        // only allow DnD onto a tag album if its being dragged
-        // from a physical album or a tag album
-        // additional allow drags from tag onto a tag to move it
-        if (!(TagItemsDrag::canDecode(event)   ||
-              AlbumItemsDrag::canDecode(event) ||
-              TagDrag::canDecode(event)))
-        {
-            clearDropTarget();
-            event->ignore();
-            return;
-        }
-    }
-    
-    openAlbumTimer_->start(500, true);
-    
-    event->accept();
-    if (dropTarget_ == newDropTarget) {
-        return;
-    }
-
-    if (dropTarget_)
-        dropTarget_->removeDropHighlight();
-
-    dropTarget_ = newDropTarget;
-    dropTarget_->addDropHighlight();
 }
 
 void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
@@ -1293,22 +1363,32 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
 {
     openAlbumTimer_->stop();
     
-    if (!dropTarget_||  dropTarget_->isGroupItem())
+    if (!dropTarget_)
         return;
-
-    Album* a = dropTarget_->album();
-    if (!a)
-        return;
-
-    if (a->type() == Album::PHYSICAL) {
-        PAlbum *album = static_cast<PAlbum*>(a);
-        phyAlbumDropEvent(event, album);
+    
+    if(dropTarget_->isGroupItem()) 
+    {
+        AlbumFolderItem *item =
+            static_cast<AlbumFolderItem*>(dragItem_);
+        PAlbum *itemAlbum = static_cast<PAlbum*>(item->album());
+        itemAlbum->setCollection(dropTarget_->text());
+        resort();
     }
-    else if (a->type() == Album::TAG) {
-        TAlbum *album = static_cast<TAlbum*>(a);
-        tagAlbumDropEvent(event, album);
-    }
-        
+    else 
+    {
+        Album* a = dropTarget_->album();
+        if (!a)
+            return;
+    
+        if (a->type() == Album::PHYSICAL) {
+            PAlbum *album = static_cast<PAlbum*>(a);
+            phyAlbumDropEvent(event, album);
+        }
+        else if (a->type() == Album::TAG) {
+            TAlbum *album = static_cast<TAlbum*>(a);
+            tagAlbumDropEvent(event, album);
+        }
+    }        
     dropTarget_->removeDropHighlight();
     dropTarget_ = 0;
 }
