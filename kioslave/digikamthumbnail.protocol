@@ -7,6 +7,7 @@ reading=true
 source=false
 Description=Digikam thumbnail kioslave
 Description[et]=Digikami pisipiltide I/O-moodul
+Description[fr]=kioslave vignettes de Digikam
 Description[nl]=Digikam miniatuur kioslave
 Description[pt]='Kioslave' de miniaturas Digikam
 Description[pt_BR]='Kioslave' de miniaturas Digikam
