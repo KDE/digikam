@@ -49,22 +49,22 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
 
     QLabel      *label;
 
-    label    = new QLabel(i18n("Width :"), plainPage());
+    label    = new QLabel(i18n("Width:"), plainPage());
     m_wInput = new KIntSpinBox(1, 9999, 1, *m_width, 10, plainPage()); 
     topLayout->addWidget(label, 0, 0);
     topLayout->addWidget(m_wInput, 0, 1);
     
-    label    = new QLabel(i18n("Height :"), plainPage());
+    label    = new QLabel(i18n("Height:"), plainPage());
     m_hInput = new KIntSpinBox(1, 9999, 1, *m_height, 10, plainPage()); 
     topLayout->addWidget(label, 0, 2);
     topLayout->addWidget(m_hInput, 0, 3);
 
-    label     = new QLabel(i18n("Width % :"), plainPage());
+    label     = new QLabel(i18n("Width (%):"), plainPage());
     m_wpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
     topLayout->addWidget(label, 1, 0);
     topLayout->addWidget(m_wpInput, 1, 1);
 
-    label    = new QLabel(i18n("Height % :"), plainPage());
+    label    = new QLabel(i18n("Height (%):"), plainPage());
     m_hpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
     topLayout->addWidget(label, 1, 2);
     topLayout->addWidget(m_hpInput, 1, 3);

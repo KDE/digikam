@@ -64,7 +64,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     QLabel      *label = 0;
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Brightness :"), plainPage());
+    label    = new QLabel(i18n("Brightness:"), plainPage());
     m_bInput = new KDoubleNumInput(plainPage());
     m_bInput->setPrecision(2);
     m_bInput->setRange(-1.0, 1.0, 0.01, true);
@@ -73,7 +73,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     hlay->addWidget(m_bInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Contrast :"), plainPage());
+    label    = new QLabel(i18n("Contrast:"), plainPage());
     m_cInput = new KDoubleNumInput(plainPage());
     m_cInput->setPrecision(2);
     m_cInput->setRange(-1.0, 1.0, 0.01, true);
@@ -82,7 +82,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     hlay->addWidget(m_cInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Gamma :"), plainPage());
+    label    = new QLabel(i18n("Gamma:"), plainPage());
     m_gInput = new KDoubleNumInput(plainPage());
     m_gInput->setPrecision(2);
     m_gInput->setRange(-1.0, 1.0, 0.01, true);

@@ -47,7 +47,7 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
     QGridLayout *topLayout =
         new QGridLayout( plainPage(), 0, 3, 4, spacingHint());
 
-    QLabel *label = new QLabel(i18n("Angle :"), plainPage());
+    QLabel *label = new QLabel(i18n("Angle:"), plainPage());
     m_angleInput = new KDoubleNumInput(plainPage()); 
     m_angleInput->setPrecision(1);
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);

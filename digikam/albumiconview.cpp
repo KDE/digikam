@@ -1588,7 +1588,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
         if (!KExifUtils::writeOrientation((*it).path(), o))
         {
-            KMessageBox::sorry(0, i18n("Failed to correct EXIF orientation for file %1")
+            KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1")
                     .arg((*it).filename()));
             return;
         }

@@ -65,7 +65,7 @@ CameraDownloadDlg::CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
     QGridLayout* glay = new QGridLayout(lay);
 
     m_currLabel = new QLabel(plainPage());
-    m_currLabel->setText(i18n("Current : "));
+    m_currLabel->setText(i18n("Current: "));
     glay->addWidget(m_currLabel, 0, 0);
 
     m_currProgress = new QProgressBar(plainPage());
@@ -76,7 +76,7 @@ CameraDownloadDlg::CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
     m_currProgress->hide();
 
     m_totLabel = new QLabel(plainPage());
-    m_totLabel->setText(i18n("Total : "));
+    m_totLabel->setText(i18n("Total: "));
     glay->addWidget(m_totLabel, 1, 0);
     
     m_totalProgress = new QProgressBar(plainPage());

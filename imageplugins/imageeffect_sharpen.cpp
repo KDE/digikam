@@ -68,7 +68,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     hlay1->addWidget(m_imagePreviewWidget);
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Radius :"), plainPage());
+    QLabel *label = new QLabel(i18n("Radius:"), plainPage());
     
     m_radiusInput = new KIntNumInput(plainPage());
     m_radiusInput->setRange(0, 10, 1, true);

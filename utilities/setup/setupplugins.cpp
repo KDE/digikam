@@ -66,7 +66,7 @@ SetupPlugins::~SetupPlugins()
 
 void SetupPlugins::initPlugins(int kipiPluginsNumber)
 {
-    m_pluginsNumber->setText(i18n("KIPI plugins found: %1").arg(kipiPluginsNumber));   
+    m_pluginsNumber->setText(i18n("Kipi plugins found: %1").arg(kipiPluginsNumber));   
 }
 
 void SetupPlugins::applyPlugins()
