@@ -54,7 +54,6 @@ extern "C"
 // Local includes.
 
 #include "version.h"
-#include "splashscreen.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
@@ -209,8 +208,6 @@ int main(int argc, char *argv[])
     config->setGroup("General Settings");
     QString version = config->readEntry("Version");
 
-    bool showSplash = config->readBoolEntry("Show Splash", true);
-
     config->setGroup("Album Settings");
     QString albumPath = config->readPathEntry("Album Path");
     QFileInfo dirInfo(albumPath);
@@ -261,19 +258,10 @@ int main(int argc, char *argv[])
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 
-    SplashScreen *splash = 0; 
-    if (showSplash)
-    {
-        splash = new SplashScreen();
-    }
-
     DigikamApp *digikam = new DigikamApp(detectCamera);
 
     app.setMainWidget(digikam);
     digikam->show();
-
-    if (showSplash && splash)
-        splash->finish( digikam );
 
 #if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;

@@ -22,9 +22,11 @@
 #include <qstring.h>
 #include <qapplication.h>
 #include <qtimer.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobalsettings.h>
 
 #include "splashscreen.h"
 
@@ -72,6 +74,7 @@ void SplashScreen::finish( QWidget *mainWin )
 
 void SplashScreen::repaint()
 {
+    drawContents();
     QWidget::repaint();
     QApplication::flush();
 }
@@ -90,6 +93,37 @@ void SplashScreen::slotClose()
     
     if (timer_->isActive()) return;
     delete this;
+}
+
+void SplashScreen::message(const QString &message, int alignment,
+                           const QColor &color )
+{
+    currStatus_ = message;
+    currAlign_ = alignment;
+    currColor_ = color;
+    repaint();
+}
+
+
+void SplashScreen::drawContents()
+{
+    QPixmap textPix = *pix_;
+    QPainter painter(&textPix, this);
+    drawContents(&painter);
+    setErasePixmap(textPix);
+}
+
+void SplashScreen::drawContents( QPainter *painter )
+{
+    painter->setPen(currColor_);
+    
+    QFont fnt(KGlobalSettings::generalFont());
+    fnt.setPointSize(8);
+    painter->setFont(fnt);
+   
+    QRect r = rect();
+    r.setRect( r.x() + 5, r.y() + 5, r.width() - 10, r.height() - 10 );
+    painter->drawText(r, currAlign_, currStatus_);
 }
 
 #include "splashscreen.moc"

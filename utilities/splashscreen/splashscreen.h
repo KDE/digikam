@@ -35,20 +35,25 @@ public:
     SplashScreen();
     ~SplashScreen();
 
-    void setStatus(const QString &message, int alignment = AlignLeft,
-                   const QColor &color = white );
     void finish( QWidget *mainWin );
     void repaint();
+    void message(const QString &message, int alignment = AlignLeft,
+                 const QColor &color = white );
 
 protected:
 
     void mousePressEvent( QMouseEvent * );
-
+    void drawContents();
+    void drawContents(QPainter *painter);
+        
 private:
 
     QPixmap *pix_;
     QTimer  *timer_;
     bool     close_;
+    QString  currStatus_;
+    QColor   currColor_;
+    int      currAlign_;
 
 private slots:
 

@@ -59,6 +59,7 @@ class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
+class SplashScreen;
 
 class DigikamApp : public KMainWindow
 {
@@ -68,6 +69,8 @@ public:
 
     DigikamApp(bool detectCamera=false);
     ~DigikamApp();
+
+    virtual void show();
     
     static DigikamApp* getinstance();
 
@@ -117,6 +120,8 @@ private:
     CameraList            *mCameraList;
     bool                   mFullScreen;
 
+    SplashScreen          *mSplash;
+    
     // Album Settings
     AlbumSettings *mAlbumSettings;
 

@@ -71,6 +71,7 @@
 #include "imagepluginloader.h"
 #include "imagewindow.h"
 #include "digikamapp.h"
+#include "splashscreen.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
     : KMainWindow( 0, "Digikam" )
@@ -80,6 +81,10 @@ DigikamApp::DigikamApp(bool detectCamera)
 
     mFullScreen = false;
     mView = 0;
+    bool showSplash = m_config->readBoolEntry("Show Splash", true);
+    mSplash = 0;
+    if(showSplash)
+        mSplash = new SplashScreen();
 
     mAlbumSettings = new AlbumSettings();
     mAlbumSettings->readSettings();
@@ -103,6 +108,8 @@ DigikamApp::DigikamApp(bool detectCamera)
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
 
     // Load Cameras
+    if(mSplash)
+        mSplash->message(i18n("Loading cameras"), AlignLeft, white);
     loadCameras();
 
     // Load KIPI Plugins.
@@ -116,6 +123,8 @@ DigikamApp::DigikamApp(bool detectCamera)
     // Auto-detect camera if requested so
     if (detectCamera)
     {
+        if(mSplash)
+            mSplash->message(i18n("Auto-detect camera"), AlignLeft, white);
         QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
     }
 }
@@ -136,6 +145,17 @@ DigikamApp::~DigikamApp()
 DigikamApp* DigikamApp::getinstance()
 {
     return m_instance;
+}
+
+void DigikamApp::show()
+{
+    if(mSplash)
+    {
+        mSplash->finish(this);
+        delete mSplash;
+        mSplash = 0;
+    }
+    KMainWindow::show();
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()
@@ -865,11 +885,14 @@ void DigikamApp::slotKipiPluginPlug()
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
 
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
-        {
+    {
         KIPI::Plugin* plugin = (*it)->plugin();
 
         if ( !plugin || !(*it)->shouldLoad() )
             continue;
+
+        if(mSplash)
+            mSplash->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
@@ -879,7 +902,7 @@ void DigikamApp::slotKipiPluginPlug()
         KActionPtrList actions = plugin->actions();
 
         for( KActionPtrList::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
-            {
+        {
             if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
                popup = &m_kipiImageActions;
 
@@ -904,11 +927,13 @@ void DigikamApp::slotKipiPluginPlug()
                popup->append( *it2 );
             else
                kdDebug() << "No menu found for a plugin!!!" << endl;
-            }
-
-        plugin->actionCollection()->readShortcutSettings();
         }
 
+        plugin->actionCollection()->readShortcutSettings();
+    }
+    
+    if(mSplash)
+        mSplash->message(i18n("%1 Plugins loaded").arg(list.count()));
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
