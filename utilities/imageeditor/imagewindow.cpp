@@ -45,6 +45,8 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kmenubar.h>
+#include <ktoolbar.h>
 
 #include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
@@ -855,10 +857,31 @@ void ImageWindow::slotToggleFullScreen()
 #else
         showNormal();
 #endif
+        menuBar()->show();
+        statusBar()->show();
+
+        QObject* obj = child("toolbar","KToolBar");
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            m_guiClient->m_fullScreenAction->unplug(toolBar);
+        }
+
         m_fullScreen = false;
     }
     else 
     {
+        // hide the menubar and the toolbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        QObject* obj = child("toolbar","KToolBar");
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            m_guiClient->m_fullScreenAction->plug(toolBar);
+        }
+
         showFullScreen();
         m_fullScreen = true;
     }
