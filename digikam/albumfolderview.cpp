@@ -1080,7 +1080,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
     // Get a pointer to the new drop item
     QPoint point(0, event->pos().y());
-    AlbumFolderItem* newDropTarget = static_cast<AlbumFolderItem*>(itemAt(point));
+    AlbumFolderItem* newDropTarget = dynamic_cast<AlbumFolderItem*>(itemAt(point));
     if (!newDropTarget ||  newDropTarget->isGroupItem() ||
         !newDropTarget->album())
     {
