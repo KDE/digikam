@@ -1,6 +1,7 @@
 v0.7.3-Beta1 - 08/02/05
 ----------------------------------------------------------------------------
-    * New plugin 'Restoration' based on CImg library.
+    * New plugin 'Photograph Inpainting' using CImg library.
+    * New plugin 'Photograph Restoration' using CImg library.
     * 'AdjustCurves' plugin : add option to see over-exposed pixels in 
        preview area.
     * 'AdjustCurves' plugins : add black/gray/white tone picker color tools

@@ -35,6 +35,7 @@ Currently implemented plugins are:
 23) Texture          : A tool to apply a decorative texture to an image.
 24) WhiteBalance     : A tool to correct image white color balance.
 25) Restoration      : An advanced filter to restore photograph using CImg library.
+26) Inpainting       : An advanced filter to inpaint photograph area using CImg library.
 
 Contact :
 -----------------------------------------------------------------------
