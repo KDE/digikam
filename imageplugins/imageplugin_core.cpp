@@ -6,7 +6,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju and Gilles Caulier
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -20,12 +20,17 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+  
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <kaction.h>
 #include <kdebug.h>
 
+// Local includes.
+
+#include "imageeffect_rgb.h"
 #include "imageeffect_bcg.h"
 #include "imageeffect_solarize.h"
 #include "imageeffect_bwsepia.h"
@@ -44,18 +49,27 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     new KAction(i18n("Blur..."), 0, 
                 this, SLOT(slotBlur()),
                 actionCollection(), "implugcore_blur");
+    
     new KAction(i18n("Sharpen..."), 0, 
                 this, SLOT(slotSharpen()),
                 actionCollection(), "implugcore_sharpen");
+    
     new KAction(i18n("Brightness/Contrast/Gamma..."), 0, 
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
+    
+    new KAction(i18n("Colors balance..."), 0, 
+                this, SLOT(slotRGB()),
+                actionCollection(), "implugcore_rgb");
+    
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
+    
     new KAction(i18n("Convert to Sepia"), 0, 
                 this, SLOT(slotSepia()),
                 actionCollection(), "implugcore_sepia");
+    
     new KAction(i18n("Solarize Image..."), 0, 
                 this, SLOT(slotSolarize()),
                 actionCollection(), "implugcore_solarize");
@@ -79,6 +93,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_blur/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sharpen/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bcg/ ");
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_rgb/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
@@ -107,6 +122,12 @@ void ImagePlugin_Core::slotSharpen()
 void ImagePlugin_Core::slotBCG()
 {
     ImageEffect_BCG dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_Core::slotRGB()
+{
+    ImageEffect_RGB dlg(parentWidget());
     dlg.exec();
 }
 

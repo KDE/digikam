@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imageplugin_core.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju and Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,8 +20,11 @@
  * 
  * ============================================================ */
 
+
 #ifndef IMAGEPLUGIN_CORE_H
 #define IMAGEPLUGIN_CORE_H
+
+// Digikam includes.
 
 #include <imageplugin.h>
 
@@ -49,6 +53,7 @@ private slots:
     void slotBlur();
     void slotSharpen();
     void slotBCG();
+    void slotRGB();
     void slotBW();
     void slotSepia();
     void slotSolarize();
