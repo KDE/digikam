@@ -72,11 +72,12 @@ public:
 };
 
 ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
-    : KDialogBase(Plain, i18n("Image Comments/Tags"), User1|User2|Stretch|Ok|Apply|Cancel,
+    : KDialogBase(Plain, i18n("Image Comments/Tags"), Help|User1|User2|Stretch|Ok|Apply|Cancel,
                   Ok, view, 0, true, true, 
 		  KStdGuiItem::guiItem(KStdGuiItem::Forward), 
 		  KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
+    setHelp("tagscommentsedit.anchor", "digikam");
     m_view     = view;
     m_currItem = currItem;
     m_lister   = view->albumLister();

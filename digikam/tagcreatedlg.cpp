@@ -34,9 +34,10 @@
 #include "tagcreatedlg.h"
 
 TagCreateDlg::TagCreateDlg(TAlbum* parent)
-    : KDialogBase( Plain, i18n("Create Tag"), Ok|Cancel, Ok,
+    : KDialogBase( Plain, i18n("Create Tag"), Help|Ok|Cancel, Ok,
                    0, 0, true, true )
 {
+    setHelp("tagscreation.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
