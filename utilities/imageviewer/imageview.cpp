@@ -1042,7 +1042,7 @@ void ImageView::setupButtons()
     d->bSaveAs  = new CButton(d->buttonBar,
                              d->actions.find("saveas"),
                              BarIcon("filesaveas"),
-                             false);
+                             true);
     d->buttonLayout->addWidget(d->bSaveAs);
 
     d->bRestore  = new CButton(d->buttonBar,
