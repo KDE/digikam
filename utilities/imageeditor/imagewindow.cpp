@@ -87,7 +87,6 @@ ImageWindow::ImageWindow()
 {
     m_instance           = this;
     m_rotatedOrFlipped   = false;
-    m_setExifOrientation = false;
     m_allowSaving        = true;
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
@@ -228,6 +227,7 @@ ImageWindow::ImageWindow()
             
     // -- read settings --------------------------------
     readSettings();
+    applySettings();
 }
 
 
@@ -265,6 +265,33 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
+void ImageWindow::applySettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+
+    // Background color.
+    QColor Black(Qt::black);
+    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor",
+                                                         &Black);
+    m_canvas->update();
+
+    // JPEG compression value.
+    m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
+
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings->getUseTrash())
+    {
+        m_guiClient->m_fileDelete->setIcon("edittrash");
+        m_guiClient->m_fileDelete->setText(i18n("Move to trash"));
+    }
+    else
+    {
+        m_guiClient->m_fileDelete->setIcon("editdelete");
+        m_guiClient->m_fileDelete->setText(i18n("Delete File"));
+    }
+}
+
 void ImageWindow::readSettings()
 {
     KConfig* config = kapp->config();
@@ -281,18 +308,6 @@ void ImageWindow::readSettings()
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
-    
-    // Background color.
-    QColor Black(Qt::black);
-    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor",
-                                                         &Black);
-
-    // JPEG compression value.
-    m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
-        
-    //config->setGroup("EXIF Settings");
-    //setExifOrientation = config->readBoolEntry("EXIF Set Orientation", true);
-
     resize(width, height);
     
     if (autoZoom) {
@@ -377,15 +392,15 @@ void ImageWindow::slotLoadCurrent()
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
-       {
+    {
        m_guiClient->m_fileDelete->setEnabled(false);
        m_guiClient->m_commentedit->setEnabled(false);
-       }
+    }
     else 
-       {
+    {
        m_guiClient->m_fileDelete->setEnabled(true);
        m_guiClient->m_commentedit->setEnabled(true);
-       }
+    }
 }
 
 void ImageWindow::slotLoadNext()
@@ -585,8 +600,7 @@ void ImageWindow::slotDeleteCurrentItem()
 
     AlbumSettings* settings = AlbumSettings::instance();
 
-    if (!settings->getUseTrash() ||
-        settings->getAskTrashConfirmation())
+    if (!settings->getUseTrash())
     {
         QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
                         .arg(m_urlCurrent.filename()));

@@ -55,7 +55,8 @@ public:
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                  const QString& caption=QString::null,
                  bool allowSaving=true);
-
+    void applySettings();
+    
     static ImageWindow* instance();
     
 private:
@@ -73,7 +74,6 @@ private:
     KURL                 m_urlCurrent;
     KURL                 m_newFile;
     
-    bool                 m_setExifOrientation;
     bool                 m_rotatedOrFlipped;
     
     bool                 m_fullScreen;

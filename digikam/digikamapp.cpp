@@ -67,6 +67,7 @@
 #include "setupeditor.h"
 #include "digikamview.h"
 #include "imagepluginloader.h"
+#include "imagewindow.h"
 #include "digikamapp.h"
  
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
@@ -92,6 +93,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 
     setupView();
     setupActions();
+    updateDeleteTrashMenu();
 
     setAutoSaveSettings();
     applyMainWindowSettings (m_config);
@@ -206,7 +208,7 @@ void DigikamApp::setupActions()
     mAlbumSortAction->setItems(sortActionList);
 
     mDeleteAction = new KAction(i18n("Delete Album"),
-                                    "edittrash",
+                                    "editdelete",
                                     0,
                                     mView,
                                     SLOT(slot_deleteAlbum()),
@@ -610,6 +612,9 @@ void DigikamApp::slotSetupChanged()
     
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
+    updateDeleteTrashMenu();
+    if (ImageWindow::instance())
+        ImageWindow::instance()->applySettings();
     m_config->sync();
 }
 
@@ -807,6 +812,24 @@ void DigikamApp::slotChangeTheme(const QString& theme)
 {
     mAlbumSettings->setCurrentTheme(theme);
     ThemeEngine::instance()->slotChangeTheme(theme);
+}
+
+void DigikamApp::updateDeleteTrashMenu()
+{
+    if (mAlbumSettings->getUseTrash())
+    {
+        mDeleteAction->setText(i18n("Move Album to trash"));
+        mDeleteAction->setIcon("edittrash");
+        mImageDeleteAction->setText(i18n("Move to trash"));
+        mImageDeleteAction->setIcon("edittrash");
+    }
+    else
+    {
+        mDeleteAction->setText(i18n("Delete Album"));
+        mDeleteAction->setIcon("editdelete");
+        mImageDeleteAction->setText(i18n("Delete"));
+        mImageDeleteAction->setIcon("editdelete");
+    }
 }
 
 DigikamApp* DigikamApp::m_instance = 0;    

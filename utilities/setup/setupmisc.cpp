@@ -48,15 +48,6 @@ SetupMisc::SetupMisc(QWidget* parent)
    m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash."),
                                    trashGroupBox);
    lay->addMultiCellWidget(m_useTrashCheck, 0, 0, 0, 1);
-
-   lay->addItem(new QSpacerItem(20, 10, QSizePolicy::Fixed, QSizePolicy::Fixed),
-                1, 0);
-   
-   m_trashConfirmationCheck = new QCheckBox(i18n("Ask for confirmation before "
-                                                 "moving items to trash."),
-                                            trashGroupBox);
-   lay->addWidget(m_trashConfirmationCheck, 1, 1);
-
    layout->addWidget(trashGroupBox);
 
    // --------------------------------------------------------
@@ -70,10 +61,6 @@ SetupMisc::SetupMisc(QWidget* parent)
    // --------------------------------------------------------
 
    layout->addStretch();
-
-   connect(m_useTrashCheck, SIGNAL(toggled(bool)),
-           SLOT(slotUseTrashChecked(bool)));
-   
    readSettings();   
 }
 
@@ -88,8 +75,6 @@ void SetupMisc::applySettings()
 
     settings->setShowSplashScreen(m_showSplashCheck->isChecked());
     settings->setUseTrash(m_useTrashCheck->isChecked());
-    settings->setAskTrashConfirmation(m_trashConfirmationCheck->isChecked());
-                                  
     settings->saveSettings();
 }
 
@@ -99,14 +84,4 @@ void SetupMisc::readSettings()
 
     m_showSplashCheck->setChecked(settings->getShowSplashScreen());
     m_useTrashCheck->setChecked(settings->getUseTrash());
-    m_trashConfirmationCheck->setChecked(settings->getAskTrashConfirmation());
-
-    slotUseTrashChecked(true);
 }
-
-void SetupMisc::slotUseTrashChecked(bool)
-{
-    m_trashConfirmationCheck->setEnabled(m_useTrashCheck->isChecked());
-}
-
-#include "setupmisc.moc"

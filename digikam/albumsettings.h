@@ -131,9 +131,6 @@ public:
     void    setUseTrash(bool val);
     bool    getUseTrash() const;
 
-    void    setAskTrashConfirmation(bool val);
-    bool    getAskTrashConfirmation() const;
-    
     static AlbumSettings *instance();
 
 private:

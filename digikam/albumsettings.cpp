@@ -58,7 +58,6 @@ public:
     bool showToolTips;
     bool showSplash;
     bool useTrash;
-    bool askTrashConfirmation;
     
     bool iconShowName;
     bool iconShowSize;
@@ -124,7 +123,6 @@ void AlbumSettings::init()
     d->showToolTips = true;
     d->showSplash   = true;
     d->useTrash     = true;
-    d->askTrashConfirmation = true;
     
     d->iconShowName = false;
     d->iconShowSize = true;
@@ -219,9 +217,6 @@ void AlbumSettings::readSettings()
 
     d->useTrash =
         config->readBoolEntry("Use Trash", true);
-
-    d->askTrashConfirmation =
-        config->readBoolEntry("Ask Trash Confirmation", true);
 }
 
 void AlbumSettings::saveSettings()
@@ -300,9 +295,6 @@ void AlbumSettings::saveSettings()
 
     config->writeEntry("Use Trash", d->useTrash);
     
-    config->writeEntry("Ask Trash Confirmation",
-                       d->askTrashConfirmation);
-
     config->sync();
 }
 
@@ -559,14 +551,4 @@ void AlbumSettings::setUseTrash(bool val)
 bool AlbumSettings::getUseTrash() const
 {
     return d->useTrash;
-}
-
-void AlbumSettings::setAskTrashConfirmation(bool val)
-{
-    d->askTrashConfirmation = val;
-}
-
-bool AlbumSettings::getAskTrashConfirmation() const
-{
-    return d->askTrashConfirmation;    
 }

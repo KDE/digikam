@@ -28,8 +28,6 @@ class QCheckBox;
 
 class SetupMisc : public QWidget
 {
-    Q_OBJECT
-    
 public:
 
     SetupMisc(QWidget* parent);
@@ -43,11 +41,6 @@ private:
 
     QCheckBox* m_showSplashCheck;
     QCheckBox* m_useTrashCheck;
-    QCheckBox* m_trashConfirmationCheck;
-
-private slots:
-
-    void slotUseTrashChecked(bool);
 };
 
 #endif /* SETUPMISC_H */

@@ -86,6 +86,7 @@ private:
     void loadPlugins();
     void loadCameras();
     void populateThemes();
+    void updateDeleteTrashMenu();
 
 protected:
 

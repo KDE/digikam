@@ -592,8 +592,13 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     popmenu.insertItem(SmallIcon("pencil"),
                        i18n("Rename"), 15);
-    popmenu.insertItem(SmallIcon("editdelete"),
-                       i18n("Delete"), 16);
+
+    if (d->albumSettings->getUseTrash())
+        popmenu.insertItem(SmallIcon("edittrash"),
+                           i18n("Move to trash"), 16);
+    else
+        popmenu.insertItem(SmallIcon("editdelete"),
+                           i18n("Delete"), 16);
 
     int id = popmenu.exec(pos);
 
@@ -774,12 +779,12 @@ void AlbumIconView::slotDeleteSelectedItems()
     if (urlList.count() <= 0)
         return;
 
-    if (!d->albumSettings->getUseTrash() ||
-        d->albumSettings->getAskTrashConfirmation())
-    {    
-        QString warnMsg(i18n("About to delete this image. Are you sure?",
-                             "About to delete these %n images. Are you sure?",
-                             nameList.count()));
+    if (!d->albumSettings->getUseTrash())
+    {
+        QString warnMsg = i18n("About to delete this image. Are you sure?",
+                               "About to delete these %n images. Are you sure?",
+                               nameList.count());
+            
         if (KMessageBox::warningContinueCancelList(this,
                                                    warnMsg,
                                                    nameList,

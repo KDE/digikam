@@ -669,13 +669,21 @@ void AlbumFolderView::albumDelete(PAlbum* album)
         ++it;
     }
 
+    AlbumSettings* settings = AlbumSettings::instance();
     if (children)
     {
         int result =
-            KMessageBox::warningYesNo(this, i18n("Album '%1' has %2 subalbum(s). "
-                                                 "Deleting this will also delete "
-                                                 "the subalbum(s). "
-                                                 "Are you sure you want to continue?")
+            KMessageBox::warningYesNo(this, settings->getUseTrash() ?
+                                      i18n("Album '%1' has %2 subalbums. "
+                                           "Moving this to trash will also "
+                                           "move the subalbums to trash. "
+                                           "Are you sure you want to continue?")
+                                      .arg(album->getTitle())
+                                      .arg(children) :
+                                      i18n("Album '%1' has %2 subalbums. "
+                                           "Deleting this will also delete "
+                                           "the subalbums. "
+                                           "Are you sure you want to continue?")
                                       .arg(album->getTitle())
                                       .arg(children));
 
@@ -691,17 +699,18 @@ void AlbumFolderView::albumDelete(PAlbum* album)
     }
     else
     {
-        int result =
-            KMessageBox::questionYesNo(0, i18n("Delete '%1' Album from HardDisk")
-                                       .arg(album->getTitle()));
-
-        if (result == KMessageBox::Yes)
+        if (!settings->getUseTrash())
         {
-            QString errMsg;
-            if (!albumMan_->deletePAlbum(album, errMsg))
-            {
-                KMessageBox::error(0, errMsg);
-            }
+            if (KMessageBox::questionYesNo(0, i18n("Delete Album '%1' from HardDisk")
+                                           .arg(album->getTitle()))
+                != KMessageBox::Yes)
+                return;
+        }
+
+        QString errMsg;
+        if (!albumMan_->deletePAlbum(album, errMsg))
+        {
+            KMessageBox::error(0, errMsg);
         }
     }
 }
@@ -1122,8 +1131,12 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
     {
         popmenu.insertItem(SmallIcon("pencil"),
                            i18n("Edit Album Properties"), 11);
-        popmenu.insertItem(SmallIcon("edittrash"),
-                           i18n("Delete Album from HardDisk"), 12);
+        if (AlbumSettings::instance()->getUseTrash())
+            popmenu.insertItem(SmallIcon("edittrash"),
+                               i18n("Move Album to trash"), 12);
+        else
+            popmenu.insertItem(SmallIcon("editdelete"),
+                               i18n("Delete Album"), 12);
 
         // Add KIPI Albums plugins Actions
                              
