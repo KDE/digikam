@@ -146,14 +146,14 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Film sensibility (ISO):"), plainPage());
     
-    m_sensibilitySlider = new QSlider(0, 14, 1, 2, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
+    m_sensibilitySlider = new QSlider(2, 14, 1, 6, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
     
     m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(800) );
+    m_sensibilityLCDValue->display( QString::number(1600) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
@@ -196,7 +196,7 @@ void ImageEffect_FilmGrain::slotUser1()
     disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
                this, SLOT(slotEffect()));    
                
-    m_sensibilitySlider->setValue(2);
+    m_sensibilitySlider->setValue(6);
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
@@ -323,6 +323,7 @@ uchar ImageEffect_FilmGrain::LimitValues (int ColorValue)
     return ((uchar) ColorValue);
 }
 
+// Not used actually !
 int ImageEffect_FilmGrain::randomize_value (int now, int min, int max, int mod_p, 
                                             int rand_max, int holdness)
 {
@@ -368,6 +369,7 @@ int ImageEffect_FilmGrain::randomize_value (int now, int min, int max, int mod_p
   return newVal;
 }
 
+// Not used actually !
 void ImageEffect_FilmGrain::scatter_hsv_scatter (uchar *r, uchar *g, uchar *b, 
                                                  int hue, int saturation, int value, int holdness)
 {
