@@ -154,13 +154,15 @@ public:
     virtual int features() const;
     virtual QString fileExtensions();
 
+    /* TODO: enable this on kipi port
 protected slots:
     void slot_onAddImageFinished(KIO::Job* job);
 
 public slots:
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Digikam::AlbumInfo *album );
-    
+    */
+
 protected:
     QString askForCategory();
     

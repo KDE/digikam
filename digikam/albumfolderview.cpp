@@ -74,7 +74,6 @@
 #include "tagcreatedlg.h"
 #include "albumsettings.h"
 
-#include "dirselectdialog.h"
 
 #include "cameratype.h"
 #include "cameradragobject.h"
