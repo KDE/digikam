@@ -27,17 +27,20 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <klocale.h>
 
 // Local includes.
 
 #include "imagepluginloader.h"
+#include "splashscreen.h"
 
 ImagePluginLoader* ImagePluginLoader::m_instance=0;
 
-ImagePluginLoader::ImagePluginLoader(QObject *parent)
+ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
                  : QObject(parent)
 {
     m_instance = this;
+    m_splash   = splash;
     
     QStringList imagePluginsList2Load;
     KConfig* config = kapp->config();
@@ -86,6 +89,9 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                  m_pluginList.append(plugin);
                 
                  kdDebug() << "ImagePluginLoader: Loaded plugin " << plugin->name() << endl;
+                 
+                 if (m_splash)      
+                    m_splash->message(i18n("Loading: %1").arg(plugin->name()));
                  }
                                 
               break;
@@ -119,10 +125,20 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                 m_pluginList.append(plugin);
                 
                 kdDebug() << "ImagePluginLoader: Loaded plugin " << plugin->name() << endl;
+                
+                if (m_splash)      
+                   m_splash->message(i18n("Loading: %1").arg(plugin->name()));
                 }
              }
           }
        }
+
+    if (m_splash)      
+       m_splash->message(i18n("%1 Image Plugins loaded").arg(offers.count()));    
+
+    m_splash = 0;        // Splashcreen is only lanched at the first time.
+                         // If user change plugins list to use in setup, don't try to 
+                         // use the old splashscreen instance.
 }
 
 Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)

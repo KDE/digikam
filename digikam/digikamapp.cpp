@@ -2,7 +2,7 @@
 //
 //    DIGIKAMAPP.CPP
 //
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//    Copyright (C) 2002-2005 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,7 @@
 #include "splashscreen.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
-    : KMainWindow( 0, "Digikam" )
+          : KMainWindow( 0, "Digikam" )
 {
     m_instance = this;
     m_config = kapp->config();
@@ -83,6 +83,7 @@ DigikamApp::DigikamApp(bool detectCamera)
     mView = 0;
     bool showSplash = m_config->readBoolEntry("Show Splash", true);
     mSplash = 0;
+    
     if(showSplash)
         mSplash = new SplashScreen();
 
@@ -863,7 +864,7 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_->loadPlugins();
 
-    m_ImagePluginsLoader = new ImagePluginLoader(this);
+    m_ImagePluginsLoader = new ImagePluginLoader(this, mSplash);
 }
 
 void DigikamApp::slotKipiPluginPlug()
@@ -934,6 +935,7 @@ void DigikamApp::slotKipiPluginPlug()
     
     if(mSplash)
         mSplash->message(i18n("%1 Kipi Plugins loaded").arg(list.count()));
+    
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );

@@ -32,23 +32,26 @@
 
 #include "imageplugin.h"
 
+class SplashScreen;
+
 class ImagePluginLoader : public QObject
 {
     
 public:
 
-    ImagePluginLoader(QObject *parent);
+    ImagePluginLoader(QObject *parent, SplashScreen *splash=0);
     ~ImagePluginLoader();
 
     static ImagePluginLoader* instance();
 
     QPtrList<Digikam::ImagePlugin>& pluginList();
     void loadPluginsFromList(QStringList list);
-    
+
 private:
 
-    static ImagePluginLoader*      m_instance;
-    QPtrList<Digikam::ImagePlugin> m_pluginList;
+    SplashScreen                   *m_splash;
+    static ImagePluginLoader       *m_instance;
+    QPtrList<Digikam::ImagePlugin>  m_pluginList;
     
     Digikam::ImagePlugin* pluginIsLoaded(QString pluginName);
 };

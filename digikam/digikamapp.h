@@ -2,7 +2,7 @@
 //
 //    DIGIKAMAPP.H
 //
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//    Copyright (C) 2002-2005 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -200,7 +200,7 @@ private slots:
     void slotSetupChanged();
 
     void slotKipiPluginPlug();
-        
+    
     void slotCameraConnect();
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
