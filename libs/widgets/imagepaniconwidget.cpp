@@ -50,15 +50,15 @@ namespace Digikam
 ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w,h);
-    setMouseTracking(true);
-    
     m_iface = new ImageIface(w,h);
-    
+
     m_data = m_iface->getPreviewData();
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
+    
+    setBackgroundMode(Qt::NoBackground);
+    setFixedSize(m_w, m_h);
+    setMouseTracking(true);
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
 }
