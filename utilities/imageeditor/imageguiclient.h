@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imageguiclient.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -21,6 +22,8 @@
 
 #ifndef IMAGEGUICLIENT_H
 #define IMAGEGUICLIENT_H
+
+// Qt includes.
 
 #include <qobject.h>
 #include <guiclient.h>
@@ -63,6 +66,8 @@ signals:
     void signalSaveAs();
     void signalRestore();
 
+    void signalFileProperties();
+
 private slots:
 
     void slotHelp();
@@ -89,6 +94,8 @@ private:
     KActionMenu   *m_rotateAction;
     KActionMenu   *m_flipAction;
     KAction       *m_cropAction;
+    
+    KAction       *m_fileproperties;
 
     friend class ImageWindow;
 };

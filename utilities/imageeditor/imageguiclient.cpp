@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imageguiclient.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -111,22 +112,27 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         "rotate_270") );
 
     m_flipAction = new KActionMenu(i18n("Flip"),
-                                   "flip_image",
-                                   actionCollection(),
-                                   "imageview_flip");
+                                        "flip_image",
+                                        actionCollection(),
+                                        "imageview_flip");
 
     m_flipAction->insert( new KAction(i18n("Horizontally"), 0,
-                                      this, SIGNAL(signalFlipHoriz()),
-                                      actionCollection(),
-                                      "flip_horizontal") );
+                                        this, SIGNAL(signalFlipHoriz()),
+                                        actionCollection(),
+                                        "flip_horizontal") );
 
     m_flipAction->insert( new KAction(i18n("Vertically"), 0,
-                                      this, SIGNAL(signalFlipVert()),
-                                      actionCollection(),
-                                      "flip_vertical") );
+                                        this, SIGNAL(signalFlipVert()),
+                                        actionCollection(),
+                                        "flip_vertical") );
 
+    m_fileproperties = new KAction(i18n("View Image properties..."), "ImageProperties",
+                               ALT+Key_Return, 
+                               this, SIGNAL(signalFileProperties()),
+                               actionCollection(), "file_properties");
+                                        
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
-                     "imageview_help");
+                         "imageview_help");
     KStdAction::aboutApp(this, SLOT(slotAboutApp()), actionCollection(),
                          "imageview_aboutapp");
     KStdAction::aboutKDE(this, SLOT(slotAboutKDE()), actionCollection(),
@@ -147,8 +153,10 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_saveas/ ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_restore/ ");
     guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&File/ /Action/file_properties/ ");
+    guiDef.append("MenuBar/Menu/&File/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
-
+    
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_rotate/ ");
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_flip/ ");
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_crop/ ");

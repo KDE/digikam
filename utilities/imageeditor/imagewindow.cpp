@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imagewindow.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,19 +20,25 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+  
 #include <qpopupmenu.h>
 #include <qstatusbar.h>
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qlabel.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kaction.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kpropertiesdialog.h>
+
+// Local includes.
 
 #include "guifactory.h"
-
 #include "canvas.h"
 #include "imageguiclient.h"
 #include "imageplugin.h"
@@ -129,7 +136,10 @@ ImageWindow::ImageWindow()
 
     connect(m_guiClient, SIGNAL(signalRestore()),
             m_canvas, SLOT(slotRestore()));
-    
+
+    connect(m_guiClient, SIGNAL(signalFileProperties()),
+            SLOT(slotFileProperties()));
+                
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
@@ -367,5 +377,9 @@ void ImageWindow::slotSelected(bool val)
     }
 }
 
+void ImageWindow::slotFileProperties()
+{
+    (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
+}
 
 #include "imagewindow.moc"

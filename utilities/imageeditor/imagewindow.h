@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imagewindow.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,10 +23,14 @@
 #ifndef IMAGEWINDOW_H
 #define IMAGEWINDOW_H
 
-#include <kurl.h>
+// Qt includes.
 
 #include <qmainwindow.h>
 #include <qstring.h>
+
+// Kde includes.
+
+#include <kurl.h>
 
 class QPopupMenu;
 class QLabel;
@@ -90,6 +95,8 @@ private slots:
     void slotZoomChanged(float zoom);
     void slotChanged(bool);
     void slotSelected(bool);
+    
+    void slotFileProperties();
 };
 
 #endif /* IMAGEWINDOW_H */
