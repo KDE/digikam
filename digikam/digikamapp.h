@@ -78,6 +78,8 @@ public:
     const QPtrList<KAction>& menuImageActions();
     const QPtrList<KAction>& menuBatchActions();
     const QPtrList<KAction>& menuAlbumActions();
+    
+    const QPtrList<KAction> menuImportActions();
 
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);

@@ -179,6 +179,15 @@ const QPtrList<KAction>& DigikamApp::menuAlbumActions()
     return m_kipiAlbumActions;
 }
 
+const QPtrList<KAction> DigikamApp::menuImportActions()
+{
+    QPtrList<KAction> importMenu;
+    importMenu = m_kipiFileActionsImport;
+    importMenu.append( mAlbumImportAction );
+    importMenu.append( mAddImagesAction );
+    return importMenu;
+}
+
 bool DigikamApp::queryClose()
 {
     return true;
@@ -887,8 +896,6 @@ void DigikamApp::slotKipiPluginPlug()
     m_kipiToolsActions.clear();
     m_kipiBatchActions.clear();
     m_kipiAlbumActions.clear();
-
-    m_kipiAlbumActions.append( mAddImagesAction );
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     

@@ -1115,6 +1115,8 @@ void AlbumFolderView::slotRightButtonClicked(ListItem* item)
 void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
 {
     QPopupMenu popmenu(this);
+    KActionMenu menuImport(i18n("Import"));
+    KActionMenu menuKIPIBatch(i18n("Batch Processes"));
 
     popmenu.insertItem(SmallIcon("albumfoldernew"),
                        i18n("New Album..."), 10);
@@ -1128,39 +1130,48 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
         // Add KIPI Albums plugins Actions
 
         KAction *action;
-        const QPtrList<KAction>& AlbumActions =
+        const QPtrList<KAction>& albumActions =
             DigikamApp::getinstance()->menuAlbumActions();
-        QPtrListIterator<KAction> it(AlbumActions);
+        QPtrListIterator<KAction> it(albumActions);
 
-        int count = 0;
         while ((action = it.current()) != 0)
         {
             action->plug(&popmenu);
             ++it;
-            count++;
+        }
+
+        // Add All Import Actions
+
+        const QPtrList<KAction> importActions =
+                DigikamApp::getinstance()->menuImportActions();
+        if ( !importActions.isEmpty() )
+        {
+            QPtrListIterator<KAction> it3(importActions);
+            while ( (action = it3.current()) != 0 )
+            {
+                menuImport.insert(action);
+                ++it3;
+            }
+            menuImport.plug(&popmenu);
         }
 
         // Add KIPI Batch processes plugins Actions
 
-        KActionMenu* menuKIPIBatch = new KActionMenu(i18n("Batch Processes"));
-        const QPtrList<KAction>& BatchActions =
+        const QPtrList<KAction>& batchActions =
             DigikamApp::getinstance()->menuBatchActions();
-        QPtrListIterator<KAction> it2(BatchActions);
-
-        int kipiCount = 0;
-        while ( (action = it2.current()) != 0 )
+        if ( !batchActions.isEmpty() )
         {
-            menuKIPIBatch->insert(action);
-            ++it2;
-            kipiCount++;
+            QPtrListIterator<KAction> it2(batchActions);
+            while ( (action = it2.current()) != 0 )
+            {
+                menuKIPIBatch.insert(action);
+                ++it2;
+            }
+            menuKIPIBatch.plug(&popmenu);
         }
 
-        if (kipiCount != 0)
-        {
-            menuKIPIBatch->plug(&popmenu);
-        }
-
-        if (count != 0 || kipiCount != 0)
+        if ( !albumActions.isEmpty() || !batchActions.isEmpty() ||
+             !importActions.isEmpty() )
         {
             popmenu.insertSeparator();
         }
