@@ -65,9 +65,6 @@ private slots:
     void slotSolarize();
     void slotRedEye();
 
-    // For testing. Will be removed...
-    void slotTest();
-
 };
     
 #endif /* IMAGEPLUGIN_CORE_H */

@@ -123,13 +123,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSolarize()),
                 actionCollection(), "implugcore_solarize");
     
-    //-------------------------------                
-    // For testing. Will be removed...
-    
-    new KAction(i18n("Test..."), 0, 
-                this, SLOT(slotTest()),
-                actionCollection(), "implugcore_test");
-
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
@@ -154,9 +147,6 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_sepia/ ");
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_solarize/ ");
 
-    // For testing. Will be removed...
-    //guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_test/ ");
-    
     // enable i18n
 
     i18n( "&Image" );
@@ -258,11 +248,6 @@ void ImagePlugin_Core::slotSepia()
 void ImagePlugin_Core::slotRedEye()
 {
     ImageEffect_RedEye::removeRedEye(parentWidget());    
-}
-
-// For testing. Will be removed...
-void ImagePlugin_Core::slotTest()
-{
 }
 
 

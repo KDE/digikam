@@ -10,11 +10,6 @@
  * 
  * Algorithms are taken from KImageEffect API of KDE project.
  * Copyright (C) 1998, 1999, 2001, 2002 Daniel M. Duley <mosfet@kde.org>
- *           (C) 1998, 1999 Christian Tibirna <ctibirna@total.net>
- *           (C) 1998, 1999 Dirk A. Mueller <mueller@kde.org>
- *           (C) 1999 Geert Jansen <g.t.jansen@stud.tue.nl>
- *           (C) 2000 Josef Weidendorfer <weidendo@in.tum.de>
- *           (C) 2004 Zack Rusin <zack@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,11 +28,6 @@
 
 #include <cmath>
 #include <cstring>
-
-// For to test KImageEffect API...
-
-#include <qimage.h>
-#include <kimageeffect.h>       
 
 // KDE includes.
 
@@ -495,32 +485,4 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     delete levels;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// For to test KImageEffect API
-
-void ImageEffect_ColorsEnhance::testKImageEffect()
-{
-    /*
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
-
-    if (!data || !w || !h)
-        return;
-
-    QImage image;
-    image.create( w, h, 32 );
-    image.setAlphaBuffer(true) ;
-    memcpy(image.bits(), data, image.numBytes());
-
-    // This is the KImageEffect call...
-    KImageEffect::emboss(image, 0.3, 0.3);    
-    
-    memcpy(data, image.bits(), image.numBytes());
-    iface.putOriginalData(data);
-    delete [] data;
-    */
-}
 
