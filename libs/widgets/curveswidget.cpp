@@ -215,7 +215,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     
     histogram = m_imageHistogram;
     
-    x  = 0; y  = 0;
+    x  = 0; 
+    y  = 0;
     max = 0.0;
     
     switch(m_channelType)
@@ -272,7 +273,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       i = (x * 256) / wWidth;
       j = ((x + 1) * 256) / wWidth;
 
-      curveVal      = m_curves->getCurveValue(m_channelType, i);
+      curveVal = m_curves->getCurveValue(m_channelType, i);
              
       do
           {
@@ -352,10 +353,10 @@ void CurvesWidget::paintEvent( QPaintEvent * )
             break;
          }            
       
-      p1.drawLine(x - 1, wHeight - ((curvePrevVal * 256) / wHeight),
-                  x,     wHeight - ((curveVal * 256) / wHeight));         
-                
-      curvePrevVal      = curveVal;
+      p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / 256),
+                  x,     wHeight - ((curveVal * wHeight) / 256));                             
+      
+      curvePrevVal = curveVal;
       }
    
    // Drawing curves points.
