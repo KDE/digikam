@@ -177,17 +177,24 @@ void ShowFoto::setupActions()
 void ShowFoto::applySettings()
 {
     bool showBar = false;
+    bool autoFit = true;
+    
     m_config->setGroup("MainWindow");
     showBar = m_config->readBoolEntry("Show Thumbnails", true);
+    autoFit = m_config->readBoolEntry("Zoom Autofit", true);
 
     if (!showBar)
         m_showBarAction->activate();
+
+    if (autoFit)
+        m_zoomFitAction->activate();
 }
 
 void ShowFoto::saveSettings()
 {
     m_config->setGroup("MainWindow");
     m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
+    m_config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
 }
 
 void ShowFoto::slotOpenFile()
