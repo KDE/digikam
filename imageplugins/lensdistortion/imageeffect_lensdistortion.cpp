@@ -427,7 +427,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_edgeSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_edgeSpinBox");
     m_edgeSpinBox->setValue(0);
         
-    whatsThis = i18n("<p>This value controls run like the Main control, but the Edge control has more effect "
+    whatsThis = i18n("<p>This value controls like the Main control, but the Edge control has more effect "
                      "at the edges of the image than at the centre.");
     
     QWhatsThis::add( m_edgeSpinBox, whatsThis);
