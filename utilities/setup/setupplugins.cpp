@@ -53,10 +53,10 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    m_pluginList->addColumn( i18n( "Description" ) );
    m_pluginList->setResizeMode( QListView::LastColumn );
    m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
-                                       "who must be loaded/unloaded from/to the current "
-                                       "Digikam instance. At the next instance this list "
-                                       "will be used during the initialisation."));
+   QWhatsThis::add( m_pluginList, i18n("<p>Here you can set the list of plugins "
+                                       "to be loaded/unloaded from/to the current "
+                                       "Digikam instance; at the next instance this list "
+                                       "will be used during initialization."));
    layout->addWidget( m_pluginList );
 }
 

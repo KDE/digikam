@@ -48,19 +48,19 @@ Setup::Setup(QWidget* parent, const char* name)
     setWFlags(Qt::WDestructiveClose);
     setHelp("setupwindow.anchor", "digikam");
     
-    page_general = addPage(i18n("Albums"), i18n("Albums settings"),
+    page_general = addPage(i18n("Albums"), i18n("Album settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
     generalPage_ = new SetupGeneral(page_general);
 
-    page_mime = addPage(i18n("Mime types"), i18n("Albums items Mime types settings"),
+    page_mime = addPage(i18n("Mime types"), i18n("Album items' MIME types settings"),
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    page_plugins = addPage(i18n("Plugins"), i18n("Plugins management settings"),
+    page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
                         BarIcon("run", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
-    page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),
+    page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
     cameraPage_ = new SetupCamera(page_camera);
     

@@ -55,8 +55,8 @@ SetupMime::SetupMime(QWidget* parent )
    imageFileFilterLabel->setText(i18n("Show only image files with extensions:"));
 
    m_imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
-   QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>You can set here the extension of image files "
-                                                "who will displayed on Albums (like JPEG or TIFF)."));
+   QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
+                                                "which will be displayed in Albums (like JPEG or TIFF)."));
    
    layout->addWidget(imageFileFilterBox);
    
@@ -68,8 +68,8 @@ SetupMime::SetupMime(QWidget* parent )
    movieFileFilterLabel->setText(i18n("Show only movie files with extensions:"));
    
    m_movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
-   QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>You can set here the extension of the movie files "
-                                                "who will displayed on Albums (like MPEG or AVI)."));
+   QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
+                                                "which will be displayed in Albums (like MPEG or AVI)."));
 
    layout->addWidget(movieFileFilterBox);
 
@@ -81,8 +81,8 @@ SetupMime::SetupMime(QWidget* parent )
    audioFileFilterLabel->setText(i18n("Show only audio files with extensions:"));
    
    m_audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
-   QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>You can set here the extension of audio files "
-                                                "who will displayed on Albums (like MP3 or OGG)."));
+   QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
+                                                "which will be displayed in Albums (like MP3 or OGG)."));
    
    layout->addWidget(audioFileFilterBox);
       
@@ -94,8 +94,8 @@ SetupMime::SetupMime(QWidget* parent )
    rawFileFilterLabel->setText(i18n("Show only Raw files with extensions:"));
 
    m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
-   QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>You can set here the extension of RAW image files "
-                                                "who will displayed on Albums (like CRW for Canon camera "
+   QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
+                                                "which will be displayed in Albums (like CRW for Canon camera "
                                                 "or NEF for Nikon camera)."));
                                                 
    layout->addWidget(rawFileFilterBox);
