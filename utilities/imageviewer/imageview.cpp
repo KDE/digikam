@@ -49,6 +49,8 @@
 #include <kstandarddirs.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <kfiledialog.h>
+#include <kimageio.h>
 
 // Local includes
 
@@ -116,6 +118,7 @@ public:
         connect(this, SIGNAL(clicked()),
                 action->receiver,
                 action->slot);
+        
         action->button = this;
     }
 
@@ -131,6 +134,7 @@ protected:
             active |= QStyle::SC_ToolButton;
 
         QStyle::SFlags flags = QStyle::Style_Default;
+        
         if (isEnabled())
             flags |= QStyle::Style_Enabled;
         if (hasFocus())
@@ -162,15 +166,15 @@ class ImageViewPrivate {
 
 public:
 
-    bool   singleItemMode;
-    KURL::List urlList;
-    KURL       urlCurrent;
+    bool         singleItemMode;
+    KURL::List   urlList;
+    KURL         urlCurrent;
 
-    Canvas *canvas;
-    QWidget *buttonBar;
+    Canvas      *canvas;
+    QWidget     *buttonBar;
     QHBoxLayout *buttonLayout;
-    QLabel *nameLabel;
-    QLabel *zoomLabel;
+    QLabel      *nameLabel;
+    QLabel      *zoomLabel;
 
     QDict<CAction> actions;
     QDict<CAction> actionKeys;
@@ -191,6 +195,7 @@ public:
     CButton *bCommentsEdit;
     CButton *bExifInfo;
     CButton *bSave;
+    CButton *bSaveAs;
     CButton *bRestore;
     CButton *bRemoveCurrent;
     CButton *bClose;
@@ -208,7 +213,6 @@ ImageView::ImageView(QWidget* parent,
                      const KURL& urlCurrent)
     : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-
     d = new ImageViewPrivate;
     
     d->fullScreen = false;
@@ -304,7 +308,6 @@ void ImageView::readSettings()
 
 void ImageView::saveSettings()
 {
-
     KConfig* config = kapp->config();
 
     config->setGroup("ImageViewer Settings");
@@ -349,7 +352,6 @@ void ImageView::loadCurrentItem()
             KURL urlPrev = *(--it);
             d->canvas->preload(urlPrev.path());
         }
-
     }
 }
 
@@ -524,7 +526,12 @@ void ImageView::setupActions()
                                   this,
                                   SLOT(slotSave()),
                                   QKeySequence(CTRL+Key_S)));
-
+                                   
+    d->actions.insert("saveas",
+                      new CAction(i18n("Save As..."),
+                                  this,
+                                  SLOT(slotSaveAs()),
+                                  QKeySequence(CTRL+SHIFT+Key_S)));                                  
 
     d->actions.insert("restore",
                       new CAction(i18n("Restore"),
@@ -571,6 +578,7 @@ void ImageView::setupActions()
     addKeyInDict("ExifInfo");
     addKeyInDict("crop");
     addKeyInDict("save");
+    addKeyInDict("saveas");
     addKeyInDict("restore");
     addKeyInDict("remove");
     addKeyInDict("close");
@@ -634,6 +642,7 @@ void ImageView::setupPopupMenu()
     d->contextMenu->insertSeparator();
 
     addMenuItem(d->contextMenu, d->actions.find("save"));
+    addMenuItem(d->contextMenu, d->actions.find("saveas"));
     addMenuItem(d->contextMenu, d->actions.find("restore"));
     addMenuItem(d->contextMenu, d->actions.find("remove"));
 
@@ -641,8 +650,7 @@ void ImageView::setupPopupMenu()
 
     addMenuItem(d->contextMenu, d->actions.find("close"));
 
-
-    // Disable save, crop, and restore actions in popupmenu.
+    // Disable save, saveas, crop, and restore actions in popupmenu.
     
     CAction *action = 0;
 
@@ -652,6 +660,9 @@ void ImageView::setupPopupMenu()
     action = d->actions.find("save");
     d->contextMenu->setItemEnabled(action->menuID, false);
 
+    action = d->actions.find("saveas");
+    d->contextMenu->setItemEnabled(action->menuID, false);
+    
     action = d->actions.find("restore");
     d->contextMenu->setItemEnabled(action->menuID, false);
 }
@@ -673,6 +684,7 @@ void ImageView::addMenuItem(QPopupMenu *menu, CAction *action)
 void ImageView::addKeyInDict(const QString& key)
 {
     CAction *action = d->actions.find(key);
+    
     if (action)
         d->actionKeys.insert(action->key, action);
 }
@@ -768,6 +780,12 @@ void ImageView::setupButtons()
                              false);
     d->buttonLayout->addWidget(d->bSave);
 
+    d->bSaveAs  = new CButton(d->buttonBar,
+                             d->actions.find("saveas"),
+                             BarIcon("filesaveas"),
+                             false);
+    d->buttonLayout->addWidget(d->bSaveAs);
+
     d->bRestore  = new CButton(d->buttonBar,
                              d->actions.find("restore"),
                              BarIcon("undo"),
@@ -783,7 +801,6 @@ void ImageView::setupButtons()
                              d->actions.find("close"),
                              BarIcon("exit"));
     d->buttonLayout->addWidget(d->bClose);
-
 
     d->buttonLayout->insertStretch(-1);
 }
@@ -1004,6 +1021,108 @@ void ImageView::slotSave()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+void ImageView::slotSaveAs()
+ {
+     if (!d->urlCurrent.isValid()) return;
+     
+     // Get the new filename. 
+     
+     QStringList mimetypes = KImageIO::mimeTypes( KImageIO::Writing );
+     
+     newFile = KURL(KFileDialog::getSaveFileName(d->urlCurrent.directory(),
+                                                 mimetypes.join(" "),
+                                                 this,
+                                                 i18n("New image filename")));
+ 
+     // Check for cancel.
+     
+     if (!newFile.isValid()) return;
+ 
+     QString tmpFile = locateLocal("tmp",
+                                   d->urlCurrent.filename());
+     
+     int result = d->canvas->save(tmpFile);
+ 
+     if (result != 1) {
+         KMessageBox::error(this, i18n("Failed to save file:")
+                            + d->urlCurrent.filename());
+         return;
+     }
+     
+     ExifRestorer exifHolder;
+     exifHolder.readFile(d->urlCurrent.path(),
+                         ExifRestorer::ExifOnly);
+ 
+     if (exifHolder.hasExif()) {
+         ExifRestorer restorer;
+         restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+         restorer.insertExifData(exifHolder.exifData());
+         restorer.writeFile(tmpFile);
+     }
+     else {
+         qWarning("No Exif Data Found");
+     }
+ 
+     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), newFile,
+                                            -1, true, false, false);
+  
+     connect(job, SIGNAL(result(KIO::Job *) ),
+             this, SLOT(slotSaveAsResult(KIO::Job *)));
+}
+
+ 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotSaveResult(KIO::Job *job)
+{
+    if (job->error()) {
+        job->showErrorDialog(this);
+        return;
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotSaveAsResult(KIO::Job *job)
+{
+    if (job->error()) {
+        job->showErrorDialog(this);
+        return;
+    }
+
+    // Added new file URL into list if the new file have been added in the current Album
+    // and added the comments if exists.
+
+    Digikam::AlbumInfo *sourceAlbum = Digikam::AlbumManager::instance()
+                                      ->findAlbum( d->urlCurrent.path().section('/', -2, -2) );
+    Digikam::AlbumInfo *targetAlbum = Digikam::AlbumManager::instance()
+                                      ->findAlbum( newFile.path().section('/', -2, -2) );
+
+    if (targetAlbum && sourceAlbum)     // The target Album is in the database ?
+       {
+       sourceAlbum->openDB();
+       QString comments = sourceAlbum->getItemComments(d->urlCurrent.filename());
+       sourceAlbum->closeDB();
+
+       targetAlbum->openDB();
+       targetAlbum->setItemComments(newFile.filename(), comments);
+       targetAlbum->closeDB();
+       
+       if ( d->urlCurrent.directory() == newFile.directory() )    // Target Album = current Album ?
+          {
+          KURL::List::iterator it = d->urlList.find(d->urlCurrent);
+          d->urlList.insert(it, newFile);
+          d->urlCurrent = newFile;
+          }
+       }
+
+    loadCurrentItem();
+}
+ 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void ImageView::slotToggleAutoZoom()
 {
     bool val;
@@ -1068,11 +1187,15 @@ void ImageView::slotCropSelected(bool val)
 void ImageView::slotChanged(bool val)
 {
     d->bSave->setEnabled(val);
+    d->bSaveAs->setEnabled(val);
     d->bRestore->setEnabled(val);
 
     CAction *action = 0;
 
     action = d->actions.find("save");
+    d->contextMenu->setItemEnabled(action->menuID, val);
+
+    action = d->actions.find("saveas");
     d->contextMenu->setItemEnabled(action->menuID, val);
 
     action = d->actions.find("restore");
@@ -1114,7 +1237,9 @@ void ImageView::slotBCGEdit()
 
 void ImageView::slotCommentsEdit()
 {
-    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()->currentAlbum();
+    Digikam::AlbumInfo *currentAlbum = Digikam::AlbumManager::instance()
+                                      ->findAlbum( d->urlCurrent.path().section('/', -2, -2) );
+
     currentAlbum->openDB();
     QString comments(currentAlbum->getItemComments(d->urlCurrent.filename()));
     
@@ -1142,17 +1267,6 @@ void ImageView::slotExifInfo()
                            i18n("This item has no Exif Information"));
     }
 
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void ImageView::slotSaveResult(KIO::Job *job)
-{
-    if (job->error()) {
-        job->showErrorDialog(this);
-        return;
-    }
 }
 
 

@@ -70,6 +70,8 @@ private:
     void loadCurrentItem();
 
     ImageViewPrivate *d;
+    
+    KURL              newFile;
 
 protected:
 
@@ -82,13 +84,15 @@ private slots:
     void slotShowRotateMenu();
     void slotShowContextMenu();
     void slotSave();
+    void slotSaveAs();
+    void slotSaveResult(KIO::Job *job);
+    void slotSaveAsResult(KIO::Job *job);
     void slotToggleAutoZoom();
     void slotToggleFullScreen();
     void slotZoomChanged(double zoom);
     void slotCropSelected(bool val);
     void slotChanged(bool val);
     void slotClose();
-    void slotSaveResult(KIO::Job *job);
     void slotBCGEdit();
     void slotCommentsEdit();
     void slotExifInfo();
