@@ -1,3 +1,1607 @@
+v0.7.1-beta1			17/12/04
+----------------------------------------------------------------------------
+2004-12-17 12:17  cgilles
+
+	* imageplugins/: imageeffect_colorsenhance.cpp,
+	  imageeffect_colorsenhance.h, imageplugin_core.cpp,
+	  imageplugin_core.h: Added invert color method for positive image
+	  correction.
+
+2004-12-17 11:15  cgilles
+
+	* digikam/imagedescedit.cpp, digikam/imagedescedit.h,
+	  utilities/imageeditor/imagewindow.cpp: Image Description dialog:
+	  disable Next/Prv button if launched from Image Editor like Image
+	  Properties Dialog.
+
+2004-12-17 00:10  cgilles
+
+	* digikam/: imagedescedit.cpp, imageproperties.cpp: Follow selected
+	  item from image properties / image description dialogs in current
+	  album
+
+2004-12-15 21:10  pahlibar
+
+	* digikam/: imageproperties.cpp, imagepropertieshistogram.cpp,
+	  imagepropertieshistogram.h:
+	  fix regression. show selected area histograms as well
+
+2004-12-15 14:40  pahlibar
+
+	* digikam/imagepropertiesexif.cpp:
+	  make sure that the level currently selected in the exif view is
+	  properly restored
+
+2004-12-15 14:31  pahlibar
+
+	* digikam/Makefile.am, digikam/albumiconview.cpp,
+	  digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  digikam/imagepropertiesexif.cpp, digikam/imagepropertiesexif.h,
+	  digikam/imagepropertiesgeneral.cpp,
+	  digikam/imagepropertiesgeneral.h,
+	  digikam/imagepropertieshistogram.cpp,
+	  digikam/imagepropertieshistogram.h, showfoto/showfoto.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h:
+	  * imageproperties has been split into four classes: three for
+	  individual pages   and one for the wrapper to build the dialog *
+	  code cleanup galore * use the new embeddable exif widget to build
+	  the exif page.  * exif thumbnail option removed * exif list can
+	  be shown in two modes (simple - only the EXIF ifd and full -
+	  all the EXIF ifds) * imageproperties dialog works in two modes,
+	  one activated from the albumiconview,   allows user to traverse
+	  through the items, second activated from the imageviewer,   a
+	  single item view (need to add a third option to run it with
+	  supplied image data	to show the correct histogram for the
+	  updated image in the imageviewer) * regression checks requested.
+
+2004-12-15 04:26  pahlibar
+
+	* digikam/albumfolderview.cpp:
+	  fix issue with dragitem persisting inspite of mouse button having
+	  being released
+
+2004-12-15 04:12  pahlibar
+
+	* digikam/albumfolderview.cpp:
+	  do not jump around when an album has been renamed
+
+2004-12-15 03:41  pahlibar
+
+	* digikam/: albumdb.cpp, main.cpp:
+	  * disable autorename of albums in db as it can cause problems
+	  with user   changing his locale settings * save the current
+	  locale setting and warn the user (with option to bail   out and
+	  correct the locale) if we detect a locale change from previous
+	  run
+
+2004-12-14 12:57  cgilles
+
+	* imageplugins/: imageeffect_ratiocrop.cpp,
+	  imageeffect_ratiocrop.h: Aspect ratio crop tool : remember
+	  settings.
+
+2004-12-14 07:56  pahlibar
+
+	* imageplugins/: imageeffect_redeye.cpp, imageplugin_core.cpp:
+	  keep the redeye correction tool enabled always. if there is no
+	  selection, have a passivepopup popup informing user what to do.
+	  the popup hides itself after a short delay or when user clicks on
+	  it
+
+2004-12-13 06:35  pahlibar
+
+	* digikam/albumfiletip.cpp:
+	  removed the owner and file permissions from the tooltip. takes up
+	  space and not a very useful parameter (you can access full info
+	  through the file properties dialog anyways)
+
+2004-12-13 06:20  pahlibar
+
+	* imageplugins/imageeffect_ratiocrop.cpp:
+	  to add a child layout to a widget which already has a layout,
+	  create it first with no parent and then insert it into the
+	  widget's layout
+
+2004-12-13 04:17  pahlibar
+
+	* utilities/imageeditor/: imageprint.cpp, imageprint.h,
+	  imagewindow.cpp:
+
+	  * default option to print now is "Scale image to fit paper" *
+	  another option now is to "Scale image to specified dimensions".
+	  implemented	image scaling to handle this for centimeters and
+	  inches * Instead of saving the image file first and then
+	  reloading to print it, get the   current image data, put it into
+	  a qimage and pass it directly to the imageprint.    substantially
+	  reduces the time needed for print operations to start  BUG: 92438
+
+2004-12-13 01:04  pahlibar
+
+	* HACKING:
+	  Hacking file has been added to cvs. Developers take heed 
+
+2004-12-12 22:23  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp: Used GridLayout for
+	  widgets. Added Tooltips
+
+2004-12-12 06:50  pahlibar
+
+	* digikam/listitem.cpp, digikam/thumbitem.cpp, digikam/thumbitem.h,
+	  digikam/thumbview.cpp, digikam/thumbview.h,
+	  showfoto/showfoto.desktop,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h:
+	  various fixes (based on icefox's kde test reports) - added
+	  copyrights, replaced func(QString a) with func(const QString& a).
+
+2004-12-11 20:19  pahlibar
+
+	* utilities/cameragui/: cameraiconitem.cpp, cameraiconitem.h,
+	  cameraiconview.cpp, cameraiconview.h, cameraui.cpp, cameraui.h:
+	  * replaced qiconview	in cameraview with thumbview. selection is
+	  now more   sensible, horizontal layout and so horizontal
+	  selection * eliminates flicker as well BUG: 94913
+
+2004-12-11 11:20  cgilles
+
+	* libs/widgets/imageselectionwidget.cpp: Fixed feedback local2real
+	  selection position when X or Y changing in Ratio-Crop tool dialog
+
+2004-12-10 15:12  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp: Fixed widget canvas
+
+2004-12-10 14:39  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Ratio-crop tool : -Added
+	  custom ratio settings.  -Added none ratio setting.  -Make fade
+	  selection and border like in ImageEditor. 
+
+2004-12-09 18:55  cgilles
+
+	* libs/widgets/: imageselectionwidget.cpp, imageselectionwidget.h:
+	  Ratio-crop tool : patch from Renchi for Blending effect outside
+	  image selection
+
+2004-12-09 16:16  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Ratio-Crop tool update : -
+	  implementation 90 % complete. Need to polish some points.  -
+	  Draging selection by corners done.
+
+2004-12-09 12:25  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h, libs/widgets/Makefile.am,
+	  libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h,
+	  libs/widgets/imageselectionwidget.cpp,
+	  libs/widgets/imageselectionwidget.h: Added new widget dedicaced
+	  for image selection in Ratio-crop tool instead PanIconWidget.
+	  This widget include aspect-ratio code instead ratio-crop dialog
+	  code.
+
+2004-12-08 16:14  cgilles
+
+	* imageplugins/: imageeffect_ratiocrop.cpp,
+	  imageeffect_ratiocrop.h: Fixed orientation event
+
+2004-12-08 13:11  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imagepaniconwidget.cpp: Fixed region selection
+	  calculation
+
+2004-12-08 11:32  cgilles
+
+	* imageplugins/: imageeffect_ratiocrop.cpp, imageplugin_core.cpp:
+	  FIxed Ratio-Crop tool accordinly with Renchi
+
+2004-12-08 11:18  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h: Grayed outside selection in
+	  ratio-crop tool
+
+2004-12-08 10:39  pahlibar
+
+	* configure.in.in, digikam/albummanager.cpp,
+	  kioslave/digikamio.cpp, kioslave/digikamtags.cpp:
+	  added configure option "--enable-nfs-hack" for users facing
+	  problems with sqlite database file locking not working on nfs
+	  mounted disk. the album db is saved (with this option enabled) in
+	  $HOMEDIR/.kde/share/apps/digikam with a filename encoded with the
+	  full path to the album library path. for eg, for album library
+	  path /mnt/nfsmount/Pictures, the db filename will be
+	  %2fmnt%2fnfsmount%2fPictures%2fdigikam.db (the %2f is escaped in
+	  konqueror as "/") obviously this is an unsupported option and
+	  normal users should never use this option BUG: 94161
+
+2004-12-08 09:53  cgilles
+
+	* imageplugins/: imageeffect_ratiocrop.cpp,
+	  imageeffect_ratiocrop.h: Fixed aspect ratio values : using only
+	  ratio, not print paper sizes.
+
+2004-12-08 08:09  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_ratiocrop.h,
+	  libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h: Bug Fix: create new signal
+	  when selection size is changed. This fix crash with
+	  ImagePreviewWidget used in ImageEditor filter like Blur and
+	  Sharpen.
+
+2004-12-08 06:54  pahlibar
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/setup/setup.cpp:
+	  * when downloading files from the camera, check for the file
+	  extension of each file and added it to the image mimetype list if
+	  not found. refresh the view appropriately.  * minor code cleanup
+
+	  BUG: 94618
+
+2004-12-08 05:36  pahlibar
+
+	* digikam/albumsettings.cpp, utilities/setup/setup.cpp:
+	  * add pnm to default file extensions to look for * fix mimetype
+	  icon in setup dialog
+
+2004-12-07 16:45  cgilles
+
+	* imageplugins/: Makefile.am, imageeffect_ratiocrop.cpp,
+	  imageeffect_ratiocrop.h, imageplugin_core.cpp,
+	  imageplugin_core.h: Added ratio-crop tool for image editor
+	  inspired from PhotoAlbum and PhotoShop Album tools.  Code
+	  partially tested. Tool working but uncomplete. Missing droping
+	  selection border and standard photograph paper sizes in inch.
+
+2004-12-07 16:41  cgilles
+
+	* libs/widgets/: imagepaniconwidget.cpp, imagepaniconwidget.h:
+	  Added methods for ratio-crop tool
+
+2004-12-06 12:51  cgilles
+
+	* imageplugins/digikamimageplugin_core.desktop: Missing encoding
+	  type
+
+2004-12-06 11:11  pahlibar
+
+	* digikam/: tagcreatedlg.cpp, tagcreatedlg.h:
+	  do the same (enable ok button only if title is non-empty) for tag
+	  edit/create dialogs. will be a good idea to merge both dialogs
+	  into one
+
+2004-12-06 11:04  pahlibar
+
+	* digikam/: albumpropsedit.cpp, albumpropsedit.h:
+	  disable ok button if title is empty. there might be other places
+	  too where this will be needed
+
+2004-12-06 01:24  pahlibar
+
+	* digikam/albumfolderview.cpp:
+	  fix crash in albumfolderview because of mouse tracking. still not
+	  optimal, you have problems with dragging starting if a tag/folder
+	  has been dragged before and then you press alt/ctrl/shift.
+
+	  need to talk to joern whether mouse tracking on the treeview is
+	  really necessary. it makes life more difficult without really
+	  adding anything much of value
+          
+2004-12-05 21:21  pahlibar
+
+	* showfoto/showfoto.cpp:
+	  include unistd header for unlink
+
+2004-12-05 10:11  pahlibar
+
+	* digikam/: albumfolderview.cpp, albumfolderview.h:
+	  fix bug where dragging item and then releaseing it out the
+	  folderview, will not clear the dragitem.
+
+2004-12-05 09:51  pahlibar
+
+	* digikam/imagedescedit.cpp:
+	  item gets deleted unwantendly
+
+2004-12-05 08:16  pahlibar
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, showfoto/thumbbar.cpp,
+	  showfoto/thumbbar.h, utilities/imageeditor/imlibinterface.cpp:
+	  added save/saveas to showFoto. with this showFoto is feature
+	  complete for release with digiKam 0.7.1
+
+2004-12-05 02:20  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc:
+	  added revert action
+
+2004-12-05 01:10  pahlibar
+
+	* showfoto/: TODO, showfoto.cpp, showfoto.h, showfotoui.rc:
+	  add crop action
+
+2004-12-05 00:53  pahlibar
+
+	* showfoto/TODO, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/canvas.cpp,
+	  utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/imlibinterface.cpp:
+	  added actions to increase/decrease gamma/brightness/contrast in
+	  imageditor canvas. accessible only through showfoto.	digikam
+	  users can use the brightness/contrast/gamma dialog
+
+2004-12-04 17:06  cgilles
+
+	* libs/curves/imagecurves.cpp: Fixed stupid limit for x Points
+	  values (-1 is used for disable a point) !
+
+2004-12-04 06:32  pahlibar
+
+	* showfoto/TODO:
+	  added mini TODO file for showFoto
+
+2004-12-04 06:32  pahlibar
+
+	* showfoto/showfoto.cpp:
+	  zoom autofit should be saved and restored. default autofit
+
+2004-12-04 06:23  pahlibar
+
+	* showfoto/showfoto.cpp:
+	  add additional key accels for loading next/prev image. that
+	  should take care of all complaints
+
+2004-12-04 06:18  pahlibar
+
+	* showfoto/: showfoto.cpp, showfotoui.rc:
+	  added options for rotating and flipping the image. use kuickshow
+	  keys for the actions
+
+2004-12-04 05:55  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc:
+	  added config option to autosave/restore window size and showing
+	  of thumbnail sidebar
+
+2004-12-04 05:22  pahlibar
+
+	* showfoto/: showfoto.cpp, thumbbar.cpp:
+	  showFoto can now see remote images.  show kde image icon for
+	  failed thumbnails
+
+2004-12-03 21:13  cgilles
+
+	* libs/curves/imagecurves.cpp: Curves histgram manipulation API
+	  100% complete.
+
+2004-12-03 15:04  cgilles
+
+	* libs/curves/imagecurves.cpp: no init nedded
+
+2004-12-03 12:56  cgilles
+
+	* libs/curves/: imagecurves.cpp, imagecurves.h: Fixed Curves API
+	  (90% completed)
+
+2004-12-02 11:37  cgilles
+
+	* libs/curves/: imagecurves.cpp, imagecurves.h: Update curves
+	  methods (80% completed)
+
+2004-12-01 22:57  cgilles
+
+	* libs/widgets/histogramwidget.h: Fixed enum
+
+2004-12-01 16:03  cgilles
+
+	* digikam/Makefile.am: added curve API in libdigikam
+
+2004-12-01 16:02  cgilles
+
+	* libs/curves/: .cvsignore, Makefile.am, imagecurves.cpp,
+	  imagecurves.h: Added curve API from Gimp2.0. Uncomplete (70%).
+	  This API will be use in the future for: - new convert 2 B&W
+	  filter implementation based on
+	  http://www.gimpguru.org/Tutorials/Color2BW tutorial.	- new image
+	  plugin (in digikamimageplugins project) for adjust curves.  - new
+	  colors filters.
+
+2004-12-01 15:57  cgilles
+
+	* libs/widgets/: colorgradientwidget.cpp, colorgradientwidget.h:
+	  Added capability to use gradient vertically
+
+2004-12-01 14:45  cgilles
+
+	* imageplugins/imageeffect_colorsenhance.cpp, libs/Makefile.am,
+	  libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: Fixed
+	  method name
+
+2004-12-01 13:07  cgilles
+
+	* libs/levels/imagelevels.cpp: Fix comments
+
+2004-12-01 08:50  cgilles
+
+	* libs/levels/: imagelevels.cpp, imagelevels.h: minor fix
+
+2004-11-30 14:26  pahlibar
+
+	* utilities/imageeditor/: imagewindow.cpp, imlibinterface.cpp:
+	  fix memory leak. remove obsolete signal/slot (free rotate)
+	  connection
+
+2004-11-30 08:49  cgilles
+
+	* libs/widgets/: Makefile.am, imagetoolswidget.cpp,
+	  imagetoolswidget.h: No need this widget in core. Moved in
+	  FreeRotation plugin
+
+2004-11-29 20:57  pahlibar
+
+	* digikam/: cameralist.cpp, digikamapp.cpp:
+	  use "usb:" instead of actual port number for auto-detecting
+	  cameras. the port numbers change with each reconnect on linux
+
+2004-11-29 14:43  cgilles
+
+	* utilities/imageeditor/: Makefile.am, canvas.cpp, canvas.h,
+	  imageguiclient.cpp, imageguiclient.h, imagerotatedlg.cpp,
+	  imagerotatedlg.h, imagewindow.cpp, imagewindow.h,
+	  imlibinterface.cpp, imlibinterface.h: Image Editor : removed Free
+	  Rotation tool for core. Available now like image plugin.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-11-29 14:19  cgilles
+
+	* Digikam.kdevelop, utilities/imageeditor/canvas.cpp,
+	  utilities/imageeditor/imageiface.cpp,
+	  utilities/imageeditor/imageiface.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h: Image editor plugin
+	  interface : added capabilty to update image data with differents
+	  size from original.
+
+2004-11-29 08:24  pahlibar
+
+	* utilities/cameragui/: dirselectdialog.cpp, dirselectdialog.h:
+	  * it was possible to select the root album as the camera
+	  destination	directory. fixed * enable the ok button only if a
+	  destination album is selected and it	 is not the root album
+
+2004-11-29 06:12  pahlibar
+
+	* digikam/: cameralist.cpp, cameralist.h, digikamapp.cpp,
+	  digikamapp.h, main.cpp:
+	  new commandline option "--detect-camera". if this is supplied,
+	  digikam will try to detect if a camera is connected (works only
+	  for gphoto2 supported usb cameras) and connects to it. if the
+	  camera is not listed in the already setup list of cameras, it
+	  will be added to it.
+
+2004-11-29 05:24  pahlibar
+
+	* utilities/cameragui/: cameraiconitem.cpp, cameraiconitem.h,
+	  cameraiconview.cpp, cameraiconview.h, cameraui.cpp:
+	  fixed regression from 0.6.2 to 0.7.0 . those folks lucky enough
+	  to have a camera which indicates a files downloaded status, will
+	  get a new item emblem on the items which haven't been downloaded
+	  yet. added a new select items button, using which items can
+	  select all/invert selection/clear selection/select only new
+	  items.
+
+	  BUG: 92977
+
+2004-11-29 04:08  pahlibar
+
+	* utilities/cameragui/cameraui.cpp:
+	  use KIconLoader::loadIconSet instead of loadicon to show visually
+	  better disabled icons
+
+2004-11-29 03:50  pahlibar
+
+	* digikam/: albumfolderview.cpp, albumfolderview.h, listview.cpp,
+	  thumbnailjob.cpp:
+	  fixed problem with items being dragged, despite the mouse having
+	  being released.  minor code fixes.
+
+2004-11-29 00:54  jahrens
+
+	* digikam/digikamapp.cpp, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/cameraui.h: Sure :-) Thanks copy and paste
+	  there was no compile error and I couldn't find it during my
+	  tests. Thanks! corrected typo CCBUG: 92884
+
+2004-11-29 00:43  jahrens
+
+	* digikam/: albumfolderview.cpp, albumiconview.cpp,
+	  albumiconview.h, thumbview.cpp, thumbview.h: digiKam respects the
+	  global kde configuration now: - single/double click to open an
+	  image in the image editor - change the cursor if it is over an
+	  item - visual feedback if an item is opened in the image editor
+
+	  These things can be configured in kcontrol (Peripherals->Mouse)
+	  BUG: 87762
+
+2004-11-27 23:33  jahrens
+
+	* utilities/imageeditor/: imagewindow.cpp, imagewindow.h:
+	  I've looked at some dialogs of this kind (kolourpaint, kate,
+	  kwrite...) and so I've changed the warning dialog to the behavior
+	  I found there.  The dialog lets the user now choose, if he wants
+	  to - save (the changes) - discard (the changes) - cancel (the
+	  operation) For saveAs you have to click cancel and choose saveAs
+	  from the file menu.
+
+	  BUG: 92103
+
+2004-11-27 19:06  jahrens
+
+	* digikam/: digikamapp.cpp, digikamview.cpp, digikamview.h:
+	  ... was in the wrong directory during commit, so here is the rest
+	  :)
+
+	  After closing the cameragui, the last destination is opened in
+	  digikam.  Hope you can live with that, Guillaume.
+
+	  BUG: 92884
+
+2004-11-27 19:04  jahrens
+
+	* utilities/cameragui/: cameraui.cpp, cameraui.h:
+	  After closing the cameragui, the last destination is opened in
+	  digikam.  Hope you can live with that, Guillaume.
+
+	  BUG: 92884
+
+2004-11-27 18:58  jahrens
+
+	* digikam/listview.cpp: ensure, a selected item is visible. items
+	  selected through the navigation history can be closed and have to
+	  be opened.
+
+2004-11-26 21:10  jahrens
+
+	* digikam/: Makefile.am, albumhistory.cpp, albumhistory.h,
+	  digikamapp.cpp, digikamapp.h, digikamui.rc, digikamview.cpp,
+	  digikamview.h, listitem.cpp, listitem.h, listview.cpp: * Added a
+	  browser-like navigation history to digikam.
+
+	  A back/forward history button was added to the toolbar and the
+	  album menu. With these buttons (or the shortcuts ALT+Key_Left /
+	  ALT+Key_Right) the user can browse through the previous opened
+	  albums.
+
+2004-11-26 10:36  cgilles
+
+	* showfoto/: Makefile.am, showfoto.cpp, showfoto.h: Back to old
+	  code. no digikam depencies in showfoto
+
+2004-11-25 15:44  cgilles
+
+	* digikam/imageproperties.cpp: Fixed current album name in General
+	  view
+
+2004-11-25 15:00  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam Image
+	  properties dialog :
+
+	  - Fix Exif current item selected backup.  - Added new horz. bar
+	  in General page between image info and file system info.
+
+2004-11-25 13:48  cgilles
+
+	* digikam/: albumfiletip.cpp, albumfiletip.h, imageproperties.cpp:
+	  Digikam Image Properties and Album Item Tips dialogs : using
+	  MimeType comment instead MimeType type !
+
+2004-11-25 13:18  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Remove second
+	  separator from General page in Stand Alone mode
+
+2004-11-25 13:09  cgilles
+
+	* Digikam.kdevelop, digikam/imageproperties.cpp,
+	  digikam/imageproperties.h, showfoto/Makefile.am,
+	  showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  utilities/imageeditor/imagewindow.cpp: Digikam Image Properties
+	  dialog : Important changes !!!
+
+	  - Added new constructor for stand alone mode (outside Digikam
+	  instance ie without album and album items informations). Dialog
+	  can be used now in ShowFoto and ImageEditor (via camera
+	  interface).  - Polish General page when Stand Alone mode.
+
+	  ShowFoto : added new menu entry File/Properties using Digikam
+	  Image Properties dialog.
+
+	  ImageEditor : remove old KFileProperties dialog and using Digikam
+	  Image Properties dialog. This mode is used when ImageEditor
+	  instance is created by Camera Interface.
+
+2004-11-25 12:56  markusb
+
+	* sqlite/Makefile.am: Fix build on platforms that don't have
+	  libpthread
+
+2004-11-25 12:54  markusb
+
+	* digikam/albumfolderview.cpp: Fix compile with gcc 2.95.4
+
+2004-11-25 10:38  cgilles
+
+	* digikam/thumbnailjob.cpp: Need to test the AlbumSettings validity
+	  instance when ThumbnailJob is used out of Digikam like when Image
+	  Properties dialog is used in Showfoto.
+
+2004-11-24 23:22  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h:
+	  no need to keep pointer variable if one is not going to use it.
+	  file properties action has no icon (a la konqueror)
+
+2004-11-24 23:19  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h:
+	  fixed broken fullscreen action. if you are adding compatibility
+	  code, make sure it works.
+
+2004-11-24 18:51  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc: Added
+	  File/Properties option.  TODO: using stand alone Digikam Image
+	  Properties dialog !!!
+
+2004-11-24 18:22  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Using KPopmenu
+	  instead QPopmenu.
+
+2004-11-24 16:46  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Stand alone
+	  implementation stage1 (not using AlbumIconItem and AlbumiconView)
+
+2004-11-24 15:29  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Fixed set exif
+	  orientation tag implementation
+
+2004-11-24 15:07  cgilles
+
+	* digikam/imageproperties.cpp: Fix save
+
+2004-11-24 14:44  cgilles
+
+	* showfoto/showfoto.cpp: Kde 3.1 compatibilty patch
+
+2004-11-24 13:45  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam Image
+	  Properties dialog :
+
+	  Remember current Exif selected Item in Exif Viewer for All Levels
+	  mode (General, Extended, and All). This item is automaticly
+	  selected in the list when you change current image with Prev/Next
+	  buttons and between each dialog instance.
+
+	  To Digikam users : this way is very powerfull when you want to
+	  search difference on Exif item between images.
+
+	  Note : please, updated libkexif source code before to update
+	  digikam.
+
+2004-11-24 09:12  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties dialog : new option for toogle exif thumbnail.
+
+2004-11-24 08:14  cgilles
+
+	* digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h:
+	  Digikam image properties : remember histogram dialog options.
+
+2004-11-24 03:11  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc:
+	  fill the toolbar.  add fullscreen option
+
+2004-11-23 22:47  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties dialog : - added Exif level information option
+	  (General, Extended, or All) - Remember this option between dialog
+	  instance.
+
+2004-11-23 16:02  cgilles
+
+	* digikam/albumiconview.cpp, digikam/digikamapp.cpp,
+	  digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  imageplugins/Makefile.am, imageplugins/histogramviewer.cpp,
+	  imageplugins/histogramviewer.h,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h,
+	  libs/widgets/histogramwidget.cpp,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imagewindow.cpp: Digikam Histogram tool
+	  (Image Properties dialog) :
+
+	  - Added histogram computation on a selected area from Image
+	  Editor (like Photoshop CS(tm). If you selected an image area from
+	  ImageEditor and you started Image Properties dialog, a new option
+	  will be available for rendering histogram on full image or only
+	  selection.  - Removed old histogram image plugin from core
+	  (remplaced by Image properties histogram tab).  - Fixed
+	  'Image/properties & Meta-Data" by "Image/Properties" - Using same
+	  'Image/Properties' menu entry icon.
+
+2004-11-23 10:13  pahlibar
+
+	* showfoto/: Makefile.am, showfoto.desktop:
+	  added showfoto desktop file
+
+2004-11-23 09:26  pahlibar
+
+	* showfoto/: Makefile.am, showfoto.cpp, showfoto.h, thumbbar.cpp,
+	  thumbbar.h:
+	  added a thumbnail sidebar to showFoto 
+
+2004-11-23 00:11  pahlibar
+
+	* digikam/albumiconview.cpp, digikam/albumiconview.h,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h:
+	  * indentation fixes * albumiconview already provides a finditem
+	  by url. no need to reimplement it
+
+2004-11-22 23:43  pahlibar
+
+	* utilities/imageeditor/canvas.cpp:
+	  * reduce tilesize to 128 (gives better progress indication of
+	  image rendering), and makes scrolling smoother * fix minor glitch
+	  in painting of adjacent tiles
+
+2004-11-22 22:27  cgilles
+
+	* digikam/albumiconview.cpp, digikam/imagedescedit.cpp,
+	  digikam/imagedescedit.h, digikam/imageproperties.cpp,
+	  digikam/imageproperties.h, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/imagecommentedit.cpp,
+	  utilities/imageeditor/imagecommentedit.h,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imageguiclient.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h: Digikam Image Editor : very
+	  important changes !
+
+	  - Using Image Properties dialog from main window when image
+	  editor is openned form an Album.  - Using Image Comments/Tags
+	  dialog  from main window when image editor is openned form an
+	  Album.  - Removing old edit comments dialog.	- Removing old Exif
+	  viewer (new exif viewer is in Properties dialog)
+
+	  To Digikam users: with this way, Digikam Image* dialogs are the
+	  same in main windows and in Editor. Try Image menu entries in
+	  Editor...
+
+	  TODO: removed Histogram image plugin (new histogram is in
+	  Properties dialog)
+
+
+2004-11-22 13:44  cgilles
+
+	* digikam/: imagedescedit.cpp, imagedescedit.h: Added slot when
+	  thumbnail creation failed.
+
+2004-11-22 13:29  cgilles
+
+	* digikam/imageproperties.cpp: Digikam image properties dialog : -
+	  Fixed test if current image cannot be loaded.  - Added wait
+	  cursor during current load image.
+
+2004-11-22 11:26  cgilles
+
+	* libs/widgets/: histogramwidget.cpp, histogramwidget.h: Digikam
+	  histogram widget: using timer for blinking computation message.
+
+2004-11-22 11:24  pahlibar
+
+	* showfoto/.cvsignore:
+	  this is stupid. why does the app binary name have to be in
+	  .cvsignore
+
+2004-11-22 11:23  pahlibar
+
+	* Makefile.am, showfoto/.cvsignore, showfoto/Makefile.am,
+	  showfoto/main.cpp, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc:
+	  digiKam has a new baby: "showfoto", a standalone imageviewer.
+	  still in very rudimentary stage, just some navigation, opening
+	  files and zooming in
+
+2004-11-22 10:45  cgilles
+
+	* libs/: histogram/imagehistogram.cpp, histogram/imagehistogram.h,
+	  widgets/histogramwidget.cpp, widgets/histogramwidget.h: Digikam
+	  histogram computation : major changes !!! - Threaded
+	  implementation. This way run unfreezed dialogs during
+	  computation.	- Histogram widget show computation informations.
+	  To Digikam users : in image properties dialog, threaded
+	  implementation let'\''s you to change the current image by
+	  Perv/Next buttons during histogram computation. This way is very
+	  important because computation can be long on very large image
+
+2004-11-22 10:44  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam
+	  histogram computation : major changes !!! - Threaded
+	  implementation. This way run unfreezed dialogs during
+	  computation.	- Histogram widget show computation informations.
+
+	  To Digikam users : in image properties dialog, threaded
+	  implementation let's you to change the current image by Perv/Next
+	  buttons during histogram computation. This way is very important
+	  because computation can be long on very large image.
+
+2004-11-22 10:29  pahlibar
+
+	* digikam/Makefile.am, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h:
+	  * fix issue with selection being painted offset from the actual
+	  selection   in case of autozoom * remove dependency of
+	  imlibinterface.cpp on albumsettings.	  IMPORTANT: developers,
+	  canvas.cpp/h,    imlibinterface.cpp/h, exifrestorer.cpp/h should
+	  not depend on any of	  the rest of digikam. this is to make sure
+	  that we can separate out a	canvas library for making a
+	  standalone imageviewer
+
+2004-11-22 08:27  pahlibar
+
+	* utilities/imageeditor/: canvas.cpp, canvas.h, imagewindow.cpp,
+	  imlibinterface.cpp, imlibinterface.h:
+	  * reworked the image painting routines:   - the painting is done
+	  onto pixmaps tiles which     are cached   - tile size is 512x512
+	  (surprisingly the speed of	 the scaling routines in imlib2
+	  tends to scale     non-linearly, i.e. its much faster to render
+	  one big     tile than a bunch of small ones). that's why such
+	  a big tile size. at most 20 tiles are cached at one	  time.
+	  - tile updating and painting is done on demand - expose,
+	  paint, cache	  - fixes glitches in the painting  * minor change:
+	  the blended color has been changed to a   shade of grey with
+	  slightly more opaqueness. i have found   this color to be more
+	  usable than the previous darker blend BUG: 91486
+
+2004-11-21 22:34  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties dialog: - Add current file name in dialog caption.  -
+	  Add message when general thumbnail failed.  TODO: threaded
+	  histogram calculation (no freeze GUI!)
+
+2004-11-20 18:25  bmeyer
+
+	* digikam/: digikamview.cpp, digikamview.h: remove hard coded file
+	  name
+
+2004-11-20 18:23  bmeyer
+
+	* version.h, digikam/album.cpp, digikam/album.h,
+	  digikam/albumdb.cpp, digikam/albumdb.h,
+	  digikam/albumfilecopymove.cpp, digikam/albumfilecopymove.h,
+	  digikam/albumfiletip.cpp, digikam/albumfiletip.h,
+	  digikam/albumfolderitem.cpp, digikam/albumfolderitem.h,
+	  digikam/albumiconview.cpp, digikam/albumitemhandler.cpp,
+	  digikam/albumitemhandler.h, digikam/albumlister.cpp,
+	  digikam/albumlister.h, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albumpropsedit.cpp,
+	  digikam/albumpropsedit.h, digikam/busyprogressbar.cpp,
+	  digikam/busyprogressbar.h, digikam/cameradragobject.cpp,
+	  digikam/cameradragobject.h, digikam/cameralist.cpp,
+	  digikam/cameralist.h, digikam/cameratype.cpp,
+	  digikam/cameratype.h, digikam/digikamfirstrun.cpp,
+	  digikam/digikamfirstrun.h, digikam/digikamio.cpp,
+	  digikam/digikamio.h, digikam/dragobjects.cpp,
+	  digikam/dragobjects.h, digikam/imagedescedit.cpp,
+	  digikam/imagedescedit.h, digikam/imageproperties.cpp,
+	  digikam/imageproperties.h, digikam/kipiinterface.cpp,
+	  digikam/kipiinterface.h, digikam/listitem.cpp,
+	  digikam/listitem.h, digikam/listview.cpp, digikam/listview.h,
+	  digikam/listview_p.h, digikam/main.cpp, digikam/syncjob.cpp,
+	  digikam/syncjob.h, digikam/tagcreatedlg.cpp,
+	  digikam/tagcreatedlg.h, digikam/tagspopupmenu.cpp,
+	  digikam/tagspopupmenu.h, digikam/thumbdb.cpp, digikam/thumbdb.h,
+	  digikam/thumbnailjob.cpp, digikam/thumbnailjob.h,
+	  imageplugins/histogramviewer.cpp, imageplugins/histogramviewer.h,
+	  imageplugins/imageeffect_bcg.cpp, imageplugins/imageeffect_bcg.h,
+	  imageplugins/imageeffect_blur.cpp,
+	  imageplugins/imageeffect_blur.h,
+	  imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_bwsepia.h,
+	  imageplugins/imageeffect_colorsenhance.cpp,
+	  imageplugins/imageeffect_colorsenhance.h,
+	  imageplugins/imageeffect_hsl.cpp, imageplugins/imageeffect_hsl.h,
+	  imageplugins/imageeffect_redeye.cpp,
+	  imageplugins/imageeffect_redeye.h,
+	  imageplugins/imageeffect_rgb.cpp, imageplugins/imageeffect_rgb.h,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  imageplugins/imageeffect_sharpen.h,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, kioslave/digikamio.cpp,
+	  kioslave/digikamio.h, kioslave/digikamtags.cpp,
+	  kioslave/digikamtags.h, kioslave/exiforientation_p.h,
+	  libs/guibuilder/guiclient.cpp, libs/guibuilder/guiclient.h,
+	  libs/guibuilder/guifactory.cpp, libs/guibuilder/guifactory.h,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h, libs/levels/imagelevels.cpp,
+	  libs/levels/imagelevels.h, libs/themeengine/texture.cpp,
+	  libs/themeengine/texture.h, libs/themeengine/theme.cpp,
+	  libs/themeengine/theme.h, libs/themeengine/themeengine.cpp,
+	  libs/themeengine/themeengine.h,
+	  libs/widgets/colorgradientwidget.cpp,
+	  libs/widgets/colorgradientwidget.h,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h,
+	  libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h,
+	  libs/widgets/imagepreviewwidget.cpp,
+	  libs/widgets/imagepreviewwidget.h,
+	  libs/widgets/imageregionwidget.cpp,
+	  libs/widgets/imageregionwidget.h,
+	  libs/widgets/imagetoolswidget.cpp,
+	  libs/widgets/imagetoolswidget.h,
+	  utilities/cameragui/animwidget.cpp,
+	  utilities/cameragui/animwidget.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h,
+	  utilities/cameragui/camerainfodialog.cpp,
+	  utilities/cameragui/camerainfodialog.h,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/dirselectdialog.cpp,
+	  utilities/cameragui/dirselectdialog.h,
+	  utilities/cameragui/exifrotate.cpp,
+	  utilities/cameragui/exifrotate.h,
+	  utilities/cameragui/gpcamera.cpp, utilities/cameragui/gpcamera.h,
+	  utilities/cameragui/gpiteminfo.cpp,
+	  utilities/cameragui/gpiteminfo.h,
+	  utilities/cameragui/gpiteminfodlg.cpp,
+	  utilities/cameragui/gpiteminfodlg.h,
+	  utilities/cameragui/jinclude.h, utilities/cameragui/jpegint.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h,
+	  utilities/cameragui/transupp.h, utilities/imageeditor/canvas.cpp,
+	  utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/exifrestorer.cpp,
+	  utilities/imageeditor/exifrestorer.h,
+	  utilities/imageeditor/imagecommentedit.cpp,
+	  utilities/imageeditor/imagecommentedit.h,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imageguiclient.h,
+	  utilities/imageeditor/imageiface.cpp,
+	  utilities/imageeditor/imageiface.h,
+	  utilities/imageeditor/imageplugin.cpp,
+	  utilities/imageeditor/imageplugin.h,
+	  utilities/imageeditor/imagepluginloader.cpp,
+	  utilities/imageeditor/imagepluginloader.h,
+	  utilities/imageeditor/imageprint.cpp,
+	  utilities/imageeditor/imageprint.h,
+	  utilities/imageeditor/imageresizedlg.cpp,
+	  utilities/imageeditor/imageresizedlg.h,
+	  utilities/imageeditor/imagerotatedlg.h,
+	  utilities/imageeditor/imagewidget.cpp,
+	  utilities/imageeditor/imagewidget.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/jpegsection.h,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/cameraselection.h, utilities/setup/gpiface.cpp,
+	  utilities/setup/gpiface.h, utilities/setup/setup.cpp,
+	  utilities/setup/setup.h, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupeditor.h, utilities/setup/setupgeneral.cpp,
+	  utilities/setup/setupgeneral.h, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupmime.h, utilities/setup/setupmisc.cpp,
+	  utilities/setup/setupmisc.h,
+	  utilities/splashscreen/splashscreen.cpp,
+	  utilities/splashscreen/splashscreen.h: Removed hard coded file
+	  name from within the file Got Renchi Raju's approval first
+
+2004-11-20 16:26  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties dialog : added pop-up menu under Exif thumbnail for to
+	  correct Exif orientation tag.  
+          
+2004-11-19 22:16  pahlibar
+
+	* AUTHORS, digikam/main.cpp:
+	  give credit to Tom for all his help with bko setup, maintenance
+	  and feedback
+
+2004-11-19 20:34  pahlibar
+
+	* utilities/setup/setupeditor.cpp:
+	  Correct mistakes in imageeditor setup whatsthis: * JPEG files
+	  saved with 100% quality are still not lossless * TIFF files are
+	  saved with Adobe Deflate compression (and not LZW).	(Gilles why
+	  do we need an option for this?)  
+          
+2004-11-19 16:08  cgilles
+
+	* utilities/: imageeditor/canvas.cpp, imageeditor/canvas.h,
+	  imageeditor/imagewindow.cpp, imageeditor/imagewindow.h,
+	  imageeditor/imlibinterface.cpp, imageeditor/imlibinterface.h,
+	  setup/setupeditor.cpp, setup/setupeditor.h: Digikam Image Editor
+	  : - Added PNG compression value.  - Added TIFF compress option.
+
+2004-11-19 14:52  cgilles
+
+	* digikam/imageproperties.cpp: KDE 3.1 compatibility patch
+
+2004-11-19 14:31  cgilles
+
+	* digikam/: imagedescedit.cpp, imageproperties.cpp: Missing to
+	  restore dialog size
+
+2004-11-19 13:51  cgilles
+
+	* digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  libs/widgets/histogramwidget.cpp: Digikam image properties dialog
+	  : save current tab selected who will be restored at the next
+	  session.  
+          
+2004-11-19 11:17  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Fix histogram viewer rendering
+	  with new file properties dialog (reported by Achim Bohnet)
+
+2004-11-19 09:06  cgilles
+
+	* digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h:
+	  Digikam image properties dialog : - Polish code stage 2.  - new
+	  histogram contructor with no image data (nedded to use updateData
+	  after instance creation)
+
+2004-11-19 06:27  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties dialog : - polish source code (stage 1).  - Added
+	  image dimenssions in General tab.  - Fix some problems reported
+	  by Achim Bohnet.
+
+2004-11-19 05:28  cgilles
+
+	* utilities/splashscreen/digikam-splash.png: A _temporaly_
+	  splashscreen sample for 0.7.1 from my personal photo collection.
+	  This splashscreen will be used during 0.7.1 devel stage.  Final
+	  splashscreen must be choosen by Digikam users via a future voting
+	  page web who will created by Yves Chauffour.	Don't forget to
+	  send me your contribution.
+          
+2004-11-18 18:30  cgilles
+
+	* digikam/imageproperties.cpp: Digikam image properties dialog :
+	  General tabs complete.  TODO:    - polish source code.     -
+	  added stand alone mode for image editor.
+
+2004-11-18 18:08  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam image
+	  properties : updated General tab (not finished) TODO: updated
+	  General tab informations when Prev/next item selected 
+
+2004-11-18 16:16  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Digikam Image
+	  properties dialog : updated General tab (not finished!)
+
+2004-11-18 11:52  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Update Image
+	  Properties dialog : Exif tab polishing !!! TODO : file properties
+	  tab.
+
+2004-11-18 09:02  cgilles
+
+	* digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h:
+	  - Histogram lib and histogram widget : capability to update the
+	  image data !!! - Image properties dialog :   * New design without
+	  std KDE file properties tabs.    * Next  and Prev image selection
+	     * Histogram and Exif tab : capabilty to update the view when a
+	  new image is selected with Prev and Next buttons.    * Histogram
+	  tab : using kio digikam thumbnail (this way don't bloc GUI)
+
+	  ==> TODO : - Added new file properties tab.  - Polish Exif tab.
+	  - Added standalone image mode for Image Editor.  - Source code
+	  polish.
+
+2004-11-18 03:51  pahlibar
+
+	* utilities/cameragui/: cameraui.cpp, cameraui.h:
+	  BUG: 92665 BUG: 92312 * Auto-album patch applied (with
+	  modifications) to automatically create sub-albums in destination
+	  album based on exif date of the camera.   - while downloading
+	  each file, the corresponding directory is "stat ed"	  to see if
+	  it exists. if not, get albummanager to create the album     and
+	  write out to database, the date of the album	 - if any of these
+	  steps fails, the whole process bails out  * merged the two
+	  download (selected/all) into one functio * thanks to lan at ac-sw
+	  com for original patches
+
+2004-11-18 02:08  pahlibar
+
+	* digikam/: albumiconitem.cpp, thumbnailjob.cpp:
+	  turn back on gdbm thumbnail hacking. will have to do some more
+	  tests to see how well does gdbm search scale with number of
+	  images
+
+2004-11-18 01:42  pahlibar
+
+	* digikam/albumiconitem.cpp, libs/themeengine/themeengine.cpp:
+	  turned off gdbm thumbnail loading temporarily provide a better
+	  looking default theme
+
+2004-11-17 16:31  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Histogramviewer
+	  use now Digikam KIO thumbnailjob for rendering the thumb on the
+	  histogram tab top. Very fast!
+
+2004-11-17 16:06  cgilles
+
+	* digikam/: albumiconview.cpp, exifpropsplugin.cpp,
+	  exifpropsplugin.h, histogrampropsplugin.cpp,
+	  histogrampropsplugin.h, imageproperties.cpp, imageproperties.h:
+	  Remove old Exif and Histogram properties plugin.  Updated new
+	  image and meta-data properties dialog.
+
+2004-11-17 15:03  cgilles
+
+	* digikam/: imageproperties.cpp, imageproperties.h: Update image
+	  properties dialog. not finished !
+
+2004-11-17 13:05  cgilles
+
+	* digikam/: Makefile.am, imageproperties.cpp, imageproperties.h:
+	  Added new files for new image properties dialog. Not finished !
+
+2004-11-17 12:56  cgilles
+
+	* digikam/imagedescedit.h: Fixed missing header
+
+2004-11-17 10:43  pahlibar
+
+	* digikam/albumiconview.cpp:
+	  applied patch from Alfons Hoogervorst to send all selected item
+	  urls to KRun
+
+2004-11-17 10:39  cgilles
+
+	* libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h,
+	  libs/widgets/imagetoolswidget.cpp,
+	  libs/widgets/imagetoolswidget.h,
+	  utilities/imageeditor/imageiface.cpp,
+	  utilities/imageeditor/imageiface.h: Fix the paint event in
+	  imagetools and panimage widget.  Fix doublebuffer in ImageWidget.
+
+2004-11-17 07:17  pahlibar
+
+	* kioslave/digikamthumbnail.cpp:
+	  regression: use ktempfile to avoid race condition while saving
+	  the thumbnail file and also to set file permissions to 0600
+	  (adhering to fd.o specs)
+
+2004-11-17 07:09  pahlibar
+
+	* kioslave/Makefile.am:
+	  fixed borked Makefile.am
+
+2004-11-17 07:05  pahlibar
+
+	* digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+	  digikam/albumiconview.cpp, digikam/exiforientation_p.h,
+	  digikam/imagedescedit.cpp, digikam/imagedescedit.h,
+	  digikam/syncjob.cpp, digikam/thumbnailjob.cpp,
+	  digikam/thumbnailjob.h, kioslave/Makefile.am,
+	  kioslave/digikamthumbnail.cpp, kioslave/digikamthumbnail.h,
+	  kioslave/exiforientation_p.h:
+
+	  * all thumbnail loading/generating/exif-rotating/caching tasks
+	  have been   offloaded to the digikamthumbnail kioslave. the main
+	  gui just does the   task of converting the image supplied by the
+	  kioslave to qpixmap and   painting it. This significantly boosts
+	  gui responsiveness * instead of loading the cached thumbnail
+	  using qimage, a native png loader   is loader with significant
+	  speed improvements in thumbnail loading   (approx 5x) * the
+	  Digikam namespace has been dropped from ThumbnailJob class, as it
+	  was	a remnant of the 0.6.x series
+
+	  * please test for any regressions * the gdbm preload thumbnail
+	  hack has been temporarily turned off. the new   thumbnail loading
+	  speed is much improved and user tests are requested to   see if
+	  still need to retain this hack * TODO: design a proper caching
+	  mechanism for pixmaps, so that only a certain   number of them
+	  are retained in memory
+
+	  BUG: 92017
+
+2004-11-17 06:38  cgilles
+
+	* utilities/imageeditor/imagerotatedlg.cpp: Optimize deg to rad
+	  calculation
+
+2004-11-16 18:09  pahlibar
+
+	* utilities/imageeditor/imagerotatedlg.cpp:
+	  fix memory leaks in the free rotation tool
+
+2004-11-16 13:43  cgilles
+
+	* libs/widgets/Makefile.am, libs/widgets/imagetoolswidget.cpp,
+	  libs/widgets/imagetoolswidget.h,
+	  utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/imagerotatedlg.cpp,
+	  utilities/imageeditor/imagerotatedlg.h: Digikam Image Editor free
+	  rotation tool : added a tools to guide the user for good image
+	  rotation adjustment.
+
+	  To Digikam users : move the mouse cursor on the free rotation
+	  preview and horizontal and vertical dashed lines will be draw.
+	  Place this lines to an important place in the image (the sea or a
+	  building for example) and press the left mouse button. The lines
+	  position will be frozen like a reference. Now adjust the free
+	  angle to a correct position accordinly with the doashed lines.
+
+2004-11-16 05:30  pahlibar
+
+	* digikam/albumlister.cpp:
+	  remove stale code
+
+2004-11-16 04:15  pahlibar
+
+	* utilities/cameragui/README:
+	  this README has been superseded by libjpeg62.README imported in
+	  by achim
+
+2004-11-16 00:19  ach
+
+	* digikam/album.cpp, digikam/album.h, digikam/albumdb.cpp,
+	  digikam/albumdb.h, digikam/albumfilecopymove.cpp,
+	  digikam/albumfilecopymove.h, digikam/albumfiletip.cpp,
+	  digikam/albumfiletip.h, digikam/albumfolderitem.cpp,
+	  digikam/albumfolderitem.h, digikam/albumitemhandler.cpp,
+	  digikam/albumitemhandler.h, digikam/albumlister.cpp,
+	  digikam/albumlister.h, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albumpropsedit.cpp,
+	  digikam/albumpropsedit.h, digikam/busyprogressbar.cpp,
+	  digikam/busyprogressbar.h, digikam/cameradragobject.cpp,
+	  digikam/cameradragobject.h, digikam/cameralist.cpp,
+	  digikam/cameralist.h, digikam/cameratype.cpp,
+	  digikam/cameratype.h, digikam/digikamfirstrun.cpp,
+	  digikam/digikamfirstrun.h, digikam/digikamio.cpp,
+	  digikam/digikamio.h, digikam/dragobjects.cpp,
+	  digikam/dragobjects.h, digikam/exiforientation_p.h,
+	  digikam/imagedescedit.cpp, digikam/listitem.cpp,
+	  digikam/listitem.h, digikam/listview.cpp, digikam/listview.h,
+	  digikam/listview_p.h, digikam/syncjob.cpp, digikam/syncjob.h,
+	  digikam/tagcreatedlg.cpp, digikam/tagcreatedlg.h,
+	  digikam/tagspopupmenu.cpp, digikam/tagspopupmenu.h,
+	  digikam/thumbdb.cpp, digikam/thumbdb.h, digikam/thumbnailjob.cpp,
+	  digikam/thumbnailjob.h, imageplugins/imageeffect_bcg.cpp,
+	  imageplugins/imageeffect_bcg.h,
+	  imageplugins/imageeffect_blur.cpp,
+	  imageplugins/imageeffect_blur.h,
+	  imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_bwsepia.h,
+	  imageplugins/imageeffect_hsl.cpp, imageplugins/imageeffect_hsl.h,
+	  imageplugins/imageeffect_redeye.cpp,
+	  imageplugins/imageeffect_redeye.h,
+	  imageplugins/imageeffect_rgb.cpp, imageplugins/imageeffect_rgb.h,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  imageplugins/imageeffect_sharpen.h,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, kioslave/digikamio.cpp,
+	  kioslave/digikamio.h, kioslave/digikamtags.cpp,
+	  kioslave/digikamtags.h, libs/guibuilder/guiclient.cpp,
+	  libs/guibuilder/guiclient.h, libs/guibuilder/guifactory.cpp,
+	  libs/guibuilder/guifactory.h, libs/themeengine/theme.cpp,
+	  libs/themeengine/theme.h, libs/themeengine/themeengine.cpp,
+	  libs/themeengine/themeengine.h,
+	  libs/widgets/imagepaniconwidget.cpp,
+	  libs/widgets/imagepaniconwidget.h,
+	  libs/widgets/imagepreviewwidget.cpp,
+	  libs/widgets/imagepreviewwidget.h,
+	  libs/widgets/imageregionwidget.cpp,
+	  libs/widgets/imageregionwidget.h,
+	  utilities/cameragui/animwidget.cpp,
+	  utilities/cameragui/animwidget.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h,
+	  utilities/cameragui/camerainfodialog.cpp,
+	  utilities/cameragui/camerainfodialog.h,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/dirselectdialog.cpp,
+	  utilities/cameragui/dirselectdialog.h,
+	  utilities/cameragui/exifrotate.cpp,
+	  utilities/cameragui/exifrotate.h,
+	  utilities/cameragui/gpcamera.cpp, utilities/cameragui/gpcamera.h,
+	  utilities/cameragui/gpiteminfo.cpp,
+	  utilities/cameragui/gpiteminfo.h,
+	  utilities/cameragui/gpiteminfodlg.cpp,
+	  utilities/cameragui/gpiteminfodlg.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/exifrestorer.cpp,
+	  utilities/imageeditor/exifrestorer.h,
+	  utilities/imageeditor/imagecommentedit.cpp,
+	  utilities/imageeditor/imagecommentedit.h,
+	  utilities/imageeditor/imageguiclient.cpp,
+	  utilities/imageeditor/imageguiclient.h,
+	  utilities/imageeditor/imageiface.cpp,
+	  utilities/imageeditor/imageiface.h,
+	  utilities/imageeditor/imageplugin.cpp,
+	  utilities/imageeditor/imageplugin.h,
+	  utilities/imageeditor/imagepluginloader.cpp,
+	  utilities/imageeditor/imagepluginloader.h,
+	  utilities/imageeditor/imageprint.cpp,
+	  utilities/imageeditor/imageprint.h,
+	  utilities/imageeditor/imageresizedlg.cpp,
+	  utilities/imageeditor/imageresizedlg.h,
+	  utilities/imageeditor/imagerotatedlg.cpp,
+	  utilities/imageeditor/imagerotatedlg.h,
+	  utilities/imageeditor/imagewidget.cpp,
+	  utilities/imageeditor/imagewidget.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/jpegsection.h,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/cameraselection.h, utilities/setup/gpiface.cpp,
+	  utilities/setup/gpiface.h, utilities/setup/setupgeneral.cpp,
+	  utilities/setup/setupgeneral.h, utilities/setup/setupmisc.cpp,
+	  utilities/setup/setupmisc.h,
+	  utilities/splashscreen/splashscreen.cpp,
+	  utilities/splashscreen/splashscreen.h: CVS_SILENT: Fix typo in
+	  GPL header:	 s/published bythe Free/published by the Free/
+
+2004-11-16 00:13  ach
+
+	* README, utilities/cameragui/libjpeg62.README: Add libjpeg62
+	  README and a note to README as required by libjpeg distribution
+
+2004-11-15 22:46  cgilles
+
+	* utilities/imageeditor/imagerotatedlg.cpp: Fixed re-scaling image
+	  for free rotation preview.
+
+2004-11-15 16:14  cgilles
+
+	* utilities/imageeditor/: imagerotatedlg.cpp, imagerotatedlg.h:
+	  Digikam ImageEditor freeRotation tool : Added free rotation
+	  preview. 
+          
+2004-11-15 11:27  cgilles
+
+	* digikam/exifpropsplugin.cpp: Digikam File properties and
+	  Meta-Data dialog : - New Exif information tab in tree view mode !
+	  - This implementation provide just _ONE_ tab for all exif
+	  informations.
+
+	  To Digikam users : you must update libkexif source code from
+	  kdeextargear-libs-1 CVS module else the compilation will be
+	  broken.
+
+2004-11-14 22:03  cgilles
+
+	* digikam/albumiconview.cpp, digikam/digikamapp.cpp,
+	  imageplugins/imageplugin_core.cpp: Fix menu entries.	Added
+	  What's this for defaut main tool bar.  Added What's this for
+	  Normalize, Equalize , and Autolevels.
+
+2004-11-14 17:50  cgilles
+
+	* imageplugins/histogramviewer.cpp: Added wait cursor
+
+2004-11-14 16:05  cgilles
+
+	* libs/histogram/imagehistogram.cpp: Improvement of histogram
+	  calculation. No need 2 loops, just one can be used.
+
+2004-11-14 15:57  cgilles
+
+	* digikam/albumiconview.cpp: Fixed popup menu entry i18n. Added
+	  wait cursor during image properties dialog construction
+	  (histogram viewer can be long).
+
+2004-11-14 15:18  cgilles
+
+	* digikam/digikamapp.cpp: Fix menu entrie i18n
+
+2004-11-13 16:58  cgilles
+
+	* digikam/: exifpropsplugin.cpp, exifpropsplugin.h: Oups (:=))
+	  Forget to add these files in CVS...
+
+2004-11-13 16:13  cgilles
+
+	* digikam/: Makefile.am, albumiconview.cpp, albumiconview.h,
+	  digikamapp.cpp, digikamapp.h, digikamui.rc, digikamview.cpp,
+	  digikamview.h: Digikam Exif Viewer : - Merged all Exif Viewer
+	  tabs in image Properties dialog.  - Removed Image/Exif
+	  information menu entry.
+
+	  To Digikam users : the Exif information are now displayed in
+	  Image properties dialog. This is requested by a wish in B.K.O.
+	  This way simplify the 'image' menu entries and the dialog
+	  numbers. I will updated the handbook accordily.
+
+	  Nota : I have seen a problem with the internationalisation of
+	  libexif (not libkexif) messages about the exif item descriptions.
+	  All accentuate carractors are bad. In English no problem.
+	  Somebody can confirm this problem with another language (spanish,
+	  german, italian, for ex.)
+
+2004-11-12 21:06  pahlibar
+
+	* digikam/albumfolderview.cpp:
+	  trim long lines. beyond 80 columns, source wraps up in editors,
+	  making it difficult to read
+
+2004-11-12 18:23  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Remove comments
+
+2004-11-12 16:52  cgilles
+
+	* digikam/histogrampropsplugin.cpp,
+	  imageplugins/histogramviewer.cpp,
+	  libs/widgets/histogramwidget.cpp: Histogram Viewer : since we can
+	  choose the main color in 'All color mode', we can displayed the
+	  stat in this color with the current histogram selection.
+
+2004-11-12 14:51  cgilles
+
+	* digikam/albummanager.cpp: Fixed missing errno header
+
+2004-11-12 14:24  cgilles
+
+	* digikam/digikamapp.cpp: Fixed typo
+
+2004-11-12 04:04  pahlibar
+
+	* digikam/: imagedescedit.cpp, imagedescedit.h:
+	  Simplest wishlist implementation ever done :).  Use ktextedit
+	  instead of qtextedit for comments editor. enable spellchecker
+	  BUG: 92310
+
+2004-11-12 03:07  pahlibar
+
+	* digikam/: albumdb.cpp, albumdb.h, albumfolderview.cpp,
+	  albummanager.cpp, albummanager.h, albumpropsedit.cpp,
+	  albumpropsedit.h:
+	  * creating a new album will popup the album properties editor
+	  directly, instead of asking for the name first and then popping
+	  up the editor.  * this also puts into place code for easy
+	  implementation of auto-folder-creation during camera downloads
+
+2004-11-11 19:32  pahlibar
+
+	* digikam/thumbnailjob.cpp:
+	  remove unnecessary reload of thumbnail
+
+2004-11-10 15:43  cgilles
+
+	* imageplugins/histogramviewer.cpp,
+	  libs/widgets/histogramwidget.cpp: Digikam Histogram Viewer :
+	  Fixed colors order in 'All Colors' mode.
+
+2004-11-10 14:35  cgilles
+
+	* imageplugins/histogramviewer.cpp, imageplugins/histogramviewer.h,
+	  imageplugins/imageplugin_core.cpp,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h:
+	  Digikam Histogram Viewer:
+
+	  New option for rendering histogram with the full image or current
+	  image selection [like in photoshop CS (tm) !!!].
+
+	  Note for Digikam users : this option is only available with the
+	  Image Editor Histogram plugin, not with the image properties
+	  extension because none image selection can be done with this
+	  way...
+
+2004-11-10 11:21  cgilles
+
+	* digikam/histogrampropsplugin.cpp, digikam/histogrampropsplugin.h,
+	  imageplugins/histogramviewer.cpp, imageplugins/histogramviewer.h,
+	  libs/widgets/histogramwidget.cpp, libs/widgets/histogramwidget.h:
+	  Digikam Histogram Viewer : add new option for choise the
+	  foreground histogram color (Red or Green or Blue) used in 'All
+	  Colors mode'. 
+          
+2004-11-09 20:51  cgilles
+
+	* utilities/imageeditor/imageguiclient.cpp: Add 'What's This' for
+	  crop image option
+
+2004-11-09 20:10  cgilles
+
+	* version.h, digikam/digikamapp.cpp: 'Updated version to
+	  '0.7.1-cvs' Fixed i18n
+
+2004-11-08 20:37  pahlibar
+
+	* ChangeLog:
+	  humpph... forgot to commit the changelog before the release
+
+2004-11-07 20:56  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+	  applied patch for g++ 3.4.2 compilation error
+
+2004-11-07 00:34  bmeyer
+
+	* digikam/albumfiletip.cpp, digikam/albumfolderitem.h,
+	  digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+	  digikam/albumiconview.cpp, digikam/albumiconview.h,
+	  digikam/digikamapp.h, digikam/digikamview.cpp,
+	  digikam/dragobjects.cpp, digikam/thumbnailjob.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/imageeditor/canvas.cpp,
+	  utilities/imageeditor/imagepluginloader.cpp,
+	  utilities/imageeditor/imageprint.cpp,
+	  utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupplugins.cpp: header clean and one
+	  QString::null conversion
+
+2004-11-06 04:34  bmeyer
+
+	* configure.in.bot: Pointer about pkgconfig sense it is different
+	  then the rest of kde
+
+2004-11-04 22:37  bmeyer
+
+	* digikam/digikam.desktop: .desktop file cleanup Add missing ; to
+	  lists remove depreciated items Terminal= 0 -> false
+
 v0.7			11/07/04
 ----------------------------------------------------------------------------
 
@@ -1354,3 +2958,4 @@ v0.2                 12/26/01
 v0.1                 12/23/01
 ------------------------------------------------------------------------------
         * Initial Public release
+          
