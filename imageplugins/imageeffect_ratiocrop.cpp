@@ -37,6 +37,7 @@
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -65,6 +66,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     setHelp("ratiocroptool.anchor", "digikam");
     QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 5 , marginHint(), spacingHint());
 
+    // -------------------------------------------------------------
+    
     QVGroupBox *gbox = new QVGroupBox(i18n("Aspect Ratio Crop Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -76,6 +79,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
     topLayout->addMultiCellWidget(gbox, 0, 0, 0, 4);
  
+    // -------------------------------------------------------------
+    
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
     m_ratioCB->insertItem( i18n("Custom") );
@@ -110,12 +115,17 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
+    m_useRuleThirdLines = new QCheckBox( i18n("Rule Third Lines"), plainPage());
+    QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can diplay the rule third lines "
+                                               "who help you to compose your photograph."));
+    
     l2->addWidget( m_customLabel1 );
     l2->addWidget( m_customRatioNInput );
     l2->addWidget( m_customLabel2 );
     l2->addWidget( m_customRatioDInput );
-    l2->addStretch( 1 );
-    topLayout->addMultiCellLayout(l2, 2, 2, 0, 2);
+    l2->addStretch();
+    l2->addWidget( m_useRuleThirdLines );
+    topLayout->addMultiCellLayout(l2, 2, 2, 0, 4);
 
     m_xInput = new KIntNumInput(plainPage());
     QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
@@ -139,6 +149,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
     topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);
     
+    // -------------------------------------------------------------
+    
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
     
@@ -156,7 +168,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     connect(m_customRatioDInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotCustomRatioChanged()));
-                                                        
+
+    connect(m_useRuleThirdLines, SIGNAL(toggled (bool)),
+            m_imageSelectionWidget, SLOT(slotRuleThirdLines(bool)));            
+                                                                                
     connect(m_widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
 
@@ -169,6 +184,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotSelectionChanged(QRect)));      
 
+    // -------------------------------------------------------------
+                
     readSettings();             
     QTimer::singleShot(0, this, SLOT(slotUser1()));
     adjustSize();
@@ -188,6 +205,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );
     m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
     m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
+    m_useRuleThirdLines->setChecked( config->readBoolEntry("Use Rule Third Lines", false) );
 
     slotRatioChanged(m_ratioCB->currentItem());
     slotOrientChanged(m_orientCB->currentItem());
@@ -201,6 +219,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Aspect Ratio Orientation", m_orientCB->currentItem() );
     config->writeEntry( "Custom Aspect Ratio Num", m_customRatioNInput->value() );
     config->writeEntry( "Custom Aspect Ratio Den", m_customRatioDInput->value() );
+    config->writeEntry( "Use Rule Third Lines", m_useRuleThirdLines->isChecked() );
     config->sync();
 }
 

@@ -27,6 +27,7 @@
 
 class QLabel;
 class QComboBox;
+class QCheckBox;
 
 class KIntNumInput;
 class KIntSpinBox;
@@ -54,6 +55,8 @@ private:
     
     QComboBox    *m_ratioCB;
     QComboBox    *m_orientCB;
+    
+    QCheckBox    *m_useRuleThirdLines;
     
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;

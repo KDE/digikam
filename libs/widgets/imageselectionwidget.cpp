@@ -57,13 +57,15 @@ namespace Digikam
 {
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent, 
-                      float aspectRatioValue, int aspectRatioType, int orient)
+                      float aspectRatioValue, int aspectRatioType, int orient,
+                      bool ruleThirdLines)
                     : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_currentAspectRatioType  = aspectRatioType; 
     m_currentAspectRatioValue = aspectRatioValue;
     m_currentOrientation      = orient; 
     m_currentResizing         = ResizingNone;
+    m_ruleThirdLines          = ruleThirdLines;
 
     m_iface  = new ImageIface(w,h);
 
@@ -111,6 +113,13 @@ void ImageSelectionWidget::resetSelection(void)
     realToLocalRegion();
     applyAspectRatio(false, false);
     setCenterSelection();
+}
+
+void ImageSelectionWidget::slotRuleThirdLines(bool ruleThirdLines)
+{
+    m_ruleThirdLines = ruleThirdLines;
+    updatePixmap();
+    repaint(false);
 }
 
 void ImageSelectionWidget::setSelectionOrientation(int orient)
@@ -328,6 +337,8 @@ void ImageSelectionWidget::regionSelectionChanged(void)
 
 void ImageSelectionWidget::updatePixmap(void)
 {
+    // Updated draging corners region.
+    
     m_localTopLeftCorner.setRect(m_localRegionSelection.left(), 
                                  m_localRegionSelection.top(), 5, 5);
     m_localBottomLeftCorner.setRect(m_localRegionSelection.left(), 
@@ -336,13 +347,16 @@ void ImageSelectionWidget::updatePixmap(void)
                                   m_localRegionSelection.top(), 5, 5);
     m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 4, 
                                      m_localRegionSelection.bottom() - 4, 5, 5);
+    
     // Drawing background and image.
+    
     m_pixmap->fill(colorGroup().background());
 
     if (!m_data)
         return;
     
     // Drawing region outside selection grayed.
+    
     QImage image((uchar*)m_data, m_w, m_h, 32, 0, 0, QImage::IgnoreEndian);
     image = image.copy();
 
@@ -378,13 +392,35 @@ void ImageSelectionWidget::updatePixmap(void)
 
     QPixmap pix(image);
     bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
-
-    // Drawing selection borders.
     QPainter p(m_pixmap);
+    
+    // Drawing 'rule of thirds' lines.
+    
+    if (m_ruleThirdLines)
+       {
+       p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
+    
+       int xThird = m_localRegionSelection.width() / 3;
+       int yThird = m_localRegionSelection.height() / 3;
+    
+       p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
+                   m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
+       p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
+                   m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
+    
+       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
+                   m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
+       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
+                   m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
+       }
+           
+    // Drawing selection borders.
+    
     p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
     // Drawing selection corners.
+    
     p.drawRect(m_localTopLeftCorner);
     p.drawRect(m_localBottomLeftCorner);
     p.drawRect(m_localTopRightCorner);

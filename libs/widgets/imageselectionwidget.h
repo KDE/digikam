@@ -59,7 +59,7 @@ public:
 
     ImageSelectionWidget(int width, int height, QWidget *parent=0, 
                          float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
-                         int orient=Landscape);
+                         int orient=Landscape, bool ruleThirdLines=false);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(void);
@@ -76,6 +76,10 @@ public:
     QRect getRegionSelection(void);
     
     void  resetSelection(void);
+
+public slots:
+
+    void slotRuleThirdLines(bool ruleThirdLines);
     
 signals:
 
@@ -88,7 +92,7 @@ protected:
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
-        
+            
 private:
 
     enum ResizingMode
@@ -101,6 +105,8 @@ private:
     };
     
     ImageIface *m_iface;
+    
+    bool        m_ruleThirdLines;
     
     uint       *m_data;
     int         m_w;
