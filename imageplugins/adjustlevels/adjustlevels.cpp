@@ -192,6 +192,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
     m_hGradientMinInput->setMaxValue(255);
+    QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradientMinInput, 2, 2, 0, 4);
@@ -200,6 +201,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
     m_hGradientMaxInput->setMaxValue(255);
+    QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradientMaxInput, 3, 3, 0, 4);
@@ -224,6 +226,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
+    QWhatsThis::add( m_hGradientMinOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));    
     QToolTip::add( m_hGradientMinOutput, i18n( "Minimal intensity output." ) );
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
@@ -232,6 +235,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
+    QWhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
     QToolTip::add( m_hGradientMaxOutput, i18n( "Maximal intensity output." ) );
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
