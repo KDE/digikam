@@ -54,4 +54,13 @@ else
   echo "-- gdbm found..................... YES"
 fi
 
+if test "x$have_tiff" != "xyes"; then
+  echo "-- libtiff found.................. NO"
+  echo ""
+  echo "digiKam needs libtiff. You need to install the libtiff development package."
+  echo ""
+else
+  echo "-- libtiff found.................. YES"
+fi
+
 echo "------------------------------------------------"

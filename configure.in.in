@@ -222,3 +222,24 @@ else
   AC_SUBST(LIB_GDBM)
 fi
 
+#------------------------------------------------------------------
+# Check for libtiff
+#------------------------------------------------------------------
+
+have_tiff=no
+AC_CHECK_LIB(tiff, TIFFWriteScanline,
+  have_tiff=yes,
+  AC_MSG_WARN([TIFF library not found]), 
+  -lz -lm)
+
+if test "x$have_tiff" = "xyes"; then
+  KDE_CHECK_HEADER(tiffio.h, have_tiff=yes, have_tiff=no)
+fi
+
+if test "x$have_tiff" != "xyes"; then
+  AC_WARN([TIFF library not found, digiKam will not be compiled.])
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+else
+  LIB_TIFF="-ltiff"
+  AC_SUBST(LIB_TIFF)
+fi

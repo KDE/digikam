@@ -11,7 +11,7 @@ libimageeditor_la_SOURCES = imlibinterface.cpp imageiface.cpp \
 			    exifrestorer.cpp imagerotatedlg.cpp 
 
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
-			    $(LIB_IMLIB2) $(LIBKEXIF_LIBS) -ltiff
+			    $(LIB_IMLIB2) $(LIBKEXIF_LIBS) $(LIB_TIFF)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/guibuilder \
