@@ -7,9 +7,6 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Some code come from the CImg Gimp plugin by Victor Stinner.
- * See: http://www.girouette-stinner.com/castor/gimp.html
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
