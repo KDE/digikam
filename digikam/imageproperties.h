@@ -47,6 +47,7 @@ class QGroupBox;
 
 class KSqueezedTextLabel;
 class KPopupMenu;
+class KSeparator;
 
 class AlbumIconView;
 class AlbumIconItem;
@@ -145,6 +146,9 @@ private:
     KSqueezedTextLabel           *m_filealbum;
     KSqueezedTextLabel           *m_filecomments;
     KSqueezedTextLabel           *m_filetags;
+    
+    KSeparator                   *m_sep1;    
+    KSeparator                   *m_sep2;
     
     QGuardedPtr<ThumbnailJob>     m_generalThumbJob;
         

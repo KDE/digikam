@@ -425,6 +425,7 @@ void ImageProperties::slotItemChanged()
     
     if (m_view)             // Digikam embeded mode.
        {           
+       m_sep2->show();
        m_filealbum->show();
        m_filecomments->show();
        m_filetags->show();
@@ -447,6 +448,7 @@ void ImageProperties::slotItemChanged()
        }
     else                    // Stand Alone mode.
        {
+       m_sep2->hide();
        m_filealbum->hide();
        m_filecomments->hide();
        m_filetags->hide();
@@ -1088,8 +1090,8 @@ void ImageProperties::setupGeneralTab()
     
     // Setup File properties infos.                                         
                                          
-    KSeparator *sep1 = new KSeparator (Horizontal, page);
-    vlay->addWidget(sep1);
+    m_sep1 = new KSeparator (Horizontal, page);
+    vlay->addWidget(m_sep1);
     
     QGridLayout *hlay1 = new QGridLayout(8, 3);
     vlay->addLayout( hlay1 );
@@ -1142,8 +1144,8 @@ void ImageProperties::setupGeneralTab()
     hlay1->addMultiCellWidget( permissions, 7, 7, 0, 0 );
     hlay1->addMultiCellWidget( m_filepermissions, 7, 7, 1, 2  );
         
-    KSeparator *sep2 = new KSeparator (Horizontal, page);
-    vlay->addWidget(sep2);
+    m_sep2 = new KSeparator (Horizontal, page);
+    vlay->addWidget(m_sep2);
 
     // Setup Digikam infos.
     
