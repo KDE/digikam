@@ -112,6 +112,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             this, SLOT(slotAlbumDeleted(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
+    connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
+            this, SLOT(slotAllAlbumsLoaded()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
@@ -444,13 +446,6 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             folderItem->setPixmap(getBlendedIcon(t));
             album->setViewItem(folderItem);
         }
-
-        if (album->type() == Album::PHYSICAL &&
-            fakeID == stateAlbumSel_)
-        {
-            setSelected(folderItem);
-            ensureItemVisible(folderItem);
-        }
     }
 }
 
@@ -481,6 +476,39 @@ void AlbumFolderView::slotAlbumsCleared()
 
     phyRootItem_ = 0;
     tagRootItem_ = 0;
+}
+
+void AlbumFolderView::slotAllAlbumsLoaded()
+{
+    AlbumFolderItem* folderItem = 0;
+
+    if (stateAlbumSel_ >= 100000 &&
+        stateAlbumSel_ <  200000)
+    {
+        // last selected album was a PAlbum
+        int id = stateAlbumSel_ - 100000;
+        PAlbum* album = albumMan_->findPAlbum(id);
+        if (album && album->getViewItem())
+        {
+            folderItem = static_cast<AlbumFolderItem*>(album->getViewItem());
+        }
+    }
+    else if (stateAlbumSel_ >= 200000)
+    {
+        // last selected album was a TAlbum
+        int id = stateAlbumSel_ - 200000;
+        TAlbum* album = albumMan_->findTAlbum(id);
+        if (album && album->getViewItem())
+        {
+            folderItem = static_cast<AlbumFolderItem*>(album->getViewItem());
+        }
+    }
+
+    if (!folderItem)
+        return;
+
+    setSelected(folderItem);
+    ensureItemVisible(folderItem);
 }
 
 void AlbumFolderView::albumNew()
@@ -789,6 +817,8 @@ void AlbumFolderView::tagEdit(TAlbum* album)
 
 void AlbumFolderView::slotSelectionChanged(ListItem* item)
 {
+    stateAlbumSel_ = 0;
+    
     if (!item)
     {
         albumMan_->setCurrentAlbum(0);

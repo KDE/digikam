@@ -69,6 +69,7 @@ public:
     Album            *currentAlbum;
     
     KURL::List        urlsToOpen;
+    bool              initialLoad;
 };
     
 
@@ -94,6 +95,8 @@ AlbumManager::AlbumManager()
     d->currentAlbum = 0;
 
     d->albumLister  = 0;
+    
+    d->initialLoad  = true;
 }
 
 AlbumManager::~AlbumManager()
@@ -599,7 +602,14 @@ void AlbumManager::removeTAlbum(TAlbum *album)
 void AlbumManager::slotCompleted()
 {
     if (d->urlsToOpen.isEmpty())
+    {
+        if (d->initialLoad)
+        {
+            d->initialLoad = false;
+            emit signalAllAlbumsLoaded();
+        }
         return;
+    }
 
     KURL url(d->urlsToOpen.first());
     d->urlsToOpen.pop_front();

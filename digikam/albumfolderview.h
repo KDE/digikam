@@ -149,6 +149,7 @@ private slots:
     void slotAlbumAdded(Album *album);
     void slotAlbumDeleted(Album *album);
     void slotAlbumsCleared();
+    void slotAllAlbumsLoaded();
 
     void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
                           const KFileMetaInfo*);

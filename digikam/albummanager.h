@@ -113,6 +113,7 @@ signals:
     void signalAlbumItemsSelected(bool selected);
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
+    void signalAllAlbumsLoaded();
 };
 
 #endif /* ALBUMMANAGER_H */
