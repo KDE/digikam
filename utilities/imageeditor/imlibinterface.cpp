@@ -365,7 +365,7 @@ bool ImlibInterface::saveAs(const QString& file, int JPEGcompression,
     imlib_modify_color_modifier_gamma(d->gamma);
     imlib_apply_color_modifier();
     
-    if (!mimeType)
+    if (mimeType.isEmpty())
         result = saveAction(file, JPEGcompression, PNGcompression, 
                             TIFFcompression, imlib_image_format());
     else 
@@ -582,12 +582,15 @@ void ImlibInterface::flipVert()
 void ImlibInterface::crop(int x, int y, int w, int h)
 {
     imlib_context_push(d->context);
-
     imlib_context_set_image(d->image);
+    QString format(imlib_image_format());
+    
     Imlib_Image im = imlib_create_cropped_image(x, y, w, h);
     imlib_free_image();
     d->image = im;
+
     imlib_context_set_image(d->image);
+    imlib_image_set_format(format.ascii());
     
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -598,6 +601,7 @@ void ImlibInterface::crop(int x, int y, int w, int h)
 void ImlibInterface::resize(int w, int h)
 {
     imlib_context_push(d->context);
+    QString format(imlib_image_format());
 
     imlib_context_set_image(d->image);
     Imlib_Image im =
@@ -605,7 +609,9 @@ void ImlibInterface::resize(int w, int h)
                                           w, h);
     imlib_free_image();
     d->image = im;
+
     imlib_context_set_image(d->image);
+    imlib_image_set_format(format.ascii());
     
     d->origWidth = imlib_image_get_width();
     d->origHeight = imlib_image_get_height();
@@ -713,6 +719,7 @@ void ImlibInterface::putData(uint* data, int w, int h)
 {
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
+    QString format(imlib_image_format());
     
     if (w != -1 && h != -1) {
     
@@ -723,7 +730,9 @@ void ImlibInterface::putData(uint* data, int w, int h)
         
         imlib_context_set_image(im);
         d->image = im;
+
         imlib_context_set_image(d->image);
+        imlib_image_set_format(format.ascii());
         
         d->origWidth = imlib_image_get_width();
         d->origHeight = imlib_image_get_height();
