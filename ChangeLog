@@ -1,4 +1,4 @@
-v0.6.3-beta1 
+v0.7.0-beta1 
 ----------------------------------------------------------------------------
         * <Gilles Caulier> Updated the menu and popup menu in according with 
           KIPI plugins actions. 
@@ -20,7 +20,7 @@ v0.6.3-beta1
         * <Gilles Caulier> Added Full Mime type support for images, movies, 
           audio, and RAW files.
         * <Gilles Caulier> Syncing with Sourceforge.net repository.
-        * <Gilles Caulier> Updated Splashscreen for 0.6.3 by Yves Chaufour <yves 
+        * <Gilles Caulier> Updated Splashscreen for 0.7.0 by Yves Chaufour <yves 
           dot chaufour at wanadoo.fr>
         * <Gilles Caulier> Fix Makefiles for KdeExtraGears-3 KDECVS module 
           integration.

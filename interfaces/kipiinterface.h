@@ -130,6 +130,8 @@ class DigikamKipiInterface : public KIPI::Interface
 public:
     DigikamKipiInterface( QObject *parent, const char *name=0);
     ~DigikamKipiInterface();
+
+    void readSettings();
     
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();

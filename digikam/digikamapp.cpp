@@ -43,6 +43,12 @@
 #include <kedittoolbar.h>
 #include <ktip.h>
 
+// Includes files for plugins support.
+
+#include "kipiinterface.h"
+#include <libkipi/pluginloader.h>
+#include <libkipi/plugin.h>
+
 // Local includes.
 
 #include "albummanager.h"
@@ -54,15 +60,8 @@
 #include "setupplugins.h"
 #include "digikamview.h"
 #include "digikamcameraprocess.h"
-#include "digikamapp.h"
-
-// Includes files for plugins support.
-
-#include "kipiinterface.h"
-#include <libkipi/pluginloader.h>
-#include <libkipi/plugin.h>
-
 #include "imagepluginloader.h"
+#include "digikamapp.h"
  
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 {
@@ -450,9 +449,11 @@ void DigikamApp::slotSetup()
 void DigikamApp::slotSetupChanged()
 {
     m_setup->pluginsPage_->applyPlugins();
+    
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     m_config->sync();
+    KipiInterface_->readSettings();
 }
 
 void DigikamApp::slotEditKeys()

@@ -13,16 +13,16 @@ o Future task.
 Main Application:
 -----------------
 
-x Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.6.3>
+x Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.7.0>
 x Lauch the Albums properties when a new Album is added 
-  to the Database.                                                 <Gilles Caulier - 0.6.3>
-x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.6.3>
-x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.6.3>
-x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.6.3>
-x Added image sizes annotation for each album item.                <Gilles Caulier - 0.6.3>
-x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.6.3>
-* Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
-o Add image date from EXIF data for each album item.               <Ralf Holzer    - 0.6.3>
+  to the Database.                                                 <Gilles Caulier - 0.7.0>
+x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.7.0>
+x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.7.0>
+x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.7.0>
+x Added image sizes annotation for each album item.                <Gilles Caulier - 0.7.0>
+x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.7.0>
+* Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
+o Add image date from EXIF data for each album item.               <Ralf Holzer    - 0.7.0>
 o Added config saving of Albums opened in Albums treeview.         
 o Added dockable main widgets like ShowImg.                        
 o Added subfolders Albums support.
@@ -63,28 +63,28 @@ Thumnails interface:
 
 o Using embedded image for thumnails generation.                   
 x Using imlib2 for to provide thumbnails if 
-  embedded image unavaible.                                        <Gilles Caulier - 0.6.3>  
+  embedded image unavaible.                                        <Gilles Caulier - 0.7.0>  
 o Thumnails generation for RAW files.
-x EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
+x EXIF autorotate.                                                 <Ralf Holzer    - 0.7.0>
 
   
 Image Viewer/Editor :
 ---------------------
 
-x Port from imlib1 to imlib2.                                      <Renchi Raju    - 0.6.3> 
-x New BCG and RGB setting dialogs with slidders.                   <Renchi Raju    - 0.6.3> 
-x Using KApplication class and main menu.                          <Renchi Raju    - 0.6.3> 
-x Added RedEyes correction.                                        <Renchi Raju    - 0.6.3> 
+x Port from imlib1 to imlib2.                                      <Renchi Raju    - 0.7.0> 
+x New BCG and RGB setting dialogs with slidders.                   <Renchi Raju    - 0.7.0> 
+x Using KApplication class and main menu.                          <Renchi Raju    - 0.7.0> 
+x Added RedEyes correction.                                        <Renchi Raju    - 0.7.0> 
 o Added Blur/Sharpen image filters.                                
 o Added Settings dialog.                                           
 o Added progress bar during loadin/save action.
 o Added multithread interface for printing.
-x Added dockable toolbars.                                         <Renchi Raju    - 0.6.3> 
-x Added Plugins interface.                                         <Renchi Raju    - 0.6.3> 
+x Added dockable toolbars.                                         <Renchi Raju    - 0.7.0> 
+x Added Plugins interface.                                         <Renchi Raju    - 0.7.0> 
 o Added Blur/Sharpen image filters.
 o Added image Histogram viewer.
 o Added Colors autocorrection filter.                              
-o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.6.3>
+o Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
 
 
 Exif Viewer :
@@ -104,11 +104,13 @@ o Added plugins loading progress bar.
 Handbook :
 ----------
 
-o Updated screenshoots.
-o New screenshoots for dialog (setup, Album properties, 
-  Exif viewer, ImageViewer).
-o Added new sections for Album properties, Exif viewer and 
-  ImageViewer.
+- Updated screenshoots.                                            <Gilles Caulier - 0.7.0>
+- New screenshoots for dialog (setup, Album properties, 
+  Exif viewer, ImageViewer).                                       <Gilles Caulier - 0.7.0>
+- Added new sections for Album properties, Exif viewer and 
+  ImageViewer.                                                     <Gilles Caulier - 0.7.0>
+- Extract plugins section and create new handbooks 
+  for KipiPlugins.                                                 <Gilles Caulier - 0.7.0>
 
 
 Plugins (LibKIPI):

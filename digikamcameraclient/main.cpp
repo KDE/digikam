@@ -36,7 +36,7 @@
 static const char *description =
     I18N_NOOP("Digital camera interface for KDE");
 
-static const char *version = "0.6.3";
+static const char *version = "0.7.0";
 
 static KCmdLineOptions options[] =
 {

@@ -350,14 +350,7 @@ QString DigikamImageCollection::uploadRootName()
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                      :KIPI::Interface( parent, name )
 {
-    // Read File Filter settings in digikamrc file.
-
-    KConfig *config = new KConfig("digikamrc");
-    config->setGroup("Album Settings");
-    QString Temp = config->readEntry("File Filter", "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp");
-    delete config;
-  
-    imagesFileFilter_ = Temp.lower() + " " + Temp.upper();
+    readSettings();
 
     // Get AlbumManger instance.
     
@@ -543,6 +536,19 @@ QString DigikamKipiInterface::fileExtensions()
 {
   return (imagesFileFilter_);
 }
+
+void DigikamKipiInterface::readSettings()
+{
+    // Read File Filter settings in digikamrc file.
+
+    KConfig *config = new KConfig("digikamrc");
+    config->setGroup("Album Settings");
+    QString Temp = config->readEntry("File Filter", "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp");
+    delete config;
+  
+    imagesFileFilter_ = Temp.lower() + " " + Temp.upper();
+}
+    
 
 #include "kipiinterface.moc"
 
