@@ -37,7 +37,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
-#include <qspinbox.h>
+#include <qlcdnumber.h>
 #include <qslider.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -138,20 +138,22 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Film sensibility:"), plainPage());
     
-    m_sensibilitySlider = new QSlider(400, 3000, 1, 800, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
+    m_sensibilitySlider = new QSlider(0, 14, 1, 2, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
-    m_sensibilitySlider->setTickInterval(100);
+    m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
     
-    m_sensibilityInput = new QSpinBox(400, 3000, 1, plainPage(), "m_sensibilityInput");
+    m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
+    m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
+    m_sensibilityLCDValue->display( QString::number(800) );
     whatsThis = i18n("<p>Set here the film sensibility in ASA to use for simulate the film graininess.");
         
-    QWhatsThis::add( m_sensibilityInput, whatsThis);
+    QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
     hlay->addWidget(label1, 1);
     hlay->addWidget(m_sensibilitySlider, 3);
-    hlay->addWidget(m_sensibilityInput, 1);
+    hlay->addWidget(m_sensibilityLCDValue, 1);
     
     // -------------------------------------------------------------
         
@@ -169,13 +171,9 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
-            m_sensibilityInput, SLOT(setValue(int)));
-    connect(m_sensibilityInput, SIGNAL(valueChanged(int)),
-            m_sensibilitySlider, SLOT(setValue(int)));            
-    connect(m_sensibilityInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect())); 
-                        
+    connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
+             this, SLOT(slotSensibilityChanged(int)) ); 
+                       
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
@@ -185,8 +183,7 @@ ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
-    m_sensibilityInput->setValue(800);
-    m_sensibilitySlider->setValue(800);
+    m_sensibilitySlider->setValue(2);
     slotEffect();
     blockSignals(false);
 } 
@@ -209,6 +206,12 @@ void ImageEffect_FilmGrain::closeEvent(QCloseEvent *e)
     e->accept();    
 }
 
+void ImageEffect_FilmGrain::slotSensibilityChanged(int v)
+{
+    m_sensibilityLCDValue->display( QString::number(400+200*v) );
+    slotEffect();
+}
+
 void ImageEffect_FilmGrain::slotEffect()
 {
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
@@ -216,7 +219,7 @@ void ImageEffect_FilmGrain::slotEffect()
     uint* data   = (uint *)image.bits();
     int   w      = image.width();
     int   h      = image.height();
-    int   s      = m_sensibilityInput->value();
+    int   s      = 400 + 200*m_sensibilitySlider->value();
             
     m_progressBar->setValue(0); 
     FilmGrain(data, w, h, s);
@@ -239,7 +242,7 @@ void ImageEffect_FilmGrain::slotOk()
     uint* data = iface.getOriginalData();
     int w      = iface.originalWidth();
     int h      = iface.originalHeight();
-    int s      = m_sensibilityInput->value();
+    int s      = 400 + 200*m_sensibilitySlider->value();
     
     m_progressBar->setValue(0);
     FilmGrain(data, w, h, s);

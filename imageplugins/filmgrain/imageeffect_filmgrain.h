@@ -33,7 +33,7 @@
 
 class QPushButton;
 class QSlider;
-class QSpinBox;
+class QLCDNumber;
 
 class KProgress;
 
@@ -68,7 +68,7 @@ private:
     
     QSlider     *m_sensibilitySlider;
     
-    QSpinBox    *m_sensibilityInput;
+    QLCDNumber  *m_sensibilityLCDValue;
     
     KProgress   *m_progressBar;
     
@@ -86,6 +86,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotSensibilityChanged(int);
    
 };
 
