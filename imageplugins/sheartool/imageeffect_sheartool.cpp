@@ -149,21 +149,21 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     topLayout->addMultiCellWidget(label2, 2, 2, 3, 3);
     topLayout->addMultiCellWidget(m_newHeightLabel, 2, 2, 4, 4);
     
-    QLabel *label3 = new QLabel(i18n("Magnitude X:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Horizontal Angle:"), plainPage());
     m_magnitudeX = new KDoubleNumInput(plainPage());
     m_magnitudeX->setPrecision(1);
     m_magnitudeX->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeX->setValue(0.0);
-    QWhatsThis::add( m_magnitudeX, i18n("<p>The X-shearing magnitude, in degrees."));
+    QWhatsThis::add( m_magnitudeX, i18n("<p>The horizontal shearing angle, in degrees."));
     topLayout->addMultiCellWidget(label3, 3, 3, 0, 0);
     topLayout->addMultiCellWidget(m_magnitudeX, 3, 3, 1, 4);
             
-    QLabel *label4 = new QLabel(i18n("Magnitude Y:"), plainPage());
+    QLabel *label4 = new QLabel(i18n("Vertical Angle:"), plainPage());
     m_magnitudeY = new KDoubleNumInput(plainPage());
     m_magnitudeY->setPrecision(1);
     m_magnitudeY->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeY->setValue(0.0);
-    QWhatsThis::add( m_magnitudeY, i18n("<p>The Y-shearing magnitude, in degrees."));
+    QWhatsThis::add( m_magnitudeY, i18n("<p>The vertical shearing angle, in degrees."));
     topLayout->addMultiCellWidget(label4, 4, 4, 0, 0);
     topLayout->addMultiCellWidget(m_magnitudeY, 4, 4, 1, 4);
     
