@@ -147,6 +147,8 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
+// Constructor with AlbumIconView and AlbumIconItem instance.
+
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, 
                                  QWidget *parent, QRect *selectionArea)
                : KDialogBase(Tabbed, QString::null, 
@@ -165,6 +167,33 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
 
     m_selectionArea = selectionArea;
     
+    setupGui();
+}
+    
+// Constructor without AlbumIconView and AlbumIconItem instance and with KURL list (Stand Alone mode).
+
+ImageProperties::ImageProperties(KURL::List filesList, KURL currentFile, 
+                                 QWidget *parent, QRect *selectionArea)
+               : KDialogBase(Tabbed, QString::null, 
+                             Help|User1|User2|Stretch|Close,
+                             Close, parent, 0, true, true, 
+                             KStdGuiItem::guiItem(KStdGuiItem::Forward), 
+                             KStdGuiItem::guiItem(KStdGuiItem::Back))
+{
+    m_view          = 0L;
+    m_currItem      = 0L;
+    
+    m_currfileURL   = currentFile;    
+    m_urlList       = filesList; 
+    m_urlListIt     = m_urlList.find(m_currfileURL);   
+
+    m_selectionArea = selectionArea;
+    
+    setupGui();
+}
+
+void ImageProperties::setupGui(void)
+{
     parentWidget()->setCursor( KCursor::waitCursor() );
     setHelp("propertiesmetadatahistogram.anchor", "digikam");        
     
@@ -188,16 +217,20 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
     // Read config.
     
     kapp->config()->setGroup("Image Properties Dialog");
-    showPage(kapp->config()->readNumEntry("Tab Actived", 0));                              // General tab.
-    m_levelExifCB->setCurrentItem(kapp->config()->readNumEntry("Exif Level", 0));          // General Exif level.
-    m_embeddedThumbBox->setChecked(kapp->config()->readBoolEntry("Show Exif Thumb", true));// Exif thumb on.
-    m_currentGeneralExifItemName = kapp->config()->readEntry("General Exif Item", QString::null);
-    m_currentExtendedExifItemName = kapp->config()->readEntry("Extended Exif Item", QString::null);
-    m_currentAllExifItemName = kapp->config()->readEntry("All Exif Item", QString::null);
-    m_channelCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Channel", 0));     // Luminosity.
-    m_scaleCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Scale", 0));         // Linear.
-    m_colorsCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Color", 0));        // Red.
-    m_renderingCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Rendering", 0)); // Full image.
+    showPage(kapp->config()->readNumEntry("Tab Actived", 0));                             // General tab.
+    m_levelExifCB->setCurrentItem(kapp->config()->readNumEntry("Exif Level", 0));         // General Exif level.
+    m_embeddedThumbBox->setChecked(kapp->config()->readBoolEntry("Show Exif Thumb",
+                                                                 true));                  // Exif thumb on.
+    m_currentGeneralExifItemName = kapp->config()->readEntry("General Exif Item",
+                                                             QString::null);
+    m_currentExtendedExifItemName = kapp->config()->readEntry("Extended Exif Item",
+                                                              QString::null);
+    m_currentAllExifItemName = kapp->config()->readEntry("All Exif Item",
+                                                         QString::null);
+    m_channelCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Scale", 0));        // Linear.
+    m_colorsCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Color", 0));       // Red.
+    m_renderingCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Rendering", 0));// Full image.
 
     // Init all info data.
     
@@ -247,29 +280,53 @@ ImageProperties::~ImageProperties()
 
 void ImageProperties::slotUser1()
 {
-    if (!m_currItem)
-        return;
+    if (m_view)             // Digikam embeded mode.
+       {
+       if (!m_currItem)
+          return;
 
-    m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-    m_currfileURL = m_currItem->fileItem()->url();    
-    slotItemChanged();
+       m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
+       m_currfileURL = m_currItem->fileItem()->url();    
+       slotItemChanged();
+       }
+    else                    // Stand Alone mode.
+       {
+       m_currfileURL = *(m_urlListIt++);   
+       slotItemChanged();
+       }
 }
 
 void ImageProperties::slotUser2()
 {
-    if (!m_currItem)
-        return;
+    if (m_view)             // Digikam embeded mode.
+       {
+       if (!m_currItem)
+           return;
     
-    m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
-    m_currfileURL = m_currItem->fileItem()->url();    
-    slotItemChanged();
+       m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
+       m_currfileURL = m_currItem->fileItem()->url();    
+       slotItemChanged();
+       }
+    else                    // Stand Alone mode.
+       {
+       m_currfileURL = *(m_urlListIt--);    
+       slotItemChanged();
+       }
 }
 
 void ImageProperties::slotItemChanged()
 {
-    if (!m_currItem)
-        return;
-    
+    if (m_view)             // Digikam embeded mode.
+       {
+       if (!m_currItem)
+          return;
+       }
+    else                    // Stand Alone mode.
+       {
+       if (!m_currfileURL.isValid())
+          return;
+       }
+       
     setCursor( KCursor::waitCursor() );
     
     if (!m_HistogramThumbJob.isNull())
@@ -344,7 +401,18 @@ void ImageProperties::slotItemChanged()
                             .arg(dims.height()).arg(i18n("pixels")) );
         }
    
-    m_filepath->setText( m_currfileURL.path() );
+    if (m_view)             // Digikam embeded mode.
+       {           
+       m_pathLabel->hide();
+       m_filepath->hide();
+       }
+    else                    // Stand Alone mode.
+       {
+       m_pathLabel->show();
+       m_filepath->show();
+       m_filepath->setText( m_currfileURL.path() );
+       }
+    
     QDateTime dateurl;
     dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
     m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
@@ -353,21 +421,40 @@ void ImageProperties::slotItemChanged()
     m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
     m_filepermissions->setText( fi->permissionsString() );
 
-    // Digikam informations.
+    // Digikam informations (only available with embedded mode)
     
-    PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
+    if (m_view)             // Digikam embeded mode.
+       {           
+       m_filealbum->show();
+       m_filecomments->show();
+       m_filetags->show();
+       m_albumLabel->show();
+       m_commentsLabel->show();
+       m_tagsLabel->show();       
+       
+       PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
     
-    if (palbum)
-        m_filealbum->setText( palbum->getURL().remove(0, 1) );
+       if (palbum)
+           m_filealbum->setText( palbum->getURL().remove(0, 1) );
     
-    m_filecomments->setText( m_view->itemComments(m_currItem) );
-    QStringList tagPaths(m_view->itemTagPaths(m_currItem));
+       m_filecomments->setText( m_view->itemComments(m_currItem) );
+       QStringList tagPaths(m_view->itemTagPaths(m_currItem));
     
-    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-        (*it).remove(0,1);
+       for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+          (*it).remove(0,1);
     
-    m_filetags->setText( tagPaths.join(", "));
-
+       m_filetags->setText( tagPaths.join(", "));
+       }
+    else                    // Stand Alone mode.
+       {
+       m_filealbum->hide();
+       m_filecomments->hide();
+       m_filetags->hide();
+       m_albumLabel->hide();
+       m_commentsLabel->hide();
+       m_tagsLabel->hide();       
+       }
+       
     // -------------------------------------------------------------                                         
     // Update Exif Viewer tab.
 
@@ -422,6 +509,7 @@ void ImageProperties::slotItemChanged()
 
     // This is necessary to stop computation because m_image.bits() is currently used by
     // threaded histogram algorithm.
+    
     m_histogramWidget->stopHistogramComputation();
         
     if ( m_image.load(m_currfileURL.path()) )
@@ -458,9 +546,18 @@ void ImageProperties::slotItemChanged()
         }
                
     // Setup buttons.
-           
-    enableButton(User1, m_currItem->nextItem() != 0);
-    enableButton(User2, m_currItem->prevItem() != 0);
+    
+    if (m_view)             // Digikam embeded mode.
+       {           
+       enableButton(User1, m_currItem->nextItem() != 0);
+       enableButton(User2, m_currItem->prevItem() != 0);
+       }
+    else                    // Stand Alone mode.
+       {
+       enableButton(User1, m_urlListIt != m_urlList.end());
+       enableButton(User2, m_urlListIt != m_urlList.begin());
+       }    
+    
     setCursor( KCursor::arrowCursor() );     
 }
 
@@ -853,7 +950,8 @@ void ImageProperties::setupExifViewer(void)
     QWhatsThis::add( m_levelExifCB, i18n("<p>Select here the Exif information level to display<p>"
                                          "<b>General</b>: display general information about the photograph "
                                          " (default).<p>"
-                                         "<b>Extended</b>: display extended information about the photograph.<p>"
+                                         "<b>Extended</b>: display extended information about the "
+                                         "photograph.<p>"
                                          "<b>All</b>: display all Exif sections."));  
                                          
     m_embeddedThumbBox = new QCheckBox(i18n("Show Exif thumbnail"), page);
@@ -1014,10 +1112,10 @@ void ImageProperties::setupGeneralTab()
     hlay1->addMultiCellWidget( dim, 2, 2, 0, 0 );
     hlay1->addMultiCellWidget( m_filedim, 2, 2, 1, 2  );
 
-    QLabel *path = new QLabel( i18n("Location:"), page);
+    m_pathLabel = new QLabel( i18n("Location:"), page);
     m_filepath = new KSqueezedTextLabel(page);
-    path->setBuddy( m_filepath );
-    hlay1->addMultiCellWidget( path, 3, 3, 0, 0 );
+    m_pathLabel->setBuddy( m_filepath );
+    hlay1->addMultiCellWidget( m_pathLabel, 3, 3, 0, 0 );
     hlay1->addMultiCellWidget( m_filepath, 3, 3, 1, 2  );
     
     QLabel *date = new QLabel( i18n("Modification Date:"), page);
@@ -1052,22 +1150,22 @@ void ImageProperties::setupGeneralTab()
     QGridLayout *hlay2 = new QGridLayout(3, 3);
     vlay->addLayout( hlay2 );
     
-    QLabel *album = new QLabel( i18n("Album:"), page);
+    m_albumLabel = new QLabel( i18n("Album:"), page);
     m_filealbum = new KSqueezedTextLabel(page);
-    album->setBuddy( m_filealbum );
-    hlay2->addMultiCellWidget( album, 0, 0, 0, 0 );
+    m_albumLabel->setBuddy( m_filealbum );
+    hlay2->addMultiCellWidget( m_albumLabel, 0, 0, 0, 0 );
     hlay2->addMultiCellWidget( m_filealbum, 0, 0, 1, 2  );
 
-    QLabel *comments = new QLabel( i18n("Comments:"), page);
+    m_commentsLabel = new QLabel( i18n("Comments:"), page);
     m_filecomments = new KSqueezedTextLabel(page);
-    comments->setBuddy( m_filecomments );
-    hlay2->addMultiCellWidget( comments, 1, 1, 0, 0 );
+    m_commentsLabel->setBuddy( m_filecomments );
+    hlay2->addMultiCellWidget( m_commentsLabel, 1, 1, 0, 0 );
     hlay2->addMultiCellWidget( m_filecomments, 1, 1, 1, 2  );
     
-    QLabel *tags = new QLabel( i18n("Tags:"), page);
+    m_tagsLabel = new QLabel( i18n("Tags:"), page);
     m_filetags = new KSqueezedTextLabel(page);
-    tags->setBuddy( m_filetags );
-    hlay2->addMultiCellWidget( tags, 2, 2, 0, 0 );
+    m_tagsLabel->setBuddy( m_filetags );
+    hlay2->addMultiCellWidget( m_tagsLabel, 2, 2, 0, 0 );
     hlay2->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
                     
     vlay->addStretch(1);

@@ -31,10 +31,11 @@
 #include <kmenubar.h>
 #include <kimageio.h>
 #include <kaccel.h>
-#include <kpropertiesdialog.h>
 #include <kdeversion.h>
 
 // Local includes.
+
+#include "imageproperties.h"
 
 #include "canvas.h"
 #include "thumbbar.h"
@@ -42,6 +43,8 @@
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
 {
+    m_urlList = urlList;
+    
     QWidget* widget = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -58,10 +61,12 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             SLOT(slotOpenURL(const KURL&)));
 
-    if (!urlList.isEmpty())
+    if (!m_urlList.isEmpty())
     {
-        for (KURL::List::const_iterator it = urlList.begin();
-             it != urlList.end(); ++it)
+        m_fileProperties->setEnabled(true);                     
+
+        for (KURL::List::const_iterator it = m_urlList.begin();
+             it != m_urlList.end(); ++it)
         {
             new ThumbBarItem(m_bar, *it);
         }
@@ -88,11 +93,14 @@ void ShowFoto::setupActions()
     KStdAction::back(this, SLOT(slotPrev()),
                      actionCollection(), "go_bwd");
 
-    new KAction(i18n("Properties"), 0,
-                ALT+Key_Return,
-                this, SLOT(slotFileProperties()),
-                actionCollection(), "file_properties");
-                     
+    m_fileProperties = new KAction(i18n("Properties"), 0,
+                                   ALT+Key_Return,
+                                   this, SLOT(slotFileProperties()),
+                                   actionCollection(), 
+                                   "file_properties");
+    
+    m_fileProperties->setEnabled(false);                     
+    
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                            actionCollection(), "zoom_plus");
@@ -136,11 +144,16 @@ void ShowFoto::slotOpenFile()
         
     if (!urls.isEmpty())
     {
+        
+        m_fileProperties->setEnabled(true);                     
         m_bar->clear();
+        m_urlList.clear();
+        
         for (KURL::List::const_iterator it = urls.begin();
              it != urls.end(); ++it)
         {
             new ThumbBarItem(m_bar, *it);
+            m_urlList.append(*it);
         }
     }
 }
@@ -150,7 +163,20 @@ void ShowFoto::slotFileProperties()
     ThumbBarItem* curr = m_bar->currentItem();
     
     if (curr)
-        (void) new KPropertiesDialog( curr->url(), this, "props dialog", true );
+    {
+       QRect sel = m_canvas->getSelectedArea();
+            
+       if (sel.isNull())
+       {
+          ImageProperties properties(m_urlList, curr->url(), this);
+          properties.exec();
+       }
+       else
+       {
+          ImageProperties properties(m_urlList, curr->url(), this, &sel);
+          properties.exec();
+       }
+    }
 }
 
 void ShowFoto::slotNext()

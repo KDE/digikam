@@ -35,7 +35,6 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
-#include <kpropertiesdialog.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kprinter.h>
@@ -555,9 +554,25 @@ void ImageWindow::slotRotatedOrFlipped()
 
 void ImageWindow::slotFileProperties()
 {
-    if (!m_view)
-        (void) new KPropertiesDialog( m_urlCurrent, this, "props dialog", true );
-    else
+    if (!m_view)         // Stand Alone mode. 
+    {
+       if (m_urlCurrent.isValid())
+       {
+          QRect sel = m_canvas->getSelectedArea();
+            
+          if (sel.isNull())
+          {
+             ImageProperties properties(m_urlList, m_urlCurrent, this);
+             properties.exec();
+          }
+          else
+          {
+             ImageProperties properties(m_urlList, m_urlCurrent, this, &sel);
+             properties.exec();
+          }
+       }
+    }
+    else                 // Digikam embeded mode.
     {
         AlbumIconItem *iconItem = m_view->findItem(m_urlCurrent.url());
         

@@ -43,6 +43,7 @@ class QTextEdit;
 class QMouseEvent;
 class QRect;
 class QCheckBox;
+class QGroupBox;
 
 class KSqueezedTextLabel;
 class KPopupMenu;
@@ -81,15 +82,26 @@ protected:
     
 };
 
+//////////////////////////////////////////////////////////////////////////
+
 class ImageProperties : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
+    // Digikam embedded mode constructor.
+    
     ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, 
-                    QWidget *parent=0, 
-                    QRect *selectionArea=0);        // Used for histogram image selection computation.
+                    QWidget *parent=0L, 
+                    QRect *selectionArea=0L);  // Used for histogram image selection computation.
+
+    // Stand Alone mode constructor.
+                        
+    ImageProperties(KURL::List filesList, KURL currentFile, 
+                    QWidget *parent=0L,
+                    QRect *selectionArea=0L);
+                    
     ~ImageProperties();
 
 public slots:    
@@ -109,9 +121,18 @@ private:
     
     KURL                          m_currfileURL;
     
+    KURL::List                    m_urlList;        // Used only in Stand Alone mode.
+    KURL::List::Iterator          m_urlListIt;
+    
+    void setupGui(void);
+    
     // For General tab.
     
     QLabel                       *m_generalThumb;
+    QLabel                       *m_albumLabel;
+    QLabel                       *m_commentsLabel;
+    QLabel                       *m_tagsLabel;
+    QLabel                       *m_pathLabel;
     
     KSqueezedTextLabel           *m_filename;
     KSqueezedTextLabel           *m_filetype;

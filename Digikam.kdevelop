@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
@@ -32,7 +32,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns></hidepatterns>
+      <hidepatterns/>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <showvcsfields>true</showvcsfields>
     </tree>
@@ -85,11 +85,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -121,10 +121,10 @@
       <prio>0</prio>
     </make>
     <run>
-      <directoryradio>build</directoryradio>
+      <directoryradio>custom</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>digikam/digikam/digikam</mainprogram>
-      <programargs/>
+      <mainprogram>showfoto</mainprogram>
+      <programargs>/mnt/temp/test/*.JPG</programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
