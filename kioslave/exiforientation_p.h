@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : exiforientation_p.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-10-24
  * Description : 

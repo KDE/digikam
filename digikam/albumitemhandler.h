@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : albumitemhandler.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-09-26
  * Description : 

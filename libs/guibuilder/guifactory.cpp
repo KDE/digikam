@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : guifactory.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-11
  * Description : 

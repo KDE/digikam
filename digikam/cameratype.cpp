@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : cameratype.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-01-29
  * Description : 

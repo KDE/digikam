@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_bcg.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-05
  * Description : 

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : tagcreatedlg.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-07-01
  * Description :

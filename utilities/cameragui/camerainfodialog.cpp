@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : camerainfodialog.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-01-28
  * Description : 

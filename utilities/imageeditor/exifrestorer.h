@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : exifrestorer.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-02-23
  * Description : 

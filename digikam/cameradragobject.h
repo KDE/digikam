@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : cameradragobject.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-02-18
  * Description : 

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : renamecustomizer.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-19
  * Description : 

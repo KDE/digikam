@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_redeye.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-06
  * Description :

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : setupmime.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-05-03
  * Description : mime types setup tab.

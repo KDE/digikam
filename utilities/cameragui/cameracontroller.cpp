@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : cameracontroller.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-17
  * Description : 

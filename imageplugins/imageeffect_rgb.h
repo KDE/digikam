@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_rgb.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-11
  * Description : RGB adjustement plugin for ImageEditor

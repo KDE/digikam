@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_blur.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-09
  * Description : Blur image filter for ImageEditor

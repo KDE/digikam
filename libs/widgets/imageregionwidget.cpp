@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageregionwidget.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-17
  * Description : a widget for to draw a image clip region.

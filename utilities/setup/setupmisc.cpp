@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : setupmisc.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-08-23
  * Description :

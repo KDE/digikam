@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : thumbnailjob.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-10-14
  * Description : 

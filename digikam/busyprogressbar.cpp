@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : busyprogressbar.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-08-31
  * Description : 

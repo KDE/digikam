@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : digikamio.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-08-30
  * Description : 

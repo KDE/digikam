@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imagelevels.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-29
  * Description : image levels manipulation methods.

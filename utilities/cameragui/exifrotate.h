@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : exifrotate.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-29
  * Description : 

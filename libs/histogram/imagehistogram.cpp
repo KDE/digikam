@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imagehistogram.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
  * Description : image histogram manipulation methods.

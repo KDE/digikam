@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_colorsenhance.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-20
  * Description : image contrast enhancement techniques. 

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : listitem.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-21
  * Description : 

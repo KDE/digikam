@@ -1,5 +1,4 @@
 /* ============================================================
- * File   : setup.cpp
  * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at free.fr>
  * Date   : 2003-02-03

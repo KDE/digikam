@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imagepluginloader.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-06-04

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imagerotatedlg.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-16
  * Description : a dialog for free resizing image operations.

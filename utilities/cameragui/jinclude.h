@@ -1,5 +1,4 @@
 /*
- * jinclude.h
  *
  * Copyright (C) 1991-1994, Thomas G. Lane.
  * This file is part of the Independent JPEG Group's software.

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_sharpen.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-09
  * Description : Sharpen image filter for ImageEditor

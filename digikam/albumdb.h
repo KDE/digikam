@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : albumdb.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-18
  * Description : 

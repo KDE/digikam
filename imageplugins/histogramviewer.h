@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : histogramviewer.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
  * Description : an image histogram viewer dialog.

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageiface.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
  * Description : 

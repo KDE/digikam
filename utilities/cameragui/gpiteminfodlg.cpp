@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : gpiteminfodlg.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-30
  * Description : 

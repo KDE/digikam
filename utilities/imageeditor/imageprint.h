@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageprint.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-13
  * Description : 

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imagetoolswidget.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-20
  * Description : 

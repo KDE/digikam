@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_hsl.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-16
  * Description : HSL adjustement plugin for ImageEditor

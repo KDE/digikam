@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : setupeditor.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-03
  * Description : setup tab for ImageEditor.

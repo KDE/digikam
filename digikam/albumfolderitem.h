@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : albumfolderitem.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-01-08
  * Description :

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : cameraiconview.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-18
  * Description : 

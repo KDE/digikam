@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : thumbdb.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-07-21
  * Description : 

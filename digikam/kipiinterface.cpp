@@ -1,5 +1,4 @@
 /* ============================================================
- * File   : kipiinterface.cpp
  * Authors: Gilles Caulier <caulier dot gilles at free.fr>
  *          Ralf Holzer <ralf at well.com>
  *          Renchi Raju <renchi@pooh.tam.uiuc.edu>

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : albumiconview.cpp
  * Author: Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2002-02-21

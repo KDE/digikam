@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : canvas.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-01-09

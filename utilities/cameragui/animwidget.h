@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : animwidget.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-21
  * Description : 

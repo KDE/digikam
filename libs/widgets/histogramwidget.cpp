@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : histogramwidget.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
  * Description : a widget for to display an image histogram.

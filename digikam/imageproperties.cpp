@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageproperties.cpp
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-11-17
  * Description :
