@@ -31,6 +31,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qevent.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -60,6 +61,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_blinkFlag      = false;
     m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
@@ -68,6 +70,11 @@ HistogramWidget::HistogramWidget(int w, int h,
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
+
+    m_blinkTimer = new QTimer( this );
+        
+    connect( m_blinkTimer, SIGNAL(timeout()),
+             this, SLOT(slotBlinkTimerDone()) );
     
     m_imageHistogram     = 0L;
     m_selectionHistogram = 0L;
@@ -85,6 +92,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_blinkFlag      = false;
     m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
@@ -93,6 +101,11 @@ HistogramWidget::HistogramWidget(int w, int h,
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
+    
+    m_blinkTimer = new QTimer( this );
+        
+    connect( m_blinkTimer, SIGNAL(timeout()),
+             this, SLOT(slotBlinkTimerDone()) );
     
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, this);
     m_selectionHistogram = 0L;
@@ -111,6 +124,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_colorType      = RedColor;
     m_renderingType  = FullImageHistogram;
     m_inSelected     = false;
+    m_blinkFlag      = false;
     m_clearFlag      = HistogramNone;
     m_selectMode     = selectMode;
     m_xmin           = 0;
@@ -119,13 +133,20 @@ HistogramWidget::HistogramWidget(int w, int h,
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
-    
+        
+    m_blinkTimer = new QTimer( this );
+        
+    connect( m_blinkTimer, SIGNAL(timeout()),
+             this, SLOT(slotBlinkTimerDone()) );
+
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
 }
 
 HistogramWidget::~HistogramWidget()
 {
+    m_blinkTimer->stop(); 
+
     if (m_imageHistogram)
        delete m_imageHistogram;
 
@@ -145,6 +166,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
         {
         setCursor( KCursor::waitCursor() );
         m_clearFlag = HistogramStarted;
+        m_blinkTimer->start( 200 ); 
         repaint(false);
         }  
     else 
@@ -153,6 +175,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             {
             // Repaint histogram 
             m_clearFlag = HistogramCompleted;
+            m_blinkTimer->stop(); 
             repaint(false);
             setCursor( KCursor::arrowCursor() );    
             
@@ -170,6 +193,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
         else
             {
             m_clearFlag = HistogramFailed;
+            m_blinkTimer->stop(); 
             repaint(false);
             setCursor( KCursor::arrowCursor() );    
             }
@@ -183,6 +207,8 @@ void HistogramWidget::stopHistogramComputation(void)
 
     if (m_selectionHistogram)
        m_selectionHistogram->stopCalcHistogramValues();
+    
+    m_blinkTimer->stop(); 
 }
 
 void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
@@ -202,6 +228,12 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
         m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
 }
 
+void HistogramWidget::slotBlinkTimerDone( void )
+{
+    m_blinkFlag = !m_blinkFlag;
+    repaint(false);
+    m_blinkTimer->start( 200 ); 
+}
 
 // This method is inspired of Gimp2.0 
 // app/widgets/gimphistogramview.c::gimp_histogram_view_expose 
@@ -214,7 +246,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
-       p1.setPen(Qt::green);
+       
+       if (m_blinkFlag)
+           p1.setPen(Qt::green);
+       else 
+           p1.setPen(Qt::darkGreen);
+       
        p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nin progress..."));
        p1.end();

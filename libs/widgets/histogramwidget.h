@@ -111,7 +111,11 @@ public slots:
 
     void slotMinValueChanged( int min );
     void slotMaxValueChanged( int max );
-        
+
+protected slots:
+    
+    void slotBlinkTimerDone( void );
+            
 protected:
 
     void paintEvent( QPaintEvent * );
@@ -122,13 +126,16 @@ protected:
 private:
 
     // Current selection informations.
-    int  m_xmin;
-    int  m_xminOrg; 
-    int  m_xmax;
-    int  m_clearFlag;          // Clear drawing zone with message.
+    int     m_xmin;
+    int     m_xminOrg; 
+    int     m_xmax;
+    int     m_clearFlag;          // Clear drawing zone with message.
     
-    bool m_inSelected;
-    bool m_selectMode;         // If true, a part of the histogram can be selected !
+    bool    m_inSelected;
+    bool    m_selectMode;         // If true, a part of the histogram can be selected !
+    bool    m_blinkFlag;         
+    
+    QTimer *m_blinkTimer;
     
     void customEvent(QCustomEvent *event);
 };
