@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-20
- * Description : image contrast enhancement techniques. 
+ * Description : image colors tools. 
  * 
  * Copyright 2004 by Gilles Caulier
  * Normalize an Equalize algorithms fixed and adapted for to work with Raw 
@@ -484,4 +484,52 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     delete levels;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// Performs image colors inversion. This tool is used for negate image 
+// resulting of a positive film scanned.
+
+void ImageEffect_ColorsEnhance::invertImage()
+{
+    Digikam::ImageIface iface(0, 0);
+
+    uint* orgData = iface.getOriginalData();
+    int   width   = iface.originalWidth();
+    int   height  = iface.originalHeight();
+
+    if (!orgData || !width || !height)
+       {
+       kdWarning() << ("ImageEffect_ColorsEnhance::invertImage: no image data available!")
+                   << endl;
+       return;
+       }
+       
+    // Create the new empty destination image data space.
+    uint* desData = new uint[width*height];
+
+    int LineWidth = width * 4;
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+      
+    uchar* bits    = (uchar*)orgData;
+    uchar* newBits = (uchar*)desData;
+
+    int i = 0;
+    
+    for (int h = 0 ; h < height ; ++h)
+        {
+        for (int w = 0 ; w < width ; ++w)
+            {
+            i = h * LineWidth + 4 * w;
+
+            newBits[i+3] = 255 - bits[i+3];
+            newBits[i+2] = 255 - bits[i+2];
+            newBits[i+1] = 255 - bits[i+1];
+            newBits[ i ] = 255 - bits[ i ];
+            }
+        }
+                        
+    iface.putOriginalData(desData);
+    
+    delete [] orgData;
+    delete [] desData;
+}
 

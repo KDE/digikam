@@ -107,6 +107,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                            "limit values and adjust the Red, Green, and Blue channels "
                                            "to a full histogram range."));  
 
+    new KAction(i18n("Invert"), 0,
+                this, SLOT(slotInvert()),
+                actionCollection(), "implugcore_invert");
+                                                           
     //-------------------------------
     // Filters menu actions.
 
@@ -147,6 +151,7 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_normalize/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_equalize/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_autolevels/ ");
+    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_invert/ ");
 
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
@@ -228,6 +233,13 @@ void ImagePlugin_Core::slotAutoLevels()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_ColorsEnhance::autoLevelsCorrectionImage();
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
+}
+
+void ImagePlugin_Core::slotInvert()
+{
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    ImageEffect_ColorsEnhance::invertImage();
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 

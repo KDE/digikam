@@ -45,7 +45,7 @@ public:
 
 private:
 
-    KAction     *m_redeyeAction;
+    KAction *m_redeyeAction;
         
 private slots:
 
@@ -57,6 +57,7 @@ private slots:
     void slotNormalize();
     void slotEqualize();
     void slotAutoLevels();
+    void slotInvert();
     void slotBW();
     void slotSepia();
     void slotRedEye();

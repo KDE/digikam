@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-20
- * Description : image contrast enhancement techniques. 
+ * Description : image colors tools. 
  * 
  * Copyright 2004 by Gilles Caulier
  *
@@ -47,6 +47,7 @@ public:
     static void equalizeImage();
     static void normalizeImage();
     static void autoLevelsCorrectionImage();
+    static void invertImage();
 
 };
 
