@@ -54,8 +54,6 @@
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
-//static const char *description = I18N_NOOP("A Photo-Management Application for KDE");
-
 static KCmdLineOptions options[] =
 {
   { 0, 0, 0 }
