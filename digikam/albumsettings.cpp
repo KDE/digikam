@@ -57,6 +57,7 @@ public:
     bool recurseTags;
     bool showToolTips;
     bool showSplash;
+    bool useTrash;
     
     bool iconShowName;
     bool iconShowSize;
@@ -121,6 +122,7 @@ void AlbumSettings::init()
     d->recurseTags  = false;
     d->showToolTips = true;
     d->showSplash   = true;
+    d->useTrash     = true;
     
     d->iconShowName = false;
     d->iconShowSize = true;
@@ -212,6 +214,9 @@ void AlbumSettings::readSettings()
     
     d->showSplash =
         config->readBoolEntry("Show Splash", true);
+
+    d->useTrash =
+        config->readBoolEntry("Use Trash", true);
 }
 
 void AlbumSettings::saveSettings()
@@ -288,6 +293,8 @@ void AlbumSettings::saveSettings()
     
     config->writeEntry("Show Splash", d->showSplash);
 
+    config->writeEntry("Use Trash", d->useTrash);
+    
     config->sync();
 }
 
@@ -534,4 +541,14 @@ void AlbumSettings::setCurrentTheme(const QString& theme)
 QString AlbumSettings::getCurrentTheme() const
 {
     return d->currentTheme;
+}
+
+void AlbumSettings::setUseTrash(bool val)
+{
+    d->useTrash = val;
+}
+
+bool AlbumSettings::getUseTrash() const
+{
+    return d->useTrash;
 }

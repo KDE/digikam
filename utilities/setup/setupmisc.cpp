@@ -37,6 +37,14 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    // --------------------------------------------------------
 
+   QHGroupBox *useTrashGroupBox = new QHGroupBox(i18n("Delete Settings"),
+                                               parent);
+   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash"),
+                                     useTrashGroupBox);
+   layout->addWidget(useTrashGroupBox);
+
+   // --------------------------------------------------------
+
    QHGroupBox *splashGroupBox = new QHGroupBox(i18n("Splash Screen Settings"),
                                                parent);
    m_showSplashCheck = new QCheckBox(i18n("Show Splash Screen at startup"),
@@ -60,6 +68,7 @@ void SetupMisc::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
 
     settings->setShowSplashScreen(m_showSplashCheck->isChecked());
+    settings->setUseTrash(m_useTrashCheck->isChecked());
                                   
     settings->saveSettings();
 }
@@ -69,4 +78,5 @@ void SetupMisc::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
 
     m_showSplashCheck->setChecked(settings->getShowSplashScreen());
+    m_useTrashCheck->setChecked(settings->getUseTrash());
 }

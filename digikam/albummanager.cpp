@@ -22,8 +22,8 @@
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <klocale.h>
-#include <kio/netaccess.h>
 #include <kdeversion.h>
+#include <kio/netaccess.h>
 
 #include <qfile.h>
 #include <qdict.h>
@@ -32,6 +32,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albumitemhandler.h"
+#include "syncjob.h"
 #include "albummanager.h"
 
 extern "C"
@@ -323,11 +324,7 @@ bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)
         return false;
     }
 
-#if KDE_IS_VERSION(3,2,0)
-    if (KIO::NetAccess::del(album->getKURL(), (QWidget*)0))
-#else
-    if (KIO::NetAccess::del(album->getKURL()))
-#endif
+    if (SyncJob::userDelete(album->getKURL()))
     {
         d->db->deleteAlbum(album);
         return true;

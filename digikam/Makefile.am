@@ -32,7 +32,8 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			thumbdb.cpp albumfiletip.cpp digikamio.cpp \
-			busyprogressbar.cpp tagspopupmenu.cpp
+			busyprogressbar.cpp tagspopupmenu.cpp \
+			syncjob.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \

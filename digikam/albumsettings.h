@@ -127,6 +127,9 @@ public:
     
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
+
+    void    setUseTrash(bool val);
+    bool    getUseTrash() const;
     
     static AlbumSettings *instance();
 

@@ -31,7 +31,6 @@
 
 #include <thumbview.h>
 #include <kfileitem.h>
-#include <kio/job.h>
 
 // Local includes.
 
@@ -150,7 +149,6 @@ private slots:
     void slotFinishedThumbnail();
     void slotSelectionChanged();
 
-    void slotOnDeleteSelectedItemsFinished(KIO::Job* job);
     void slotFilesModified();
     void slotFilesModified(const KURL& url);
 

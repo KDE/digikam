@@ -87,6 +87,7 @@
 #include "thumbnailjob.h"
 #include "albumfilecopymove.h"
 #include "digikamio.h"
+#include "syncjob.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
 #include "tagspopupmenu.h"
@@ -755,7 +756,6 @@ void AlbumIconView::slotDeleteSelectedItems()
             AlbumIconItem *iconItem =
                 static_cast<AlbumIconItem *>(it);
             url = iconItem->fileItem()->url();
-            url.setProtocol("digikamio");
             urlList.append(url);
             nameList.append(iconItem->text());
         }
@@ -771,23 +771,37 @@ void AlbumIconView::slotDeleteSelectedItems()
                                                i18n("Delete"))
         ==  KMessageBox::Continue)
     {
+        AlbumManager* man = AlbumManager::instance();
+        AlbumDB* db = man->albumDB();
 
-        KIO::DeleteJob* job = KIO::del(urlList, false, true);
+        if (SyncJob::userDelete(urlList))
+        {
+            for (KURL::List::const_iterator it = urlList.begin();
+                 it != urlList.end(); ++it)
+            {
+                AlbumIconItem* iconItem = findItem((*it).url());
+                if (!iconItem)
+                    continue;
 
-        connect(job, SIGNAL(result(KIO::Job*)),
-                this, SLOT(slotOnDeleteSelectedItemsFinished(KIO::Job*)));
+                PAlbum* palbum =
+                    d->imageLister->findParentAlbum(iconItem->fileItem());
+                if (palbum)
+                {
+                    db->deleteItem(palbum, iconItem->text());
+                }   
+            }
+        }
+        else
+        {
+            KMessageBox::sorry(0, i18n("Failed to delete files.\n%1")
+                               .arg(SyncJob::lastErrorMsg()));
+        }
+
+        d->imageLister->updateDirectory();
+        updateBanner();
     }
 }
 
-void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
-{
-    if (job->error())
-        job->showErrorDialog(this);
-
-    d->imageLister->updateDirectory();
-
-    updateBanner();
-}
 void AlbumIconView::slotFilesModified()
 {
     d->imageLister->updateDirectory();

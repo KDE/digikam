@@ -69,6 +69,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "syncjob.h"
 #include "imagewindow.h"
 
 ImageWindow* ImageWindow::instance()
@@ -593,13 +594,9 @@ void ImageWindow::slotDeleteCurrentItem()
         return;
     }
 
-#if KDE_IS_VERSION(3,2,0)
-    if (!KIO::NetAccess::del(m_urlCurrent, this))
-#else
-    if (!KIO::NetAccess::del(m_urlCurrent))
-#endif
+    if (!SyncJob::userDelete(m_urlCurrent))
     {
-        QString errMsg(KIO::NetAccess::lastErrorString());
+        QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
         return;
     }

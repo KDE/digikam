@@ -40,6 +40,7 @@ private:
     void readSettings();
 
     QCheckBox* m_showSplashCheck;
+    QCheckBox* m_useTrashCheck;
 };
 
 #endif /* SETUPMISC_H */
