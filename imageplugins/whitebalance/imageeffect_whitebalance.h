@@ -36,6 +36,8 @@ class QLabel;
 class QComboBox;
 class QPushButton;
 
+class KDoubleNumInput;
+
 namespace Digikam
 {
 class ImageGuideWidget;
@@ -61,6 +63,26 @@ protected:
 
     void closeEvent(QCloseEvent *e);    
 
+private:    
+
+    bool                          m_clipSat;
+    bool                          m_overExp;
+    bool                          m_WBind;
+    
+    double                        m_saturation;
+    double                        m_temperature;    
+    double                        m_gamma;
+    double                        m_black;
+    double                        m_exposition;
+    double                        m_dark;
+    double                        m_green;
+        
+    int                           m_BP, m_WP;
+    uint                          m_rgbMax;
+    
+    float                         curve[256];
+    float                         m_mr, m_mg, m_mb;
+        
 private:
 
     enum TargetColor 
@@ -68,19 +90,34 @@ private:
     WhiteColor=0,
     BlackColor
     };
-    
+
+    enum BWMethod 
+    {
+    ColorPicker=0,
+    CorrectionFilter
+    };
+   
     QWidget                      *m_parent;
     
     QPushButton                  *m_helpButton;
     
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
+    QComboBox                    *m_wbMethod;
     
     QPushButton                  *m_blackColorButton;
     QPushButton                  *m_whiteColorButton;
     
     QColor                        m_blackColor;
     QColor                        m_whiteColor;
+    
+    KDoubleNumInput              *m_temperatureInput;
+    KDoubleNumInput              *m_darkInput;
+    KDoubleNumInput              *m_blackInput;
+    KDoubleNumInput              *m_exposureInput;
+    KDoubleNumInput              *m_gammaInput;
+    KDoubleNumInput              *m_saturationInput;
+    KDoubleNumInput              *m_greenInput;
     
     Digikam::CurvesWidget        *m_whiteBalanceCurvesWidget;
     Digikam::ImageCurves         *m_whiteBalanceCurves;
@@ -95,6 +132,9 @@ private:
         
     void setWhiteColor(QColor color);
     void setBlackColor(QColor color);
+    void setRGBmult(void);
+    void setLUTv(int mv);
+    void setLUT(void);
     void whiteBalance(uint *data, int w, int h, QColor bColor, QColor wColor);
 
 private slots:
@@ -106,6 +146,7 @@ private slots:
     void slotColorSelectedFromImage( const QColor &color );
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
+    void slotMethodChanged(int method);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
