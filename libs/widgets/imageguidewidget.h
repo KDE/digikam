@@ -61,8 +61,7 @@ public:
 
 signals:
 
-    void spotColorChanged( const QColor &color, bool release ); 
-    void spotPositionChanged( const QPoint &position, bool release ); 
+    void spotPositionChanged( const QColor &color, bool release, const QPoint &position ); 
     
 protected:
     

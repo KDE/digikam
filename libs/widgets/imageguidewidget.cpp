@@ -185,8 +185,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        
        if (m_freeze) 
           {
-          emit spotColorChanged( getSpotColor(), true );
-          emit spotPositionChanged( getSpotPosition(), true );
+           emit spotPositionChanged( getSpotColor(), true, getSpotPosition() );
           }
        }
 }
@@ -201,10 +200,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
         repaint(false);
         
         if (m_mouseLeftButtonTracking)
-           {
-           emit spotPositionChanged( getSpotPosition(), false );
-           emit spotColorChanged( getSpotColor(), false ); 
-           }
+           emit spotPositionChanged( getSpotColor(), false, getSpotPosition() );
         }
     else
         setCursor ( KCursor::arrowCursor() );

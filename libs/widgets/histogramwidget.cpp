@@ -546,7 +546,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                }
             else 
                {
-               // Witch color must be used on the foreground with all colors channel mode?
+               // Which color must be used on the foreground with all colors channel mode?
                switch (m_colorType) 
                   {
                   case Digikam::HistogramWidget::RedColor:
@@ -613,7 +613,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
             }
          else 
             {
-            // Witch color must be used on the foreground with all colors channel mode?
+            // Which color must be used on the foreground with all colors channel mode?
             switch (m_colorType) 
                {
                case Digikam::HistogramWidget::RedColor:
@@ -712,7 +712,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       
        if (guidePos != -1)
           {
-          p1.drawLine(guidePos, 0, guidePos, wHeight);  
+          p1.drawLine(guidePos, 0, (guidePos * 256) / wWidth, wHeight);  
 
           QString string = i18n("x:%1").arg(guidePos);
           QFontMetrics fontMt( string );       
@@ -721,12 +721,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       
           if (guidePos < wWidth/2)
              {
-             rect.moveLeft(guidePos + 3);
+             rect.moveLeft((guidePos * 256) / wWidth + 3);
              p1.drawText(rect, Qt::AlignLeft, string);
              }
           else
              {
-             rect.moveRight(guidePos - 3);
+             rect.moveRight((guidePos * 256) / wWidth - 3);
              p1.drawText(rect, Qt::AlignRight, string);
              }
           }
