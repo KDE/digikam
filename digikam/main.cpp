@@ -44,6 +44,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "splashscreen.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("Digikam"),
-                          "0.7.0-cvs",
+                          digikam_version,
                           description,
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2004, Digikam developers team"),

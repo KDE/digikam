@@ -14,6 +14,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
 	-I$(top_srcdir)/digikam/utilities/setup \
+	-I$(top_srcdir)/digikam/ \
 	$(all_includes)
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
