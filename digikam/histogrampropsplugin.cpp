@@ -337,6 +337,7 @@ void HistogramPropsPlugin::slotColorsChanged(int color)
        }
 
     m_histogramWidget->repaint(false);
+    updateInformations();
 }
 
 void HistogramPropsPlugin::slotUpdateMinInterv(int min)
@@ -364,36 +365,27 @@ void HistogramPropsPlugin::updateInformations()
     int min = m_minInterv->value();
     int max = m_maxInterv->value();
     int channel = m_channelCB->currentItem();
-    
-    if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
-       {
-       double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
-       m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
-    
-       double pixels = m_histogramWidget->m_imageHistogram->getPixels();
-       m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
-    
-       double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
-       m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
-      
-       double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
-       m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
-    
-       double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
-       m_labelMedianValue->setText(value.setNum(median, 'f', 1)); 
 
-       double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-       m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
-       }
-    else
-       {
-       m_labelMeanValue->setText("");
-       m_labelPixelsValue->setText("");
-       m_labelStdDevValue->setText("");
-       m_labelCountValue->setText("");
-       m_labelMedianValue->setText("");
-       m_labelPercentileValue->setText("");
-       }
+    if ( channel == Digikam::HistogramWidget::ColorChannelsHistogram )
+       channel = m_colorsCB->currentItem()+1;
+               
+    double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
+    m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
+    
+    double pixels = m_histogramWidget->m_imageHistogram->getPixels();
+    m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
+    
+    double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+    m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
+      
+    double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+    m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
+    
+    double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+    m_labelMedianValue->setText(value.setNum(median, 'f', 1)); 
+
+    double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
+    m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
 }
 
 #include "histogrampropsplugin.moc"

@@ -329,20 +329,20 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                switch (m_colorType) 
                   {
                   case Digikam::HistogramWidget::RedColor:
-                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
+//                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+  //                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
                     p1.drawLine(x, wHeight, x, wHeight - yr);     
                     break;
 
                   case Digikam::HistogramWidget::GreenColor:
-                    p1.drawLine(x, wHeight, x, wHeight - yb);                 
-                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+    //                p1.drawLine(x, wHeight, x, wHeight - yb);                 
+       //             p1.drawLine(x, wHeight, x, wHeight - yr);                 
                     p1.drawLine(x, wHeight, x, wHeight - yg);     
                     break;
 
                   default:
-                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
+         //           p1.drawLine(x, wHeight, x, wHeight - yr);                 
+            //        p1.drawLine(x, wHeight, x, wHeight - yg);                 
                     p1.drawLine(x, wHeight, x, wHeight - yb);     
                     break;
                   }

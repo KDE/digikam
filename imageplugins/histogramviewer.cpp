@@ -423,6 +423,7 @@ void HistogramViewer::slotColorsChanged(int color)
        }
 
     m_histogramWidget->repaint(false);
+    updateInformations();
 }
 
 void HistogramViewer::slotRenderingChanged(int rendering)
@@ -463,61 +464,52 @@ void HistogramViewer::slotIntervChanged(int)
 
 void HistogramViewer::updateInformations()
 {
+    double mean, pixels, stddev, counts, median;
     QString value;
     int min = m_minInterv->value();
     int max = m_maxInterv->value();
     int channel = m_channelCB->currentItem();
-    double mean, pixels, stddev, counts, median;
     
-    if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
-       {
-       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
-          mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
-       else
-          mean = m_histogramWidget->m_selectionHistogram->getMean(channel, min, max);
-       
-       m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
-
-       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
-          pixels = m_histogramWidget->m_imageHistogram->getPixels();
-       else
-          pixels = m_histogramWidget->m_selectionHistogram->getPixels();
-       
-       m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
-
-       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
-          stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
-       else 
-          stddev = m_histogramWidget->m_selectionHistogram->getStdDev(channel, min, max);
-       
-       m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
-
-       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
-          counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
-       else
-          counts = m_histogramWidget->m_selectionHistogram->getCount(channel, min, max);
-       
-       m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
-
-       if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
-          median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
-       else
-          median = m_histogramWidget->m_selectionHistogram->getMedian(channel, min, max);
-       
-       m_labelMedianValue->setText(value.setNum(median, 'f', 1));
-
-       double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-       m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
-       }
+    if ( channel == Digikam::HistogramWidget::ColorChannelsHistogram )
+       channel = m_colorsCB->currentItem()+1;
+    
+    if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+       mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
     else
-       {
-       m_labelMeanValue->setText("");
-       m_labelPixelsValue->setText("");
-       m_labelStdDevValue->setText("");
-       m_labelCountValue->setText("");
-       m_labelMedianValue->setText("");
-       m_labelPercentileValue->setText("");
-       }
+       mean = m_histogramWidget->m_selectionHistogram->getMean(channel, min, max);
+       
+    m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
+
+    if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+       pixels = m_histogramWidget->m_imageHistogram->getPixels();
+    else
+       pixels = m_histogramWidget->m_selectionHistogram->getPixels();
+       
+    m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
+
+    if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+       stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+    else 
+       stddev = m_histogramWidget->m_selectionHistogram->getStdDev(channel, min, max);
+       
+    m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
+
+    if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+       counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+    else
+       counts = m_histogramWidget->m_selectionHistogram->getCount(channel, min, max);
+       
+    m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
+
+    if (m_histogramWidget->m_renderingType == Digikam::HistogramWidget::FullImageHistogram)
+       median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+    else
+       median = m_histogramWidget->m_selectionHistogram->getMedian(channel, min, max);
+       
+    m_labelMedianValue->setText(value.setNum(median, 'f', 1));
+      
+    double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
+    m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
 }
 
 #include "histogramviewer.moc"
