@@ -1141,8 +1141,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     if (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) &&
         !TagDrag::canDecode(event))
     {
+        clearDropTarget();
         event->ignore();
-
         return;
     }
 
@@ -1152,6 +1152,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     if (!newDropTarget ||  newDropTarget->isGroupItem() ||
         !newDropTarget->album())
     {
+        clearDropTarget();
         event->ignore();
         return;
     }
@@ -1160,6 +1161,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     if (newDropTarget->album()->isRoot() &&
        (QUriDrag::canDecode(event) || CameraDragObject::canDecode(event)))
     {
+        clearDropTarget();
         event->ignore();
         return;
     }
@@ -1169,6 +1171,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         // do not allow DnD from tags onto a physical album
         if (TagItemsDrag::canDecode(event) || TagDrag::canDecode(event))
         {
+            clearDropTarget();
             event->ignore();
             return;
         }
@@ -1179,6 +1182,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     if ((!TagItemsDrag::canDecode(event) && !AlbumItemsDrag::canDecode(event)) &&
         (!folderItem || folderItem->album()->isAncestorOf(newDropTarget->album())))
     {
+        clearDropTarget();
         event->ignore();
         return;
     }
@@ -1192,6 +1196,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
               AlbumItemsDrag::canDecode(event) ||
               TagDrag::canDecode(event)))
         {
+            clearDropTarget();
             event->ignore();
             return;
         }
@@ -1199,6 +1204,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
     event->accept();
     if (dropTarget_ == newDropTarget) {
+        qWarning("Accepted: %s",dropTarget_->text().latin1());
         return;
     }
 
@@ -1211,9 +1217,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
 void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
 {
-    if (dropTarget_)
-        dropTarget_->removeDropHighlight();
-    dropTarget_ = 0;
+    clearDropTarget();
 }
 
 void AlbumFolderView::contentsDropEvent(QDropEvent* event)
@@ -1445,6 +1449,13 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
                 dropItem->setOpen(true);
         }
     }
+}
+
+void AlbumFolderView::clearDropTarget()
+{
+    if (dropTarget_)
+        dropTarget_->removeDropHighlight();
+    dropTarget_ = 0;    
 }
 
 void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,

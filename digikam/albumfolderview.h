@@ -99,9 +99,10 @@ private:
 
     void contextMenuPAlbum(PAlbum* album);
     void contextMenuTAlbum(TAlbum* album);
-    
+
     void phyAlbumDropEvent(QDropEvent* e, PAlbum *album);
     void tagAlbumDropEvent(QDropEvent* e, TAlbum *album);
+    void clearDropTarget();
 
     void loadAlbumState();
     void saveAlbumState();
