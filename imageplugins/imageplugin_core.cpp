@@ -36,7 +36,6 @@
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
-#include "imageeffect_solarize.h"
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"
@@ -109,10 +108,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSepia()),
                 actionCollection(), "implugcore_sepia");
     
-    new KAction(i18n("Solarize Image..."), 0, 
-                this, SLOT(slotSolarize()),
-                actionCollection(), "implugcore_solarize");
-    
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
@@ -143,7 +138,6 @@ QStringList ImagePlugin_Core::guiDefinition() const
 
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_sepia/ ");
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_solarize/ ");
 
     // enable i18n
 
@@ -221,12 +215,6 @@ void ImagePlugin_Core::slotHistogramViewer()
     HistogramViewer dlg(parentWidget(), data, w, h);
     dlg.exec();
     delete [] data;
-}
-
-void ImagePlugin_Core::slotSolarize()
-{
-    ImageEffect_Solarize dlg(parentWidget());
-    dlg.exec();
 }
 
 void ImagePlugin_Core::slotBW()

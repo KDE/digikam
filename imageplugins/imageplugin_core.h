@@ -61,7 +61,6 @@ private slots:
     void slotHistogramViewer();
     void slotBW();
     void slotSepia();
-    void slotSolarize();
     void slotRedEye();
 
 };
