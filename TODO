@@ -22,12 +22,13 @@ x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer 
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.7.0>
 x LibExif 0.6.x support.                                           <Ralf Holzer    - 0.7.0>
 x Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.7.0>
-x Added subfolders Albums support.
-x Added tagging images feature.
-x Option to hide image names.
-x Added a test for checking if a camera name is already in the 
+x Added image Histogram viewer in file properties.                 <Gilles Caulier - 0.7.0>  
+x Added subfolders Albums support.                                 <Renchi Raju    - 0.7.0> 
+x Added tagging images feature.                                    <Renchi Raju    - 0.7.0> 
+x Option to hide image names.                                      <Renchi Raju    - 0.7.0> 
+x View/Hide main toolbar.                                          <Joern Ahrens   - 0.7.0>
+o Added a test for checking if a camera name is already in the 
   Digikam camera list when a new camera is added.
-x View/Hide main toolbar.
 o Add image date from EXIF data for each album item.               
 o Added config saving of Albums opened in Albums treeview.         
 o Custom thumbnail highlighting of album thumbnails.
@@ -74,8 +75,8 @@ x Added Color balance plugin.                                      <Gilles Cauli
 x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
 x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
 * Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
-x Added image Histogram viewer.
-o Added Colors autocorrection filter.                              
+x Added image Histogram viewer.                                    <Gilles Caulier - 0.7.0>  
+x Added Colors autocorrection filter.                              <Gilles Caulier - 0.7.0>  
 
 
 SplashScreen :
