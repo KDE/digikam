@@ -1,6 +1,6 @@
 SUBDIRS = adjustlevels solarize despeckle oilpaint emboss charcoal unsharp \
 	  raindrop filmgrain freerotation adjustcurves sheartool antivignetting \
-	  lensdistortion superimpose 
+	  lensdistortion superimpose perspective 
 
 AUTOMAKE_OPTIONS = foreign 
 

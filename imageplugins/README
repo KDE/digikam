@@ -25,6 +25,7 @@ Currently implemented plugins are:
 13) AntiVignetting   : A tool for to reduce image vignetting.
 14) LensDistortion   : A tool for to reduce optical lens distortions.
 15) SuperImpose      : A tool for to superimposed a template to an image.
+16) Perpective       : A tool for adjusting image perpective.
 
 Contact :
 -----------------------------------------------------------------------

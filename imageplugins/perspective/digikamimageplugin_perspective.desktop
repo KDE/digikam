@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_Perspective
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Perspective tool plugin for digiKam
+
+X-KDE-Library=digikamimageplugin_perspective
+author=Gilles Caulier, caulier dot gilles at free dot fr
