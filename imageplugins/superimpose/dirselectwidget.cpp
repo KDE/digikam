@@ -47,7 +47,7 @@ struct DirSelectWidget::Private
     KURL             m_rootUrl;
 };
 
-DirSelectWidget::DirSelectWidget( KURL rootUrl, QWidget* parent, const char* name)
+DirSelectWidget::DirSelectWidget( KURL rootUrl, KURL currentUrl, QWidget* parent, const char* name)
                : QWidget( parent, name)
 {
     d = new Private;
@@ -59,7 +59,7 @@ DirSelectWidget::DirSelectWidget( KURL rootUrl, QWidget* parent, const char* nam
     d->m_treeView->addColumn( i18n("Folders" ) );
     d->m_treeView->header()->setStretchEnabled( true, 0 );
     
-    setRootPath(rootUrl);
+    setRootPath(rootUrl, currentUrl);
 }
 
 DirSelectWidget::~DirSelectWidget()
@@ -85,7 +85,7 @@ void DirSelectWidget::load()
 
     d->m_pendingPath.pop_front();
 
-    d->m_handled += "/" + item;
+    d->m_handled += item;
     
     KFileTreeViewItem* branch = d->m_treeView->findItem( d->m_item, d->m_handled );
     
@@ -109,14 +109,15 @@ void DirSelectWidget::slotFolderSelected(QListViewItem *)
     emit folderItemSelected(d->m_treeView->currentURL());
 }
 
-void DirSelectWidget::setRootPath(KURL rootUrl)
+void DirSelectWidget::setRootPath(KURL rootUrl, KURL currentUrl)
 {
     d->m_rootUrl = rootUrl;
     d->m_treeView->clear();
     QString root = rootUrl.path();
-    QString uploadPath = root;
+    QString uploadPath = currentUrl.isValid() ? currentUrl.path() : root;
 
     d->m_item = d->m_treeView->addBranch( rootUrl, rootUrl.fileName() );    
+    
     d->m_treeView->setDirOnlyMode( d->m_item, true );
         
     uploadPath = uploadPath.mid( root.length() );

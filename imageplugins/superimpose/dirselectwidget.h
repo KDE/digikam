@@ -26,6 +26,7 @@
 // Qt includes.
 
 #include <qwidget.h>
+#include <qstring.h>
 
 // KDE includes.
 
@@ -43,11 +44,11 @@ Q_OBJECT
 
 public:
      
-    DirSelectWidget( KURL rootUrl, QWidget* parent, const char* name=0);
+    DirSelectWidget( KURL rootUrl, KURL currentUrl, QWidget* parent, const char* name=0);
     ~DirSelectWidget();
      
     KURL path() const;
-    void setRootPath(KURL rootUrl);
+    void setRootPath(KURL rootUrl, KURL currentUrl=KURL::KURL(QString::QString::null));
     KURL rootPath(void);
 
 signals :

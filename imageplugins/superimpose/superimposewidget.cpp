@@ -134,10 +134,18 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
 void SuperImposeWidget::slotSetCurrentTemplate(const KURL& url)
 {
     m_template.load(url.path());
-    
     QSize size = m_template.size();
-    int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
-    m_rect = QRect(width()/2-neww/2, 0, neww, height());
+    
+    if (size.width() < size.height())
+       {
+       int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
+       m_rect = QRect(width()/2-neww/2, 0, neww, height());
+       }
+    else
+       {
+       int newh = (int) ((float)width() / (float)size.width() * (float)size.height());
+       m_rect = QRect(0, height()/2-newh/2, width(), newh);
+       }
     
     m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
     
@@ -225,8 +233,6 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
           switch (m_editMode)
            {
            case ZOOMIN:
-              break;
-              
            case ZOOMOUT:
               break;
            
@@ -249,9 +255,6 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
           switch (m_editMode)
            {
            case ZOOMIN:
-              setCursor( KCursor::crossCursor() );
-              break;
-              
            case ZOOMOUT:
               setCursor( KCursor::crossCursor() );
               break;
