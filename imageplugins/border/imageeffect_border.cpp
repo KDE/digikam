@@ -760,18 +760,17 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
     QPainter p(&patternPixmap);
-    
     p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
-                QBrush::QBrush(QColor::QColor(Qt::black),
+                QBrush::QBrush(Qt::black,
                 QPixmap::QPixmap(path + pattern + ".png")) );
     
     p.setPen(QPen(Qt::black, 10, Qt::SolidLine));
-    p.drawRect( m_borderWidth->value(), m_borderWidth->value(), 
-                m_previewWidget->imageIface()->originalWidth(), 
-                m_previewWidget->imageIface()->originalHeight() );
-                
-    p.drawRect( 0, 0, patternPixmap.width(), patternPixmap.height() );
-    
+    p.drawRect( m_borderWidth->value()-5, m_borderWidth->value()-5, 
+                m_previewWidget->imageIface()->originalWidth()+10, 
+                m_previewWidget->imageIface()->originalHeight()+10 );
+
+    p.drawRect( 5, 5, patternPixmap.width()-10, patternPixmap.height()-10 );
+                                
     p.end();
     
     dest = patternPixmap.convertToImage().scale( src.width() + borderWidth*2,
