@@ -58,13 +58,23 @@ CameraDownloadDlg::CameraDownloadDlg(QWidget *parent, KIO::Slave *slave,
     lay->addWidget(m_label);
     m_label->setText(i18n("Downloading %1 items...").arg(items.count()));
 
+    QGridLayout* glay = new QGridLayout(lay);
+
+    QLabel *curLab = new QLabel(plainPage());
+    curLab->setText(i18n("Current : "));
+    glay->addWidget(curLab, 0, 0);
+
     m_currProgress = new QProgressBar(plainPage());
     m_currProgress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lay->addWidget(m_currProgress);
+    glay->addWidget(m_currProgress, 0, 1);
 
+    QLabel *totLab = new QLabel(plainPage());
+    totLab->setText(i18n("Total : "));
+    glay->addWidget(totLab, 1, 0);
+    
     m_totalProgress = new QProgressBar(plainPage());
     m_totalProgress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lay->addWidget(m_totalProgress);
+    glay->addWidget(m_totalProgress, 1, 1);
 
     m_totalProgress->setTotalSteps(items.count());
     
