@@ -64,10 +64,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                        m_parent(parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
+    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );     
+    
+    // -------------------------------------------------------------
+        
     QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 5 , marginHint(), spacingHint());
 
-    // -------------------------------------------------------------
-    
     QVGroupBox *gbox = new QVGroupBox(i18n("Aspect Ratio Crop Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -115,7 +117,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
-    m_useRuleThirdLines = new QCheckBox( i18n("Rule Third Lines"), plainPage());
+    m_useRuleThirdLines = new QCheckBox( i18n("Show Rule Third Lines"), plainPage());
     QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can display the rule third lines "
                                                "who help you to compose your photograph."));
     
