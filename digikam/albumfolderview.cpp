@@ -622,16 +622,49 @@ void AlbumFolderView::albumDelete(PAlbum* album)
     if (!album || album->isRoot())
         return;
 
-    int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' Album from HardDisk")
-                                   .arg(album->getTitle()));
+    // find number of subalbums
 
-    if (result == KMessageBox::Yes)
+    int children = 0;
+    AlbumIterator it(album);
+    while ( it.current() )
     {
-        QString errMsg;
-        if (!albumMan_->deletePAlbum(album, errMsg))
+        children++;
+        ++it;
+    }
+
+    if (children)
+    {
+        int result =
+            KMessageBox::warningYesNo(this, i18n("Album '%1' has %2 subalbum(s). "
+                                                 "Deleting this will also delete "
+                                                 "the subalbum(s). "
+                                                 "Are you sure you want to continue?")
+                                      .arg(album->getTitle())
+                                      .arg(children));
+
+        if (result == KMessageBox::Yes)
         {
-            KMessageBox::error(0, errMsg);
+            QString errMsg;
+            if (!albumMan_->deletePAlbum(album, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
+        }
+
+    }
+    else
+    {
+        int result =
+            KMessageBox::questionYesNo(0, i18n("Delete '%1' Album from HardDisk")
+                                       .arg(album->getTitle()));
+
+        if (result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!albumMan_->deletePAlbum(album, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
         }
     }
 }
@@ -759,15 +792,48 @@ void AlbumFolderView::tagDelete(TAlbum *album)
     if (!album || album->isRoot())
         return;
 
-    int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' Tag")
-                                   .arg(album->getTitle()));
+    // find number of subtags
 
-    if (result == KMessageBox::Yes)
+    int children = 0;
+    AlbumIterator it(album);
+    while ( it.current() )
     {
-        QString errMsg;
-        if (!albumMan_->deleteTAlbum(album, errMsg)) 
-            KMessageBox::error(0, errMsg);
+        children++;
+        ++it;
+    }
+
+    if (children)
+    {
+        int result =
+            KMessageBox::warningYesNo(this, i18n("Tag '%1' has %2 subtag(s). "
+                                                 "Deleting this will also delete "
+                                                 "the subtag(s). "
+                                                 "Are you sure you want to continue?")
+                                      .arg(album->getTitle())
+                                      .arg(children));
+
+        if (result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!albumMan_->deleteTAlbum(album, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
+        }
+
+    }
+    else
+    {
+        int result =
+            KMessageBox::questionYesNo(0, i18n("Delete '%1' Tag")
+                                       .arg(album->getTitle()));
+
+        if (result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!albumMan_->deleteTAlbum(album, errMsg)) 
+                KMessageBox::error(0, errMsg);
+        }
     }
 }
 
