@@ -22,6 +22,7 @@
      <Action name="zoom_fit" /> 
      <Separator />
      <Action name="full_screen" /> 
+     <Action name="show_thumbs" /> 
  </Menu>
 
 </MenuBar>

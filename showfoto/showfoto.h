@@ -26,6 +26,7 @@
 
 class KAction;
 class KToggleAction;
+class KConfig;
 
 class Canvas;
 class ThumbBarView;
@@ -49,22 +50,25 @@ private slots:
     void slotToggleFullScreen();
     void slotEscapePressed();
     void slotFileProperties();
+    void slotToggleShowBar();
         
 private:
 
     void setupActions();
+    void applySettings();
+    void saveSettings();
 
 private:
 
     Canvas*         m_canvas;
-    
     ThumbBarView*   m_bar;
+    KConfig*        m_config;
     
     KToggleAction*  m_zoomFitAction;
-    
     KAction*        m_zoomPlusAction;
     KAction*        m_zoomMinusAction;
     KToggleAction*  m_fullScreenAction;
+    KToggleAction*  m_showBarAction;
     
     bool            m_fullScreen;
 };

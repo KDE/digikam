@@ -26,6 +26,8 @@
 // KDE includes.
 
 #include <kaction.h>
+#include <kapplication.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kmenubar.h>
@@ -43,6 +45,9 @@
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
 {
+    m_config = kapp->config();
+    m_fullScreen = false;
+    
     QWidget* widget = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -51,28 +56,26 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     lay->addWidget(m_canvas);
     lay->addWidget(m_bar);
 
-    m_fullScreen = false;
-    
     setCentralWidget(widget);
     setupActions();
+    applySettings();
 
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             SLOT(slotOpenURL(const KURL&)));
 
-    if (!urlList.isEmpty())
+    for (KURL::List::const_iterator it = urlList.begin();
+         it != urlList.end(); ++it)
     {
-        for (KURL::List::const_iterator it = urlList.begin();
-             it != urlList.end(); ++it)
-        {
-            new ThumbBarItem(m_bar, *it);
-        }
+        new ThumbBarItem(m_bar, *it);
     }
 
-    resize(800,600);
+    setAutoSaveSettings();
+    applyMainWindowSettings(m_config);
 }
 
 ShowFoto::~ShowFoto()
 {
+    saveSettings();
     delete m_bar;
     delete m_canvas;
 }
@@ -117,7 +120,12 @@ void ShowFoto::setupActions()
                           SLOT(slotToggleFullScreen()),
                           actionCollection(), "full_screen");
 #endif
-    
+
+    m_showBarAction =
+        new KToggleAction(i18n("Hide thumbnails"), 0, Key_T,
+                          this, SLOT(slotToggleShowBar()),
+                          actionCollection(), "show_thumbs");
+        
     createGUI("showfotoui.rc", false);
 
     KAccel *accel = new KAccel(this);
@@ -125,6 +133,22 @@ void ShowFoto::setupActions()
                   i18n("Exit out of the fullscreen mode"),
                   Key_Escape, this, SLOT(slotEscapePressed()),
                   false, true);
+}
+
+void ShowFoto::applySettings()
+{
+    bool showBar = false;
+    m_config->setGroup("MainWindow");
+    showBar = m_config->readBoolEntry("Show Thumbnails", true);
+
+    if (!showBar)
+        m_showBarAction->activate();
+}
+
+void ShowFoto::saveSettings()
+{
+    m_config->setGroup("MainWindow");
+    m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
 }
 
 void ShowFoto::slotOpenFile()
@@ -236,6 +260,18 @@ void ShowFoto::slotEscapePressed()
         return;
 
     m_fullScreenAction->activate();
+}
+
+void ShowFoto::slotToggleShowBar()
+{
+    if (m_showBarAction->isChecked())
+    {
+        m_bar->hide();
+    }
+    else
+    {
+        m_bar->show();
+    }
 }
 
 #include "showfoto.moc"
