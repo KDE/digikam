@@ -144,10 +144,10 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
     mainTab->addTab( firstPage, i18n("Main") );
 
-    QLabel *typeLabel = new QLabel(i18n("Type:"), firstPage);
+    QLabel *typeLabel = new QLabel(i18n("Restoration Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
-    m_restorationTypeCB->insertItem( i18n("Restoration") );
+    m_restorationTypeCB->insertItem( i18n("Filtering") );
     m_restorationTypeCB->insertItem( i18n("Inpainting") );
     QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the photograph restoration type."));
 
@@ -346,7 +346,7 @@ void ImageEffect_Restoration::slotUser1()
 
        switch(m_restorationTypeCB->currentItem())
           {
-          case RestorationMode:
+          case FilteringMode:
             {
             m_detailInput->setValue(0.1);
             m_gradientInput->setValue(0.9);

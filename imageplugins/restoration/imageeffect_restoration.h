@@ -70,7 +70,7 @@ private:
 
     enum RestorationType
     {
-    RestorationMode=0,
+    FilteringMode=0,
     InPaintingMode
     };
 
