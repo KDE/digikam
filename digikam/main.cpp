@@ -174,6 +174,10 @@ int main(int argc, char *argv[])
                           "karlsson dot h at home dot se",
                           0);
     
+    aboutData.addCredit ( "Aaron Seigo",
+                          I18N_NOOP("Various usability fixes and general application polishing"),
+                          "aseigo at kde.org",
+                          0);
     
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"),
                             I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
