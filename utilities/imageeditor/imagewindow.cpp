@@ -138,6 +138,10 @@ ImageWindow::ImageWindow()
             SLOT(slotSelected(bool)));
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             SLOT(slotChanged(bool)));
+    connect(m_canvas, SIGNAL(signalShowNextImage()),
+            SLOT(slotLoadNext()));
+    connect(m_canvas, SIGNAL(signalShowPrevImage()),
+            SLOT(slotLoadPrev()));
 
     // -- read settings --------------------------------
     readSettings();

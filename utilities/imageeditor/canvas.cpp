@@ -505,7 +505,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() == Qt::ControlButton) {
+    if (e->state() == Qt::ShiftButton) {
 
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -513,7 +513,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() == Qt::ShiftButton) {
+    else if (e->state() == Qt::ControlButton) {
 
         if (e->delta() < 0)
             slotIncreaseZoom();
