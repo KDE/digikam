@@ -670,84 +670,91 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     KSeparator *sep1 = new KSeparator (Horizontal, page);
     vlay->addWidget(sep1);
     
-    QHBoxLayout *hlay1 = new QHBoxLayout();
+    QGridLayout *hlay1 = new QGridLayout(7, 3);
     vlay->addLayout( hlay1 );
+    
     QLabel *name = new QLabel( i18n("Name:"), page);
     m_filename = new KSqueezedTextLabel( fileURL.fileName(), page);
     name->setBuddy( m_filename );
-    hlay1->addWidget( name );
-    hlay1->addStretch( 1 );
-    hlay1->addWidget( m_filename );
+    hlay1->addMultiCellWidget( name, 0, 0, 0, 0 );
+    hlay1->addMultiCellWidget( m_filename, 0, 0, 1, 2  );
     
-    QHBoxLayout *hlay2 = new QHBoxLayout();
-    vlay->addLayout( hlay2 );
     QLabel *type = new QLabel( i18n("Type:"), page);
     m_filetype = new KSqueezedTextLabel( KMimeType::findByURL(fileURL)->name(), page);
     type->setBuddy( m_filetype );
-    hlay2->addWidget( type );
-    hlay2->addStretch( 1 );
-    hlay2->addWidget( m_filetype );
+    hlay1->addMultiCellWidget( type, 1, 1, 0, 0 );
+    hlay1->addMultiCellWidget( m_filetype, 1, 1, 1, 2  );
 
-    QHBoxLayout *hlay3 = new QHBoxLayout();
-    vlay->addLayout( hlay3 );
     QLabel *path = new QLabel( i18n("Location:"), page);
     m_filepath = new KSqueezedTextLabel( fileURL.path(), page);
     path->setBuddy( m_filepath );
-    hlay3->addWidget( path );
-    hlay3->addStretch( 1 );
-    hlay3->addWidget( m_filepath );
+    hlay1->addMultiCellWidget( path, 2, 2, 0, 0 );
+    hlay1->addMultiCellWidget( m_filepath, 2, 2, 1, 2  );
     
     const KFileItem* fi = m_currItem->fileItem();    
     
-    QHBoxLayout *hlay4 = new QHBoxLayout();
-    vlay->addLayout( hlay4 );
     QLabel *date = new QLabel( i18n("Modification Date:"), page);
     QDateTime dateurl;
     dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
-    m_filedate = new KSqueezedTextLabel( KGlobal::locale()->formatDateTime(dateurl, true, true),
-                                         page);
+    m_filedate = new KSqueezedTextLabel( KGlobal::locale()->formatDateTime(dateurl, true, true), page);
     date->setBuddy( m_filedate );
-    hlay4->addWidget( date );
-    hlay4->addStretch( 1 );
-    hlay4->addWidget( m_filedate );
+    hlay1->addMultiCellWidget( date, 3, 3, 0, 0 );
+    hlay1->addMultiCellWidget( m_filedate, 3, 3, 1, 2  );
     
-    QHBoxLayout *hlay5 = new QHBoxLayout();
-    vlay->addLayout( hlay5 );
     QLabel *size = new QLabel( i18n("Size:"), page);
     m_filesize = new KSqueezedTextLabel( i18n("%1 (%2)")
                                          .arg(KIO::convertSize(fi->size()))
                                          .arg(KGlobal::locale()->formatNumber(fi->size(), 0)),
                                          page);
     size->setBuddy( m_filesize );
-    hlay5->addWidget( size );
-    hlay5->addStretch( 1 );
-    hlay5->addWidget( m_filesize );
+    hlay1->addMultiCellWidget( size, 4, 4, 0, 0 );
+    hlay1->addMultiCellWidget( m_filesize, 4, 4, 1, 2  );
 
-    QHBoxLayout *hlay6 = new QHBoxLayout();
-    vlay->addLayout( hlay6 );
     QLabel *owner = new QLabel( i18n("Owner:"), page);
-    m_fileowner = new KSqueezedTextLabel( i18n("%1 - %2)")
-                                         .arg(fi->user())
-                                         .arg(fi->group()),
-                                         page);
+    m_fileowner = new KSqueezedTextLabel( i18n("%1 - %2").arg(fi->user()).arg(fi->group()), page);
     owner->setBuddy( m_fileowner );
-    hlay6->addWidget( owner );
-    hlay6->addStretch( 1 );
-    hlay6->addWidget( m_fileowner );
+    hlay1->addMultiCellWidget( owner, 5, 5, 0, 0 );
+    hlay1->addMultiCellWidget( m_fileowner, 5, 5, 1, 2  );
 
-    QHBoxLayout *hlay7 = new QHBoxLayout();
-    vlay->addLayout( hlay7 );
     QLabel *permissions = new QLabel( i18n("Permissions:"), page);
-    m_filepermissions = new KSqueezedTextLabel( fi->permissionsString(),
-                                                page);
+    m_filepermissions = new KSqueezedTextLabel( fi->permissionsString(), page);
     permissions->setBuddy( m_filepermissions );
-    hlay7->addWidget( permissions );
-    hlay7->addStretch( 1 );
-    hlay7->addWidget( m_filepermissions );
+    hlay1->addMultiCellWidget( permissions, 6, 6, 0, 0 );
+    hlay1->addMultiCellWidget( m_filepermissions, 6, 6, 1, 2  );
         
     KSeparator *sep2 = new KSeparator (Horizontal, page);
     vlay->addWidget(sep2);
+
+    QGridLayout *hlay2 = new QGridLayout(3, 3);
+    vlay->addLayout( hlay2 );
     
+    PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
+    
+    if (palbum)
+        {
+        QLabel *album = new QLabel( i18n("Album:"), page);
+        m_filealbum = new KSqueezedTextLabel( palbum->getURL().remove(0,1), page);
+        album->setBuddy( m_filealbum );
+        hlay2->addMultiCellWidget( album, 0, 0, 0, 0 );
+        hlay2->addMultiCellWidget( m_filealbum, 0, 0, 1, 2  );
+        }
+
+    QLabel *comments = new QLabel( i18n("Comments:"), page);
+    m_filecomments = new KSqueezedTextLabel( m_view->itemComments(m_currItem), page);
+    comments->setBuddy( m_filecomments );
+    hlay2->addMultiCellWidget( comments, 1, 1, 0, 0 );
+    hlay2->addMultiCellWidget( m_filecomments, 1, 1, 1, 2  );
+    
+    QStringList tagPaths(m_view->itemTagPaths(m_currItem));
+    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+        (*it).remove(0,1);
+
+    QLabel *tags = new QLabel( i18n("Tags:"), page);
+    m_filetags = new KSqueezedTextLabel( tagPaths.join(", "), page);
+    tags->setBuddy( m_filetags );
+    hlay2->addMultiCellWidget( tags, 2, 2, 0, 0 );
+    hlay2->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
+                    
     vlay->addStretch(1);
 }
 

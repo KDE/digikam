@@ -94,6 +94,9 @@ private:
     KSqueezedTextLabel           *m_filesize;
     KSqueezedTextLabel           *m_fileowner;
     KSqueezedTextLabel           *m_filepermissions;
+    KSqueezedTextLabel           *m_filealbum;
+    KSqueezedTextLabel           *m_filecomments;
+    KSqueezedTextLabel           *m_filetags;
     
     QGuardedPtr<ThumbnailJob>     m_generalThumbJob;
         
