@@ -1,13 +1,20 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
-        * Added saving of comments in EXIF UserComment field and in JPEG COM field
-        * Added Albums Collections and plugins management Settings tabs in Settings dialog.
-        * New Settings dialog based on QFrame widget (KDE standard).
-        * Added plugins management settings (loaded/unloaded plugins).
-        * Added Full Mime type support for images, movies, audio, and RAW files.
-        * Syncing with Sourceforge.net repository.
-        * Updated Splashscreen for 0.6.3 by Yves Chaufour <yves dot chaufour at wanadoo.fr>
-        * Fix Makefiles for KdeExtraGears-3 KDECVS module integration.
+        * <Gilles Caulier> Added a new option in .configure for KIPI support.
+        * <Ralf Holzer> Added saving of comments in EXIF UserComment field 
+          and in JPEG COM field
+        * <Gilles Caulier> Added Albums Collections and plugins management 
+          Settings tabs in Settings dialog.
+        * <Gilles Caulier> New Settings dialog based on QFrame widget (KDE standard).
+        * <Gilles Caulier> Added plugins management settings 
+          (loaded/unloaded plugins).
+        * <Gilles Caulier> Added Full Mime type support for images, movies, 
+          audio, and RAW files.
+        * <Gilles Caulier> Syncing with Sourceforge.net repository.
+        * <Gilles Caulier> Updated Splashscreen for 0.6.3 by Yves Chaufour <yves 
+          dot chaufour at wanadoo.fr>
+        * <Gilles Caulier> Fix Makefiles for KdeExtraGears-3 KDECVS module 
+          integration.
 
 v0.6.2-RC            05/18/04    
 ----------------------------------------------------------------------------

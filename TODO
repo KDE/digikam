@@ -16,13 +16,13 @@ Main Application:
 x Provide a new QFrame style config Dialog (KDE standard)          <Gilles Caulier - 0.6.3>
 x Lauch the Albums properties when a new Album is added 
   to the Database.                                                 <Gilles Caulier - 0.6.3>
-- Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
-- Add image sizes annotation for each album item.                  <Gilles Caulier - 0.6.3>
-- Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
-- Added dockable main widgets like Showimg.                        <Gilles Caulier - 0.6.3>
 x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.6.3>
 x Types MIME support (image, audio, video, RAW files).             <Gilles Caulier - 0.6.3>
 x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer    - 0.6.3>
+- Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
+- Added image sizes annotation for each album item.                <Gilles Caulier - 0.6.3>
+- Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
+- Added dockable main widgets like ShowImg.                        <Gilles Caulier - 0.6.3>
 o Subfolders Albums support.
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
@@ -40,7 +40,7 @@ CameraClient:
 -------------
 
 o Lauch the Albums properties when a new Album is added 
-  to the Database.                                                 <Gilles Caulier - 0.6.3>
+  to the Database (using DCOP).                                    <Gilles Caulier - 0.6.3>
 o Make Folder Ability.
 o Delete Folder Ability.
 o Camera Configure Dialog.
