@@ -1595,20 +1595,36 @@ void AlbumIconView::slotSelectionChanged()
         emitItemsSelected(false);
 }
 
-void AlbumIconView::slotSetExifOrientation( AlbumIconItem *item, int orientation )
+void AlbumIconView::slotSetExifOrientation( int orientation )
 {
-    kdDebug() << "Setting Exif Orientation to " << orientation << endl;
+    KURL::List urlList;
 
-    KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
-
-    if (!KExifUtils::writeOrientation(item->fileItem()->url().path(), o))
-    {
-        KMessageBox::sorry(0, i18n("Failed to correct EXIF orientation for file %1")
-                           .arg(item->text()));
-        return;
+    for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
+        if (it->isSelected()) {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            urlList.append(iconItem->fileItem()->url());
+        }
     }
 
-    refreshItems(item->fileItem()->url().path()); 
+    if (urlList.count() <= 0) return;
+
+    KURL::List::Iterator it;
+    
+    for( it = urlList.begin(); it != urlList.end(); ++it ) 
+    {
+        kdDebug() << "Setting Exif Orientation to " << orientation << endl;
+
+        KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
+
+        if (!KExifUtils::writeOrientation((*it).path(), o))
+        {
+            KMessageBox::sorry(0, i18n("Failed to correct EXIF orientation for file %1")
+                    .arg((*it).filename()));
+            return;
+        }
+
+        refreshItems((*it).path()); 
+    }
 }
 
 void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)

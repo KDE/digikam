@@ -161,7 +161,7 @@ public slots:
 
     void slotEditImageComments(AlbumIconItem* item);
     void slotShowExifInfo(AlbumIconItem* item);
-    void slotSetExifOrientation(AlbumIconItem* item, int orientation);
+    void slotSetExifOrientation(int orientation);
     void slotRename(AlbumIconItem* item);
     void slotDeleteSelectedItems();
     void slotDisplayItem(AlbumIconItem *item=0);
