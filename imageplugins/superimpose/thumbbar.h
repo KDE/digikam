@@ -20,6 +20,7 @@
 #define THUMBBAR_H
 
 #include <qscrollview.h>
+#include <qtooltip.h>
 #include <kurl.h>
 
 class QPixmap;
@@ -45,6 +46,7 @@ public:
 
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
+    ThumbBarItem* findItem(const QPoint& pos) const;
 
     void invalidateThumb(ThumbBarItem* item);
     
@@ -90,6 +92,7 @@ public:
     ThumbBarItem* next() const;
     ThumbBarItem* prev() const;
     int           position() const;
+    QRect         rect() const;
 
     void          repaint();
 
@@ -104,5 +107,21 @@ private:
 
     friend class ThumbBarView;
 };
+
+class ThumbBarToolTip : public QToolTip
+{
+public:
+
+    ThumbBarToolTip(ThumbBarView* parent);
+
+protected:
     
+    void maybeTip(const QPoint& pos);
+
+private:
+
+    ThumbBarView* m_view;
+};
+
+
 #endif /* THUMBBAR_H */
