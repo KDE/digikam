@@ -62,6 +62,12 @@ private:           // Variables.
     
     Imlib_Load_Error      errorRet;
     
+    DATA8 r_table[256];
+    DATA8 g_table[256];
+    DATA8 b_table[256];
+    DATA8 a_table[256];
+    DATA8 dummy_table[256];
+        
     int                   w;
     int                   h;
     int                   ow;
@@ -103,11 +109,6 @@ public:           // Fonctions.
             oh = imlib_image_get_height();
             w  = ow;
             h  = oh;
-            
-            mod = imlib_create_color_modifier();
-            imlib_context_set_color_modifier(mod);
-            
-            if (mod == NULL) qDebug ("color modifier is null");
             
             render();
             }
@@ -308,10 +309,17 @@ public:           // Fonctions.
     
     void ajustInit(void)
         {
+        mod = imlib_create_color_modifier();
+            
+        if (mod == NULL) qDebug ("Warning : color modifier is null");
+        
+        imlib_context_set_color_modifier(mod);
+        imlib_reset_color_modifier();
         }
         
     void ajustAccepted(void)
         {
+        imlib_free_color_modifier();
         changed = true;
         dirty   = true;             
         }
@@ -325,7 +333,6 @@ public:           // Fonctions.
         {
         if (!im) return;
 
-        imlib_context_set_image(im);        
         imlib_modify_color_modifier_gamma(val);
         imlib_apply_color_modifier();
         imlib_reset_color_modifier();
@@ -337,7 +344,6 @@ public:           // Fonctions.
         {
         if (!im) return;
         
-        imlib_context_set_image(im);        
         imlib_modify_color_modifier_brightness(val);
         imlib_apply_color_modifier();
         imlib_reset_color_modifier();
@@ -349,7 +355,6 @@ public:           // Fonctions.
         {
         if (!im) return;
 
-        imlib_context_set_image(im);        
         imlib_modify_color_modifier_contrast(val);
         imlib_apply_color_modifier();
         imlib_reset_color_modifier();
