@@ -1,3 +1,5 @@
+digikamimagebrokenpicdir = $(kde_datadir)/digikam/data
+digikamimagebrokenpic_DATA = image_broken.png
 
 EXTRA_DIST = hi16-app-digikam.png hi22-app-digikam.png hi32-app-digikam.png hi48-app-digikam.png \
              lo16-app-digikam.png lo22-app-digikam.png lo32-app-digikam.png lo48-app-digikam.png \

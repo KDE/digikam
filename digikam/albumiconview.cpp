@@ -32,11 +32,12 @@
 #include <kservice.h>
 #include <krun.h>
 #include <kaction.h>
+#include <kstandarddirs.h>
 
-#include "albuminfo.h"
-#include "albummanager.h"
-#include "thumbnailjob.h"
-#include "digikamio.h"
+#include <interfaces/albuminfo.h>
+#include <interfaces/albummanager.h>
+#include <interfaces/thumbnailjob.h>
+#include <interfaces/digikamio.h>
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -1004,18 +1005,39 @@ void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
     iconItem->setPixmap(pix);
 }
 
-// if we failed to generate a thumbnail using our thumbnail generator
+// If we failed to generate a thumbnail using our thumbnail generator
 // use kde thumbnail generator to generate one
+
 void AlbumIconView::slotFailedThumbnail(const KURL& url)
 {
     KIO::PreviewJob* job = KIO::filePreview(KURL::List(url),
                                             (int)d->thumbSize.size());
+                                            
     connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
             SLOT(slotGotThumbnailKDE(const KFileItem*, const QPixmap&)));
+    connect(job, SIGNAL(failed(const KFileItem*)),
+            SLOT(slotFailedThumbnailKDE(const KFileItem*)));            
 }
 
 void AlbumIconView::slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix)
 {
+    slotGotThumbnail(item->url(), pix);    
+}
+
+// If we failed to generate a thumbnail using kde thumbnail generator, 
+// use a broken image instead.
+
+void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
+{
+    QImage img;
+    QPixmap pix;
+    KGlobal::dirs()->addResourceType("digikam_imagebroken", KGlobal::dirs()->kde_default("data") 
+                                                            + "digikam/data");
+    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken", "image_broken.png");
+    dir = dir + "image_broken.png";
+    img.load(dir);
+    const QImage scaleImg(img.smoothScale( (int)d->thumbSize.size(), (int)d->thumbSize.size() ));
+    pix.convertFromImage(scaleImg);
     slotGotThumbnail(item->url(), pix);    
 }
 

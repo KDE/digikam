@@ -5,7 +5,7 @@
 #include <kfileitem.h>
 #include <kio/job.h>
 
-#include "albumitemhandler.h"
+#include <interfaces/albumitemhandler.h>
 
 class QMouseEvent;
 class QResizeEvent;
@@ -90,7 +90,7 @@ private slots:
     void slotGotThumbnail(const KURL& url, const QPixmap& pix);
     void slotFailedThumbnail(const KURL& url);
     void slotGotThumbnailKDE(const KFileItem*, const QPixmap&);
-
+    void slotFailedThumbnailKDE(const KFileItem* item);
     void slotSelectionChanged();
 
     void slot_onDeleteSelectedItemsFinished(KIO::Job* job);
