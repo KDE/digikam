@@ -69,6 +69,7 @@ signals:
 
     void signalFileProperties();
     void signalExifInfo();
+    void signalCommentsEdit();
     
 private slots:
 
@@ -99,7 +100,8 @@ private:
     
     KAction       *m_fileproperties;
     KAction       *m_exifinfo;
-
+    KAction       *m_commentedit;
+    
     friend class ImageWindow;
 };
 

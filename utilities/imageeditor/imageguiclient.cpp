@@ -139,6 +139,11 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                              Key_F6, 
                              this, SIGNAL(signalExifInfo()),
                              actionCollection(), "exif_info");
+                             
+    m_commentedit = new KAction(i18n("Edit Image Comments..."), "EditComments",
+                                Key_F3, 
+                                this, SIGNAL(signalCommentsEdit()),
+                                actionCollection(), "comments_edit");
                                                                                                          
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                          "imageview_help");
@@ -167,6 +172,7 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&File/ /Action/imageview_exit/ ");
     
     guiDef.append("MenuBar/Menu/&Image/ /Action/exif_info/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Action/comments_edit/ ");
     guiDef.append("MenuBar/Menu/&Image/ /Separator/ / ");
     
     guiDef.append("MenuBar/Menu/&Transform/ /Action/imageview_rotate/ ");

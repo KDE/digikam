@@ -98,6 +98,7 @@ private slots:
     
     void slotFileProperties();
     void slotExifInfo();
+    void slotCommentsEdit();
 };
 
 #endif /* IMAGEWINDOW_H */

@@ -37,6 +37,7 @@
 #include <kpropertiesdialog.h>
 #include <kmessagebox.h>
 #include <libkexif/kexif.h>
+#include <libkexif/kexifutils.h>
 
 // Local includes.
 
@@ -47,6 +48,11 @@
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
 #include "imagewindow.h"
+#include "imagecommentedit.h"
+#include "albummanager.h"
+#include "album.h"
+#include "albumdb.h"
+#include "albumsettings.h"
 
 ImageWindow* ImageWindow::instance()
 {
@@ -141,9 +147,10 @@ ImageWindow::ImageWindow()
 
     connect(m_guiClient, SIGNAL(signalFileProperties()),
             SLOT(slotFileProperties()));
-
     connect(m_guiClient, SIGNAL(signalExifInfo()),
             SLOT(slotExifInfo()));            
+    connect(m_guiClient, SIGNAL(signalCommentsEdit()),
+            SLOT(slotCommentsEdit()));            
                             
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
@@ -361,7 +368,7 @@ void ImageWindow::slotChanged(bool val)
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
-			QString(" ") +
+                        QString(" ") +
                         i18n("pixels"));
 
     m_guiClient->m_restoreAction->setEnabled(val);
@@ -401,4 +408,34 @@ void ImageWindow::slotExifInfo()
         }
 }
 
+void ImageWindow::slotCommentsEdit()
+{
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    QString comments( db->getItemCaption(palbum, m_urlCurrent.fileName()) );
+    
+    if (ImageCommentEdit::editComments(m_urlCurrent.filename(), comments, this)) 
+       {
+       db->setItemCaption(palbum, m_urlCurrent.fileName(), comments);
+    
+       AlbumSettings *settings = AlbumSettings::instance();
+        
+       if (settings->getSaveExifComments())
+          {
+          KFileMetaInfo metaInfo(m_urlCurrent, "image/jpeg", KFileMetaInfo::Fastest);
+          if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
+             {
+             // store as JPEG JFIF comment
+             if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                {
+                metaInfo["Jpeg EXIF Data"].item("Comment").setValue(comments);
+                metaInfo.applyChanges();
+                }
+             }
+          }
+       }       
+}
+
 #include "imagewindow.moc"
+

@@ -3,11 +3,12 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libimageeditor.la
 
 libimageeditor_la_SOURCES = guiclient.cpp  guifactory.cpp \
-			imlibinterface.cpp imageiface.cpp \
-			imagewidget.cpp imageplugin.cpp \
-			imagepluginloader.cpp \
-			imagewindow.cpp imageguiclient.cpp \
-			canvas.cpp imageresizedlg.cpp
+			    imlibinterface.cpp imageiface.cpp \
+			    imagewidget.cpp imageplugin.cpp \
+			    imagepluginloader.cpp \
+			    imagewindow.cpp imageguiclient.cpp \
+			    canvas.cpp imageresizedlg.cpp \
+			    imagecommentedit.cpp 
 
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB2)
 
@@ -17,7 +18,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  $(IMLIB2_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = guiclient.h guifactory.h imageiface.h \
-			imagewidget.h imageplugin.h
+			 imagewidget.h imageplugin.h
 
 digikamincludedir = $(includedir)/digikam
 
