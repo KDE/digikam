@@ -155,6 +155,10 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Dried") );
     m_borderType->insertItem( i18n("Decorative Pink") );
     m_borderType->insertItem( i18n("Decorative Stone") );
+    m_borderType->insertItem( i18n("Decorative Chalk") );
+    m_borderType->insertItem( i18n("Decorative Granit") );
+    m_borderType->insertItem( i18n("Decorative Rock") );
+    m_borderType->insertItem( i18n("Decorative Wall") );
 
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
     
@@ -329,6 +333,10 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
        case 12:// Decorative Dried.
        case 13:// Decorative Pink.
        case 14:// Decorative Stone.
+       case 15:// Decorative Chalk.
+       case 16:// Decorative Granit.
+       case 17:// Decorative Rock.
+       case 18:// Decorative Wall.
           break;
        }
        
@@ -363,6 +371,10 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
        case 12:// Decorative Dried.
        case 13:// Decorative Pink.
        case 14:// Decorative Stone.
+       case 15:// Decorative Chalk.
+       case 16:// Decorative Granit.
+       case 17:// Decorative Rock.
+       case 18:// Decorative Wall.
           break;          
        }
        
@@ -419,6 +431,10 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case 12:// Decorative Dried.
        case 13:// Decorative Pink.
        case 14:// Decorative Stone.
+       case 15:// Decorative Chalk.
+       case 16:// Decorative Granit.
+       case 17:// Decorative Rock.
+       case 18:// Decorative Wall.
           m_foregroundColorButton->setEnabled(false);
           m_backgroundColorButton->setEnabled(false);
           m_labelForeground->setEnabled(false);
@@ -474,6 +490,10 @@ void ImageEffect_Border::slotEffect()
        case 12:// Decorative Dried.
        case 13:// Decorative Pink.
        case 14:// Decorative Stone.
+       case 15:// Decorative Chalk.
+       case 16:// Decorative Granit.
+       case 17:// Decorative Rock.
+       case 18:// Decorative Wall.
           setCursor( KCursor::waitCursor() );
           pattern(src, dest, borderWidth);
           setCursor( KCursor::arrowCursor() );        
@@ -532,6 +552,10 @@ void ImageEffect_Border::slotOk()
        case 12:// Decorative Dried.
        case 13:// Decorative Pink.
        case 14:// Decorative Stone.
+       case 15:// Decorative Chalk.
+       case 16:// Decorative Granit.
+       case 17:// Decorative Rock.
+       case 18:// Decorative Wall.
           pattern(src, dest, m_borderWidth->value());
           break;
        }
@@ -709,6 +733,22 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
        
        case 14:// Decorative Stone.
           pattern = "stone-pattern";
+          break;
+       
+       case 15:// Decorative Chalk.
+          pattern = "chalk-pattern";
+          break;
+       
+       case 16:// Decorative Granit.
+          pattern = "granit-pattern";
+          break;
+
+       case 17:// Decorative Rock.
+          pattern = "rock-pattern";
+          break;
+       
+       case 18:// Decorative Wall.
+          pattern = "wall-pattern";
           break;
        }
     
