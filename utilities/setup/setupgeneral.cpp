@@ -120,6 +120,18 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    
    // --------------------------------------------------------
 
+   QGroupBox *iconCommentsGroup = new QGroupBox(1,
+                                            Qt::Horizontal, 
+                                            i18n("Comments"),
+                                            parent);
+
+   iconSaveExifBox_ = new QCheckBox(iconCommentsGroup);
+   iconSaveExifBox_->setText(i18n("Save comments as EXIF Comments in Jpeg images"));
+
+   layout->addWidget(iconCommentsGroup);
+
+   // --------------------------------------------------------
+
    layout->addStretch();
 
    readSettings();
@@ -153,6 +165,7 @@ void SetupGeneral::applySettings()
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
+    settings->setSaveExifComments(iconSaveExifBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -187,6 +200,7 @@ void SetupGeneral::readSettings()
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
+    iconSaveExifBox_->setChecked(settings->getSaveExifComments());
 }
 
 void SetupGeneral::slotChangeAlbumPath()
