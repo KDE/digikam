@@ -1015,7 +1015,7 @@ void ImageWindow::slotToggleFullScreen()
         menuBar()->show();
         statusBar()->show();
 
-        QObject* obj = child("toolbar","KToolBar");
+        QObject* obj = child("ToolBar","KToolBar");
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
@@ -1050,7 +1050,7 @@ void ImageWindow::slotToggleFullScreen()
         menuBar()->hide();
         statusBar()->hide();
 
-        QObject* obj = child("toolbar","KToolBar");
+        QObject* obj = child("ToolBar","KToolBar");
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
