@@ -731,7 +731,8 @@ bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType
        result = saveTIFF(saveFile, true);        
        }
     
-    imlib_image_set_format(mimeType.ascii()); 
+    if (!mimeType.isEmpty())
+       imlib_image_set_format(mimeType.ascii()); 
     
     // Always save jpeg files at 95 % quality without compression
             
