@@ -1,3 +1,28 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+//    ALBUMICONITEM.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Qt includes.
+
 #include <qapplication.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -9,6 +34,8 @@
 #include <qdatetime.h>
 #include <qstringlist.h>
 
+// KDE includes.
+
 #include <kfileitem.h>
 #include <kmimetype.h>
 #include <kfilemetainfo.h>
@@ -16,6 +43,8 @@
 #include <kio/global.h>
 #include <klocale.h>
 #include <kexifdata.h>
+
+// Local includes.
 
 #include "albumsettings.h"
 #include "albumiconview.h"
@@ -28,7 +57,7 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
                              int size,
                              const KFileItem* fileItem,
                              int imageWidth, int imageHeight)
-    : ThumbItem(parent, text, pix)
+             : ThumbItem(parent, text, pix)
 {
     view_ = parent;
     size_ = size;
@@ -309,24 +338,32 @@ void AlbumIconItem::updateExtraText()
           }
 
           delete exifData;
-
        }  
 
     }
+    
+    // FIXME : using KIO/KFileMetaInfo instead for extract Width and Height values ! Qimage is too long !!!
+                
+    QImage im(fileItem_->url().path());
 
-    if (imageWidth_ != 0 && imageHeight_ != 0) {
+    if(im.isNull() == false)
+        {
+        imageWidth_= im.width();
+        imageHeight_= im.height();
+        }
+    
+    if (imageWidth_ != 0 && imageHeight_ != 0 && settings->getIconShowResolution()) 
+        {
         if (!firstLine)
             extraText += "\n";
         else
             firstLine = false;
-        extraText += QString::number(imageWidth_)
-                     + "x"
-                     + QString::number(imageHeight_)
-                     + i18n("Pixels");
-    }
+        
+        extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
+                                         .arg(QString::number(imageHeight_));
+        }
 
     extraText_ = extraText;
-
 }
 
 void AlbumIconItem::setImageDimensions(int width, int height)

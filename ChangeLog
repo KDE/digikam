@@ -1,5 +1,8 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> Added a new options in general setup for to show the 
+          image resolution of Album items.
+        * <Gilles Caulier> Added Exif actions settings tabs in Settings dialog.
         * <Gilles Caulier> Added a new option in .configure for KIPI support.
         * <Ralf Holzer> Added saving of comments in EXIF UserComment field 
           and in JPEG COM field

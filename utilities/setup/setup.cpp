@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "setupgeneral.h"
+#include "setupexif.h"
 #include "setupcollections.h"
 #include "setupmime.h"
 #include "setupplugins.h"
@@ -52,7 +53,11 @@ Setup::Setup(QWidget* parent, const char* name)
     page_general = addPage(i18n("Albums"), i18n("Album settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
     generalPage_ = new SetupGeneral(page_general);
-    
+
+    page_exif = addPage(i18n("Exif"), i18n("Exif action settings"),
+                        BarIcon("exifinfo", KIcon::SizeMedium));
+    exifPage_ = new SetupExif(page_exif);
+        
     page_collections = addPage(i18n("Collections"), i18n("Album collection settings"),
                                BarIcon("fileopen", KIcon::SizeMedium));
     collectionsPage_ = new SetupCollections(page_collections);

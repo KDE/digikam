@@ -35,8 +35,9 @@
 #include "thumbnailsize.h"
 #include "albumsettings.h"
 
-class AlbumSettingsPrivate {
 
+class AlbumSettingsPrivate 
+{
 public:
 
     KConfig *config;
@@ -158,6 +159,10 @@ void AlbumSettings::readSettings()
             config->readNumEntry("Default Icon Size",
                                  ThumbnailSize::Medium);
 
+    if (config->hasKey("Icon Show Resolution"))
+        d->iconShowResolution =
+            config->readBoolEntry("Icon Show Resolution",
+                                  false);                                 
 
     if (config->hasKey("Icon Show Mime"))
         d->iconShowMime =
@@ -223,23 +228,31 @@ void AlbumSettings::saveSettings()
     
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
-
+    
+    config->writeEntry("Icon Show Resolution",
+                       d->iconShowMime);
+                                                      
     config->writeEntry("Icon Show Mime",
                        d->iconShowMime);
+                       
     config->writeEntry("Icon Show Size",
                        d->iconShowSize);
+                       
     config->writeEntry("Icon Show Date",
                        d->iconShowDate);
+                       
     config->writeEntry("Icon Show Comments",
                        d->iconShowComments);
+                       
     config->writeEntry("Icon Show File Comments",
                        d->iconShowFileComments);
+                       
     config->writeEntry("Save EXIF Comments",
                        d->saveExifComments);
+                       
     config->writeEntry("EXIF Rotate",
                        d->exifRotate);
     config->sync();
-
 }
 
 void AlbumSettings::setAlbumLibraryPath(const QString& path)
@@ -377,6 +390,16 @@ void AlbumSettings::setIconShowFileComments(bool val)
 bool AlbumSettings::getIconShowFileComments() const
 {
     return d->iconShowFileComments;
+}
+
+void AlbumSettings::setIconShowResolution(bool val)
+{
+    d->iconShowResolution = val;
+}
+
+bool AlbumSettings::getIconShowResolution() const
+{
+    return d->iconShowResolution;
 }
 
 void AlbumSettings::setSaveExifComments(bool val)

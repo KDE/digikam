@@ -119,23 +119,11 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
    iconShowFileCommentsBox_->setText(i18n("Show comments stored in file"));
 
+   iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
+   iconShowResolutionBox_->setText(i18n("Show image resolution"));
+
    layout->addWidget(iconTextGroup);
    
-   // --------------------------------------------------------
-
-   QGroupBox *iconExifGroup = new QGroupBox(1,
-                                            Qt::Horizontal, 
-                                            i18n("EXIF"),
-                                            parent);
-
-   iconSaveExifBox_ = new QCheckBox(iconExifGroup);
-   iconSaveExifBox_->setText(i18n("Save comments as EXIF Comments in Jpeg images"));
-
-   iconExifRotateBox_ = new QCheckBox(iconExifGroup);
-   iconExifRotateBox_->setText(i18n("Rotate images and thumbnails according to EXIF tag"));
-
-   layout->addWidget(iconExifGroup);
-
    // --------------------------------------------------------
 
    layout->addStretch();
@@ -170,10 +158,9 @@ void SetupGeneral::applySettings()
     settings->setIconShowMime(iconShowMimeBox_->isChecked());
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
     settings->setIconShowDate(iconShowDateBox_->isChecked());
+    settings->setIconShowResolution(iconShowResolutionBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
     settings->setIconShowFileComments(iconShowFileCommentsBox_->isChecked());
-    settings->setSaveExifComments(iconSaveExifBox_->isChecked());
-    settings->setExifRotate(iconExifRotateBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -207,10 +194,9 @@ void SetupGeneral::readSettings()
     iconShowMimeBox_->setChecked(settings->getIconShowMime());
     iconShowSizeBox_->setChecked(settings->getIconShowSize());
     iconShowDateBox_->setChecked(settings->getIconShowDate());
+    iconShowResolutionBox_->setChecked(settings->getIconShowResolution());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
     iconShowFileCommentsBox_->setChecked(settings->getIconShowFileComments());
-    iconSaveExifBox_->setChecked(settings->getSaveExifComments());
-    iconExifRotateBox_->setChecked(settings->getExifRotate());
 }
 
 void SetupGeneral::slotChangeAlbumPath()

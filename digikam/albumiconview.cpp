@@ -196,7 +196,6 @@ void AlbumIconView::applySettings(const AlbumSettings*
     viewport()->setUpdatesEnabled(true);
 
     slotUpdate();
-
 }
 
 

@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-//    SETUPGENERAL.H
+//    SETUPEXIF.H
 //
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//    Copyright (C) 2003-2004 Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Ralf Holzer <ralf at well.com>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -21,25 +21,23 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef SETUPGENERAL_H
-#define SETUPGENERAL_H
+#ifndef SETUPEXIF_H
+#define SETUPEXIF_H
 
 // Qt includes.
 
 #include <qwidget.h>
 
-class QRadioButton;
 class QCheckBox;
-class QLineEdit;
 
-class SetupGeneral : public QWidget
+class SetupExif : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupGeneral(QWidget* parent = 0);
-    ~SetupGeneral();
+    SetupExif(QWidget* parent = 0);
+    ~SetupExif();
 
     void applySettings();
 
@@ -47,23 +45,9 @@ private:
 
     void readSettings();
 
-    QLineEdit    *albumPathEdit;
-
-    QRadioButton *smallIconButton_;
-    QRadioButton *mediumIconButton_;
-    QRadioButton *largeIconButton_;
-    QRadioButton *hugeIconButton_;
-
-    QCheckBox    *iconShowMimeBox_;
-    QCheckBox    *iconShowSizeBox_;
-    QCheckBox    *iconShowDateBox_;
-    QCheckBox    *iconShowResolutionBox_;
-    QCheckBox    *iconShowCommentsBox_;
-    QCheckBox    *iconShowFileCommentsBox_;
+    QCheckBox    *iconSaveExifBox_;
+    QCheckBox    *iconExifRotateBox_;
     
-private slots:
-
-    void slotChangeAlbumPath();
 };
 
-#endif // SETUPGENERAL_H 
+#endif // SETUPEXIF_H 
