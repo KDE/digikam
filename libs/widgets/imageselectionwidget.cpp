@@ -17,11 +17,11 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-#define OPACITY 0.7
-#define RCOL    0xAA
-#define GCOL    0xAA
-#define BCOL    0xAA
+ 
+#define OPACITY          0.7
+#define RCOL             0xAA
+#define GCOL             0xAA
+#define BCOL             0xAA
  
 // C++ includes.
 
@@ -340,13 +340,13 @@ void ImageSelectionWidget::updatePixmap(void)
     // Updated draging corners region.
     
     m_localTopLeftCorner.setRect(m_localRegionSelection.left(), 
-                                 m_localRegionSelection.top(), 5, 5);
+                                 m_localRegionSelection.top(), 8, 8);
     m_localBottomLeftCorner.setRect(m_localRegionSelection.left(), 
-                                    m_localRegionSelection.bottom() - 4, 5, 5);   
-    m_localTopRightCorner.setRect(m_localRegionSelection.right() - 4, 
-                                  m_localRegionSelection.top(), 5, 5);
-    m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 4, 
-                                     m_localRegionSelection.bottom() - 4, 5, 5);
+                                    m_localRegionSelection.bottom() - 7, 8, 8);   
+    m_localTopRightCorner.setRect(m_localRegionSelection.right() - 7, 
+                                  m_localRegionSelection.top(), 8, 8);
+    m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 7, 
+                                     m_localRegionSelection.bottom() - 7, 8, 8);
     
     // Drawing background and image.
     
@@ -494,23 +494,23 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
           QPoint pm(e->x(), e->y());
           
           if ( m_currentResizing == ResizingTopLeft &&
-               pm.x() < m_localRegionSelection.right() - 5 &&
-               pm.y() < m_localRegionSelection.bottom() - 5 )
+               pm.x() < m_localRegionSelection.right() - 8 &&
+               pm.y() < m_localRegionSelection.bottom() - 8 )
               m_localRegionSelection.setTopLeft(pm);             
              
           else if ( m_currentResizing == ResizingTopRight  &&
-               pm.x() > m_localRegionSelection.left() + 5 &&
-               pm.y() < m_localRegionSelection.bottom() - 5 )
+               pm.x() > m_localRegionSelection.left() + 8 &&
+               pm.y() < m_localRegionSelection.bottom() - 8 )
              m_localRegionSelection.setTopRight(pm);
           
           else if ( m_currentResizing == ResizingBottomLeft  &&
-               pm.x() < m_localRegionSelection.right() - 5 &&
-               pm.y() > m_localRegionSelection.top() + 5 )
+               pm.x() < m_localRegionSelection.right() - 8 &&
+               pm.y() > m_localRegionSelection.top() + 8 )
              m_localRegionSelection.setBottomLeft(pm);
              
           else if ( m_currentResizing == ResizingBottomRight  &&
-               pm.x() > m_localRegionSelection.left() + 5 &&
-               pm.y() > m_localRegionSelection.top() + 5 )
+               pm.x() > m_localRegionSelection.left() + 8 &&
+               pm.y() > m_localRegionSelection.top() + 8 )
              m_localRegionSelection.setBottomRight(pm);
           
           applyAspectRatio(false, false);
