@@ -34,14 +34,15 @@
 #include "syncjob.h"
 
 TagCreateDlg::TagCreateDlg(TAlbum* parent)
-    : KDialogBase( Plain, i18n("Create Tag"), Help|Ok|Cancel, Ok,
+    : KDialogBase( Plain, i18n("Create New Tag"), Help|Ok|Cancel, Ok,
                    0, 0, true, true )
 {
     setHelp("tagscreation.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("Create New Tag in '%1'").arg(parent->getPrettyURL()) );
+    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(parent->getPrettyURL()) );
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
@@ -56,21 +57,26 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
-    titleLabel->setText(i18n("Title:"));
+    titleLabel->setText(i18n("&Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
     m_titleEdit = new QLineEdit(plainPage());
+    titleLabel->setBuddy(m_titleEdit);
     gl->addWidget(m_titleEdit, 0, 1);
 
     setFocusProxy(m_titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
-    iconTextLabel->setText(i18n("Set icon:"));
+    iconTextLabel->setText(i18n("&Icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
     m_iconButton = new QPushButton(plainPage());
     m_iconButton->setFixedSize(40, 40);
+    iconTextLabel->setBuddy(m_iconButton);
     gl->addWidget(m_iconButton, 1, 1);
+
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    gl->addItem(spacer, 2, 1);
 
     connect(m_iconButton, SIGNAL(clicked()),
             SLOT(slotIconChange()));
@@ -82,6 +88,8 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
         m_icon = parent->getIcon();
         m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
     }
+
+    adjustSize();
 }
 
 TagCreateDlg::~TagCreateDlg()
@@ -128,7 +136,8 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("Edit Tag '%1' Properties").arg(album->getPrettyURL()) );
+    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>").arg(album->getPrettyURL()) );
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
@@ -143,29 +152,35 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
-    titleLabel->setText(i18n("Title:"));
+    titleLabel->setText(i18n("&Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
     m_titleEdit = new QLineEdit(plainPage());
     m_titleEdit->setText(album->getTitle());
+    titleLabel->setBuddy(m_titleEdit);
     gl->addWidget(m_titleEdit, 0, 1);
 
     setFocusProxy(m_titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
-    iconTextLabel->setText(i18n("Set icon:"));
+    iconTextLabel->setText(i18n("&Icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
     m_iconButton = new QPushButton(plainPage());
     m_iconButton->setFixedSize(40, 40);
+    iconTextLabel->setBuddy(m_iconButton);
     gl->addWidget(m_iconButton, 1, 1);
+
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    gl->addItem(spacer, 2, 1);
 
     connect(m_iconButton, SIGNAL(clicked()),
             SLOT(slotIconChange()));
 
     m_icon = album->getIcon();
-
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
+
+    adjustSize();
 }
 
 TagEditDlg::~TagEditDlg()

@@ -21,21 +21,23 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qframe.h>
-#include <qpushbutton.h>
 #include <qheader.h>
+#include <qpushbutton.h>
 
 // KDE includes.
 
+#include <kdatepicker.h>
+#include <ktextedit.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kdatepicker.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -57,130 +59,91 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album)
     setHelp("albumpropsedit.anchor", "digikam");
     album_ = album;
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
+    QGridLayout *topLayout = new QGridLayout( plainPage(), 2, 6,
                                               0, spacingHint() );
 
     QLabel *topLabel = new QLabel( plainPage() );
-    topLabel->setText( i18n( "Edit '%1' Album Properties").arg(album->getTitle()));
-    topLayout->addWidget( topLabel  );
+    topLabel->setText( i18n( "<qt><b><i>%1</i> Album Properties</b></qt>")
+                       .arg(album->getTitle()));
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
+    topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
 
     // --------------------------------------------------------
 
     QFrame *topLine = new QFrame( plainPage() );
     topLine->setFrameShape( QFrame::HLine );
     topLine->setFrameShadow( QFrame::Sunken );
-    topLayout->addWidget( topLine );
+    topLayout->addMultiCellWidget( topLine, 1, 1, 0, 1  );
 
     // --------------------------------------------------------
 
-    QGroupBox *titleBox = new QGroupBox( plainPage() );
-    titleBox->setTitle( i18n( "Edit Album Description" ) );
+/*    QGroupBox *titleBox = new QGroupBox( plainPage() );
+    titleBox->setTitle( i18n( "Album Description" ) );
     titleBox->setColumnLayout( 0, Qt::Horizontal );
     QGridLayout *titleBoxLayout =
-        new QGridLayout( titleBox->layout(), 2, 2, spacingHint() );
+    new QGridLayout( topLayout, 2, 5, spacingHint() );*/
 
-    QLabel *titleLabel = new QLabel( titleBox );
-    titleLabel->setText( i18n( "Title: " ) );
-    titleBoxLayout->addWidget( titleLabel, 0, 0 );
+    QLabel *titleLabel = new QLabel( plainPage( ) );
+    titleLabel->setText( i18n( "&Title:" ) );
+    topLayout->addWidget( titleLabel, 2, 0 );
 
-    titleEdit_ = new QLineEdit( titleBox );
-    titleBoxLayout->addWidget( titleEdit_, 0, 1 );
+    titleEdit_ = new QLineEdit( plainPage( ) );
+    topLayout->addWidget( titleEdit_, 2, 1 );
+    titleLabel->setBuddy( titleEdit_ );
 
-    QLabel *commentsLabel = new QLabel( titleBox );
-    commentsLabel->setText( i18n( "Comments: " ) );
-    titleBoxLayout->addWidget( commentsLabel, 2, 0 );
+    QLabel *collectionLabel = new QLabel( plainPage( ) );
+    collectionLabel->setText( i18n( "Co&llection:" ) );
+    topLayout->addWidget( collectionLabel, 3, 0 );
 
-    commentsEdit_ = new QLineEdit( titleBox );
-    titleBoxLayout->addWidget( commentsEdit_, 2, 1 );
+    collectionCombo_ = new QComboBox( plainPage( ) );
+    collectionCombo_->setEditable(true);
+    topLayout->addWidget( collectionCombo_, 3, 1 );
+    collectionLabel->setBuddy( collectionCombo_ );
 
-    topLayout->addWidget( titleBox );
+    QLabel *commentsLabel = new QLabel( plainPage( ) );
+    commentsLabel->setText( i18n( "Co&mments:" ) );
+    topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignAuto|Qt::AlignTop );
 
-    // ------------------------------------------------------
+    commentsEdit_ = new KTextEdit( plainPage( ) );
+    topLayout->addWidget( commentsEdit_, 4, 1 );
+    commentsLabel->setBuddy( commentsEdit_ );
+    commentsEdit_->setMaximumHeight(commentsEdit_->fontMetrics().height() * 2.5);
 
-    QGroupBox *dateBox = new QGroupBox( plainPage() );
-    dateBox->setTitle( i18n( "Change Album Date" ) );
-    dateBox->setColumnLayout( 0, Qt::Horizontal );
-    QVBoxLayout *dateBoxLayout =
-        new QVBoxLayout( dateBox->layout(), spacingHint() );
+    QLabel *dateLabel = new QLabel( plainPage( ) );
+    dateLabel->setText( i18n( "Album &Date:" ) );
+    topLayout->addWidget( dateLabel, 5, 0, Qt::AlignAuto|Qt::AlignTop );
 
-    datePicker_ = new KDatePicker( dateBox );
-    dateBoxLayout->addWidget( datePicker_ );
-
-    topLayout->addWidget( dateBox );
-
-    // ------------------------------------------------------
-
-    QGroupBox *collectionBox = new QGroupBox( plainPage() );
-    collectionBox->setTitle( i18n( "Change Album Collection" ) );
-    collectionBox->setColumnLayout(0, Qt::Horizontal );
-    QGridLayout *collectionBoxLayout =
-        new QGridLayout( collectionBox->layout(), 2, 2, spacingHint() );
-
-    collectionEdit_ = new QListView( collectionBox );
-    collectionEdit_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                               QSizePolicy::MinimumExpanding));
-    collectionBoxLayout->addMultiCellWidget( collectionEdit_,
-                                             0, 2, 0, 0 );
-
-    QPushButton *addCollectionBtn = new QPushButton( i18n("Add..."),
-                                                     collectionBox );
-    collectionBoxLayout->addWidget( addCollectionBtn, 0, 1);
-
-    QPushButton *delCollectionBtn = new QPushButton( i18n("Delete"),
-                                                     collectionBox );
-    collectionBoxLayout->addWidget( delCollectionBtn, 1, 1);
-
-    topLayout->addWidget( collectionBox );
+    datePicker_ = new KDatePicker( plainPage( ) );
+    topLayout->addWidget( datePicker_, 5, 1 );
+    dateLabel->setBuddy( datePicker_ );
 
     // Initialize ---------------------------------------------
 
-    populateCollections();
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings)
+    {
+        collectionCombo_->insertItem( QString::null );
+        QStringList collections = settings->getAlbumCollectionNames();
+        collectionCombo_->insertStringList( collections );
+        int collectionIndex = collections.findIndex( album->getCollection() );
+        if ( collectionIndex != -1 )
+        {
+            // + 1 because of the empty item
+            collectionCombo_->setCurrentItem(collectionIndex + 1);
+        }
+    }
 
     titleEdit_->setText( album->getTitle() );
     commentsEdit_->setText( album->getCaption() );
     datePicker_->setDate( album->getDate() );
 
-    QCheckListItem *checkItem =
-        (QCheckListItem*) collectionEdit_->findItem(album->getCollection(), 0);
-    if (checkItem) checkItem->setOn(true);
-
     // Connections -------------------------------------------
 
-    connect(addCollectionBtn, SIGNAL(clicked()),
-            this, SLOT(slotAddCollection()));
-
-    connect(delCollectionBtn, SIGNAL(clicked()),
-            this, SLOT(slotDelCollection()));
-
-    //resize(500, 400);
     adjustSize();
 }
 
 AlbumPropsEdit::~AlbumPropsEdit()
 {
-}
-
-void AlbumPropsEdit::populateCollections()
-{
-    AlbumSettings *settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    collectionEdit_->addColumn("Collections");
-    collectionEdit_->header()->hide();
-    collectionEdit_->setColumnWidthMode(0, QListView::Maximum);
-
-    rootCollectionItem_ =
-        new QCheckListItem(collectionEdit_, i18n("Collections"));
-    rootCollectionItem_->setSelectable(false);
-    rootCollectionItem_->setOpen(true);
-
-    albumCollections_ = settings->getAlbumCollectionNames();
-    for (QStringList::const_iterator it = albumCollections_.begin();
-         it != albumCollections_.end(); ++it ) {
-        new QCheckListItem(rootCollectionItem_, *it,
-                           QCheckListItem::RadioButton);
-    }
-
 }
 
 QString AlbumPropsEdit::title() const
@@ -200,61 +163,32 @@ QDate AlbumPropsEdit::date() const
 
 QString AlbumPropsEdit::collection() const
 {
-    QString name;
+    QString name = collectionCombo_->currentText();
 
-    QListViewItemIterator it(collectionEdit_);
-    for ( ; it.current(); ++it) {
-        QCheckListItem *item =
-            (QCheckListItem*)(it.current());
-        if (item->type() == QCheckListItem::RadioButton &&
-            item->isOn()) {
-            name = item->text();
-        }
+    if (name.isEmpty())
+    {
+        name = i18n( "Uncategorized Album" );
     }
-
-    if (name.isNull()) name = i18n( "Unknown" );
 
     return name;
 }
 
 QStringList AlbumPropsEdit::albumCollections() const
 {
-    return albumCollections_;
-}
-
-void AlbumPropsEdit::slotAddCollection()
-{
-    bool ok;
-
-#if KDE_IS_VERSION(3,2,0)
-    QString newCollection = KInputDialog::getText(i18n("New Collection Name"),
-                                                  i18n("Enter new collection name:"),
-                                                  QString::null, &ok, this);
-#else
-    QString newCollection = KLineEditDlg::getText(i18n("New Collection Name"),
-                                                  i18n("Enter new collection name:"),
-                                                  QString::null, &ok, this);
-#endif
-    if (!ok) return;
-
-    if (!albumCollections_.contains(newCollection)) {
-        new QCheckListItem(rootCollectionItem_, newCollection,
-                           QCheckListItem::RadioButton);
-        albumCollections_.append(newCollection);
+    QStringList collections;
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings)
+    {
+        collections = settings->getAlbumCollectionNames();
     }
-}
 
-void AlbumPropsEdit::slotDelCollection()
-{
-    QListViewItem *item = collectionEdit_->selectedItem();
-    if (!item) return;
+    QString currentCollection = collectionCombo_->currentText();
+    if ( collections.findIndex( currentCollection ) == -1 )
+    {
+        collections.append(currentCollection);
+    }
 
-    QCheckListItem *checkItem = (QCheckListItem*) item;
-    if (!checkItem || checkItem == rootCollectionItem_)
-        return;
-
-    albumCollections_.remove(checkItem->text(0));
-    delete checkItem;
+    return collections;
 }
 
 bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
@@ -273,5 +207,3 @@ bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
 
     return ok;
 }
-
-#include "albumpropsedit.moc"

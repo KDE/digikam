@@ -2,8 +2,8 @@
  * File  : albumpropsedit.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-03-09
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2003 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -11,12 +11,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef ALBUMPROPSEDIT_H
@@ -33,17 +33,16 @@
 #include <kdialogbase.h>
 
 class KDatePicker;
-class QListView;
+class QComboBox;
 class QLineEdit;
 class QCheckBox;
 class QCheckListItem;
+class KTextEdit;
 
 class PAlbum;
 
 class AlbumPropsEdit : public KDialogBase
 {
-    Q_OBJECT
-
 public:
 
     AlbumPropsEdit(PAlbum* album);
@@ -64,23 +63,16 @@ public:
 
 private:
 
-    void  populateCollections();
-
     PAlbum         *album_;
     QStringList     albumCollections_;
-    
+
     QLineEdit      *titleEdit_;
-    QLineEdit      *commentsEdit_;
-    
+    KTextEdit      *commentsEdit_;
+
     KDatePicker    *datePicker_;
 
-    QListView      *collectionEdit_;
+    QComboBox      *collectionCombo_;
     QCheckListItem *rootCollectionItem_;
-
-private slots:
-
-    void slotAddCollection();
-    void slotDelCollection();
 };
 
 #endif /* ALBUMPROPSEDIT_H */
