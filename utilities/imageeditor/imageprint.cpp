@@ -71,8 +71,8 @@
 //////////////////////////////////// CONSTRUCTORS ///////////////////////////////////////////
 
 ImagePrint::ImagePrint(const QString& filename, KPrinter& printer, const QString& originalFileName)
+          : m_filename( filename), m_printer( printer ), m_originalFileName( originalFileName)
 {
-    printImageWithQt( filename, printer, originalFileName );
 }
 
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
@@ -145,21 +145,20 @@ ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
 
 //////////////////////////////////////// FONCTIONS //////////////////////////////////////////
 
-bool ImagePrint::printImageWithQt( const QString& filename, KPrinter& printer,
-                                   const QString& originalFileName )
+bool ImagePrint::printImageWithQt()
 {
-    QImage image( filename );
+    QImage image( m_filename );
     
     if ( image.isNull() ) 
         {
-        kdWarning() << "Can't load image: " << filename << " for printing.\n";
+        kdWarning() << "Can't load image: " << m_filename << " for printing.\n";
         return false;
         }
 
     QPainter p;
-    p.begin( &printer );
+    p.begin( &m_printer );
 
-    QPaintDeviceMetrics metrics( &printer );
+    QPaintDeviceMetrics metrics( &m_printer );
     p.setFont( KGlobalSettings::generalFont() );
     QFontMetrics fm = p.fontMetrics();
 
@@ -171,13 +170,11 @@ bool ImagePrint::printImageWithQt( const QString& filename, KPrinter& printer,
 
     // Black & white print ?
     
-    if ( printer.option( "app-imageeditor-blackwhite" ) != f) 
-        {
+    if ( m_printer.option( "app-imageeditor-blackwhite" ) != f) 
         image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-        }
 
     int filenameOffset = 0;
-    bool printFilename = printer.option( "app-imageeditor-printFilename" ) != f;
+    bool printFilename = m_printer.option( "app-imageeditor-printFilename" ) != f;
     
     if ( printFilename ) 
         {
@@ -185,23 +182,17 @@ bool ImagePrint::printImageWithQt( const QString& filename, KPrinter& printer,
         h -= filenameOffset; // filename goes into one line!
         }
 
-    //
-    // shrink image to pagesize, if necessary
-    //
+    // Shrink image to pagesize, if necessary.
     
-    bool shrinkToFit = (printer.option( "app-imageeditor-shrinkToFit" ) != f);
+    bool shrinkToFit = (m_printer.option( "app-imageeditor-shrinkToFit" ) != f);
     
     if ( shrinkToFit && image.width() > w || image.height() > h )
-        {
         image = image.smoothScale( w, h, QImage::ScaleMin );
-        }
 
-    //
-    // align image
-    //
+    // Align image.
     
     bool ok = false;
-    int alignment = printer.option("app-imageeditor-alignment").toInt( &ok );
+    int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
     
     if ( !ok )
         alignment = Qt::AlignCenter; // default
@@ -227,15 +218,13 @@ bool ImagePrint::printImageWithQt( const QString& filename, KPrinter& printer,
     else if ( alignment & Qt::AlignBottom )
         y = h - image.height();
 
-    //
-    // perform the actual drawing
-    //
+    // Perform the actual drawing.
     
     p.drawImage( x, y, image );
 
     if ( printFilename )
         {
-        QString fname = minimizeString( originalFileName, fm, w );
+        QString fname = minimizeString( m_originalFileName, fm, w );
         
         if ( !fname.isEmpty() )
             {

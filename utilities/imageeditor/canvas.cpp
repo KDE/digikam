@@ -160,14 +160,20 @@ void Canvas::load(const QString& filename)
 int Canvas::save(const QString& filename)
 {
     int result = d->im->save(filename);
-    emit signalChanged(false);
+    if ( result == true ) emit signalChanged(false);
     return result;
 }
 
-int Canvas::saveAs(const QString& filename)
+int Canvas::saveAs(const QString& filename, const QString& mimeType)
 {
-    int result = d->im->saveAs(filename);
-    emit signalChanged(false);
+    int result = d->im->saveAs(filename, mimeType);
+    if ( result == true ) emit signalChanged(false);
+    return result;
+}
+
+int Canvas::saveAsTmpFile(const QString& filename, const QString& mimeType)
+{
+    int result = d->im->saveAs(filename, mimeType);
     return result;
 }
 

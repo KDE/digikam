@@ -47,15 +47,16 @@ public:
 
     void load(const QString& filename);
     int  save(const QString& filename);
-    int  saveAs(const QString& filename);
-    
+    int  saveAs(const QString& filename, const QString& mimeType);
+    int  saveAsTmpFile(const QString& filename, const QString& mimeType=0);
+        
     bool maxZoom();
     bool minZoom();
     int  imageWidth();
     int  imageHeight();
 
     void resizeImage(int w, int h);
-    
+        
 protected:
     
     void resizeEvent(QResizeEvent* e);
@@ -69,8 +70,8 @@ protected:
 private:
 
     void updateAutoZoom();
-    void updateContentsSize();
     void paintViewportRect(const QRect& vr, bool aa, bool mask);
+    void updateContentsSize();
     void drawRubber();
 
     CanvasPrivate *d;

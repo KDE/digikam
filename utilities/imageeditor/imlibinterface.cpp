@@ -20,6 +20,13 @@
  * 
  * ============================================================ */
 
+// Lib TIFF includes. 
+
+extern "C" 
+{
+#include <tiffio.h>
+}
+ 
 // C++ includes.
 
 #include <cmath>
@@ -62,6 +69,7 @@ public:
     Colormap cm;
     int      depth;
 
+    // PENDING (Gilles) : Renchi, can you give me some explanations about this variable ?
     bool valid;
     bool dirty;
     
@@ -208,7 +216,12 @@ bool ImlibInterface::save(const QString& file)
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
     
-    bool result = saveAction(file);
+    QString currentMimeType(imlib_image_format());
+
+    bool result = saveAction(file, currentMimeType);
+    
+    // PENDING (Gilles) : Renchi,
+    // What do you want to do with this varaible in according with 'result' value ?
     d->valid   = false;
     d->dirty   = true;
     
@@ -216,12 +229,19 @@ bool ImlibInterface::save(const QString& file)
     return result;
 }
 
-bool ImlibInterface::saveAs(const QString& file)
+bool ImlibInterface::saveAs(const QString& file, const QString& mimeType)
 {
+    bool result;
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
-        
-    bool result = saveAction(file);
+
+    if (!mimeType)
+        result = saveAction(file, imlib_image_format());
+    else 
+       result = saveAction(file, mimeType);
+
+    // PENDING (Gilles) : Renchi,
+    // What do you wnat to do with this varaible in according with 'result' value ?
     d->valid   = true;
     d->dirty   = true;
     
@@ -664,18 +684,30 @@ void ImlibInterface::putSelectedData(uint* data)
     emit signalRequestUpdate();
 }
 
-bool ImlibInterface::saveAction(const QString& saveFile) 
+bool ImlibInterface::saveAction(const QString& saveFile, const QString& mimeType) 
 {
     bool result;
-    QFileInfo fileInfo(saveFile);
-    QString ext = fileInfo.extension(false);
-    kdDebug() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" << ext.ascii() << ")" << endl;
+    kdWarning() << "Saving to :" << QFile::encodeName(saveFile).data() << " (" 
+                << mimeType.ascii() << ")" << endl;
     
-    imlib_image_set_format(ext.ascii()); 
+    if (mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF")) 
+       {
+       // Imlib2 uses LZW compression (not available
+       // in most distributions) which results
+       // in corrupted tiff files. Here we use
+       // a different compression algorithm
+       
+       // Renchi, I use this implemetation temporally until imlib2 support correctly TIFF file format 
+       result = saveTIFF(saveFile, true);        
+       }
+    
+    imlib_image_set_format(mimeType.ascii()); 
     
     // Always save jpeg files at 95 % quality without compression
-    if (ext.upper() == QString("JPG") || ext.upper() == QString("JPEG")) 
+            
+    if (mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG")) 
        imlib_image_attach_data_value ("quality", NULL, 95, NULL);
+               
             
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 
@@ -683,17 +715,62 @@ bool ImlibInterface::saveAction(const QString& saveFile)
         {
         kdWarning() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
                     << (int)d->errorRet << endl;
-        result = false;
+        return false;  // Do not reload the file if saving failed !
         }
-    else 
-        result = true;
 
     // Now kill the image and re-read it from the saved file
             
     if ( load(saveFile) == false ) 
-        result = false;
+        {
+        kdWarning() << "error loading image '" << QFile::encodeName(saveFile).data() << endl;
+        return false;
+        }
      
-    return result;
+    return true;
+}
+
+
+// This fonction is temporally used until imlib2 support correctly TIFF file format.
+bool ImlibInterface::saveTIFF(const QString& saveFile, bool compress) 
+{
+    TIFF   *tif;
+    DATA32 *data;
+    int     y;
+    int     w;
+
+    tif = TIFFOpen(QFile::encodeName(saveFile).data(), "w");
+        
+    if (tif)
+       {
+       TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, imlib_image_get_width());
+       TIFFSetField(tif, TIFFTAG_IMAGELENGTH, imlib_image_get_height());
+       TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+       TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+       TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+            
+       if (compress)
+          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+       else
+          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+          {
+          TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
+          TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+          w = TIFFScanlineSize(tif);
+          TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
+          TIFFDefaultStripSize(tif, 0));
+                
+          for (y = 0 ; y < imlib_image_get_height() ; ++y)
+              {
+              data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() );
+              TIFFWriteScanline(tif, data, y, 0);
+              }
+          }
+            
+       TIFFClose(tif);
+       return true;
+       }
+            
+    return false;  
 }
 
 ImlibInterface* ImlibInterface::instance()

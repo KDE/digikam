@@ -30,29 +30,32 @@
 // KDE lib includes
 
 #include <kurl.h>
+#include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
 class QCheckBox;
 class QRadioButton;
 
 class KComboBox;
-class KPrinter;
 class KIntNumInput;
 
 class ImagePrint  
 {
 public:
 
-    ImagePrint(const QString& filename, KPrinter& printer, const QString& originalFileName);
+    ImagePrint(const QString& filename, KPrinter& printer, 
+               const QString& originalFileName);
     ~ImagePrint();
+
+    bool printImageWithQt();
 
 private:
     
-    bool printImageWithQt( const QString& filename, KPrinter& printer,
-                           const QString& originalFileName );
+    QString   m_filename;
+    KPrinter& m_printer;
+    QString   m_originalFileName;
     
     void addConfigPages();
-     
     QString minimizeString( QString text, const QFontMetrics& metrics,
                             int maxWidth );                           
 };
