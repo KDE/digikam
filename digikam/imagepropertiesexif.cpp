@@ -68,6 +68,7 @@ ImagePropertiesEXIF::ImagePropertiesEXIF(QWidget* page)
     config->setGroup("Image Properties Dialog");
     m_levelCombo->setCurrentItem(config->readNumEntry("EXIF Level", 0));
     m_currItem = config->readEntry("Current EXIF Item", QString());
+    slotLevelChanged(0);
 }
 
 ImagePropertiesEXIF::~ImagePropertiesEXIF()
