@@ -40,7 +40,7 @@ extern "C"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "sqlite.h"
+#include <sqlite.h>
 #include <sys/time.h>
 #include <time.h>
 }
@@ -258,7 +258,9 @@ void kio_digikamtagsProtocol::listDir(const KURL& url)
         }
         
         // now list files
+        buildAlbumMap();
         listDir(url, id, recurse);
+
         m_items.clear();
     }
         
@@ -272,24 +274,28 @@ void kio_digikamtagsProtocol::listDir(const KURL& url)
 void kio_digikamtagsProtocol::listDir(const KURL& url, int tagid, bool recurse)
 {
     QStringList values;
-    
-    execSql( QString("SELECT Albums.url||'/'||ImageTags.name, Albums.id "
-                     "FROM Albums JOIN ImageTags "
-                     "ON ImageTags.tagid=%1 AND Albums.id=ImageTags.dirid "
-                     "ORDER BY ImageTags.name;")
-             .arg(tagid), &values );
+
+    static const QString sqlStr = "SELECT dirid, name "
+                                  "FROM ImageTags "
+                                  "WHERE tagid=%1  "
+                                  "ORDER BY name;";
+ 
+    execSql( sqlStr.arg(tagid), &values );
 
     QString path;
     KURL    xurl;
     int     dirid;
+    QString name;
 
     KIO::UDSEntry entry;
     KIO::UDSAtom  atom;
     
     for (QStringList::iterator it = values.begin(); it != values.end(); )
     {
-        path  = QDir::cleanDirPath( m_libraryPath + QString("/") + *(it++) );
         dirid = (*(it++)).toInt();
+        name  =  *it++;
+        path  = QDir::cleanDirPath( m_libraryPath + QString("/") +
+                                    m_albumMap[dirid] + "/" + name );
 
         // check if this item is already between listed to avoid duplicate items
         // (this problem arises when you have same item under different subtags)
@@ -325,7 +331,6 @@ void kio_digikamtagsProtocol::listDir(const KURL& url, int tagid, bool recurse)
         atom.m_long = st.st_atime;
         entry.append( atom );
 
-        
         atom.m_uds = KIO::UDS_URL;
         xurl.setProtocol("file");
         xurl.setPath(path);
@@ -344,7 +349,6 @@ void kio_digikamtagsProtocol::listDir(const KURL& url, int tagid, bool recurse)
         entry.append( atom );
         
         listEntry(entry, false);
-
     }
 
     m_items.sort();
@@ -369,6 +373,25 @@ void kio_digikamtagsProtocol::listDir(const KURL& url, int tagid, bool recurse)
         xurl.setProtocol("digikamtags");
         xurl.setPath(url.path(1) + (*it++));
         listDir(xurl, childid, recurse);
+    }
+}
+
+void kio_digikamtagsProtocol::buildAlbumMap()
+{
+    m_albumMap.clear();
+
+    static const QString sqlStr = "SELECT id, url FROM Albums;";
+
+    QStringList values;
+    execSql(sqlStr, &values);
+
+    int     id;
+    QString url;
+    for (QStringList::iterator it = values.begin(); it != values.end(); )
+    {
+        id  = (*it++).toInt();
+        url = *it++;
+        m_albumMap.insert(id, url);
     }
 }
 

@@ -50,6 +50,7 @@ private:
     void statRoot();
     void statTag(const KURL &url);
     void listDir(const KURL& url, int tagid, bool recurse);
+    void buildAlbumMap();
     
     bool execSql(const QString& sql, QStringList* const values = 0, 
                  const bool debug = false);
@@ -57,7 +58,8 @@ private:
     sqleet*            m_db;
     bool               m_valid;
     QString            m_libraryPath;
-    
+
+    QMap<int,QString>  m_albumMap;
     // Using a stl list instead of QStringList
     // as tests indicate sorting is much faster on the stl list
     std::list<QString> m_items;
