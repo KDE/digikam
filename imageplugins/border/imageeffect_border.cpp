@@ -101,7 +101,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 5, 3 , marginHint(), spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
     
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -114,7 +114,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Add Border to Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
     
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -145,7 +145,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Type:"), gbox2);
     m_borderType = new QComboBox( false, gbox2 );
     m_borderType->insertItem( i18n("Solid") );
-    // Niepce is Real name. This is the first guy in the world to have build a camera.
+    // Niepce is Real name. This is the first guy in the world to have built a camera.
     m_borderType->insertItem( "Niepce" );     
     m_borderType->insertItem( i18n("Beveled") );
     m_borderType->insertItem( i18n("Decorative Pine") );
@@ -183,7 +183,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     gridBox2->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
     gridBox2->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
     
-    topLayout->addMultiCellWidget(gbox2, 1, 1, 2, 2);
+    topLayout->addMultiCellWidget(gbox2, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
 
