@@ -33,6 +33,7 @@
 #include <qprogressbar.h>
 #include <qlayout.h>
 #include <qtimer.h>
+#include <qpopupmenu.h>
 
 #include <guifactory.h>
 
@@ -122,6 +123,13 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
                                          port, path);
 
     // -- setup connections --------------------------
+    
+    connect(d->view, SIGNAL(signalRightButtonClicked(ThumbItem *,
+            const QPoint &)), this, 
+            SLOT(slotRightButtonClicked(ThumbItem *,
+            const QPoint &)));
+    connect(d->view, SIGNAL(signalRightButtonClicked(const QPoint &)),
+            this, SLOT(slotRightButtonClicked(const QPoint &)));
 
     connect(d->controller, SIGNAL(signalFatal(const QString&)),
             SLOT(slotFatal(const QString&)));
@@ -368,4 +376,28 @@ void CameraUI::saveInitialSize()
     config->sync();
 }
 
+void CameraUI::slotRightButtonClicked(ThumbItem *, const QPoint &pos)
+{
+    QPopupMenu popmenu(this);
+    popmenu.insertItem(i18n("Download All"), 
+                       this, SLOT(slotDownloadAll()));                           
+    popmenu.insertItem(i18n("Download Selected"), 
+                       this, SLOT(slotDownloadSelected()));
+    popmenu.insertSeparator();
+    popmenu.insertItem(i18n("Image View ..."),
+                       this, SLOT(slotFileView()));
+    popmenu.insertItem(i18n("Image Properties ..."),
+                       this, SLOT(slotFileProperties()));
+    popmenu.insertItem(i18n("Image Exif Information ..."),
+                       this, SLOT(slotFileExif()));
+    popmenu.exec(pos);
+}
+
+void CameraUI::slotRightButtonClicked(const QPoint &pos)
+{
+    QPopupMenu popmenu(this);
+    popmenu.insertItem(i18n("Download All"), 
+                       this, SLOT(slotDownloadAll()));                           
+    popmenu.exec(pos);
+}
 #include "cameraui.moc"

@@ -26,6 +26,7 @@
 
 class CameraUIPriv;
 class CameraIconItem;
+class ThumbItem;
 
 class CameraUI : public QMainWindow
 {
@@ -65,6 +66,10 @@ private slots:
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();
+    
+    void slotRightButtonClicked(ThumbItem *item,
+                                const QPoint &pos);    
+    void slotRightButtonClicked(const QPoint &pos);                                    
 };
 
 #endif /* CAMERAUI_H */
