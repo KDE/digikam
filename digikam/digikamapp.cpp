@@ -586,10 +586,10 @@ void DigikamApp::slotEditKeys()
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
         {
-        KIPI::Plugin* plugin = (*it)->plugin;
+        KIPI::Plugin* plugin = (*it)->plugin();
         
         if ( plugin )
-           dialog->insert( plugin->actionCollection(), (*it)->comment );
+           dialog->insert( plugin->actionCollection(), (*it)->comment() );
         }
     
     dialog->configure();
@@ -684,9 +684,9 @@ void DigikamApp::slotKipiPluginPlug()
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
         {
-        KIPI::Plugin* plugin = (*it)->plugin;
+        KIPI::Plugin* plugin = (*it)->plugin();
         
-        if ( !plugin || !(*it)->shouldLoad )
+        if ( !plugin || !(*it)->shouldLoad() )
             continue;
 
         plugin->setup( this );
