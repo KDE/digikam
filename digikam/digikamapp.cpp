@@ -511,6 +511,9 @@ void DigikamApp::loadPlugins()
 {
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
+
+    connect( mAlbumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
+             KipiInterface_, SLOT( slotSelectionChanged( bool ) ) );
     
     ignores << QString::fromLatin1( "HelloWorld" );    
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );

@@ -82,7 +82,7 @@ public:
     
     virtual int DigikamImageInfo::angle();
     virtual void setAngle( int angle );
-
+       
 private:
     QString             imageName_;
     QString             imageUrl_;
@@ -142,7 +142,10 @@ public:
 
 protected slots:
     void slot_onAddImageFinished(KIO::Job* job);
-    
+
+public slots:
+    void slotSelectionChanged( bool );    
+
 protected:
     QString askForCategory();
     

@@ -458,5 +458,11 @@ void DigikamKipiInterface::delImage( const KURL& url )
        }   
 }
 
+void DigikamKipiInterface::slotSelectionChanged( bool b )
+{
+    emit selectionChanged( b );
+}
+
+
 #include "kipiinterface.moc"
 
