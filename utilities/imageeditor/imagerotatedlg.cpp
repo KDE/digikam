@@ -19,7 +19,7 @@
  * 
  * ============================================================ */
 
-#define PI 3.14159265
+#define RAD2DEGCONST 0.0174532925
 
 // Imlib2 include.
 
@@ -157,13 +157,13 @@ void ImageRotateDlg::freerotation(double angle, uint *data, int w, int h)
     imlib_context_set_image(imTop);
 
     // Imlib2 use an angle in Radian, not in Degrees. We must convert that !
-    Imlib_Image im = imlib_create_rotated_image( angle * PI / 180.0 );
+    Imlib_Image im = imlib_create_rotated_image( angle * RAD2DEGCONST );
     
     // Calc distance for each angles to use for rotation.
-    int d1 = abs((int)((double)(h)*sin( angle * PI / 180.0) ));
-    int d2 = abs((int)((double)(w)*cos( angle * PI / 180.0) ));
-    int d3 = abs((int)((double)(w)*sin( angle * PI / 180.0) ));
-    int d4 = abs((int)((double)(h)*cos( angle * PI / 180.0) ));
+    int d1 = abs((int)((double)(h)*sin( angle * RAD2DEGCONST ) ));
+    int d2 = abs((int)((double)(w)*cos( angle * RAD2DEGCONST ) ));
+    int d3 = abs((int)((double)(w)*sin( angle * RAD2DEGCONST ) ));
+    int d4 = abs((int)((double)(h)*cos( angle * RAD2DEGCONST ) ));
     
     imlib_free_image();
     imlib_context_set_image(im);
