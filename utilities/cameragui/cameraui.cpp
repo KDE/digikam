@@ -35,6 +35,7 @@
 #include <qlineedit.h>
 #include <qprogressbar.h>
 #include <qtimer.h>
+#include <qfile.h>
 
 #include <kmessagebox.h>
 #include <kglobal.h>
@@ -50,6 +51,13 @@
 #if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
 #endif
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}
 
 #include "albummanager.h"
 #include "album.h"
@@ -122,9 +130,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     // About popupmenu button using a slot for calling the camera interface
     // anchor in Digikam handbook.
     
-    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(), false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(),
+                                        false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Digikam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Digikam Handbook"),
+                                 this, SLOT(slotHelp()), 0, -1, 0);
     m_helpBtn->setPopup( helpMenu->menu() );
 
     mainLayout->addLayout(btnLayout);
@@ -137,10 +147,15 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_renameCustomizer = new RenameCustomizer(m_advBox);
     m_view->setRenameCustomizer(m_renameCustomizer);
 
-    QVGroupBox* rotateBox = new QVGroupBox(i18n("Auto Orient"), m_advBox);
+    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera provided Information(EXIF)"),
+                                         m_advBox);
     m_autoRotateCheck = new QCheckBox(i18n("Automatically rotate/flip using "
                                            "camera provided information (EXIF)"),
-                                      rotateBox);
+                                      exifBox);
+    m_autoAlbumCheck = new QCheckBox(i18n("Download photos into automatically "
+                                          "created date based sub-albums of "
+                                          "destination album"),
+                                      exifBox);
     
     mainLayout->addWidget(m_advBox);
     
@@ -339,85 +354,15 @@ void CameraUI::slotErrorMsg(const QString& msg)
 
 void CameraUI::slotDownloadSelected()
 {
-    AlbumManager* man = AlbumManager::instance();
-    QString libPath(man->getLibraryPath());
-    QString currPath;
-
-    Album* album = man->currentAlbum();
-    if (!album || album->type() != Album::PHYSICAL)
-        currPath = libPath;
-    else
-    {
-        currPath = ((PAlbum*)album)->getKURL().path();
-    }
-
-    QString header(i18n("Select Destination Album for "
-                        "Importing Camera Images"));
-
-    QString newDirName;
-    QIconViewItem* firstItem = m_view->firstItem();
-    if (firstItem)
-    {
-        CameraIconViewItem* iconItem =
-            static_cast<CameraIconViewItem*>(firstItem);
-        
-        QDateTime date;
-        date.setTime_t(iconItem->itemInfo()->mtime);
-#if KDE_IS_VERSION(3,2,0)
-        newDirName = QString("%1, %2, %3")
-                     .arg(KGlobal::locale()->calendar()->year(date.date()))
-                     .arg(KGlobal::locale()->calendar()->monthName(date.date()))
-                     .arg(KGlobal::locale()->calendar()->day(date.date()));
-#else
-        newDirName = QString("%1, %2, %3")
-                     .arg(date.date().year())
-                     .arg(KGlobal::locale()->monthName(date.date().month()))
-                     .arg(date.date().day());
-#endif
-    }
-    
-    KURL url = DirSelectDialog::selectDir(libPath, currPath,
-                                          this, header, newDirName);
-    if (!url.isValid())
-        return;
-    
-    m_controller->downloadPrep();
-
-    QString downloadName;
-    QString name;
-    QString folder;
-    bool    autoRotate;
-
-    autoRotate = m_autoRotateCheck->isChecked();
-
-    int total = 0;
-    for (QIconViewItem* item = m_view->firstItem(); item;
-         item = item->nextItem())
-    {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        if (iconItem->isSelected())
-        {
-            folder = iconItem->m_itemInfo->folder;
-            name   = iconItem->m_itemInfo->name;
-            downloadName = iconItem->getDownloadName();
-
-            KURL u(url);
-            u.addPath(downloadName.isEmpty() ? name : downloadName);
-            
-            m_controller->download(folder, name, u.path(), autoRotate);
-            total++;
-        }
-    }
-
-    if (total <= 0)
-        return;
-    
-    m_progress->setProgress(0);
-    m_progress->setTotalSteps(total);
-    m_progress->show();
+    slotDownload(true);
 }
 
 void CameraUI::slotDownloadAll()
+{
+    slotDownload(false);
+}
+
+void CameraUI::slotDownload(bool onlySelected)
 {
     AlbumManager* man = AlbumManager::instance();
     QString libPath(man->getLibraryPath());
@@ -466,22 +411,47 @@ void CameraUI::slotDownloadAll()
     QString downloadName;
     QString name;
     QString folder;
+    time_t  mtime;
     bool    autoRotate;
+    bool    autoAlbum;
 
     autoRotate = m_autoRotateCheck->isChecked();
+    autoAlbum  = m_autoAlbumCheck->isChecked();
 
     int total = 0;
     for (QIconViewItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
+        if (onlySelected && !(item->isSelected()))
+            continue;
+
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
         folder = iconItem->m_itemInfo->folder;
         name   = iconItem->m_itemInfo->name;
         downloadName = iconItem->getDownloadName();
+        mtime        = iconItem->m_itemInfo->mtime;
         
         KURL u(url);
-        u.addPath(downloadName.isEmpty() ? name : downloadName);
-            
+        if (autoAlbum)
+        {
+            QDateTime date;
+            date.setTime_t(mtime);
+            QString dirName(date.toString("yyyy-MM-dd"));
+            QString errMsg;
+            if (!createAutoAlbum(url, dirName, date.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return;
+            }
+
+            u.addPath(dirName);
+            u.addPath(downloadName.isEmpty() ? name : downloadName);
+        }
+        else
+        {
+            u.addPath(downloadName.isEmpty() ? name : downloadName);
+        }
+
         m_controller->download(folder, name, u.path(), autoRotate);
         total++;
     }
@@ -632,6 +602,7 @@ void CameraUI::readSettings()
     w = config->readNumEntry("Width", 500);
     h = config->readNumEntry("Height", 500);
     m_autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
+    m_autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
 
     resize(w, h);
 }
@@ -644,7 +615,47 @@ void CameraUI::saveSettings()
     config->writeEntry("Width", width());
     config->writeEntry("Height", height());
     config->writeEntry("AutoRotate", m_autoRotateCheck->isChecked());
+    config->writeEntry("AutoAlbum", m_autoAlbumCheck->isChecked());
     config->sync();
+}
+
+bool CameraUI::createAutoAlbum(const KURL& parentURL,
+                               const QString& name,
+                               const QDate& date,
+                               QString& errMsg)
+{
+    KURL u(parentURL);
+    u.addPath(name);
+
+    // first stat to see if the album exists
+    struct stat buf;
+    if (::stat(QFile::encodeName(u.path()), &buf) == 0)
+    {
+        // now check if its really a directory
+        if (S_ISDIR(buf.st_mode))
+            return true;
+        else
+        {
+            errMsg = i18n("A file with same name (%1) exists in folder %2")
+                     .arg(name)
+                     .arg(parentURL.path());
+            return false;
+        }
+    }
+
+    // looks like the directory does not exist, try to create it
+
+    AlbumManager* aman = AlbumManager::instance();
+    PAlbum* parent =  aman->findPAlbum(parentURL);
+    if (!parent)
+    {
+        errMsg = i18n("Failed to find Album for path '%1'")
+                 .arg(parentURL.path());
+        return false;
+    }
+
+    return aman->createPAlbum(parent, name, QString(""),
+                              date, QString(""), errMsg);
 }
 
 #include "cameraui.moc"

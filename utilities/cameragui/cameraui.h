@@ -38,6 +38,8 @@ class QVBox;
 class QLineEdit;
 class QPopupMenu;
 class QProgressBar;
+class QDate;
+class KURL;
 
 class CameraIconView;
 class CameraIconViewItem;
@@ -66,6 +68,10 @@ private:
 
     void readSettings();
     void saveSettings();
+    bool createAutoAlbum(const KURL& parentURL,
+                         const QString& name,
+                         const QDate& date,
+                         QString& errMsg);
     
     CameraIconView*   m_view;
 
@@ -82,6 +88,7 @@ private:
     QVBox*            m_advBox;
     RenameCustomizer* m_renameCustomizer;
     QCheckBox*        m_autoRotateCheck;
+    QCheckBox*        m_autoAlbumCheck;
     
     QLabel*           m_status;
     AnimWidget*       m_anim;
@@ -104,6 +111,7 @@ private slots:
 
     void slotDownloadSelected();
     void slotDownloadAll();
+    void slotDownload(bool onlySelected);
     void slotDeleteSelected();
     void slotDeleteAll();
 
