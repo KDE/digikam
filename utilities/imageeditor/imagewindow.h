@@ -107,6 +107,7 @@ private slots:
 
     void slotToggleAutoZoom();
     void slotToggleFullScreen();
+    void slotEscapePressed();
 
     void slotResize();
     void slotRotate();

@@ -47,6 +47,7 @@
 #include <kdeversion.h>
 #include <kmenubar.h>
 #include <ktoolbar.h>
+#include <kaccel.h>
 
 #include <libkexif/kexif.h>
 #include <libkexif/kexifdata.h>
@@ -124,6 +125,14 @@ ImageWindow::ImageWindow()
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel,1);
+
+    // -- Some Accels not available from actions -------------
+
+    KAccel* accel = new KAccel(this);
+    accel->insert("Exit fullscreen", i18n("Exit fullscreen"),
+                  i18n("Exit out of the fullscreen mode"),
+                  Key_Escape, this, SLOT(slotEscapePressed()),
+                  false, true);
     
     // -- setup connections ---------------------------
     
@@ -884,6 +893,14 @@ void ImageWindow::slotToggleFullScreen()
 
         showFullScreen();
         m_fullScreen = true;
+    }
+}
+
+void ImageWindow::slotEscapePressed()
+{
+    if (m_fullScreen) 
+    {
+        m_guiClient->m_fullScreenAction->activate();
     }
 }
 
