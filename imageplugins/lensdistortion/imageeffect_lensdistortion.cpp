@@ -380,7 +380,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    QHBoxLayout* l = new QHBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the spherical aberration correction. "
@@ -404,7 +404,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Main:"), gbox2);
     m_mainSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_mainSlider");
     m_mainSlider->setTickmarks(QSlider::Below);
-    m_mainSlider->setTickInterval(100);
+    m_mainSlider->setTickInterval(200);
     m_mainSlider->setTracking ( false );
     m_mainSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_mainSpinBox");
     m_mainSpinBox->setValue(0);
@@ -422,7 +422,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Edge:"), gbox2);
     m_edgeSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_edgeSlider");
     m_edgeSlider->setTickmarks(QSlider::Below);
-    m_edgeSlider->setTickInterval(100);
+    m_edgeSlider->setTickInterval(200);
     m_edgeSlider->setTracking ( false );  
     m_edgeSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_edgeSpinBox");
     m_edgeSpinBox->setValue(0);
@@ -440,7 +440,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Zoom:"), gbox2);
     m_rescaleSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_rescaleSlider");
     m_rescaleSlider->setTickmarks(QSlider::Below);
-    m_rescaleSlider->setTickInterval(100);
+    m_rescaleSlider->setTickInterval(200);
     m_rescaleSlider->setTracking ( false );  
     m_rescaleSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_rescaleSpinBox");
     m_rescaleSpinBox->setValue(0);
@@ -456,7 +456,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label4 = new QLabel(i18n("Brighten:"), gbox2);
     m_brightenSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_brightenSlider");
     m_brightenSlider->setTickmarks(QSlider::Below);
-    m_brightenSlider->setTickInterval(100);
+    m_brightenSlider->setTickInterval(200);
     m_brightenSlider->setTracking ( false );  
     
     m_brightenSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_brightenSpinBox");
