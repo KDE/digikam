@@ -1954,6 +1954,7 @@ void AlbumIconView::slotRearrange()
     if (d->rearrangeTimer->isActive())
         return;
 
+    updateBanner();
     slotUpdate();
 }
 
