@@ -89,8 +89,6 @@ public:
     float brightness;
     float contrast;
 
-    QBitmap qmask;
-    
     Imlib_Context        context;
     Imlib_Image          image;
     Imlib_Color_Modifier cmod;
@@ -379,101 +377,62 @@ bool ImlibInterface::hasAlpha()
     return alpha;
 }
 
-void ImlibInterface::paint(QPaintDevice* p, int sx, int sy, int sw, int sh,
-                           int dx, int dy, int antialias)
+void ImlibInterface::paintOnDevice(QPaintDevice* p,
+                                   int sx, int sy, int sw, int sh,
+                                   int dx, int dy, int dw, int dh,
+                                   int antialias)
 {
     if (!d->image)
         return;
-    
+
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
-
-    bool alpha = false;
-    
     imlib_context_set_drawable(p->handle());
-    if (imlib_image_has_alpha()) {
-        alpha = true;
-        if (d->qmask.width()  != d->width ||
-            d->qmask.height() != d->height)
-            d->qmask.resize(d->width, d->height);
-        imlib_context_set_mask(d->qmask.handle());
-        imlib_context_set_blend(1);
-    }
-    else {
-        imlib_context_set_mask(0);
-        imlib_context_set_blend(0);
-    }        
     imlib_context_set_anti_alias(antialias);
-    
-    int x, y, w, h;
-    x = QMAX(int(sx / d->zoom), 0);
-    y = QMAX(int(sy / d->zoom), 0);
-    w = QMIN(int(sw / d->zoom), d->origWidth);
-    h = QMIN(int(sh / d->zoom), d->origHeight);
-
 
     // need to set this, bug in imlib2 causes crash
     imlib_context_set_color_modifier(0);
 
-    imlib_render_image_part_on_drawable_at_size(x, y, w, h,
-                                                dx, dy, sw, sh);
+    imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
+                                                dx, dy, dw, dh);
 
     imlib_context_pop();
 }
 
-void ImlibInterface::paint(QPaintDevice* p, int sx, int sy,
-                           int sw, int sh, int dx, int dy,
-                           int antialias,
-                           int mx, int my, int mw, int mh)
+void ImlibInterface::paintOnDevice(QPaintDevice* p,
+                                   int sx, int sy, int sw, int sh,
+                                   int dx, int dy, int dw, int dh,
+                                   int mx, int my, int mw, int mh,
+                                   int antialias)
 {
     if (!d->image)
         return;
 
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
-
-    bool alpha = false;
-
     imlib_context_set_drawable(p->handle());
-    if (imlib_image_has_alpha()) {
-        alpha = true;
-        if (d->qmask.width()  != d->width ||
-            d->qmask.height() != d->height)
-            d->qmask.resize(d->width, d->height);
-        imlib_context_set_mask(d->qmask.handle());
-        imlib_context_set_blend(1);
-    }
-    else {
-        imlib_context_set_mask(0);
-        imlib_context_set_blend(0);
-    }
     imlib_context_set_anti_alias(antialias);
 
-    int x, y, w, h;
-    x = QMAX(int(sx / d->zoom), 0);
-    y = QMAX(int(sy / d->zoom), 0);
-    w = QMIN(int(sw / d->zoom), d->origWidth);
-    h = QMIN(int(sh / d->zoom), d->origHeight);
-    
     // need to set this, bug in imlib2 causes crash
     imlib_context_set_color_modifier(0);
 
-    Imlib_Image bot = imlib_create_cropped_scaled_image(x, y, w, h, sw, sh);
+    Imlib_Image bot = imlib_create_cropped_scaled_image(sx, sy, sw, sh,
+                                                        dw, dh);
 
     // create the mask -----------------------------------
 
-    Imlib_Image top = imlib_create_image(sw, sh);
+    Imlib_Image top = imlib_create_image(dw, dh);
     imlib_context_set_image(top);
     DATA32* data = imlib_image_get_data();
     DATA32* ptr = data;
 
-    for (int j=0; j<sh; j++) {
-        for (int i=0; i<sw; i++) {
+    for (int j=0; j<dh; j++) {
+        for (int i=0; i<dw; i++) {
             if (i >= (mx-dx) && i <= (mx-dx+mw-1) &&
                 j >= (my-dy) && j <= (my-dy+mh-1))
                 *(ptr++) = 0x00000000;
             else
-                *(ptr++) = 0xaa000011;
+                *(ptr++) = 0xBBAAAAAA;
         }
     }
     imlib_image_put_back_data(data);
@@ -482,8 +441,9 @@ void ImlibInterface::paint(QPaintDevice* p, int sx, int sy,
     // blend the mask -----------------------------------
     imlib_context_set_image(bot);
     imlib_context_set_blend(1);
-    imlib_blend_image_onto_image(top, 0, 0, 0, sw, sh,
-                                 0, 0, sw, sh);
+    imlib_blend_image_onto_image(top, 0,
+                                 0, 0, dw, dh,
+                                 0, 0, dw, dh);
 
     imlib_render_image_on_drawable(dx, dy);
 

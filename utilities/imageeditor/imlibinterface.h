@@ -57,14 +57,15 @@ public:
         
     void zoom(double val);
 
-    void paint(QPaintDevice* p, int sx, int sy,
-               int sw, int sh, int dx, int dy,
-               int antialias=0);
-
-    void paint(QPaintDevice* p, int sx, int sy,
-               int sw, int sh, int dx, int dy,
-               int antialias,
-               int mx, int my, int mw, int mh);
+    void paintOnDevice(QPaintDevice* p,
+                       int sx, int sy, int sw, int sh,
+                       int dx, int dy, int dw, int dh,
+                       int antialias);
+    void paintOnDevice(QPaintDevice* p,
+                       int sx, int sy, int sw, int sh,
+                       int dx, int dy, int dw, int dh,
+                       int mx, int my, int mw, int mh,
+                       int antialias);
     
     int  width();
     int  height();

@@ -25,7 +25,6 @@
 // Qt includes.
 
 #include <qscrollview.h>
-#include <qcolor.h>
 
 class QString;
 class QPixmap;
@@ -33,6 +32,7 @@ class QPaintEvent;
 class QResizeEvent;
 class QWheelEvent;
 class QKeyEvent;
+class QColor;
 
 class CanvasPrivate;
 
@@ -64,9 +64,9 @@ public:
 
     void resizeImage(int w, int h);
     void rotateImage(double angle);
+
+    void setBackgroundColor(const QColor& color);
     
-    QColor m_backgroundColor;
-        
 protected:
     
     void resizeEvent(QResizeEvent* e);
@@ -79,9 +79,9 @@ protected:
 private:
 
     void updateAutoZoom();
-    void paintViewportRect(const QRect& vr, bool aa, bool mask);
     void updateContentsSize();
     void drawRubber();
+    void paintViewport(const QRect& er, bool antialias);
 
     CanvasPrivate *d;
 
@@ -108,7 +108,6 @@ private slots:
 
     void slotSelected();
     void slotPaintSmooth();
-    void slotPaintStrips();
     void slotRequestUpdate();
     
 signals:

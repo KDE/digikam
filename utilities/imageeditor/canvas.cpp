@@ -40,7 +40,8 @@
 #include <qimage.h>
 #include <qregion.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
+#include <qcache.h>
+#include <qcolor.h>
 
 // Local includes.
 
@@ -49,15 +50,22 @@
 
 using namespace Digikam;
 
-const double maxZoom_ = 8.0;
-
 class CanvasPrivate {
 
 public:
 
+    CanvasPrivate() :
+        maxZoom(8.0),
+        tileSize(512)
+    {
+        tileCache.setMaxCost(20);
+        tileCache.setAutoDelete(true);
+    }
+
+    
     ImlibInterface    *im;
-    QPixmap*           qpix;
     QPixmap            qcheck;
+    QColor             bgColor;
                      
     double             zoom;
     bool               autoZoom;
@@ -76,9 +84,11 @@ public:
     int                midButtonY;
 
     QTimer            *paintTimer;
-    QTimer            *stripPaintTimer;
 
-    QValueList<QRect>  stripList;
+    const double       maxZoom;
+    const int          tileSize;
+    QCache<QPixmap>    tileCache;
+    QPixmap*           tileTmpPix;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -86,15 +96,14 @@ Canvas::Canvas(QWidget *parent)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
     
-    // Background color per default = black.
-    m_backgroundColor.setRgb( 0, 0, 0 );     
-
     d = new CanvasPrivate;
 
     d->im = ImlibInterface::instance();
     d->zoom = 1.0;
     d->autoZoom = false;
     d->fullScreen = false;
+    d->bgColor.setRgb( 0, 0, 0 );
+    d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
 
     d->rubber = 0;
     d->pressedMoved  = false;
@@ -107,9 +116,7 @@ Canvas::Canvas(QWidget *parent)
     d->midButtonX       = 0;
     d->midButtonY       = 0;
 
-    d->qpix   = 0;
     d->paintTimer = new QTimer;
-    d->stripPaintTimer = new QTimer;
     
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
@@ -125,8 +132,6 @@ Canvas::Canvas(QWidget *parent)
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
             SLOT(slotPaintSmooth()));
-    connect(d->stripPaintTimer, SIGNAL(timeout()),
-            SLOT(slotPaintStrips()));
 
     viewport()->setMouseTracking(false);
 }
@@ -136,11 +141,7 @@ Canvas::~Canvas()
     d->paintTimer->stop();
     delete d->paintTimer;
 
-    d->stripPaintTimer->stop();
-    delete d->stripPaintTimer;
-    
-    if (d->qpix)
-        delete d->qpix;
+    delete d->tileTmpPix;
     
     delete d->im;
 
@@ -158,13 +159,9 @@ void Canvas::load(const QString& filename)
         emit signalSelected(false);
     }
 
-    d->stripPaintTimer->stop();
-    d->stripList.clear();
-
-    
     viewport()->setUpdatesEnabled(false);
-    
-    d->stripList.clear();
+
+    d->tileCache.clear();
     d->im->load(filename);
 
     d->zoom = 1.0;
@@ -176,18 +173,7 @@ void Canvas::load(const QString& filename)
     updateContentsSize();
 
     viewport()->setUpdatesEnabled(true);
-
-    //viewport()->update();
-
-    /* instead of painting the entire canvas split into
-       small strip paint events */
-
-    d->stripList.clear();
-    for (int j=0; j<viewport()->height(); j+=20)
-    {
-        d->stripList.append(QRect(0, j, viewport()->width(), 20));
-    }
-    d->stripPaintTimer->start(0, true);
+    viewport()->update();
 
     emit signalChanged(false);
     emit signalZoomChanged(d->zoom);
@@ -242,8 +228,8 @@ void Canvas::updateAutoZoom()
 
     srcWidth  = d->im->origWidth();
     srcHeight = d->im->origHeight();
-    dstWidth  = frameRect().width() - 20;
-    dstHeight = frameRect().height() - 20;
+    dstWidth  = contentsRect().width();
+    dstHeight = contentsRect().height();
 
     if (dstWidth > srcWidth &&
         dstHeight > srcHeight)
@@ -259,7 +245,7 @@ void Canvas::updateAutoZoom()
 
 void Canvas::updateContentsSize()
 {
-    //viewport()->setUpdatesEnabled(false);
+    viewport()->setUpdatesEnabled(false);
 
     d->paintTimer->stop();
     d->ltActive      = false;
@@ -282,8 +268,8 @@ void Canvas::updateContentsSize()
     if (visibleWidth() > wZ || visibleHeight() > hZ) {
 
         // Center the image
-        int centerx = frameRect().width()/2;
-        int centery = frameRect().height()/2;
+        int centerx = contentsRect().width()/2;
+        int centery = contentsRect().height()/2;
         int xoffset = int(centerx - wZ/2);
         int yoffset = int(centery - hZ/2);
         xoffset = QMAX(xoffset, 0);
@@ -296,12 +282,9 @@ void Canvas::updateContentsSize()
         d->pixmapRect = QRect(0, 0, wZ, hZ);
     }
 
-    if (!d->qpix) 
-        d->qpix = new QPixmap();
-    d->qpix->resize(frameRect().width(), frameRect().height());
-
+    d->tileCache.clear();    
     resizeContents(wZ, hZ);
-    //viewport()->setUpdatesEnabled(true);
+    viewport()->setUpdatesEnabled(true);
 }
 
 
@@ -325,90 +308,124 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
 
-    if (d->zoom > 1.0) {
-        int x = er.x();
-        int y = er.y();
-        int w = er.width();
-        int h = er.height();
-
-        x = int(int(x/d->zoom)*d->zoom)  - 2*int(d->zoom);
-        y = int(int(y/d->zoom)*d->zoom)  - 2*int(d->zoom);
-        w = int(ceil(w/d->zoom)*d->zoom) + 2*int(d->zoom);
-        h = int(ceil(h/d->zoom)*d->zoom) + 2*int(d->zoom);
-        er = QRect(x,y,w,h);
-    }
-
-
-    paintViewportRect(er, d->zoom <= 1.0, !d->pressedMoving);
-
-    if (!d->pressedMoving && (d->zoom > 1.0))
+    paintViewport(er, d->zoom <= 1.0);
+    if (d->zoom > 1.0)
         d->paintTimer->start(100, true);
 }
 
-void Canvas::paintViewportRect(const QRect& vr, bool aa, bool mask)
+void Canvas::paintViewport(const QRect& er, bool antialias)
 {
-    QRect cr(viewportToContents(vr.topLeft()), vr.size());
-    QRegion clipRegion(0, 0, cr.width(), cr.height());
+    QRect cr(viewportToContents(er.topLeft()),
+             viewportToContents(er.bottomRight()));
+
+    QRegion clipRegion(er);
     
-    QRect ir(d->pixmapRect.intersect(cr));
-    if (!ir.isEmpty()) {
+    cr = d->pixmapRect.intersect(cr);
+    if (!cr.isEmpty())
+    {
+        clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
 
-        clipRegion -= QRegion(ir.x()-cr.x(), ir.y()-cr.y(),
-                              ir.width(), ir.height());
-        
-        int x = ir.x() - d->pixmapRect.x();
-        int y = ir.y() - d->pixmapRect.y();
-        int w = ir.width();
-        int h = ir.height();
-        if (d->im->hasAlpha()) {
-            QPainter p(d->qpix);
-            p.drawTiledPixmap(ir.x()-cr.x(), ir.y()-cr.y(),
-                              w, h, d->qcheck, x % 16, y % 16);
-            p.end();
-        }
+        QRect pr = QRect(cr.x()-d->pixmapRect.x(),
+                         cr.y()-d->pixmapRect.y(),
+                         cr.width(), cr.height());
 
-        if (d->rubber && d->pressedMoved && mask)
+        int x1 = (int)floor((float)pr.x()/(float)d->tileSize)      * d->tileSize;
+        int y1 = (int)floor((float)pr.y()/(float)d->tileSize)      * d->tileSize;
+        int x2 = (int)ceilf((float)pr.right()/(float)d->tileSize)  * d->tileSize;
+        int y2 = (int)ceilf((float)pr.bottom()/(float)d->tileSize) * d->tileSize;
+
+        QPixmap pix(d->tileSize, d->tileSize);
+        int sx, sy, sw, sh;
+
+        for (int j=y1; j<y2; j+=d->tileSize)
         {
-            QRect rr(d->rubber->normalize());
-            rr = rr.intersect(cr);
-            rr = QRect(rr.x() - cr.x(),
-                       rr.y() - cr.y(),
-                       rr.width(), rr.height());
-
-            d->im->paint(d->qpix, x, y, w, h, ir.x()-cr.x(), ir.y()-cr.y(),
-                         aa ? 1:0, rr.x(), rr.y(), rr.width(), rr.height());
-
-            rr = QRect(d->rubber->normalize());
-            rr = QRect(rr.x() - cr.x(), rr.y() - cr.y(),
-                       rr.width(), rr.height());
-            QPainter p(d->qpix);
-            p.setPen(QPen(QColor(250,250,255),1));
-            p.drawRect(rr);
-            if (rr.width() >= 10 && rr.height() >= 10)
+            for (int i=x1; i<x2; i+=d->tileSize)
             {
-                p.drawRect(rr.x(), rr.y(), 5, 5);
-                p.drawRect(rr.x(), rr.y()+rr.height()-5, 5, 5);
-                p.drawRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5);
-                p.drawRect(rr.x()+rr.width()-5, rr.y(), 5, 5);
+                QString key = QString("%1,%1")
+                              .arg(i)
+                              .arg(j);
+
+                QPixmap *pix = d->tileCache.find(key);
+                
+                if (!pix)
+                {
+                    if (antialias)
+                    {
+                        pix = new QPixmap(d->tileSize, d->tileSize);
+                        d->tileCache.insert(key, pix);
+                    }
+                    else
+                    {
+                        pix = d->tileTmpPix;
+                    }
+
+                    if (d->im->hasAlpha())
+                    {
+                        QPainter p(pix);
+                        p.drawTiledPixmap(0, 0, d->tileSize, d->tileSize,
+                                          d->qcheck, 0, 0);
+                        p.end();
+                    }
+                    else
+                    {
+                        pix->fill(d->bgColor);
+                    }
+
+                    sx = (int)floor(i/d->zoom);
+                    sy = (int)floor(j/d->zoom);
+                    sw = (int)floor(d->tileSize/d->zoom);
+                    sh = (int)floor(d->tileSize/d->zoom);
+
+                    if (d->rubber && d->pressedMoved)
+                    {
+                        QRect rr(d->rubber->normalize());
+                        rr = QRect(d->rubber->normalize());
+                        QRect  r(i,j,d->tileSize,d->tileSize);
+                        d->im->paintOnDevice(pix, sx, sy, sw, sh,
+                                             0, 0, d->tileSize, d->tileSize,
+                                             rr.x() - i, rr.y() - j,
+                                             rr.width(), rr.height(),
+                                             antialias);
+
+                        rr = QRect(d->rubber->normalize());
+                        rr.moveBy(-i, -j); 
+                        QPainter p(pix);
+                        p.setPen(QPen(QColor(250,250,255),1));
+                        p.drawRect(rr);
+                        if (rr.width() >= 10 && rr.height() >= 10)
+                        {
+                            p.drawRect(rr.x(), rr.y(), 5, 5);
+                            p.drawRect(rr.x(), rr.y()+rr.height()-5, 5, 5);
+                            p.drawRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5);
+                            p.drawRect(rr.x()+rr.width()-5, rr.y(), 5, 5);
+                        }
+                        p.end();
+                    }
+                    else
+                    {
+                        d->im->paintOnDevice(pix, sx, sy, sw, sh,
+                                             0, 0, d->tileSize, d->tileSize,
+                                             antialias);
+                    }
+                }
+
+                QRect  r(i,j,d->tileSize,d->tileSize);
+                QRect  ir = pr.intersect(r);
+                QPoint pt(contentsToViewport(QPoint(ir.x()+d->pixmapRect.x(),
+                                                    ir.y()+d->pixmapRect.y())));
+
+                bitBlt(viewport(), pt.x(), pt.y(),
+                       pix,
+                       ir.x()-r.x(), ir.y()-r.y(),
+                       ir.width(), ir.height());
             }
-            p.end();
-
         }
-        else {
-            d->im->paint(d->qpix, x, y, w, h,
-                         ir.x()-cr.x(), ir.y()-cr.y(),
-                         aa ? 1:0);
-        }
-
     }
 
-    QPainter p(d->qpix);
-    p.setClipRegion(clipRegion);
-    p.fillRect(0, 0, cr.width(), cr.height(), m_backgroundColor);
-    p.end();
-
-    bitBlt(viewport(), vr.x(), vr.y(), d->qpix, 0, 0,
-           vr.width(), vr.height(), Qt::CopyROP, true);
+    QPainter painter(viewport());
+    painter.setClipRegion(clipRegion);
+    painter.fillRect(er, d->bgColor);
+    painter.end();
 }
 
 void Canvas::drawRubber()
@@ -498,11 +515,16 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
     d->rubber = new QRect(e->x(), e->y(), 0, 0);
 
+    if (d->pressedMoved)
+    {
+        d->tileCache.clear();
+        viewport()->update();
+    }
+    
     d->pressedMoved  = false;
     d->pressedMoving = true;
 
     viewport()->setMouseTracking(false);
-    viewport()->update();
 }
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
@@ -594,7 +616,9 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         viewport()->update();
     }
 
-    if (d->pressedMoved && d->rubber) {
+    if (d->pressedMoved && d->rubber)
+    {
+        d->tileCache.clear();
         viewport()->setMouseTracking(true);
         emit signalSelected(true);
     }
@@ -645,12 +669,12 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 
 bool Canvas::maxZoom()
 {
-    return ((d->zoom + 0.1) >= maxZoom_);
+    return ((d->zoom + 1.0/16.0) >= d->maxZoom);
 }
 
 bool Canvas::minZoom()
 {
-    return ((d->zoom - 0.1) <= 0.1);
+    return ((d->zoom - 1.0/16.0) <= 0.1);
 }
 
 bool Canvas::exifRotated()
@@ -663,7 +687,7 @@ void Canvas::slotIncreaseZoom()
     if (d->autoZoom || maxZoom())
         return;
 
-    d->zoom = d->zoom + 0.1;
+    d->zoom = d->zoom + 1.0/16.0;
 
     d->im->zoom(d->zoom);
     
@@ -678,7 +702,7 @@ void Canvas::slotDecreaseZoom()
     if (d->autoZoom || minZoom())
         return;
 
-    d->zoom = d->zoom - 0.1;    
+    d->zoom = d->zoom - 1.0/16.0;    
 
     d->im->zoom(d->zoom);
 
@@ -850,6 +874,15 @@ void Canvas::rotateImage(double angle)
     emit signalChanged(true);
 }
 
+void Canvas::setBackgroundColor(const QColor& color)
+{
+    if (d->bgColor == color)
+        return;
+    
+    d->bgColor = color;
+    viewport()->update();
+}
+
 void Canvas::slotRestore()
 {
     d->im->restore();
@@ -911,24 +944,7 @@ void Canvas::slotPaintSmooth()
     if (d->paintTimer->isActive())
         return;
 
-    QRect cr(contentsX(), contentsY(),
-             visibleWidth(), visibleHeight());
-    QRect vr(contentsToViewport(cr.topLeft()),
-             cr.size());
-    paintViewportRect(vr, true, true);
-}
-
-void Canvas::slotPaintStrips()
-{
-    if (d->stripList.isEmpty())
-        return;
-    
-    for (QValueList<QRect>::iterator it=d->stripList.begin();
-         it != d->stripList.end(); ++it)
-    {
-        QRect er(*it);
-        viewport()->repaint(er.x(), er.y(), er.width(), er.height(), false);
-    }
+    paintViewport(contentsRect(), true);
 }
 
 #include "canvas.moc"

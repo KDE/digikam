@@ -270,9 +270,9 @@ void ImageWindow::applySettings()
     config->setGroup("ImageViewer Settings");
 
     // Background color.
-    QColor Black(Qt::black);
-    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor",
-                                                         &Black);
+    QColor bgColor(Qt::black);
+    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor",
+                                                        &bgColor));
     m_canvas->update();
 
     // JPEG compression value.
