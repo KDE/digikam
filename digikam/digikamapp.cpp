@@ -554,8 +554,8 @@ void DigikamApp::loadPlugins()
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
-    ignores << QString::fromLatin1( "HelloWorld" );    
-    ignores << QString::fromLatin1( "KameraKlient" );    
+    ignores.append( "HelloWorld" );    
+    ignores.append( "KameraKlient" );    
     
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );
     
