@@ -26,8 +26,12 @@
 
 #include <qwidget.h>
 
+class QLabel;
+class QStringList;
+
 class KColorButton;
 class KIntNumInput;
+class KListView;
 
 class SetupEditor : public QWidget
 {
@@ -39,13 +43,25 @@ public:
     ~SetupEditor();
 
     void applySettings();
+    QStringList getImagePluginsListEnable();
 
 private:
 
-    void readSettings();
-
+    QStringList   m_availableImagePluginList;
+    QStringList   m_enableImagePluginList;
+    
     KColorButton *m_backgroundColor;
+    
     KIntNumInput *m_JPEGcompression;
+    
+    QLabel       *m_pluginsNumber;
+    
+    KListView    *m_pluginList;
+    
+    void readSettings();
+    void initImagePluginsList();
+    void updateImagePluginsList(QStringList lista, QStringList listl);
+    
 };
 
 #endif // SETUPEDITOR_H 

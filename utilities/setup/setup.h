@@ -59,8 +59,9 @@ public:
           Page page=General);
     ~Setup();
 
-    SetupPlugins* pluginsPage_;
-
+    SetupPlugins     *pluginsPage_;
+    SetupEditor      *editorPage_;
+    
 private:
 
     QFrame           *page_general;
@@ -76,7 +77,6 @@ private:
     SetupExif        *exifPage_;
     SetupCollections *collectionsPage_;
     SetupMime        *mimePage_;
-    SetupEditor      *editorPage_;
     SetupCamera      *cameraPage_;
     SetupMisc        *miscPage_;
 

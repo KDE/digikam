@@ -62,6 +62,7 @@
 #include "albumsettings.h"
 #include "setup.h"
 #include "setupplugins.h"
+#include "setupeditor.h"
 #include "digikamview.h"
 #include "imagepluginloader.h"
 #include "digikamapp.h"
@@ -561,6 +562,7 @@ void DigikamApp::slotSetupCamera()
 void DigikamApp::slotSetupChanged()
 {
     m_setup->pluginsPage_->applyPlugins();
+    m_ImagePluginsLoader->loadPluginsFromList(m_setup->editorPage_->getImagePluginsListEnable());
     
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
@@ -648,7 +650,7 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_->loadPlugins();                             
     
-    new ImagePluginLoader(this);
+    m_ImagePluginsLoader = new ImagePluginLoader(this);
 }
 
 void DigikamApp::slotKipiPluginPlug()

@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imagepluginloader.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju and Gilles Caulier
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,8 +23,13 @@
 #ifndef IMAGEPLUGINLOADER_H
 #define IMAGEPLUGINLOADER_H
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qstring.h>
+
+// Local includes.
 
 #include "imageplugin.h"
 
@@ -38,11 +44,14 @@ public:
     static ImagePluginLoader* instance();
 
     QPtrList<Digikam::ImagePlugin>& pluginList();
+    void loadPluginsFromList(QStringList list);
     
 private:
 
     static ImagePluginLoader*      m_instance;
     QPtrList<Digikam::ImagePlugin> m_pluginList;
+    
+    Digikam::ImagePlugin* pluginIsLoaded(QString pluginName);
 };
 
 #endif /* IMAGEPLUGINLOADER_H */

@@ -1,10 +1,11 @@
 /* ============================================================
  * File  : imagepluginloader.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004 by Renchi Raju and Gilles Caulier
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,39 +20,100 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kdebug.h>
+#include <kconfig.h>
+#include <kapplication.h>
+
+// Local includes.
 
 #include "imagepluginloader.h"
 
 ImagePluginLoader* ImagePluginLoader::m_instance=0;
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent)
-    : QObject(parent)
+                 : QObject(parent)
 {
     m_instance = this;
 
+    // Load the ImagePlugins list who must be loaded (configured in setup dialog).
+    // If the config plugins list entry do not exist (like if this is the first time 
+    // to run with DigikamImagePlugins loading/unloading capabilty), then load all 
+    // ImagePlugins available on the system.
+    
+    QStringList imagePluginsList2Load;
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");  
+    
+    if ( config->readEntry("ImagePlugins List") == QString::null )   
+       {
+       KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
+       KTrader::OfferList::ConstIterator iter;
+    
+       for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
+          {
+          KService::Ptr service = *iter;
+          imagePluginsList2Load.append(service->name());
+          }
+       }
+    else
+       imagePluginsList2Load = config->readListEntry("ImagePlugins List");
+
+    loadPluginsFromList(imagePluginsList2Load);
+}
+
+void ImagePluginLoader::loadPluginsFromList(QStringList list)
+{
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
     
-    for (iter = offers.begin() ; iter != offers.end() ; ++iter) {
-
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+        {
         KService::Ptr service = *iter;
+        Digikam::ImagePlugin *plugin;
 
-        Digikam::ImagePlugin *plugin =
-            KParts::ComponentFactory
-            ::createInstanceFromService<Digikam::ImagePlugin>(service, this,
-                                                              0, 0);
+        if(!list.contains(service->name()))
+            {
+            if((plugin = pluginIsLoaded(service->name())) != NULL)
+                m_pluginList.remove(plugin);
+            }
+        else 
+            {
+            if( pluginIsLoaded(service->name()) )
+               continue;
+            else
+                {
+                plugin = KParts::ComponentFactory
+                         ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
 
-        if (plugin) {
-
-            m_pluginList.append(plugin);
-
-            kdDebug() << "ImagePluginLoader: Loaded plugin "
-                      << plugin->name() << endl;
+                if (plugin)
+                    {
+                    m_pluginList.append(plugin);
+                
+                    kdDebug() << "ImagePluginLoader: Loaded plugin "
+                              << plugin->name() << endl;
+                    }
+                }
+            }
         }
-    }
+}
+
+Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)
+{
+    if( m_pluginList.isEmpty() ) return NULL;
+
+    Digikam::ImagePlugin *plugin;
+        
+    for ( plugin = m_pluginList.first() ; plugin ; plugin = m_pluginList.next() )
+       {
+       if( plugin->name() == pluginName )
+          return plugin;
+       }
+           
+    return NULL;
 }
 
 ImagePluginLoader::~ImagePluginLoader()

@@ -23,7 +23,6 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qhgroupbox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
@@ -36,6 +35,8 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <klistview.h>
+#include <ktrader.h>
 
 // Local includes.
 
@@ -71,9 +72,9 @@ SetupEditor::SetupEditor(QWidget* parent )
    // --------------------------------------------------------
    
    QGroupBox *interfaceOptionsGroup = new QGroupBox(2,
-                                               Qt::Horizontal, 
-                                               i18n("Interface options"),
-                                               parent);
+                                                    Qt::Horizontal, 
+                                                    i18n("Interface options"),
+                                                    parent);
    
    QLabel *backgroundColorlabel = new QLabel( i18n("Background color:"), interfaceOptionsGroup);
    m_backgroundColor = new KColorButton(interfaceOptionsGroup);
@@ -84,14 +85,86 @@ SetupEditor::SetupEditor(QWidget* parent )
    layout->addWidget(interfaceOptionsGroup);
 
    // --------------------------------------------------------
+   
+   QGroupBox *imagePluginsListGroup = new QGroupBox(1,
+                                                    Qt::Horizontal, 
+                                                    i18n("Image plugins list"),
+                                                    parent);
+   
+   m_pluginsNumber = new QLabel(imagePluginsListGroup);
 
-   layout->addStretch();
+   m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
+   m_pluginList->addColumn( i18n( "Name" ) );
+   m_pluginList->addColumn( i18n( "Description" ) );
+   m_pluginList->setResizeMode( QListView::LastColumn );
+   m_pluginList->setAllColumnsShowFocus( true );
+   QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
+                                       "who must be enable/disable for the future "
+                                       "Digikam image editor instances."
+                                       "<p>Nota: the core image plugin cannot be disable."));
+   
+   layout->addWidget( imagePluginsListGroup );
+   
+   // --------------------------------------------------------
 
    readSettings();
+   initImagePluginsList();
+   updateImagePluginsList(m_availableImagePluginList, m_enableImagePluginList);
 }
 
 SetupEditor::~SetupEditor()
 {
+}
+
+void SetupEditor::initImagePluginsList()
+{
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
+    KTrader::OfferList::ConstIterator iter;
+    
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+        {
+        KService::Ptr service = *iter;
+        m_availableImagePluginList.append(service->name());
+        m_availableImagePluginList.append(service->comment());
+        }
+}
+
+void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
+{
+    QStringList::Iterator it = lista.begin();
+    m_pluginsNumber->setText(i18n("Plugins found: %1")
+                             .arg(lista.count()/2));
+    
+    while(  it != lista.end() )
+        {
+        QCheckListItem *item = new QCheckListItem (m_pluginList, *it, QCheckListItem::CheckBox);
+        item->setText(0, *it);
+        
+        if (listl.contains(*it)) 
+           item->setOn(true);
+        
+        if (*it == "ImagePlugin_Core")  // Always enable the Digikam core plugin.
+           item->setEnabled(false);
+        
+        it++;
+        item->setText(1, *it);
+        it++;
+        }
+}
+
+QStringList SetupEditor::getImagePluginsListEnable()
+{
+    QStringList imagePluginList;
+    QCheckListItem *item = (QCheckListItem*)m_pluginList->firstChild();
+        
+    while( item )
+        {
+        if (item->isOn())
+        imagePluginList.append(item->text(0));
+        item = (QCheckListItem*)item->nextSibling();
+        }
+
+    return imagePluginList;
 }
 
 void SetupEditor::applySettings()
@@ -101,6 +174,7 @@ void SetupEditor::applySettings()
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
+    config->writeEntry("ImagePlugins List", getImagePluginsListEnable());            
     config->sync();
 }
 
@@ -112,6 +186,8 @@ void SetupEditor::readSettings()
     config->setGroup("ImageViewer Settings");  
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
+    m_enableImagePluginList = config->readListEntry("ImagePlugins List");
+    
     delete Black;
 }
 

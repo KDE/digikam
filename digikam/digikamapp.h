@@ -47,6 +47,7 @@ class PluginLoader;
 class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
 class DigikamKipiInterface;
+class ImagePluginLoader;
 
 class KAction;
 class KActionMenu;
@@ -94,6 +95,8 @@ private:
 
     static DigikamApp     *m_instance;
     AlbumManager          *mAlbumManager;
+    
+    ImagePluginLoader     *m_ImagePluginsLoader;
     
     // For KIPI plugins support 
     KIPI::PluginLoader    *KipiPluginLoader_;
