@@ -24,6 +24,8 @@
 #ifndef ALBUMFILETIP_H
 #define ALBUMFILETIP_H
 
+// Qt includes.
+
 #include <qframe.h>
 #include <qstring.h>
 #include <qpixmap.h>

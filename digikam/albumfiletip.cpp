@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+// Qt includes. 
+ 
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -29,12 +31,17 @@
 #include <qpainter.h>
 #include <qapplication.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kfilemetainfo.h>
+#include <kmimetype.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kdeversion.h>
+
+// Local includes.
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -44,8 +51,8 @@
 #include "albumfiletip.h"
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-    : QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
-              WStyle_StaysOnTop | WX11BypassWM )
+            : QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
+                     WStyle_StaysOnTop | WX11BypassWM )
 {
     m_view     = view;
     m_iconItem = 0;
@@ -291,6 +298,9 @@ void AlbumFileTip::updateText()
 
     tip += cellBeg + i18n("Name:") + cellMid;
     tip += fi->url().fileName() + cellEnd;
+    
+    tip += cellBeg + i18n("Type:") + cellMid;
+    tip += KMimeType::findByURL(fi->url())->comment() + cellEnd;
 
     QDateTime date;
     date.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));

@@ -379,7 +379,7 @@ void ImageProperties::slotItemChanged()
                                   m_currfileURL);
 
     m_filename->setText( m_currfileURL.fileName() );
-    m_filetype->setText( KMimeType::findByURL(m_currfileURL)->name() );
+    m_filetype->setText( KMimeType::findByURL(m_currfileURL)->comment() );
 #if KDE_VERSION >= 0x30200
     KFileMetaInfo meta(m_currfileURL);
 #else
