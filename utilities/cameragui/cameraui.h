@@ -95,6 +95,8 @@ private:
     QProgressBar*     m_progress;
 
     CameraController* m_controller;
+    
+    KURL              m_lastDestURL;
 
 private slots:
 
@@ -125,6 +127,9 @@ private slots:
     void slotItemsSelected(bool selected);
     
     void slotToggleAdvanced();
+    
+signals:
+    void signalLastDestionation(const KURL&);
 };
 
 #endif /* CAMERAUI_H */

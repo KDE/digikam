@@ -245,6 +245,9 @@ bool CameraUI::isBusy() const
 
 void CameraUI::closeEvent(QCloseEvent* e)
 {
+    if(!m_lastDestURL.isEmpty())
+        emit signalLastDestionation(m_lastDestURL);
+
     delete m_controller;
     saveSettings();
     e->accept();    
@@ -450,14 +453,14 @@ void CameraUI::slotDownload(bool onlySelected)
         {
             u.addPath(downloadName.isEmpty() ? name : downloadName);
         }
-
         m_controller->download(folder, name, u.path(), autoRotate);
         total++;
     }
 
     if (total <= 0)
         return;
-    
+
+    m_lastDestURL = url;            
     m_progress->setProgress(0);
     m_progress->setTotalSteps(total);
     m_progress->show();
