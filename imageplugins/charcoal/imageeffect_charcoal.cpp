@@ -290,21 +290,25 @@ void ImageEffect_Charcoal::slotOk()
 QImage ImageEffect_Charcoal::charcoal(QImage &src, double pencil, double smooth)
 {
     if (m_cancel) return src;
-    m_progressBar->setValue(10); 
+    m_progressBar->setValue(0); 
     kapp->processEvents();    
     
-    // Detects edges in an image using pixel neighborhoods and an edge
+    // Detects edges in the image using pixel neighborhoods and an edge
     // detection mask.
     QImage img(KImageEffect::edge(src, pencil));
-    m_progressBar->setValue(20); 
+    m_progressBar->setValue(10); 
     kapp->processEvents();    
            
     if (m_cancel) return src;
     m_progressBar->setValue(20); 
     kapp->processEvents();    
     
-    // Blurs an image by convolving pixel neighborhoods.
+    // Blurs the image by convolving pixel neighborhoods.
+#if KDE_VERSION >= 0x30200
     img = KImageEffect::blur(img, pencil, smooth);
+#else
+    img = KImageEffect::blur(img, pencil);
+#endif
     m_progressBar->setValue(30); 
     kapp->processEvents();    
     
