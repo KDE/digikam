@@ -56,7 +56,7 @@
 
  <Menu name="help" >
     <text>&amp;Help</text>
-     <Action name="imageview_imagepluginshelp" />
+     <Action name="imagepluginshelp" />
  </Menu>
  
  <Merge/>

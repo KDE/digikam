@@ -62,10 +62,10 @@
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
 {
-    m_config = kapp->config();
+    m_config     = kapp->config();
     m_fullScreen = false;
     
-    QWidget* widget = new QWidget(this);
+    QWidget* widget  = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
     m_canvas = new Canvas(widget);
@@ -82,11 +82,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     KGlobal::iconLoader()->addAppDir("digikam");
 
-    ImagePluginLoader* imagePluginLoader
-        = new ImagePluginLoader(this);
+    m_imagePluginLoader = new ImagePluginLoader(this);
     
-    for (Digikam::ImagePlugin* plugin = imagePluginLoader->pluginList().first();
-         plugin; plugin = imagePluginLoader->pluginList().next())
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next())
     {
         if (plugin)
         {
@@ -100,19 +99,28 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     applySettings();
 
+    //-------------------------------------------------------------
+    
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             SLOT(slotOpenURL(const KURL&)));
+            
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             m_cropAction, SLOT(setEnabled(bool)));
+            
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_saveAction, SLOT(setEnabled(bool)));
+            
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_saveAsAction, SLOT(setEnabled(bool)));
+            
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_revertAction, SLOT(setEnabled(bool)));
+            
     connect(m_canvas, SIGNAL(signalChanged(bool)),
             m_undoAction, SLOT(setEnabled(bool)));
 
+    //-------------------------------------------------------------
+        
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
@@ -125,14 +133,23 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
 ShowFoto::~ShowFoto()
 {
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+        if (plugin) {
+            guiFactory()->removeClient(plugin);
+            plugin->setParentWidget(0);
+            plugin->setEnabledSelectionActions(false);
+        }
+    }
+
     saveSettings();
     delete m_bar;
     delete m_canvas;
+    delete m_imagePluginLoader;
 }
 
 void ShowFoto::setupActions()
 {
-
     KStdAction::open(this, SLOT(slotOpenFile()),
                      actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
@@ -265,7 +282,7 @@ void ShowFoto::setupActions()
     m_imagePluginsHelp = new KAction(i18n("Image Plugins Handbooks"), 
                                      "digikamimageplugins", 0, 
                                      this, SLOT(slotImagePluginsHelp()),
-                                     actionCollection(), "imageview_imagepluginshelp");
+                                     actionCollection(), "imagepluginshelp");
     
     // ---------------------------------------------------------------
     

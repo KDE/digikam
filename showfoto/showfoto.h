@@ -30,6 +30,7 @@ class KSelectAction;
 class KConfig;
 
 class Canvas;
+class ImagePluginLoader;
 
 namespace Digikam
 {
@@ -77,6 +78,8 @@ private:
 private:
 
     Canvas                *m_canvas;
+    
+    ImagePluginLoader     *m_imagePluginLoader;
     
     Digikam::ThumbBarView *m_bar;
     
