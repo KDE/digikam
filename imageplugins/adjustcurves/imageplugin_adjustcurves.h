@@ -25,7 +25,7 @@
 
 // Digikam includes.
 
-#include <digikam/imageplugin.h>
+#include <digikamheaders.h>
 
 class ImagePlugin_AdjustCurves : public Digikam::ImagePlugin
 {

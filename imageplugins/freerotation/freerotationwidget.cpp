@@ -41,7 +41,7 @@
 
 // Digikam includes.
 
-#include <digikam/imageiface.h>
+#include <digikamheaders.h>
 
 // Local includes.
 

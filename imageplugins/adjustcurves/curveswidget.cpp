@@ -41,8 +41,7 @@
 
 // Digikam includes.
 
-#include <digikam/imagehistogram.h>
-#include <digikam/imagecurves.h>
+#include <digikamheaders.h>
 
 // Local includes.
 

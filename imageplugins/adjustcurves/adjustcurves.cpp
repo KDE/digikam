@@ -61,11 +61,7 @@
 
 // Digikam includes.
 
-#include <digikam/imagehistogram.h>
-#include <digikam/imagecurves.h>
-#include <digikam/imageiface.h>
-#include <digikam/imagewidget.h>
-#include <digikam/colorgradientwidget.h>
+#include <digikamheaders.h>
 
 // Local includes.
 

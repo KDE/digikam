@@ -28,10 +28,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikam/imageiface.h>
-
 // Local includes.
 
 #include "adjustcurves.h"

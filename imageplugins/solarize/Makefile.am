@@ -1,8 +1,8 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
-	      $(all_includes) $(IMLIB2_CFLAGS)   
-        
+	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS)   
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_solarize.la
 
@@ -10,7 +10,7 @@ digikamimageplugin_solarize_la_SOURCES = \
 	imageplugin_solarize.cpp \
 	imageeffect_solarize.cpp 
 
-digikamimageplugin_solarize_la_LIBADD = $(LIB_KPARTS) -ldigikam
+digikamimageplugin_solarize_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
 digikamimageplugin_solarize_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

@@ -25,7 +25,7 @@
 
 // Digikam includes.
 
-#include <digikam/imageplugin.h>
+#include <digikamheaders.h>
 
 class ImagePlugin_AntiVignetting : public Digikam::ImagePlugin
 {

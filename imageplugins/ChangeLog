@@ -1,6 +1,7 @@
 v0.7.2-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
-
+    * Patch from Renchi Raju which allows digikamimageplugins to be compiled 
+      when digikam is also present in the toplevel directory.
     * New plugin 'ShearTool'.
     * New plugin 'LensDistortion'.
     * New plugin 'AntiVignetting'.

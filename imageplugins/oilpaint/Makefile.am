@@ -1,8 +1,8 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
-	      $(all_includes) $(IMLIB2_CFLAGS)   
-        
+	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS)   
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_oilpaint.la 
 
@@ -10,7 +10,7 @@ digikamimageplugin_oilpaint_la_SOURCES = \
 	imageplugin_oilpaint.cpp \
 	imageeffect_oilpaint.cpp 
 
-digikamimageplugin_oilpaint_la_LIBADD = $(LIB_KPARTS) -ldigikam 
+digikamimageplugin_oilpaint_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
 digikamimageplugin_oilpaint_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
