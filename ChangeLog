@@ -1,3 +1,107 @@
+v0.7.1				03/01/05
+----------------------------------------------------------------------------
+2004-12-29 19:06  pahlibar
+
+	* showfoto/: thumbbar.cpp, thumbbar.h:
+	  optimize the repaints. paint only whats needed
+
+2004-12-29 13:13  pahlibar
+
+	* utilities/cameragui/: cameraui.cpp, dirselectdialog.cpp,
+	  dirselectdialog.h:
+	  Allow downloading of albums into sub auto-albums of root album
+	  (if and only if Auto album creation option is checked) BUG: 95965
+
+2004-12-28 21:55  pahlibar
+
+	* utilities/cameragui/: Makefile.am, cameracontroller.cpp,
+	  cameraiconview.cpp, dkcamera.cpp, dkcamera.h, gpcamera.cpp,
+	  gpcamera.h, umscamera.cpp, umscamera.h:
+	  * abstracted out the camera interface * separate implementations
+	  for gphoto2 supported cameras and usb mass   storage cameras *
+	  the usb mass storage cameras now do direct file io operations
+	  instead of   relying on gphoto2 "directory browse" driver * all
+	  files (as specified by file extensions) can be browsed using the
+	  new	usb mass storage camera interface
+
+2004-12-28 17:06  pahlibar
+
+	* kioslave/: digikamthumbnail.cpp, digikamthumbnail.h:
+	  Use dcraw to generate a quick-image to generate thumbnails for
+	  raw images. Its more reliable than using Dave Coffin's parse.c in
+	  extracting images and the generation speed seems reasonable
+	  BUG: 90875
+
+2004-12-27 15:42  pahlibar
+
+	* utilities/setup/setupcamera.cpp:
+	  just check in the currently listed cameras in the listview to
+	  prevent adding the auto-detected cameras multiple times.  BUG:
+	  95880
+
+2004-12-24 03:21  cgilles
+
+	* imageplugins/imageeffect_colorsenhance.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h: Fixed Bug 95744 (Digikam crashes
+	  when selecting "Automatic level" in the editor) : Since histogram
+	  calculation use a thread, i have missing to add a non-threaded
+	  calculation for this operation : - AutoLevels.  - Normalize.	-
+	  Equalize.  Fixed Histogram lib and imageplugin core
+	  implementation.  CCMAIL: digikam-devel@lists.sourceforge.net'
+
+2004-12-24 03:20  cgilles
+
+	* imageplugins/imageeffect_colorsenhance.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h: Fixed Bug 95744 (Digikam crashes
+	  when selecting "Automatic level" in the editor) : Since histogram
+	  calculation use a thread, i have missing to add a non-threaded
+	  calculation for this operation :
+	  - AutoLevels.  - Normalize.  - Equalize.
+	  Fixed Histogram lib and imageplugin core implementation.
+
+
+2004-12-23 15:49  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+	  a quick christmas gift before i leave. digiKam and showFoto can
+	  now load and display all the "useless" formats which imlib2
+	  doesn't support, but kde does (for eg: eps, ico, exr, JPEG 2000,
+	  ...)
+
+2004-12-22 16:20  cgilles
+
+	* digikam/imagedescedit.cpp, digikam/imageproperties.cpp,
+	  utilities/imageeditor/imagewindow.cpp: Do ensure visible current
+	  album thumb item in main window when Next/prev button is actived
+	  in Properties Dialog/Description Dialog/ImageEditor.
+
+2004-12-22 13:49  pahlibar
+
+	* digikam/: albumfolderview.cpp, albumpropsedit.cpp,
+	  albumsettings.cpp:
+	  * sort collections by names * fix an issue with empty collections
+	  showing up if the saved collection list   has an empty collection
+	  BUG: 95669
+
+2004-12-22 07:44  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp: Thumbs actived in current
+	  Album Window follows current image selected in Image Editor.
+
+2004-12-21 12:11  pahlibar
+
+	* kioslave/Makefile.am:
+	  added libpng explicitly to the linker flags BUG: 95582
+
+2004-12-21 12:00  pahlibar
+
+	* kioslave/digikamio.cpp:
+	  fixed broken copy of a src file with non-latin chars in its path
+	  to any destination album. some encoding qcstring->qstring voodoo
+
+
 v0.7.1-beta2			20/12/04
 ----------------------------------------------------------------------------
 2004-12-20 15:11  pahlibar
