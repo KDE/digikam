@@ -3,7 +3,7 @@
 //    DIGIKAMPLUGINMANAGER.H
 //
 //    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //                            Richard Groult <Richard dot Groult at jalix.org>
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -33,17 +33,10 @@
 
 class KAction;
 
-#ifdef HAVE_KIPI                         // libKIPI support.
-   namespace KIPI
-   {
-   class Plugin;
-   }
-#else                                    // DigikamPlugins support.
-   namespace Digikam
-   {
-   class Plugin;
-   }
-#endif
+namespace Digikam
+{
+class Plugin;
+}
    
 class DigikamPluginManager : public QObject
 {
@@ -57,13 +50,9 @@ public:
     
     static DigikamPluginManager* instance();
     
-    #ifdef HAVE_KIPI                         // libKIPI support.
-       const  QPtrList<KIPI::Plugin>& pluginList();
-    #else                                    // DigikamPlugins support.   
-       const  QPtrList<Digikam::Plugin>& pluginList();
-    #endif
+    const  QPtrList<Digikam::Plugin>& pluginList();
     
-    const  QPtrList<KAction>&         menuMergeActions();
+    const  QPtrList<KAction>& menuMergeActions();
     
     const  QStringList availablePluginList();
     const  QStringList loadedPluginList();
@@ -72,22 +61,14 @@ private:
 
     static DigikamPluginManager* instance_;
     
-    #ifdef HAVE_KIPI                         // libKIPI support.
-       QPtrList<KIPI::Plugin>    pluginList_;
-    #else                                    // DigikamPlugins support.   
-       QPtrList<Digikam::Plugin>    pluginList_;
-    #endif
+    QPtrList<Digikam::Plugin>    pluginList_;
 
     QPtrList<KAction>            menuMergeActions_;
     QStringList                  availablePluginList_;
     
     void initAvailablePluginList();
     
-    #ifdef HAVE_KIPI                         // libKIPI support.
-       KIPI::Plugin* pluginIsLoaded(QString pluginName);
-    #else                                    // DigikamPlugins support.   
-       Digikam::Plugin* pluginIsLoaded(QString pluginName);
-    #endif
+    Digikam::Plugin* pluginIsLoaded(QString pluginName);
 };
 
 #endif // DIGIKAMPLUGINMANAGER_H 

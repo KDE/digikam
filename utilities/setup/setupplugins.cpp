@@ -2,7 +2,7 @@
 //
 //    SETUPPLUGINS.CPP
 //
-//    Copyright (C) 2004 Gilles CAULIER <caulier dot gilles at free.fr>
+//    Copyright (C) 2004 Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,11 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 //////////////////////////////////////////////////////////////////////////////
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 // QT includes.
 
@@ -67,8 +72,15 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
-    m_pluginsNumber->setText(i18n("Plugins found: %1")
-                             .arg(lista.count()/2));
+    
+    #ifdef HAVE_KIPI
+    QString pluginsType = i18n("KIPI plugins");
+    #else
+    QString pluginsType = i18n("Digikam plugins");
+    #endif
+
+    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
+                                                 .arg(lista.count()/2));
     
     while(  it != lista.end() )
         {

@@ -37,7 +37,7 @@ digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) \
 		  libdigikam.la
                   
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2)
+digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) $(LIB_KIPI)
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp

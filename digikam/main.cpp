@@ -3,7 +3,7 @@
 //    MAIN.CPP
 //
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,11 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 //////////////////////////////////////////////////////////////////////////////
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 // Qt includes.
 
@@ -43,9 +48,13 @@
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
-
-static const char *description =
-	I18N_NOOP("A Photo-Management Application for KDE");
+#ifdef HAVE_KIPI
+static const char *description = I18N_NOOP("A Photo-Management Application for KDE\n"
+                                           "(built with KIPI plugins support)");
+#else
+static const char *description = I18N_NOOP("A Photo-Management Application for KDE\n"
+                                           "(built with Digikam plugins support)");
+#endif
 
 
 static KCmdLineOptions options[] =

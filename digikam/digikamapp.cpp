@@ -3,7 +3,7 @@
 //    DIGIKAMAPP.CPP
 //
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -46,16 +46,24 @@
 
 #include "albummanager.h"
 #include "albuminfo.h"
-
 #include "cameralist.h"
 #include "cameratype.h"
 #include "albumsettings.h"
 #include "setup.h"
 #include "setupplugins.h"
 #include "digikamview.h"
-#include "digikampluginmanager.h"
 #include "digikamcameraprocess.h"
 #include "digikamapp.h"
+
+// Includes files for plugins support.
+
+#ifdef HAVE_KIPI
+#include "kipiinterface.h"
+#include <libkipi/pluginloader.h>
+#include <libkipi/plugin.h>
+#else
+#include "digikampluginmanager.h"
+#endif
 
 
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
@@ -89,13 +97,9 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     mCameraList->load();
 
     // Load Plugins
-    pluginManager_ = new DigikamPluginManager(this);
-    
-    if ( m_config->readEntry("Plugin List") == QString::null )         
-       pluginManager_->loadPlugins();                             
-    else 
-       pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
-       
+        
+    loadPlugins();
+              
     // Start the camera process
     DigikamCameraProcess *process = new DigikamCameraProcess(this);
     process->start();
@@ -106,7 +110,12 @@ DigikamApp::~DigikamApp()
     if (mView)
         delete mView;
 
+    #ifdef HAVE_KIPI
+    m_config->writeEntry( "Plugin List", pluginLoader_->loadedPlugins() );
+    #else
     m_config->writeEntry( "Plugin List", pluginManager_->loadedPluginList() );
+    #endif
+    
     m_config->sync();
     delete m_config;
     
@@ -420,15 +429,24 @@ void DigikamApp::slotSetup()
     connect(m_setup, SIGNAL(okClicked()),
             this,  SLOT(slotSetupChanged()));
     
+    #ifdef HAVE_KIPI    // KIPI plugins.
+    m_setup->pluginsPage_->initPlugins(pluginLoader_->availablePlugins(),
+                                       pluginLoader_->loadedPlugins());
+    #else   // DigikamPlugins        
     m_setup->pluginsPage_->initPlugins(pluginManager_->availablePluginList(),
                                        pluginManager_->loadedPluginList());
+    #endif                                   
     
     m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
+    #ifdef HAVE_KIPI    // KIPI plugins.
+    pluginLoader_->loadPlugins(m_setup->pluginsPage_->getPluginList());
+    #else   // DigikamPlugins 
     pluginManager_->loadPlugins(m_setup->pluginsPage_->getPluginList());
+    #endif     
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
 }
@@ -436,9 +454,10 @@ void DigikamApp::slotSetupChanged()
 void DigikamApp::slotEditKeys()
 {
     KKeyDialog::configure( actionCollection()
-#if KDE_VERSION >= 306
+    
+    #if KDE_VERSION >= 306
                            , true /*allow on-letter shortcuts*/
-#endif
+    #endif
         );
 }
 
@@ -473,7 +492,73 @@ void DigikamApp::slotToggleFullScreen()
 
 void DigikamApp::slotShowTip()
 {
-  KTipDialog::showTip("digikam/tips", true);
+    KTipDialog::showTip("digikam/tips", true);
 }
+
+void DigikamApp::loadPlugins()
+{
+    #ifdef HAVE_KIPI    // Loading KIPI plugins.
+    
+    QStringList ignores;
+
+    interface_ = new KipiInterface( this, "KIPI interface" );
+
+    pluginLoader_ = new KIPI::PluginLoader( ignores, interface_ );
+    pluginLoader_->loadPlugins();
+
+    QPtrList<KAction> fileActions;
+    QPtrList<KAction> imageActions;
+    QPtrList<KAction> toolsActions;
+
+    KIPI::PluginLoader::List list = pluginLoader_->pluginList();
+    
+    for( QPtrListIterator<KIPI::Plugin> it( list ); *it; ++it ) 
+        {
+        KIPI::Plugin* plugin = *it;
+        QPtrList<KAction>* popup = 0;
+        
+        if ( plugin->category() == KIPI::IMAGESPLUGIN )
+            popup = &imageActions;
+
+        else if ( plugin->category() == KIPI::EXPORTPLUGIN  || plugin->category() == KIPI::IMPORTPLUGIN )
+            popup = &fileActions;
+
+        else if ( plugin->category() == KIPI::TOOLSPLUGIN )
+            popup = &toolsActions;
+
+        if ( popup ) 
+            {
+            KActionCollection *actions = plugin->actionCollection();
+            
+            for (unsigned int i=0; i < actions->count(); i++) 
+                {
+                popup->append( actions->action(i) );
+                }
+            }
+        else 
+            {
+            // PENDING(blackie) need id!
+            qDebug("No menu found for a plugin" ); // , plugin->id().latin1());
+            }
+        }
+
+    // For this to work I need to pass false as second arg for createGUI
+    
+    plugActionList( QString::fromLatin1("file_actions"), fileActions );
+    plugActionList( QString::fromLatin1("image_actions"), imageActions );
+    plugActionList( QString::fromLatin1("tool_actions"), toolsActions );
+
+    #else   // Loading DigikamPlugins
+    
+    pluginManager_ = new DigikamPluginManager(this);
+    
+    if ( m_config->readEntry("Plugin List") == QString::null )         
+       pluginManager_->loadPlugins();                             
+    else 
+       pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
+    
+    #endif
+    }
+
 
 #include "digikamapp.moc"

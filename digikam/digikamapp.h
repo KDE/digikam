@@ -3,7 +3,7 @@
 //    DIGIKAMAPP.H
 //
 //    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,22 @@
 #include <kapp.h>
 #include <kmainwindow.h>
 
+namespace Digikam
+{
+class AlbumManager;
+}
+
+#ifdef HAVE_KIPI
+namespace KIPI
+{
+class PluginLoader;
+}
+
+class PluginLoader;               //   For KIPI pluggins support.
+class KipiInterface;
+#else
+class DigikamPluginManager;       //   For DigikamPlugins support.
+#endif
 
 class KAction;
 class KActionMenu;
@@ -48,13 +64,8 @@ class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
-class DigikamPluginManager;
 class Setup;
-
-namespace Digikam
-{
-class AlbumManager;
-}
+      
 
 class DigikamApp : public KMainWindow
 {
@@ -72,7 +83,7 @@ private:
 
     void setupView();
     void setupActions();
-
+    void loadPlugins();
 
 protected:
 
@@ -81,14 +92,20 @@ protected:
 private:
 
     Digikam::AlbumManager *mAlbumManager;
+    
+    #ifdef HAVE_KIPI
+    KIPI::PluginLoader    *pluginLoader_;
+    KipiInterface         *interface_;
+    #else
     DigikamPluginManager  *pluginManager_;
+    #endif
+     
+    KConfig               *m_config;    
+    Setup                 *m_setup;
     
-    KConfig*      m_config;    
-    Setup*        m_setup;
-    
-    DigikamView*  mView;
-    CameraList*   mCameraList;
-    bool          mFullScreen;
+    DigikamView           *mView;
+    CameraList            *mCameraList;
+    bool                   mFullScreen;
 
     // Album Settings
     AlbumSettings* mAlbumSettings;

@@ -3,7 +3,7 @@
 //    DIGIKAMPLUGINMANAGER.CPP
 //
 //    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //                            Richard Groult <Richard dot Groult at jalix.org>
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -37,16 +37,9 @@
 
 // Local includes.
 
-#ifdef HAVE_KIPI                         // libKIPI support.
-   #include <libkipi/plugin.h>
-   #include <libkipi/pluginloader.h>
-#else                                    // DigikamPlugins support.
-   #include "plugin.h"
-#endif
-
 #include "digikamapp.h"
 #include "digikampluginmanager.h"
-
+#include "plugin.h"
 
 DigikamPluginManager::DigikamPluginManager(QObject *parent)
                     : QObject(parent)
@@ -64,39 +57,23 @@ DigikamPluginManager::~DigikamPluginManager()
 
 void DigikamPluginManager::loadPlugins()
 {
-    #ifdef HAVE_KIPI                         // libKIPI support.
-       KTrader::OfferList offers = KTrader::self()->query("KIPI/Plugin");
-    #else                                    // DigikamPlugins support.
-       KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
-    #endif
-
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
     KTrader::OfferList::ConstIterator iter;
     
     for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
         {
         KService::Ptr service = *iter;
 
-        #ifdef HAVE_KIPI                         // libKIPI support.
-           KIPI::Plugin *plugin = KParts::ComponentFactory
-                                           ::createInstanceFromService<KIPI::Plugin>
-                                           (service, this, 0, 0);
-        #else                                    // DigikamPlugins support.
-           Digikam::Plugin *plugin = KParts::ComponentFactory
+        Digikam::Plugin *plugin = KParts::ComponentFactory
                                            ::createInstanceFromService<Digikam::Plugin>
                                            (service, this, 0, 0);
-        #endif
-                                           
 
         if (plugin) 
             {
             pluginList_.append(plugin);
             ((DigikamApp *)parent())->guiFactory()->addClient(plugin);
             
-            #ifdef HAVE_KIPI                         // libKIPI support.
-               QVariant variant(service->property("X-KIPI-MergeMenu"));
-            #else                                    // DigikamPlugins support.
-               QVariant variant(service->property("X-Digikam-MergeMenu"));
-            #endif
+            QVariant variant(service->property("X-Digikam-MergeMenu"));
 
             if (!variant.isNull()) 
                 {
@@ -119,19 +96,11 @@ void DigikamPluginManager::loadPlugins()
         }
 }
 
-#ifdef HAVE_KIPI                         // libKIPI support.
-   KIPI::Plugin* DigikamPluginManager::pluginIsLoaded(QString pluginName)
-#else                                    // DigikamPlugins support.
-   Digikam::Plugin* DigikamPluginManager::pluginIsLoaded(QString pluginName)
-#endif
+Digikam::Plugin* DigikamPluginManager::pluginIsLoaded(QString pluginName)
 {
 	if (pluginList_.isEmpty()) return NULL;
 
-        #ifdef HAVE_KIPI                         // libKIPI support.
-	   KIPI::Plugin *plugin;
-        #else                                    // DigikamPlugins support.
-	   Digikam::Plugin *plugin;
-        #endif
+        Digikam::Plugin *plugin;
         
 	for ( plugin = pluginList_.first(); plugin ; plugin = pluginList_.next() )
 	   {
@@ -145,23 +114,13 @@ void DigikamPluginManager::loadPlugins()
 
 void DigikamPluginManager::loadPlugins(QStringList list)
 {
-        #ifdef HAVE_KIPI                         // libKIPI support.
-	   KTrader::OfferList offers = KTrader::self()->query("KIPI/Plugin");
-        #else                                    // DigikamPlugins support.
-           KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
-        #endif
-	
+        KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
 	KTrader::OfferList::ConstIterator iter;
 	
         for (iter = offers.begin() ; iter != offers.end() ; ++iter)
 	    {
 		KService::Ptr service = *iter;
-		
-                #ifdef HAVE_KIPI                         // libKIPI support.                
-                   KIPI::Plugin *plugin;
-                #else                                    // DigikamPlugins support.
-                   Digikam::Plugin *plugin;
-                #endif
+                Digikam::Plugin *plugin;
 
 		if (!list.contains(service->name()))
 		{
@@ -187,11 +146,7 @@ void DigikamPluginManager::loadPlugins(QStringList list)
 			 	pluginList_.append(plugin);
 				((DigikamApp *)parent())->guiFactory()->addClient(plugin);
                                 
-				#ifdef HAVE_KIPI                         // libKIPI support.
-				   QVariant variant(service->property("X-KIPI-MergeMenu"));
-				#else                                    // DigikamPlugins support.
-				   QVariant variant(service->property("X-Digikam-MergeMenu"));
-				#endif
+  			        QVariant variant(service->property("X-Digikam-MergeMenu"));
 				
 			 	if (!variant.isNull())
 			 	{
@@ -215,12 +170,7 @@ void DigikamPluginManager::loadPlugins(QStringList list)
 
 void DigikamPluginManager::initAvailablePluginList()
 {
-    #ifdef HAVE_KIPI                         // libKIPI support.    
-       KTrader::OfferList offers = KTrader::self()->query("KIPI/Plugin");
-    #else                                    // DigikamPlugins support.
-       KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
-    #endif
-    
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/Plugin");
     KTrader::OfferList::ConstIterator iter;
     
     for(iter = offers.begin() ; iter != offers.end() ; ++iter)
@@ -253,11 +203,7 @@ DigikamPluginManager* DigikamPluginManager::instance()
 
 const QStringList DigikamPluginManager::loadedPluginList()
 {
-    #ifdef HAVE_KIPI                         // libKIPI support.   
-       KIPI::Plugin *plugin;
-    #else                                    // DigikamPlugins support.  
-       Digikam::Plugin *plugin;
-    #endif
+    Digikam::Plugin *plugin;
 	          
 	QStringList list;
         
@@ -268,3 +214,4 @@ const QStringList DigikamPluginManager::loadedPluginList()
 }
 
 DigikamPluginManager* DigikamPluginManager::instance_ = 0;
+
