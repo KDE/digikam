@@ -1,7 +1,6 @@
+SUBDIRS = interfaces kioslave utilities digikam digikamcameraclient
 
-SUBDIRS = interfaces kioslave utilities digikam digikamcameraclient po doc
-
-EXTRA_DIST = Digikam.kdevelop admin AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
+EXTRA_DIST = Digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 
 AUTOMAKE_OPTIONS = foreign 
 
@@ -18,14 +17,6 @@ MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
 
 tip_DATA = tips
 tipdir = $(kde_datadir)/digikam
-
-package-messages:
-	$(MAKE) -f admin/Makefile.common package-messages
-	$(MAKE) -C po merge
-
-dist-hook:
-	cd $(top_distdir) && perl admin/am_edit -padmin
-	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc"` >> rc.cpp
