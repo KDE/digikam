@@ -48,6 +48,7 @@
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -92,8 +93,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_originalHeight    = height;
     
     m_clipSat = true;
-    m_overExp = false;
-    m_WBind   = false;
     
     m_mr     = 1.0;
     m_mg     = 1.0;
@@ -330,7 +329,15 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "You can pick color on image to see the color level corresponding on "
                                                  "histogram."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
+    
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
+                                                      "will be colored black. This haven't effect to final rendering."));
 
+    m_WBSaturedIndicatorBox = new QCheckBox(i18n("White Balance Saturation Indicator"), gbox4);
+    QWhatsThis::add( m_WBSaturedIndicatorBox, i18n("<p>If you enable this option, over-satured pixels from target image preview "
+                                                   "will be over-colored. This haven't effect to final rendering."));
+    
     topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
@@ -357,6 +364,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_autoAdjustExposure, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustExposure()));
 
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));                        
+    
+    connect(m_WBSaturedIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));                        
+            
     // Correction Filter Slider controls.
                         
     connect(m_temperaturePresetCB, SIGNAL(activated(int)),
@@ -688,7 +701,12 @@ void ImageEffect_WhiteBalance::slotEffect()
     m_gamma       = m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
-       
+    m_overExp     = m_overExposureIndicatorBox->isChecked();
+    m_WBind       = m_WBSaturedIndicatorBox->isChecked();
+    
+    if (m_overExp) m_WBSaturedIndicatorBox->setEnabled(true);
+    else m_WBSaturedIndicatorBox->setEnabled(false);
+    
     // Set preview lut.
     setRGBmult();
     m_mg = 1.0;
@@ -724,6 +742,8 @@ void ImageEffect_WhiteBalance::slotOk()
     m_gamma       = m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
+    m_overExp     = false;
+    m_WBind       = false;
        
     // Set final lut.
     setRGBmult();
@@ -773,8 +793,7 @@ void ImageEffect_WhiteBalance::setLUTv(void)
     
     if (m_WP - m_BP < 1) m_WP = m_BP + 1;
 
-    kdDebug() << k_funcinfo 
-              << "T(K): " << m_temperature
+    kdDebug() << "T(K): " << m_temperature
               << " => R:" << m_mr
               << " G:"    << m_mg
               << " B:"    << m_mb
@@ -814,14 +833,14 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height)
             v = QMAX(rv[0], rv[1]);
             v = QMAX(v, rv[2]); 
             
-            if (m_clipSat) v = QMIN(v, m_rgbMax);
+            if (m_clipSat) v = QMIN(v, (int)m_rgbMax);
             i = v;
 
             for (c = 0 ; c < 3 ; c++) 
                 {
                 int r, o;
                 
-                r = (m_clipSat && rv[c] > m_rgbMax) ? m_rgbMax : rv[c];
+                r = (m_clipSat && rv[c] > (int)m_rgbMax) ? m_rgbMax : rv[c];
 
                 if (v <= m_BP) 
                     p[c] = o = 0;
