@@ -19,14 +19,23 @@
  * 
  * ============================================================ */
 
+// C ansi includes.
+ 
 #include <iostream>
 
-#include <klocale.h>
+// Qt includes.
 
 #include <qapplication.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qcolor.h>
+
+// KDE includes.
+
+#include <klocale.h>
+#include <kdebug.h>
+
+// Local includes.
 
 #include "gpfileiteminfo.h"
 #include "thumbnailsize.h"
@@ -429,9 +438,11 @@ void GPController::getThumbnail(const QString& folder,
                                                    imageName,
                                                    thumbnail));
     }
-    else {
-        qWarning(i18n("Failed to get preview for '%1/%2'").arg(folder).arg(imageName).ascii());
-    }
+    else 
+        {
+        QString msg = i18n("Failed to get preview for '%1/%2'").arg(folder).arg(imageName);
+        kdError() << msg << endl;
+        }
 
 }
 
@@ -598,7 +609,7 @@ void GPController::exifInfo(const QString& folder,
 
 void GPController::error(const QString& errorMsg)
 {
-    qWarning(errorMsg.ascii());
+    kdError() << errorMsg << endl;
     QApplication::postEvent(parent_, new GPEventError(errorMsg));
 }
 
