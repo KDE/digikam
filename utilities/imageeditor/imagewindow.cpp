@@ -715,7 +715,7 @@ void ImageWindow::slotSave()
     if( m_rotatedOrFlipped || m_canvas->exifRotated() )
        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
 
-    if(!SyncJob::copy(KURL(tmpFile), m_urlCurrent))
+    if(!SyncJob::file_move(KURL(tmpFile), m_urlCurrent))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
