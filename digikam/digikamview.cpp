@@ -291,23 +291,14 @@ void DigikamView::slot_albumAddImages()
         return;
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-    
-    QStringList list =
-        KFileDialog::getOpenFileNames(QString::null,
-                                      AlbumSettings::instance()->getImageFileFilter(),
-                                      this,
-                                      i18n("Add Images"));
-    KURL::List urls;
 
-    for (QStringList::Iterator it
-             = list.begin(); it != list.end(); ++it ) {
-        QFileInfo fi(*it);
-        if (!fi.isDir()) {
-            urls.append(KURL(*it));
-        }
-    }
+    KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
+                                                AlbumSettings::instance()->getImageFileFilter(),
+                                                this,
+                                                i18n("Add Images"));
 
-    if (!urls.isEmpty()) {
+    if (!urls.isEmpty())
+    {
         KIO::CopyJob* job =
             KIO::copy(urls, palbum->getKURL(), true);
         connect(job, SIGNAL(result(KIO::Job *) ),
