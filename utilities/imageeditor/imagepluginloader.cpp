@@ -75,7 +75,7 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
         KService::Ptr service = *iter;
         Digikam::ImagePlugin *plugin;
 
-        if(!list.contains(service->name()))
+        if(!list.contains(service->name()) && service->name() != "ImagePlugin_Core")
             {
             if((plugin = pluginIsLoaded(service->name())) != NULL)
                 m_pluginList.remove(plugin);
