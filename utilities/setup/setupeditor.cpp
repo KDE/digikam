@@ -95,8 +95,9 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
    m_pluginList->addColumn( i18n( "Name" ) );
-   m_pluginList->addColumn( i18n( "Description" ) );
    m_pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
+   m_pluginList->addColumn( i18n( "Description" ) );
+   m_pluginList->setResizeMode( QListView::LastColumn );
    m_pluginList->setAllColumnsShowFocus( true );
    QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
                                        "which must be enabled/disabled for the future "
@@ -125,8 +126,8 @@ void SetupEditor::initImagePluginsList()
         {
         KService::Ptr service = *iter;
         m_availableImagePluginList.append(service->name());      // Plugin name translated.
-        m_availableImagePluginList.append(service->comment());   // Plugin comments translated.
         m_availableImagePluginList.append(service->library());   // Plugin system library name.
+        m_availableImagePluginList.append(service->comment());   // Plugin comments translated.
         }
 }
 
@@ -140,9 +141,9 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
         {
         QString pluginName = *it;
         it++;
-        QString pluginComments = *it;
-        it++;
         QString libraryName = *it;
+        it++;
+        QString pluginComments = *it;
         QCheckListItem *item = new QCheckListItem (m_pluginList, pluginName, QCheckListItem::CheckBox);
         
         if (listl.contains(libraryName)) 
@@ -155,8 +156,8 @@ void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
            }
         
         item->setText(0, pluginName);        // Added plugin name.
-        item->setText(1, pluginComments);    // Added plugin comments.
-        item->setText(2, libraryName);       // Added library plugin name.
+        item->setText(1, libraryName);       // Added library plugin name.
+        item->setText(2, pluginComments);    // Added plugin comments.
         it++;
         }
 }
@@ -169,7 +170,7 @@ QStringList SetupEditor::getImagePluginsListEnable()
     while( item )
         {
         if (item->isOn())
-        imagePluginList.append(item->text(2));        // Get the plugin library name.
+        imagePluginList.append(item->text(1));        // Get the plugin library name.
         item = (QCheckListItem*)item->nextSibling();
         }
 
