@@ -108,11 +108,15 @@
 #ifndef INT8_TYPE
 # define INT8_TYPE signed char
 #endif
+
+/* DigiKam customization */
 #ifndef INTPTR_TYPE
-# if SQLITE_PTR_SZ==4
+# if SIZEOF_CHAR_P==4
 #   define INTPTR_TYPE int
 # else
 #   define INTPTR_TYPE long long
+#warning "WARNING: Compiling sqlite for a Big Endian Platform."
+#warning "WARNING: If you know this isn't true, please file a bugreport."
 # endif
 #endif
 typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */
