@@ -28,14 +28,12 @@
 #include <qcstring.h>
 #include <qstring.h>
 #include <qfile.h>
+#include <qdatastream.h>
+#include <qstringlist.h>
 
 extern "C"
 {
-#include <sys/types.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <gdbm.h>
 }
 
 #include "undocache.h"
@@ -44,128 +42,85 @@ class UndoCachePriv
 {
 public:
 
-    GDBM_FILE db;
-    QString   dbPath;
+    QString     cachePrefix;
+    QStringList cacheFilenames;
 };
-
-void UndoCache_gdbm_fatal_func(char* val)
-{
-    kdWarning() << "UndoCache: GDBM fatal error occured: "
-                << val << endl;    
-}
 
 UndoCache::UndoCache()
 {
     d = new UndoCachePriv;
 
-    QString tmp = QString("%1-%2")
+    QString tmp = QString("%1-%2-undocache")
                   .arg(KGlobal::instance()->aboutData()->programName())
                   .arg(getpid());
     
-    d->dbPath = locateLocal("cache", tmp + "_undocache.db");
-    QCString encPath = QFile::encodeName(d->dbPath);
-
-    const char* path = encPath; 
-    d->db = gdbm_open((char*)path, 0, GDBM_WRCREAT|GDBM_SYNC,
-                        0666, (void (*)()) UndoCache_gdbm_fatal_func);
-    if (!d->db)
-    {
-        kdWarning() << "Failed to open ImageViewer Undo DB file: "
-                    << d->dbPath << endl;
-    }
+    d->cachePrefix = locateLocal("cache", tmp);
 }
 
 UndoCache::~UndoCache()
 {
-    if (d->db)
-    {
-        gdbm_close(d->db);
-        unlink(QFile::encodeName(d->dbPath));
-    }
+    clear();
     delete d;
 }
 
 void UndoCache::clear()
 {
-    if (d->db)
+    for (QStringList::iterator it = d->cacheFilenames.begin();
+         it != d->cacheFilenames.end(); ++it)
     {
-        datum key, nextkey;
-
-        key = gdbm_firstkey(d->db);
-        while (key.dptr)
-        {
-            nextkey = gdbm_nextkey(d->db, key);
-            gdbm_delete(d->db, key);
-            free(key.dptr);
-            key = nextkey;
-        }
+        ::unlink(QFile::encodeName(*it));
     }
+
+    d->cacheFilenames.clear();
 }
 
 bool UndoCache::pushLevel(int level, int w, int h, uint* data)
 {
-    if (d->db)
-    {
-        datum key, content;
+    QString cacheFile = QString("%1-%2.bin")
+                        .arg(d->cachePrefix)
+                        .arg(level);
 
-        QString levelName;
-        levelName.setNum(level);
-        
-        key.dsize = 1;
-        key.dptr  = (char*)levelName.ascii();
-
-        char* buf = new char[w*h*sizeof(uint) + 2*sizeof(int)];
-        char* p = buf;
-
-        memcpy(p, &w, sizeof(int));
-        p += sizeof(int);
-        memcpy(p, &h, sizeof(int));
-        p += sizeof(int);
-        memcpy(p, data, w*h*sizeof(uint));
-
-        content.dsize = w*h*sizeof(uint) + 2*sizeof(int);
-        content.dptr  = buf;
-        
-        gdbm_store(d->db, key, content, GDBM_REPLACE);
-
-        delete [] buf;
-        
-        return true;
-    }
-    else
+    QFile file(cacheFile);
+    
+    if (!file.open(IO_WriteOnly))
         return false;
+
+    QDataStream ds(&file);
+    ds << w;
+    ds << h;
+
+    QByteArray ba;
+    ba.setRawData((const char*)data, w*h*sizeof(uint));
+    ds << ba;
+    ba.resetRawData((const char*)data, w*h*sizeof(uint));
+
+    file.close();
+    return true;
 }
 
 bool UndoCache::popLevel(int level, int& w, int& h, uint*& data)
 {
-    if (d->db)
-    {
-        datum key, content;
+    QString cacheFile = QString("%1-%2.bin")
+                        .arg(d->cachePrefix)
+                        .arg(level);
 
-        QString levelName;
-        levelName.setNum(level);
-
-        key.dsize = 1;
-        key.dptr  = (char*)levelName.ascii();
-
-        content = gdbm_fetch(d->db, key);
-        if (!content.dptr)
-            return false;
-
-        char* p = content.dptr;
-        memcpy(&w, p, sizeof(int));
-        p += sizeof(int);
-        memcpy(&h, p, sizeof(int));
-        p += sizeof(int);
-
-        data = new uint[w*h];
-        memcpy(data, p, w*h*sizeof(uint));
-
-        gdbm_delete(d->db, key);
-        free(content.dptr);
-
-        return true;
-    }
-    else
+    QFile file(cacheFile);
+    if (!file.open(IO_ReadOnly))
         return false;
+
+    QDataStream ds(&file);
+    ds >> w;
+    ds >> h;
+
+    data = new uint[w*h];
+
+    QByteArray ba;
+    ba.setRawData((const char*)data, w*h*sizeof(uint));
+    ds >> ba;
+    ba.resetRawData((const char*)data, w*h*sizeof(uint));
+
+    file.close();
+
+    ::unlink(QFile::encodeName(cacheFile));
+    return true;
 }
