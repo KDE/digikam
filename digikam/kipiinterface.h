@@ -159,7 +159,7 @@ protected slots:
 
 public slots:
     void slotSelectionChanged( bool b );
-    void slotCurrentAlbumChanged( PAlbum *palbum );
+    void slotCurrentAlbumChanged( Album *palbum );
     
 
 protected:

@@ -261,8 +261,6 @@ QString DigikamImageCollection::name()
 {
     if (palbum_) 
         {
-        // PENDING : Renchi, Why the GetTitle() method isn't available in PAlbum ?
-        
         QString title = palbum_->getTitle();    
         return (title);    
         }
@@ -606,11 +604,11 @@ void DigikamKipiInterface::slotSelectionChanged( bool b )
     emit currentScopeChanged( b );
 }
 
-void DigikamKipiInterface::slotCurrentAlbumChanged( PAlbum *palbum )
+void DigikamKipiInterface::slotCurrentAlbumChanged( Album *album )
 {
     bool b = false;
     
-    if ( palbum )
+    if ( album )
        b = true;
     
     emit currentAlbumChanged( b );

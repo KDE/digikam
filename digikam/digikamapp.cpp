@@ -340,7 +340,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
-    mKipiHelpAction = new KAction(i18n("Plugins help"),
+    mKipiHelpAction = new KAction(i18n("Plugins handbooks"),
                                    "kipi",
                                    0,
                                    this,
@@ -497,13 +497,14 @@ void DigikamApp::slotEditKeys()
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
-    {
+        {
         KIPI::Plugin* plugin = (*it)->plugin;
-        dialog->insert( plugin->actionCollection(), (*it)->comment );
-    }
+        
+        if ( plugin )
+           dialog->insert( plugin->actionCollection(), (*it)->comment );
+        }
     
     dialog->configure();
-
     delete dialog;
 }
 
@@ -558,8 +559,8 @@ void DigikamApp::loadPlugins()
     connect( mAlbumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
              KipiInterface_, SLOT( slotSelectionChanged( bool ) ) );
 
-    connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( AlbumInfo * ) ),
-             KipiInterface_, SLOT( slotCurrentAlbumChanged( AlbumInfo * ) ) );
+    connect( mAlbumManager, SIGNAL( signalAlbumCurrentChanged( Album * ) ),
+             KipiInterface_, SLOT( slotCurrentAlbumChanged( Album * ) ) );
                  
     ignores << QString::fromLatin1( "HelloWorld" );    
     ignores << QString::fromLatin1( "KameraKlient" );    
