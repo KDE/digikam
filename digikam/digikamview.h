@@ -114,6 +114,7 @@ private slots:
 signals:
 
     void signal_albumSelected(bool val);
+    void signal_tagSelected(bool val);
     void signal_imageSelected(bool val);
 };
 

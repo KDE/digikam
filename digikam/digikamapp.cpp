@@ -152,6 +152,8 @@ void DigikamApp::setupView()
 
     connect(mView, SIGNAL(signal_albumSelected(bool)),
             this, SLOT(slot_albumSelected(bool)));
+    connect(mView, SIGNAL(signal_tagSelected(bool)),
+            this, SLOT(slot_tagSelected(bool)));
             
     connect(mView, SIGNAL(signal_imageSelected(bool)),
             this, SLOT(slot_imageSelected(bool)));
@@ -477,6 +479,12 @@ void DigikamApp::slot_albumSelected(bool val)
     mDeleteAction->setEnabled(val);
     mAddImagesAction->setEnabled(val);
     mPropsEditAction->setEnabled(val);
+}
+
+void DigikamApp::slot_tagSelected(bool val)
+{
+    mDeleteTagAction->setEnabled(val);
+    mEditTagAction->setEnabled(val);
 }
 
 void DigikamApp::slot_imageSelected(bool val)

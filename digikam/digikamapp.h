@@ -174,6 +174,7 @@ private:
 private slots:
 
     void slot_albumSelected(bool val);
+    void slot_tagSelected(bool val);
     void slot_imageSelected(bool val);
     void slot_exit();
     void slotShowTip();

@@ -168,10 +168,20 @@ void DigikamView::slot_albumSelected(Album* album)
     if (!album) {
         mIconView->setAlbum(0);
         emit signal_albumSelected(false);
+        emit signal_tagSelected(false);
         return;
     }
 
-    emit signal_albumSelected(true);
+    if (album->type() == Album::PHYSICAL)
+    {
+        emit signal_albumSelected(true);
+        emit signal_tagSelected(false);
+    }
+    else if (album->type() == Album::TAG)
+    {
+        emit signal_albumSelected(false);
+        emit signal_tagSelected(true);
+    }
     mIconView->setAlbum(album);
 }
 
