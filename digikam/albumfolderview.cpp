@@ -93,7 +93,6 @@ extern "C"
 #include <X11/Xlib.h>
 }
 
-
 AlbumFolderView::AlbumFolderView(QWidget *parent)
                : ListView(parent)
 {
@@ -324,7 +323,7 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
     QString collection = album->getCollection();
 
     if (!collectionList.contains(collection))
-        collection = i18n( "Unknown" );
+        collection = i18n("Uncategorized Albums");
 
     AlbumFolderItem* parentItem = 0;
 
@@ -593,15 +592,15 @@ void AlbumFolderView::albumNew(PAlbum* parent)
 
 #if KDE_IS_VERSION(3,2,0)
     QString newDir = KInputDialog::getText(i18n("New Album Name"),
-                                           i18n("Creating new album in '%1'\n"
-                                                "Enter album name:")
-                                           .arg(parent->getPrettyURL()),
+                                           i18n("<qt><b>Creating a new album in <i>%1</i></b><hr><br>\n"
+                                                   "Enter a name for the new album:</qt>")
+                                               .arg(parent->getPrettyURL()),
                                            QString::null, &ok, this);
 #else
     QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
-                                           i18n("Creating new album in '%1'\n"
-                                                "Enter album name:")
-                                           .arg(parent->getPrettyURL()),
+                                           i18n("<qt><b>Creating a new album in <i>%1</i></b><hr><br>\n"
+                                                   "Enter a name for the new album:</qt>")
+                                                .arg(parent->getPrettyURL()),
                                            QString::null, &ok, this);
 #endif
 
@@ -1117,7 +1116,6 @@ void AlbumFolderView::slotRightButtonClicked(ListItem* item)
      default:
          break;
      }
-
 }
 
 void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
@@ -1131,12 +1129,7 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
     {
         popmenu.insertItem(SmallIcon("pencil"),
                            i18n("Edit Album Properties..."), 11);
-        if (AlbumSettings::instance()->getUseTrash())
-            popmenu.insertItem(SmallIcon("edittrash"),
-                               i18n("Move Album to Trash"), 12);
-        else
-            popmenu.insertItem(SmallIcon("editdelete"),
-                               i18n("Delete Album"), 12);
+        popmenu.insertSeparator();
 
         // Add KIPI Albums plugins Actions
 
@@ -1153,9 +1146,6 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
             count++;
         }
 
-        if (count != 0)
-            popmenu.insertSeparator();
-
         // Add KIPI Batch processes plugins Actions
 
         KActionMenu* menuKIPIBatch = new KActionMenu(i18n("Batch Processes"));
@@ -1163,17 +1153,33 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
             DigikamApp::getinstance()->menuBatchActions();
         QPtrListIterator<KAction> it2(BatchActions);
 
-        count = 0;
+        int kipiCount = 0;
         while ( (action = it2.current()) != 0 )
         {
             menuKIPIBatch->insert(action);
             ++it2;
-            count++;
+            kipiCount++;
         }
 
-        if (count != 0)
+        if (kipiCount != 0)
         {
             menuKIPIBatch->plug(&popmenu);
+        }
+
+        if (count != 0 || kipiCount != 0)
+        {
+            popmenu.insertSeparator();
+        }
+
+        if (AlbumSettings::instance()->getUseTrash())
+        {
+            popmenu.insertItem(SmallIcon("edittrash"),
+                               i18n("Move Album to Trash"), 12);
+        }
+        else
+        {
+            popmenu.insertItem(SmallIcon("editdelete"),
+                               i18n("Delete Album"), 12);
         }
     }
 
