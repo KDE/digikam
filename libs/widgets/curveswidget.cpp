@@ -92,7 +92,7 @@ CurvesWidget::~CurvesWidget()
 
 void CurvesWidget::reset(void)
 {
-    m_grab_point = -1;    
+    m_grab_point   = -1;    
     m_guideVisible = false;
     repaint(false);
 }
@@ -100,7 +100,8 @@ void CurvesWidget::reset(void)
 void CurvesWidget::setCurveGuide(QColor color)
 {
     m_guideVisible = true;
-    m_colorGuide = color;
+    m_colorGuide   = color;
+    repaint(false);
 }
 
 void CurvesWidget::curveTypeChanged(void)
@@ -218,9 +219,9 @@ void CurvesWidget::paintEvent( QPaintEvent * )
        return;
        }
        
-    uint   x, y;
-    uint   wWidth = width();
-    uint   wHeight = height();
+    int    x, y;
+    int    wWidth = width();
+    int    wHeight = height();
     double max;
     class Digikam::ImageHistogram *histogram; 
     
@@ -423,26 +424,30 @@ void CurvesWidget::paintEvent( QPaintEvent * )
             break;
 
          default:                                     // Alpha.
+            guidePos = -1;         
             break;
          }  
       
-      p1.drawLine(guidePos, 0, guidePos, wHeight);  
+       if (guidePos != -1)
+          {
+          p1.drawLine(guidePos, 0, guidePos, wHeight);  
 
-      QString string = i18n("x:%1").arg(guidePos);
-      QFontMetrics fontMt( string );       
-      QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
-      rect.setBottom(wHeight - 10);
+          QString string = i18n("x:%1").arg(guidePos);
+          QFontMetrics fontMt( string );       
+          QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
+          rect.setBottom(wHeight - 10);
       
-      if (guidePos < wWidth/2)
-         {
-         rect.moveLeft(guidePos + 3);
-         p1.drawText(rect, Qt::AlignLeft, string);
-         }
-      else
-         {
-         rect.moveRight(guidePos - 3);
-         p1.drawText(rect, Qt::AlignRight, string);
-         }
+          if (guidePos < wWidth/2)
+             {
+             rect.moveLeft(guidePos + 3);
+             p1.drawText(rect, Qt::AlignLeft, string);
+             }
+          else
+             {
+             rect.moveRight(guidePos - 3);
+             p1.drawText(rect, Qt::AlignRight, string);
+             }
+          }
       }
 
    p1.end();

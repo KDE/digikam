@@ -1106,7 +1106,7 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
         
     // Apply HSL.
     uchar* c;
-    register int r, g, b;
+    int r, g, b;
 
     unsigned int* ptr = data;
 

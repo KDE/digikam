@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qcolor.h>
 #include <qwidget.h>
 
 class QCustomEvent;
@@ -98,6 +99,9 @@ public:
                     uint *s_data=0, uint s_w=0, uint s_h=0, 
                     bool blinkComputation=true);
     
+    void setHistogramGuide(QColor color);                    
+    void reset(void);
+    
     int   m_channelType;     // Channel type to draw.
     int   m_scaleType;       // Scale to use for drawing.
     int   m_colorType;       // Color to use for drawing in All Colors Channel mode.
@@ -137,6 +141,7 @@ private:
     int     m_xmax;
     int     m_clearFlag;          // Clear drawing zone with message.
     
+    bool    m_guideVisible;
     bool    m_inSelected;
     bool    m_selectMode;         // If true, a part of the histogram can be selected !
     bool    m_blinkFlag; 
@@ -144,6 +149,8 @@ private:
                                   // else nothing (limit flicker effect in widget especially for small image/computation time).       
     
     QTimer *m_blinkTimer;
+    
+    QColor  m_colorGuide;
     
     void customEvent(QCustomEvent *event);
 };

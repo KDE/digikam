@@ -295,8 +295,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
-            this, SLOT(slotSpotColorChanged( const QColor & ))); 
+    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+            this, SLOT(slotSpotColorChanged( const QColor &, bool ))); 
     
     // -------------------------------------------------------------
     // ComboBox slots.
@@ -339,7 +339,7 @@ void AdjustCurveDialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
+void AdjustCurveDialog::slotSpotColorChanged(const QColor &color, bool release)
 {
     if ( m_pickBlack->isOn() )
        {
@@ -349,7 +349,7 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(color.red(), 42));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(color.green(), 42));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(color.blue(), 42));      
-       m_pickBlack->setOn(false);
+       m_pickBlack->setOn(!release);
        }
     else if ( m_pickGray->isOn() )
        {
@@ -359,7 +359,7 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint::QPoint(color.red(), 128));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint::QPoint(color.green(), 128));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint::QPoint(color.blue(), 128));      
-       m_pickGray->setOn(false);
+       m_pickGray->setOn(!release);
        }
     else if ( m_pickWhite->isOn() )
        {
@@ -369,7 +369,7 @@ void AdjustCurveDialog::slotSpotColorChanged( const QColor &color )
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(color.red(), 213));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(color.green(), 213));      
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 213));      
-       m_pickWhite->setOn(false);
+       m_pickWhite->setOn(!release);
        }
     else
        m_curvesWidget->setCurveGuide(color);

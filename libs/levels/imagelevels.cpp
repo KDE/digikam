@@ -3,7 +3,7 @@
  * Date  : 2004-07-29
  * Description : image levels manipulation methods.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c 
@@ -54,7 +54,7 @@ ImageLevels::ImageLevels()
     m_lut->luts      = NULL;
     m_lut->nchannels = 0;
 
-    for (int channel = 0 ; channel < 5 ; ++channel)
+    for (int channel = 0 ; channel < 5 ; channel++)
        levelsChannelReset(channel);
 }
 
@@ -64,7 +64,7 @@ ImageLevels::~ImageLevels()
        {
        if (m_lut->luts)
           {
-          for (int i = 0 ; i < m_lut->nchannels ; ++i)
+          for (int i = 0 ; i < m_lut->nchannels ; i++)
               delete [] m_lut->luts[i];
 
           delete [] m_lut->luts;
@@ -97,7 +97,7 @@ void ImageLevels::levelsAuto(Digikam::ImageHistogram *hist)
 
     for (int channel = Digikam::ImageHistogram::RedChannel ;
          channel <= Digikam::ImageHistogram::BlueChannel ;
-         ++channel)
+         channel++)
        {
        levelsChannelAuto(hist, channel);
        }
@@ -127,7 +127,7 @@ void ImageLevels::levelsChannelAuto(Digikam::ImageHistogram *hist, int channel)
        
        new_count = 0.0;
 
-       for (i = 0 ; i < 255 ; ++i)
+       for (i = 0 ; i < 255 ; i++)
           {
           new_count += hist->getValue(channel, i);
           percentage = new_count / count;
@@ -144,7 +144,7 @@ void ImageLevels::levelsChannelAuto(Digikam::ImageHistogram *hist, int channel)
        
        new_count = 0.0;
       
-       for (i = 255 ; i > 0 ; --i)
+       for (i = 255 ; i > 0 ; i--)
           {
           new_count += hist->getValue(channel, i);
           percentage = new_count / count;
@@ -159,77 +159,77 @@ void ImageLevels::levelsChannelAuto(Digikam::ImageHistogram *hist, int channel)
        }
 }
 
-int ImageLevels::levelsInputFromColor(int channel, uchar *color)
+int ImageLevels::levelsInputFromColor(int channel, QColor color)
 {
     switch (channel)
        {
        case Digikam::ImageHistogram::ValueChannel:
-          return QMAX (QMAX (color[Digikam::ImageLevels::RedPixel],
-                             color[Digikam::ImageLevels::GreenPixel]),
-                       color[Digikam::ImageLevels::BluePixel]);
+          return QMAX (QMAX (color.red(), color.green()), color.blue());
        
        case Digikam::ImageHistogram::RedChannel:
-          return color[Digikam::ImageLevels::RedPixel];
+          return color.red();
        
        case Digikam::ImageHistogram::GreenChannel:
-          return color[Digikam::ImageLevels::GreenPixel];
+          return  color.green();
     
        case Digikam::ImageHistogram::BlueChannel:
-          return color[Digikam::ImageLevels::BluePixel];
-    
-       case Digikam::ImageHistogram::AlphaChannel:
-          return color[Digikam::ImageLevels::AlphaPixel];
+          return color.blue();
        }
 
     return 0;  // just to please the compiler.
 }
 
-void ImageLevels::levelsAdjustByColors(int channel, uchar *black, uchar *gray, uchar *white)
+void ImageLevels::levelsBlackToneAdjustByColors(int channel, QColor color)
 {
     if (!m_levels) return;
 
-    if (black)
-       m_levels->low_input[channel] = levelsInputFromColor(channel, black);
+    m_levels->low_input[channel] = levelsInputFromColor(channel, color);
+}
 
-    if (white)
-       m_levels->high_input[channel] = levelsInputFromColor(channel, white);
+void ImageLevels::levelsWhiteToneAdjustByColors(int channel, QColor color)
+{
+    if (!m_levels) return;
 
-    if (gray)
-       {
-       int    input;
-       int    range;
-       double inten;
-       double out_light;
-       uchar  lightness;
+    m_levels->high_input[channel] = levelsInputFromColor(channel, color);
+}
 
-       // Calculate lightness value.
+void ImageLevels::levelsGrayToneAdjustByColors(int channel, QColor color)
+{
+    if (!m_levels) return;
+
+    int    input;
+    int    range;
+    double inten;
+    double out_light;
+    uchar  lightness;
+
+    // Calculate lightness value.
        
-       lightness = (uchar)GIMP_RGB_INTENSITY (gray[0], gray[1], gray[2]);  
+    lightness = (uchar)GIMP_RGB_INTENSITY (color.red(), color.green(), color.blue());  
 
-       input = levelsInputFromColor(channel, gray);
+    input = levelsInputFromColor(channel, color);
 
-       range = m_levels->high_input[channel] - m_levels->low_input[channel];
+    range = m_levels->high_input[channel] - m_levels->low_input[channel];
       
-       if (range <= 0)
-          return;
+    if (range <= 0)
+       return;
 
-       input -= m_levels->low_input[channel];
+    input -= m_levels->low_input[channel];
        
-       if (input < 0)
-          return;
+    if (input < 0)
+       return;
 
-       // Normalize input and lightness.
+    // Normalize input and lightness.
        
-       inten = (double) input / (double) range;
-       out_light = (double) lightness/ (double) range;
+    inten = (double) input / (double) range;
+    out_light = (double) lightness/ (double) range;
 
-       if (out_light <= 0)
-          return;
+    if (out_light <= 0)
+       return;
 
-       // Map selected color to corresponding lightness.
+    // Map selected color to corresponding lightness.
        
-       m_levels->gamma[channel] = log (inten) / log (out_light); 
-       }
+    m_levels->gamma[channel] = log (inten) / log (out_light); 
 } 
 
 void ImageLevels::levelsCalculateTransfers()
@@ -241,9 +241,9 @@ void ImageLevels::levelsCalculateTransfers()
 
     // Recalculate the levels arrays.
     
-    for (j = 0 ; j < 5 ; ++j)
+    for (j = 0 ; j < 5 ; j++)
       {
-      for (i = 0; i < 256; ++i)
+      for (i = 0; i < 256; i++)
           {
           //  determine input intensity.
           
@@ -338,7 +338,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
 
     if (m_lut->luts)
        {
-       for (i = 0 ; i < m_lut->nchannels ; ++i)
+       for (i = 0 ; i < m_lut->nchannels ; i++)
            delete [] m_lut->luts[i];
 
        delete [] m_lut->luts;
@@ -347,11 +347,11 @@ void ImageLevels::levelsLutSetup(int nchannels)
     m_lut->nchannels = nchannels;
     m_lut->luts      = new uchar*[m_lut->nchannels];
     
-    for (i = 0 ; i < m_lut->nchannels ; ++i)
+    for (i = 0 ; i < m_lut->nchannels ; i++)
        {
        m_lut->luts[i] = new uchar[256];
 
-       for (v = 0 ; v < 256 ; ++v)
+       for (v = 0 ; v < 256 ; v++)
           {
           // to add gamma correction use func(v ^ g) ^ 1/g instead. 
           val = 255.0 * levelsLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
@@ -546,7 +546,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
        return false;
        }
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
       {
       fields = fscanf (file, "%d %d %d %d ",
                        &low_input[i],
@@ -575,7 +575,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
         }
       }
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
       {
       setLevelGammaValue(i, gamma[i]);
       setLevelLowInputValue(i, low_input[i]);
@@ -604,7 +604,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
 
     fprintf (file, "# GIMP Levels File\n");
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < 5 ; i++)
       {
       char buf[256];
       sprintf (buf, "%f", getLevelGammaValue(i));
@@ -622,6 +622,5 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
   
     return true;
 }
-
 
 }  // NameSpace Digikam

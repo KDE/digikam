@@ -41,6 +41,8 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
+#include <qhbuttongroup.h> 
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -258,6 +260,40 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
 
+    m_pickerColorButtonGroup = new QHButtonGroup(gbox3);
+    m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
+    KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
+    m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
+    m_pickBlack->setToggleButton(true);
+    QToolTip::add( m_pickBlack, i18n( "Shadow tone color picker" ) );
+    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
+                                       "smooth curves point on Red, Green and Blue channels."));
+    m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
+    KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
+    m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
+    m_pickGray->setToggleButton(true);
+    QToolTip::add( m_pickGray, i18n( "Middle tone color picker" ) );
+    QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
+                                      "smooth curves point on Red, Green and Blue channels."));
+    m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
+    m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
+    KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
+    m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
+    m_pickWhite->setToggleButton(true);
+    QToolTip::add( m_pickWhite, i18n( "Highlight tone color picker" ) );
+    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
+                                       "smooth curves point on Red, Green and Blue channels."));
+    m_pickerColorButtonGroup->setExclusive(true);
+    m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
+    
     topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
 
     // -------------------------------------------------------------
@@ -267,7 +303,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageWidget(300, 200, frame2);
+    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
+                                                            Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
@@ -294,6 +331,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
+            
+    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+            this, SLOT(slotSpotColorChanged( const QColor &, bool )));             
 
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
@@ -355,6 +395,35 @@ void AdjustLevelDialog::closeEvent(QCloseEvent *e)
     delete m_histogramWidget;
     delete m_levels;
     e->accept();
+}
+
+void AdjustLevelDialog::slotSpotColorChanged(const QColor &color, bool release)
+{
+    if ( m_pickBlack->isOn() )
+       {
+       // Black tonal levels point.
+       m_levels->levelsBlackToneAdjustByColors(m_channelCB->currentItem(), color);      
+       m_pickBlack->setOn(!release);
+       }
+    else if ( m_pickGray->isOn() )
+       {
+       // Gray tonal levels point.
+       m_levels->levelsGrayToneAdjustByColors(m_channelCB->currentItem(), color);      
+       m_pickGray->setOn(!release);
+       }
+    else if ( m_pickWhite->isOn() )
+       {
+       // White tonal levels point.
+       m_levels->levelsWhiteToneAdjustByColors(m_channelCB->currentItem(), color);      
+       m_pickWhite->setOn(!release);
+       }
+    else
+       m_histogramWidget->setHistogramGuide(color);
+
+    // Refresh the current levels config.
+    slotChannelChanged(m_channelCB->currentItem());
+       
+    slotEffect();                
 }
 
 void AdjustLevelDialog::slotGammaInputchanged(double val)
@@ -444,7 +513,8 @@ void AdjustLevelDialog::slotResetAllChannels()
 
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
-
+    m_histogramWidget->reset();
+    
     slotEffect();
 }
 
@@ -454,6 +524,7 @@ void AdjustLevelDialog::slotUser1()
 
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
+    m_histogramWidget->reset();
 
     slotEffect();
 }

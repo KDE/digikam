@@ -105,6 +105,7 @@ private:
     QPushButton                  *m_pickWhite;
     
     QHButtonGroup                *m_pickerColorButtonGroup;
+    
     Digikam::CurvesWidget        *m_curvesWidget;
     
     Digikam::ColorGradientWidget *m_hGradient;
@@ -133,7 +134,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotPositionChanged(int x, int y);
-    void slotSpotColorChanged( const QColor &color );
+    void slotSpotColorChanged(const QColor &color, bool release);
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

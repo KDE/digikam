@@ -32,6 +32,9 @@
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
+#include <qrect.h> 
+#include <qfont.h> 
+#include <qfontmetrics.h> 
 
 // KDE includes.
 
@@ -67,7 +70,8 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_xmin             = 0;
     m_xmax             = 0;
     m_blinkComputation = blinkComputation;
-    
+    m_guideVisible     = false;
+        
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -155,6 +159,19 @@ HistogramWidget::~HistogramWidget()
 
     if (m_selectionHistogram)
        delete m_selectionHistogram;
+}
+
+void HistogramWidget::setHistogramGuide(QColor color)
+{
+    m_guideVisible = true;
+    m_colorGuide   = color;
+    repaint(false);
+}
+
+void HistogramWidget::reset(void)
+{
+    m_guideVisible = false;
+    repaint(false);
 }
 
 void HistogramWidget::customEvent(QCustomEvent *event)
@@ -284,10 +301,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        return;
        }
        
-    uint   x, y;
-    uint   yr, yg, yb;             // For all color channels.
-    uint   wWidth = width();
-    uint   wHeight = height();
+    int    x, y;
+    int    yr, yg, yb;             // For all color channels.
+    int    wWidth = width();
+    int    wHeight = height();
     double max;
     class ImageHistogram *histogram; 
     
@@ -464,8 +481,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
          {
          if ( m_selectMode == true )   // Selection mode enable ?
             {
-            if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
-                x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+            if ( x >= (int)((float)(m_xmin * wWidth) / 256.0) && 
+                x <= (int)((float)(m_xmax * wWidth) / 256.0) )
                {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
@@ -502,8 +519,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
          {
          if ( m_selectMode == true )   // Histogram selection mode enable ?
             {
-            if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
-                x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+            if ( x >= (int)((float)(m_xmin * wWidth) / 256.0) && 
+                x <= (int)((float)(m_xmax * wWidth) / 256.0) )
                {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
@@ -661,8 +678,60 @@ void HistogramWidget::paintEvent( QPaintEvent * )
          }
       }
       
-      p1.end();
-      bitBlt(this, 0, 0, &pm);
+   // Drawing color guide.
+
+    p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::DotLine));      
+    int guidePos;
+
+    if (m_guideVisible)   
+       {
+       switch(m_channelType)
+          {
+          case HistogramWidget::RedChannelHistogram:      
+             guidePos = m_colorGuide.red();
+             break;
+         
+          case HistogramWidget::GreenChannelHistogram:    
+             guidePos = m_colorGuide.green();
+             break;
+             
+          case HistogramWidget::BlueChannelHistogram:     
+             guidePos = m_colorGuide.blue();
+             break;
+             
+          case HistogramWidget::ValueHistogram:    
+             guidePos = QMAX(QMAX(m_colorGuide.red(), m_colorGuide.green()), m_colorGuide.blue());
+             break;
+
+          default:                                     // Alpha.
+             guidePos = -1;
+             break;
+          }  
+      
+       if (guidePos != -1)
+          {
+          p1.drawLine(guidePos, 0, guidePos, wHeight);  
+
+          QString string = i18n("x:%1").arg(guidePos);
+          QFontMetrics fontMt( string );       
+          QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
+          rect.setBottom(wHeight - 10);
+      
+          if (guidePos < wWidth/2)
+             {
+             rect.moveLeft(guidePos + 3);
+             p1.drawText(rect, Qt::AlignLeft, string);
+             }
+          else
+             {
+             rect.moveRight(guidePos - 3);
+             p1.drawText(rect, Qt::AlignRight, string);
+             }
+          }
+       }
+      
+    p1.end();
+    bitBlt(this, 0, 0, &pm);
 }
 
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )

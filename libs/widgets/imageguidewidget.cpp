@@ -68,6 +68,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool spotVisib
     m_guideMode = guideMode;
     m_freeze = true;
     m_focus = false;
+    m_mouseLeftButtonTracking = false;
     resetSpotPosition();
 }
 
@@ -161,10 +162,16 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
 
 void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton &&
+    if ( !m_focus && e->button() == Qt::LeftButton &&
          m_rect.contains( e->x(), e->y() ) )
        {
        m_focus = true;
+       }
+    
+    if (!m_freeze && e->button() == Qt::LeftButton &&
+         m_rect.contains( e->x(), e->y() ))
+       {
+       m_mouseLeftButtonTracking = true;
        }
 }
 
@@ -174,10 +181,13 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        {    
        m_freeze = !m_freeze;
        m_focus = false;
-       emit spotPositionChanged( getSpotPosition() );
+       m_mouseLeftButtonTracking = false;
        
        if (m_freeze) 
-          emit spotColorChanged( getSpotColor() );
+          {
+          emit spotColorChanged( getSpotColor(), true );
+          emit spotPositionChanged( getSpotPosition(), true );
+          }
        }
 }
 
@@ -189,6 +199,12 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
         m_xpos = e->x();
         m_ypos = e->y();
         repaint(false);
+        
+        if (m_mouseLeftButtonTracking)
+           {
+           emit spotPositionChanged( getSpotPosition(), false );
+           emit spotColorChanged( getSpotColor(), false ); 
+           }
         }
     else
         setCursor ( KCursor::arrowCursor() );

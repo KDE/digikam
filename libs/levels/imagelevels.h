@@ -3,7 +3,7 @@
  * Date  : 2004-07-29
  * Description : image levels manipulation methods.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,10 @@
                                    (g) * GIMP_RGB_INTENSITY_GREEN + \
                                    (b) * GIMP_RGB_INTENSITY_BLUE)
 
+// Qt includes.
+
+#include <qcolor.h>
+                                   
 // KDE includes.
 
 #include <kurl.h>
@@ -84,8 +88,10 @@ public:
     void   levelsChannelReset(int channel);
     void   levelsAuto(Digikam::ImageHistogram *hist);
     void   levelsChannelAuto(Digikam::ImageHistogram *hist, int channel);
-    int    levelsInputFromColor(int channel, uchar *color);    
-    void   levelsAdjustByColors(int channel, uchar *black, uchar *gray, uchar *white);
+    int    levelsInputFromColor(int channel, QColor color);    
+    void   levelsBlackToneAdjustByColors(int channel, QColor color);
+    void   levelsGrayToneAdjustByColors(int channel, QColor color);
+    void   levelsWhiteToneAdjustByColors(int channel, QColor color);
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
     void   levelsLutSetup(int nchannels);
@@ -120,6 +126,5 @@ private:
 };
 
 }  // NameSpace Digikam
-
 
 #endif /* IMAGELEVELS_H */

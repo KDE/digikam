@@ -345,8 +345,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
-            this, SLOT(slotColorSelectedFromImage( const QColor & ))); 
+    connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor &, bool )),
+            this, SLOT(slotColorSelectedFromImage( const QColor &, bool ))); 
 
     connect(m_autoAdjustExposure, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustExposure()));
@@ -564,13 +564,13 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
     slotEffect();  
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
+void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color, bool release )
 {
     if ( m_pickTemperature->isOn() )
        {
        // Calculate Temperature and Green component from color picked.
               
-       int l, r, m;
+       register int l, r, m;
        double sR, sG, sB, mRB, t;
     
        t   = QMAX( QMAX(color.red(), color.green()), color.blue());
@@ -579,7 +579,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
        sB  = color.blue()  / t;
        mRB = sR / sB;
 
-       kdDebug() << k_funcinfo << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
+       kdDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
     
        l = 0;
        r = sizeof(bbWB)/(sizeof(float)*3);
@@ -592,21 +592,20 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
           else
               r = m;
     
-          kdDebug() << k_funcinfo 
-                    << "L,M,R:  " << l << " " << m << " " << r 
+          kdDebug() << "L,M,R:  " << l << " " << m << " " << r 
                     << " bbWB[m]=:"    << bbWB[m][0]/bbWB[m][2]
                     << endl;
           }
        
-       kdDebug() << k_funcinfo << "Temperature (K):" << m*10.0+2000.0 << endl;
+       kdDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
 
        t = (bbWB[m][1]/bbWB[m][0]) / (sG/sR);
     
-       kdDebug() << k_funcinfo << "Green component:" << t << endl;
+       kdDebug() << "Green component:" << t << endl;
     
        m_temperatureInput->setValue(m*10.0+2000.0);
        m_greenInput->setValue(t);
-       m_pickTemperature->setOn(false);
+       m_pickTemperature->setOn(!release);
        }
 
     slotEffect();  

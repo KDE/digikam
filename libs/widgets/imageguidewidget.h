@@ -61,8 +61,8 @@ public:
 
 signals:
 
-    void spotColorChanged( const QColor &color ); 
-    void spotPositionChanged( const QPoint &position ); 
+    void spotColorChanged( const QColor &color, bool release ); 
+    void spotPositionChanged( const QPoint &position, bool release ); 
     
 protected:
     
@@ -89,6 +89,7 @@ private:
     bool        m_focus;
     bool        m_freeze;
     bool        m_spotVisible;
+    bool        m_mouseLeftButtonTracking;
     
     QPixmap    *m_pixmap;
 };

@@ -29,6 +29,7 @@
 class QComboBox;
 class QSpinBox;
 class QPushButton;
+class QHButtonGroup;
 
 class KDoubleSpinBox;
 class KGradientSelector;
@@ -39,6 +40,7 @@ namespace Digikam
 class HistogramWidget;
 class ImageLevels;
 class ImageWidget;
+class ImageGuideWidget;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
@@ -73,34 +75,46 @@ private:
     BlueChannel,
     AlphaChannel
     };
+    
+    enum ColorPicker
+    {
+    BlackTonal=0,
+    GrayTonal,
+    WhiteTonal
+    };
 
-    QComboBox                    *m_channelCB;    
-    QComboBox                    *m_scaleCB;    
+    QComboBox                 *m_channelCB;    
+    QComboBox                 *m_scaleCB;    
     
-    QSpinBox                     *m_minInput;
-    QSpinBox                     *m_maxInput;
-    QSpinBox                     *m_minOutput;
-    QSpinBox                     *m_maxOutput;
+    QSpinBox                  *m_minInput;
+    QSpinBox                  *m_maxInput;
+    QSpinBox                  *m_minOutput;
+    QSpinBox                  *m_maxOutput;
     
-    KDoubleNumInput              *m_gammaInput;
+    KDoubleNumInput           *m_gammaInput;
     
-    QPushButton                  *m_loadButton;
-    QPushButton                  *m_saveButton;
-    QPushButton                  *m_autoButton;
-    QPushButton                  *m_resetButton;
-    QPushButton                  *m_helpButton;
+    QPushButton               *m_loadButton;
+    QPushButton               *m_saveButton;
+    QPushButton               *m_autoButton;
+    QPushButton               *m_resetButton;
+    QPushButton               *m_helpButton;
+    QPushButton               *m_pickBlack;
+    QPushButton               *m_pickGray;
+    QPushButton               *m_pickWhite;
     
-    KGradientSelector            *m_hGradientMinInput;
-    KGradientSelector            *m_hGradientMaxInput;
-    KGradientSelector            *m_hGradientMinOutput;
-    KGradientSelector            *m_hGradientMaxOutput;
+    QHButtonGroup             *m_pickerColorButtonGroup;
     
-    Digikam::HistogramWidget     *m_histogramWidget;
+    KGradientSelector         *m_hGradientMinInput;
+    KGradientSelector         *m_hGradientMaxInput;
+    KGradientSelector         *m_hGradientMinOutput;
+    KGradientSelector         *m_hGradientMaxOutput;
     
-    Digikam::ImageWidget         *m_previewOriginalWidget;
-    Digikam::ImageWidget         *m_previewTargetWidget;
+    Digikam::HistogramWidget  *m_histogramWidget;
     
-    Digikam::ImageLevels         *m_levels;
+    Digikam::ImageGuideWidget *m_previewOriginalWidget;
+    Digikam::ImageWidget      *m_previewTargetWidget;
+    
+    Digikam::ImageLevels      *m_levels;
 
 private:
 
@@ -126,6 +140,7 @@ private slots:
     void slotAdjustMaxInputSpinBox(int val);
     void slotAdjustMinOutputSpinBox(int val);
     void slotAdjustMaxOutputSpinBox(int val);
+    void slotSpotColorChanged(const QColor &color, bool release);
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
