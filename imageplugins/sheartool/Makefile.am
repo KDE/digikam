@@ -10,7 +10,7 @@ digikamimageplugin_sheartool_la_SOURCES = \
 	imageplugin_sheartool.cpp \
 	imageeffect_sheartool.cpp  
 
-digikamimageplugin_sheartool_la_LIBADD = $(LIB_KPARTS) -ldigikam 
+digikamimageplugin_sheartool_la_LIBADD = $(LIB_KPARTS) $(LIB_IMLIB2) -ldigikam 
 
 digikamimageplugin_sheartool_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

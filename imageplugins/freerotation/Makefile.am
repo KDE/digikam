@@ -10,7 +10,7 @@ digikamimageplugin_freerotation_la_SOURCES = \
 	imageplugin_freerotation.cpp \
 	imageeffect_freerotation.cpp freerotationwidget.cpp 
 
-digikamimageplugin_freerotation_la_LIBADD = $(LIB_KPARTS) -ldigikam 
+digikamimageplugin_freerotation_la_LIBADD = $(LIB_KPARTS) $(LIB_IMLIB2) -ldigikam 
 
 digikamimageplugin_freerotation_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
