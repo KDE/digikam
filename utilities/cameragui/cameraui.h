@@ -77,6 +77,7 @@ private:
     bool              m_showAdvanced;
     QVBox*            m_advBox;
     RenameCustomizer* m_renameCustomizer;
+    QCheckBox*        m_autoRotateCheck;
     
     QLabel*           m_status;
     AnimWidget*       m_anim;

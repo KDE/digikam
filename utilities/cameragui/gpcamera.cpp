@@ -282,7 +282,8 @@ bool GPCamera::getSubFolders(const QString& folder,
     }
     status = new GPStatus();
 
-    if (gp_camera_folder_list_folders(d->camera, folder.latin1(),
+    if (gp_camera_folder_list_folders(d->camera,
+                                      QFile::encodeName(folder),
                                       clist, status->context)
         != GP_OK) {
 
@@ -325,7 +326,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     status = new GPStatus;
     
     gp_list_new(&clist);
-    if (gp_camera_folder_list_files(d->camera, folder.latin1(),
+    if (gp_camera_folder_list_files(d->camera, QFile::encodeName(folder),
                                     clist,
                                     status->context) != GP_OK) {
         gp_list_unref(clist);
@@ -369,7 +370,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
     status = new GPStatus;
     
     gp_list_new(&clist);
-    if (gp_camera_folder_list_files(d->camera, folder.latin1(),
+    if (gp_camera_folder_list_files(d->camera, QFile::encodeName(folder),
                                     clist,
                                     status->context) != GP_OK) {
         gp_list_unref(clist);
@@ -396,7 +397,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
         itemInfo.folder = folder;
 
         CameraFileInfo info;
-        gp_camera_file_get_info(d->camera, folder.latin1(),
+        gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
                                 cname, &info, status->context);
 
         itemInfo.mtime            = -1;
@@ -469,8 +470,8 @@ bool GPCamera::getThumbnail(const QString& folder,
     
     status = new GPStatus;
 
-    if (gp_camera_file_get(d->camera, folder.latin1(),
-                           itemName.latin1(),
+    if (gp_camera_file_get(d->camera, QFile::encodeName(folder),
+                           QFile::encodeName(itemName),
                            GP_FILE_TYPE_PREVIEW,
                            cfile, status->context) != GP_OK) {
         gp_file_unref(cfile);
@@ -506,8 +507,8 @@ bool GPCamera::getExif(const QString& folder,
     
     status = new GPStatus;
 
-    if (gp_camera_file_get(d->camera, folder.latin1(),
-                           itemName.latin1(),
+    if (gp_camera_file_get(d->camera, QFile::encodeName(folder),
+                           QFile::encodeName(itemName),
                            GP_FILE_TYPE_EXIF,
                            cfile, status->context) != GP_OK) {
         gp_file_unref(cfile);
@@ -544,8 +545,8 @@ bool GPCamera::downloadItem(const QString& folder,
     }
     status = new GPStatus;
     
-    if (gp_camera_file_get(d->camera, folder.latin1(),
-                           itemName.latin1(),
+    if (gp_camera_file_get(d->camera, QFile::encodeName(folder),
+                           QFile::encodeName(itemName),
                            GP_FILE_TYPE_NORMAL, cfile,
                            status->context) != GP_OK) {
         gp_file_unref(cfile);
@@ -574,8 +575,8 @@ bool GPCamera::deleteItem(const QString& folder,
     }
     status = new GPStatus;
 
-    if (gp_camera_file_delete(d->camera, folder.latin1(),
-                              itemName.latin1(),
+    if (gp_camera_file_delete(d->camera, QFile::encodeName(folder),
+                              QFile::encodeName(itemName),
                               status->context) != GP_OK) {
         delete status;
         status = 0;
@@ -613,7 +614,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
     }
     status = new GPStatus;
     
-    if (gp_camera_folder_delete_all(d->camera, folder.latin1(),
+    if (gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
                                     status->context) != GP_OK) {
         delete status;
         status = 0;
@@ -637,7 +638,7 @@ bool GPCamera::uploadItem(const QString& folder,
         return false;
     }
 
-    gp_file_set_name(cfile, itemName.local8Bit());
+    gp_file_set_name(cfile, QFile::encodeName(itemName));
 
     if (status) {
         delete status;
@@ -646,7 +647,7 @@ bool GPCamera::uploadItem(const QString& folder,
     status = new GPStatus;
 
     if (gp_camera_folder_put_file(d->camera,
-                                  folder.latin1(),
+                                  QFile::encodeName(folder),
                                   cfile,
                                   status->context) != GP_OK) {
         gp_file_unref(cfile);

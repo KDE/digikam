@@ -19,7 +19,7 @@
  * 
  * ============================================================ */
 
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
@@ -111,12 +111,18 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     mainLayout->addLayout(btnLayout);
 
     m_advBox = new QVBox(this);
+    m_advBox->setSpacing(5);
     m_showAdvanced = false;
     m_advBox->hide();
 
     m_renameCustomizer = new RenameCustomizer(m_advBox);
     m_view->setRenameCustomizer(m_renameCustomizer);
 
+    QVGroupBox* rotateBox = new QVGroupBox(i18n("Auto Orient"), m_advBox);
+    m_autoRotateCheck = new QCheckBox(i18n("Automatically rotate/flip using "
+                                           "camera provided information (EXIF)"),
+                                      rotateBox);
+    
     mainLayout->addWidget(m_advBox);
     
     m_downloadMenu = new QPopupMenu(this);
@@ -311,6 +317,9 @@ void CameraUI::slotDownloadSelected()
     QString downloadName;
     QString name;
     QString folder;
+    bool    autoRotate;
+
+    autoRotate = m_autoRotateCheck->isChecked();
 
     int total = 0;
     for (QIconViewItem* item = m_view->firstItem(); item;
@@ -326,7 +335,7 @@ void CameraUI::slotDownloadSelected()
             KURL u(url);
             u.addPath(downloadName.isEmpty() ? name : downloadName);
             
-            m_controller->download(folder, name, u.path());
+            m_controller->download(folder, name, u.path(), autoRotate);
             total++;
         }
     }
@@ -365,6 +374,9 @@ void CameraUI::slotDownloadAll()
     QString downloadName;
     QString name;
     QString folder;
+    bool    autoRotate;
+
+    autoRotate = m_autoRotateCheck->isChecked();
 
     int total = 0;
     for (QIconViewItem* item = m_view->firstItem(); item;
@@ -378,7 +390,7 @@ void CameraUI::slotDownloadAll()
         KURL u(url);
         u.addPath(downloadName.isEmpty() ? name : downloadName);
             
-        m_controller->download(folder, name, u.path());
+        m_controller->download(folder, name, u.path(), autoRotate);
         total++;
     }
 
@@ -499,6 +511,7 @@ void CameraUI::readSettings()
     config->setGroup("Camera Settings");
     w = config->readNumEntry("Width", 500);
     h = config->readNumEntry("Height", 500);
+    m_autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
 
     resize(w, h);
 }
@@ -510,6 +523,7 @@ void CameraUI::saveSettings()
     config->setGroup("Camera Settings");
     config->writeEntry("Width", width());
     config->writeEntry("Height", height());
+    config->writeEntry("AutoRotate", m_autoRotateCheck->isChecked());
     config->sync();
 }
 

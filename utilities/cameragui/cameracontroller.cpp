@@ -42,9 +42,11 @@ extern "C"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdio.h>
 }    
 
 #include "gpcamera.h"
+#include "exifrotate.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
 
@@ -62,6 +64,7 @@ public:
         gp_listfolders,
         gp_listfiles,
         gp_download,
+        gp_upload,
         gp_delete,
         gp_thumbnail,
         gp_exif
@@ -83,6 +86,8 @@ public:
         gp_listedfiles,
         gp_downloaded,
         gp_downloadFailed,
+        gp_uploaded,
+        gp_uploadFailed,
         gp_deleted,
         gp_deleteFailed,
         gp_thumbnailed,
@@ -250,15 +255,43 @@ void CameraThread::run()
         }
         case(CameraCommand::gp_download):
         {
-            QString folder = cmd->map["folder"].asString();
-            QString file   = cmd->map["file"].asString();
-            QString dest   = cmd->map["dest"].asString();
+            QString folder     = cmd->map["folder"].asString();
+            QString file       = cmd->map["file"].asString();
+            QString dest       = cmd->map["dest"].asString();
+            bool    autoRotate = cmd->map["autoRotate"].asBool();
 
             sendInfo(i18n("Downloading file %1...")
                      .arg(file));
 
-            bool result = d->camera->downloadItem(folder, file, dest);
+            // download to a temp file
+            KURL tempURL(dest);
+            tempURL = tempURL.upURL();
+            tempURL.addPath( QString(".digikam-camera-%1")
+                             .arg(getpid()));
 
+            bool result = d->camera->downloadItem(folder, file,
+                                                  tempURL.path());
+
+            if (result)
+            {
+                if (autoRotate)
+                {
+                    sendInfo(i18n("EXIF rotating file %1...")
+                             .arg(file));
+                    Digikam::exifRotate(tempURL.path());
+                }
+
+                // move the file to the destination file
+                if (rename(QFile::encodeName(tempURL.path()),
+                           QFile::encodeName(dest)) != 0)
+                {
+                    // rename failed. delete the temp file
+                    unlink(QFile::encodeName(tempURL.path()));
+                    result = false;
+                }
+            }
+
+            
             if (result)
             {
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_downloaded);
@@ -273,6 +306,35 @@ void CameraThread::run()
                 event->map.insert("folder", QVariant(folder));
                 event->map.insert("file", QVariant(file));
                 event->map.insert("dest", QVariant(dest));
+                QApplication::postEvent(parent, event);
+            }                
+            break;
+        }
+        case(CameraCommand::gp_upload):
+        {
+            QString folder = cmd->map["folder"].asString();
+            QString file   = cmd->map["file"].asString();
+            QString src    = cmd->map["src"].asString();
+
+            sendInfo(i18n("Uploading file %1...")
+                     .arg(file));
+
+            bool result = d->camera->uploadItem(folder, file, src);
+
+            if (result)
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_uploaded);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("src", QVariant(src));
+                QApplication::postEvent(parent, event);
+            }
+            else
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_uploadFailed);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("src", QVariant(src));
                 QApplication::postEvent(parent, event);
             }                
             break;
@@ -414,13 +476,14 @@ void CameraController::downloadPrep()
 }
 
 void CameraController::download(const QString& folder, const QString& file,
-                                const QString& dest)
+                                const QString& dest, bool autoRotate)
 {
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_download;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
     cmd->map.insert("dest", QVariant(dest));
+    cmd->map.insert("autoRotate", QVariant(autoRotate, 0));
     d->cmdQueue.enqueue(cmd);
 }
 

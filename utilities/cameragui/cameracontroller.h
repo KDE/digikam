@@ -48,7 +48,7 @@ public:
 
     void downloadPrep();
     void download(const QString& folder, const QString& file,
-                  const QString& dest);
+                  const QString& dest, bool autoRotate);
 
     void deleteFile(const QString& folder, const QString& file);
     
