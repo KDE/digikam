@@ -45,11 +45,12 @@
 #include <qtooltip.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+#include <qslider.h>
+#include <qspinbox.h>
 #include <qimage.h>
 
 // KDE includes.
 
-#include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -78,9 +79,11 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset values")),
                  m_parent(parent)
 {
+    QString whatsThis;
+    
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
     m_cancel = false;
-    
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -119,37 +122,58 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
-    m_radiusInput = new KIntNumInput(plainPage());
-    m_radiusInput->setRange(1, 20, 1, true);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
-                                         "1 and above determine the blur matrix radius "
-                                         "that determines how much to blur the image."));
+    //label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_radiusSlider = new QSlider(1, 20, 1, 1, Qt::Horizontal, plainPage(), "m_radiusSlider");
+    m_radiusSlider->setTickmarks(QSlider::Below);
+    m_radiusSlider->setTickInterval(1);
+    m_radiusSlider->setTracking ( false );
+    m_radiusInput = new QSpinBox(1, 20, 1, plainPage(), "m_radiusInput");
+    whatsThis = i18n("<p>A radius of 0 has no effect, "
+                     "1 and above determine the blur matrix radius "
+                     "that determines how much to blur the image.");
+    QWhatsThis::add( m_radiusInput, whatsThis);
+    QWhatsThis::add( m_radiusSlider, whatsThis);
     hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_radiusInput, 5);
+    hlay2->addWidget(m_radiusSlider, 3);
+    hlay2->addWidget(m_radiusInput, 1);
     
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
-    m_blackLevelInput = new KIntNumInput(plainPage());
-    m_blackLevelInput->setRange(0, 255, 1, true);
-    QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls adjust the black "
-                                             "levels used by the adaptive filter to "
-                                             "adjust the filter radius."));
+    //label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );  
+    m_blackLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_blackLevelSlider");
+    m_blackLevelSlider->setTickmarks(QSlider::Below);
+    m_blackLevelSlider->setTickInterval(20);
+    m_blackLevelSlider->setTracking ( false );  
+    m_blackLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_blackLevelInput");
+    whatsThis = i18n("<p>This value controls adjust the black "
+                     "levels used by the adaptive filter to "
+                     "adjust the filter radius.");
+    QWhatsThis::add( m_blackLevelInput, whatsThis);
+    QWhatsThis::add( m_blackLevelSlider, whatsThis);                     
     hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_blackLevelInput, 5);
+    hlay3->addWidget(m_blackLevelSlider, 3);
+    hlay3->addWidget(m_blackLevelInput, 1);
 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
-    m_whiteLevelInput = new KIntNumInput(plainPage());
-    m_whiteLevelInput->setRange(0, 255, 1, true);
-    QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls adjust the white "
-                                             "levels used by the adaptive filter to "
-                                             "adjust the filter radius."));
+    //label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );  
+    m_whiteLevelSlider = new QSlider(0, 255, 1, 1, Qt::Horizontal, plainPage(), "m_whiteLevelSlider");
+    m_whiteLevelSlider->setTickmarks(QSlider::Below);
+    m_whiteLevelSlider->setTickInterval(20);
+    m_whiteLevelSlider->setTracking ( false );  
+    m_whiteLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_whiteLevelInput");
+    whatsThis = i18n("<p>This value controls adjust the white "
+                     "levels used by the adaptive filter to "
+                     "adjust the filter radius.");
+    QWhatsThis::add( m_whiteLevelInput, whatsThis);
+    QWhatsThis::add( m_whiteLevelSlider, whatsThis);                         
     hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_whiteLevelInput, 5);
+    hlay4->addWidget(m_whiteLevelSlider, 3);
+    hlay4->addWidget(m_whiteLevelInput, 1);
 
     // -------------------------------------------------------------
     
@@ -178,12 +202,24 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
+    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
+            m_radiusInput, SLOT(setValue(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged(int)),
+            m_radiusSlider, SLOT(setValue(int)));            
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));
-
+            SLOT(slotEffect()));            
+            
+    connect(m_blackLevelSlider, SIGNAL(valueChanged(int)),
+            m_blackLevelInput, SLOT(setValue(int)));
+    connect(m_blackLevelInput, SIGNAL(valueChanged(int)),
+            m_blackLevelSlider, SLOT(setValue(int)));   
     connect(m_blackLevelInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));
 
+    connect(m_whiteLevelSlider, SIGNAL(valueChanged(int)),
+            m_whiteLevelInput, SLOT(setValue(int)));
+    connect(m_whiteLevelInput, SIGNAL(valueChanged(int)),
+            m_whiteLevelSlider, SLOT(setValue(int)));
     connect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                                                
             
@@ -220,11 +256,13 @@ void DespeckleDialog::slotUser1()
 {
     blockSignals(true);
     m_radiusInput->setValue(3);
+    m_radiusSlider->setValue(3);
     m_blackLevelInput->setValue(7);
+    m_blackLevelSlider->setValue(7);
     m_whiteLevelInput->setValue(248);
-    blockSignals(false);
-    
+    m_whiteLevelSlider->setValue(248);
     slotEffect();
+    blockSignals(false);
 } 
 
 void DespeckleDialog::slotEffect()

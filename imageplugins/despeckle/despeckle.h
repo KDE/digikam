@@ -28,8 +28,9 @@
 
 class QPushButton;
 class QCheckBox;
+class QSpinBox;
+class QSlider;
 
-class KIntNumInput;
 class KProgress;
 
 namespace Digikam
@@ -59,10 +60,14 @@ private:
     QWidget      *m_parent;
     QPushButton  *m_helpButton;
     
-    KIntNumInput *m_radiusInput;
-    KIntNumInput *m_blackLevelInput;
-    KIntNumInput *m_whiteLevelInput;
+    QSpinBox     *m_radiusInput;
+    QSpinBox     *m_blackLevelInput;
+    QSpinBox     *m_whiteLevelInput;
         
+    QSlider      *m_radiusSlider;
+    QSlider      *m_blackLevelSlider;
+    QSlider      *m_whiteLevelSlider;
+    
     KProgress    *m_progressBar;
     
     QCheckBox    *m_useAdaptativeMethod;
