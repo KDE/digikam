@@ -544,6 +544,9 @@ void AlbumFolderView::slotAllAlbumsLoaded()
 
     setSelected(folderItem);
     ensureItemVisible(folderItem);
+
+    disconnect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
+               this, SLOT(slotAllAlbumsLoaded()));
 }
 
 void AlbumFolderView::albumNew()
@@ -1067,6 +1070,9 @@ void AlbumFolderView::slotSelectionChanged(ListItem* item)
     if (folderItem->album_)
     {
         albumMan_->setCurrentAlbum(folderItem->album_);
+        stateAlbumSel_ = folderItem->album_->getID();
+        stateAlbumSel_ += (folderItem->album_->type() ==
+                           Album::PHYSICAL) ? 100000 : 200000;
     }
 }
 
