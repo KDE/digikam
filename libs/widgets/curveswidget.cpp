@@ -4,7 +4,7 @@
  * Date  : 2004-12-01
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,13 +41,14 @@
 
 // Digikam includes.
 
-#include <digikamheaders.h>
+#include <imagehistogram.h>
+#include <imagecurves.h>
 
 // Local includes.
 
 #include "curveswidget.h"
 
-namespace DigikamAdjustCurvesImagesPlugin
+namespace Digikam
 {
 
 CurvesWidget::CurvesWidget(int w, int h, 
@@ -97,7 +98,7 @@ void CurvesWidget::curveTypeChanged(void)
   
           //  pick representative points from the curve and make them control points
           
-          for (int i = 0; i <= 8; ++i)
+          for (int i = 0; i <= 8; i++)
              {
              int index = CLAMP0255 (i * 32);
              
@@ -260,7 +261,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     
     int curvePrevVal = 0;
        
-    for (x = 0 ; x < wWidth ; ++x)
+    for (x = 0 ; x < wWidth ; x++)
       {
       double value = 0.0; 
       int    i, j;
@@ -280,23 +281,23 @@ void CurvesWidget::paintEvent( QPaintEvent * )
           switch(m_channelType)
              {
              case CurvesWidget::GreenChannelHistogram:    // Green channel.
-                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
                 break;
              
              case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i++);   
                 break;
              
              case CurvesWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);    
+                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
                 break;
 
              case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i++);   
                 break;
 
              case CurvesWidget::ValueHistogram:           // Luminosity.
-                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, ++i);   
+                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, i++);   
                 break;
              }            
             
@@ -343,7 +344,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       {      
       p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
             
-      for (int p = 0 ; p < 17 ; ++p)
+      for (int p = 0 ; p < 17 ; p++)
          {
          QPoint curvePoint = m_curves->getCurvePoint(m_channelType, p);
          
@@ -374,7 +375,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 
    distance = 65536;
    
-   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+   for (i = 0, closest_point = 0 ; i < 17 ; i++)
       {
       if (m_curves->getCurvePointX(m_channelType, i) != -1)
          {
@@ -410,7 +411,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
            
          m_rightmost = 256;
          
-         for (i = closest_point + 1 ; i < 17 ; ++i)
+         for (i = closest_point + 1 ; i < 17 ; i++)
             {
             if (m_curves->getCurvePointX(m_channelType, i) != -1)
                {
@@ -462,7 +463,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
 
    distance = 65536;
    
-   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+   for (i = 0, closest_point = 0 ; i < 17 ; i++)
       {
       if (m_curves->getCurvePointX(m_channelType, i) != -1)
          {
@@ -531,7 +532,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
 
            if (x2 != x1)
               {
-              for (i = x1 ; i <= x2 ; ++i)
+              for (i = x1 ; i <= x2 ; i++)
                  m_curves->setCurveValue(m_channelType, i, 255 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
               }
            else
@@ -555,7 +556,7 @@ void CurvesWidget::leaveEvent( QEvent * )
       emit signalMouseMoved(-1, -1);
 }
 
-}  // NameSpace DigikamAdjustCurvesImagesPlugin
+}  // NameSpace Digikam
 
 #include "curveswidget.moc"
 

@@ -4,7 +4,7 @@
  * Date  : 2004-12-01
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,14 +28,11 @@
 
 class QCustomEvent;
 
+
 namespace Digikam
 {
 class ImageHistogram;
 class ImageCurves;
-}
-
-namespace DigikamAdjustCurvesImagesPlugin
-{
 
 class CurvesWidget : public QWidget
 {
@@ -120,6 +117,6 @@ private:
     void customEvent(QCustomEvent *event);
 };
 
-}  // NameSpace DigikamAdjustCurvesImagesPlugin
+}  // NameSpace Digikam
 
 #endif /* CURVESWIDGET_H */

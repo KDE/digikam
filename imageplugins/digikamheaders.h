@@ -24,6 +24,7 @@
 
 #include <colorgradientwidget.h>
 #include <histogramwidget.h>
+#include <curveswidget.h>
 #include <imagecurves.h>
 #include <imagehistogram.h>
 #include <imagefilters.h>
@@ -41,6 +42,7 @@
 
 #include <digikam/colorgradientwidget.h>
 #include <digikam/histogramwidget.h>
+#include <digikam/curveswidget.h>
 #include <digikam/imagecurves.h>
 #include <digikam/imagehistogram.h>
 #include <digikam/imagefilters.h>

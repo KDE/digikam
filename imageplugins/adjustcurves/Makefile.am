@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
 kde_module_LTLIBRARIES = digikamimageplugin_adjustcurves.la
 
 digikamimageplugin_adjustcurves_la_SOURCES = imageplugin_adjustcurves.cpp \
-	                                     adjustcurves.cpp curveswidget.cpp 
+	                                     adjustcurves.cpp 
 
 digikamimageplugin_adjustcurves_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
