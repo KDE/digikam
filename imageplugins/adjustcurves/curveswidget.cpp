@@ -332,11 +332,9 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       // Drawing curve.   
    
       p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-      
-      //p1.drawPoint(x, wHeight - ((curveVal * 256) / wHeight)); 
-      
       p1.drawLine(x - 1, wHeight - ((curvePrevVal * 256) / wHeight),
                   x,     wHeight - ((curveVal * 256) / wHeight));         
+      
       curvePrevVal = curveVal;
       }
    
@@ -349,10 +347,13 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       for (int p = 0 ; p < 17 ; ++p)
          {
          QPoint curvePoint = m_curves->getCurvePoint(m_channelType, p);
-      
-         p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 2, 
-                         wHeight - 2 - ((curvePoint.y() * 256) / wHeight),
-                         4, 4 ); 
+         
+         if (curvePoint.x() >= 0)
+             {
+             p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 2, 
+                             wHeight - 2 - ((curvePoint.y() * 256) / wHeight),
+                             4, 4 ); 
+             }
          }
       }
                
@@ -422,11 +423,6 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
          m_grab_point = closest_point;
          m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
          
-         kdDebug() << "m_leftmost=" << m_leftmost 
-                   << "  m_rightmost=" << m_rightmost 
-                   << "  m_grab_point=" << m_grab_point 
-                   << endl;    
-         
          break;
 
       case Digikam::ImageCurves::CURVE_FREE:
@@ -479,9 +475,6 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    if (distance > 8)
       closest_point = (x + 8) / 16;   
    
-   kdDebug() << "closest_point=" << closest_point 
-             << endl;         
-             
    switch ( m_curves->getCurveType(m_channelType) )
       {
       case Digikam::ImageCurves::CURVE_SMOOTH:
@@ -499,11 +492,6 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
  
             m_curves->setCurvePointX(m_channelType, m_grab_point, -1);
             
-            kdDebug() << "m_leftmost=" << m_leftmost 
-                   << "  m_rightmost=" << m_rightmost 
-                   << "  x=" << x 
-                   << endl; 
-                   
             if (x > m_leftmost && x < m_rightmost)
                {
                closest_point = (x + 8) / 16;
@@ -512,9 +500,6 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
                   m_grab_point = closest_point;
 
                m_curves->setCurvePoint(m_channelType, m_grab_point, QPoint::QPoint(x, 255 - y));
-               
-               kdDebug() << "closest_point(2)=" << closest_point 
-                         << endl;   
                }
 
             m_curves->curvesCalculateCurve(m_channelType);

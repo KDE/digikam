@@ -182,7 +182,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_typeCB->insertItem( i18n("Smooth") );
     m_typeCB->insertItem( i18n("Free") );
     m_typeCB->setCurrentText( i18n("Smooth") );
-    QWhatsThis::add( m_typeCB, i18n("<p>Select here the curve type to draw for the current channel."));
+    QWhatsThis::add( m_typeCB, i18n("<p>Select here the curve type to draw for the current channel.<p>"
+                                    "<b>Smooth</b>: this mode constrains the curve type to a smooth line with tension.<p>"
+                                    "<b>Free</b>: with this mode, you can draw your curve free-hand with the mouse."));
 
     m_labelPos = new QLabel(gbox);
     m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
