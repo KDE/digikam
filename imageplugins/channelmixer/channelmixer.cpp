@@ -236,7 +236,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     QWhatsThis::add( m_loadButton, i18n("<p>Load gains settings from a Gimp gains text file."));
     m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
     QWhatsThis::add( m_saveButton, i18n("<p>Save gains settings to a Gimp gains text file."));
-    m_resetButton = new QPushButton(i18n("&Reset All Values"), gbox3);
+    m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all color channels' gains settings."));
 
     topLayout->addMultiCellWidget(gbox3, 2, 2, 0, 0);
