@@ -12,7 +12,7 @@ Currently implemented plugins are:
 
  1) AdjustLevels       : A plugin for to adjust the image histogram levels manually.
  2) SolarizeImage      : A plugin for to solarize an image.
-
+ 3) Despeckle          : A noise reduction filter.
 
 Contact :
 -----------------------------------------------------------------------

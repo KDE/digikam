@@ -1,4 +1,11 @@
-v0.1.0 - 08/11/04
+v0.3.0 - 08/25/04
+----------------------------------------------------------------------------
+    * Added new noise reduction filter 'Despeckle' plugin using KDEImageEffect API.
+
+v0.2.0 - 08/15/04
 ----------------------------------------------------------------------------
     * Moved 'SolarizeImage' plugin from Digikam core.
+
+v0.1.0 - 08/11/04
+----------------------------------------------------------------------------
     * Initial Creation : 'AdjustLevels' plugin.
