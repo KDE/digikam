@@ -124,7 +124,7 @@ int main(int argc, char **argv)
                       0);
 
     about.addCredit ( "Achim Bohnet",
-                      I18N_NOOP("Bugs reports and patchs"),
+                      I18N_NOOP("Bugs reports and patches"),
                       "ach at mpe.mpg.de",
                       0);
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
                       0);
 
     about.addCredit ( "Richard Taylor",
-                      I18N_NOOP("Feedback and patchs"),
+                      I18N_NOOP("Feedback and patches"),
                       "r dot taylor at bcs.org.uk",
                       0);
                                                                   
