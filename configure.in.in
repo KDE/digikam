@@ -230,7 +230,7 @@ have_tiff=no
 AC_CHECK_LIB(tiff, TIFFWriteScanline,
   have_tiff=yes,
   AC_MSG_WARN([TIFF library not found]), 
-  -lz -lm)
+  -ljpeg -lz -lm)
 
 if test "x$have_tiff" = "xyes"; then
   KDE_CHECK_HEADER(tiffio.h, have_tiff=yes, have_tiff=no)
