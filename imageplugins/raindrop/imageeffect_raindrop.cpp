@@ -41,6 +41,7 @@
 #include <qimage.h>
 #include <qspinbox.h>
 #include <qdatetime.h> 
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -49,6 +50,7 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kimageeffect.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
@@ -205,9 +207,6 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    slotUser1();    // Reset all parameters to the default values.        
-    
     connect(m_dropSlider, SIGNAL(valueChanged(int)),
             m_dropSpinBox, SLOT(setValue(int)));
     connect(m_dropSpinBox, SIGNAL(valueChanged(int)),
@@ -228,6 +227,12 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
             m_coeffSlider, SLOT(setValue(int)));   
     connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));     
+
+    // -------------------------------------------------------------
+    
+    adjustSize();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.        
+                
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -255,6 +260,13 @@ void ImageEffect_RainDrop::slotCancel()
 void ImageEffect_RainDrop::slotUser1()
 {
     blockSignals(true);
+    disconnect(m_dropSpinBox, SIGNAL(valueChanged (int)),
+              this, SLOT(slotEffect()));  
+    disconnect(m_amountSpinBox, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));     
+    disconnect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
+               this, SLOT(slotEffect()));     
+          
     m_dropSlider->setValue(80);
     m_dropSpinBox->setValue(80);
     
@@ -264,6 +276,13 @@ void ImageEffect_RainDrop::slotUser1()
     m_coeffSlider->setValue(30);
     m_coeffSpinBox->setValue(30);
     slotEffect();
+    
+    connect(m_dropSpinBox, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));  
+    connect(m_amountSpinBox, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));     
+    connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));     
     blockSignals(false);
 } 
 
@@ -271,9 +290,11 @@ void ImageEffect_RainDrop::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
+    // Preview image size.
     int wp      = iface->previewWidth();
     int hp      = iface->previewHeight();
     
+    // All data from the image
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
@@ -281,17 +302,50 @@ void ImageEffect_RainDrop::slotEffect()
     int a       = m_amountSpinBox->value();
     int c       = m_coeffSpinBox->value();
 
-    m_progressBar->setValue(0); 
-    rainDrops(data, w, h, d, a, c);
-    
-    QImage image;
-    image.create( w, h, 32 );
-    image.setAlphaBuffer(true) ;
-    memcpy(image.bits(), data, image.numBytes());
-    QImage newImage = image.scale(wp, hp);
-    
-    iface->putPreviewData((uint*)newImage.bits());
+    // Selected data from the image
+    int selectedX = iface->selectedXOrg();
+    int selectedY = iface->selectedYOrg();
+    int selectedW = iface->selectedWidth();
+    int selectedH = iface->selectedHeight();
 
+    m_progressBar->setValue(0); 
+
+    // If we have a region selection in image, use it for ignore the filter modification on,
+    // else, applied the filter on the full image.
+    
+    if (selectedW && selectedH)     
+       {
+       // Get a copy of the selected image region for restoring at end...
+       QImage orgImg, selectedImg;
+       orgImg.create( w, h, 32 );
+       orgImg.setAlphaBuffer(true);
+       memcpy(orgImg.bits(), data, orgImg.numBytes());
+       selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
+    
+       rainDrops(data, w, h, d, a, c);
+    
+       QImage newImg, targetImg;
+       newImg.create( w, h, 32 );
+       newImg.setAlphaBuffer(true) ;
+       memcpy(newImg.bits(), data, newImg.numBytes());
+    
+       KImageEffect::blendOnLower(selectedX, selectedY, selectedImg, newImg);
+    
+       QImage destImg = newImg.scale(wp, hp);
+       iface->putPreviewData((uint*)destImg.bits());
+       }
+    else 
+       {
+       rainDrops(data, w, h, d, a, c);
+       QImage newImg;
+       newImg.create( w, h, 32 );
+       newImg.setAlphaBuffer(true) ;
+       memcpy(newImg.bits(), data, newImg.numBytes());
+    
+       QImage destImg = newImg.scale(wp, hp);
+       iface->putPreviewData((uint*)destImg.bits());
+       }
+           
     delete [] data;
     m_progressBar->setValue(0); 
     m_previewWidget->update();
@@ -311,17 +365,46 @@ void ImageEffect_RainDrop::slotOk()
     int a       = m_amountSpinBox->value();
     int c       = m_coeffSpinBox->value();
 
+    // Selected data from the image
+    int selectedX = iface->selectedXOrg();
+    int selectedY = iface->selectedYOrg();
+    int selectedW = iface->selectedWidth();
+    int selectedH = iface->selectedHeight();
+
+    m_progressBar->setValue(0); 
+        
     if (data) 
        {
-       m_progressBar->setValue(0); 
-       rainDrops(data, w, h, d, a, c);    
-       
-       if ( !m_cancel )
-          iface->putOriginalData(data);
-        
-       delete [] data;
+       // If we have a region selection in image, use it for ignore the filter modification on,
+       // else, applied the filter on the full image.
+           
+       if (selectedW && selectedH)     
+          {
+          // Get a copy of the selected image region for restoring at end...
+          QImage orgImg, selectedImg;
+          orgImg.create( w, h, 32 );
+          orgImg.setAlphaBuffer(true);
+          memcpy(orgImg.bits(), data, orgImg.numBytes());
+          selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
+    
+          rainDrops(data, w, h, d, a, c);
+    
+          QImage newImg, targetImg;
+          newImg.create( w, h, 32 );
+          newImg.setAlphaBuffer(true) ;
+          memcpy(newImg.bits(), data, newImg.numBytes());
+    
+          KImageEffect::blendOnLower(selectedX, selectedY, selectedImg, newImg);
+          if ( !m_cancel ) iface->putOriginalData((uint*)newImg.bits());
+          }
+       else 
+          {
+          rainDrops(data, w, h, d, a, c);
+          if ( !m_cancel ) iface->putOriginalData(data);
+          }
        }
     
+    delete [] data;    
     m_parent->setCursor( KCursor::arrowCursor() );        
     accept();
 }
