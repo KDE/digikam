@@ -13,7 +13,7 @@ Main Application:
 * Option to hide header in thumbnail view
 * Option to hide image names
 * Added LibKIPI support instead Digikamplugins interface.
-* Added dockable widget like Showimg.
+* Added dockable main widgets like Showimg.
 * Added config saving of Albums opened in Albums treeview.
 
 CameraClient:
@@ -29,11 +29,12 @@ CameraClient:
 ImageViever:
 
 * Port from imlib1 to imlib2.
+* Added dockable toolbars.
 * Add Plugins interface.
 * Add RedEyes correction.
 * Add Blur/Sharpen image filters.
 * Add image Histogram viewer.
-* Add Color autocorrection filter.
+* Add Colors autocorrection filter.
 
 Plugins (LibKIPI):
 
