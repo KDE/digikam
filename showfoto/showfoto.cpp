@@ -1248,18 +1248,21 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
     // No error, remove item in thumbbar.
     
+    Digikam::ThumbBarItem *item2remove = m_bar->currentItem();
+    
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
      {
-        if (item->url().equals(m_bar->currentItem()->url()))
+        if (item->url().equals(item2remove->url()))
         {
             m_bar->removeItem(item);
             break;
         }
     }
 
-    // Update thumbbar item preview.
-    m_bar->invalidateThumb(m_bar->currentItem());
+    // Update thumbbar items preview.
+    m_bar->invalidateThumb(item2remove);
     
+    // Disable menu actions if no current image.
     if ( m_bar->countItems() == 0 )    
        toogleActions(false);
 }
