@@ -28,6 +28,11 @@
 
 class KDoubleNumInput;
 
+namespace Digikam
+{
+class ImageWidget;
+}
+
 class ImageRotateDlg : public KDialogBase
 {
     Q_OBJECT
@@ -39,13 +44,19 @@ public:
 
 private:
 
+    Digikam::ImageWidget *m_previewWidget;
+    
     KDoubleNumInput *m_angleInput;
 
     double          *m_angle;
     
+    void freerotation(double angle, uint *data, int w, int h);
+        
 private slots:
 
     void slotOk();
+    void slotEffect();
+    
 };
 
 #endif /* IMAGEROTATEDLG_H */
