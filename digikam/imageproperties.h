@@ -24,30 +24,28 @@
 
 // Qt includes.
 
-#include <qguardedptr.h>
-#include <qpixmap.h>
+#include <qstring.h>
+#include <qimage.h>
 
 // KDE includes.
 
 #include <kdialogbase.h>
 
-// Local includes.
-
-#include "thumbnailjob.h"
-
+class QComboBox;
+class QSpinBox;
 class QLabel;
-class QListView;
-class QPixmap;
-class QCheckListItem;
-class QCheckBox;
-
-class KFileMetaInfo;
-class KTextEdit;
 
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumLister;
-class TAlbum;
+
+class KExifData;
+
+namespace Digikam
+{
+class HistogramWidget;
+class ColorGradientWidget;
+}
 
 class ImageProperties : public KDialogBase
 {
@@ -70,18 +68,12 @@ private:
     AlbumIconView *m_view;
     AlbumIconItem *m_currItem;
     AlbumLister   *m_lister;
-    QLabel        *m_thumbLabel;
-    QLabel        *m_nameLabel;
-    KTextEdit     *m_commentsEdit;
-    QListView     *m_tagsView;
-    QCheckBox     *m_autoSaveBox;
-    bool           m_modified;
 
-    QGuardedPtr<ThumbnailJob> m_thumbJob;
+    // For Exif viever.
+    
+    KExifData     *mExifData;
 
-    void populateTags();
-    void populateTags(QCheckListItem* parItem, TAlbum* parAlbum);
-
+    void setupExifViewer(void);
     
     // For histogram viever.
     

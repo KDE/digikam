@@ -27,6 +27,7 @@
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
+#include <qtextedit.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qcombobox.h>
@@ -40,12 +41,16 @@
 #include <kdialogbase.h>
 #include <kdeversion.h>
 #include <kapplication.h>
+#include <kurl.h>
+#include <kcursor.h>
 
 // LibKexif includes.
 
-#include <libkexif/kexif.h>
-#include <libkexif/kexifutils.h>
+#include <libkexif/kexififd.h>
+#include <libkexif/kexifentry.h>
 #include <libkexif/kexifdata.h>
+#include <libkexif/kexiflistview.h>
+#include <libkexif/kexiflistviewitem.h>
 
 // Local includes.
 
@@ -67,29 +72,62 @@
 
 
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
-               : KDialogBase(Plain, i18n("Image Properties"), Help|User1|User2|Stretch|Ok|Apply|Cancel,
+               : KDialogBase(Tabbed, i18n("Image Properties and Meta-Data"), 
+                             Help|User1|User2|Stretch|Ok|Cancel,
                              Ok, view, 0, true, true, 
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
-    setHelp("imageproperties.anchor", "digikam");
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    
+    // Main init.
+    
+    setHelp("propertiesmetadatahistogram.anchor", "digikam");
     m_view     = view;
     m_currItem = currItem;
     m_lister   = view->albumLister();
+    KURL fileURL(m_currItem->fileItem()->url());
+    
+    // Exif Viewer init.
+    
+    mExifData = new KExifData;
 
+    if (mExifData->readFromFile(fileURL.path()))
+        setupExifViewer();
+        
+    // HistoGramViewer init.
+    
+    m_histogramWidget = 0L;
+    m_hGradient       = 0L;
+    m_image.load(fileURL.path());
+    
+    if (m_image.isNull() == false)
+       {
+       if(m_image.depth() < 32)                 // we works always with 32bpp.
+          m_image = m_image.convertDepth(32);
+       
+       m_image.setAlphaBuffer(true);
+       setupHistogramViewer((uint *)m_image.bits(), m_image.width(), m_image.height());
+       }
+    
+    parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
 
 ImageProperties::~ImageProperties()
 {
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    
-    kapp->config()->setGroup("Image Description Dialog");
+   
+    kapp->config()->setGroup("Image Properties Dialog");
 //    kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
-    saveDialogSize("Image Description Dialog");
+    saveDialogSize("Image Properties Dialog");
+    
+    // For Exif viewer.
+    
+    if (mExifData)
+        delete mExifData;
     
     // For histogram viever.
+    
     if ( m_histogramWidget )
        delete m_histogramWidget;
     
@@ -102,9 +140,6 @@ void ImageProperties::slotUser1()
 /*    if (!m_currItem)
         return;
 
-    if (m_autoSaveBox->isChecked())
-    slotApply();    
-
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     slotItemChanged();*/
 }
@@ -114,9 +149,6 @@ void ImageProperties::slotUser2()
     /*if (!m_currItem)
         return;
     
-    if (m_autoSaveBox->isChecked())
-    slotApply();    
-
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     slotItemChanged();*/
 }
@@ -503,6 +535,46 @@ void ImageProperties::updateInformations()
 }
 
 //-----------------------------------------------------------------------------------------------------------
+// Exif Viewer implementation methods
+
+void ImageProperties::setupExifViewer(void)
+{
+    QPtrList<KExifIfd> ifdList(mExifData->ifdList());
+
+    QFrame *page = addPage( i18n("Exif") );
+    QGridLayout* layout = new QGridLayout(page);
+    KExifListView* listview = new KExifListView(page, true);
+    
+    QGroupBox *textBox = new QGroupBox(1, Qt::Vertical, page);
+    QTextEdit *textEdit = new QTextEdit(textBox);
+    textEdit->setReadOnly(true);
+    textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    textBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    textEdit->setText(i18n("Select an item to see its description"));
+    
+    layout->addWidget(listview, 0, 0);
+    layout->addWidget(textBox, 1, 0);
+    
+    for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
+        {
+        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), ifd->getName());
+        listview->addItems(ifd->entryList(), item );
+        }
+        
+    connect(listview, SIGNAL(signal_itemDescription(const QString&)),
+            textEdit, SLOT(setText(const QString&)));
+
+    // Exif embedded thumbnails listview entry creation.
+    
+    QImage thumbnail(mExifData->getThumbnail());
+        
+    if (!thumbnail.isNull()) 
+        {
+        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), i18n("Thumbnail"));
+        KExifListViewItem *item2 = new KExifListViewItem(item, listview->lastItem(), "");
+        item2->setPixmap(1, QPixmap(thumbnail));
+        }        
+}
 
 
 #include "imageproperties.moc"

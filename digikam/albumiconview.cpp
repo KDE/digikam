@@ -67,7 +67,6 @@
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kcursor.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -98,6 +97,7 @@
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
+#include "imageproperties.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
@@ -108,8 +108,6 @@
 
 #include "albumiconitem.h"
 #include "digikamapp.h"
-#include "histogrampropsplugin.h"
-#include "exifpropsplugin.h"
 #include "albumiconview.h"
 
 class AlbumIconViewPrivate
@@ -896,26 +894,11 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;
-    
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
-    ExifPropsPlugin *exifProps = new ExifPropsPlugin(&dlg, item->fileItem()->url().path());
-    HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(&dlg, item->fileItem()->url().path());
 
-    // Adding Exif Viewer tabs in properties dialog.
-    if (exifProps)
-       dlg.insertPlugin(exifProps);
-
-    // Adding Histogram Viewer tab in properties dialog       
-    if (histogramProps)
-       dlg.insertPlugin(histogramProps);
+    ImageProperties properties(this, item);
     
-    parentWidget()->setCursor( KCursor::arrowCursor() );
-           
-    if (dlg.exec())
-    {
-        item->repaint();
-    }
+    properties.exec();
+
 }
 
 // ------------------------------------------------------------------------------
