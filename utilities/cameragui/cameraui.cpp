@@ -31,6 +31,7 @@
 #include <qframe.h>
 #include <qprogressbar.h>
 #include <qlayout.h>
+#include <qtimer.h>
 
 #include <guifactory.h>
 
@@ -56,6 +57,7 @@ public:
 
     QLabel*              statusLabel;
     QProgressBar*        progressBar;
+    QTimer*              progressHideTimer;
 };
 
 CameraUI::CameraUI(QWidget* parent, const QString& model,
@@ -99,6 +101,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
                                               QSizePolicy::Fixed, 1, 0));
     d->progressBar->setTotalSteps(100);
     h->addWidget(d->progressBar);
+    d->progressBar->hide();
+
+    d->progressHideTimer = new QTimer(this);
     
     setCentralWidget(w);
 
@@ -137,11 +142,16 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     connect(d->controller, SIGNAL(signalInfoMessage(const QString&)),
             d->statusLabel, SLOT(setText(const QString&)));
     connect(d->controller, SIGNAL(signalInfoPercent(int)),
-            d->progressBar, SLOT(setProgress(int)));
+            SLOT(slotProgress(int)));
+
+    connect(d->progressHideTimer, SIGNAL(timeout()),
+            d->progressBar, SLOT(hide()));
 }
 
 CameraUI::~CameraUI()
 {
+    delete d->progressHideTimer;
+    
     saveInitialSize();
     
     delete d->controller;
@@ -237,6 +247,15 @@ void CameraUI::slotDownloadAll()
         return;
 
     d->controller->downloadAll(url.path());
+}
+
+void CameraUI::slotProgress(int val)
+{
+    d->progressHideTimer->stop();
+    if (d->progressBar->isHidden())
+        d->progressBar->show();
+    d->progressBar->setProgress(val);
+    d->progressHideTimer->start(1000, false);
 }
 
 void CameraUI::loadInitialSize()

@@ -48,6 +48,7 @@ private slots:
     void slotFatal(const QString& msg);
     void slotBusy(bool val);
     void slotSelectionChanged();
+    void slotProgress(int val);
 
     void slotDownloadSelected();
     void slotDownloadAll();
