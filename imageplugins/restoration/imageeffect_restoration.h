@@ -45,6 +45,7 @@ class KProgress;
 namespace Digikam
 {
 class ImagePreviewWidget;
+class ImageIface;
 }
 
 namespace DigikamImagePlugins
@@ -90,6 +91,8 @@ private:
     int              m_currentRenderingMode;
     
     uint            *m_originalData;
+    int              m_originalWidth;
+    int              m_originalHeight;
     
     QImage           m_previewImage;
     QWidget         *m_parent;
@@ -126,6 +129,7 @@ private:
     DigikamImagePlugins::CimgIface       *m_cimgInterface;
     
     Digikam::ImagePreviewWidget          *m_imagePreviewWidget;
+    Digikam::ImageIface                  *m_iface;    
     
     void customEvent(QCustomEvent *event);
     

@@ -83,7 +83,12 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_timer                = 0L;
     m_originalData         = 0L;
     m_cimgInterface        = 0L;
-        
+
+    m_iface          = new Digikam::ImageIface(0, 0);
+    m_originalData   = m_iface->getOriginalData();
+    m_originalWidth  = m_iface->originalWidth();
+    m_originalHeight = m_iface->originalHeight();        
+    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -318,7 +323,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 ImageEffect_Restoration::~ImageEffect_Restoration()
 {
     // No need to delete m_previewData because it's driving by QImage.
-        
+
     if (m_cimgInterface)
        delete m_cimgInterface;
        
@@ -327,6 +332,8 @@ ImageEffect_Restoration::~ImageEffect_Restoration()
     
     if (m_timer)
        delete m_timer;
+    
+    delete m_iface;
 }
 
 void ImageEffect_Restoration::slotTimer()
@@ -504,18 +511,12 @@ void ImageEffect_Restoration::slotOk()
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-        
-    uint* m_originalData = iface.getOriginalData();
-    int w                = iface.originalWidth();
-    int h                = iface.originalHeight();
-    
     m_progressBar->setValue(0);
     
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(m_originalData, w, h, 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(m_originalData, m_originalWidth, m_originalHeight, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -580,7 +581,6 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  Digikam::ImageIface iface(0, 0);
                  iface.putOriginalData(i18n("Restoration"), m_originalData);
        
-                 delete [] m_originalData;
                  m_parent->setCursor( KCursor::arrowCursor() );
                  accept();       
                  break;
