@@ -871,7 +871,7 @@ void ImageWindow::slotToggleFullScreen()
     }
     else 
     {
-        // hide the menubar and the toolbar
+        // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
 
