@@ -130,7 +130,6 @@ void ImageProperties::slotUser1()
         return;
     }
         
-    m_currItem->setSelected(false);
     m_currItem  = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currURL   = m_currItem->fileItem()->url();    
     m_currItem->setSelected(true);
@@ -156,7 +155,6 @@ void ImageProperties::slotUser2()
         return;
     }
     
-    m_currItem->setSelected(false);
     m_currItem    = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currURL     = m_currItem->fileItem()->url();    
     m_currItem->setSelected(true);

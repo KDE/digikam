@@ -237,7 +237,6 @@ void ImageDescEdit::slotUser1()
     if (m_autoSaveBox->isChecked())
        slotApply();    
        
-    m_currItem->setSelected(false);
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currItem->setSelected(true);    
     
@@ -252,7 +251,6 @@ void ImageDescEdit::slotUser2()
     if (m_autoSaveBox->isChecked())
         slotApply();    
 
-    m_currItem->setSelected(false);
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currItem->setSelected(true);
         
