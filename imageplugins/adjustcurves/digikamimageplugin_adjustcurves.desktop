@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_AdjustCurves
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+
+Comment=Image histogram adjust curves plugin for digikam
+
+X-KDE-Library=digikamimageplugin_adjustcurves
+author=Caulier Gilles, caulier dot gilles at free dot fr
