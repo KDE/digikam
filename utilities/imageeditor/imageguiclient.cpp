@@ -92,6 +92,7 @@ ImageGUIClient::ImageGUIClient()
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
                                      actionCollection(),
                                      "imageview_rotate");
+    m_rotateAction->setDelayed(false);
 
     m_rotateAction->insert( new KAction(i18n("90 degrees"),
                                         0, Key_1, this, SIGNAL(signalRotate90()),
@@ -162,8 +163,10 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutapp/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/imageview_aboutkde/ ");
     
+    guiDef.append("ToolBar/Action/imageview_first/ ");
     guiDef.append("ToolBar/Action/imageview_prev/ ");
     guiDef.append("ToolBar/Action/imageview_next/ ");
+    guiDef.append("ToolBar/Action/imageview_last/ ");
     guiDef.append("ToolBar/Separator/ / ");
     guiDef.append("ToolBar/Action/imageview_save/ ");
     guiDef.append("ToolBar/Action/imageview_saveas/ ");

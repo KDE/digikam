@@ -163,8 +163,11 @@ ImageWindow::~ImageWindow()
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList,
-                          const KURL& urlCurrent)
+                          const KURL& urlCurrent,
+                          const QString& caption)
 {
+    setCaption(caption);
+    
     m_urlList    = urlList;
     m_urlCurrent = urlCurrent;
     

@@ -25,6 +25,7 @@
 #include <kurl.h>
 
 #include <qmainwindow.h>
+#include <qstring.h>
 
 class QPopupMenu;
 class QLabel;
@@ -45,7 +46,8 @@ public:
 
     ~ImageWindow();
 
-    void loadURL(const KURL::List& urlList, const KURL& urlCurrent);
+    void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
+                 const QString& caption=QString::null);
 
     static ImageWindow* instance();
     

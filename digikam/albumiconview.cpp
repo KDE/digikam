@@ -710,7 +710,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     //view->show();
 
     ImageWindow *imview = ImageWindow::instance();
-    imview->loadURL(urlList, item->fileItem()->url());
+    imview->loadURL(urlList, item->fileItem()->url(),
+		    d->currentAlbum ? d->currentAlbum->getTitle():QString());
     if (imview->isHidden())
         imview->show();
     imview->raise();

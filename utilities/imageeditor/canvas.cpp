@@ -260,7 +260,7 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
     paintViewportRect(er, false);
 
     if (!d->pressedMoving)
-        d->paintTimer->start(300, true);
+        d->paintTimer->start(500, true);
 }
 
 void Canvas::paintViewportRect(const QRect& vr, bool aa)
