@@ -503,7 +503,7 @@ void ImageEffect_Border::slotEffect()
           break;
        }
     
-    tmp = tmp.scale(w, h, QImage::ScaleMin);
+    tmp = tmp.smoothScale(w, h, QImage::ScaleMin);
     dest.create( w, h, 32 );
     dest.fill(m_previewWidget->colorGroup().background().rgb());
     bitBlt( &dest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());

@@ -1,14 +1,13 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
-	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS) 
+	      $(all_includes) $(LIBDIGIKAM_CFLAGS) 
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_lensdistortion.la 
 
-digikamimageplugin_lensdistortion_la_SOURCES = \
-	imageplugin_lensdistortion.cpp \
-	imageeffect_lensdistortion.cpp 
+digikamimageplugin_lensdistortion_la_SOURCES = imageplugin_lensdistortion.cpp \
+	                                       imageeffect_lensdistortion.cpp 
 
 digikamimageplugin_lensdistortion_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) 
 

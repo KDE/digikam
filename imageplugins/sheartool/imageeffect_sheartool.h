@@ -2,10 +2,10 @@
  * File  : imageeffect_sheartool.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
   * Date  : 2004-12-23
- * Description : a Digikam image editor plugin for process 
+ * Description : a digiKam image editor plugin for process 
  *               shearing image.
 * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,8 +28,9 @@
 #include <kdialogbase.h>
 
 class QPushButton;
+class QLabel;
 
-class KIntNumInput;
+class KDoubleNumInput;
 
 namespace Digikam
 {
@@ -50,14 +51,15 @@ public:
 
 private:
 
-    float                m_ratioW, m_ratioH;   // Ratio coef. between preview and original image.
-
-    QWidget             *m_parent;
+    QLabel                    *m_newWidthLabel;
+    QLabel                    *m_newHeightLabel;
     
-    QPushButton         *m_helpButton;
+    QWidget                   *m_parent;
+    
+    QPushButton               *m_helpButton;
    
-    KIntNumInput        *m_magnitudeX;
-    KIntNumInput        *m_magnitudeY;
+    KDoubleNumInput           *m_magnitudeX;
+    KDoubleNumInput           *m_magnitudeY;
 
     Digikam::ImageGuideWidget *m_previewWidget;
     

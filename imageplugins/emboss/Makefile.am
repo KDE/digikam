@@ -1,14 +1,13 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
-	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS)   
+	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_emboss.la
 
-digikamimageplugin_emboss_la_SOURCES = \
-	imageplugin_emboss.cpp \
-	imageeffect_emboss.cpp 
+digikamimageplugin_emboss_la_SOURCES = imageplugin_emboss.cpp \
+	                               imageeffect_emboss.cpp 
 
 digikamimageplugin_emboss_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
