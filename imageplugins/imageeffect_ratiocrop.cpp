@@ -61,17 +61,19 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                        m_parent(parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 5 , marginHint(), spacingHint());
 
     QVGroupBox *gbox = new QVGroupBox(i18n("Aspect Ratio Crop Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
+    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>You can see here the aspect ratio selection preview used for "
+                                                  "cropping. You can use the mouse for moving and resizing the crop "
+                                                  "area."));
     l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    topLayout->addMultiCellWidget(gbox, 0, 0, 0, 4);
  
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
     m_ratioCB->insertItem( i18n("Custom") );
@@ -83,54 +85,57 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->insertItem( "7:10" );
     m_ratioCB->insertItem( i18n("None") );
     m_ratioCB->setCurrentText( "1:1" );
-    QWhatsThis::add( m_ratioCB, i18n("<p>Select here your aspect ratio for cropping."));
+    QWhatsThis::add( m_ratioCB, i18n("<p>Select here your contrained aspect ratio for cropping."));
     
     QLabel *label2 = new QLabel(i18n("Orientation:"), plainPage());
     m_orientCB = new QComboBox( false, plainPage() );
     m_orientCB->insertItem( i18n("Landscape") );
     m_orientCB->insertItem( i18n("Portrait") );
+    QWhatsThis::add( m_orientCB, i18n("<p>Select here contrained aspect ratio orientation."));
     
-    hlay->addWidget(label, 1);
-    hlay->addWidget(m_ratioCB, 2);
-    hlay->addWidget(label2, 1);
-    hlay->addWidget(m_orientCB, 2);
+    topLayout->addMultiCellWidget(label, 1, 1, 0, 0);
+    topLayout->addMultiCellWidget(m_ratioCB, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(label2, 1, 1, 3, 3);
+    topLayout->addMultiCellWidget(m_orientCB, 1, 1, 4, 4);
 
-    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
+    QHBoxLayout* l2 = new QHBoxLayout(plainPage(), 1, 0);
+    m_customLabel1 = new QLabel(i18n("Custom Ratio: "), plainPage());
+    m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
     m_customRatioNInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
-    m_customLabel1 = new QLabel(i18n("Custom Ratio:"), plainPage());
+    QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
+    m_customLabel2 = new QLabel(" : ", plainPage());
+    m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
     m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
-    m_customLabel2 = new QLabel(":", plainPage());
-    hlay4->addWidget(m_customLabel1, 1);
-    hlay4->addWidget(m_customRatioNInput);
-    hlay4->addWidget(m_customLabel2);
-    hlay4->addWidget(m_customRatioDInput);
-    hlay4->addStretch(5);
-    
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label5 = new QLabel(i18n("X:"), plainPage());
+    QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
+
+    l2->addWidget( m_customLabel1 );
+    l2->addWidget( m_customRatioNInput );
+    l2->addWidget( m_customLabel2 );
+    l2->addWidget( m_customRatioDInput );
+    l2->addStretch( 1 );
+    topLayout->addMultiCellLayout(l2, 2, 2, 0, 2);
+
     m_xInput = new KIntNumInput(plainPage());
+    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for croping."));
+    m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    QLabel *label3 = new QLabel(i18n("Width:"), plainPage());
     m_widthInput = new KIntNumInput(plainPage());
+    m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
+    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for croping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    hlay2->addWidget(label5, 1);
-    hlay2->addWidget(m_xInput, 5);
-    hlay2->addStretch(1);
-    hlay2->addWidget(label3, 1);
-    hlay2->addWidget(m_widthInput, 5);
+    topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
+    topLayout->addMultiCellWidget(m_widthInput, 3, 3, 3, 4);
     
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label6 = new QLabel(i18n("Y:"), plainPage());
     m_yInput = new KIntNumInput(plainPage());
+    m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
+    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for croping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    QLabel *label4 = new QLabel(i18n("Height:"), plainPage());
     m_heightInput = new KIntNumInput(plainPage());
+    m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
+    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for croping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
-    hlay3->addWidget(label6, 1);
-    hlay3->addWidget(m_yInput, 5);    
-    hlay3->addStretch(1);
-    hlay3->addWidget(label4, 1);
-    hlay3->addWidget(m_heightInput, 5);
+    topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
+    topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);
     
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
