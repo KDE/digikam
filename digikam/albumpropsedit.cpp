@@ -4,6 +4,7 @@
  * Description :
  *
  * Copyright 2003 by Renchi Raju
+ * Copyright 2005 by Tom Albers
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +25,9 @@
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qdatetime.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qlistview.h>
@@ -37,6 +41,9 @@
 #include <ktextedit.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <kcursor.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -50,6 +57,9 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "albumpropsedit.h"
+
+#include <libkexif/kexifdata.h>
+#include <stdlib.h>
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
@@ -119,6 +129,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( datePicker_, 5, 1 );
     dateLabel->setBuddy( datePicker_ );
 
+    QPushButton *avgButton = new QPushButton( 
+                                i18n("This is a button which calculates "
+                                     "the average date",
+                                     "&Average" ), plainPage( ) );
+    topLayout->addWidget( avgButton, 6, 1);
+
     setTabOrder(titleEdit_, collectionCombo_);
     setTabOrder(collectionCombo_, commentsEdit_);
     setTabOrder(commentsEdit_, datePicker_);
@@ -158,6 +174,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     connect(titleEdit_, SIGNAL(textChanged(const QString&)),
             SLOT(slotTitleChanged(const QString&)));
+    connect(avgButton, SIGNAL( clicked() ),
+            SLOT( slotAverageButtonClicked()));
     
     adjustSize();
 }
@@ -252,6 +270,78 @@ bool AlbumPropsEdit::createNew(PAlbum  *parent,
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
     enableButtonOK(!newtitle.isEmpty());    
+}
+
+void AlbumPropsEdit::slotAverageButtonClicked()
+{
+    setCursor( KCursor::waitCursor() );
+    QDate guessedDate = averageDate( true );
+    kdDebug() << "Exif-based returned: " << guessedDate << endl; 
+    if ( guessedDate.isValid() )
+    {
+        setCursor( KCursor::arrowCursor() );
+        datePicker_->setDate( guessedDate );
+    }
+    else
+    {
+        guessedDate = averageDate ( false );
+        setCursor( KCursor::arrowCursor() );
+        kdDebug() << "File-based resturned: " << guessedDate << endl;
+        if ( guessedDate.isValid() )
+            datePicker_->setDate( guessedDate );
+        else
+            KMessageBox::error( plainPage( ), 
+                                i18n( "Could not calculate an average based "
+                                      "on creation date (EXIF) or based on the "
+                                      "modification date of the files." ),
+                                i18n( "Could not calculate an average" ) );
+    }
+}
+
+QDate AlbumPropsEdit::averageDate( bool const basedOnExif )
+{
+    int differenceInSecs = 0;
+    int amountOfImages = 0;
+    KExifData exifData;
+    QDateTime baseDateTime;
+
+    QDir dir(album_->getKURL().path());
+    dir.setFilter( QDir::Files );
+    const QFileInfoList *list = dir.entryInfoList();
+    if (!list) return QDate();
+
+    QFileInfoListIterator it (*list);
+    QFileInfo *fi;
+    while ( ( fi = it.current() ) != 0)
+    {
+        QDateTime fileDateTime;
+        if (basedOnExif)
+        {
+            exifData.readFromFile( fi->absFilePath() );
+            fileDateTime = exifData.getExifDateTime();
+        } else
+            fileDateTime = fi->lastModified();   // fi->created() ?
+
+        if ( fileDateTime.isValid() )
+        {
+            ++amountOfImages;
+            if ( baseDateTime.isNull() )
+                baseDateTime=fileDateTime;
+            else
+                differenceInSecs += fileDateTime.secsTo( baseDateTime );
+        }
+        ++it;
+    }
+
+    if ( amountOfImages > 0 )
+    {
+        QDateTime averageDateTime;
+        averageDateTime.setTime_t( baseDateTime.toTime_t() +
+                                   abs( differenceInSecs/amountOfImages ) );
+        return ( averageDateTime.date() );
+    }
+    else
+        return QDate();
 }
 
 #include "albumpropsedit.moc"

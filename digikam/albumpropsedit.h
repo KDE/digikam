@@ -68,7 +68,10 @@ public:
                           QDate& date,
                           QString& collection,
                           QStringList& albumCollections);
-    
+
+    QDate averageDate( bool const basedOnExif );
+
+
 private:
 
     PAlbum         *album_;
@@ -83,8 +86,8 @@ private:
     QCheckListItem *rootCollectionItem_;
 
 private slots:
-
    void slotTitleChanged(const QString& newtitle);
+   void slotAverageButtonClicked();
 };
 
 #endif /* ALBUMPROPSEDIT_H */
