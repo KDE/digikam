@@ -20,14 +20,6 @@
 #ifndef TRANSUPP_H
 #define TRANSUPP_H
 
-namespace Digikam
-{
-
-/* If you happen not to want the image transform support, disable it here */
-#ifndef TRANSFORMS_SUPPORTED
-#define TRANSFORMS_SUPPORTED 1		/* 0 disables transform code */
-#endif
-
 /* Short forms of external names for systems with brain-damaged linkers. */
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
@@ -37,6 +29,15 @@ namespace Digikam
 #define jcopy_markers_setup			jCMrkSetup
 #define jcopy_markers_execute			jCMrkExec
 #endif /* NEED_SHORT_EXTERNAL_NAMES */
+
+
+namespace Digikam
+{
+
+/* If you happen not to want the image transform support, disable it here */
+#ifndef TRANSFORMS_SUPPORTED
+#define TRANSFORMS_SUPPORTED 1		/* 0 disables transform code */
+#endif
 
 
 /*
