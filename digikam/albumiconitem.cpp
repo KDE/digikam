@@ -11,6 +11,7 @@
 
 #include <kfileitem.h>
 #include <kmimetype.h>
+#include <kfilemetainfo.h>
 #include <kurl.h>
 #include <kio/global.h>
 #include <klocale.h>
@@ -277,6 +278,19 @@ void AlbumIconItem::updateExtraText()
             else
                 firstLine = false;
             extraText += comments;
+        }
+
+        // read and display JPEG COM field
+        KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+
+        if(metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+        {
+            extraText += "\n";
+            QString jpegComments = metaInfo["Jpeg EXIF Data"].item("Comment").value().toString();
+
+            // Only append JPEG comments if they are different from the regular comment
+            if(jpegComments != comments)
+              extraText += jpegComments;
         }
     }
 

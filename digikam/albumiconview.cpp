@@ -520,7 +520,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 
         // store as JPEG Exif comment
         QString fileName(iconItem->fileItem()->url().path());
-        KFileMetaInfo metaInfo(fileName,"image/jpeg",KFileMetaInfo::Fastest);
+        KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
 
         if(metaInfo.mimeType() == "image/jpeg" && settings->getSaveExifComments())
         {
