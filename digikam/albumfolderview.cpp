@@ -1310,6 +1310,11 @@ void AlbumFolderView::contentsMouseReleaseEvent(QMouseEvent *)
     dragItem_ = 0;
 }
 
+void AlbumFolderView::leaveEvent(QEvent*)
+{
+    dragItem_ = 0;    
+}
+
 void AlbumFolderView::startDrag()
 {
     AlbumFolderItem *folderItem

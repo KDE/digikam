@@ -117,6 +117,7 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent *e);    
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
     virtual void contentsMouseReleaseEvent(QMouseEvent *e);
+    void leaveEvent(QEvent*);
     virtual void startDrag();
     
     void resizeEvent(QResizeEvent* e);
