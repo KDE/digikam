@@ -753,7 +753,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     slotToolTip();
     
     // Dragging ?
-    if (d->startDragItem) {
+    if (e->state() == LeftButton && d->startDragItem) {
 
         if ( (d->dragStartPos - e->pos() ).manhattanLength()
              > QApplication::startDragDistance() ) {
