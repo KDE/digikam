@@ -76,9 +76,10 @@ ImageWindow* ImageWindow::m_instance = 0;
 ImageWindow::ImageWindow()
     : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
 {
-    m_instance = this;
+    m_instance           = this;
     m_rotatedOrFlipped   = false;
     m_setExifOrientation = false;
+    m_fullScreen         = false;
 
     // -- build the gui -------------------------------------
     
@@ -155,6 +156,8 @@ ImageWindow::ImageWindow()
             m_canvas, SLOT(slotDecreaseZoom()));
     connect(m_guiClient, SIGNAL(signalZoomFit()),
             SLOT(slotToggleAutoZoom()));
+    connect(m_guiClient, SIGNAL(signalToggleFullScreen()),
+            SLOT(slotToggleFullScreen()));            
 
     connect(m_guiClient, SIGNAL(signalRotate90()),
             m_canvas, SLOT(slotRotate90()));
@@ -240,13 +243,12 @@ void ImageWindow::readSettings()
     
     int width, height;
     bool autoZoom;
-    bool fullScreen;
     
     config->setGroup("ImageViewer Settings");
     width = config->readNumEntry("Width", 500);
     height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
-    fullScreen = config->readBoolEntry("FullScreen", false);
+    m_fullScreen = config->readBoolEntry("FullScreen", false);
     //config->setGroup("EXIF Settings");
     //setExifOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
@@ -257,8 +259,9 @@ void ImageWindow::readSettings()
         m_guiClient->m_zoomPlusAction->setEnabled(false);
         m_guiClient->m_zoomMinusAction->setEnabled(false);
     }
-//     if (fullScreen)
-//         d->bFullScreen->animateClick();
+    
+    if (m_fullScreen)
+        slotToggleFullScreen();
 }
 
 void ImageWindow::saveSettings()
@@ -269,7 +272,7 @@ void ImageWindow::saveSettings()
     config->writeEntry("Width", width());
     config->writeEntry("Height", height());
     config->writeEntry("AutoZoom", m_guiClient->m_zoomFitAction->isChecked());
-    //config->writeEntry("FullScreen", d->bFullScreen->isOn());
+    config->writeEntry("FullScreen", m_fullScreen);
     config->sync();
 }
 
@@ -710,6 +713,23 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     emit signalFileAdded(m_newFile);
     
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target image.
+}
+
+void ImageWindow::slotToggleFullScreen()
+{
+    if (m_fullScreen) 
+        {
+        showNormal();
+        m_fullScreen = false;
+        
+        // PENDING (Gilles) : restored the old window size and position !
+        move(0, 0);
+        }
+    else 
+        {
+        showFullScreen();
+        m_fullScreen = true;
+        }
 }
 
 #include "imagewindow.moc"

@@ -111,6 +111,11 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                         this, SIGNAL(signalZoomFit()),
                                         actionCollection(), "imageview_zoom_fit");
 
+    m_fullScreenAction = new KToggleAction(i18n("Toggle Full Screen"), "window_fullscreen",
+                                        CTRL+SHIFT+Key_F, 
+                                        this, SIGNAL(signalToggleFullScreen()),
+                                        actionCollection(), "toggle_fullScreen");
+                                        
     new KAction(i18n("&Resize..."), 0, 0,
                      this, SIGNAL(signalResize()),
                      actionCollection(), "imageview_resize");
@@ -197,6 +202,8 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&View/ /Action/imageview_zoom_plus/ ");
     guiDef.append("MenuBar/Menu/&View/ /Action/imageview_zoom_minus/ ");
     guiDef.append("MenuBar/Menu/&View/ /Action/imageview_zoom_fit/ ");
+    guiDef.append("MenuBar/Menu/&View/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&View/ /Action/toggle_fullScreen/ ");
 
     guiDef.append("MenuBar/DefineGroup/Generic/ ");
     

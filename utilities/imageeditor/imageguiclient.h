@@ -54,6 +54,7 @@ signals:
     void signalZoomPlus();
     void signalZoomMinus();
     void signalZoomFit();
+    void signalToggleFullScreen();
     
     void signalRotate90();    
     void signalRotate180();    
@@ -95,6 +96,7 @@ private:
     KAction       *m_zoomPlusAction;
     KAction       *m_zoomMinusAction;
     KToggleAction *m_zoomFitAction;
+    KToggleAction *m_fullScreenAction;
 
     KActionMenu   *m_rotateAction;
     KActionMenu   *m_flipAction;

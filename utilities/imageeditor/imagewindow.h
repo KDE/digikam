@@ -75,6 +75,8 @@ private:
     bool                 m_setExifOrientation;
     bool                 m_rotatedOrFlipped;
     
+    bool                 m_fullScreen;
+    
     static ImageWindow*  m_instance;
 
 private:
@@ -98,6 +100,7 @@ private slots:
     void slotLoadLast();
 
     void slotToggleAutoZoom();
+    void slotToggleFullScreen();
 
     void slotResize();
     
