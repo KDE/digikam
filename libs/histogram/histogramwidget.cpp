@@ -73,6 +73,7 @@ HistogramWidget::~HistogramWidget()
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
     uint   x, y;
+    uint   yr, yg, yb;             // For all color channels.
     uint   wWidth = width();
     uint   wHeight = height();
     double max;
@@ -93,6 +94,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
        case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
           max = m_imageHistogram->getMaximum(Digikam::ImageHistogram::AlphaChannel);  
+          break;
+       
+       case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
+          max = QMAX (QMAX (m_imageHistogram->getMaximum(Digikam::ImageHistogram::RedChannel),
+                            m_imageHistogram->getMaximum(Digikam::ImageHistogram::GreenChannel)),
+                      m_imageHistogram->getMaximum(Digikam::ImageHistogram::BlueChannel));  
           break;
                     
        case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
@@ -122,7 +129,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        
     for (x = 0 ; x < wWidth ; ++x)
       {
-      double value = 0.0;
+      double value = 0.0; 
+      double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
     
       i = (x * 256) / wWidth;
@@ -131,7 +139,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       do
           {
           double v;
-
+          double vr, vg, vb;                              // For all color channels.
+          
           switch(m_channelType)
              {
              case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
@@ -149,44 +158,101 @@ void HistogramWidget::paintEvent( QPaintEvent * )
              case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
                 v = m_imageHistogram->getValue(Digikam::ImageHistogram::AlphaChannel, ++i);   
                 break;
-                                
+
+             case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
+                vr = m_imageHistogram->getValue(Digikam::ImageHistogram::RedChannel, ++i);   
+                vg = m_imageHistogram->getValue(Digikam::ImageHistogram::GreenChannel, i);   
+                vb = m_imageHistogram->getValue(Digikam::ImageHistogram::BlueChannel, i);   
+                break;
+                                                
              case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
                 v = m_imageHistogram->getValue(Digikam::ImageHistogram::ValueChannel, ++i);   
                 break;
              }            
             
-          if (v > value)
-             value = v;
+          if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
+             {
+             if (v > value)
+                value = v;
+             }
+          else 
+             {
+             if (vr > value_r)
+                value_r = vr;
+             if (vg > value_g)
+                value_g = vg;
+             if (vb > value_b)
+                value_b = vb;
+             }
           }
       while (i < j);
 
-      switch (m_scaleType)
-        {
-        case Digikam::HistogramWidget::LinScaleHistogram:
-          y = (int) ((wHeight * value) / max);
-          break;
+      if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
+         {
+         switch (m_scaleType)
+            {
+            case Digikam::HistogramWidget::LinScaleHistogram:
+              y = (int) ((wHeight * value) / max);
+              break;
 
-        case Digikam::HistogramWidget::LogScaleHistogram:
-          if (value <= 0.0) value = 1.0;
-          y = (int) ((wHeight * log (value)) / max);
-          break;
+            case Digikam::HistogramWidget::LogScaleHistogram:
+              if (value <= 0.0) value = 1.0;
+              y = (int) ((wHeight * log (value)) / max);
+              break;
 
-        default:
-          y = 0;
-          break;
-        }
+            default:
+              y = 0;
+              break;
+            }
+         }
+      else
+         {
+         switch (m_scaleType)
+            {
+            case Digikam::HistogramWidget::LinScaleHistogram:
+              yr = (int) ((wHeight * value_r) / max);
+              yg = (int) ((wHeight * value_g) / max);
+              yb = (int) ((wHeight * value_b) / max);
+              break;
+
+            case Digikam::HistogramWidget::LogScaleHistogram:
+              if (value_r <= 0.0) value_r = 1.0;
+              if (value_g <= 0.0) value_g = 1.0;
+              if (value_b <= 0.0) value_b = 1.0;
+              yr = (int) ((wHeight * log (value_r)) / max);
+              yg = (int) ((wHeight * log (value_g)) / max);
+              yb = (int) ((wHeight * log (value_b)) / max);
+              break;
+
+            default:
+              yr = 0;
+              yg = 0;
+              yb = 0;
+              break;
+            }
+         }
 
       // Drawing the histogram + selection or only the histogram.
-      
-      if ( m_selectMode == true )   // Selection mode enable ?
+
+      if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
          {
-         if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
-              x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+         if ( m_selectMode == true )   // Selection mode enable ?
             {
-            p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, 0);
-            p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, wHeight - y);                 
+            if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
+                x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+               {
+               p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, 0);
+               p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - y);                 
+               }
+            else 
+               {
+               p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - y);                 
+               p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight - y, x, 0);                 
+               }
             }
          else 
             {
@@ -196,12 +262,43 @@ void HistogramWidget::paintEvent( QPaintEvent * )
             p1.drawLine(x, wHeight - y, x, 0);                 
             }
          }
-      else 
+      else
          {
-         p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight, x, wHeight - y);                 
-         p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight - y, x, 0);                 
+         if ( m_selectMode == true )   // Selection mode enable ?
+            {
+            if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
+                x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
+               {
+               p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, 0);
+               p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - yr);                 
+               p1.drawLine(x, wHeight, x, wHeight - yg);                 
+               p1.drawLine(x, wHeight, x, wHeight - yb);     
+               }
+            else 
+               {
+               p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - yr);                 
+               p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - yg);                 
+               p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight, x, wHeight - yb);                 
+               p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+               p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+               }
+            }
+         else 
+            {
+            p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, wHeight - yr);                 
+            p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, wHeight - yg);                 
+            p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight, x, wHeight - yb);                 
+            p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+            p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+            }
          }
       }
       

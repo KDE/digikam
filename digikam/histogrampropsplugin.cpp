@@ -91,6 +91,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
+    m_channelCB->insertItem( i18n("Colors") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display.<p>"
                                        "<b>Luminosity</b>: drawing the image luminosity values.<p>"
@@ -99,7 +100,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
                                        "<b>Blue</b>: drawing the blue image channel values.<p>"
                                        "<b>Alpha</b>: drawing the alpha image channel values. " 
                                        "This channel corresponding to the transparency value and "
-                                       "is supported by some image formats like PNG or GIF."));
+                                       "is supported by some image formats like PNG or GIF.<p>"
+                                       "<b>Colors</b>: drawing all color channels values at the same time."));
     
     QLabel *label2 = new QLabel(i18n("Scale:"), page);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -143,10 +145,12 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, page);
     m_minInterv->setValue(0);
-    QWhatsThis::add( m_minInterv, i18n("<p>Select here the minimal intensity value of the histogram selection."));    
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the minimal intensity "
+                                       "value of the histogram selection."));    
     m_maxInterv = new QSpinBox(0, 255, 1, page);
     m_maxInterv->setValue(255);
-    QWhatsThis::add( m_minInterv, i18n("<p>Select here the maximal intensity value of the histogram selection."));
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the maximal intensity value "
+                                       "of the histogram selection."));
     hlay2->addWidget(label3);
     hlay2->addWidget(m_minInterv);
     hlay2->addWidget(m_maxInterv);
@@ -155,7 +159,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
     QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
-                                "selected histogram part."));
+                                "selected histogram part. This values are available for all channels "
+                                "excepted when you displayed all color channels at the same time."));
                                 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -242,7 +247,12 @@ void HistogramPropsPlugin::slotChannelChanged(int channel)
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           break;
-                    
+          
+       case 5:           // All color channels.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          break;
+                              
        default:          // Luminosity.
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
@@ -295,23 +305,35 @@ void HistogramPropsPlugin::updateInformations()
     int max = m_maxInterv->value();
     int channel = m_channelCB->currentItem();
     
-    double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
-    m_labelMeanValue->setText(value.sprintf("%3.1f", mean));
+    if ( channel != Digikam::HistogramWidget::ColorChannelsHistogram )
+       {
+       double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
+       m_labelMeanValue->setText(value.sprintf("%3.1f", mean));
     
-    double pixels = m_histogramWidget->m_imageHistogram->getPixels();
-    m_labelPixelsValue->setText(value.sprintf("%8d", (int)pixels));
+       double pixels = m_histogramWidget->m_imageHistogram->getPixels();
+       m_labelPixelsValue->setText(value.sprintf("%8d", (int)pixels));
     
-    double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
-    m_labelStdDevValue->setText(value.sprintf("%3.1f", stddev));
+       double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+       m_labelStdDevValue->setText(value.sprintf("%3.1f", stddev));
       
-    double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
-    m_labelCountValue->setText(value.sprintf("%8d", (int)counts));
+       double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+       m_labelCountValue->setText(value.sprintf("%8d", (int)counts));
     
-    double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
-    m_labelMedianValue->setText(value.sprintf("%3.1f", median));
+       double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+       m_labelMedianValue->setText(value.sprintf("%3.1f", median));
 
-    double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-    m_labelPercentileValue->setText(value.sprintf("%4.1f", percentile));
+       double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
+       m_labelPercentileValue->setText(value.sprintf("%4.1f", percentile));
+       }
+    else
+       {
+       m_labelMeanValue->setText("");
+       m_labelPixelsValue->setText("");
+       m_labelStdDevValue->setText("");
+       m_labelCountValue->setText("");
+       m_labelMedianValue->setText("");
+       m_labelPercentileValue->setText("");
+       }
 }
 
 #include "histogrampropsplugin.moc"

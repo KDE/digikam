@@ -40,12 +40,13 @@ public:
 enum HistogramType
 {
     ValueHistogram = 0,       // Luminosity.
-    RedChannelHistogram,      // Red channel
-    GreenChannelHistogram,    // Green channel
-    BlueChannelHistogram,     // Blue channel
-    AlphaChannelHistogram,    // Alpha channel
-    LinScaleHistogram,        // Linear scale
-    LogScaleHistogram         // Logarithmic scale
+    RedChannelHistogram,      // Red channel.
+    GreenChannelHistogram,    // Green channel.
+    BlueChannelHistogram,     // Blue channel.
+    AlphaChannelHistogram,    // Alpha channel.
+    ColorChannelsHistogram,   // All color channels.
+    LinScaleHistogram,        // Linear scale.
+    LogScaleHistogram         // Logarithmic scale.
 };
     
 public:
