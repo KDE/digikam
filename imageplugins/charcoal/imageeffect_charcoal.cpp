@@ -142,7 +142,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_pencilSlider->setTracking ( false );
     
     m_pencilInput = new QSpinBox(1, 100, 1, plainPage(), "m_pencilInput");
-    whatsThis = i18n("<p>Set here the charcoal pencil size used for to simulate the drawing.");
+    whatsThis = i18n("<p>Set here the charcoal pencil size used to simulate the drawing.");
         
     QWhatsThis::add( m_pencilInput, whatsThis);
     QWhatsThis::add( m_pencilSlider, whatsThis);
