@@ -35,7 +35,6 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
-class QGridLayout;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -102,16 +101,16 @@ private:
     
     enum TemperaturePreset
     {
-    Neutral=0,
-    Candle,
-    Lamp40W,
+    Lamp40W=0,
     Lamp200W,
     Sunrise,
     Tungsten,
+    Neutral,
     Xenon,
     Sun,
     Flash,
     Sky,
+    None
     };
     
     uint                         *m_destinationPreviewData;
@@ -119,6 +118,7 @@ private:
     QWidget                      *m_parent;
     
     QPushButton                  *m_helpButton;
+    QPushButton                  *m_pickTemperature;
     
     QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
@@ -132,10 +132,7 @@ private:
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
     
-    QGridLayout                  *m_grid;
-    
-    KIntNumInput                 *m_temperatureInput;
-    
+    KDoubleNumInput              *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
     KDoubleNumInput              *m_blackInput;
     KDoubleNumInput              *m_exposureInput;
@@ -165,6 +162,7 @@ private slots:
     void slotColorSelectedFromImage( const QColor &color );
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
+    void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
 };
 
