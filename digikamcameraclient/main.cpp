@@ -144,7 +144,7 @@ int main(int argc, char **argv)
                       0);
 
     about.addCredit ( "Richard Taylor",
-                      I18N_NOOP("Developer"),
+                      I18N_NOOP("Feedback and patchs"),
                       "r dot taylor at bcs.org.uk",
                       0);
                                                                   

@@ -2,8 +2,7 @@ DIGIKAM
 
 Authors :
 ----------------------------------------------------------------------
-Renchi Raju    <renchi at pooh.tam.uiuc.edu>
-Gilles Caulier <caulier dot gilles at free.fr>
+See AUTHORS file for details.
 
 
 Resume :
@@ -32,8 +31,10 @@ AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
 gphoto2 2.x
-imlib1 >= 1.90
+imlib2 >= 1.0.x
 libexif >= 0.5.7
+libKIPI from kdeextragear-libs-1
+libKexif from kdeextragear-libs-1
 
 
 Installation :
