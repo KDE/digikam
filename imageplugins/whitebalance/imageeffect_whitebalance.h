@@ -78,21 +78,18 @@ private:
     double                        m_exposition;
     double                        m_dark;
     double                        m_green;
-        
+
+    int                           m_blackExposure;
+    int                           m_grayExposure;
+    int                           m_whiteExposure;
     int                           m_BP, m_WP;
+    
     uint                          m_rgbMax;
     
     float                         curve[256];
     float                         m_mr, m_mg, m_mb;
         
 private:
-
-    enum TargetColor 
-    {
-    WhiteColor=0,
-    GrayColor,
-    BlackColor
-    };
 
     enum BWMethod 
     {
@@ -113,12 +110,27 @@ private:
     BlueChannel
     };
     
+    enum TemperaturePreset
+    {
+    Neutral=0,
+    Candle,
+    Lamp40W,
+    Lamp200W,
+    Sunrise,
+    Tungsten,
+    Xenon,
+    Sun,
+    Flash,
+    Sky,
+    };
+    
     uint                         *m_destinationPreviewData;
     
     QWidget                      *m_parent;
     
     QPushButton                  *m_helpButton;
     
+    QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
     QComboBox                    *m_wbMethod;
@@ -139,13 +151,17 @@ private:
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
 
-    QLabel                       *m_whitePickColorLabel;    
-    QLabel                       *m_grayPickColorLabel;    
     QLabel                       *m_blackPickColorLabel;    
+    QLabel                       *m_grayPickColorLabel;    
+    QLabel                       *m_whitePickColorLabel;    
     
     QGridLayout                  *m_grid;
     
+    KIntNumInput                 *m_blackExposureInput;
+    KIntNumInput                 *m_grayExposureInput;
+    KIntNumInput                 *m_whiteExposureInput;
     KIntNumInput                 *m_temperatureInput;
+    
     KDoubleNumInput              *m_darkInput;
     KDoubleNumInput              *m_blackInput;
     KDoubleNumInput              *m_exposureInput;
@@ -169,7 +185,7 @@ private:
     void setRGBmult(void);
     void setLUTv(void);
     void whiteBalanceCorrectionFilter(uint *data, int w, int h);
-    void whiteBalanceColorPicker(uint *data, int w, int h, QColor bColor, QColor gColor, QColor wColor);
+    void whiteBalanceColorPicker(uint *data, int w, int h);
 
 private slots:
 
@@ -184,6 +200,7 @@ private slots:
     void slotBlackColorPickerToggle(bool b);
     void slotGrayColorPickerToggle(bool g);
     void slotWhiteColorPickerToggle(bool w);
+    void slotTemperaturePresetChanged(int tempPreset);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

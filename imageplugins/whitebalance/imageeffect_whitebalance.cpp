@@ -230,7 +230,19 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                               "tones with white-balance filter using <b>Color Picker</b> method."));
     m_whiteColorButton->setToggleButton(true);
     m_whiteColorButton->setOn(true);
-        
+
+    m_blackExposureInput = new KIntNumInput(gbox);
+    m_blackExposureInput->setRange(-10, 10, 1, true);
+    QWhatsThis::add( m_blackExposureInput, i18n("<p>Set here the black color tone exposure."));
+
+    m_grayExposureInput = new KIntNumInput(gbox);
+    m_grayExposureInput->setRange(-10, 10, 1, true);
+    QWhatsThis::add( m_grayExposureInput, i18n("<p>Set here the gray color tone exposure."));
+    
+    m_whiteExposureInput = new KIntNumInput(gbox);
+    m_whiteExposureInput->setRange(-10, 10, 1, true);
+    QWhatsThis::add( m_whiteExposureInput, i18n("<p>Set here the white color tone exposure."));
+            
     // Correction Filter settings widgets.
     
     m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
@@ -258,8 +270,20 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma corection value."));
         
     m_temperatureLabel = new QLabel(i18n("Temperature:"), gbox);
+    m_temperaturePresetCB = new QComboBox( false, gbox );
+    m_temperaturePresetCB->insertItem( i18n("Neutral") );
+    m_temperaturePresetCB->insertItem( i18n("Candle") );
+    m_temperaturePresetCB->insertItem( i18n("40W") );
+    m_temperaturePresetCB->insertItem( i18n("200W") );
+    m_temperaturePresetCB->insertItem( i18n("Sunrise") );
+    m_temperaturePresetCB->insertItem( i18n("Tungsten") );
+    m_temperaturePresetCB->insertItem( i18n("Xenon") );
+    m_temperaturePresetCB->insertItem( i18n("Sun") );
+    m_temperaturePresetCB->insertItem( i18n("Flash") );
+    m_temperaturePresetCB->insertItem( i18n("Sky") );
+    QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature preset to use"));
     m_temperatureInput = new KIntNumInput(gbox);
-    m_temperatureInput->setRange(2200, 7000, 100, true);
+    m_temperatureInput->setRange(1500, 7000, 100, true);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance colour temperature in Kelvin."));
         
     m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
@@ -336,7 +360,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
             this, SLOT(slotColorSelectedFromImage( const QColor & ))); 
 
-    // Color Picker Buttons.
+    // Color Picker Buttons and sliders.
     
     connect(m_blackColorButton, SIGNAL(toggled(bool)),
             this, SLOT(slotBlackColorPickerToggle(bool)));
@@ -346,9 +370,21 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                 
     connect(m_whiteColorButton, SIGNAL(toggled(bool)),
             this, SLOT(slotWhiteColorPickerToggle(bool)));
-            
-    // Slider controls.
+
+    connect(m_blackExposureInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                       
+
+    connect(m_grayExposureInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                       
+
+    connect(m_whiteExposureInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                       
+                                    
+    // Correction Filter Slider controls.
                         
+    connect(m_temperaturePresetCB, SIGNAL(activated(int)),
+            this, SLOT(slotTemperaturePresetChanged(int)));
+    
     connect(m_temperatureInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                       
             
@@ -394,16 +430,20 @@ void ImageEffect_WhiteBalance::slotUser1()
     if ( m_wbMethod->currentItem() == CorrectionFilter )
        {
        // Neutral color temperature settings.
-       m_temperatureInput->setValue(4750);                     
        m_darkInput->setValue(0.5);
        m_blackInput->setValue(0.0);
        m_exposureInput->setValue(0.0);
        m_gammaInput->setValue(0.6);  
        m_saturationInput->setValue(1.0);  
        m_greenInput->setValue(1.2);  
+       m_temperaturePresetCB->setCurrentItem(Neutral);
+       slotTemperaturePresetChanged(Neutral);
        }
     else
        {    
+       m_blackExposureInput->setValue(0);                     
+       m_grayExposureInput->setValue(0);                     
+       m_whiteExposureInput->setValue(0);                     
        m_blackColor = Qt::black;
        setBlackColor(m_blackColor);    
        m_grayColor = Qt::gray;
@@ -471,6 +511,7 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_gammaLabel->hide();
           m_gammaInput->hide();
           m_temperatureLabel->hide();
+          m_temperaturePresetCB->hide();
           m_temperatureInput->hide();
           m_saturationLabel->hide();
           m_saturationInput->hide();
@@ -485,6 +526,7 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_grid->remove(m_gammaLabel);
           m_grid->remove(m_gammaInput);
           m_grid->remove(m_temperatureLabel);
+          m_grid->remove(m_temperaturePresetCB);
           m_grid->remove(m_temperatureInput);
           m_grid->remove(m_saturationLabel);
           m_grid->remove(m_saturationInput);
@@ -497,11 +539,17 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_grayPickColorLabel->show();
           m_grid->addMultiCellWidget(m_whitePickColorLabel, 2, 2, 0, 0);
           m_whitePickColorLabel->show();
-          m_grid->addMultiCellWidget(m_blackColorButton, 0, 0, 1, 1);
+          m_grid->addMultiCellWidget(m_blackExposureInput, 0, 0, 1, 3);
+          m_blackExposureInput->show();
+          m_grid->addMultiCellWidget(m_grayExposureInput, 1, 1, 1, 3);
+          m_grayExposureInput->show();
+          m_grid->addMultiCellWidget(m_whiteExposureInput, 2, 2, 1, 3);
+          m_whiteExposureInput->show();
+          m_grid->addMultiCellWidget(m_blackColorButton, 0, 0, 4, 4);
           m_blackColorButton->show();
-          m_grid->addMultiCellWidget(m_grayColorButton, 1, 1, 1, 1);
+          m_grid->addMultiCellWidget(m_grayColorButton, 1, 1, 4, 4);
           m_grayColorButton->show();
-          m_grid->addMultiCellWidget(m_whiteColorButton, 2, 2, 1, 1);
+          m_grid->addMultiCellWidget(m_whiteColorButton, 2, 2, 4, 4);
           m_whiteColorButton->show();
 
           slotUser1();
@@ -513,12 +561,18 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_blackPickColorLabel->hide();
           m_grayPickColorLabel->hide();
           m_whitePickColorLabel->hide();
+          m_blackExposureInput->hide();
+          m_grayExposureInput->hide();
+          m_whiteExposureInput->hide();
           m_blackColorButton->hide();
           m_grayColorButton->hide();
           m_whiteColorButton->hide();
           m_grid->remove(m_blackPickColorLabel);
           m_grid->remove(m_grayPickColorLabel);
           m_grid->remove(m_whitePickColorLabel);
+          m_grid->remove(m_blackExposureInput);
+          m_grid->remove(m_grayExposureInput);
+          m_grid->remove(m_whiteExposureInput);
           m_grid->remove(m_blackColorButton);
           m_grid->remove(m_grayColorButton);
           m_grid->remove(m_whiteColorButton);
@@ -532,7 +586,8 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_grid->addMultiCellWidget(m_gammaLabel, 3, 3, 0, 0);
           m_grid->addMultiCellWidget(m_gammaInput, 3, 3, 1, 4);
           m_grid->addMultiCellWidget(m_temperatureLabel, 4, 4, 0, 0);
-          m_grid->addMultiCellWidget(m_temperatureInput, 4, 4, 1, 4);
+          m_grid->addMultiCellWidget(m_temperaturePresetCB, 4, 4, 1, 1);
+          m_grid->addMultiCellWidget(m_temperatureInput, 4, 4, 2, 4);
           m_grid->addMultiCellWidget(m_saturationLabel, 5, 5, 0, 0);
           m_grid->addMultiCellWidget(m_saturationInput, 5, 5, 1, 4);
           m_grid->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
@@ -546,6 +601,7 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_gammaLabel->show();
           m_gammaInput->show();
           m_temperatureLabel->show();
+          m_temperaturePresetCB->show();
           m_temperatureInput->show();
           m_saturationLabel->show();
           m_saturationInput->show();
@@ -555,6 +611,54 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           break;
           }
        }
+}
+
+void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
+{
+   switch(tempPreset)
+       {
+       case Neutral:
+          m_temperatureInput->setValue(4750);
+          break;
+       
+       case Candle:
+          m_temperatureInput->setValue(1500);
+          break;
+       
+       case Lamp40W:
+          m_temperatureInput->setValue(2680);
+          break;
+       
+       case Lamp200W:
+          m_temperatureInput->setValue(3000);
+          break;
+       
+       case Sunrise:
+          m_temperatureInput->setValue(3200);
+          break;
+       
+       case Tungsten:
+          m_temperatureInput->setValue(3400);
+          break;
+       
+       case Xenon:
+          m_temperatureInput->setValue(5000);
+          break;
+       
+       case Sun:
+          m_temperatureInput->setValue(5500);
+          break;
+       
+       case Flash:
+          m_temperatureInput->setValue(5600);
+          break;
+       
+       case Sky:
+          m_temperatureInput->setValue(6500);
+          break;
+       }
+
+    slotEffect();  
 }
 
 void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
@@ -571,7 +675,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
 
 void ImageEffect_WhiteBalance::setWhiteColor(QColor color)
 {
-    QPixmap pixmap(16 , 16);
+    QPixmap pixmap(48, 48);
     pixmap.fill(color);
     m_whiteColor = color;
     m_whiteColorButton->setPixmap(pixmap);
@@ -598,7 +702,7 @@ void ImageEffect_WhiteBalance::setWhiteColor(QColor color)
 
 void ImageEffect_WhiteBalance::setGrayColor(QColor color)
 {
-    QPixmap pixmap(16 , 16);
+    QPixmap pixmap(48, 48);
     pixmap.fill(color);
     m_grayColor = color;
     m_grayColorButton->setPixmap(pixmap);
@@ -625,7 +729,7 @@ void ImageEffect_WhiteBalance::setGrayColor(QColor color)
 
 void ImageEffect_WhiteBalance::setBlackColor(QColor color)
 {
-    QPixmap pixmap(16, 16);
+    QPixmap pixmap(48, 48);
     pixmap.fill(color);
     m_blackColor = color;
     m_blackColorButton->setPixmap(pixmap);
@@ -727,7 +831,13 @@ void ImageEffect_WhiteBalance::slotEffect()
        whiteBalanceCorrectionFilter(m_destinationPreviewData, w, h);
        }
     else
-       whiteBalanceColorPicker(m_destinationPreviewData, w, h, m_blackColor, m_grayColor, m_whiteColor);
+       {
+       m_blackExposure = m_blackExposureInput->value();
+       m_grayExposure = m_grayExposureInput->value();
+       m_whiteExposure = m_whiteExposureInput->value();
+
+       whiteBalanceColorPicker(m_destinationPreviewData, w, h);
+       }
            
     iface->putPreviewData(m_destinationPreviewData);       
     m_previewTargetWidget->update();
@@ -769,7 +879,13 @@ void ImageEffect_WhiteBalance::slotOk()
        whiteBalanceCorrectionFilter(data, w, h);
        }
     else
-       whiteBalanceColorPicker(data, w, h, m_blackColor, m_grayColor, m_whiteColor);
+       {
+       m_blackExposure = m_blackExposureInput->value();
+       m_grayExposure = m_grayExposureInput->value();
+       m_whiteExposure = m_whiteExposureInput->value();
+
+       whiteBalanceColorPicker(data, w, h);
+       }
 
     iface.putOriginalData(i18n("White Balance"), data);                   
     delete [] data;
@@ -886,7 +1002,7 @@ void ImageEffect_WhiteBalance::whiteBalanceCorrectionFilter(uint *data, int widt
 // The theory of this method inspired from tutorial from 'lasm' available at http://www.geocities.com/lasm.rm/wb2.html
 // I have re-create a new curves computation (not based on linear color transformation) for to have better results.        
 
-void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, int height, QColor bColor, QColor gColor, QColor wColor)
+void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, int height)
 {  
     uchar* pOutBits = new uchar[width*height*4];    
 
@@ -898,21 +1014,30 @@ void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, in
 
     // Black curves point.
     
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1,  QPoint::QPoint(bColor.red(), 35));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1,  QPoint::QPoint(bColor.green(), 35));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1,  QPoint::QPoint(bColor.blue(), 35));          
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1,
+                    QPoint::QPoint(CLAMP0255(m_blackColor.red() + m_blackExposure), 35));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1,  
+                    QPoint::QPoint(CLAMP0255(m_blackColor.green() + m_blackExposure), 35));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1,     
+                    QPoint::QPoint(CLAMP0255(m_blackColor.blue() + m_blackExposure), 35));      
     
     // Gray curves point.
     
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8,  QPoint::QPoint(gColor.red(), 128));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8,  QPoint::QPoint(gColor.green(), 128));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8,  QPoint::QPoint(gColor.blue(), 128));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8,  
+                    QPoint::QPoint(CLAMP0255(m_grayColor.red() + m_grayExposure), 128));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8,
+                    QPoint::QPoint(CLAMP0255(m_grayColor.green() + m_grayExposure), 128));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8,        
+                    QPoint::QPoint(CLAMP0255(m_grayColor.blue() + m_grayExposure), 128));      
     
     // White curves point.
     
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15,  QPoint::QPoint(wColor.red(), 220));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15,  QPoint::QPoint(wColor.green(), 220));      
-    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15,  QPoint::QPoint(wColor.blue(), 220));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15,
+                    QPoint::QPoint(CLAMP0255(m_whiteColor.red() + m_whiteExposure), 220));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15,  
+                    QPoint::QPoint(CLAMP0255(m_whiteColor.green() + m_whiteExposure), 220));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15,  
+                    QPoint::QPoint(CLAMP0255(m_whiteColor.blue() + m_whiteExposure), 220));      
     
     // Final curves point.
     
