@@ -1454,14 +1454,13 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     {
         // Allow external objects to be dropped on
         //   - palbums
+        //   - PAlbum root
         // don't allow drop on
         //   - tags
         //   - group items like collections
-        //   - any root item
-
+        //   - tag root item
         if( !newDropTarget->isGroupItem() &&
-            newDropTarget->album()->type() == Album::PHYSICAL &&
-            !newDropTarget->album()->isRoot() )
+            newDropTarget->album()->type() == Album::PHYSICAL )
         {
             validDrag = true;
         }
