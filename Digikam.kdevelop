@@ -121,10 +121,10 @@
       <prio>0</prio>
     </make>
     <run>
-      <directoryradio>custom</directoryradio>
+      <directoryradio>build</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>showfoto</mainprogram>
-      <programargs>/mnt/temp/test/*.JPG</programargs>
+      <mainprogram>digikam/digikam/digikam</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
