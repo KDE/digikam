@@ -56,7 +56,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Color balance"),
+    QVGroupBox *gbox = new QVGroupBox(i18n("Color-balance"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);

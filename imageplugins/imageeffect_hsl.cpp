@@ -50,7 +50,7 @@
 #include "imageeffect_hsl.h"
 
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
-               : KDialogBase(Plain, i18n("HSL balance"),
+               : KDialogBase(Plain, i18n("Hue/Saturation/Lightness"),
                              Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset values"))
 {
@@ -58,13 +58,13 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness balance"),
+    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness adjustments"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image HSL balance preview."));
+    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image Hue/Saturation/Lightness adjustments preview."));
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
 
