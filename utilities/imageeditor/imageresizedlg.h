@@ -54,10 +54,7 @@ private:
 private slots:
 
     void slotOk();
-    void slotWChanged(int val);
-    void slotHChanged(int val);
-    void slotWPChanged(double val);
-    void slotHPChanged(double val);
+    void slotChanged();
 };
 
 #endif /* IMAGERESIZEDLG_H */

@@ -49,23 +49,27 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
 
     QLabel      *label;
 
-    label    = new QLabel(i18n("Width:"), plainPage());
+    label    = new QLabel(i18n("Width:"), plainPage(), "w");
     m_wInput = new KIntSpinBox(1, 9999, 1, *m_width, 10, plainPage()); 
+    m_wInput->setName("w");
     topLayout->addWidget(label, 0, 0);
     topLayout->addWidget(m_wInput, 0, 1);
     
     label    = new QLabel(i18n("Height:"), plainPage());
-    m_hInput = new KIntSpinBox(1, 9999, 1, *m_height, 10, plainPage()); 
+    m_hInput = new KIntSpinBox(1, 9999, 1, *m_height, 10, plainPage());
+    m_hInput->setName("h");
     topLayout->addWidget(label, 0, 2);
     topLayout->addWidget(m_hInput, 0, 3);
 
     label     = new QLabel(i18n("Width (%):"), plainPage());
     m_wpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
+    m_wpInput->setName("wp");
     topLayout->addWidget(label, 1, 0);
     topLayout->addWidget(m_wpInput, 1, 1);
 
-    label    = new QLabel(i18n("Height (%):"), plainPage());
+    label    = new QLabel(i18n("Height (%):"), plainPage(), "hp");
     m_hpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
+    m_hpInput->setName("hp");
     topLayout->addWidget(label, 1, 2);
     topLayout->addWidget(m_hpInput, 1, 3);
 
@@ -75,14 +79,15 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
 
     m_constrainCheck->setChecked(true);
 
+
     connect(m_wInput, SIGNAL(valueChanged(int)),
-            SLOT(slotWChanged(int)));
+            SLOT(slotChanged()));
     connect(m_hInput, SIGNAL(valueChanged(int)),
-            SLOT(slotHChanged(int)));
+            SLOT(slotChanged()));
     connect(m_wpInput, SIGNAL(valueChanged(double)),
-            SLOT(slotWPChanged(double)));
+            SLOT(slotChanged()));
     connect(m_hpInput, SIGNAL(valueChanged(double)),
-            SLOT(slotHPChanged(double)));
+            SLOT(slotChanged()));
 }
 
 ImageResizeDlg::~ImageResizeDlg()
@@ -96,34 +101,72 @@ void ImageResizeDlg::slotOk()
     accept();
 }
 
-void ImageResizeDlg::slotWChanged(int val)
+void ImageResizeDlg::slotChanged()
 {
-    double wp = (double)val/(double)(*m_width) * 100.0;
-    m_wpInput->setValue(wp);
+    m_wInput->blockSignals(true);
+    m_hInput->blockSignals(true);
+    m_wpInput->blockSignals(true);
+    m_hpInput->blockSignals(true);
+    
+    QString s(sender()->name());
+    
+    if (s == "w")
+    {
+        double val = m_wInput->value();
+        double wp  = val/(double)(*m_width) * 100.0;
+        m_wpInput->setValue(wp);
 
-    if (m_constrainCheck->isChecked()) 
-        m_hpInput->setValue(wp);
-}
+        if (m_constrainCheck->isChecked())
+        {
+            m_hpInput->setValue(wp);
+            int h = (int)(wp*(*m_height)/100);
+            m_hInput->setValue(h);
+        }
+    }
+    else if (s == "h")
+    {
+        double val = m_hInput->value();
+        double hp  = val/(double)(*m_height) * 100.0;
+        m_hpInput->setValue(hp);
 
-void ImageResizeDlg::slotHChanged(int val)
-{
-    double hp = (double)val/(double)(*m_height) * 100;
-    m_hpInput->setValue(hp);
+        if (m_constrainCheck->isChecked())
+        {
+            m_wpInput->setValue(hp);
+            int w = (int)(hp*(*m_width)/100);
+            m_wInput->setValue(w);
+        }
+    }
+    else if (s == "wp")
+    {
+        double val = m_wpInput->value();
+        int w      = (int)(val*(*m_width)/100);
+        m_wInput->setValue(w);
 
-    if (m_constrainCheck->isChecked())
-        m_wpInput->setValue(hp);
-}
+        if (m_constrainCheck->isChecked())
+        {
+            m_hpInput->setValue(val);
+            int h = (int)(val*(*m_height)/100);
+            m_hInput->setValue(h);
+        }
+    }
+    else if (s == "hp")
+    {
+        double val = m_hpInput->value();
+        int h      = (int)(val*(*m_height)/100);
+        m_hInput->setValue(h);
 
-void ImageResizeDlg::slotWPChanged(double val)
-{
-    int w = (int)(val*(*m_width)/100);
-    m_wInput->setValue(w);
-}
+        if (m_constrainCheck->isChecked())
+        {
+            m_wpInput->setValue(val);
+            int w = (int)(val*(*m_width)/100);
+            m_wInput->setValue(w);
+        }
+    }
 
-void ImageResizeDlg::slotHPChanged(double val)
-{
-    int h = (int)(val*(*m_height)/100);
-    m_hInput->setValue(h);
+    m_wInput->blockSignals(false);
+    m_hInput->blockSignals(false);
+    m_wpInput->blockSignals(false);
+    m_hpInput->blockSignals(false);
 }
 
 #include "imageresizedlg.moc"
