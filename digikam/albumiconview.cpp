@@ -781,7 +781,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
             SLOT(slotFilesModified()));
     connect(imview, SIGNAL(signalFileModified(const KURL&)),
-            SLOT(slotFilesModified(const KURL& url)));
+            SLOT(slotFilesModified(const KURL&)));
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             SLOT(slotFilesModified()));
         
