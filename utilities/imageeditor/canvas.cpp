@@ -74,6 +74,9 @@ public:
     bool               rtActive;
     bool               lbActive;
     bool               rbActive;
+    bool               midButtonPressed;
+    int                midButtonX;
+    int                midButtonY;
 
     QTimer            *paintTimer;
     QTimer            *stripPaintTimer;
@@ -103,6 +106,9 @@ Canvas::Canvas(QWidget *parent)
     d->rtActive      = false;
     d->lbActive      = false;
     d->rbActive      = false;
+    d->midButtonPressed = false;
+    d->midButtonX       = 0;
+    d->midButtonY       = 0;
 
     d->qpix   = 0;
     d->paintTimer = new QTimer;
@@ -421,43 +427,58 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
+
+    d->midButtonPressed = false;
     
-    if (d->ltActive || d->rtActive ||
-        d->lbActive || d->rbActive) {
+    if (e->button() == Qt::LeftButton)
+    {
+        if (d->ltActive || d->rtActive ||
+            d->lbActive || d->rbActive) {
 
-        Q_ASSERT( d->rubber );
-        if (!d->rubber)
+            Q_ASSERT( d->rubber );
+            if (!d->rubber)
+                return;
+
+            // Set diagonally opposite corner as anchor
+        
+            QRect r(d->rubber->normalize());
+
+            if (d->ltActive) {
+                d->rubber->setTopLeft(r.bottomRight());
+                d->rubber->setBottomRight(r.topLeft());
+            }
+            else if (d->rtActive) {
+                d->rubber->setTopLeft(r.bottomLeft());
+                d->rubber->setBottomRight(r.topRight());
+            }
+            else if (d->lbActive) {
+                d->rubber->setTopLeft(r.topRight());
+                d->rubber->setBottomRight(r.bottomLeft());
+            }
+            else if (d->rbActive) {
+                d->rubber->setTopLeft(r.topLeft());
+                d->rubber->setBottomRight(r.bottomLeft());
+            }
+        
+            viewport()->setMouseTracking(false);
+
+            d->pressedMoving = true;
             return;
-
-        // Set diagonally oppposite corner as anchor
-        
-        QRect r(d->rubber->normalize());
-
-        if (d->ltActive) {
-            d->rubber->setTopLeft(r.bottomRight());
-            d->rubber->setBottomRight(r.topLeft());
         }
-        else if (d->rtActive) {
-            d->rubber->setTopLeft(r.bottomLeft());
-            d->rubber->setBottomRight(r.topRight());
+    }
+    else if (e->button() == Qt::MidButton)
+    {
+        if (visibleWidth()  < d->im->width() ||
+            visibleHeight() < d->im->height())
+        {
+            viewport()->setCursor(Qt::SizeAllCursor);
+            d->midButtonPressed = true;
+            d->midButtonX       = e->x();
+            d->midButtonY       = e->y();
         }
-        else if (d->lbActive) {
-            d->rubber->setTopLeft(r.topRight());
-            d->rubber->setBottomRight(r.bottomLeft());
-        }
-        else if (d->rbActive) {
-            d->rubber->setTopLeft(r.topLeft());
-            d->rubber->setBottomRight(r.bottomLeft());
-        }
-        
-        viewport()->setMouseTracking(false);
-        //viewport()->update();
-
-        //d->pressedMoved  = false;
-        d->pressedMoving = true;
         return;
     }
-
+    
     if (d->rubber) {
         delete d->rubber;
         d->rubber = 0;        
@@ -474,11 +495,22 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    if (!e || !d->rubber)
+    if (!e)
         return;
 
-    if (!viewport()->hasMouseTracking()) {
-
+    if (e->state() == Qt::MidButton)
+    {
+        if (d->midButtonPressed)
+        {
+            scrollBy(d->midButtonX - e->x(),
+                     d->midButtonY - e->y());
+        }
+    }
+    else if (!viewport()->hasMouseTracking())
+    {
+        if (!d->rubber)
+            return;
+        
         if (e->state() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive))
@@ -502,6 +534,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     }
     else {
 
+        if (!d->rubber)
+            return;
+        
         QRect r(d->rubber->normalize());
         
         QRect lt(r.x()-5,r.y()-5,10,10);
@@ -540,6 +575,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     if (!e)
         return;
 
+    d->midButtonPressed = false;
+    
     if (d->pressedMoving) {
         d->pressedMoving = false;
         viewport()->update();
@@ -558,8 +595,13 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         emit signalSelected(false);
     }
 
-    if (e->button() == Qt::RightButton) {
+    if (e->button() != Qt::LeftButton)
+    {
         viewport()->unsetCursor();
+    }
+
+    if (e->button() == Qt::RightButton)
+    {
         emit signalRightButtonClicked();
     }
 }
