@@ -100,6 +100,7 @@ private:
     
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
+    QCheckBox                    *m_overExposureIndicatorBox;
     
     Digikam::ColorGradientWidget *m_hGradient;
     

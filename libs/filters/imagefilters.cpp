@@ -725,9 +725,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to blur bits the horizontal blur values
-            pBlur[i+2] = LimitValues (nSumR / nCount);
-            pBlur[i+1] = LimitValues (nSumG / nCount);
-            pBlur[ i ] = LimitValues (nSumB / nCount);
+            pBlur[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            pBlur[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
@@ -763,9 +763,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to bits the vertical blur values
-            pOutBits[i+2] = LimitValues (nSumR / nCount);
-            pOutBits[i+1] = LimitValues (nSumG / nCount);
-            pOutBits[ i ] = LimitValues (nSumB / nCount);
+            pOutBits[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            pOutBits[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            pOutBits[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
                 
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
@@ -784,7 +784,8 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                      float rrGain, float rgGain, float rbGain,
                                      float grGain, float ggGain, float gbGain,
-                                     float brGain, float bgGain, float bbGain)
+                                     float brGain, float bgGain, float bbGain, 
+                                     bool overIndicator)
 {
     if (!data || !Width || !Height)
        {
@@ -818,14 +819,14 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
             
             if (bMonochrome)
                 {
-                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
                 pResBits[i] = pResBits[i+1] = pResBits[i+2] = nGray;
                 }
             else
                 {
-                pResBits[i+2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
-                pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm);
-                pResBits[ i ] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm);
+                pResBits[i+2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+                pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
+                pResBits[ i ] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
                 }
             
             pResBits[i+3] = pBits[i+3];

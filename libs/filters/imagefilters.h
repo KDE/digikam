@@ -21,6 +21,8 @@
 #ifndef IMAGE_FILTERS_H
 #define IMAGE_FILTERS_H
 
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
 // C++ includes.
 
 #include <cmath>
@@ -107,16 +109,6 @@ private:    // Private methods used internally.
        return (bIsWOk && bIsHOk);
        };       
 
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    static inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };        
-       
     // Methods for Channel mixer.   
        
     static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
@@ -129,14 +121,15 @@ private:    // Private methods used internally.
        return( fabs (1.0 / lfSum) );
        }
 
-    static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, uchar R, uchar G, uchar B, double Norm)
+    static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, 
+                                 uchar R, uchar G, uchar B, double Norm, 
+                                 bool overIndicator=false)
        {
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
        lfMix *= Norm;
        
-       if (lfMix > 255.0) return 255;        
-       if (lfMix < 0) return 0;
-       return( (uchar)lfMix );
+       if (overIndicator && lfMix > 255) lfMix = 0;        
+       return( (uchar)CLAMP (lfMix, 0, 255) );
        }       
 
 public:   // Public methods.
@@ -151,7 +144,8 @@ public:   // Public methods.
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,
                                   float grGain, float ggGain, float gbGain,
-                                  float brGain, float bgGain, float bbGain);
+                                  float brGain, float bgGain, float bbGain,
+                                  bool overIndicator=false);
     static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);     
     static void sharpenImage(uint* data, int w, int h, int r);
     static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);

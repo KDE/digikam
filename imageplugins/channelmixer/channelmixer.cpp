@@ -217,8 +217,6 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(m_greenGain, 4, 4, 1, 4);
     grid->addMultiCellWidget(m_blueGain, 5, 5, 1, 4);
 
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-
     m_monochrome = new QCheckBox( i18n("Monochrome"), gbox);
     QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want rendering the image in monochrome mode. "
                                         "In this mode, histogram will display only luminosity values."));
@@ -228,6 +226,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     
     grid->addMultiCellWidget(m_monochrome, 6, 6, 0, 1);
     grid->addMultiCellWidget(m_preserveLuminosity, 6, 6, 3, 4);
+    
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
 
     // -------------------------------------------------------------
 
@@ -239,7 +239,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all color channels' gains settings."));
 
-    topLayout->addMultiCellWidget(gbox3, 2, 2, 0, 0);
+    topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
 
     // -------------------------------------------------------------
 
@@ -262,7 +262,11 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                                                  "to see the color level corresponding on histogram."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
-    topLayout->addMultiCellWidget(gbox4, 1, 2, 1, 1);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
+                                                      "will be will be over-colored. This haven't effect to final rendering."));
+    
+    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
     adjustSize();
     disableResize();
@@ -283,6 +287,9 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const QColor &, bool, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const QColor & ))); 
                         
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));              
+    
     // -------------------------------------------------------------
     // Gains settings slots.
 
@@ -517,21 +524,23 @@ void ChannelMixerDialog::slotEffect()
 
     if (m)
        {
-       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,      // Image data.
+       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,    // Image data.
                 l,                                                                 // Preserve luminosity.    
                 m,                                                                 // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,                 // Red channel gains.
                 0.0,            1.0,              0.0,                             // Green channel gains (not used).
-                0.0,            0.0,              1.0);                            // Blue channel gains (not used).
+                0.0,            0.0,              1.0,                             // Blue channel gains (not used).
+                m_overExposureIndicatorBox->isChecked());
        }
     else
        {
-       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,      // Image data.
+       Digikam::ImageFilters::channelMixerImage(m_destinationPreviewData, w, h,    // Image data.
                 l,                                                                 // Preserve luminosity.    
                 m,                                                                 // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,                   // Red channel gains.
                 m_greenRedGain, m_greenGreenGain, m_greenBlueGain,                 // Green channel gains.
-                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);                 // Blue channel gains.
+                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain,                  // Blue channel gains.
+                m_overExposureIndicatorBox->isChecked());
        }
     
     ifaceDest->putPreviewData(m_destinationPreviewData);
