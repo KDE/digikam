@@ -123,7 +123,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     topLayout->addWidget(headerFrame);
     
     QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
+                                                                        "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
