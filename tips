@@ -24,7 +24,7 @@ Did you know that digiKam supports <b>Drag'n'Drop</b>? So you could easily move 
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could use the nested albums in digiKam.
+Did you know that you can use nested albums in digiKam.
 </td>
 </tr>
 </table>
@@ -58,7 +58,7 @@ Did you know that the Properties entry of each photo gives you access to the pro
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could edit the <b>Exif</b> information of a photo by using its properties dialog?
+Did you know that you can edit the <b>Exif</b> information of a photo by using its properties dialog?
 </td>
 </tr>
 </table>
@@ -92,7 +92,7 @@ Did you know that each photo has a context menu that can be reached by clicking 
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that albums in digiKam are Folders in your Album Library? So you could easily import your Photos by simply copying them to your Album Library.
+Did you know that albums in digiKam are Folders in your Album Library? So you can easily import your Photos by simply copying them to your Album Library.
 </td>
 </tr>
 </table>
@@ -109,7 +109,7 @@ Did you know that albums in digiKam are Folders in your Album Library? So you co
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could customize your digikam toolbars using Settings -> Configure Toolbars...?
+Did you know that you can customize your digikam toolbars using Settings -> Configure Toolbars...?
 </td>
 </tr>
 </table>
@@ -126,7 +126,7 @@ Did you know that you could customize your digikam toolbars using Settings -> Co
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that digiKam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating digiKam.
+Did you know that digiKam supports <b>DCOP</b>? So you can write your own scripts automating digiKam.
 </td>
 </tr>
 </table>
@@ -160,7 +160,7 @@ Did you know that there is a digiKam hotplugging howto available at <a href="htt
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could reach other users using the digikam-users mailing list? Subscribe yourself to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
+Did you know that you can reach other users using the digikam-users mailing list? Subscribe yourself to the list at <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
 </td>
 </tr>
 </table>
@@ -209,7 +209,7 @@ Did you know that you have direct access to the KDE Gamma Configuration using To
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
+Did you know that you can print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
 </td>
 </tr>
 </table>
@@ -225,7 +225,7 @@ Did you know that you could print images using the Print Wizard? You can start i
 <td><img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
+Did you know that you can use the <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
 </td>
 </tr>
 </table>
@@ -241,7 +241,7 @@ Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for 
 <td>
 <img src="crystalsvg/32x32/apps/digikam.png"></td>
 <td>
-Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
+Did you know that the all settings in a dialog box have <b>What's this?</b> information available, which can be reached via the right mouse button?
 </td>
 </tr>
 </table>
@@ -258,7 +258,7 @@ Did you know that the all options in a dialog box have <b>What's this?</b> infor
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that because PNG file format use a lossless compression algorithm, you can use the max compression level with this file format?
+Did you know that because the PNG file format uses a lossless compression algorithm, you can use the max compression level with this file format?
 </td>
 </tr>
 </table>
