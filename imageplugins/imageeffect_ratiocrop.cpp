@@ -18,11 +18,6 @@
  * 
  * ============================================================ */
 
-// Imlib2 include.
-
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
-
 // C++ include.
 
 #include <cstring>
@@ -37,6 +32,7 @@
 #include <qwhatsthis.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -393,30 +389,12 @@ void ImageEffect_RatioCrop::slotOk()
     int h            = iface.originalHeight();
     QRect currentPos = m_imageSelectionWidget->getRegionSelection();
 
-    Imlib_Context context = imlib_context_new();
-    imlib_context_push(context);
-
-    Imlib_Image imOrg = imlib_create_image_using_copied_data(w, h, data);
-    imlib_context_set_image(imOrg);
+    QImage imOrg, imDest;
+    imOrg.create(w, h, 32);
+    memcpy(imOrg.bits(), data, imOrg.numBytes());
+    imDest = imOrg.copy(currentPos);
+    iface.putOriginalData((uint*)imDest.bits(), imDest.width(), imDest.height());   
     
-    Imlib_Image imDest = imlib_create_cropped_image(currentPos.left(), currentPos.top(),
-                                                    currentPos.width(), currentPos.height());
-    imlib_context_set_image(imDest);    
-    
-    uint* ptr  = imlib_image_get_data_for_reading_only();
-    int   newW = imlib_image_get_width();
-    int   newH = imlib_image_get_height();
-
-    iface.putOriginalData(ptr, newW, newH);   
-    
-    imlib_context_set_image(imOrg);
-    imlib_free_image_and_decache();
-
-    imlib_context_set_image(imDest);
-    imlib_free_image_and_decache();
-    
-    imlib_context_pop();
-    imlib_context_free(context);       
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();
