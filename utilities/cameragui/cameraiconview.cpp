@@ -51,6 +51,8 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     setSelectionMode(Extended);
     setHScrollBarMode(QScrollView::AlwaysOff);
 
+    CameraIconViewItem::m_newEmblem = new QPixmap(CameraIconViewItem::new_xpm);
+    
     connect(this, SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
     connect(this, SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)),
@@ -61,7 +63,9 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
 
 CameraIconView::~CameraIconView()
 {
-    
+    clear();
+    delete CameraIconViewItem::m_newEmblem;
+    CameraIconViewItem::m_newEmblem = 0;
 }
 
 void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
@@ -97,6 +101,11 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
 
     delete item;
     arrangeItemsInGrid();
+}
+
+CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
+{
+    return m_itemDict.find(folder+file);
 }
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename,
@@ -244,6 +253,39 @@ void CameraIconView::slotDoubleClicked(QIconViewItem* item)
         return;
 
     emit signalFileView(static_cast<CameraIconViewItem*>(item));
+}
+
+void CameraIconView::slotSelectAll()
+{
+    selectAll(true);    
+}
+
+void CameraIconView::slotSelectNone()
+{
+    clearSelection();
+}
+
+void CameraIconView::slotSelectInvert()
+{
+    invertSelection();
+}
+
+void CameraIconView::slotSelectNew()
+{
+    blockSignals(true);
+    clearSelection();
+    for (QIconViewItem* item = firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* viewItem =
+            static_cast<CameraIconViewItem*>(item);
+        if (viewItem->itemInfo()->downloaded == 0)
+        {
+            viewItem->setSelected(true, true);
+        }
+    }
+    blockSignals(false);
+    emit selectionChanged();
 }
 
 #include "cameraiconview.moc"

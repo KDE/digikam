@@ -36,6 +36,7 @@ public:
 
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
+    void    setDownloaded();
 
     GPItemInfo* itemInfo() const
         { return m_itemInfo; }
@@ -54,6 +55,9 @@ private:
     QString     m_downloadName;
     QRect       m_itemExtraRect;
 
+    static QPixmap*    m_newEmblem;
+    static const char* new_xpm[];
+    
     friend class CameraUI;
     friend class CameraIconView;
 };

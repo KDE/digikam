@@ -23,6 +23,34 @@
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
 
+const char* CameraIconViewItem::new_xpm[] =
+{
+    "13 13 8 1",
+    "       c None",
+    ".      c #232300",
+    "+      c #F6F611",
+    "@      c #000000",
+    "#      c #DBDA4D",
+    "$      c #FFFF00",
+    "%      c #AAA538",
+    "&      c #E8E540",
+    "      .      ",
+    "  .  .+.  .  ",
+    " @#@ .$. .#. ",
+    "  @$@#$#@$.  ",
+    "   @$%&%$@   ",
+    " ..#%&&&%#.. ",
+    ".+$$&&&&&$$+@",
+    " ..#%&&&%#@@ ",
+    "   @$%&%$@   ",
+    "  .$@#$#@$.  ",
+    " @#. @$@ @#. ",
+    "  .  @+@  .  ",
+    "      @      "
+};
+
+QPixmap* CameraIconViewItem::m_newEmblem = 0;
+
 CameraIconViewItem::CameraIconViewItem(QIconView* parent,
                                        const GPItemInfo& itemInfo,
                                        const QString& downloadName)
@@ -156,6 +184,13 @@ void CameraIconViewItem::paintItem(QPainter *, const QColorGroup& cg)
                    Qt::AlignTop,m_downloadName);
     }
 
+    if (m_itemInfo->downloaded == 0)
+    {
+        int x = rect().width() - m_newEmblem->width() - 5;
+        int y = 5;
+        p.drawPixmap(x, y, *m_newEmblem);
+    }
+    
     p.end();
 
     QRect r(rect());
@@ -180,6 +215,15 @@ void CameraIconViewItem::setDownloadName(const QString& downloadName)
 QString CameraIconViewItem::getDownloadName() const
 {
     return m_downloadName;
+}
+
+void CameraIconViewItem::setDownloaded()
+{
+    if (m_itemInfo->downloaded != 1)
+    {
+        m_itemInfo->downloaded = 1;
+        repaint();
+    }
 }
 
 void CameraIconViewItem::setPixmap(const QPixmap& icon)

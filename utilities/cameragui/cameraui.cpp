@@ -111,9 +111,13 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     mainLayout->addWidget(viewBox);
 
     QHBoxLayout* btnLayout = new QHBoxLayout();
+
+    QPushButton* helpBtn;
+    QPushButton* selectBtn;
     
     m_advBtn      = new QPushButton(i18n("&Advanced %1").arg(">>"), this);
-    m_helpBtn     = new QPushButton(i18n("&Help"), this);
+    helpBtn       = new QPushButton(i18n("&Help"), this);
+    selectBtn     = new QPushButton(i18n("&Select"), this);
     m_downloadBtn = new QPushButton(i18n("&Download"), this);
     m_deleteBtn   = new QPushButton(i18n("D&elete"), this);
     m_closeBtn    = new QPushButton(i18n("&Close"), this);
@@ -121,20 +125,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     btnLayout->addWidget(m_advBtn);
     btnLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Expanding,
                                        QSizePolicy::Fixed));
-    btnLayout->addWidget(m_helpBtn);
+    btnLayout->addWidget(helpBtn);
+    btnLayout->addWidget(selectBtn);
     btnLayout->addWidget(m_downloadBtn);
     btnLayout->addWidget(m_deleteBtn);
     btnLayout->addWidget(m_closeBtn);
-
-    // About popupmenu button using a slot for calling the camera interface
-    // anchor in Digikam handbook.
-    
-    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(),
-                                        false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Digikam Handbook"),
-                                 this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpBtn->setPopup( helpMenu->menu() );
 
     mainLayout->addLayout(btnLayout);
     
@@ -157,7 +152,33 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
                                       exifBox);
     
     mainLayout->addWidget(m_advBox);
+
+    // About popupmenu button using a slot for calling the camera interface
+    // anchor in Digikam handbook.
     
+    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(),
+                                        false);
+    helpMenu->menu()->removeItemAt(0);
+    helpMenu->menu()->insertItem(i18n("Digikam Handbook"),
+                                 this, SLOT(slotHelp()), 0, -1, 0);
+    helpBtn->setPopup( helpMenu->menu() );
+
+    // -------------------------------------------------------------------------
+    
+    QPopupMenu* selectMenu = new QPopupMenu(this);
+    selectMenu->insertItem(i18n("Select &All"),
+                           m_view, SLOT(slotSelectAll()));
+    selectMenu->insertItem(i18n("Select N&one"),
+                           m_view, SLOT(slotSelectNone()));
+    selectMenu->insertItem(i18n("&Invert Selection"),
+                           m_view, SLOT(slotSelectInvert()));
+    selectMenu->insertSeparator();
+    selectMenu->insertItem(i18n("Select &New Items"),
+                           m_view, SLOT(slotSelectNew()));
+    selectBtn->setPopup(selectMenu);    
+
+    // -------------------------------------------------------------------------
+        
     m_downloadMenu = new QPopupMenu(this);
     m_downloadMenu->insertItem(i18n("Download Selected"),
                                this, SLOT(slotDownloadSelected()),
@@ -168,6 +189,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_downloadMenu->setItemEnabled(0, false);
     m_downloadBtn->setPopup(m_downloadMenu);
 
+    // -------------------------------------------------------------------------
+    
     m_deleteMenu = new QPopupMenu(this);
     m_deleteMenu->insertItem(i18n("Delete Selected"),
                              this, SLOT(slotDeleteSelected()),
@@ -178,6 +201,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_deleteMenu->setItemEnabled(0, false);
     m_deleteBtn->setPopup(m_deleteMenu);
 
+    // -------------------------------------------------------------------------
+    
     connect(m_closeBtn, SIGNAL(clicked()),
             SLOT(close()));
     connect(m_advBtn, SIGNAL(clicked()),
@@ -577,8 +602,14 @@ void CameraUI::slotItemsSelected(bool selected)
     m_deleteMenu->setItemEnabled(0, selected);
 }
 
-void CameraUI::slotDownloaded(const QString&, const QString&)
+void CameraUI::slotDownloaded(const QString& folder, const QString& file)
 {
+    CameraIconViewItem* iconItem = m_view->findItem(folder, file);
+    if (iconItem)
+    {
+        iconItem->setDownloaded();
+    }
+    
     int curr = m_progress->progress();
     m_progress->setProgress(curr+1);
 }

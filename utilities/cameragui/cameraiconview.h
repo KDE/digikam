@@ -45,6 +45,8 @@ public:
     void setThumbnail(const QString& folder, const QString& filename,
                       const QPixmap& pixmap);
 
+    CameraIconViewItem* findItem(const QString& folder, const QString& file);
+    
 private:
 
     QString getTemplatedName(const QString& templ,
@@ -67,6 +69,10 @@ public slots:
 
     void slotDownloadNameChanged();
     void slotSelectionChanged();
+    void slotSelectAll();
+    void slotSelectNone();
+    void slotSelectInvert();
+    void slotSelectNew();
 
 private slots:
 
