@@ -43,6 +43,11 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
     m_width  = width;
     m_height = height;
 
+    m_prevW  = *m_width;
+    m_prevH  = *m_height;
+    m_prevWP = 100.0;
+    m_prevHP = 100.0;
+    
     QGridLayout *topLayout =
         new QGridLayout( plainPage(), 0, 3, 4, spacingHint());
 
@@ -95,8 +100,12 @@ ImageResizeDlg::~ImageResizeDlg()
 
 void ImageResizeDlg::slotOk()
 {
-    *m_width  = m_wInput->value();
-    *m_height = m_hInput->value();
+    if (m_prevW != m_wInput->value() || m_prevH != m_hInput->value() ||
+        m_prevWP != m_wpInput->value() || m_prevHP != m_hpInput->value())
+        slotChanged();
+    
+    *m_width  = m_prevW;
+    *m_height = m_prevH;
     accept();
 }
 
@@ -162,6 +171,11 @@ void ImageResizeDlg::slotChanged()
         }
     }
 
+    m_prevW = m_wInput->value();
+    m_prevH = m_hInput->value();
+    m_prevWP = m_wpInput->value();
+    m_prevHP = m_hpInput->value();
+    
     m_wInput->blockSignals(false);
     m_hInput->blockSignals(false);
     m_wpInput->blockSignals(false);

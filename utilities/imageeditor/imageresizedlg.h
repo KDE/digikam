@@ -49,6 +49,11 @@ private:
 
     int      *m_width;
     int      *m_height;
+
+    int       m_prevW;
+    int       m_prevH;
+    double    m_prevWP;
+    double    m_prevHP;
     
 private slots:
 
