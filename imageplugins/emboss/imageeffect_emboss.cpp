@@ -95,7 +95,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Oil paint algorithm"), 
+    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Emboss algorithm"), 
                      "pieter_voloshyn at ame.com.br");         
                                           
     m_helpButton = actionButton( Help );
