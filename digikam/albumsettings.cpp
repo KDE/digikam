@@ -114,6 +114,9 @@ void AlbumSettings::init()
     d->iconShowComments = true;
     d->iconShowFileComments = false;
     d->iconShowResolution = false;
+    d->saveExifComments = true;
+    d->exifRotate = true;
+    d->exifSetOrientation = true;
 }
 
 void AlbumSettings::readSettings()
@@ -190,6 +193,8 @@ void AlbumSettings::readSettings()
             config->readBoolEntry("Icon Show File Comments",
                                   true);
 
+    config->setGroup("EXIF Settings");
+
     if (config->hasKey("Save EXIF Comments"))
         d->saveExifComments =
             config->readBoolEntry("Save EXIF Comments",
@@ -253,6 +258,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show File Comments",
                        d->iconShowFileComments);
                        
+    config->setGroup("EXIF Settings");
+
     config->writeEntry("Save EXIF Comments",
                        d->saveExifComments);
                        
@@ -262,6 +269,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("EXIF Set Orientation",
                        d->exifSetOrientation);
     config->sync();
+
 }
 
 void AlbumSettings::setAlbumLibraryPath(const QString& path)

@@ -87,6 +87,7 @@
 #include "albummanager.h"
 #include "albuminfo.h"
 #include "kexif.h"
+#include "kexifdata.h"
 
 
 /////////////////////////////////////// CLASS ////////////////////////////////////////////
@@ -409,6 +410,8 @@ void ImageView::readSettings()
     height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
     fullScreen = config->readBoolEntry("FullScreen", false);
+    config->setGroup("EXIF Settings");
+    setExifOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
     resize(width, height);
     
@@ -530,6 +533,9 @@ void ImageView::setupConnections()
 {
     connect(d->canvas, SIGNAL(signalChanged(bool)),
             this, SLOT(slotChanged(bool)));
+            
+    connect(d->canvas, SIGNAL(signalRotatedOrFlipped(bool)),
+            this, SLOT(slotRotatedOrFlipped(bool)));
             
     connect(d->canvas, SIGNAL(signalCropSelected(bool)),
             this, SLOT(slotCropSelected(bool)));
@@ -1518,6 +1524,13 @@ void ImageView::slotSave()
         qWarning("No Exif Data Found");
         }
 
+    if( rotatedOrFlipped )
+    {
+       KExifData *exifData = new KExifData;
+       exifData->writeOrientation(d->urlCurrent.path(), KExifData::NORMAL);
+       delete exifData;
+    }
+
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), d->urlCurrent,
                                            -1, true, false, false);
 
@@ -1709,6 +1722,13 @@ void ImageView::slotCropSelected(bool val)
     d->contextMenu->setItemEnabled(action->menuID, val);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotRotatedOrFlipped(bool val)
+{
+   rotatedOrFlipped = true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 

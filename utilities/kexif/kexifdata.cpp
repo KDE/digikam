@@ -184,18 +184,18 @@ void KExifData::saveFile(const QString& filename)
 }
 
 
-void KExifData::writeOrientation(QString& filename, ImageOrientation orientation)
+void KExifData::writeOrientation(const QString& filename, ImageOrientation orientation)
 {
    QString str = "";
    writeFile( filename, str, orientation);
 }
 
-void KExifData::writeComment(QString& filename, QString& comment)
+void KExifData::writeComment(const QString& filename, const QString& comment)
 {
    writeFile( filename, comment, UNSPECIFIED );
 }
 
-void KExifData::writeFile(QString& filename, QString& comment, ImageOrientation orientation)
+void KExifData::writeFile(const QString& filename, const QString& comment, ImageOrientation orientation)
 {
     unsigned int count = 0;
     Q_UINT8 byte;

@@ -604,6 +604,7 @@ void Canvas::slotFlipHorizontal()
     viewport()->repaint();
 
     emit signalChanged(true);
+    emit signalRotatedOrFlipped(true);
 }
 
 
@@ -621,6 +622,7 @@ void Canvas::slotFlipVertical()
     viewport()->repaint();
 
     emit signalChanged(true);
+    emit signalRotatedOrFlipped(true);
 }
 
 
@@ -638,6 +640,7 @@ void Canvas::slotRotate90()
     viewport()->repaint();
 
     emit signalChanged(true);
+    emit signalRotatedOrFlipped(true);
 }
 
 
@@ -655,6 +658,7 @@ void Canvas::slotRotate180()
     viewport()->repaint();
 
     emit signalChanged(true);
+    emit signalRotatedOrFlipped(true);
 }
 
 
@@ -672,6 +676,7 @@ void Canvas::slotRotate270()
     viewport()->repaint();
 
     emit signalChanged(true);
+    emit signalRotatedOrFlipped(true);
 }
 
 

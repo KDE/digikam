@@ -104,6 +104,8 @@ private:
                                             // when the images are opened from the cameraUI 
                                             // interface (like 'Image Comments Editor'
                                             // and 'Remove From Album').
+    bool setExifOrientation;
+    bool rotatedOrFlipped;
                                             
     QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;                                            
 
@@ -127,6 +129,7 @@ private slots:
     void slotZoomChanged(double zoom);
     void slotCropSelected(bool val);
     void slotChanged(bool val);
+    void slotRotatedOrFlipped(bool val);
     void slotClose();
     void slotBCGEdit();
     void slotCommentsEdit();
@@ -181,6 +184,7 @@ private:
     KComboBox *m_units;
     QCheckBox *m_addFileName;
     QCheckBox *m_blackwhite;
+
 };
 
 #endif // IMAGEVIEW_H 

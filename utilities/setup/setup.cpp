@@ -90,6 +90,7 @@ void Setup::slotOkClicked()
     collectionsPage_->applySettings();
     mimePage_->applySettings();
     cameraPage_->applySettings();
+    exifPage_->applySettings();
     close();
 }
 

@@ -45,9 +45,9 @@ public:
     QValueVector<KExifIfd> ifdVector;
 
     void saveFile(const QString& filename);
-    void writeOrientation(QString& filename, ImageOrientation orientation);
-    void writeComment(QString& filename, QString& comment);
-    void writeFile(QString& filename, QString& comment, ImageOrientation orientation); 
+    void writeOrientation(const QString& filename, ImageOrientation orientation);
+    void writeComment(const QString& filename, const QString& comment);
+    void writeFile(const QString& filename, const QString& comment, ImageOrientation orientation); 
 
 private:
 

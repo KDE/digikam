@@ -110,6 +110,7 @@ signals:
     void signalMaxZoom();
     void signalMinZoom();
     void signalChanged(bool);
+    void signalRotatedOrFlipped(bool);
     void signalCropSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();
