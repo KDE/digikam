@@ -4,7 +4,7 @@
  * Date  : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -328,11 +328,9 @@ void AdjustCurveDialog::slotPositionChanged(int x, int y)
 
 void AdjustCurveDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceOrg =
-        m_previewOriginalWidget->imageIface();
+    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
 
-    Digikam::ImageIface* ifaceDest =
-        m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
     uint* orgData = ifaceOrg->getPreviewData();
     int   w       = ifaceOrg->previewWidth();
@@ -356,11 +354,9 @@ void AdjustCurveDialog::slotEffect()
 
 void AdjustCurveDialog::slotOk()
 {
-    Digikam::ImageIface* ifaceOrg =
-        m_previewOriginalWidget->imageIface();
+    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
 
-    Digikam::ImageIface* ifaceDest =
-        m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
     uint* orgData = ifaceOrg->getOriginalData();
     int   w       = ifaceOrg->originalWidth();
@@ -467,6 +463,7 @@ void AdjustCurveDialog::slotLoadCurves()
 
     // Refresh the current curves config.
     slotChannelChanged(m_channelCB->currentItem());
+    slotEffect();
 }
 
 void AdjustCurveDialog::slotSaveCurves()
