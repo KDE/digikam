@@ -239,7 +239,11 @@ void ImageEffect_Emboss::slotEffect()
     double radius = m_radiusInput->value();
     double sigma  = m_sigmaInput->value();
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
+#if KDE_VERSION >= 0x30200
     QImage newImage = KImageEffect::emboss(image, radius, sigma);
+#else
+    QImage newImage = KImageEffect::emboss(image);
+#endif
     m_imagePreviewWidget->setPreviewImageData(newImage);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
@@ -263,7 +267,11 @@ void ImageEffect_Emboss::slotOk()
         image.setAlphaBuffer(true) ;
         memcpy(image.bits(), data, image.numBytes());
 
+#if KDE_VERSION >= 0x30200
         QImage newImage = KImageEffect::emboss(image, radius, sigma);
+#else
+        QImage newImage = KImageEffect::emboss(image);
+#endif
     
         memcpy(data, newImage.bits(), newImage.numBytes());
         iface.putOriginalData(data);

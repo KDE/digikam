@@ -196,7 +196,11 @@ void ImageEffect_OilPaint::slotEffect()
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     double factor = m_radiusInput->value();
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
+#if KDE_VERSION >=0x30200
     QImage newImage = KImageEffect::oilPaintConvolve(image, factor);
+#else
+    QImage newImage = KImageEffect::oilPaint(image, (int)factor);
+#endif
     m_imagePreviewWidget->setPreviewImageData(newImage);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
@@ -219,7 +223,11 @@ void ImageEffect_OilPaint::slotOk()
         image.setAlphaBuffer(true) ;
         memcpy(image.bits(), data, image.numBytes());
 
+#if KDE_VERSION >=0x30200
         QImage newImage = KImageEffect::oilPaintConvolve(image, factor);
+#else
+        QImage newImage = KImageEffect::oilPaint(image, (int)factor);
+#endif
     
         memcpy(data, newImage.bits(), newImage.numBytes());
         iface.putOriginalData(data);
