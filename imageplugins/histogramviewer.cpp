@@ -170,7 +170,7 @@ void HistogramViewer::setupGui(uint *imageData, uint imageWidth, uint imageHeigh
                                      "Logarithmic scale can be used when the maximal counts is big. "
                                      "Like this all values (small and big) will be visible on the graph."));
 
-    QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
+    QLabel *label10 = new QLabel(i18n("Color:"), plainPage());
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_colorsCB = new QComboBox( false, plainPage() );
     m_colorsCB->insertItem( i18n("Red") );

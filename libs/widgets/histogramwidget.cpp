@@ -316,7 +316,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
          }
       else
          {
-         if ( m_selectMode == true )   // Selection mode enable ?
+         if ( m_selectMode == true )   // Histogram selection mode enable ?
             {
             if ( x >= (uint)((float)(m_xmin * wWidth) / 256.0) && 
                 x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
@@ -354,11 +354,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                   {
                   case Digikam::HistogramWidget::RedColor:
                     p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
                     p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
@@ -369,11 +369,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
                   case Digikam::HistogramWidget::GreenColor:
                     p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);                 
                     p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
@@ -406,11 +406,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                {
                case Digikam::HistogramWidget::RedColor:
                  p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                 p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
                  p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
@@ -421,11 +421,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
                case Digikam::HistogramWidget::GreenColor:
                  p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
-                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
-                 p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                 p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
                  p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
