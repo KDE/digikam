@@ -43,7 +43,7 @@ public:
     void insert(CameraType* ctype);
     void remove(CameraType* ctype);
     CameraType* find(const QString& title);
-    CameraType* autoDetect();
+    CameraType* autoDetect(bool& retry);
     void clear();
 
     QPtrList<CameraType>* cameraList();

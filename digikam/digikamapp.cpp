@@ -671,7 +671,15 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
 
 void DigikamApp::slotCameraAutoDetect()
 {
-    CameraType* ctype = mCameraList->autoDetect();
+    bool retry = false;
+    
+    CameraType* ctype = mCameraList->autoDetect(retry);
+    if (!ctype && retry)
+    {
+        QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
+        return;
+    }
+    
     if (ctype && ctype->action())
     {
         ctype->action()->activate();

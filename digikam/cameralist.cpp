@@ -184,14 +184,19 @@ CameraType* CameraList::find(const QString& title)
     return 0;
 }
 
-CameraType* CameraList::autoDetect()
+CameraType* CameraList::autoDetect(bool& retry)
 {
+    retry = false;
+    
     QString model, port;
     if (GPIface::autoDetect(model, port) != 0)
     {
-        KMessageBox::error(0, i18n("Failed to auto-detect camera.\n"
-                                   "Please check if your camera is turned on "
-                                   "and retry."));
+       retry = ( KMessageBox::warningYesNo(0,
+                                           i18n("Failed to auto-detect camera. "
+                                                "Please make sure its connected "
+                                                "properly and turned on. "
+                                                "Would you like to try again?"))
+                 == KMessageBox::Yes );
         return 0;
     }
 
