@@ -45,7 +45,7 @@ public:
     
 signals:
 
-    void signalSelectionMoved( QRect rect );
+    void signalSelectionMoved( QRect rect, bool targetDone );
 
 protected:
     
@@ -68,6 +68,10 @@ private:
     QRect       m_rect;       
     QRect       m_regionSelection;         // Original size image selection.
     QRect       m_localRegionSelection;    // Thumbnail size selection.
+    
+    // Recalculate the target selection position and emit 'signalSelectionMoved'.
+    
+    void ImagePanIconWidget::regionSelectionChanged( bool targetDone );
 
 };
 

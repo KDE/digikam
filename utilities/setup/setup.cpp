@@ -72,7 +72,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     editorPage_ = new SetupEditor(page_editor);
     
     page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
-                           BarIcon("run", KIcon::SizeMedium));
+                           BarIcon("share", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
     page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),

@@ -76,7 +76,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     frame1->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
-    m_imageRegionWidget->setClipPosition(0, 0);
+    m_imageRegionWidget->setClipPosition(0, 0, true);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
                                                "who will be used for the preview computation."
@@ -100,8 +100,8 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     connect(m_imageRegionWidget, SIGNAL(contentsMovedEvent()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved (QRect)),
-            this, SLOT(slotSetImageRegionPosition(QRect)));
+    connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved (QRect, bool)),
+            this, SLOT(slotSetImageRegionPosition(QRect, bool)));
             
     QTimer::singleShot(0, this, SLOT(slotOriginalImageRegionChanged()));            
 }
@@ -127,9 +127,9 @@ void ImagePreviewWidget::setPreviewImageData(QImage img)
     m_previewTargetLabel->setPixmap(pix);
 }    
 
-void ImagePreviewWidget::slotSetImageRegionPosition(QRect rect)
+void ImagePreviewWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
 {
-    m_imageRegionWidget->setClipPosition(rect.x(), rect.y());
+    m_imageRegionWidget->setClipPosition(rect.x(), rect.y(), targetDone);
     updateSelectionInfo(rect);
 }
 

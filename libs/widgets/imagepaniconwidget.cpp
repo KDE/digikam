@@ -87,6 +87,22 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
     repaint(false);
 }
 
+void ImagePanIconWidget::regionSelectionChanged( bool targetDone )
+{
+    m_regionSelection.setX( (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
+                            ( (float)m_iface->originalWidth() / (float)m_w )) );
+                                            
+    m_regionSelection.setY( (int)( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
+                            ( (float)m_iface->originalHeight() / (float)m_h )) );
+                                            
+    m_regionSelection.setWidth( (int)((float)m_localRegionSelection.width() *
+                                ( (float)m_iface->originalWidth() / (float)m_w )) );
+                                     
+    m_regionSelection.setHeight( (int)((float)m_localRegionSelection.height() *
+                                 ( (float)m_iface->originalHeight() / (float)m_h )) );
+    
+    emit signalSelectionMoved( m_regionSelection, targetDone );
+}
 
 void ImagePanIconWidget::paintEvent( QPaintEvent * )
 {
@@ -122,20 +138,7 @@ void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
     if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
        setCursor ( KCursor::arrowCursor() );
-
-       m_regionSelection.setX( (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
-                               ( (float)m_iface->originalWidth() / (float)m_w )) );
-                                            
-       m_regionSelection.setY( (int)( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
-                               ( (float)m_iface->originalHeight() / (float)m_h )) );
-                                            
-       m_regionSelection.setWidth( (int)((float)m_localRegionSelection.width() *
-                                ( (float)m_iface->originalWidth() / (float)m_w )) );
-                                     
-       m_regionSelection.setHeight( (int)((float)m_localRegionSelection.height() *
-                                    ( (float)m_iface->originalHeight() / (float)m_h )) );
-    
-       emit signalSelectionMoved( m_regionSelection );
+       regionSelectionChanged(true);
        }
 }
 
@@ -151,6 +154,7 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
      
        m_xpos = newxpos;
        m_ypos = newypos;
+       regionSelectionChanged(false);
        return;
        }        
     else 

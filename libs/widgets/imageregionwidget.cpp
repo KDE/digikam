@@ -23,7 +23,6 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qcursor.h>
 
 // KDE includes.
 
@@ -54,12 +53,6 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     
     setFixedSize(wp, hp);
     viewport()->setMouseTracking(true);
-    
-    KGlobal::dirs()->addResourceType("kipi_handcursor", KGlobal::dirs()->kde_default("data")
-                   + "kipi/data");
-    m_handCursor = new QCursor( KGlobal::dirs()->findResourceDir("kipi_handcursor", "handcursor.png")
-                   + "handcursor.png" );
-    
     setImage();
 }
 
@@ -90,10 +83,12 @@ void ImageRegionWidget::setImage(void)
     delete [] data;
 }
 
-void ImageRegionWidget::setClipPosition(int x, int y)
+void ImageRegionWidget::setClipPosition(int x, int y, bool targetDone)
 {
     setContentsPos(x, y);    
-    emit contentsMovedEvent();
+    
+    if( targetDone )
+       emit contentsMovedEvent();
 }
 
 QRect ImageRegionWidget::getImageRegion(void)
@@ -119,7 +114,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
        {
        m_xpos = e->x();
        m_ypos = e->y();
-       setCursor ( *m_handCursor );
+       setCursor ( KCursor::sizeAllCursor() );
        }
 }
 

@@ -52,7 +52,7 @@ public:
 public slots:
 
     // Set the top/Left conner clip position.
-    void slotSetImageRegionPosition(QRect rect);
+    void slotSetImageRegionPosition(QRect rect, bool targetDone);
     
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(void);

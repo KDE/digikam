@@ -29,7 +29,6 @@
 #include <qrect.h>
 
 class QPixmap;
-class QCursor;
 
 namespace Digikam
 {
@@ -43,7 +42,7 @@ public:
     ImageRegionWidget(int wp, int hp, QWidget *parent=0, bool scrollBar=true);
     ~ImageRegionWidget();
     
-    void setClipPosition(int x, int y);    
+    void setClipPosition(int x, int y, bool targetDone);    
     QRect getImageRegion(void);
     QImage getImageRegionData(void);
     
@@ -64,8 +63,6 @@ protected:
    
     int        m_xpos;
     int        m_ypos;
-
-    QCursor   *m_handCursor;
 
     void drawContents(QPainter *p, int x, int y, int w, int h);
     void setImage(void);
