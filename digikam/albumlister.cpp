@@ -99,6 +99,9 @@ void AlbumLister::openAlbum(Album *album)
     }
     else if (album->type() == Album::TAG)
     {
+        //TODO: if the album library path has changed: kill the tags kioslave
+        // by pumping a metadata to it, causing it to reload.
+        
         connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
                 SLOT(slotNewTagItems(const KFileItemList&)));
         connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
