@@ -505,7 +505,11 @@ void DigikamApp::slotToggleFullScreen()
 
 void DigikamApp::slotShowTip()
 {
-    KTipDialog::showTip("digikam/tips", true);
+    QStringList tipsFiles;
+    tipsFiles.append("digikam/tips");
+    tipsFiles.append("kipi/tips");
+    
+    KTipDialog::showMultiTip(0, tipsFiles, true);
 }
 
 void DigikamApp::loadPlugins()
