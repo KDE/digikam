@@ -29,8 +29,8 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 
-#include <interfaces/albummanager.h>
-#include <interfaces/albuminfo.h>
+#include "albummanager.h"
+#include "albuminfo.h"
 
 #include "albumfolderview.h"
 #include "albumfolderitem.h"

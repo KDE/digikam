@@ -45,10 +45,10 @@
 #include <kmessagebox.h>
 #include <klineeditdlg.h>
 
-#include <interfaces/albummanager.h>
-#include <interfaces/albuminfo.h>
-#include <interfaces/thumbnailjob.h>
-#include <interfaces/digikamio.h>
+#include "albummanager.h"
+#include "albuminfo.h"
+#include "thumbnailjob.h"
+#include "digikamio.h"
 
 #include "thumbnailsize.h"
 #include "albumfolderitem.h"

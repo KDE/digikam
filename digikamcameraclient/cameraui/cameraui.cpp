@@ -32,6 +32,7 @@
 
 #include <qlabel.h>
 
+
 #include "camerauiview.h"
 #include "camerasettings.h"
 #include "cameraui.h"

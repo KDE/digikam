@@ -5,7 +5,7 @@
 #include <kfileitem.h>
 #include <kio/job.h>
 
-#include <interfaces/albumitemhandler.h>
+#include "albumitemhandler.h"
 
 class QMouseEvent;
 class QResizeEvent;

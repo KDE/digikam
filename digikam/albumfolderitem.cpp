@@ -29,7 +29,7 @@
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 
-#include <interfaces/albuminfo.h>
+#include "albuminfo.h"
 
 #include "albumfolderview.h"
 #include "albumfolderitem.h"

@@ -28,7 +28,7 @@
 #include <kdebug.h>
 #include <kaction.h>
 
-#include <interfaces/plugin.h>
+#include "plugin.h"
 
 #include "digikamapp.h"
 #include "digikampluginmanager.h"

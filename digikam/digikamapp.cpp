@@ -33,8 +33,8 @@
 #include <kedittoolbar.h>
 #include <ktip.h>
 
-#include <interfaces/albummanager.h>
-#include <interfaces/albuminfo.h>
+#include "albummanager.h"
+#include "albuminfo.h"
 
 #include "cameralist.h"
 #include "cameratype.h"

@@ -33,10 +33,10 @@
 #include <krun.h>
 #include <kaction.h>
 
-#include <interfaces/albuminfo.h>
-#include <interfaces/albummanager.h>
-#include <interfaces/thumbnailjob.h>
-#include <interfaces/digikamio.h>
+#include "albuminfo.h"
+#include "albummanager.h"
+#include "thumbnailjob.h"
+#include "digikamio.h"
 
 #include "albumsettings.h"
 #include "imagedescedit.h"
