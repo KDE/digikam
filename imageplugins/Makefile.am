@@ -7,5 +7,7 @@ MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
 picsdir = $(kde_datadir)/digikam/data
 pics_DATA = digikamimageplugins_banner_left.png
 
-EXTRA_DIST = $(pics_DATA)
+iconsdir = $(kde_datadir)/digikam/icons/hicolor/32x32/actions
+
+KDE_ICON = digikamimageplugins
 
