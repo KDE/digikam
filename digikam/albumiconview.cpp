@@ -511,14 +511,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 
         d->currentAlbum->setItemComments(iconItem->text(), comments);
         
-        int h = iconItem->height();
-        iconItem->updateExtraText();
-        iconItem->calcRect();
-        iconItem->repaint();
-        if (iconItem->height() != h)
-            rearrangeItems();
-
-        // store as JPEG Exif comment
+       // store as JPEG Exif comment
         QString fileName(iconItem->fileItem()->url().path());
         KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
 
@@ -537,6 +530,13 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
             exifData->saveExifComment(fileName,comments);
             delete exifData;
         }
+
+        int h = iconItem->height();
+        iconItem->updateExtraText();
+        iconItem->calcRect();
+        iconItem->repaint();
+        if (iconItem->height() != h)
+            rearrangeItems();
 
     }
 }
