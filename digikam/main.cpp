@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                           i18n("Using Kipi library version %1").arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
-                          I18N_NOOP("digiKam"),
+                          I18N_NOOP("Digikam"),
                           digikam_version,        // Release number available in version.h to the top source dir.
                           Description.latin1(),
                           KAboutData::License_GPL,
@@ -188,8 +188,6 @@ int main(int argc, char *argv[])
     client->attach();
     app.dcopClient()->registerAs(app.name(), false);
 
-    double currentVersion = 0.6;
-
     KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
     double version = config->readDoubleNumEntry("Version");
@@ -200,8 +198,9 @@ int main(int argc, char *argv[])
     QString albumPath = config->readPathEntry("Album Path");
     QFileInfo dirInfo(albumPath);
 
-    if (version < currentVersion || !dirInfo.exists()
-        || !dirInfo.isDir())
+    // version 0.6 was the version when the new Albums Library
+    // storage was implemented
+    if (version < 0.6 || !dirInfo.exists() || !dirInfo.isDir())
     {
         // Run the first run
         DigikamFirstRun *firstRun = new DigikamFirstRun(config);
@@ -209,7 +208,7 @@ int main(int argc, char *argv[])
         firstRun->show();
         return app.exec();
     }
-    
+
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 
