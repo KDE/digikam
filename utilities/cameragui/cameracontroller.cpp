@@ -152,6 +152,7 @@ void CameraController::slotCancel()
     ds << 2;
     KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_SPECIAL,
                                              ba, false);
+    job->setWindow(d->parent);
     KIO::Scheduler::assignJobToSlave(d->slave, job);
     
     d->state = ST_NONE;
@@ -180,6 +181,7 @@ void CameraController::slotSlaveConnected(KIO::Slave* slave)
         ds << 1;
         KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_SPECIAL,
                                                  ba, false);
+        job->setWindow(d->parent);
         d->job = job;
 
         connect(job, SIGNAL(result(KIO::Job*)),
@@ -280,6 +282,7 @@ void CameraController::slotList()
     emit signalBusy(true);
         
     KIO::ListJob* job = KIO::listDir(url, false);
+    job->setWindow(d->parent);
     d->job = job;
 
     connect(job, SIGNAL(entries(KIO::Job*, const KIO::UDSEntryList&)),
@@ -318,6 +321,7 @@ void CameraController::slotThumbnails()
     emit signalBusy(true);
 
     CameraThumbJob *job = new CameraThumbJob(d->slave, d->itemList, 100);
+    job->setWindow(d->parent);
     d->job = job;
 
     connect(job, SIGNAL(signalThumbnail(const KFileItem*, const QPixmap&)),

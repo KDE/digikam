@@ -152,7 +152,7 @@ CameraUI::~CameraUI()
 
 void CameraUI::slotFatal(const QString& msg)
 {
-    KMessageBox::error( 0, msg);
+    KMessageBox::error( this, msg);
     close();
 }
 
