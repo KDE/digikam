@@ -165,8 +165,8 @@ int main(int argc, char *argv[])
                           0);
                                                     
     aboutData.addCredit ( "Richard Taylor",
-                          I18N_NOOP("Feedback and patches"),
-                          "r dot taylor at bcs.org.uk",
+                          I18N_NOOP("Feedback and patches. Handbook writer"),
+                          "rjt-digicam at thegrindstone dot me dot uk",
                           0);
 
     aboutData.addCredit ( "Hans Karlsson",
