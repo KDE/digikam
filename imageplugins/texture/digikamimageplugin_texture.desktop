@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_Texture
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=digiKam plugin to apply texture on image
+
+X-KDE-Library=digikamimageplugin_texture
+author=Gilles Caulier, caulier dot gilles at free dot fr

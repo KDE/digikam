@@ -32,6 +32,7 @@ Currently implemented plugins are:
 20) ChannelMixer     : Color channels mixer tool.
 21) BlurFX           : Blurring special effects package.
 22) DistortionFX     : Distortion special effects package. 
+23) Texture          : A too to apply a decorative texture to an image.
 
 Contact :
 -----------------------------------------------------------------------
