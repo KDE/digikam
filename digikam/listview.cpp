@@ -587,4 +587,28 @@ void ListView::takeItem(ListItem* item)
         d->visibleItems.remove(pos);    
 }
 
+QSize ListView::sizeHint() const
+{
+    if (cachedSizeHint().isValid())
+        return cachedSizeHint();
+
+    constPolish();
+
+    QSize s(0,0);
+    if (verticalScrollBar()->isVisible())
+        s.setWidth(s.width() + style().pixelMetric(QStyle::PM_ScrollBarExtent));
+    s += QSize(frameWidth()*2,frameWidth()*2);
+
+    s.setHeight(s.height() + 10 * d->itemHeight);
+    
+    if ( s.width() > s.height() * 3 )
+	s.setHeight( s.width() / 3 );
+    else if ( s.width() *3 < s.height() )
+	s.setHeight( s.width() * 3 );
+
+    setCachedSizeHint( s );
+
+    return s;
+}
+
 #include "listview.moc"

@@ -51,6 +51,8 @@ public:
     void      ensureItemVisible(ListItem *item);
 
     int       itemHeight() const;
+
+    QSize     sizeHint() const;
     
 protected:
 
