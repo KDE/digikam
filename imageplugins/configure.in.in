@@ -59,13 +59,3 @@ fi
 dnl Check if Imlib2 is installed properly
 KDE_FIND_IMLIB2_CONFIG
 
-dnl Check for Mesa (OpenGL) for slideshow plugin
-MDL_HAVE_OPENGL
-
-AM_CONDITIONAL(compile_SLIDESHOW, test -n "$ac_imlib2_config" -a "$have_GL" = yes )
-
-if test -z "$ac_imlib2_config" -o "$have_GL" != yes; then
-	AC_MSG_WARN([Slideshow plugin will not be compiled])
-fi
-
-
