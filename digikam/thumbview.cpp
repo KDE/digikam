@@ -48,55 +48,55 @@ extern "C" {
 
 #define RECT_EXTENSION 300
 
-class ThumbViewPrivate {
-
+class ThumbViewPrivate 
+{
 public:
 
-    ThumbItem *firstItem;
-    ThumbItem *lastItem;
+    ThumbItem           *firstItem;
+    ThumbItem           *lastItem;
 
-    int spacing;
-    int count;
-    
-    bool clearing;
-    bool pressedMoved;
-    
-    QRect banner;
-    QRect *rubber;
-    QPoint dragStartPos;
+    int                 spacing;
+    int                 count;
 
-    QPtrList<ThumbItem>    selectedItems;
-    QPtrList<ThumbItem>    prevSelectedItems;
+    bool                clearing;
+    bool                pressedMoved;
 
-    QTimer* updateTimer;
+    QRect               banner;
+    QRect               *rubber;
+    QPoint              dragStartPos;
 
-    struct ItemContainer {
-	ItemContainer(ItemContainer *p, ItemContainer *n,
-                      const QRect &r)
-	    : prev(p), next(n), rect(r) {
+    QPtrList<ThumbItem> selectedItems;
+    QPtrList<ThumbItem> prevSelectedItems;
 
+    QTimer              *updateTimer;
+
+    struct ItemContainer 
+    {
+        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r) 
+            : prev(p), next(n), rect(r) 
+        {
             items.setAutoDelete(false);
             if (prev)
                 prev->next = this;
             if (next)
                 next->prev = this;
-	}
-        
-	ItemContainer *prev, *next;
-	QRect rect;
-	QPtrList<ThumbItem> items;
+        }
 
+        ItemContainer     *prev, *next;
+        QRect             rect;
+        QPtrList<ThumbItem> items;
     } *firstContainer, *lastContainer;
 
-    ThumbItem *startDragItem;
+    ThumbItem           *startDragItem;
 
-    struct SortableItem {
+    struct SortableItem 
+    {
         ThumbItem *item;
-    };   
+    };
 
-    ThumbItem* toolTipItem;
-    QTimer*    toolTipTimer;
-    bool       showTips;
+    ThumbItem           *toolTipItem;
+    QTimer              *toolTipTimer;
+    bool                showTips;
 };
 
 
@@ -112,8 +112,7 @@ static int cmpItems( const void *n1, const void *n2 )
 }
 
 
-ThumbView::ThumbView(QWidget* parent, const char* name,
-                     WFlags fl)
+ThumbView::ThumbView(QWidget* parent, const char* name, WFlags fl)
     : QScrollView(parent, name, Qt::WStaticContents | fl)
 {
     setBackgroundMode(Qt::NoBackground);
@@ -121,9 +120,9 @@ ThumbView::ThumbView(QWidget* parent, const char* name,
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(QWidget::WheelFocus);
     viewport()->setMouseTracking(true);
-    
+
     renamingItem = 0;
-    
+
     d = new ThumbViewPrivate;
     d->firstItem = 0;
     d->lastItem  = 0;
@@ -143,7 +142,7 @@ ThumbView::ThumbView(QWidget* parent, const char* name,
 
     d->toolTipTimer = new QTimer();
     d->toolTipItem  = 0;
-    
+
     connect(d->updateTimer, SIGNAL(timeout()),
             SLOT(slotUpdate()));
     connect(d->toolTipTimer, SIGNAL(timeout()),
@@ -158,7 +157,7 @@ ThumbView::~ThumbView()
 
     if (d->rubber)
         delete d->rubber;
-    
+
     delete d->updateTimer;
     delete d->toolTipTimer;
     delete d;
@@ -203,27 +202,29 @@ void ThumbView::clear(bool update)
 
 int ThumbView::count()
 {
-    return d->count;    
+    return d->count;
 }
 
 int ThumbView::index(ThumbItem* item)
 {
     if ( !item )
-	return -1;
+        return -1;
 
     if ( item == d->firstItem )
-	return 0;
+        return 0;
     else if ( item == d->lastItem )
-	return d->count - 1;
-    else {
-	ThumbItem *i = d->firstItem;
-	int j = 0;
-	while ( i && i != item ) {
-	    i = i->next;
-	    ++j;
-	}
+        return d->count - 1;
+    else 
+    {
+        ThumbItem *i = d->firstItem;
+        int j = 0;
+        while ( i && i != item ) 
+        {
+            i = i->next;
+            ++j;
+        }
 
-	return i ? j : -1;
+        return i ? j : -1;
     }
 }
 
@@ -255,11 +256,11 @@ void ThumbView::insertItem(ThumbItem *item)
     }
 
     d->count++;
-    
+
     // this way one can insert items in a loop
     // without too many paintevents
     d->updateTimer->start(0, true);
-    
+
 }
 
 void ThumbView::takeItem(ThumbItem *item)
@@ -267,7 +268,7 @@ void ThumbView::takeItem(ThumbItem *item)
     if (!item) return;
 
     d->count--;
-    
+
     // First remove item from any containers holding it
     ThumbViewPrivate::ItemContainer *tmp = d->firstContainer;
     while (tmp) {
@@ -284,35 +285,39 @@ void ThumbView::takeItem(ThumbItem *item)
         d->toolTipTimer->stop();
         slotToolTip();
     }
-    
-    if (item == d->firstItem) {
-	d->firstItem = d->firstItem->next;
-	if (d->firstItem)
-	    d->firstItem->prev = 0;
+
+    if (item == d->firstItem) 
+    {
+        d->firstItem = d->firstItem->next;
+        if (d->firstItem)
+            d->firstItem->prev = 0;
         else
             d->firstItem = d->lastItem = 0;
     }
-    else if (item == d->lastItem) {
-	d->lastItem = d->lastItem->prev;
-	if ( d->lastItem )
+    else if (item == d->lastItem) 
+    {
+        d->lastItem = d->lastItem->prev;
+        if ( d->lastItem )
 	    d->lastItem->next = 0;
         else
             d->firstItem = d->lastItem = 0;
-    } else {
-	ThumbItem *i = item;
-	if (i) {
-	    if (i->prev )
-		i->prev->next = i->next;
-	    if ( i->next )
-		i->next->prev = i->prev;
-	}
+    }
+    else 
+    {
+        ThumbItem *i = item;
+        if (i) 
+        {
+            if (i->prev )
+                i->prev->next = i->next;
+            if ( i->next )
+                i->next->prev = i->prev;
+        }
     }
 
     if (!d->clearing) {
         QRect r(contentsRectToViewport(item->rect())); 
         viewport()->repaint(r);
     }
-    
 }
 
 void ThumbView::slotUpdate()
@@ -352,7 +357,6 @@ void ThumbView::sort()
     }
 
     delete [] items;
-    
 }
 
 void ThumbView::setEnableToolTips(bool val)
@@ -391,29 +395,25 @@ void ThumbView::viewportPaintEvent(QPaintEvent *pe)
     }
 
     ThumbViewPrivate::ItemContainer *c = d->firstContainer;
-    for ( ; c; c = c->next) {
-
+    for ( ; c; c = c->next) 
+    {
         QRect cr(contentsRectToViewport(c->rect));
-        
-        if (r.intersects(cr)) {
-        
+
+        if (r.intersects(cr)) 
+        {
             ThumbItem *item = c->items.first();
-            for ( ; item; item = c->items.next()) {
-
+            for ( ; item; item = c->items.next()) 
+            {
                 QRect ir(contentsRectToViewport(item->rect()));
-
-                if (r.intersects(ir)) {
-
+                if (r.intersects(ir)) 
+                {
                     item->paintItem(&painter, colorGroup());
-
                     paintRegion -= QRegion(ir);
                 }
             }
         }
     }
 
-
-        
     painter.setClipRegion(paintRegion);
     painter.fillRect(r, colorGroup().base());
 
@@ -458,7 +458,7 @@ void ThumbView::rearrangeItems(bool update)
     h = QMAX(h, d->lastItem->y() + d->lastItem->height());
 
     int vw = visibleWidth();
- 
+
     viewport()->setUpdatesEnabled(false);
     resizeContents( w, h );
     bool doAgain = visibleWidth() != vw;
@@ -466,7 +466,6 @@ void ThumbView::rearrangeItems(bool update)
         rearrangeItems(false);
     viewport()->setUpdatesEnabled(true);
 
-    
     rebuildContainers();
 
     if (changedLayout && update) {
@@ -479,7 +478,7 @@ void ThumbView::rearrangeItems(bool update)
 
 void ThumbView::triggerUpdate()
 {
-    d->updateTimer->start(0, true);    
+    d->updateTimer->start(0, true);
 }
 
 ThumbItem* ThumbView::makeRow(ThumbItem *begin, int &y, bool &changed)
@@ -540,14 +539,13 @@ void ThumbView::repaintBanner()
     if (d->banner.isEmpty() || d->banner.isNull())
          return;
     QRect br(contentsRectToViewport(d->banner));
-                                
+
     viewport()->repaint(br);
 }
 
 void ThumbView::calcBanner()
 {
     d->banner.setRect(0, 0, 0, 0);
-    
 }
 
 void ThumbView::paintBanner(QPainter *)
@@ -595,9 +593,8 @@ void ThumbView::leaveEvent(QEvent *e)
 
     // nullify the d->startDragItem if the mouse
     // leaves the widget
-    
     d->startDragItem = 0;
-    
+
     QScrollView::leaveEvent(e);
 }
 
@@ -647,55 +644,59 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     d->toolTipTimer->stop();
     slotToolTip();
 
-    
     // Delete any existing rubber -------------------------------
 
-    if ( d->rubber ) {
-	   QPainter p;
-	   p.begin(viewport());
-	   p.setRasterOp(NotROP);
-	   p.setPen(QPen(color0, 1));
-	   p.setBrush(NoBrush);
-    
-	   drawRubber(&p);
-	   p.end();
-	   delete d->rubber;
-	   d->rubber = 0;
+    if ( d->rubber )
+    {
+        QPainter p;
+        p.begin(viewport());
+        p.setRasterOp(NotROP);
+        p.setPen(QPen(color0, 1));
+        p.setBrush(NoBrush);
+
+        drawRubber(&p);
+        p.end();
+        delete d->rubber;
+        d->rubber = 0;
     }
 
     d->dragStartPos = e->pos();
-    
+
     ThumbItem *item = findItem(e->pos());
-    if (item) {
-
-        if (e->state() & Qt::ControlButton) {
-            
+    if (item) 
+    {
+        if (e->state() & Qt::ControlButton) 
+        {
             item->setSelected(!item->isSelected(), false);
-                
         }
-        else if (e->state() & Qt::ShiftButton) {
-
+        else if (e->state() & Qt::ShiftButton) 
+        {
             // different selection mode than the Trolls
 
             ThumbItem *lastSelectedItem = 0;
 
             bool bwdSelection = false;
-                
+
             // first go backwards
-            for (ThumbItem *it = item->prev; it; it = it->prev) {
-                if (it->isSelected()) {
+            for (ThumbItem *it = item->prev; it; it = it->prev) 
+            {
+                if (it->isSelected()) 
+                {
                     lastSelectedItem = it;
                     bwdSelection = true;
                     break;
                 }
             }
-                
+
             bool fwdSelection = false;
-                
-            if (!lastSelectedItem) {
+
+            if (!lastSelectedItem) 
+            {
                 // Now go forward
-                for (ThumbItem *it = item->next; it; it = it->next) {
-                    if (it->isSelected()) {
+                for (ThumbItem *it = item->next; it; it = it->next) 
+                {
+                    if (it->isSelected()) 
+                    {
                         lastSelectedItem = it;
                         fwdSelection = true;
                         break;
@@ -704,10 +705,12 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
             }
 
             blockSignals(true);
-            
-            if (bwdSelection) {
+
+            if (bwdSelection) 
+            {
                 for (ThumbItem *it = lastSelectedItem;
-                     it && it != item->next; it = it->next) {
+                     it && it != item->next; it = it->next) 
+                {
                     if (!it->isSelected()) {
                         it->setSelected(true, false);
                     }
@@ -719,9 +722,11 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
 //                    }
 //                }
             }
-            else if (fwdSelection) {
+            else if (fwdSelection) 
+            {
                 for (ThumbItem *it = item;
-                     it && it != lastSelectedItem->next; it = it->next) {
+                     it && it != lastSelectedItem->next; it = it->next) 
+                {
                     if (!it->isSelected()) {
                         it->setSelected(true, false);
                     }
@@ -743,7 +748,8 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
             emit signalSelectionChanged();
 
         }
-        else {
+        else 
+        {
             if (!item->isSelected()) {
                 item->setSelected(true, true);
             }
@@ -795,11 +801,11 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
 {
 
     if (!e) return;
-    
+
     if (e->state() == NoButton )
     {
         ThumbItem* item = findItem(e->pos());
-        
+
         if(d->showTips)
         {
             if (!isActiveWindow())
@@ -809,28 +815,28 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
                 slotToolTip();
                 return;
             }
-            
+
             if (item != d->toolTipItem)
             {
                 d->toolTipItem = 0;
                 d->toolTipTimer->stop();
                 slotToolTip();
-                
+
                 if(acceptToolTip(item, e->pos()))
                 {
                     d->toolTipItem = item;
                     d->toolTipTimer->start(500, true);
                 }
             }
-            
+
             if(item == d->toolTipItem && !acceptToolTip(item, e->pos()))
             {
                 d->toolTipItem = 0;
                 d->toolTipTimer->stop();
-                slotToolTip();                
+                slotToolTip();
             }
         }
-                
+
         if(KGlobalSettings::changeCursorOverIcon())
         {
             if(item)
@@ -844,7 +850,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     d->toolTipItem  = 0;
     d->toolTipTimer->stop();
     slotToolTip();
-    
+
     // Dragging ?
     if (d->startDragItem && 
        (e->state() ==  LeftButton || 
@@ -858,7 +864,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
-    
+
     if (!d->rubber) return;
 
     QRect oldRubber = QRect(*d->rubber);
@@ -877,13 +883,17 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     bool changed = false;
 
     blockSignals(true);
-    
+
     ThumbViewPrivate::ItemContainer *c = d->lastContainer;
-    for (; c; c = c->prev) {
-	if ( rubberUnion.intersects(c->rect) ) {
+    for (; c; c = c->prev) 
+    {
+        if ( rubberUnion.intersects(c->rect) ) 
+        {
             ThumbItem *item = c->items.last();
-	    for ( ; item; item = c->items.prev() ) {
-                if (nr.intersects(item->rect())) {
+            for ( ; item; item = c->items.prev() ) 
+            {
+                if (nr.intersects(item->rect())) 
+                {
                     if (!item->isSelected())
                     {
                         item->setSelected(true, false);
@@ -891,7 +901,8 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
                         paintRegion += QRect(item->rect());
                     }
                 }
-                else {
+                else 
+                {
                     if (item->isSelected() &&
                         d->prevSelectedItems.containsRef(item) == 0)
                     {
@@ -903,7 +914,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
             }
         }
     }
-    
+
     blockSignals(false);
     viewport()->setUpdatesEnabled(true);
 
@@ -917,7 +928,6 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     p.setBrush( NoBrush );
     drawRubber( &p );
     p.end();
-    
 
     if (changed) {
         emit signalSelectionChanged();
@@ -926,7 +936,7 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 
     ensureVisible(e->pos().x(), e->pos().y());
-    
+
     *d->rubber = r;
 
     p.begin(viewport());
@@ -952,7 +962,7 @@ void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
         p.setRasterOp( NotROP );
         p.setPen( QPen( color0, 1 ) );
         p.setBrush( NoBrush );
-    
+
         drawRubber( &p );
         p.end();
 
@@ -961,7 +971,7 @@ void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 
     d->prevSelectedItems.clear();
-    
+
     if (e->button() == Qt::RightButton) {
         ThumbItem *item = findItem(e->pos());
         if (item) 
@@ -971,8 +981,10 @@ void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
     }
     else if ((e->button() == Qt::LeftButton) &&
              !(e->state() & Qt::ShiftButton) &&
-             !(e->state() & Qt::ControlButton)) {
-        if (d->pressedMoved) {
+             !(e->state() & Qt::ControlButton)) 
+    {
+        if (d->pressedMoved)
+        {
             d->pressedMoved = false;
             return;
         }
@@ -990,7 +1002,7 @@ void ThumbView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
     if(KGlobalSettings::singleClick())
         return;
-    
+
     ThumbItem *item = findItem(e->pos());
     if (item) {
         itemClickedToOpen(item);
@@ -1001,14 +1013,14 @@ void ThumbView::itemClickedToOpen(ThumbItem *item)
 {
     if(!item)
         return;
-    
+
     blockSignals(true);
     clearSelection();
     if (renamingItem)
         renamingItem->cancelRenameItem();
     blockSignals(false);
     item->setSelected(true);
-    emit signalDoubleClicked(item);    
+    emit signalDoubleClicked(item);
 }
 
 void ThumbView::contentsWheelEvent(QWheelEvent *e)
@@ -1029,34 +1041,41 @@ void ThumbView::rebuildContainers()
     appendContainer();
 
     ThumbViewPrivate::ItemContainer* c = d->lastContainer;
-    while (item) {
-	if (c->rect.contains(item->rect())) {
-	    c->items.append(item);
-	    item = item->next;
-	}
-        else if (c->rect.intersects(item->rect())) {
-	    c->items.append( item );
-	    c = c->next;
-	    if (!c) {
-		appendContainer();
-		c = d->lastContainer;
-	    }
-	    c->items.append(item);
-	    item = item->next;
-	    c = c->prev;
-	}
-        else {
-            if (item->y() < c->rect.y() && c->prev) {
+    while (item) 
+    {
+        if (c->rect.contains(item->rect())) 
+        {
+            c->items.append(item);
+            item = item->next;
+        }
+        else if (c->rect.intersects(item->rect())) 
+        {
+            c->items.append( item );
+            c = c->next;
+            if (!c) 
+            {
+                appendContainer();
+                c = d->lastContainer;
+            }
+            c->items.append(item);
+            item = item->next;
+            c = c->prev;
+        }
+        else 
+        {
+            if (item->y() < c->rect.y() && c->prev) 
+            {
                 c = c->prev;
                 continue;
             }
 
-	    c = c->next;
-	    if (!c) {
-		appendContainer();
-		c = d->lastContainer;
-	    }
-	}
+            c = c->next;
+            if (!c) 
+            {
+                appendContainer();
+                c = d->lastContainer;
+            }
+        }
     }
 }
 
@@ -1067,23 +1086,24 @@ void ThumbView::appendContainer()
     s = QSize( INT_MAX - 1, RECT_EXTENSION );
 
     if (!d->firstContainer) {
-	d->firstContainer =
+        d->firstContainer =
             new ThumbViewPrivate::ItemContainer(0, 0, QRect(QPoint(0, 0), s));
-	d->lastContainer = d->firstContainer;
+        d->lastContainer = d->firstContainer;
     }
     else {
         d->lastContainer = new ThumbViewPrivate::ItemContainer(
             d->lastContainer, 0, QRect(d->lastContainer->rect.bottomLeft(), s));
-    }  
+    }
 }
 
 void ThumbView::deleteContainers()
 {
     ThumbViewPrivate::ItemContainer *c = d->firstContainer, *tmpc;
-    while (c) {
-	tmpc = c->next;
-	delete c;
-	c = tmpc;
+    while (c) 
+    {
+        tmpc = c->next;
+        delete c;
+        c = tmpc;
     }
     d->firstContainer = d->lastContainer = 0;
 }
@@ -1100,61 +1120,68 @@ void ThumbView::updateItemContainer(ThumbItem *item)
     }
 
     ThumbViewPrivate::ItemContainer *c = d->firstContainer;
-    if (!c) {
-	appendContainer();
-	c = d->firstContainer;
+    if (!c) 
+    {
+        appendContainer();
+        c = d->firstContainer;
     }
 
     const QRect ir = item->rect();
     bool contains = false;
-    for (;;) {
-	if (c->rect.intersects(ir)) {
-	    contains = c->rect.contains(ir);
-	    break;
-	}
+    for (;;) 
+    {
+        if (c->rect.intersects(ir)) 
+        {
+            contains = c->rect.contains(ir);
+            break;
+        }
 
-	c = c->next;
-	if (!c) {
-	    appendContainer();
-	    c = d->lastContainer;
-	}
+        c = c->next;
+        if (!c) 
+        {
+            appendContainer();
+            c = d->lastContainer;
+        }
     }
 
-    if ( !c ) {
-	return;
-    }
+    if ( !c )
+        return;
+
 
     c->items.append(item);
- 
-    if (!contains) {
-	c = c->next;
-	if (!c) {
-	    appendContainer();
-	    c = d->lastContainer;
-	}
-	c->items.append( item );
+
+    if (!contains) 
+    {
+        c = c->next;
+        if (!c) 
+        {
+            appendContainer();
+            c = d->lastContainer;
+        }
+        c->items.append( item );
     }
 
     if (contentsWidth() < ir.right() ||
         contentsHeight() < ir.bottom())
-	resizeContents(QMAX(contentsWidth(), ir.right()),
+        resizeContents(QMAX(contentsWidth(), ir.right()),
                        QMAX(contentsHeight(), ir.bottom()));
-    
 }
 
 ThumbItem* ThumbView::findItem(const QPoint& pos)
 {
     if ( !d->firstItem )
-	return 0;
+        return 0;
 
     ThumbViewPrivate::ItemContainer *c = d->lastContainer;
-    for (; c; c = c->prev) {
-	if ( c->rect.contains(pos) ) {
-	    ThumbItem *item = c->items.last();
-	    for ( ; item; item = c->items.prev() )
-		if ( item->rect().contains( pos ) )
-		    return item;
-	}
+    for (; c; c = c->prev) 
+    {
+        if ( c->rect.contains(pos) ) 
+        {
+            ThumbItem *item = c->items.last();
+            for ( ; item; item = c->items.prev() )
+                if ( item->rect().contains( pos ) )
+                    return item;
+        }
     }
 
     return 0;
@@ -1166,7 +1193,7 @@ ThumbItem* ThumbView::findItem(const QString& text)
         return 0;
 
     bool found = false;
-    
+
     ThumbItem *item = 0;
     for (item = d->firstItem; item; item = item->next) {
         if (item->text() == text) {
@@ -1179,7 +1206,6 @@ ThumbItem* ThumbView::findItem(const QString& text)
         return item;
     else
         return 0;
-    
 }
 
 QRect ThumbView::contentsRectToViewport(const QRect& r)
@@ -1234,7 +1260,8 @@ void ThumbView::invertSelection()
 
 void ThumbView::selectItem(ThumbItem* item, bool select)
 {
-    if (!item) return;
+    if (!item) 
+        return;
 
     if (select)
     {
@@ -1244,20 +1271,22 @@ void ThumbView::selectItem(ThumbItem* item, bool select)
     {
         d->selectedItems.remove(item);
     }
-    
+
     emit signalSelectionChanged();
 }
 
 void ThumbView::emitRenamed(ThumbItem *item)
 {
-    if (!item) return;
+    if (!item) 
+        return;
 
     emit signalItemRenamed(item);
 }
 
 void ThumbView::startDrag()
 {
-    if (!d->startDragItem) return;
+    if (!d->startDragItem) 
+        return;
 
     QStrList uris;
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
@@ -1276,36 +1305,36 @@ void ThumbView::startDrag()
 
 void ThumbView::contentsDropEvent(QDropEvent *e)
 {
-
-    if (!e) return;
+    if (!e)
+        return;
 
     if (e->source() == this) {
         e->accept();
         return;
     }
-    
-    
 }
 
 void ThumbView::keyPressEvent(QKeyEvent *e)
 {
     bool handled = false;
-    
+
     if ( !d->firstItem )
-	return;
+        return;
 
     ThumbItem *currItem = d->selectedItems.first();
 
-    switch ( e->key() ) {
-
-    case Key_Home: {
+    switch ( e->key() ) 
+    {
+    case Key_Home: 
+    {
         d->firstItem->setSelected(true, true);
         ensureItemVisible(d->firstItem);
         handled = true;
         break;
     }
 
-    case Key_End: {
+    case Key_End: 
+    {
         d->lastItem->setSelected(true, true);
         ensureItemVisible(d->lastItem);
         handled = true;
@@ -1313,7 +1342,8 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
 
     case Key_Enter:
-    case Key_Return: {
+    case Key_Return: 
+    {
         if (currItem)
         {
             emit signalReturnPressed(currItem);
@@ -1321,34 +1351,35 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         }
         break;
     }
-        
-    case Key_Right: {
+
+    case Key_Right: 
+    {
         ThumbItem *item = currItem ? currItem->next : d->firstItem;
-        
+
         if (item)
         {
             if(currItem && currItem->isSelected() && item->isSelected())
             {
                 currItem->setSelected(false,false);
             }
-            
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
         handled = true;
         break;
     }
-        
-    case Key_Left: {
+
+    case Key_Left: 
+    {
         ThumbItem *item = currItem ? currItem->prev : d->firstItem;
-        
+
         if (item)
         {
             if(currItem && currItem->isSelected() && item->isSelected())
             {
                 currItem->setSelected(false,false);
             }
-            
+
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
@@ -1356,15 +1387,15 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         break;
     }
 
-    case Key_Up: {
-
+    case Key_Up: 
+    {
         currItem = currItem ? currItem : d->firstItem;
 
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() - d->spacing*2;
-        
+
         ThumbItem *item = 0;
-        
+
         while (!item && y > 0) {
             item = findItem(QPoint(x,y));
             y -= d->spacing * 2;
@@ -1383,29 +1414,29 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         handled = true;
         break;
     }
-        
-    case Key_Down: {
 
+    case Key_Down: 
+    {
         currItem = currItem ? currItem : d->firstItem;
-        
+
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() + currItem->height() +
                 d->spacing * 2;
 
         ThumbItem *item = 0;
-        
+
         while (!item && y < contentsHeight()) {
             item = findItem(QPoint(x,y));
             y += d->spacing * 2;
         }
-        
+
         if (item)
         {
             if(currItem && currItem->isSelected() && item->isSelected())
             {
                 currItem->setSelected(false,false);
             }
-            
+
             keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
         }
@@ -1414,42 +1445,46 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
         break;
     }
 
-    case Key_Next: {
-
+    case Key_Next: 
+    {
         currItem = currItem ? currItem : d->firstItem;
 
         QRect r( 0, currItem->y() + visibleHeight(),
                  contentsWidth(), visibleHeight() );
-	ThumbItem *ni = findFirstVisibleItem(r);
-	if (!ni) {
+        ThumbItem *ni = findFirstVisibleItem(r);
+        if (!ni) 
+        {
             r = QRect( 0, currItem->y() + currItem->height(),
                        contentsWidth(), contentsHeight() );
-	    ni = findLastVisibleItem( r );
+            ni = findLastVisibleItem( r );
         }
-        if (ni) {
+        if (ni) 
+        {
             ni->setSelected(true, true);
             ensureItemVisible(ni);
             handled = true;
         }
         break;
     }
-        
-    case Key_Prior: {
 
+    case Key_Prior: 
+    {
         currItem = currItem ? currItem : d->firstItem;
 
-	QRect r(0, currItem->y() - visibleHeight(),
+        QRect r(0, currItem->y() - visibleHeight(),
                 contentsWidth(), visibleHeight() );
-	ThumbItem *ni = findFirstVisibleItem(r);
-	if ( !ni ) {
+        ThumbItem *ni = findFirstVisibleItem(r);
+        if ( !ni ) 
+        {
             r = QRect( 0, 0, contentsWidth(), currItem->y() );
-	    ni = findFirstVisibleItem( r );
-	}
-	if ( ni ) {
+            ni = findFirstVisibleItem( r );
+        }
+        if ( ni ) 
+        {
             ni->setSelected(true, true);
             ensureItemVisible(ni);
             handled = true;
-	}
+        }
 
         break;
     }
@@ -1469,7 +1504,7 @@ void ThumbView::keySelectItem(ThumbItem* item, bool shift)
 {
     if (!item)
         return;
-    
+
     if (shift)
     {
         if (!item->isSelected())
@@ -1491,7 +1526,7 @@ void ThumbView::keySelectItem(ThumbItem* item, bool shift)
 void ThumbView::ensureItemVisible(ThumbItem *item)
 {
     if ( !item )
-	return;
+        return;
 
     if ( item->y() == d->firstItem->y() )
     {
@@ -1512,29 +1547,36 @@ ThumbItem* ThumbView::findFirstVisibleItem(const QRect &r ) const
     ThumbViewPrivate::ItemContainer *c = d->firstContainer;
     ThumbItem *i = 0;
     bool alreadyIntersected = false;
-    for ( ; c; c = c->next ) {
-	if ( c->rect.intersects( r ) ) {
-	    alreadyIntersected = true;
-	    ThumbItem *item = c->items.first();
-	    for ( ; item; item = c->items.next() ) {
-		if ( r.intersects( item->rect() ) ) {
-		    if ( !i ) {
-			i = item;
-		    } else {
-			QRect r2 = item->rect();
-			QRect r3 = i->rect();
-			if ( r2.y() < r3.y() )
-			    i = item;
-			else if ( r2.y() == r3.y() &&
-				  r2.x() < r3.x() )
-			    i = item;
-		    }
-		}
-	    }
-	} else {
-	    if ( alreadyIntersected )
-		break;
-	}
+    for ( ; c; c = c->next )
+    {
+        if ( c->rect.intersects( r ) )
+        {
+            alreadyIntersected = true;
+            ThumbItem *item = c->items.first();
+            for ( ; item; item = c->items.next() )
+            {
+                if ( r.intersects( item->rect() ) )
+                {
+                    if ( !i ) {
+                        i = item;
+                    }
+                    else {
+                        QRect r2 = item->rect();
+                        QRect r3 = i->rect();
+                        if ( r2.y() < r3.y() )
+                            i = item;
+                        else if ( r2.y() == r3.y() &&
+                                  r2.x() < r3.x() )
+                            i = item;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if ( alreadyIntersected )
+                break;
+        }
     }
 
     return i;
@@ -1545,29 +1587,35 @@ ThumbItem* ThumbView::findLastVisibleItem(const QRect &r ) const
     ThumbViewPrivate::ItemContainer *c = d->firstContainer;
     ThumbItem *i = 0;
     bool alreadyIntersected = false;
-    for ( ; c; c = c->next ) {
-	if ( c->rect.intersects( r ) ) {
-	    alreadyIntersected = true;
-	    ThumbItem *item = c->items.first();
-	    for ( ; item; item = c->items.next() ) {
-		if ( r.intersects( item->rect() ) ) {
-		    if ( !i ) {
-			i = item;
-		    } else {
-			QRect r2 = item->rect();
-			QRect r3 = i->rect();
-			if ( r2.y() > r3.y() )
-			    i = item;
-			else if ( r2.y() == r3.y() &&
-				  r2.x() > r3.x() )
-			    i = item;
-		    }
-		}
-	    }
-	} else {
-	    if ( alreadyIntersected )
-		break;
-	}
+    for ( ; c; c = c->next ) 
+    {
+        if ( c->rect.intersects( r ) ) 
+        {
+            alreadyIntersected = true;
+            ThumbItem *item = c->items.first();
+            for ( ; item; item = c->items.next() ) 
+            {
+                if ( r.intersects( item->rect() ) ) 
+                {
+                    if ( !i ) {
+                        i = item;
+                    }
+                    else {
+                        QRect r2 = item->rect();
+                        QRect r3 = i->rect();
+                        if ( r2.y() > r3.y() )
+                            i = item;
+                        else if ( r2.y() == r3.y() &&
+                                  r2.x() > r3.x() )
+                            i = item;
+                    }
+                }
+            }
+        }
+        else {
+            if ( alreadyIntersected )
+                break;
+        }
     }
 
     return i;
