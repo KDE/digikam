@@ -1541,14 +1541,14 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
         int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
         int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
-        // If shift key is pressed while dragging copy the drag object without
+        // If shift key is pressed while dragging, move the drag object without
         // displaying popup menu -> move
         if ( ( (keys_return[key_3 / 8]) && (1 << (key_3 % 8)) ) ||
              ( (keys_return[key_4 / 8]) && (1 << (key_4 % 8)) ))
         {
             id = 10;
         }
-        // If ctrl key is pressed while dragging copy the drag object without
+        // If ctrl key is pressed while dragging, copy the drag object without
         // displaying popup menu -> copy
         else if ( ( (keys_return[key_1 / 8]) && (1 << (key_1 % 8)) ) ||
                   ( (keys_return[key_2 / 8]) && (1 << (key_2 % 8)) ))
@@ -1601,7 +1601,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
         int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
         int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
-        // If shift key is pressed while dropping copy the drag object without
+        // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
         if ( ( (keys_return[key_3 / 8]) && (1 << (key_3 % 8)) ) ||
              ( (keys_return[key_4 / 8]) && (1 << (key_4 % 8)) ))
