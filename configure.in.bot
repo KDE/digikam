@@ -10,6 +10,7 @@ if test -z "$ac_imlib2_config"; then
   echo "digiKam needs imlib2-config. You need to install Imlib 2.x, e.g. from"
   echo "http://prdownloads.sourceforge.net/enlightenment/imlib2-1.0.6.tar.gz"
   echo ""
+  all_tests=bad
 else
   echo "-- imlib2 found................... YES"
 fi
@@ -20,6 +21,7 @@ if test -z "$GPHOTO_CONFIG" ; then
   echo "digiKam needs gPhoto2. You need to install gPhoto2, e.g. from"
   echo "http://www.gphoto.org/download.html"
   echo ""
+  all_tests=bad
 else
   echo "-- gphoto2 found.................. YES"
 fi
@@ -33,6 +35,7 @@ if test "x$have_libkexif" != "xyes"; then
   echo "Example:"
   echo "export PKG_CONFIG_PATH=$KDEDIR/lib/pkgconfig/"
   echo ""
+  all_tests=bad
 else
   echo "-- libkexif found................. YES"
 fi
@@ -43,6 +46,7 @@ if test "x$have_libkipi" != "xyes"; then
   echo "digiKam needs libkipi. You need to install libkipi first"
   echo "libkipi website is at http://extragear.kde.org/apps/kipi.php"
   echo ""
+  all_tests=bad
 else
   echo "-- libkipi found.................. YES"
 fi
@@ -53,6 +57,7 @@ if test "x$have_gdbm" != "xyes"; then
   echo ""
   echo "digiKam needs gdbm. You need to install the gdbm development package."
   echo ""
+  all_tests=bad
 else
   echo "-- gdbm found..................... YES"
 fi
@@ -62,6 +67,7 @@ if test "x$have_tiff" != "xyes"; then
   echo ""
   echo "digiKam needs libtiff. You need to install the libtiff development package."
   echo ""
+  all_tests=bad
 else
   echo "-- libtiff found.................. YES"
 fi
