@@ -279,7 +279,7 @@ void ImageWindow::readSettings()
     //setExifOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
     resize(width, height);
-
+    
     if (autoZoom) {
         m_guiClient->m_zoomFitAction->activate();
         m_guiClient->m_zoomPlusAction->setEnabled(false);
@@ -287,7 +287,10 @@ void ImageWindow::readSettings()
     }
     
     if (m_fullScreen)
-        slotToggleFullScreen();
+    {
+        m_fullScreen = false;
+        m_guiClient->m_fullScreenAction->activate();
+    }
 }
 
 void ImageWindow::saveSettings()
@@ -845,18 +848,20 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
 void ImageWindow::slotToggleFullScreen()
 {
     if (m_fullScreen) 
-        {
+    {
+
+#if QT_VERSION >= 0x030300
+        setWindowState( windowState() & ~WindowFullScreen );
+#else
         showNormal();
+#endif
         m_fullScreen = false;
-        
-        // PENDING (Gilles) : restored the old window size and position !
-        move(0, 0);
-        }
+    }
     else 
-        {
+    {
         showFullScreen();
         m_fullScreen = true;
-        }
+    }
 }
 
 void ImageWindow::promptUserSave()
