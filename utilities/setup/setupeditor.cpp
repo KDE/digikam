@@ -128,7 +128,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
                                        "which must be enabled/disabled for the future "
                                        "Digikam image editor instances."
-                                       "<p>Nota: the core image plugin cannot be disabled."));
+                                       "<p>Note: the core image plugin cannot be disabled."));
 
    layout->addWidget( imagePluginsListGroup );
 
