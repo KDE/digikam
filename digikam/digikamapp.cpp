@@ -441,7 +441,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
-    mKipiHelpAction = new KAction(i18n("Kipi Plugins Handbooks"),
+    mKipiHelpAction = new KAction(i18n("Kipi Plugins Handbook"),
                                    "kipi",
                                    0,
                                    this,
