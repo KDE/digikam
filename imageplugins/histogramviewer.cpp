@@ -37,6 +37,7 @@
 
 #include <klocale.h>
 #include <kselect.h>
+#include <kcursor.h>
 
 // Local includes.
 
@@ -119,6 +120,7 @@ HistogramViewer::HistogramViewer(QWidget* parent,
 void HistogramViewer::setupGui(uint *imageData, uint imageWidth, uint imageHeight,
                                uint *selectionData, uint selectionWidth, uint selectionheight)
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     setHelp("histogramviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
@@ -326,6 +328,7 @@ void HistogramViewer::setupGui(uint *imageData, uint imageWidth, uint imageHeigh
 
     adjustSize();
     updateInformations();
+    parentWidget()->setCursor( KCursor::arrowCursor() );
 }
 
 HistogramViewer::~HistogramViewer()

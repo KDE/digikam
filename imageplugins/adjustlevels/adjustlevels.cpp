@@ -44,6 +44,7 @@
 
 // KDE includes.
 
+#include <kcursor.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -78,6 +79,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                  : KDialogBase(Plain, i18n("Adjust Color Levels"), Help|User1|Ok|Cancel, Ok,
                                parent, 0, true, true, i18n("&Reset Values"))
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();
 
@@ -344,6 +347,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     adjustSize();
     QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));     // Reset all parameters to the default values.
     disableResize();
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 AdjustLevelDialog::~AdjustLevelDialog()
