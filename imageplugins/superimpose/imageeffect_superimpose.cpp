@@ -34,6 +34,7 @@
 // Qt includes. 
  
 #include <qvgroupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
@@ -71,6 +72,7 @@
 #include "version.h"
 #include "thumbbar.h"
 #include "superimposewidget.h"
+#include "dirselectwidget.h"
 #include "imageeffect_superimpose.h"
 
 namespace DigikamSuperImposeImagesPlugin
@@ -84,8 +86,15 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
                          m_parent(parent)
 {
     QString whatsThis;
-        
+           
     setButtonWhatsThis ( User1, i18n("<p>Reset edition mode to the default settings.") );
+    
+    // Read settings.
+    
+    KConfig *config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    m_templatesRootUrl.setPath( config->readPathEntry("Templates Root URL", "/") );
+    m_templatesUrl.setPath( config->readPathEntry("Templates URL", "/") );
     
     // About data and help button.
     
@@ -176,10 +185,18 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox2 = new QVGroupBox(i18n("Templates"), plainPage());
+    QGroupBox *gbox2 = new QGroupBox(i18n("Templates"), plainPage());
+    QGridLayout* grid = new QGridLayout( gbox2, 2, 3, 20, spacingHint());
+    
     m_thumbnailsBar = new ThumbBarView(gbox2);
-    QPushButton *templateDirButton = new QPushButton( i18n("Browse..."), gbox2 );
-    QWhatsThis::add( templateDirButton, i18n("<p>Change the current templates directory.") );
+    m_dirSelect = new DirSelectWidget(m_templatesRootUrl, gbox2);
+    QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
+    QWhatsThis::add( templateDirButton, i18n("<p>Change here the current templates root directory to use.") );
+
+    grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
+    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 2);    
+    grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
+    
     hlayout->addWidget(gbox2);
     
     // -------------------------------------------------------------
@@ -195,16 +212,14 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     connect(m_thumbnailsBar, SIGNAL(signalURLSelected(const KURL&)),
             m_previewWidget, SLOT(slotSetCurrentTemplate(const KURL&)));            
 
+    connect(m_dirSelect, SIGNAL(folderItemSelected(const KURL &)),
+            this, SLOT(slotTemplateDirChanged(const KURL &)));
+    
     connect(templateDirButton, SIGNAL(clicked()),
-            this, SLOT(slotTemplateDirChanged()));
+            this, SLOT(slotRootTemplateDirChanged()));
                                     
     // -------------------------------------------------------------
     
-    // Read templates url settings.
-    
-    KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    m_templatesUrl.setPath( config->readPathEntry("Templates URL", "/") );
     populateTemplates();
 }
 
@@ -212,6 +227,7 @@ ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 {
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
+    config->writePathEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
     config->writePathEntry( "Templates URL", m_templatesUrl.path() );
     config->sync();
 }
@@ -219,7 +235,7 @@ ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 void ImageEffect_SuperImpose::populateTemplates(void)
 {
     m_thumbnailsBar->clear(true);
-    QDir *dir = new QDir(m_templatesUrl.path(), "*.png");
+    QDir *dir = new QDir(m_templatesUrl.path(), "*.png *.PNG");
     dir->setFilter ( QDir::Files | QDir::NoSymLinks );
 
     const QFileInfoList* fileinfolist = dir->entryInfoList();
@@ -244,11 +260,19 @@ void ImageEffect_SuperImpose::slotHelp()
                                              "digikamimageplugins");
 }
 
-void ImageEffect_SuperImpose::slotTemplateDirChanged(void)
+void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
 {
-    KURL url = KFileDialog::getExistingDirectory(m_templatesUrl.path(), 0,
-                                                i18n("Select Template Directory to Browse..."));
+    KURL url = KFileDialog::getExistingDirectory(m_templatesUrl.path(), kapp->activeWindow(),
+                                                 i18n("Select Template Root Directory to Use..."));
     
+    if( url.isValid() )
+       {
+       m_dirSelect->setRootPath(url);
+       }
+}
+
+void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
+{
     if( url.isValid() )
        {
        m_templatesUrl = url;

@@ -36,6 +36,7 @@
 class QPushButton;
 
 class ThumbBarView;
+class DirSelectWidget;
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -62,6 +63,9 @@ private:
     ThumbBarView      *m_thumbnailsBar;
 
     KURL               m_templatesUrl;
+    KURL               m_templatesRootUrl;
+    
+    DirSelectWidget   *m_dirSelect;
     
     void populateTemplates(void);
     
@@ -70,7 +74,8 @@ private slots:
     void slotHelp();
     void slotOk();
     void slotUser1();
-    void slotTemplateDirChanged(void);
+    void slotTemplateDirChanged(const KURL& url);
+    void slotRootTemplateDirChanged(void);
 
 };
 

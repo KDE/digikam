@@ -8,7 +8,8 @@ kde_module_LTLIBRARIES = digikamimageplugin_superimpose.la
 
 digikamimageplugin_superimpose_la_SOURCES = \
 	imageplugin_superimpose.cpp thumbbar.cpp \
-	imageeffect_superimpose.cpp superimposewidget.cpp 
+	imageeffect_superimpose.cpp superimposewidget.cpp \
+	dirselectwidget.cpp         
 
 digikamimageplugin_superimpose_la_LIBADD = $(LIB_KPARTS) $(LIB_IMLIB2) $(LIBDIGIKAM_LIBS)
 
