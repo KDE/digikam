@@ -695,7 +695,7 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     switch (m_borderType->currentItem())
        {
        case 3: // Decorative Pine.
-          pattern = "tree-pattern";
+          pattern = "pine-pattern";
           break;
           
        case 4: // Decorative Wood.
