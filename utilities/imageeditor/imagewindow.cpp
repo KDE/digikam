@@ -292,7 +292,7 @@ void ImageWindow::buildGUI()
                                            this, SLOT(slotToggleFullScreen()),
                                            actionCollection(), "toggle_fullScreen");
 
-    m_viewHistogramAction = new KSelectAction(i18n("View &Histogram"), "histogram",
+    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram",
                                               Key_H,
                                               this, SLOT(slotViewHistogram()),
                                               actionCollection(), "imageview_histogram");
