@@ -20,6 +20,7 @@ x Lauch the Albums properties when a new Album is added
 - Add image sizes annotation for each album item.                  <Gilles Caulier - 0.6.3>
 - Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
 - Added dockable main widgets like Showimg.                        <Gilles Caulier - 0.6.3>
+x Upload/download dynamicly the plugins.                           <Gilles Caulier - 0.6.3>
 o Custom thumbnail highlighting of album thumbnails.
 o Added Albums protection with password capability.
 o View/Hide main toolbar/statusbar.
@@ -47,7 +48,15 @@ o View/Hide main toolbar/statusbar.
 o Enable/Disable thumnails generation (bandwith limitation
   in slow camera connexion).
 
+  
+Thumnails interface:
+--------------------
 
+o Using embedded image for thumnails generation.
+o Provide an interface for RAW files thumbs.
+o EXIF autorotate.
+
+  
 Image Viever/Editor:
 --------------------
 
