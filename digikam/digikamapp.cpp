@@ -441,13 +441,13 @@ void DigikamApp::slotSetup()
     
     #ifdef HAVE_KIPI    // KIPI plugins.
     
-    KIPI::PluginLoader::List list = KipiPluginLoader_->pluginList();
+    KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     QStringList availablePlugins;
     
-    for( KIPI::PluginLoader::List::Iterator it = list.begin() ; it != list.end() ; ++it )
+    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
         {
-        KIPI::Plugin* plugin = (*it).plugin;
-        availablePlugins << (*it).name << (*it).comment;
+        KIPI::Plugin* plugin = (*it)->plugin;
+        availablePlugins << (*it)->name << (*it)->comment;
         }
     
     m_setup->pluginsPage_->initPlugins(availablePlugins,
@@ -482,12 +482,12 @@ void DigikamApp::slotEditKeys()
     
     #ifdef HAVE_KIPI    // KIPI plugins.
 
-    KIPI::PluginLoader::List list = KipiPluginLoader_->pluginList();
+    KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
-    for( KIPI::PluginLoader::List::Iterator it = list.begin() ; it != list.end() ; ++it ) 
+    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
         {
-        KIPI::Plugin* plugin = (*it).plugin;
-        dialog->insert( plugin->actionCollection(), (*it).comment );
+        KIPI::Plugin* plugin = (*it)->plugin;
+        dialog->insert( plugin->actionCollection(), (*it)->comment );
         }
     
     #endif 
@@ -548,11 +548,11 @@ void DigikamApp::loadPlugins()
     else 
        KipiPluginLoader_->loadPlugins(m_config->readListEntry("KIPI Plugins List"));
 */
-    KIPI::PluginLoader::List list = KipiPluginLoader_->pluginList();
+    KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
-    for( KIPI::PluginLoader::List::Iterator it = list.begin(); it != list.end(); ++it ) 
+    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin(); it != list.end(); ++it ) 
         {
-        KIPI::Plugin* plugin = (*it).plugin;
+        KIPI::Plugin* plugin = (*it)->plugin;
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
         
