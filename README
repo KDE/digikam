@@ -64,3 +64,7 @@ In the source directory do :
 More specifics compilations and installations options can be used with '.configure' script.
 Check it with './configure --help' command line.
 
+Nota : use the '--enable-debug=full' option with the configure script for to provide
+a full informations bug report.
+
+

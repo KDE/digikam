@@ -62,3 +62,5 @@ Checked this with './configure --help' command line.
 
 - You must build and install the 'digikam' source code before trying build this module.
 
+Nota : use the '--enable-debug=full' option with the configure script for to provide
+a full informations bug report.
