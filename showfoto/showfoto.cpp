@@ -854,6 +854,8 @@ void ShowFoto::slotOpenURL(const KURL& url)
                    .arg(QString::number(index+1))
                    .arg(QString::number(m_bar->countItems()));
     m_nameLabel->setText(text);
+    
+    setCaption(i18n("Showfoto - %1").arg(m_bar->currentItem()->url().directory()));
 }
 
 void ShowFoto::slotAutoFit()
