@@ -1,3 +1,8 @@
+v0.6.0 - 09/01/04
+----------------------------------------------------------------------------
+    * Using QSlider/QSpinbox instead KNumIntInput for Despeckle plugin: solve
+      a problem with the preview calculation when the sliders are moved.
+    
 v0.5.0 - 08/27/04
 ----------------------------------------------------------------------------
     * Added new unsharped mask filter plugin using Gimp 2.0 algorithm.
