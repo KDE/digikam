@@ -1,5 +1,7 @@
 v0.7.2-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
+    * 'ShearTool', 'FreeRotation, 'LensDistortion' plugins use common Image 
+      Guide widget.
     * New plugin 'PerspectiveAdjustment'.
     * New plugin 'SuperImpose'.
     * Patch from Renchi Raju which allows digikamimageplugins to be compiled 
