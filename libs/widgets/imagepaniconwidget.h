@@ -27,6 +27,8 @@
 #include <qwidget.h>
 #include <qrect.h>
 
+class QPixmap;
+
 namespace Digikam
 {
 
@@ -68,6 +70,8 @@ private:
     QRect       m_rect;       
     QRect       m_regionSelection;         // Original size image selection.
     QRect       m_localRegionSelection;    // Thumbnail size selection.
+    
+    QPixmap*    m_pixmap;
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     

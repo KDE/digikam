@@ -318,7 +318,7 @@ void ImageIface::setOriginalBCG(double brightness, double contrast, double gamma
     ImlibInterface::instance()->setBCG(brightness, contrast, gamma);    
 }
 
-void ImageIface::paint(QWidget* widget, int x, int y, int w, int h)
+void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 {
     imlib_context_push(d->context);
 
@@ -340,7 +340,7 @@ void ImageIface::paint(QWidget* widget, int x, int y, int w, int h)
 
     imlib_context_pop();
 
-    bitBlt(widget, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
+    bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
 }
 
 }

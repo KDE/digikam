@@ -30,6 +30,7 @@
 #include <qregion.h>
 #include <qpainter.h>
 #include <qpen.h>
+#include <qpixmap.h>
 
 // KDE include.
 
@@ -57,6 +58,7 @@ ImageToolsWidget::ImageToolsWidget(int w, int h, QWidget *parent)
     m_data = m_iface->getPreviewData();
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
     
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(m_w, m_h);
@@ -72,6 +74,7 @@ ImageToolsWidget::~ImageToolsWidget()
 {
     delete [] m_data;
     delete m_iface;
+    delete m_pixmap;
 }
 
 ImageIface* ImageToolsWidget::imageIface()
@@ -81,20 +84,17 @@ ImageIface* ImageToolsWidget::imageIface()
 
 void ImageToolsWidget::paintEvent( QPaintEvent * )
 {
-    m_iface->paint(this, m_rect.x(), m_rect.y(),
+    m_pixmap->fill(colorGroup().background());
+    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                    m_rect.width(), m_rect.height());
 
-    QRect r(0, 0, width(), height());
-    QRegion reg(r);
-    reg -= m_rect;
-
-    QPainter p(this);
-    p.setPen(QPen::QPen(Qt::red, 1, Qt::DotLine));
+    QPainter p(m_pixmap);
+    p.setPen(QPen(Qt::red, 2, Qt::DotLine));
     p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
     p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
-    p.setClipRegion(reg);
-    p.fillRect(r, colorGroup().background());
     p.end();
+
+    bitBlt(this, 0, 0, m_pixmap);
 }
 
 void ImageToolsWidget::mousePressEvent ( QMouseEvent * e )

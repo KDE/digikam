@@ -27,6 +27,8 @@
 #include <qwidget.h>
 #include <qrect.h>
 
+class QPixmap;
+
 namespace Digikam
 {
 
@@ -65,7 +67,8 @@ private:
     
     bool        m_focus;
     bool        m_freeze;
-    
+
+    QPixmap*    m_pixmap;
 };
 
 }  // NameSpace Digikam

@@ -32,7 +32,7 @@
 #define MIN3(a, b, c) (QMIN(QMIN(a,b),b))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-class QWidget;
+class QPaintDevice;
 
 namespace Digikam
 {
@@ -71,7 +71,7 @@ public:
     void setPreviewBCG(double brightness, double contrast, double gamma);
     void setOriginalBCG(double brightness, double contrast, double gamma);
     
-    void paint(QWidget* widget, int x, int y, int w, int h);
+    void paint(QPaintDevice* device, int x, int y, int w, int h);
     
 private:
 
