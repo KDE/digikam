@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -21,6 +21,8 @@
 
 #ifndef IMAGEEFFECT_BCG_H
 #define IMAGEEFFECT_BCG_H
+
+// KDE includes.
 
 #include <kdialogbase.h>
 
@@ -49,6 +51,7 @@ private:
 
 private slots:
 
+    void slotUser1();
     void slotEffect();
     void slotOk();
 };
