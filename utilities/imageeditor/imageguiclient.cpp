@@ -170,7 +170,7 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                          "imageview_help");
     
     m_ImagePluginsHelpAction = new KAction(i18n("ImagePlugins' handbooks"),
-                                        0, 0, this,
+                                        "digikamimageplugins", 0, this,
                                         SIGNAL(signalShowImagePluginsHelp()),
                                         actionCollection(),
                                         "imageview_helpimageplugins");
