@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="digikamimageplugin_perspective" >
+
+ <MenuBar>
+
+  <Menu name="Transform" >
+   <text>&amp;Transform</text>
+   <Action name="imageplugin_perspective" /> 
+  </Menu>
+
+ </MenuBar>
+
+</kpartgui>

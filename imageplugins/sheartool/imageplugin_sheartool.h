@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_ShearTool();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotShearTool();

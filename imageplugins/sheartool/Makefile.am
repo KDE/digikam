@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_sheartool.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_sheartool.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_sheartool_ui.rc

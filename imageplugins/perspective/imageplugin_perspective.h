@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Perspective();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotPerspective();

@@ -42,19 +42,14 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const char*, c
     new KAction(i18n("Perspective Adjustment..."), 0, 
                 this, SLOT(slotPerspective()),
                 actionCollection(), "imageplugin_perspective");
-                
+    
+    setXMLFile("digikamimageplugin_perspective_ui.rc");      
+                                    
     kdDebug() << "ImagePlugin_Perspective plugin loaded" << endl;
 }
 
 ImagePlugin_Perspective::~ImagePlugin_Perspective()
 {
-}
-
-QStringList ImagePlugin_Perspective::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/imageplugin_perspective/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Perspective::slotPerspective()

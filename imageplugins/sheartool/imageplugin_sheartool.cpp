@@ -42,19 +42,14 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const char*, const
     new KAction(i18n("Shear..."), 0, 
                 this, SLOT(slotShearTool()),
                 actionCollection(), "imageplugin_sheartool");
-                
+    
+    setXMLFile("digikamimageplugin_sheartool_ui.rc");         
+                                    
     kdDebug() << "ImagePlugin_ShearTool plugin loaded" << endl;
 }
 
 ImagePlugin_ShearTool::~ImagePlugin_ShearTool()
 {
-}
-
-QStringList ImagePlugin_ShearTool::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/imageplugin_sheartool/ ");
-    return guiDef;
 }
 
 void ImagePlugin_ShearTool::slotShearTool()

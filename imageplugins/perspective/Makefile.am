@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_perspective.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_perspective.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_perspective_ui.rc
