@@ -229,6 +229,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "Black tone color picker" ) );
+    QWhatsThis::add( m_pickBlack, i18n("<p>Set here the color from original image used to set <b>Black Tone</b> "
+                                       "curves point on Red, Green and Blue channels."));
     m_pickGray  = new QPushButton(bGroup);
     bGroup->insert(m_pickGray, GrayTonal);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
@@ -236,7 +238,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickGray->setToggleButton(true);
-    QToolTip::add( m_pickGray, i18n( "Gray tone color picker" ) );
+    QToolTip::add( m_pickGray, i18n( "Middle tone color picker" ) );
+    QWhatsThis::add( m_pickGray, i18n("<p>Set here the color from original image used to set <b>Middle Tone</b> "
+                                      "curves point on Red, Green and Blue channels."));
     m_pickWhite = new QPushButton(bGroup);
     bGroup->insert(m_pickWhite, WhiteTonal);
     KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
@@ -245,6 +249,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
     QToolTip::add( m_pickWhite, i18n( "White tone color picker" ) );
+    QWhatsThis::add( m_pickWhite, i18n("<p>Set here the color from original image used to set <b>White Tone</b> "
+                                       "curves point on Red, Green and Blue channels."));
     bGroup->setExclusive(true);
     bGroup->setFrameShape(QFrame::NoFrame);
 
@@ -259,7 +265,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image using picker "
+                                                   "color tools to select Black, Middle, and White tone for ajust curves point in Red, "
+                                                   "Green and Blue Channels."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
     QFrame *frame3 = new QFrame(gbox4);
@@ -448,28 +456,28 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
 {
     switch(channel)
        {
-       case 1:           // Red.
+       case LuminosityChannel:
+          m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
+          m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+          break;
+       
+       case RedChannel:
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
           m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
-       case 2:           // Green.
+       case GreenChannel:
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
           m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
-       case 3:           // Blue.
+       case BlueChannel:
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
           m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
 
-       case 4:           // Alpha.
+       case AlphaChannel:
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::AlphaChannelHistogram;
-          m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-          break;
-
-       default:          // Luminosity.
-          m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
        }
@@ -483,12 +491,12 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
 {
     switch(scale)
        {
-       case 1:           // Log.
-          m_curvesWidget->m_scaleType = Digikam::CurvesWidget::LogScaleHistogram;
-          break;
-
-       default:          // Lin.
+       case Linear:
           m_curvesWidget->m_scaleType = Digikam::CurvesWidget::LinScaleHistogram;
+          break;
+       
+       case Logarithmic:
+          m_curvesWidget->m_scaleType = Digikam::CurvesWidget::LogScaleHistogram;
           break;
        }
 
@@ -499,12 +507,12 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 {
     switch(type)
        {
-       case 1:           // Free.
-          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
-          break;
-
-       default:          // Smooth.
+       case SmoothDrawing:          
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+          break;
+       
+       case FreeDrawing:          
+          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
           break;
        }
     
@@ -551,7 +559,6 @@ void AdjustCurveDialog::slotSaveCurves()
     // Refresh the current curves config.
     slotChannelChanged(m_channelCB->currentItem());
 }
-
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
 

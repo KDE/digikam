@@ -68,6 +68,27 @@ private:
     WhiteTonal
     };
 
+    enum ColorChannel
+    {
+    LuminosityChannel=0,
+    RedChannel,
+    GreenChannel,
+    BlueChannel,
+    AlphaChannel
+    };
+    
+    enum HistogramScale
+    {
+    SmoothDrawing=0,
+    FreeDrawing
+    };
+    
+    enum CurvesDrawingType
+    {
+    Linear=0,
+    Logarithmic
+    };
+    
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;  
     QComboBox                    *m_typeCB;  
