@@ -7,8 +7,7 @@
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror 
-to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
+Did you know that digiKam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror to digiKam or from digiKam to K3b simply by using "Drag'n'Drop".
 </td>
 </tr>
 </table>
@@ -25,7 +24,7 @@ to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could use the nested albums in Digikam.
+Did you know that you could use the nested albums in digiKam.
 </td>
 </tr>
 </table>
@@ -93,7 +92,7 @@ Did you know that each photo has a context menu that can be reached by clicking 
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that albums in Digikam are Folders in your Album Library? So you could easily import your Photos by simply copying them to your Album Library.
+Did you know that albums in digiKam are Folders in your Album Library? So you could easily import your Photos by simply copying them to your Album Library.
 </td>
 </tr>
 </table>
@@ -127,7 +126,7 @@ Did you know that you could customize your digikam toolbars using Settings -> Co
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating Digikam.
+Did you know that digiKam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating digiKam.
 </td>
 </tr>
 </table>
@@ -144,8 +143,7 @@ Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that there is a Digikam hotplugging howto available at
-<a href="http://digikam.free.fr/hotplug/howto.html">http://digikam.free.fr/hotplug/howto.html</a> ?
+Did you know that there is a digiKam hotplugging howto available at <a href="http://digikam.free.fr/hotplug/howto.html">http://digikam.free.fr/hotplug/howto.html</a> ?
 </td>
 </tr>
 </table>
@@ -179,7 +177,7 @@ Did you know that you could reach other users using the digikam-users mailing li
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://extragear.kde.org/apps/kipi.php">http://extragear.kde.org/apps/kipi.php</a>.
+Did you know that digiKam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://extragear.kde.org/apps/kipi.php">http://extragear.kde.org/apps/kipi.php</a>.
 </td>
 </tr>
 </table>
@@ -277,7 +275,7 @@ Did you know that because PNG file format use a lossless compression algorithm, 
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you can print the current image opened in the Digikam image editor?
+Did you know that you can print the current image opened in the digiKam image editor?
 </td>
 </tr>
 </table>
@@ -294,7 +292,7 @@ Did you know that you can print the current image opened in the Digikam image ed
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you can edit the comments of the current image opened in the Digikam image editor?
+Did you know that you can edit the comments of the current image opened in the digiKam image editor?
 </td>
 </tr>
 </table>
@@ -311,7 +309,7 @@ Did you know that you can edit the comments of the current image opened in the D
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-Did you know that you could use <Page Down> and <Page Up> on your Keyboard to switch between the photos in the image editor?
+Did you know that you could use &lt;Page Down&gt; and &lt;Page Up&gt; on your Keyboard to switch between the photos in the image editor?
 </td>
 </tr>
 </table>
