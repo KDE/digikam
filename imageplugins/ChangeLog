@@ -1,5 +1,6 @@
 v0.7.0 - xx/10/04
 ----------------------------------------------------------------------------
+    * New 'RainDrop image' plugin using Pieter Voloshyn algorithm. 
     * New Emboss algorithm from Pieter Voloshyn. 
     * New OilPaint algorithm from Pieter Voloshyn. 
     * Add graphical banner with logo.
