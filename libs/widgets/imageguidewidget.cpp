@@ -103,13 +103,17 @@ QColor ImageGuideWidget::getCrossCenterColor(void)
     // Get cross position in real image.
     QPoint currentPointPosition = getCrossCenterPosition();
     
-    uint *currentPointData = m_iface->getOriginalData() + currentPointPosition.x() + 
+    uint *data = m_iface->getOriginalData();
+    
+    uint *currentPointData = data + currentPointPosition.x() + 
                              (m_iface->originalWidth() * currentPointPosition.y());
     QColor currentPointColor(
                              (*currentPointData >> 16) & 0xff,        // Red.
                              (*currentPointData >>  8) & 0xff,        // Green.
                              (*currentPointData)       & 0xff         // Blue.
                              );
+                             
+    delete [] data;                             
     return(currentPointColor);
 }
 

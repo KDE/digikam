@@ -282,6 +282,10 @@ void CurvesWidget::paintEvent( QPaintEvent * )
           
           switch(m_channelType)
              {
+             case CurvesWidget::RedChannelHistogram:      // Red channel.
+                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
+                break;
+             
              case CurvesWidget::GreenChannelHistogram:    // Green channel.
                 v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
                 break;
@@ -290,10 +294,6 @@ void CurvesWidget::paintEvent( QPaintEvent * )
                 v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i++);   
                 break;
              
-             case CurvesWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
-                break;
-
              case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
                 v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i++);   
                 break;
@@ -333,7 +333,25 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       
       // Drawing curves.   
    
-      p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+      switch(m_channelType)
+         {
+         case CurvesWidget::RedChannelHistogram:      // Red channel.
+            p1.setPen(QPen::QPen(Qt::darkRed, 1, Qt::SolidLine));
+            break;
+         
+         case CurvesWidget::GreenChannelHistogram:    // Green channel.
+            p1.setPen(QPen::QPen(Qt::darkGreen, 1, Qt::SolidLine));
+            break;
+             
+         case CurvesWidget::BlueChannelHistogram:     // Blue channel.
+            p1.setPen(QPen::QPen(Qt::darkBlue, 1, Qt::SolidLine));
+            break;
+             
+         default:                                     // Luminosity or Alpha.
+            p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+            break;
+         }            
+      
       p1.drawLine(x - 1, wHeight - ((curvePrevVal * 256) / wHeight),
                   x,     wHeight - ((curveVal * 256) / wHeight));         
                 
@@ -404,7 +422,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
          
          m_leftmost = -1;
          
-         for (i = closest_point - 1 ; i >= 0 ; --i)
+         for (i = closest_point - 1 ; i >= 0 ; i--)
             {
             if (m_curves->getCurvePointX(m_channelType, i) != -1)
                {
