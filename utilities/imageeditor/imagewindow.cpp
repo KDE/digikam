@@ -613,9 +613,13 @@ void ImageWindow::slotSaveResult(KIO::Job *job)
     if (job->error()) 
        {
        job->showErrorDialog(this);
+       
+       // PENDING (Gilles) : Redraw only the canvas not reload the file.
        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));  
        return;
        }
+    
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                                   
 }
 
 void ImageWindow::slotSaveAs()
@@ -645,6 +649,8 @@ void ImageWindow::slotSaveAs()
        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
                           .arg(m_newFile.filename())
                           .arg(m_newFile.path().section('/', -2, -2)));
+       
+       // PENDING (Gilles) : Redraw only the canvas not reload the file.
        
        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));                            
        return;
@@ -678,6 +684,8 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     if (job->error()) 
     {
        job->showErrorDialog(this);
+       
+       // PENDING (Gilles) : Redraw only the canvas not reload the file.
        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      
        return;
     }
