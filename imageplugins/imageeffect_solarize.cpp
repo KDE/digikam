@@ -19,22 +19,33 @@
  * 
  * ============================================================ */
 
+// Qt includes. 
+ 
 #include <qlayout.h>
 #include <qframe.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
 
+// KDE includes.
+
 #include <knuminput.h>
 #include <klocale.h>
+#include <kcursor.h>
+
+// Digikam includes.
 
 #include <imageiface.h>
 #include <imagewidget.h>
 
+// Local includes.
+
 #include "imageeffect_solarize.h"
 
 ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
-                    : KDialogBase(Plain, i18n("Solarize Image"), Help|Ok|Cancel, Ok,
-                                  parent, 0, true, true)
+                    : KDialogBase(Plain, i18n("Solarize Image"),
+                                  Help|Ok|Cancel, Ok,
+                                  parent, 0, true, true),
+                      m_parent(parent)
 {
     setHelp("imageviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
@@ -97,6 +108,7 @@ void ImageEffect_Solarize::slotEffect()
 
 void ImageEffect_Solarize::slotOk()
 {
+    m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface =
         m_previewWidget->imageIface();
 
@@ -114,7 +126,8 @@ void ImageEffect_Solarize::slotOk()
         
         delete [] data;
     }
-        
+    
+    m_parent->setCursor( KCursor::arrowCursor() );        
     accept();
 }
 

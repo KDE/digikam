@@ -44,7 +44,10 @@ public:
 
 private:
 
+    QWidget      *m_parent;
+    
     KIntNumInput *m_radiusInput;
+    
 //    Digikam::ImageWidget *m_previewWidget;
     
     void sharpen(uint* data, int w, int h, int r);

@@ -54,7 +54,7 @@ private slots:
     
 private:
 
-    int m_selectedId;
+    int      m_selectedId;
 };
 
 #endif /* IMAGEEFFECT_REDEYE_H */

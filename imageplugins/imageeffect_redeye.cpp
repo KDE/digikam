@@ -19,20 +19,34 @@
  * 
  * ============================================================ */
 
-#include <kdialogbase.h>
-#include <klocale.h>
-#include <kapplication.h>
-#include <kconfig.h>
+// C++ includes. 
+ 
+#include <cstring>
+ 
+// Imlib2 includes.
 
+#define X_DISPLAY_MISSING 1
+#include <Imlib2.h>
+ 
+// Qt includes.
+ 
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
 
+// KDE includes.
+
+#include <kdialogbase.h>
+#include <klocale.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+
+// Digikam includes.
+
 #include <imageiface.h>
 
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
-#include <cstring>
+// Local includes.
 
 #include "imageeffect_redeye.h"
 
@@ -41,8 +55,11 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     // -- run the dlg ----------------------------------------------
 
     ImageEffect_RedEyeDlg dlg(parent);
+    
     if (dlg.exec() != QDialog::Accepted)
         return;
+    
+    parent->setCursor( KCursor::waitCursor() );
 
     // -- save settings ----------------------------------------------
 
@@ -62,7 +79,10 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     int   h    = iface.selectedHeight();
 
     if (!data || !w || !h)
+        {
+        parent->setCursor( KCursor::arrowCursor() );
         return;
+        }
 
     uint* newData = new uint[w*h];
     memcpy(newData, data, w*h*sizeof(unsigned int));
@@ -158,6 +178,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     iface.putSelectedData(data);
 
     delete [] data;
+    parent->setCursor( KCursor::arrowCursor() );
 }
 
 ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)

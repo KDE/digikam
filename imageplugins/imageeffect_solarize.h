@@ -48,7 +48,10 @@ protected:
     
 private:
     
+    QWidget              *m_parent;
+
     KDoubleNumInput      *m_numInput;
+    
     Digikam::ImageWidget *m_previewWidget;
 
 private slots:

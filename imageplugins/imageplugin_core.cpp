@@ -26,6 +26,7 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <kaction.h>
+#include <kcursor.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -202,17 +203,23 @@ void ImagePlugin_Core::slotHSL()
 
 void ImagePlugin_Core::slotNormalize()
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_ColorsEnhance::normalizeImage();
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotEqualize()
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_ColorsEnhance::equalizeImage();
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotAutoLevels()
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_ColorsEnhance::autoLevelsCorrectionImage();
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotHistogramViewer()
@@ -236,12 +243,16 @@ void ImagePlugin_Core::slotSolarize()
 
 void ImagePlugin_Core::slotBW()
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_BWSepia::convertTOBW();    
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotSepia()
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_BWSepia::convertTOSepia();    
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 void ImagePlugin_Core::slotRedEye()

@@ -39,6 +39,7 @@
 // KDE includes.
 
 #include <knuminput.h>
+#include <kcursor.h>
 #include <klocale.h>
 
 // Digikam includes.
@@ -53,7 +54,8 @@
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : KDialogBase(Plain, i18n("Blur image"),
                               Help|Ok|Cancel, Ok,
-                              parent, 0, true, true)
+                              parent, 0, true, true),
+                  m_parent(parent)
 {
     setHelp("imageviewer.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
@@ -116,6 +118,7 @@ void ImageEffect_Blur::slotEffect()
 
 void ImageEffect_Blur::slotOk()
 {
+    m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
     
     uint* data = iface.getOriginalData();
@@ -127,6 +130,7 @@ void ImageEffect_Blur::slotOk()
            
     iface.putOriginalData(data);
     delete [] data;
+    m_parent->setCursor( KCursor::arrowCursor() );
     accept();
 }
 
