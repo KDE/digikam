@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : cameracontroller.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-17
+ * Date  : 2004-09-17
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -19,518 +19,661 @@
  * 
  * ============================================================ */
 
-#include <kio/scheduler.h>
-#include <kio/slave.h>
-#include <kio/jobclasses.h>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qwaitcondition.h>
+#include <qevent.h>
+#include <qapplication.h>
+#include <qdeepcopy.h>
+#include <qvariant.h>
+#include <qimage.h>
+#include <qdatastream.h>
+#include <qfile.h>
+#include <qtimer.h>
+
 #include <klocale.h>
 #include <kurl.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kio/renamedlg.h>
 #include <kdebug.h>
 
-#include <qstring.h>
-#include <qtimer.h>
-#include <qdatastream.h>
-#include <qguardedptr.h>
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}    
 
-#include <libkexif/kexif.h>
-#include <libkexif/kexifutils.h>
-#include <libkexif/kexifdata.h>
-
-#include <imagewindow.h>
-#include "camerathumbjob.h"
-#include "cameradownloaddlg.h"
-#include "camerainfodialog.h"
+#include "gpcamera.h"
+#include "mtqueue.h"
 #include "cameracontroller.h"
 
+class CameraThread;
+
+class CameraCommand
+{
+public:
+
+    enum Action
+    {
+        gp_none = 0,
+        gp_connect,
+        gp_cancel,
+        gp_listfolders,
+        gp_listfiles,
+        gp_download,
+        gp_delete,
+        gp_thumbnail,
+        gp_exif
+    };
+    
+    Action                 action;
+    QMap<QString,QVariant> map; 
+};    
+
+class CameraEvent : public QCustomEvent
+{
+public:
+
+    enum State
+    {
+        gp_connected = 0,
+        gp_busy,
+        gp_listedfolders,
+        gp_listedfiles,
+        gp_downloaded,
+        gp_downloadFailed,
+        gp_deleted,
+        gp_deleteFailed,
+        gp_thumbnailed,
+        gp_infomsg,
+        gp_errormsg
+    };
+    
+    CameraEvent(State state) :
+        QCustomEvent(QEvent::User+state)
+        {}
+
+    bool                   result;
+    QString                msg;
+    QMap<QString,QVariant> map; 
+};
+    
 class CameraControllerPriv
 {
 public:
 
-    QWidget *parent;
-    
-    QString model;
-    QString port;
-    QString path;
+    QWidget*               parent;
+    CameraThread*          thread;
+    GPCamera*              camera;
+    MTQueue<CameraCommand> cmdQueue;
+    QTimer*                timer;
+    bool                   close;
 
-    KIO::Slave             *slave;
-    QGuardedPtr<KIO::Job>   job;
-
-    bool slaveConnected;
-    bool cameraConnected;
-
-    CameraController::State state;
-
-    KFileItemList itemList;
+    bool                   overwriteAll;
+    bool                   skipAll;
+    int                    downloadTotal;
 };
-    
 
-CameraController::CameraController(QWidget *parent, const QString& model,
-                                   const QString& port, const QString& path)
+class CameraThread : public QThread
 {
-    d = new CameraControllerPriv;
-    d->parent = parent;
-    d->model  = model;
-    d->port   = port;
-    d->path   = path;
-    d->state  = ST_NONE;
-    d->slaveConnected   = false;
-    d->cameraConnected  = false;
-    d->itemList.setAutoDelete(true);
+public:
 
-    KURL url;
-    url.setProtocol("digikamcamera");
-    url.setPath("/");
+    CameraThread(CameraController* controller);
+    ~CameraThread();
 
-    KIO::MetaData m;
-    m["model"] = model;
-    m["port"]  = port;
-    m["path"]  = path;
+    void sendBusy(bool busy);
+    void sendError(const QString& msg);
+    void sendInfo(const QString& msg);
+    
+protected:
 
-    d->slave = KIO::Scheduler::getConnectedSlave(url, m);
-    if (!d->slave)
-    {
-        QTimer::singleShot(0, this, SLOT(slotSlaveConnectFailed()));
+    void run();
+
+private:
+    
+    CameraControllerPriv* d;
+    QObject*              parent;
+};
+
+CameraThread::CameraThread(CameraController* controller)
+    : d(controller->d), parent(controller)
+{
+}
+
+CameraThread::~CameraThread()
+{
+}
+
+void CameraThread::run()
+{
+    if (d->close)
         return;
+
+    sendBusy(true);
+
+
+    CameraCommand* cmd = d->cmdQueue.dequeue();
+    if (cmd)
+    {
+
+        switch (cmd->action)
+        {
+        case(CameraCommand::gp_connect):
+        {
+            sendInfo(i18n("Connecting to camera ..."));
+        
+            bool result = d->camera->connect();
+
+            CameraEvent* event = new CameraEvent(CameraEvent::gp_connected);
+            event->result = result;
+            QApplication::postEvent(parent, event);
+
+            if (result)
+                sendInfo(i18n("Connection established"));
+            else
+                sendInfo(i18n("Connection failed"));
+
+            break;
+        }
+        case(CameraCommand::gp_listfolders):
+        {
+            sendInfo(i18n("Listing folders ..."));
+
+            QStringList folderList;
+            folderList.append(d->camera->path());
+            d->camera->getAllFolders(d->camera->path(), folderList);
+
+            CameraEvent* event = new CameraEvent(CameraEvent::gp_listedfolders);
+            event->map.insert("folders", QVariant(folderList));
+            QApplication::postEvent(parent, event);
+        
+            sendInfo(i18n("Finished listing folders ..."));
+
+            break;
+        }
+        case(CameraCommand::gp_listfiles):
+        {
+            QString folder = cmd->map["folder"].asString();
+            
+            sendInfo(i18n("Listing files in %1 ...")
+                     .arg(folder));
+
+            GPItemInfoList itemsList;
+            if (!d->camera->getItemsInfoList(folder, itemsList))
+            {
+                sendError(i18n("Failed to list files in %1")
+                          .arg(folder));
+            }
+
+            if (!itemsList.isEmpty())
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_listedfiles);
+                event->map.insert("folder", QVariant(folder));
+                
+                QByteArray  ba;
+                QDataStream ds(ba, IO_WriteOnly);
+                ds << itemsList;
+                
+                event->map.insert("files", QVariant(ba));
+                QApplication::postEvent(parent, event);
+            }
+
+            sendInfo(i18n("Finished listing files in %1")
+                     .arg(folder));
+            
+            break;
+        }
+        case(CameraCommand::gp_thumbnail):
+        {
+            QString folder = cmd->map["folder"].asString();
+            QString file   = cmd->map["file"].asString();
+
+            sendInfo(i18n("Getting thumbnail for %1/%2 ...")
+                     .arg(folder)
+                     .arg(file));
+
+            QImage thumbnail;
+            d->camera->getThumbnail(folder, file,
+                                    thumbnail);
+
+            if (!thumbnail.isNull())
+                thumbnail = thumbnail.smoothScale(128,128,QImage::ScaleMin);
+        
+            CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
+            event->map.insert("folder", QVariant(folder));
+            event->map.insert("file", QVariant(file));
+            event->map.insert("thumbnail", QVariant(thumbnail));
+            QApplication::postEvent(parent, event);
+
+            break;
+        }
+        case(CameraCommand::gp_download):
+        {
+            QString folder = cmd->map["folder"].asString();
+            QString file   = cmd->map["file"].asString();
+            QString dest   = cmd->map["dest"].asString();
+
+            sendInfo(i18n("Downloading file %1 ...")
+                     .arg(file));
+
+            bool result = d->camera->downloadItem(folder, file, dest);
+
+            if (result)
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_downloaded);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("dest", QVariant(dest));
+                QApplication::postEvent(parent, event);
+            }
+            else
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_downloadFailed);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("dest", QVariant(dest));
+                QApplication::postEvent(parent, event);
+            }                
+            break;
+        }
+        case(CameraCommand::gp_delete):
+        {
+            QString folder = cmd->map["folder"].asString();
+            QString file   = cmd->map["file"].asString();
+
+            sendInfo(i18n("Deleting file %1 ...")
+                     .arg(file));
+
+            bool result = d->camera->deleteItem(folder, file);
+
+            if (result)
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_deleted);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                QApplication::postEvent(parent, event);
+            }
+            else
+            {
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_deleteFailed);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                QApplication::postEvent(parent, event);
+            }                
+            break;
+        }
+        default:
+            kdWarning() << k_funcinfo << " unknown action specified" << endl;
+        }    
+
+        delete cmd;
+
     }
 
-    // ref the slave so that scheduler doesn't kill off the slave
-    // while we are still holding a pointer to it
-    d->slave->ref();
-    
-    KIO::Scheduler::
-        connect(SIGNAL(slaveError(KIO::Slave *, int, const QString&)),
-                this, SLOT(slotSlaveError(KIO::Slave *, int, const QString&)));
-    KIO::Scheduler::
-        connect(SIGNAL(slaveConnected(KIO::Slave *)),
-                this, SLOT(slotSlaveConnected(KIO::Slave *)));
+    sendBusy(false);
+}
+
+void CameraThread::sendBusy(bool val)
+{
+    CameraEvent* event = new CameraEvent(CameraEvent::gp_busy);
+    event->result = val;
+    QApplication::postEvent(parent, event);
+}
+
+void CameraThread::sendError(const QString& msg)
+{
+    CameraEvent* event = new CameraEvent(CameraEvent::gp_errormsg);
+    event->msg = msg;
+    QApplication::postEvent(parent, event);
+}
+
+
+void CameraThread::sendInfo(const QString& msg)
+{
+    CameraEvent* event = new CameraEvent(CameraEvent::gp_infomsg);
+    event->msg = msg;
+    QApplication::postEvent(parent, event);
+}
+
+// -- Camera Controller ------------------------------------------------------
+
+CameraController::CameraController(QWidget* parent, const QString& model,
+                                   const QString& port,
+                                   const QString& path)
+    : QObject(parent)
+{
+    d = new CameraControllerPriv;	
+    d->parent        = parent;
+    d->close         = false;
+
+    d->overwriteAll  = false;
+    d->skipAll       = false;
+    d->downloadTotal = 0;
+
+    d->camera = new GPCamera(model, port, path);
+    d->thread = new CameraThread(this);
+    d->timer  = new QTimer();
+
+    connect(d->timer, SIGNAL(timeout()),
+            SLOT(slotProcessNext()));
+
+    d->timer->start(50, false);
 }
 
 CameraController::~CameraController()
 {
-    emit signalClear();
-
-    if (!d->job.isNull())
-    {
-        delete d->job;
-    }
+    delete d->timer;
     
-    if (d->slave)
-    {
-        KIO::Scheduler::disconnectSlave(d->slave);
+    d->camera->cancel();
+    d->close = true;
 
-        // deref the slave so that it dies on its own
-        d->slave->deref();
-    }
+    while (d->thread->running())
+        d->thread->wait();
+    delete d->thread;
+    delete d->camera;
     delete d;
 }
 
-void CameraController::downloadAll(const QString& destFolder)
+void CameraController::slotConnect()
 {
-    slotCancel();
-
-    bool slaveDied;
-    
-    CameraDownloadDlg dlg(d->parent, d->slave, d->itemList,
-                          destFolder, &slaveDied);
-    dlg.exec();
-
-    if (slaveDied)
-    {
-        QTimer::singleShot(0, this, SLOT(slotSlaveDied()));
-    }
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_connect;
+    d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::downloadSel(const KFileItemList& items,
-                                   const QString& destFolder)
+void CameraController::listFolders()
 {
-    slotCancel();
-
-    bool slaveDied;
-
-    CameraDownloadDlg dlg(d->parent, d->slave, items,
-                          destFolder, &slaveDied);
-    connect(&dlg, SIGNAL(signalSlaveDied()),
-            SLOT(slotSlaveDied()));
-    dlg.exec();
-
-    if (slaveDied)
-    {
-        QTimer::singleShot(0, this, SLOT(slotSlaveDied()));
-    }
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_listfolders;
+    d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::deleteAll()
+void CameraController::listFiles(const QString& folder)
 {
-    
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_listfiles;
+    cmd->map.insert("folder", QVariant(folder));
+    d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::deleteSel(const KFileItemList& )
+void CameraController::getThumbnail(const QString& folder, const QString& file)
 {
-    
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_thumbnail;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::openFile(const KFileItem* item)
+void CameraController::downloadPrep()
 {
-    if (!item)
-        return;
-
-    slotCancel();
-
-    KURL url;
-    url.setProtocol("digikamcamera");
-    url.setPath("/");
-
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << item->url() << KURL(locateLocal("tmp", "digikamcamera.tmp"))
-       << -1 << (Q_INT8) true;
-
-    KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_COPY, ba, false);
-    KIO::Scheduler::assignJobToSlave(d->slave, job);
-
-    job->setWindow(d->parent);
-    d->job = job;
-    d->state = ST_OPEN;
-
-    connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
-    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-            SLOT(slotPercent(KIO::Job*, unsigned long)));
-
-    emit signalBusy(true);
+    d->overwriteAll  = false;
+    d->skipAll       = false;
+    d->downloadTotal = 0;
 }
 
-void CameraController::getExif(const KFileItem* item)
+void CameraController::download(const QString& folder, const QString& file,
+                                const QString& dest)
 {
-    if (!item)
-        return;
-
-    slotCancel();
-    
-    KIO::TransferJob *job = KIO::get(item->url(), false, false);
-    KIO::Scheduler::assignJobToSlave(d->slave, job);
-
-    job->setWindow(d->parent);
-    job->addMetaData("exif", "1");
-    d->job = job;
-    d->state = ST_EXIF;
-
-    connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
-            this, SLOT(slotExifData(KIO::Job *, const QByteArray &)));
-    connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
-    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-            SLOT(slotPercent(KIO::Job*, unsigned long)));
-
-    emit signalBusy(true);
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_download;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("dest", QVariant(dest));
+    d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::slotCameraInfo()
+void CameraController::deleteFile(const QString& folder, const QString& file)
 {
-    slotCancel();
-
-    KURL url;
-    url.setProtocol("digikamcamera");
-    url.setPath("/");
-
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << 4;
-    KIO::TransferJob* job = new KIO::TransferJob(url, KIO::CMD_SPECIAL,
-                                                 ba, QByteArray(), false);
-    KIO::Scheduler::assignJobToSlave(d->slave, job);
-    job->setWindow(d->parent);
-    d->job = job;
-    d->state = ST_INFO;
-
-    connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
-            this, SLOT(slotInfoData(KIO::Job *, const QByteArray &)));
-    connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
-    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-            SLOT(slotPercent(KIO::Job*, unsigned long)));
-
-    emit signalBusy(true);
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_delete;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    d->cmdQueue.enqueue(cmd);
 }
 
 void CameraController::slotCancel()
 {
-    if (d->job.isNull())
+    d->cmdQueue.flush();   
+    d->camera->cancel();
+}
+
+void CameraController::customEvent(QCustomEvent* e)
+{
+    CameraEvent* event = dynamic_cast<CameraEvent*>(e);
+    if (!event)
+    {
         return;
-
-    /* don't kill jobs. the slave gets killed too.
-       send a cmd cancel to the remote kioslave */
-    
-    KURL url;
-    url.setProtocol("digikamcamera");
-    url.setPath("/");
-
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << 2;
-    KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_SPECIAL,
-                                             ba, false);
-    job->setWindow(d->parent);
-    KIO::Scheduler::assignJobToSlave(d->slave, job);
-    
-    d->state = ST_NONE;
-    emit signalInfoMessage(i18n("Ready"));
-    emit signalBusy(false);
-    delete d->job;
-}
-
-void CameraController::slotSlaveConnected(KIO::Slave* slave)
-{
-    if (slave == d->slave)
-    {
-        d->slaveConnected = true;
-
-        /* Now connect to the camera */
-
-        KURL url;
-        url.setProtocol("digikamcamera");
-        url.setPath("/");
-
-        d->state = ST_CONNECT;
-
-        QByteArray ba;
-        QDataStream ds(ba, IO_WriteOnly);
-        ds << 1;
-        KIO::SimpleJob* job = new KIO::SimpleJob(url, KIO::CMD_SPECIAL,
-                                                 ba, false);
-        job->setWindow(d->parent);
-        d->job = job;
-
-        connect(job, SIGNAL(result(KIO::Job*)),
-                SLOT(slotResult(KIO::Job*)));
-        connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-                SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-        connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-                SLOT(slotPercent(KIO::Job*, unsigned long)));
-
-        KIO::Scheduler::assignJobToSlave(d->slave, job);
-
-        emit signalBusy(true);
     }
-}
-
-void CameraController::slotSlaveConnectFailed()
-{
-    emit signalFatal(i18n("Failed to Initialize Camera Client.\n"
-                          "Please check your installation"));
-}
-
-void CameraController::slotSlaveDied()
-{
-    emit signalFatal(i18n("The connection to the camera is lost. "
-                          "Please try again. If this problem persists, "
-                          "please contact %1 to report this problem")
-                     .arg("digikam-users@list.sourceforge.net"));
-}
-
-void CameraController::slotSlaveError(KIO::Slave *slave, int error,
-                                      const QString &errorMsg)
-{
-    if (slave == d->slave)
+    
+    switch(event->type()-QEvent::User)
     {
-        switch (error)
-        {
-        case(KIO::ERR_CONNECTION_BROKEN):
-        {
-            KIO::Scheduler::disconnectSlave(d->slave);
-        }
-        case(KIO::ERR_SERVICE_NOT_AVAILABLE):
-        {
-            emit signalFatal(errorMsg);
-            break;
-        }
-        case(KIO::ERR_SLAVE_DIED):
-        {
-            slotSlaveDied();
-            break;
-        }
-        default:
-            kdWarning() << k_funcinfo << errorMsg << endl;
-        }
+    case (CameraEvent::gp_connected) :
+    {
+        emit signalConnected(event->result);
+        break;
     }
-}
-
-void CameraController::slotResult(KIO::Job *job)
-{
-    if (job->error())
+    case (CameraEvent::gp_errormsg) :
     {
-        if (job->error() == KIO::ERR_SLAVE_DIED)
-        {
-            slotSlaveDied();
-            return;            
-        }
+        emit signalErrorMsg(QDeepCopy<QString>(event->msg));
+        break;
+    }
+    case (CameraEvent::gp_busy) :
+    {
+        if (event->result)
+            emit signalBusy(true);
+        break;
+    }
+    case (CameraEvent::gp_infomsg) :
+    {
+        emit signalInfoMsg(QDeepCopy<QString>(event->msg));
+        break;
+    }
+    case (CameraEvent::gp_listedfolders) :
+    {
+        QStringList folderList =
+            QDeepCopy<QStringList>(event->map["folders"].asStringList());
+        emit signalFolderList(folderList);
+        break;
+    }
+    case (CameraEvent::gp_listedfiles) :
+    {
+        QString    folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QByteArray ba     = QDeepCopy<QByteArray>(event->map["files"].asByteArray());
+        QDataStream ds(ba, IO_ReadOnly);
+        GPItemInfoList items;
+        ds >> items;
+        emit signalFileList(items);
+        break;
+    }
+    case (CameraEvent::gp_thumbnailed) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+        QImage  thumb  = QDeepCopy<QImage>(event->map["thumbnail"].asImage());
+        emit signalThumbnail(folder, file, thumb);
+        break;
+    }
+    case (CameraEvent::gp_downloaded) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+        emit signalDownloaded(folder, file);
+        break;
+    }
+    case (CameraEvent::gp_downloadFailed) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+ 
+        d->timer->stop();
+
+        QString msg = i18n("Failed to download file %1.")
+                      .arg(file);
         
-        if (d->state == ST_CONNECT)
+        if (d->cmdQueue.isEmpty())
         {
-            emit signalFatal(QString("Failed to connect to camera"));
+            KMessageBox::error(d->parent, msg);
         }
         else
         {
-            job->showErrorDialog(d->parent);
+            msg += i18n(" Do you want to continue?");
+            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            if (result != KMessageBox::Continue)
+                slotCancel();
         }
-        emit signalInfoMessage(i18n("Ready"));
+
+        d->timer->start(50);
+        emit signalDownloaded(folder, file);
+        break;
+    }
+    case (CameraEvent::gp_deleted) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+        emit signalDeleted(folder, file);
+        break;
+    }
+    case (CameraEvent::gp_deleteFailed) :
+    {
+        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+        QString file   = QDeepCopy<QString>(event->map["file"].asString());
+ 
+        d->timer->stop();
+
+        QString msg = i18n("Failed to delete file %1.")
+                      .arg(file);
+        
+        if (d->cmdQueue.isEmpty())
+        {
+            KMessageBox::error(d->parent, msg);
+        }
+        else
+        {
+            msg += i18n(" Do you want to continue?");
+            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            if (result != KMessageBox::Continue)
+                slotCancel();
+        }
+
+        d->timer->start(50);
+        break;
+    }
+    default:
+        kdWarning() << k_funcinfo << "Unknown event" << endl;
+    }
+}
+
+void CameraController::slotProcessNext()
+{
+    if (d->thread->running())
+        return;
+
+    if (d->cmdQueue.isEmpty())
+    {
         emit signalBusy(false);
         return;
     }
 
-    if (d->state == ST_CONNECT)
-    {
-        /* connected. start listing */
-        d->cameraConnected = true;
-        QTimer::singleShot(0, this, SLOT(slotList()));
-    }
-
-    if (d->state == ST_LIST)
-    {
-        /* listing finished. start getting thumbnails */
-        QTimer::singleShot(0, this, SLOT(slotThumbnails()));
-    }
-    if (d->state == ST_OPEN)
-    {
-        KURL url(locateLocal("tmp", "digikamcamera.tmp"));
-        KURL::List urlList;
-        urlList << url;
-
-        ImageWindow *im = ImageWindow::instance();
-        im->loadURL(urlList, url, d->model, false);
-        if (im->isHidden())
-            im->show();
-        else
-            im->raise();
-        im->setFocus();
-    }
-
-    d->state = ST_NONE;
-    emit signalInfoMessage(i18n("Ready"));
-    emit signalBusy(false);
-}
-
-void CameraController::slotInfoMessage(KIO::Job *, const QString &msg)
-{
-    emit signalInfoMessage(msg);
-}
-
-void CameraController::slotPercent(KIO::Job *, unsigned long percent)
-{
-    emit signalInfoPercent((int)percent);
-}
-
-void CameraController::slotList()
-{
-    KURL url;
-    url.setProtocol("digikamcamera");
-    url.setPath("/");
-        
-    d->state = ST_LIST;
+    d->timer->stop();
     emit signalBusy(true);
+    
+    CameraCommand* cmd = d->cmdQueue.head();
+
+    bool skip      = false;
+    bool cancel    = false;
+    bool overwrite = false;
+
+    QString folder;
+    QString file;
+    QString dest;
+    
+    if (cmd->action == CameraCommand::gp_download)
+    {
+        folder = QDeepCopy<QString>(cmd->map["folder"].asString());
+        file   = QDeepCopy<QString>(cmd->map["file"].asString());
+        dest   = QDeepCopy<QString>(cmd->map["dest"].asString());
+
+        if (!d->overwriteAll)
+        {
+            struct stat info;
+            while (::stat(QFile::encodeName(dest), &info) == 0)
+            {
+                if (d->skipAll)
+                {
+                    skip = true;
+                    break;
+                }
+
+                KIO::RenameDlg dlg(d->parent, i18n("Rename File"), file, dest,
+                                   KIO::RenameDlg_Mode(KIO::M_MULTI |
+                                                       KIO::M_OVERWRITE |
+                                                       KIO::M_SKIP));
+            
+                int result = dlg.exec();
+                dest       = dlg.newDestURL().path();
+
+                switch (result)
+                {
+                case KIO::R_CANCEL:
+                {
+                    cancel = true;
+                    break;
+                }
+                case KIO::R_SKIP:
+                {
+                    skip = true;
+                    break;
+                }
+                case KIO::R_AUTO_SKIP:
+                {
+                    d->skipAll = true;
+                    skip       = true;
+                    break;
+                }
+                case KIO::R_OVERWRITE:
+                {
+                    overwrite       = true;
+                    break;
+                }
+                case KIO::R_OVERWRITE_ALL:
+                {
+                    d->overwriteAll = true;
+                    overwrite       = true;
+                    break;
+                }
+                default:
+                    break;
+                }
+
+                if (cancel || skip || overwrite)
+                    break;
+            }
+        }
+
+        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));
         
-    KIO::ListJob* job = KIO::listDir(url, false);
-    job->setWindow(d->parent);
-    d->job = job;
-
-    connect(job, SIGNAL(entries(KIO::Job*, const KIO::UDSEntryList&)),
-            SLOT(slotEntries(KIO::Job*, const KIO::UDSEntryList&)));
-    connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
-    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-            SLOT(slotPercent(KIO::Job*, unsigned long)));
-
-    KIO::Scheduler::assignJobToSlave(d->slave, job);
-}
-
-void CameraController::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entryList)
-{
-    KFileItemList items;
-    
-    for (KIO::UDSEntryList::const_iterator it = entryList.begin();
-         it != entryList.end(); ++it)
-    {
-        KFileItem *fileItem = new KFileItem(*it, ((KIO::ListJob*)job)->url());
-        items.append(fileItem);
-        d->itemList.append(fileItem);
     }
 
-    emit signalNewItems(items);
-}
-
-void CameraController::slotThumbnails()
-{
-    if (d->itemList.isEmpty())
-        return;
-
-    d->state = ST_THUMBNAIL;
-    emit signalBusy(true);
-
-    CameraThumbJob *job = new CameraThumbJob(d->slave, d->itemList, 100);
-    job->setWindow(d->parent);
-    d->job = job;
-
-    connect(job, SIGNAL(signalThumbnail(const KFileItem*, const QPixmap&)),
-            SIGNAL(signalThumbnail(const KFileItem*, const QPixmap&)));
-    connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
-    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
-            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
-    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
-            SLOT(slotPercent(KIO::Job*, unsigned long)));
-}
-
-void CameraController::slotExifData(KIO::Job *job, const QByteArray &data)
-{
-    if (data.isEmpty())
-        return;
-
-    KURL url(((KIO::SimpleJob*)job)->url());
-    
-    uint  esize  = 0;
-    char* edata = 0;
-    QDataStream ds(data, IO_ReadOnly);
-    ds.readBytes(edata, esize);
-    if (!edata || !esize)
+    if (cancel)
     {
-        KMessageBox::error( d->parent,
-                            i18n("No Exif information available for %1")
-                            .arg(url.prettyURL()));
+        slotCancel();
+        d->timer->start(50, false);
         return;
     }
-    
-    KExif exif(d->parent);
-    exif.loadData(url.fileName(), edata, esize);
-    delete [] edata;
-
-    exif.exec();
-}
-
-void CameraController::slotInfoData(KIO::Job *, const QByteArray &data)
-{
-    if (data.isEmpty())
+    else if (skip)
+    {
+        d->cmdQueue.dequeue();
+        emit signalInfoMsg(i18n("Skipped file %1")
+                           .arg(file));
+        emit signalSkipped(folder, file);        
+        d->timer->start(50, false);
         return;
+    }
 
-    QString summary;
-    QString manual;
-    QString about;
-
-    QDataStream ds(data, IO_ReadOnly);
-    ds >> summary;
-    ds >> manual;
-    ds >> about;
-
-    CameraInfoDialog dlg(summary, manual, about);
-    dlg.exec();
+    d->thread->start();
+    d->timer->start(50, false);
 }
 
 #include "cameracontroller.moc"

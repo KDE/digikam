@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : cameraui.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-17
+ * Date  : 2004-09-16
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -19,208 +19,270 @@
  * 
  * ============================================================ */
 
-#include <kaction.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kfileitem.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kpropertiesdialog.h>
-#include <kiconloader.h>
-
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qframe.h>
-#include <qprogressbar.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
-#include <qtimer.h>
+#include <qpushbutton.h>
+#include <qtoolbutton.h>
+#include <qiconview.h>
+#include <qlabel.h>
+#include <qvbox.h>
 #include <qpopupmenu.h>
+#include <qimage.h>
+#include <qpixmap.h>
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qprogressbar.h>
+#include <qtimer.h>
 
-#include <guifactory.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kurl.h>
+#include <kconfig.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 
 #include "albummanager.h"
 #include "album.h"
-#include "cameraguiclient.h"
 #include "dirselectdialog.h"
-#include "cameraiconitem.h"
+#include "renamecustomizer.h"
+#include "animwidget.h"
 #include "cameraiconview.h"
-#include "thumbitem.h"
+#include "cameraiconitem.h"
 #include "cameracontroller.h"
 #include "cameraui.h"
 
-#include "camerapropsplugin.h"
-
-class CameraUIPriv
+CameraUI::CameraUI(QWidget* parent, const QString& title,
+                   const QString& model, const QString& port,
+                   const QString& path)
+    : QDialog(parent, 0, false, WDestructiveClose)    
 {
-public:
+    // -- setup view -----------------------------------------
 
-    CameraIconView*      view;
-    CameraController*    controller;
+    QVBoxLayout* mainLayout = new QVBoxLayout(this, 5, 5);
 
-    Digikam::GUIFactory* guiFactory;
-    CameraGUIClient*     guiClient;
+    QGroupBox* viewBox = new QGroupBox(title, this);
+    viewBox->setColumnLayout(0, Qt::Vertical);
 
-    QLabel*              statusLabel;
-    QProgressBar*        progressBar;
-    QTimer*              progressHideTimer;
-};
+    QGridLayout* viewBoxLayout =
+        new QGridLayout(viewBox->layout(), 2, 4, 5);
+    viewBoxLayout->setColStretch( 0, 0 );
+    viewBoxLayout->setColStretch( 1, 3 );
+    viewBoxLayout->setColStretch( 2, 1 );
+    viewBoxLayout->setColStretch( 3, 0 );
 
-CameraUI::CameraUI(QWidget* parent, const QString& model,
-                   const QString& port, const QString& path)
-    : QMainWindow(parent, model.latin1(), WType_TopLevel|WGroupLeader|WDestructiveClose)
-{
-    setCaption(model);
+    m_view = new CameraIconView(viewBox);
+    viewBoxLayout->addMultiCellWidget(m_view, 0, 0, 0, 3);
+
+    m_cancelBtn = new QToolButton(viewBox);
+    QPixmap icon = kapp->iconLoader()->loadIcon("stop",
+                                                KIcon::NoGroup,
+                                                22);
+    m_cancelBtn->setText(i18n("Cancel"));
+    m_cancelBtn->setIconSet(icon);
+    m_cancelBtn->setEnabled(false);
+    viewBoxLayout->addWidget(m_cancelBtn, 1, 0);
     
-    d = new CameraUIPriv;  
-
-    // -- build the gui -------------------------------------
+    m_status = new QLabel(viewBox);
+    viewBoxLayout->addWidget(m_status, 1, 1);
+    m_progress = new QProgressBar(viewBox);
+    viewBoxLayout->addWidget(m_progress, 1, 2);
+    m_progress->hide();
+    m_anim = new AnimWidget(viewBox);
+    viewBoxLayout->addWidget(m_anim, 1, 3);
     
-    d->guiFactory = new Digikam::GUIFactory();
-    d->guiClient  = new CameraGUIClient(this);
-    d->guiFactory->insertClient(d->guiClient);
-    d->guiFactory->buildGUI(this);
+    mainLayout->addWidget(viewBox);
 
-    // -- setup action connections ---------------------------
+    QHBoxLayout* btnLayout = new QHBoxLayout();
+    
+    m_advBtn      = new QPushButton(i18n("&Advanced %1").arg(">>"), this);
+    m_downloadBtn = new QPushButton(i18n("&Download"), this);
+    m_deleteBtn   = new QPushButton(i18n("D&elete"), this);
+    m_closeBtn    = new QPushButton(i18n("&Close"), this);
+    
+    btnLayout->addWidget(m_advBtn);
+    btnLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Expanding,
+                                       QSizePolicy::Fixed));
+    btnLayout->addWidget(m_downloadBtn);
+    btnLayout->addWidget(m_deleteBtn);
+    btnLayout->addWidget(m_closeBtn);
 
-    connect(d->guiClient, SIGNAL(signalExit()),
+    mainLayout->addLayout(btnLayout);
+
+    m_advBox = new QVBox(this);
+    m_showAdvanced = false;
+    m_advBox->hide();
+
+    m_renameCustomizer = new RenameCustomizer(m_advBox);
+    m_view->setRenameCustomizer(m_renameCustomizer);
+
+    mainLayout->addWidget(m_advBox);
+    
+    m_downloadMenu = new QPopupMenu(this);
+    m_downloadMenu->insertItem(i18n("Download Selected"),
+                               this, SLOT(slotDownloadSelected()),
+                               0, 0);
+    m_downloadMenu->insertItem(i18n("Download All"),
+                               this, SLOT(slotDownloadAll()),
+                               0, 1);
+    m_downloadMenu->setItemEnabled(0, false);
+    m_downloadBtn->setPopup(m_downloadMenu);
+
+    m_deleteMenu = new QPopupMenu(this);
+    m_deleteMenu->insertItem(i18n("Delete Selected"),
+                             this, SLOT(slotDeleteSelected()),
+                             0, 0);
+    m_deleteMenu->insertItem(i18n("Delete All"),
+                             this, SLOT(slotDeleteAll()),
+                             0, 1);
+    m_deleteMenu->setItemEnabled(0, false);
+    m_deleteBtn->setPopup(m_deleteMenu);
+
+    connect(m_view, SIGNAL(signalSelected(bool)),
+            SLOT(slotItemsSelected(bool)));
+    connect(m_closeBtn, SIGNAL(clicked()),
             SLOT(close()));
+    connect(m_advBtn, SIGNAL(clicked()),
+            SLOT(slotToggleAdvanced()));
 
-    // -- setup the central widget ---------------------------
+    // -- Read settings --------------------------------------------------
 
-    QWidget* w       = new QWidget(this);
-    QVBoxLayout* lay = new QVBoxLayout(w, 0, 0);
-
-    d->view = new CameraIconView(w);
-    lay->addWidget(d->view);
-
-    QFrame* s = new QFrame(w);
-    s->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    QHBoxLayout* h = new QHBoxLayout(s, 5, 5);
-    lay->addWidget(s);
-
-    d->statusLabel = new QLabel(s);
-    d->statusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                              QSizePolicy::Fixed, 2, 0));
-    h->addWidget(d->statusLabel);
-
-    d->progressBar = new QProgressBar(s);
-    d->progressBar->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                              QSizePolicy::Fixed, 1, 0));
-    d->progressBar->setTotalSteps(100);
-    h->addWidget(d->progressBar);
-    d->progressBar->hide();
-
-    d->progressHideTimer = new QTimer(this);
+    readSettings();
     
-    setCentralWidget(w);
-
-    // -- resize the window --------------------------
-
-    loadInitialSize();
+    // -- camera controller -----------------------------------------------
     
-    // -- setup the camera ---------------------------
+    m_controller = new CameraController(this, model, port, path);
 
-    d->controller = new CameraController(this, model,
-                                         port, path);
-
-    // -- setup connections --------------------------
-    
-    connect(d->view, SIGNAL(signalRightButtonClicked(ThumbItem *,
-            const QPoint &)), this, 
-            SLOT(slotRightButtonClicked(ThumbItem *,
-            const QPoint &)));
-    connect(d->view, SIGNAL(signalRightButtonClicked(const QPoint &)),
-            this, SLOT(slotRightButtonClicked(const QPoint &)));
-
-    connect(d->controller, SIGNAL(signalFatal(const QString&)),
-            SLOT(slotFatal(const QString&)));
-    
-    connect(d->guiClient, SIGNAL(signalDownloadSelected()),
-            SLOT(slotDownloadSelected()));
-    connect(d->guiClient, SIGNAL(signalDownloadAll()),
-            SLOT(slotDownloadAll()));
-    
-    connect(d->guiClient, SIGNAL(signalCancel()),
-            d->controller, SLOT(slotCancel()));
-    connect(d->controller, SIGNAL(signalBusy(bool)),
+    connect(m_controller, SIGNAL(signalConnected(bool)),
+            SLOT(slotConnected(bool)));
+    connect(m_controller, SIGNAL(signalInfoMsg(const QString&)),
+            m_status, SLOT(setText(const QString&)));
+    connect(m_controller, SIGNAL(signalErrorMsg(const QString&)),
+            SLOT(slotErrorMsg(const QString&)));
+    connect(m_controller, SIGNAL(signalBusy(bool)),
             SLOT(slotBusy(bool)));
+    connect(m_controller, SIGNAL(signalFolderList(const QStringList&)),
+            SLOT(slotFolderList(const QStringList&)));
+    connect(m_controller, SIGNAL(signalFileList(const GPItemInfoList&)),
+            SLOT(slotFileList(const GPItemInfoList&)));
+    connect(m_controller, SIGNAL(signalThumbnail(const QString&,
+                                                 const QString&,
+                                                 const QImage&)),
+            SLOT(slotThumbnail(const QString&, const QString&,
+                               const QImage&)));
+    connect(m_controller, SIGNAL(signalDownloaded(const QString&, const QString&)),
+            SLOT(slotDownloaded(const QString&, const QString&)));
+    connect(m_controller, SIGNAL(signalSkipped(const QString&, const QString&)),
+            SLOT(slotSkipped(const QString&, const QString&)));
+    connect(m_controller, SIGNAL(signalDeleted(const QString&, const QString&)),
+            SLOT(slotDeleted(const QString&, const QString&)));
+    connect(m_cancelBtn, SIGNAL(clicked()),
+            m_controller, SLOT(slotCancel()));
 
-    connect(d->guiClient, SIGNAL(signalCameraInfo()),
-            d->controller, SLOT(slotCameraInfo()));
-    
-    connect(d->guiClient, SIGNAL(signalFileView()),
-            this, SLOT(slotFileView()));
-    connect(d->guiClient, SIGNAL(signalFileProps()),
-            this, SLOT(slotFileProperties()));
-    connect(d->guiClient, SIGNAL(signalFileExif()),
-            this, SLOT(slotFileExif()));
-
-    connect(d->guiClient, SIGNAL(signalSelectAll()),
-            this, SLOT(slotSelectAll()));
-    connect(d->guiClient, SIGNAL(signalSelectNone()),
-            this, SLOT(slotSelectNone()));
-    connect(d->guiClient, SIGNAL(signalSelectInvert()),
-            this, SLOT(slotSelectInvert()));
-    
-    connect(d->view, SIGNAL(signalSelectionChanged()),
-            SLOT(slotSelectionChanged()));
-    connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
-            SLOT(slotFileView(CameraIconItem*)));
-    
-    connect(d->controller, SIGNAL(signalNewItems(const KFileItemList&)),
-            d->view, SLOT(slotNewItems(const KFileItemList&)));
-    connect(d->controller, SIGNAL(signalThumbnail(const KFileItem*, const QPixmap&)),
-            d->view, SLOT(slotGotThumbnail(const KFileItem*, const QPixmap&)));
-
-    connect(d->controller, SIGNAL(signalInfoMessage(const QString&)),
-            d->statusLabel, SLOT(setText(const QString&)));
-    connect(d->controller, SIGNAL(signalInfoPercent(int)),
-            SLOT(slotProgress(int)));
-
-    connect(d->progressHideTimer, SIGNAL(timeout()),
-            SLOT(slotProgressHide()));
+    QTimer::singleShot(0, m_controller, SLOT(slotConnect()));
 }
 
 CameraUI::~CameraUI()
 {
-    delete d->progressHideTimer;
-    
-    saveInitialSize();
-    
-    delete d->controller;
-    delete d->guiClient;
-    delete d->guiFactory;
-    delete d;
 }
 
-void CameraUI::slotFatal(const QString& msg)
+void CameraUI::closeEvent(QCloseEvent* e)
 {
-    KMessageBox::error( this, msg);
-    close();
+    delete m_controller;
+    saveSettings();
+    e->accept();    
 }
 
 void CameraUI::slotBusy(bool val)
 {
-    d->guiClient->m_cancelAction->setEnabled(val);    
+    if (!val)
+    {
+        if (!m_busy)
+            return;
+
+        m_busy = false;
+        m_cancelBtn->setEnabled(false);
+        m_downloadBtn->setEnabled(true);
+        m_deleteBtn->setEnabled(true);
+        m_anim->stop();
+        m_status->setText(i18n("Ready"));
+        m_progress->hide();
+    }
+    else
+    {
+        if (!m_anim->running())
+            m_anim->start();
+        m_busy = true;
+        m_cancelBtn->setEnabled(true);
+        m_downloadBtn->setEnabled(false);
+        m_deleteBtn->setEnabled(false);
+    }
 }
 
-void CameraUI::slotSelectionChanged()
+void CameraUI::slotConnected(bool val)
 {
-    bool selected = false;
-    for (ThumbItem *item = d->view->firstItem(); item; item = item->nextItem())
+    if (!val)
     {
-        if (item->isSelected())
-         {
-             selected = true;
-             break;
-         }
+      if (KMessageBox::warningYesNo(this,
+                                    i18n("Failed to connect to camera. "
+                                         "Please make sure its connected "
+                                         "properly and turned on. "
+                                         "Would you like to try again?"))
+          == KMessageBox::Yes)
+          QTimer::singleShot(0, m_controller, SLOT(slotConnect()));
+      else
+          close();
     }
+    else
+    {
+        m_controller->listFolders();
+    }
+}
 
-    d->guiClient->m_downloadSelAction->setEnabled(selected);
-    d->guiClient->m_deleteSelAction->setEnabled(selected);
-    d->guiClient->m_fileViewAction->setEnabled(selected);
-    d->guiClient->m_filePropsAction->setEnabled(selected);
-    d->guiClient->m_fileExifAction->setEnabled(selected);
+void CameraUI::slotFolderList(const QStringList& folderList)
+{
+    for (QStringList::const_iterator it = folderList.begin();
+         it != folderList.end(); ++it)
+    {
+        m_controller->listFiles(*it);
+    }
+}
+
+void CameraUI::slotFileList(const GPItemInfoList& fileList)
+{
+    for (GPItemInfoList::const_iterator it = fileList.begin();
+         it != fileList.end(); ++it)
+    {
+        m_view->addItem(*it);
+        m_controller->getThumbnail((*it).folder, (*it).name);
+    }
+}
+
+void CameraUI::slotThumbnail(const QString& folder, const QString& file,
+                             const QImage& thumbnail)
+{
+    m_view->setThumbnail(folder, file, thumbnail);    
+}
+
+void CameraUI::slotToggleAdvanced()
+{
+    m_showAdvanced = !m_showAdvanced;
+    if (m_showAdvanced)
+    {
+        m_advBox->show();
+        m_advBtn->setText(i18n("&Simple %1").arg("<<"));
+    }
+    else
+    {
+        m_advBox->hide();
+        m_advBtn->setText(i18n("&Advanced %1").arg(">>"));
+    }
+}
+
+void CameraUI::slotErrorMsg(const QString& msg)
+{
+    KMessageBox::error(this, msg);    
 }
 
 void CameraUI::slotDownloadSelected()
@@ -239,26 +301,42 @@ void CameraUI::slotDownloadSelected()
 
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
-    
-    KURL url = DirSelectDialog::selectDir(libPath, currPath, this, header);
+    KURL url = DirSelectDialog::selectDir(libPath, currPath,
+                                          this, header);
     if (!url.isValid())
         return;
-
-    KFileItemList itemList;
     
-    for (ThumbItem *item = d->view->firstItem(); item; item = item->nextItem())
+    m_controller->downloadPrep();
+
+    QString downloadName;
+    QString name;
+    QString folder;
+
+    int total = 0;
+    for (QIconViewItem* item = m_view->firstItem(); item;
+         item = item->nextItem())
     {
-        if (item->isSelected())
-         {
-             CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-             itemList.append(iconItem->fileItem());
-         }
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        if (iconItem->isSelected())
+        {
+            folder = iconItem->m_itemInfo->folder;
+            name   = iconItem->m_itemInfo->name;
+            downloadName = iconItem->getDownloadName();
+
+            KURL u(url);
+            u.addPath(downloadName.isEmpty() ? name : downloadName);
+            
+            m_controller->download(folder, name, u.path());
+            total++;
+        }
     }
 
-    if (itemList.isEmpty())
+    if (total <= 0)
         return;
     
-    d->controller->downloadSel(itemList, url.path());
+    m_progress->setProgress(0);
+    m_progress->setTotalSteps(total);
+    m_progress->show();
 }
 
 void CameraUI::slotDownloadAll()
@@ -277,99 +355,157 @@ void CameraUI::slotDownloadAll()
 
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
-    
-    KURL url = DirSelectDialog::selectDir(libPath, currPath, this, header);
+    KURL url = DirSelectDialog::selectDir(libPath, currPath,
+                                          this, header);
     if (!url.isValid())
         return;
+    
+    m_controller->downloadPrep();
 
-    d->controller->downloadAll(url.path());
+    QString downloadName;
+    QString name;
+    QString folder;
+
+    int total = 0;
+    for (QIconViewItem* item = m_view->firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        folder = iconItem->m_itemInfo->folder;
+        name   = iconItem->m_itemInfo->name;
+        downloadName = iconItem->getDownloadName();
+        
+        KURL u(url);
+        u.addPath(downloadName.isEmpty() ? name : downloadName);
+            
+        m_controller->download(folder, name, u.path());
+        total++;
+    }
+
+    if (total <= 0)
+        return;
+    
+    m_progress->setProgress(0);
+    m_progress->setTotalSteps(total);
+    m_progress->show();
 }
 
-void CameraUI::slotProgress(int val)
+void CameraUI::slotDeleteSelected()
 {
-    d->progressHideTimer->stop();
-    if (d->progressBar->isHidden())
-        d->progressBar->show();
-    d->progressBar->setProgress(val);
-    d->progressHideTimer->start(1000, false);
-}
+    QStringList folders;
+    QStringList files;
+    QStringList deleteList;
+    
+    for (QIconViewItem* item = m_view->firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        if (iconItem->isSelected())
+        {
+            QString folder = iconItem->m_itemInfo->folder;
+            QString file   = iconItem->m_itemInfo->name;
+            folders.append(folder);
+            files.append(file);
+            deleteList.append(folder + QString("/") + file);
+        }
+    }
 
-void CameraUI::slotProgressHide()
-{
-    d->progressBar->setProgress(0);
-    d->progressBar->hide();
-}
-
-void CameraUI::slotFileView()
-{
-    slotFileView(d->view->firstSelectedItem());
-}
-
-void CameraUI::slotFileView(CameraIconItem* item)
-{
-    if (!item)
+    if (folders.isEmpty())
         return;
 
-    d->controller->openFile(item->fileItem());
+    QString warnMsg(i18n("About to delete these Image(s)\n"
+                         "Are you sure?"));
+    if (KMessageBox::warningContinueCancelList(this, warnMsg,
+                                               deleteList,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+        ==  KMessageBox::Continue) {
+
+        QStringList::iterator itFolder = folders.begin();
+        QStringList::iterator itFile   = files.begin();
+        for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
+        {
+            m_controller->deleteFile(*itFolder, *itFile);
+        }
+    }
 }
 
-void CameraUI::slotFileProperties()
+void CameraUI::slotDeleteAll()
 {
-    slotFileProperties(d->view->firstSelectedItem());
-}
+    QStringList folders;
+    QStringList files;
+    QStringList deleteList;
+    
+    for (QIconViewItem* item = m_view->firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        QString folder = iconItem->m_itemInfo->folder;
+        QString file   = iconItem->m_itemInfo->name;
+        folders.append(folder);
+        files.append(file);
+        deleteList.append(folder + QString("/") + file);
+    }
 
-void CameraUI::slotFileProperties(CameraIconItem* item)
-{
-    if (!item)
+    if (folders.isEmpty())
         return;
 
-    KPropertiesDialog dlg(item->fileItem(), this, 0, true, false);
-    CameraPropsPlugin *plugin = new CameraPropsPlugin(&dlg);
-    dlg.insertPlugin(plugin);
-    dlg.exec();
+    QString warnMsg(i18n("About to delete these Image(s)\n"
+                         "Are you sure?"));
+    if (KMessageBox::warningContinueCancelList(this, warnMsg,
+                                               deleteList,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+        ==  KMessageBox::Continue) {
+
+        QStringList::iterator itFolder = folders.begin();
+        QStringList::iterator itFile   = files.begin();
+        for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
+        {
+            m_controller->deleteFile(*itFolder, *itFile);
+        }
+    }
 }
 
-void CameraUI::slotFileExif()
+void CameraUI::slotItemsSelected(bool selected)
 {
-    slotFileExif(d->view->firstSelectedItem());
+    m_downloadMenu->setItemEnabled(0, selected);
+    m_deleteMenu->setItemEnabled(0, selected);
 }
 
-void CameraUI::slotFileExif(CameraIconItem* item)
+void CameraUI::slotDownloaded(const QString&, const QString&)
 {
-    if (!item)
-        return;
-
-    d->controller->getExif(item->fileItem());
+    int curr = m_progress->progress();
+    m_progress->setProgress(curr+1);
 }
 
-void CameraUI::slotSelectAll()
+void CameraUI::slotSkipped(const QString&, const QString&)
 {
-    d->view->selectAll();    
+    int curr = m_progress->progress();
+    m_progress->setProgress(curr+1);
 }
 
-void CameraUI::slotSelectNone()
+void CameraUI::slotDeleted(const QString& folder, const QString& file)
 {
-    d->view->clearSelection();    
+    m_view->removeItem(folder, file);
 }
 
-void CameraUI::slotSelectInvert()
+void CameraUI::readSettings()
 {
-    d->view->invertSelection();    
-}
+    KConfig* config = kapp->config();
 
-void CameraUI::loadInitialSize()
-{
-    KConfig *config = kapp->config();
+    int w, h;
 
     config->setGroup("Camera Settings");
-    int w = config->readNumEntry("Width", 500);
-    int h = config->readNumEntry("Height", 500);
+    w = config->readNumEntry("Width", 500);
+    h = config->readNumEntry("Height", 500);
+
     resize(w, h);
 }
 
-void CameraUI::saveInitialSize()
+void CameraUI::saveSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig* config = kapp->config();
 
     config->setGroup("Camera Settings");
     config->writeEntry("Width", width());
@@ -377,30 +513,4 @@ void CameraUI::saveInitialSize()
     config->sync();
 }
 
-void CameraUI::slotRightButtonClicked(ThumbItem *, const QPoint &pos)
-{
-    QPopupMenu popmenu(this);
-    popmenu.insertItem(i18n("Download All..."), 
-                       this, SLOT(slotDownloadAll()));                           
-    popmenu.insertItem(i18n("Download Selected..."), 
-                       this, SLOT(slotDownloadSelected()));
-    popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("editimage"),
-                       i18n("View/Edit..."),
-                       this, SLOT(slotFileView()));
-    popmenu.insertItem(SmallIcon("text_italic"), 
-                       i18n("View Exif Information"),
-                       this, SLOT(slotFileExif()));
-    popmenu.insertItem(i18n("Properties"),
-                       this, SLOT(slotFileProperties()));                       
-    popmenu.exec(pos);
-}
-
-void CameraUI::slotRightButtonClicked(const QPoint &pos)
-{
-    QPopupMenu popmenu(this);
-    popmenu.insertItem(i18n("Download All..."), 
-                       this, SLOT(slotDownloadAll()));                           
-    popmenu.exec(pos);
-}
 #include "cameraui.moc"

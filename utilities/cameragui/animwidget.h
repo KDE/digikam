@@ -1,7 +1,7 @@
 /* ============================================================
- * File  : camerathumbjob.h
+ * File  : animwidget.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-13
+ * Date  : 2004-09-21
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -19,44 +19,41 @@
  * 
  * ============================================================ */
 
-#ifndef CAMERATHUMBJOB_H
-#define CAMERATHUMBJOB_H
+#ifndef ANIMWIDGET_H
+#define ANIMWIDGET_H
 
-#include <kio/job.h>
-#include <kfileitem.h>
+#include <qwidget.h>
 
-namespace KIO
-{
-class Slave;
-}
+class QTimer;
+class QPixmap;
 
-class CameraThumbJobPriv;
-
-class CameraThumbJob : public KIO::Job
+class AnimWidget : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    CameraThumbJob(KIO::Slave *slave, const KFileItemList& items, int size);
-    ~CameraThumbJob();
+    AnimWidget(QWidget* parent, int size=20);
+    ~AnimWidget();
 
-signals:
+    void start();
+    void stop();
+    bool running() const;
 
-    void signalThumbnail(const KFileItem* item, const QPixmap& pix);
-    void signalCompleted();
+protected:
+
+    void paintEvent(QPaintEvent*);
+
+private slots:
+
+    void slotTimeout();
     
-protected slots:
-
-    void slotResult(KIO::Job *job);
-    void slotData(KIO::Job *job, const QByteArray &data);
-
 private:
 
-    void processNext();
-    void createShmSeg();
-    
-    CameraThumbJobPriv *d;
+    QTimer*  m_timer;
+    QPixmap* m_pix;
+    int      m_pos;
+    int      m_size;
 };
 
-#endif /* CAMERATHUMBJOB_H */
+#endif /* ANIMWIDGET_H */

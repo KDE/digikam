@@ -509,8 +509,8 @@ void DigikamApp::slotCameraConnect()
     
     if (ctype) 
     {
-        CameraUI* cgui = new CameraUI(this, ctype->model(), ctype->port(),
-                                      ctype->path());
+        CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+                                      ctype->port(), ctype->path());
         cgui->show();
     }
 }

@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : cameraiconview.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-13
+ * Date  : 2004-09-18
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -19,124 +19,147 @@
  * 
  * ============================================================ */
 
-#include <kio/scheduler.h>
-#include <kio/slave.h>
+#include <qfile.h>
 
-#include <kdirlister.h>
-#include <kurl.h>
-#include <kio/previewjob.h>
-#include <kdebug.h>
+#include <time.h>
 
-#include <qtimer.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-
-#include "thumbitem.h"
-#include "camerathumbjob.h"
+#include "gpiteminfo.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
+#include "renamecustomizer.h"
 
-class CameraIconViewPriv
-{
-public:
-
-};
-    
 CameraIconView::CameraIconView(QWidget* parent)
-    : ThumbView(parent)
+    : QIconView(parent), m_renamer(0)
 {
-    setWFlags(Qt::WDestructiveClose);
+    setAutoArrange(true);    
+    setSorting(true);
+    setItemsMovable(false);
+    setResizeMode(Adjust);
+    setShowToolTips(false);
+    setSpacing(5);
+    setAcceptDrops(false);
+    setSelectionMode(Extended);
+    setHScrollBarMode(QScrollView::AlwaysOff);
 
-    d = new CameraIconViewPriv;
-
-    connect(this, SIGNAL(signalDoubleClicked(ThumbItem *)),
-            SLOT(slotDoubleClicked(ThumbItem *)));
-    connect(this, SIGNAL(signalReturnPressed(ThumbItem *)),
-            SLOT(slotDoubleClicked(ThumbItem *)));
+    connect(this, SIGNAL(selectionChanged()),
+            SLOT(slotSelectionChanged()));
 }
 
 CameraIconView::~CameraIconView()
 {
-    delete d;
+    
 }
 
-CameraIconItem* CameraIconView::firstSelectedItem()
+void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 {
-    CameraIconItem *iconItem = 0;
-    for (ThumbItem *item = firstItem(); item;
-         item = item->nextItem())
-    {
-        if (item->isSelected())
-         {
-             iconItem = static_cast<CameraIconItem*>(item);
-             break;
-         }
-    }
-
-    return iconItem;
+    m_renamer = renamer;
+    connect(m_renamer, SIGNAL(signalChanged()),
+            SLOT(slotDownloadNameChanged()));
 }
 
-void CameraIconView::slotNewItems(const KFileItemList& itemList)
+void CameraIconView::addItem(const GPItemInfo& info)
 {
-    int w = 110;
-    QPixmap pix(w, w);
-    pix.fill(colorGroup().base());
-    QPainter p(&pix);
-    p.fillRect(0, 0, w, w, QBrush(colorGroup().base()));
-    p.setPen(Qt::black);
-    p.drawRect(0, 0, w, w);
-    p.end();
+    CameraIconViewItem* item = new CameraIconViewItem(this, info);
+    item->setDragEnabled(false);
+    m_itemDict.insert(info.folder+info.name, item);
 
-    KFileItem* item;
-
-    for (KFileItemListIterator it(itemList); (item = it.current()); ++it)
+    if (m_renamer && !m_renamer->useDefault())
     {
-        if (item->isDir())
-            continue;
-
-        /*ThumbItem* iconItem = new ThumbItem(this, item->url().filename(),
-          pix); */
-        CameraIconItem *iconItem = new CameraIconItem(this, item, pix);
-        item->setExtraData(this, iconItem);
+        item->setDownloadName( getTemplatedName( m_renamer->nameTemplate(),
+                                                 item ) );
     }
 }
 
-void CameraIconView::slotDeleteItem(KFileItem *item)
+void CameraIconView::removeItem(const QString& folder, const QString& file)
 {
-    ThumbItem* iconItem = (ThumbItem*) item->extraData(this);
-    if (!iconItem)
-        return;
-
-    delete iconItem;
-    item->removeExtraData(this);
-}
-
-void CameraIconView::slotClear()
-{
-    clear();
-}
-
-void CameraIconView::slotGotThumbnail(const KFileItem* item, const QPixmap& pix)
-{
-    CameraIconItem* iconItem = (CameraIconItem*) item->extraData(this);
-    if (!iconItem)
-        return;
-
-    iconItem->setPixmap(pix);
-}
-
-void CameraIconView::slotFailedThumbnail(const KFileItem* item)
-{
-    kdDebug() << "Failed thumbnail " << item->url().url() << endl;
-}
-
-void CameraIconView::slotDoubleClicked(ThumbItem *item)
-{
+    QIconViewItem* item = m_itemDict.find(folder+file);
     if (!item)
         return;
 
-    CameraIconItem *iconItem = static_cast<CameraIconItem*>(item);
-    emit signalFileView(iconItem);
+    delete item;
+    arrangeItemsInGrid();
+}
+
+void CameraIconView::setThumbnail(const QString& folder, const QString& filename,
+                                  const QPixmap& pixmap)
+{
+    QIconViewItem* item = m_itemDict.find(folder+filename);
+    if (!item)
+        return;
+
+    item->setPixmap(pixmap);
+}
+
+void CameraIconView::slotDownloadNameChanged()
+{
+    bool    useDefault   = true;
+    QString nameTemplate;
+
+    if (m_renamer)
+    {
+        useDefault   = m_renamer->useDefault();
+        nameTemplate = m_renamer->nameTemplate();
+    }
+    
+    viewport()->setUpdatesEnabled(false);
+    for (QIconViewItem* item = firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* viewItem =
+            static_cast<CameraIconViewItem*>(item);
+        viewItem->setDownloadName( useDefault ? QString::null :
+                                   getTemplatedName( nameTemplate, viewItem ) );
+    }
+    arrangeItemsInGrid();
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+}
+
+QString CameraIconView::getTemplatedName(const QString& templ,
+                                         CameraIconViewItem* item)
+{
+    if (templ.isEmpty())
+        return QString::null;
+    
+    QString dname(templ);
+    
+    QString ext = item->text();
+    int pos = ext.findRev('.');
+    if (pos < 0)
+        ext = "";
+    else
+        ext = ext.right( ext.length() - pos - 1);
+
+    struct tm* time_tm = gmtime(&item->m_itemInfo->mtime);
+    char* s = new char[100];
+    strftime(s, 100, QFile::encodeName(dname), time_tm);
+    dname  = s;
+    delete [] s;
+
+    dname.sprintf(QFile::encodeName(dname), index(item)+1);
+    dname.replace("/","");
+
+    dname += '.';
+    dname += ext;
+    
+    return dname;
+}
+
+void CameraIconView::slotSelectionChanged()
+{
+    bool selected = false;
+    
+    for (QIconViewItem* item = firstItem(); item;
+         item = item->nextItem())
+    {
+        if (item->isSelected())
+        {
+            selected = true;
+            break;
+        }
+    }
+
+    emit signalSelected(selected);
 }
 
 #include "cameraiconview.moc"

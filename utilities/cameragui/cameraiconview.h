@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : cameraiconview.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-13
+ * Date  : 2004-09-18
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -22,21 +22,14 @@
 #ifndef CAMERAICONVIEW_H
 #define CAMERAICONVIEW_H
 
-#include <kfileitem.h>
-#include <kio/global.h>
+#include <qiconview.h>
+#include <qdict.h>
 
-#include "thumbview.h"
+class GPItemInfo;
+class RenameCustomizer;
+class CameraIconViewItem;
 
-namespace KIO
-{
-class Job;
-class Slave;
-}
-
-class CameraIconItem;
-class CameraIconViewPriv;
-
-class CameraIconView : public ThumbView
+class CameraIconView : public QIconView
 {
     Q_OBJECT
     
@@ -45,29 +38,29 @@ public:
     CameraIconView(QWidget* parent);
     ~CameraIconView();
 
-    CameraIconItem* firstSelectedItem();
+    void setRenameCustomizer(RenameCustomizer* renamer);
     
+    void addItem(const GPItemInfo& itemInfo);
+    void removeItem(const QString& folder, const QString& file);
+    void setThumbnail(const QString& folder, const QString& filename,
+                      const QPixmap& pixmap);
+
 private:
 
-    CameraIconViewPriv *d;
+    QString getTemplatedName(const QString& templ,
+                             CameraIconViewItem* item);
+    
+    QDict<CameraIconViewItem> m_itemDict;
+    RenameCustomizer*         m_renamer;
 
 signals:
 
-    void signalFileView(CameraIconItem* item);
+    void signalSelected(bool selected);
     
 public slots:
 
-    void slotNewItems(const KFileItemList& itemList);
-    void slotDeleteItem(KFileItem *item);
-    void slotClear();
-
-    void slotGotThumbnail(const KFileItem* item, const QPixmap& pix);
-    void slotFailedThumbnail(const KFileItem* item);
-
-private slots:
-
-    void slotDoubleClicked(ThumbItem *item);
-};
-
+    void slotDownloadNameChanged();
+    void slotSelectionChanged();
+};    
 
 #endif /* CAMERAICONVIEW_H */

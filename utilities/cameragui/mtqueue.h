@@ -49,6 +49,34 @@ public:
     return i;
   }
 
+  Type * head(bool lock=true)
+  {
+    if (lock)
+       mutex_.lock();
+    Type * i = queue_.head();
+    if (lock)
+        mutex_.unlock();
+    return i;
+  }
+
+  int count()
+  {
+    mutex_.lock();
+    int c = queue_.count();
+    mutex_.unlock();
+    return c;
+  }
+
+  void lock()
+  {
+    mutex_.lock();
+  }
+
+  void unlock()
+  {
+    mutex_.unlock();
+  }
+    
 private:
 
   QPtrQueue<Type> queue_;

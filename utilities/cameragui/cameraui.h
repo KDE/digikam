@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : cameraui.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-17
+ * Date  : 2004-09-16
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
@@ -22,54 +22,91 @@
 #ifndef CAMERAUI_H
 #define CAMERAUI_H
 
-#include <qmainwindow.h>
+#include <qdialog.h>
+#include <qstring.h>
 
-class CameraUIPriv;
-class CameraIconItem;
-class ThumbItem;
+#include "gpiteminfo.h"
 
-class CameraUI : public QMainWindow
+class QIconView;
+class QPushButton;
+class QToolButton;
+class QCheckBox;
+class QLabel;
+class QImage;
+class QVButtonGroup;
+class QVBox;
+class QLineEdit;
+class QPopupMenu;
+class QProgressBar;
+
+class CameraIconView;
+class CameraController;
+class RenameCustomizer;
+class AnimWidget;
+
+class CameraUI : public QDialog
 {
     Q_OBJECT
-    
+
 public:
 
-    CameraUI(QWidget *parent, const QString& model,
-             const QString& port, const QString& path);
+    CameraUI(QWidget* parent, const QString& title,
+             const QString& model, const QString& port,
+             const QString& path);
     ~CameraUI();
 
+protected:
+
+    void closeEvent(QCloseEvent* e);
+    
 private:
 
-    CameraUIPriv *d;
-
-    void loadInitialSize();
-    void saveInitialSize();
+    void readSettings();
+    void saveSettings();
     
+    CameraIconView*   m_view;
+
+    QPushButton*      m_closeBtn;
+    QPushButton*      m_downloadBtn;
+    QPushButton*      m_deleteBtn;
+    QPopupMenu*       m_downloadMenu;
+    QPopupMenu*       m_deleteMenu;
+    QPushButton*      m_advBtn;
+    QToolButton*      m_cancelBtn;
+
+    bool              m_showAdvanced;
+    QVBox*            m_advBox;
+    RenameCustomizer* m_renameCustomizer;
+    
+    QLabel*           m_status;
+    AnimWidget*       m_anim;
+    bool              m_busy;
+    QProgressBar*     m_progress;
+
+    CameraController* m_controller;
+
 private slots:
 
-    void slotFatal(const QString& msg);
+    void slotConnected(bool val);
     void slotBusy(bool val);
-    void slotSelectionChanged();
-    void slotProgress(int val);
-    void slotProgressHide();
+    void slotErrorMsg(const QString& msg);
+    void slotFolderList(const QStringList& folderList);
+    void slotFileList(const GPItemInfoList& fileList);
+    void slotThumbnail(const QString& folder, const QString& file,
+                       const QImage& thumbnail);
 
     void slotDownloadSelected();
     void slotDownloadAll();
+    void slotDeleteSelected();
+    void slotDeleteAll();
 
-    void slotFileView();
-    void slotFileView(CameraIconItem*);
-    void slotFileProperties();
-    void slotFileProperties(CameraIconItem*);
-    void slotFileExif();
-    void slotFileExif(CameraIconItem*);
+    void slotDownloaded(const QString&, const QString&);
+    void slotSkipped(const QString&, const QString&);
+    void slotDeleted(const QString&, const QString&);
     
-    void slotSelectAll();
-    void slotSelectNone();
-    void slotSelectInvert();
+    void slotItemsSelected(bool selected);
     
-    void slotRightButtonClicked(ThumbItem *item,
-                                const QPoint &pos);    
-    void slotRightButtonClicked(const QPoint &pos);                                    
+    void slotToggleAdvanced();
 };
 
 #endif /* CAMERAUI_H */

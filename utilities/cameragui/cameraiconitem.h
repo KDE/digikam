@@ -1,10 +1,10 @@
 /* ============================================================
  * File  : cameraiconitem.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-23
+ * Date  : 2004-09-21
  * Description : 
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,44 +22,36 @@
 #ifndef CAMERAICONITEM_H
 #define CAMERAICONITEM_H
 
-#include "thumbitem.h"
+#include <qiconview.h>
+#include <qstring.h>
 
-class QString;
-class QPixmap;
-class QPainter;
-class QColorGroup;
+class GPItemInfo;
 
-class KFileItem;
-class ThumbView;
-
-class CameraIconItem : public ThumbItem
+class CameraIconViewItem : public QIconViewItem
 {
-    friend class CameraIconView;
-    
 public:
 
-    CameraIconItem(ThumbView* parent,
-                   KFileItem* fileItem,
-                   const QPixmap& pixmap);
-    ~CameraIconItem();
+    CameraIconViewItem(QIconView* parent, const GPItemInfo& itemInfo,
+                       const QString& downloadName=QString::null);
+    ~CameraIconViewItem();
 
-    KFileItem* fileItem() const;
+    void    setDownloadName(const QString& downloadName);
+    QString getDownloadName() const;
     
-    void setPixmap(const QPixmap& pix);
-
 protected:
 
-    virtual void paintItem(QPainter *p, const QColorGroup& cg);
+    void calcRect(const QString & text_ = QString::null);
+    void paintItem(QPainter *, const QColorGroup& cg);
+    void paintFocus(QPainter *, const QColorGroup& cg);
     
 private:
 
-    void loadBasePix();
+    GPItemInfo* m_itemInfo;
+    QString     m_downloadName;
+    QRect       m_itemExtraRect;
 
-    KFileItem* m_fileItem;
-    int m_pixWidth, m_pixHeight;
-
-    static QPixmap* baseRegPix;
-    static QPixmap* baseSelPix;
+    friend class CameraUI;
+    friend class CameraIconView;
 };
 
 #endif /* CAMERAICONITEM_H */
