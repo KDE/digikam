@@ -313,6 +313,7 @@ void ImageProperties::slotItemChanged()
     KURL fileURL(m_currItem->fileItem()->url());    
     setCaption(i18n("Properties for \"%1\"").arg(fileURL.fileName()));
     
+    // -------------------------------------------------------------                                         
     // Update General tab.
     
     m_filename->clear();
@@ -386,7 +387,8 @@ void ImageProperties::slotItemChanged()
         (*it).remove(0,1);
     
     m_filetags->setText( tagPaths.join(", "));
-                                         
+
+    // -------------------------------------------------------------                                         
     // Update Exif Viewer tab.
        
     m_listview->clear();
@@ -419,6 +421,7 @@ void ImageProperties::slotItemChanged()
         QToolTip::add( m_listview, i18n("Select an item to see its description"));
         }
        
+    // -------------------------------------------------------------                                         
     // Update Histogram Viewer tab.
     
     m_HistogramThumbJob = new ThumbnailJob(fileURL, 48);
@@ -446,6 +449,9 @@ void ImageProperties::slotItemChanged()
        
         m_image.setAlphaBuffer(true);
         
+        // If a selection area is done in Image Editor and if the current image is the same 
+        // in Image Editor, then compute too the histogram for this selection.
+        
         if (m_selectionArea && m_IEcurrentItem == m_currItem)
            {
            m_imageSelection = m_image.copy(*m_selectionArea);
@@ -454,7 +460,6 @@ void ImageProperties::slotItemChanged()
                                          m_imageSelection.height());
            m_renderingLabel->show();                                         
            m_renderingCB->show();                                         
-           slotRenderingChanged(m_renderingCB->currentItem());
            }
         else 
            {
@@ -462,10 +467,6 @@ void ImageProperties::slotItemChanged()
            m_renderingLabel->hide();                                         
            m_renderingCB->hide();
            }
-           
-        slotChannelChanged(m_channelCB->currentItem());
-        slotScaleChanged(m_scaleCB->currentItem());
-        slotColorsChanged(m_colorsCB->currentItem());
         }
     else 
         {
@@ -654,6 +655,9 @@ void ImageProperties::setupHistogramViewer(void)
     connect(m_histogramWidget, SIGNAL(signalMouseReleased( int )),
             this, SLOT(slotUpdateMaxInterv(int)));
 
+    connect(m_histogramWidget, SIGNAL(signalHistogramComputationDone()),
+            this, SLOT(slotRefreshOptions()));
+            
     connect(m_minInterv, SIGNAL(valueChanged (int)),
             m_histogramWidget, SLOT(slotMinValueChanged(int)));
 
@@ -665,6 +669,16 @@ void ImageProperties::setupHistogramViewer(void)
 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotIntervChanged(int)));
+}
+
+void ImageProperties::slotRefreshOptions(void)
+{
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleCB->currentItem());
+    slotColorsChanged(m_colorsCB->currentItem());
+    
+    if (m_selectionArea && m_IEcurrentItem == m_currItem)
+       slotRenderingChanged(m_renderingCB->currentItem());
 }
 
 void ImageProperties::slotChannelChanged(int channel)
@@ -853,7 +867,8 @@ void ImageProperties::setupExifViewer(void)
     m_levelExifCB->insertItem( i18n("Extended") );
     m_levelExifCB->insertItem( i18n("All") );
     QWhatsThis::add( m_levelExifCB, i18n("<p>Select here the Exif information level to display<p>"
-                                         "<b>General</b>: display general information about the photograph (default).<p>"
+                                         "<b>General</b>: display general information about the photograph "
+                                         " (default).<p>"
                                          "<b>Extended</b>: display extended information about the photograph.<p>"
                                          "<b>All</b>: display all Exif sections."));  
     hlay->addWidget(m_mainExifThumb);

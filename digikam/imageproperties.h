@@ -199,6 +199,7 @@ private slots:
     
     // For histogram viever.
     
+    void slotRefreshOptions(void);
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);

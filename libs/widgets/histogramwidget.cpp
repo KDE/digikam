@@ -189,6 +189,8 @@ void HistogramWidget::customEvent(QCustomEvent *event)
                emit signalMousePressed( m_xmin );
                emit signalMouseReleased( m_xmax );   // Current selection available.
                }
+            
+            emit signalHistogramComputationDone();
             }
         else
             {
@@ -196,6 +198,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             m_blinkTimer->stop(); 
             repaint(false);
             setCursor( KCursor::arrowCursor() );    
+            emit signalHistogramComputationFailed();
             }
         }
 }
