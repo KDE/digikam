@@ -216,6 +216,15 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_addImages");
 
+    mAlbumImportAction = new KAction( i18n("Import Folders..."),
+                                      "fileopen",
+                                      0,
+                                      mView,
+                                      SLOT(slotAlbumImportFolder()),
+                                      actionCollection(),
+                                      "album_importFolder");                            
+
+                                    
     mPropsEditAction = new KAction( i18n("Edit Album Properties"),
                                     "albumfoldercomment",
                                     CTRL+Key_F3,

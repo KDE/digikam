@@ -306,6 +306,11 @@ void DigikamView::slot_albumAddImages()
     }
 }
 
+void DigikamView::slotAlbumImportFolder()
+{
+    mFolderView->albumImportFolder();
+}
+
 void DigikamView::slot_albumHighlight()
 {
     Album *album = mAlbumMan->currentAlbum();

@@ -128,7 +128,8 @@ private:
 
     KAction *mAddImagesAction;
     KAction *mPropsEditAction;
-
+    KAction *mAlbumImportAction;
+    
     // Tag Actions
     KAction *mNewTagAction;
     KAction *mDeleteTagAction;

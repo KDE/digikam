@@ -78,6 +78,7 @@ public slots:
     // Album action slots
     void slot_albumPropsEdit();
     void slot_albumAddImages();
+    void slotAlbumImportFolder();
 
     // Tag action slots
     void slotNewTag();

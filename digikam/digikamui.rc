@@ -15,6 +15,7 @@
    <Separator/>
       <Menu name="Import"><text>&amp;Import</text>
          <Action name="album_addImages" />
+         <Action name="album_importFolder" />
          <ActionList name="file_actions_import"/>
       </Menu>
       <Menu name="Export"><text>&amp;Export</text>

@@ -74,6 +74,7 @@ public:
     void albumDelete(PAlbum* album);
     void albumEdit(PAlbum* album);
     void albumHighlight(PAlbum* album);
+    void albumImportFolder();
     
     void tagNew();
     void tagNew(TAlbum* album);
@@ -157,7 +158,8 @@ private slots:
     void slotAlbumDeleted(Album *album);
     void slotAlbumsCleared();
     void slotAllAlbumsLoaded();
-
+    void slotAlbumImportResult(KIO::Job* job);
+    
     void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
                           const KFileMetaInfo*);
 

@@ -52,6 +52,7 @@
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kstandarddirs.h>
+#include <kurl.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -745,6 +746,53 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
     }
 }
 
+void AlbumFolderView::albumImportFolder()
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    QDir libraryDir(settings->getAlbumLibraryPath());
+    if(!libraryDir.exists()) 
+    {
+        KMessageBox::error(0,
+                           i18n("Album Library has not been set correctly\n"
+                                "Please run Setup"));
+        return;
+    }
+    
+    PAlbum* parent = 0;
+    if(getSelected())
+    {
+        AlbumFolderItem *folderItem =
+            dynamic_cast<AlbumFolderItem*>(getSelected());
+        Album *a = folderItem->album();
+        if (a && a->type() == Album::PHYSICAL)
+        {
+            parent = dynamic_cast<PAlbum*>(a);
+        }
+    }
+    if(!parent)
+        parent = dynamic_cast<PAlbum*>(phyRootItem_->album());
+
+    QString libraryPath = parent->getKURL().path();
+    
+    KFileDialog dlg(QString::null, "inode/directory", this, "importFolder", true);
+    dlg.setMode(KFile::Directory | KFile::ExistingOnly |  KFile::Files);
+    if(dlg.exec() != QDialog::Accepted)
+        return;
+    
+    KURL::List urls = dlg.selectedURLs();
+    if(urls.empty())
+        return;
+
+    KIO::CopyJob* job = KIO::copy(urls, parent->getKURL(), true);
+    connect(job, SIGNAL(result(KIO::Job *)),
+            this, SLOT(slotAlbumImportResult(KIO::Job *)));
+}
+
+void AlbumFolderView::slotAlbumImportResult(KIO::Job* job)
+{
+    if (job->error())
+        job->showErrorDialog(this);
+}
 
 void AlbumFolderView::tagNew()
 {
