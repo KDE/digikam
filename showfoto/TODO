@@ -6,7 +6,6 @@ todo stuff before 0.7.3 release
 
 * disable plugin menu entries if no current image. 
 * writing hanbook based on digiKam handbook image editor part. 
-* add showfoto icon. 
 * implemented Redo/Undo features 
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add Edit menu entries like in digiKam image editor. 
