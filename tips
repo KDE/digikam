@@ -1,239 +1,181 @@
 <tip category="Digikam|General">
-<html>
-<p>Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that Digikam supports <b>Drag'n'Drop</b>? So you could easily move images from Konqueror 
+to Digikam or from Digikam to K3b simply by using "Drag'n'Drop".
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you could use the album collection feature to get your Photos sorted into two levels? First, the collection; then, the album.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could use the album collection feature to get your Photos sorted into two levels? First, the collection; then, the album.
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that the Properties entry of each photo gives you access to the properties entry of Konqueror?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that the Properties entry of each photo gives you access to the properties entry of Konqueror?
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you could edit the <b>EXIF</b> Information of a photo by using its properties dialog?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could edit the <b>Exif</b> informations of a photo by using its properties dialog?
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that each photo has a context menu that can be reached by clicking on it with the right mouse button?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that each photo has a context menu that can be reached by clicking on it with the right mouse button?
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that albums in Digikam are Folders in your Album Library? So you could easily import your Photos by simply copying them to your Album Library.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that albums in Digikam are Folders in your Album Library? So you could easily imported your Photos by simply copying them to your Album Library.
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you could customize your digikam toolbars using Settings -> Configure Toolbars...?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could customize your digikam toolbars using Settings -> Configure Toolbars...?
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating Digikam.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that Digikam registers itself as a <b>DCOP</b> Server? So you could write your own scripts automating Digikam.
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|General">
-<html>
-<p>Did you know that there is a Digikam hotplugging howto available at
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that there is a Digikam hotplugging howto available at
 <a href="http://digikam.free.fr/hotplug/howto.html">http://digikam.free.fr/hotplug/howto.html</a> ?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+</td>
+</tr></table></p></html>
 </tip>
-
 
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you could reach other users and Digikam developers using the digikam-users mailing list? Subscribe yourself to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could reach other users and Digikam developers using the digikam-users mailing list? Subscribe yourself to the list using <a href="https://lists.sourceforge.net/lists/listinfo/digikam-users">https://lists.sourceforge.net/lists/listinfo/digikam-users</a>.
+</td>
+</tr></table></p></html>
 </tip>
-
 
 <tip category="Digikam|General">
-<html>
-<p>Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://digikam.sourceforge.net/plugins.html">http://digikam.sourceforge.net/plugins.html</a>.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that Digikam has multiple Plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information about this at <a href="http://digikam.sourceforge.net/plugins.html">http://digikam.sourceforge.net/plugins.html</a>.
+</td>
+</tr></table></p></html>
 </tip>
-
 
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you have direct access to the KDE Gamma Configuration using Tools -> Gamma calibration?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you have direct access to the KDE Gamma Configuration using Tools -> Gamma calibration?
+</td>
+</tr></table></p></html>
 </tip>
-
 
 <tip category="Digikam|General">
-<html>
-<p>Did you know that you could print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
+</td>
+</tr></table></p></html>
 </tip>
 
+<tip category="Digikam|General">
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
+</td>
+</tr></table></p></html>
+</tip>
+
+<tip category="Digikam|General">
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
+</td>
+</tr></table></p></html>
+</tip>
+
+<tip category="Digikam|General">
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that Digikam use Kipi plugins who can be used also in Kimdaba, Showimg, and Gwenview programs?
+</td>
+</tr></table></p></html>
+</tip>
+
+<tip category="Digikam|General">
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that because PNG file format use a lossless compression algorithm, you can use the max compression level with this file format?
+</td>
+</tr></table></p></html>
+</tip>
 
 <tip category="Digikam|ImageEditor">
-<html>
-<p>Did you know that you could use <Page Down> and <Page Up> on your Keyboard to switch between the photos in the image editor?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you can print the current image opened in the Digikam image editor?
+</td>
+</tr></table></p></html>
 </tip>
-
-
-<tip category="Digikam|General">
-<html>
-<p>Did you know that you can use <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
-</tip>
-
-
-<tip category="Digikam|General">
-<html>
-<p>Did you know that the all options in a dialog box have <b>What's this?</b> information available with the right mouse button?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
-</tip>
-
-
-<tip category="Digikam|General">
-<html>
-<p>Did you know that Digikam use Kipi plugins who can be used also in Kimdaba, Showimg, and Gwenview programs?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
-</tip>
-
-
-<tip category="Digikam|General">
-<html>
-<p>Did you know that because PNG file format use a lossless compression algorithm, you can use the max compression level with this file format ?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
-</tip>
-
 
 <tip category="Digikam|ImageEditor">
-<html>
-<p>Did you know that you can print the current image opened in the Digikam image editor?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you can edit the comments of the current image opened in the Digikam image editor?
+</td>
+</tr></table></p></html>
 </tip>
 
-
 <tip category="Digikam|ImageEditor">
-<html>
-<p>Did you know that you can edit the comments of the current image opened in the Digikam image editor?
-</p>
-<br>
-<center>
-<img src="hicolor/48x48/apps/digikam.png">
-</center>
-</html>
+<html><p><table border="0" cellpadding="0" cellspacing="10" align="center"><tr>
+<td><img src="hicolor/48x48/apps/digikam.png"></td>
+<td>
+Did you know that you could use <Page Down> and <Page Up> on your Keyboard to switch between the photos in the image editor?
+</td>
+</tr></table></p></html>
 </tip>
