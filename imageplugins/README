@@ -7,16 +7,16 @@ http://extragear.kde.org/apps/digikamimageplugins
 
 Resume :
 ----------------------------------------------------------------------
-Digikam uses a plugin architecture for additional functionality in ImageEditor.
+digiKam uses a plugin architecture for additional functionality in ImageEditor.
 Currently implemented plugins are:
 
  1) AdjustLevels     : A plugin for to adjust the image histogram levels manually.
  2) SolarizeImage    : A plugin for to solarize an image.
- 3) Despeckle        : A noise reduction filter (based on Gimp 2.0 algorithm).
+ 3) Despeckle        : A noise reduction filter (based on Gimp 2.x algorithm).
  4) OilPaint         : An oil painting effect filter.
  5) Emboss           : An embossed image effect filter.
  6) Charcoal         : A charcoal drawing image effect filter.
- 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.0 algorithm).
+ 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.x algorithm).
  8) RainDrop         : Adding Raindrops randomly in an image.
  9) FilmGrain        : Adding film grain in an image.
 10) FreeRotation     : Perform an image rotation with a free angle in degrees.
@@ -34,7 +34,7 @@ Currently implemented plugins are:
 22) DistortionFX     : Distortion special effects package. 
 23) Texture          : A tool to apply a decorative texture to an image.
 24) WhiteBalance     : A tool to correct image white color balance.
-25) Restoration      : An advanced filter to restore photograph.
+25) Restoration      : An advanced filter to restore photograph using CImg library.
 
 Contact :
 -----------------------------------------------------------------------
