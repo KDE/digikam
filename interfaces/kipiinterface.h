@@ -43,6 +43,8 @@
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
 #include <libkipi/imageinfo.h>
+#include <libkipi/imageinfoshared.h>
+#include <libkipi/imagecollectionshared.h>
 
 namespace Digikam
 {
@@ -57,12 +59,75 @@ class ImageCollection;
 class ImageInfo;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class DigikamImageInfo :public KIPI::ImageInfoShared
+{
+public:
+    DigikamImageInfo( KIPI::Interface* interface, const KURL& url );
+    ~DigikamImageInfo();
+    
+    virtual QString title();
+    virtual void setTitle( const QString& );
+
+    virtual QString description();
+    virtual void setDescription( const QString& );
+
+    virtual QMap<QString,QVariant> attributes();
+    virtual void clearAttributes();
+    virtual void addAttributes( const QMap<QString,QVariant>& );
+
+    virtual int angle();
+    virtual void setAngle( int );
+
+    virtual QDateTime time( KIPI::TimeSpec what );
+    virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec );
+    virtual bool isTimeExact();
+
+    virtual void cloneData( ImageInfoShared* other );
+
+private:
+    QString imageName_;
+    QString albumName_;
+    QString imageComments_;
+    Digikam::AlbumInfo *album_;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class DigikamImageCollection :public KIPI::ImageCollectionShared
+{
+public:
+    enum Type { CurrentAlbum, CurrentSelection, SubClass };
+
+    DigikamImageCollection( Type tp );
+    ~DigikamImageCollection();
+    
+    virtual QString name();
+    virtual QString comment();
+    virtual KURL::List images();
+    virtual KURL path();
+    virtual KURL uploadPath();
+    virtual KURL uploadRoot();
+
+protected:
+    KURL commonRoot();
+
+private:
+    Type _tp;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KipiInterface : public KIPI::Interface
 {
     Q_OBJECT
 
 public:
-    KipiInterface( QObject *parent, const char *name=0, Digikam::AlbumManager *albumM=0);
+    KipiInterface( QObject *parent, const char *name=0);
     ~KipiInterface();
     
     virtual KIPI::ImageCollection currentAlbum();

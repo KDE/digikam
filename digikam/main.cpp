@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                           "0.6.3",
                           description,
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2003, Digikam developers team"),
+                          I18N_NOOP("(c) 2002-2004, Digikam developers team"),
                           0,
                           "http://digikam.sourceforge.net",
                           "digikam-users@list.sourceforge.net");

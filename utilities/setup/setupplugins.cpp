@@ -58,10 +58,8 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    m_pluginList->addColumn( i18n( "Description" ) );
    m_pluginList->setResizeMode( QListView::LastColumn );
    m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, i18n("<p>Here you can set the list of plugins "
-                                       "to be loaded/unloaded from/to the current "
-                                       "Digikam instance; at the next instance this list "
-                                       "will be used during initialization."));
+   QWhatsThis::add( m_pluginList, i18n("<p>Here you can see the list of plugins "
+                                       "loaded on the current Digikam instance"));
    layout->addWidget( m_pluginList );
 }
 
@@ -75,13 +73,12 @@ void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
     
     #ifdef HAVE_KIPI
     QString pluginsType = i18n("KIPI plugins");
-    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
-                                                 .arg(lista.count()));
     #else
     QString pluginsType = i18n("Digikam plugins");
-    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
-                                                 .arg(lista.count()/2));
     #endif
+
+    m_pluginsNumber->setText(i18n("%1 found: %2").arg(pluginsType)
+                                                 .arg(lista.count()/2));    
     
     while(  it != lista.end() )
         {
@@ -91,11 +88,8 @@ void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
         if (listl.contains(*it)) item->setOn(true);
         
         ++it;
-        #ifdef HAVE_KIPI
-        #else
         item->setText(1, *it);
         ++it;
-        #endif
         }
 }
 
