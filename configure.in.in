@@ -56,3 +56,15 @@ if test "$want_kipi" = "yes"; then
     AC_WARN([Can't find KIPI headers, Digikam won't be compiled with KIPI support])
   fi
 fi
+
+#------------------------------------------------------------------
+# Check for Libkexif
+#------------------------------------------------------------------
+
+KDE_CHECK_HEADER(libkexif/kexif.h, have_kexif=yes, have_kexif=no)
+
+if test "$have_kexif" = "no"; then
+  AC_WARN([Can't find Libkexif headers, Digikam won't be compiled.])
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+fi
+

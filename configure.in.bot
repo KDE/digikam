@@ -15,9 +15,9 @@ if test -z "$GPHOTO_CONFIG" ; then
   echo ""
 fi
 
-if test "$NO_LIBEXIF" = "yes"; then
+if test "$have_kexif" = "no"; then
   echo ""
-  echo "DigiKam needs libexif. You need to install libexif, e.g. from"
-  echo "http://libexif.sourceforge.net"
+  echo "DigiKam needs libkexif. You need to install libexif from the"
+  echo "kdeextragear-libs-1 package first."
   echo ""
 fi

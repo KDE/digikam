@@ -1,1 +1,1 @@
-SUBDIRS = kexif imageviewer splashscreen setup 
+SUBDIRS = imageviewer splashscreen setup 
