@@ -25,10 +25,10 @@ int main(int argc, char **argv)
                       version,
 		      description,
 		      KAboutData::License_GPL,
-                      "(C) 2003 Renchi Raju",
+                      "(C) 2002-2004, Digikam developers team",
 		      0,
 		      "http://digikam.sourceforge.net",
-		      "renchi at pooh.tam.uiuc.edu");
+		      "digikam-users@list.sourceforge.net");
 
     about.addAuthor ( "Renchi Raju",
                       I18N_NOOP("coordinator and main developer"),
