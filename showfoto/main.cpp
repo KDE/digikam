@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KGlobal::locale()->setMainCatalogue( "digikam" );
+    KGlobal::locale()->insertCatalogue("digikamimageplugins");
 
     KApplication app;
     KImageIO::registerFormats();
