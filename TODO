@@ -58,19 +58,20 @@ Thumnails interface:
 
 o Using embedded image for thumnails generation.
 o Provide an interface for RAW files thumbs.
-o EXIF autorotate.
+* EXIF autorotate.                                                 <Ralf Holzer    - 0.6.3>
 
   
 Image Viever/Editor:
 --------------------
 
 * Port from imlib1 to imlib2.                                      <Gilles Caulier - 0.6.3>
+* New BCG setting dialog with slidders.                            <Gilles Caulier - 0.6.3>
 - Added RedEyes correction.                                        <Gilles Caulier - 0.6.3>
 - Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.6.3>
 - Added Settings dialog.                                           <Gilles Caulier - 0.6.3>
 - Build a main popup menu like the Gimp.                           <Gilles Caulier - 0.6.3>
-- New BCG setting dialog with slidders.                            <Gilles Caulier - 0.6.3>
-o Add multithread interface for printing.
+o Added progress bar during loadin/save action.
+o Added multithread interface for printing.
 o Added dockable toolbars.
 o Added Plugins interface.
 o Added Blur/Sharpen image filters.
