@@ -19,32 +19,27 @@
  *
  * ============================================================ */
 
-// Qt includes.
-
-#include <qframe.h>
-#include <qlabel.h>
-#include <qtextedit.h>
-#include <qcheckbox.h>
+// Qt includes. 
+ 
 #include <qlayout.h>
+#include <qcolor.h>
+#include <qframe.h>
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qlistview.h>
-#include <qguardedptr.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
-#include <qcursor.h> 
+#include <qlabel.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qcombobox.h>
+#include <qspinbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
- 
+
 #include <klocale.h>
-#include <kurl.h>
-#include <kdebug.h>
-#include <kapplication.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <ktextedit.h>
+#include <kselect.h>
+#include <kdialogbase.h>
 #include <kdeversion.h>
+#include <kapplication.h>
 
 // LibKexif includes.
 
@@ -53,6 +48,10 @@
 #include <libkexif/kexifdata.h>
 
 // Local includes.
+
+#include "imagehistogram.h"
+#include "histogramwidget.h"
+#include "colorgradientwidget.h"
 
 #include "albumfolderview.h"
 #include "albumfolderitem.h"
@@ -63,91 +62,21 @@
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
-#include "tagcreatedlg.h"
+
 #include "imageproperties.h"
 
-class TAlbumCheckListItem : public QCheckListItem
-{
-public:
-
-    TAlbumCheckListItem(QListView* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle()),
-          m_album(album)
-        {}
-    
-    TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle(), QCheckListItem::CheckBox),
-          m_album(album)
-        {}
-
-    TAlbum* m_album;
-};
 
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
-    : KDialogBase(Plain, i18n("Image Comments/Tags"), Help|User1|User2|Stretch|Ok|Apply|Cancel,
-                  Ok, view, 0, true, true, 
-                  KStdGuiItem::guiItem(KStdGuiItem::Forward), 
-                  KStdGuiItem::guiItem(KStdGuiItem::Back))
+               : KDialogBase(Plain, i18n("Image Properties"), Help|User1|User2|Stretch|Ok|Apply|Cancel,
+                             Ok, view, 0, true, true, 
+                             KStdGuiItem::guiItem(KStdGuiItem::Forward), 
+                             KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
-    setHelp("tagscommentsedit.anchor", "digikam");
+    setHelp("imageproperties.anchor", "digikam");
     m_view     = view;
     m_currItem = currItem;
     m_lister   = view->albumLister();
 
-    QGridLayout *topLayout = new QGridLayout(plainPage(), 3, 2, 5, spacingHint());
-
-    QGroupBox  *thumbBox = new QGroupBox(plainPage());
-    QVBoxLayout *thumbBoxLayout = new QVBoxLayout(thumbBox, marginHint(),
-                                                  spacingHint());
-    m_thumbLabel = new QLabel(thumbBox);
-    m_thumbLabel->setFixedSize(256, 256);
-    m_thumbLabel->setScaledContents(false);
-    m_thumbLabel->setAlignment(Qt::AlignCenter);
-    thumbBoxLayout->addWidget(m_thumbLabel, 0, Qt::AlignCenter);
-    m_nameLabel = new QLabel(thumbBox);
-    thumbBoxLayout->addWidget(m_nameLabel, 0, Qt::AlignCenter);
-    topLayout->addWidget(thumbBox, 0, 0);
-
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
-    m_commentsEdit = new KTextEdit(commentsBox);
-#if KDE_IS_VERSION(3,2,0)
-    m_commentsEdit->setCheckSpellingEnabled(true);
-#endif
-    topLayout->addWidget(commentsBox, 1, 0);
-
-    QVGroupBox* tagsBox = new QVGroupBox(i18n("Tags"), plainPage());
-    m_tagsView = new QListView(tagsBox);
-    topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
-
-    m_autoSaveBox = new QCheckBox(i18n("Automatically save comments and tags "
-                           "when navigating between items"),
-                          plainPage());
-    topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
-    kapp->config()->setGroup("Image Description Dialog");
-    m_autoSaveBox->setChecked(kapp->config()->readBoolEntry("Auto Save", true));
-    
-    m_tagsView->addColumn("Tags");
-    m_tagsView->header()->hide();
-    m_tagsView->setSelectionMode(QListView::Single);
-    m_tagsView->setResizeMode(QListView::LastColumn);
-    populateTags();
-
-    connect(m_commentsEdit, SIGNAL(textChanged()),
-            SLOT(slotModified()));
-    
-    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*, 
-            const QPoint &, int)), this, 
-            SLOT(slotRightButtonClicked(QListViewItem*, 
-            const QPoint&, int)));
-            
-    slotItemChanged();
-
-    resize(configDialogSize("Image Description Dialog"));
-
-    m_commentsEdit->installEventFilter(this);
-    m_tagsView->installEventFilter(this);
-    
-    m_commentsEdit->setFocus();
 }
 
 ImageProperties::~ImageProperties()
@@ -156,175 +85,45 @@ ImageProperties::~ImageProperties()
         m_thumbJob->kill();
     
     kapp->config()->setGroup("Image Description Dialog");
-    kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
+//    kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
     saveDialogSize("Image Description Dialog");
-}
-
-bool ImageProperties::eventFilter(QObject *, QEvent *e)
-{
-    if ( e->type() == QEvent::KeyPress )
-    {
-        QKeyEvent *k = (QKeyEvent *)e;
-        if (k->state() == Qt::ControlButton &&
-            (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            slotApply();
-            AlbumIconItem* item =
-                dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-            if (item)
-            {
-                slotUser1();
-            }
-            return true;
-        }
-        else if (k->state() == Qt::ShiftButton &&
-                 (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            slotApply();
-            AlbumIconItem* item =
-                dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
-            if (item)
-            {
-                slotUser2();
-            }
-            return true;
-        }
-        
-        return false;
-    }
-    return false;
-}
-
-
-void ImageProperties::populateTags()
-{
-    m_tagsView->clear();
-
-    TAlbum* rootTag = AlbumManager::instance()->findTAlbum(0);
-    if (!rootTag)
-        return;
-
-    TAlbumCheckListItem* item = new TAlbumCheckListItem(m_tagsView, rootTag);
-    item->setPixmap(0, rootTag->getPixmap());
-    item->setOpen(true);
-    populateTags(item, rootTag);
-}
-
-void ImageProperties::populateTags(QCheckListItem* parItem, TAlbum* parAlbum)
-{
-    TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-    if (!child)
-        return;
-
-    while (child)
-    {
-        TAlbumCheckListItem* item = new TAlbumCheckListItem(parItem, child);
-        item->setPixmap(0, child->getPixmap());
-        item->setOpen(true);
-        populateTags(item, child);
-        child = dynamic_cast<TAlbum*>(child->next());
-    }
-}
-
-void ImageProperties::slotModified()
-{
-    m_modified = true;
+    
+    // For histogram viever.
+    if ( m_histogramWidget )
+       delete m_histogramWidget;
+    
+    if ( m_hGradient )        
+       delete m_hGradient;
 }
 
 void ImageProperties::slotUser1()
 {
-    if (!m_currItem)
+/*    if (!m_currItem)
         return;
 
     if (m_autoSaveBox->isChecked())
     slotApply();    
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-    slotItemChanged();
+    slotItemChanged();*/
 }
 
 void ImageProperties::slotUser2()
 {
-    if (!m_currItem)
+    /*if (!m_currItem)
         return;
     
     if (m_autoSaveBox->isChecked())
     slotApply();    
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
-    slotItemChanged();
-}
-
-void ImageProperties::slotApply()
-{
-    if (!m_currItem)
-        return;
-
-    KURL fileURL(m_currItem->fileItem()->url());    
-    
-    PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
-    if (!album)
-    {
-        kdWarning() << "Failed to find parent album for"
-                    << m_currItem->fileItem()->url().prettyURL()
-                    << endl;
-        return;
-    }
-
-    AlbumDB* db  = AlbumManager::instance()->albumDB();
-
-    if (m_modified)
-    {
-        db->setItemCaption(album, fileURL.fileName(), m_commentsEdit->text());
-
-        if (AlbumSettings::instance() &&
-            AlbumSettings::instance()->getSaveExifComments())
-        {
-            // store as JPEG Exif comment
-            KFileMetaInfo metaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
-
-            // set Jpeg comment
-             if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
-                 && metaInfo.containsGroup("Jpeg EXIF Data"))
-            {
-                kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                          << endl;
-                metaInfo["Jpeg EXIF Data"].item("Comment")
-                    .setValue(m_commentsEdit->text());
-                metaInfo.applyChanges();
-            }
-
-            // set EXIF UserComment
-            //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
-        }
-        
-        m_modified = false;
-    }
-
-    db->removeItemAllTags(album, fileURL.fileName());
-    QListViewItemIterator it(m_tagsView);
-    while (it.current())
-    {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->isOn())
-        {
-            db->setItemTag(album, fileURL.fileName(), tItem->m_album);
-        }
-        ++it;
-    }
-}
-
-void ImageProperties::slotOk()
-{
-    slotApply();
-    KDialogBase::slotOk();    
+    slotItemChanged();*/
 }
 
 void ImageProperties::slotItemChanged()
 {
-    if (!m_currItem)
+/*    if (!m_currItem)
         return;
 
     m_modified = false;
@@ -384,157 +183,326 @@ void ImageProperties::slotItemChanged()
     }
 
     enableButton(User1, m_currItem->nextItem() != 0);
-    enableButton(User2, m_currItem->prevItem() != 0);
+    enableButton(User2, m_currItem->prevItem() != 0);*/
 }
 
-void ImageProperties::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                     const KFileMetaInfo*)
-{
-    m_thumbLabel->setPixmap(pix);
-}
 
-void ImageProperties::slotRightButtonClicked(QListViewItem *item, 
-                                           const QPoint &, int )
+//-----------------------------------------------------------------------------------------------------------
+// Histogram Viewer implementation methods
+
+void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint height)
 {
-    TAlbum              *album;
-    TAlbumCheckListItem *albumItem = 0;
+    QFrame *page = addPage( i18n("&Histogram"));
+   
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+
+    // -------------------------------------------------------------
+                                              
+    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     
-    if (!item) 
-    {
-        album = AlbumManager::instance()->findTAlbum(0);
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(m_tagsView->firstChild());
-    }
-    else 
-    {
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
-
-        if(!albumItem)
-            album = AlbumManager::instance()->findTAlbum(0);
-        else
-            album = albumItem->m_album;
-    }
-
-    if(!album)
-        return;    
-            
-    QPopupMenu popmenu(this);
-
-    popmenu.insertItem(SmallIcon("tag"),
-                       i18n("New Tag"), 10);
-    if (!album->isRoot())
-    {                       
-        popmenu.insertItem(SmallIcon("pencil"),
-                           i18n("Edit Tag Properties"), 11);
-        popmenu.insertItem(SmallIcon("edittrash"),
-                           i18n("Delete Tag"), 12);
-    }
+    QLabel *imagePreview = new QLabel( page );
+    imagePreview->setFixedHeight( 48 );
+    QImage image;
+    QPixmap pix;
+    image.create( width, height, 32 );
+    image.setAlphaBuffer(true) ;
+    memcpy(image.bits(), imageData, image.numBytes());
+    image = image.smoothScale(48, 48, QImage::ScaleMin);
+    pix.convertFromImage(image);
+    imagePreview->setPixmap(pix);
+    hlay->addWidget(imagePreview);
+           
+    QGridLayout *grid = new QGridLayout(hlay, 2, 4);
     
-    switch (popmenu.exec(QCursor::pos()))
-    {
-    case 10:
-    {
-        tagNew(album, albumItem);
-        break;
-    }
-    case 11:
-    {
-        if (!album->isRoot())
-            tagEdit(album);
-        break;
-    }
-    case 12:
-    {
-        if (!album->isRoot()) 
-            tagDelete(album, albumItem);
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-void ImageProperties::tagNew(TAlbum* parAlbum, QCheckListItem *item)
-{
-    if(!parAlbum || !item)
-        return;
+    QLabel *label1 = new QLabel(i18n("Channel:"), page);
+    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_channelCB = new QComboBox( false, page );
+    m_channelCB->insertItem( i18n("Luminosity") );
+    m_channelCB->insertItem( i18n("Red") );
+    m_channelCB->insertItem( i18n("Green") );
+    m_channelCB->insertItem( i18n("Blue") );
+    m_channelCB->insertItem( i18n("Alpha") );
+    m_channelCB->insertItem( i18n("Colors") );
+    m_channelCB->setCurrentText( i18n("Luminosity") );
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+                                       "<b>Luminosity</b>: drawing the image luminosity values.<p>"
+                                       "<b>Red</b>: drawing the red image channel values.<p>"
+                                       "<b>Green</b>: drawing the green image channel values.<p>"
+                                       "<b>Blue</b>: drawing the blue image channel values.<p>"
+                                       "<b>Alpha</b>: drawing the alpha image channel values. " 
+                                       "This channel corresponding to the transparency value and "
+                                       "is supported by some image formats such as PNG or GIF.<p>"
+                                       "<b>Colors</b>: drawing all color channels values at the same time."));
+    
+    QLabel *label2 = new QLabel(i18n("Scale:"), page);
+    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_scaleCB = new QComboBox( false, page );
+    m_scaleCB->insertItem( i18n("Linear") );
+    m_scaleCB->insertItem( i18n("Logarithmic") );
+    m_scaleCB->setCurrentText( i18n("Logarithmic") );
+    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+                                     "If the image maximal counts is small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts is big. "
+                                     "Like this all values (small and big) will be visible on the graph."));
+    
+    QLabel *label10 = new QLabel(i18n("Colors:"), page);
+    label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_colorsCB = new QComboBox( false, page );
+    m_colorsCB->insertItem( i18n("Red") );
+    m_colorsCB->insertItem( i18n("Green") );
+    m_colorsCB->insertItem( i18n("Blue") );
+    m_colorsCB->setCurrentText( i18n("Red") );
+    m_colorsCB->setEnabled( false );
+    QWhatsThis::add( m_colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
+                                       "<b>Red</b>: drawing the red image channel on the foreground.<p>"
+                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
+                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
+                                     
+    grid->addWidget(label1, 0, 0);
+    grid->addWidget(m_channelCB, 0, 1);
+    grid->addWidget(label2, 0, 2);
+    grid->addWidget(m_scaleCB, 0, 3);
+    grid->addWidget(label10, 1, 0);
+    grid->addWidget(m_colorsCB, 1, 1);
+    
+    // -------------------------------------------------------------
+    
+    QFrame *frame = new QFrame( page );
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, 
+                                                     imageData,
+                                                     width,
+                                                     height,
+                                                     frame);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
+    l->addWidget(m_histogramWidget, 0);
         
-    QString title, icon;
-    AlbumManager *albumMan_ = AlbumManager::instance();
-    
-    if (!TagCreateDlg::tagCreate(parAlbum, title, icon))
-        return;
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
+    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    topLayout->addWidget(frame, 4);
+    topLayout->addWidget(m_hGradient, 0);
 
-    QString errMsg;
-    if (!albumMan_->createTAlbum(parAlbum, title, icon, errMsg))
-    {
-        KMessageBox::error(0, errMsg);
-    }
-    else
-    {
-        TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-        while (child)
-        {
-            if (child->getTitle() == title)
-            {
-                new TAlbumCheckListItem(item, child);
-                return;
-            }
-            child = dynamic_cast<TAlbum*>(child->next());
-        }
-    }
+    // -------------------------------------------------------------
+
+    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
+    QLabel *label3 = new QLabel(i18n("Intensity range:"), page);
+    label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    m_minInterv = new QSpinBox(0, 255, 1, page);
+    m_minInterv->setValue(0);
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the minimal intensity "
+                                       "value of the histogram selection."));    
+    m_maxInterv = new QSpinBox(0, 255, 1, page);
+    m_maxInterv->setValue(255);
+    QWhatsThis::add( m_minInterv, i18n("<p>Select here the maximal intensity value "
+                                       "of the histogram selection."));
+    hlay2->addWidget(label3);
+    hlay2->addWidget(m_minInterv);
+    hlay2->addWidget(m_maxInterv);
+    
+    // -------------------------------------------------------------
+    
+    QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
+    QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
+                                "selected histogram part. These values are available for all channels."));
+                                
+    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
+    label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelMeanValue = new QLabel(gbox);
+    m_labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
+    label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelPixelsValue = new QLabel(gbox);
+    m_labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    QLabel *label6 = new QLabel(i18n("Standard deviation:"), gbox);
+    label6->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelStdDevValue = new QLabel(gbox);
+    m_labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+
+    QLabel *label7 = new QLabel(i18n("Count:"), gbox);
+    label7->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelCountValue = new QLabel(gbox);
+    m_labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    QLabel *label8 = new QLabel(i18n("Median:"), gbox);
+    label8->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelMedianValue = new QLabel(gbox);
+    m_labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
+    label9->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_labelPercentileValue = new QLabel(gbox);
+    m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    topLayout->addWidget(gbox);
+    topLayout->addStretch();
+
+    // -------------------------------------------------------------
+    
+    connect(m_channelCB, SIGNAL(activated(int)),
+            this, SLOT(slotChannelChanged(int)));
+    
+    connect(m_scaleCB, SIGNAL(activated(int)),
+            this, SLOT(slotScaleChanged(int)));
+    
+    connect(m_colorsCB, SIGNAL(activated(int)),
+            this, SLOT(slotColorsChanged(int)));            
+ 
+    connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
+            this, SLOT(slotUpdateMinInterv(int)));
+       
+    connect(m_histogramWidget, SIGNAL(signalMouseReleased( int )),
+            this, SLOT(slotUpdateMaxInterv(int)));
+
+    connect(m_minInterv, SIGNAL(valueChanged (int)),
+            m_histogramWidget, SLOT(slotMinValueChanged(int)));
+
+    connect(m_minInterv, SIGNAL(valueChanged (int)),
+            this, SLOT(slotIntervChanged(int)));
+
+    connect(m_maxInterv, SIGNAL(valueChanged (int)),
+            m_histogramWidget, SLOT(slotMaxValueChanged(int)));
+
+    connect(m_maxInterv, SIGNAL(valueChanged (int)),
+            this, SLOT(slotIntervChanged(int)));
+    
+    updateInformations(); 
 }
 
-void ImageProperties::tagDelete(TAlbum *album, QCheckListItem *item)
+void ImageProperties::slotChannelChanged(int channel)
 {
-    if (!album || album->isRoot())
-        return;
-    
-    AlbumManager *albumMan_ = AlbumManager::instance();
-    
-    int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
-                                   .arg(album->getTitle()));
+    switch(channel)
+       {
+       case 1:           // Red.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+          m_colorsCB->setEnabled(false);
+          break;
+       
+       case 2:           // Green.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+          m_colorsCB->setEnabled(false);
+          break;
+          
+       case 3:           // Blue.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_colorsCB->setEnabled(false);
+          break;
 
-    if (result == KMessageBox::Yes)
-    {
-        QString errMsg;
-        if (!albumMan_->deleteTAlbum(album, errMsg)) 
-            KMessageBox::error(0, errMsg);
-    }
-
-    if(item)
-        delete item;    
+       case 4:           // Alpha.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(false);
+          break;
+          
+       case 5:           // All color channels.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(true);
+          break;
+                              
+       default:          // Luminosity.
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+          m_colorsCB->setEnabled(false);
+          break;
+       }
+   
+    m_histogramWidget->repaint(false);
+    updateInformations();
 }
 
-
-void ImageProperties::tagEdit(TAlbum* album)
+void ImageProperties::slotScaleChanged(int scale)
 {
-    if (!album || album->isRoot())
-        return;
-
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
-
-    AlbumFolderView* folderView =
-        static_cast<AlbumFolderView*>(folderItem->listView());
-    folderView->tagEdit(album);
-
-    // Now update the icon/title of the corresponding checklistitem
-
-    QListViewItemIterator it(m_tagsView);
-    while (it.current())
-    {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->m_album == album)
-        {
-            tItem->setText(0, album->getTitle());
-            tItem->setPixmap(0, album->getPixmap());
-        }
-        ++it;
-    }
-    
+    switch(scale)
+       {
+       case 1:           // Log.
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
+          break;
+          
+       default:          // Lin.
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
+          break;
+       }
+   
+    m_histogramWidget->repaint(false);
 }
+
+void ImageProperties::slotColorsChanged(int color)
+{
+    switch(color)
+       {
+       case 1:           // Green.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::GreenColor;
+          break;
+       
+       case 2:           // Blue.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::BlueColor;
+          break;
+
+       default:          // Red.
+          m_histogramWidget->m_colorType = Digikam::HistogramWidget::RedColor;
+          break;
+       }
+
+    m_histogramWidget->repaint(false);
+    updateInformations();
+}
+
+void ImageProperties::slotUpdateMinInterv(int min)
+{
+    m_minInterv->setValue(min);
+}
+
+
+void ImageProperties::slotUpdateMaxInterv(int max)
+{
+    m_maxInterv->setValue(max);
+    updateInformations();
+}
+
+void ImageProperties::slotIntervChanged(int)
+{
+    m_maxInterv->setMinValue(m_minInterv->value());
+    m_minInterv->setMaxValue(m_maxInterv->value());
+    updateInformations();
+}
+
+void ImageProperties::updateInformations()
+{
+    QString value;
+    int min = m_minInterv->value();
+    int max = m_maxInterv->value();
+    int channel = m_channelCB->currentItem();
+
+    if ( channel == Digikam::HistogramWidget::ColorChannelsHistogram )
+       channel = m_colorsCB->currentItem()+1;
+               
+    double mean = m_histogramWidget->m_imageHistogram->getMean(channel, min, max);
+    m_labelMeanValue->setText(value.setNum(mean, 'f', 1));
+    
+    double pixels = m_histogramWidget->m_imageHistogram->getPixels();
+    m_labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
+    
+    double stddev = m_histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
+    m_labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
+      
+    double counts = m_histogramWidget->m_imageHistogram->getCount(channel, min, max);
+    m_labelCountValue->setText(value.setNum((float)counts, 'f', 0));
+    
+    double median = m_histogramWidget->m_imageHistogram->getMedian(channel, min, max);
+    m_labelMedianValue->setText(value.setNum(median, 'f', 1)); 
+
+    double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
+    m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
+}
+
+//-----------------------------------------------------------------------------------------------------------
 
 
 #include "imageproperties.moc"
