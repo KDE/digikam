@@ -3,7 +3,7 @@
 #---------------------------------------------------------
 # checking for Imlib...
 
-AC_DEFUN(KDE_FIND_IMLIB_CONFIG,
+AC_DEFUN([KDE_FIND_IMLIB_CONFIG],
    [AC_MSG_CHECKING([for imlib-config])
 
 imlib_config_given=NO
