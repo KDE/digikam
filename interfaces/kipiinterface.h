@@ -37,6 +37,7 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <kio/job.h>
 
 // KIPI Includes.
 
@@ -59,6 +60,16 @@ class ImageCollection;
 class ImageInfo;
 }
 
+/*
+class DigikamAlbumAddImageJob : public KIO::job
+{
+    Q_OBJECT
+
+public:
+    DigikamAlbumAddImageJob();
+
+};
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -108,7 +119,7 @@ protected:
     Digikam::AlbumInfo *album_;
     
     KURL commonRoot();
-
+    
 private:
     Type _tp;
 };
@@ -126,6 +137,7 @@ public:
     
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
+    virtual KIPI::ImageCollection currentScope();
     virtual QValueList<KIPI::ImageCollection> allAlbums();
     virtual KIPI::ImageInfo info( const KURL& );
     virtual bool addImage( const KURL&, QString& errmsg );
@@ -133,6 +145,9 @@ public:
     virtual void refreshImages( const KURL::List& urls );
     virtual int features() const;
 
+protected slots:
+    void slot_onAddImageFinished(KIO::Job* job);
+    
 protected:
     QString askForCategory();
     

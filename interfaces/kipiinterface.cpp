@@ -30,7 +30,9 @@
 
 #include <klocale.h>
 #include <kfilemetainfo.h>
+#include <kio/netaccess.h>
 #include <libkexif/kexifdata.h>
+#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +49,7 @@ DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url 
                 : KIPI::ImageInfoShared( interface, url )
 {
     imageName_ = url.fileName();
-    imageUrl_ = url.path();
+    imageUrl_  = url.path();
     albumName_ = url.path().section('/', -2, -2);
     
     if (albumName_.isEmpty() == false && imageName_.isEmpty() == false)
@@ -121,32 +123,19 @@ QMap<QString,QVariant> DigikamImageInfo::attributes()
 {
     QMap<QString,QVariant> res;
     
-    // FIXME !
-    
-    /*if ( _info ) {
-        for( QMapIterator<QString,QStringList> it = _info->_options.begin(); it != _info->_options.end(); ++it ) {
-            res.insert( it.key(), QVariant( it.data() ) );
-        }
-    }*/
+    // TODO !
     
     return res;
 }
 
 void DigikamImageInfo::clearAttributes()
 {
-    // FIXME !
+    // TODO !
 }
 
 void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
 {
-    // FIXME !
-    
-    /*if ( _info ) {
-        for( QMapConstIterator<QString,QVariant> it = map.begin(); it != map.end(); ++it ) {
-            QStringList list = it.data().toStringList();
-            _info->addOption( it.key(), list );
-        }
-    }*/
+    // TODO !
 }
 
 
@@ -155,9 +144,9 @@ void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& map )
 DigikamImageCollection::DigikamImageCollection( Type tp, Digikam::AlbumInfo *album )
                       : _tp( tp )
 {
-    if (album)
+    if (album)           // A specific Album has been specified !
        album_ = album;
-    else
+    else                 // Using the curent selected Album !
        album_ = Digikam::AlbumManager::instance()->currentAlbum();
 }
 
@@ -270,6 +259,17 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
     return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection ) );
 }
 
+KIPI::ImageCollection DigikamKipiInterface::currentScope()
+{
+    DigikamImageCollection *images = new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection );
+    
+    if ( images->images().isEmpty() == false )
+        return currentSelection();
+    else
+        return currentAlbum();
+}
+
+
 QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
     QValueList<KIPI::ImageCollection> result;
@@ -305,31 +305,59 @@ int DigikamKipiInterface::features() const
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 {
-    /*QString dir = url.path();
-    QString root = Options::instance()->imageDirectory();
-    if ( !dir.startsWith( root ) ) {
-        errmsg = i18n("<qt>Image needs to be placed in a sub directory of the KimDaBa image database, "
-                      "which is rooted at %1. Image path was %2</qt>").arg( root ).arg( dir );
-        return false;
-    }
-
-    dir = dir.mid( root.length() );
-    ImageInfo* info = new ImageInfo( dir );
-    ImageDB::instance()->addImage( info );*/
-    
-    return true;      // FIXME !
+    DigikamImageCollection *currentAlbum = new DigikamImageCollection( DigikamImageCollection::AllAlbumItems );
+        
+    if ( url.isValid() == false )
+       {
+       errmsg = i18n("'%1' isn't a valid URL!").arg(url.path());
+       return false;
+       }
+    else 
+       {
+       KIO::CopyJob* job = KIO::copy(url, KURL(currentAlbum->path()), true);
+       
+       connect(job, SIGNAL(result(KIO::Job*)),
+               this, SLOT(slot_onAddImageFinished(KIO::Job*)));
+       
+       return true;
+       }
 }
+
+void DigikamKipiInterface::slot_onAddImageFinished(KIO::Job* job)
+{
+    if (job->error())
+        job->showErrorDialog(0);
+    
+    albumManager_->refreshItemHandler(); 
+}
+
 
 void DigikamKipiInterface::delImage( const KURL& url )
 {
-    /*ImageInfo* info = ImageDB::instance()->find( url.path() );
-    if ( info ) {
-        ImageInfoList list;
-        list.append( info );
-        ImageDB::instance()->deleteList( list );
-    }*/
+    // The root path is the Digikam Album library path ?
     
-    // FIXME !
+    if ( url.path().section('/', 0, -3) == albumManager_->getLibraryPath() )
+       {
+       // There is an Album with the Album name include in the 'url' ?
+       
+       Digikam::AlbumInfo *album = albumManager_->findAlbum( url.path().section('/', -2, -2));
+    
+       if ( album )
+          {
+          if ( KIO::NetAccess::del(url) == false )
+             {
+             kdWarning() << "DigikamKipiInterface::delImage : Cannot delete an image !!!" << endl;
+             }
+          }
+       else 
+          {
+          kdWarning() << "DigikamKipiInterface::delImage : cannot find the Album in the Digikam Album library !!!" << endl;
+          }   
+       }
+    else 
+       {
+       kdWarning() << "DigikamKipiInterface::delImage : url isn't in the Digikam Album library !!!" << endl;
+       }   
 }
 
 #include "kipiinterface.moc"
