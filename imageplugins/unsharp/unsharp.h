@@ -31,7 +31,6 @@ class QSpinBox;
 class QSlider;
 
 class KProgress;
-class KDoubleSpinBox;
 
 namespace Digikam
 {
@@ -57,25 +56,28 @@ protected:
     
 private:
 
-    QWidget         *m_parent;
-    QPushButton     *m_helpButton;
+    QWidget     *m_parent;
     
-    KDoubleSpinBox  *m_radiusInput;
-    KDoubleSpinBox  *m_amountInput;
-    QSpinBox        *m_thresholdInput;
+    QPushButton *m_helpButton;
     
-    QSlider         *m_radiusSlider;
-    QSlider         *m_amountSlider;
-    QSlider         *m_thresholdSlider;
+    QSpinBox    *m_radiusInput;
+    QSpinBox    *m_amountInput;
+    QSpinBox    *m_thresholdInput;
     
-    KProgress       *m_progressBar;
+    QSlider     *m_radiusSlider;
+    QSlider     *m_amountSlider;
+    QSlider     *m_thresholdSlider;
+    
+    KProgress   *m_progressBar;
         
-    bool             m_cancel;
+    bool         m_cancel;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
 
-    void unsharp(uint* data, int w, int h, double radius, 
-                 double amount, int threshold);
+private:    
+    
+    void unsharp(uint* data, int w, int h, int r, 
+                 int a, int threshold);
                  
     inline void blur_line (double *ctable, double *cmatrix, int cmatrix_length,
                            uchar *cur_col, uchar *dest_col, int y, long bytes);  
@@ -92,10 +94,6 @@ private slots:
     void slotOk();
     void slotCancel();
     
-    void slotSliderRadiusChanged(int v);
-    void slotSpinBoxRadiusChanged(double v);
-    void slotSliderAmountChanged(int v);
-    void slotSpinBoxAmountChanged(double v);
 };
 
 }  // NameSpace DigikamUnsharpFilterImagesPlugin

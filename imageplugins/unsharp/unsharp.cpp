@@ -61,7 +61,6 @@
 #include <kpopupmenu.h>
 #include <kimageeffect.h>
 #include <kprogress.h>
-#include <knuminput.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
@@ -155,9 +154,10 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_radiusSlider->setTickInterval(50);
     m_radiusSlider->setTracking ( false );
     
-    m_radiusInput = new KDoubleSpinBox(0.1, 120.0, 0.1, 5.0, 1, plainPage(), "m_radiusInput");
+    m_radiusInput = new QSpinBox(1, 1200, 1, plainPage(), "m_radiusInput");
+
     whatsThis = i18n("<p>A radius of 0 has no effect, "
-                     "1 and above determine the blur matrix radius "
+                     "10 and above determine the blur matrix radius "
                      "that determines how much to blur the image.");
     
     QWhatsThis::add( m_radiusInput, whatsThis);
@@ -177,8 +177,9 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_amountSlider->setTickInterval(5);
     m_amountSlider->setTracking ( false );
     
-    m_amountInput = new KDoubleSpinBox(0.0, 5.0, 0.1, 0.5, 1, plainPage(), "m_amountInput");
-    whatsThis = i18n("<p>The percentage of the difference between the "
+    m_amountInput = new QSpinBox(0, 50, 1, plainPage(), "m_amountInput");
+        
+    whatsThis = i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back "      
                      "into the original.");
     
@@ -228,19 +229,19 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
             this, SLOT(slotEffect()));
     
     connect(m_radiusSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotSliderRadiusChanged(int)));
-    connect(m_radiusInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSpinBoxRadiusChanged(double)));            
-    connect(m_radiusInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));   
+            m_radiusInput, SLOT(setValue(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged(int)),
+            m_radiusSlider, SLOT(setValue(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                                                
 
     connect(m_amountSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotSliderAmountChanged(int)));
-    connect(m_amountInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSpinBoxAmountChanged(double)));            
-    connect(m_amountInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
-
+            m_amountInput, SLOT(setValue(int)));
+    connect(m_amountInput, SIGNAL(valueChanged(int)),
+            m_amountSlider, SLOT(setValue(int)));
+    connect(m_amountInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotEffect()));                                                            
+            
     connect(m_thresholdSlider, SIGNAL(valueChanged(int)),
             m_thresholdInput, SLOT(setValue(int)));
     connect(m_thresholdInput, SIGNAL(valueChanged(int)),
@@ -251,34 +252,6 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
 
 UnsharpDialog::~UnsharpDialog()
 {
-}
-
-void UnsharpDialog::slotSliderRadiusChanged(int v)
-{
-    blockSignals(true);
-    m_radiusInput->setValue((double)v/10.0);
-    blockSignals(false);
-}
-
-void UnsharpDialog::slotSpinBoxRadiusChanged(double v)
-{
-    blockSignals(true);
-    m_radiusSlider->setValue((int)(v*10.0));
-    blockSignals(false);
-}
-
-void UnsharpDialog::slotSliderAmountChanged(int v)
-{
-    blockSignals(true);
-    m_amountInput->setValue((double)v/10.0);
-    blockSignals(false);
-}
-
-void UnsharpDialog::slotSpinBoxAmountChanged(double v)
-{
-    blockSignals(true);
-    m_amountSlider->setValue((int)(v*10.0));
-    blockSignals(false);
 }
 
 void UnsharpDialog::slotHelp()
@@ -302,9 +275,9 @@ void UnsharpDialog::slotCancel()
 void UnsharpDialog::slotUser1()
 {
     blockSignals(true);
-    m_radiusInput->setValue(5.0);
+    m_radiusInput->setValue(50);
     m_radiusSlider->setValue(50);
-    m_amountInput->setValue(0.5);
+    m_amountInput->setValue(5);
     m_amountSlider->setValue(5);
     m_thresholdInput->setValue(0);
     m_thresholdSlider->setValue(0);
@@ -320,8 +293,8 @@ void UnsharpDialog::slotEffect()
     uint*  data = (uint *)img.bits();
     int    w    = img.width();
     int    h    = img.height();
-    double r    = m_radiusInput->value();
-    double a    = m_amountInput->value();
+    int    r    = m_radiusInput->value();
+    int    a    = m_amountInput->value();
     int    th   = m_thresholdInput->value();
     
     m_progressBar->setValue(0);            
@@ -344,8 +317,8 @@ void UnsharpDialog::slotOk()
     uint*  data = iface.getOriginalData();
     int    w     = iface.originalWidth();
     int    h     = iface.originalHeight();
-    double r     = m_radiusInput->value();
-    double a     = m_amountInput->value();
+    int    r     = m_radiusInput->value();
+    int    a     = m_amountInput->value();
     int    th    = m_thresholdInput->value();
     
     m_progressBar->setValue(0);        
@@ -359,9 +332,11 @@ void UnsharpDialog::slotOk()
     accept();
 }
 
-void UnsharpDialog::unsharp(uint* data, int w, int h, double radius, 
-                            double amount, int threshold)
+void UnsharpDialog::unsharp(uint* data, int w, int h, int r, 
+                            int a, int threshold)
 {
+    double radius = r / 10.0;
+    double amount = a / 10.0;
     int     bytes = 4;      // bpp in image.
     int     x1 = 0;         // Full image used.
     int     x2 = w;
