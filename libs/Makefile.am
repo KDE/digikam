@@ -1,1 +1,1 @@
-SUBDIRS = guibuilder histogram
+SUBDIRS = guibuilder histogram levels

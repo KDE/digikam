@@ -45,6 +45,7 @@ public:
 
     static void equalizeImage();
     static void normalizeImage();
+    static void autoLevelsCorrectionImage();
     static void testKImageEffect();
 
 };

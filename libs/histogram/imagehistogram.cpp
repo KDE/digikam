@@ -6,7 +6,7 @@
  * 
  * Copyright 2004 by Gilles Caulier
  *
- * Some code parts are inspired from from gimp 2.0
+ * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
  * This program is free software; you can redistribute it
@@ -408,5 +408,5 @@ double ImageHistogram::getMaximum(int channel)
   return max;
 }
 
-}
+}  // NameSpace Digikam
 

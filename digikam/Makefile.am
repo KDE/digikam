@@ -7,6 +7,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/sqlite \
 	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/libs/histogram \
+	-I$(top_srcdir)/digikam/libs/levels \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
@@ -34,6 +35,7 @@ libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
+		        $(top_builddir)/digikam/libs/levels/liblevels.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \

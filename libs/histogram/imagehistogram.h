@@ -79,6 +79,6 @@ private:
     bool calcHistogramValues();       
 };
 
-}
+}  // NameSpace Digikam
 
 #endif /* IMAGEHISTOGRAM_H */

@@ -98,6 +98,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotEqualize()),
                 actionCollection(), "implugcore_equalize") );                
     
+    m_colorsAction->insert(
+                new KAction(i18n("Auto levels"), 0, 
+                this, SLOT(slotAutoLevels()),
+                actionCollection(), "implugcore_autolevels") );   
+                    
     new KAction(i18n("Histogram..."), 0, 
                 this, SLOT(slotHistogramViewer()),
                 actionCollection(), "implugcore_histogramviewer");
@@ -203,6 +208,11 @@ void ImagePlugin_Core::slotNormalize()
 void ImagePlugin_Core::slotEqualize()
 {
     ImageEffect_ColorsEnhance::equalizeImage();
+}
+
+void ImagePlugin_Core::slotAutoLevels()
+{
+    ImageEffect_ColorsEnhance::autoLevelsCorrectionImage();
 }
 
 void ImagePlugin_Core::slotHistogramViewer()

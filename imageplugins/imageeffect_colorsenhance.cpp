@@ -44,6 +44,8 @@
 
 // Digikam includes.
  
+#include <imagehistogram.h>
+#include <imagelevels.h>
 #include <imageiface.h>
 
 // Local includes.
@@ -476,6 +478,48 @@ void ImageEffect_ColorsEnhance::normalizeImage()
 
     iface.putOriginalData(data);
     delete [] data;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
+{
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth();
+    int   h    = iface.originalHeight();
+
+    if (!data || !w || !h)
+       {
+       kdWarning() << ("ImageEffect_ColorsEnhance::autoLevelsCorrectionImage: no image data available!")
+                   << endl;
+       return;
+       }
+  
+  // Create an histogram of the current image.     
+  Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
+  
+  // Create an empty instance of levels to use.
+  Digikam::ImageLevels    *levels    = new Digikam::ImageLevels();      
+  
+  // Initialize an auto levels correction of the histogram.
+  levels->levelsAuto(histogram);
+
+  // Recalculate the transfer arrays.
+  levels->levelsCalculateTransfers();
+
+  // Renchi, Whats doing this method exactly ?
+  levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+  
+  // TODO : Renchi, what are doing with the lut and the level ?
+  //        Where Gimp change the original image data ?
+                    
+  iface.putOriginalData(data);
+  
+  delete [] data;
+  delete histogram;
+  delete levels;
 }
 
 //////////////////////////////////////////////////////////////////////////////

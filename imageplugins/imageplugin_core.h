@@ -58,6 +58,7 @@ private slots:
     void slotHSL();
     void slotNormalize();
     void slotEqualize();
+    void slotAutoLevels();
     void slotHistogramViewer();
     void slotBW();
     void slotSepia();
