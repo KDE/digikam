@@ -62,7 +62,7 @@ protected:
     void closeEvent(QCloseEvent *e);
     
     // Backported from ImageProcessing version 1
-    void softnerBlur(uint *data, int Width, int Height);
+    void softenerBlur(uint *data, int Width, int Height);
     void shakeBlur(uint *data, int Width, int Height, int Distance);
     void frostGlass(uint *data, int Width, int Height, int Frost);
     

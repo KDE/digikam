@@ -312,7 +312,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           m_levelLabel->setEnabled(true);
           break;
 
-       case 4: // Softner Blur.
+       case 4: // Softener Blur.
           m_distanceInput->setEnabled(false);
           m_distanceLabel->setEnabled(false);
           break;
@@ -389,8 +389,8 @@ void ImageEffect_BlurFX::slotEffect()
           motionBlur((uint *)pImg.bits(), pRect.width(), pRect.height(), d, (double)l);
           break;
 
-       case 4: // Softner Blur.
-          softnerBlur((uint *)pImg.bits(), pRect.width(), pRect.height());
+       case 4: // Softener Blur.
+          softenerBlur((uint *)pImg.bits(), pRect.width(), pRect.height());
           break;
 
        case 5: // Shake Blur.
@@ -468,7 +468,7 @@ void ImageEffect_BlurFX::slotEffect()
           m_levelLabel->setEnabled(true);
           break;
 
-       case 4: // Softner Blur.
+       case 4: // Softener Blur.
           m_distanceInput->setEnabled(false);
           m_distanceLabel->setEnabled(false);
           break;
@@ -525,8 +525,8 @@ void ImageEffect_BlurFX::slotOk()
              motionBlur(data, w, h, d, (double)l);
              break;
 
-          case 4: // Softner Blur.
-             softnerBlur(data, w, h);
+          case 4: // Softener Blur.
+             softenerBlur(data, w, h);
              break;
           
           case 5: // Shake Blur.
@@ -1310,7 +1310,7 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
     delete [] lpYArray;
 }
 
-/* Function to apply the softnerBlur effect                                            
+/* Function to apply the softenerBlur effect                                            
  *                                                                                  
  * data             => The image data in RGBA mode.                            
  * Width            => Width of image.                          
@@ -1320,7 +1320,7 @@ void ImageEffect_BlurFX::motionBlur(uint *data, int Width, int Height, int Dista
  *                     blur with 3x3 dimentions, in light tones, we apply a blur with   
  *                     5x5 dimentions. Easy, hun?
  */
-void ImageEffect_BlurFX::softnerBlur(uint *data, int Width, int Height)
+void ImageEffect_BlurFX::softenerBlur(uint *data, int Width, int Height)
 {
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
