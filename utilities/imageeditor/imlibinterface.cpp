@@ -169,15 +169,21 @@ bool ImlibInterface::load(const QString& filename)
         d->image = 0;
     }
 
-    d->width  = 0;
-    d->height = 0;
+    d->width      = 0;
+    d->height     = 0;
     d->origWidth  = 0;
     d->origHeight = 0;
-    d->selX = 0;
-    d->selY = 0;
-    d->selW = 0;
-    d->selH = 0;
+    d->selX       = 0;
+    d->selY       = 0;
+    d->selW       = 0;
+    d->selH       = 0;
+    d->gamma      = 1.0;
+    d->contrast   = 1.0;
+    d->brightness = 0.0;
 
+    imlib_context_set_color_modifier(d->cmod);
+    imlib_reset_color_modifier();
+    
     Imlib_Load_Error errorReturn;
     d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
                                                   &errorReturn);
@@ -193,9 +199,6 @@ bool ImlibInterface::load(const QString& filename)
         d->width  = d->origWidth;
         d->height = d->origHeight;
 
-        d->gamma      = 1.0;
-        d->contrast   = 1.0;
-        d->brightness = 0.0;
         valRet = true;
     }
     else {
@@ -396,11 +399,26 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
     imlib_context_set_drawable(p->handle());
     imlib_context_set_anti_alias(antialias);
 
-    // need to set this, bug in imlib2 causes crash
-    imlib_context_set_color_modifier(0);
+    imlib_context_set_color_modifier(d->cmod);
 
-    imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
-                                                dx, dy, dw, dh);
+    if (d->zoom == 1.0)
+    {
+        // this hack is needed because imlib2 renders image incorrectly
+        // if zoom == 1 and an unmodified colot modifier is applied
+        Imlib_Image tmp =
+            imlib_create_cropped_scaled_image(sx, sy, sw, sh, dw, dh);
+        if (tmp)
+        {        
+            imlib_context_set_image(tmp);
+            imlib_render_image_on_drawable(dx, dy);
+            imlib_free_image();
+        }
+    }
+    else
+    {
+        imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
+                                                    dx, dy, dw, dh);
+    }
 
     imlib_context_pop();
 }
@@ -419,8 +437,7 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
     imlib_context_set_drawable(p->handle());
     imlib_context_set_anti_alias(antialias);
 
-    // need to set this, bug in imlib2 causes crash
-    imlib_context_set_color_modifier(0);
+    imlib_context_set_color_modifier(d->cmod);
 
     Imlib_Image bot = imlib_create_cropped_scaled_image(sx, sy, sw, sh,
                                                         dw, dh);
@@ -626,6 +643,9 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 
     imlib_reset_color_modifier();
     imlib_context_set_color_modifier(0);
+    d->gamma      = 1.0;
+    d->contrast   = 1.0;
+    d->brightness = 0.0;
 
     // restore image's alpha setting.
     // seems applying brightness/contrast/alpha will cause alpha lookup table to

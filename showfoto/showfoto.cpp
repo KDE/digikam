@@ -69,8 +69,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         new ThumbBarItem(m_bar, *it);
     }
 
+    resize(640,480);
     setAutoSaveSettings();
-    applyMainWindowSettings(m_config);
 }
 
 ShowFoto::~ShowFoto()
@@ -148,6 +148,27 @@ void ShowFoto::setupActions()
                 actionCollection(), "flip_vert");
     
     // ---------------------------------------------------------------
+
+    new KAction(i18n("Increase Gamma"), 0, Key_G,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "gamma_plus");
+    new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "gamma_minus");
+    new KAction(i18n("Increase Brightness"), 0, Key_B,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "brightness_plus");
+    new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "brightness_minus");
+    new KAction(i18n("Increase Contrast"), 0, Key_C,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "contrast_plus");
+    new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
+                this, SLOT(slotChangeBCG()),
+                actionCollection(), "contrast_minus");
+    
+    // ---------------------------------------------------------------
     
     createGUI("showfotoui.rc", false);
 
@@ -171,6 +192,14 @@ void ShowFoto::setupActions()
     accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
                   i18n("Load Previous Image"),
                   Key_Prior, this, SLOT(slotPrev()),
+                  false, true);
+    accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
+                  i18n("Zoom into Image"),
+                  Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
+                  false, true);
+    accel->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
+                  i18n("Zoom out of Image"),
+                  Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
                   false, true);
 }
 
@@ -317,6 +346,38 @@ void ShowFoto::slotToggleShowBar()
     else
     {
         m_bar->show();
+    }
+}
+
+void ShowFoto::slotChangeBCG()
+{
+    QString name;
+    if (sender())
+        name = sender()->name();
+
+    if (name == "gamma_plus")
+    {
+        m_canvas->increaseGamma();
+    }
+    else if  (name == "gamma_minus")
+    {
+        m_canvas->decreaseGamma();
+    }
+    else if  (name == "brightness_plus")
+    {
+        m_canvas->increaseBrightness();
+    }
+    else if  (name == "brightness_minus")
+    {
+        m_canvas->decreaseBrightness();
+    }
+    else if  (name == "contrast_plus")
+    {
+        m_canvas->increaseContrast();
+    }
+    else if  (name == "contrast_minus")
+    {
+        m_canvas->decreaseContrast();
     }
 }
 

@@ -51,6 +51,7 @@ private slots:
     void slotEscapePressed();
     void slotFileProperties();
     void slotToggleShowBar();
+    void slotChangeBCG();
         
 private:
 

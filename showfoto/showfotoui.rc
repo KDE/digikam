@@ -35,6 +35,16 @@
      <Action name="show_thumbs" /> 
  </Menu>
 
+ <Menu name="Fix" >
+   <text>Fi&amp;x</text>
+     <Action name="gamma_plus" />
+     <Action name="gamma_minus" />
+     <Action name="brightness_plus" />
+     <Action name="brightness_minus" />
+     <Action name="contrast_plus" />
+     <Action name="contrast_minus" />
+ </Menu>
+
 </MenuBar>
 
 <ToolBar noMerge="1" name="mainToolBar">

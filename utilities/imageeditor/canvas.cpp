@@ -884,7 +884,62 @@ void Canvas::setBackgroundColor(const QColor& color)
 
 void Canvas::setExifOrient(bool exifOrient)
 {
-    d->im->setExifOrient(exifOrient);    
+    d->im->setExifOrient(exifOrient);
+    viewport()->update();
+}
+
+void Canvas::increaseGamma()
+{
+    d->im->changeGamma(1);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
+void Canvas::decreaseGamma()
+{
+    d->im->changeGamma(-1);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
+void Canvas::increaseBrightness()
+{
+    d->im->changeBrightness(1);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
+void Canvas::decreaseBrightness()
+{
+    d->im->changeBrightness(-1);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
+void Canvas::increaseContrast()
+{
+    d->im->changeContrast(5);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
+}
+
+void Canvas::decreaseContrast()
+{
+    d->im->changeContrast(-5);    
+    d->tileCache.clear();    
+    viewport()->update();
+
+    emit signalChanged(true);
 }
 
 void Canvas::slotRestore()

@@ -68,6 +68,13 @@ public:
 
     void setBackgroundColor(const QColor& color);
     void setExifOrient(bool exifOrient);
+
+    void increaseGamma();
+    void decreaseGamma();
+    void increaseBrightness();
+    void decreaseBrightness();
+    void increaseContrast();
+    void decreaseContrast();
     
 protected:
     
