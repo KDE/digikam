@@ -5,7 +5,7 @@
  * Description : a Digikam image plugin for to add
  *               raindrops on an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Original RainDrop algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
@@ -50,7 +50,6 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kimageeffect.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
@@ -321,7 +320,6 @@ void ImageEffect_RainDrop::slotEffect()
        // Get a copy of the selected image region for restoring at end...
        QImage orgImg, selectedImg;
        orgImg.create( w, h, 32 );
-       orgImg.setAlphaBuffer(true);
        memcpy(orgImg.bits(), data, orgImg.numBytes());
        selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
     
@@ -329,10 +327,10 @@ void ImageEffect_RainDrop::slotEffect()
     
        QImage newImg, targetImg;
        newImg.create( w, h, 32 );
-       newImg.setAlphaBuffer(true) ;
        memcpy(newImg.bits(), data, newImg.numBytes());
-    
-       KImageEffect::blendOnLower(selectedX, selectedY, selectedImg, newImg);
+        
+       bitBlt( &newImg, selectedX, selectedY, 
+               &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
     
        QImage destImg = newImg.scale(wp, hp);
        iface->putPreviewData((uint*)destImg.bits());
@@ -342,7 +340,6 @@ void ImageEffect_RainDrop::slotEffect()
        rainDrops(data, w, h, d, a, c);
        QImage newImg;
        newImg.create( w, h, 32 );
-       newImg.setAlphaBuffer(true) ;
        memcpy(newImg.bits(), data, newImg.numBytes());
     
        QImage destImg = newImg.scale(wp, hp);
@@ -394,7 +391,6 @@ void ImageEffect_RainDrop::slotOk()
           // Get a copy of the selected image region for restoring at end...
           QImage orgImg, selectedImg;
           orgImg.create( w, h, 32 );
-          orgImg.setAlphaBuffer(true);
           memcpy(orgImg.bits(), data, orgImg.numBytes());
           selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
     
@@ -402,10 +398,11 @@ void ImageEffect_RainDrop::slotOk()
     
           QImage newImg, targetImg;
           newImg.create( w, h, 32 );
-          newImg.setAlphaBuffer(true) ;
           memcpy(newImg.bits(), data, newImg.numBytes());
-    
-          KImageEffect::blendOnLower(selectedX, selectedY, selectedImg, newImg);
+
+          bitBlt( &newImg, selectedX, selectedY, 
+               &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
+               
           if ( !m_cancel ) iface->putOriginalData((uint*)newImg.bits());
           }
        else 
