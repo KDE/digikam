@@ -89,7 +89,6 @@ public slots:
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);
     void slot_imageCommentsEdit(AlbumIconItem* iconItem=0);
-    void slot_imageExifInfo(AlbumIconItem* iconItem=0);
     void slot_imageExifOrientation(int orientation);
     void slot_imageRename(AlbumIconItem* iconItem=0);
     void slot_imageDelete();

@@ -36,7 +36,6 @@
    <text>&amp;Image</text>
      <Action name="image_view" />
      <Action name="image_comments" />
-     <Action name="image_view_exif" />
      <Action name="image_set_exif_orientation"/>
      <Action name="image_properties" />
    <Separator />
@@ -103,7 +102,7 @@
   <Separator/>
   <Action name="image_view" />
   <Action name="image_comments" />
-  <Action name="image_view_exif" />
+  <Action name="image_properties" />
   <Action name="image_rename" />
   <Separator/>
   <Action name="album_thumbSizeIncrease" />

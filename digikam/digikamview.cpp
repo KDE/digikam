@@ -393,21 +393,6 @@ void DigikamView::slot_imageCommentsEdit(AlbumIconItem *iconItem)
     mIconView->slotEditImageComments(item);
 }
 
-void DigikamView::slot_imageExifInfo(AlbumIconItem *iconItem)
-{
-    AlbumIconItem *item;
-
-    if (!iconItem) {
-        item = mIconView->firstSelectedItem();
-        if (!item) return;
-    }
-    else {
-        item = iconItem;
-    }
-
-    mIconView->slotShowExifInfo(item);
-}
-
 void DigikamView::slot_imageExifOrientation(int orientation)
 {
     mIconView->slotSetExifOrientation(orientation);

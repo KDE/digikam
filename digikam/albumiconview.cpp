@@ -103,6 +103,7 @@
 #include "albumiconitem.h"
 #include "digikamapp.h"
 #include "histogrampropsplugin.h"
+#include "exifpropsplugin.h"
 #include "albumiconview.h"
 
 class AlbumIconViewPrivate
@@ -522,8 +523,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("text_block"),
                        i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(SmallIcon("text_italic"),
-                       i18n("View Exif Information"), 13);
     popmenu.insertItem(i18n("Properties"), 14);
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
@@ -615,11 +614,6 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
         break;
     }
 
-    case 13: {
-        slotShowExifInfo(iconItem);
-        break;
-    }
-
     case 14: {
         slotProperties(iconItem);
         break;
@@ -692,22 +686,6 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
 
     updateBanner();
     updateContents();
-}
-
-void AlbumIconView::slotShowExifInfo(AlbumIconItem* item)
-{
-    if ( !item ) return;
-
-    KExif exif(this);
-
-    if (exif.loadFile(item->fileItem()->url().path()))
-    {
-        exif.exec();
-    }
-    else
-    {
-        KMessageBox::sorry(0, i18n("This item has no Exif information."));
-    }
 }
 
 void AlbumIconView::slotRename(AlbumIconItem* item)
@@ -892,7 +870,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
             SLOT(slotFilesModified()));
 
     imview->loadURL(urlList, item->fileItem()->url(),
-		    d->currentAlbum ? d->currentAlbum->getTitle():QString());
+                    d->currentAlbum ? d->currentAlbum->getTitle():QString());
     if (imview->isHidden())
         imview->show();
     imview->raise();
@@ -904,11 +882,17 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
     if (!item) return;
 
     KPropertiesDialog dlg(item->fileItem()->url(), this, 0, true, false);
+    ExifPropsPlugin *exifProps = new ExifPropsPlugin(&dlg, item->fileItem()->url().path());
     HistogramPropsPlugin *histogramProps = new HistogramPropsPlugin(&dlg, item->fileItem()->url().path());
 
+    // Adding Exif Viewer tabs in properties dialog.
+    if (exifProps)
+       dlg.insertPlugin(exifProps);
+
+    // Adding Histogram Viewer tab in properties dialog       
     if (histogramProps)
        dlg.insertPlugin(histogramProps);
-
+       
     if (dlg.exec())
     {
         item->repaint();

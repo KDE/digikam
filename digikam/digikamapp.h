@@ -136,43 +136,43 @@ private:
     KAction       *mOpenInKonquiAction;
     
     // Tag Actions
-    KAction *mNewTagAction;
-    KAction *mDeleteTagAction;
-    KAction *mEditTagAction;
+    KAction       *mNewTagAction;
+    KAction       *mDeleteTagAction;
+    KAction       *mEditTagAction;
     
     // Image Actions
-    KAction *mImageViewAction;
-    KAction *mImageCommentsAction;
-    KAction *mImageViewExifAction;
-    KAction *mImageSetExifOrientation1Action;
-    KAction *mImageSetExifOrientation2Action;
-    KAction *mImageSetExifOrientation3Action;
-    KAction *mImageSetExifOrientation4Action;
-    KAction *mImageSetExifOrientation5Action;
-    KAction *mImageSetExifOrientation6Action;
-    KAction *mImageSetExifOrientation7Action;
-    KAction *mImageSetExifOrientation8Action;
-    KAction *mImageRenameAction;
-    KAction *mImageDeleteAction;
-    KAction *mImagePropsAction;
+    KAction       *mImageViewAction;
+    KAction       *mImageCommentsAction;
+    KAction       *mImageViewExifAction;
+    KAction       *mImageSetExifOrientation1Action;
+    KAction       *mImageSetExifOrientation2Action;
+    KAction       *mImageSetExifOrientation3Action;
+    KAction       *mImageSetExifOrientation4Action;
+    KAction       *mImageSetExifOrientation5Action;
+    KAction       *mImageSetExifOrientation6Action;
+    KAction       *mImageSetExifOrientation7Action;
+    KAction       *mImageSetExifOrientation8Action;
+    KAction       *mImageRenameAction;
+    KAction       *mImageDeleteAction;
+    KAction       *mImagePropsAction;
     KSelectAction *mImageSortAction;
-    KActionMenu *mImageExifOrientationActionMenu;
+    KActionMenu   *mImageExifOrientationActionMenu;
 
     // Selection Actions
-    KAction *mSelectAllAction;
-    KAction *mSelectNoneAction;
-    KAction *mSelectInvertAction;
+    KAction       *mSelectAllAction;
+    KAction       *mSelectNoneAction;
+    KAction       *mSelectInvertAction;
 
     // View Actions
-    KAction *mThumbSizePlusAction;
-    KAction *mThumbSizeMinusAction;
-    KAction *mFullScreenAction;
+    KAction       *mThumbSizePlusAction;
+    KAction       *mThumbSizeMinusAction;
+    KAction       *mFullScreenAction;
 
     // Application Actions
-    KAction *mQuitAction;
-    KAction *mTipAction;
-    KAction *mKipiHelpAction;
-    KAction *mGammaAdjustmentAction;
+    KAction       *mQuitAction;
+    KAction       *mTipAction;
+    KAction       *mKipiHelpAction;
+    KAction       *mGammaAdjustmentAction;
 
 private slots:
 

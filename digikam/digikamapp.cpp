@@ -281,14 +281,6 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_comments");
 
-    mImageViewExifAction = new KAction(i18n("View Exif Information"),
-                                    "exifinfo",
-                                    Key_F6,
-                                    mView,
-                                    SLOT(slot_imageExifInfo()),
-                                    actionCollection(),
-                                    "image_view_exif");
-
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
                                     Key_F2,
@@ -306,7 +298,7 @@ void DigikamApp::setupActions()
                                     "image_delete");
 
     mImagePropsAction = new KAction(i18n("Properties"),
-                                    "image",
+                                    "exifinfo",
                                     ALT+Key_Return,
                                     mView,
                                     SLOT(slotImageProperties()),
@@ -476,7 +468,6 @@ void DigikamApp::setupActions()
 
     mImageViewAction->setEnabled(false);
     mImageCommentsAction->setEnabled(false);
-    mImageViewExifAction->setEnabled(false);
     mImageRenameAction->setEnabled(false);
     mImageDeleteAction->setEnabled(false);
     mImagePropsAction->setEnabled(false);
@@ -516,7 +507,6 @@ void DigikamApp::slot_imageSelected(bool val)
 {
     mImageViewAction->setEnabled(val);
     mImageCommentsAction->setEnabled(val);
-    mImageViewExifAction->setEnabled(val);
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
     mImagePropsAction->setEnabled(val);
