@@ -93,7 +93,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mCameraList->load();
 
-    // Load Plugins
+    // Load KIPI Plugins.
         
     loadPlugins();
               
@@ -239,7 +239,7 @@ void DigikamApp::setupActions()
                                     "image_view");
 
     mImageCommentsAction = new KAction(i18n("Edit Image Comments and Tags"),
-		    		    "imagecomment",
+                                   "imagecomment",
                                     Key_F3,
                                     mView,
                                     SLOT(slot_imageCommentsEdit()),
@@ -247,7 +247,7 @@ void DigikamApp::setupActions()
                                     "image_comments");
 
     mImageExifAction = new KAction(i18n("View Exif Information"),
-		    		    "exifinfo",
+                                    "exifinfo",
                                     Key_F6,
                                     mView,
                                     SLOT(slot_imageExifInfo()),
@@ -255,7 +255,7 @@ void DigikamApp::setupActions()
                                     "image_exif");
 
     mImageRenameAction = new KAction(i18n("Rename"),
-		    	 	    "pencil",
+                                    "pencil",
                                     Key_F2,
                                     mView,
                                     SLOT(slot_imageRename()),
@@ -348,6 +348,7 @@ void DigikamApp::setupActions()
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);                                   
     
     // Initialize Actions ---------------------------------------
+    
     mDeleteAction->setEnabled(false);
     mAddImagesAction->setEnabled(false);
     mPropsEditAction->setEnabled(false);
@@ -397,7 +398,7 @@ void DigikamApp::slot_exit()
 
 void DigikamApp::slotCameraConnect()
 {
-    /* TODO:
+    /* todo:
      *
     CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
     
@@ -462,26 +463,21 @@ void DigikamApp::slotSetup()
     
     // For to show the number of KIPI plugins in the setup dialog.
 
-    // todo
-    /*
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     m_setup->pluginsPage_->initPlugins((int)list.count());
-    */
     
     m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
-    // todo
-    //m_setup->pluginsPage_->applyPlugins();
+    m_setup->pluginsPage_->applyPlugins();
     
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
     m_config->sync();
 
-    // todo
-    //KipiInterface_->readSettings();
+    KipiInterface_->readSettings();
 }
 
 void DigikamApp::slotEditKeys()
@@ -489,7 +485,6 @@ void DigikamApp::slotEditKeys()
     KKeyDialog* dialog = new KKeyDialog();
     dialog->insert( actionCollection(), i18n( "General" ) );
     
-    /* todo
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
@@ -497,7 +492,6 @@ void DigikamApp::slotEditKeys()
         KIPI::Plugin* plugin = (*it)->plugin;
         dialog->insert( plugin->actionCollection(), (*it)->comment );
     }
-    */
     
     dialog->configure();
 
@@ -544,8 +538,6 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::loadPlugins()
 {
-    // todo
-    /*
     QStringList ignores;
     KipiInterface_ = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
@@ -556,13 +548,14 @@ void DigikamApp::loadPlugins()
              KipiInterface_, SLOT( slotCurrentAlbumChanged( AlbumInfo * ) ) );
                  
     ignores << QString::fromLatin1( "HelloWorld" );    
+    ignores << QString::fromLatin1( "KameraKlient" );    
+    
     KipiPluginLoader_ = new KIPI::PluginLoader( ignores, KipiInterface_ );
     
     connect( KipiPluginLoader_, SIGNAL( replug() ),
              this, SLOT( slotKipiPluginPlug() ) );
 
     KipiPluginLoader_->loadPlugins();                             
-    */
     
     new ImagePluginLoader(this);
 }

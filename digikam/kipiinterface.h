@@ -21,8 +21,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// TODO: disable this till we have kipi ported to new interface
-#if 0
 
 #ifndef DIGIKAM_KIPIINTERFACE_H
 #define DIGIKAM_KIPIINTERFACE_H
@@ -51,11 +49,11 @@
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
-namespace Digikam
-{
 class AlbumManager;
-class AlbumInfo;
-}
+class Album;
+class PAlbum;
+class AlbumDB;
+class AlbumSettings;
 
 namespace KIPI
 {
@@ -91,11 +89,13 @@ public:
     virtual void setAngle( int angle );
     
 private:
-    QString             imageName_;
-    QString             imageUrl_;
-    QString             albumName_;
-    QString             imageComments_;
-    Digikam::AlbumInfo *album_;
+    AlbumManager *albumManager_;
+    QString   imageName_;
+    KURL      imageUrl_;
+    KURL      albumURL_;
+    QString   imageComments_;
+    PAlbum    *palbum_;
+    AlbumDB   *albumDB_;
 };
 
 
@@ -106,7 +106,7 @@ class DigikamImageCollection : public KIPI::ImageCollectionShared
 public:
     enum Type { AllAlbumItems, AlbumItemsSelection };
 
-    DigikamImageCollection( Type tp, QString filter, Digikam::AlbumInfo *album=0 );
+    DigikamImageCollection( Type tp, QString filter, PAlbum *album=0 );
     ~DigikamImageCollection();
     
     virtual QString name();
@@ -120,7 +120,8 @@ public:
     virtual QString uploadRootName();
     
 protected:
-    Digikam::AlbumInfo *album_;
+    PAlbum       *palbum_;
+    AlbumManager *albumManager_;
     
     KURL commonRoot();
     
@@ -134,8 +135,7 @@ private:
 
 class DigikamKipiInterface : public KIPI::Interface
 {
-    // TODO: enable this when kipi is ported. right now moc will complain
-    //Q_OBJECT
+    Q_OBJECT
 
 public:
     DigikamKipiInterface( QObject *parent, const char *name=0);
@@ -154,27 +154,27 @@ public:
     virtual int features() const;
     virtual QString fileExtensions();
 
-    /* TODO: enable this on kipi port
 protected slots:
     void slot_onAddImageFinished(KIO::Job* job);
 
 public slots:
     void slotSelectionChanged( bool b );
-    void slotCurrentAlbumChanged( Digikam::AlbumInfo *album );
-    */
+    void slotCurrentAlbumChanged( PAlbum *palbum );
+    
 
 protected:
     QString askForCategory();
     
     // For Add images operations.
-    Digikam::AlbumInfo    *m_sourceAlbum;
-    Digikam::AlbumInfo    *m_targetAlbum;
-    QString                m_imageFileName;
+    PAlbum       *m_sourceAlbum;
+    PAlbum       *m_targetAlbum;
+    QString       m_imageFileName;
     
-    QString                imagesFileFilter_; 
-    Digikam::AlbumManager *albumManager_;
+    QString       imagesFileFilter_; 
+    AlbumManager *albumManager_;
+    AlbumDB      *albumDB_;
 };
+
 
 #endif  // DIGIKAM_KIPIINTERFACE_H
 
-#endif

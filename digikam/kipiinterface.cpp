@@ -21,7 +21,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#if 0
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -58,31 +57,30 @@ extern "C"
 // Local includes.
 
 #include "albummanager.h"
-#include "albuminfo.h"
+#include "album.h"
+#include "albumdb.h"
 #include "albumsettings.h"
-#include "digikamio.h"
 #include "kipiinterface.h"
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// IMAGE INFO IMPLEMENTATION CLASS ////////////////////////////////////////
 
 DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url )
                 : KIPI::ImageInfoShared( interface, url )
 {
-    imageName_ = url.fileName();
-    imageUrl_  = url.path();
-    albumName_ = url.path().section('/', -2, -2);
+    albumManager_ = AlbumManager::instance();
+    imageName_    = url.fileName();
+    imageUrl_     = url;
+    albumURL_     = KURL::KURL(url.directory());
+    albumDB_      = albumManager_->albumDB();
     
-    if (albumName_.isEmpty() == false && imageName_.isEmpty() == false)
+    if (albumURL_.isValid() == true && imageName_.isEmpty() == false)
        {
-       album_ = Digikam::AlbumManager::instance()->findAlbum(albumName_);
+       palbum_ = albumManager_->findPAlbum(albumURL_);
        
-       if (album_)
-          {
-          album_->openDB();
-          imageComments_ = album_->getItemComments(imageName_);
-          album_->closeDB();    
-          }
+       if (palbum_)
+          imageComments_ = albumDB_->getItemCaption(palbum_, imageName_);
        } 
 }
 
@@ -102,26 +100,21 @@ QString DigikamImageInfo::description()
 
 void DigikamImageInfo::setTitle( const QString& name )
 {
-    if (album_ && name.isEmpty() == false)
-       {
-       DigikamIO::rename(album_, imageName_, name);
-       }
+    if (palbum_ && name.isEmpty() == false)
+       albumDB_->moveItem(palbum_, imageName_, palbum_, name);
 }
 
 void DigikamImageInfo::setDescription( const QString& description )
 {
-    if (album_)
+    if (palbum_)
        {
-       album_->openDB();
-       album_->setItemComments(imageName_, description);
-       album_->closeDB();    
-
+       albumDB_->setItemCaption(palbum_, imageName_, description);
+                        
        // store as JPEG Exif comment
            
        AlbumSettings *settings = AlbumSettings::instance();
 
-       QString fileName(imageUrl_);
-       KFileMetaInfo metaInfo(fileName, "image/jpeg",KFileMetaInfo::Fastest);
+       KFileMetaInfo metaInfo(imageUrl_, "image/jpeg",KFileMetaInfo::Fastest);
 
        if(settings->getSaveExifComments() && metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
            {
@@ -135,13 +128,18 @@ void DigikamImageInfo::setDescription( const QString& description )
 
            // set EXIF UserComment
               
-           KExifUtils::writeComment(fileName,description);
+           QString fileName(imageUrl_.path());                  // PENDING (gilles): Ralph, LibKexif must 
+                                                                // support KURL in the future...
+           KExifUtils::writeComment(fileName, description);
            }
        }
 }
 
 void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
 {
+    // PENDING (Gilles) : This fonction must support KURL in the future !!!...
+    //                    Or the best way is a new AlbumDB method for to set the time of items.
+    
     FILE * f;
     struct utimbuf * t = new utimbuf();
     struct tm tmp;
@@ -152,7 +150,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
 
     time_t ti;
 
-    f = fopen(imageUrl_.ascii(), "r");
+    f = fopen(imageUrl_.path().ascii(), "r");
 
     if ( f == NULL )
        {
@@ -179,7 +177,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
        return;
        }
 
-    if( stat(imageUrl_.ascii(), &st ) == -1 )
+    if( stat(imageUrl_.path().ascii(), &st ) == -1 )
        {
        kdWarning() << "DigikamImageInfo::setTime() : Cannot stat image file !!!" << endl;
        return;
@@ -190,12 +188,15 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
     t->actime = ti;
     t->modtime = ti;
 
-    if( utime(imageUrl_.ascii(), t ) != 0 )
+    if( utime(imageUrl_.path().ascii(), t ) != 0 )
        kdWarning() << "DigikamImageInfo::setTime() : Cannot change image file date and time !!!" << endl;
 }
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )
 {
+    // PENDING (Gilles) : Added new Image data to clone who are provide by the 
+    // new Renchi implementation for Digikam 0.7.0...
+    
     setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
 }
@@ -231,16 +232,25 @@ void DigikamImageInfo::setAngle( int angle )
     // TODO ! This will a libKExif implementation call ?
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// IMAGE COLLECTION IMPLEMENTATION CLASS ////////////////////////////////////
 
-DigikamImageCollection::DigikamImageCollection( Type tp, QString filter, Digikam::AlbumInfo *album )
+DigikamImageCollection::DigikamImageCollection( Type tp, QString filter, PAlbum *album )
                       : tp_( tp ), imgFilter_(filter)
 {
-    if (album)           // A specific Album has been specified !
-       album_ = album;
-    else                 // Using the curent selected Album !
-       album_ = Digikam::AlbumManager::instance()->currentAlbum();
+    albumManager_ = AlbumManager::instance();
+    
+    if (album)           
+       {
+       // A specific Album has been specified !
+       palbum_  = album;
+       }
+    else                 
+       {   
+       // Using the curent selected Album !
+       Album *current = albumManager_->currentAlbum();
+       palbum_ = albumManager_->findPAlbum(KURL::KURL(current->getURL()));       
+       }
 }
 
 DigikamImageCollection::~DigikamImageCollection()
@@ -249,11 +259,11 @@ DigikamImageCollection::~DigikamImageCollection()
 
 QString DigikamImageCollection::name()
 {
-    if (album_) 
+    if (palbum_) 
         {
-        album_->openDB();
-        QString title = album_->getTitle();
-        album_->closeDB();    
+        // PENDING : Renchi, Why the GetTitle() method isn't available in PAlbum ?
+        
+        QString title = palbum_->getTitle();    
         return (title);    
         }
     else
@@ -262,11 +272,9 @@ QString DigikamImageCollection::name()
 
 QString DigikamImageCollection::category()
 {
-    if (album_) 
+    if (palbum_) 
         {
-        album_->openDB();
-        QString category = album_->getCollection();
-        album_->closeDB();    
+        QString category = palbum_->getCollection();
         return (category);    
         }
     else
@@ -275,11 +283,9 @@ QString DigikamImageCollection::category()
 
 QDate DigikamImageCollection::date()
 {
-    if (album_) 
+    if (palbum_) 
         {
-        album_->openDB();
-        QDate date = album_->getDate();
-        album_->closeDB();    
+        QDate date = palbum_->getDate();
         return (date);    
         }
     else
@@ -288,11 +294,9 @@ QDate DigikamImageCollection::date()
 
 QString DigikamImageCollection::comment()
 {
-    if (album_) 
+    if (palbum_) 
         {
-        album_->openDB();
-        QString comments = album_->getComments();
-        album_->closeDB();        
+        QString comments = palbum_->getCaption();
         return (comments);
         }
     else
@@ -303,24 +307,21 @@ KURL::List DigikamImageCollection::images()
 {
     QStringList items;
 
-    if (album_) 
+    if (palbum_) 
         {
         switch ( tp_ ) 
            {
-           case AllAlbumItems:
+           case AllAlbumItems:       // PENDING (Gilles) : Support KURL !...
+                                     // Or a new method on PAlbum for to get all KURL items from an Album.
               {
-              album_->openDB();
-              
-              QDir albumDir(album_->getPath(), imgFilter_.latin1(),
+              QDir albumDir(palbum_->getKURL().path(), imgFilter_.latin1(),
                             QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
 
               QStringList Files = albumDir.entryList();
         
               for ( QStringList::Iterator it = Files.begin() ; it != Files.end() ; ++it )
-                  items.append(album_->getPath() + "/" + *it);
+                  items.append(palbum_->getKURL().path() + "/" + *it);
 
-              album_->closeDB();        
-          
               if ( items.isEmpty() == true )
                  kdWarning() << "DigikamImageCollection::images()::AllAlbumItems : images list is empty!!!" 
                              << endl;
@@ -330,14 +331,15 @@ KURL::List DigikamImageCollection::images()
               
            case AlbumItemsSelection:
               {
-              album_->openDB();   
-              items = album_->getSelectedItemsPath();
-              album_->closeDB();        
+              // PENDING (gilles) : Renchi, _WHERE_I_CAN_FIND_ the very 
+              // important getSelectedItemsPath() method ???
+              
+              //items = album_->getSelectedItemsPath();
 
-           if ( items.isEmpty() == true )
+              if ( items.isEmpty() == true )
                  kdWarning() << "DigikamImageCollection::images()::AlbumItemsSelection : images list is empty!!!"
                              << endl;
-
+              
               break;
               }
               
@@ -367,11 +369,9 @@ KURL DigikamImageCollection::commonRoot()
 {
     KURL url;
     
-    if (!album_) return url;
+    if (!palbum_) return url;
         
-    album_->openDB();
-    url.setPath( album_->getPath() );
-    album_->closeDB();        
+    url = palbum_->getKURL();
     return url;
 }
 
@@ -379,7 +379,9 @@ KURL DigikamImageCollection::uploadRoot()
 {
     KURL url;
     
-    url.setPath( Digikam::AlbumManager::instance()->getLibraryPath() );
+    // PENDING (gilles) : Renchi, why getLibraryPath() method don't return KURL instead...
+    
+    url.setPath( albumManager_->getLibraryPath() );
     return (url);
 }
 
@@ -388,16 +390,16 @@ QString DigikamImageCollection::uploadRootName()
     return (i18n("My Albums"));
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// KIPI INTERFACE IMPLEMENTATION CLASS //////////////////////////////////////////
 
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                      :KIPI::Interface( parent, name )
 {
+    albumManager_ = AlbumManager::instance();
+    albumDB_      = albumManager_->albumDB();
     readSettings();
-
-    // Get AlbumManger instance.
-    
-    albumManager_ = Digikam::AlbumManager::instance();
 }
 
 DigikamKipiInterface::~DigikamKipiInterface()
@@ -422,18 +424,20 @@ KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 
 KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
-    if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
-       {
+    // PENDING (gilles) : Renchi, _WHERE_I_CAN_FIND_ the very important getSelectedItemsPath() method ???
+
+/*    if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
+       {*/
        kdWarning() << "DigikamKipiInterface::currentSelection() : no current selection!!!" 
                    << endl;
        return KIPI::ImageCollection(0);
-       }
+       /*}
     else
        return KIPI::ImageCollection( new DigikamImageCollection
                                          (
                                          DigikamImageCollection::AlbumItemsSelection,
                                          imagesFileFilter_
-                                         ) );
+                                         ) );*/
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentScope()
@@ -463,18 +467,17 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
     QValueList<KIPI::ImageCollection> result;
     
-    for (Digikam::AlbumInfo *album = albumManager_->firstAlbum() ;
-         album ; album = album->nextAlbum())
+    PAlbumList palbumList = albumManager_->pAlbums();
+    
+    for(  QValueList<PAlbum*>::Iterator it = palbumList.begin(); it != palbumList.end(); ++it ) 
         {
-        album->openDB();
         DigikamImageCollection* col = new DigikamImageCollection
                                           ( 
                                           DigikamImageCollection::AllAlbumItems, 
                                           imagesFileFilter_,
-                                          album 
+                                          *it 
                                           );
         result.append( KIPI::ImageCollection( col ) );
-        album->closeDB();
         }
 
     return result;
@@ -487,7 +490,11 @@ KIPI::ImageInfo DigikamKipiInterface::info( const KURL& url )
 
 void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 {
-    albumManager_->refreshItemHandler(); 
+
+    // PENDING (gilles) : Renchi, there is a way for to use KURL::List instead QStringList
+    // with refreshItemHandler() method ?
+    
+    albumManager_->refreshItemHandler(urls.toStringList()); 
 }
 
 int DigikamKipiInterface::features() const
@@ -510,8 +517,11 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     if ( url.path().section('/', 0, -3) == albumManager_->getLibraryPath() )
        return true;    
     
-    m_sourceAlbum = albumManager_->findAlbum(url.path().section('/', -2, -2));
-    m_targetAlbum = albumManager_->currentAlbum();
+    m_sourceAlbum = albumManager_->findPAlbum(KURL::KURL(url.directory()));
+    
+    // PENDING (Gilles) : Renchi, there is no way for to get a PAlbum instead Album with currentAlbum() method ?
+    Album *current = albumManager_->currentAlbum();
+    m_targetAlbum = albumManager_->findPAlbum(KURL::KURL(current->getURL()));
     
     if ( m_targetAlbum ) 
        {
@@ -528,7 +538,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
        }
     else 
        {
-       KIO::CopyJob* job = KIO::copy(url, KURL(m_targetAlbum->getPath() + "/" + m_imageFileName), true);
+       KIO::CopyJob* job = KIO::copy(url, KURL(m_targetAlbum->getURL() + "/" + m_imageFileName), true);
        
        connect(job, SIGNAL(result(KIO::Job*)),
                this, SLOT(slot_onAddImageFinished(KIO::Job*)));
@@ -542,40 +552,39 @@ void DigikamKipiInterface::slot_onAddImageFinished(KIO::Job* job)
     if (job->error())
         job->showErrorDialog(0);
     else
-       {  // Copy the image comments if the source image is in the Albums library.
+       {  
+       // Copy the image comments if the source image is in the Albums library.
+       
        if (m_sourceAlbum)
           {
-          m_sourceAlbum->openDB();
-          QString comments = m_sourceAlbum->getItemComments(m_imageFileName);
-          m_sourceAlbum->closeDB();
+          QString comments = albumDB_->getItemCaption( m_sourceAlbum, m_imageFileName );
 
-          m_targetAlbum->openDB();
-          m_targetAlbum->setItemComments(m_imageFileName, comments);
-          m_targetAlbum->closeDB();
+          albumDB_->setItemCaption( m_targetAlbum, m_imageFileName, comments );
           }
        }
     
-    albumManager_->refreshItemHandler(); 
+    albumManager_->refreshItemHandler( m_targetAlbum->getURL() + "/" + m_imageFileName ); 
 }
 
 
 void DigikamKipiInterface::delImage( const KURL& url )
 {
     // The root path is the Digikam Album library path ?
-    
+
     if ( url.path().section('/', 0, -3) == albumManager_->getLibraryPath() )
        {
        // There is an Album with the Album name include in the 'url' ?
        
-       Digikam::AlbumInfo *album = albumManager_->findAlbum( url.path().section('/', -2, -2));
+       PAlbum *palbum = albumManager_->findPAlbum( KURL::KURL(url.directory()) );
     
-       if ( album )
+       if ( palbum )
           {
-          if ( KIO::NetAccess::del(url) == false )
-             {
-             kdWarning() << "DigikamKipiInterface::delImage() : Cannot delete an image !!!" 
-                         << endl;
-             }
+          albumDB_->deleteItem( palbum, url.fileName() );
+          
+          // PENDING (gilles) : Renchi, HowTo get succes information after deleteItem() running ?
+          
+/*          kdWarning() << "DigikamKipiInterface::delImage() : Cannot delete an image !!!" 
+                         << endl;*/
           }
        else 
           {
@@ -597,11 +606,11 @@ void DigikamKipiInterface::slotSelectionChanged( bool b )
     emit currentScopeChanged( b );
 }
 
-void DigikamKipiInterface::slotCurrentAlbumChanged( Digikam::AlbumInfo *album )
+void DigikamKipiInterface::slotCurrentAlbumChanged( PAlbum *palbum )
 {
     bool b = false;
     
-    if ( album )
+    if ( palbum )
        b = true;
     
     emit currentAlbumChanged( b );
@@ -625,7 +634,6 @@ void DigikamKipiInterface::readSettings()
     imagesFileFilter_ = Temp.lower() + " " + Temp.upper();
 }
 
-#endif
 
 #include "kipiinterface.moc"
 

@@ -66,11 +66,9 @@ Setup::Setup(QWidget* parent, const char* name)
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    /*
     page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
                            BarIcon("run", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
-    */
         
     page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
