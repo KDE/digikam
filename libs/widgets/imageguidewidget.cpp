@@ -29,6 +29,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpixmap.h>
+#include <qtooltip.h>
 
 // KDE include.
 
@@ -185,7 +186,12 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        
        if (m_freeze) 
           {
-           emit spotPositionChanged( getSpotColor(), true, getSpotPosition() );
+          QColor color = getSpotColor();
+          QPoint point = getSpotPosition();
+          emit spotPositionChanged( color, true, point );
+          QToolTip::add( this, i18n("(%1,%2)<br>RGB:%3,%4,%5")
+                                    .arg(point.x()).arg(point.y())
+                                    .arg(color.red()).arg(color.green()).arg(color.blue()) );
           }
        }
 }
