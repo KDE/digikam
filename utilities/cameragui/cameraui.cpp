@@ -26,6 +26,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kpropertiesdialog.h>
+#include <kiconloader.h>
 
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -384,12 +385,14 @@ void CameraUI::slotRightButtonClicked(ThumbItem *, const QPoint &pos)
     popmenu.insertItem(i18n("Download Selected"), 
                        this, SLOT(slotDownloadSelected()));
     popmenu.insertSeparator();
-    popmenu.insertItem(i18n("Image View ..."),
+    popmenu.insertItem(SmallIcon("editimage"),
+                       i18n("View/Edit"),
                        this, SLOT(slotFileView()));
-    popmenu.insertItem(i18n("Image Properties ..."),
-                       this, SLOT(slotFileProperties()));
-    popmenu.insertItem(i18n("Image Exif Information ..."),
+    popmenu.insertItem(SmallIcon("text_italic"), 
+                       i18n("View Exif Information ..."),
                        this, SLOT(slotFileExif()));
+    popmenu.insertItem(i18n("Properties ..."),
+                       this, SLOT(slotFileProperties()));                       
     popmenu.exec(pos);
 }
 
