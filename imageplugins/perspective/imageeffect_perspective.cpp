@@ -33,7 +33,6 @@
 // Qt includes. 
  
 #include <qvgroupbox.h>
-#include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
