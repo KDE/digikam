@@ -30,8 +30,10 @@
 class QPushButton;
 class QSpinBox;
 class QSlider;
+class QTimer;
 
 class KProgress;
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -64,13 +66,13 @@ private:
     
     QPushButton          *m_helpButton;
 
-    QSlider              *m_dropSlider;
-    QSlider              *m_amountSlider;        
-    QSlider              *m_coeffSlider;    
-    
-    QSpinBox             *m_dropSpinBox;
-    QSpinBox             *m_amountSpinBox;
-    QSpinBox             *m_coeffSpinBox;
+    QTimer               *m_timerDrop;
+    QTimer               *m_timerAmount;
+    QTimer               *m_timerCoeff;
+            
+    KIntNumInput         *m_dropInput;
+    KIntNumInput         *m_amountInput;
+    KIntNumInput         *m_coeffInput;    
     
     KProgress            *m_progressBar;
     
@@ -87,6 +89,9 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotTimerDrop();
+    void slotTimerAmount();    
+    void slotTimerCoeff();    
 };
 
 }  // NameSpace DigikamRainDropImagesPlugin

@@ -54,6 +54,7 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
+#include <knuminput.h>
 
 // Digikam includes.
 
@@ -74,6 +75,9 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                   parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
+    m_timerDrop   = 0;
+    m_timerAmount = 0;
+    m_timerCoeff  = 0;
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
@@ -147,63 +151,39 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Drop size:"), plainPage());
     
-    m_dropSlider = new QSlider(1, 200, 1, 80, Qt::Horizontal, plainPage(), "m_dropSlider");
-    m_dropSlider->setTickmarks(QSlider::Below);
-    m_dropSlider->setTickInterval(20);
-    m_dropSlider->setTracking ( false );
-    
-    m_dropSpinBox = new QSpinBox(1, 200, 1, plainPage(), "m_dropSpinBox");
-    m_dropSpinBox->setValue(80);
-        
-    whatsThis = i18n("<p>Set here the raindrops' size.");
-    QWhatsThis::add( m_dropSpinBox, whatsThis);
-    QWhatsThis::add( m_dropSlider, whatsThis);
+    m_dropInput = new KIntNumInput(plainPage());
+    m_dropInput->setRange(0, 200, 1, true);
+    m_dropInput->setValue(80);
+    QWhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
     
     hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_dropSlider, 3);
-    hlay2->addWidget(m_dropSpinBox, 1);
+    hlay2->addWidget(m_dropInput, 3);
     
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Number:"), plainPage());
     
-    m_amountSlider = new QSlider(1, 500, 1, 150, Qt::Horizontal, plainPage(), "m_amountSlider");
-    m_amountSlider->setTickmarks(QSlider::Below);
-    m_amountSlider->setTickInterval(50);
-    m_amountSlider->setTracking ( false );  
-    
-    m_amountSpinBox = new QSpinBox(1, 500, 1, plainPage(), "m_amountSpinBox");
-    m_amountSpinBox->setValue(150);
-        
-    whatsThis = i18n("<p>This value controls the maximum number of raindrops.");
-    QWhatsThis::add( m_amountSpinBox, whatsThis);
-    QWhatsThis::add( m_amountSlider, whatsThis);                     
+    m_amountInput = new KIntNumInput(plainPage());
+    m_amountInput->setRange(1, 500, 1, true);
+    m_amountInput->setValue(150);
+    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops."));                     
     
     hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_amountSlider, 3);
-    hlay3->addWidget(m_amountSpinBox, 1);
+    hlay3->addWidget(m_amountInput, 3);
     
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Fish eyes:"), plainPage());
     
-    m_coeffSlider = new QSlider(1, 100, 1, 30, Qt::Horizontal, plainPage(), "m_coeffSlider");
-    m_coeffSlider->setTickmarks(QSlider::Below);
-    m_coeffSlider->setTickInterval(10);
-    m_coeffSlider->setTracking ( false );  
-    
-    m_coeffSpinBox = new QSpinBox(1, 100, 1, plainPage(), "m_coeffSpinBox");
-    m_coeffSpinBox->setValue(30);
-    
-    whatsThis = i18n("<p>This value is the fish-eye-effect optical distortion coefficient.");
-    QWhatsThis::add( m_coeffSpinBox, whatsThis);
-    QWhatsThis::add( m_coeffSlider, whatsThis);                     
+    m_coeffInput = new KIntNumInput(plainPage());
+    m_coeffInput->setRange(1, 100, 1, true);
+    m_coeffInput->setValue(30);
+    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical distortion coefficient."));                     
     
     hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_coeffSlider, 3);
-    hlay4->addWidget(m_coeffSpinBox, 1);
+    hlay4->addWidget(m_coeffInput, 3);
     
     // -------------------------------------------------------------
         
@@ -220,30 +200,26 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    connect(m_dropSlider, SIGNAL(valueChanged(int)),
-            m_dropSpinBox, SLOT(setValue(int)));
-    connect(m_dropSpinBox, SIGNAL(valueChanged(int)),
-            m_dropSlider, SLOT(setValue(int)));            
-    connect(m_dropSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));            
-            
-    connect(m_amountSlider, SIGNAL(valueChanged(int)),
-            m_amountSpinBox, SLOT(setValue(int)));
-    connect(m_amountSpinBox, SIGNAL(valueChanged(int)),
-            m_amountSlider, SLOT(setValue(int)));   
-    connect(m_amountSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
-
-    connect(m_coeffSlider, SIGNAL(valueChanged(int)),
-            m_coeffSpinBox, SLOT(setValue(int)));
-    connect(m_coeffSpinBox, SIGNAL(valueChanged(int)),
-            m_coeffSlider, SLOT(setValue(int)));   
-    connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
+    connect(m_dropInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimerDrop()));  
+    
+    connect(m_amountInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimerAmount()));  
+    
+    connect(m_coeffInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimerCoeff()));  
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
 {
+    if (m_timerDrop)
+       delete m_timerDrop;
+    
+    if (m_timerAmount)
+       delete m_timerAmount;
+    
+    if (m_timerCoeff)
+       delete m_timerCoeff;
 }
 
 void ImageEffect_RainDrop::slotHelp()
@@ -272,29 +248,63 @@ void ImageEffect_RainDrop::slotUser1()
        }
     else
        {    
-       m_dropSlider->blockSignals(true);
-       m_dropSpinBox->blockSignals(true);
-       m_amountSlider->blockSignals(true);
-       m_amountSpinBox->blockSignals(true);
-       m_coeffSlider->blockSignals(true);
-       m_coeffSpinBox->blockSignals(true);
+       m_dropInput->blockSignals(true);
+       m_amountInput->blockSignals(true);
+       m_coeffInput->blockSignals(true);
       
-       m_dropSlider->setValue(80);
-       m_dropSpinBox->setValue(80);
-       m_amountSlider->setValue(150);
-       m_amountSpinBox->setValue(150);
-       m_coeffSlider->setValue(30);
-       m_coeffSpinBox->setValue(30);
+       m_dropInput->setValue(80);
+       m_amountInput->setValue(150);
+       m_coeffInput->setValue(30);
 
-       m_dropSlider->blockSignals(false);
-       m_dropSpinBox->blockSignals(false);
-       m_amountSlider->blockSignals(false);
-       m_amountSpinBox->blockSignals(false);
-       m_coeffSlider->blockSignals(false);
-       m_coeffSpinBox->blockSignals(false);
+       m_dropInput->blockSignals(false);
+       m_amountInput->blockSignals(false);
+       m_coeffInput->blockSignals(false);
        slotEffect();
        }
 } 
+
+void ImageEffect_RainDrop::slotTimerDrop()
+{
+    if (m_timerDrop)
+       {
+       m_timerDrop->stop();
+       delete m_timerDrop;
+       }
+    
+    m_timerDrop = new QTimer( this );
+    connect( m_timerDrop, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timerDrop->start(500, true);
+}
+
+void ImageEffect_RainDrop::slotTimerAmount()
+{
+    if (m_timerAmount)
+       {
+       m_timerAmount->stop();
+       delete m_timerAmount;
+       }
+    
+    m_timerAmount = new QTimer( this );
+    connect( m_timerAmount, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timerAmount->start(500, true);
+}
+
+void ImageEffect_RainDrop::slotTimerCoeff()
+{
+    if (m_timerCoeff)
+       {
+       m_timerCoeff->stop();
+       delete m_timerCoeff;
+       }
+    
+    m_timerCoeff = new QTimer( this );
+    connect( m_timerCoeff, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timerCoeff->start(500, true);
+}
+
 
 void ImageEffect_RainDrop::slotEffect()
 {
@@ -303,12 +313,9 @@ void ImageEffect_RainDrop::slotEffect()
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
     
-    m_dropSlider->setEnabled(false);
-    m_dropSpinBox->setEnabled(false);
-    m_amountSlider->setEnabled(false);
-    m_amountSpinBox->setEnabled(false);
-    m_coeffSlider->setEnabled(false);
-    m_coeffSpinBox->setEnabled(false);
+    m_dropInput->setEnabled(false);
+    m_amountInput->setEnabled(false);
+    m_coeffInput->setEnabled(false);
     
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
@@ -320,9 +327,9 @@ void ImageEffect_RainDrop::slotEffect()
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
-    int d       = m_dropSlider->value();
-    int a       = m_amountSlider->value();
-    int c       = m_coeffSlider->value();
+    int d       = m_dropInput->value();
+    int a       = m_amountInput->value();
+    int c       = m_coeffInput->value();
 
     // Selected data from the image
     int selectedX = iface->selectedXOrg();
@@ -370,12 +377,9 @@ void ImageEffect_RainDrop::slotEffect()
     m_progressBar->setValue(0); 
     m_previewWidget->update();
 
-    m_dropSlider->setEnabled(true);
-    m_dropSpinBox->setEnabled(true);
-    m_amountSlider->setEnabled(true);
-    m_amountSpinBox->setEnabled(true);
-    m_coeffSlider->setEnabled(true);
-    m_coeffSpinBox->setEnabled(true);
+    m_dropInput->setEnabled(true);
+    m_amountInput->setEnabled(true);
+    m_coeffInput->setEnabled(true);
         
     m_cancel = false;
     m_dirty = false;
@@ -386,12 +390,9 @@ void ImageEffect_RainDrop::slotEffect()
 
 void ImageEffect_RainDrop::slotOk()
 {
-    m_dropSlider->setEnabled(false);
-    m_dropSpinBox->setEnabled(false);
-    m_amountSlider->setEnabled(false);
-    m_amountSpinBox->setEnabled(false);
-    m_coeffSlider->setEnabled(false);
-    m_coeffSpinBox->setEnabled(false);
+    m_dropInput->setEnabled(false);
+    m_amountInput->setEnabled(false);
+    m_coeffInput->setEnabled(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -402,9 +403,9 @@ void ImageEffect_RainDrop::slotOk()
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
-    int d       = m_dropSlider->value();
-    int a       = m_amountSlider->value();
-    int c       = m_coeffSlider->value();
+    int d       = m_dropInput->value();
+    int a       = m_amountInput->value();
+    int c       = m_coeffInput->value();
 
     // Selected data from the image
     int selectedX = iface->selectedXOrg();
@@ -553,6 +554,11 @@ void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int Drop
         if (Counter >= 10000)
             {
             NumBlurs = Amount;
+            
+            // Update the progress bar in dialog.
+            m_progressBar->setValue(100);
+            kapp->processEvents(); 
+            
             break;
             }
 
