@@ -26,3 +26,5 @@ kde_services_DATA = digikamimageplugin_core.desktop
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_core_ui.rc
 
+digikamimageplugin_coreicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_coreicon_ICON = AUTO
