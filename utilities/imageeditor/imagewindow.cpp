@@ -97,7 +97,6 @@ ImageWindow::ImageWindow()
     m_fullScreenHideToolBar = false;
     m_view                  = 0L;
     
-
     // -- construct the view ---------------------------------
 
     m_canvas    = new Canvas(this);
@@ -116,8 +115,7 @@ ImageWindow::ImageWindow()
     // -- build the gui -------------------------------------
 
     buildGUI();
-    
-    
+        
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
@@ -142,8 +140,7 @@ ImageWindow::ImageWindow()
                     false, true);
 
     // -- setup connections ---------------------------
-
-            
+           
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
@@ -158,10 +155,10 @@ ImageWindow::ImageWindow()
             SLOT(slotLoadPrev()));
     
     // -- read settings --------------------------------
+    
     readSettings();
     applySettings();
 }
-
 
 ImageWindow::~ImageWindow()
 {
