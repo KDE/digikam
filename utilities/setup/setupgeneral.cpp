@@ -66,7 +66,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    albumPathBox->setTitle(i18n("Album Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
-   QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the Digikam Albums "
+   QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                         "library in your computer.\n"
                                         "Write access is required for this path."));
                                                 
@@ -251,8 +251,8 @@ void SetupGeneral::slotChangeAlbumPath()
 
     QFileInfo targetPath(result);
     if (!targetPath.isWritable()) {
-        KMessageBox::sorry(0, i18n("No writable access for this path!\n"
-                                   "Please select another path or change right access!"));
+        KMessageBox::sorry(0, i18n("No write access for this path!\n"
+                                   "Please select another path or change write access!"));
         return;
     }
     
