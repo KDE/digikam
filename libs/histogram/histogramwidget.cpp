@@ -156,12 +156,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       switch (m_scaleType)
         {
         case Digikam::HistogramWidget::LinScaleHistogram:
-          y = (int) (((wHeight - 1) * value) / max);
+          y = (int) ((wHeight * value) / max);
           break;
 
         case Digikam::HistogramWidget::LogScaleHistogram:
           if (value <= 0.0) value = 1.0;
-          y = (int) (((wHeight - 1) * log (value)) / max);
+          y = (int) ((wHeight * log (value)) / max);
           break;
 
         default:
@@ -175,16 +175,16 @@ void HistogramWidget::paintEvent( QPaintEvent * )
            x <= (uint)((float)(m_xmax * wWidth) / 256.0) )
          {
          p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight - 1, x, -1);
+         p1.drawLine(x, wHeight, x, 0);
          p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight - 1, x, wHeight - y - 1);                 
+         p1.drawLine(x, wHeight, x, wHeight - y);                 
          }
       else 
          {
          p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight - 1, x, wHeight - y - 1);                 
+         p1.drawLine(x, wHeight, x, wHeight - y);                 
          p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-         p1.drawLine(x, wHeight - y, x, -1);                 
+         p1.drawLine(x, wHeight - y, x, 0);                 
          }
       }
       
