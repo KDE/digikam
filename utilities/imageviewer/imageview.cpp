@@ -1781,3 +1781,5 @@ void ImageView::slotImageProperties()
 }
 
 
+
+#include "imageview.moc"

@@ -61,3 +61,5 @@ void KExifListView::slot_selectionChanged(QListViewItem *item)
     emit signal_itemDescription(viewItem->exifEntry()->getDescription());
 
 }
+
+#include "kexiflistview.moc"

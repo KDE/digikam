@@ -58,3 +58,5 @@ bool IMEventFilter::eventFilter(QObject *, QEvent *e)
     return true;
     
 }
+
+#include "imeventfilter.moc"

@@ -110,3 +110,5 @@ void ImageBCGEdit::slotUser1()
 {
     slotClose();
 }
+
+#include "imagebcgedit.moc"

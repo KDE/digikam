@@ -219,3 +219,5 @@ void KExif::slot_close()
 {
     close();
 }
+
+#include "kexif.moc"

@@ -93,3 +93,5 @@ void SplashScreen::slotClose()
     if (timer_->isActive()) return;
     delete this;
 }
+
+#include "splashscreen.moc"

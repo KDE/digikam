@@ -662,3 +662,5 @@ void ImlibInterface::restore()
     if (im)
         im->restore();
 }
+
+#include "imlibinterface.moc"
