@@ -42,9 +42,9 @@ AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
 gphoto2 2.x
-imlib2 >= 1.0.x
+imlib2 >= 1.1.0
 libexif >= 0.5.7
-libgdbm
+libgdbm >= 1.8.0
 libKIPI from kdeextragear-libs-1
 libKexif from kdeextragear-libs-1
 
