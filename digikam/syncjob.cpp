@@ -34,7 +34,6 @@
 
 #include <qapplication.h>
 #include <qpixmap.h>
-#include <qimage.h>
 
 #include "albumsettings.h"
 #include "syncjob.h"
@@ -64,10 +63,10 @@ bool SyncJob::trash(const KURL::List& urls)
     return sj.trashPriv(urls);    
 }
 
-bool SyncJob::copy(const KURL &src, const KURL &dest)
+bool SyncJob::file_move(const KURL &src, const KURL &dest)
 {
     SyncJob sj;
-    return sj.copyPriv(src, dest);
+    return sj.fileMovePriv(src, dest);
 }
 
 QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
@@ -83,7 +82,8 @@ SyncJob::SyncJob()
 
 SyncJob::~SyncJob()
 {
-    delete thumbnail_;
+    if (thumbnail_)
+        delete thumbnail_;
 }
 
 bool SyncJob::delPriv(const KURL::List& urls)
@@ -112,7 +112,7 @@ bool SyncJob::trashPriv(const KURL::List& urls)
     return success_;
 }
 
-bool SyncJob::copyPriv(const KURL &src, const KURL &dest)
+bool SyncJob::fileMovePriv(const KURL &src, const KURL &dest)
 {
     success_ = true;
 
@@ -153,6 +153,8 @@ void SyncJob::slotResult( KIO::Job * job )
 QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 {
     thumbnailSize_ = size;
+    if (thumbnail_)
+        delete thumbnail_;
     thumbnail_ = new QPixmap;
     
     if(name.startsWith("/"))
@@ -202,10 +204,8 @@ void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix,
         int w2 = thumbnailSize_;
         int h1 = pix.height();
         int h2 = thumbnailSize_;
-        QImage image;
-        image = pix;
-        QImage cropped = image.copy((w1-w2)/2, (h1-h2)/2, w2, h2);
-        *thumbnail_ = cropped;
+        thumbnail_->resize(w2,h2);
+        bitBlt(thumbnail_, 0, 0, &pix, (w1-w2)/2, (h1-h2)/2, w2, h2);
     }
     else
     {
