@@ -140,7 +140,7 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
        }
 
     if (m_splash)      
-       m_splash->message(i18n("%1 Image Plugins loaded").arg(cpt));    
+       m_splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));    
 
     m_splash = 0;        // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 

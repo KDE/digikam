@@ -938,7 +938,7 @@ void DigikamApp::slotKipiPluginPlug()
     }
     
     if(mSplash)
-        mSplash->message(i18n("%1 Kipi Plugins loaded").arg(cpt));
+        mSplash->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
     
     // Create GUI menu in according with plugins.
 
