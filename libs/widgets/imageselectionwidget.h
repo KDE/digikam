@@ -84,7 +84,7 @@ public slots:
     
 signals:
 
-    void signalSelectionMoved( QRect rect, bool targetDone );     
+    void signalSelectionMoved( QRect rect );     
     void signalSelectionChanged( QRect rect );   
     void signalSelectionWidthChanged( int newWidth ); 
     void signalSelectionHeightChanged( int newHeight ); 
@@ -140,7 +140,7 @@ private:
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     void regionSelectionMoved( bool targetDone );
     
-    void regionSelectionChanged(void);
+    void regionSelectionChanged(bool targetDone);
     void realToLocalRegion(bool updateSizeOnly=false);
     void localToRealRegion(void);
     void applyAspectRatio(bool WOrH, bool repaintWidget=true, bool updateChange=true);

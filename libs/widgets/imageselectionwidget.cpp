@@ -240,7 +240,8 @@ void ImageSelectionWidget::setCenterSelection(void)
     m_localRegionSelection.moveBy(
       (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
       (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
-    applyAspectRatio(false);
+    applyAspectRatio(false, true, false);
+    regionSelectionChanged(true);
 }
 
 void ImageSelectionWidget::realToLocalRegion(bool updateSizeOnly)
@@ -340,7 +341,7 @@ void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget, bool 
     // Recalculate the real selection values.
     
     if (updateChange) 
-       regionSelectionChanged();
+       regionSelectionChanged(false);
     
     if (repaintWidget)
        {
@@ -366,14 +367,16 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
 
     localToRealRegion();
        
-    emit signalSelectionMoved( m_regionSelection, targetDone );
+    if (targetDone)    
+       emit signalSelectionMoved( m_regionSelection );
 }
 
-void ImageSelectionWidget::regionSelectionChanged(void)
+void ImageSelectionWidget::regionSelectionChanged(bool targetDone)
 {
     localToRealRegion();
 
-    emit signalSelectionChanged( m_regionSelection );   
+    if (targetDone)
+       emit signalSelectionChanged( m_regionSelection );   
 }
 
 void ImageSelectionWidget::updatePixmap(void)
@@ -501,7 +504,7 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
     if ( m_currentResizing != ResizingNone )
        {
        setCursor ( KCursor::arrowCursor() );
-       regionSelectionChanged();
+       regionSelectionChanged(true);
        m_currentResizing = ResizingNone;
        } 
     else if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
