@@ -68,7 +68,9 @@ public:
 
 ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     : KDialogBase(Plain, i18n("Image Comments/Tags"), User1|User2|Stretch|Ok|Apply|Cancel,
-                  Ok, view, 0, true, true, i18n("&Next"), i18n("&Previous"))
+                  Ok, view, 0, true, true, 
+		  KStdGuiItem::guiItem(KStdGuiItem::Forward), 
+		  KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
     m_view     = view;
     m_currItem = currItem;
