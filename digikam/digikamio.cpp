@@ -25,6 +25,8 @@
 #include <kmessagebox.h>
 #include <kdatastream.h>
 #include <kio/renamedlg.h>
+#include <kio/global.h>
+#include <kio/slaveinterface.h>
 
 #include <qtimer.h>
 #include <qfile.h>
