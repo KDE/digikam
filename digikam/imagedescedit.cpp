@@ -111,8 +111,8 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
 
     m_autoSaveBox = new QCheckBox(i18n("Automatically save comments and tags "
-			               "when navigating between items"),
-		                  plainPage());
+                                       "when navigating between items"),
+                                  plainPage());
     topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
     kapp->config()->setGroup("Image Description Dialog");
     m_autoSaveBox->setChecked(kapp->config()->readBoolEntry("Auto Save", true));
@@ -241,7 +241,7 @@ void ImageDescEdit::slotUser2()
         return;
     
     if (m_autoSaveBox->isChecked())
-	slotApply();    
+        slotApply();    
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     slotItemChanged();
@@ -333,6 +333,7 @@ void ImageDescEdit::slotItemChanged()
     KURL fileURL(m_currItem->fileItem()->url());    
     
     m_thumbJob = new ThumbnailJob(fileURL, 256);
+    
     connect(m_thumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
@@ -341,6 +342,10 @@ void ImageDescEdit::slotItemChanged()
                                   const QPixmap&,
                                   const KFileMetaInfo*)));
     
+    connect(m_thumbJob,
+            SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedThumbnail(const KURL&)));    
+                                  
     PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
     if (!album)
     {
@@ -382,6 +387,12 @@ void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
                                      const KFileMetaInfo*)
 {
     m_thumbLabel->setPixmap(pix);
+}
+
+void ImageDescEdit::slotFailedThumbnail(const KURL&)
+{
+    m_thumbLabel->clear();
+    m_thumbLabel->setText(i18n("Thumnail unavailable"));
 }
 
 void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 

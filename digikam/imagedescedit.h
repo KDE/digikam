@@ -94,7 +94,9 @@ private slots:
     void slotOk();
     void slotGotThumbnail(const KURL&, const QPixmap& pix,
                           const KFileMetaInfo*);    
+    void slotFailedThumbnail(const KURL&);
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
+
 };
  
 #endif  // IMAGEDESCEDIT_H
