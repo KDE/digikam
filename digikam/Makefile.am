@@ -27,13 +27,13 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        albumfolderview.cpp albumfolderitem.cpp \
 		        albumiconview.cpp albumiconitem.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
-		        albumsettings.cpp histogrampropsplugin.cpp \
+		        albumsettings.cpp imageproperties.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamfirstrun.cpp firstrunUI.ui \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			thumbdb.cpp albumfiletip.cpp digikamio.cpp \
 			busyprogressbar.cpp tagspopupmenu.cpp \
-			syncjob.cpp exifpropsplugin.cpp imageproperties.cpp 
+			syncjob.cpp  
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_GDBM) \
