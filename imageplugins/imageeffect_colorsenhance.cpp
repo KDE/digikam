@@ -5,7 +5,7 @@
  * Description : image contrast enhancement techniques. 
  * 
  * Copyright 2004 by Gilles Caulier
- * Normalize algorithm fixed and adapted for to work with Raw 
+ * Normalize an Equalize algorithms fixed and adapted for to work with Raw 
  * data image (ARGB).
  * 
  * Algorithms are taken from KImageEffect API of KDE project.
@@ -50,9 +50,147 @@
 
 #include "imageeffect_colorsenhance.h"
 
-// Performs histogram equalisation.The algorithm normalizes 
+/////////////////////////////////////////////////////////////////////////////////
+// Performs an histogram equalisation of the image.
+
+void ImageEffect_ColorsEnhance::equalizeImage()
+{
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth();
+    int   h    = iface.originalHeight();
+
+    if (!data || !w || !h)
+       {
+       kdWarning() << ("ImageEffect_ColorsEnhance::equalizeImage: no image data available!") << endl;
+       return;
+       }
+       
+    struct double_packet  high, low, intensity;
+    struct double_packet *histogram;
+    struct double_packet *map;
+    struct short_packet  *equalize_map;
+    int                   x, y;
+    unsigned int         *p, *q;
+    register long         i;               // long type in kdefx ! checked !!!
+    unsigned char         r, g, b, a;
+    
+    // Memory allocation. I have fixed the that because the old implementation 
+    // using malloc !!! Now we use a full C++ compliance.
+    
+    histogram    = new double_packet[256];
+    map          = new double_packet[256];
+    equalize_map = new short_packet[256];
+    
+    if( !histogram || !map || !equalize_map )
+       {
+       if(histogram)
+           delete [] histogram;
+       
+       if(map)
+           delete [] map;
+       
+       if(equalize_map)
+           delete [] equalize_map;
+        
+       kdWarning() << ("ImageEffect_ColorsEnhance::equalizeImage: Unable to allocate memory!") << endl;
+       return;
+       }
+    
+    // Form histogram.
+    
+    memset(histogram, 0, 256*sizeof(struct double_packet));
+        
+    for (y = 0 ; y < h ; ++y)
+      {
+      p = data + (w * y);
+      
+      for (x = 0 ; x < w ; ++x)
+         {
+         histogram[(unsigned char)(*p)].blue++;
+         histogram[(unsigned char)(*p >> 8)].green++;
+         histogram[(unsigned char)(*p >> 16)].red++;
+         histogram[(unsigned char)(*p >> 24)].alpha++;
+         p++;
+         }
+      }
+      
+    // Integrate the histogram to get the equalization map.
+     
+    memset(&intensity, 0, sizeof(struct double_packet));
+    memset(&high, 0, sizeof(struct double_packet));            
+    memset(&low,  0, sizeof(struct double_packet));
+    
+    for(i = 0 ; i <= 255 ; ++i)
+       {
+       intensity.red   += histogram[i].red;
+       intensity.green += histogram[i].green;
+       intensity.blue  += histogram[i].blue;
+       intensity.alpha += histogram[i].alpha;
+       map[i]=intensity;
+       }
+    
+    low =  map[0];
+    high = map[255];
+    memset(equalize_map, 0, 256*sizeof(short_packet));
+    
+    for(i = 0 ; i <= 255 ; ++i)
+       {
+       if(high.red != low.red)
+          equalize_map[i].red=(unsigned short)((65535*(map[i].red-low.red))/(high.red-low.red));
+       if(high.green != low.green)
+          equalize_map[i].green=(unsigned short)((65535*(map[i].green-low.green))/(high.green-low.green));
+       if(high.blue != low.blue)
+          equalize_map[i].blue=(unsigned short)((65535*(map[i].blue-low.blue))/(high.blue-low.blue));
+       if(high.alpha != low.alpha)
+          equalize_map[i].alpha=(unsigned short)((65535*(map[i].alpha-low.alpha))/(high.alpha-low.alpha));
+       }
+    
+    delete [] histogram;
+    delete [] map;
+    
+    // Stretch the histogram.
+    
+    for(y = 0 ; y < h ; ++y)
+       {
+       q = data + (w * y);
+            
+       for(x = 0 ; x < w ; ++x)
+          {
+          if(low.red != high.red)
+             r = (equalize_map[(unsigned char)(q[x] >> 16)].red)/257;
+          else
+             r = (unsigned char)(q[x] >> 16);      
+          if(low.green != high.green)
+             g = (equalize_map[(unsigned char)(q[x] >> 8)].green)/257;
+          else
+             g = (unsigned char)(q[x] >> 8);       
+          if(low.blue != high.blue)
+             b = (equalize_map[(unsigned char)(q[x])].blue)/257;
+          else
+             b = (unsigned char)(q[x]);            
+          if(low.alpha != high.alpha)
+             a = (equalize_map[(unsigned char)(q[x] >> 24)].alpha)/257;
+          else
+             a = (unsigned char)(q[x] >> 24);      
+          
+          q[x] = (unsigned int)(a << 24) + (unsigned int)(r << 16) + 
+                 (unsigned int)(g << 8)  + (unsigned int)(b);                
+          }
+       }
+    
+    delete [] equalize_map;
+    
+    iface.putOriginalData(data);
+    delete [] data;       
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Performs histogram normalization of the image. The algorithm normalizes 
 // the pixel values from an image for to span the full range 
 // of color values. This is a contrast enhancement technique. 
+
 void ImageEffect_ColorsEnhance::normalizeImage()
 {
     Digikam::ImageIface iface(0, 0);
@@ -63,7 +201,7 @@ void ImageEffect_ColorsEnhance::normalizeImage()
 
     if (!data || !w || !h)
        {
-       kdWarning() << ("ImageEffect_ColorsEnhance: no image data available!") << endl;
+       kdWarning() << ("ImageEffect_ColorsEnhance::normalizeImage: no image data available!") << endl;
        return;
        }
 
@@ -91,7 +229,7 @@ void ImageEffect_ColorsEnhance::normalizeImage()
        if(normalize_map)
            delete [] normalize_map;
         
-       kdWarning() << ("ImageEffect_ColorsEnhance: Unable to allocate memory!") << endl;
+       kdWarning() << ("ImageEffect_ColorsEnhance::normalizeImage: Unable to allocate memory!") << endl;
        return;
        }
 

@@ -43,6 +43,7 @@ struct short_packet
 
 public:
 
+    static void equalizeImage();
     static void normalizeImage();
     static void testKImageEffect();
 

@@ -83,6 +83,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotNormalize()),
                 actionCollection(), "implugcore_normalize") );
 
+    m_colorsAction->insert(
+                new KAction(i18n("Equalize"), 0, 
+                this, SLOT(slotEqualize()),
+                actionCollection(), "implugcore_equalize") );                
+    
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
@@ -174,6 +179,11 @@ void ImagePlugin_Core::slotHSL()
 void ImagePlugin_Core::slotNormalize()
 {
     ImageEffect_ColorsEnhance::normalizeImage();
+}
+
+void ImagePlugin_Core::slotEqualize()
+{
+    ImageEffect_ColorsEnhance::equalizeImage();
 }
 
 void ImagePlugin_Core::slotSolarize()

@@ -57,6 +57,7 @@ private slots:
     void slotRGB();
     void slotHSL();
     void slotNormalize();
+    void slotEqualize();
     void slotBW();
     void slotSepia();
     void slotSolarize();
