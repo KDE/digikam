@@ -18,25 +18,29 @@
  * 
  * ============================================================ */
 
+// Local includes.
+ 
 #include "imageplugin.h"
 
 namespace Digikam
 {
 
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
-    : QObject(parent, name)
+           : QObject(parent, name)
 {
     m_parentWidget = 0;
 }
 
 ImagePlugin::~ImagePlugin()
-{
-    
+{    
 }
 
 void ImagePlugin::setEnabledSelectionActions(bool)
 {
-    
+}
+
+void ImagePlugin::setEnabledActions(bool)
+{
 }
 
 void ImagePlugin::setParentWidget(QWidget* parent)
@@ -49,4 +53,5 @@ QWidget* ImagePlugin::parentWidget()
     return m_parentWidget;
 }
 
-}
+}  // namespace Digikam
+

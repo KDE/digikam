@@ -21,7 +21,12 @@
 #ifndef IMAGEPLUGIN_H
 #define IMAGEPLUGIN_H
 
+// Qt includes.
+
 #include <qobject.h>
+
+// KDE includes.
+
 #include <kxmlguiclient.h>
 
 class QWidget;
@@ -37,15 +42,18 @@ public:
     virtual ~ImagePlugin();
 
     virtual void setEnabledSelectionActions(bool enable);
+    virtual void setEnabledActions(bool enable);
 
     void     setParentWidget(QWidget* parent);
-    QWidget* parentWidget();
+    
+    QWidget  *parentWidget();
     
 private:
 
-    QWidget    *m_parentWidget;
+    QWidget  *m_parentWidget;
 };
 
-}
+}  //namespace Digikam
 
 #endif /* IMAGEPLUGIN_H */
+
