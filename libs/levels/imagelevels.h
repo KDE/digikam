@@ -77,15 +77,31 @@ public:
     ~ImageLevels();
 
     // Methods for to manipulate the levels data.        
-    void  levelsAuto(Digikam::ImageHistogram *hist);
-    void  levelsChannelAuto(Digikam::ImageHistogram *hist, int channel);
-    int   levelsInputFromColor(int channel, uchar *color);    
-    void  levelsAdjustByColors(int channel, uchar *black, uchar *gray, uchar *white);
-    void  levelsCalculateTransfers();
-    float levelsLutFunc(int n_channels, int channel, float value);
-    void  levelsLutSetup(int nchannels);
-    void  levelLutProcess(uint *srcPR, uint *destPR, int w, int h);
     
+    void   levelsChannelReset(int channel);
+    void   levelsAuto(Digikam::ImageHistogram *hist);
+    void   levelsChannelAuto(Digikam::ImageHistogram *hist, int channel);
+    int    levelsInputFromColor(int channel, uchar *color);    
+    void   levelsAdjustByColors(int channel, uchar *black, uchar *gray, uchar *white);
+    void   levelsCalculateTransfers();
+    float  levelsLutFunc(int n_channels, int channel, float value);
+    void   levelsLutSetup(int nchannels);
+    void   levelLutProcess(uint *srcPR, uint *destPR, int w, int h);
+
+    // Methods for to set manualy the levels values.        
+    
+    void   setLevelGammaValue(int Channel, double val);
+    void   setLevelLowInputValue(int Channel, int val);
+    void   setLevelHighInputValue(int Channel, int val);
+    void   setLevelLowOutputValue(int Channel, int val);
+    void   setLevelHighOutputValue(int Channel, int val);    
+    
+    double getLevelGammaValue(int Channel);
+    int    getLevelLowInputValue(int Channel);
+    int    getLevelHighInputValue(int Channel);
+    int    getLevelLowOutputValue(int Channel);
+    int    getLevelHighOutputValue(int Channel);    
+        
 private:
 
     // Levels data.
@@ -93,8 +109,6 @@ private:
     
     // Lut data.
     struct _Lut *m_lut;
-     
-    void levelsChannelReset(int channel);
 };
 
 }  // NameSpace Digikam

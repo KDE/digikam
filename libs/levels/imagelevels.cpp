@@ -50,13 +50,8 @@ ImageLevels::ImageLevels()
     m_lut->luts      = NULL;
     m_lut->nchannels = 0;
 
-    for (int channel = Digikam::ImageHistogram::ValueChannel ;
-         channel <= Digikam::ImageHistogram::AlphaChannel ;
-         ++channel)
-       {
+    for (int channel = 0 ; channel < 5 ; ++channel)
        levelsChannelReset(channel);
-       }
-
 }
 
 ImageLevels::~ImageLevels()
@@ -442,6 +437,76 @@ void ImageLevels::levelLutProcess(uint *srcPR, uint *destPR, int w, int h)
     src  += src_r_i;
     dest += dest_r_i;
     }
+}
+
+void ImageLevels::setLevelGammaValue(int Channel, double val)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       m_levels->gamma[Channel] = val;
+}
+
+void ImageLevels::setLevelLowInputValue(int Channel, int val)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       m_levels->low_input[Channel] = val;
+}
+
+void ImageLevels::setLevelHighInputValue(int Channel, int val)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       m_levels->high_input[Channel] = val;
+}
+
+void ImageLevels::setLevelLowOutputValue(int Channel, int val)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       m_levels->low_output[Channel] = val;
+}
+
+void ImageLevels::setLevelHighOutputValue(int Channel, int val)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       m_levels->high_output[Channel] = val;
+}
+
+double ImageLevels::getLevelGammaValue(int Channel)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       return (m_levels->gamma[Channel]);
+    
+    return 0.0;
+}
+
+int ImageLevels::getLevelLowInputValue(int Channel)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       return (m_levels->low_input[Channel]);
+    
+    return 0;
+}
+
+int ImageLevels::getLevelHighInputValue(int Channel)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       return (m_levels->high_input[Channel]);
+    
+    return 0;
+}
+
+int ImageLevels::getLevelLowOutputValue(int Channel)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       return (m_levels->low_output[Channel]);
+    
+    return 0;
+}
+
+int ImageLevels::getLevelHighOutputValue(int Channel)
+{
+    if ( m_levels && Channel>=0 && Channel<5 )
+       return (m_levels->high_output[Channel]);
+    
+    return 0;
 }
 
 }  // NameSpace Digikam
