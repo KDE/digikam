@@ -515,7 +515,7 @@ void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
     if ( m_curves && 
          channel>=0 && channel<5 && 
          point>=0 && point<=17 &&
-         val.x()>=0 && val.x()<=255 &&
+         val.x()>=-1 && val.x()<=255 &&    // x can be egal to -1 if the current point is disable !!!
          val.y()>=0 && val.y()<=255)
        {
        m_curves->points[channel][point][0] = val.x();
@@ -528,7 +528,7 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
     if ( m_curves && 
          channel>=0 && channel<5 && 
          point>=0 && point<=17 &&
-         x>=0 && x<=255)
+         x>=-1 && x<=255)                 // x can be egal to -1 if the current point is disable !!!
        {
        m_curves->points[channel][point][0] = x;
        }
