@@ -622,9 +622,11 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
 
-    // Press outside any item. unselect all
-    clearSelection();
-
+    // Press outside any item. unselect all if the ctrl button is not pressed
+    if (!(e->state() & Qt::ControlButton))
+    {
+        clearSelection();
+    }
 
     // If not item then initiate rubber
     if ( d->rubber ) {
@@ -689,13 +691,6 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
                 if (nr.intersects(item->rect())) {
                     if (!item->isSelected()) {
                         item->setSelected(true, false);
-                        changed = true;
-                        paintRegion += QRect(item->rect());
-                    }
-                }
-                else {
-                    if (item->isSelected()) {
-                        item->setSelected(false, false);
                         changed = true;
                         paintRegion += QRect(item->rect());
                     }
