@@ -97,8 +97,8 @@ signals:
     void signalRequestUpdate();
     
 private:
+
     bool saveAction(const QString& saveFile); 
-    bool saveTIFF(const QString& saveFile, bool compress=false);
 
     ImlibInterface();
 
