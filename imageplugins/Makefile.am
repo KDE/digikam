@@ -1,7 +1,7 @@
 SUBDIRS = common adjustlevels solarize despeckle oilpaint emboss charcoal unsharp \
 	  raindrop filmgrain freerotation adjustcurves sheartool antivignetting \
 	  lensdistortion superimpose perspective border blurfx distortionfx \
-	  inserttext infrared channelmixer texture whitebalance restoration inpainting 
+	  inserttext infrared channelmixer texture whitebalance restoration  
 
 AUTOMAKE_OPTIONS = foreign 
 
