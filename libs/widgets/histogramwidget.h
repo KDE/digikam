@@ -72,14 +72,16 @@ public:
     
     HistogramWidget(int w, int h,                              // Widget size.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true);
+                    bool blinkComputation=true,
+                    bool statisticsVisible=false);
 
     // Constructor with image data and without image selection data.
     
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true);
+                    bool blinkComputation=true,
+                    bool statisticsVisible=false);
     
     // Constructor with image data and image selection data.
     
@@ -87,7 +89,8 @@ public:
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     uint *s_data, uint s_w, uint s_h,          // Image selection info.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true);
+                    bool blinkComputation=true,
+                    bool statisticsVisible=false);
     
     ~HistogramWidget();
 
@@ -141,12 +144,14 @@ private:
     int     m_xmax;
     int     m_clearFlag;          // Clear drawing zone with message.
     
-    bool    m_guideVisible;
+    bool    m_guideVisible;       // Display color guide.
+    bool    m_statisticsVisible;  // Display tooltip histogram statistics.
     bool    m_inSelected;
     bool    m_selectMode;         // If true, a part of the histogram can be selected !
     bool    m_blinkFlag; 
     bool    m_blinkComputation;   // If true, a message will be displayed during histogram computation,
-                                  // else nothing (limit flicker effect in widget especially for small image/computation time).       
+                                  // else nothing (limit flicker effect in widget especially for small
+                                  // image/computation time).       
     
     QTimer *m_blinkTimer;
     

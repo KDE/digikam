@@ -35,6 +35,7 @@
 #include <qrect.h> 
 #include <qfont.h> 
 #include <qfontmetrics.h> 
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -56,21 +57,23 @@ namespace Digikam
 // Constructor without image data (needed to use updateData() method after instance created).
 
 HistogramWidget::HistogramWidget(int w, int h, 
-                                 QWidget *parent, bool selectMode, bool blinkComputation)
+                                 QWidget *parent, bool selectMode, 
+                                 bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType      = ValueHistogram;
-    m_scaleType        = LogScaleHistogram;
-    m_colorType        = RedColor;
-    m_renderingType    = FullImageHistogram;
-    m_inSelected       = false;
-    m_blinkFlag        = false;
-    m_clearFlag        = HistogramNone;
-    m_selectMode       = selectMode;
-    m_xmin             = 0;
-    m_xmax             = 0;
-    m_blinkComputation = blinkComputation;
-    m_guideVisible     = false;
+    m_channelType       = ValueHistogram;
+    m_scaleType         = LogScaleHistogram;
+    m_colorType         = RedColor;
+    m_renderingType     = FullImageHistogram;
+    m_inSelected        = false;
+    m_blinkFlag         = false;
+    m_clearFlag         = HistogramNone;
+    m_selectMode        = selectMode;
+    m_xmin              = 0;
+    m_xmax              = 0;
+    m_blinkComputation  = blinkComputation;
+    m_guideVisible      = false;
+    m_statisticsVisible = statisticsVisible;
         
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -89,21 +92,23 @@ HistogramWidget::HistogramWidget(int w, int h,
 
 HistogramWidget::HistogramWidget(int w, int h, 
                                  uint *i_data, uint i_w, uint i_h, 
-                                 QWidget *parent, bool selectMode, bool blinkComputation)
+                                 QWidget *parent, bool selectMode, 
+                                 bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType      = ValueHistogram;
-    m_scaleType        = LogScaleHistogram;
-    m_colorType        = RedColor;
-    m_renderingType    = FullImageHistogram;
-    m_inSelected       = false;
-    m_blinkFlag        = false;
-    m_clearFlag        = HistogramNone;
-    m_selectMode       = selectMode;
-    m_xmin             = 0;
-    m_xmax             = 0;
-    m_blinkComputation = blinkComputation;
-    m_guideVisible     = false;
+    m_channelType       = ValueHistogram;
+    m_scaleType         = LogScaleHistogram;
+    m_colorType         = RedColor;
+    m_renderingType     = FullImageHistogram;
+    m_inSelected        = false;
+    m_blinkFlag         = false;
+    m_clearFlag         = HistogramNone;
+    m_selectMode        = selectMode;
+    m_xmin              = 0;
+    m_xmax              = 0;
+    m_blinkComputation  = blinkComputation;
+    m_guideVisible      = false;
+    m_statisticsVisible = statisticsVisible;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -123,21 +128,23 @@ HistogramWidget::HistogramWidget(int w, int h,
 HistogramWidget::HistogramWidget(int w, int h, 
                                  uint *i_data, uint i_w, uint i_h, 
                                  uint *s_data, uint s_w, uint s_h,
-                                 QWidget *parent, bool selectMode, bool blinkComputation)
+                                 QWidget *parent, bool selectMode, 
+                                 bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_channelType      = ValueHistogram;
-    m_scaleType        = LogScaleHistogram;
-    m_colorType        = RedColor;
-    m_renderingType    = FullImageHistogram;
-    m_inSelected       = false;
-    m_blinkFlag        = false;
-    m_clearFlag        = HistogramNone;
-    m_selectMode       = selectMode;
-    m_xmin             = 0;
-    m_xmax             = 0;
-    m_blinkComputation = blinkComputation;
-    m_guideVisible     = false;
+    m_channelType       = ValueHistogram;
+    m_scaleType         = LogScaleHistogram;
+    m_colorType         = RedColor;
+    m_renderingType     = FullImageHistogram;
+    m_inSelected        = false;
+    m_blinkFlag         = false;
+    m_clearFlag         = HistogramNone;
+    m_selectMode        = selectMode;
+    m_xmin              = 0;
+    m_xmax              = 0;
+    m_blinkComputation  = blinkComputation;
+    m_guideVisible      = false;
+    m_statisticsVisible = statisticsVisible;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -712,7 +719,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       
        if (guidePos != -1)
           {
-          p1.drawLine((guidePos * wWidth) / 256, 0, (guidePos * wWidth) / 256, wHeight);  
+          int xGuide = (guidePos * wWidth) / 256;
+          p1.drawLine(xGuide, 0, xGuide, wHeight);  
 
           QString string = i18n("x:%1").arg(guidePos);
           QFontMetrics fontMt( string );       
@@ -721,17 +729,35 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       
           if (guidePos < wWidth/2)
              {
-             rect.moveLeft(((guidePos * wWidth) / 256) + 3);
+             rect.moveLeft(xGuide + 3);
              p1.drawText(rect, Qt::AlignLeft, string);
              }
           else
              {
-             rect.moveRight(((guidePos * wWidth) / 256) - 3);
+             rect.moveRight(xGuide - 3);
              p1.drawText(rect, Qt::AlignRight, string);
              }
           }
        }
-      
+
+    if (m_statisticsVisible)   
+       {
+       QToolTip::add( this, i18n("Mean: %1<br>"
+                                 "Pixels: %2<br>"
+                                 "Std dev.: %3<br>"
+                                 "Count: %4<br>"
+                                 "Median: %5<br>"
+                                 "Percent: %6<br>")
+                                 .arg(histogram->getMean(m_channelType, 0, 255))
+                                 .arg(histogram->getPixels())
+                                 .arg(histogram->getStdDev(m_channelType, 0, 255))
+                                 .arg(histogram->getCount(m_channelType, 0, 255))
+                                 .arg(histogram->getMedian(m_channelType, 0, 255))
+                                 .arg((histogram->getPixels() > 0 ?
+                                      (100.0 * histogram->getCount(m_channelType, 0, 255) /
+                                       histogram->getPixels()) : 0.0)));
+       }      
+       
     p1.end();
     bitBlt(this, 0, 0, &pm);
 }
