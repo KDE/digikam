@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>
@@ -80,7 +80,6 @@ PixelAccess::PixelAccess(uint *data, int Width, int Height)
     m_srcPR       = data;
      
     m_image.create( m_imageWidth, m_imageHeight, 32 );
-    m_image.setAlphaBuffer(true) ;
     memcpy(m_image.bits(), m_srcPR, m_image.numBytes());
     
     for ( int i = 0 ; i < PixelAccessRegions ; ++i ) 
@@ -392,7 +391,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     
     // -------------------------------------------------------------
                                                   
-    QGroupBox *gbox2 = new QGroupBox(i18n("Filter Settings"), plainPage());
+    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 5, 2, 20, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gbox2 );
