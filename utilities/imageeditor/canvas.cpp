@@ -127,8 +127,8 @@ Canvas::Canvas(QWidget *parent)
     p.fillRect(8, 0, 8, 8, QColor(100,100,100));
     p.end();
     
-    connect(d->im, SIGNAL(signalModified(bool)),
-            SLOT(slotModified(bool)));
+    connect(d->im, SIGNAL(signalModified(bool, bool)),
+            SLOT(slotModified(bool, bool)));
     connect(this, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
@@ -176,7 +176,7 @@ void Canvas::load(const QString& filename)
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
-    emit signalChanged(false);
+    emit signalChanged(false, false);
     emit signalZoomChanged(d->zoom);
 }
 
@@ -190,7 +190,7 @@ int Canvas::save(const QString& filename, int JPEGcompression,
 {
     int result = d->im->save(filename, JPEGcompression, PNGcompression, 
                              TIFFcompression);
-    if ( result == true ) emit signalChanged(false);
+    if ( result == true ) emit signalChanged(false, false);
     return result;
 }
 
@@ -200,7 +200,7 @@ int Canvas::saveAs(const QString& filename, int JPEGcompression,
 {
     int result = d->im->saveAs(filename, JPEGcompression, PNGcompression, 
                                TIFFcompression, mimeType);
-    if ( result == true ) emit signalChanged(false);
+    if ( result == true ) emit signalChanged(false, false);
     return result;
 }
 
@@ -878,6 +878,11 @@ void Canvas::slotUndo()
     d->im->undo();
 }
 
+void Canvas::slotRedo()
+{
+    d->im->redo();
+}
+
 void Canvas::slotCopy()
 {
     int x, y, w, h;
@@ -934,7 +939,7 @@ void Canvas::slotSelected()
     d->im->setSelectedArea(x, y, w, h);
 }
 
-void Canvas::slotModified(bool anyMoreUndo)
+void Canvas::slotModified(bool anyMoreUndo, bool anyMoreRedo)
 {
     if (d->autoZoom)
         updateAutoZoom();
@@ -942,7 +947,7 @@ void Canvas::slotModified(bool anyMoreUndo)
 
     updateContentsSize();
     viewport()->update();
-    emit signalChanged(anyMoreUndo);
+    emit signalChanged(anyMoreUndo, anyMoreRedo);
 }
 
 void Canvas::slotPaintSmooth()

@@ -27,6 +27,7 @@
      <Action name="imageview_copy" />
      <Separator/>
      <Action name="imageview_undo" />
+     <Action name="imageview_redo" />
   </Menu>
   
   <Menu name="Image" >
@@ -82,6 +83,7 @@
      <Separator/>     
      <Action name="imageview_save" />
      <Action name="imageview_undo" />
+     <Action name="imageview_redo" />     
      <Action name="imageview_restore" />
      <Separator/>     
      <Action name="imageview_zoom_plus" /> 

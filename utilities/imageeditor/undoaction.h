@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Jörn Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-02-06
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Jörn Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +32,7 @@ public:
     virtual ~UndoAction();
 
     virtual void rollBack() = 0;
+    virtual void execute()  = 0;
     
 protected:
 
@@ -52,6 +54,7 @@ public:
     ~UndoActionRotate();
 
     void rollBack();
+    void execute();
 
 private:
 
@@ -72,6 +75,7 @@ public:
     ~UndoActionFlip();
 
     void rollBack();
+    void execute();
 
 private:
 
@@ -83,17 +87,22 @@ class UndoActionBCG : public UndoAction
 public:
 
     UndoActionBCG(Digikam::ImlibInterface* iface,
-                  double gamma, double brightness,
-                  double contrast);
+                  double oldGamma, double oldBrightness,
+                  double oldContrast, double newGamma,
+                  double newBrightness, double newContrast);
     ~UndoActionBCG();
 
     void rollBack();
-    
+    void execute();    
+
 private:
 
-    double m_gamma;
-    double m_brightness;
-    double m_contrast;
+    double m_oldGamma;
+    double m_oldBrightness;
+    double m_oldContrast;
+    double m_newGamma;
+    double m_newBrightness;
+    double m_newContrast;
 };
 
 class UndoActionIrreversible : public UndoAction
@@ -104,6 +113,8 @@ public:
     ~UndoActionIrreversible();
 
     void rollBack();
+    void execute();
+
 };
 
 #endif /* UNDOACTION_H */

@@ -1,10 +1,11 @@
 /* ============================================================
  * File  : undoaction.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Jörn Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-02-06
  * Description : 
  * 
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Jörn Ahrens
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +62,24 @@ void UndoActionRotate::rollBack()
     }
 }
 
+void UndoActionRotate::execute()
+{
+    switch(m_angle)
+    {
+    case R90:
+        m_iface->rotate90(false);
+        return;
+    case R180:
+        m_iface->rotate180(false);
+        return;
+    case R270:
+        m_iface->rotate270(false);
+        return;
+    default:
+        kdWarning() << "Unknown rotate angle specified" << endl;
+    }
+}
+
 UndoActionFlip::UndoActionFlip(Digikam::ImlibInterface* iface,
                                UndoActionFlip::Direction dir)
     : UndoAction(iface), m_dir(dir)
@@ -88,14 +107,22 @@ void UndoActionFlip::rollBack()
     }
 }
 
+void UndoActionFlip::execute()
+{
+    rollBack();
+}
+
 UndoActionBCG::UndoActionBCG(Digikam::ImlibInterface* iface,
-                             double gamma, double brightness,
-                             double contrast)
-    : UndoAction(iface), m_gamma(gamma), m_brightness(brightness),
-      m_contrast(contrast)
+                             double oldGamma, double oldBrightness,
+                             double oldContrast, double newGamma,
+                             double newBrightness, double newContrast)
+    : UndoAction(iface), m_oldGamma(oldGamma), m_oldBrightness(oldBrightness),
+      m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
+      m_newContrast(newContrast)
 {
     
 }
+
 UndoActionBCG::~UndoActionBCG()
 {
     
@@ -103,7 +130,12 @@ UndoActionBCG::~UndoActionBCG()
 
 void UndoActionBCG::rollBack()
 {
-    m_iface->changeBCG(m_gamma, m_brightness, m_contrast);    
+    m_iface->changeBCG(m_oldGamma, m_oldBrightness, m_oldContrast);
+}
+
+void UndoActionBCG::execute()
+{
+    m_iface->changeBCG(m_newGamma, m_newBrightness, m_newContrast);
 }
 
 UndoActionIrreversible::UndoActionIrreversible(Digikam::ImlibInterface* iface)
@@ -113,10 +145,14 @@ UndoActionIrreversible::UndoActionIrreversible(Digikam::ImlibInterface* iface)
 
 UndoActionIrreversible::~UndoActionIrreversible()
 {
-    
+
 }
 
 void UndoActionIrreversible::rollBack()
+{
+}
+
+void UndoActionIrreversible::execute()
 {
 }
 

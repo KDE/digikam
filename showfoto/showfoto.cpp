@@ -125,6 +125,9 @@ void ShowFoto::setupActions()
     m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
                                     actionCollection(), "undo");
     
+    m_redoAction = KStdAction::redo(m_canvas, SLOT(slotRedo()),
+                                    actionCollection(), "redo");
+
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
     
@@ -135,6 +138,7 @@ void ShowFoto::setupActions()
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
     m_undoAction->setEnabled(false);
+    m_redoAction->setEnabled(false);
                      
     // ---------------------------------------------------------------
     

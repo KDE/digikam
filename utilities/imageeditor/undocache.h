@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Jörn Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-02-05
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Jörn Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,9 +31,11 @@ public:
     ~UndoCache();
 
     void clear();
-    bool pushLevel(int level, int w, int h, uint* data);
-    bool popLevel(int level,  int& w, int& h, uint*& data);
-    
+    bool putData(int level, int w, int h, uint* data);
+    bool getData(int level, int& w, int& h, uint*& data, bool del=true);
+
+    void erase(int level);
+
 private:
 
     UndoCachePriv* d;

@@ -1,10 +1,11 @@
 /* ============================================================
  * File  : undocache.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Jörn Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-02-05
  * Description : 
  * 
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Jörn Ahrens
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,11 +51,13 @@ UndoCache::UndoCache()
 {
     d = new UndoCachePriv;
 
-    QString tmp = QString("%1-%2-undocache")
-                  .arg(KGlobal::instance()->aboutData()->programName())
-                  .arg(getpid());
-    
-    d->cachePrefix = locateLocal("cache", tmp);
+    QString cacheDir;
+    cacheDir = locateLocal("cache", 
+                           KGlobal::instance()->aboutData()->programName() + "/");
+
+    d->cachePrefix = QString("%1undocache-%2")
+                             .arg(cacheDir)
+                             .arg(getpid());
 }
 
 UndoCache::~UndoCache()
@@ -63,6 +66,9 @@ UndoCache::~UndoCache()
     delete d;
 }
 
+/**
+ * delete all cache files
+ */
 void UndoCache::clear()
 {
     for (QStringList::iterator it = d->cacheFilenames.begin();
@@ -74,7 +80,10 @@ void UndoCache::clear()
     d->cacheFilenames.clear();
 }
 
-bool UndoCache::pushLevel(int level, int w, int h, uint* data)
+/**
+ * write the data into a cache file
+ */
+bool UndoCache::putData(int level, int w, int h, uint* data)
 {
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
@@ -82,7 +91,7 @@ bool UndoCache::pushLevel(int level, int w, int h, uint* data)
 
     QFile file(cacheFile);
     
-    if (!file.open(IO_WriteOnly))
+    if (file.exists() || !file.open(IO_WriteOnly))
         return false;
 
     QDataStream ds(&file);
@@ -101,7 +110,10 @@ bool UndoCache::pushLevel(int level, int w, int h, uint* data)
     return true;
 }
 
-bool UndoCache::popLevel(int level, int& w, int& h, uint*& data)
+/**
+ * get the data from a cache file
+ */
+bool UndoCache::getData(int level, int& w, int& h, uint*& data, bool del)
 {
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
@@ -124,9 +136,26 @@ bool UndoCache::popLevel(int level, int& w, int& h, uint*& data)
 
     file.close();
 
-    ::unlink(QFile::encodeName(cacheFile));
-
-    d->cacheFilenames.remove(cacheFile);
+    if(del)
+    {
+        ::unlink(QFile::encodeName(cacheFile));
+        d->cacheFilenames.remove(cacheFile);
+    }
 
     return true;
+}
+
+/**
+ * delete a cache file
+ */
+void UndoCache::erase(int level)
+{
+    QString cacheFile = QString("%1-%2.bin")
+                        .arg(d->cachePrefix)
+                        .arg(level);
+
+    if(d->cacheFilenames.find(cacheFile) == d->cacheFilenames.end())
+        return;
+    
+    ::unlink(QFile::encodeName(cacheFile));
 }

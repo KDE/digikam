@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Jörn Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-02-06
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Jörn Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,15 +38,24 @@ public:
     ~UndoManager();
 
     void undo();
+    void redo();
+    
     void clear(bool clearCache=true);
     bool anyMoreUndo();
+    bool anyMoreRedo();    
 
     void addAction(UndoAction* action);
 
 private:
+    
+    void clearUndoActions();
+    void clearRedoActions();
 
     Digikam::ImlibInterface* m_iface;
-    QValueList<UndoAction*>  m_actions;
+    
+    QValueList<UndoAction*>  m_undoActions;
+    QValueList<UndoAction*>  m_redoActions;
+    
     UndoCache*               m_cache;
 };
 

@@ -122,6 +122,7 @@ private:
     
     KAction       *m_copyAction;
     KAction       *m_undoAction;
+    KAction       *m_redoAction;    
     
     KAction       *m_imagePluginsHelp;
     
@@ -161,7 +162,7 @@ private slots:
     
     void slotContextMenu();
     void slotZoomChanged(float zoom);
-    void slotChanged(bool);
+    void slotChanged(bool, bool);
     void slotSelected(bool);
 
     void slotRotatedOrFlipped();

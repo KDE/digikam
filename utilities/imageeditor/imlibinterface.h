@@ -50,6 +50,7 @@ public:
     void preload(const QString& filename);
     void setExifOrient(bool exifOrient);
     void undo();
+    void redo();
     void restore();
     bool save(const QString& file, int JPEGcompression, 
               int PNGcompression, bool TIFFcompression);
@@ -104,7 +105,7 @@ public:
     
 signals:
 
-    void signalModified(bool moreUndo);
+    void signalModified(bool moreUndo, bool moreRedo);
     
 private:
 

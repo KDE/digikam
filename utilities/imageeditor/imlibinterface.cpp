@@ -333,12 +333,24 @@ void ImlibInterface::undo()
 {
     if (!d->undoMan->anyMoreUndo())
     {
-        emit signalModified(false);
+        emit signalModified(false, d->undoMan->anyMoreRedo());
         return;
     }
 
     d->undoMan->undo();
-    emit signalModified(d->undoMan->anyMoreUndo());
+    emit signalModified(d->undoMan->anyMoreUndo(), true);
+}
+
+void ImlibInterface::redo()
+{
+    if (!d->undoMan->anyMoreRedo())
+    {
+        emit signalModified(d->undoMan->anyMoreUndo(), false);
+        return;
+    }
+
+    d->undoMan->redo();
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::restore()
@@ -346,7 +358,7 @@ void ImlibInterface::restore()
     d->undoMan->clear();
     
     load(d->filename);
-    emit signalModified(false);
+    emit signalModified(false, false);
 }
 
 bool ImlibInterface::save(const QString& file, int JPEGcompression, 
@@ -373,7 +385,7 @@ bool ImlibInterface::save(const QString& file, int JPEGcompression,
     if (result)
     {
         d->undoMan->clear();
-        emit signalModified(false);
+        emit signalModified(false, false);
     }
     
     return result;
@@ -407,7 +419,7 @@ bool ImlibInterface::saveAs(const QString& file, int JPEGcompression,
     if (result)
     {
         d->undoMan->clear();
-        emit signalModified(false);
+        emit signalModified(false, false);
     }
 
     return result;    
@@ -576,7 +588,7 @@ void ImlibInterface::rotate90(bool saveUndo)
     d->origHeight = imlib_image_get_height();    
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::rotate180(bool saveUndo)
@@ -595,7 +607,7 @@ void ImlibInterface::rotate180(bool saveUndo)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::rotate270(bool saveUndo)
@@ -614,7 +626,7 @@ void ImlibInterface::rotate270(bool saveUndo)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::flipHoriz(bool saveUndo)
@@ -633,7 +645,7 @@ void ImlibInterface::flipHoriz(bool saveUndo)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
     
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::flipVert(bool saveUndo)
@@ -652,7 +664,7 @@ void ImlibInterface::flipVert(bool saveUndo)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::crop(int x, int y, int w, int h)
@@ -673,7 +685,7 @@ void ImlibInterface::crop(int x, int y, int w, int h)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::resize(int w, int h)
@@ -697,12 +709,13 @@ void ImlibInterface::resize(int w, int h)
     d->origHeight = imlib_image_get_height();
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::changeGamma(double gamma)
 {
     d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
+                                            d->contrast, gamma, d->brightness,
                                             d->contrast));
 
     imlib_context_push(d->context);
@@ -719,12 +732,13 @@ void ImlibInterface::changeGamma(double gamma)
     
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::changeBrightness(double brightness)
 {
     d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
+                                            d->contrast, d->gamma, brightness,
                                             d->contrast));
 
     imlib_context_push(d->context);
@@ -741,13 +755,14 @@ void ImlibInterface::changeBrightness(double brightness)
 
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::changeContrast(double contrast)
 {
     d->undoMan->addAction(new UndoActionBCG(this, d->gamma, d->brightness,
-                                            d->contrast));
+                                            d->contrast, d->gamma, d->brightness,
+                                            contrast));
 
     imlib_context_push(d->context);
     imlib_context_set_color_modifier(d->cmod);
@@ -763,7 +778,7 @@ void ImlibInterface::changeContrast(double contrast)
 
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 void ImlibInterface::changeBCG(double gamma, double brightness, double contrast)
@@ -784,7 +799,7 @@ void ImlibInterface::changeBCG(double gamma, double brightness, double contrast)
 
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 
@@ -819,7 +834,7 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 uint* ImlibInterface::getData()
@@ -877,7 +892,7 @@ void ImlibInterface::putData(uint* data, int w, int h,
     
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 uint* ImlibInterface::getSelectedData()
@@ -937,7 +952,7 @@ void ImlibInterface::putSelectedData(uint* data, bool saveUndo)
 
     imlib_context_pop();
 
-    emit signalModified(true);
+    emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
 bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression,

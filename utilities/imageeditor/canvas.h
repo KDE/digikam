@@ -113,6 +113,7 @@ public slots:
     
     void slotRestore();
     void slotUndo();
+    void slotRedo();
     
     void slotCopy();
 
@@ -120,14 +121,14 @@ private slots:
 
     void slotSelected();
     void slotPaintSmooth();
-    void slotModified(bool anyMoreUndo);
+    void slotModified(bool anyMoreUndo, bool anyMoreRedo);
     
 signals:
 
     void signalZoomChanged(float zoom);
     void signalMaxZoom();
     void signalMinZoom();
-    void signalChanged(bool);
+    void signalChanged(bool, bool);
     void signalSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();

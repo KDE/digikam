@@ -83,6 +83,7 @@ private:
     KAction*        m_saveAction;
     KAction*        m_saveAsAction;
     KAction*        m_undoAction;
+    KAction*        m_redoAction;
     
     bool            m_fullScreen;
 };

@@ -147,8 +147,8 @@ ImageWindow::ImageWindow()
             SLOT(slotZoomChanged(float)));
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected(bool)));
-    connect(m_canvas, SIGNAL(signalChanged(bool)),
-            SLOT(slotChanged(bool)));
+    connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
+            SLOT(slotChanged(bool, bool)));
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             SLOT(slotLoadNext()));
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
@@ -247,7 +247,10 @@ void ImageWindow::buildGUI()
     m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
                                     actionCollection(), "imageview_undo");
     m_undoAction->setEnabled(false);
-          
+
+    m_redoAction = KStdAction::redo(m_canvas, SLOT(slotRedo()),
+                                    actionCollection(), "imageview_redo");
+    m_redoAction->setEnabled(false);
            
     // -- View actions ----------------------------------------------------------------
     
@@ -380,6 +383,7 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     m_saveAction->setEnabled(false);
     m_restoreAction->setEnabled(false);
     m_undoAction->setEnabled(false);
+    m_redoAction->setEnabled(false);
 
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
@@ -631,7 +635,7 @@ void ImageWindow::slotZoomChanged(float zoom)
                                   !m_zoomFitAction->isChecked());
 }
 
-void ImageWindow::slotChanged(bool val)
+void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 {
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
@@ -639,14 +643,16 @@ void ImageWindow::slotChanged(bool val)
                         QString(" ") +
                         i18n("pixels"));
 
-    m_restoreAction->setEnabled(val);
-    m_undoAction->setEnabled(val);
+    m_restoreAction->setEnabled(moreUndo);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+
     if (m_allowSaving)
     {
-        m_saveAction->setEnabled(val);
+        m_saveAction->setEnabled(moreUndo);
     }
 
-    if (!val)
+    if (!moreUndo)
         m_rotatedOrFlipped = false;
 }
 
