@@ -94,8 +94,8 @@ void AlbumFileTip::reposition()
         return;
 
     QRect rect = m_iconItem->rect();
-    QPoint off = m_view->mapToGlobal( m_view->contentsToViewport( QPoint( 0, 0 ) ) );
-    rect.moveBy( off.x(), off.y() );
+    rect.moveTopLeft(m_view->contentsToViewport(rect.topLeft()));
+    rect.moveTopLeft(m_view->viewport()->mapToGlobal(rect.topLeft()));
 
     QPoint pos = rect.center();
     // m_corner:
@@ -129,11 +129,13 @@ void AlbumFileTip::reposition()
     if (rect.bottom() + height() > desk.bottom())
     {
         // above
-        pos.setY( rect.top() - height() );
+        pos.setY( rect.top() - height() - 5);
         m_corner += 2;
     }
     else
+    {
         pos.setY( rect.bottom() + 5 );
+    }
 
     move( pos );
 
