@@ -98,6 +98,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     groupItems_.clear();
     phyRootItem_ = 0;
     tagRootItem_ = 0;
+    openAlbumTimer_ = new QTimer(this);
     
     connect(this, SIGNAL(signalSelectionChanged(ListItem*)),
             SLOT(slotSelectionChanged(ListItem*)));
@@ -117,8 +118,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
-    connect(&openAlbumTimer_, SIGNAL(timeout()),
-            this, SLOT(slotOpenAlbum()));
+    connect(openAlbumTimer_, SIGNAL(timeout()),
+            this, SLOT(slotOpenAlbumFolderItem()));
             
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
@@ -1254,7 +1255,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         }
     }
     
-    openAlbumTimer_.start(750, true);
+    openAlbumTimer_->start(500, true);
     
     event->accept();
     if (dropTarget_ == newDropTarget) {
@@ -1275,7 +1276,7 @@ void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
 
 void AlbumFolderView::contentsDropEvent(QDropEvent* event)
 {
-    openAlbumTimer_.stop();
+    openAlbumTimer_->stop();
     
     if (!dropTarget_||  dropTarget_->isGroupItem())
         return;
@@ -1511,12 +1512,12 @@ void AlbumFolderView::clearDropTarget()
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
     dropTarget_ = 0;    
-    openAlbumTimer_.stop();
+    openAlbumTimer_->stop();
 }
 
-void AlbumFolderView::slotOpenAlbum()
+void AlbumFolderView::slotOpenAlbumFolderItem()
 {
-    openAlbumTimer_.stop();
+    openAlbumTimer_->stop();
     if(dropTarget_ && !dropTarget_->isOpen())
         dropTarget_->setOpen(true);
 }

@@ -140,7 +140,7 @@ private:
 
     QPoint                             dragStartPos_;
     ListItem                           *dragItem_;
-    QTimer                             openAlbumTimer_;    
+    QTimer                             *openAlbumTimer_;    
     
     QMap<int,int>                      stateAlbumOpen_;
     int                                stateAlbumSel_;
@@ -163,7 +163,7 @@ private slots:
     void slotAllAlbumsLoaded();
     void slotAlbumImportResult(KIO::Job* job);
 
-    void slotOpenAlbum();
+    void slotOpenAlbumFolderItem();
         
     void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
                           const KFileMetaInfo*);
