@@ -355,7 +355,6 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
         return;
 
     KFileItem* item;
-
     for (KFileItemListIterator it(itemList); (item = it.current()); ++it)
     {
         if (item->isDir())
@@ -1449,6 +1448,20 @@ void AlbumIconView::slotContentsMoving(int x, int y)
         if (item == lastItem)
             return;
         item = (AlbumIconItem*)item->nextItem();
+    }
+}
+
+bool AlbumIconView::acceptToolTip(ThumbItem *item, const QPoint &mousePos)
+{
+    AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
+    
+    if(iconItem && iconItem->thumbnailRect().contains(mousePos))
+    {
+        return true;
+    }
+    else
+    {    
+        return false;
     }
 }
 

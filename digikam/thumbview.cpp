@@ -772,6 +772,10 @@ void ThumbView::contentsMousePressEvent(QMouseEvent *e)
     d->pressedMoved = false;
 }
 
+bool ThumbView::acceptToolTip(ThumbItem *, const QPoint &)
+{
+    return true;
+}
 
 void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
 {
@@ -795,10 +799,21 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
             if (item != d->toolTipItem)
             {
                 d->toolTipItem = 0;
+                d->toolTipTimer->stop();
                 slotToolTip();
                 
-                d->toolTipItem = item;
-                d->toolTipTimer->start(500, true);
+                if(acceptToolTip(item, e->pos()))
+                {
+                    d->toolTipItem = item;
+                    d->toolTipTimer->start(500, true);
+                }
+            }
+            
+            if(item == d->toolTipItem && !acceptToolTip(item, e->pos()))
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();                
             }
         }
                 

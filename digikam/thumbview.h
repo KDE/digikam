@@ -98,6 +98,8 @@ protected:
 
     virtual void startDrag();
     virtual void contentsDropEvent(QDropEvent *e);
+    
+    virtual bool acceptToolTip(ThumbItem *item, const QPoint &mousePos);
 
 private:
 

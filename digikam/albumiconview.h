@@ -121,6 +121,8 @@ protected:
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDropEvent(QDropEvent *e);
 
+    bool acceptToolTip(ThumbItem *item, const QPoint &mousePos);
+    
 private:
 
     AlbumIconViewPrivate *d;
