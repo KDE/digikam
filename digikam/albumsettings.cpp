@@ -60,7 +60,6 @@ public:
     bool iconShowResolution;
     bool saveExifComments;
     bool exifRotate;
-
 };
 
 
@@ -112,6 +111,7 @@ void AlbumSettings::init()
     d->iconShowSize = true;
     d->iconShowDate = false;
     d->iconShowComments = true;
+    d->iconShowFileComments = false;
     d->iconShowResolution = false;
 }
 
@@ -230,7 +230,7 @@ void AlbumSettings::saveSettings()
                        QString::number(d->thumbnailSize));
     
     config->writeEntry("Icon Show Resolution",
-                       d->iconShowMime);
+                       d->iconShowResolution);
                                                       
     config->writeEntry("Icon Show Mime",
                        d->iconShowMime);
@@ -274,7 +274,6 @@ QStringList AlbumSettings::getAlbumCollectionNames()
 {
     return d->albumCollectionNames;
 }
-
 
 bool AlbumSettings::addAlbumCollectionName(const QString& name)
 {
