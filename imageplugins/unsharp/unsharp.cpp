@@ -176,7 +176,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     
     m_thresholdInput = new QSpinBox(0, 255, 1, plainPage(), "m_thresholdInput");
     
-    whatsThis = i18n("<p>The threshold, as a fraction of the maximum RGB value, "
+    whatsThis = i18n("<p>The threshold, as a fraction of the maximum luminosity value, "
                      "needed to apply the difference amount.");
     
     QWhatsThis::add( m_thresholdInput, whatsThis);
