@@ -1074,10 +1074,6 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 	return;
 
     ThumbItem *currItem = d->selectedItems.first();
-    if (!currItem) {
-        d->firstItem->setSelected(true, true);
-        return;
-    }
 
     switch ( e->key() ) {
 
@@ -1097,12 +1093,16 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 
     case Key_Enter:
     case Key_Return: {
-        emit signalReturnPressed(currItem);
+        if (currItem)
+        {
+            emit signalReturnPressed(currItem);
+            handled = true;
+        }
         break;
     }
         
     case Key_Right: {
-        ThumbItem *item = currItem->next;
+        ThumbItem *item = currItem ? currItem->next : d->firstItem;
         if (item)
         {
             keySelectItem(item, e->state() & Qt::ShiftButton);
@@ -1113,7 +1113,7 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
         
     case Key_Left: {
-        ThumbItem *item = currItem->prev;
+        ThumbItem *item = currItem ? currItem->prev : d->firstItem;
         if (item)
         {
             keySelectItem(item, e->state() & Qt::ShiftButton);
@@ -1125,6 +1125,8 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 
     case Key_Up: {
 
+        currItem = currItem ? currItem : d->firstItem;
+        
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() - d->spacing*2;
         
@@ -1145,6 +1147,8 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
         
     case Key_Down: {
+
+        currItem = currItem ? currItem : d->firstItem;
 
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() + currItem->height() +
@@ -1169,6 +1173,8 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 
     case Key_Next: {
 
+        currItem = currItem ? currItem : d->firstItem;
+
         QRect r( 0, currItem->y() + visibleHeight(),
                  contentsWidth(), visibleHeight() );
 	ThumbItem *ni = findFirstVisibleItem(r);
@@ -1186,6 +1192,8 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
         
     case Key_Prior: {
+
+        currItem = currItem ? currItem : d->firstItem;
 
 	QRect r(0, currItem->y() - visibleHeight(),
                 contentsWidth(), visibleHeight() );
@@ -1209,7 +1217,7 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
 
     if (handled) {
-        viewport()->repaint();
+        viewport()->update();
         emit signalSelectionChanged();
     }
 }
