@@ -71,9 +71,10 @@ DigikamFirstRun::DigikamFirstRun( KConfig* config,
                                   QWidget* parent,
                                   const char* name, bool modal,
                                   WFlags fl )
-    : KDialogBase( parent, name, modal, i18n( "Album Library Path" ), Ok|Cancel, Ok, true )
+    : KDialogBase( parent, name, modal, i18n( "Album Library Path" ), Help|Ok|Cancel, Ok, true )
 
 {
+    setHelp("firstrundialog.anchor", "digikam");
     setWFlags(fl);
     config_ = config;
     ui = new DigikamFirstFirstRunWidget(this);

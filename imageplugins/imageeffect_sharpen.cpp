@@ -58,7 +58,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                  parent, 0, true, true),
                      m_parent(parent)
 {
-    setHelp("imageeditor.anchor", "digikam");
+    setHelp("blursharpentool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);

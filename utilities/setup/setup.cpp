@@ -49,7 +49,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                    name, true, true )
 {
     setWFlags(Qt::WDestructiveClose);
-    setHelp("setupwindow.anchor", "digikam");
+    setHelp("setupdialog.anchor", "digikam");
     
     page_general = addPage(i18n("Albums"), i18n("Album Settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));

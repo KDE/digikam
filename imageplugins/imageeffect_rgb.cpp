@@ -52,7 +52,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
                              Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset Values"))
 {
-    setHelp("imageeditor.anchor", "digikam");
+    setHelp("colorbalancetool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 

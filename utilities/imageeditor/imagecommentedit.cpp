@@ -35,7 +35,7 @@ ImageCommentEdit::ImageCommentEdit(const QString& itemName,
     : KDialogBase( Plain, i18n("Image Comments"), Help|Ok|Cancel, Ok,
                    parent, 0, true, true )
 {
-    setHelp("imagedescedit.anchor", "digikam");
+    setHelp("commentsedittool.anchor", "digikam");
     mItemName = itemName;
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
