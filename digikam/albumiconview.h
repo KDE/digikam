@@ -121,6 +121,7 @@ private slots:
     void slotGotThumbnailKDE(const KFileItem*, const QPixmap&);
     void slotFailedThumbnailKDE(const KFileItem* item);
     void slotSelectionChanged();
+    void slotSetExifOrientation( const QString filename, int orientation );
 
     void slot_onDeleteSelectedItemsFinished(KIO::Job* job);
 

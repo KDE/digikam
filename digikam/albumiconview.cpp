@@ -392,6 +392,16 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
         KTrader::self()->query(iconItem->fileItem()->mimetype(),
                                "Type == 'Application'");
     
+    QPopupMenu *exifOrientationMenu = new QPopupMenu();
+
+    exifOrientationMenu->insertItem(i18n("Normal"), 201);
+    exifOrientationMenu->insertItem(i18n("Flipped horizontally"), 202);
+    exifOrientationMenu->insertItem(i18n("Rotated 180 degrees"), 203);
+    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees / horiz. flipped"), 204);
+    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees"), 205);
+    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees / vert. flipped"), 206);
+    exifOrientationMenu->insertItem(i18n("Rotated 270 degrees"), 207);
+
     QPopupMenu *openWithMenu = new QPopupMenu();
 
     KTrader::OfferList::Iterator iter;
@@ -417,6 +427,8 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
                        i18n("Edit Comments ..."), 12);
     popmenu.insertItem(SmallIcon("text_italic"),
                        i18n("View Exif Information ..."), 13);
+    popmenu.insertItem(SmallIcon("text_italic"),
+                       i18n("Set Exif Orientation ..."), exifOrientationMenu, 17);
     popmenu.insertItem(i18n("Properties"), 14);
     popmenu.insertSeparator();
 
@@ -488,13 +500,16 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     //---------------------------------------------------------------
 
-    if (id >= 100) {
+    if( id >= 200) {
+        slotSetExifOrientation( iconItem->fileItem()->url().path(), id -200 );
+    } else if (id >= 100) {
         KService::Ptr imageServicePtr = serviceVector[id-100];
         KRun::run(*imageServicePtr, iconItem->fileItem()->url());
     }
 
     serviceVector.clear();
     delete openWithMenu;
+    delete exifOrientationMenu;
 }
 
 void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
@@ -1147,10 +1162,20 @@ bool AlbumIconView::eventFilter(QObject *obj, QEvent *ev)
     return ThumbView::eventFilter(obj, ev);    
 }
 
+void AlbumIconView::slotSetExifOrientation( const QString filename, int orientation )
+{
+    KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
+
+    KExifData *exifData = new KExifData;
+    exifData->writeOrientation(filename, o);
+    delete exifData;
+
+    emit 
+}
 
 void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
 {
-   // Rotate image based on EXIF rotate tag
+   // Rotate thumbnail based on EXIF rotate tag
     QWMatrix matrix;
 
     KExifData *exifData = new KExifData;

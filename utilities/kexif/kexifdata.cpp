@@ -209,7 +209,15 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
     // TODO get byte order from jpeg file!
     stream.setByteOrder(QDataStream::LittleEndian);
  
-    stream >> byte;
+    Q_UINT16 header;
+    stream >> header;
+
+    if(header != 0xffd8)
+    {
+       kdDebug() << "No JPEG file." << endl;
+       file.close();
+       return;
+    }
 
     // skip until EXIF marker is found
     while(!stream.atEnd())
