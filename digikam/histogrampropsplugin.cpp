@@ -28,6 +28,7 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpainter.h>
+#include <qpixmap.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qwhatsthis.h>
@@ -83,6 +84,18 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     // -------------------------------------------------------------
                                               
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
+    
+    QLabel *imagePreview = new QLabel( page );
+    imagePreview->setFixedHeight( 48 );
+    QImage image;
+    QPixmap pix;
+    image.create( width, height, 32 );
+    image.setAlphaBuffer(true) ;
+    memcpy(image.bits(), imageData, image.numBytes());
+    image = image.smoothScale(48, 48, QImage::ScaleMin);
+    pix.convertFromImage(image);
+    imagePreview->setPixmap(pix);
+
     QLabel *label1 = new QLabel(i18n("Channel:"), page);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, page );
@@ -114,6 +127,7 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
                                      "Logarithmic scale can be used when the maximal counts is big. "
                                      "Like this all values (small and big) will be visible on the graph."));
     
+    hlay->addWidget(imagePreview);                                     
     hlay->addWidget(label1);
     hlay->addWidget(m_channelCB);
     hlay->addWidget(label2);
