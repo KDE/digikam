@@ -60,7 +60,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kimageeffect.h>
 #include <kprogress.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>

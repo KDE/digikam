@@ -53,7 +53,6 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kimageeffect.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
