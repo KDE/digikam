@@ -397,6 +397,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 4, 2, 20, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gbox2 );
+    m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the distortion correction "
                                               "applied to a cross pattern.") );
     gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
