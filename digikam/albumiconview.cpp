@@ -534,9 +534,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 
             // set EXIF UserComment
             KExifData *exifData = new KExifData;
-            exifData->readFromFile(fileName);
-            exifData->setUserComment(comments);
-            exifData->saveExifData(fileName);
+            exifData->saveExifComment(fileName,comments);
             delete exifData;
         }
 
