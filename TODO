@@ -1,22 +1,26 @@
-TODO:
-===========================================
+DIGIKAM PROJECT TODO:
+=====================
 
 Main Application:
+-----------------
 
-* Backup and retrieve image comments and album properties.
-* Add image sizes annotation for each album item.
+* Added LibKIPI support instead Digikamplugins interface.          <planed by Gilles Caulier for 0.6.3>
+* Add image sizes annotation for each album item.                  <planed by Gilles Caulier for 0.6.3>
+* Added config saving of Albums opened in Albums treeview.         <planed by Gilles Caulier for 0.6.3>
+* Added dockable main widgets like Showimg.                        <planed by Gilles Caulier for 0.6.3>
 * Custom thumbnail highlighting of album thumbnails.
 * View/Hide main toolbar/statusbar.
-* Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar with
-  KURLBar::writeItem API (settings is in ~/.kde/share/config/kdeglobals file).
-* Save relative sizes of treeview and thumbnailview
-* Option to hide header in thumbnail view
-* Option to hide image names
-* Added LibKIPI support instead Digikamplugins interface.
-* Added dockable main widgets like Showimg.
-* Added config saving of Albums opened in Albums treeview.
+* Backup and retrieve image comments and album properties.
+* Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar
+  with KURLBar::writeItem API (settings is in 
+  ~/.kde/share/config/kdeglobals file).
+* Save relative sizes of treeview and thumbnailview.
+* Option to hide header in thumbnail view.
+* Option to hide image names.
+
 
 CameraClient:
+-------------
 
 * Make Folder Ability.
 * Delete Folder Ability.
@@ -25,18 +29,25 @@ CameraClient:
 * DnD Upload (moved to wishlist. in case of the future parts
   implementation there can be no DnD upload).
 * View/Hide main toolbar/statusbar.
+* Enable/Disable thumnails generation (bandwith limitation
+  in slow camera connexion).
+
 
 ImageViever:
+------------
 
-* Port from imlib1 to imlib2.
+* Port from imlib1 to imlib2.                                      <planed by Gilles Caulier for 0.6.3>
+* Add RedEyes correction.                                          <planed by Gilles Caulier for 0.6.3>
+* Add Blur/Sharpen image filters.                                  <planed by Gilles Caulier for 0.6.3>
 * Added dockable toolbars.
 * Add Plugins interface.
-* Add RedEyes correction.
 * Add Blur/Sharpen image filters.
 * Add image Histogram viewer.
 * Add Colors autocorrection filter.
 
+
 Plugins (LibKIPI):
+------------------
 
 ==> see the TODO file in 'kdeextragear-libs-1' CVS module.
 
