@@ -119,6 +119,7 @@ AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
     view_        = parent;
     fileItem_    = fileItem;
     metaInfo_    = 0;
+    time_        = fileItem_->time(KIO::UDS_MODIFICATION_TIME);
 
     setRect(view_->itemRect());
 }
@@ -166,11 +167,9 @@ int AlbumIconItem::compare(ThumbItem *item)
     }
     case(AlbumSettings::ByIDate):
     {
-        time_t mytime(fileItem_->time(KIO::UDS_MODIFICATION_TIME));
-        time_t histime(iconItem->fileItem_->time(KIO::UDS_MODIFICATION_TIME));
-        if (mytime < histime)
+        if (time_ < iconItem->time_)
             return -1;
-        else if (mytime > histime)
+        else if (time_ > iconItem->time_)
             return 1;
         else
             return 0;
@@ -260,7 +259,7 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
     if (settings->getIconShowDate())
     {
         QDateTime date;
-        date.setTime_t(fileItem_->time(KIO::UDS_MODIFICATION_TIME));
+        date.setTime_t(time_);
 
         r = view_->itemDateRect();    
         p.setFont(view_->itemFontXtra());

@@ -90,7 +90,7 @@ public:
     
     void setItemHandler(AlbumItemHandler *handler);
     AlbumItemHandler* getItemHandler();
-    void refreshItemHandler(const QStringList& itemList=QStringList());
+    void refreshItemHandler(const KURL::List& itemList=KURL::List());
     void emitAlbumItemsSelected(bool val);
 
 private:

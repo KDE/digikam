@@ -313,13 +313,15 @@ KURL::List DigikamImageCollection::images()
     }
     case SelectedItems:
     {
-        QStringList items;
         AlbumItemHandler* handler =
             AlbumManager::instance()->getItemHandler();
-        if (handler)
-            items = handler->selectedItemsPath();
 
-        return KURL::List(items);
+        if (handler)
+        {
+            return handler->selectedItems();
+        }
+
+        return KURL::List();
               
         break;
     }
@@ -337,13 +339,16 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     // just return whatevers visible in the albumitemhandler
     if ( album == AlbumManager::instance()->currentAlbum() )
     {
-        QStringList items;
         AlbumItemHandler* handler =
             AlbumManager::instance()->getItemHandler();
         if (handler)
-            items = handler->allItemsPath();
-        
-        return KURL::List(items);
+        {
+            return handler->allItems();
+        }
+        else
+        {
+            return KURL::List();
+        }
     }
 
     // else load the directory and return the items found
@@ -369,13 +374,12 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
     // just return whatevers visible in the albumitemhandler
     if ( album == AlbumManager::instance()->currentAlbum() )
     {
-        QStringList items;
         AlbumItemHandler* handler =
             AlbumManager::instance()->getItemHandler();
         if (handler)
-            items = handler->allItemsPath();
-        
-        return KURL::List(items);
+            return handler->allItems();
+        else
+            return KURL::List();
     }
 
     // else get the images from the database and return the items found
@@ -566,10 +570,7 @@ KIPI::ImageInfo DigikamKipiInterface::info( const KURL& url )
 void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 {
 
-    // PENDING (gilles) : Renchi, there is a way for to use KURL::List instead QStringList
-    // with refreshItemHandler() method ?
-    
-    albumManager_->refreshItemHandler(urls.toStringList()); 
+    albumManager_->refreshItemHandler(urls); 
 }
 
 int DigikamKipiInterface::features() const
@@ -600,7 +601,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     
     // Renchi: No need to have an 'AlbumDB::addItem()' method ?       
        
-    albumManager_->refreshItemHandler( QStringList::QStringList(url.path()) ); 
+    albumManager_->refreshItemHandler( url ); 
     
     return true;
 }

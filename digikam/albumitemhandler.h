@@ -21,7 +21,7 @@
 #ifndef ALBUMITEMHANDLER_H
 #define ALBUMITEMHANDLER_H
 
-#include <qstringlist.h>
+#include <kurl.h>
 
 /*! 
   AlbumItemHandler
@@ -37,12 +37,10 @@ public:
     AlbumItemHandler();
     virtual ~AlbumItemHandler();
     
-    virtual QStringList allItems() = 0;
-    virtual QStringList selectedItems() = 0;
-    virtual QStringList allItemsPath() = 0;
-    virtual QStringList selectedItemsPath() = 0;
+    virtual KURL::List allItems() = 0;
+    virtual KURL::List selectedItems() = 0;
     virtual void refresh() = 0;
-    virtual void refreshItems(const QStringList& items) = 0;
+    virtual void refreshItems(const KURL::List& items) = 0;
 
 protected:
 

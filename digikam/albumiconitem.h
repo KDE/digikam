@@ -30,6 +30,11 @@
 #include <qrect.h>
 #include <qpixmap.h>
 
+extern "C"
+{
+#include <time.h>
+}
+
 // Local includes.
 
 #include "thumbitem.h"
@@ -76,6 +81,7 @@ private:
     const KFileMetaInfo *metaInfo_;
     AlbumIconView       *view_;
     QPixmap              thumbnail_;
+    time_t               time_;
 };
 
 

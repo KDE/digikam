@@ -728,7 +728,7 @@ AlbumItemHandler* AlbumManager::getItemHandler()
     return d->itemHandler;
 }
 
-void AlbumManager::refreshItemHandler(const QStringList& itemList)
+void AlbumManager::refreshItemHandler(const KURL::List& itemList)
 {
     if (itemList.empty())
         d->itemHandler->refresh();

@@ -78,13 +78,11 @@ public:
     AlbumIconItem* firstSelectedItem();
     AlbumLister*   albumLister() const;
 
-    QStringList allItems();
-    QStringList selectedItems();
-    QStringList allItemsPath();
-    QStringList selectedItemsPath();
+    KURL::List allItems();
+    KURL::List selectedItems();
 
     void refresh();
-    void refreshItems(const QStringList& itemList);
+    void refreshItems(const KURL::List& itemList);
 
     QRect    itemRect() const;
     QRect    itemDateRect() const;

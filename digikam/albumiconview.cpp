@@ -827,7 +827,7 @@ void AlbumIconView::slotFilesModified()
 
 void AlbumIconView::slotFilesModified(const KURL& url)
 {
-    refreshItems(QStringList(url.path()));
+    refreshItems(url);
 }
 
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
@@ -1449,53 +1449,28 @@ void AlbumIconView::slotShowToolTip(ThumbItem* item)
     d->toolTip->setIconItem(dynamic_cast<AlbumIconItem*>(item));
 }
 
-QStringList AlbumIconView::allItems()
+KURL::List AlbumIconView::allItems()
 {
-    QStringList itemList;
-
-    for (ThumbItem *it = firstItem(); it;
-         it = it->nextItem()) {
-        itemList.append(it->text());
-    }
-
-    return itemList;
-}
-
-QStringList AlbumIconView::selectedItems()
-{
-    QStringList itemList;
-
-    for (ThumbItem *it = firstItem(); it;
-         it = it->nextItem()) {
-        if (it->isSelected())
-            itemList.append(it->text());
-    }
-
-    return itemList;
-}
-
-QStringList AlbumIconView::allItemsPath()
-{
-    QStringList itemList;
+    KURL::List itemList;
 
     for (ThumbItem *it = firstItem(); it;
          it = it->nextItem()) {
         AlbumIconItem *item = (AlbumIconItem*) it;
-        itemList.append(item->fileItem()->url().path());
+        itemList.append(item->fileItem()->url());
     }
 
     return itemList;
 }
 
-QStringList AlbumIconView::selectedItemsPath()
+KURL::List AlbumIconView::selectedItems()
 {
-    QStringList itemList;
+    KURL::List itemList;
 
     for (ThumbItem *it = firstItem(); it;
          it = it->nextItem()) {
         if (it->isSelected()) {
             AlbumIconItem *item = (AlbumIconItem*) it;
-            itemList.append(item->fileItem()->url().path());
+            itemList.append(item->fileItem()->url());
         }
     }
 
@@ -1513,22 +1488,9 @@ void AlbumIconView::refresh()
     d->imageLister->openAlbum(d->currentAlbum);
 }
 
-void AlbumIconView::refreshItems(const QStringList& itemList)
+void AlbumIconView::refreshItems(const KURL::List& urlList)
 {
-    if (!d->currentAlbum || itemList.empty())
-        return;
-
-    KURL::List urlList;
-    for ( QStringList::const_iterator it = itemList.begin();
-          it != itemList.end(); ++it )
-    {
-        KURL u(*it);
-        u.cleanPath();
-
-        urlList.append(u);
-    }
-
-    if (urlList.isEmpty())
+    if (!d->currentAlbum || urlList.empty())
         return;
 
     if (d->thumbJob.isNull())
@@ -1667,8 +1629,9 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
             return;
         }
 
-        refreshItems((*it).path());
     }
+
+    refreshItems(urlList);
 }
 
 QRect AlbumIconView::itemRect() const
