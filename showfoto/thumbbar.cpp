@@ -24,11 +24,16 @@
 #include <qpainter.h>
 #include <qdict.h>
 #include <qpoint.h>
+#include <qdatetime.h>
 
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <kfileitem.h>
+#include <kglobal.h>
 
 #include <cmath>
 
@@ -57,7 +62,8 @@ public:
     int           margin;
     int           tileSize;
     
-    QTimer*       timer;
+    QTimer*          timer;
+    ThumbBarToolTip* tip;
 };
 
 ThumbBarView::ThumbBarView(QWidget* parent)
@@ -67,6 +73,8 @@ ThumbBarView::ThumbBarView(QWidget* parent)
     d->margin   = 5;
     d->tileSize = 64;
 
+    d->tip = new ThumbBarToolTip(this);
+    
     d->timer = new QTimer(this);
     connect(d->timer, SIGNAL(timeout()),
             SLOT(slotUpdate()));
@@ -76,6 +84,8 @@ ThumbBarView::ThumbBarView(QWidget* parent)
     setFrameStyle(QFrame::NoFrame);
     setFixedWidth(d->tileSize + 2*d->margin
                   + verticalScrollBar()->sizeHint().width());
+
+    viewport()->setMouseTracking(true);
 }
 
 ThumbBarView::~ThumbBarView()
@@ -83,8 +93,7 @@ ThumbBarView::~ThumbBarView()
     clear(false);
 
     delete d->timer;
-    d->timer = 0;
-    
+    delete d->tip;
     delete d;
 }
 
@@ -130,6 +139,21 @@ ThumbBarItem* ThumbBarView::firstItem() const
 ThumbBarItem* ThumbBarView::lastItem() const
 {
     return d->lastItem;
+}
+
+ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
+{
+    int y = pos.y();
+    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    {
+        if (y >= item->m_pos &&
+            y <= (item->m_pos+d->tileSize+2*d->margin))
+        {
+            return item;
+        }
+    }
+
+    return 0;
 }
 
 void ThumbBarView::setSelected(ThumbBarItem* item)
@@ -433,9 +457,68 @@ ThumbBarItem* ThumbBarItem::prev() const
     return m_prev;
 }
 
+QRect ThumbBarItem::rect() const
+{
+    return QRect(0, m_pos,
+                 m_view->visibleWidth(),
+                 m_view->d->tileSize + 2*m_view->d->margin);
+}
+
 void ThumbBarItem::repaint()
 {
     m_view->repaintItem(this);   
 }
 
 #include "thumbbar.moc"
+
+ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
+    : QToolTip(parent->viewport()), m_view(parent)
+{
+    
+}
+
+void ThumbBarToolTip::maybeTip(const QPoint& pos)
+{
+    if ( !parentWidget() || !m_view)
+        return;
+
+    ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
+    if (!item)
+        return;
+
+    QRect r(item->rect());
+    r = QRect( m_view->contentsToViewport(r.topLeft()),
+               r.size() );
+
+    QString cellBeg("<tr><td><nobr><font size=-1>");
+    QString cellMid("</font></nobr></td>"
+                    "<td><nobr><font size=-1>");
+    QString cellEnd("</font></nobr></td></tr>");
+    
+    QString tipText;
+    tipText  = "<table cellspacing=0 cellpadding=0>";
+    tipText += cellBeg + i18n("Name:") + cellMid;
+    tipText += item->url().filename() + cellEnd;
+
+    tipText += cellBeg + i18n("Type:") + cellMid;
+    tipText += KMimeType::findByURL(item->url())->comment() + cellEnd;
+
+    KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown,
+                       item->url());
+
+    QDateTime date;
+    date.setTime_t(fileItem.time(KIO::UDS_MODIFICATION_TIME));
+    tipText += cellBeg + i18n("Modification Date:") + cellMid +
+               KGlobal::locale()->formatDateTime(date, true, true)
+               + cellEnd;
+
+    tipText += cellBeg + i18n("Size:") + cellMid;
+    tipText += i18n("%1 (%2)")
+               .arg(KIO::convertSize(fileItem.size()))
+               .arg(KGlobal::locale()->formatNumber(fileItem.size(), 0))
+               + cellEnd;
+
+    tipText += "</table>";
+    
+    tip(r, tipText);
+}
