@@ -1,9 +1,7 @@
 METASOURCES = AUTO
 
-INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor \
-	-I$(top_srcdir)/digikam/libs/guibuilder \
-	-I$(top_srcdir)/digikam/libs/widgets \
-	$(all_includes)   
+INCLUDES    = $(KDE_INCLUDES)/digikam \
+	$(all_includes)
         
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_unsharp.la
@@ -13,7 +11,7 @@ digikamimageplugin_unsharp_la_SOURCES = \
 	unsharp.cpp
 
 digikamimageplugin_unsharp_la_LIBADD = $(LIB_KPARTS) \
-	$(top_builddir)/digikam/digikam/libdigikam.la
+	$(kde_libraries)/libdigikam.la
 
 digikamimageplugin_unsharp_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
