@@ -41,6 +41,7 @@
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qsize.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -50,12 +51,12 @@
 // Local includes.
 
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagetoolswidget.h"
 #include "imagerotatedlg.h"
 
 ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
-              : KDialogBase(Plain, i18n("Rotate Image"), Help|Ok|Cancel, Ok,
-                            parent, 0, true, true)
+              : KDialogBase(Plain, i18n("Rotate Image"), Help|User1|Ok|Cancel, Ok,
+                            parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("freerotationtool.anchor", "digikam");
     
@@ -69,8 +70,14 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the free rotation operation preview."));
+    m_previewWidget = new Digikam::ImageToolsWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the free rotation operation preview."
+                                           "If you move the mouse cursor on this preview, "
+                                           "a vertical and horizontal dashed line will be draw "
+                                           "for guide you to adjust the rotation angle. "
+                                           "Press the mouse left button to freeze the dashed "
+                                           "lines position."));
+                                           
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
     
@@ -91,12 +98,30 @@ ImageRotateDlg::ImageRotateDlg(QWidget *parent, double *angle)
     // -------------------------------------------------------------
     
     connect(m_angleInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
+            
+    adjustSize();
+    disableResize();
 }
 
 ImageRotateDlg::~ImageRotateDlg()
 {
 }
+
+void ImageRotateDlg::slotUser1()
+{
+    blockSignals(true);
+    disconnect(m_angleInput, SIGNAL(valueChanged (double)),
+               this, SLOT(slotEffect()));
+                   
+    m_angleInput->setValue(0.0);
+    
+    connect(m_angleInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotEffect()));
+            
+    blockSignals(false);
+    slotEffect();    
+} 
 
 void ImageRotateDlg::slotEffect()
 {
