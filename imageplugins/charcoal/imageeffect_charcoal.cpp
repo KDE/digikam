@@ -37,6 +37,7 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qimage.h>
+#include <qslider.h>
 
 // KDE includes.
 
@@ -68,6 +69,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                                   parent, 0, true, true),
                       m_parent(parent)
 {
+    QString whatsThis;
+    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -99,23 +102,45 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     
+    // -------------------------------------------------------------
+    
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Radius:"), plainPage());
-    m_radiusInput = new KDoubleNumInput(plainPage());
-    m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(0.1, 10.0, 0.1, true);
-    m_radiusInput->setValue(1.0);
-    hlay->addWidget(label, 1);
-    hlay->addWidget(m_radiusInput, 5);
+    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
+    
+    m_radiusSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_radiusSlider");
+    m_radiusSlider->setTickmarks(QSlider::Below);
+    m_radiusSlider->setTickInterval(10);
+    m_radiusSlider->setTracking ( false );
+    
+    m_radiusInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_radiusInput");
+    whatsThis = i18n("<p>Set here the radius of the gaussian not counting the center pixel.");
+        
+    QWhatsThis::add( m_radiusInput, whatsThis);
+    QWhatsThis::add( m_radiusSlider, whatsThis);
 
+    hlay->addWidget(label1, 1);
+    hlay->addWidget(m_radiusSlider, 3);
+    hlay->addWidget(m_radiusInput, 1);
+    
+    // -------------------------------------------------------------
+    
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Sigma:"), plainPage());
-    m_sigmaInput = new KDoubleNumInput(plainPage());
-    m_sigmaInput->setPrecision(1);
-    m_sigmaInput->setRange(0.1, 10.0, 0.1, true);
-    m_sigmaInput->setValue(1.0);
+    
+    m_sigmaSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_sigmaSlider");
+    m_sigmaSlider->setTickmarks(QSlider::Below);
+    m_sigmaSlider->setTickInterval(10);
+    m_sigmaSlider->setTracking ( false );
+    
+    m_sigmaInput = new KDoubleSpinBox(0.1, 10.0, 0.1, 1.0, 1, plainPage(), "m_sigmaInput");
+    whatsThis = i18n("<p>Set here the standard deviation of the gaussian.");
+    
+    QWhatsThis::add( m_sigmaSlider, whatsThis);
+    QWhatsThis::add( m_sigmaInput, whatsThis);
+                 
     hlay2->addWidget(label2, 1);
-    hlay2->addWidget(m_sigmaInput, 5);
+    hlay2->addWidget(m_sigmaSlider, 3);
+    hlay2->addWidget(m_sigmaInput, 1);
 
     // -------------------------------------------------------------
     
@@ -124,16 +149,51 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
+    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderRadiusChanged(int)));
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSpinBoxRadiusChanged(double)));            
     connect(m_radiusInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));            
-    
-    connect(m_sigmaInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));            
+            this, SLOT(slotEffect()));   
 
+    connect(m_sigmaSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderSigmaChanged(int)));
+    connect(m_sigmaInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSpinBoxSigmaChanged(double)));            
+    connect(m_sigmaInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotEffect()));        
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
 {
+}
+
+void ImageEffect_Charcoal::slotSliderRadiusChanged(int v)
+{
+    blockSignals(true);
+    m_radiusInput->setValue((double)v/10.0);
+    blockSignals(false);
+}
+
+void ImageEffect_Charcoal::slotSpinBoxRadiusChanged(double v)
+{
+    blockSignals(true);
+    m_radiusSlider->setValue((int)(v*10.0));
+    blockSignals(false);
+}
+
+void ImageEffect_Charcoal::slotSliderSigmaChanged(int v)
+{
+    blockSignals(true);
+    m_sigmaInput->setValue((double)v/10.0);
+    blockSignals(false);
+}
+
+void ImageEffect_Charcoal::slotSpinBoxSigmaChanged(double v)
+{
+    blockSignals(true);
+    m_sigmaSlider->setValue((int)(v*10.0));
+    blockSignals(false);
 }
 
 void ImageEffect_Charcoal::slotHelp()
@@ -144,8 +204,6 @@ void ImageEffect_Charcoal::slotHelp()
 
 void ImageEffect_Charcoal::closeEvent(QCloseEvent *e)
 {
-    delete m_radiusInput;
-    delete m_imagePreviewWidget;
     e->accept();    
 }
 
