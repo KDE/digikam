@@ -57,7 +57,6 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     m_h      = m_iface->originalHeight();
     
     m_img.create( m_w, m_h, 32 );
-    m_img.setAlphaBuffer(true);
     memcpy(m_img.bits(), m_data, m_img.numBytes());
         
     setBackgroundMode(Qt::NoBackground);

@@ -429,7 +429,6 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
      // Setup for filter...
 
      image.create( w, h, 32 );
-     image.setAlphaBuffer(true) ;
      memcpy(image.bits(), data, image.numBytes());
 
      size        = despeckle_radius * 2 + 1;

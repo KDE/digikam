@@ -287,9 +287,7 @@ void ImageEffect_Charcoal::slotOk()
         
     if (data) 
         {
-        QImage image;
-        image.create( w, h, 32 );
-        image.setAlphaBuffer(true) ;
+        QImage image( w, h, 32 );
         memcpy(image.bits(), data, image.numBytes());
 
         QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
