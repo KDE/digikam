@@ -216,7 +216,7 @@ double ImageHistogram::getMean(int channel, int start, int end)
   double mean = 0.0;
   double count;
 
-  if ( !256 || start < 0 || 
+  if ( !m_histogram || start < 0 || 
        end > 256 || start > end )
        return 0.0;
 
