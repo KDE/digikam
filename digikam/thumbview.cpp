@@ -1015,10 +1015,14 @@ void ThumbView::selectItem(ThumbItem* item, bool select)
 {
     if (!item) return;
 
-    if (select) 
-        d->selectedItems.append(item);
+    if (select)
+    {
+        d->selectedItems.prepend(item);
+    }
     else
+    {
         d->selectedItems.remove(item);
+    }
     
     emit signalSelectionChanged();
 }
@@ -1098,24 +1102,24 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     }
         
     case Key_Right: {
-
         ThumbItem *item = currItem->next;
-        if (item) {
-            item->setSelected(true,true);
+        if (item)
+        {
+            keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
-            handled = true;
         }
+        handled = true;
         break;
-    }        
-
+    }
+        
     case Key_Left: {
-
         ThumbItem *item = currItem->prev;
-        if (item) {
-            item->setSelected(true,true);
+        if (item)
+        {
+            keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
-            handled = true;
         }
+        handled = true;
         break;
     }
 
@@ -1123,20 +1127,20 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
 
         int x = currItem->x() + currItem->width()/2;
         int y = currItem->y() - d->spacing*2;
-
+        
         ThumbItem *item = 0;
         
         while (!item && y > 0) {
             item = findItem(QPoint(x,y));
             y -= d->spacing * 2;
         }
-        
-        if (item) {
-            item->setSelected(true,true);
-            ensureItemVisible(item);
-            handled = true;
-        }
 
+        if (item)
+        {
+            keySelectItem(item, e->state() & Qt::ShiftButton);
+            ensureItemVisible(item);
+        }
+        handled = true;
         break;
     }
         
@@ -1153,11 +1157,12 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
             y += d->spacing * 2;
         }
         
-        if (item) {
-            item->setSelected(true,true);
+        if (item)
+        {
+            keySelectItem(item, e->state() & Qt::ShiftButton);
             ensureItemVisible(item);
-            handled = true;
         }
+        handled = true;
 
         break;
     }
@@ -1206,6 +1211,29 @@ void ThumbView::keyPressEvent(QKeyEvent *e)
     if (handled) {
         viewport()->repaint();
         emit signalSelectionChanged();
+    }
+}
+
+void ThumbView::keySelectItem(ThumbItem* item, bool shift)
+{
+    if (!item)
+        return;
+    
+    if (shift)
+    {
+        if (!item->isSelected())
+        {
+            item->setSelected(true,false);
+        }
+        else
+        {
+            d->selectedItems.removeRef(item);
+            d->selectedItems.prepend(item);
+        }
+    }
+    else
+    {
+        item->setSelected(true,true);
     }
 }
 

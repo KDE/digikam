@@ -81,6 +81,7 @@ private:
     void rebuildContainers();
     void appendContainer();
     void deleteContainers();
+    void keySelectItem(ThumbItem* item, bool shift);
 
 private:
 
