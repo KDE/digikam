@@ -46,7 +46,7 @@ class ImagePropertiesHistogram : public QObject
 
 public:
 
-    ImagePropertiesHistogram(QWidget* page);
+    ImagePropertiesHistogram(QWidget* page, QRect* selectionArea);
     ~ImagePropertiesHistogram();
 
     void setCurrentURL(const KURL& url);

@@ -89,7 +89,8 @@ void ImageProperties::setupGui(void)
 
     m_generalPage   = new ImagePropertiesGeneral(addPage(i18n("&General")));
     m_exifPage      = new ImagePropertiesEXIF(addPage(i18n("&EXIF")));
-    m_histogramPage = new ImagePropertiesHistogram(addPage(i18n("&Histogram")));
+    m_histogramPage = new ImagePropertiesHistogram(addPage(i18n("&Histogram")),
+                                                   m_selectionArea);
     
     // Read config.
     kapp->config()->setGroup("Image Properties Dialog");

@@ -36,9 +36,10 @@
 
 #include "imagepropertieshistogram.h"
 
-ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page)
+ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page,
+                                                   QRect* selectionArea)
 {
-    m_selectionArea = 0;
+    m_selectionArea = selectionArea;
    
     QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 5);
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
