@@ -212,7 +212,7 @@ void KExifData::writeFile(const QString& filename, const QString& comment, Image
     Q_UINT16 header;
     stream >> header;
 
-    if(header != 0xffd8)
+    if(header != 0xffd8 && header != 0xd8ff)
     {
        kdDebug() << "No JPEG file." << endl;
        file.close();
