@@ -809,11 +809,16 @@ bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, co
     if ( !mimeType.isEmpty() )
        imlib_image_set_format(mimeType.ascii()); 
     
-    // Always save jpeg files with the at 'JPEGcompression' % quality without compression
+    // Always save JPEG files with the at 'JPEGcompression' % quality without compression.
             
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
        imlib_image_attach_data_value ("quality", NULL, JPEGcompression, NULL);
             
+    // Always saving PNG files with a max. compression (small size).
+              
+    if ( mimeType.upper() == QString("PNG") ) 
+       imlib_image_attach_data_value ("quality", NULL, 1, NULL);
+
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 
     if( d->errorRet != IMLIB_LOAD_ERROR_NONE ) 
