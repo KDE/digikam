@@ -143,6 +143,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     QLabel *label3 = new QLabel(i18n("Intensity range :"), plainPage());
     label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     m_minInterv = new QSpinBox(0, 255, 1, plainPage());
+    m_minInterv->setValue(0);
     m_maxInterv = new QSpinBox(0, 255, 1, plainPage());
     m_maxInterv->setValue(255);
     hlay2->addWidget(label3);
@@ -213,6 +214,7 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
             this, SLOT(slotIntervChanged(int)));
                                                            
     adjustSize();
+    updateInformations();
 }
 
 HistogramViewer::~HistogramViewer()

@@ -50,10 +50,14 @@ HistogramWidget::HistogramWidget(int w, int h, uint *i_data,
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
     m_inSelected     = false;
+    m_xmin           = 0;
+    m_xmax           = 0;
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h);
-        
+
+    setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
+    emit signalMouseReleased(255);
 }
 
 HistogramWidget::~HistogramWidget()
