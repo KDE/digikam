@@ -367,7 +367,6 @@ public:
         imlib_context_set_image(ajusted_im);        
         imlib_modify_color_modifier_gamma(val);
         imlib_apply_color_modifier();
-        changed = true;
         dirty   = true;
         qDebug("gamma:%f", (float)val);
         }
@@ -379,7 +378,6 @@ public:
         imlib_context_set_image(ajusted_im);  
         imlib_modify_color_modifier_brightness(val);
         imlib_apply_color_modifier();
-        changed    = true;
         dirty      = true;
         qDebug("brightness:%f", (float)val);
         }
@@ -391,7 +389,6 @@ public:
         imlib_context_set_image(ajusted_im);
         imlib_modify_color_modifier_contrast(val);
         imlib_apply_color_modifier();
-        changed  = true;
         dirty    = true;
         qDebug("contrast:%f", (float)val);
         }
@@ -854,9 +851,7 @@ void ImlibInterface::crop(int x, int y, int w, int h)
 void ImlibInterface::changeGamma(int val)
 {
     ImImage *im = d->cache->currentImage();
-    
-    if (!im) d->cache->image(d->file);
-    
+ 
     if (im) im->changeGamma((double)val/20.0);
 }
 
@@ -865,8 +860,6 @@ void ImlibInterface::changeBrightness(int val)
 {
     ImImage *im = d->cache->currentImage();
     
-    if (!im) d->cache->image(d->file);
-    
     if (im) im->changeBrightness((double)val/100.0);
 }
 
@@ -874,8 +867,6 @@ void ImlibInterface::changeBrightness(int val)
 void ImlibInterface::changeContrast(int val)
 {
     ImImage *im = d->cache->currentImage();
-    
-    if (!im) d->cache->image(d->file);
     
     if (im) im->changeContrast((double)val/100.0);
 }
