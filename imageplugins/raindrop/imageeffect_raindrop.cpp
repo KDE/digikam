@@ -7,7 +7,7 @@
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
- * Original RainDrop algorithm copyrighted 2004 by 
+ * Original RainDrop algorithm copyrighted 2004-2005 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
  * This program is free software; you can redistribute it
@@ -350,7 +350,7 @@ void ImageEffect_RainDrop::slotEffect()
        memcpy(orgImg.bits(), data, orgImg.numBytes());
        selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
     
-       rainDrops(data, w, h, d, a, c);
+       rainDrops(data, w, h, 0, d, a, c, true);
     
        QImage newImg, targetImg;
        newImg.create( w, h, 32 );
@@ -364,7 +364,7 @@ void ImageEffect_RainDrop::slotEffect()
        }
     else 
        {
-       rainDrops(data, w, h, d, a, c);
+       rainDrops(data, w, h, 0, d, a, c, true);
        QImage newImg;
        newImg.create( w, h, 32 );
        memcpy(newImg.bits(), data, newImg.numBytes());
@@ -428,7 +428,7 @@ void ImageEffect_RainDrop::slotOk()
           memcpy(orgImg.bits(), data, orgImg.numBytes());
           selectedImg = orgImg.copy(selectedX, selectedY, selectedW, selectedH);
     
-          rainDrops(data, w, h, d, a, c);
+          rainDrops(data, w, h, 0, d, a, c, true);
     
           QImage newImg, targetImg;
           newImg.create( w, h, 32 );
@@ -441,7 +441,8 @@ void ImageEffect_RainDrop::slotOk()
           }
        else 
           {
-          rainDrops(data, w, h, d, a, c);
+          rainDrops(data, w, h, 0, d, a, c, true);
+          
           if ( !m_cancel ) iface->putOriginalData(data);
           }
        }
@@ -451,324 +452,350 @@ void ImageEffect_RainDrop::slotOk()
     accept();
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to apply the RainDrops effect (inspired from Jason Waltman code)          
+/* Function to apply the RainDrops effect backported from ImageProcessing version 2                                           
  *                                                                                  
  * data             => The image data in RGBA mode.                            
  * Width            => Width of image.                          
  * Height           => Height of image.                            
- * DropSize         => Raindrop size                                              
- * Amount           => Maximum number of raindrops                                  
- * Coeff            => FishEye coefficient                                           
+ * MinDropSize      => It's the minimum random size for rain drop.
+ * MaxDropSize      => It's the minimum random size for rain drop.
+ * Amount           => It's the maximum number for rain drops inside the image.
+ * Coeff            => It's the fisheye's coefficient.
+ * bLimitRange      => If true, the drop will not be cut.
  *                                                                                   
  * Theory           => This functions does several math's functions and the engine   
  *                     is simple to undestand, but a little hard to implement. A       
  *                     control will indicate if there is or not a raindrop in that       
- *                     area, if not, a fisheye effect with a random size (max=DropSize)
+ *                     area, if not, a fisheye effect with a random size (max=MaxDropSize)
  *                     will be applied, after this, a shadow will be applied too.       
  *                     and after this, a blur function will finish the effect.            
  */
-void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int DropSize, int Amount, int Coeff)
+void ImageEffect_RainDrop::rainDrops(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, 
+                                     int Amount, int Coeff, bool bLimitRange)
 {
-    int BitCount = 0;
+    int    nRandSize, i;
+    int    nCounter = 0;
+    int    nRandX, nRandY;
+    int    nWidth = Width;
+    int    nHeight = Height;
+    bool   bResp;
 
-    if (Coeff <= 0) Coeff = 1;
-    
-    if (Coeff > 100) Coeff = 100;
+    if (Amount <= 0)
+        return;
+
+    if (MinDropSize >= MaxDropSize)
+        MaxDropSize = MinDropSize + 1;
+
+    if (MaxDropSize <= 0)
+        return;
 
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-
-    BitCount = LineWidth * Height;
-    uchar*    Bits = (uchar*)data;
-    uchar* NewBits = new uchar[BitCount];
-    bool** BoolMatrix = CreateBoolArray (Width, Height);
-
-    int       i, j, k, l, m, n;                 // loop variables
-    int       p, q;                             // positions
-    int       Bright;                           // Bright value for shadows and highlights
-    int       x, y;                             // center coordinates
-    int       Counter = 0;                      // Counter (duh !)
-    int       NewSize;                          // Size of current raindrop
-    int       halfSize;                         // Half of the current raindrop
-    int       Radius;                           // Maximum radius for raindrop
-    int       BlurRadius;                       // Blur Radius
-    int       BlurPixels;
     
-    double    r, a;                             // polar coordinates
-    double    OldRadius;                        // Radius before processing
-    double    NewCoeff = (double)Coeff * 0.01;  // FishEye Coefficients
-    double    s;
-    double    R, G, B;
+    int BitCount = LineWidth * Height;
+    uchar* pResBits = new uchar[BitCount];
+    memcpy (pResBits, data, BitCount);     
 
-    bool      FindAnother = false;              // To search for good coordinates
+    uchar *pStatusBits = new uchar[nHeight * nWidth];
+    memset(pStatusBits, 0, sizeof(nHeight * nWidth));
+    
+    // Randomize.
     
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    
     srand ((uint) dt.secsTo(Y2000));
     
-    // Init booleen Matrix.
-    
-    for (i = 0 ; !m_cancel && (i < Width) ; ++i)
-       {
-       for (j = 0 ; !m_cancel && (j < Height) ; ++j)
-          {
-          p = j * LineWidth + 4 * i;         
-          NewBits[p+2] = Bits[p+2];
-          NewBits[p+1] = Bits[p+1];
-          NewBits[ p ] = Bits[ p ];
-          BoolMatrix[i][j] = false;
-          }
-       }
-
-    for (int NumBlurs = 0 ; !m_cancel && (NumBlurs <= Amount) ; ++NumBlurs)
+    for (i = 0; !m_cancel && (i < Amount); i++)
         {
-        NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
-        halfSize = NewSize / 2;
-        Radius = halfSize;
-        s = Radius / log (NewCoeff * Radius + 1);
-
-        Counter = 0;
+        nCounter = 0;
         
-        do
+        do 
             {
-            FindAnother = false;
-            y = (int)(rand() * ((double)( Width - 1) / RAND_MAX));
-            x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
+            nRandX = (int)(rand() * ((double)( nWidth - 1) / RAND_MAX));
+            nRandY = (int)(rand() * ((double)(nHeight - 1) / RAND_MAX));
 
-            if (BoolMatrix[y][x])
-                FindAnother = true;
-            else
-                for (i = x - halfSize ; !m_cancel && (i <= x + halfSize) ; i++)
-                    for (j = y - halfSize ; !m_cancel && (j <= y + halfSize) ; j++)
-                        if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
-                            if (BoolMatrix[j][i])
-                                FindAnother = true;
+            nRandSize = (rand() % (MaxDropSize - MinDropSize)) + MinDropSize;
 
-            Counter++;
-            } 
-        while (!m_cancel && (FindAnother && (Counter < 10000)) );
+            bResp = CreateRainDrop (data, Width, Height, pResBits, pStatusBits, nRandX, nRandY, nRandSize, Coeff, bLimitRange);
 
-        if (Counter >= 10000)
+            nCounter++;
+            }
+        while ((bResp == false) && (nCounter < 10000) && !m_cancel);
+
+        if (nCounter >= 10000)
             {
-            NumBlurs = Amount;
+            i = Amount;
             
             // Update the progress bar in dialog.
             m_progressBar->setValue(100);
             kapp->processEvents(); 
-            
             break;
-            }
-
-        for (i = -1 * halfSize ; !m_cancel && (i < NewSize - halfSize) ; i++)
-            {
-            for (j = -1 * halfSize ; !m_cancel && (j < NewSize - halfSize) ; j++)
-                {
-                r = sqrt (i * i + j * j);
-                a = atan2 (i, j);
-
-                if (r <= Radius)
-                    {
-                    OldRadius = r;
-                    r = (exp (r / s) - 1) / NewCoeff;
-
-                    k = x + (int)(r * sin (a));
-                    l = y + (int)(r * cos (a));
-
-                    m = x + i;
-                    n = y + j;
-
-                    if ((k >= 0) && (k < Height) && (l >= 0) && (l < Width))
-                        {
-                        if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-                            {
-                            p = k * LineWidth + 4 * l;        
-                            q = m * LineWidth + 4 * n;        
-                            NewBits[q+2] = Bits[p+2];
-                            NewBits[q+1] = Bits[p+1];
-                            NewBits[ q ] = Bits[ p ];
-                            BoolMatrix[n][m] = true;
-                            Bright = 0;
-                                
-                            if (OldRadius >= 0.9 * Radius)
-                                {
-                                if ((a <= 0) && (a > -2.25))
-                                   Bright = -80;
-                                else if ((a <= -2.25) && (a > -2.5))
-                                   Bright = -40;
-                                else if ((a <= 0.25) && (a > 0))
-                                   Bright = -40;
-                                }
-
-                            else if (OldRadius >= 0.8 * Radius)
-                                {
-                                if ((a <= -0.75) && (a > -1.50))
-                                    Bright = -40;
-                                else if ((a <= 0.10) && (a > -0.75))
-                                    Bright = -30;
-                                else if ((a <= -1.50) && (a > -2.35))
-                                    Bright = -30;
-                                }
-
-                            else if (OldRadius >= 0.7 * Radius)
-                                {
-                                if ((a <= -0.10) && (a > -2.0))
-                                    Bright = -20;
-                                else if ((a <= 2.50) && (a > 1.90))
-                                    Bright = 60;
-                                }
-                                
-                            else if (OldRadius >= 0.6 * Radius)
-                                {
-                                if ((a <= -0.50) && (a > -1.75))
-                                    Bright = -20;
-                                else if ((a <= 0) && (a > -0.25))
-                                    Bright = 20;
-                                else if ((a <= -2.0) && (a > -2.25))
-                                    Bright = 20;
-                                }
-
-                            else if (OldRadius >= 0.5 * Radius)
-                                {
-                                if ((a <= -0.25) && (a > -0.50))
-                                    Bright = 30;
-                                else if ((a <= -1.75 ) && (a > -2.0))
-                                    Bright = 30;
-                                }
-
-                            else if (OldRadius >= 0.4 * Radius)
-                                {
-                                if ((a <= -0.5) && (a > -1.75))
-                                    Bright = 40;
-                                }
-
-                            else if (OldRadius >= 0.3 * Radius)
-                                {
-                                if ((a <= 0) && (a > -2.25))
-                                    Bright = 30;
-                                }
-
-                            else if (OldRadius >= 0.2 * Radius)
-                                {
-                                if ((a <= -0.5) && (a > -1.75))
-                                    Bright = 20;
-                                }
-
-                            NewBits[q+2] = LimitValues (NewBits[q+2] + Bright);
-                            NewBits[q+1] = LimitValues (NewBits[q+1] + Bright);
-                            NewBits[ q ] = LimitValues (NewBits[ q ] + Bright);
-                            }
-                        }
-                    }
-                }
-            }
-
-        BlurRadius = NewSize / 25 + 1;
-            
-        for (i = -1 * halfSize - BlurRadius ; !m_cancel && (i < NewSize - halfSize + BlurRadius) ; i++)
-            {
-            for (j = -1 * halfSize - BlurRadius ; !m_cancel && (j < NewSize - halfSize + BlurRadius) ; j++)
-                {
-                r = sqrt (i * i + j * j);
-                
-                if (r <= Radius * 1.1)
-                    {
-                    R = G = B = 0;
-                    BlurPixels = 0;
-                        
-                    for (k = -1 * BlurRadius; k < BlurRadius + 1; k++)
-                        for (l = -1 * BlurRadius; l < BlurRadius + 1; l++)
-                            {
-                            m = x + i + k;
-                            n = y + j + l;
-                            
-                            if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-                                {
-                                p = m * LineWidth + 4 * n;           
-                                R += NewBits[p+2];
-                                G += NewBits[p+1];
-                                B += NewBits[ p ];
-                                BlurPixels++;
-                                }
-                            }
-
-                    m = x + i;
-                    n = y + j;
-                        
-                    if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-                        {
-                        p = m * LineWidth + 4 * n;                  
-                        NewBits[p+2] = (uchar)(R / BlurPixels);
-                        NewBits[p+1] = (uchar)(G / BlurPixels);
-                        NewBits[ p ] = (uchar)(B / BlurPixels);
-                        }
-                    }
-                }
             }
         
         // Update the progress bar in dialog.
-        m_progressBar->setValue((int) (((double)NumBlurs * 100.0) / Amount));
+        m_progressBar->setValue((int) (((double)i * 100.0) / Amount));
         kapp->processEvents(); 
         }
+
+    delete [] pStatusBits;
     
     if (!m_cancel) 
-       memcpy (data, NewBits, BitCount);        
-        
-    delete [] NewBits;
+       memcpy (data, pResBits, BitCount);        
+                
+    delete [] pResBits;
 
-    FreeBoolArray (BoolMatrix, Width);
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to free a dinamic boolean array                                            
- *                                                               
- * lpbArray          => Dynamic boolean array                                      
- * Columns           => The array bidimension value                                 
- *                                                                                  
- * Theory            => An easy to undestand 'for' statement                          
- */
-void ImageEffect_RainDrop::FreeBoolArray (bool** lpbArray, uint Columns)
+bool ImageEffect_RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits,
+                                          int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
-    for (uint i = 0; i < Columns; ++i)
-        free (lpbArray[i]);
-        
-    free (lpbArray);
-}
+    register int w, h, nw1, nh1, nw2, nh2;
+    int          nHalfSize = DropSize / 2;
+    int          pos1, pos2, nBright;
+    double       lfRadius, lfOldRadius, lfAngle, lfDiv;
+    
+    uchar *pBits    = (uchar*)data; 
+    uchar *pResBits = (uchar*)dest;
 
-/* Function to create a bidimentional dinamic boolean array                  
- *                                                                                
- * Columns           => Number of columns                                          
- * Rows              => Number of rows                                              
- *                                                                                  
- * Theory            => Using 'for' statement, we can alloc multiple dinamic arrays   
- *                      To create more dimentions, just add some 'for's, ok?           
- */
-bool** ImageEffect_RainDrop::CreateBoolArray (uint Columns, uint Rows)
-{
-    bool** lpbArray = NULL;
-    lpbArray = (bool**) malloc (Columns * sizeof (bool*));
+    int nTotalR, nTotalG, nTotalB, nBlurPixels, nBlurRadius;
 
-    if (lpbArray == NULL)
-        return (NULL);
-
-    for (uint i = 0; i < Columns; ++i)
-    {
-        lpbArray[i] = (bool*) malloc (Rows * sizeof (bool));
-        if (lpbArray[i] == NULL)
+    if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
         {
-            FreeBoolArray (lpbArray, Columns);
-            return (NULL);
-        }
-    }
+        Coeff *= 0.01; 
+        lfDiv = (double)nHalfSize / log (Coeff * (double)nHalfSize + 1.0);
 
-    return (lpbArray);
+        for (h = -nHalfSize; !m_cancel && (h <= nHalfSize); h++)
+            {
+            for (w = -nHalfSize; !m_cancel && (w <= nHalfSize); w++)
+                {
+                lfRadius = sqrt (h * h + w * w);
+                lfAngle = atan2 (h, w);
+
+                if (lfRadius <= (double)nHalfSize)
+                    {
+                    lfOldRadius = lfRadius;
+                    lfRadius = (exp (lfRadius / lfDiv) - 1.0) / Coeff;
+                    
+                    nw1 = (int)((double)X + lfRadius * cos (lfAngle));
+                    nh1 = (int)((double)Y + lfRadius * sin (lfAngle));
+
+                    nw2 = X + w;
+                    nh2 = Y + h;
+
+                    if (IsInside(Width, Height, nw1, nh1))
+                        {
+                        if (IsInside(Width, Height, nw2, nh2))
+                            {
+                            pos1 = SetPosition(Width, nw1, nh1);
+                            pos2 = SetPosition(Width, nw2, nh2);
+
+                            nBright = 0;
+                            
+                            if (lfOldRadius >= 0.9 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.0) && (lfAngle < 2.25))
+                                    nBright = -80;
+                                else if ((lfAngle >= 2.25) && (lfAngle < 2.5))
+                                    nBright = -40;
+                                else if ((lfAngle >= -0.25) && (lfAngle < 0.0))
+                                    nBright = -40;
+                                }
+
+                            else if (lfOldRadius >= 0.8 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.75) && (lfAngle < 1.50))
+                                    nBright = -40;
+                                else if ((lfAngle >= -0.10) && (lfAngle < 0.75))
+                                    nBright = -30;
+                                else if ((lfAngle >= 1.50) && (lfAngle < 2.35))
+                                    nBright = -30;
+                                }
+
+                            else if (lfOldRadius >= 0.7 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.10) && (lfAngle < 2.0))
+                                    nBright = -20;
+                                else if ((lfAngle >= -2.50) && (lfAngle < -1.90))
+                                    nBright = 60;
+                                }
+                            
+                            else if (lfOldRadius >= 0.6 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.50) && (lfAngle < 1.75))
+                                    nBright = -20;
+                                else if ((lfAngle >= 0.0) && (lfAngle < 0.25))
+                                    nBright = 20;
+                                else if ((lfAngle >= 2.0) && (lfAngle < 2.25))
+                                    nBright = 20;
+                                }
+
+                            else if (lfOldRadius >= 0.5 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.25) && (lfAngle < 0.50))
+                                    nBright = 30;
+                                else if ((lfAngle >= 1.75 ) && (lfAngle < 2.0))
+                                    nBright = 30;
+                                } 
+
+                            else if (lfOldRadius >= 0.4 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.5) && (lfAngle < 1.75))
+                                    nBright = 40;
+                                }
+
+                            else if (lfOldRadius >= 0.3 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.0) && (lfAngle < 2.25))
+                                    nBright = 30;
+                                }
+
+                            else if (lfOldRadius >= 0.2 * (double)nHalfSize)
+                                {
+                                if ((lfAngle >= 0.5) && (lfAngle < 1.75))
+                                    nBright = 20;
+                                }
+
+                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
+                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
+                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
+                            }
+                        }
+                    }
+                }
+            }
+
+        nBlurRadius = DropSize / 25 + 1;
+
+        for (h = -nHalfSize - nBlurRadius; !m_cancel && (h <= nHalfSize + nBlurRadius); h++)
+            {
+            for (w = -nHalfSize - nBlurRadius; !m_cancel && (w <= nHalfSize + nBlurRadius); w++)
+                {
+                lfRadius = sqrt (h * h + w * w);
+
+                if (lfRadius <= (double)nHalfSize * 1.1)
+                    {
+                    nTotalR = nTotalG = nTotalB = 0;
+                    nBlurPixels = 0;
+
+                    for (nh1 = -nBlurRadius; !m_cancel && (nh1 <= nBlurRadius); nh1++)
+                        {
+                        for (nw1 = -nBlurRadius; !m_cancel && (nw1 <= nBlurRadius); nw1++)
+                            {
+                            nw2 = X + w + nw1;
+                            nh2 = Y + h + nh1;
+
+                            if (IsInside (Width, Height, nw2, nh2))
+                                {
+                                pos1 = SetPosition (Width, nw2, nh2);
+
+                                nTotalB += pResBits[pos1++];
+                                nTotalG += pResBits[pos1++];
+                                nTotalR += pResBits[pos1++];
+                                nBlurPixels++;
+                                }
+                            }
+                        }
+
+                    nw1 = X + w;
+                    nh1 = Y + h;
+
+                    if (IsInside (Width, Height, nw1, nh1))
+                        {
+                        pos1 = SetPosition (Width, nw1, nh1);
+
+                        pResBits[pos1++] = nTotalB / nBlurPixels;
+                        pResBits[pos1++] = nTotalG / nBlurPixels;
+                        pResBits[pos1++] = nTotalR / nBlurPixels;
+                        }
+                    }
+                }
+            }
+
+        SetDropStatusBits (Width, Height, pStatusBits, X, Y, DropSize);
+        }
+    else
+        return (false);
+
+    return (true);
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.  
- 
+
+bool ImageEffect_RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, 
+                                        int DropSize, bool bLimitRange)
+{
+    register int w, h, i = 0;
+    int nHalfSize = DropSize / 2;
+
+    if (pStatusBits == NULL)
+        return (true);
+    
+    for (h = Y - nHalfSize; h <= Y + nHalfSize; h++)
+        {
+        for (w = X - nHalfSize; w <= X + nHalfSize; w++)
+            {
+            if (IsInside (Width, Height, w, h))
+                {
+                i = h * Width + w;
+                if (pStatusBits[i])
+                    return (false);
+                }
+            else
+                {
+                if (bLimitRange)
+                    return (false);
+                }
+            }
+        }
+
+    return (true);
+}
+
+bool ImageEffect_RainDrop::IsInside (int Width, int Height, int X, int Y)
+{
+    bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+    bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+
+    return (bIsWOk && bIsHOk);
+}
+
+bool ImageEffect_RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize)
+{
+    register int w, h, i = 0;
+    int nHalfSize = DropSize / 2;
+
+    if (pStatusBits == NULL)
+        return (false);
+
+    for (h = Y - nHalfSize; h <= Y + nHalfSize; h++)
+        {
+        for (w = X - nHalfSize; w <= X + nHalfSize; w++)
+            {
+            if (IsInside (Width, Height, w, h))
+                {
+                i = h * Width + w;
+                pStatusBits[i] = 255;
+                }
+            }
+        }
+
+    return (true);
+}
+
+/* Function to get the width's stride                                               
+ *                                                                                  
+ * Width            => Bitmap's width                                               
+ *                                                                                  
+ */ 
+int ImageEffect_RainDrop::GetStride (int Width)
+{
+    int LineWidth = Width * 4;
+
+    if (LineWidth % 4)
+        return (4 - (LineWidth % 4));
+
+    return (0);
+}
+
 /* This function limits the RGB values                        
  *                                                                         
  * ColorValue        => Here, is an RGB value to be analized                   

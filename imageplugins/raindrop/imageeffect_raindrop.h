@@ -55,7 +55,6 @@ public:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void rainDrops(uint *data, int Width, int Height, int DropSize, int Amount, int Coeff);
     
 private:
     
@@ -78,9 +77,25 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
 
-    inline bool** CreateBoolArray (uint Columns, uint Rows);
-    inline void FreeBoolArray (bool** lpbArray, uint Columns);
-    inline uchar LimitValues (int ColorValue);
+    void rainDrops(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, int Amount, 
+                   int Coeff, bool bLimitRange);
+                   
+    bool CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits, int X, int Y, 
+                        int DropSize, double Coeff, bool bLimitRange);
+    
+    bool CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
+    
+    bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
+                        
+    inline uchar LimitValues(int ColorValue);
+    
+    inline bool IsInside (int Width, int Height, int X, int Y);
+    
+    inline int GetStride (int Width);
+
+    inline int GetLineWidth (int Width){ return ((Width * 4) + GetStride (Width)); };
+            
+    inline int SetPosition (int Width, int X, int Y){ return (Y * GetLineWidth(Width) + 4 * X); };
     
 private slots:
 
