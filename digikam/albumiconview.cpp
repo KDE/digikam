@@ -162,6 +162,7 @@ public:
     QTimer*              rearrangeTimer;
 
     bool                 inFocus;
+    QString              nextItemToSelect;
 };
 
 
@@ -406,6 +407,14 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
         slotContentsMoving(contentsX(), contentsY());
     }
 
+    if (!d->nextItemToSelect.isEmpty())
+    {
+        ThumbItem* item = findItem(d->nextItemToSelect);
+        if (item)
+            item->setSelected(true);
+        d->nextItemToSelect = QString();
+    }
+    
     emit signalItemsAdded();
 }
 
@@ -747,11 +756,16 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
-                              newName);
+    if (!AlbumFileCopyMove::rename(album, item->fileItem()->url().fileName(),
+                                   newName))
+        return;
+
+    KURL newURL = item->fileItem()->url().upURL();
+    newURL.addPath(newName);
+    d->nextItemToSelect = newURL.url();
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-       d->imageLister->updateDirectory();
+        d->imageLister->updateDirectory();
 
     if( renameAlbumIcon )
     {
