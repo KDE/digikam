@@ -164,7 +164,6 @@ void ImageSelectionWidget::setSelectionX(int x)
 {
     m_regionSelection.moveLeft(x);
     realToLocalRegion();
-    regionSelectionMoved(false);
     updatePixmap();
     repaint(false);
 }
@@ -173,7 +172,6 @@ void ImageSelectionWidget::setSelectionY(int y)
 {
     m_regionSelection.moveTop(y);
     realToLocalRegion();
-    regionSelectionMoved(false);
     updatePixmap();
     repaint(false);
 }
