@@ -117,7 +117,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display.<p>"
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
