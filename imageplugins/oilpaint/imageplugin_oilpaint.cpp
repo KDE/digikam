@@ -41,7 +41,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
                     : Digikam::ImagePlugin(parent, "ImagePlugin_OilPaint")
 {
     new KAction(i18n("Oil paint..."), 0, 
-                this, SLOT(slotTest()),
+                this, SLOT(slotOilPaint()),
                 actionCollection(), "implugcore_oilpaint");
                 
     
@@ -59,7 +59,7 @@ QStringList ImagePlugin_OilPaint::guiDefinition() const
     return guiDef;
 }
 
-void ImagePlugin_OilPaint::slotTest()
+void ImagePlugin_OilPaint::slotOilPaint()
 {
     DigikamOilPaintImagesPlugin::ImageEffect_OilPaint dlg(parentWidget());
     dlg.exec();

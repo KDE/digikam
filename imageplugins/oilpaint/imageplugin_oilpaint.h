@@ -41,7 +41,7 @@ public:
 
 private slots:
 
-    void slotTest();
+    void slotOilPaint();
 
 };
     
