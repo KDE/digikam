@@ -560,11 +560,11 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     bool count =0;
 
     while ( (action = it1.current()) != 0 )
-        {
+    {
         action->plug(&popmenu);
         ++it1;
         count = 1;
-        }
+    }
 
     // Don't insert a separator if we didn't plug in any actions
 
@@ -648,7 +648,17 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     if (id >= 100 && id < 1000) {
         KService::Ptr imageServicePtr = serviceVector[id-100];
-        KRun::run(*imageServicePtr, iconItem->fileItem()->url());
+        KURL::List urlList;
+        for (ThumbItem *it = firstItem(); it; it=it->nextItem())
+        {
+            if (it->isSelected())
+            {
+                AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+                urlList.append(selItem->fileItem()->url());
+            }
+        }
+        if (urlList.count())
+            KRun::run(*imageServicePtr, urlList);
     }
 
     serviceVector.clear();
