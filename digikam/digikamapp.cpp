@@ -25,6 +25,7 @@
 
 #include <qcstring.h>
 #include <qdatastream.h>
+#include <qlabel.h>
 #include <qstringlist.h>
 #include <qkeysequence.h>
 #include <qsignalmapper.h>
@@ -96,7 +97,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     updateDeleteTrashMenu();
 
     setAutoSaveSettings();
-    applyMainWindowSettings (m_config);
+    applyMainWindowSettings(m_config);
 
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
 
@@ -119,7 +120,7 @@ DigikamApp::~DigikamApp()
     delete mAlbumSettings;
 
     delete mAlbumManager;
-    
+
     m_instance = 0;
 }
 
@@ -561,7 +562,7 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
                                    this, SLOT(slotCameraConnect()),
                                    actionCollection(),
                                    ctype->title().utf8());
-    mCameraMenuAction->insert(cAction);
+    mCameraMenuAction->insert(cAction, 0);
     ctype->setAction(cAction);
 }
 
