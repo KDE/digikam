@@ -268,6 +268,9 @@ int main(int argc, char *argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
     tipsFiles.append("digikamimageplugins/tips");
+
+    KGlobal::locale()->insertCatalogue("kipiplugins");
+    KGlobal::locale()->insertCatalogue("digikamimageplugins");
     
     KTipDialog::showMultiTip(0, tipsFiles, false);
 #else
