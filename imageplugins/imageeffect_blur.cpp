@@ -69,7 +69,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     m_radiusInput = new KIntNumInput(plainPage());
     m_radiusInput->setRange(0, 20, 1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
-                                         "1 and above determine the gaussian blur matrix radius "
+                                         "1 and above determine the Gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
     
     hlay2->addWidget(label, 1);
