@@ -47,6 +47,10 @@ signals:
     void signalCancel();
     void signalExit();
 
+    void signalFileView();
+    void signalFileProps();
+    void signalFileExif();
+    
     void signalSelectAll();
     void signalSelectNone();
     void signalSelectInvert();
@@ -64,6 +68,10 @@ private:
     KActionMenu *m_deleteAction;
     KAction     *m_downloadSelAction;
     KAction     *m_deleteSelAction;
+
+    KAction     *m_filePropsAction;
+    KAction     *m_fileExifAction;
+    KAction     *m_fileViewAction;
     
     friend class CameraUI;
 };

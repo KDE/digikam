@@ -25,6 +25,7 @@
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kpropertiesdialog.h>
 
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -133,6 +134,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     connect(d->controller, SIGNAL(signalBusy(bool)),
             SLOT(slotBusy(bool)));
 
+    connect(d->guiClient, SIGNAL(signalFileProps()),
+            this, SLOT(slotFileProperties()));
+
     connect(d->guiClient, SIGNAL(signalSelectAll()),
             this, SLOT(slotSelectAll()));
     connect(d->guiClient, SIGNAL(signalSelectNone()),
@@ -194,6 +198,9 @@ void CameraUI::slotSelectionChanged()
 
     d->guiClient->m_downloadSelAction->setEnabled(selected);
     d->guiClient->m_deleteSelAction->setEnabled(selected);
+    //d->guiClient->m_fileViewAction->setEnabled(selected);
+    d->guiClient->m_filePropsAction->setEnabled(selected);
+    //d->guiClient->m_fileExifAction->setEnabled(selected);
 }
 
 void CameraUI::slotDownloadSelected()
@@ -271,6 +278,34 @@ void CameraUI::slotProgressHide()
 {
     d->progressBar->setProgress(0);
     d->progressBar->hide();
+}
+
+void CameraUI::slotFileProperties()
+{
+    CameraIconItem *iconItem = 0;
+    for (ThumbItem *item = d->view->firstItem(); item;
+         item = item->nextItem())
+    {
+        if (item->isSelected())
+         {
+             iconItem = static_cast<CameraIconItem*>(item);
+             break;
+         }
+    }
+
+    if (!iconItem)
+        return;
+    
+    slotFileProperties(iconItem);
+}
+
+void CameraUI::slotFileProperties(CameraIconItem* item)
+{
+    if (!item)
+        return;
+
+    KPropertiesDialog dlg(item->fileItem(), this, 0, true, false);
+    dlg.exec();
 }
 
 void CameraUI::slotSelectAll()

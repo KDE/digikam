@@ -35,7 +35,7 @@ QPixmap* CameraIconItem::baseRegPix = 0;
 QPixmap* CameraIconItem::baseSelPix = 0;
 
 CameraIconItem::CameraIconItem(ThumbView* parent,
-                               const KFileItem* fileItem,
+                               KFileItem* fileItem,
                                const QPixmap& pixmap)
     : ThumbItem(parent, fileItem->name(), pixmap),
       m_fileItem(fileItem)
@@ -49,7 +49,7 @@ CameraIconItem::~CameraIconItem()
 {
 }
 
-const KFileItem* CameraIconItem::fileItem() const
+KFileItem* CameraIconItem::fileItem() const
 {
     return m_fileItem;    
 }

@@ -25,6 +25,7 @@
 #include <qmainwindow.h>
 
 class CameraUIPriv;
+class CameraIconItem;
 
 class CameraUI : public QMainWindow
 {
@@ -54,6 +55,9 @@ private slots:
     void slotDownloadSelected();
     void slotDownloadAll();
 
+    void slotFileProperties();
+    void slotFileProperties(CameraIconItem*);
+    
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();

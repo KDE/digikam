@@ -39,11 +39,11 @@ class CameraIconItem : public ThumbItem
 public:
 
     CameraIconItem(ThumbView* parent,
-                   const KFileItem* fileItem,
+                   KFileItem* fileItem,
                    const QPixmap& pixmap);
     ~CameraIconItem();
 
-    const KFileItem* fileItem() const;
+    KFileItem* fileItem() const;
     
     void setPixmap(const QPixmap& pix);
 
@@ -55,7 +55,7 @@ private:
 
     void loadBasePix();
 
-    const KFileItem* m_fileItem;
+    KFileItem* m_fileItem;
     int m_pixWidth, m_pixHeight;
 
     static QPixmap* baseRegPix;

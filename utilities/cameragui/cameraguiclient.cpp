@@ -85,6 +85,22 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
                                  actionCollection(),
                                  "cancel");
 
+    m_fileViewAction = new KAction(i18n("View"), 0,
+                                    this, SIGNAL(signalFileView()),
+                                    actionCollection(), "file_view");
+
+    m_filePropsAction = new KAction(i18n("Properties..."), 0,
+                                    this, SIGNAL(signalFileProps()),
+                                    actionCollection(), "file_props");
+
+    m_fileExifAction = new KAction(i18n("Exif Information..."), 0,
+                                    this, SIGNAL(signalFileExif()),
+                                    actionCollection(), "file_exif");
+
+    m_fileViewAction->setEnabled(false);
+    m_filePropsAction->setEnabled(false);
+    m_fileExifAction->setEnabled(false);
+
     new KAction(i18n("Select All"), 0, CTRL+Key_A,
                 this, SIGNAL(signalSelectAll()),
                 actionCollection(), "select_all");
@@ -121,6 +137,11 @@ QStringList CameraGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Camera/ /Action/exit/ ");
     
+    guiDef.append("MenuBar/Menu/&Image/ /Action/file_view/ ");
+    guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
+    guiDef.append("MenuBar/Menu/&Image/ /Action/file_props/ ");
+    guiDef.append("MenuBar/Menu/&Image/ /Action/file_exif/ ");
+
     guiDef.append("MenuBar/Menu/&View/ /Action/select_all/ ");
     guiDef.append("MenuBar/Menu/&View/ /Action/select_none/ ");
     guiDef.append("MenuBar/Menu/&View/ /Action/select_invert/ ");
@@ -137,6 +158,7 @@ QStringList CameraGUIClient::guiDefinition() const
     // enable i18n
 
     i18n( "&Camera" );
+    i18n( "&Image" );
     i18n( "&View" );
     i18n( "&Help" );
     
