@@ -42,6 +42,8 @@ public:
               int permissions, bool overwrite);
     void rename(const KURL &src, const KURL &dest,
                 bool overwrite);
+    void del(const KURL& url, bool isfile);
+    void stat(const KURL& url);
 
 private:
 

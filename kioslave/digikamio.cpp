@@ -711,6 +711,118 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
     }
 }
 
+void kio_digikamioProtocol::del(const KURL& url, bool isfile)
+{
+    QCString path( QFile::encodeName(url.path()));
+
+    if (isfile)
+    {
+        kdDebug() <<  "Deleting file "<< url.url() << endl;
+
+        // find the parent album
+        QString parentURL(albumURLFromKURL(url.upURL()));
+
+        // find the album id
+        int dirID;
+
+        QStringList vals;
+        
+        execSql( QString("SELECT id FROM Albums WHERE url = '%1'")
+                 .arg(parentURL), &vals );
+        if (vals.isEmpty())
+        {
+            error(KIO::ERR_UNKNOWN,
+                  i18n("Could not find source parent album for %1")
+                  .arg(url.path()));
+            return;
+        }
+        dirID = vals.first().toInt();
+
+        execSql( "BEGIN TRANSACTION;" );
+        
+        if (::unlink(path.data()) == 0)
+        {
+            // delete the item from the database
+            execSql( QString("DELETE FROM Images "
+                             "WHERE dirid=%1 AND name='%2';")
+                     .arg(dirID)
+                     .arg(escapeString(url.fileName())) );
+            
+            execSql( QString("DELETE FROM ImageTags "
+                             "WHERE dirid=%1 AND name='%2';")
+                     .arg(dirID)
+                     .arg(escapeString(url.fileName())) );
+        }
+        else
+        {
+            if ((errno == EACCES) || (errno == EPERM))
+                error( KIO::ERR_ACCESS_DENIED, url.path());
+            else if (errno == EISDIR)
+                error( KIO::ERR_IS_DIRECTORY, url.path());
+            else
+                error( KIO::ERR_CANNOT_DELETE, url.path() );
+        }
+
+        execSql( "COMMIT TRANSACTION;" );
+    }
+    else
+    {
+        kdDebug() << "Deleting folder not supported yet" << endl;
+        
+        error( KIO::ERR_COULD_NOT_RMDIR, url.path() );
+    }
+
+    finished();
+}
+
+void kio_digikamioProtocol::stat(const KURL& url)
+{
+    QCString path( QFile::encodeName(url.path(-1)));
+    KIO::UDSEntry entry;
+
+    KIO::UDSAtom atom;
+    atom.m_uds = KIO::UDS_NAME;
+    atom.m_str = url.fileName();
+    entry.append( atom );
+
+    mode_t type;
+    mode_t access;
+    KDE_struct_stat buff;
+
+    if (KDE_stat( path.data(), &buff ))
+    {
+        error( KIO::ERR_DOES_NOT_EXIST, url.path(-1) );
+        return;
+    }
+
+    type = buff.st_mode & S_IFMT; // extract file type
+    access = buff.st_mode & 07777; // extract permissions
+
+    atom.m_uds = KIO::UDS_FILE_TYPE;
+    atom.m_long = type;
+    entry.append( atom );
+
+    atom.m_uds = KIO::UDS_ACCESS;
+    atom.m_long = access;
+    entry.append( atom );
+
+    atom.m_uds = KIO::UDS_SIZE;
+    atom.m_long = buff.st_size;
+    entry.append( atom );
+
+    atom.m_uds = KIO::UDS_MODIFICATION_TIME;
+    atom.m_long = buff.st_mtime;
+    entry.append( atom );
+
+    atom.m_uds = KIO::UDS_ACCESS_TIME;
+    atom.m_long = buff.st_atime;
+    entry.append( atom );
+    
+    statEntry(entry);
+    
+    finished();
+}
+
 QString kio_digikamioProtocol::albumURLFromKURL(const KURL& kurl)
 {
     QString url(kurl.path(-1));

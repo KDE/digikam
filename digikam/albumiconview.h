@@ -161,6 +161,8 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+
+    void slotRearrange();
     
 public slots:
 

@@ -45,6 +45,7 @@
 #include <qguardedptr.h>
 #include <qdict.h>
 #include <qdatastream.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -147,6 +148,7 @@ public:
 
     QDict<AlbumIconItem> itemDict;
     AlbumFileTip*        toolTip;
+    QTimer*              rearrangeTimer;
 
     bool                 inFocus;
 };
@@ -160,6 +162,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     d->imageLister = new AlbumLister();
 
     d->toolTip = new AlbumFileTip(this);
+    d->rearrangeTimer = new QTimer(this);
     
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -207,6 +210,11 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
+
+    // -- Timer connection ----------------------------------------------
+
+    connect(d->rearrangeTimer, SIGNAL(timeout()),
+            SLOT(slotRearrange()));
     
     // -- resource for broken image thumbnail ---------------------------
     KGlobal::dirs()->addResourceType("digikam_imagebroken",
@@ -216,6 +224,8 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
 AlbumIconView::~AlbumIconView() 
 {
+    delete d->rearrangeTimer;
+
     if (!d->thumbJob.isNull()) 
     {
         d->thumbJob->kill();
@@ -399,13 +409,6 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
 
     if (!d->thumbJob.isNull())
         d->thumbJob->removeItem(item);
-
-    PAlbum* album = d->imageLister->findParentAlbum(item);
-    if (album)
-    {
-        AlbumManager::instance()->albumDB()->deleteItem(album,
-                                                        item->url().fileName());
-    }
     
     delete iconItem;
     item->removeExtraData(this);
@@ -414,8 +417,7 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
     u.cleanPath();
     d->itemDict.remove(u.url());
 
-    rearrangeItems();
-    updateBanner();
+    d->rearrangeTimer->start(0, true);
 }
 
 void AlbumIconView::slotImageListerClear()
@@ -696,14 +698,17 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 void AlbumIconView::slotDeleteSelectedItems()
 {
 
-    KURL::List urlList;
+    KURL::List  urlList;
     QStringList nameList;
 
+    KURL url;
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
         if (it->isSelected()) {
             AlbumIconItem *iconItem =
                 static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->fileItem()->url());
+            url = iconItem->fileItem()->url();
+            url.setProtocol("digikamio");
+            urlList.append(url);
             nameList.append(iconItem->text());
         }
     }
@@ -724,10 +729,6 @@ void AlbumIconView::slotDeleteSelectedItems()
         connect(job, SIGNAL(result(KIO::Job*)),
                 this, SLOT(slotOnDeleteSelectedItemsFinished(KIO::Job*)));
     }
-
-    // TODO: use a native delete to remove items from database if current
-    // album is a tag album OR use a kdirwatch on all the items in the
-    // tag album.
 }
 
 void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
@@ -735,8 +736,7 @@ void AlbumIconView::slotOnDeleteSelectedItemsFinished(KIO::Job* job)
     if (job->error())
         job->showErrorDialog(this);
 
-    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-        d->imageLister->updateDirectory();
+    d->imageLister->updateDirectory();
 
     updateBanner();
 }
@@ -1921,6 +1921,14 @@ void AlbumIconView::slotRemoveTag(int tagID)
         d->imageLister->updateDirectory();        
     }
     updateContents();
+}
+
+void AlbumIconView::slotRearrange()
+{
+    if (d->rearrangeTimer->isActive())
+        return;
+
+    slotUpdate();
 }
 
 #include "albumiconview.moc"

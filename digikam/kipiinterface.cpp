@@ -239,7 +239,12 @@ DigikamImageCollection::~DigikamImageCollection()
 
 QString DigikamImageCollection::name()
 {
-     return album_->getTitle();    
+    if ( album_->type() == Album::PHYSICAL )
+        return album_->getTitle();
+    else if ( album_->type() == Album::TAG )
+        return (i18n("Tag:") + album_->getURL());
+
+    return QString::null;
 }
 
 QString DigikamImageCollection::category()
@@ -351,11 +356,11 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 {
     AlbumDB* db = AlbumManager::instance()->albumDB();
 
-    db->beginTransaction();
-
     QStringList     urls;
     QValueList<int> dirIDs;
     
+    db->beginTransaction();
+
     db->getItemsInTAlbum(album, urls, dirIDs);
 
     db->commitTransaction();
@@ -486,10 +491,7 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 
     QString fileFilter(fileExtensions());
 
-    // TODO: for now just add PAlbums. at some point we have
-    // to start thinking off adding TAlbums too.
     PAlbumList palbumList = albumManager_->pAlbums();
-    
     for ( QValueList<PAlbum*>::Iterator it = palbumList.begin();
           it != palbumList.end(); ++it ) 
     {
@@ -503,6 +505,26 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
         result.append( KIPI::ImageCollection( col ) );
     }
 
+    /*
+     * Disable this till the imagesgallery plugin is fixed
+      
+    TAlbumList talbumList = albumManager_->tAlbums();
+    for ( QValueList<TAlbum*>::Iterator it = talbumList.begin();
+          it != talbumList.end(); ++it ) 
+    {
+        // don't add the root album
+        if ((*it)->isRoot())
+            continue;
+
+        DigikamImageCollection* col =
+            new DigikamImageCollection( DigikamImageCollection::AllItems, 
+                                        *it, fileFilter );
+        result.append( KIPI::ImageCollection( col ) );
+    }
+
+    */
+    
+    
     return result;
 }
 
