@@ -7,7 +7,7 @@
  * 
  * Copyright 2004 by Gilles Caulier
  *
- * Original OilPaint algorithm copyrighted 2004by 
+ * Original OilPaint algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
  * This program is free software; you can redistribute it
@@ -139,17 +139,17 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                                            plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
     
-        // -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Brush size:"), plainPage());
     
-    m_brushSizeSlider = new QSlider(1, 10, 1, 1, Qt::Horizontal, plainPage(), "m_brushSizeSlider");
+    m_brushSizeSlider = new QSlider(1, 5, 1, 1, Qt::Horizontal, plainPage(), "m_brushSizeSlider");
     m_brushSizeSlider->setTickmarks(QSlider::Below);
     m_brushSizeSlider->setTickInterval(1);
     m_brushSizeSlider->setTracking ( false );
     
-    m_brushSizeInput = new QSpinBox(1, 10, 1, plainPage(), "m_brushSizeInput");
+    m_brushSizeInput = new QSpinBox(1, 5, 1, plainPage(), "m_brushSizeInput");
     
     whatsThis = i18n("<p>Set here the brush size use for to simulate the oil painting.");
     QWhatsThis::add( m_brushSizeInput, whatsThis);
@@ -217,10 +217,10 @@ ImageEffect_OilPaint::~ImageEffect_OilPaint()
 void ImageEffect_OilPaint::slotUser1()
 {
     blockSignals(true);
-    m_brushSizeInput->setValue(2);
-    m_brushSizeSlider->setValue(2);
-    m_smoothInput->setValue(20);
-    m_smoothSlider->setValue(20);
+    m_brushSizeInput->setValue(1);
+    m_brushSizeSlider->setValue(1);
+    m_smoothInput->setValue(30);
+    m_smoothSlider->setValue(30);
     slotEffect();
     blockSignals(false);
 } 
@@ -305,12 +305,9 @@ void ImageEffect_OilPaint::slotOk()
 void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness)
 {
     int LineWidth = w * 4;
-    
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
       
-    uint*  newData = new uint[w*h*4];
-    uchar* newBits = (uchar*) newData;
-    
+    uchar* newBits = (uchar*)data;
     int i = 0;
     uint color;
     
@@ -331,9 +328,6 @@ void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int
        m_progressBar->setValue((int) (((double)h2 * 100.0) / h));
        kapp->processEvents();          
        }
-    
-    memcpy(data, newData, w*h*4);             
-    delete [] newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
