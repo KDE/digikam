@@ -15,6 +15,16 @@
      <Action name="go_fwd" /> 
  </Menu>
 
+ <Menu name="transform" >
+   <text>&amp;Transform</text>
+     <Action name="rotate_90" />
+     <Action name="rotate_180" />
+     <Action name="rotate_270" />
+     <Separator />
+     <Action name="flip_horiz" />
+     <Action name="flip_vert" />
+ </Menu>
+
  <Menu name="view" >
    <text>&amp;View</text>
      <Action name="zoom_plus" />

@@ -96,7 +96,9 @@ void ShowFoto::setupActions()
                 ALT+Key_Return,
                 this, SLOT(slotFileProperties()),
                 actionCollection(), "file_properties");
-                     
+
+    // ---------------------------------------------------------------
+    
     m_zoomPlusAction =
         KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                            actionCollection(), "zoom_plus");
@@ -125,7 +127,28 @@ void ShowFoto::setupActions()
         new KToggleAction(i18n("Hide thumbnails"), 0, Key_T,
                           this, SLOT(slotToggleShowBar()),
                           actionCollection(), "show_thumbs");
-        
+
+    // ---------------------------------------------------------------
+    
+    new KAction(i18n("Rotate 90"), 0, Key_9,
+                m_canvas, SLOT(slotRotate90()),
+                actionCollection(), "rotate_90");
+    new KAction(i18n("Rotate 180"), 0, Key_8,
+                m_canvas, SLOT(slotRotate180()),
+                actionCollection(), "rotate_180");
+    new KAction(i18n("Rotate 270"), 0, Key_7,
+                m_canvas, SLOT(slotRotate270()),
+                actionCollection(), "rotate_270");
+
+    new KAction(i18n("Flip Horizontally"), 0, Key_Asterisk,
+                m_canvas, SLOT(slotFlipHoriz()),
+                actionCollection(), "flip_horiz");
+    new KAction(i18n("Flip Vertically"), 0, Key_Slash,
+                m_canvas, SLOT(slotFlipVert()),
+                actionCollection(), "flip_vert");
+    
+    // ---------------------------------------------------------------
+    
     createGUI("showfotoui.rc", false);
 
     KAccel *accel = new KAccel(this);
