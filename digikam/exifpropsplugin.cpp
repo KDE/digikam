@@ -69,41 +69,39 @@ void ExifPropsPlugin::setupGui(KPropertiesDialog *dialog)
 {
     QPtrList<KExifIfd> ifdList(mExifData->ifdList());
 
+    QFrame *page = dialog->addPage( i18n("Exif") );
+    QGridLayout* layout = new QGridLayout(page);
+    KExifListView* listview = new KExifListView(page, true);
+    
+    QGroupBox *textBox = new QGroupBox(1, Qt::Vertical, page);
+    QTextEdit *textEdit = new QTextEdit(textBox);
+    textEdit->setReadOnly(true);
+    textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    textBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    textEdit->setText(i18n("Select an item to see its description"));
+    
+    layout->addWidget(listview, 0, 0);
+    layout->addWidget(textBox, 1, 0);
+    
     for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
         {
-        QFrame *page = dialog->addPage( i18n("Exif-%1").arg(ifd->getName()));
-        QGridLayout* layout = new QGridLayout(page);
-        KExifListView* listview = new KExifListView(page);
-        listview->addItems(ifd->entryList());
-        layout->addWidget(listview, 0, 0);
-
-        QGroupBox *textBox = new QGroupBox(1, Qt::Vertical, page);
-        QTextEdit *textEdit = new QTextEdit(textBox);
-        textEdit->setReadOnly(true);
-        textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
-        textBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
-        textEdit->setText(i18n("Select an item to see its description"));
-
-        layout->addWidget(textBox, 1, 0);
-        
-        connect(listview, SIGNAL(signal_itemDescription(const QString&)),
-                textEdit, SLOT(setText(const QString&)));
+        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), ifd->getName());
+        listview->addItems(ifd->entryList(), item );
         }
+        
+    connect(listview, SIGNAL(signal_itemDescription(const QString&)),
+            textEdit, SLOT(setText(const QString&)));
 
-    
-    // Exif embedded thumbnails page creation.
+    // Exif embedded thumbnails listview entry creation.
     
     QImage thumbnail(mExifData->getThumbnail());
         
     if (!thumbnail.isNull()) 
         {
-        QFrame *page = dialog->addPage( i18n("Exif-Thumbnail"));
-        QGridLayout* layout = new QGridLayout(page);
-        QLabel* label = new QLabel(page);
-        label->setFixedSize(thumbnail.size());
-        label->setPixmap(QPixmap(thumbnail));
-        layout->addWidget(label, 0, 0);
-        }
+        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), i18n("Thumbnail"));
+        KExifListViewItem *item2 = new KExifListViewItem(item, listview->lastItem(), "");
+        item2->setPixmap(1, QPixmap(thumbnail));
+        }        
 }
 
 
