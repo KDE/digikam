@@ -73,14 +73,9 @@ private:
     enum RestorationFilteringPreset
     {
     NoPreset=0,
-    ReduceJPEGArtefacts,
-    ReduceGaussianNoise,
     ReduceUniformNoise,
-    ReduceNonSyntheticNoise,
-    ReduceImportantNoise,
+    ReduceJPEGArtefacts,
     ReduceTexturing,
-    VideoImageRestoration,
-    PaintingEffect
     };
 
     enum RunningMode
@@ -142,7 +137,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();
-    void slotRestorationTypeChanged(int type);
+
 };
     
 }  // NameSpace DigikamRestorationImagesPlugin

@@ -226,9 +226,12 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
-    
+
+    // -------------------------------------------------------------
+            
     adjustSize();
     disableResize(); 
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
     

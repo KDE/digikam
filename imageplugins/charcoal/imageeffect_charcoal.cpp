@@ -5,7 +5,7 @@
  * Description : a digikam image editor plugin for to
  *               simulate charcoal drawing.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,7 +79,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A charcoal drawing image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -178,9 +178,11 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    // -------------------------------------------------------------
     adjustSize();
     disableResize();        
-
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+    
     // -------------------------------------------------------------
         
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -226,8 +228,7 @@ void ImageEffect_Charcoal::slotUser1()
 
 void ImageEffect_Charcoal::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("charcoal",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("charcoal", "digikamimageplugins");
 }
 
 void ImageEffect_Charcoal::closeEvent(QCloseEvent *e)

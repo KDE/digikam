@@ -218,9 +218,12 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay5->addWidget(m_progressBar, 1);
     
+    // -------------------------------------------------------------
+    
     adjustSize();
     disableResize();  
-        
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+            
     // -------------------------------------------------------------
         
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),

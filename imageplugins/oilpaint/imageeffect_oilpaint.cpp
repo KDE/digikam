@@ -186,7 +186,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     adjustSize();
     disableResize();
-        
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+                
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -232,8 +233,7 @@ void ImageEffect_OilPaint::slotUser1()
 
 void ImageEffect_OilPaint::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("oilpaint",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("oilpaint", "digikamimageplugins");
 }
 
 void ImageEffect_OilPaint::closeEvent(QCloseEvent *e)

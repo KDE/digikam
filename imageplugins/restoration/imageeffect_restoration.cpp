@@ -158,20 +158,17 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
-    m_restorationTypeCB->insertItem( i18n("No Preset") );
-    m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
-    m_restorationTypeCB->insertItem( i18n("Reduce Gaussian Noise") );
+    m_restorationTypeCB->insertItem( i18n("None") );
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
-    m_restorationTypeCB->insertItem( i18n("Reduce Non Synthetic Noise") );
-    m_restorationTypeCB->insertItem( i18n("Reduce Important Noise") );
+    m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
     m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
-    m_restorationTypeCB->insertItem( i18n("Video Image Restoration") );
-    m_restorationTypeCB->insertItem( i18n("Painting Effect") );
-    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration."));
+    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
+                                               "<b>None</b>: no preset values. Lets settings to default.<p>"
+                                               "<b>Reduce Uniform Noise</b>: reduce small image artefacts like CCD noise.<p>"
+                                               "<b>Reduce JPEG Artefacts</b>: reduce large image artefacts like JPEG compression mosaic.<p>"
+                                               "<b>Reduce Texturing</b>: reduce image artefacts like paper texture "
+                                               "coming from a scanned image.<p>"));
 
-    // Disable ComboBox until Inpainting method will be completed.
-    m_restorationTypeCB->setEnabled(false);
-        
     grid->addMultiCellWidget(typeLabel, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 1, 1);
     
@@ -191,7 +188,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Low smoothing limitation factor used to sharpening level of target image detail."));
+    QWhatsThis::add( m_detailInput, i18n("<p>Low smoothing limitation factor used to set the sharpening level of target image."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
 
@@ -200,7 +197,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
     m_gradientInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_gradientInput, i18n("<p>Hight smoothing limitation factor used to sharpening level of target image detail."));
+    QWhatsThis::add( m_gradientInput, i18n("<p>Hight smoothing limitation factor used to set the sharpening level of target image."));
     grid2->addMultiCellWidget(m_gradientLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
 
@@ -349,10 +346,6 @@ void ImageEffect_Restoration::slotTimer()
     m_timer->start(500, true);
 }
 
-void ImageEffect_Restoration::slotRestorationTypeChanged(int type)
-{
-}
-
 void ImageEffect_Restoration::slotUser1()
 {
     if (m_dirty)
@@ -372,60 +365,36 @@ void ImageEffect_Restoration::slotUser1()
        m_linearInterpolationBox->blockSignals(true);
        m_normalizeBox->blockSignals(true);
 
+       m_detailInput->setValue(0.1);
+       m_gradientInput->setValue(0.9);
+       m_timeStepInput->setValue(20.0);
+       m_blurInput->setValue(1.4);
+       m_blurItInput->setValue(1.0);
+       m_angularStepInput->setValue(45.0);
+       m_integralStepInput->setValue(0.8);
+       m_gaussianInput->setValue(3.0);
+       m_linearInterpolationBox->setChecked(true);
+       m_normalizeBox->setChecked(false);
+       
        switch(m_restorationTypeCB->currentItem())
           {
-          case NoPreset:
-            {
-            m_detailInput->setValue(0.1);
-            m_gradientInput->setValue(0.9);
-            m_timeStepInput->setValue(20.0);
-            m_blurInput->setValue(1.4);
-            m_blurItInput->setValue(1.0);
-            m_angularStepInput->setValue(45.0);
-            m_integralStepInput->setValue(0.8);
-            m_gaussianInput->setValue(3.0);
-            m_linearInterpolationBox->setChecked(true);
-            m_normalizeBox->setChecked(false);
-            break;
-            }
-
-          case ReduceJPEGArtefacts:
-            {
-            break;
-            }
-          
-          case ReduceGaussianNoise:
-            {
-            break;
-            }
-          
           case ReduceUniformNoise:
             {
+            m_timeStepInput->setValue(40.0);
             break;
             }
           
-          case ReduceNonSyntheticNoise:
+          case ReduceJPEGArtefacts:
             {
-            break;
-            }
-          
-          case ReduceImportantNoise:
-            {
+            m_detailInput->setValue(0.3);
+            m_blurInput->setValue(0.9);
+            m_timeStepInput->setValue(100.0);
             break;
             }
           
           case ReduceTexturing:
             {
-            break;
-            }
-          
-          case VideoImageRestoration:
-            {
-            break;
-            }
-          
-          case PaintingEffect:
-            {
+            m_timeStepInput->setValue(100.0);
             break;
             }
           }                       
@@ -479,6 +448,8 @@ void ImageEffect_Restoration::slotEffect()
     m_currentRenderingMode = PreviewRendering;
     m_dirty                = true;
     
+    m_imagePreviewWidget->setEnabled(false);
+    m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
     m_timeStepInput->setEnabled(false);
@@ -521,6 +492,8 @@ void ImageEffect_Restoration::slotEffect()
 void ImageEffect_Restoration::slotOk()
 {
     m_currentRenderingMode = FinalRendering;
+    m_imagePreviewWidget->setEnabled(false);
+    m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
     m_timeStepInput->setEnabled(false);
@@ -588,6 +561,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  setButtonText(User1, i18n("&Reset Values"));
                  setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
                  enableButton(Ok, true);    
+                 m_imagePreviewWidget->setEnabled(true);                 
+                 m_restorationTypeCB->setEnabled(true);
                  m_detailInput->setEnabled(true);
                  m_gradientInput->setEnabled(true);
                  m_timeStepInput->setEnabled(true);
@@ -627,6 +602,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                     setButtonText(User1, i18n("&Reset Values"));
                     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
                     enableButton(Ok, true);    
+                    m_imagePreviewWidget->setEnabled(true);                 
+                    m_restorationTypeCB->setEnabled(true);
                     m_detailInput->setEnabled(true);
                     m_gradientInput->setEnabled(true);
                     m_timeStepInput->setEnabled(true);

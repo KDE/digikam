@@ -177,6 +177,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
     adjustSize();
     disableResize(); 
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
     
@@ -196,11 +197,11 @@ ImageEffect_Infrared::~ImageEffect_Infrared()
 
 void ImageEffect_Infrared::slotUser1()
 {
-    blockSignals(true);
+    m_sensibilitySlider->blockSignals(true);
           
     m_sensibilitySlider->setValue(1);
     
-    blockSignals(false);
+    m_sensibilitySlider->blockSignals(false);
     slotEffect();    
 } 
 
