@@ -6,8 +6,6 @@ Gilles Caulier <caulier dot gilles at free.fr>                        : Co-coord
 
 DEVELOPERS :
 
-Todd Shoemaker <todd at theshoemakers.net>                            : Developer.
-Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Developer.
 Ralf Holzer <ralf at well.com>                                        : Developer.
 Joern Ahrens <kde at jokele.de>                                       : Developer.
 
@@ -34,3 +32,5 @@ Richard Groult <Richard dot Groult at jalix.org>                      : Plugins 
 Jens Gassmann <jens dot gassmann at atomix.de>                        : Splashscreen for 0.6.1.
 Yves Chaufour <yves dot chaufour at wanadoo.fr>                       : Splashscreen for 0.6.2 and 0.7.0.
 Sebastian Rooder <seppelrockt at web.de>                              : New Crystal icons style for 0.6.2.
+Todd Shoemaker <todd at theshoemakers.net>                            : Feedback and patchs.
+Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Feedback and patchs.
