@@ -243,8 +243,15 @@ void ImageSelectionWidget::setSelectionY(int y)
 void ImageSelectionWidget::setSelectionWidth(int w)
 {
     m_regionSelection.setWidth(w);
-    realToLocalRegion(true);
+    realToLocalRegion(true);    
     applyAspectRatio(false, true, false);
+       
+    if (m_currentAspectRatioType == RATIONONE)
+       {
+       emit signalSelectionChanged( m_regionSelection );  
+       return;
+       }
+    
     localToRealRegion();
     emit signalSelectionHeightChanged(m_regionSelection.height());
     
@@ -265,6 +272,13 @@ void ImageSelectionWidget::setSelectionHeight(int h)
     m_regionSelection.setHeight(h);
     realToLocalRegion(true);
     applyAspectRatio(true, true, false);
+    
+    if (m_currentAspectRatioType == RATIONONE)
+       {
+       emit signalSelectionChanged( m_regionSelection );  
+       return;
+       }
+    
     localToRealRegion();
     emit signalSelectionWidthChanged(m_regionSelection.width());
         
@@ -298,11 +312,15 @@ void ImageSelectionWidget::realToLocalRegion(bool updateSizeOnly)
 {
     if (!updateSizeOnly)
        {
-       m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
-                                    ( (float)m_w / (float)m_iface->originalWidth() )) );
+       if (m_regionSelection.x() == 0 ) m_localRegionSelection.setX(0);
+       else
+          m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
+                                      ( (float)m_w / (float)m_iface->originalWidth() )) );
                                             
-       m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)m_regionSelection.y() * 
-                                    ( (float)m_h / (float)m_iface->originalHeight() )) );
+       if (m_regionSelection.y() == 0 ) m_localRegionSelection.setY(0);
+       else
+          m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)m_regionSelection.y() * 
+                                      ( (float)m_h / (float)m_iface->originalHeight() )) );
        }
                                             
     m_localRegionSelection.setWidth( (int)((float)m_regionSelection.width() *
