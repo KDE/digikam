@@ -2,10 +2,11 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
- * Description : 
+ * Description : load digiKam image editor plugins list 
+ *               configured in setup dialog.
  * 
- * Copyright 2004 by Renchi Raju and Gilles Caulier
-
+ * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -37,11 +38,6 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent)
                  : QObject(parent)
 {
     m_instance = this;
-
-    // Load the ImagePlugins list who must be loaded (configured in setup dialog).
-    // If the config plugins list entry do not exist (like if this is the first time 
-    // to run with DigikamImagePlugins loading/unloading capabilty), then load all 
-    // ImagePlugins available on the system.
     
     QStringList imagePluginsList2Load;
     KConfig* config = kapp->config();
@@ -69,35 +65,64 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
     
+    // Load plugin core at the first time.
+
     for(iter = offers.begin(); iter != offers.end(); ++iter)
-        {
+       {
         KService::Ptr service = *iter;
         Digikam::ImagePlugin *plugin;
 
-        if(!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
-            {
-            if((plugin = pluginIsLoaded(service->name())) != NULL)
-                m_pluginList.remove(plugin);
-            }
-        else 
-            {
-            if( pluginIsLoaded(service->name()) )
-               continue;
-            else
-                {
-                plugin = KParts::ComponentFactory
-                         ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
+        if(service->library() == "digikamimageplugin_core")
+           {
+           if( pluginIsLoaded(service->name()) )
+              break;
+           else
+              {
+              plugin = KParts::ComponentFactory
+                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
 
-                if (plugin)
-                    {
-                    m_pluginList.append(plugin);
+              if (plugin)
+                 {
+                 m_pluginList.append(plugin);
                 
-                    kdDebug() << "ImagePluginLoader: Loaded plugin "
-                              << plugin->name() << endl;
-                    }
+                 kdDebug() << "ImagePluginLoader: Loaded plugin " << plugin->name() << endl;
+                 }
+                                
+              break;
+              }
+           }
+       }
+        
+    // Load all other image plugins after (make a coherant menu construction in Image Editor).
+      
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+       {
+       KService::Ptr service = *iter;
+       Digikam::ImagePlugin *plugin;
+
+       if(!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
+          {
+          if((plugin = pluginIsLoaded(service->name())) != NULL)
+              m_pluginList.remove(plugin);
+          }
+       else 
+          {
+          if( pluginIsLoaded(service->name()) )
+             continue;
+          else
+             {
+             plugin = KParts::ComponentFactory
+                      ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
+
+             if (plugin)
+                {
+                m_pluginList.append(plugin);
+                
+                kdDebug() << "ImagePluginLoader: Loaded plugin " << plugin->name() << endl;
                 }
-            }
-        }
+             }
+          }
+       }
 }
 
 Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)
