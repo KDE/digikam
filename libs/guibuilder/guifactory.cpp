@@ -277,7 +277,15 @@ void GUIFactory::buildGUI(QWidget *w)
         QMainWindow *p = static_cast<QMainWindow*>(w);
 
         {
-            QMenuBar* menuBar = p->menuBar();
+            //QMenuBar* menuBar = p->menuBar();
+            //menuBar->clear();
+
+            QObject* obj = p->child("menubar","KMenuBar");
+            KMenuBar* menuBar = 0;
+            if (obj)
+                menuBar = static_cast<KMenuBar*>(obj);
+            else
+                menuBar = new KMenuBar(p);
             menuBar->clear();
             
             GUIElement *gui = d->menuBarGUI->m_firstChild;
