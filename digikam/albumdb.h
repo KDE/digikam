@@ -56,6 +56,7 @@ public:
     void setCollection(PAlbum *album);
     void setDate(PAlbum *album);
     void setIcon(TAlbum *album, const QString& icon);
+    void setIcon(PAlbum *album, const QString& icon);    
 
     QString     getItemCaption(PAlbum *album, const QString& name);
     QStringList getItemTagNames(PAlbum *album, const QString& name);
