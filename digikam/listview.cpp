@@ -312,7 +312,7 @@ void ListView::drawArrow(QPainter* p, const QRect& r, bool open,
     if (selected)
         p->setPen( colorGroup().highlightedText() );
     else
-        p->setPen( colorGroup().buttonText() );
+        p->setPen( colorGroup().text() );
     p->drawLineSegments( a, 0, 4 );
     p->drawPoint( a[8] );
 
