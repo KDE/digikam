@@ -37,7 +37,6 @@
 #include <kio/renamedlg.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 
 #include <libkexif/kexif.h>
 

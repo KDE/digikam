@@ -35,7 +35,7 @@
 
 // KDE includes.
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmainwindow.h>
 
 

@@ -34,7 +34,6 @@
 #include <kfileitem.h>
 #include <kfilemetainfo.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <kdeversion.h>
 

@@ -34,7 +34,6 @@
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qpopupmenu.h>
-#include <qpainter.h>
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qguardedptr.h>
@@ -42,7 +41,6 @@
 #include <qcursor.h>
 #include <qvaluevector.h>
 #include <qptrlist.h>
-#include <qguardedptr.h>
 #include <qdict.h>
 #include <qdatastream.h>
 #include <qtimer.h>

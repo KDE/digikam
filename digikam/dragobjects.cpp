@@ -19,8 +19,8 @@
  * 
  * ============================================================ */
 
-#include <album.h>
-#include <albummanager.h>
+#include "album.h"
+#include "albummanager.h"
 
 #include "dragobjects.h"
 

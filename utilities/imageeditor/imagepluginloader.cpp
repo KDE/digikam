@@ -48,7 +48,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent)
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");  
     
-    if ( config->readEntry("ImagePlugins List") == QString::null )   
+    if ( config->readEntry("ImagePlugins List").isNull() )   
        {
        KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
        KTrader::OfferList::ConstIterator iter;

@@ -28,7 +28,6 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qcheckbox.h>
-#include <qlayout.h>
 
 // KDE includes.
 

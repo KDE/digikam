@@ -22,7 +22,7 @@
 #ifndef ALBUMFOLDERITEM_H
 #define ALBUMFOLDERITEM_H
 
-#include <listitem.h>
+#include "listitem.h"
 #include <qpixmap.h>
 
 class QPainter;

@@ -53,7 +53,6 @@
 #include <kiconloader.h>
 #include <kpropsdlg.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kurl.h>

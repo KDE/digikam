@@ -31,7 +31,6 @@
 #include <qstring.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qwhatsthis.h>
 
 // KDE includes.

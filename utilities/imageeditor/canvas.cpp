@@ -35,15 +35,13 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpixmap.h>
-#include <qrect.h>
 #include <qstyle.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <qcursor.h>
 #include <qimage.h>
 #include <qregion.h>
 #include <qtimer.h>
 #include <qvaluelist.h>
-#include <qapplication.h>
 
 // Local includes.
 

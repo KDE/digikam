@@ -29,7 +29,7 @@
 #include <qrect.h>
 #include <qfont.h>
 
-#include <thumbview.h>
+#include "thumbview.h"
 #include <kfileitem.h>
 
 // Local includes.

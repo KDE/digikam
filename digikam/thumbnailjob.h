@@ -24,7 +24,6 @@
 
 #include <kio/job.h>
 #include <kurl.h>
-#include <kurl.h>
 #include <qcstring.h>
 
 class QPixmap;

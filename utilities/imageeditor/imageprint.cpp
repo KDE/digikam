@@ -37,7 +37,6 @@
 #include <qcheckbox.h>
 #include <qfont.h>
 #include <qgrid.h>
-#include <qlayout.h>
 #include <qimage.h>
 #include <qpaintdevicemetrics.h>
 #include <qpainter.h>
@@ -51,7 +50,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kimageio.h>
 #include <kcombobox.h>
@@ -61,7 +60,6 @@
 #include <kprinter.h>
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
-#include <kapplication.h> 
 
 // Local includes
 

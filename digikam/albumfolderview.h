@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <listview.h>
+#include "listview.h"
 #include <qptrlist.h>
 #include <qguardedptr.h>
 #include <qpixmap.h>
