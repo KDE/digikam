@@ -91,7 +91,7 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
         return;
 
     delete item;
-    rearrangeItems();
+    triggerUpdate();
 }
 
 CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)

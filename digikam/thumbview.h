@@ -50,6 +50,7 @@ public:
     
     virtual void clear(bool update=true);
     void rearrangeItems(bool update=true);
+    void triggerUpdate();
 
     void repaintBanner();
 

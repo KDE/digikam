@@ -477,6 +477,11 @@ void ThumbView::rearrangeItems(bool update)
 
 }
 
+void ThumbView::triggerUpdate()
+{
+    d->updateTimer->start(0, true);    
+}
+
 ThumbItem* ThumbView::makeRow(ThumbItem *begin, int &y, bool &changed)
 {
     ThumbItem *end = 0;
