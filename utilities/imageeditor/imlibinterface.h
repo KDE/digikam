@@ -110,7 +110,7 @@ private:
                     int PNGcompression, bool TIFFcompression, 
                     const QString& mimeType); 
     bool saveTIFF(const QString& saveFile, bool compress);
-    void exifRotate(QString filename);
+    void exifRotate(const QString& filename);
         
     ImlibInterface();
     ImlibInterfacePrivate *d;

@@ -258,7 +258,7 @@ void ListItem::setOpen(bool val)
 
 bool ListItem::isOpen() const
 {
-    return m_open;    
+    return m_open;
 }
 
 bool ListItem::isRoot() const

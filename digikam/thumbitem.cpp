@@ -1,3 +1,19 @@
+/* ============================================================
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2002-2004 by Renchi Raju
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * ============================================================ */
+
 #include <qpixmap.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
@@ -298,12 +314,12 @@ int ThumbItem::height() const
     return d->rect.height();
 }
 
-bool ThumbItem::move(int x, int y)
+bool ThumbItem::move(int _x, int _y)
 {
-    if (x == this->x() && y == this->y())
+    if (_x == x() && _y == y())
 	return false;
 
-    d->rect.setRect(x, y, d->rect.width(),
+    d->rect.setRect(_x, _y, d->rect.width(),
                     d->rect.height());
     return true;
 }

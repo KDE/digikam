@@ -224,7 +224,7 @@ bool ImlibInterface::exifRotated()
 }
 
 
-void ImlibInterface::exifRotate(QString filename)
+void ImlibInterface::exifRotate(const QString& filename)
 {
    // Rotate image based on EXIF rotate tag
     KExifData *exifData = new KExifData;
