@@ -58,7 +58,7 @@ ImageHistogram::~ImageHistogram()
 
 bool ImageHistogram::calcHistogramValues()
 {
-    register uint  x, y;                   
+    register uint  i;                   
     unsigned char  blue, green, red, alpha;
     int            max;
     unsigned int  *p;
@@ -74,32 +74,25 @@ bool ImageHistogram::calcHistogramValues()
     memset(m_histogram, 0, 256*sizeof(struct double_packet));
     
     // Form histogram (RAW DATA32 ARGB extraction method).
-   
-    for (y = 0 ; y < m_imageHeight ; ++y)
-      {
-      p = m_imageData + (m_imageWidth * y);
-      
-      for (x = 0 ; x < m_imageWidth ; ++x)
-         {           
-         blue  = (unsigned char)(*p);
-         green = (unsigned char)(*p >> 8);
-         red   = (unsigned char)(*p >> 16);
-         alpha = (unsigned char)(*p >> 24);
-         
-         m_histogram[blue].blue++;
-         m_histogram[green].green++;
-         m_histogram[red].red++;
-         m_histogram[alpha].alpha++;    
-         
-         max = (blue > green) ? blue : green;
-         
-         if (red > max)
-            m_histogram[red].value++;
-         else
-            m_histogram[max].value++;
 
-         p++;
-         }
+    for (i = 0 ; i < (m_imageHeight*m_imageWidth) ; ++i)
+      {
+      p = m_imageData + i;
+      
+      blue  = (unsigned char)(*p);
+      green = (unsigned char)(*p >> 8);
+      red   = (unsigned char)(*p >> 16);
+      alpha = (unsigned char)(*p >> 24);
+         
+      m_histogram[blue].blue++;
+      m_histogram[green].green++;
+      m_histogram[red].red++;
+      m_histogram[alpha].alpha++;    
+         
+      max = (blue > green) ? blue : green;
+         
+      if (red > max) m_histogram[red].value++;
+      else m_histogram[max].value++;
       }
     
     return true;
