@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qscrollview.h>
+#include <qrect.h>
 
 class QString;
 class QPixmap;
@@ -56,11 +57,12 @@ public:
                        int PNGcompression, bool TIFFcompression, 
                        const QString& mimeType=0);
         
-    bool maxZoom();
-    bool minZoom();
-    bool exifRotated();
-    int  imageWidth();
-    int  imageHeight();
+    bool  maxZoom();
+    bool  minZoom();
+    bool  exifRotated();
+    int   imageWidth();
+    int   imageHeight();
+    QRect getSelectedArea();
 
     void resizeImage(int w, int h);
     void rotateImage(double angle);

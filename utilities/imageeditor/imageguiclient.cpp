@@ -80,11 +80,16 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                               this, SIGNAL(signalFilePrint()),
                               actionCollection(), "file_print");
 
-    m_fileproperties = new KAction(i18n("Properties && &Meta-Data..."), "image",
+    m_fileproperties = new KAction(i18n("Properties"), "exifinfo",
                                    ALT+Key_Return,
                                    this, SIGNAL(signalFileProperties()),
                                    actionCollection(), "file_properties");
 
+    m_fileproperties->setWhatsThis( i18n( "This option display the current image properties, meta-data, "
+                                          "and histogram. If you have selected a region, you can choose an "
+                                          "histogram rendering for the full image or the current image "
+                                          "selection."));
+                                   
     m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
                                    SHIFT+Key_Delete,
                                    this, SIGNAL(signalDeleteCurrentItem()),

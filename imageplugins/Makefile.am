@@ -15,7 +15,7 @@ digikamimageplugin_core_la_SOURCES = \
 	imageeffect_bcg.cpp imageeffect_redeye.cpp \
 	imageeffect_blur.cpp imageeffect_sharpen.cpp \
 	imageeffect_rgb.cpp imageeffect_hsl.cpp \
-	imageeffect_colorsenhance.cpp histogramviewer.cpp 
+	imageeffect_colorsenhance.cpp 
 
 digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
 	$(top_builddir)/digikam/digikam/libdigikam.la

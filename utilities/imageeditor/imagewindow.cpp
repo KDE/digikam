@@ -563,8 +563,18 @@ void ImageWindow::slotFileProperties()
         
         if (iconItem)
         {
-            ImageProperties properties(m_view, iconItem, this);
-            properties.exec();
+            QRect sel = m_canvas->getSelectedArea();
+            
+            if (sel.isNull())
+            {
+                ImageProperties properties(m_view, iconItem, this);
+                properties.exec();
+            }
+            else
+            {
+                ImageProperties properties(m_view, iconItem, this, &sel);
+                properties.exec();
+            }
         }
     }
 }

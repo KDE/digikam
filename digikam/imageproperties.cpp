@@ -36,6 +36,7 @@
 #include <qdatetime.h>
 #include <qsize.h>
 #include <qpopupmenu.h>
+#include <qrect.h>
 
 // KDE includes.
 
@@ -175,7 +176,8 @@ void ExifThumbLabel::mousePressEvent( QMouseEvent * e)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent)
+ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, 
+                                 QWidget *parent, QRect *selectionArea)
                : KDialogBase(Tabbed, QString::null, 
                              Help|User1|User2|Stretch|Close,
                              Close, parent, 0, true, true, 
@@ -187,9 +189,13 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, Q
     // Main init.
     
     setHelp("propertiesmetadatahistogram.anchor", "digikam");
-    m_view     = view;
-    m_currItem = currItem;
-    m_lister   = view->albumLister();
+    m_view          = view;
+    m_selectionArea = selectionArea;
+    
+    m_IEcurrentItem = currItem;           // In Image Editor mode, save current idem (used if 
+                                          // an image selection area is passed in constructor).
+    m_currItem      = currItem;
+    m_lister        = view->albumLister();
     KURL fileURL(m_currItem->fileItem()->url());
         
     //General tab init.
@@ -292,7 +298,7 @@ void ImageProperties::slotItemChanged()
     }
 
     KURL fileURL(m_currItem->fileItem()->url());    
-    setCaption(i18n("Properties and Meta-Data - %1").arg(fileURL.fileName()));
+    setCaption(i18n("Properties for \"%1\"").arg(fileURL.fileName()));
     
     // Update General tab.
     
@@ -433,10 +439,26 @@ void ImageProperties::slotItemChanged()
             m_image = m_image.convertDepth(32);
        
         m_image.setAlphaBuffer(true);
-        m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+        
+        if (m_selectionArea && m_IEcurrentItem == m_currItem)
+           {
+           m_imageSelection = m_image.copy(*m_selectionArea);
+           m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
+                                         (uint *)m_imageSelection.bits(), m_imageSelection.width(),
+                                         m_imageSelection.height());
+           m_renderingLabel->show();                                         
+           m_renderingCB->show();                                         
+           }
+        else 
+           {
+           m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+           m_renderingLabel->hide();                                         
+           m_renderingCB->hide();
+           }
         }
     else 
         {
+        m_imageSelection.reset();
         m_image.reset();
         m_histogramWidget->updateData(0L, 0, 0);
         }
@@ -511,13 +533,26 @@ void ImageProperties::setupHistogramViewer(void)
                                        "<b>Red</b>: drawing the red image channel on the foreground.<p>"
                                        "<b>Green</b>: drawing the green image channel on the foreground.<p>"
                                        "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
-                                     
+                                       
+    m_renderingLabel = new QLabel(i18n("Rendering:"), page);
+    m_renderingLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_renderingCB = new QComboBox( false, page );
+    m_renderingCB->insertItem( i18n("Full Image") );
+    m_renderingCB->insertItem( i18n("Selection") );
+    m_renderingCB->setCurrentText( i18n("Full Image") );
+    
+    QWhatsThis::add( m_renderingCB, i18n("<p>Select here the histogram rendering method:<p>"
+                     "<b>Full Image</b>: drawing histogram using the full image.<p>"
+                     "<b>Selection</b>: drawing histogram using the current image selection."));  
+                                                                            
     grid->addWidget(label1, 0, 0);
     grid->addWidget(m_channelCB, 0, 1);
     grid->addWidget(label2, 0, 2);
     grid->addWidget(m_scaleCB, 0, 3);
     grid->addWidget(label10, 1, 0);
     grid->addWidget(m_colorsCB, 1, 1);
+    grid->addWidget(m_renderingLabel, 1, 2);
+    grid->addWidget(m_renderingCB, 1, 3);
     
     // -------------------------------------------------------------
     
@@ -601,8 +636,11 @@ void ImageProperties::setupHistogramViewer(void)
             this, SLOT(slotScaleChanged(int)));
     
     connect(m_colorsCB, SIGNAL(activated(int)),
-            this, SLOT(slotColorsChanged(int)));            
- 
+            this, SLOT(slotColorsChanged(int)));     
+                   
+    connect(m_renderingCB, SIGNAL(activated(int)),
+            this, SLOT(slotRenderingChanged(int)));       
+             
     connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
             this, SLOT(slotUpdateMinInterv(int)));
        
@@ -697,6 +735,23 @@ void ImageProperties::slotColorsChanged(int color)
 
        default:          // Red.
           m_histogramWidget->m_colorType = Digikam::HistogramWidget::RedColor;
+          break;
+       }
+
+    m_histogramWidget->repaint(false);
+    updateInformations();
+}
+
+void ImageProperties::slotRenderingChanged(int rendering)
+{
+    switch(rendering)
+       {
+       case 1:           // Image Selection.
+          m_histogramWidget->m_renderingType = Digikam::HistogramWidget::ImageSelectionHistogram;
+          break;
+       
+       default:          // Full Image.
+          m_histogramWidget->m_renderingType = Digikam::HistogramWidget::FullImageHistogram;
           break;
        }
 

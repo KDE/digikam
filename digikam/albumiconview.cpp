@@ -522,11 +522,13 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     QPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("editimage"),
                        i18n("View/Edit..."), 10);
-    popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
+    popmenu.insertItem(i18n("Open With"), 
+                       &openWithMenu, 11);
     popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("text_block"),
+    popmenu.insertItem(SmallIcon("imagecomment"),
                        i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(i18n("Properties && &Meta-Data..."), 14);
+    popmenu.insertItem(SmallIcon("exifinfo"), 
+                       i18n("Properties..."), 14);
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
         popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);

@@ -42,6 +42,7 @@ class QSpinBox;
 class QTextEdit;
 class QMouseEvent;
 class QPopupMenu;
+class QRect;
 
 class KSqueezedTextLabel;
 
@@ -85,7 +86,9 @@ class ImageProperties : public KDialogBase
 
 public:
 
-    ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, QWidget *parent=0);
+    ImageProperties(AlbumIconView* view, AlbumIconItem* currItem, 
+                    QWidget *parent=0, 
+                    QRect *selectionArea=0);        // Used for histogram image selection computation.
     ~ImageProperties();
 
 public slots:    
@@ -140,6 +143,7 @@ private:
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
     QComboBox                    *m_colorsCB;    
+    QComboBox                    *m_renderingCB;    
         
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
@@ -151,8 +155,14 @@ private:
     QLabel                       *m_labelCountValue;
     QLabel                       *m_labelMedianValue;
     QLabel                       *m_labelPercentileValue;
+    QLabel                       *m_renderingLabel;
     
     QImage                        m_image;
+    QImage                        m_imageSelection;
+    
+    AlbumIconItem                *m_IEcurrentItem;
+    
+    QRect                        *m_selectionArea;
     
     QGuardedPtr<ThumbnailJob>     m_HistogramThumbJob;
     
@@ -184,6 +194,7 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
+    void slotRenderingChanged(int rendering);
     void slotIntervChanged(int);
     void slotGotHistogramThumbnail(const KURL&, const QPixmap& pix,
                                    const KFileMetaInfo*);  

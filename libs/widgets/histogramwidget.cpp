@@ -226,6 +226,8 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
     
     if (s_data && s_w && s_h)
         m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
+    else 
+        m_selectionHistogram = 0L;
 }
 
 void HistogramWidget::slotBlinkTimerDone( void )

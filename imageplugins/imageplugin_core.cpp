@@ -31,7 +31,6 @@
 // Local includes.
 
 #include <imageiface.h>
-#include "histogramviewer.h"
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
@@ -98,7 +97,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                         "as each other value. Sometimes Equalize works wonderfully at "
                                         "enhancing the contrasts in an image. Other times it gives "
                                         "garbage. It is a very powerful operation, which can either work "
-                                        "miracles on an image or destroy it.display the current image histogram."));  
+                                        "miracles on an image or destroy it.display the current image "
+                                        "histogram."));  
                                          
     KAction *autolevelseAction = new KAction(i18n("Auto Levels"), 0,
                 this, SLOT(slotAutoLevels()),
@@ -107,15 +107,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                            "and Blue channels. It search the image shadow and highlight "
                                            "limit values and adjust the Red, Green, and Blue channels "
                                            "to a full histogram range."));  
-    //-------------------------------
-    // Image menu actions.
-
-    KAction *histogramAction = new KAction(i18n("Histogram..."), 0,
-                this, SLOT(slotHistogramViewer()),
-                actionCollection(), "implugcore_histogramviewer");
-    histogramAction->setWhatsThis( i18n( "This option display the current image histogram. "
-                                         "If you have selected a region, you can choose an histogram "
-                                         "rendering for the full image or the current image selection."));
 
     //-------------------------------
     // Filters menu actions.
@@ -139,8 +130,6 @@ QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
 
-    guiDef.append("MenuBar/Menu/&Image/Image/Action/implugcore_histogramviewer/ ");
-
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_bcg/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_hsl/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_rgb/ ");
@@ -161,7 +150,6 @@ QStringList ImagePlugin_Core::guiDefinition() const
 
     // Enable i18n for the menu options.
 
-    i18n( "&Image" );
     i18n( "Fi&x" );
     i18n( "Fi&lters" );
     i18n( "&Colors" );
@@ -223,34 +211,6 @@ void ImagePlugin_Core::slotAutoLevels()
     parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_ColorsEnhance::autoLevelsCorrectionImage();
     parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotHistogramViewer()
-{
-    Digikam::ImageIface iface(0, 0);
-
-    uint* i_data = iface.getOriginalData();
-    int i_w      = iface.originalWidth();
-    int i_h      = iface.originalHeight();
-
-    uint* s_data = iface.getSelectedData();
-    int s_w      = iface.selectedWidth();
-    int s_h      = iface.selectedHeight();
-     
-    if (!s_data || !s_w || !s_h)
-        {
-        HistogramViewer dlg(parentWidget(), i_data, i_w, i_h);
-        dlg.exec();
-        delete [] i_data;
-        }
-    else 
-        {
-        HistogramViewer dlg(parentWidget(), i_data, i_w, i_h, 
-                            s_data, s_w, s_h);
-        dlg.exec();
-        delete [] i_data;
-        delete [] s_data;
-        }
 }
 
 void ImagePlugin_Core::slotBW()

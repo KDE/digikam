@@ -29,7 +29,6 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <qevent.h>
-#include <qrect.h>
 #include <qpoint.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -220,6 +219,14 @@ int Canvas::imageWidth()
 int Canvas::imageHeight()
 {
     return d->im->origHeight();
+}
+
+QRect Canvas::getSelectedArea()
+{
+    int x, y, w, h;
+    
+    d->im->getSelectedArea(x, y, w, h);
+    return ( QRect(x, y, w, h) );
 }
 
 void Canvas::updateAutoZoom()
