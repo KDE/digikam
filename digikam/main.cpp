@@ -231,6 +231,7 @@ int main(int argc, char *argv[])
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
+    tipsFiles.append("digikamimageplugins/tips");
     
     KTipDialog::showMultiTip(0, tipsFiles, false);
 #else
