@@ -733,6 +733,11 @@ void ShowFoto::slotToggleFullScreen()
         showNormal();
 #endif
         menuBar()->show();
+        
+        // If Hide Thumbbar option is checked.
+        if (!m_showBarAction->isChecked())
+           m_bar->show();
+
         QObject* obj = child("mainToolBar","KToolBar");
         if (obj)
         {
@@ -746,6 +751,10 @@ void ShowFoto::slotToggleFullScreen()
     {
         // hide the menubar and the statusbar
         menuBar()->hide();
+        
+        // If Hide Thumbbar option is checked.
+        if (!m_showBarAction->isChecked())
+           m_bar->hide();
 
         QObject* obj = child("mainToolBar","KToolBar");
         if (obj)

@@ -1,7 +1,7 @@
 todo stuff before 0.7.3 release
 ---------------------------------
 
-* disable thumbbar in full screen mode. 
+* add First/Last image button like in image editor.
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add shofoto settings dialog. 
 * writing handbook based on digiKam handbook image editor part. 
