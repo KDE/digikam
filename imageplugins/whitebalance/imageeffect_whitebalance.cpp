@@ -29,12 +29,14 @@
 // Qt includes. 
  
 #include <qhgroupbox.h>
+#include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qcombobox.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -61,17 +63,19 @@
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
-                     : KDialogBase(Plain, i18n("White Balance"),
-                                   Help|User1|Ok|Cancel, Ok,
-                                   parent, 0, true, true,
-                                   i18n("&Reset Values")),
-                       m_parent(parent)
+ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
+                        : KDialogBase(Plain, i18n("White Balance"),
+                                      Help|User1|Ok|Cancel, Ok,
+                                      parent, 0, true, true,
+                                      i18n("&Reset Values")),
+                          m_parent(parent)
 {
+    parentWidget()->setCursor( KCursor::waitCursor() );
     QString whatsThis;
-        
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
     
+    m_whiteBalanceCurves = new Digikam::ImageCurves();
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -121,51 +125,99 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHGroupBox *gbox = new QHGroupBox(i18n("Image Preview"), plainPage());
+    QGroupBox *gbox = new QGroupBox(plainPage());
+    gbox->setFlat(false);
+    gbox->setTitle(i18n("Settings"));
+    QGridLayout* grid = new QGridLayout( gbox, 4, 6, 20, spacingHint());
 
-    QLabel *label1 = new QLabel(i18n("Original:"), gbox);
-    label1->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    QFrame *frame2 = new QFrame(gbox);
-    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(320, 240, frame2, true, Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
-    l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+    QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
+    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_scaleCB = new QComboBox( false, gbox );
+    m_scaleCB->insertItem( i18n("Linear") );
+    m_scaleCB->insertItem( i18n("Logarithmic") );
+    m_scaleCB->setCurrentText( i18n("Logarithmic") );
+    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "if it is used, all values (small and large) will be visible on the "
+                                     "graph."));
 
-    QLabel *label2 = new QLabel(i18n("Target:"), gbox);
-    label2->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    QFrame *frame3 = new QFrame(gbox);
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(320, 240, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white balance adjustments preview."));
-    l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
-
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 4);
+    grid->addMultiCellWidget(label2, 0, 0, 4, 4);
+    grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
     
-    // -------------------------------------------------------------
+    QFrame *frame = new QFrame(gbox);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+
+    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gbox );
+    m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
+
+    m_whiteBalanceCurvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_whiteBalanceCurves, frame);
+    QWhatsThis::add( m_whiteBalanceCurvesWidget, i18n("<p>This is the curve drawing of the selected image "
+                                                      "histogram channel"));
+    l->addWidget(m_whiteBalanceCurvesWidget, 0);
+    grid->addMultiCellWidget(frame, 2, 2, 1, 5);
     
-    QLabel *label3 = new QLabel(i18n("Target Color:"), plainPage());
-    m_targetColor = new QComboBox( false, plainPage() );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
+    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+    
+    QLabel *label3 = new QLabel( i18n("Target Color:"), gbox );
+    m_targetColor = new QComboBox( false, gbox );
     m_targetColor->insertItem( i18n("White") );
     m_targetColor->insertItem( i18n("Black") );
     QWhatsThis::add( m_targetColor, i18n("<p>Select here the target balance color to correct."));
 
-    topLayout->addMultiCellWidget(label3, 2, 2, 0, 1);
-    topLayout->addMultiCellWidget(m_targetColor, 2, 2, 2, 4);
+    grid->addMultiCellWidget(label3, 4, 4, 1, 2);
+    grid->addMultiCellWidget(m_targetColor, 4, 4, 3, 5);
                 
-    QLabel *label4 = new QLabel(i18n("Foreground Color:"), plainPage());
-    m_foregroundColorButton = new KColorButton( QColor::QColor( 255, 255, 255 ), plainPage() );
+    QLabel *label4 = new QLabel( i18n("Foreground Color:"), gbox );
+    m_foregroundColorButton = new KColorButton( QColor::QColor( 255, 255, 255 ), gbox );
     QWhatsThis::add( m_foregroundColorButton, i18n("<p>Set here the foreground color from original image to correct black-white balance."));
         
-    topLayout->addMultiCellWidget(label4, 3, 3, 0, 1);
-    topLayout->addMultiCellWidget(m_foregroundColorButton, 3, 3, 2, 4);
-        
+    grid->addMultiCellWidget(label4, 5, 5, 1, 2);
+    grid->addMultiCellWidget(m_foregroundColorButton, 5, 5, 3, 5);
+    
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
+
+    // -------------------------------------------------------------
+
+    QVGroupBox *gbox4 = new QVGroupBox(i18n("Image Preview"), plainPage());
+
+    QLabel *label5 = new QLabel(i18n("Original:"), gbox4);
+    label5->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+    QFrame *frame2 = new QFrame(gbox4);
+    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
+    m_previewOriginalWidget = new Digikam::ImageGuideWidget(240, 160, frame2, true, Digikam::ImageGuideWidget::PickColorMode);
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
+    l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+
+    QLabel *label6 = new QLabel(i18n("Target:"), gbox4);
+    label6->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+    QFrame *frame3 = new QFrame(gbox4);
+    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
+    m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white balance adjustments preview."));
+    l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
+
+    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
+    
+    // -------------------------------------------------------------
+
     adjustSize();
     disableResize();
 
+    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
+
     // -------------------------------------------------------------
  
+    connect(m_scaleCB, SIGNAL(activated(int)),
+            this, SLOT(slotScaleChanged(int)));
+    
     connect(m_targetColor, SIGNAL(activated(int)),
             this, SLOT(slotEffect())); 
                
@@ -178,6 +230,13 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 {
+}
+
+void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
+{
+    delete m_whiteBalanceCurvesWidget;
+    delete m_whiteBalanceCurves;
+    e->accept();
 }
 
 void ImageEffect_WhiteBalance::slotUser1()
@@ -201,6 +260,22 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
     slotEffect();  
 }
 
+void ImageEffect_WhiteBalance::slotScaleChanged(int scale)
+{
+    switch(scale)
+       {
+       case 1:           // Log.
+          m_whiteBalanceCurvesWidget->m_scaleType = Digikam::CurvesWidget::LogScaleHistogram;
+          break;
+
+       default:          // Lin.
+          m_whiteBalanceCurvesWidget->m_scaleType = Digikam::CurvesWidget::LinScaleHistogram;
+          break;
+       }
+
+    m_whiteBalanceCurvesWidget->repaint(false);
+}
+
 void ImageEffect_WhiteBalance::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
@@ -212,6 +287,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     QColor f    = m_foregroundColorButton->color();
 
     bwBalance(data, w, h, t, f);
+    m_whiteBalanceCurvesWidget->repaint(false);
     
     iface->putPreviewData(data);       
     delete [] data;
@@ -259,22 +335,21 @@ void ImageEffect_WhiteBalance::bwBalance(uint *data, int w, int h, int tColor, Q
     
     uchar* pOutBits = new uchar[w*h*4];    
 
-    Digikam::ImageCurves *balanceCurves = new Digikam::ImageCurves();
+    m_whiteBalanceCurves->curvesReset();
     
     for (int i = 0 ; i < 256; i++)
        {
-       balanceCurves->setCurveValue(Digikam::ImageHistogram::RedChannel, i, curvePoint(tColor, red, i));
-       balanceCurves->setCurveValue(Digikam::ImageHistogram::GreenChannel, i, curvePoint(tColor, green, i));
-       balanceCurves->setCurveValue(Digikam::ImageHistogram::BlueChannel, i, curvePoint(tColor, blue, i));
+       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::RedChannel, i, curvePoint(tColor, red, i));
+       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::GreenChannel, i, curvePoint(tColor, green, i));
+       m_whiteBalanceCurves->setCurveValue(Digikam::ImageHistogram::BlueChannel, i, curvePoint(tColor, blue, i));
        }
        
-    balanceCurves->curvesCalculateCurve(Digikam::ImageHistogram::AlphaChannel);
-    balanceCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    balanceCurves->curvesLutProcess(data, (uint *)pOutBits, w, h);
+    m_whiteBalanceCurves->curvesCalculateCurve(Digikam::ImageHistogram::AlphaChannel);
+    m_whiteBalanceCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_whiteBalanceCurves->curvesLutProcess(data, (uint *)pOutBits, w, h);
     
     memcpy (data, pOutBits, w*h*4);           
        
-    delete balanceCurves;
     delete [] pOutBits;
 }
 

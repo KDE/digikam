@@ -41,6 +41,9 @@ namespace Digikam
 {
 class ImageGuideWidget;
 class ImageWidget;
+class ColorGradientWidget;
+class CurvesWidget;
+class ImageCurves;
 }
 
 namespace DigikamWhiteBalanceImagesPlugin
@@ -52,8 +55,12 @@ class ImageEffect_WhiteBalance : public KDialogBase
 
 public:
 
-    ImageEffect_WhiteBalance(QWidget* parent);
+    ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height);
     ~ImageEffect_WhiteBalance();
+    
+protected:
+
+    void closeEvent(QCloseEvent *e);    
 
 private:
 
@@ -63,20 +70,26 @@ private:
     BlackColor
     };
     
-    QWidget                   *m_parent;
+    QWidget                      *m_parent;
     
-    QPushButton               *m_helpButton;
+    QPushButton                  *m_helpButton;
     
-    QComboBox                 *m_targetColor;
-
-    KColorButton              *m_foregroundColorButton;
+    QComboBox                    *m_targetColor;
+    QComboBox                    *m_scaleCB;  
     
-    Digikam::ImageGuideWidget *m_previewOriginalWidget;
+    KColorButton                 *m_foregroundColorButton;
     
-    Digikam::ImageWidget      *m_previewTargetWidget; 
+    Digikam::CurvesWidget        *m_whiteBalanceCurvesWidget;
+    Digikam::ImageCurves         *m_whiteBalanceCurves;
+    
+    Digikam::ColorGradientWidget *m_hGradient;
+    Digikam::ColorGradientWidget *m_vGradient;
+    
+    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
+    Digikam::ImageWidget         *m_previewTargetWidget; 
     
     void bwBalance(uint *data, int w, int h, int tColor, QColor fColor);
-    uchar curvePoint(int target, uchar channel, int i);
+    inline uchar curvePoint(int target, uchar channel, int i);
 
 private slots:
 
@@ -85,6 +98,7 @@ private slots:
     void slotOk();
     void slotUser1();
     void slotColorSelectedFromImage( const QColor &color );
+    void slotScaleChanged(int scale);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
