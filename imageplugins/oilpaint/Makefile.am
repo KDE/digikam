@@ -20,3 +20,6 @@ kde_services_DATA = digikamimageplugin_oilpaint.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_oilpaint.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_oilpaint_ui.rc        
+       

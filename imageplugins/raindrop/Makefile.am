@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_raindrop.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_raindrop.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_raindrop_ui.rc     

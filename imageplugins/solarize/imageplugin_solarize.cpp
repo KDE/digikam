@@ -44,19 +44,13 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                 this, SLOT(slotSolarize()),
                 actionCollection(), "imageplugin_solarize");
                 
-    
+    setXMLFile( "digikamimageplugin_solarize_ui.rc" );    
+        
     kdDebug() << "ImagePlugin_Solarize plugin loaded" << endl;
 }
 
 ImagePlugin_Solarize::~ImagePlugin_Solarize()
 {
-}
-
-QStringList ImagePlugin_Solarize::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_solarize/ ");
-    return guiDef;
 }
 
 void ImagePlugin_Solarize::slotSolarize()

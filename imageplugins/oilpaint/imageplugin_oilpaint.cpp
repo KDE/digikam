@@ -43,20 +43,14 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
     new KAction(i18n("Oil Paint..."), 0, 
                 this, SLOT(slotOilPaint()),
                 actionCollection(), "imageplugin_oilpaint");
-                
+                    
+    setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );          
     
     kdDebug() << "ImagePlugin_OilPaint plugin loaded" << endl;
 }
 
 ImagePlugin_OilPaint::~ImagePlugin_OilPaint()
 {
-}
-
-QStringList ImagePlugin_OilPaint::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_oilpaint/ ");
-    return guiDef;
 }
 
 void ImagePlugin_OilPaint::slotOilPaint()

@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_solarize.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_solarize.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_solarize_ui.rc

@@ -43,19 +43,13 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const char*, const Q
                 this, SLOT(slotRainDrop()),
                 actionCollection(), "imageplugin_raindrop");
                 
-    
+    setXMLFile( "digikamimageplugin_raindrop_ui.rc" );    
+        
     kdDebug() << "ImagePlugin_RainDrop plugin loaded" << endl;
 }
 
 ImagePlugin_RainDrop::~ImagePlugin_RainDrop()
 {
-}
-
-QStringList ImagePlugin_RainDrop::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/imageplugin_raindrop/ ");
-    return guiDef;
 }
 
 void ImagePlugin_RainDrop::slotRainDrop()

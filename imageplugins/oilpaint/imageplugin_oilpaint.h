@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_OilPaint();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotOilPaint();

@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Solarize();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotSolarize();

@@ -37,8 +37,6 @@ public:
                          const QStringList &args);
     ~ImagePlugin_RainDrop();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotRainDrop();
