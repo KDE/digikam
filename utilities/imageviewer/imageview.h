@@ -95,8 +95,8 @@ private:
     ImageViewPrivate *d;
     
     KURL              newFile;
-    bool              fromCameraUIFlag;     // Flag used for limited ImageViewer options 
-                                            // when images are opened from the cameraUI 
+    bool              fromCameraUIFlag;     // Flag used for to limit ImageViewer options 
+                                            // when the images are opened from the cameraUI 
                                             // interface (like 'Image Comments Editor'
                                             // and 'Remove From Album').
 
@@ -129,6 +129,9 @@ private slots:
     void slotKeyPress(int key);
     void slotPrintImage();
     void slotImageProperties();
+    void slotImageNameActived( const QString & filename );
+    void slotHelp( void );
+    void slotAbout( void );
 };
 
 

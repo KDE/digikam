@@ -53,6 +53,7 @@
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 #include <qcolor.h>
+#include <qcombobox.h>
 
 // KDE lib includes
 
@@ -73,6 +74,7 @@
 #include <kprinter.h>
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
+#include <kapplication.h> 
 
 // Local includes
 
@@ -162,17 +164,22 @@ protected:
         if (isEnabled())
             flags |= QStyle::Style_Enabled;
         if (hasFocus())
+        
             flags |= QStyle::Style_HasFocus;
         if (isDown())
+        
             flags |= QStyle::Style_Down;
         if (isOn())
+        
             flags |= QStyle::Style_On;
         if (autoRaise()) 
             {
             flags |= QStyle::Style_AutoRaise;
+            
             if (uses3D()) 
                 {
                 flags |= QStyle::Style_MouseOver;
+                
                 if (! isOn() && ! isDown())
                     flags |= QStyle::Style_Raised;
                 }
@@ -202,7 +209,8 @@ public:
     QHBoxLayout *buttonLayout;
     QWidget     *buttonBar2;
     QHBoxLayout *buttonLayout2;
-    QLabel      *nameLabel;
+    QComboBox   *nameComboBox;
+    QLabel      *countLabel;
     QLabel      *zoomLabel;
 
     QDict<CAction> actions;
@@ -299,7 +307,6 @@ ImageViewPrintDialogPage::ImageViewPrintDialogPage( QWidget *parent, const char 
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );
-    // m_shrinkToFit = new QRadioButton( i18n("Shrink image to &fit, if necessary"), group );
     m_shrinkToFit = new QCheckBox( i18n("Shrink image to &fit, if necessary"), group );
     m_shrinkToFit->setChecked( true );
 
@@ -422,12 +429,13 @@ void ImageView::loadCurrentItem()
         {
         d->canvas->load(d->urlCurrent.path());
 
-        QString text = i18n("%1 (%2 of %3)")
-                       .arg(d->urlCurrent.filename())
+        QString text = i18n("%2 of %3")
                        .arg(QString::number(index+1))
                        .arg(QString::number(d->urlList.count()));
 
-        d->nameLabel->setText(text);
+        d->countLabel->setText(text);
+        
+        d->nameComboBox->setCurrentText(d->urlCurrent.filename());
             
         // Going up, Mr. Tyler?
         if (d->preloadNext && (d->urlCurrent != d->urlList.last())) 
@@ -435,6 +443,14 @@ void ImageView::loadCurrentItem()
             // preload the next item
             KURL urlNext = *(++it);
             d->canvas->preload(urlNext.path());
+            
+            if (d->urlList.count() == 1)
+               d->bPrev->setEnabled(false);
+            else       
+               d->bPrev->setEnabled(true);
+             
+            if (d->urlCurrent == d->urlList.last()) 
+                d->bNext->setEnabled(false);   
             }
         else if (d->urlCurrent != d->urlList.first())
             {
@@ -443,8 +459,33 @@ void ImageView::loadCurrentItem()
 
             KURL urlPrev = *(--it);
             d->canvas->preload(urlPrev.path());
+            
+            if (d->urlList.count() == 1)
+                d->bNext->setEnabled(false);
+            else       
+                d->bNext->setEnabled(true);
+
+            if (d->urlCurrent == d->urlList.first()) 
+                d->bPrev->setEnabled(false);
             }
         }
+
+    if (d->urlList.count() == 1)
+        {
+        setPrevAction(false);
+        setNextAction(false);
+        }
+    else       
+        {
+        setNextAction(true);
+        setPrevAction(true);
+        }
+                          
+    if (d->urlCurrent == d->urlList.last()) 
+        setNextAction(false);
+        
+    if (d->urlCurrent == d->urlList.first()) 
+        setPrevAction(false);
 }
 
 
@@ -473,16 +514,24 @@ void ImageView::setupConnections()
 {
     connect(d->canvas, SIGNAL(signalChanged(bool)),
             this, SLOT(slotChanged(bool)));
+            
     connect(d->canvas, SIGNAL(signalCropSelected(bool)),
             this, SLOT(slotCropSelected(bool)));
+            
     connect(d->canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotShowContextMenu()));
+            
     connect(d->canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotNextImage()));
+            
     connect(d->canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotPrevImage()));
+            
     connect(d->canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
+            
+    connect(d->nameComboBox, SIGNAL( activated( const QString & ) ),
+            this, SLOT( slotImageNameActived( const QString & ) ) );
 }
 
 
@@ -494,17 +543,20 @@ void ImageView::setupActions()
 
     d->actions.insert("prev",
                       new CAction(i18n("Previous Image"),
-                                  this, SLOT(slotPrevImage()),
+                                  this,
+                                  SLOT(slotPrevImage()),
                                   QKeySequence(Key_PageUp)));
 
     d->actions.insert("next",
                       new CAction(i18n("Next Image"),
-                                  this, SLOT(slotNextImage()),
+                                  this,
+                                  SLOT(slotNextImage()),
                                   QKeySequence(Key_PageDown)));
 
     d->actions.insert("zoomIn",
                       new CAction(i18n("Zoom In"),
-                                  d->canvas, SLOT(slotIncreaseZoom()),
+                                  d->canvas,
+                                  SLOT(slotIncreaseZoom()),
                                   QKeySequence(Key_Plus)));
 
     d->actions.insert("zoomOut",
@@ -683,6 +735,18 @@ void ImageView::setupActions()
                                   SLOT(slotClose()),
                                   QKeySequence(CTRL+Key_Q)));
 
+    d->actions.insert("help",
+                      new CAction(i18n("Help"),
+                                  this,
+                                  SLOT(slotHelp()),
+                                  QKeySequence(Key_F1)));
+    
+    d->actions.insert("about",
+                      new CAction(i18n("About"),
+                                  this,
+                                  SLOT(slotAbout()),
+                                  QKeySequence(CTRL+SHIFT+Key_A)));
+                                  
     // Now insert these keys into the keydict
 
     d->actionKeys.setAutoDelete(false);
@@ -728,6 +792,9 @@ void ImageView::setupActions()
 
     d->actionKeys.insert(QKeySequence(Key_Escape),
                          d->actions.find("close"));
+    
+    addKeyInDict("help");
+    addKeyInDict("about");
 }
 
 
@@ -810,6 +877,8 @@ void ImageView::setupPopupMenu()
     d->contextMenu->insertSeparator();
 
     addMenuItem(d->contextMenu, d->actions.find("close"));
+    addMenuItem(d->contextMenu, d->actions.find("help"));
+    addMenuItem(d->contextMenu, d->actions.find("about"));
 
     // Disable save, saveas, crop, and restore actions in popupmenu.
     
@@ -867,7 +936,6 @@ void ImageView::setupButtons()
     d->buttonLayout2->addWidget(d->bNext);
 
     QHBox *labelBox = new QHBox(d->buttonBar2);
-    labelBox->setPaletteBackgroundColor(Qt::white);
     labelBox->setMargin(0);
     labelBox->setSpacing(2);
     
@@ -875,11 +943,21 @@ void ImageView::setupButtons()
     d->buttonLayout2->addWidget(labelBox);
     d->buttonLayout2->addSpacing(5);
     
-    d->nameLabel = new QLabel(labelBox);
-    d->nameLabel->setPaletteBackgroundColor(Qt::white);
-    d->nameLabel->setFrameShape(QFrame::Box);
-    labelBox->setStretchFactor(d->nameLabel, 5);
+    d->nameComboBox = new QComboBox(labelBox);
+  
+    for ( KURL::List::iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it )
+        {
+        KURL url = *it;
+        d->nameComboBox->insertItem( url.filename() );
+        }
     
+    labelBox->setStretchFactor(d->nameComboBox, 5);
+    
+    d->countLabel = new QLabel(labelBox);
+    d->countLabel->setPaletteBackgroundColor(Qt::white);
+    d->countLabel->setFrameShape(QFrame::Box);
+    labelBox->setStretchFactor(d->countLabel, 1);
+
     d->zoomLabel = new QLabel(labelBox);
     d->zoomLabel->setPaletteBackgroundColor(Qt::white);
     d->zoomLabel->setFrameShape(QFrame::Box);
@@ -1000,7 +1078,6 @@ void ImageView::closeEvent(QCloseEvent *e)
     if (!e) return;
 
     promptUserSave();
-    
     e->accept();
 }
 
@@ -1048,31 +1125,40 @@ bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
     QString t = "true";
     QString f = "false";
 
-    // Black & white print?
-    if ( printer.option( "app-imageviewer-blackwhite" ) != f) {
+    // Black & white print ?
+    
+    if ( printer.option( "app-imageviewer-blackwhite" ) != f) 
+        {
         image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-    }
+        }
 
     int filenameOffset = 0;
     bool printFilename = printer.option( "app-imageviewer-printFilename" ) != f;
-    if ( printFilename ) {
+    
+    if ( printFilename ) 
+        {
         filenameOffset = fm.lineSpacing() + 14;
         h -= filenameOffset; // filename goes into one line!
-    }
+        }
 
     //
     // shrink image to pagesize, if necessary
     //
+    
     bool shrinkToFit = (printer.option( "app-imageviewer-shrinkToFit" ) != f);
-    if ( shrinkToFit && image.width() > w || image.height() > h ) {
+    
+    if ( shrinkToFit && image.width() > w || image.height() > h )
+        {
         image = image.smoothScale( w, h, QImage::ScaleMin );
-    }
+        }
 
     //
     // align image
     //
+    
     bool ok = false;
     int alignment = printer.option("app-imageviewer-alignment").toInt( &ok );
+    
     if ( !ok )
         alignment = Qt::AlignCenter; // default
 
@@ -1081,6 +1167,7 @@ bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
 
     // ### need a GUI for this in KuickPrintDialogPage!
     // x - alignment
+    
     if ( alignment & Qt::AlignHCenter )
         x = (w - image.width())/2;
     else if ( alignment & Qt::AlignLeft )
@@ -1099,19 +1186,21 @@ bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
     //
     // perform the actual drawing
     //
+    
     p.drawImage( x, y, image );
 
     if ( printFilename )
-    {
-        QString fname = minimizeString( originalFileName, fm, w );
-        if ( !fname.isEmpty() )
         {
+        QString fname = minimizeString( originalFileName, fm, w );
+        
+        if ( !fname.isEmpty() )
+            {
             int fw = fm.width( fname );
             int x = (w - fw)/2;
             int y = metrics.height() - filenameOffset/2;
             p.drawText( x, y, fname );
-        }
-    }
+            }
+         }
 
     p.end();
 
@@ -1128,21 +1217,23 @@ QString ImageView::minimizeString( QString text, const QFontMetrics& metrics,
         return QString::null; // no sense to cut that tiny little string
 
     bool changed = false;
+    
     while ( metrics.width( text ) > maxWidth )
-    {
+        {
         int mid = text.length() / 2;
         text.remove( mid, 2 ); // remove 2 characters in the middle
         changed = true;
-    }
+        }
 
     if ( changed ) // add "..." in the middle
-    {
+        {
         int mid = text.length() / 2;
+        
         if ( mid <= 5 ) // sanity check
             return QString::null;
 
         text.replace( mid - 1, 3, "..." );
-    }
+        }
 
     return text;
 }
@@ -1186,9 +1277,12 @@ void ImageViewPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
 
     bool ok;
     int val = opts["app-imageviewer-scale-width-pixels"].toInt( &ok );
+    
     if ( ok )
         setScaleWidth( val );
+    
     val = opts["app-imageviewer-scale-height-pixels"].toInt( &ok );
+    
     if ( ok )
         setScaleHeight( val );
 
@@ -1196,7 +1290,7 @@ void ImageViewPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
         m_shrinkToFit->setChecked( !m_scale->isChecked() );
 
     // ### re-enable when implementednn
-     toggleScaling( false && m_scale->isChecked() );
+    toggleScaling( false && m_scale->isChecked() );
 }
 
 
@@ -1297,14 +1391,6 @@ void ImageView::slotNextImage()
            KURL urlNext = *(++it);
            d->urlCurrent = urlNext;
            loadCurrentItem();
-             
-           if (d->urlList.count() == 1)
-               setPrevAction(false);
-           else       
-               setPrevAction(true);
-                          
-           if (d->urlCurrent == d->urlList.last()) 
-               setNextAction(false);
            }
         }
 }
@@ -1327,14 +1413,6 @@ void ImageView::slotPrevImage()
              KURL urlPrev = *(--it);
              d->urlCurrent = urlPrev;
              loadCurrentItem();
-             
-             if (d->urlList.count() == 1)
-               setNextAction(false);
-             else       
-               setNextAction(true);
-             
-             if (d->urlCurrent == d->urlList.first()) 
-                setPrevAction(false);
              }
          }
 }
@@ -1356,6 +1434,8 @@ void ImageView::slotRemoveCurrentItemfromAlbum()
                                            i18n("Delete"))
         ==  KMessageBox::Continue) 
            {
+           loadCurrentItem();
+           
            KIO::DeleteJob* job = KIO::del(currentImage, false, true);
 
            connect(job, SIGNAL(result(KIO::Job*)),
@@ -1374,14 +1454,13 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
         return;
         }
 
-    promptUserSave();
     KURL CurrentToRemove = d->urlCurrent;
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
     if (it != d->urlList.end())
        {
        d->preloadNext = true;
-
+       
        // Try to get the next image in the current Album...
 
        if (d->urlCurrent != d->urlList.last())
@@ -1389,16 +1468,8 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
           KURL urlNext = *(++it);
           d->urlCurrent = urlNext;
           d->urlList.remove(CurrentToRemove);
+          d->nameComboBox->removeItem ( d->nameComboBox->currentItem() );
           loadCurrentItem();
-          
-          if (d->urlList.count() == 1)
-             d->bPrev->setEnabled(false);
-          else       
-             d->bPrev->setEnabled(true);
-             
-          if (d->urlCurrent == d->urlList.last()) 
-              d->bNext->setEnabled(false);   
-              
           return;
           }
 
@@ -1409,16 +1480,8 @@ void ImageView::slot_onDeleteCurrentItemFinished(KIO::Job* job)
           KURL urlPrev = *(--it);
           d->urlCurrent = urlPrev;
           d->urlList.remove(CurrentToRemove);
+          d->nameComboBox->removeItem ( d->nameComboBox->currentItem() );
           loadCurrentItem();
-          
-          if (d->urlList.count() == 1)
-             d->bNext->setEnabled(false);
-          else       
-             d->bNext->setEnabled(true);
-
-          if (d->urlCurrent == d->urlList.first()) 
-              d->bPrev->setEnabled(false);
-              
           return;
           }
 
@@ -1602,13 +1665,15 @@ void ImageView::slotSaveAsResult(KIO::Job *job)
        targetAlbum->setItemComments(newFile.filename(), comments);
        targetAlbum->closeDB();
        
-       if ( d->urlCurrent.directory() == newFile.directory() )    // Target Album = current Album ?
+       if ( d->urlCurrent.directory() == newFile.directory() &&    // Target Album = current Album ?
+            d->urlList.find(newFile) == d->urlList.end() )         // The image file not already exist in le list.            
           {
           d->canvas->slotRestore();
           d->canvas->load(newFile.path());
           KURL::List::iterator it = d->urlList.find(d->urlCurrent);
           d->urlList.insert(it, newFile);
           d->urlCurrent = newFile;
+          d->nameComboBox->insertItem( newFile.filename() );
           }
        }
 
@@ -1715,18 +1780,25 @@ void ImageView::slotClose()
 void ImageView::slotBCGEdit()
 {
     ImageBCGEdit *bcgEdit = new ImageBCGEdit(this);
+    
     connect(bcgEdit, SIGNAL(signalGammaIncrease()),
             d->canvas, SLOT(slotGammaPlus()));
+            
     connect(bcgEdit, SIGNAL(signalGammaDecrease()),
             d->canvas, SLOT(slotGammaMinus()));
+            
     connect(bcgEdit, SIGNAL(signalBrightnessIncrease()),
             d->canvas, SLOT(slotBrightnessPlus()));
+            
     connect(bcgEdit, SIGNAL(signalBrightnessDecrease()),
             d->canvas, SLOT(slotBrightnessMinus()));
+            
     connect(bcgEdit, SIGNAL(signalContrastIncrease()),
             d->canvas, SLOT(slotContrastPlus()));
+            
     connect(bcgEdit, SIGNAL(signalContrastDecrease()),
             d->canvas, SLOT(slotContrastMinus()));
+            
     bcgEdit->adjustSize();
     bcgEdit->show();
 }
@@ -1799,15 +1871,17 @@ void ImageView::slotPrintImage()
     KPrinter::addDialogPage( new ImageViewPrintDialogPage( this, "imageviewer page"));
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
-    {
-        KTempFile tmpFile( "imageviewer", ".png" );
-        if ( tmpFile.status() == 0 )
         {
+        KTempFile tmpFile( "imageviewer", ".png" );
+        
+        if ( tmpFile.status() == 0 )
+            {
             tmpFile.setAutoDelete( true );
+            
             if ( d->canvas->save(tmpFile.name()) )
                 printImageWithQt( tmpFile.name(), printer, d->urlCurrent.filename() );
+            }
         }
-    }
     
     loadCurrentItem();
 }
@@ -1822,6 +1896,45 @@ void ImageView::slotImageProperties()
     (void) new KPropertiesDialog( url, this, "props dialog", true );
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotImageNameActived( const QString & filename )
+{
+    promptUserSave();
+    
+    for ( KURL::List::iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it )
+        {
+        KURL name = *it;
+
+        if ( name.filename() == filename )
+           d->urlCurrent = *it;
+        }
+
+    loadCurrentItem();
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotHelp( void )
+{
+    KApplication::kApplication()->invokeHelp( "imageviewer.anchor", "digikam" );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotAbout( void )
+{
+    KMessageBox::about(this, i18n("An image viewer/editor for Digikam\n\n"
+                                  "Authors: Renchi Raju and Gilles Caulier\n\n"
+                                  "Emails:\n"
+                                  "renchi at pooh.tam.uiuc.edu\n"
+                                  "caulier dot gilles at free.fr\n\n"
+                                  "This program use 'imlib1' API for all images manipulations.\n"),
+                                  i18n("About Digikam image viewer"));
+}
 
 
 #include "imageview.moc"
