@@ -368,6 +368,16 @@ void DigikamView::slot_imageExifInfo(AlbumIconItem *iconItem)
     mIconView->slotShowExifInfo(item);
 }
 
+void DigikamView::slot_imageExifOrientation(int orientation)
+{
+    AlbumIconItem *item;
+
+    item = mIconView->firstSelectedItem();
+    if (!item) return;
+
+    mIconView->slotSetExifOrientation(item, orientation);
+}
+
 void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;

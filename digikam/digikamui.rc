@@ -38,7 +38,8 @@
    <text>&amp;Image</text>
      <Action name="image_view" />
      <Action name="image_comments" />
-     <Action name="image_exif" />
+     <Action name="image_view_exif" />
+     <Action name="image_set_exif_orientation"/>
      <Action name="image_properties" />
    <Separator />
      <ActionList name="image_actions"/>  
@@ -105,7 +106,7 @@
   <Separator name="separator_9" />
   <Action name="image_view" />
   <Action name="image_comments" />
-  <Action name="image_exif" />
+  <Action name="image_view_exif" />
   <Action name="image_rename" />
   <Separator name="separator_10" />
   <Separator name="separator_11" />

@@ -27,6 +27,7 @@
 #include <qdatastream.h>
 #include <qstringlist.h>
 #include <qkeysequence.h>
+#include <qsignalmapper.h>
 
 // KDE includes.
 
@@ -255,15 +256,15 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_comments");
 
-    mImageExifAction = new KAction(i18n("View Exif Information"),
+    mImageViewExifAction = new KAction(i18n("View Exif Information"),
                                     "exifinfo",
                                     Key_F6,
                                     mView,
                                     SLOT(slot_imageExifInfo()),
                                     actionCollection(),
-                                    "image_exif");
+                                    "image_view_exif");
 
-    mImageRenameAction = new KAction(i18n("Rename"),
+   mImageRenameAction = new KAction(i18n("Rename"),
                                     "pencil",
                                     Key_F2,
                                     mView,
@@ -303,8 +304,51 @@ void DigikamApp::setupActions()
     sortImagesActionList.append(i18n("By Date"));
     sortImagesActionList.append(i18n("By File Size"));
     mImageSortAction->setItems(sortImagesActionList);
-
+    
     // -----------------------------------------------------------------
+    
+    QSignalMapper *exifOrientationMapper = new QSignalMapper( mView );
+    connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
+              mView, SLOT( slot_imageExifOrientation( int ) ) );
+
+    mImageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
+                                                      actionCollection(),
+                                                      "image_set_exif_orientation");
+     
+    mImageSetExifOrientation1Action = new KAction(i18n("Normal"),0,actionCollection());
+    mImageSetExifOrientation2Action = new KAction(i18n("Flipped horizontally"),0,actionCollection());
+    mImageSetExifOrientation3Action = new KAction(i18n("Rotated 180 degrees"),0,actionCollection());
+    mImageSetExifOrientation4Action = new KAction(i18n("Rotated 90 degrees / horiz. flipped"),0,actionCollection());
+    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 degrees"),0,actionCollection());
+    mImageSetExifOrientation6Action = new KAction(i18n("Rotated 90 degrees / vert. flipped"),0,actionCollection());
+    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 270 degrees"),0,actionCollection());
+
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation1Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation2Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation3Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation4Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation5Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation6Action);
+    mImageExifOrientationActionMenu->insert(mImageSetExifOrientation7Action);
+
+    connect( mImageSetExifOrientation1Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation2Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation3Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation4Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation5Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation6Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect( mImageSetExifOrientation7Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+
+    exifOrientationMapper->setMapping( mImageSetExifOrientation1Action, 1);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation2Action, 2);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation3Action, 3);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation4Action, 4);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation5Action, 5);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation6Action, 6);
+    exifOrientationMapper->setMapping( mImageSetExifOrientation7Action, 7);
+ 
+    // -----------------------------------------------------------------
+    
     mSelectAllAction = new KAction(i18n("Select All"),
                                     0,
                                     CTRL+Key_A,
@@ -392,10 +436,12 @@ void DigikamApp::setupActions()
 
     mImageViewAction->setEnabled(false);
     mImageCommentsAction->setEnabled(false);
-    mImageExifAction->setEnabled(false);
+    mImageViewExifAction->setEnabled(false);
     mImageRenameAction->setEnabled(false);
     mImageDeleteAction->setEnabled(false);
     mImagePropsAction->setEnabled(false);
+    mImagePropsAction->setEnabled(false);
+    mImageExifOrientationActionMenu->setEnabled(false);
 
     mAlbumSortAction->setCurrentItem((int)mAlbumSettings->getAlbumSortOrder());
     mImageSortAction->setCurrentItem((int)mAlbumSettings->getImageSortOrder());
@@ -423,10 +469,11 @@ void DigikamApp::slot_imageSelected(bool val)
 {
     mImageViewAction->setEnabled(val);
     mImageCommentsAction->setEnabled(val);
-    mImageExifAction->setEnabled(val);
+    mImageViewExifAction->setEnabled(val);
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
     mImagePropsAction->setEnabled(val);
+    mImageExifOrientationActionMenu->setEnabled(val);
 }
 
 void DigikamApp::slot_exit()

@@ -143,7 +143,6 @@ private slots:
     void slotFailedThumbnailKDE(const KFileItem* item);    
     void slotFinishedThumbnail();
     void slotSelectionChanged();
-    void slotSetExifOrientation( const QString filename, int orientation );
 
     void slotOnDeleteSelectedItemsFinished(KIO::Job* job);
     void slotFilesModified();
@@ -157,6 +156,7 @@ public slots:
 
     void slotEditImageComments(AlbumIconItem* item);
     void slotShowExifInfo(AlbumIconItem* item);
+    void slotSetExifOrientation(AlbumIconItem* item, int orientation);
     void slotRename(AlbumIconItem* item);
     void slotDeleteSelectedItems();
     void slotDisplayItem(AlbumIconItem *item=0);

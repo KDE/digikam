@@ -104,7 +104,7 @@ private:
     QPtrList<KAction>      m_kipiToolsActions;
     QPtrList<KAction>      m_kipiBatchActions;
     QPtrList<KAction>      m_kipiAlbumActions;
-     
+
     KConfig               *m_config;    
     Setup                 *m_setup;
     
@@ -137,11 +137,19 @@ private:
     // Image Actions
     KAction *mImageViewAction;
     KAction *mImageCommentsAction;
-    KAction *mImageExifAction;
+    KAction *mImageViewExifAction;
+    KAction *mImageSetExifOrientation1Action;
+    KAction *mImageSetExifOrientation2Action;
+    KAction *mImageSetExifOrientation3Action;
+    KAction *mImageSetExifOrientation4Action;
+    KAction *mImageSetExifOrientation5Action;
+    KAction *mImageSetExifOrientation6Action;
+    KAction *mImageSetExifOrientation7Action;
     KAction *mImageRenameAction;
     KAction *mImageDeleteAction;
     KAction *mImagePropsAction;
     KSelectAction *mImageSortAction;
+    KActionMenu *mImageExifOrientationActionMenu;
 
     // Selection Actions
     KAction *mSelectAllAction;
