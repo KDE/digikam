@@ -54,7 +54,7 @@ Setup::Setup(QWidget* parent, const char* name)
                            BarIcon("folder_image", KIcon::SizeMedium));
     generalPage_ = new SetupGeneral(page_general);
 
-    page_exif = addPage(i18n("Exif"), i18n("Exif action settings"),
+    page_exif = addPage(i18n("Embedded info"), i18n("Embedded images informations settings"),
                         BarIcon("exifinfo", KIcon::SizeMedium));
     exifPage_ = new SetupExif(page_exif);
         
