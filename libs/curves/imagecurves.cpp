@@ -86,7 +86,10 @@ void ImageCurves::curvesReset(void)
     m_lut->nchannels = 0;
 
     for (int channel = 0 ; channel < 5 ; channel++)
+       {
+       setCurveType(channel, CURVE_SMOOTH);
        curvesChannelReset(channel);
+       }
 }
 
 void ImageCurves::curvesChannelReset(int channel)
