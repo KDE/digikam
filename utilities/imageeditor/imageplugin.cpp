@@ -29,7 +29,8 @@ namespace Digikam
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
     : QObject(parent, name)
 {
-    m_instance = 0;    
+    m_instance = 0;
+    m_parentWidget = 0;
 }
 
 ImagePlugin::~ImagePlugin()
@@ -45,6 +46,16 @@ void ImagePlugin::setInstance(KInstance *instance)
 void ImagePlugin::setEnabledSelectionActions(bool)
 {
     
+}
+
+void ImagePlugin::setParentWidget(QWidget* parent)
+{
+    m_parentWidget = parent;    
+}
+
+QWidget* ImagePlugin::parentWidget()
+{
+    return m_parentWidget;
 }
 
 }

@@ -32,9 +32,9 @@
 
 #include "imageeffect_solarize.h"
 
-ImageEffect_Solarize::ImageEffect_Solarize()
+ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     : KDialogBase(Plain, i18n("Solarize Image"), Ok|Cancel, Ok,
-                  0, 0, true, true)
+                  parent, 0, true, true)
 {
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());

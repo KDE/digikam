@@ -37,7 +37,7 @@ class ImageEffect_Solarize : public KDialogBase
     
 public:
 
-    ImageEffect_Solarize();
+    ImageEffect_Solarize(QWidget *parent);
     ~ImageEffect_Solarize();
 
 protected:

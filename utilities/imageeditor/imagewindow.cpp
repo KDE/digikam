@@ -65,6 +65,7 @@ ImageWindow::ImageWindow()
          plugin; plugin = loader->pluginList().next()) {
         if (plugin) {
             m_guiFactory->insertClient(plugin);
+            plugin->setParentWidget(this);
             plugin->setEnabledSelectionActions(false);
         }
     }
@@ -155,6 +156,7 @@ ImageWindow::~ImageWindow()
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
         if (plugin) {
+            plugin->setParentWidget(0);
             plugin->setEnabledSelectionActions(false);
         }
     }
@@ -331,6 +333,7 @@ void ImageWindow::slotChanged(bool val)
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
+			QString(" ") +
                         i18n("pixels"));
 
     m_guiClient->m_restoreAction->setEnabled(val);

@@ -32,10 +32,10 @@
 
 #include "imageeffect_bcg.h"
 
-ImageEffect_BCG::ImageEffect_BCG()
+ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     : KDialogBase(Plain, i18n("Brightness/Contrast/Gamma"),
                   Ok|Cancel, Ok,
-                  0, 0, true, true)
+                  parent, 0, true, true)
 {
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());

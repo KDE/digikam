@@ -26,6 +26,7 @@
 
 class QWidget;
 class QString;
+class QPixmap;
 
 namespace Digikam
 {
@@ -46,11 +47,10 @@ public:
     void load(const QString& filename);
     void zoom(double val);
 
-    void paint(int dx, int dy, int dw, int dh,
-               int sx, int sy);
-    void paint(QPaintDevice *w, int dx, int dy, int dw, int dh,
-               int sx, int sy);
-
+    void paint(QPaintDevice* p, int sx, int sy,
+               int sw, int sh, int dx, int dy,
+               int antialias=0);
+    
     int  width();
     int  height();
     int  origWidth();
@@ -93,7 +93,6 @@ signals:
 private:
 
     ImlibInterface();
-    void render();
 
     ImlibInterfacePrivate *d;
     

@@ -48,7 +48,7 @@ public:
     int  imageWidth();
     int  imageHeight();
 
-    void resize(int w, int h);
+    void resizeImage(int w, int h);
     
 protected:
     
@@ -58,11 +58,12 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent *e);
     void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsWheelEvent(QWheelEvent *e);
-
+    
 private:
 
     void updateAutoZoom();
     void updateContentsSize();
+    void paintViewportRect(const QRect& vr, bool aa);
 
     CanvasPrivate *d;
 
@@ -83,19 +84,13 @@ public slots:
     
     void slotCrop();
     
-    void slotGammaPlus();
-    void slotGammaMinus();
-    void slotBrightnessPlus();
-    void slotBrightnessMinus();
-    void slotContrastPlus();
-    void slotContrastMinus();
-
     void slotRestore();
 
 private slots:
 
-    void slotChanged();
     void slotSelected();
+    void slotPaintSmooth();
+    void slotRequestUpdate();
     
 signals:
 
@@ -110,3 +105,4 @@ signals:
 };
     
 #endif /* CANVAS_H */
+

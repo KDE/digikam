@@ -84,13 +84,13 @@ void ImagePlugin_Core::setEnabledSelectionActions(bool enable)
 
 void ImagePlugin_Core::slotBCG()
 {
-    ImageEffect_BCG dlg;
+    ImageEffect_BCG dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotSolarize()
 {
-    ImageEffect_Solarize dlg;
+    ImageEffect_Solarize dlg(parentWidget());
     dlg.exec();
 }
 

@@ -19,18 +19,18 @@
  * 
  * ============================================================ */
 
-#include <qwidget.h>
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include <qpainter.h>
+#include <qapplication.h>
 
 #include <X11/Xlib.h>
 #include <Imlib2.h>
 
-#include "imlibinterface.h"
+#include <cmath>
+#include <cstdio>
 
-using namespace std;
+#include "imlibinterface.h"
 
 namespace Digikam
 {
@@ -58,18 +58,18 @@ public:
     int  selY;
     int  selW;
     int  selH;
+    double zoom;
 
     float gamma;
     float brightness;
     float contrast;
 
-    QPixmap qpix;
     QBitmap qmask;
-    QPixmap qcheck;
     
-    Imlib_Context context;
-    Imlib_Image   image;
-    QString       filename;
+    Imlib_Context        context;
+    Imlib_Image          image;
+    Imlib_Color_Modifier cmod;
+    QString              filename;
 };
 
 ImlibInterface::ImlibInterface()
@@ -101,8 +101,8 @@ ImlibInterface::ImlibInterface()
     imlib_context_set_visual(d->vis);
     imlib_context_set_colormap(d->cm);
     
-    Imlib_Color_Modifier mod = imlib_create_color_modifier();
-    imlib_context_set_color_modifier(mod);
+    d->cmod = imlib_create_color_modifier();
+    imlib_context_set_color_modifier(d->cmod);
 
     imlib_context_pop();
 
@@ -117,18 +117,7 @@ ImlibInterface::ImlibInterface()
     d->selY = 0;
     d->selW = 0;
     d->selH = 0;
-
-    d->qpix.setMask(d->qmask);
-
-    d->qcheck.resize(16, 16);
-
-    QPainter p;
-    p.begin(&d->qcheck);
-    p.fillRect(0, 0, 8, 8, QColor(144,144,144));
-    p.fillRect(8, 8, 8, 8, QColor(144,144,144));
-    p.fillRect(0, 8, 8, 8, QColor(100,100,100));
-    p.fillRect(8, 0, 8, 8, QColor(100,100,100));
-    p.end();
+    d->zoom = 1.0;
 }
 
 ImlibInterface::~ImlibInterface()
@@ -227,46 +216,51 @@ bool ImlibInterface::hasAlpha()
     return alpha;
 }
 
-void ImlibInterface::paint(QPaintDevice *w, int dx, int dy, int dw, int dh,
-                           int sx, int sy)
+void ImlibInterface::paint(QPaintDevice* p, int sx, int sy, int sw, int sh,
+                           int dx, int dy, int antialias)
 {
-    if (d->dirty)
-        render();
-
-    bitBlt(w, sx, sy, &d->qpix, dx, dy, dw, dh, Qt::CopyROP, !hasAlpha());
-}
-
-void ImlibInterface::render()
-{
-    d->qpix.resize(d->width, d->height);
-
+    if (!d->image)
+        return;
+    
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
-    imlib_context_set_drawable(d->qpix.handle());
-    imlib_context_set_mask(0);
-    imlib_context_set_blend(0);
+    bool alpha = false;
     
+    imlib_context_set_drawable(p->handle());
     if (imlib_image_has_alpha()) {
-        QPainter p;
-        p.begin(&d->qpix);
-        p.drawTiledPixmap(0,0,d->width,d->height,d->qcheck);
-        p.end();
-
-        d->qmask.resize(d->width, d->height);
+        alpha = true;
+        if (d->qmask.width()  != d->width ||
+            d->qmask.height() != d->height)
+            d->qmask.resize(d->width, d->height);
         imlib_context_set_mask(d->qmask.handle());
         imlib_context_set_blend(1);
     }
-        
-    imlib_render_image_on_drawable_at_size(0,0,d->width,d->height);
+    else {
+        imlib_context_set_mask(0);
+        imlib_context_set_blend(0);
+    }        
+    imlib_context_set_anti_alias(antialias);
+    
+    int x, y, w, h;
+    x = QMAX(int(sx / d->zoom), 0);
+    y = QMAX(int(sy / d->zoom), 0);
+    w = QMIN(int(sw / d->zoom), d->origWidth);
+    h = QMIN(int(sh / d->zoom), d->origHeight);
+
+
+    // need to set this, bug in imlib2 causes crash
+    imlib_context_set_color_modifier(0);
+
+    imlib_render_image_part_on_drawable_at_size(x, y, w, h,
+                                                dx, dy, sw, sh);
 
     imlib_context_pop();
-
-    d->dirty = false;
 }
 
 void ImlibInterface::zoom(double val)
 {
+    d->zoom   = val;
     d->width  = (int)(d->origWidth  * val);
     d->height = (int)(d->origHeight * val);
     d->dirty  = true;
@@ -381,6 +375,7 @@ void ImlibInterface::saveAs(const QString&)
 void ImlibInterface::changeGamma(double gamma)
 {
     imlib_context_push(d->context);
+    imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
     
     d->gamma += gamma/10.0;
@@ -388,6 +383,8 @@ void ImlibInterface::changeGamma(double gamma)
     imlib_modify_color_modifier_gamma(d->gamma);
     imlib_modify_color_modifier_brightness(d->brightness);
     imlib_modify_color_modifier_contrast(d->contrast);
+
+    imlib_context_set_color_modifier(0);
     
     d->dirty = true;
     imlib_context_pop();
@@ -396,6 +393,7 @@ void ImlibInterface::changeGamma(double gamma)
 void ImlibInterface::changeBrightness(double brightness)
 {
     imlib_context_push(d->context);
+    imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
 
     d->brightness += brightness/100.0;
@@ -403,6 +401,8 @@ void ImlibInterface::changeBrightness(double brightness)
     imlib_modify_color_modifier_gamma(d->gamma);
     imlib_modify_color_modifier_brightness(d->brightness);
     imlib_modify_color_modifier_contrast(d->contrast);
+
+    imlib_context_set_color_modifier(0);
 
     d->dirty = true;
 
@@ -412,6 +412,7 @@ void ImlibInterface::changeBrightness(double brightness)
 void ImlibInterface::changeContrast(double contrast)
 {
     imlib_context_push(d->context);
+    imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
     
     d->contrast += contrast/100.0;
@@ -419,6 +420,8 @@ void ImlibInterface::changeContrast(double contrast)
     imlib_modify_color_modifier_gamma(d->gamma);
     imlib_modify_color_modifier_brightness(d->brightness);
     imlib_modify_color_modifier_contrast(d->contrast);
+
+    imlib_context_set_color_modifier(0);
 
     d->dirty = true;
 
@@ -431,6 +434,7 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 
     bool alpha = imlib_image_has_alpha();
     
+    imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
     
     imlib_modify_color_modifier_brightness(brightness);
@@ -439,6 +443,7 @@ void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
     imlib_apply_color_modifier();
 
     imlib_reset_color_modifier();
+    imlib_context_set_color_modifier(0);
 
     // restore image's alpha setting.
     // seems applying brightness/contrast/alpha will cause alpha lookup table to
@@ -551,6 +556,5 @@ ImlibInterface* ImlibInterface::instance()
 ImlibInterface* ImlibInterface::m_instance = 0;
 
 }
-
 
 #include "imlibinterface.moc"

@@ -37,7 +37,7 @@ class ImageEffect_BCG : public KDialogBase
 
 public:
 
-    ImageEffect_BCG();
+    ImageEffect_BCG(QWidget *parent);
     ~ImageEffect_BCG();
 
 private:

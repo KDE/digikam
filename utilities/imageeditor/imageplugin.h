@@ -27,6 +27,7 @@
 #include "guiclient.h"
 
 class KInstance;
+class QWidget;
 
 namespace Digikam
 {
@@ -41,10 +42,14 @@ public:
     void setInstance(KInstance *instance);
 
     virtual void setEnabledSelectionActions(bool enable);
+
+    void     setParentWidget(QWidget* parent);
+    QWidget* parentWidget();
     
 private:
 
     KInstance  *m_instance;
+    QWidget    *m_parentWidget;
 };
 
 }
