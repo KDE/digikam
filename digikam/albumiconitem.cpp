@@ -280,8 +280,10 @@ void AlbumIconItem::updateExtraText()
             extraText += comments;
         }
 
+        // FIXME : This code must be fixed by Richard Taylor !!!
+        
         // read and display JPEG COM field
-        KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
+   /*     KFileMetaInfo metaInfo(fileItem_->url(), "image/jpeg", KFileMetaInfo::Fastest);
 
         if(metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
         {
@@ -291,7 +293,7 @@ void AlbumIconItem::updateExtraText()
             // Only append JPEG comments if they are different from the regular comment
             if(jpegComments != comments)
               extraText += jpegComments;
-        }
+        }*/  
     }
 
     if (imageWidth_ != 0 && imageHeight_ != 0) {
