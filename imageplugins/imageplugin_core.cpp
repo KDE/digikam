@@ -52,11 +52,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Fix and Colors menu actions
 
-    new KAction(i18n("Blur..."), 0,
+    new KAction(i18n("Blur..."), "blurimage", 0,
                 this, SLOT(slotBlur()),
                 actionCollection(), "implugcore_blur");
 
-    new KAction(i18n("Sharpen..."), 0,
+    new KAction(i18n("Sharpen..."), "sharpenimage", 0,
                 this, SLOT(slotSharpen()),
                 actionCollection(), "implugcore_sharpen");
 
@@ -116,14 +116,14 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                            "limit values and adjust the Red, Green, and Blue channels "
                                            "to a full histogram range."));  
 
-    new KAction(i18n("Invert"), 0,
+    new KAction(i18n("Invert"), "invertimage", 0,
                 this, SLOT(slotInvert()),
                 actionCollection(), "implugcore_invert");
                                                            
     //-------------------------------
     // Filters menu actions.
 
-    m_convertToAction = new KActionMenu(i18n("&Convert to"), 0,
+    m_convertToAction = new KActionMenu(i18n("&Convert to"), "bwtonal", 0,
                                         actionCollection(),
                                         "implugcore_convert_to");
     m_convertToAction->setDelayed(false);
@@ -155,7 +155,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Transform menu actions.
     
-    new KAction(i18n("Aspect Ratio Crop..."), 0,
+    new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
                 this, SLOT(slotRatioCrop()),
                 actionCollection(), "implugcore_ratiocrop");
 
