@@ -60,7 +60,7 @@ public:
 
 CameraUI::CameraUI(QWidget* parent, const QString& model,
                    const QString& port, const QString& path)
-    : QMainWindow(parent, 0, WType_TopLevel|WDestructiveClose)
+    : QMainWindow(parent, 0, WType_TopLevel|WGroupLeader|WDestructiveClose)
 {
     d = new CameraUIPriv;  
 
