@@ -81,8 +81,6 @@
 
 #include "albumiconitem.h"
 #include "albumiconview.h"
-#include "../utilities/kexif/jpeg-data.h"
-#include "../utilities/kexif/jpeg-marker.h"
 
 class AlbumIconViewPrivate {
 
