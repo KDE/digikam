@@ -132,10 +132,11 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 
 void ImageEffect_RatioCrop::slotUser1()
 {
-    m_imageSelectionWidget->setSelectionX(0);
+    m_imageSelectionWidget->resetSelection();
+/*    m_imageSelectionWidget->setSelectionX(0);
     m_imageSelectionWidget->setSelectionY(0);
     m_widthInput->setValue((int)(m_imageSelectionWidget->getOriginalImageWidth() / 2.0));
-    m_imageSelectionWidget->setCenterSelection();
+    m_imageSelectionWidget->setCenterSelection();*/
 } 
 
 void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)

@@ -54,6 +54,8 @@ public:
     int   getOriginalImageHeight(void);
     QRect getRegionSelection(void);
     
+    void  resetSelection(void);
+    
     enum RatioAspect           // Contrained Aspect Ratio list.
     {
     RATIO01X01 = 0,            // 1:1
@@ -84,6 +86,15 @@ protected:
         
 private:
 
+    enum ResizingMode
+    {
+    ResizingNone = 0,
+    ResizingTopLeft,
+    ResizingTopRight, 
+    ResizingBottomLeft,   
+    ResizingBottomRight,
+    };
+    
     ImageIface *m_iface;
     
     uint       *m_data;
@@ -93,22 +104,28 @@ private:
     int         m_xpos;
     int         m_ypos;
 
-    bool        m_resizingSelMode;
-    
     QRect       m_rect;                    
-    QRect       m_regionSelection;         // Original size image selection.
-    QRect       m_localRegionSelection;    // Thumbnail size selection.
+    QRect       m_regionSelection;         // Real size image selection.
+    QRect       m_localRegionSelection;    // Local size selection.
+    
+    // Draggable local region selection corners.
+    QRect       m_localTopLeftCorner;
+    QRect       m_localBottomLeftCorner;
+    QRect       m_localTopRightCorner;
+    QRect       m_localBottomRightCorner;
     
     QPixmap*    m_pixmap;
     
     int         m_currentOrientation;
     int         m_currentAspectRatio;
+    int         m_currentResizing;
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
     void regionSelectionMoved( bool targetDone );
-    void applyAspectRatio(bool WOrH);
-
+    void regionSelectionChanged(void);
+    void realToLocalRegion(void);
+    void applyAspectRatio(bool WOrH, bool repaintWidget=true);
 };
 
 }  // NameSpace Digikam

@@ -30,6 +30,7 @@
 #include <qbrush.h> 
 #include <qpixmap.h>
 #include <qpen.h>
+#include <qpoint.h> 
 
 // KDE include.
 
@@ -54,6 +55,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)
 {
     m_currentAspectRatio = RATIO01X01;
     m_currentOrientation = Landscape;
+    m_currentResizing    = ResizingNone;
 
     m_iface  = new ImageIface(w,h);
 
@@ -86,6 +88,22 @@ int ImageSelectionWidget::getOriginalImageHeight(void)
     return m_iface->originalHeight();
 }
 
+QRect ImageSelectionWidget::getRegionSelection(void)
+{
+    return m_regionSelection;
+}
+
+void ImageSelectionWidget::resetSelection(void)
+{
+    m_regionSelection.setX(0);
+    m_regionSelection.setY(0);
+    m_regionSelection.setWidth((int)(m_iface->originalWidth()/2.0));
+    m_regionSelection.setHeight((int)(m_iface->originalHeight()/2.0));
+    realToLocalRegion();
+    applyAspectRatio(false, false);
+    setCenterSelection();
+}
+
 void ImageSelectionWidget::setSelectionOrientation(int orient)
 {
     m_currentOrientation = orient;
@@ -101,122 +119,41 @@ void ImageSelectionWidget::setSelectionAspectRatio(int aspectRatio)
 void ImageSelectionWidget::setSelectionX(int x)
 {
     m_regionSelection.setX(x);
+    realToLocalRegion();
     applyAspectRatio(false);
 }
 
 void ImageSelectionWidget::setSelectionY(int y)
 {
     m_regionSelection.setY(y);
+    realToLocalRegion();
     applyAspectRatio(false);
 }
 
 void ImageSelectionWidget::setSelectionWidth(int w)
 {
     m_regionSelection.setWidth(w);
+    realToLocalRegion();
     applyAspectRatio(false);
 }
 
 void ImageSelectionWidget::setSelectionHeight(int h)
 {
     m_regionSelection.setHeight(h);
+    realToLocalRegion();
     applyAspectRatio(true);
 }
 
-void ImageSelectionWidget::applyAspectRatio(bool WOrH)
+void ImageSelectionWidget::setCenterSelection(void)
 {
-    if ( !WOrH )  // Width changed.
-       {    
-       int w = m_regionSelection.width();
-       
-       switch(m_currentAspectRatio)
-          {
-          case RATIO01X01:  
-                m_regionSelection.setHeight(w); 
-             break;
-          
-          case RATIO03X04:  
-             if ( m_currentOrientation )  
-                m_regionSelection.setHeight((int)(w * 1.3333333333333));   // Landscape
-             else                       
-                m_regionSelection.setHeight((int)(w * 0.75));              // Portrait
-             break;
-       
-          case RATIO02x03:           
-             if ( m_currentOrientation )  
-                m_regionSelection.setHeight((int)(w * 1.5));               // Landscape
-             else                       
-                m_regionSelection.setHeight((int)(w * 0.66666666666667));  // Portrait
-             break;
+    m_localRegionSelection.moveBy(
+      (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
+      (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
+    applyAspectRatio(false);
+}
 
-          case RATIO05x07:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setHeight((int)(w * 1.4));               // Landscape
-             else                       
-                m_regionSelection.setHeight((int)(w * 0.71428571428571));  // Portrait
-             break;          
-       
-          case RATIO07x10:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setHeight((int)(w * 1.4285714285714));   // Landscape
-             else                       
-                m_regionSelection.setHeight((int)(w * 0.7));               // Portrait
-             break;                            
-
-          case RATIO04X05:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setHeight((int)(w * 1.25));              // Landscape
-             else                       
-                m_regionSelection.setHeight((int)(w * 0.8));               // Portrait
-             break;                                         
-          }
-       }  
-    else      // Height changed.
-       {
-       int h = m_regionSelection.height();
-       
-       switch(m_currentAspectRatio)
-          {
-          case RATIO01X01:      
-             m_regionSelection.setWidth(h);
-             break;
-       
-          case RATIO03X04:      
-             if ( m_currentOrientation )  
-                m_regionSelection.setWidth((int)(h * 0.75));             // Landscape
-             else                       
-                m_regionSelection.setWidth((int)(h * 1.3333333333333));  // Portrait
-             break;
-       
-          case RATIO02x03:    
-             if ( m_currentOrientation )  
-                m_regionSelection.setWidth((int)(h * 0.66666666666667)); // Landscape
-             else                       
-                m_regionSelection.setWidth((int)(h * 1.5));              // Portrait
-             break;
-       
-          case RATIO05x07:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setWidth((int)(h * 0.71428571428571)); // Landscape
-             else                       
-                m_regionSelection.setWidth((int)(h * 1.4));              // Portrait
-             break; 
-
-          case RATIO07x10:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setWidth((int)(h * 0.7));              // Landscape
-             else                       
-                m_regionSelection.setWidth((int)(h * 1.4285714285714));  // Portrait
-             break;           
-       
-          case RATIO04X05:          
-             if ( m_currentOrientation )  
-                m_regionSelection.setWidth((int)(h * 0.8));              // Landscape
-             else                       
-                m_regionSelection.setWidth((int)(h * 1.25));             // Portrait
-             break;        
-          }
-       }
-       
+void ImageSelectionWidget::realToLocalRegion(void)
+{
     m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
                                               ( (float)m_w / (float)m_iface->originalWidth() )) );
                                             
@@ -227,23 +164,131 @@ void ImageSelectionWidget::applyAspectRatio(bool WOrH)
                                           ( (float)m_w / (float)m_iface->originalWidth() )) );
                                      
     m_localRegionSelection.setHeight( (int)((float)m_regionSelection.height() *
-                                           ( (float)m_h / (float)m_iface->originalHeight() )) );
+                                           ( (float)m_h / (float)m_iface->originalHeight() )) );    
+}
+
+void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget)
+{
+    // Save local selection area for re-adjustment after changing width and height.
+    QRect oldLocalRegionSelection = m_localRegionSelection;
+
+    if ( !WOrH )  // Width changed.
+       {    
+       int w = m_localRegionSelection.width();
+       
+       switch(m_currentAspectRatio)
+          {
+          case RATIO01X01:  
+                m_localRegionSelection.setHeight(w); 
+             break;
+          
+          case RATIO03X04:  
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setHeight((int)(w * 1.3333333333333));   // Landscape
+             else                       
+                m_localRegionSelection.setHeight((int)(w * 0.75));              // Portrait
+             break;
+       
+          case RATIO02x03:           
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setHeight((int)(w * 1.5));               // Landscape
+             else                       
+                m_localRegionSelection.setHeight((int)(w * 0.66666666666667));  // Portrait
+             break;
+
+          case RATIO05x07:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setHeight((int)(w * 1.4));               // Landscape
+             else                       
+                m_localRegionSelection.setHeight((int)(w * 0.71428571428571));  // Portrait
+             break;          
+       
+          case RATIO07x10:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setHeight((int)(w * 1.4285714285714));   // Landscape
+             else                       
+                m_localRegionSelection.setHeight((int)(w * 0.7));               // Portrait
+             break;                            
+
+          case RATIO04X05:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setHeight((int)(w * 1.25));              // Landscape
+             else                       
+                m_localRegionSelection.setHeight((int)(w * 0.8));               // Portrait
+             break;                                         
+          }
+       }  
+    else      // Height changed.
+       {
+       int h = m_localRegionSelection.height();
+       
+       switch(m_currentAspectRatio)
+          {
+          case RATIO01X01:      
+             m_localRegionSelection.setWidth(h);
+             break;
+       
+          case RATIO03X04:      
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setWidth((int)(h * 0.75));             // Portrait
+             else                       
+                m_localRegionSelection.setWidth((int)(h * 1.3333333333333));  // Landscape
+             break;
+       
+          case RATIO02x03:    
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setWidth((int)(h * 0.66666666666667)); // Portrait
+             else                       
+                m_localRegionSelection.setWidth((int)(h * 1.5));              // Landscape
+             break;
+       
+          case RATIO05x07:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setWidth((int)(h * 0.71428571428571)); // Portrait
+             else                       
+                m_localRegionSelection.setWidth((int)(h * 1.4));              // Landscape
+             break; 
+
+          case RATIO07x10:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setWidth((int)(h * 0.7));              // Portrait
+             else                       
+                m_localRegionSelection.setWidth((int)(h * 1.4285714285714));  // Landscape
+             break;           
+       
+          case RATIO04X05:          
+             if ( m_currentOrientation )  
+                m_localRegionSelection.setWidth((int)(h * 0.8));              // Portrait
+             else                       
+                m_localRegionSelection.setWidth((int)(h * 1.25));             // Landscape
+             break;        
+          }
+       }
+
+    // If we change local selection size by a corner, re-adjust the oposite corner position.
+    // It unecessary to do that for Bottom Left corner because it's do by setWidth and setHeight
+    // methods.
+           
+    switch(m_currentResizing)
+       {
+       case ResizingTopLeft:    
+          m_localRegionSelection.moveBottomRight( oldLocalRegionSelection.bottomRight() );
+          break;
+       
+       case ResizingTopRight:      
+          m_localRegionSelection.moveBottomLeft( oldLocalRegionSelection.bottomLeft() );
+          break;
+       
+       case ResizingBottomLeft:      
+          m_localRegionSelection.moveTopRight( oldLocalRegionSelection.topRight() );
+          break;
+       }       
+       
+    // Recalculate the real selection values.
+    regionSelectionChanged();
     
-    repaint(false);
-    emit signalSelectionChanged( m_regionSelection );       
-}
-
-QRect ImageSelectionWidget::getRegionSelection(void)
-{
-    return (m_regionSelection);
-}
-
-void ImageSelectionWidget::setCenterSelection(void)
-{
-    m_regionSelection.moveBy(
-      (int)((m_iface->originalWidth() / 2.0)  - (m_regionSelection.width() / 2.0)), 
-      (int)((m_iface->originalHeight() / 2.0) - (m_regionSelection.height() / 2.0)));
-    applyAspectRatio(false);
+    if (repaintWidget)
+       repaint(false);
 }
 
 void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
@@ -272,16 +317,41 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
     int h = (int)((float)m_localRegionSelection.height() *
                  ( (float)m_iface->originalHeight() / (float)m_h ));
                      
-    m_regionSelection.setX(x);
-    m_regionSelection.setY(y);
-    m_regionSelection.setWidth(w);                                     
-    m_regionSelection.setHeight(h);
+    m_regionSelection.setRect(x, y, w, h);
        
     emit signalSelectionMoved( m_regionSelection, targetDone );
 }
 
+void ImageSelectionWidget::regionSelectionChanged(void)
+{
+    int x = (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
+                   ( (float)m_iface->originalWidth() / (float)m_w ));
+                                            
+    int y = (int)( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
+                   ( (float)m_iface->originalHeight() / (float)m_h ));
+                                            
+    int w = (int)((float)m_localRegionSelection.width() *
+                 ( (float)m_iface->originalWidth() / (float)m_w ));
+                                     
+    int h = (int)((float)m_localRegionSelection.height() *
+                 ( (float)m_iface->originalHeight() / (float)m_h ));
+                     
+    m_regionSelection.setRect(x, y, w, h);
+    
+    emit signalSelectionChanged( m_regionSelection );   
+}
+
 void ImageSelectionWidget::paintEvent( QPaintEvent * )
 {
+    m_localTopLeftCorner.setRect(m_localRegionSelection.left(), 
+                                 m_localRegionSelection.top(), 10, 10);
+    m_localBottomLeftCorner.setRect(m_localRegionSelection.left(), 
+                                    m_localRegionSelection.bottom() - 10, 10, 10);   
+    m_localTopRightCorner.setRect(m_localRegionSelection.right() - 10, 
+                                  m_localRegionSelection.top(), 10, 10);
+    m_localBottomRightCorner.setRect(m_localRegionSelection.right() - 10, 
+                                     m_localRegionSelection.bottom() - 10, 10, 10);
+    
     // Drawing background and image.
     m_pixmap->fill(colorGroup().background());
     m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
@@ -298,10 +368,15 @@ void ImageSelectionWidget::paintEvent( QPaintEvent * )
     p.setRasterOp(Qt::CopyROP);
     p.setClipping(false);
     
-    // Drawing selection border
+    // Drawing selection borders.
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
+    // Drawing selection corners.
+    p.drawRect(m_localTopLeftCorner);
+    p.drawRect(m_localBottomLeftCorner);
+    p.drawRect(m_localTopRightCorner);
+    p.drawRect(m_localBottomRightCorner);
     p.end();
 
     bitBlt(this, 0, 0, m_pixmap);                   
@@ -309,44 +384,87 @@ void ImageSelectionWidget::paintEvent( QPaintEvent * )
 
 void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton &&
-         m_localRegionSelection.contains( e->x(), e->y() ) )
+    if ( e->button() == Qt::LeftButton )
        {
-       m_xpos = e->x();
-       m_ypos = e->y();
-       
-       setCursor ( KCursor::sizeAllCursor() );
+       if ( m_localTopLeftCorner.contains( e->x(), e->y() ) )
+          m_currentResizing = ResizingTopLeft;
+       else if ( m_localBottomRightCorner.contains( e->x(), e->y() ) )
+          m_currentResizing = ResizingBottomRight;
+       else if ( m_localTopRightCorner.contains( e->x(), e->y() ) )
+          m_currentResizing = ResizingTopRight;
+       else if ( m_localBottomLeftCorner.contains( e->x(), e->y() ) )
+          m_currentResizing = ResizingBottomLeft;
+       else if ( m_localRegionSelection.contains( e->x(), e->y() ) )
+          {
+          m_xpos = e->x();
+          m_ypos = e->y();
+          setCursor ( KCursor::sizeAllCursor() );
+          }
        }
 }
 
 void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
+    if ( m_currentResizing != ResizingNone )
+       {
+       setCursor ( KCursor::arrowCursor() );
+       regionSelectionChanged();
+       m_currentResizing = ResizingNone;
+       } 
+    else if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
        setCursor ( KCursor::arrowCursor() );
        regionSelectionMoved(true);
-       }
+       }      
 }
 
 void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( e->state() == Qt::LeftButton )
        {
-       int newxpos = e->x();
-       int newypos = e->y();
+       if ( m_currentResizing == ResizingNone )
+          {
+          int newxpos = e->x();
+          int newypos = e->y();
        
-       m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
+          m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
 
-       repaint(false);
+          repaint(false);
      
-       m_xpos = newxpos;
-       m_ypos = newypos;
-       regionSelectionMoved(false);
-       return;
-       }        
-    else 
+          m_xpos = newxpos;
+          m_ypos = newypos;
+          regionSelectionMoved(false);
+          return;
+          }    
+       else
+          {
+          if ( m_currentResizing == ResizingTopLeft )
+             m_localRegionSelection.setTopLeft(QPoint::QPoint(e->x(), e->y()));             
+             
+          else if ( m_currentResizing == ResizingTopRight )
+             m_localRegionSelection.setTopRight(QPoint::QPoint(e->x(), e->y()));
+          
+          else if ( m_currentResizing == ResizingBottomLeft )
+             m_localRegionSelection.setBottomLeft(QPoint::QPoint(e->x(), e->y()));
+             
+          else if ( m_currentResizing == ResizingBottomRight )
+             m_localRegionSelection.setBottomRight(QPoint::QPoint(e->x(), e->y()));
+          
+          applyAspectRatio(false, false);
+          applyAspectRatio(true);
+          
+          return;
+          }
+       }
+    else
        {
-       if ( m_localRegionSelection.contains( e->x(), e->y() ) )
+       if ( m_localTopLeftCorner.contains( e->x(), e->y() ) ||
+            m_localBottomRightCorner.contains( e->x(), e->y() ) )
+           setCursor( KCursor::sizeFDiagCursor() );
+       else if ( m_localTopRightCorner.contains( e->x(), e->y() ) ||
+                 m_localBottomLeftCorner.contains( e->x(), e->y() ) )
+           setCursor( KCursor::sizeBDiagCursor() );
+       else if ( m_localRegionSelection.contains( e->x(), e->y() ) )
            setCursor( KCursor::handCursor() );
        else
            setCursor ( KCursor::arrowCursor() );
