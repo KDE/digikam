@@ -63,7 +63,8 @@ public:
     void setItemCaption(PAlbum *album, const QString& name,
                         const QString& caption);
     void setItemTag(PAlbum *album, const QString& name, TAlbum* tag);
-    void removeItemTags(PAlbum *album, const QString& name);
+    void removeItemTag(PAlbum *album, const QString& name, TAlbum* tag);
+    void removeItemAllTags(PAlbum *album, const QString& name);
 
     QStringList getItemsURL(TAlbum *album);
     void getItemsInTAlbum(TAlbum* album, QStringList& urls,

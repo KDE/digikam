@@ -45,6 +45,7 @@ class QPoint;
 class QString;
 class QPainter;
 class QPixmap;
+class QPopupMenu;
 
 class AlbumIconItem;
 class AlbumSettings;
@@ -124,6 +125,7 @@ private:
     void           updateItemRectsPixmap();
     bool           showMetaInfo();
     AlbumIconItem* findItem(const QString& url) const;
+    QPopupMenu*    getTagsPopup(int addToID, QWidget* parent=0, int tagid=0);
 
 private slots:
 

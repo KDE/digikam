@@ -289,7 +289,7 @@ void ImageDescEdit::slotApply()
         m_modified = false;
     }
 
-    db->removeItemTags(album, fileURL.fileName());
+    db->removeItemAllTags(album, fileURL.fileName());
     QListViewItemIterator it(m_tagsView);
     while (it.current())
     {

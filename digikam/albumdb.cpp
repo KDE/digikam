@@ -720,7 +720,16 @@ void AlbumDB::setItemTag(PAlbum *album, const QString& name, TAlbum* tag)
                  .arg(tag->getID()) );
 }
 
-void AlbumDB::removeItemTags(PAlbum *album, const QString& name)
+void AlbumDB::removeItemTag(PAlbum *album, const QString& name, TAlbum* tag)
+{
+    execSql( QString("DELETE FROM ImageTags "
+                     "WHERE dirid=%1 AND name='%2' AND tagid='%3';")
+             .arg(album->getID())
+             .arg(escapeString(name))
+             .arg(tag->getID()) );
+}
+
+void AlbumDB::removeItemAllTags(PAlbum *album, const QString& name)
 {
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE dirid=%1 AND name='%2';")
@@ -932,4 +941,3 @@ bool AlbumDB::createTAlbum(TAlbum* parent, const QString& name,
     AlbumManager::instance()->insertTAlbum(album);
     return true;
 }
-
