@@ -399,7 +399,7 @@ void CameraUI::slotRightButtonClicked(ThumbItem *, const QPoint &pos)
 void CameraUI::slotRightButtonClicked(const QPoint &pos)
 {
     QPopupMenu popmenu(this);
-    popmenu.insertItem(i18n("Download All"), 
+    popmenu.insertItem(i18n("Download All..."), 
                        this, SLOT(slotDownloadAll()));                           
     popmenu.exec(pos);
 }

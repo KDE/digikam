@@ -38,20 +38,20 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
                                        "download");
     m_downloadAction->setDelayed(false);
 
-    m_downloadSelAction = new KAction(i18n("Selected"),
-                                      0,
-                                      this,
-                                      SIGNAL(signalDownloadSelected()),
-                                      actionCollection());
-    
-    KAction* downloadAllAction = new KAction(i18n("All"),
+    KAction* downloadAllAction = new KAction(i18n("All..."),
                                              0,
                                              this,
                                              SIGNAL(signalDownloadAll()),
                                              actionCollection());
+    
+    m_downloadSelAction = new KAction(i18n("Selected..."),
+                                      0,
+                                      this,
+                                      SIGNAL(signalDownloadSelected()),
+                                      actionCollection());
 
-    m_downloadAction->insert(m_downloadSelAction);
     m_downloadAction->insert(downloadAllAction);
+    m_downloadAction->insert(m_downloadSelAction);    
 
     m_deleteAction  = new KActionMenu(i18n("Delete"),
                                       "deleteimage",
@@ -89,15 +89,15 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
                                  actionCollection(),
                                  "cancel");
 
-    m_fileViewAction = new KAction(i18n("&View..."), 0,
+    m_fileViewAction = new KAction(i18n("&View/Edit..."), 0,
                                     this, SIGNAL(signalFileView()),
                                     actionCollection(), "file_view");
 
-    m_filePropsAction = new KAction(i18n("&Properties..."), 0,
+    m_filePropsAction = new KAction(i18n("&Properties"), 0,
                                     this, SIGNAL(signalFileProps()),
                                     actionCollection(), "file_props");
 
-    m_fileExifAction = new KAction(i18n("&Exif Information..."), 0,
+    m_fileExifAction = new KAction(i18n("&Exif Information"), 0,
                                     this, SIGNAL(signalFileExif()),
                                     actionCollection(), "file_exif");
 
