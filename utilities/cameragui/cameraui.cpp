@@ -62,8 +62,10 @@ public:
 
 CameraUI::CameraUI(QWidget* parent, const QString& model,
                    const QString& port, const QString& path)
-    : QMainWindow(parent, 0, WType_TopLevel|WGroupLeader|WDestructiveClose)
+    : QMainWindow(parent, model.latin1(), WType_TopLevel|WGroupLeader|WDestructiveClose)
 {
+    setCaption(model);
+    
     d = new CameraUIPriv;  
 
     // -- build the gui -------------------------------------
@@ -145,7 +147,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
             SLOT(slotProgress(int)));
 
     connect(d->progressHideTimer, SIGNAL(timeout()),
-            d->progressBar, SLOT(hide()));
+            SLOT(slotProgressHide()));
 }
 
 CameraUI::~CameraUI()
@@ -256,6 +258,12 @@ void CameraUI::slotProgress(int val)
         d->progressBar->show();
     d->progressBar->setProgress(val);
     d->progressHideTimer->start(1000, false);
+}
+
+void CameraUI::slotProgressHide()
+{
+    d->progressBar->setProgress(0);
+    d->progressBar->hide();
 }
 
 void CameraUI::loadInitialSize()

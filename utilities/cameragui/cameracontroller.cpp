@@ -156,7 +156,6 @@ void CameraController::slotCancel()
     KIO::Scheduler::assignJobToSlave(d->slave, job);
     
     d->state = ST_NONE;
-    emit signalInfoPercent(0);
     emit signalInfoMessage(i18n("Ready"));
     emit signalBusy(false);
     delete d->job;
@@ -237,7 +236,6 @@ void CameraController::slotResult(KIO::Job *job)
         {
             job->showErrorDialog();
         }
-        emit signalInfoPercent(0);
         emit signalInfoMessage(i18n("Ready"));
         emit signalBusy(false);
         return;
@@ -257,7 +255,6 @@ void CameraController::slotResult(KIO::Job *job)
     }
 
     d->state = ST_NONE;
-    emit signalInfoPercent(0);
     emit signalInfoMessage(i18n("Ready"));
     emit signalBusy(false);
 }

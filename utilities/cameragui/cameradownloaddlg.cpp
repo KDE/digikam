@@ -114,14 +114,14 @@ void CameraDownloadDlg::slotProcessNext()
                 break;
             }
 
-            KIO::RenameDlg_Result result =
-                KIO::open_RenameDlg(i18n("Rename File"), srcPath, destPath,
-                                    KIO::RenameDlg_Mode(KIO::M_MULTI |
-                                                        KIO::M_OVERWRITE |
-                                                        KIO::M_SKIP),
-                                    newDestPath);
+            KIO::RenameDlg dlg(this, i18n("Rename File"), srcPath, destPath,
+                               KIO::RenameDlg_Mode(KIO::M_MULTI |
+                                                   KIO::M_OVERWRITE |
+                                                   KIO::M_SKIP));
+            
+            int result = dlg.exec();
 
-            destPath = newDestPath;
+            destPath = dlg.newDestURL().path();
 
             switch (result)
             {

@@ -49,6 +49,7 @@ private slots:
     void slotBusy(bool val);
     void slotSelectionChanged();
     void slotProgress(int val);
+    void slotProgressHide();
 
     void slotDownloadSelected();
     void slotDownloadAll();
