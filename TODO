@@ -4,7 +4,7 @@ TODO:
 Main Application:
 
 * Backup and retrieve image comments and album properties.
-* Add image sizes annotation for each album image.
+* Add image sizes annotation for each album item.
 * Custom thumbnail highlighting of album thumbnails.
 * View/Hide main toolbar/statusbar.
 * Add an entry 'Photo Albums' in KDEcommon FileOpen URL bar with
@@ -13,6 +13,8 @@ Main Application:
 * Option to hide header in thumbnail view
 * Option to hide image names
 * Added LibKIPI support instead Digikamplugins interface.
+* Added dockable widget like Showimg.
+* Added config saving of Albums opened in Albums treeview.
 
 CameraClient:
 
