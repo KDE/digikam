@@ -89,7 +89,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-curves adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier",
+                                       "(c) 2004-2005, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -133,7 +133,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
     QGroupBox *gbox = new QGroupBox(plainPage());
     gbox->setFlat(false);
-    gbox->setTitle(i18n("Curve Settings"));
+    gbox->setTitle(i18n("Settings"));
     QGridLayout* grid = new QGridLayout( gbox, 4, 6, 20, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
@@ -222,23 +222,19 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Image Preview"), plainPage());
+    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
 
-    QLabel *label3 = new QLabel(i18n("Original:"), gbox4);
-    label3->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame2 = new QFrame(gbox4);
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageWidget(240, 160, frame2);
+    m_previewOriginalWidget = new Digikam::ImageWidget(300, 200, frame2);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
-    QLabel *label4 = new QLabel(i18n("Target:"), gbox4);
-    label4->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QFrame *frame3 = new QFrame(gbox4);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
+    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's curve-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 

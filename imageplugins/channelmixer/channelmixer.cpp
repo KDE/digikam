@@ -146,7 +146,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
 
     QGroupBox *gbox = new QGroupBox(plainPage());
     gbox->setFlat(false);
-    gbox->setTitle(i18n("Input/Output Gains Settings"));
+    gbox->setTitle(i18n("Settings"));
     QGridLayout* grid = new QGridLayout( gbox, 6, 5, 20, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);

@@ -47,7 +47,6 @@
 #include <qcombobox.h>
 #include <qpixmap.h>
 #include <qtimer.h>
-#include <qhbuttongroup.h> 
 #include <qtooltip.h>
 
 // KDE includes.
@@ -211,21 +210,26 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_grid = new QGridLayout( layout2, 6, 4, spacingHint());
     
     // Color Picker settings widgets.
-
-    m_bGroup = new QHButtonGroup(gbox);
-    m_blackColorButton = new QPushButton( m_bGroup );
+    
+    m_blackPickColorLabel = new QLabel(i18n("Black Tone:"), gbox);
+    m_grayPickColorLabel = new QLabel(i18n("Gray Tone:"), gbox);
+    m_whitePickColorLabel = new QLabel(i18n("White Tone:"), gbox);
+    
+    m_blackColorButton = new QPushButton( gbox );
     QWhatsThis::add( m_blackColorButton, i18n("<p>Set here the color from original image use to correct <b>Black</b> "
-                                              "tones with white-balance filter with <b>Color Picker</b> method."));
-    m_bGroup->insert(m_blackColorButton, WhiteColor);
+                                              "tones with white-balance filter using <b>Color Picker</b> method."));
     m_blackColorButton->setToggleButton(true);
-    m_whiteColorButton = new QPushButton( m_bGroup );
+    
+    m_grayColorButton = new QPushButton( gbox );
+    QWhatsThis::add( m_grayColorButton, i18n("<p>Set here the color from original image use to correct <b>Gray</b> "
+                                              "tones with white-balance filter using <b>Color Picker</b> method."));
+    m_grayColorButton->setToggleButton(true);
+    
+    m_whiteColorButton = new QPushButton( gbox );
     QWhatsThis::add( m_whiteColorButton, i18n("<p>Set here the color from original image use to correct <b>White</b> "
-                                              "tones with white-balance filter with <b>Color Picker</b> method."));
-    m_bGroup->insert(m_whiteColorButton, BlackColor);
+                                              "tones with white-balance filter using <b>Color Picker</b> method."));
     m_whiteColorButton->setToggleButton(true);
     m_whiteColorButton->setOn(true);
-    m_bGroup->setExclusive(true);
-    m_bGroup->setFrameShape(QFrame::NoFrame);
         
     // Correction Filter settings widgets.
     
@@ -332,6 +336,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_previewOriginalWidget, SIGNAL(spotColorChanged( const QColor & )),
             this, SLOT(slotColorSelectedFromImage( const QColor & ))); 
 
+    // Color Picker Buttons.
+    
+    connect(m_blackColorButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotBlackColorPickerToggle(bool)));
+    
+    connect(m_grayColorButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotGrayColorPickerToggle(bool)));
+                
+    connect(m_whiteColorButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotWhiteColorPickerToggle(bool)));
+            
     // Slider controls.
                         
     connect(m_temperatureInput, SIGNAL(valueChanged (int)),
@@ -391,6 +406,8 @@ void ImageEffect_WhiteBalance::slotUser1()
        {    
        m_blackColor = Qt::black;
        setBlackColor(m_blackColor);    
+       m_grayColor = Qt::gray;
+       setGrayColor(m_grayColor);    
        m_whiteColor = Qt::white;
        setWhiteColor(m_whiteColor);  
        m_whiteBalanceCurves->curvesReset();
@@ -407,6 +424,36 @@ void ImageEffect_WhiteBalance::slotUser1()
 void ImageEffect_WhiteBalance::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("whitebalance", "digikamimageplugins");
+}
+
+void ImageEffect_WhiteBalance::slotBlackColorPickerToggle(bool b)
+{
+    m_grayColorButton->blockSignals(true);
+    m_whiteColorButton->blockSignals(true);
+    m_grayColorButton->setOn(!b);
+    m_whiteColorButton->setOn(!b);
+    m_grayColorButton->blockSignals(false);
+    m_whiteColorButton->blockSignals(false);
+}
+
+void ImageEffect_WhiteBalance::slotGrayColorPickerToggle(bool g)
+{
+    m_blackColorButton->blockSignals(true);
+    m_whiteColorButton->blockSignals(true);
+    m_blackColorButton->setOn(!g);
+    m_whiteColorButton->setOn(!g);
+    m_blackColorButton->blockSignals(false);
+    m_whiteColorButton->blockSignals(false);
+}
+
+void ImageEffect_WhiteBalance::slotWhiteColorPickerToggle(bool w)
+{
+    m_blackColorButton->blockSignals(true);
+    m_grayColorButton->blockSignals(true);    
+    m_blackColorButton->setOn(!w);
+    m_grayColorButton->setOn(!w);
+    m_blackColorButton->blockSignals(false);
+    m_grayColorButton->blockSignals(false);    
 }
 
 void ImageEffect_WhiteBalance::slotMethodChanged(int method)
@@ -444,16 +491,37 @@ void ImageEffect_WhiteBalance::slotMethodChanged(int method)
           m_grid->remove(m_greenLabel);
           m_grid->remove(m_greenInput);
           
-          m_grid->addMultiCellWidget(m_bGroup, 0, 0, 0, 4);
-          m_bGroup->show();
+          m_grid->addMultiCellWidget(m_blackPickColorLabel, 0, 0, 0, 0);
+          m_blackPickColorLabel->show();
+          m_grid->addMultiCellWidget(m_grayPickColorLabel, 1, 1, 0, 0);
+          m_grayPickColorLabel->show();
+          m_grid->addMultiCellWidget(m_whitePickColorLabel, 2, 2, 0, 0);
+          m_whitePickColorLabel->show();
+          m_grid->addMultiCellWidget(m_blackColorButton, 0, 0, 1, 1);
+          m_blackColorButton->show();
+          m_grid->addMultiCellWidget(m_grayColorButton, 1, 1, 1, 1);
+          m_grayColorButton->show();
+          m_grid->addMultiCellWidget(m_whiteColorButton, 2, 2, 1, 1);
+          m_whiteColorButton->show();
+
           slotUser1();
           break;
           }
 
        case CorrectionFilter:
           {
-          m_bGroup->hide();
-          m_grid->remove(m_bGroup);
+          m_blackPickColorLabel->hide();
+          m_grayPickColorLabel->hide();
+          m_whitePickColorLabel->hide();
+          m_blackColorButton->hide();
+          m_grayColorButton->hide();
+          m_whiteColorButton->hide();
+          m_grid->remove(m_blackPickColorLabel);
+          m_grid->remove(m_grayPickColorLabel);
+          m_grid->remove(m_whitePickColorLabel);
+          m_grid->remove(m_blackColorButton);
+          m_grid->remove(m_grayColorButton);
+          m_grid->remove(m_whiteColorButton);
           
           m_grid->addMultiCellWidget(m_darkLabel, 0, 0, 0, 0);
           m_grid->addMultiCellWidget(m_darkInput, 0, 0, 1, 4);
@@ -493,6 +561,8 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromImage( const QColor &color )
 {
     if ( m_whiteColorButton->isOn() )
        setWhiteColor(color);
+    else if ( m_grayColorButton->isOn() )
+       setGrayColor(color);
     else if ( m_blackColorButton->isOn() )
        setBlackColor(color);
 
@@ -524,6 +594,33 @@ void ImageEffect_WhiteBalance::setWhiteColor(QColor color)
     tip += "</table>";
         
     QToolTip::add( m_whiteColorButton, tip);    
+}
+
+void ImageEffect_WhiteBalance::setGrayColor(QColor color)
+{
+    QPixmap pixmap(16 , 16);
+    pixmap.fill(color);
+    m_grayColor = color;
+    m_grayColorButton->setPixmap(pixmap);
+    QString numVal;
+    
+    QString tip = "<table cellspacing=0 cellpadding=0>";
+    QString headBeg("<tr bgcolor=\"orange\"><td colspan=2><nobr><font size=-1 color=\"black\"><i>");
+    QString headEnd("</i></font></nobr></td></nobr</tr>");
+    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellMid("</font></nobr></td><td><nobr><font size=-1 color=\"black\">");
+    QString cellEnd("</font></nobr></td></tr>");
+
+    tip += headBeg + i18n("<b>Color Picker</b> method<br>Gray color tone:") + headEnd;
+    tip += cellBeg + i18n("Red:") + cellMid;
+    tip += numVal.setNum(m_grayColor.red()) + cellEnd;
+    tip += cellBeg + i18n("Green:") + cellMid;
+    tip += numVal.setNum(m_grayColor.green()) + cellEnd;
+    tip += cellBeg + i18n("Blue:") + cellMid;
+    tip += numVal.setNum(m_grayColor.blue()) + cellEnd;
+    tip += "</table>";
+        
+    QToolTip::add( m_grayColorButton, tip);    
 }
 
 void ImageEffect_WhiteBalance::setBlackColor(QColor color)
@@ -630,7 +727,7 @@ void ImageEffect_WhiteBalance::slotEffect()
        whiteBalanceCorrectionFilter(m_destinationPreviewData, w, h);
        }
     else
-       whiteBalanceColorPicker(m_destinationPreviewData, w, h, m_blackColor, m_whiteColor);
+       whiteBalanceColorPicker(m_destinationPreviewData, w, h, m_blackColor, m_grayColor, m_whiteColor);
            
     iface->putPreviewData(m_destinationPreviewData);       
     m_previewTargetWidget->update();
@@ -672,7 +769,7 @@ void ImageEffect_WhiteBalance::slotOk()
        whiteBalanceCorrectionFilter(data, w, h);
        }
     else
-       whiteBalanceColorPicker(data, w, h, m_blackColor, m_whiteColor);
+       whiteBalanceColorPicker(data, w, h, m_blackColor, m_grayColor, m_whiteColor);
 
     iface.putOriginalData(i18n("White Balance"), data);                   
     delete [] data;
@@ -789,28 +886,35 @@ void ImageEffect_WhiteBalance::whiteBalanceCorrectionFilter(uint *data, int widt
 // The theory of this method inspired from tutorial from 'lasm' available at http://www.geocities.com/lasm.rm/wb2.html
 // I have re-create a new curves computation (not based on linear color transformation) for to have better results.        
 
-void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, int height, QColor bColor, QColor wColor)
+void ImageEffect_WhiteBalance::whiteBalanceColorPicker(uint *data, int width, int height, QColor bColor, QColor gColor, QColor wColor)
 {  
     uchar* pOutBits = new uchar[width*height*4];    
 
-    // Start curves points.  
+    // Start curves point.  
             
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 0,  QPoint::QPoint(0, 0));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 0,  QPoint::QPoint(0, 0));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 0,  QPoint::QPoint(0, 0));      
 
-    // Black curves points.
+    // Black curves point.
     
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1,  QPoint::QPoint(bColor.red(), 35));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1,  QPoint::QPoint(bColor.green(), 35));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1,  QPoint::QPoint(bColor.blue(), 35));          
-    // White curves points.
+    
+    // Gray curves point.
+    
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8,  QPoint::QPoint(gColor.red(), 128));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8,  QPoint::QPoint(gColor.green(), 128));      
+    m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8,  QPoint::QPoint(gColor.blue(), 128));      
+    
+    // White curves point.
     
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15,  QPoint::QPoint(wColor.red(), 220));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15,  QPoint::QPoint(wColor.green(), 220));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15,  QPoint::QPoint(wColor.blue(), 220));      
     
-    // Final curves points
+    // Final curves point.
     
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 16,  QPoint::QPoint(255, 255));      
     m_whiteBalanceCurves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 16,  QPoint::QPoint(255, 255));      

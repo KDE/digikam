@@ -36,7 +36,6 @@ class QLabel;
 class QComboBox;
 class QPushButton;
 class QGridLayout;
-class QHButtonGroup;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -91,6 +90,7 @@ private:
     enum TargetColor 
     {
     WhiteColor=0,
+    GrayColor,
     BlackColor
     };
 
@@ -124,9 +124,11 @@ private:
     QComboBox                    *m_wbMethod;
     
     QPushButton                  *m_blackColorButton;
+    QPushButton                  *m_grayColorButton;
     QPushButton                  *m_whiteColorButton;
     
     QColor                        m_blackColor;
+    QColor                        m_grayColor;
     QColor                        m_whiteColor;
     
     QLabel                       *m_temperatureLabel;
@@ -136,10 +138,12 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
+
+    QLabel                       *m_whitePickColorLabel;    
+    QLabel                       *m_grayPickColorLabel;    
+    QLabel                       *m_blackPickColorLabel;    
     
     QGridLayout                  *m_grid;
-    
-    QHButtonGroup                *m_bGroup;
     
     KIntNumInput                 *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
@@ -160,11 +164,12 @@ private:
 private:
         
     void setWhiteColor(QColor color);
+    void setGrayColor(QColor color);
     void setBlackColor(QColor color);
     void setRGBmult(void);
     void setLUTv(void);
     void whiteBalanceCorrectionFilter(uint *data, int w, int h);
-    void whiteBalanceColorPicker(uint *data, int w, int h, QColor bColor, QColor wColor);
+    void whiteBalanceColorPicker(uint *data, int w, int h, QColor bColor, QColor gColor, QColor wColor);
 
 private slots:
 
@@ -176,6 +181,9 @@ private slots:
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
     void slotMethodChanged(int method);
+    void slotBlackColorPickerToggle(bool b);
+    void slotGrayColorPickerToggle(bool g);
+    void slotWhiteColorPickerToggle(bool w);
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
