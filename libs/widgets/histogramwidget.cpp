@@ -712,7 +712,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       
        if (guidePos != -1)
           {
-          p1.drawLine(guidePos, 0, (guidePos * 256) / wWidth, wHeight);  
+          p1.drawLine((guidePos * 256) / wWidth, 0, (guidePos * 256) / wWidth, wHeight);  
 
           QString string = i18n("x:%1").arg(guidePos);
           QFontMetrics fontMt( string );       
