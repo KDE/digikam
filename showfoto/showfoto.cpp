@@ -73,16 +73,27 @@
 #include "imageprint.h"
 #include "imlibinterface.h"
 #include "splashscreen.h"
+#include "setup.h"
+#include "setupeditor.h"
+#include "setupplugins.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
 {
-    m_splash     = 0;
-    m_config     = kapp->config();
-    m_fullScreen = false;
+    m_splash                 = 0;
+    m_deleteItem2Trash       = true;
+    m_fullScreen             = false;
+    m_fullScreenHideToolBar  = false;
+    m_fullScreenHideThumbBar = true;
+    m_config                 = kapp->config();
+    m_config->setGroup("ImageViewer Settings");
     
-    m_splash     = new SplashScreen("showfoto-splash.png");
+    if(m_config->readBoolEntry("ShowSplash", true) &&
+       !kapp->isRestored())
+    {
+       m_splash = new SplashScreen("showfoto-splash.png");
+    }
     
     // -- construct the view ---------------------------------
     
@@ -119,19 +130,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Load image plugins.
     
     m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
-    
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next())
-    {
-        if (plugin)
-        {
-            guiFactory()->addClient(plugin);
-            plugin->setParentWidget(this);
-            plugin->setEnabledSelectionActions(false);
-        }
-        else
-            kdDebug() << "Invalid plugin to add!" << endl;
-    }
+    loadPlugins();
     
     applySettings();
 
@@ -166,15 +165,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
 ShowFoto::~ShowFoto()
 {
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
-        if (plugin) {
-            guiFactory()->removeClient(plugin);
-            plugin->setParentWidget(0);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
-
+    unLoadPlugins();
     saveSettings();
     delete m_bar;
     delete m_canvas;
@@ -222,9 +213,14 @@ void ShowFoto::setupActions()
                               actionCollection(), "print");
 
     m_propertiesAction = new KAction(i18n("Properties"), "exifinfo",
-                             ALT+Key_Return,
-                             this, SLOT(slotFileProperties()),
-                             actionCollection(), "file_properties");
+                                     ALT+Key_Return,
+                                     this, SLOT(slotFileProperties()),
+                                     actionCollection(), "file_properties");
+    
+    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
+                               SHIFT+Key_Delete,
+                               this, SLOT(slotDeleteCurrentItem()),
+                               actionCollection(), "delete");
                                   
     // -- Edit actions ----------------------------------------------------------------                     
 
@@ -394,10 +390,9 @@ void ShowFoto::setupActions()
     
     // -- Configure toolbar and shortcuts ---------------------------------------------
     
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),
-                            actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()),
-                                  actionCollection());
+    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+    KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
     
     // ---------------------------------------------------------------
     
@@ -436,6 +431,32 @@ void ShowFoto::setupActions()
 
 void ShowFoto::applySettings()
 {
+    m_config->setGroup("ImageViewer Settings");
+
+    // Current image deleted go to trash ?
+    m_deleteItem2Trash = m_config->readBoolEntry("DeleteItem2Trash", true);
+    
+    // Background color.
+    QColor bgColor(Qt::black);
+    m_canvas->setBackgroundColor(m_config->readColorEntry("BackgroundColor", &bgColor));
+    m_canvas->update();
+    
+    m_fullScreenHideToolBar = m_config->readBoolEntry("FullScreenHideToolBar", false);
+    m_fullScreenHideThumbBar = m_config->readBoolEntry("FullScreenHideThumbBar", true);
+
+    // JPEG quality value.
+    // JPEG quality slider setting : 0 - 100 ==> imlib2 setting : 25 - 100.
+    m_JPEGCompression = (int)((75.0/99.0)*(float)m_config->readNumEntry("JPEGCompression", 75)
+                              + 25.0 - (75.0/99.0));
+
+    // PNG compression value.
+    // PNG compression slider setting : 1 - 9 ==> imlib2 setting : 100 - 1.
+    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)m_config->readNumEntry("PNGCompression", 1)
+                             + 100.0 - ((1.0-100.0)/8.0));
+
+    // TIFF compression.
+    m_TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
+    
     bool showBar = false;
     bool autoFit = true;
     
@@ -628,7 +649,8 @@ void ShowFoto::slotSaveAs()
 
     QString tmpFile = saveAsURL.directory() + QString("/.showfoto-tmp-")
                       + saveAsURL.filename();
-    if (!m_canvas->saveAsTmpFile(tmpFile, 85, 1, true, format.lower()))
+    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression, 
+                                 m_TIFFCompression, format.lower()))
     {
         KMessageBox::error(this, i18n("Failed to save file '%1'")
                            .arg(saveAsURL.filename()));
@@ -732,7 +754,8 @@ bool ShowFoto::save()
     
     QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
                       + url.filename();
-    if (!m_canvas->saveAsTmpFile(tmpFile, 85, 1, true))
+    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
+                                 m_TIFFCompression))
     {
         KMessageBox::error(this, i18n("Failed to save file '%1'")
                            .arg(url.filename()));
@@ -845,13 +868,21 @@ void ShowFoto::slotToggleFullScreen()
 
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
-           m_bar->hide();
+        {
+            if (m_fullScreenHideThumbBar)
+               m_bar->hide();
+            else
+               m_fullScreenAction->plug(m_bar);
+        }
 
         QObject* obj = child("mainToolBar","KToolBar");
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            toolBar->hide();
+            if (m_fullScreenHideToolBar)
+                toolBar->hide();
+            else
+                m_fullScreenAction->plug(toolBar);
         }
 
         showFullScreen();
@@ -992,6 +1023,7 @@ void ShowFoto::toogleActions(bool val)
     m_BCGAction->setEnabled(val);
     m_fileprint->setEnabled(val);
     m_resizeAction->setEnabled(val);
+    m_fileDelete->setEnabled(val);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next()) 
@@ -1100,5 +1132,113 @@ void ShowFoto::slotZoomChanged(float zoom)
                                   !m_zoomFitAction->isChecked());
 }
 
+void ShowFoto::slotSetup()
+{
+    Setup setup(this);
+
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    m_imagePluginLoader->loadPluginsFromList(setup.pluginsPage_->getImagePluginsListEnable());
+    m_config->sync();
+    unLoadPlugins();
+    loadPlugins();
+    applySettings();
+
+    if ( m_bar->countItems() == 0 )    
+       toogleActions(false);
+}
+
+void ShowFoto::loadPlugins()
+{
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    {
+        if (plugin)
+        {
+            guiFactory()->addClient(plugin);
+            plugin->setParentWidget(this);
+            plugin->setEnabledSelectionActions(false);
+        }
+        else
+            kdDebug() << "Invalid plugin to add!" << endl;
+    }
+}
+
+void ShowFoto::unLoadPlugins()
+{
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+        if (plugin) {
+            guiFactory()->removeClient(plugin);
+            plugin->setParentWidget(0);
+            plugin->setEnabledSelectionActions(false);
+        }
+    }
+}
+
+void ShowFoto::slotDeleteCurrentItem()
+{
+    /*
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+        return;
+
+
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings->getUseTrash())
+    {
+        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                        .arg(m_urlCurrent.filename()));
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+            !=  KMessageBox::Continue)
+        {
+            return;
+        }
+    }
+
+    if (!SyncJob::userDelete(m_urlCurrent))
+    {
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    emit signalFileDeleted(m_urlCurrent);
+
+    KURL CurrentToRemove = m_urlCurrent;
+    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+
+    if (it != m_urlList.end())
+    {
+        if (m_urlCurrent != m_urlList.last())
+        {
+            // Try to get the next image in the current Album...
+
+            KURL urlNext = *(++it);
+            m_urlCurrent = urlNext;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+        else if (m_urlCurrent != m_urlList.first())
+        {
+            // Try to get the previous image in the current Album...
+
+            KURL urlPrev = *(--it);
+            m_urlCurrent = urlPrev;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+    }
+*/
+}
 
 #include "showfoto.moc"

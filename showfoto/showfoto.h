@@ -71,6 +71,7 @@ private slots:
     void slotSaveAs();
     void slotFilePrint();
     void slotOpenURL(const KURL& url);
+    void slotDeleteCurrentItem();
     void slotFileProperties();
     
     void slotToggleFullScreen();
@@ -92,6 +93,7 @@ private slots:
     void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
+    void slotSetup();
                
 private:
 
@@ -101,6 +103,8 @@ private:
     bool promptUserSave();
     bool save();
     void toogleActions(bool val);
+    void loadPlugins();
+    void unLoadPlugins();
 
 private:
 
@@ -128,6 +132,7 @@ private:
     KAction               *m_saveAsAction;
     KAction               *m_propertiesAction;
     KAction               *m_fileprint;    
+    KAction               *m_fileDelete;
     
     KAction               *m_forwardAction;
     KAction               *m_backAction;
@@ -162,7 +167,15 @@ private:
     QLabel*                m_zoomLabel;
     QLabel*                m_resLabel;
     
+    int                    m_JPEGCompression;
+    int                    m_PNGCompression;
+    
     bool                   m_fullScreen;
+    bool                   m_TIFFCompression;
+    bool                   m_fullScreenHideToolBar;
+    bool                   m_fullScreenHideThumbBar;
+    bool                   m_deleteItem2Trash;
+
 };
 
 #endif /* SHOWFOTO_H */
