@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-//    SETUPMIME.CPP
+//    SETUPPLUGINS.CPP
 //
 //    Copyright (C) 2004 Gilles CAULIER <caulier dot gilles at free.fr>
 //
@@ -23,119 +23,77 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <qhgroupbox.h>
+#include <qstring.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <klineeditdlg.h>
+#include <klistview.h>
 
-// // Local includes.
+// Local includes.
 
-#include "albumsettings.h"
-#include "setupmime.h"
+#include "setupplugins.h"
 
 
-SetupMime::SetupMime(QWidget* parent )
-         : QWidget(parent)
+SetupPlugins::SetupPlugins(QWidget* parent )
+            : QWidget(parent)
 {
    QVBoxLayout *layout = new QVBoxLayout( parent, 10);
    layout->setSpacing( KDialog::spacingHint() );
 
-   // --------------------------------------------------------
-
-   QGroupBox *imageFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Image files"), parent);
-   
-   QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
-   imageFileFilterLabel->setText(i18n("Show only image files with extensions:"));
-
-   m_imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
-   QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>You can set here the extension of image files "
-                                                "who will displayed on Albums (like JPEG or TIFF)."));
-   
-   layout->addWidget(imageFileFilterBox);
-   
-   // --------------------------------------------------------
-   
-   QGroupBox *movieFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Movie files"), parent);
-  
-   QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
-   movieFileFilterLabel->setText(i18n("Show only movie files with extensions:"));
-   
-   m_movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
-   QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>You can set here the extension of the movie files "
-                                                "who will displayed on Albums (like MPEG or AVI)."));
-
-   layout->addWidget(movieFileFilterBox);
-
-   // --------------------------------------------------------
-   
-   QGroupBox *audioFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Audio files"), parent);
-  
-   QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
-   audioFileFilterLabel->setText(i18n("Show only audio files with extensions:"));
-   
-   m_audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
-   QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>You can set here the extension of audio files "
-                                                "who will displayed on Albums (like MP3 or OGG)."));
-   
-   layout->addWidget(audioFileFilterBox);
-      
-   // --------------------------------------------------------
-
-   QGroupBox *rawFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Raw files"), parent);
-
-   QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
-   rawFileFilterLabel->setText(i18n("Show only Raw files with extensions:"));
-
-   m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
-   QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>You can set here the extension of RAW image files "
-                                                "who will displayed on Albums (like CRW for Canon camera"
-                                                "or NEF for Nikon camera)."));
-                                                
-   layout->addWidget(rawFileFilterBox);
-   
-   // --------------------------------------------------------
-
-   layout->addStretch();
-
-   readSettings();
+   m_pluginList = new KListView( parent, "pluginList" );
+   m_pluginList->setAllColumnsShowFocus( true );
+   m_pluginList->setResizeMode( KListView::LastColumn );
+   m_pluginList->setFullWidth( true );
+   m_pluginList->addColumn( i18n( "Name" ) );
+   m_pluginList->addColumn( i18n( "Description" ) );
+   QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
+                                       "who must be loaded/unloaded from/to the current "
+                                       "Digikam instance. At the next instance this list "
+                                       "will be used during the initialisation."));
+   layout->addWidget( m_pluginList );
 }
 
-SetupMime::~SetupMime()
+SetupPlugins::~SetupPlugins()
 {
 }
 
-void SetupMime::applySettings()
+void SetupPlugins::initPlugins(QStringList lista, QStringList listl)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    QStringList::Iterator it = lista.begin();
     
-    if (!settings) return;
-
-    settings->setImageFileFilter(m_imageFileFilterEdit->text());
-    settings->setMovieFileFilter(m_movieFileFilterEdit->text());
-    settings->setAudioFileFilter(m_audioFileFilterEdit->text());
-    settings->setRawFileFilter(m_rawFileFilterEdit->text());
-    
-    settings->saveSettings();
+    while(  it != lista.end() )
+        {
+        QCheckListItem *item = new QCheckListItem (m_pluginList, *it, QCheckListItem::CheckBox);
+        item->setText(0, *it);
+        
+        if (listl.contains(*it)) item->setOn(true);
+        
+        it++;
+        item->setText(1, *it);
+        it++;
+        }
 }
 
-void SetupMime::readSettings()
+QStringList SetupPlugins::getPluginList()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    
-    if (!settings) return;
-
-    m_imageFileFilterEdit->setText(settings->getImageFileFilter());
-    m_movieFileFilterEdit->setText(settings->getMovieFileFilter());
-    m_audioFileFilterEdit->setText(settings->getAudioFileFilter());
-    m_rawFileFilterEdit->setText(settings->getRawFileFilter());    
+    QStringList list;
+    QCheckListItem * item = (QCheckListItem*)m_pluginList->firstChild();
+        
+    while( item )
+            {
+            if (item->isOn())
+               list.append(item->text(0));
+               
+            item = (QCheckListItem*)item->nextSibling();
+            }
+            
+    return list;
 }
 
 
-#include "setupmime.moc"
+#include "setupplugins.moc"

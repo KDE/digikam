@@ -1,19 +1,25 @@
-/***************************************************************************
-                          digikamapp.h  -  description
-                             -------------------
-    begin                : Sat Nov 16 10:11:43 CST 2002
-    copyright            : (C) 2002 by Renchi Raju
-    email                : renchi@pooh.tam.uiuc.edu
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
+//
+//    DIGIKAMAPP.H
+//
+//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
 #ifndef DIGIKAMAPP_H
 #define DIGIKAMAPP_H
@@ -22,21 +28,28 @@
 #include <config.h>
 #endif
 
-#include <kapp.h>
-#include <kmainwindow.h>
+// Qt includes.
+
 #include <qstring.h>
 #include <qmap.h>
+
+// KDE includes.
+
+#include <kapp.h>
+#include <kmainwindow.h>
 
 
 class KAction;
 class KActionMenu;
 class KSelectAction;
+class KConfig;
 
 class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
 class DigikamPluginManager;
+class Setup;
 
 namespace Digikam
 {
@@ -69,6 +82,9 @@ private:
 
     Digikam::AlbumManager *mAlbumManager;
     DigikamPluginManager  *pluginManager_;
+    
+    KConfig*      m_config;    
+    Setup*        m_setup;
     
     DigikamView*  mView;
     CameraList*   mCameraList;
@@ -128,4 +144,4 @@ private slots:
     void slotToggleFullScreen();
 };
 
-#endif
+#endif  // DIGIKAMAPP_H

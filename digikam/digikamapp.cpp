@@ -1,25 +1,34 @@
-/***************************************************************************
-                          digikamapp.cpp  -  description
-                             -------------------
-    begin                : Sat Nov 16 10:11:43 CST 2002
-    copyright            : (C) 2002 by Renchi Raju
-    email                : renchi@pooh.tam.uiuc.edu
+////////////////////////////////////////////////////////////////////////////////
+//
+//    DIGIKAMAPP.CPP
+//
+//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+// QT includes.
 
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qstringlist.h>
 #include <qkeysequence.h>
+
+// KDE includes.
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -33,6 +42,8 @@
 #include <kedittoolbar.h>
 #include <ktip.h>
 
+// Local includes.
+
 #include "albummanager.h"
 #include "albuminfo.h"
 
@@ -40,6 +51,7 @@
 #include "cameratype.h"
 #include "albumsettings.h"
 #include "setup.h"
+#include "setupplugins.h"
 #include "digikamview.h"
 #include "digikampluginmanager.h"
 #include "digikamcameraprocess.h"
@@ -48,7 +60,7 @@
 
 DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 {
-    KConfig* config=kapp->config();
+    m_config = kapp->config();
 
     mFullScreen = false;
     mView = 0;
@@ -63,6 +75,7 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
 
     connect(mCameraList, SIGNAL(signalCameraAdded(CameraType *)),
             this, SLOT(slotCameraAdded(CameraType *)));
+            
     connect(mCameraList, SIGNAL(signalCameraRemoved(CameraType *)),
             this, SLOT(slotCameraRemoved(CameraType *)));
 
@@ -70,14 +83,15 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     setupActions();
 
     setAutoSaveSettings();
-    applyMainWindowSettings (config);
+    applyMainWindowSettings (m_config);
 
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mCameraList->load();
 
     // Load Plugins
     pluginManager_ = new DigikamPluginManager(this);
-
+    pluginManager_->loadPlugins(m_config->readListEntry("Plugin List"));
+    
     // Start the camera process
     DigikamCameraProcess *process = new DigikamCameraProcess(this);
     process->start();
@@ -105,6 +119,7 @@ void DigikamApp::setupView()
 
     connect(mView, SIGNAL(signal_albumSelected(bool)),
             this, SLOT(slot_albumSelected(bool)));
+            
     connect(mView, SIGNAL(signal_imageSelected(bool)),
             this, SLOT(slot_imageSelected(bool)));
 }
@@ -335,6 +350,9 @@ void DigikamApp::slot_imageSelected(bool val)
 
 void DigikamApp::slot_exit()
 {
+    m_config->writeEntry( "Plugin List", pluginManager_->loadedPluginList() );
+    m_config->sync();
+
     close();
 }
 
@@ -392,15 +410,20 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
 
 void DigikamApp::slotSetup()
 {
-    Setup *setup = new Setup;
-    connect(setup, SIGNAL(okClicked()),
+    m_setup = new Setup;
+    
+    connect(m_setup, SIGNAL(okClicked()),
             this,  SLOT(slotSetupChanged()));
-    setup->show();
-
+    
+    m_setup->pluginsPage_->initPlugins(pluginManager_->availablePluginList(),
+                                       pluginManager_->loadedPluginList());
+    
+    m_setup->show();
 }
 
 void DigikamApp::slotSetupChanged()
 {
+    pluginManager_->loadPlugins(m_setup->pluginsPage_->getPluginList());
     mView->applySettings(mAlbumSettings);
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
 }
@@ -418,11 +441,13 @@ void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config());
     KEditToolbar *dlg = new KEditToolbar(actionCollection(), "digikamui.rc");
+    
     if (dlg->exec())
-    {
+        {
         createGUI("digikamui.rc");
         applyMainWindowSettings(KGlobal::config());
-    }
+        }
+    
     delete dlg;
 }
 

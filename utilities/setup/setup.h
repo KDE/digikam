@@ -31,10 +31,11 @@
 class QFrame;
 class SetupGeneral;
 class SetupMime;
+class SetupPlugins;
 class SetupCamera;
 
-class Setup : public KDialogBase {
-
+class Setup : public KDialogBase 
+{
     Q_OBJECT
 
 public:
@@ -42,10 +43,13 @@ public:
     Setup(QWidget* parent=0, const char* name=0);
     ~Setup();
 
+    SetupPlugins* pluginsPage_;
+    
 private:
 
     QFrame * page_general;
     QFrame * page_mime;
+    QFrame * page_plugins;
     QFrame * page_camera;
     
     SetupGeneral* generalPage_;

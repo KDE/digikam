@@ -36,6 +36,7 @@
 
 #include "setupgeneral.h"
 #include "setupmime.h"
+#include "setupplugins.h"
 #include "setupcamera.h"
 #include "setup.h"
 
@@ -54,7 +55,11 @@ Setup::Setup(QWidget* parent, const char* name)
     page_mime = addPage(i18n("Mime types"), i18n("Albums items Mime types settings"),
                         BarIcon("mime", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
-    
+
+    page_plugins = addPage(i18n("Plugins"), i18n("Plugins management settings"),
+                        BarIcon("run", KIcon::SizeMedium));
+    pluginsPage_ = new SetupPlugins(page_plugins);
+        
     page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
     cameraPage_ = new SetupCamera(page_camera);

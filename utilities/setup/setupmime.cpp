@@ -35,7 +35,7 @@
 #include <kdialog.h>
 #include <klineeditdlg.h>
 
-// // Local includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "setupmime.h"
@@ -95,7 +95,7 @@ SetupMime::SetupMime(QWidget* parent )
 
    m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
    QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>You can set here the extension of RAW image files "
-                                                "who will displayed on Albums (like CRW for Canon camera"
+                                                "who will displayed on Albums (like CRW for Canon camera "
                                                 "or NEF for Nikon camera)."));
                                                 
    layout->addWidget(rawFileFilterBox);

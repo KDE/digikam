@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-//    SETUPGENERAL.H
+//    SETUPPLUGINS.H
 //
 //    Copyright (C) 2004 Gilles CAULIER <caulier dot gilles at free.fr>
 //
@@ -20,34 +20,30 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef SETUPMIME_H
-#define SETUPMIME_H
+#ifndef SETUPPLUGINS_H
+#define SETUPPLUGINS_H
 
 // Qt includes.
 
 #include <qwidget.h>
 
-class QLineEdit;
+class KListView;
 
-class SetupMime : public QWidget
+class SetupPlugins : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupMime(QWidget* parent = 0);
-    ~SetupMime();
+    SetupPlugins(QWidget* parent = 0);
+    ~SetupPlugins();
 
-    void applySettings();
+    void initPlugins(QStringList lista, QStringList listl);
+    QStringList getPluginList();
 
 private:
 
-    void readSettings();
-
-    QLineEdit *m_imageFileFilterEdit;
-    QLineEdit *m_movieFileFilterEdit;
-    QLineEdit *m_audioFileFilterEdit;
-    QLineEdit *m_rawFileFilterEdit;
+    KListView* m_pluginList;
 };
 
-#endif // SETUPMIME_H 
+#endif // SETUPPLUGINS_H 

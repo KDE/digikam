@@ -1,5 +1,6 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * Added plugins management settings (loaded/unloaded plugins).
         * Added Full Mime type support for images, movies, audio, and RAW files.
 
 v0.6.2-RC            05/18/04    
