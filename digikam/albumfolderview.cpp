@@ -584,8 +584,8 @@ void AlbumFolderView::albumNew(PAlbum* parent)
     if (!libraryDir.exists()) 
     {
         KMessageBox::error(0,
-                           i18n("Album Library has not been set correctly\n"
-                                "Please run Setup"));
+                           i18n("The Albums Library has not been set correctly.\n"
+                                "Select \"Configure Digikam\" from the Settings menu and choose a folder to use for the Albums Library."));
         return;
     }
 
@@ -882,8 +882,8 @@ void AlbumFolderView::albumImportFolder()
     if(!libraryDir.exists()) 
     {
         KMessageBox::error(0,
-                           i18n("Album Library has not been set correctly\n"
-                                "Please run Setup"));
+                           i18n("The Albums Library has not been set correctly.\n"
+                                "Select \"Configure Digikam\" from the Settings menu and choose a folder to use for the Albums Library."));
         return;
     }
     
