@@ -121,7 +121,7 @@ const char* TagItemsDrag::format(int i) const
 }
 
 TagDrag::TagDrag( int albumid, QWidget *dragSource, 
-                         const char *name ) :
+                  const char *name ) :
     QDragObject( dragSource, name )
 {
     mAlbumID = albumid;
@@ -134,15 +134,10 @@ bool TagDrag::canDecode( const QMimeSource* e )
 
 const char* TagDrag::format( int i ) const
 {
-    switch( i )
-    {
-        case 0:
-            return "digikam/tag-id";
-            break;
-        default:
-            return 0;
-            break;
-    }
+    if ( i == 0 )
+        return "digikam/tag-id";
+
+    return 0;
 }
 
 QByteArray TagDrag::encodedData( const char* ) const
