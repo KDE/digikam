@@ -90,7 +90,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                     "<b>Red Filter</b>: simulate black and white film exposure using red filter. "
                                     "Using this one for creates dramatic sky effects and simulates moonlight scenes in daytime.<p>"
                                     "<b>Yellow Filter</b>: simulate black and white film exposure using yellow filter. "
-                                    "most natural tonal correction; improves contrast. Ideal for landscapes.<p>"
+                                    "Most natural tonal correction and improves contrast. Ideal for landscapes.<p>"
                                     "<b>Sepia Tone</b>: gives a warm highlight and mid-tone while adding a bit of coolness to the "
                                     "shadows-very similar to the process of bleaching a print and re-developing in a sepia toner.<p>"
                                     "<b>Brown Tone</b>: more neutral than Sepia Tone filter.<p>"
