@@ -85,6 +85,7 @@
 #include "albummanager.h"
 #include "thumbnailjob.h"
 #include "albumfilecopymove.h"
+#include "digikamio.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
 
@@ -1267,11 +1268,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         int id = popMenu.exec(QCursor::pos());
         switch(id) {
         case 10: {
-            KIO::move(srcURLs,destURL,true);
+            new DigikamIO(srcURLs, destURL, true);
             break;
         }
         case 11: {
-            KIO::copy(srcURLs,destURL,true);
+            new DigikamIO(srcURLs, destURL, false);
             break;
         }
         default:
