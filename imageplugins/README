@@ -19,6 +19,8 @@ Currently implemented plugins are:
  7) Unsharp            : An unsharped mask image filter (based on Gimp 2.0 algorithm).
  8) RainDrop           : Adding Raindrops randomly in an image.
  9) FilmGrain          : Adding film grain in an image.
+10) FreeRotation       : Perform an image rotation with a free angle in degrees.
+11) AdjustCurves       : A plugin for to adjust the image histogram curves.
 
 Contact :
 -----------------------------------------------------------------------
