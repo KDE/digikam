@@ -15,11 +15,22 @@ Currently implemented plugins are:
 
 Contact :
 -----------------------------------------------------------------------
-If you have questions, comments, suggestions, requests, bug reports to
-make do email at :
+If you have questions, comments, suggestions to make do email at :
 
 digikam-users@list.sourceforge.net
 
+
+IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
+system who can be contacted by the Kde help menu of all image plugins dialog (not 
+the Main digikam help menu). 
+A mail will be automaticly sent to the digikam development mailing list.
+There is no need to contact directly the digikam mailing list for a bug report 
+or a devel wish.
+
+The current DigikamImagePlugins bugs and devel wish reported to the Kde bugs report can be see 
+at this url :
+
+http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
 Depencies :
 -----------------------------------------------------------------------
