@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qdatetime.h>
+#include <qstylesheet.h>
 
 #include <klocale.h>
 #include <kfileitem.h>
@@ -193,9 +194,48 @@ void AlbumFileTip::updateText()
     }
     tip += cellBeg + i18n("Tags:") + cellMid +
            tagPaths.join(",<br>") + cellEnd;
+
+    // Meta Info ----------------------------------------------------
+
+    QString metaStr;
+    KFileMetaInfo info(fi->metaInfo());
+
+    if (info.isValid() && !info.isEmpty() )
+    {
+        QStringList keys = info.preferredKeys();
+        int maxCount = 6;
+        int count = 0;
+        
+        for (QStringList::iterator it = keys.begin();
+             count < maxCount && it!=keys.end() ; ++it)
+        {
+            KFileMetaInfoItem item = info.item( *it );
+            if ( item.isValid() )
+            {
+                QString s = item.string();
+                if (s.length() > 50) s = s.left(47) + "...";
+                if ( !s.isEmpty() )
+                {
+                    count++;
+                    metaStr += cellBeg +
+                               QStyleSheet::escape( item.translatedKey() ) +
+                               ":" + cellMid +
+                               QStyleSheet::escape( s ) + cellEnd;
+                }
+
+            }
+        }
+    }
+
+    if (!metaStr.isEmpty())
+    {
+        tip += headBeg + QString("Meta Information") + headEnd;
+        tip += metaStr;
+    }
     
     tip += "</table>";
 
+    
     m_label->setText(tip);
 }
 
@@ -216,4 +256,3 @@ QString AlbumFileTip::dateToString(const QDateTime& datetime) const
 
     return str;
 }
-
