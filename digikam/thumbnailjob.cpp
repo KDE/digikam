@@ -32,6 +32,7 @@
 #include <kstandarddirs.h>
 #include <kmdcodec.h>
 #include <kglobal.h>
+#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 #include "thumbdb.h"
@@ -45,8 +46,6 @@ extern "C"
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <X11/Xlib.h>
-#include <Imlib2.h>
 }
 
 namespace Digikam
@@ -56,7 +55,7 @@ class ThumbnailJobPriv
 {
 public:
 
-    KFileItemList fileList;
+    KURL::List    urlList;
     QString       thumbRoot;
     int           size;
     int           cacheSize;
@@ -64,8 +63,8 @@ public:
     bool          highlight;
     bool          metainfo;
 
-    const KFileItem*  next_item;
-    KFileItem*    curr_item;
+    KURL          curr_url;
+    KURL          next_url;
     time_t        curr_mtime;
     QString       curr_uri;
     QString       curr_thumb;
@@ -77,86 +76,60 @@ public:
     // And the data area
     uchar *shmaddr;
 
-    Display      *display;
-    Visual       *vis;
-    GC            gc;
-    Colormap      cm;
-    Imlib_Context context;
-    Imlib_Image   image;
-
     bool          running;
+    QTimer*       timer;
 };
 
-ThumbnailJob::ThumbnailJob(const KFileItem* fileItem, int size,
+ThumbnailJob::ThumbnailJob(const KURL& url, int size,
                            bool dir, bool highlight)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
-    d->fileList.append(fileItem);
-    d->size = size;
-    d->dir  = dir;
+    d->urlList.append(url);
+    d->size      = size;
+    d->dir       = dir;
     d->highlight = highlight;
     d->metainfo  = false;
     d->running   = false;
 
-    d->curr_item = d->fileList.first();
-    d->next_item = d->curr_item;
+    d->curr_url = d->urlList.first();
+    d->next_url = d->curr_url;
     
     d->shmid   = -1;
     d->shmaddr = 0;
 
-    d->display = QPaintDevice::x11AppDisplay();
-    d->vis     = DefaultVisual(d->display, DefaultScreen(d->display));
-    d->cm      = DefaultColormap(d->display, DefaultScreen(d->display));
-    d->context = imlib_context_new();
-    d->image   = 0;
-    imlib_context_push(d->context);
-    imlib_set_cache_size(0);
-    imlib_set_color_usage(128);
-    imlib_context_set_dither(1);
-    imlib_context_set_display(d->display);
-    imlib_context_set_visual(d->vis);
-    imlib_context_set_colormap(d->cm);
-    imlib_context_pop();
+    d->timer = new QTimer;
+    connect(d->timer, SIGNAL(timeout()),
+            SLOT(slotTimeout()));
     
     createThumbnailDirs();
 
     processNext();
 }
 
-ThumbnailJob::ThumbnailJob(const KFileItemList& itemList, int size,
+ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
                            bool metainfo, bool highlight)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
-    d->fileList  = itemList;
+    d->urlList   = urlList;
     d->size      = size;
     d->dir       = false;
     d->highlight = highlight;
     d->metainfo  = metainfo;
     d->running   = false;
 
-    d->curr_item = d->fileList.first();
-    d->next_item = d->curr_item;
+    d->curr_url = d->urlList.first();
+    d->next_url = d->curr_url;
     
     d->shmid = -1;
     d->shmaddr = 0;
 
-    d->display = QPaintDevice::x11AppDisplay();
-    d->vis   = DefaultVisual(d->display, DefaultScreen(d->display));
-    d->cm    = DefaultColormap(d->display, DefaultScreen(d->display));
-    d->context = imlib_context_new();
-    d->image   = 0;
-    imlib_context_push(d->context);
-    imlib_set_cache_size(0);
-    imlib_set_color_usage(128);
-    imlib_context_set_dither(1);
-    imlib_context_set_display(d->display);
-    imlib_context_set_visual(d->vis);
-    imlib_context_set_colormap(d->cm);
-    imlib_context_pop();
+    d->timer = new QTimer;
+    connect(d->timer, SIGNAL(timeout()),
+            SLOT(slotTimeout()));
 
     createThumbnailDirs();
 
@@ -165,8 +138,8 @@ ThumbnailJob::ThumbnailJob(const KFileItemList& itemList, int size,
 
 ThumbnailJob::~ThumbnailJob()
 {
-    imlib_context_free(d->context);
-    
+    delete d->timer;
+
     if (d->shmaddr) {
         shmdt((char*)d->shmaddr);
         shmctl(d->shmid, IPC_RMID, 0);
@@ -174,45 +147,41 @@ ThumbnailJob::~ThumbnailJob()
     delete d;
 }
 
-void ThumbnailJob::addItem(const KFileItem* item)
+void ThumbnailJob::addItem(const KURL& url)
 {
-    d->fileList.append(item);
+    d->urlList.append(url);
 
     if (!d->running && subjobs.isEmpty())
         processNext();
 }
 
-void ThumbnailJob::addItems(const KFileItemList& itemList)
+void ThumbnailJob::addItems(const KURL::List& urlList)
 {
-    KFileItemListIterator it(itemList);
-    while (it.current() != 0) {
-        d->fileList.append(it.current());
-        ++it;
+    for (KURL::List::const_iterator it = urlList.begin();
+         it != urlList.end(); ++it)
+    {
+        d->urlList.append(*it);
     }
 
     if (!d->running && subjobs.isEmpty())
         processNext();
 }
 
-bool ThumbnailJob::setNextItemToLoad(const KFileItem* item)
+bool ThumbnailJob::setNextItemToLoad(const KURL& url)
 {
-    if (d->fileList.containsRef(item))
+    KURL::List::const_iterator it = d->urlList.find(url);
+    if (it != d->urlList.end())
     {
-        d->next_item = item;
+        d->next_url = *it;
         return true;
     }
 
     return false;
 }
 
-void ThumbnailJob::removeItem(const KFileItem *fileItem)
+void ThumbnailJob::removeItem(const KURL& url)
 {
-    d->fileList.removeRef(fileItem);
-
-    if (d->next_item == fileItem)
-        d->next_item = d->fileList.current();
-    if (d->curr_item == fileItem)
-        d->curr_item = 0;
+    d->urlList.remove(url);
 }
 
 void ThumbnailJob::createThumbnailDirs()
@@ -230,26 +199,32 @@ void ThumbnailJob::createThumbnailDirs()
 
 void ThumbnailJob::processNext()
 {
-    if (d->fileList.isEmpty()) {
+    if (d->urlList.isEmpty()) {
         emit signalCompleted();
         return;
     }
 
-    if (d->next_item != d->fileList.current())
+    KURL::List::iterator it = d->urlList.find(d->next_url);
+    if (it == d->urlList.end())
     {
-        if (d->fileList.findRef(d->next_item) == -1)
-        {
-            d->fileList.first();
-        }
+        it = d->urlList.begin();
     }
 
-    d->curr_item = d->fileList.current();
-    d->fileList.remove();
-    d->next_item = d->fileList.current();
+    d->curr_url = *it;
+    it = d->urlList.remove(it);
+    if (it != d->urlList.end())
+    {
+        d->next_url = *it;
+    }
+    else
+    {
+        d->next_url = KURL();
+    }
+
     
     // First, stat the original file
     d->running = true;
-    QTimer::singleShot(0, this, SLOT(slotTimeout()));
+    d->timer->start(0, true);
 }
 
 void ThumbnailJob::slotResult(KIO::Job *job)
@@ -257,9 +232,9 @@ void ThumbnailJob::slotResult(KIO::Job *job)
     subjobs.remove(job);
     Q_ASSERT( subjobs.isEmpty() );
     
-    if (job->error() && d->curr_item)
+    if (job->error())
     {
-        emit signalFailed(d->curr_item);
+        emit signalFailed(d->curr_url);
     }
 
     processNext();
@@ -267,10 +242,7 @@ void ThumbnailJob::slotResult(KIO::Job *job)
 
 bool ThumbnailJob::statThumbnail()
 {
-    if (!d->curr_item)
-        return false;
-    
-    d->curr_uri = "file://" + QDir::cleanDirPath(d->curr_item->url().path(1));
+    d->curr_uri = "file://" + QDir::cleanDirPath(d->curr_url.path(1));
 
     KMD5 md5( QFile::encodeName( d->curr_uri ) );
     d->curr_thumb = QFile::encodeName( md5.hexDigest() ) + ".png";
@@ -291,33 +263,24 @@ bool ThumbnailJob::statThumbnail()
             return false;
         }
     }
-        
-    d->image = imlib_load_image_immediately_without_cache(QFile::encodeName(file));
-    if (!d->image)
-    {
-        return false;
-    }
 
-    if (!ThumbDB::instance()->hasThumb(d->curr_item->url().path(1)))
+    QImage thumb(file);
+    if (thumb.isNull())
+        return false;
+
+    if (!ThumbDB::instance()->hasThumb(d->curr_url.path(1)))
     {
         QImage thumb(file);
-        ThumbDB::instance()->putThumb(d->curr_item->url().path(1), thumb);
+        ThumbDB::instance()->putThumb(d->curr_url.path(1), thumb);
     }
     
-    imlib_context_push(d->context);
-    imlib_context_set_image(d->image);
-    imlib_context_pop();
-
-    emitThumbnail();
+    emitThumbnail(thumb);
     return true;
 }
 
 void ThumbnailJob::createThumbnail()
 {
-    if (!d->curr_item)
-        return;
-    
-    KURL url(d->curr_item->url());
+    KURL url(d->curr_url);
     url.setProtocol("digikamthumbnail");
 
     KIO::TransferJob *job = KIO::get(url, false, false);
@@ -335,15 +298,12 @@ void ThumbnailJob::createThumbnail()
 
 void ThumbnailJob::createFolderThumbnail()
 {
-    if (!d->curr_item)
-        return;
-
-    QDir dir(d->curr_item->url().path());
+    QDir dir(d->curr_url.path());
     dir.setFilter(QDir::Files);
     const QFileInfoList *list = dir.entryInfoList();
     if (!list) {
         kdWarning() << k_funcinfo << "Could not read Directory"
-                    << d->curr_item->url().path() << endl;
+                    << d->curr_url.path() << endl;
         processNext();
         return;
     }
@@ -415,7 +375,8 @@ void ThumbnailJob::createShmSeg()
 
 void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
 {
-    if (data.isEmpty()) return;
+    if (data.isEmpty())
+        return;
 
     QImage thumb;
     QDataStream stream(data, IO_ReadOnly);
@@ -432,10 +393,7 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
 
     if (thumb.isNull()) {
         kdWarning() << k_funcinfo << "thumbnail is null" << endl;
-        if (d->curr_item)
-        {
-            emit signalFailed(d->curr_item);
-        }
+        emit signalFailed(d->curr_url);
         return;
     }
 
@@ -458,44 +416,24 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         
     thumb.save(d->thumbRoot + d->curr_thumb, "PNG", 0);
 
-    ThumbDB::instance()->putThumb( d->curr_item->url().path(1), thumb );
-
-    d->image = imlib_create_image(thumb.width(), thumb.height());
-    imlib_context_push(d->context);
-    imlib_context_set_image(d->image);
-    uint *imgData = imlib_image_get_data();
-    memcpy(imgData, thumb.bits(), thumb.numBytes());
-    imlib_image_put_back_data(imgData);
-    imlib_context_pop();
+    ThumbDB::instance()->putThumb( d->curr_url.path(1), thumb );
     
-    emitThumbnail();
+    emitThumbnail(thumb);
 }
 
-void ThumbnailJob::emitThumbnail()
+void ThumbnailJob::emitThumbnail(QImage& thumb)
 {
-    if (!d->image || !d->curr_item)
+    if (thumb.isNull())
+    {
         return;
+    }
 
-    imlib_context_push(d->context);
-    imlib_context_set_image(d->image);
+    thumb = thumb.smoothScale(d->size, d->size, QImage::ScaleMin);
 
-    int w = imlib_image_get_width();
-    int h = imlib_image_get_height();
+    QPixmap pix(thumb);
 
-    QSize size(w, h);
-    size.scale(d->size, d->size, QSize::ScaleMin);
-
-    w = size.width();
-    h = size.height();
-    
-    QPixmap pix(w, h);
-    imlib_context_set_drawable(pix.handle());
-    imlib_context_set_anti_alias(1);
-    imlib_render_image_on_drawable_at_size(0, 0, w, h);
-
-    imlib_free_image();
-    d->image = 0;
-    imlib_context_pop();
+    int w = pix.width();
+    int h = pix.height();
 
     // highlight only when requested and when thumbnail
     // width and height are greater than 10
@@ -512,27 +450,21 @@ void ThumbnailJob::emitThumbnail()
     KFileMetaInfo *metaInfo = 0;
     if (d->metainfo)
     {
-        metaInfo = new KFileMetaInfo(d->curr_item->url().path());
+        metaInfo = new KFileMetaInfo(d->curr_url.path());
     }
 
-    emit signalThumbnailMetaInfo(d->curr_item, pix, metaInfo);
+    emit signalThumbnailMetaInfo(d->curr_url, pix, metaInfo);
 }
 
 void ThumbnailJob::slotTimeout()
 {
     d->running = false;
     
-    if (!d->curr_item)
-    {
-        processNext();
-        return;
-    }
-        
     struct stat stbuf;
-    if (::stat(QFile::encodeName(d->curr_item->url().path()), &stbuf) == -1)
+    if (::stat(QFile::encodeName(d->curr_url.path()), &stbuf) == -1)
     {
         kdWarning() << k_funcinfo << "Stat failed for url "
-                    << d->curr_item->url().prettyURL() << endl;
+                    << d->curr_url.prettyURL() << endl;
         processNext();
         return;
     }

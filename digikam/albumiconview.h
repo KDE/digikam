@@ -142,9 +142,9 @@ private slots:
     void slotDoubleClicked(ThumbItem *item);
     void slotRightButtonClicked(ThumbItem *item, const QPoint& pos);
 
-    void slotGotThumbnail(const KFileItem* item, const QPixmap& pix,
+    void slotGotThumbnail(const KURL& url, const QPixmap& pix,
                           const KFileMetaInfo* metaInfo);
-    void slotFailedThumbnail(const KFileItem* item);
+    void slotFailedThumbnail(const KURL& url);
     void slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix);
     void slotFailedThumbnailKDE(const KFileItem* item);    
     void slotFinishedThumbnail();

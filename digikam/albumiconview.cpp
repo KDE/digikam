@@ -360,28 +360,28 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
 
     slotUpdate();
 
-    // create a new list with items sorted according to the view
-    KFileItemList fileList;
+    // create a url list with items sorted according to the view
+    KURL::List urlList;
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        fileList.append(iconItem->fileItem());
+        urlList.append(iconItem->fileItem()->url());
     }
     
     if (d->thumbJob.isNull())
     {
-        d->thumbJob = new Digikam::ThumbnailJob(fileList,
+        d->thumbJob = new Digikam::ThumbnailJob(urlList,
                                                 (int)d->thumbSize.size(),
                                                 showMetaInfo());
         connect(d->thumbJob, 
-                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,
                                                const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KFileItem*,
+                SLOT(slotGotThumbnail(const KURL&,
                                       const QPixmap&,
                                       const KFileMetaInfo*)));
         connect(d->thumbJob,
-                SIGNAL(signalFailed(const KFileItem*)),
-                SLOT(slotFailedThumbnail(const KFileItem*)));
+                SIGNAL(signalFailed(const KURL&)),
+                SLOT(slotFailedThumbnail(const KURL&)));
 
         connect(d->thumbJob,
                 SIGNAL(signalCompleted()),
@@ -389,7 +389,7 @@ void AlbumIconView::slotImageListerNewItems(const KFileItemList& itemList)
     }
     else
     {
-        d->thumbJob->addItems(fileList);
+        d->thumbJob->addItems(urlList);
         slotContentsMoving(contentsX(), contentsY());
     }
     
@@ -408,7 +408,7 @@ void AlbumIconView::slotImageListerDeleteItem(KFileItem* item)
         return;
 
     if (!d->thumbJob.isNull())
-        d->thumbJob->removeItem(item);
+        d->thumbJob->removeItem(item->url());
     
     delete iconItem;
     item->removeExtraData(this);
@@ -1357,7 +1357,7 @@ void AlbumIconView::slotContentsMoving(int x, int y)
     AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
     AlbumIconItem* item = firstItem;
     while (item) {
-        if (d->thumbJob->setNextItemToLoad(item->fileItem()))
+        if (d->thumbJob->setNextItemToLoad(item->fileItem()->url()))
             return;
         if (item == lastItem)
             return;
@@ -1439,61 +1439,59 @@ void AlbumIconView::refreshItems(const QStringList& itemList)
     if (!d->currentAlbum || itemList.empty())
         return;
 
-    KFileItemList fList;
+    KURL::List urlList;
     for ( QStringList::const_iterator it = itemList.begin();
           it != itemList.end(); ++it )
     {
         KURL u(*it);
         u.cleanPath();
 
-        AlbumIconItem* iconItem = findItem(u.url());
-        if (iconItem)
-            fList.append(iconItem->fileItem());
+        urlList.append(u);
     }
         
-    if (fList.isEmpty())
+    if (urlList.isEmpty())
         return;
 
     if (d->thumbJob.isNull())
     {
         d->thumbJob =
-            new Digikam::ThumbnailJob(fList, (int)d->thumbSize.size());
+            new Digikam::ThumbnailJob(urlList, (int)d->thumbSize.size());
         connect(d->thumbJob, 
-                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,
                                                const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KFileItem*,
+                SLOT(slotGotThumbnail(const KURL&,
                                       const QPixmap&,
                                       const KFileMetaInfo*)));
         connect(d->thumbJob,
-                SIGNAL(signalFailed(const KFileItem*)),
-                SLOT(slotFailedThumbnail(const KFileItem*)));
+                SIGNAL(signalFailed(const KURL&)),
+                SLOT(slotFailedThumbnail(const KURL&)));
         connect(d->thumbJob,
                 SIGNAL(signalCompleted()),
                 SLOT(slotFinishedThumbnail()));
     }
     else
     {
-        d->thumbJob->addItems(fList);
+        d->thumbJob->addItems(urlList);
     }
 }
 
-void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& pix,
+void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
                                      const KFileMetaInfo* metaInfo)
 {
    AlbumSettings *settings = AlbumSettings::instance();
 
-   if (!settings || !fileItem)
+   if (!settings)
        return;
 
-   AlbumIconItem *iconItem = (AlbumIconItem *)fileItem->extraData(this);
+   AlbumIconItem *iconItem = d->itemDict.find(url.url());
    if (!iconItem)
        return;
 
    if(settings->getExifRotate())
    {
       QPixmap rotPix(pix);
-      exifRotate(fileItem->url().path(), rotPix);
+      exifRotate(url.path(), rotPix);
       iconItem->setPixmap(rotPix, metaInfo);
    }
    else
@@ -1505,10 +1503,10 @@ void AlbumIconView::slotGotThumbnail(const KFileItem* fileItem, const QPixmap& p
 // If we failed to generate a thumbnail using our thumbnail generator
 // use kde thumbnail generator to generate one
 
-void AlbumIconView::slotFailedThumbnail(const KFileItem* item)
+void AlbumIconView::slotFailedThumbnail(const KURL& url)
 {
     KURL::List urlList;	
-    urlList.append(item->url());
+    urlList.append(url);
     
     KIO::PreviewJob* job = KIO::filePreview(urlList, (int)d->thumbSize.size());
                                             
@@ -1524,7 +1522,7 @@ void AlbumIconView::slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pi
     if (!iconItem)
         return;
     
-    slotGotThumbnail(iconItem->fileItem(), pix, 0);
+    slotGotThumbnail(iconItem->fileItem()->url(), pix, 0);
 }
 
 void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
@@ -1542,7 +1540,7 @@ void AlbumIconView::slotFailedThumbnailKDE(const KFileItem* item)
     QImage img(dir);
     img = img.smoothScale(size, size);
 
-    slotGotThumbnail(iconItem->fileItem(), QPixmap(img), 0);
+    slotGotThumbnail(iconItem->fileItem()->url(), QPixmap(img), 0);
 }
 
 void AlbumIconView::slotFinishedThumbnail()

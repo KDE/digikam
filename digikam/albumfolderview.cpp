@@ -470,7 +470,7 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
         PAlbum* p = dynamic_cast<PAlbum*>(album);
         p->fileItem()->removeExtraData(this);
         if (!thumbJob_.isNull())
-            thumbJob_->removeItem(p->fileItem());
+            thumbJob_->removeItem(p->getKURL());
     }
     
     AlbumFolderItem* folderItem =
@@ -743,20 +743,20 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
 
     if (thumbJob_.isNull())
     {
-        thumbJob_ = new Digikam::ThumbnailJob(album->fileItem(),
+        thumbJob_ = new Digikam::ThumbnailJob(album->getKURL(),
                                               (int)ThumbnailSize::Tiny,
                                               true);
         connect(thumbJob_,
-                SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+                SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                                const QPixmap&,
                                                const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KFileItem*,
+                SLOT(slotGotThumbnail(const KURL&,
                                       const QPixmap&,
                                       const KFileMetaInfo*)));
     }
     else
     {
-        thumbJob_->addItem(album->fileItem());
+        thumbJob_->addItem(album->getKURL());
     }
 }
 
@@ -1630,15 +1630,16 @@ void AlbumFolderView::slotOpenAlbumFolderItem()
         dropTarget_->setOpen(true);
 }
 
-void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,
+void AlbumFolderView::slotGotThumbnail(const KURL& url,
                                        const QPixmap& thumbnail,
                                        const KFileMetaInfo*)
 {
-    if (!fileItem->extraData(this))
+    PAlbum* album = albumMan_->findPAlbum(url);
+    if (!album || !album->getViewItem())
         return;
-
+    
     AlbumFolderItem *folderItem =
-        (AlbumFolderItem*)(fileItem->extraData(this));    
+        (AlbumFolderItem*)(album->getViewItem());    
 
     folderItem->setPixmap(thumbnail);
 }

@@ -326,16 +326,16 @@ void ImageDescEdit::slotItemChanged()
         delete m_thumbJob;
     }
 
-    m_thumbJob = new Digikam::ThumbnailJob(m_currItem->fileItem(), 256);
+    KURL fileURL(m_currItem->fileItem()->url());    
+    
+    m_thumbJob = new Digikam::ThumbnailJob(fileURL, 256);
     connect(m_thumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KFileItem*,
+            SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
                                            const KFileMetaInfo*)),
-            SLOT(slotGotThumbnail(const KFileItem*,
+            SLOT(slotGotThumbnail(const KURL&,
                                   const QPixmap&,
                                   const KFileMetaInfo*)));
-    
-    KURL fileURL(m_currItem->fileItem()->url());    
     
     PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
     if (!album)
@@ -374,7 +374,7 @@ void ImageDescEdit::slotItemChanged()
     enableButton(User2, m_currItem->prevItem() != 0);
 }
 
-void ImageDescEdit::slotGotThumbnail(const KFileItem*, const QPixmap& pix,
+void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
                                      const KFileMetaInfo*)
 {
     // todo: exif autorotate the thumbnail

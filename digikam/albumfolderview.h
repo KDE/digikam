@@ -174,7 +174,7 @@ private slots:
 
     void slotOpenAlbumFolderItem();
         
-    void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
+    void slotGotThumbnail(const KURL& url, const QPixmap& thumbnail,
                           const KFileMetaInfo*);
 
     void slotThemeChanged();

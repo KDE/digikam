@@ -24,7 +24,7 @@
 
 #include <kio/job.h>
 #include <kurl.h>
-#include <kfileitem.h>
+#include <kurl.h>
 #include <qcstring.h>
 
 class QPixmap;
@@ -42,24 +42,24 @@ class ThumbnailJob : public KIO::Job
 
 public:
 
-    ThumbnailJob(const KFileItem* item, int size, bool dir=false,
+    ThumbnailJob(const KURL& url, int size, bool dir=false,
                  bool highlight=true);
-    ThumbnailJob(const KFileItemList& fileList, int size, bool metainfo=true,
-                 bool highlight=true);
+    ThumbnailJob(const KURL::List& urlList, int size,
+                 bool metainfo=true, bool highlight=true);
     ~ThumbnailJob();
 
-    void addItem(const  KFileItem* fileItem);
-    void addItems(const KFileItemList& fileList);
+    void addItem(const  KURL& url);
+    void addItems(const KURL::List& urlList);
 
-    bool setNextItemToLoad(const KFileItem *fileItem);
-    void removeItem(const KFileItem *fileItem);
+    bool setNextItemToLoad(const KURL& url);
+    void removeItem(const KURL& url);
     
 signals:
 
-    void signalThumbnailMetaInfo(const KFileItem* item, const QPixmap& pix,
+    void signalThumbnailMetaInfo(const KURL& url, const QPixmap& pix,
                                  const KFileMetaInfo* metaInfo);
     void signalCompleted();
-    void signalFailed(const KFileItem* item);
+    void signalFailed(const KURL& url);
 
 private:
 
@@ -72,7 +72,7 @@ private:
     bool statThumbnail();
     void createThumbnail();
     void createFolderThumbnail();
-    void emitThumbnail();
+    void emitThumbnail(QImage& thumb);
     void createShmSeg();
 
 protected slots:

@@ -63,7 +63,7 @@ private slots:
     void slotUser2();
     void slotApply();
     void slotOk();
-    void slotGotThumbnail(const KFileItem*, const QPixmap& pix,
+    void slotGotThumbnail(const KURL&, const QPixmap& pix,
                           const KFileMetaInfo*);    
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
 };
