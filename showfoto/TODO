@@ -1,7 +1,9 @@
 todo stuff before 0.7.3 release
 ---------------------------------
 
-* add First/Last image button like in image editor.
+* add Move to trash.
+* add Print image.
+* add configure 
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add shofoto settings dialog. 
 * writing handbook based on digiKam handbook image editor part. 

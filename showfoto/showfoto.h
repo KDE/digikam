@@ -60,6 +60,8 @@ private slots:
     void slotOpenFile();
     void slotNext();
     void slotPrev();
+    void slotLast();
+    void slotFirst();
     void slotSave();
     void slotSaveAs();
     void slotAutoFit();
@@ -111,9 +113,12 @@ private:
     KAction               *m_saveAction;
     KAction               *m_saveAsAction;
     KAction               *m_propertiesAction;
+    
     KAction               *m_forwardAction;
     KAction               *m_backAction;
-
+    KAction               *m_firstAction;
+    KAction               *m_lastAction;
+                          
     KActionMenu           *m_rotateAction;
     KAction               *m_rotate90Action;
     KAction               *m_rotate180Action;

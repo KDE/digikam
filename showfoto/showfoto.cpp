@@ -157,11 +157,22 @@ void ShowFoto::setupActions()
                      actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
+    
     m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
-                                  actionCollection(), "go_fwd");
+                                  actionCollection(), "file_fwd");
     m_backAction = KStdAction::back(this, SLOT(slotPrev()),
-                               actionCollection(), "go_bwd");
+                               actionCollection(), "file_bwd");
 
+    m_firstAction = new KAction(i18n("&First"), "start",
+                                KStdAccel::shortcut( KStdAccel::Home),
+                                this, SLOT(slotFirst()),
+                                actionCollection(), "file_first");
+
+    m_lastAction = new KAction(i18n("&Last"), "finish",
+                               KStdAccel::shortcut( KStdAccel::End),
+                               this, SLOT(slotLast()),
+                               actionCollection(), "file_last");
+                                  
     m_propertiesAction = new KAction(i18n("Properties"), 0,
                              ALT+Key_Return,
                              this, SLOT(slotFileProperties()),
@@ -460,6 +471,22 @@ void ShowFoto::slotFileProperties()
     
     if (curr)
         (void) new KPropertiesDialog( curr->url(), this, "props dialog", true );
+}
+
+void ShowFoto::slotFirst()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->firstItem() );
+}
+
+void ShowFoto::slotLast()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->lastItem() );
 }
 
 void ShowFoto::slotNext()
