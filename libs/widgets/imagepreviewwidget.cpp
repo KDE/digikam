@@ -56,7 +56,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     QFrame *frame3 = new QFrame(gbox1);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
-    m_imagePanIconWidget = new Digikam::ImagePanIconWidget(240, 160, frame3);
+    m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
     QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
                                                 "who can help you to select the clip preview."
                                                 "<p>Cliked and moved the mouse cursor in the "
