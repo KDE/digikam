@@ -125,12 +125,12 @@ void AlbumSettings::init()
     d->useTrash     = true;
     
     d->iconShowName = false;
-    d->iconShowSize = true;
-    d->iconShowDate = false;
+    d->iconShowSize = false;
+    d->iconShowDate = true;
     d->iconShowComments = true;
     d->iconShowFileComments = false;
     d->iconShowResolution = false;
-    d->iconShowTags = false;
+    d->iconShowTags = true;
     d->saveExifComments = false;
     d->exifRotate = false;
     d->exifSetOrientation = false;
@@ -184,10 +184,10 @@ void AlbumSettings::readSettings()
                                                   false);                                 
 
     d->iconShowSize = config->readBoolEntry("Icon Show Size",
-                              true);
+                              false);
 
     d->iconShowDate = config->readBoolEntry("Icon Show Date",
-                                            false);
+                                            true);
 
     d->iconShowComments = config->readBoolEntry("Icon Show Comments",
                                                 true);
