@@ -42,20 +42,14 @@ ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const ch
     new KAction(i18n("Lens Distortion Correction..."), 0, 
                 this, SLOT(slotLensDistortion()),
                 actionCollection(), "imageplugin_lensdistortion");
-                
     
+    setXMLFile("digikamimageplugin_lensdistortion_ui.rc");            
+        
     kdDebug() << "ImagePlugin_LensDistortion plugin loaded" << endl;
 }
 
 ImagePlugin_LensDistortion::~ImagePlugin_LensDistortion()
 {
-}
-
-QStringList ImagePlugin_LensDistortion::guiDefinition() const
-{
-    QStringList guiDef;
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/imageplugin_lensdistortion/ ");
-    return guiDef;
 }
 
 void ImagePlugin_LensDistortion::slotLensDistortion()

@@ -20,3 +20,5 @@ kde_services_DATA = digikamimageplugin_lensdistortion.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_lensdistortion.pot
 
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimageplugin_lensdistortion_ui.rc

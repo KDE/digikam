@@ -37,8 +37,6 @@ public:
                                  const QStringList &args);
     ~ImagePlugin_LensDistortion();
 
-    QStringList guiDefinition() const;
-
 private slots:
 
     void slotLensDistortion();
