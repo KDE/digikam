@@ -54,7 +54,7 @@ public:
     void ajustInit(void);
     void ajustRejected(void);
     void ajustAccepted(void);
-
+    
 protected:
     
     void resizeEvent(QResizeEvent* e);
@@ -101,6 +101,7 @@ public slots:
     void slotGammaChanged(int val);
     void slotBrightnessChanged(int val);
     void slotContrastChanged(int val);
+    void slotPreviewEnabled(bool on);
     
     void slotRestore();
 

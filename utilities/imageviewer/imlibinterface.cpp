@@ -62,11 +62,11 @@ private:           // Variables.
     
     Imlib_Load_Error      errorRet;
     
-    DATA8 r_table[256];
-    DATA8 g_table[256];
-    DATA8 b_table[256];
-    DATA8 a_table[256];
-    DATA8 dummy_table[256];
+    DATA8                 r_table[256];
+    DATA8                 g_table[256];
+    DATA8                 b_table[256];
+    DATA8                 a_table[256];
+    DATA8                 dummy_table[256];
         
     int                   w;
     int                   h;
@@ -76,6 +76,11 @@ private:           // Variables.
     bool                  changed;
     bool                  dirty;
     bool                  valid;
+    bool                  preview;
+
+    double                newGamma;        
+    double                newBrightness;        
+    double                newContrast;        
     
     QString               file;
 
@@ -95,6 +100,7 @@ public:           // Fonctions.
         dirty          = true;
         changed        = false;
         valid          = false;
+        preview        = false;
         
         file           = filename;
         
@@ -163,11 +169,6 @@ public:           // Fonctions.
             oh = imlib_image_get_height();
             w  = ow;
             h  = oh;
-            
-            mod = imlib_create_color_modifier();
-            imlib_context_set_color_modifier(mod);
-            
-            if (mod == NULL) qDebug ("color modifier is null");
             
             changed = false;
             dirty   = true;
@@ -314,57 +315,89 @@ public:           // Fonctions.
         if (mod == NULL) qDebug ("Warning : color modifier is null");
         
         imlib_context_set_color_modifier(mod);
-        imlib_reset_color_modifier();
+        /*imlib_reset_color_modifier();
+        imlib_get_color_modifier_tables(r_table, g_table,
+                                        b_table, a_table);*/
         }
         
     void ajustAccepted(void)
         {
+        if (preview == false)
+           {
+           imlib_context_set_color_modifier(mod);
+           imlib_modify_color_modifier_gamma(newGamma);
+           imlib_modify_color_modifier_brightness(newBrightness);
+           imlib_modify_color_modifier_contrast(newContrast);
+           imlib_apply_color_modifier();
+           }
+        
         imlib_free_color_modifier();
         changed = true;
         dirty   = true;             
+        preview = false;
         }
         
     void ajustRejected(void)
         {
-        changed = false;
+        imlib_free_color_modifier();
+        changed = true;
+        restore();
+        preview = false;
         }
 
-    void changeGamma(double val)  
+   void ajustPreviewEnabled(bool on)
         {
-        if (!im) return;
-
-        imlib_modify_color_modifier_gamma(val);
-        imlib_get_color_modifier_tables(r_table, g_table,
-                                         b_table, a_table);
-        imlib_reset_color_modifier();
-        imlib_set_color_modifier_tables(r_table, g_table,
-                                         b_table, a_table);
-        imlib_apply_color_modifier();
-
-        dirty   = true;
-        qDebug("gamma:%f", (float)val);
+        preview = on;
+        
+        if (preview == true) dirty = true;
         }
-
-    void changeBrightness(double val)  
+        
+    void changeGamma(double val)   // FIXME : Preview not run correctly !
         {
         if (!im) return;
         
-        imlib_modify_color_modifier_brightness(val);
-        imlib_apply_color_modifier();
-        imlib_reset_color_modifier();
-        dirty      = true;
-        qDebug("brightness:%f", (float)val);
+        newGamma = val;
+       
+        if (preview == true) 
+           {
+           imlib_context_set_color_modifier(mod);
+           imlib_modify_color_modifier_gamma(val);
+           imlib_apply_color_modifier();
+           dirty = true;
+           qDebug("gamma:%f", (float)val);
+           }
         }
 
-    void changeContrast(double val)  
+    void changeBrightness(double val)  // FIXME : Preview not run correctly !
+        {
+        if (!im) return;
+        
+        newBrightness = val;
+        
+        if (preview == true) 
+           {
+           imlib_context_set_color_modifier(mod);
+           imlib_modify_color_modifier_brightness(val);
+           imlib_apply_color_modifier();
+           dirty = true;
+           qDebug("brightness:%f", (float)val);
+           }
+        }
+
+    void changeContrast(double val)  // FIXME : Preview not run correctly !
         {
         if (!im) return;
 
-        imlib_modify_color_modifier_contrast(val);
-        imlib_apply_color_modifier();
-        imlib_reset_color_modifier();
-        dirty    = true;
-        qDebug("contrast:%f", (float)val);
+        newContrast = val;
+                
+        if (preview == true) 
+           {
+           imlib_context_set_color_modifier(mod);
+           imlib_modify_color_modifier_contrast(val);
+           imlib_apply_color_modifier();
+           dirty = true;
+           qDebug("contrast:%f", (float)val);
+           }
         }
 
     int save(const QString& saveFile) 
@@ -393,11 +426,6 @@ private:           // Fonctions.
 
     int saveAction(const QString& saveFile) 
         {
-        // Apply the modifiers to the image
-        
-        imlib_context_set_image(im);
-        imlib_apply_color_modifier(); 
-        
         QFileInfo fileInfo(saveFile);
         QString ext = fileInfo.extension(false);
         int result;
@@ -421,7 +449,8 @@ private:           // Fonctions.
             imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &errorRet);
 
             if( errorRet != IMLIB_LOAD_ERROR_NONE ) {
-               kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " << (int)errorRet << endl;
+               kdDebug() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
+                         << (int)errorRet << endl;
                result = 0;
             } else {
                result = 1;
@@ -806,7 +835,7 @@ void ImlibInterface::changeGamma(int val)
 {
     ImImage *im = d->cache->currentImage();
  
-    if (im) im->changeGamma((double)val/20.0);
+    if (im) im->changeGamma(((double)val + 1000.0)/1000.0);
 }
 
 
@@ -814,7 +843,7 @@ void ImlibInterface::changeBrightness(int val)
 {
     ImImage *im = d->cache->currentImage();
     
-    if (im) im->changeBrightness((double)val/100.0);
+    if (im) im->changeBrightness((double)val/400.0);
 }
 
 
@@ -822,7 +851,7 @@ void ImlibInterface::changeContrast(int val)
 {
     ImImage *im = d->cache->currentImage();
     
-    if (im) im->changeContrast((double)val/100.0);
+    if (im) im->changeContrast(((double)val + 400.0)/400.0);
 }
 
 
@@ -891,6 +920,15 @@ void ImlibInterface::ajustAccepted(void)
     if (im) im->ajustAccepted();
 }
 
+
+void ImlibInterface::ajustPreviewEnabled(bool on)
+{
+    ImImage *im = d->cache->currentImage();
+    
+    if (!im) d->cache->image(d->file);
+    
+    if (im) im->ajustPreviewEnabled(on);
+}
 
 
 #include "imlibinterface.moc"

@@ -757,6 +757,17 @@ void Canvas::slotContrastChanged(int val)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+void Canvas::slotPreviewEnabled(bool on)
+{
+    iface->ajustPreviewEnabled(on);
+    viewport()->repaint();
+
+    emit signalChanged(true);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 void Canvas::slotRestore()
 {
     iface->restore();

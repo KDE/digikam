@@ -1779,8 +1779,11 @@ void ImageView::slotBCGEdit()
             
     connect(bcgEdit, SIGNAL(signalContrastValueChanged(int)),
             d->canvas, SLOT(slotContrastChanged(int)));
-    
-    if ( bcgEdit->exec() == KMessageBox::Ok )
+
+    connect(bcgEdit, SIGNAL(signalPreviewEnabled(bool)),
+            d->canvas, SLOT(slotPreviewEnabled(bool)));
+                
+    if ( bcgEdit->exec() == KDialogBase::Ok )
        d->canvas->ajustAccepted();
     else
        d->canvas->ajustRejected();           

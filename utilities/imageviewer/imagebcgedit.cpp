@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -47,7 +48,7 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     QWidget* box = new QWidget( this );
     setMainWidget(box);
     QVBoxLayout *dvlay = new QVBoxLayout( box, 10, spacingHint() );
-    QGridLayout *grid = new QGridLayout( 2, 3 );
+    QGridLayout *grid = new QGridLayout( 3, 3 );
     dvlay->addLayout( grid );
     
     // --------------------------------------------------------
@@ -55,8 +56,8 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     m_label_gammaValue = new QLabel (i18n("Gamma:"), box);
     grid->addWidget( m_label_gammaValue, 0, 0 );
        
-    m_gammaValue = new KIntNumInput(10, box);
-    m_gammaValue->setRange(0, 200, 1, true );
+    m_gammaValue = new KIntNumInput(0, box);
+    m_gammaValue->setRange(-100, 100, 1, true );
     QWhatsThis::add( m_gammaValue, i18n("<p>Select here the Gamma value of image.") );
     m_label_gammaValue->setBuddy( m_gammaValue );
     grid->addWidget( m_gammaValue, 0, 1 );
@@ -82,9 +83,15 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
     QWhatsThis::add( m_contrastValue, i18n("<p>Select here the Gamma value of image.") );
     m_label_contrastValue->setBuddy( m_contrastValue );
     grid->addWidget( m_contrastValue, 2, 1 );
-        
+
     // --------------------------------------------------------
+
+    m_preview = new QCheckBox(box);
+    m_preview->setText(i18n("Preview"));
+    grid->addWidget( m_preview, 3, 0 );            
     
+    // --------------------------------------------------------
+   
     connect(m_gammaValue, SIGNAL(valueChanged (int)),
             this, SIGNAL(signalGammaValueChanged (int) ));
             
@@ -92,7 +99,15 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
             this, SIGNAL(signalContrastValueChanged (int) ));
             
     connect(m_contrastValue, SIGNAL(valueChanged (int)),
-            this, SIGNAL(signalContrastValueChanged (int) ));                        
+            this, SIGNAL(signalContrastValueChanged (int) ));              
+               
+    connect(m_preview, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalPreviewEnabled(bool)));    
+
+    m_preview->setChecked(false);          // FIXME : Preview not yet done !
+    //m_preview->setEnabled(false);
+    
+    emit signalPreviewEnabled(m_preview->isChecked());
 }
 
 ImageBCGEdit::~ImageBCGEdit()

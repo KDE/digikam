@@ -74,7 +74,8 @@ public:
     void ajustInit(void);
     void ajustRejected(void);
     void ajustAccepted(void);
-
+    void ajustPreviewEnabled(bool on);
+    
 private:
 
     ImlibInterfacePrivate *d;

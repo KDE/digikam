@@ -28,6 +28,9 @@
 
 #include <kdialogbase.h>
 
+class QCheckBox;
+class QLabel;
+
 class KIntNumInput;
 
 class ImageBCGEdit : public KDialogBase
@@ -44,16 +47,19 @@ signals:
     void signalGammaValueChanged(int);
     void signalBrightnessValueChanged(int);
     void signalContrastValueChanged(int);
-
+    void signalPreviewEnabled(bool); 
+    
 protected :
 
     KIntNumInput *m_gammaValue;
     KIntNumInput *m_brightnessValue;
     KIntNumInput *m_contrastValue;
     
-    QLabel *m_label_gammaValue;
-    QLabel *m_label_brightnessValue;
-    QLabel *m_label_contrastValue;
+    QLabel       *m_label_gammaValue;
+    QLabel       *m_label_brightnessValue;
+    QLabel       *m_label_contrastValue;
+    
+    QCheckBox    *m_preview;
 };
 
 #endif  // IMAGEBCGEDIT_H 
