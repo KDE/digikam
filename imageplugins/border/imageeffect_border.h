@@ -75,8 +75,6 @@ private:
     QColor                m_niepceLineColor;
     QColor                m_bevelUpperLeftColor; 
     QColor                m_bevelLowerRightColor;
-    QColor                m_liquidBackgroundColor;
-    QColor                m_liquidForegroundColor;
     QColor                m_roundCornerBackgroundColor;
     
     KIntNumInput         *m_borderWidth;
@@ -91,7 +89,7 @@ private:
     
     void solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth);
     void niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth);
-    void liquid(QImage &src, QImage &dest, const QColor &fg, const QColor &bg, int borderWidth);
+    void rock(QImage &src, QImage &dest, int borderWidth);
     void bevel(QImage &src, QImage &dest, const QColor &topColor, const QColor &btmColor, int borderWidth);
     void roundCorner(QImage &src, QImage &dest, const QColor &bg);
     
