@@ -53,7 +53,8 @@ namespace Digikam
 
 CurvesWidget::CurvesWidget(int w, int h, 
                            uint *i_data, uint i_w, uint i_h, 
-                           Digikam::ImageCurves *curves, QWidget *parent)
+                           Digikam::ImageCurves *curves, QWidget *parent, 
+                           bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_channelType    = ValueHistogram;
@@ -63,6 +64,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_curves         = curves;
     m_grab_point     = -1;    
     m_last           = 0;
+    m_readOnlyMode   = readOnly;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -270,7 +272,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       i = (x * 256) / wWidth;
       j = ((x + 1) * 256) / wWidth;
 
-      curveVal   = m_curves->getCurveValue(m_channelType, i);
+      curveVal      = m_curves->getCurveValue(m_channelType, i);
              
       do
           {
@@ -329,18 +331,18 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
       p1.drawLine(x, wHeight - y, x, 0);         
       
-      // Drawing curve.   
+      // Drawing curves.   
    
       p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
       p1.drawLine(x - 1, wHeight - ((curvePrevVal * 256) / wHeight),
                   x,     wHeight - ((curveVal * 256) / wHeight));         
-      
-      curvePrevVal = curveVal;
+                
+      curvePrevVal      = curveVal;
       }
    
    // Drawing curves points.
    
-   if ( m_curves->getCurveType(m_channelType) == Digikam::ImageCurves::CURVE_SMOOTH )
+   if ( !m_readOnlyMode && m_curves->getCurveType(m_channelType) == Digikam::ImageCurves::CURVE_SMOOTH )
       {      
       p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
             
@@ -363,6 +365,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
 void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 {
+   if (m_readOnlyMode) return;
+   
    int i;
    int closest_point;
    int distance;
@@ -438,6 +442,8 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 
 void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
+   if (m_readOnlyMode) return;
+   
    if (e->button() != Qt::LeftButton || m_clearFlag == HistogramStarted)
       return;
    
@@ -450,6 +456,8 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
 {
+   if (m_readOnlyMode) return;
+   
    int i;
    int closest_point;
    int x1, x2, y1, y2;

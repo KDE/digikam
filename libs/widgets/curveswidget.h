@@ -66,7 +66,9 @@ public:
     CurvesWidget(int w, int h,                                      // Widget size.
                  uint *i_data, uint i_w, uint i_h,                  // Full image info.
                  Digikam::ImageCurves *curves,                      // Curves data instance to use.
-                 QWidget *parent=0);
+                 QWidget *parent=0,                                 // Parent widget instance.
+                 bool readOnly=false);                              // If true : widget with full edition mode capabilities.
+                                                                    // If false : display curve data only without edition.
                  
     ~CurvesWidget();
 
@@ -109,6 +111,7 @@ private:
     int                   m_last;
     
     bool                  m_blinkFlag;         
+    bool                  m_readOnlyMode;
     
     QTimer               *m_blinkTimer;
     
