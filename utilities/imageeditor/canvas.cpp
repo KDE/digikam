@@ -383,12 +383,14 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         QRect  r(i,j,d->tileSize,d->tileSize);
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
                                              0, 0, d->tileSize, d->tileSize,
-                                             rr.x() - i, rr.y() - j,
+                                             rr.x() - i - d->pixmapRect.x(),
+                                             rr.y() - j -d->pixmapRect.y(),
                                              rr.width(), rr.height(),
                                              antialias);
 
                         rr = QRect(d->rubber->normalize());
-                        rr.moveBy(-i, -j); 
+                        rr.moveBy(-i-d->pixmapRect.x(),
+                                  -j-d->pixmapRect.y()); 
                         QPainter p(pix);
                         p.setPen(QPen(QColor(250,250,255),1));
                         p.drawRect(rr);
@@ -881,6 +883,11 @@ void Canvas::setBackgroundColor(const QColor& color)
     
     d->bgColor = color;
     viewport()->update();
+}
+
+void Canvas::setExifOrient(bool exifOrient)
+{
+    d->im->setExifOrient(exifOrient);    
 }
 
 void Canvas::slotRestore()

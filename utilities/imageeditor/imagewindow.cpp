@@ -295,6 +295,8 @@ void ImageWindow::applySettings()
         m_guiClient->m_fileDelete->setIcon("editdelete");
         m_guiClient->m_fileDelete->setText(i18n("Delete File"));
     }
+
+    m_canvas->setExifOrient(settings->getExifRotate());
 }
 
 void ImageWindow::readSettings()

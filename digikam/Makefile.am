@@ -45,6 +45,7 @@ libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
+		        $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 		        $(top_builddir)/digikam/utilities/setup/libsetup.la

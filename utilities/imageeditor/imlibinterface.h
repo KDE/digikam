@@ -48,6 +48,7 @@ public:
 
     bool load(const QString& filename);
     void preload(const QString& filename);
+    void setExifOrient(bool exifOrient);
     bool restore();
     bool save(const QString& file, int JPEGcompression, 
               int PNGcompression, bool TIFFcompression);

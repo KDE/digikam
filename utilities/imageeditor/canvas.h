@@ -66,6 +66,7 @@ public:
     void rotateImage(double angle);
 
     void setBackgroundColor(const QColor& color);
+    void setExifOrient(bool exifOrient);
     
 protected:
     

@@ -55,7 +55,6 @@ extern "C"
 
 // Local includes.
 
-#include "albumsettings.h"
 #include "imlibinterface.h"
 
 namespace Digikam
@@ -89,6 +88,8 @@ public:
     float brightness;
     float contrast;
 
+    bool  exifOrient;
+    
     Imlib_Context        context;
     Imlib_Image          image;
     Imlib_Color_Modifier cmod;
@@ -141,6 +142,7 @@ ImlibInterface::ImlibInterface()
     d->selW = 0;
     d->selH = 0;
     d->zoom = 1.0;
+    d->exifOrient = false;
         
     m_rotatedOrFlipped = false;
 }
@@ -204,8 +206,7 @@ bool ImlibInterface::load(const QString& filename)
         
     imlib_context_pop();
 
-    AlbumSettings *settings = AlbumSettings::instance();
-    if(settings->getExifRotate())
+    if (d->exifOrient)
     {
         exifRotate(filename);
     }
@@ -289,6 +290,11 @@ void ImlibInterface::preload(const QString& filename)
         imlib_free_image();
     }
     imlib_context_pop();
+}
+
+void ImlibInterface::setExifOrient(bool exifOrient)
+{
+    d->exifOrient = exifOrient;    
 }
 
 bool ImlibInterface::restore()
