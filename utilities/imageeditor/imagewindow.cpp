@@ -346,6 +346,23 @@ void ImageWindow::slotLoadCurrent()
         m_guiClient->m_navLastAction->setEnabled(false);
     }
 
+    // Disable some menu actions if the current root image URL 
+    // isn't include in the Digikam Albums library database.
+    // This is necessary when ImageEditor is opened from cameraclient.
+
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+       {
+       m_guiClient->m_fileDelete->setEnabled(false);
+       m_guiClient->m_commentedit->setEnabled(false);
+       }
+    else 
+       {
+       m_guiClient->m_fileDelete->setEnabled(true);
+       m_guiClient->m_commentedit->setEnabled(true);
+       }
 }
 
 void ImageWindow::slotLoadNext()
@@ -536,6 +553,12 @@ void ImageWindow::slotCommentsEdit()
 
 void ImageWindow::slotDeleteCurrentItem()
 {
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+        return;
+    
     QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
                     .arg(m_urlCurrent.filename()));
 
