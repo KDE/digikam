@@ -84,7 +84,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Film Grain"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin for add film grain on an image."),
+                                       I18N_NOOP("A Digikam image plugin for add film grain to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -111,7 +111,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Film Grain On Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Film Grain To Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -138,12 +138,12 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Film sensibility:"), plainPage());
     
-    m_sensibilitySlider = new QSlider(100, 3000, 100, 300, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
-    m_sensibilitySlider->setTickmarks(QSlider::Below);
-    m_sensibilitySlider->setTickInterval(100);
+    m_sensibilitySlider = new QSlider(400, 3000, 1, 800, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
+    m_sensibilitySlider->setTickInterval(100);
+    m_sensibilitySlider->setTickmarks(QSlider::Below);
     
-    m_sensibilityInput = new QSpinBox(100, 3000, 100, plainPage(), "m_sensibilityInput");
+    m_sensibilityInput = new QSpinBox(400, 3000, 1, plainPage(), "m_sensibilityInput");
     whatsThis = i18n("<p>Set here the film sensibility in ASA to use for simulate the film graininess.");
         
     QWhatsThis::add( m_sensibilityInput, whatsThis);
@@ -185,8 +185,8 @@ ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
-    m_sensibilityInput->setValue(300);
-    m_sensibilitySlider->setValue(300);
+    m_sensibilityInput->setValue(800);
+    m_sensibilitySlider->setValue(800);
     slotEffect();
     blockSignals(false);
 } 
