@@ -207,3 +207,5 @@ bool GPEventFilter::eventFilter(QObject *, QEvent *e)
     
     
 }
+
+#include "gpeventfilter.moc"

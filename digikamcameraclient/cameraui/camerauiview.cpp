@@ -901,3 +901,5 @@ bool CameraUIView::cameraReadyForUpload(QString& reason)
     return result;
 }
 
+
+#include "camerauiview.moc"

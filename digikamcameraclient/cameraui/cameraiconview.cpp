@@ -318,3 +318,5 @@ void CameraIconView::startDrag()
     drag->setPixmap(SmallIcon("image"));
     drag->dragCopy();
 }
+
+#include "cameraiconview.moc"

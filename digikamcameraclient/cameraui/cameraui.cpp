@@ -421,3 +421,5 @@ void CameraUI::connectCamera()
     camConnectAction->activate();
 }
 
+
+#include "cameraui.moc"

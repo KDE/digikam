@@ -679,3 +679,5 @@ void GPController::getInformation(QString& summary, QString& manual,
     camera_->cameraAbout(about);
     mutex_.unlock();
 }
+
+#include "gpcontroller.moc"

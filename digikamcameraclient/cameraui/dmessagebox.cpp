@@ -138,3 +138,5 @@ void DMessageBox::showMsg(const QString& msg)
         msgBox->show();
 }
 
+
+#include "dmessagebox.moc"
