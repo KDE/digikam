@@ -46,6 +46,10 @@ private:
     QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
+    void tagNew(TAlbum* parent);
+    void tagEdit(TAlbum* album);
+    void tagDelete(TAlbum *album);
+    
     QGuardedPtr<Digikam::ThumbnailJob> m_thumbJob;
 
     void populateTags();
@@ -61,6 +65,7 @@ private slots:
     void slotOk();
     void slotGotThumbnail(const KFileItem*, const QPixmap& pix,
                           const KFileMetaInfo*);    
+    void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
 };
 
 #endif

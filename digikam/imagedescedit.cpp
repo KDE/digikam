@@ -23,6 +23,8 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -35,6 +37,8 @@
 #include <qlistview.h>
 #include <qguardedptr.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <libkexif/kexif.h>
 #include <libkexif/kexifutils.h>
@@ -48,6 +52,7 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "imagedescedit.h"
+#include "tagcreatedlg.h"
 
 class TAlbumCheckListItem : public QCheckListItem
 {
@@ -114,6 +119,11 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem)
     connect(m_commentsEdit, SIGNAL(textChanged()),
             SLOT(slotModified()));
     
+    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*, 
+            const QPoint &, int)), this, 
+            SLOT(slotRightButtonClicked(QListViewItem*, 
+            const QPoint&, int)));
+            
     slotItemChanged();
 
     resize(configDialogSize(*(kapp->config()),"Image Description Dialog"));
@@ -366,6 +376,134 @@ void ImageDescEdit::slotGotThumbnail(const KFileItem*, const QPixmap& pix,
 {
     // todo: exif autorotate the thumbnail
     m_thumbLabel->setPixmap(pix);
+}
+
+void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 
+                                           const QPoint &point, int nr)
+{
+    TAlbum *album;
+    TAlbumCheckListItem *albumItem;
+    
+    if(item)
+        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
+
+    if(!albumItem || !item)
+        album = AlbumManager::instance()->findTAlbum(0);
+    else
+        album = albumItem->m_album;
+    
+    if(!album)
+        return;
+
+    QPopupMenu popmenu(this);
+
+    popmenu.insertItem(SmallIcon("tag"),
+                       i18n("New Tag"), 10);
+    if (!album->isRoot())
+    {                       
+//        popmenu.insertItem(SmallIcon("pencil"),
+//                           i18n("Edit Tag Properties"), 11);
+        popmenu.insertItem(SmallIcon("edittrash"),
+                           i18n("Delete Tag"), 12);
+    }
+    
+    switch (popmenu.exec(QCursor::pos()))
+    {
+    case 10:
+    {
+        tagNew(album);
+        populateTags();        
+        break;
+    }
+    case 11:
+    {
+        if (!album->isRoot())
+            tagEdit(album);
+        break;
+    }
+    case 12:
+    {
+        if (!album->isRoot()) {
+            tagDelete(album);
+            populateTags();
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void ImageDescEdit::tagNew(TAlbum* parent)
+{
+    QString title, icon;
+    AlbumManager *albumMan_ = AlbumManager::instance();
+    
+    if (!TagCreateDlg::tagCreate(parent, title, icon))
+        return;
+
+    QString errMsg;
+    if (!albumMan_->createTAlbum(parent, title, icon, errMsg))
+        KMessageBox::error(0, errMsg);
+}
+
+void ImageDescEdit::tagDelete(TAlbum *album)
+{
+    if (!album || album->isRoot())
+        return;
+    
+    AlbumManager *albumMan_ = AlbumManager::instance();
+    
+    int result =
+        KMessageBox::questionYesNo(0, i18n("Delete '%1' Tag")
+                                   .arg(album->getTitle()));
+
+    if (result == KMessageBox::Yes)
+    {
+        QString errMsg;
+        if (!albumMan_->deleteTAlbum(album, errMsg)) 
+            KMessageBox::error(0, errMsg);
+    }
+}
+
+
+void ImageDescEdit::tagEdit(TAlbum* album)
+{
+/*    if (!album || album->isRoot())
+        return;
+
+    QString title, icon;
+    if (!TagEditDlg::tagEdit(album, title, icon))
+    {
+        return;
+    }
+    
+    AlbumManager *albumMan_ = AlbumManager::instance();
+    
+    TAlbumCheckListItem *folderItem =
+        static_cast<TAlbumCheckListItem*>(album->getViewItem());
+    
+    if (album->getTitle() != title)
+    {
+        QString errMsg;
+        if (!albumMan_->renameTAlbum(album, title, errMsg))
+            KMessageBox::error(0, errMsg);
+        else {
+            folderItem->setText(0, title);
+            populateTags();
+        }
+    }
+
+    if (album->getIcon() != icon)
+    {
+        QString errMsg;
+        if (!albumMan_->updateTAlbumIcon(album, icon, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            folderItem->setPixmap(getBlendedIcon(album));
+    }
+    
+    emit signalTagsAssigned();*/
 }
 
 
