@@ -142,7 +142,10 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     m_borderType = new QComboBox( false, plainPage() );
     m_borderType->insertItem( i18n("Solid") );
-    m_borderType->insertItem( "Niepce" );
+
+    // Niepce is Real name. This is the first guy in the world to have build a camera.
+    m_borderType->insertItem( "Niepce" );     
+
     m_borderType->insertItem( i18n("Beveled") );
     m_borderType->insertItem( i18n("Decorative Pine") );
     m_borderType->insertItem( i18n("Decorative Wood") );
