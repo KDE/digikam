@@ -118,7 +118,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Radius :"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
     m_radiusInput = new KDoubleNumInput(plainPage());
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.1, 120.0, 0.1, true);
@@ -131,7 +131,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Amount :"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Amount:"), plainPage());
     m_amountInput = new KDoubleNumInput(plainPage());
     m_amountInput->setPrecision(1);
     m_amountInput->setRange(0.0, 5.0, 0.1, true);
@@ -144,7 +144,7 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("Threshold :"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Threshold:"), plainPage());
     m_thresholdInput = new KIntNumInput(plainPage());
     m_thresholdInput->setRange(0, 255, 1, true);
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum RGB value, "

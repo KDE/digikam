@@ -118,7 +118,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Radius :"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
     m_radiusInput = new KIntNumInput(plainPage());
     m_radiusInput->setRange(1, 20, 1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
@@ -130,7 +130,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Black level :"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
     m_blackLevelInput = new KIntNumInput(plainPage());
     m_blackLevelInput->setRange(0, 255, 1, true);
     QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls adjust the black "
@@ -142,7 +142,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("White level :"), plainPage());
+    QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
     m_whiteLevelInput = new KIntNumInput(plainPage());
     m_whiteLevelInput->setRange(0, 255, 1, true);
     QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls adjust the white "

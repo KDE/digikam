@@ -92,7 +92,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     topLayout->addWidget(gbox);
 
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Intensity :"), plainPage());
+    QLabel *label = new QLabel(i18n("Intensity:"), plainPage());
     m_numInput = new KDoubleNumInput(plainPage());
     m_numInput->setPrecision(1);
     m_numInput->setRange(0.0, 100.0, 0.1, true);

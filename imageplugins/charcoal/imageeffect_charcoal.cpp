@@ -100,7 +100,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     hlay1->addWidget(m_imagePreviewWidget);
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Radius :"), plainPage());
+    QLabel *label = new QLabel(i18n("Radius:"), plainPage());
     m_radiusInput = new KDoubleNumInput(plainPage());
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.1, 10.0, 0.1, true);
@@ -109,7 +109,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     hlay->addWidget(m_radiusInput, 5);
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Sigma :"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Sigma:"), plainPage());
     m_sigmaInput = new KDoubleNumInput(plainPage());
     m_sigmaInput->setPrecision(1);
     m_sigmaInput->setRange(0.1, 10.0, 0.1, true);

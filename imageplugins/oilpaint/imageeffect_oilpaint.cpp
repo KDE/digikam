@@ -100,7 +100,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     hlay1->addWidget(m_imagePreviewWidget);
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Radius :"), plainPage());
+    QLabel *label = new QLabel(i18n("Radius:"), plainPage());
     m_numInput = new KDoubleNumInput(plainPage());
     m_numInput->setPrecision(1);
     m_numInput->setRange(0.1, 10.0, 0.1, true);
