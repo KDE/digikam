@@ -1037,7 +1037,7 @@ void ThumbView::startDrag()
     QStrList uris;
     for (ThumbItem *it = firstItem(); it; it=it->nextItem()) {
         if (it->isSelected()) {
-            uris.append(it->text());
+            uris.append(it->text().utf8());
         }
     }
 

@@ -7,6 +7,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>
@@ -123,11 +124,11 @@ void DigikamFirstRun::accept()
 
     QDialog::accept();
 
-    QString ErrorMsg, URL="";
+    QString ErrorMsg, URL;
 
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
-    	std::cout << ErrorMsg;
+    	kdError() << ErrorMsg << endl;
 	KMessageBox::sorry(0, i18n("Cannot restart Digikam like a KDE service.\nPlease restart Digikam manually."));
     }
 
