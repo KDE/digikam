@@ -12,9 +12,11 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam Core Image Plugin
+Comment[it]=Plugin delle immagini centrale di digiKam
 Comment[nl]=Digikam kernafbeeldingplugin
 Comment[pt]='Plugin' Nuclear de Imagem do digiKam
 Comment[pt_BR]='Plugin' Nuclear de Imagem do digiKam
+Comment[sv]=Insticksprogram med bildkärna för Digikam
 
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
