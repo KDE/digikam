@@ -140,7 +140,7 @@ void DigikamFirstRun::slotOk()
     QFileInfo path(albumLibraryFolder);
     if (!path.isWritable()) {
         KMessageBox::information(0, i18n("No write access for this path.\n"
-                                         "Warning: the comments and tag features will not work!"));
+                                         "Warning: the comments and tag features will not work."));
         return;
     }
 

@@ -654,7 +654,7 @@ void ImageWindow::slotDeleteCurrentItem()
 
     KMessageBox::information(this,
                              i18n("There is no image to show in the current album.\n"
-                                  "The image rditor will be closed."),
+                                  "The image editor will be closed."),
                              i18n("No Image in Current Album"));
 
     close();
