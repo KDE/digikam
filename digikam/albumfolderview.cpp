@@ -67,7 +67,7 @@
 #include "cameradragobject.h"
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-    : QListView(parent)
+               : QListView(parent)
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -116,8 +116,6 @@ void AlbumFolderView::applySettings()
     albumSortOrder_ = settings->getAlbumSortOrder();
     resort();
 }
-
-
 
 void AlbumFolderView::resort()
 {
@@ -368,9 +366,8 @@ void AlbumFolderView::albumNew()
         }
 
     bool ok;
-    QString newDir =
-        KLineEditDlg::getText(i18n("Enter New Album Name: "),
-                              "", &ok, this);
+    QString newDir = KLineEditDlg::getText(i18n("Enter New Album Name: "),
+                                                "", &ok, this);
     if (!ok) return;
     
     KURL newAlbumURL = settings->getAlbumLibraryPath();
@@ -383,7 +380,6 @@ void AlbumFolderView::albumNew()
 
     connect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
             this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
-                        
 }
 
 void AlbumFolderView::slot_onAlbumCreate(KIO::Job* job)
@@ -401,6 +397,7 @@ void AlbumFolderView::slot_newAlbumCreated(Digikam::AlbumInfo* album)
 {    
     albumMan_->setCurrentAlbum(album);              
     slot_albumPropsEdit(album);
+    
     disconnect(albumMan_, SIGNAL(signalAlbumAdded(Digikam::AlbumInfo*)),
                this, SLOT(slot_newAlbumCreated(Digikam::AlbumInfo*)));
 }
@@ -535,7 +532,6 @@ void AlbumFolderView::slot_rightButtonClicked(QListViewItem* item,
     }
 
 }
-
 
 void AlbumFolderView::slot_albumPropsEdit(Digikam::AlbumInfo* album)
 {
