@@ -1204,7 +1204,6 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
     event->accept();
     if (dropTarget_ == newDropTarget) {
-        qWarning("Accepted: %s",dropTarget_->text().latin1());
         return;
     }
 
