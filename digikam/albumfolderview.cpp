@@ -73,7 +73,7 @@
 #include "albumpropsedit.h"
 #include "tagcreatedlg.h"
 #include "albumsettings.h"
-
+#include "themeengine.h"
 
 #include "cameratype.h"
 #include "cameradragobject.h"
@@ -109,6 +109,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             this, SLOT(slotAlbumDeleted(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            SLOT(slotThemeChanged()));
 }
 
 AlbumFolderView::~AlbumFolderView()
@@ -948,19 +951,16 @@ void AlbumFolderView::contextMenuTAlbum(TAlbum* album)
     }
 }
 
-void AlbumFolderView::focusInEvent(QFocusEvent*)
+void AlbumFolderView::resizeEvent(QResizeEvent* e)
 {
-    unsetPalette();
-}
+    ListView::resizeEvent(e);
 
-void AlbumFolderView::focusOutEvent(QFocusEvent*)
-{
-    QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, QColor(245,245,245));
-    plt.setActive(cg);
-    plt.setInactive(cg);
-    setPalette(plt);
+    int w = frameRect().width();
+    int h = itemHeight();
+    if (itemRegPix_.width()  != w || itemRegPix_.height() != h)
+    {
+        slotThemeChanged();
+    }
 }
 
 // Drag and Drop -----------------------------------------
@@ -1239,6 +1239,32 @@ void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,
         (AlbumFolderItem*)(fileItem->extraData(this));    
 
     folderItem->setPixmap(thumbnail);
+}
+
+void AlbumFolderView::paintItemBase(QPainter* p, const QColorGroup&,
+                                    const QRect& r, bool selected)
+{
+    p->drawPixmap(r.x(), r.y(), selected ? itemSelPix_ : itemRegPix_);
+}
+
+void AlbumFolderView::slotThemeChanged()
+{
+    int w = frameRect().width();
+    int h = itemHeight();
+    
+    itemRegPix_ = ThemeEngine::instance()->listRegPixmap(w, h);
+    itemSelPix_ = ThemeEngine::instance()->listSelPixmap(w, h);
+    
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
+
+    viewport()->update();
 }
 
 #include "albumfolderview.moc"

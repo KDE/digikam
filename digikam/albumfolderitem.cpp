@@ -27,6 +27,7 @@
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 
+#include "themeengine.h"
 #include "album.h"
 
 #include "albumfolderview.h"
@@ -130,6 +131,8 @@ void AlbumFolderItem::removeDropHighlight()
 
 void AlbumFolderItem::paint(QPainter *p, const QColorGroup &cg, const QRect& r)
 {
+    ThemeEngine* te = ThemeEngine::instance();
+    
     if (isRoot_) {
         p->save();
 
@@ -143,7 +146,7 @@ void AlbumFolderItem::paint(QPainter *p, const QColorGroup &cg, const QRect& r)
         f.setBold(true);
         p->setFont(f);
         QRect br;    
-        p->setPen( isSelected() ? cg.highlightedText() : QPen(QColor(50,50,100), 2) );
+        p->setPen( QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 2) );
         p->drawText(tr.x(), tr.y(), tr.width(), r.height(),
                     Qt::AlignLeft|Qt::AlignVCenter, text(), -1, &br);
         p->drawLine(br.right() + 5, tr.height()/2, tr.right(), tr.height()/2);
@@ -162,7 +165,7 @@ void AlbumFolderItem::paint(QPainter *p, const QColorGroup &cg, const QRect& r)
         f.setItalic(true);
         p->setFont(f);
         QRect br;    
-        p->setPen( isSelected() ? cg.highlightedText() : QPen(QColor(150,150,200), 1) );
+        p->setPen( QPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor(), 1) );
         p->drawText(tr.x(), tr.y(), tr.width(), r.height(),
                     Qt::AlignLeft|Qt::AlignVCenter, text(), -1, &br);
         p->drawLine(br.right() + 5, tr.height()/2, tr.right(), tr.height()/2);

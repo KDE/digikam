@@ -8,6 +8,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/libs/histogram \
 	-I$(top_srcdir)/digikam/libs/levels \
+	-I$(top_srcdir)/digikam/libs/themeengine \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
@@ -28,7 +29,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
-			thumbdb.cpp texture.cpp
+			thumbdb.cpp
 
 libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(LIBSOCKET) $(LIB_KFILE) $(LIB_KEXIF) $(LIB_GDBM) \
@@ -36,6 +37,7 @@ libdigikam_la_LIBADD  = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)  \
 		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		        $(top_builddir)/digikam/libs/levels/liblevels.la \
+		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \

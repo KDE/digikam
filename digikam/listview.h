@@ -50,6 +50,8 @@ public:
     void      clear();
 
     void      ensureItemVisible(ListItem *item);
+
+    int       itemHeight() const;
     
 protected:
 
@@ -59,7 +61,9 @@ protected:
     void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsMouseDoubleClickEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
-    void resizeEvent(QResizeEvent *e);
+
+    virtual void paintItemBase(QPainter* p, const QColorGroup& group,
+                               const QRect& r, bool selected);
 
 signals:
 
@@ -81,8 +85,6 @@ private:
 
     void takeItem(ListItem* item);
     
-    void drawCheckBox(QPainter *p, const QRect& r, bool checkable,
-                      bool checked);
     void drawArrow(QPainter* p, const QRect& r, bool open,
                    bool selected);
     

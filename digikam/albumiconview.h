@@ -109,13 +109,12 @@ protected:
     void calcBanner();
     void paintBanner(QPainter *p);
     void updateBanner();
-
+    void resizeEvent(QResizeEvent *e);
+    
     // DnD
     void startDrag();
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDropEvent(QDropEvent *e);
-    void focusInEvent(QFocusEvent *e);
-    void focusOutEvent(QFocusEvent *e);
 
 private:
 
@@ -151,6 +150,8 @@ private slots:
     void slotFilesModified(const KURL& url);
 
     void slotContentsMoving(int x, int y);
+
+    void slotThemeChanged();
     
 public slots:
 

@@ -76,6 +76,8 @@
   
   <Action name="camera_menu" />
 
+  <Action name="theme_menu" />
+
   <Menu name="settings" >
      <Action name="full_screen" />
   </Menu>

@@ -118,6 +118,9 @@ public:
 
     void setRecurseTags(bool val);
     bool getRecurseTags() const;
+
+    void    setCurrentTheme(const QString& theme);
+    QString getCurrentTheme() const;
     
     static AlbumSettings *instance();
 

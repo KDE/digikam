@@ -32,56 +32,46 @@
 #define TEXTURE_H
 
 #include <qpixmap.h>
-#include <qimage.h>
 #include <qcolor.h>
+
+#include "theme.h"
 
 class Texture
 {
 public:
 
-    enum Bevel {
-        FLAT =     0x00002,
-        SUNKEN =   0x00004,
-        RAISED =   0x00008
-    };
-    
-    enum Textures {
-        NONE =     0x00000,
-        SOLID =    0x00010,
-        GRADIENT = 0x00020
-    };
-    
-    enum Gradients {
-        HORIZONTAL =  0x00040,
-        VERTICAL =    0x00080,
-        DIAGONAL =    0x00100
-    };
+    Texture(int w, int h, const QColor& from, const QColor& to,
+            Theme::Bevel bevel, Theme::Gradient gradient,
+            bool border, const QColor& borderColor);
+    ~Texture();
 
-    enum {
-        BEVEL1 =         0x04000,
-        BEVEL2 =         0x08000
-    };
-
-    Texture(int w, int h, const QColor& from, const QColor& to);
-
-    QPixmap renderPixmap();
+    QPixmap renderPixmap() const;
     
 private:
 
-    void bevel();
-    void vgradient();
+    void doBevel();
+
+    void doSolid();
+    void doHgradient();
+    void doVgradient();
+    void doDgradient();
+
     void buildImage();
 
-    QImage        m_image;
+    QPixmap       m_pixmap;
     QColor        m_color0;
     QColor        m_color1;
-    unsigned long m_type;
     int           m_width;
     int           m_height;
+    bool          m_border;
+    QColor        m_borderColor;
 
     unsigned char* m_red;
     unsigned char* m_green;
     unsigned char* m_blue;
+
+    Theme::Bevel    m_bevel;
+    Theme::Gradient m_gradient;
 };
 
 #endif /* TEXTURE_H */

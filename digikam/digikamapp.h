@@ -58,7 +58,6 @@ class CameraType;
 class DigikamView;
 class AlbumSettings;
 class Setup;
-      
 
 class DigikamApp : public KMainWindow
 {
@@ -84,6 +83,7 @@ private:
     void setupView();
     void setupActions();
     void loadPlugins();
+    void populateThemes();
 
 protected:
 
@@ -116,7 +116,10 @@ private:
 
     // Camera Actions
     KActionMenu   *mCameraMenuAction;
- 
+
+    // Theme Actions
+    KSelectAction *mThemeMenuAction;
+    
     // Album Actions
     KAction       *mNewAction;
     KAction       *mDeleteAction;
@@ -173,6 +176,8 @@ private slots:
     void slotEditKeys();
     void slotConfToolbars();
     void slotToggleFullScreen();
+
+    void slotChangeTheme(const QString& theme);
 };
 
 #endif  // DIGIKAMAPP_H

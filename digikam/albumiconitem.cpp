@@ -52,6 +52,7 @@
 
 // Local includes.
 
+#include "themeengine.h"
 #include "thumbdb.h"
 #include "thumbnailsize.h"
 #include "albumsettings.h"
@@ -201,7 +202,7 @@ void AlbumIconItem::calcRect()
 
 }
 
-void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
+void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
 {
     QPixmap pix;
     QRect   r;
@@ -212,8 +213,10 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
     else
         pix = *(view_->itemBaseRegPixmap());
 
+    ThemeEngine* te = ThemeEngine::instance();
+    
     QPainter p(&pix);
-    p.setPen(isSelected() ? cg.highlightedText() : cg.text());
+    p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
     if (thumbnail_.isNull())
     {
@@ -309,8 +312,7 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup& cg)
     }
 
     p.setFont(view_->itemFontCom());
-    if (!isSelected())
-        p.setPen(QColor("steelblue"));
+    p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
 
     if (settings->getIconShowTags())
     {

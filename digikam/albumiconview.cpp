@@ -90,12 +90,12 @@
 #include "imagedescedit.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
+#include "themeengine.h"
 
 #include "cameratype.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
 
-#include "texture.h"
 #include "albumiconitem.h"
 #include "digikamapp.h"
 #include "histogrampropsplugin.h"
@@ -134,6 +134,7 @@ public:
 
     QPixmap itemRegPixmap;
     QPixmap itemSelPixmap;
+    QPixmap bannerPixmap;
 
     QFont fnReg;
     QFont fnCom;
@@ -189,6 +190,11 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(this, SIGNAL(contentsMoving(int, int)),
             SLOT(slotContentsMoving(int, int)));
 
+    // -- ThemeEngine connections ---------------------------------------
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            SLOT(slotThemeChanged()));
+    
     // -- resource for broken image thumbnail ---------------------------
     KGlobal::dirs()->addResourceType("digikam_imagebroken",
                                      KGlobal::dirs()->kde_default("data") 
@@ -873,6 +879,14 @@ ThumbnailSize AlbumIconView::thumbnailSize()
     return d->thumbSize;    
 }
 
+void AlbumIconView::resizeEvent(QResizeEvent *e)
+{
+    ThumbView::resizeEvent(e);
+    
+    if (d->bannerPixmap.width() != frameRect().width())
+        calcBanner();
+}
+
 void AlbumIconView::calcBanner()
 {
     QRect banner(0, 0, 0, 0);
@@ -934,6 +948,9 @@ void AlbumIconView::calcBanner()
     banner.setWidth(frameRect().width());
 
     setBannerRect(banner);
+
+    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(banner.width(),
+                                                            banner.height());
 }
 
 void AlbumIconView::paintBanner(QPainter *p)
@@ -945,17 +962,8 @@ void AlbumIconView::paintBanner(QPainter *p)
 
     p->save();
 
-    QRegion oR(r);
-
-    r.setHeight(r.height() - 5);
-    p->fillRect(r, colorGroup().highlight());
-
-    oR -= QRegion(r);
-    p->save();
-    p->setClipRegion(QRegion(oR));
-    p->fillRect(oR.boundingRect(), colorGroup().base());
-    p->restore();
-
+    p->drawPixmap(r.x(), r.y(), d->bannerPixmap);
+    
     // Title --------------------------------------------------------
     
     r.setX(r.x() + 5);
@@ -1419,21 +1427,6 @@ void AlbumIconView::slotSelectionChanged()
         emitItemsSelected(false);
 }
 
-void AlbumIconView::focusInEvent(QFocusEvent *)
-{
-    unsetPalette();
-}
-
-void AlbumIconView::focusOutEvent(QFocusEvent *)
-{
-    QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, QColor(245,245,245));
-    plt.setActive(cg);
-    plt.setInactive(cg);
-    setPalette(plt);
-}
-
 void AlbumIconView::slotSetExifOrientation( const QString filename, int orientation )
 {
     KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
@@ -1666,34 +1659,29 @@ void AlbumIconView::updateItemRectsPixmap()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap.resize(d->itemRect.width(), d->itemRect.height());
-    d->itemRegPixmap.fill(Qt::white);
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
+                                                               d->itemRect.height());
 
-    {
-        d->itemRegPixmap.resize(d->itemRect.width(), d->itemRect.height());
-        Texture tex(d->itemRect.width()-2, d->itemRect.height()-2,
-                    QColor("#efefef"), QColor("#e0e0e0"));
-        QPixmap pix = tex.renderPixmap();
-        QPainter p(&d->itemRegPixmap);
-        p.setPen(Qt::black);
-        p.drawPixmap(1, 1, pix);
-        p.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
-        p.end();
-    }
-
-    {
-        d->itemSelPixmap.resize(d->itemRect.width(), d->itemRect.height());
-        Texture tex(d->itemRect.width()-2, d->itemRect.height()-2,
-                    colorGroup().highlight().light(120), colorGroup().highlight());
-        QPixmap pix = tex.renderPixmap();
-        QPainter p(&d->itemSelPixmap);
-        p.setPen(Qt::black);
-        p.drawPixmap(1, 1, pix);
-        p.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
-        p.end();
-    }
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
+                                                               d->itemRect.height());
 }
 
+void AlbumIconView::slotThemeChanged()
+{
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
+
+    updateItemRectsPixmap();
+    updateBanner();
+
+    viewport()->update();
+}
 
 bool AlbumIconView::showMetaInfo()
 {

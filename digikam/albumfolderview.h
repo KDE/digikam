@@ -109,8 +109,10 @@ protected:
     void contentsDragLeaveEvent(QDragLeaveEvent*);
     void contentsDropEvent(QDropEvent*);
 
-    void focusInEvent(QFocusEvent*);
-    void focusOutEvent(QFocusEvent*);
+    void resizeEvent(QResizeEvent* e);
+
+    void paintItemBase(QPainter* p, const QColorGroup& group,
+                       const QRect& r, bool selected);
     
 private:
 
@@ -121,6 +123,9 @@ private:
     QGuardedPtr<Digikam::ThumbnailJob> thumbJob_;
     AlbumFolderItem*                   phyRootItem_;
     AlbumFolderItem*                   tagRootItem_;
+
+    QPixmap                            itemRegPix_;
+    QPixmap                            itemSelPix_;
 
 signals:
 
@@ -140,6 +145,8 @@ private slots:
 
     void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
                           const KFileMetaInfo*);
+
+    void slotThemeChanged();
 };
 
 #endif  // ALBUMFOLDERVIEW_H

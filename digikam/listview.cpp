@@ -215,6 +215,11 @@ void ListView::fontChange(const QFont& oldFont)
     triggerUpdate();
 }
 
+int ListView::itemHeight() const
+{
+    return d->itemHeight;    
+}
+
 void ListView::viewportPaintEvent(QPaintEvent *pe)
 {
     QRect r(pe->rect());
@@ -240,19 +245,12 @@ void ListView::viewportPaintEvent(QPaintEvent *pe)
 
             p.begin(&pix);
 
-            if (item == d->selectedItem) {          
-                p.fillRect(0, 0, pix.width(), pix.height(),
-                           colorGroup().highlight());
-                p.setPen(colorGroup().text());
-                p.drawRect(0, 0, pix.width(), pix.height());
-                p.setPen(colorGroup().highlightedText());
-            }
-            else {
-                p.fillRect(0, 0, pix.width(), pix.height(), colorGroup().base());
-                p.setPen(colorGroup().text());
-            }                
-
+            paintItemBase(&p, colorGroup(), QRect(0,0,pix.width(), pix.height()),
+                          item == d->selectedItem);
             
+            p.setPen( item == d->selectedItem ? colorGroup().highlightedText() :
+                      colorGroup().text() );
+
             x = d->arrowBoxPos + item->m_offset;
             y = pix.height()/2 - d->controlSize/2;
             if (item->isExpandable()) 
@@ -275,6 +273,25 @@ void ListView::viewportPaintEvent(QPaintEvent *pe)
     painter.fillRect(r, colorGroup().base());
     
     painter.end();
+}
+
+void ListView::paintItemBase(QPainter* p, const QColorGroup& cg,
+                             const QRect& r, bool selected)
+{
+    p->save();
+    
+    if (selected)
+    {
+        p->fillRect(r, cg.highlight());
+        p->setPen(cg.text());
+        p->drawRect(r);
+    }
+    else
+    {
+        p->fillRect(r, cg.base());
+    }
+
+    p->restore();
 }
 
 void ListView::drawArrow(QPainter* p, const QRect& r, bool open,
@@ -468,12 +485,6 @@ void ListView::repaintItem(ListItem* item)
     if (!item)
         return;
     viewport()->update();    
-}
-
-void ListView::resizeEvent(QResizeEvent *e)
-{
-    QScrollView::resizeEvent(e);
-    viewport()->update();
 }
 
 void ListView::sort()

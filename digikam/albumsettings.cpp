@@ -66,6 +66,8 @@ public:
     bool saveExifComments;
     bool exifRotate;
     bool exifSetOrientation;
+
+    QString currentTheme;
 };
 
 
@@ -186,6 +188,8 @@ void AlbumSettings::readSettings()
                                                     false);
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
+
+    d->currentTheme = config->readEntry("Theme", i18n("Default"));
     
     config->setGroup("EXIF Settings");
 
@@ -197,6 +201,7 @@ void AlbumSettings::readSettings()
     
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation",
                                                   false);
+
 }
 
 void AlbumSettings::saveSettings()
@@ -254,6 +259,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show Tags",
                        d->iconShowTags);
 
+    config->writeEntry("Theme", d->currentTheme);
+    
     config->setGroup("EXIF Settings");
 
     config->writeEntry("Save EXIF Comments",
@@ -264,8 +271,8 @@ void AlbumSettings::saveSettings()
                        
     config->writeEntry("EXIF Set Orientation",
                        d->exifSetOrientation);
-    config->sync();
 
+    config->sync();
 }
 
 void AlbumSettings::setAlbumLibraryPath(const QString& path)
@@ -481,4 +488,14 @@ void AlbumSettings::setRecurseTags(bool val)
 bool AlbumSettings::getRecurseTags() const
 {
     return d->recurseTags;
+}
+
+void AlbumSettings::setCurrentTheme(const QString& theme)
+{
+    d->currentTheme = theme;    
+}
+
+QString AlbumSettings::getCurrentTheme() const
+{
+    return d->currentTheme;
 }

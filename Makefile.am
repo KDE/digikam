@@ -1,4 +1,4 @@
-SUBDIRS = sqlite libs utilities digikam kioslave imageplugins
+SUBDIRS = sqlite libs utilities digikam kioslave imageplugins themes
 
 EXTRA_DIST = Digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 

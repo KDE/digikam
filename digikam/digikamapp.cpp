@@ -52,6 +52,7 @@
 
 #include "albummanager.h"
 #include "album.h"
+#include "themeengine.h"
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameraui.h"
@@ -93,8 +94,10 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     mCameraList->load();
 
     // Load KIPI Plugins.
-        
     loadPlugins();
+
+    // Load Themes
+    populateThemes();
 }
 
 DigikamApp::~DigikamApp()
@@ -150,12 +153,22 @@ void DigikamApp::setupView()
 
 void DigikamApp::setupActions()
 {
+    // -----------------------------------------------------------------
+
     mCameraMenuAction = new KActionMenu(i18n("&Camera"),
                                     "digitalcam",
                                     actionCollection(),
                                     "camera_menu");
     mCameraMenuAction->setDelayed(false);
 
+    // -----------------------------------------------------------------
+
+    mThemeMenuAction = new KSelectAction(i18n("&Themes"), 0,
+                                         actionCollection(),
+                                         "theme_menu");
+    connect(mThemeMenuAction, SIGNAL(activated(const QString&)),
+            SLOT(slotChangeTheme(const QString&)));
+    
     // -----------------------------------------------------------------
 
     mNewAction = new KAction(i18n("&New Album"),
@@ -427,39 +440,6 @@ void DigikamApp::slotCameraConnect()
                                       ctype->path());
         cgui->show();
     }
-    
-    /* todo:
-     *
-    CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
-    
-    if (ctype) 
-    {
-        QString selectedAlbum = "";
-        if (mAlbumManager->currentAlbum())
-            selectedAlbum = mAlbumManager->currentAlbum()->getTitle();
-
-        QByteArray arg, arg2;
-        QDataStream stream(arg, IO_WriteOnly);
-        stream << mAlbumSettings->getAlbumLibraryPath();
-        stream << selectedAlbum;
-        stream << ctype->title();
-        stream << ctype->model();
-        stream << ctype->port();
-        stream << ctype->path();
-
-        DCOPClient *client = kapp->dcopClient();
-        
-        if (!client->send("digikamcameraclient", "DigikamCameraClient",
-                          "cameraOpen(QString,QString,QString,QString,QString,QString)",
-                          arg))
-            kdWarning() << "DigikamApp: DCOP Communication Error" << endl;
-        
-        if (!client->send("digikamcameraclient", "DigikamCameraClient",
-                          "cameraConnect()",
-                          arg2))
-            kdWarning() << "DigikamApp: DCOP Communication Error" << endl;
-    }
-    */
 }
 
 void DigikamApp::slotCameraAdded(CameraType *ctype)
@@ -661,7 +641,25 @@ void DigikamApp::slotKipiPluginPlug()
     plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
 }
 
-    
+void DigikamApp::populateThemes()
+{
+    ThemeEngine::instance()->scanThemes();
+    QStringList themes(ThemeEngine::instance()->themeNames());
+
+    mThemeMenuAction->setItems(themes);
+    int index = themes.findIndex(mAlbumSettings->getCurrentTheme());
+    if (index == -1)
+        index = themes.findIndex(i18n("Default"));
+    mThemeMenuAction->setCurrentItem(index);
+    ThemeEngine::instance()->slotChangeTheme(mThemeMenuAction->currentText());
+}
+
+void DigikamApp::slotChangeTheme(const QString& theme)
+{
+    mAlbumSettings->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
+}
+
 DigikamApp* DigikamApp::m_instance = 0;    
 
 #include "digikamapp.moc"
