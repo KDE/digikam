@@ -174,12 +174,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140,
-                                                     imageData,
-                                                     width,
-                                                     height,
-                                                     frame,
-                                                     false);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
@@ -260,7 +255,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_saveButton, i18n("<p>Save levels settings to a Gimp levels text file."));
     m_autoButton = new QPushButton(i18n("&Auto"), gbox3);
     QWhatsThis::add( m_autoButton, i18n("<p>Adjust levels automatically."));
-    m_resetButton = new QPushButton(i18n("&Reset All Values"), gbox3);
+    m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
 
     topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
@@ -352,8 +347,7 @@ AdjustLevelDialog::~AdjustLevelDialog()
 
 void AdjustLevelDialog::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("adjustlevels",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("adjustlevels", "digikamimageplugins");
 }
 
 void AdjustLevelDialog::closeEvent(QCloseEvent *e)
@@ -380,8 +374,7 @@ void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
 
     m_minInput->setValue(255 - val);
     m_hGradientMinInput->setValue( val );
-    m_levels->setLevelLowInputValue(m_channelCB->currentItem(),
-                                    255 - val);
+    m_levels->setLevelLowInputValue(m_channelCB->currentItem(), 255 - val);
     blockSignals(false);
     slotEffect();
 }
@@ -395,8 +388,7 @@ void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
 
     m_maxInput->setValue(255 - val);
     m_hGradientMaxInput->setValue( val );
-    m_levels->setLevelHighInputValue(m_channelCB->currentItem(),
-                                    255 - val);
+    m_levels->setLevelHighInputValue(m_channelCB->currentItem(), 255 - val);
     blockSignals(false);
     slotEffect();
 }
@@ -410,8 +402,7 @@ void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
 
     m_minOutput->setValue(255 - val);
     m_hGradientMinOutput->setValue( val );
-    m_levels->setLevelLowOutputValue(m_channelCB->currentItem(),
-                                     255 - val);
+    m_levels->setLevelLowOutputValue(m_channelCB->currentItem(), 255 - val);
     blockSignals(false);
     slotEffect();
 }
@@ -425,8 +416,7 @@ void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
 
     m_maxOutput->setValue(255 - val);
     m_hGradientMaxOutput->setValue( val );
-    m_levels->setLevelHighOutputValue(m_channelCB->currentItem(),
-                                      255 - val);
+    m_levels->setLevelHighOutputValue(m_channelCB->currentItem(), 255 - val);
     blockSignals(false);
     slotEffect();
 }
@@ -481,11 +471,9 @@ void AdjustLevelDialog::slotAutoLevels()
 
 void AdjustLevelDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceOrg =
-        m_previewOriginalWidget->imageIface();
+    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
 
-    Digikam::ImageIface* ifaceDest =
-        m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
     uint* orgData = ifaceOrg->getPreviewData();
     int   w       = ifaceOrg->previewWidth();
@@ -509,11 +497,9 @@ void AdjustLevelDialog::slotEffect()
 
 void AdjustLevelDialog::slotOk()
 {
-    Digikam::ImageIface* ifaceOrg =
-        m_previewOriginalWidget->imageIface();
+    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
 
-    Digikam::ImageIface* ifaceDest =
-        m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
     uint* orgData = ifaceOrg->getOriginalData();
     int   w       = ifaceOrg->originalWidth();
@@ -539,7 +525,15 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
 {
     switch(channel)
        {
-       case 1:           // Red.
+       case LuminosityChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
+          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
+          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
+          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
+          break;
+       
+       case RedChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "red" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "red" ) );
@@ -547,7 +541,7 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "red" ) );
           break;
 
-       case 2:           // Green.
+       case GreenChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "green" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "green" ) );
@@ -555,7 +549,7 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "green" ) );
           break;
 
-       case 3:           // Blue.
+       case BlueChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "blue" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "blue" ) );
@@ -563,16 +557,8 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "blue" ) );
           break;
 
-       case 4:           // Alpha.
+       case AlphaChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
-          break;
-
-       default:          // Luminosity.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -593,12 +579,12 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
 {
     switch(scale)
        {
-       case 1:           // Log.
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
-          break;
-
-       default:          // Lin.
+       case Linear: 
           m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
+          break;
+       
+       case Logarithmic:
+          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
           break;
        }
 
@@ -644,7 +630,6 @@ void AdjustLevelDialog::slotSaveLevels()
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
 }
-
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
 

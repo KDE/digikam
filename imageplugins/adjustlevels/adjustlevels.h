@@ -59,6 +59,21 @@ protected:
     
 private:
     
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+    
+    enum ColorChannel
+    {
+    LuminosityChannel=0,
+    RedChannel,
+    GreenChannel,
+    BlueChannel,
+    AlphaChannel
+    };
+
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_scaleCB;    
     
