@@ -107,24 +107,30 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     hlay4->addStretch(5);
     
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
+    QLabel *label5 = new QLabel(i18n("X:"), plainPage());
     m_xInput = new KIntNumInput(plainPage());
-    m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    QLabel *label3 = new QLabel(i18n("Width:"), plainPage());
     m_widthInput = new KIntNumInput(plainPage());
-    m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    hlay2->addWidget(m_xInput, 3);
-    hlay2->addWidget(m_widthInput, 3);
+    hlay2->addWidget(label5, 1);
+    hlay2->addWidget(m_xInput, 5);
+    hlay2->addStretch(1);
+    hlay2->addWidget(label3, 1);
+    hlay2->addWidget(m_widthInput, 5);
     
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
+    QLabel *label6 = new QLabel(i18n("Y:"), plainPage());
     m_yInput = new KIntNumInput(plainPage());
-    m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    QLabel *label4 = new QLabel(i18n("Height:"), plainPage());
     m_heightInput = new KIntNumInput(plainPage());
-    m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
-    hlay3->addWidget(m_yInput, 3);
-    hlay3->addWidget(m_heightInput, 3);
+    hlay3->addWidget(label6, 1);
+    hlay3->addWidget(m_yInput, 5);    
+    hlay3->addStretch(1);
+    hlay3->addWidget(label4, 1);
+    hlay3->addWidget(m_heightInput, 5);
     
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
