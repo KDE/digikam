@@ -308,6 +308,8 @@ void AlbumIconItem::updateExtraText()
              if( jpegComments != exifComments ) extraText += exifComments;
           }
 
+          delete exifData;
+
        }  
 
     }
