@@ -1,11 +1,9 @@
 todo stuff before 0.7.3 release
 ---------------------------------
 
-* fix actions toogle rules
-* disable plugin menu entries if no current image. 
+* disable thumbbar in full screen mode. 
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add shofoto settings dialog. 
-* disable thumbbar in full screen mode. 
 * writing handbook based on digiKam handbook image editor part. 
 * use exifrestorer for save/saveas
 
