@@ -229,12 +229,12 @@ void ThumbItem::repaint()
     view->viewport()->repaint(r);
 }
 
-QRect ThumbItem::rect()
+QRect ThumbItem::rect() const
 {
     return d->rect;
 }
 
-QRect ThumbItem::textRect(bool relative)
+QRect ThumbItem::textRect(bool relative) const
 {
     if (relative) {
         return d->textRect;
@@ -248,7 +248,7 @@ QRect ThumbItem::textRect(bool relative)
     }
 }
 
-QRect ThumbItem::pixmapRect(bool relative)
+QRect ThumbItem::pixmapRect(bool relative) const
 {
     if (relative) {
         return d->pixmapRect;

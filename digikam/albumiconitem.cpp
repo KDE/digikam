@@ -326,7 +326,7 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
            0, 0, r.width(), r.height());
 }
 
-QRect AlbumIconItem::thumbnailRect()
+QRect AlbumIconItem::thumbnailRect() const
 {
     QRect pixmapRect = view_->itemPixmapRect();
     QRect r          = rect();

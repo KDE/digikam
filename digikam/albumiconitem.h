@@ -67,7 +67,7 @@ public:
     }
 
     void setPixmap(const QPixmap& thumb, const KFileMetaInfo* metaInfo);
-    QRect thumbnailRect();
+    QRect thumbnailRect() const;
 
     virtual int compare(ThumbItem *item);
     

@@ -51,9 +51,9 @@ public:
     int width() const;
     int height() const;
 
-    QRect rect();
-    QRect textRect(bool relative=true);
-    QRect pixmapRect(bool relative=true);
+    QRect rect() const;
+    QRect textRect(bool relative=true) const;
+    QRect pixmapRect(bool relative=true) const;
 
     bool move(int x, int y);
 
