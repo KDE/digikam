@@ -390,6 +390,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     if (!item) 
     {
         album = AlbumManager::instance()->findTAlbum(0);
+        albumItem = dynamic_cast<TAlbumCheckListItem*>(m_tagsView->firstChild());
     }
     else 
     {
@@ -432,11 +433,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     case 12:
     {
         if (!album->isRoot()) 
-        {
-            tagDelete(album);
-            if(albumItem)
-                delete item;
-        }
+            tagDelete(album, albumItem);
         break;
     }
     default:
@@ -446,6 +443,9 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
 
 void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
 {
+    if(!parAlbum || !item)
+        return;
+        
     QString title, icon;
     AlbumManager *albumMan_ = AlbumManager::instance();
     
@@ -472,7 +472,7 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
     }
 }
 
-void ImageDescEdit::tagDelete(TAlbum *album)
+void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
 {
     if (!album || album->isRoot())
         return;
@@ -489,6 +489,9 @@ void ImageDescEdit::tagDelete(TAlbum *album)
         if (!albumMan_->deleteTAlbum(album, errMsg)) 
             KMessageBox::error(0, errMsg);
     }
+
+    if(item)
+        delete item;    
 }
 
 
