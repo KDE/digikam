@@ -279,13 +279,13 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_temperatureInput = new KDoubleNumInput(gbox);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
-    QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance colour temperature in Kelvin."));
+    QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
         
     m_greenLabel = new QLabel(i18n("Green:"), gbox);
     m_greenInput = new KDoubleNumInput(gbox);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(0.2, 2.5, 0.1, true);
-    QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta colour cast removal level."));
+    QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
         
     grid2->addMultiCellWidget(m_exposureLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_autoAdjustExposure, 0, 0, 1, 1);
@@ -317,7 +317,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image "
-                                                   "to select the tone to ajust image's white-balance with "
+                                                   "to select the tone to adjust image's white-balance with "
                                                    "<b>Color Picker</b> method."));
     l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
 
