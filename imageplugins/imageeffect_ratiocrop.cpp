@@ -43,6 +43,8 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 // Digikam includes.
 
@@ -167,14 +169,39 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotSelectionChanged(QRect)));      
 
-    slotRatioChanged(m_ratioCB->currentItem());
+    readSettings();             
     QTimer::singleShot(0, this, SLOT(slotUser1()));
     adjustSize();
-    disableResize();                  
+    disableResize();     
 }
 
 ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 {
+    writeSettings();
+}
+
+void ImageEffect_RatioCrop::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 1) );
+    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );
+    m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
+    m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
+
+    slotRatioChanged(m_ratioCB->currentItem());
+    slotOrientChanged(m_orientCB->currentItem());
+}
+    
+void ImageEffect_RatioCrop::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    config->writeEntry( "Aspect Ratio", m_ratioCB->currentItem() );
+    config->writeEntry( "Aspect Ratio Orientation", m_orientCB->currentItem() );
+    config->writeEntry( "Custom Aspect Ratio Num", m_customRatioNInput->value() );
+    config->writeEntry( "Custom Aspect Ratio Den", m_customRatioDInput->value() );
+    config->sync();
 }
 
 void ImageEffect_RatioCrop::slotUser1()
@@ -229,16 +256,26 @@ void ImageEffect_RatioCrop::slotRatioChanged(int a)
 {
     m_imageSelectionWidget->setSelectionAspectRatioType(a);
     
-    if ( a == 0 ) // Custom ratio selected.
+    if ( a == Digikam::ImageSelectionWidget::RATIOCUSTOM ) 
        {
        m_customLabel1->setEnabled(true);
        m_customLabel2->setEnabled(true);
        m_customRatioNInput->setEnabled(true);
        m_customRatioDInput->setEnabled(true);
+       m_orientCB->setEnabled(true);
        slotCustomRatioChanged();
        }
-    else
+    else if ( a == Digikam::ImageSelectionWidget::RATIONONE )
        {
+       m_orientCB->setEnabled(false);
+       m_customLabel1->setEnabled(false);
+       m_customLabel2->setEnabled(false);
+       m_customRatioNInput->setEnabled(false);
+       m_customRatioDInput->setEnabled(false);
+       }
+    else        // Pre-config ratio selected.
+       {
+       m_orientCB->setEnabled(true);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
        m_customRatioNInput->setEnabled(false);

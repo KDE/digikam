@@ -65,6 +65,9 @@ private:
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
     
+    void readSettings(void);
+    void writeSettings(void);
+    
 private slots:
 
     void slotUser1();
