@@ -1,10 +1,17 @@
 [Desktop Entry]
 Name=ImagePlugin_FreeRotation
+Name[pt]='Plugin' de Rotação Livre
+Name[pt_BR]='Plugin' de Rotação Livre
+Name[sv]=Insticksprogram för bildrotation
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
-Comment=Free rotation plugin for digikam
+Comment=Free rotation plugin for digiKam
+Comment[fr]=Module externe de digiKam pour faire pivoter une image
+Comment[pt]='Plugin' de rotação livre para o digikam
+Comment[pt_BR]='Plugin' de rotação livre para o digikam
+Comment[sv]=Digikam insticksprogram för bildrotation
 
 X-KDE-Library=digikamimageplugin_freerotation
 author=Gilles Caulier, caulier dot gilles at free dot fr

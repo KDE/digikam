@@ -12,11 +12,12 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
-Comment=Image histogram adjust levels plugin for digikam
+Comment=Image histogram adjust levels plugin for digiKam
 Comment[da]=Histogramniveaujustering-plugin til Digikam
 Comment[de]=Digikam Plugin zur Justierung der Bildhistogrammwerte
+Comment[es]=Complemento para ajustar los niveles del histograma de la imagen para digikam
 Comment[et]=Digikami pildi histogrammi tasemete kohendamise plugin
-Comment[fr]=Module externe de Digikam pour l'ajustement des niveaux d'une image
+Comment[fr]=Module externe de digiKam pour l'ajustement des niveaux d'une image
 Comment[it]=Plugin di regolazione dei livelli degli istogrammi delle immagini per Digikam
 Comment[nl]=Digikam-plugin voor niveaubijstelling van afbeeldinghistogram
 Comment[pt]='Plugin' de ajustar os níveis do histograma da imagem para o digikam
