@@ -22,7 +22,6 @@
 #include <qstring.h>
 
 #include <kdirlister.h>
-#include <kdirwatch.h>
 #include <kdebug.h>
 
 #include "album.h"
@@ -44,7 +43,6 @@ class AlbumListerPriv
 public:
 
     KDirLister* dirLister;
-    KDirWatch*  dirWatch;
 
     Album*      currAlbum;
     AlbumDB*    db;
@@ -54,25 +52,18 @@ AlbumLister::AlbumLister()
 {
     d = new AlbumListerPriv;
     d->dirLister = new KDirLister;
-    d->dirWatch  = 0;
     d->currAlbum = 0;
 }
 
 AlbumLister::~AlbumLister()
 {
     delete d->dirLister;
-    if (d->dirWatch)
-        delete d->dirWatch;
     delete d;
 }
 
 void AlbumLister::openAlbum(Album *album)
 {
     d->dirLister->stop();
-    if (d->dirWatch) {
-        delete d->dirWatch;
-        d->dirWatch = 0;
-    }
 
     d->dirLister->disconnect(this);
     
