@@ -1,4 +1,4 @@
-INCLUDES    = $(all_includes) -I$(top_srcdir)/digikam/sqlite
+INCLUDES    = -I$(top_srcdir)/digikam/sqlite $(all_includes) 
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la
 

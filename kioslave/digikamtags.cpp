@@ -40,7 +40,6 @@ extern "C"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-//#include "../sqlite/sqlite.h"
 #include "sqlite.h"
 #include <sys/time.h>
 #include <time.h>
