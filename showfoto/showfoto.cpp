@@ -67,6 +67,7 @@
 #include "thumbbar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
+#include "imageresizedlg.h"
 #include "imageprint.h"
 #include "imlibinterface.h"
 #include "showfoto.h"
@@ -177,11 +178,6 @@ void ShowFoto::setupActions()
                                this, SLOT(slotLast()),
                                actionCollection(), "file_last");
                                   
-    m_propertiesAction = new KAction(i18n("Properties"), 0,
-                             ALT+Key_Return,
-                             this, SLOT(slotFileProperties()),
-                             actionCollection(), "file_properties");
-
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
     
@@ -199,7 +195,12 @@ void ShowFoto::setupActions()
                               CTRL+Key_P,
                               this, SLOT(slotFilePrint()),
                               actionCollection(), "print");
-    
+
+    m_propertiesAction = new KAction(i18n("Properties"), "exifinfo",
+                             ALT+Key_Return,
+                             this, SLOT(slotFileProperties()),
+                             actionCollection(), "file_properties");
+                                  
     // -- Edit actions ----------------------------------------------------------------                     
 
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
@@ -315,15 +316,19 @@ void ShowFoto::setupActions()
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
     
-    // ---------------------------------------------------------------
+    // -- Transform actions ----------------------------------------------------------
     
+    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
+                                 this, SLOT(slotResize()),
+                                 actionCollection(), "resize");
+
     m_cropAction = new KAction(i18n("Crop"), "crop",
                                CTRL+Key_C,
                                m_canvas, SLOT(slotCrop()),
                                actionCollection(), "crop");
     m_cropAction->setEnabled(false);
 
-    // -- BCG actions ---------------------------------------------------
+    // -- BCG actions ----------------------------------------------------------------
 
     m_BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"),
                                   0, actionCollection(), "bcg");
@@ -937,6 +942,7 @@ void ShowFoto::toogleActions(bool val)
     m_flipAction->setEnabled(val);
     m_BCGAction->setEnabled(val);
     m_fileprint->setEnabled(val);
+    m_resizeAction->setEnabled(val);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next()) 
@@ -1010,5 +1016,16 @@ void ShowFoto::slotFilePrint()
     }
 }
 
+void ShowFoto::slotResize()
+{
+    int width  = m_canvas->imageWidth();
+    int height = m_canvas->imageHeight();
+
+    ImageResizeDlg dlg(this, &width, &height);
+    if (dlg.exec() == QDialog::Accepted &&
+        (width != m_canvas->imageWidth() ||
+        height != m_canvas->imageHeight()))
+        m_canvas->resizeImage(width, height);
+}
 
 #include "showfoto.moc"

@@ -1,6 +1,6 @@
 METASOURCES = AUTO
 
-noinst_LTLIBRARIES = libimageeditor.la libimagecanvas.la libimageprint.la 
+noinst_LTLIBRARIES = libimageeditor.la libimagecanvas.la libshowfoto.la 
 
 libimagecanvas_la_SOURCES = imlibinterface.cpp canvas.cpp \
 			    exifrestorer.cpp undocache.cpp \
@@ -18,9 +18,9 @@ libimageeditor_la_SOURCES = imageiface.cpp imagewidget.cpp \
 libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 			    $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
 
-libimageprint_la_SOURCES = imageprint.cpp 
+libshowfoto_la_SOURCES = imageprint.cpp imageresizedlg.cpp 
 
-libimageprint_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
+libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
                             
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/widgets \

@@ -44,6 +44,7 @@
      <Action name="rotate" /> 
      <Action name="flip" />    
      <Action name="crop" />
+     <Action name="resize" /> 
  </Menu>
 
  <Menu name="View" >

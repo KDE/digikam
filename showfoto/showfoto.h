@@ -70,6 +70,7 @@ private slots:
     
     void slotToggleFullScreen();
     void slotAutoFit();
+    void slotResize();
     void slotEscapePressed();
     void slotToggleShowBar();
     void slotViewHistogram();
@@ -130,6 +131,7 @@ private:
     KAction               *m_rotate180Action;
     KAction               *m_rotate270Action;
     
+    KAction               *m_resizeAction;
     KActionMenu           *m_flipAction;
     KAction               *m_flipHorzAction;
     KAction               *m_flipVertAction;
