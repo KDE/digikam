@@ -29,23 +29,13 @@
 
  <Menu name="Fix" >
    <text>Fi&amp;x</text>
-     <Action name="gamma_plus" />
-     <Action name="gamma_minus" />
-     <Action name="brightness_plus" />
-     <Action name="brightness_minus" />
-     <Action name="contrast_plus" />
-     <Action name="contrast_minus" />
+     <Action name="bcg" />
  </Menu>
 
  <Menu name="Transform" >
    <text>&amp;Transform</text>
-     <Action name="rotate_90" />
-     <Action name="rotate_180" />
-     <Action name="rotate_270" />
-     <Separator />
-     <Action name="flip_horiz" />
-     <Action name="flip_vert" />
-     <Separator />
+     <Action name="rotate" /> 
+     <Action name="flip" />    
      <Action name="crop" />
  </Menu>
 

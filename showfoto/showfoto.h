@@ -1,8 +1,10 @@
 /* ============================================================
- * File  : showfoto.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Copyright 2004 by Renchi Raju
+ * Description : 
+ * 
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -14,6 +16,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef SHOWFOTO_H
@@ -25,6 +28,7 @@
 #include <kurl.h>
 
 class KAction;
+class KActionMenu;
 class KToggleAction;
 class KSelectAction;
 class KConfig;
@@ -94,18 +98,39 @@ private:
     
     KConfig               *m_config;
     
+    KAction               *m_zoomPlusAction;
+    KAction               *m_zoomMinusAction;
     KToggleAction         *m_zoomFitAction;
     KToggleAction         *m_fullScreenAction;
     KToggleAction         *m_showBarAction;
     
-    KAction               *m_zoomPlusAction;
-    KAction               *m_zoomMinusAction;
     KAction               *m_cropAction;
+    KAction               *m_imagePluginsHelp;
+    
     KAction               *m_revertAction;
     KAction               *m_saveAction;
     KAction               *m_saveAsAction;
-    KAction               *m_imagePluginsHelp;
+    KAction               *m_propertiesAction;
+    KAction               *m_forwardAction;
+    KAction               *m_backAction;
 
+    KActionMenu           *m_rotateAction;
+    KAction               *m_rotate90Action;
+    KAction               *m_rotate180Action;
+    KAction               *m_rotate270Action;
+    
+    KActionMenu           *m_flipAction;
+    KAction               *m_flipHorzAction;
+    KAction               *m_flipVertAction;
+    
+    KActionMenu           *m_BCGAction;
+    KAction               *m_incGammaAction;
+    KAction               *m_decGammaAction;
+    KAction               *m_incBrightAction;
+    KAction               *m_decBrightAction;
+    KAction               *m_incContrastAction;
+    KAction               *m_decContrastAction;
+    
     KAction               *m_copyAction;
     KToolBarPopupAction   *m_undoAction;
     KToolBarPopupAction   *m_redoAction;

@@ -1,11 +1,11 @@
 /* ============================================================
- * File  : showfoto.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -157,15 +157,15 @@ void ShowFoto::setupActions()
                      actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
-    KStdAction::forward(this, SLOT(slotNext()),
-                        actionCollection(), "go_fwd");
-    KStdAction::back(this, SLOT(slotPrev()),
-                     actionCollection(), "go_bwd");
+    m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
+                                  actionCollection(), "go_fwd");
+    m_backAction = KStdAction::back(this, SLOT(slotPrev()),
+                               actionCollection(), "go_bwd");
 
-    new KAction(i18n("Properties"), 0,
-                ALT+Key_Return,
-                this, SLOT(slotFileProperties()),
-                actionCollection(), "file_properties");
+    m_propertiesAction = new KAction(i18n("Properties"), 0,
+                             ALT+Key_Return,
+                             this, SLOT(slotFileProperties()),
+                             actionCollection(), "file_properties");
 
     m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "revert");
@@ -252,51 +252,88 @@ void ShowFoto::setupActions()
     selectItems << i18n("Alpha");
     m_viewHistogramAction->setItems(selectItems);
 
+    // -- rotate actions ---------------------------------------------
+    
+    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
+                                     actionCollection(),
+                                     "rotate");
+    m_rotateAction->setDelayed(false);
+
+    m_rotate90Action  = new KAction(i18n("90 Degrees"),
+                                    0, Key_9, m_canvas, SLOT(slotRotate90()),
+                                    actionCollection(),
+                                    "rotate_90");
+    m_rotate180Action = new KAction(i18n("180 Degrees"),
+                                    0, Key_8, m_canvas, SLOT(slotRotate180()),
+                                    actionCollection(),
+                                    "rotate_180");
+    m_rotate270Action = new KAction(i18n("270 Degrees"),
+                                    0, Key_7, m_canvas, SLOT(slotRotate270()),
+                                    actionCollection(),
+                                    "rotate_270");
+    m_rotateAction->insert(m_rotate90Action);
+    m_rotateAction->insert(m_rotate180Action);
+    m_rotateAction->insert(m_rotate270Action);
+    
+    // -- flip actions ---------------------------------------------------------------
+    
+    m_flipAction = new KActionMenu(i18n("Flip"),
+                                   "flip_image",
+                                   actionCollection(),
+                                   "flip");
+    m_flipAction->setDelayed(false);
+
+    m_flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
+                                   m_canvas, SLOT(slotFlipHoriz()),
+                                   actionCollection(),
+                                   "flip_horizontal"); 
+
+    m_flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
+                                   m_canvas, SLOT(slotFlipVert()),
+                                   actionCollection(),
+                                   "flip_vertical");
+    m_flipAction->insert(m_flipHorzAction);
+    m_flipAction->insert(m_flipVertAction);
+    
     // ---------------------------------------------------------------
     
-    new KAction(i18n("Rotate 90"), 0, Key_9,
-                m_canvas, SLOT(slotRotate90()),
-                actionCollection(), "rotate_90");
-    new KAction(i18n("Rotate 180"), 0, Key_8,
-                m_canvas, SLOT(slotRotate180()),
-                actionCollection(), "rotate_180");
-    new KAction(i18n("Rotate 270"), 0, Key_7,
-                m_canvas, SLOT(slotRotate270()),
-                actionCollection(), "rotate_270");
-
-    new KAction(i18n("Flip Horizontally"), 0, Key_Asterisk,
-                m_canvas, SLOT(slotFlipHoriz()),
-                actionCollection(), "flip_horiz");
-    new KAction(i18n("Flip Vertically"), 0, Key_Slash,
-                m_canvas, SLOT(slotFlipVert()),
-                actionCollection(), "flip_vert");
-
     m_cropAction = new KAction(i18n("Crop"), "crop",
                                CTRL+Key_C,
                                m_canvas, SLOT(slotCrop()),
                                actionCollection(), "crop");
     m_cropAction->setEnabled(false);
 
-    // ---------------------------------------------------------------
+    // -- BCG actions ---------------------------------------------------
 
-    new KAction(i18n("Increase Gamma"), 0, Key_G,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "gamma_plus");
-    new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "gamma_minus");
-    new KAction(i18n("Increase Brightness"), 0, Key_B,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "brightness_plus");
-    new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "brightness_minus");
-    new KAction(i18n("Increase Contrast"), 0, Key_C,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "contrast_plus");
-    new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
-                this, SLOT(slotChangeBCG()),
-                actionCollection(), "contrast_minus");
+    m_BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"),
+                                  0, actionCollection(), "bcg");
+    m_BCGAction->setDelayed(false);
+
+    m_incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
+                           this, SLOT(slotChangeBCG()),
+                           actionCollection(), "gamma_plus");
+    m_decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
+                           this, SLOT(slotChangeBCG()),
+                           actionCollection(), "gamma_minus");
+    m_incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
+                            this, SLOT(slotChangeBCG()),
+                            actionCollection(), "brightness_plus");
+    m_decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
+                            this, SLOT(slotChangeBCG()),
+                            actionCollection(), "brightness_minus");
+    m_incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
+                              this, SLOT(slotChangeBCG()),
+                              actionCollection(), "contrast_plus");
+    m_decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
+                              this, SLOT(slotChangeBCG()),
+                              actionCollection(), "contrast_minus");
+
+    m_BCGAction->insert(m_incBrightAction);
+    m_BCGAction->insert(m_decBrightAction);
+    m_BCGAction->insert(m_incContrastAction);
+    m_BCGAction->insert(m_decContrastAction);
+    m_BCGAction->insert(m_incGammaAction);
+    m_BCGAction->insert(m_decGammaAction);
                 
     // -- help actions -----------------------------------------------
     
@@ -412,6 +449,8 @@ void ShowFoto::slotOpenFile()
         {
             new Digikam::ThumbBarItem(m_bar, *it);
         }
+           
+    toogleActions(true);
     }
 }
 
@@ -838,9 +877,14 @@ void ShowFoto::slotSelected(bool val)
 
 void ShowFoto::toogleActions(bool val)
 {
-    m_cropAction->setEnabled(val);
-    m_copyAction->setEnabled(val);
-
+    m_zoomFitAction->setEnabled(val);
+    m_saveAsAction->setEnabled(val);
+    m_propertiesAction->setEnabled(val);
+    m_viewHistogramAction->setEnabled(val);
+    m_rotateAction->setEnabled(val);
+    m_flipAction->setEnabled(val);
+    m_BCGAction->setEnabled(val);
+    
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next()) {
         if (plugin) {
