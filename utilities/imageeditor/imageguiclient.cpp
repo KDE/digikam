@@ -225,6 +225,15 @@ QStringList ImageGUIClient::guiDefinition() const
     guiDef.append("PopupMenu/Action/imageview_rotate/ ");
     guiDef.append("PopupMenu/Action/imageview_crop/ ");
 
+    // enable i18n
+
+    i18n( "&File" );
+    i18n( "Fi&x" );
+    i18n( "&Transform" );
+    i18n( "&View" );
+    i18n( "&Help" );
+    
+    
     return guiDef;
 }
 

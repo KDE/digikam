@@ -22,11 +22,14 @@
 #include <qptrlist.h>
 #include <qmainwindow.h>
 #include <qpopupmenu.h>
+#include <qstring.h>
+#include <qcstring.h>
 
 #include <kaction.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "guiclient.h"
 #include "guifactory.h"
@@ -320,6 +323,13 @@ void GUIFactory::buildGUI(GUIElement *g, QWidget *widget)
 
         next = gui->m_next;
 
+        QString i18nText;
+        QCString text = gui->m_text.utf8();
+        if (!text.isEmpty())
+            i18nText = i18n( text );
+        else
+            i18nText = i18n( "No text!" );
+        
         if (gui->m_type == GUIElement::Action) {
             if (gui->m_action)
                 gui->m_action->plug(widget);
@@ -328,12 +338,12 @@ void GUIFactory::buildGUI(GUIElement *g, QWidget *widget)
             QPopupMenu* popMenu = new QPopupMenu(widget);
             if (widget->inherits("QMenuBar")) {
                 QMenuBar *mb = static_cast<QMenuBar*>(widget);
-                mb->insertItem(gui->m_text, popMenu);
+                mb->insertItem(i18nText, popMenu);
                 buildGUI(gui->m_firstChild, popMenu);
             }
             else if (widget->inherits("QPopupMenu")) {
                 QPopupMenu *pm = static_cast<QPopupMenu*>(widget);
-                pm->insertItem(gui->m_text, popMenu);
+                pm->insertItem(i18nText, popMenu);
                 buildGUI(gui->m_firstChild, popMenu);
             }
         }

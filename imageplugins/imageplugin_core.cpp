@@ -102,6 +102,11 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
 
+    // enable i18n
+
+    i18n( "&Filters" );
+    i18n( "Fi&x" );
+    
     return guiDef;
 }
 
