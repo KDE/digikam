@@ -103,9 +103,10 @@ private:
     ImageWindow();
     void readSettings();
     void saveSettings();
-    void promptUserSave();
+    bool promptUserSave();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
+    bool save();
 
 signals:
 

@@ -419,7 +419,8 @@ void ImageWindow::slotLoadCurrent()
 
 void ImageWindow::slotLoadNext()
 {
-    promptUserSave();
+    if(!promptUserSave())
+        return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
@@ -435,7 +436,8 @@ void ImageWindow::slotLoadNext()
 
 void ImageWindow::slotLoadPrev()
 {
-    promptUserSave();
+    if(!promptUserSave())
+        return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
@@ -452,14 +454,18 @@ void ImageWindow::slotLoadPrev()
 
 void ImageWindow::slotLoadFirst()
 {
-    promptUserSave();
+    if(!promptUserSave())
+        return;
+    
     m_urlCurrent = m_urlList.first();
     slotLoadCurrent();
 }
 
 void ImageWindow::slotLoadLast()
 {
-    promptUserSave();
+    if(!promptUserSave())
+        return;
+    
     m_urlCurrent = m_urlList.last();
     slotLoadCurrent();
 }
@@ -724,17 +730,22 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slotSave()
 {
+    save();
+}
+
+bool ImageWindow::save()
+{
     QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
 
     bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, 
                                           m_PNGCompression, m_TIFFCompression);
 
-    if (result == false)
+    if (!result)
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                           .arg(m_urlCurrent.filename())
-                           .arg(m_urlCurrent.path().section('/', -2, -2)));
-        return;
+                                .arg(m_urlCurrent.filename())
+                                .arg(m_urlCurrent.path().section('/', -2, -2)));
+        return false;
     }
 
     ExifRestorer exifHolder;
@@ -751,22 +762,23 @@ void ImageWindow::slotSave()
         kdWarning() << ("slotSave::No Exif Data Found") << endl;
 
     if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-       KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
 
     if(!SyncJob::file_move(KURL(tmpFile), m_urlCurrent))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
+        return false;
     }
-    else
-    {
-        emit signalFileModified(m_urlCurrent);
-        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    }
+
+    emit signalFileModified(m_urlCurrent);
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    
+    return true;
 }
 
 void ImageWindow::slotSaveAs()
- {
+{
     // Get the new filename.
 
     // The typemines listed is the base imagefiles supported by imlib2.
@@ -1006,25 +1018,39 @@ void ImageWindow::slotEscapePressed()
     }
 }
 
-void ImageWindow::promptUserSave()
+bool ImageWindow::promptUserSave()
 {
     if (m_guiClient->m_saveAction->isEnabled())
     {
         int result =
-            KMessageBox::warningYesNo(this,
-                                      i18n("The image \"%1\" has been modified.\n"
-                                           "Do you want to save it?")
-                                      .arg(m_urlCurrent.filename()));
+            KMessageBox::warningYesNoCancel(this,
+                                            i18n("The image \"%1\" has been modified.\n"
+                                                 "Do you want to save it?")
+                                                 .arg(m_urlCurrent.filename()),
+                                            QString::null,
+                                            KStdGuiItem::save(),
+                                            KStdGuiItem::discard());
         if (result == KMessageBox::Yes)
-            slotSave();
+        {
+            return save();
+        }
+        else if (result == KMessageBox::No)
+        {
+            return true;
+        }
+        else
+            return false;
     }
+    return true;
 }
 
 void ImageWindow::closeEvent(QCloseEvent *e)
 {
     if (!e) return;
 
-    promptUserSave();
+    if(!promptUserSave())
+        return;
+    
     e->accept();
 }
 
