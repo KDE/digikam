@@ -25,6 +25,8 @@
 #include <kio/job.h>
 #include <kurl.h>
 
+class QProgressDialog;
+
 class DigikamIO : public KIO::Job
 {
     Q_OBJECT

@@ -69,7 +69,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "thumbnailjob.h"
-#include "albumfilecopymove.h"
+#include "digikamio.h"
 #include "digikamapp.h"
 
 #include "thumbnailsize.h"
@@ -1170,15 +1170,24 @@ void AlbumFolderView::startDrag()
     if (folderItem->isGroupItem() || folderItem->album()->isRoot())
         return;
 
-    if (folderItem->album()->type() == Album::PHYSICAL)
-        return;
-        
-    // Start dragging a tag        
-    TagDrag *tagDrag = new TagDrag(folderItem->album()->getID(), 
-                                   this);
-    if(tagDrag) {
-        tagDrag->setPixmap(*folderItem->pixmap());
-        tagDrag->drag();
+    Album* album = folderItem->album();
+
+    if (album->type() == Album::PHYSICAL)
+    {
+        PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+        KURLDrag* kdrag = new KURLDrag(palbum->getKURL(), this);
+        kdrag->setPixmap(*folderItem->pixmap());
+        kdrag->drag();
+    }
+    else if (album->type() == Album::TAG)
+    {
+        // Start dragging a tag        
+        TagDrag *tagDrag = new TagDrag(album->getID(), 
+                                       this);
+        if(tagDrag) {
+            tagDrag->setPixmap(*folderItem->pixmap());
+            tagDrag->drag();
+        }
     }
 }
 
@@ -1346,24 +1355,12 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         {
         case 10:
         {
-            QStringList fileList;
-            KURL::List::iterator it;
-            for ( it = urls.begin(); it != urls.end(); ++it )
-                fileList.append((*it).filename());
-                
-            new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                  fileList, true);
+            new DigikamIO(urls, destAlbum->getKURL(), true);
             break;
         }
         case 11:
         {
-            QStringList fileList;
-            KURL::List::iterator it;
-            for ( it = urls.begin(); it != urls.end(); ++it )
-                fileList.append((*it).filename());
-                
-            new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                  fileList, false);
+            new DigikamIO(urls, destAlbum->getKURL(), false);
             break;
         }
         default:
@@ -1390,11 +1387,11 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
         int id = popMenu.exec(QCursor::pos());
         switch(id) {
         case 10: {
-            KIO::move(srcURLs,destURL,true);
+            new DigikamIO(srcURLs, destAlbum->getKURL(), true);
             break;
         }
         case 11: {
-            KIO::copy(srcURLs,destURL,true);
+            new DigikamIO(srcURLs, destAlbum->getKURL(), false);
             break;
         }
         default:
