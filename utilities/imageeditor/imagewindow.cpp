@@ -279,7 +279,7 @@ void ImageWindow::buildGUI()
                                  actionCollection(), "imageview_resize");
 
     m_cropAction = new KAction(i18n("&Crop"), "crop",
-                               CTRL+Key_C,
+                               CTRL+Key_X,
                                m_canvas, SLOT(slotCrop()),
                                actionCollection(), "imageview_crop");
     m_cropAction->setEnabled(false);
