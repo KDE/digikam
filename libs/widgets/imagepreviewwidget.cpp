@@ -34,6 +34,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kcursor.h>
 
 // Local includes.
 
@@ -108,6 +109,14 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
 
 ImagePreviewWidget::~ImagePreviewWidget()
 {
+}
+
+void ImagePreviewWidget::setPreviewImageWaitCursor(bool enable)
+{
+    if ( enable )
+       m_previewTargetLabel->setCursor( KCursor::waitCursor() );
+    else 
+       m_previewTargetLabel->setCursor( KCursor::arrowCursor() );
 }
 
 QRect ImagePreviewWidget::getOriginalImageRegion(void)

@@ -48,6 +48,7 @@ public:
     QRect  getOriginalImageRegion(void);
     QImage getOriginalClipImage(void);
     void   setPreviewImageData(QImage img);
+    void   setPreviewImageWaitCursor(bool enable);
 
 public slots:
 
