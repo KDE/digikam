@@ -34,6 +34,7 @@
 
 class QComboBox;
 class QLabel;
+class QTimer;
 
 class KIntNumInput;
 class KColorButton;
@@ -75,8 +76,9 @@ private:
     QColor                m_niepceLineColor;
     QColor                m_bevelUpperLeftColor; 
     QColor                m_bevelLowerRightColor;
-    QColor                m_roundCornerBackgroundColor;
     
+    QTimer               *m_timer;
+
     KIntNumInput         *m_borderWidth;
     
     KColorButton         *m_foregroundColorButton;
@@ -89,14 +91,8 @@ private:
     
     void solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth);
     void niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth);
-    void rock(QImage &src, QImage &dest, int borderWidth);
     void bevel(QImage &src, QImage &dest, const QColor &topColor, const QColor &btmColor, int borderWidth);
-    void roundCorner(QImage &src, QImage &dest, const QColor &bg);
-    
-    void copyImageSecondaryAlpha(QImage &dest, int dx, int dy, int dw, int dh,
-                                 QImage &src, int sx, int sy, int sw, int sh);
-    void tileImage(QImage &dest, int dx, int dy, int dw, int dh, 
-                   QImage &src, int sx, int sy, int sw, int sh);
+    void pattern(QImage &src, QImage &dest, int borderWidth);
 
 private slots:
 
@@ -104,10 +100,10 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotUser1();
+    void slotTimer();
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
-    
 };
 
 }  // NameSpace DigikamBorderImagesPlugin

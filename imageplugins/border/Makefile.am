@@ -21,4 +21,4 @@ messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_border.pot
 
 borderpicsdir = $(kde_datadir)/digikamimageplugins/data
-borderpics_DATA = roundcorner-picfill.png roundcorner-shadow.png
+borderpics_DATA = pine-pattern.png wood-pattern.png paper-pattern.png parque-pattern.png

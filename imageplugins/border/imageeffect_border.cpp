@@ -7,9 +7,6 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Round Corner code is inspired of border Algorithms from Pixie Plus.
- * Copyright (C) 1999-2001 Daniel M. Duley <mosfet@kde.org>
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -38,6 +35,10 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qcombobox.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qbrush.h>
+#include <qtimer.h> 
 
 // KDE includes.
 
@@ -73,6 +74,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                                 parent, 0, true, true, i18n("&Reset Values")),
                     m_parent(parent)
 {
+    m_timer = 0;
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
@@ -141,8 +143,10 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Solid") );
     m_borderType->insertItem( i18n("Niepce") );
     m_borderType->insertItem( i18n("Beveled") );
-    m_borderType->insertItem( i18n("Rock") );
-    m_borderType->insertItem( i18n("Round Corners") );
+    m_borderType->insertItem( i18n("Decorative Pine") );
+    m_borderType->insertItem( i18n("Decorative Wood") );
+    m_borderType->insertItem( i18n("Decorative Paper") );
+    m_borderType->insertItem( i18n("Decorative Parque") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
     
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
@@ -186,7 +190,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
             this, SLOT(slotBorderTypeChanged(int)));
             
     connect(m_borderWidth, SIGNAL(valueChanged(int)),
-            this, SLOT(slotEffect()));            
+            this, SLOT(slotTimer()));            
 
     connect(m_foregroundColorButton, SIGNAL(changed(const QColor &)),
             this, SLOT(slotColorForegroundChanged(const QColor &)));            
@@ -197,6 +201,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
 
 ImageEffect_Border::~ImageEffect_Border()
 {
+    if (m_timer)
+       delete m_timer;
 }
 
 void ImageEffect_Border::readSettings(void)
@@ -217,7 +223,6 @@ void ImageEffect_Border::readSettings(void)
     m_niepceLineColor = config->readColorEntry("Niepce Line Color", black);
     m_bevelUpperLeftColor = config->readColorEntry("Bevel Upper Left Color", gray1);
     m_bevelLowerRightColor = config->readColorEntry("Bevel Lower Right Color", gray2);
-    m_roundCornerBackgroundColor = config->readColorEntry("Round Corner Background Color", gray1);
     
     delete black;
     delete white;
@@ -240,7 +245,6 @@ void ImageEffect_Border::writeSettings(void)
     config->writeEntry( "Niepce Line Color", m_niepceLineColor );
     config->writeEntry( "Bevel Upper Left Color", m_bevelUpperLeftColor );
     config->writeEntry( "Bevel Lower Right Color", m_bevelLowerRightColor );
-    config->writeEntry( "Round Corner Background Color", m_roundCornerBackgroundColor );
     
     config->sync();
 }
@@ -274,6 +278,20 @@ void ImageEffect_Border::slotUser1()
     m_backgroundColorButton->blockSignals(false);
 } 
 
+void ImageEffect_Border::slotTimer()
+{
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
+}
+
 void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
@@ -290,10 +308,16 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
           m_bevelUpperLeftColor = color;
           break;
 
-       case 3: // Rock.
+       case 3: // Decorative Pine.
           break;
 
-       case 4: // Round Corners.
+       case 4: // Decorative Wood.
+          break;
+          
+       case 5: // Decorative Paper.
+          break;
+       
+       case 6: // Decorative Parque.
           break;
        }
        
@@ -316,12 +340,17 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
           m_bevelLowerRightColor = color;
           break;
 
-       case 3: // Rock.
+       case 3: // Decorative Pine.
           break;
 
-       case 4: // Round Corners.
-          m_roundCornerBackgroundColor = color;
+       case 4: // Decorative Wood.
           break;
+          
+       case 5: // Decorative Paper.
+          break;
+       
+       case 6: // Decorative Parque.
+          break;          
        }
        
     slotEffect();       
@@ -365,18 +394,14 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           m_backgroundColorButton->setColor( m_bevelLowerRightColor );
           break;
 
-       case 3: // Rock.
+       case 3: // Decorative Pine.
+       case 4: // Decorative Wood.
+       case 5: // Decorative Paper.
+       case 6: // Decorative Parque.
           m_foregroundColorButton->setEnabled(false);
           m_backgroundColorButton->setEnabled(false);
           m_labelForeground->setEnabled(false);
           m_labelBackground->setEnabled(false);
-          break;
-
-       case 4: // Round Corners.
-          m_foregroundColorButton->setEnabled(false);
-          m_backgroundColorButton->setColor( m_roundCornerBackgroundColor );
-          m_labelForeground->setEnabled(false);
-          m_borderWidth->setEnabled(false);
           break;
        }
 
@@ -416,12 +441,13 @@ void ImageEffect_Border::slotEffect()
                 m_bevelLowerRightColor, borderWidth);
           break;
 
-       case 3: // Blur.
-          rock(src, dest, borderWidth);
-          break;
-
-       case 4: // Round Corners.
-          roundCorner(src, dest, m_roundCornerBackgroundColor);
+       case 3: // Decorative Pine.
+       case 4: // Decorative Wood.
+       case 5: // Decorative Paper.
+       case 6: // Decorative Parque.
+          setCursor( KCursor::waitCursor() );
+          pattern(src, dest, borderWidth);
+          setCursor( KCursor::arrowCursor() );        
           break;
        }
 
@@ -465,12 +491,11 @@ void ImageEffect_Border::slotOk()
                 m_bevelLowerRightColor, m_borderWidth->value());
           break;
 
-       case 3: // Blur.
-          rock(src, dest, m_borderWidth->value());
-          break;
-
-       case 4: // Round Corners.
-          roundCorner(src, dest, m_roundCornerBackgroundColor);
+       case 3: // Decorative Pine.
+       case 4: // Decorative Wood.
+       case 5: // Decorative Paper.
+       case 6: // Decorative Parque.
+          pattern(src, dest, m_borderWidth->value());
           break;
        }
 
@@ -560,14 +585,10 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
        output = (unsigned int *)dest.scanLine(y);
        
        for(x=0; x < wc; ++x)
-          {
           output[x] = topColor.rgb();
-          }
         
        for(;x < dest.width(); ++x)
-          {
           output[x] = btmColor.rgb();
-          }
        }
        
     // left and right
@@ -590,246 +611,53 @@ void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor
        output = (unsigned int *)dest.scanLine(y);
        
        for(x=0; x < wc; ++x)
-          {
           output[x] = topColor.rgb();
-          }
           
        for(; x < dest.width(); ++x)
-          {
           output[x] = btmColor.rgb();
-          }
        }
        
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
 }
 
-void ImageEffect_Border::rock(QImage &src, QImage &dest, int borderWidth)
+void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth)
 {
-    dest.reset();
-    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    dest.setAlphaBuffer(true);
-    dest.fill( QColor::QColor(128, 128, 128).rgb() );
+    QString pattern;
     
-    dest = KImageEffect::addNoise(dest, KImageEffect::UniformNoise);
-    dest = KImageEffect::charcoal(dest, 1.0, 1.0);
+    switch (m_borderType->currentItem())
+       {
+       case 3: // Decorative Pine.
+          pattern = "tree-pattern";
+          break;
+          
+       case 4: // Decorative Wood.
+          pattern = "wood-pattern";
+          break;
+       
+       case 5: // Decorative Paper.
+          pattern = "paper-pattern";
+          break;
+       
+       case 6: // Decorative Parque.
+          pattern = "parque-pattern";
+          break;
+       }
     
+    QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + borderWidth*2,
+                          m_previewWidget->imageIface()->originalHeight() + borderWidth*2);
+    
+    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
+    QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
+    
+    QPainter p(&patternPixmap);
+    p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
+                QBrush::QBrush(QColor::QColor(Qt::black),
+                QPixmap::QPixmap(path + pattern + ".png")) );
+    p.end();
+    
+    dest = patternPixmap.convertToImage().scale( src.width() + borderWidth*2,
+                                                 src.height() + borderWidth*2 );
     KImageEffect::blendOnLower(borderWidth, borderWidth, src, dest);
-}
-
-void ImageEffect_Border::roundCorner(QImage &src, QImage &dest, const QColor &bg)
-{
-    int total, current;
-    unsigned int *data;
-    QColor c;
-    int h, s, v;
-    int r, g, b;
-    int bgH, bgS, bgV;
-    int alpha;
-    QString path;
-    QImage img;
-    
-    // round corners adds 1 pixel on top and left, 8 on bottom and right
-    
-    dest.reset();
-    //dest.create(src.width()+9, src.height()+9, 32);
-    dest.create(src.width(), src.height(), 32);
-    dest.setAlphaBuffer(true);
-    dest.fill(bg.rgb());
-
-    // first do the shadowing
-    
-    KGlobal::dirs()->addResourceType("roundcorner-shadow", 
-                                     KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    path = KGlobal::dirs()->findResourceDir("roundcorner-shadow", "roundcorner-shadow.png");
-    img.load(path + "roundcorner-shadow.png");
-    img.detach();
-    
-    if(img.depth() < 32)
-       img = img.convertDepth(32);
-    
-    // convert shadow alpha layer to background color
-    
-    data = (unsigned int *)img.bits();
-    total = img.width()*img.height();
-    bg.hsv(&bgH, &bgS, &bgV);
-    
-    for(current=0; current<total; ++current)
-       {
-       alpha = qAlpha(data[current]);
-       c.setRgb(data[current]);
-        
-       if(alpha == 0)
-          {
-          c = bg;
-          alpha = 255;
-          }
-       else if(alpha != 255)
-          {
-          float srcPercent = ((float)alpha)/255.0;
-          float destPercent = 1.0-srcPercent;
-          r = (int)((srcPercent*c.red()) + (destPercent*bg.red()));
-          g = (int)((srcPercent*c.green()) + (destPercent*bg.green()));
-          b = (int)((srcPercent*c.blue()) + (destPercent*bg.blue()));
-          c.setRgb(r, g, b);
-          alpha = 255;
-          }
-       else
-          {
-          c.hsv(&h, &s, &v);
-          c.setHsv(bgH, bgS, v);
-          }
-       data[current] = qRgba(c.red(), c.green(), c.blue(), alpha);
-       }
-       
-    // tile shadow to destination
-
-    // top left corner
-    tileImage(dest, 0, 0, 14, 14, 
-              img, 0, 0, 14, 14);
-    
-    // top right corner
-    tileImage(dest, dest.width()-13, 0, 14, 14,
-              img, img.width()-13, 0, 14, 14);
-               
-    // bottom left corner
-    tileImage(dest, 0, dest.height()-13, 14, 14,
-              img, 0, img.height()-13, 14, 14);
-               
-    // bottom right corner
-    tileImage(dest, dest.width()-13, dest.height()-13, 14, 14,
-              img, img.width()-13, img.height()-13, 14, 14);
-               
-    // top tile
-    tileImage(dest, 13, 0, dest.width()-25, 14,
-              img, 14, 0, 4, 14);
-               
-    // bottom tile
-    tileImage(dest, 13, dest.height()-13, dest.width()-25, 14,
-              img, 14, img.height()-13, 4, 14);
-               
-    // left tile
-    tileImage(dest, 0, 13, 14, dest.height()-25,
-              img, 0, 14, 14, 4);
-               
-    // right tile
-    tileImage(dest, dest.width()-13, 13, 14, dest.height()-25,
-              img, img.width()-13, 14, 14, 4);
-
-    // done with shadow, calculate image mask and alpha layer
-    
-    KGlobal::dirs()->addResourceType("roundcorner-picfill", 
-                                     KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    path = KGlobal::dirs()->findResourceDir("roundcorner-picfill", "roundcorner-picfill.png");
-    img.load(path + "roundcorner-picfill.png");
-    img.detach();
-
-    if(img.depth() < 32)
-       img = img.convertDepth(32);
-        
-    QImage blendedSrc = src;
-    blendedSrc.detach();
-
-    // top left corner
-    copyImageSecondaryAlpha(blendedSrc, 0, 0, 14, 14, 
-                            img, 0, 0, 14, 14);
-    
-    // top right corner
-    copyImageSecondaryAlpha(blendedSrc, blendedSrc.width()-13, 0, 14, 14,
-                            img, img.width()-13, 0, 14, 14);
-    
-    // bottom left corner
-    copyImageSecondaryAlpha(blendedSrc, 0, blendedSrc.height()-13, 14, 14,
-                            img, 0, img.height()-13, 14, 14);
-    
-    // bottom right corner
-    copyImageSecondaryAlpha(blendedSrc, blendedSrc.width()-13, blendedSrc.height()-13, 14, 14,
-                            img, img.width()-13, img.height()-13, 14, 14);
-    
-    // top tile
-    copyImageSecondaryAlpha(blendedSrc, 13, 0, blendedSrc.width()-25, 14,
-                            img, 14, 0, 2, 14);
-    
-    // bottom tile
-    copyImageSecondaryAlpha(blendedSrc, 13, blendedSrc.height()-13, blendedSrc.width()-25, 14,
-                            img, 14, img.height()-13, 2, 14);
-    
-    // left tile
-    copyImageSecondaryAlpha(blendedSrc, 0, 13, 14, blendedSrc.height()-25,
-                            img, 0, 14, 14, 2);
-    
-    // right tile
-    copyImageSecondaryAlpha(blendedSrc, blendedSrc.width()-13, 13, 14, blendedSrc.height()-25,
-                            img, img.width()-13, 14, 14, 2);
-
-    KImageEffect::blendOnLower(0, 0, blendedSrc, dest);
-}
-
-void ImageEffect_Border::copyImageSecondaryAlpha(QImage &dest, int dx, int dy, int dw, int dh,
-                                                 QImage &src, int sx, int sy, int sw, int sh)
-{
-    unsigned int *srcData, *destData;
-    int orig_sx = sx;
-    int orig_sy = sy;
-    int orig_dx = dx;
-    //int orig_dy = dy;
-    int sx2 = sx+sw-1;
-    int sy2 = sy+sh-1;
-    int dx2 = dx+dw-1;
-    int dy2 = dy+dh-1;
-
-    int r, g, b, alpha;
-
-    for(;dy < dy2; ++sy, ++dy)
-       {
-       if(sy > sy2)
-            sy = orig_sy;
-        
-       srcData = (unsigned int *)src.scanLine(sy);
-       destData = (unsigned int *)dest.scanLine(dy);
-       
-       for(sx=orig_sx, dx=orig_dx; dx < dx2; ++sx, ++dx)
-          {
-          if(sx > sx2)
-                sx = orig_sx;
-           
-          r = qRed(destData[dx]);
-          g = qGreen(destData[dx]);
-          b = qBlue(destData[dx]);
-          alpha = qAlpha(srcData[sx]);
-          destData[dx] = qRgba(r, g, b, alpha);
-          }
-       }
-}
-
-void ImageEffect_Border::tileImage(QImage &dest, int dx, int dy, int dw, int dh, 
-                                   QImage &src, int sx, int sy, int sw, int sh)
-{
-    unsigned int *srcData, *destData;
-    int orig_sx = sx;
-    int orig_sy = sy;
-    int orig_dx = dx;
-    //int orig_dy = dy;
-    int sx2 = sx+sw-1;
-    int sy2 = sy+sh-1;
-    int dx2 = dx+dw-1;
-    int dy2 = dy+dh-1;
-
-    for(;dy < dy2; ++sy, ++dy)
-       {
-       if(sy > sy2)
-          sy = orig_sy;
-        
-       srcData = (unsigned int *)src.scanLine(sy);
-       destData = (unsigned int *)dest.scanLine(dy);
-        
-       for(sx=orig_sx, dx=orig_dx; dx < dx2; ++sx, ++dx)
-          {
-          if(sx > sx2)
-             sx = orig_sx;
-             
-          destData[dx] = srcData[sx];
-          }
-       }
 }
 
 }  // NameSpace DigikamBorderImagesPlugin
