@@ -313,7 +313,7 @@ KURL::List DigikamImageCollection::images()
         AlbumItemHandler* handler =
             AlbumManager::instance()->getItemHandler();
         if (handler)
-            items = handler->allItemsPath();
+            items = handler->selectedItemsPath();
 
         return KURL::List(items);
               
