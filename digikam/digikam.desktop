@@ -3,7 +3,7 @@
 Encoding=UTF-8
 Type=Application
 Exec=digikam -caption "%c" %i %m
-Icon=digikam.png
+Icon=digikam
 DocPath=digikam/index.html
 Name=digikam
 Name[da]=Digikam
