@@ -5,6 +5,9 @@
 //    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles CAULIER <caulier dot gilles at free.fr>
 //
+//    Original printing code from Kuickshow program.
+//    Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
+//
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation; either version 2 of the License, or
@@ -40,6 +43,16 @@
 #include <qhbox.h>
 #include <qsignal.h>
 #include <qevent.h>
+#include <qcheckbox.h>
+#include <qfont.h>
+#include <qgrid.h>
+#include <qlayout.h>
+#include <qimage.h>
+#include <qpaintdevicemetrics.h>
+#include <qpainter.h>
+#include <qradiobutton.h>
+#include <qvbuttongroup.h>
+#include <qcolor.h>
 
 // KDE lib includes
 
@@ -51,6 +64,15 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
+#include <kimageeffect.h>
+#include <kcombobox.h>
+#include <kdialog.h>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <knuminput.h>
+#include <kprinter.h>
+#include <ktempfile.h>
+#include <kpropertiesdialog.h>
 
 // Local includes
 
@@ -199,6 +221,8 @@ public:
     CButton *bBCGEdit;
     CButton *bCommentsEdit;
     CButton *bExifInfo;
+    CButton *bImageProperties;
+    CButton *bPrint;
     CButton *bSave;
     CButton *bSaveAs;
     CButton *bRestore;
@@ -252,6 +276,61 @@ ImageView::ImageView(QWidget* parent,
 }
 
 
+ImageViewPrintDialogPage::ImageViewPrintDialogPage( QWidget *parent, const char *name )
+                        : KPrintDialogPage( parent, name )
+{
+    setTitle( i18n("Image Settings") );
+
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
+
+    m_addFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
+    m_addFileName->setChecked( true );
+    layout->addWidget( m_addFileName );
+
+    m_blackwhite = new QCheckBox ( i18n("Print image in &black and white"), this);
+    m_blackwhite->setChecked( false );
+    layout->addWidget (m_blackwhite );
+
+    QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
+    group->setRadioButtonExclusive( true );
+    layout->addWidget( group );
+    // m_shrinkToFit = new QRadioButton( i18n("Shrink image to &fit, if necessary"), group );
+    m_shrinkToFit = new QCheckBox( i18n("Shrink image to &fit, if necessary"), group );
+    m_shrinkToFit->setChecked( true );
+
+    QWidget *widget = new QWidget( group );
+    QGridLayout *grid = new QGridLayout( widget, 3, 3 );
+    grid->addColSpacing( 0, 30 );
+    grid->setColStretch( 0, 0 );
+    grid->setColStretch( 1, 1 );
+    grid->setColStretch( 2, 10 );
+
+    m_scale = new QRadioButton( i18n("Print e&xact size: "), widget );
+    m_scale->setEnabled( false ); // ###
+    grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
+    group->insert( m_scale );
+    connect( m_scale, SIGNAL( toggled( bool )), SLOT( toggleScaling( bool )));
+
+    m_units = new KComboBox( false, widget, "unit combobox" );
+    grid->addWidget( m_units, 0, 2, AlignLeft );
+    m_units->insertItem( i18n("Millimeters") );
+    m_units->insertItem( i18n("Centimeters") );
+    m_units->insertItem( i18n("Inches") );
+
+    m_width = new KIntNumInput( widget, "exact width" );
+    grid->addWidget( m_width, 1, 1 );
+    m_width->setLabel( i18n("&Width:" ) );
+    m_width->setMinValue( 1 );
+
+    m_height = new KIntNumInput( widget, "exact height" );
+    grid->addWidget( m_height, 2, 1 );
+    m_height->setLabel( i18n("&Height:" ) );
+    m_height->setMinValue( 1 );
+}
+
+
 //////////////////////////////////// DESTRUCTOR /////////////////////////////////////////////
 
 ImageView::~ImageView()
@@ -259,6 +338,11 @@ ImageView::~ImageView()
     saveSettings();
     d->actions.clear();
     delete d;
+}
+
+
+ImageViewPrintDialogPage::~ImageViewPrintDialogPage()
+{
 }
 
 
@@ -526,7 +610,7 @@ void ImageView::setupActions()
                                   QKeySequence(SHIFT+Key_C)));
 
     d->actions.insert("bcgEdit",
-                      new CAction(i18n("Adjust Brightness/Contrast/Gamma"),
+                      new CAction(i18n("Adjust Image..."),
                                   this,
                                   SLOT(slotBCGEdit()),
                                   QKeySequence(CTRL+Key_E)));
@@ -534,24 +618,36 @@ void ImageView::setupActions()
     if ( fromCameraUIFlag == false )
        {
        d->actions.insert("commentsEdit",
-                      new CAction(i18n("Edit Image Comments"),
+                      new CAction(i18n("Edit Image Comments..."),
                                   this,
                                   SLOT(slotCommentsEdit()),
                                   QKeySequence(Key_F3)));
        }
     
     d->actions.insert("ExifInfo",
-                      new CAction(i18n("View Exif Information"),
+                      new CAction(i18n("View Exif Information..."),
                                   this,
                                   SLOT(slotExifInfo()),
                                   QKeySequence(Key_F6)));
-                                  
+
+    d->actions.insert("ImageProperties",
+                      new CAction(i18n("View Image properties..."),
+                                  this,
+                                  SLOT(slotImageProperties()),
+                                  QKeySequence(ALT+Key_Return)));
+                                                                    
     d->actions.insert("crop",
                       new CAction(i18n("Crop"),
                                   d->canvas,
                                   SLOT(slotCrop()),
                                   QKeySequence(CTRL+Key_C)));
 
+    d->actions.insert("print",
+                      new CAction(i18n("Print Image..."),
+                                  this,
+                                  SLOT(slotPrintImage()),
+                                  QKeySequence(CTRL+Key_P)));
+    
     d->actions.insert("save",
                       new CAction(i18n("Save"),
                                   this,
@@ -616,7 +712,9 @@ void ImageView::setupActions()
        addKeyInDict("commentsEdit");
        
     addKeyInDict("ExifInfo");
+    addKeyInDict("ImageProperties");
     addKeyInDict("crop");
+    addKeyInDict("print");
     addKeyInDict("save");
     addKeyInDict("saveas");
     addKeyInDict("restore");
@@ -695,9 +793,11 @@ void ImageView::setupPopupMenu()
        addMenuItem(d->contextMenu, d->actions.find("commentsEdit"));
        
     addMenuItem(d->contextMenu, d->actions.find("ExifInfo"));
+    addMenuItem(d->contextMenu, d->actions.find("ImageProperties"));
 
     d->contextMenu->insertSeparator();
     
+    addMenuItem(d->contextMenu, d->actions.find("print"));
     addMenuItem(d->contextMenu, d->actions.find("save"));
     addMenuItem(d->contextMenu, d->actions.find("saveas"));
     addMenuItem(d->contextMenu, d->actions.find("restore"));
@@ -840,6 +940,16 @@ void ImageView::setupButtons()
                              d->actions.find("ExifInfo"),
                              BarIcon("exifinfo"));
     d->buttonLayout->addWidget(d->bExifInfo);
+
+    d->bImageProperties = new CButton(d->buttonBar,
+                             d->actions.find("ImageProperties"),
+                             BarIcon("image"));
+    d->buttonLayout->addWidget(d->bImageProperties);
+    
+    d->bPrint = new CButton(d->buttonBar,
+                             d->actions.find("print"),
+                             BarIcon("fileprint"));
+    d->buttonLayout->addWidget(d->bPrint);
     
     d->bSave  = new CButton(d->buttonBar,
                              d->actions.find("save"),
@@ -873,6 +983,268 @@ void ImageView::setupButtons()
     d->buttonLayout->addWidget(d->bClose);
 
     d->buttonLayout->insertStretch(-1);
+}
+
+
+void ImageView::closeEvent(QCloseEvent *e)
+{
+    if (!e) return;
+
+    promptUserSave();
+    
+    e->accept();
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::promptUserSave()
+{
+    if (d->bSave->isEnabled()) {
+
+        int result =
+            KMessageBox::warningYesNo(this,                                      
+                                      i18n("\"%1\" has been modified.\n"
+                                           "Do you wish to want to save it?")
+                                           .arg(d->urlCurrent.filename()));
+        if (result == KMessageBox::Yes)
+            slotSave();
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+bool ImageView::printImageWithQt( const QString& filename, KPrinter& printer,
+                                  const QString& originalFileName )
+{
+    QImage image( filename );
+    if ( image.isNull() ) {
+        kdWarning() << "Can't load image: " << filename << " for printing.\n";
+        return false;
+    }
+
+    QPainter p;
+    p.begin( &printer );
+
+    QPaintDeviceMetrics metrics( &printer );
+    p.setFont( KGlobalSettings::generalFont() );
+    QFontMetrics fm = p.fontMetrics();
+
+    int w = metrics.width();
+    int h = metrics.height();
+
+    QString t = "true";
+    QString f = "false";
+
+    // Black & white print?
+    if ( printer.option( "app-imageviewer-blackwhite" ) != f) {
+        image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
+    }
+
+    int filenameOffset = 0;
+    bool printFilename = printer.option( "app-imageviewer-printFilename" ) != f;
+    if ( printFilename ) {
+        filenameOffset = fm.lineSpacing() + 14;
+        h -= filenameOffset; // filename goes into one line!
+    }
+
+    //
+    // shrink image to pagesize, if necessary
+    //
+    bool shrinkToFit = (printer.option( "app-imageviewer-shrinkToFit" ) != f);
+    if ( shrinkToFit && image.width() > w || image.height() > h ) {
+        image = image.smoothScale( w, h, QImage::ScaleMin );
+    }
+
+
+    //
+    // align image
+    //
+    bool ok = false;
+    int alignment = printer.option("app-imageviewer-alignment").toInt( &ok );
+    if ( !ok )
+        alignment = Qt::AlignCenter; // default
+
+    int x = 0;
+    int y = 0;
+
+    // ### need a GUI for this in KuickPrintDialogPage!
+    // x - alignment
+    if ( alignment & Qt::AlignHCenter )
+        x = (w - image.width())/2;
+    else if ( alignment & Qt::AlignLeft )
+        x = 0;
+    else if ( alignment & Qt::AlignRight )
+        x = w - image.width();
+
+    // y - alignment
+    if ( alignment & Qt::AlignVCenter )
+        y = (h - image.height())/2;
+    else if ( alignment & Qt::AlignTop )
+        y = 0;
+    else if ( alignment & Qt::AlignBottom )
+        y = h - image.height();
+
+    //
+    // perform the actual drawing
+    //
+    p.drawImage( x, y, image );
+
+    if ( printFilename )
+    {
+        QString fname = minimizeString( originalFileName, fm, w );
+        if ( !fname.isEmpty() )
+        {
+            int fw = fm.width( fname );
+            int x = (w - fw)/2;
+            int y = metrics.height() - filenameOffset/2;
+            p.drawText( x, y, fname );
+        }
+    }
+
+    p.end();
+
+    return true;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+QString ImageView::minimizeString( QString text, const QFontMetrics& metrics,
+                                   int maxWidth )
+{
+    if ( text.length() <= 5 )
+        return QString::null; // no sense to cut that tiny little string
+
+    bool changed = false;
+    while ( metrics.width( text ) > maxWidth )
+    {
+        int mid = text.length() / 2;
+        text.remove( mid, 2 ); // remove 2 characters in the middle
+        changed = true;
+    }
+
+    if ( changed ) // add "..." in the middle
+    {
+        int mid = text.length() / 2;
+        if ( mid <= 5 ) // sanity check
+            return QString::null;
+
+        text.replace( mid - 1, 3, "..." );
+    }
+
+    return text;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageViewPrintDialogPage::getOptions( QMap<QString,QString>& opts,
+                                           bool /*incldef*/ )
+{
+    QString t = "true";
+    QString f = "false";
+
+//    ### opts["app-imageviewer-alignment"] = ;
+    opts["app-imageviewer-printFilename"] = m_addFileName->isChecked() ? t : f;
+    opts["app-imageviewer-blackwhite"] = m_blackwhite->isChecked() ? t : f;
+    opts["app-imageviewer-shrinkToFit"] = m_shrinkToFit->isChecked() ? t : f;
+    opts["app-imageviewer-scale"] = m_scale->isChecked() ? t : f;
+    opts["app-imageviewer-scale-unit"] = m_units->currentText();
+    opts["app-imageviewer-scale-width-pixels"] = QString::number( scaleWidth() );
+    opts["app-imageviewer-scale-height-pixels"] = QString::number( scaleHeight() );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageViewPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
+{
+    QString t = "true";
+    QString f = "false";
+
+    m_addFileName->setChecked( opts["app-imageviewer-printFilename"] != f );
+    // This sound strange, but if I copy the code on the line above, the checkbox
+    // was always checked. And this isn't the wanted behavior. So, with this works.
+    // KPrint magic ;-)
+    m_blackwhite->setChecked ( false );
+    m_shrinkToFit->setChecked( opts["app-imageviewer-shrinkToFit"] != f );
+    m_scale->setChecked( opts["app-imageviewer-scale"] == t );
+
+    m_units->setCurrentItem( opts["app-imageviewer-scale-unit"] );
+
+    bool ok;
+    int val = opts["app-imageviewer-scale-width-pixels"].toInt( &ok );
+    if ( ok )
+        setScaleWidth( val );
+    val = opts["app-imageviewer-scale-height-pixels"].toInt( &ok );
+    if ( ok )
+        setScaleHeight( val );
+
+    if ( m_scale->isChecked() == m_shrinkToFit->isChecked() )
+        m_shrinkToFit->setChecked( !m_scale->isChecked() );
+
+    // ### re-enable when implementednn
+     toggleScaling( false && m_scale->isChecked() );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageViewPrintDialogPage::toggleScaling( bool enable )
+{
+    m_width->setEnabled( enable );
+    m_height->setEnabled( enable );
+    m_units->setEnabled( enable );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+int ImageViewPrintDialogPage::scaleWidth() const
+{
+    return fromUnitToPixels( m_width->value() );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+int ImageViewPrintDialogPage::scaleHeight() const
+{
+    return fromUnitToPixels( m_height->value() );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageViewPrintDialogPage::setScaleWidth( int pixels )
+{
+    m_width->setValue( (int) pixelsToUnit( pixels ) );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageViewPrintDialogPage::setScaleHeight( int pixels )
+{
+    m_width->setValue( (int) pixelsToUnit( pixels ) );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+int ImageViewPrintDialogPage::fromUnitToPixels( float /*value*/ ) const
+{
+    return 1; // ###
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+float ImageViewPrintDialogPage::pixelsToUnit( int /*pixels*/ ) const
+{
+    return 1.0; // ###
 }
 
 
@@ -1374,31 +1746,38 @@ void ImageView::slotKeyPress(int key)
     
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void ImageView::closeEvent(QCloseEvent *e)
+void ImageView::slotPrintImage()
 {
-    if (!e) return;
+    KPrinter printer;
+    printer.setDocName( d->urlCurrent.filename() );
+    printer.setCreator( "Digikam-ImageViewer");
 
-    promptUserSave();
-    
-    e->accept();
-}
+    KPrinter::addDialogPage( new ImageViewPrintDialogPage( this, "imageviewer page"));
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-void ImageView::promptUserSave()
-{
-    if (d->bSave->isEnabled()) {
-
-        int result =
-            KMessageBox::warningYesNo(this,                                      
-                                      i18n("\"%1\" has been modified.\n"
-                                           "Do you wish to want to save it?")
-                                           .arg(d->urlCurrent.filename()));
-        if (result == KMessageBox::Yes)
-            slotSave();
+    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
+    {
+        KTempFile tmpFile( "imageviewer", ".png" );
+        if ( tmpFile.status() == 0 )
+        {
+            tmpFile.setAutoDelete( true );
+            if ( d->canvas->save(tmpFile.name()) )
+                printImageWithQt( tmpFile.name(), printer, d->urlCurrent.filename() );
+        }
     }
+    
+    loadCurrentItem();
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImageView::slotImageProperties()
+{
+    KURL url;
+    url.setPath( d->urlCurrent.path() );
+    (void) new KPropertiesDialog( url, this, "props dialog", true );
+}
+
+

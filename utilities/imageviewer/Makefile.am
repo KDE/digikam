@@ -6,7 +6,7 @@ libimageviewer_la_SOURCES = imageview.cpp canvas.cpp \
 		            imlibinterface.cpp exifrestorer.cpp \
 		            imeventfilter.cpp imagebcgedit.cpp
 
-libimageviewer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_IMLIB)
+libimageviewer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) $(LIB_IMLIB)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/interfaces \

@@ -5,6 +5,9 @@
 //    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles CAULIER <caulier dot gilles at free.fr>
 //
+//    Original printing code from Kuickshow program.
+//    Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
+//
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation; either version 2 of the License, or
@@ -27,14 +30,23 @@
 // Qt lib includes
 
 #include <qwidget.h>
+#include <qfontmetrics.h>
+#include <qstring.h>
 
 // KDE lib includes
 
 #include <kurl.h>
 #include <kio/job.h>
+#include <kdeprint/kprintdialogpage.h>
 
 class QPopupMenu;
 class QCloseEvent;
+class QCheckBox;
+class QRadioButton;
+
+class KComboBox;
+class KPrinter;
+class KIntNumInput;
 
 class CAction;
 class ImageViewPrivate;
@@ -69,6 +81,14 @@ private:
     void addKeyInDict(const QString& key);
     void promptUserSave();
     void loadCurrentItem();
+    
+    // For printing. 
+    
+    bool printImageWithQt( const QString& filename, KPrinter& printer,
+                           const QString& originalFileName );
+    void addConfigPages();
+    QString minimizeString( QString text, const QFontMetrics& metrics,
+                            int maxWidth );                           
 
     ImageViewPrivate *d;
     
@@ -105,6 +125,48 @@ private slots:
     void slotRemoveCurrentItemfromAlbum();
     void slot_onDeleteCurrentItemFinished(KIO::Job *job);
     void slotKeyPress(int key);
+    void slotPrintImage();
+    void slotImageProperties();
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+class ImageViewPrintDialogPage : public KPrintDialogPage
+{
+    Q_OBJECT
+
+public:
+
+    ImageViewPrintDialogPage( QWidget *parent = 0L, const char *name = 0 );
+    ~ImageViewPrintDialogPage();
+
+    virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
+    virtual void setOptions(const QMap<QString,QString>& opts);
+
+private slots:
+
+    void toggleScaling( bool enable );
+
+private:
+
+    // return values in pixels!
+    int scaleWidth() const;
+    int scaleHeight() const;
+
+    void setScaleWidth( int pixels );
+    void setScaleHeight( int pixels );
+
+    int fromUnitToPixels( float val ) const;
+    float pixelsToUnit( int pixels ) const;
+
+    QCheckBox *m_shrinkToFit;
+    QRadioButton *m_scale;
+    KIntNumInput *m_width;
+    KIntNumInput *m_height;
+    KComboBox *m_units;
+    QCheckBox *m_addFileName;
+    QCheckBox *m_blackwhite;
 };
 
 #endif // IMAGEVIEW_H 

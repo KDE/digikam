@@ -1,5 +1,7 @@
 v0.6.3 (usingLibKIPI)-Alpha1 
 ----------------------------------------------------------------------------
+        * Added 'Image Properties' action button in ImageViewer.
+        * Added 'Print image' action button in ImageViewer.        
         * Added a broken image when the thumbnailizations failed.
         * Added 'Flip image' actions button in ImageViewer.
         * Added 'Save as' action button in ImageViewer.
