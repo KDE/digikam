@@ -1,0 +1,14 @@
+[Protocol]
+exec=kio_digikamtags
+protocol=digikamtags
+input=none
+output=filesystem
+listing=Name,Type
+reading=true
+writing=false
+makedir=false
+linking=false
+deleting=false
+moving=false
+maxInstances=1
+Description=Digikam tags kioslave
