@@ -66,10 +66,10 @@ class ExifThumbLabel : public QLabel
 
 public:
     
-    ExifThumbLabel(QWidget * parent, KURL currentUrl);
+    ExifThumbLabel(QWidget * parent);
     ~ExifThumbLabel();
     
-    void setOrientationMenu(KExifData *currExifData);
+    void setOrientationMenu(KExifData *currExifData, KURL currentUrl);
 
 protected:    
     
@@ -106,6 +106,8 @@ private:
     AlbumIconView                *m_view;
     
     AlbumIconItem                *m_currItem;
+    
+    KURL                          m_currfileURL;
     
     // For General tab.
     
@@ -173,7 +175,7 @@ private:
     QImage                        m_image;
     QImage                        m_imageSelection;
     
-    AlbumIconItem                *m_IEcurrentItem;
+    KURL                          m_IEcurrentURL;
     
     QRect                        *m_selectionArea;
     

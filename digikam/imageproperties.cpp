@@ -85,11 +85,9 @@
 #include "imageproperties.h"
 
 
-ExifThumbLabel::ExifThumbLabel(QWidget * parent, KURL currentUrl)
+ExifThumbLabel::ExifThumbLabel(QWidget * parent)
                :QLabel(parent)
 {
-    m_currentUrl = currentUrl;
-    
     m_popmenu = new QPopupMenu(this);
     m_popmenu->setCheckable(true);
     m_popmenu->insertItem(i18n("Correct Exif Orientation Tag"), 10);
@@ -110,8 +108,9 @@ ExifThumbLabel::~ExifThumbLabel()
     delete m_popmenu;
 }
 
-void ExifThumbLabel::setOrientationMenu(KExifData *currExifData)
+void ExifThumbLabel::setOrientationMenu(KExifData *currExifData, KURL currentUrl)
 {
+    m_currentUrl = currentUrl;
     int orient = currExifData->getImageOrientation();
     m_popmenu->setItemChecked(orient + 10, true);
 }
@@ -149,14 +148,14 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
-    m_view          = view;               // Needed for PAlbum using.
-    
-    m_IEcurrentItem = currItem;           // In Image Editor mode, save current idem (used if 
-                                          // an image selection area is passed in constructor).
+    m_view          = view;                          // Needed for PAlbum using.
     m_currItem      = currItem;
     
-    KURL fileURL(m_currItem->fileItem()->url());
+    m_IEcurrentURL  = currItem->fileItem()->url();   // With Image Editor mode, save current idem url (used if 
+                                                     // an image selection area is passed in constructor).
     
+    m_currfileURL   = m_currItem->fileItem()->url();    
+
     m_selectionArea = selectionArea;
     
     parentWidget()->setCursor( KCursor::waitCursor() );
@@ -245,6 +244,7 @@ void ImageProperties::slotUser1()
         return;
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
+    m_currfileURL = m_currItem->fileItem()->url();    
     slotItemChanged();
 }
 
@@ -254,6 +254,7 @@ void ImageProperties::slotUser2()
         return;
     
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
+    m_currfileURL = m_currItem->fileItem()->url();    
     slotItemChanged();
 }
 
@@ -265,27 +266,18 @@ void ImageProperties::slotItemChanged()
     setCursor( KCursor::waitCursor() );
     
     if (!m_HistogramThumbJob.isNull())
-    {
         m_HistogramThumbJob->kill();
-    }
 
     if (!m_HistogramThumbJob.isNull())
-    {
         delete m_HistogramThumbJob;
-    }
 
     if (!m_generalThumbJob.isNull())
-    {
         m_generalThumbJob->kill();
-    }
 
     if (!m_generalThumbJob.isNull())
-    {
         delete m_generalThumbJob;
-    }
 
-    KURL fileURL(m_currItem->fileItem()->url());    
-    setCaption(i18n("Properties for \"%1\"").arg(fileURL.fileName()));
+    setCaption(i18n("Properties for \"%1\"").arg(m_currfileURL.fileName()));
     
     // -------------------------------------------------------------                                         
     // Update General tab.
@@ -302,7 +294,7 @@ void ImageProperties::slotItemChanged()
     m_filecomments->clear();
     m_filetags->clear();
     
-    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
+    m_generalThumbJob = new ThumbnailJob(m_currfileURL, 128);
     
     connect(m_generalThumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
@@ -316,15 +308,20 @@ void ImageProperties::slotItemChanged()
             SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedGeneralThumbnail(const KURL&)));       
 
-    const KFileItem* fi = m_currItem->fileItem();    
-    m_filename->setText( fileURL.fileName() );
-    m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
-#if KDE_VERSION >= 0x30200
-    KFileMetaInfo meta(fileURL);
-#else
-    KFileMetaInfo meta(fileURL.path());
-#endif
+    // File system informations
     
+    KFileItem* fi = new KFileItem(KFileItem::Unknown,
+                                  KFileItem::Unknown,
+                                  m_currfileURL);
+
+    m_filename->setText( m_currfileURL.fileName() );
+    m_filetype->setText( KMimeType::findByURL(m_currfileURL)->name() );
+#if KDE_VERSION >= 0x30200
+    KFileMetaInfo meta(m_currfileURL);
+#else
+    KFileMetaInfo meta(m_currfileURL.path());
+#endif
+
     if (meta.isValid())
         {
         QSize dims;
@@ -340,7 +337,7 @@ void ImageProperties::slotItemChanged()
                             .arg(dims.height()).arg(i18n("pixels")) );
         }
    
-    m_filepath->setText( fileURL.path() );
+    m_filepath->setText( m_currfileURL.path() );
     QDateTime dateurl;
     dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
     m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
@@ -349,6 +346,8 @@ void ImageProperties::slotItemChanged()
     m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
     m_filepermissions->setText( fi->permissionsString() );
 
+    // Digikam informations.
+    
     PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
     
     if (palbum)
@@ -372,7 +371,7 @@ void ImageProperties::slotItemChanged()
     
     m_ExifData = new KExifData;
     
-    if (m_ExifData->readFromFile(fileURL.path()))
+    if (m_ExifData->readFromFile(m_currfileURL.path()))
         {
         slotLevelExifChanged(m_levelExifCB->currentItem());
     
@@ -384,7 +383,7 @@ void ImageProperties::slotItemChanged()
             {
             m_exifThumb->setFixedSize(thumbnail.size());
             m_exifThumb->setPixmap(QPixmap(thumbnail));
-            m_exifThumb->setOrientationMenu(m_ExifData);
+            m_exifThumb->setOrientationMenu(m_ExifData, m_currfileURL.path());
             }        
         else
             {
@@ -400,7 +399,7 @@ void ImageProperties::slotItemChanged()
     // -------------------------------------------------------------                                         
     // Update Histogram Viewer tab.
     
-    m_HistogramThumbJob = new ThumbnailJob(fileURL, 48);
+    m_HistogramThumbJob = new ThumbnailJob(m_currfileURL, 48);
     
     connect(m_HistogramThumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
@@ -418,7 +417,7 @@ void ImageProperties::slotItemChanged()
     // threaded histogram algorithm.
     m_histogramWidget->stopHistogramComputation();
         
-    if ( m_image.load(fileURL.path()) )
+    if ( m_image.load(m_currfileURL.path()) )
        {
         if(m_image.depth() < 32)                 // we works always with 32bpp.
             m_image = m_image.convertDepth(32);
@@ -428,7 +427,7 @@ void ImageProperties::slotItemChanged()
         // If a selection area is done in Image Editor and if the current image is the same 
         // in Image Editor, then compute too the histogram for this selection.
         
-        if (m_selectionArea && m_IEcurrentItem == m_currItem)
+        if (m_selectionArea && m_IEcurrentURL == m_currfileURL)
            {
            m_imageSelection = m_image.copy(*m_selectionArea);
            m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
@@ -653,7 +652,7 @@ void ImageProperties::slotRefreshOptions(void)
     slotScaleChanged(m_scaleCB->currentItem());
     slotColorsChanged(m_colorsCB->currentItem());
     
-    if (m_selectionArea && m_IEcurrentItem == m_currItem)
+    if (m_selectionArea && m_IEcurrentURL == m_currfileURL)
        slotRenderingChanged(m_renderingCB->currentItem());
 }
 
@@ -864,7 +863,7 @@ void ImageProperties::setupExifViewer(void)
     m_listview = new KExifListView(page, true);
     
     m_embeddedThumbnail = new QVGroupBox(i18n("Embedded Exif thumbnail"), page);
-    m_exifThumb = new ExifThumbLabel(m_embeddedThumbnail, m_currItem->fileItem()->url());
+    m_exifThumb = new ExifThumbLabel(m_embeddedThumbnail);
     QWhatsThis::add( m_exifThumb, i18n("<p>You can see here the Exif thumbnail embedded in image.<p>"
                                        "If you press under with right mouse button, you can corrected the "
                                        "Exif orientation tag by a popup menu."));
