@@ -325,3 +325,5 @@ extern "C"
         return 0;
     }
 }
+
+#include "digikamcamera.moc"
