@@ -59,7 +59,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_JPEGcompression->setRange(1, 100, 1, true );
    m_JPEGcompression->setLabel( i18n("&JPEG compression:") );
 
-   QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value of the JPEG images:<p>"
+   QWhatsThis::add( m_JPEGcompression, i18n("<p>The compression value for JPEG images:<p>"
                                             "<b>1</b>: very high compression<p>"
                                             "<b>25</b>: high compression<p>"
                                             "<b>50</b>: medium compression<p>"
