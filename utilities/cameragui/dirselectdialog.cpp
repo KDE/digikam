@@ -127,8 +127,8 @@ void DirSelectDialog::openNextDir( KFileTreeViewItem* parent)
     }
     else
     {
-        kdWarning() << k_funcinfo <<  "Could not find item"
-                    << endl;
+        kdWarning() << k_funcinfo <<  "Could not find item for url"
+                    << url.prettyURL() << endl;
         m_urlsToList.push(url);
     }
 }
@@ -177,11 +177,12 @@ void DirSelectDialog::slotUser1()
     if (!ftvItem)
         return;
 
-    QString relPath = KURL::relativePath(m_rootURL.path(1),
-                                         ftvItem->fileItem()->url().path(1));
+    QString rootPath = QDir::cleanDirPath(m_rootURL.path(-1));
+    QString relPath  = QDir::cleanDirPath(ftvItem->fileItem()->url().path(-1));
+    
+    relPath.remove(0, rootPath.length());
     if (!relPath.startsWith("/"))
         relPath.prepend("/");
-    relPath = QDir::cleanDirPath(relPath);
         
     bool ok;
 
