@@ -43,12 +43,12 @@ ImageGUIClient::ImageGUIClient(QWidget *parent)
                                   this, SIGNAL(signalNext()),
                                   actionCollection(), "imageview_next"); 
 
-    m_navFirstAction = new KAction(i18n("&First"), "2leftarrow",
+    m_navFirstAction = new KAction(i18n("&First"), "start",
                                    KStdAccel::shortcut( KStdAccel::Home),
                                    this, SIGNAL(signalFirst()),
                                    actionCollection(), "imageview_first"); 
                 
-    m_navLastAction = new KAction(i18n("&Last"), "2rightarrow",
+    m_navLastAction = new KAction(i18n("&Last"), "finish",
                                   KStdAccel::shortcut( KStdAccel::End),
                                   this, SIGNAL(signalLast()),
                                   actionCollection(), "imageview_last");
