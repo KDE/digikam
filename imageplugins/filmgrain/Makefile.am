@@ -22,3 +22,6 @@ messages: rc.cpp
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_filmgrain_ui.rc        
+
+digikamimageplugin_filmgrainicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_filmgrainicon_ICON = AUTO
