@@ -21,6 +21,10 @@
 #ifndef IMAGE_FILTERS_H
 #define IMAGE_FILTERS_H
 
+// C++ includes.
+
+#include <cmath>
+
 namespace Digikam
 {
 
@@ -103,6 +107,26 @@ private:    // Private methods used internally.
        if (ColorValue < 0) ColorValue = 0;
        return ((uchar) ColorValue);
        };        
+       
+    static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
+       {
+       double lfSum = RedGain + GreenGain + BlueGain;
+
+       if ((lfSum == 0.0) || (bPreserveLum == false))
+           return (1.0);
+
+       return( fabs (1.0 / lfSum) );
+       }
+
+    static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, uchar R, uchar G, uchar B, double Norm)
+       {
+       double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
+       lfMix *= Norm;
+       
+       if (lfMix > 255.0) return 255;        
+       if (lfMix < 0) return 0;
+       return( (uchar)lfMix );
+       }       
 
 public:   // Public methods.
 
@@ -113,6 +137,10 @@ public:   // Public methods.
     static void invertImage(uint *data, int w, int h);
     static void smartBlurImage(uint *data, int Width, int Height);
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
+    static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
+                                  float rrGain, float rgGain, float rbGain,
+                                  float grGain, float ggGain, float gbGain,
+                                  float brGain, float bgGain, float bbGain);
 };
 
 }  // NameSpace Digikam

@@ -31,7 +31,6 @@
 
 // C++ includes.
 
-#include <cmath>
 #include <cstring>
 #include <cstdlib>
 
@@ -767,6 +766,54 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     delete [] pBlur;
     delete [] pOutBits;
     delete [] Kernel;
+}
+
+void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
+                                     float rrGain, float rgGain, float rbGain,
+                                     float grGain, float ggGain, float gbGain,
+                                     float brGain, float bgGain, float bbGain)
+{
+    register int h, w, i = 0;
+    uchar nGray, red, green , blue;
+    int nStride = GetStride(Width);
+    
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    int    BitCount = LineWidth * Height;
+    uchar*    pBits = (uchar*)data;
+    uchar* pResBits = new uchar[BitCount];
+    
+    double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
+    double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
+    double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
+    
+    for (h = 0; h < Height; h++, i += nStride)
+        {
+        for (w = 0; w < Width; w++, i += 4)
+            {
+            red   = pBits[i+2];
+            green = pBits[i+1];
+            blue  = pBits[ i ];
+            
+            if (bMonochrome)
+                {
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
+                pResBits[i] = pResBits[i+1] = pResBits[i+2] = nGray;
+                }
+            else
+                {
+                pResBits[ i ] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
+                pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm);
+                pResBits[i+2] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm);
+                }
+            
+            pResBits[i+3] = pBits[i+3];
+            }
+        }
+
+    memcpy (data, pResBits, BitCount);
+    delete [] pResBits;
 }
 
 }  // NameSpace Digikam
