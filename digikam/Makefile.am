@@ -29,7 +29,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
 		        albumsettings.cpp histogrampropsplugin.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        digikamfirstrun.cpp \
+		        digikamfirstrun.cpp firstrunUI.ui \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			thumbdb.cpp albumfiletip.cpp digikamio.cpp \
 			busyprogressbar.cpp tagspopupmenu.cpp \
