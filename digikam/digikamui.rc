@@ -6,13 +6,9 @@
   <Menu name="Album" >
    <text>&amp;Album</text>
      <Action name="album_new" />
-     <Action name="album_add" />
-     <Action name="album_sort" />
    <Separator/>
      <Action name="album_propsEdit" />
      <Action name="album_openinkonqui" />
-   <Separator/>
-      <ActionList name="album_actions"/>
    <Separator/>
       <Menu name="Import"><text>&amp;Import</text>
          <Action name="album_addImages" />
@@ -62,10 +58,13 @@
      <Action name="album_thumbSizeIncrease" />
      <Action name="album_thumbSizeDecrease" />
      <Separator />
+     <Action name="album_sort" />
      <Action name="image_sort" />
   </Menu>
   
   <Menu name="Tools"><text>Too&amp;ls</text>
+      <ActionList name="album_actions"/>
+   <Separator/>
     <Action name="gamma_adjustment" />
     <ActionList name="tool_actions"/>
     <Menu name="BatchProcesses"><text>&amp;Batch processes</text>
@@ -80,9 +79,9 @@
   
   <Action name="camera_menu" />
 
-  <Action name="theme_menu" />
-
   <Menu name="settings" >
+     <Action name="theme_menu" />
+     <Separator/>
      <Action name="full_screen" />
   </Menu>
 
@@ -94,30 +93,18 @@
   <text>Main Toolbar</text>
   <Action name="album_new" />
   <Action name="album_addImages" />
-  <Action name="album_add" />
   <Action name="album_propsEdit" />
-  <Separator name="separator_1" />
-  <Separator name="separator_2" />
-  <Separator name="separator_3" />
+  <Separator/>
   <Action name="album_sort" />
-  <Separator name="separator_4" />
-  <Separator name="separator_5" />
-  <Separator name="separator_6" />
-  <Action name="camera_menu" />
-  <Separator name="separator_7" />
-  <Separator name="separator_8" />
-  <Separator name="separator_9" />
+  <Separator/>
   <Action name="image_view" />
   <Action name="image_comments" />
   <Action name="image_view_exif" />
   <Action name="image_rename" />
-  <Separator name="separator_10" />
-  <Separator name="separator_11" />
-  <Separator name="separator_12" />
+  <Separator/>
+  <Action name="image_sort_label" />  
   <Action name="image_sort" />  
-  <Separator name="separator_13" />
-  <Separator name="separator_14" />
-  <Separator name="separator_15" />
+  <Separator/>
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
   <Action name="full_screen" />

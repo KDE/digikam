@@ -25,20 +25,17 @@
 
 // Qt includes.
 
-#include <qdialog.h>
-
-class QCheckBox;
-class QLineEdit;
-class QPushButton;
+#include <kdialogbase.h>
 
 class KConfig;
+class KURLRequester;
+class DigikamFirstFirstRunWidget;
 
-class DigikamFirstRun : public QDialog
+class DigikamFirstRun : public KDialogBase
 {
     Q_OBJECT
 
 public:
-
     DigikamFirstRun( KConfig* config,
                      QWidget* parent = 0,
                      const char* name = 0,
@@ -47,17 +44,11 @@ public:
     ~DigikamFirstRun();
 
 private:
-
-    QLineEdit*   pathEdit_;
     KConfig*     config_;
-    QPushButton *okButton_;
-    QPushButton *cancelButton_;
+    DigikamFirstFirstRunWidget *ui;
 
-private slots:
-
-    void accept();
-    void slotChangePath();
-    void slotPathEdited(const QString& newPath);
+protected slots:
+    void slotOk();
 };
 
 #endif // DIGIKAMFIRSTRUN_H
