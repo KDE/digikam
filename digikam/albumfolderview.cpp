@@ -100,6 +100,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     tagRootItem_ = 0;
     openAlbumTimer_ = new QTimer(this);
     stateInitialLoading_ = true;
+    inFocus_             = false;
     
     connect(this, SIGNAL(signalSelectionChanged(ListItem*)),
             SLOT(slotSelectionChanged(ListItem*)));
@@ -1135,6 +1136,25 @@ void AlbumFolderView::resizeEvent(QResizeEvent* e)
     {
         slotThemeChanged();
     }
+}
+
+void AlbumFolderView::setInFocus(bool val)
+{
+    inFocus_ = val;    
+}
+
+void AlbumFolderView::focusInEvent(QFocusEvent* e)
+{
+    emit signalInFocus();
+    ListView::focusInEvent(e);
+}
+
+void AlbumFolderView::drawFrame(QPainter* p)
+{
+    if (inFocus_)
+        drawFrameRaised(p);
+    else
+        drawFrameSunken(p);
 }
 
 // Drag and Drop -----------------------------------------

@@ -61,7 +61,8 @@ protected:
     void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsMouseDoubleClickEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
-    void drawFrame(QPainter *p);
+    void drawFrameRaised(QPainter* p);
+    void drawFrameSunken(QPainter* p);
 
     virtual void paintItemBase(QPainter* p, const QColorGroup& group,
                                const QRect& r, bool selected);

@@ -81,6 +81,9 @@ DigikamView::DigikamView(QWidget *parent)
     setupConnections();
 
     mAlbumMan->setItemHandler(mIconView);
+
+    mFolderView->setInFocus(true);
+    mIconView->setInFocus(false);
 }
 
 DigikamView::~DigikamView()
@@ -111,8 +114,14 @@ void DigikamView::setupConnections()
     connect(mIconView,  SIGNAL(signalItemsAdded()),
             this, SLOT(slot_albumHighlight()));
 
+    connect(mIconView, SIGNAL(signalInFocus()),
+            SLOT(slotIconViewInFocus()));
+    
     connect(mFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
+
+    connect(mFolderView, SIGNAL(signalInFocus()),
+            SLOT(slotFolderViewInFocus()));
 }
 
 void DigikamView::slot_sortAlbums(int order)
@@ -429,6 +438,18 @@ void DigikamView::slotSortImages(int order)
         return;
     settings->setImageSortOder((AlbumSettings::ImageSortOrder) order);
     mIconView->slotUpdate();
+}
+
+void DigikamView::slotFolderViewInFocus()
+{
+    mFolderView->setInFocus(true);
+    mIconView->setInFocus(false);
+}
+
+void DigikamView::slotIconViewInFocus()
+{
+    mFolderView->setInFocus(false);
+    mIconView->setInFocus(true);
 }
 
 #include "digikamview.moc"

@@ -108,6 +108,9 @@ private slots:
 
     void slot_imageCopyResult(KIO::Job* job);
 
+    void slotFolderViewInFocus();
+    void slotIconViewInFocus();
+    
 signals:
 
     void signal_albumSelected(bool val);

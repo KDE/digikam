@@ -104,13 +104,18 @@ public:
     QFont    itemFontReg() const;
     QFont    itemFontCom() const;
     QFont    itemFontXtra() const;
+
+    void     setInFocus(bool val);
     
 protected:
 
     void calcBanner();
     void paintBanner(QPainter *p);
     void updateBanner();
-    void resizeEvent(QResizeEvent *e);
+    void resizeEvent(QResizeEvent* e);
+
+    void focusInEvent(QFocusEvent* e);
+    void drawFrame(QPainter* p);
     
     // DnD
     void startDrag();
@@ -171,6 +176,7 @@ public slots:
 signals:
 
     void signalItemsAdded();
+    void signalInFocus();
 
 };
 

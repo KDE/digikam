@@ -113,6 +113,7 @@ public:
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
+        inFocus       = false;
     }
     
     AlbumLister         *imageLister;
@@ -146,6 +147,8 @@ public:
 
     QDict<AlbumIconItem> itemDict;
     AlbumFileTip*        toolTip;
+
+    bool                 inFocus;
 };
 
 
@@ -926,6 +929,25 @@ void AlbumIconView::resizeEvent(QResizeEvent *e)
     
     if (d->bannerPixmap.width() != frameRect().width())
         calcBanner();
+}
+
+void AlbumIconView::setInFocus(bool val)
+{
+    d->inFocus = val;
+}
+
+void AlbumIconView::focusInEvent(QFocusEvent* e)
+{
+    emit signalInFocus();
+    ThumbView::focusInEvent(e);
+}
+
+void AlbumIconView::drawFrame(QPainter* p)
+{
+    if (d->inFocus)
+        drawFrameRaised(p);
+    else
+        drawFrameSunken(p);
 }
 
 void AlbumIconView::calcBanner()

@@ -588,14 +588,25 @@ void ThumbView::focusOutEvent(QFocusEvent *e)
     QScrollView::focusOutEvent(e);
 }
 
-void ThumbView::drawFrame(QPainter* p)
+void ThumbView::drawFrameRaised(QPainter* p)
 {
     QRect       r      = frameRect();
     int         lwidth = lineWidth();
 
     const QColorGroup & g = colorGroup();
 
-    qDrawShadeRect( p, r, g, !hasFocus(), lwidth,
+    qDrawShadeRect( p, r, g, false, lwidth,
+                    midLineWidth() );
+}
+
+void ThumbView::drawFrameSunken(QPainter* p)
+{
+    QRect       r      = frameRect();
+    int         lwidth = lineWidth();
+
+    const QColorGroup & g = colorGroup();
+
+    qDrawShadeRect( p, r, g, true, lwidth,
                     midLineWidth() );
 }
 

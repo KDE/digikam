@@ -320,14 +320,25 @@ void ListView::drawArrow(QPainter* p, const QRect& r, bool open,
     p->restore();
 }
 
-void ListView::drawFrame(QPainter *p)
+void ListView::drawFrameRaised(QPainter *p)
 {
     QRect       r      = frameRect();
     int         lwidth = lineWidth();
 
-    const QColorGroup & g = colorGroup();
+    const QColorGroup& g = colorGroup();
 
-    qDrawShadeRect( p, r, g, !hasFocus(), lwidth,
+    qDrawShadeRect( p, r, g, false, lwidth,
+                    midLineWidth() );
+}
+
+void ListView::drawFrameSunken(QPainter *p)
+{
+    QRect       r      = frameRect();
+    int         lwidth = lineWidth();
+
+    const QColorGroup& g = colorGroup();
+
+    qDrawShadeRect( p, r, g, true, lwidth,
                     midLineWidth() );
 }
 
