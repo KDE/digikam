@@ -1139,6 +1139,16 @@ void ImageWindow::slotEditKeys()
 {
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
+
+    ImagePluginLoader* loader = ImagePluginLoader::instance();
+    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+         plugin; plugin = loader->pluginList().next())
+    {
+        if (plugin)
+        {
+            dialog.insert( plugin->actionCollection(), plugin->name() );
+        }
+    }
     
     dialog.configure();
 }
