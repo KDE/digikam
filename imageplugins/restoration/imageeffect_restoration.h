@@ -95,6 +95,9 @@ private:
     int              m_originalHeight;
     
     QImage           m_previewImage;
+    
+    QTimer          *m_timer;
+    
     QWidget         *m_parent;
     
     QPushButton     *m_helpButton;
@@ -108,23 +111,25 @@ private:
     QLabel          *m_integralStepLabel;
     QLabel          *m_gaussianLabel;
     
+    // Preset Settings.
+    QComboBox       *m_restorationTypeCB;  
+    
+    KProgress       *m_progressBar;
+        
+    // Smoothing settings.
     KDoubleNumInput *m_detailInput;
     KDoubleNumInput *m_gradientInput;
     KDoubleNumInput *m_timeStepInput;
     KDoubleNumInput *m_blurInput;
+    KDoubleNumInput *m_blurItInput;
+    
+    // Advanced Settings.
     KDoubleNumInput *m_angularStepInput;
     KDoubleNumInput *m_integralStepInput;
     KDoubleNumInput *m_gaussianInput;
-    KDoubleNumInput *m_blurItInput;
     
     QCheckBox       *m_linearInterpolationBox;
     QCheckBox       *m_normalizeBox;
-    
-    QComboBox       *m_restorationTypeCB;  
-        
-    QTimer          *m_timer;
-    
-    KProgress       *m_progressBar;
     
     DigikamImagePlugins::CimgIface       *m_cimgInterface;
     
@@ -140,6 +145,8 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotUser2();
+    void slotUser3();
     void slotTimer();
 
 };
