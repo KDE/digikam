@@ -1,6 +1,7 @@
 v0.7.2 - 28/02/05
 ----------------------------------------------------------------------------
     * Update and fix handbooks for final release.
+    * FilmGrain : new algorithm inspired of gimpguru.org tutorial.
     * Raindrops : new algorithm from Pieter. Improved clipping region method.
     * Raindrops : add 'abort' preview computation.
 
