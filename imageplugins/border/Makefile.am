@@ -1,4 +1,5 @@
 METASOURCES = AUTO
+SUBDIRS = patterns
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/ \
 	      $(all_includes) $(IMLIB2_CFLAGS) $(LIBDIGIKAM_CFLAGS)   
@@ -28,3 +29,6 @@ borderpics_DATA = pine-pattern.png wood-pattern.png paper-pattern.png parque-pat
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_border_ui.rc
+
+digikamimageplugin_bordericondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_bordericon_ICON = AUTO
