@@ -98,7 +98,6 @@ DigikamApp::DigikamApp(bool detectCamera)
     setupActions();
     updateDeleteTrashMenu();
 
-    setAutoSaveSettings();
     applyMainWindowSettings(m_config);
 
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
@@ -112,6 +111,8 @@ DigikamApp::DigikamApp(bool detectCamera)
     // Load Themes
     populateThemes();
 
+    setAutoSaveSettings();    
+    
     // Auto-detect camera if requested so
     if (detectCamera)
     {
