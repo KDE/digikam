@@ -357,8 +357,10 @@ void AlbumFileTip::updateText()
     m_label->setText(tip);
 }
 
-QString AlbumFileTip::breakString(const QString& str)
+QString AlbumFileTip::breakString(const QString& input)
 {
+    QString str = input.simplifyWhiteSpace();
+    
     uint maxLen = 30;
     
     if (str.length() <= maxLen)
@@ -368,11 +370,20 @@ QString AlbumFileTip::breakString(const QString& str)
     QString br;
 
     uint i = 0;
+    uint count = 0;
     while (i < str.length())
     {
-        br.append(str[i++]);
-        if (i % maxLen == 0)
+        if (count >= maxLen && str[i].isSpace())
+        {
+            count = 0;
             br.append("<br>");
+        }
+        else
+        {
+            br.append(str[i]);
+        }
+        i++;
+        count++;
     }
 
     return br;
