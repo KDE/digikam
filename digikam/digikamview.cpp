@@ -292,8 +292,11 @@ void DigikamView::slot_albumPropsEdit()
 void DigikamView::slot_albumAddImages()
 {
     Album *album = mAlbumMan->currentAlbum();
-    if (!album) return;
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
 
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    
     QStringList list =
         KFileDialog::getOpenFileNames(QString::null,
                                       AlbumSettings::instance()->getImageFileFilter(),
@@ -311,7 +314,7 @@ void DigikamView::slot_albumAddImages()
 
     if (!urls.isEmpty()) {
         KIO::CopyJob* job =
-            KIO::copy(urls, album->getURL(), true);
+            KIO::copy(urls, palbum->getKURL(), true);
         connect(job, SIGNAL(result(KIO::Job *) ),
                 this, SLOT(slot_imageCopyResult(KIO::Job *)));
     }
