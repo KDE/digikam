@@ -1,5 +1,6 @@
 v0.6.3-beta1 
 ----------------------------------------------------------------------------
+        * <Gilles Caulier> Added thumbnails creation with imlib2 API.
         * <Gilles Caulier> Added a new option in general setup for to show the 
           images resolution of Album items (using imlib2).
         * <Gilles Caulier> Added Exif actions settings tabs in Settings dialog.
