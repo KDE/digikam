@@ -6,6 +6,8 @@ AUTOMAKE_OPTIONS = foreign
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
 
+COMPILE_FIRST = sqlite
+
 tip_DATA = tips
 tipdir = $(kde_datadir)/digikam
 
