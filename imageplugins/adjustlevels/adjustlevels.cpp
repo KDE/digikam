@@ -113,13 +113,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display.<p>"
-                                       "<b>Luminosity</b>: drawing the image luminosity values.<p>"
-                                       "<b>Red</b>: drawing the red image channel values.<p>"
-                                       "<b>Green</b>: drawing the green image channel values.<p>"
-                                       "<b>Blue</b>: drawing the blue image channel values.<p>"
-                                       "<b>Alpha</b>: drawing the alpha image channel values. " 
-                                       "This channel corresponding to the transparency value and "
-                                       "is supported by some image formats like PNG or GIF."));
+                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                       "<b>Red</b>: display the red image-channel values.<p>"
+                                       "<b>Green</b>: display the green image-channel values.<p>"
+                                       "<b>Blue</b>: display the blue image-channel values.<p>"
+                                       "<b>Alpha</b>: display the alpha image-channel values. " 
+                                       "This channel corresponds to the transparency value and "
+                                       "is supported by some image formats, such as PNG or GIF."));
     
     QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -128,9 +128,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
     QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image maximal counts is small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts is big. "
-                                     "Like this all values (small and big) will be visible on the graph."));
+                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "if it is used, all values (small and large) will be visible on the graph."));
     
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
@@ -222,9 +222,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
     QWhatsThis::add( m_saveButton, i18n("<p>Save levels settings to a Gimp levels text file."));
     m_autoButton = new QPushButton(i18n("&Auto"), gbox3);
-    QWhatsThis::add( m_autoButton, i18n("<p>Adjust levels automaticly."));
+    QWhatsThis::add( m_autoButton, i18n("<p>Adjust levels automatically."));
     m_resetButton = new QPushButton(i18n("&Reset all values"), gbox3);
-    QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels levels values."));
+    QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
     
     topLayout->addMultiCellWidget(gbox3, 2, 2, 0, 0);  
     
@@ -247,7 +247,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageWidget(240, 160, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image level adjustments preview."));
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
     topLayout->addMultiCellWidget(gbox4, 0, 2, 1, 1);  
@@ -583,7 +583,7 @@ void AdjustLevelDialog::slotLoadLevels()
 
     if ( m_levels->loadLevelsFromGimpLevelsFile( loadLevelsFile ) == false )
        {
-       KMessageBox::error(this, i18n("Cannot loading from the Gimp levels text file!"));
+       KMessageBox::error(this, i18n("Cannot load from the Gimp levels text file."));
        return;
        }
     
@@ -597,13 +597,13 @@ void AdjustLevelDialog::slotSaveLevels()
 
     saveLevelsFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
-                                             QString( i18n("Gimp Levels file to save...")) );
+                                             QString( i18n("Gimp levels file to save...")) );
     if( saveLevelsFile.isEmpty() )
        return;
 
     if ( m_levels->saveLevelsToGimpLevelsFile( saveLevelsFile ) == false )
        {
-       KMessageBox::error(this, i18n("Cannot saving to the Gimp levels text file!"));
+       KMessageBox::error(this, i18n("Cannot save to the Gimp levels text file."));
        return;
        }
     
