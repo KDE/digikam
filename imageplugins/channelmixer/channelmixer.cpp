@@ -263,8 +263,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from target image preview "
-                                                      "will be will be over-colored. This haven't effect to final rendering."));
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
+                                                      "will be over-colored. This will not have an effect on the final rendering."));
     
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
