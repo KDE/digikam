@@ -7,6 +7,9 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
+ * Some code come from the CImg Gimp plugin by Victor Stinner.
+ * See: http://www.girouette-stinner.com/castor/gimp.html
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -95,7 +98,13 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
-    
+
+    about->addAuthor("Victor Stinner", I18N_NOOP("CImg Gimp plugin"), 0,
+                     "http://www.girouette-stinner.com/castor/gimp.html");
+
+    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                     "http://www.greyc.ensicaen.fr/~dtschump/greycstoration/index.html");
+                        
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
