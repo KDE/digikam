@@ -1,25 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    MAIN.CPP
-//
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * File   : main.cpp
+ * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2002-07-28
+ * Description : 
+ * 
+ * Copyright 2002-2004 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 
 #ifdef HAVE_CONFIG_H
@@ -159,6 +158,11 @@ int main(int argc, char *argv[])
                           "r dot taylor at bcs.org.uk",
                           0);
                           
+    aboutData.addCredit ( "Joern Ahrens",
+                          I18N_NOOP("Developer"),
+                          "kde at jokele.de",
+                          0);
+    
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"),
                             I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 
