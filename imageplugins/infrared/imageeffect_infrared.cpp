@@ -158,7 +158,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     m_sensibilityLCDValue->display( QString::number(200) );
     whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                      "Increasing this value will increase the portion of green color in the mix. " 
-                     "It'll also increase the halo effect on the hightlights, and the film graininess (if the box is checked).");
+                     "It will also increase the halo effect on the hightlights, and the film graininess (if the box is checked).");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
