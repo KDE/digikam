@@ -3,6 +3,7 @@
 #include "kexifdata.h"
 #include "kexifentry.h"
 #include "kdebug.h"
+#include <libexif/exif-utils.h>
 
 #include <qfile.h>
 #include <kio/job.h>
@@ -148,6 +149,30 @@ QString KExifData::getUserComment()
    return mUserComment;
 
 }
+
+KExifData::ImageOrientation KExifData::getImageOrientation()
+{
+   if (mExifData) {
+      //get byte order for later reading
+      ExifByteOrder o=exif_data_get_byte_order(mExifData);
+      //retrieve Ifd0
+      ExifContent *ifd0=mExifData->ifd[EXIF_IFD_0];
+      //look for entry in ifd0
+      ExifEntry *entry=exif_content_get_entry(ifd0, EXIF_TAG_ORIENTATION);
+
+      if (entry && entry->format == EXIF_FORMAT_SHORT && entry->components == 1) {
+         //read value
+         ExifShort s = exif_get_short(entry->data, o);
+
+         return (ImageOrientation)s;
+      }
+   }
+
+   // if something went wrong, return NORMAL
+   return NORMAL;
+   
+}
+
 
 
 void KExifData::saveFile(const QString& filename)

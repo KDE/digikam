@@ -21,13 +21,25 @@ public:
         ERROR,
         SUCCESS };
 
+    enum ImageOrientation {
+        NORMAL=1, 
+        HFLIP=2, 
+        ROT_180=3, 
+        VFlip=4, 
+        ROT_90_HFLIP=5, 
+        ROT_90=6, 
+        ROT_90_VFLIP=7, 
+        ROT_270=8
+    };
+
     KExifData();
     ~KExifData();
 
     int readFromFile(const QString& filename);
     int readFromData(char* data, int size);
     int getThumbnail(QImage& thumb);
-    QString KExifData::getUserComment();
+    QString getUserComment();
+    ImageOrientation getImageOrientation();
 
     QValueVector<KExifIfd> ifdVector;
 
