@@ -153,6 +153,7 @@ void ImlibInterface::load(const QString& filename)
 
     if (d->image) {
         imlib_context_set_image(d->image);
+        imlib_image_set_changes_on_disk();
 
         d->origWidth  = imlib_image_get_width();
         d->origHeight = imlib_image_get_height();
