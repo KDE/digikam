@@ -240,9 +240,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_scaleCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
     
-    connect(m_whiteColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotEffect()));
-            
     connect(m_previewOriginalWidget, SIGNAL(crossCenterColorChanged( const QColor & )),
             this, SLOT(slotColorSelectedFromImage( const QColor & )));            
 }
