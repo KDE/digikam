@@ -77,7 +77,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();      
 
-    setButtonWhatsThis ( User1, i18n("<p>Reset level values from the currently selected channel.") );
+    setButtonWhatsThis ( User1, i18n("<p>Reset levels values from the current selected channel.") );
     
     // About data and help button.
     
