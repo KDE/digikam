@@ -527,7 +527,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
 
             // set EXIF UserComment
             KExifData *exifData = new KExifData;
-            exifData->saveExifComment(fileName,comments);
+            exifData->writeComment(fileName,comments);
             delete exifData;
         }
 
@@ -1163,6 +1163,7 @@ void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
 
     switch (orientation) {
        case KExifData::NORMAL:
+       case KExifData::UNSPECIFIED:
           break;
 
        case KExifData::HFLIP:

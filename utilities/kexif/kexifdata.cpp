@@ -184,7 +184,18 @@ void KExifData::saveFile(const QString& filename)
 }
 
 
-void KExifData::saveExifComment(QString& filename, QString& comment)
+void KExifData::writeOrientation(QString& filename, ImageOrientation orientation)
+{
+   QString str = "";
+   writeFile( filename, str, orientation);
+}
+
+void KExifData::writeComment(QString& filename, QString& comment)
+{
+   writeFile( filename, comment, UNSPECIFIED );
+}
+
+void KExifData::writeFile(QString& filename, QString& comment, ImageOrientation orientation)
 {
     unsigned int count = 0;
     Q_UINT8 byte;
@@ -232,56 +243,83 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
 
     QMemArray<unsigned char> buf(sectionLen);
 
-    Q_UINT32 userCommentOffset = 0;
-    Q_UINT32 oldCommentLength = 0;
-
-    for(int i=0 ; i < (sectionLen - 2) ; i++)
+    if( comment != "" ) 
     {
-      stream >> byte;
-      buf[i] = byte;
-      count++;
+       // replace EXIF UserCommentTag
+       Q_UINT32 userCommentOffset = 0;
+       Q_UINT32 oldCommentLength = 0;
 
-      // search for UserComment tag
-      if(i > 4 && buf[i]==0x00 && buf[i-1]==0x07 && buf[i-2]==0x92 && buf[i-3]==0x86)
-      {
-        stream >> oldCommentLength;
-        stream >> userCommentOffset;
-        count+=8;
-        kdDebug() << "Found UserComment offset: " << userCommentOffset << endl;
-        kdDebug() << "Found oldCommentLength: " << oldCommentLength << endl;
-        break;
-      }
-    }
-    if(!userCommentOffset)
+       for(int i=0 ; i < (sectionLen - 2) ; i++)
+       {
+          stream >> byte;
+          buf[i] = byte;
+          count++;
+
+          // search for UserComment tag
+          // this code is not perfect, but the probability that the sequence below is not
+          // the UserComment tag is very small.
+          if(i > 4 && buf[i]==0x00 && buf[i-1]==0x07 && buf[i-2]==0x92 && buf[i-3]==0x86)
+          {
+             stream >> oldCommentLength;
+             stream >> userCommentOffset;
+             count+=8;
+             kdDebug() << "Found UserComment offset: " << userCommentOffset << endl;
+             kdDebug() << "Found oldCommentLength: " << oldCommentLength << endl;
+             break;
+          }
+       }
+       if(!userCommentOffset)
+       {
+          kdDebug() << "No EXIF UserComment found." << endl;
+          file.close();
+          return;
+       }
+
+       while(count < userCommentOffset + 6)
+       {
+          stream >> byte;
+          count++;
+       }
+
+       // write character code ASCII into offset position
+       stream << 0x49435341;
+       stream << 0x00000049;
+
+       // don't write more than the old field length
+       unsigned int writeLen = (oldCommentLength < comment.length() + 8) ? oldCommentLength - 8 : comment.length(); 
+
+       // write comment into stream
+       for(unsigned int i = 0 ; i < writeLen ; i++)
+       {
+          stream << (Q_UINT8)comment.at(i).latin1();
+       }
+
+       // overwrite rest of old comment. Standard suggests \20, but that's not done in practice 
+       for(unsigned int i=0 ; i < oldCommentLength - writeLen - 8; i++)
+       {
+          stream << (Q_UINT8)0x00;
+       }
+    } 
+    else 
     {
-      kdDebug() << "No EXIF UserComment found." << endl;
-      file.close();
-      return;
-    }
+       // replace EXIF orientation tag
+       for(int i=0 ; i < (sectionLen - 2) ; i++)
+       {
+          stream >> byte;
+          buf[i] = byte;
+          count++;
 
-    while(count < userCommentOffset + 6)
-    {
-      stream >> byte;
-      count++;
-    }
-
-    // write character code ASCII into offset position
-    stream << 0x49435341;
-    stream << 0x00000049;
-
-    // don't write more than the old field length
-    unsigned int writeLen = (oldCommentLength < comment.length() + 8) ? oldCommentLength - 8 : comment.length(); 
-
-    // write comment into stream
-    for(unsigned int i = 0 ; i < writeLen ; i++)
-    {
-      stream << (Q_UINT8)comment.at(i).latin1();
-    }
-
-    // overwrite rest of old comment. Standard suggests \20, but that's not done in practice 
-    for(unsigned int i=0 ; i < oldCommentLength - writeLen - 8; i++)
-    {
-      stream << (Q_UINT8)0x00;
+          // search for Orientation tag
+          // this code is not perfect, but the probability that the sequence below is not
+          // the Orientation tag is very small.
+          if(i > 8 && buf[i]==0x00 && buf[i-1]==0x00 && buf[i-2]==0x00 && buf[i-3]==0x01 
+                 && buf[i-4]==0x00 && buf[i-5]==0x03 && buf[i-6]==0x01 && buf[i-7]==0x12)
+          {
+             stream << orientation;
+             kdDebug() << "Wrote Image Orientation: " << orientation << endl;
+             break;
+          }
+       }
     }
 
     file.close();

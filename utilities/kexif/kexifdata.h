@@ -22,6 +22,7 @@ public:
         SUCCESS };
 
     enum ImageOrientation {
+        UNSPECIFIED=0,
         NORMAL=1, 
         HFLIP=2, 
         ROT_180=3, 
@@ -44,7 +45,9 @@ public:
     QValueVector<KExifIfd> ifdVector;
 
     void saveFile(const QString& filename);
-    void KExifData::saveExifComment(QString& filename, QString& comment);
+    void writeOrientation(QString& filename, ImageOrientation orientation);
+    void writeComment(QString& filename, QString& comment);
+    void writeFile(QString& filename, QString& comment, ImageOrientation orientation); 
 
 private:
 
