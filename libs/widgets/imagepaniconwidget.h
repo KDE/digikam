@@ -50,7 +50,13 @@ public:
         
 signals:
 
-    void signalSelectionMoved( QRect rect, bool targetDone );
+    // Used on Ratio crop tool and with ImagePreview widget. 
+    // Emit when selection have been moved with mouse. 'targetDone' booleen 
+    // value is used for indicate if the mouse have been released.
+    void signalSelectionMoved( QRect rect, bool targetDone );     
+    
+    // Used on Ratio crop tool only. Emit when selection area size have been changed.
+    void signalSelectionChanged( QRect rect );   
 
 protected:
     

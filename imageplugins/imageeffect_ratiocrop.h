@@ -76,6 +76,8 @@ private:
     CMS40x50,                  // 40 x 50 cm
     };
     
+    void updateSelectionSize(QRect rect);
+    
 private slots:
 
     void slotUser1();
@@ -85,6 +87,7 @@ private slots:
     void slotOrientChanged(int o);
     void slotRatioChanged(void);
     void slotSelectionMoved(QRect rect, bool target);
+    void slotSelectionChanged(QRect rect);
 };
 
 #endif /* IMAGEEFFECT_RATIOCROP_H */

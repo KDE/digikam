@@ -97,7 +97,7 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
                                            ( (float)m_h / (float)m_iface->originalHeight() )) );
     
     repaint(false);
-    emit signalSelectionMoved( m_regionSelection, true );
+    emit signalSelectionChanged( m_regionSelection );
 }
 
 QRect ImagePanIconWidget::getRegionSelection(void)
