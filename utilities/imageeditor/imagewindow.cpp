@@ -603,7 +603,8 @@ void ImageWindow::slotResize()
 
 void ImageWindow::slotContextMenu()
 {
-    m_contextMenu->exec(QCursor::pos());
+    //m_contextMenu->exec(QCursor::pos());
+    kdDebug() << "TODO: implement" << endl;
 }
 
 void ImageWindow::slotZoomChanged(float zoom)
