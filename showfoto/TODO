@@ -1,6 +1,7 @@
 todo stuff before 0.7.3 release
 ---------------------------------
 
+* update Showfoto splashscreen (different to digiKam).
 * add Move to trash.
 * disable Fix-Increase/Decrease BCG if core plugin is available. 
 * add shofoto settings dialog. 
