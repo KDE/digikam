@@ -30,6 +30,8 @@
 
 // Local includes.
 
+#include <imageiface.h>
+#include "histogramviewer.h"
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
@@ -46,8 +48,11 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
 
 ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                    const QStringList &)
-    : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
+                : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
+    //-------------------------------                
+    // Fix/Colors menu actions
+
     new KAction(i18n("Blur..."), 0, 
                 this, SLOT(slotBlur()),
                 actionCollection(), "implugcore_blur");
@@ -56,7 +61,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSharpen()),
                 actionCollection(), "implugcore_sharpen");
 
-    // Fix/Colors menu actions
+    m_redeyeAction = new KAction(i18n("Red Eye Reduction"), 0, 
+                                 this, SLOT(slotRedEye()),
+                                 actionCollection(), "implugcore_redeye");
+    m_redeyeAction->setEnabled(false);
     
     m_colorsAction = new KActionMenu(i18n("&Colors"), "blend",
                                      actionCollection(),
@@ -78,6 +86,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb") );
 
+    m_colorsAction->insert(new KActionSeparator());  
+                
     m_colorsAction->insert(
                 new KAction(i18n("Normalize"), 0, 
                 this, SLOT(slotNormalize()),
@@ -88,6 +98,16 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotEqualize()),
                 actionCollection(), "implugcore_equalize") );                
     
+    m_colorsAction->insert(new KActionSeparator());  
+    
+    m_colorsAction->insert(
+                new KAction(i18n("Histogram viewer..."), 0, 
+                this, SLOT(slotHistogramViewer()),
+                actionCollection(), "implugcore_histogramviewer") );                
+    
+    //-------------------------------                
+    // Filters menu actions.
+                                    
     new KAction(i18n("Convert to Black-White"), 0, 
                 this, SLOT(slotBW()),
                 actionCollection(), "implugcore_bw");
@@ -100,14 +120,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotSolarize()),
                 actionCollection(), "implugcore_solarize");
     
-/*    new KAction(i18n("Testing KImageEffect filter"), 0, 
+    //-------------------------------                
+    // For testing. Will be removed...
+    
+    new KAction(i18n("Test..."), 0, 
                 this, SLOT(slotTest()),
-                actionCollection(), "implugcore_test");*/
-
-    m_redeyeAction = new KAction(i18n("Red Eye Reduction"), 0, 
-                                 this, SLOT(slotRedEye()),
-                                 actionCollection(), "implugcore_redeye");
-    m_redeyeAction->setEnabled(false);
+                actionCollection(), "implugcore_test");
 
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
@@ -120,12 +138,6 @@ QStringList ImagePlugin_Core::guiDefinition() const
 {
     QStringList guiDef;
 
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
-    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
-    
-//    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_test/ ");
-
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
@@ -133,6 +145,13 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
     guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
 
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_bw/ ");
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_sepia/ ");
+    guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_solarize/ ");
+
+    // For testing. Will be removed...
+    //guiDef.append("MenuBar/Menu/&Filters/Generic/Action/implugcore_test/ ");
+    
     // enable i18n
 
     i18n( "&Filters" );
@@ -186,6 +205,18 @@ void ImagePlugin_Core::slotEqualize()
     ImageEffect_ColorsEnhance::equalizeImage();
 }
 
+void ImagePlugin_Core::slotHistogramViewer()
+{
+    Digikam::ImageIface iface(0, 0);
+
+    uint* data = iface.getOriginalData();
+    int w      = iface.originalWidth();
+    int h      = iface.originalHeight();
+    
+    HistogramViewer dlg(parentWidget(), data, w, h);
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotSolarize()
 {
     ImageEffect_Solarize dlg(parentWidget());
@@ -207,9 +238,9 @@ void ImagePlugin_Core::slotRedEye()
     ImageEffect_RedEye::removeRedEye(parentWidget());    
 }
 
+// For testing. Will be removed...
 void ImagePlugin_Core::slotTest()
 {
-    ImageEffect_ColorsEnhance::testKImageEffect();
 }
 
 
