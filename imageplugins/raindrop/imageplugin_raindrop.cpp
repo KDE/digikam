@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_raindrop,
 ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const char*, const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_RainDrop")
 {
-    new KAction(i18n("Raindrops..."), "raindrop", 0, 
-                this, SLOT(slotRainDrop()),
-                actionCollection(), "imageplugin_raindrop");
+    m_raindropAction = new KAction(i18n("Raindrops..."), "raindrop", 0, 
+                           this, SLOT(slotRainDrop()),
+                           actionCollection(), "imageplugin_raindrop");
                 
     setXMLFile( "digikamimageplugin_raindrop_ui.rc" );    
         
@@ -50,6 +50,11 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const char*, const Q
 
 ImagePlugin_RainDrop::~ImagePlugin_RainDrop()
 {
+}
+
+void ImagePlugin_RainDrop::setEnabledActions(bool enable)
+{
+    m_raindropAction->setEnabled(enable);
 }
 
 void ImagePlugin_RainDrop::slotRainDrop()

@@ -41,9 +41,9 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
-    new KAction(i18n("Channel Mixer..."), "channelmixer", 0, 
-                this, SLOT(slotChannelMixer()),
-                actionCollection(), "imageplugin_channelmixer");
+    m_channelMixerAction = new KAction(i18n("Channel Mixer..."), "channelmixer", 0, 
+                               this, SLOT(slotChannelMixer()),
+                               actionCollection(), "imageplugin_channelmixer");
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
     
@@ -52,6 +52,11 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
 
 ImagePlugin_ChannelMixer::~ImagePlugin_ChannelMixer()
 {
+}
+
+void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
+{
+    m_channelMixerAction->setEnabled(enable);
 }
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()

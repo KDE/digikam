@@ -4,7 +4,7 @@
  * Date  : 2004-08-26
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
                                            const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Charcoal")
 {
-    new KAction(i18n("Charcoal Drawing..."), "charcoaltool", 0, 
-                this, SLOT(slotCharcoal()),
-                actionCollection(), "imageplugin_charcoal");
+    m_charcoalAction = new KAction(i18n("Charcoal Drawing..."), "charcoaltool", 0, 
+                           this, SLOT(slotCharcoal()),
+                           actionCollection(), "imageplugin_charcoal");
                 
     setXMLFile( "digikamimageplugin_charcoal_ui.rc" );
     
@@ -51,6 +51,11 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
 
 ImagePlugin_Charcoal::~ImagePlugin_Charcoal()
 {
+}
+
+void ImagePlugin_Charcoal::setEnabledActions(bool enable)
+{
+    m_charcoalAction->setEnabled(enable);
 }
 
 void ImagePlugin_Charcoal::slotCharcoal()

@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_distortionfx,
 ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const char*, const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_DistortionFX")
 {
-    new KAction(i18n("Distortion Effects..."), "distortionfx", 0, 
-                this, SLOT(slotDistortionFX()),
-                actionCollection(), "imageplugin_distortionfx");
+    m_distortionfxAction = new KAction(i18n("Distortion Effects..."), "distortionfx", 0, 
+                               this, SLOT(slotDistortionFX()),
+                               actionCollection(), "imageplugin_distortionfx");
                 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );    
         
@@ -50,6 +50,11 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const char*,
 
 ImagePlugin_DistortionFX::~ImagePlugin_DistortionFX()
 {
+}
+
+void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
+{
+    m_distortionfxAction->setEnabled(enable);
 }
 
 void ImagePlugin_DistortionFX::slotDistortionFX()

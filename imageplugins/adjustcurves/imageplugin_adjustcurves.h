@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_AdjustCurves : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_AdjustCurves(QObject *parent, const char* name,
                              const QStringList &args);
     ~ImagePlugin_AdjustCurves();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_curvesAction;
+    
 private slots:
 
     void slotCurvesAdjust();

@@ -41,9 +41,9 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
-    new KAction(i18n("Levels Adjust..."), "adjustlevels", 0, 
-                this, SLOT(slotLevelsAdjust()),
-                actionCollection(), "imageplugin_adjustlevels");
+    m_levelsAction = new KAction(i18n("Levels Adjust..."), "adjustlevels", 0, 
+                         this, SLOT(slotLevelsAdjust()),
+                         actionCollection(), "imageplugin_adjustlevels");
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
     
@@ -52,6 +52,11 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()
 {
+}
+
+void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
+{
+    m_levelsAction->setEnabled(enable);
 }
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()

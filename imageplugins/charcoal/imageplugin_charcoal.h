@@ -4,7 +4,7 @@
  * Date  : 2004-08-26
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_Charcoal : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_Charcoal(QObject *parent, const char* name,
                          const QStringList &args);
     ~ImagePlugin_Charcoal();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_charcoalAction;
+    
 private slots:
 
     void slotCharcoal();

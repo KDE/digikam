@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_infrared,
 ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const char*, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_Infrared")
 {
-    new KAction(i18n("Infrared Film..."), "infrared", 0, 
-                this, SLOT(slotInfrared()),
-                actionCollection(), "imageplugin_infrared");
+    m_infraredAction = new KAction(i18n("Infrared Film..."), "infrared", 0, 
+                           this, SLOT(slotInfrared()),
+                           actionCollection(), "imageplugin_infrared");
                 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );                                
     
@@ -50,6 +50,11 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const char*, const Q
 
 ImagePlugin_Infrared::~ImagePlugin_Infrared()
 {
+}
+
+void ImagePlugin_Infrared::setEnabledActions(bool enable)
+{
+    m_infraredAction->setEnabled(enable);
 }
 
 void ImagePlugin_Infrared::slotInfrared()

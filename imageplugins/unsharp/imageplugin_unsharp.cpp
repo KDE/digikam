@@ -44,9 +44,9 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
                                          const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Unsharp")
 {
-    new KAction(i18n("Unsharp Mask..."), "unsharpedmask", 0, 
-                this, SLOT(slotUnsharp()),
-                actionCollection(), "imageplugin_unsharp");
+    m_unsharpAction = new KAction(i18n("Unsharp Mask..."), "unsharpedmask", 0, 
+                          this, SLOT(slotUnsharp()),
+                          actionCollection(), "imageplugin_unsharp");
 
     setXMLFile("digikamimageplugin_unsharp_ui.rc");               
                     
@@ -55,6 +55,11 @@ ImagePlugin_Unsharp::ImagePlugin_Unsharp(QObject *parent, const char*,
 
 ImagePlugin_Unsharp::~ImagePlugin_Unsharp()
 {
+}
+
+void ImagePlugin_Unsharp::setEnabledActions(bool enable)
+{
+    m_unsharpAction->setEnabled(enable);
 }
 
 void ImagePlugin_Unsharp::slotUnsharp()

@@ -4,7 +4,7 @@
  * Date  : 2004-12-25
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_antivignetting,
 ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const char*, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_AntiVignetting")
 {
-    new KAction(i18n("Anti Vignetting..."), "antivignetting", 0, 
-                this, SLOT(slotAntiVignetting()),
-                actionCollection(), "imageplugin_antivignetting");
+    m_antivignettingAction = new KAction(i18n("Anti Vignetting..."), "antivignetting", 0, 
+                                 this, SLOT(slotAntiVignetting()),
+                                 actionCollection(), "imageplugin_antivignetting");
 
     setXMLFile("digikamimageplugin_antivignetting_ui.rc");                
     
@@ -50,6 +50,11 @@ ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const ch
 
 ImagePlugin_AntiVignetting::~ImagePlugin_AntiVignetting()
 {
+}
+
+void ImagePlugin_AntiVignetting::setEnabledActions(bool enable)
+{
+    m_antivignettingAction->setEnabled(enable);
 }
 
 void ImagePlugin_AntiVignetting::slotAntiVignetting()

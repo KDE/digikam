@@ -4,7 +4,7 @@
  * Date  : 2004-11-23
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_sheartool,
 ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const char*, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_ShearTool")
 {
-    new KAction(i18n("Shear..."), "sheartool", 0, 
-                this, SLOT(slotShearTool()),
-                actionCollection(), "imageplugin_sheartool");
+    m_sheartoolAction = new KAction(i18n("Shear..."), "sheartool", 0, 
+                            this, SLOT(slotShearTool()),
+                            actionCollection(), "imageplugin_sheartool");
     
     setXMLFile("digikamimageplugin_sheartool_ui.rc");         
                                     
@@ -50,6 +50,11 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const char*, const
 
 ImagePlugin_ShearTool::~ImagePlugin_ShearTool()
 {
+}
+
+void ImagePlugin_ShearTool::setEnabledActions(bool enable)
+{
+    m_sheartoolAction->setEnabled(enable);
 }
 
 void ImagePlugin_ShearTool::slotShearTool()

@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_DistortionFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -37,6 +39,12 @@ public:
                              const QStringList &args);
     ~ImagePlugin_DistortionFX();
 
+    void setEnabledActions(bool enable);
+
+private:
+
+    KAction *m_distortionfxAction;
+    
 private slots:
 
     void slotDistortionFX();

@@ -4,7 +4,7 @@
  * Date  : 2004-02-14
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                                                    const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Solarize")
 {
-    new KAction(i18n("Solarize Image..."), "solarizetool", 0, 
-                this, SLOT(slotSolarize()),
-                actionCollection(), "imageplugin_solarize");
+    m_solarizeAction = new KAction(i18n("Solarize Image..."), "solarizetool", 0, 
+                           this, SLOT(slotSolarize()),
+                           actionCollection(), "imageplugin_solarize");
                 
     setXMLFile( "digikamimageplugin_solarize_ui.rc" );    
         
@@ -51,6 +51,11 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
 
 ImagePlugin_Solarize::~ImagePlugin_Solarize()
 {
+}
+
+void ImagePlugin_Solarize::setEnabledActions(bool enable)
+{
+    m_solarizeAction->setEnabled(enable);
 }
 
 void ImagePlugin_Solarize::slotSolarize()

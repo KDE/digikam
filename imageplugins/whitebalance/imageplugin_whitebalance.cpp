@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_whitebalance,
 ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
-    new KAction(i18n("White Balance..."), "whitebalance", 0, 
-                this, SLOT(slotWhiteBalance()),
-                actionCollection(), "imageplugin_whitebalance");
+    m_whitebalanceAction = new KAction(i18n("White Balance..."), "whitebalance", 0, 
+                               this, SLOT(slotWhiteBalance()),
+                               actionCollection(), "imageplugin_whitebalance");
     
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");         
                                     
@@ -50,6 +50,11 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*,
 
 ImagePlugin_WhiteBalance::~ImagePlugin_WhiteBalance()
 {
+}
+
+void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
+{
+    m_whitebalanceAction->setEnabled(enable);
 }
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()

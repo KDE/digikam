@@ -82,6 +82,7 @@ private:
     void saveSettings();
     bool promptUserSave();
     bool save();
+    void toogleActions(bool val);
 
 private:
 

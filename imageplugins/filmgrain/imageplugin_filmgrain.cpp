@@ -4,7 +4,7 @@
  * Date  : 2004-10-01
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_filmgrain,
 ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const char*, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_FilmGrain")
 {
-    new KAction(i18n("Add Film Grain..."), "filmgrain", 0, 
-                this, SLOT(slotFilmGrain()),
-                actionCollection(), "imageplugin_filmgrain");
+    m_filmgrainAction = new KAction(i18n("Add Film Grain..."), "filmgrain", 0, 
+                            this, SLOT(slotFilmGrain()),
+                            actionCollection(), "imageplugin_filmgrain");
                 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );                                
     
@@ -50,6 +50,11 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const char*, const
 
 ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()
 {
+}
+
+void ImagePlugin_FilmGrain::setEnabledActions(bool enable)
+{
+    m_filmgrainAction->setEnabled(enable);
 }
 
 void ImagePlugin_FilmGrain::slotFilmGrain()

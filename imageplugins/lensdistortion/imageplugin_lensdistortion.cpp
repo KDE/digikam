@@ -4,7 +4,7 @@
  * Date  : 2004-12-27
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_lensdistortion,
 ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const char*, const QStringList &)
                             : Digikam::ImagePlugin(parent, "ImagePlugin_LensDistortion")
 {
-    new KAction(i18n("Lens Distortion Correction..."), "lensdistortion", 0, 
-                this, SLOT(slotLensDistortion()),
-                actionCollection(), "imageplugin_lensdistortion");
+    m_lensdistortionAction = new KAction(i18n("Lens Distortion Correction..."), "lensdistortion", 0, 
+                                 this, SLOT(slotLensDistortion()),
+                                 actionCollection(), "imageplugin_lensdistortion");
     
     setXMLFile("digikamimageplugin_lensdistortion_ui.rc");            
         
@@ -50,6 +50,11 @@ ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const ch
 
 ImagePlugin_LensDistortion::~ImagePlugin_LensDistortion()
 {
+}
+
+void ImagePlugin_LensDistortion::setEnabledActions(bool enable)
+{
+    m_lensdistortionAction->setEnabled(enable);
 }
 
 void ImagePlugin_LensDistortion::slotLensDistortion()

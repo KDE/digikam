@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_ChannelMixer : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_ChannelMixer(QObject *parent, const char* name,
                              const QStringList &args);
     ~ImagePlugin_ChannelMixer();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_channelMixerAction;
+    
 private slots:
 
     void slotChannelMixer();

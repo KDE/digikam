@@ -40,9 +40,9 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
-    new KAction(i18n("Curves Adjust..."), "adjustcurves", 0, 
-                this, SLOT(slotCurvesAdjust()),
-                actionCollection(), "imageplugin_adjustcurves");
+    m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 0, 
+                         this, SLOT(slotCurvesAdjust()),
+                         actionCollection(), "imageplugin_adjustcurves");
 
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
@@ -51,6 +51,11 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()
 {
+}
+
+void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
+{
+    m_curvesAction->setEnabled(enable);
 }
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()

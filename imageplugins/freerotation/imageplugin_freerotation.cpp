@@ -4,7 +4,7 @@
  * Date  : 2004-11-28
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_freerotation,
 ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const char*, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_FreeRotation")
 {
-    new KAction(i18n("Free Rotation..."), "freerotation", 0, 
-                this, SLOT(slotFreeRotation()),
-                actionCollection(), "imageplugin_freerotation");
+    m_freerotationAction = new KAction(i18n("Free Rotation..."), "freerotation", 0, 
+                             this, SLOT(slotFreeRotation()),
+                             actionCollection(), "imageplugin_freerotation");
     
     setXMLFile("digikamimageplugin_freerotation_ui.rc");         
                                     
@@ -50,6 +50,11 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const char*,
 
 ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()
 {
+}
+
+void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
+{
+    m_freerotationAction->setEnabled(enable);
 }
 
 void ImagePlugin_FreeRotation::slotFreeRotation()

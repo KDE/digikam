@@ -52,13 +52,13 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Fix and Colors menu actions
 
-    new KAction(i18n("Blur..."), "blurimage", 0,
-                this, SLOT(slotBlur()),
-                actionCollection(), "implugcore_blur");
+    m_blurAction = new KAction(i18n("Blur..."), "blurimage", 0,
+                       this, SLOT(slotBlur()),
+                       actionCollection(), "implugcore_blur");
 
-    new KAction(i18n("Sharpen..."), "sharpenimage", 0,
-                this, SLOT(slotSharpen()),
-                actionCollection(), "implugcore_sharpen");
+    m_sharpenAction = new KAction(i18n("Sharpen..."), "sharpenimage", 0,
+                          this, SLOT(slotSharpen()),
+                          actionCollection(), "implugcore_sharpen");
 
     m_redeyeAction = new KAction(i18n("Red Eye Reduction..."), "redeyes", 0,
                                  this, SLOT(slotRedEye()),
@@ -66,73 +66,73 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to use this option.") );
 
-    new KAction(i18n("Brightness/Contrast/Gamma..."), "adjustbcg", 0,
-                this, SLOT(slotBCG()),
-                actionCollection(), "implugcore_bcg");
+    m_BCGAction = new KAction(i18n("Brightness/Contrast/Gamma..."), "adjustbcg", 0,
+                      this, SLOT(slotBCG()),
+                      actionCollection(), "implugcore_bcg");
 
-    new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 0,
-                this, SLOT(slotHSL()),
-                actionCollection(), "implugcore_hsl");
+    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 0,
+                      this, SLOT(slotHSL()),
+                      actionCollection(), "implugcore_hsl");
 
-    new KAction(i18n("Color Balance..."), "adjustrgb", 0,
-                this, SLOT(slotRGB()),
-                actionCollection(), "implugcore_rgb");
+    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb", 0,
+                      this, SLOT(slotRGB()),
+                      actionCollection(), "implugcore_rgb");
 
-    KAction *stretchContrastAction = new KAction(i18n("Stretch Contrast"), "stretchcontrast", 0,
-                this, SLOT(slotNormalize()),
-                actionCollection(), "implugcore_stretch_contrast");
-    stretchContrastAction->setWhatsThis( i18n( "This option enhances the contrast and brightness "
-                                               "of the RGB values of an image by stretching the lowest "
-                                               "and highest values to their fullest range, adjusting "
-                                               "everything in between." ));                
+    m_stretchContrastAction = new KAction(i18n("Stretch Contrast"), "stretchcontrast", 0,
+                                  this, SLOT(slotNormalize()),
+                                  actionCollection(), "implugcore_stretch_contrast");
+    m_stretchContrastAction->setWhatsThis( i18n( "This option enhances the contrast and brightness "
+                                                 "of the RGB values of an image by stretching the lowest "
+                                                 "and highest values to their fullest range, adjusting "
+                                                 "everything in between." ));                
 
     
-    KAction *normalizeAction = new KAction(i18n("Normalize"), "normalize", 0,
-                this, SLOT(slotNormalize()),
-                actionCollection(), "implugcore_normalize");
-    normalizeAction->setWhatsThis( i18n( "This option scales brightness values across the active "
-                                         "image so that the darkest point becomes black, and the "
-                                         "brightest point becomes as bright as possible without "
-                                         "altering its hue. This is often a \"magic fix\" for "
-                                         "images that are dim or washed out."));                
+    m_normalizeAction = new KAction(i18n("Normalize"), "normalize", 0,
+                            this, SLOT(slotNormalize()),
+                            actionCollection(), "implugcore_normalize");
+    m_normalizeAction->setWhatsThis( i18n( "This option scales brightness values across the active "
+                                           "image so that the darkest point becomes black, and the "
+                                           "brightest point becomes as bright as possible without "
+                                           "altering its hue. This is often a \"magic fix\" for "
+                                           "images that are dim or washed out."));                
 
-    KAction *equalizeAction = new KAction(i18n("Equalize"), "equalize", 0,
-                this, SLOT(slotEqualize()),
-                actionCollection(), "implugcore_equalize");
-    equalizeAction->setWhatsThis( i18n( "This option adjusts the brightness of colors across the "
-                                        "active image so that the histogram for the Value channel "
-                                        "is as nearly as possible flat, that is, so that each possible "
-                                        "brightness value appears at about the same number of pixels "
-                                        "as each other value. Sometimes Equalize works wonderfully at "
-                                        "enhancing the contrasts in an image. Other times it gives "
-                                        "garbage. It is a very powerful operation, which can either work "
-                                        "miracles on an image or destroy it."));  
+    m_equalizeAction = new KAction(i18n("Equalize"), "equalize", 0,
+                           this, SLOT(slotEqualize()),
+                           actionCollection(), "implugcore_equalize");
+    m_equalizeAction->setWhatsThis( i18n( "This option adjusts the brightness of colors across the "
+                                          "active image so that the histogram for the Value channel "
+                                          "is as nearly as possible flat, that is, so that each possible "
+                                          "brightness value appears at about the same number of pixels "
+                                          "as each other value. Sometimes Equalize works wonderfully at "
+                                          "enhancing the contrasts in an image. Other times it gives "
+                                          "garbage. It is a very powerful operation, which can either work "
+                                          "miracles on an image or destroy it."));  
                                          
-    KAction *autolevelseAction = new KAction(i18n("Auto Levels"), "autolevels", 0,
-                this, SLOT(slotAutoLevels()),
-                actionCollection(), "implugcore_autolevels");
-    autolevelseAction->setWhatsThis( i18n( "This option maximizes the tonal range in the Red, Green, "
-                                           "and Blue channels. It search the image shadow and highlight "
-                                           "limit values and adjust the Red, Green, and Blue channels "
-                                           "to a full histogram range."));  
+    m_autolevelseAction = new KAction(i18n("Auto Levels"), "autolevels", 0,
+                              this, SLOT(slotAutoLevels()),
+                              actionCollection(), "implugcore_autolevels");
+    m_autolevelseAction->setWhatsThis( i18n( "This option maximizes the tonal range in the Red, Green, "
+                                             "and Blue channels. It search the image shadow and highlight "
+                                             "limit values and adjust the Red, Green, and Blue channels "
+                                             "to a full histogram range."));  
 
-    new KAction(i18n("Invert"), "invertimage", 0,
-                this, SLOT(slotInvert()),
-                actionCollection(), "implugcore_invert");
+    m_invertAction = new KAction(i18n("Invert"), "invertimage", 0,
+                         this, SLOT(slotInvert()),
+                         actionCollection(), "implugcore_invert");
                                                            
     //-------------------------------
     // Filters menu actions.
 
-    new KAction(i18n("Black and White..."), "bwtonal", 0,
-                this, SLOT(slotBW()),
-                actionCollection(), "implugcore_blackwhite");
+    m_BWAction = new KAction(i18n("Black and White..."), "bwtonal", 0,
+                     this, SLOT(slotBW()),
+                     actionCollection(), "implugcore_blackwhite");
 
     //-------------------------------
     // Transform menu actions.
     
-    new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
-                this, SLOT(slotRatioCrop()),
-                actionCollection(), "implugcore_ratiocrop");
+    m_aspectRatioCropAction = new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
+                                  this, SLOT(slotRatioCrop()),
+                                  actionCollection(), "implugcore_ratiocrop");
 
     //-------------------------------
     // Init. menu actions.
@@ -148,6 +148,23 @@ ImagePlugin_Core::~ImagePlugin_Core()
 
 void ImagePlugin_Core::setEnabledSelectionActions(bool)
 {
+}
+
+void ImagePlugin_Core::setEnabledActions(bool enable)
+{
+    m_redeyeAction->setEnabled(enable);
+    m_BCGAction->setEnabled(enable);
+    m_HSLAction->setEnabled(enable);
+    m_RGBAction->setEnabled(enable);
+    m_stretchContrastAction->setEnabled(enable);
+    m_normalizeAction->setEnabled(enable);
+    m_equalizeAction->setEnabled(enable);
+    m_autolevelseAction->setEnabled(enable);
+    m_invertAction->setEnabled(enable);
+    m_BWAction->setEnabled(enable);
+    m_aspectRatioCropAction->setEnabled(enable);
+    m_sharpenAction->setEnabled(enable);
+    m_blurAction->setEnabled(enable);
 }
 
 void ImagePlugin_Core::slotBlur()

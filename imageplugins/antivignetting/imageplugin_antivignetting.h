@@ -4,7 +4,7 @@
  * Date  : 2004-12-25
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_AntiVignetting : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_AntiVignetting(QObject *parent, const char* name,
                                const QStringList &args);
     ~ImagePlugin_AntiVignetting();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_antivignettingAction;
+    
 private slots:
 
     void slotAntiVignetting();

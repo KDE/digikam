@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_SuperImpose : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -37,6 +39,12 @@ public:
                          const QStringList &args);
     ~ImagePlugin_SuperImpose();
 
+    void setEnabledActions(bool enable);
+
+private:
+
+    KAction *m_superimposeAction;
+   
 private slots:
 
     void slotSuperImpose();

@@ -4,7 +4,7 @@
  * Date  : 2004-08-26
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_Emboss : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -37,6 +39,12 @@ public:
                          const QStringList &args);
     ~ImagePlugin_Emboss();
 
+    void setEnabledActions(bool enable);
+
+private:
+
+    KAction *m_embossAction;
+    
 private slots:
 
     void slotEmboss();

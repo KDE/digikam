@@ -4,7 +4,7 @@
  * Date  : 2004-08-25
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
                                                    const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_OilPaint")
 {
-    new KAction(i18n("Oil Paint..."), "oilpaint", 0, 
-                this, SLOT(slotOilPaint()),
-                actionCollection(), "imageplugin_oilpaint");
+    m_oilpaintAction = new KAction(i18n("Oil Paint..."), "oilpaint", 0, 
+                       this, SLOT(slotOilPaint()),
+                       actionCollection(), "imageplugin_oilpaint");
                     
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );          
     
@@ -51,6 +51,11 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
 
 ImagePlugin_OilPaint::~ImagePlugin_OilPaint()
 {
+}
+
+void ImagePlugin_OilPaint::setEnabledActions(bool enable)
+{
+    m_oilpaintAction->setEnabled(enable);
 }
 
 void ImagePlugin_OilPaint::slotOilPaint()

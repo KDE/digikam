@@ -4,7 +4,7 @@
  * Date  : 2004-08-24
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
                                              const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_Despeckle")
 {
-    new KAction(i18n("Noise Reduction..."), "despeckle", 0, 
-                this, SLOT(slotDespeckle()),
-                actionCollection(), "imageplugin_despeckle");
+    m_despeckleAction = new KAction(i18n("Noise Reduction..."), "despeckle", 0, 
+                            this, SLOT(slotDespeckle()),
+                            actionCollection(), "imageplugin_despeckle");
                 
     setXMLFile("digikamimageplugin_despeckle_ui.rc");                
 
@@ -51,6 +51,11 @@ ImagePlugin_Despeckle::ImagePlugin_Despeckle(QObject *parent, const char*,
 
 ImagePlugin_Despeckle::~ImagePlugin_Despeckle()
 {
+}
+
+void ImagePlugin_Despeckle::setEnabledActions(bool enable)
+{
+    m_despeckleAction->setEnabled(enable);
 }
 
 void ImagePlugin_Despeckle::slotDespeckle()

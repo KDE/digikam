@@ -4,7 +4,7 @@
  * Date  : 2004-08-26
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
                                        const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Emboss")
 {
-    new KAction(i18n("Emboss..."), "embosstool", 0, 
-                this, SLOT(slotEmboss()),
-                actionCollection(), "imageplugin_emboss");
+    m_embossAction = new KAction(i18n("Emboss..."), "embosstool", 0, 
+                         this, SLOT(slotEmboss()),
+                         actionCollection(), "imageplugin_emboss");
                 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );                
     
@@ -51,6 +51,11 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()
 {
+}
+
+void ImagePlugin_Emboss::setEnabledActions(bool enable)
+{
+    m_embossAction->setEnabled(enable);
 }
 
 void ImagePlugin_Emboss::slotEmboss()

@@ -39,9 +39,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_blurfx,
 ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const char*, const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_BlurFX")
 {
-    new KAction(i18n("Blur Effects..."), "blurfx", 0, 
-                this, SLOT(slotBlurFX()),
-                actionCollection(), "imageplugin_blurfx");
+    m_blurfxAction = new KAction(i18n("Blur Effects..."), "blurfx", 0, 
+                         this, SLOT(slotBlurFX()),
+                         actionCollection(), "imageplugin_blurfx");
                 
     setXMLFile( "digikamimageplugin_blurfx_ui.rc" );    
         
@@ -50,6 +50,11 @@ ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const char*, const QStri
 
 ImagePlugin_BlurFX::~ImagePlugin_BlurFX()
 {
+}
+
+void ImagePlugin_BlurFX::setEnabledActions(bool enable)
+{
+    m_blurfxAction->setEnabled(enable);
 }
 
 void ImagePlugin_BlurFX::slotBlurFX()

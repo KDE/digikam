@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_WhiteBalance : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -37,6 +39,12 @@ public:
                          const QStringList &args);
     ~ImagePlugin_WhiteBalance();
 
+    void setEnabledActions(bool enable);
+
+private:
+
+    KAction *m_whitebalanceAction;
+   
 private slots:
 
     void slotWhiteBalance();

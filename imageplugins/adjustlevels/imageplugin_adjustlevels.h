@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_AdjustLevels : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_AdjustLevels(QObject *parent, const char* name,
                              const QStringList &args);
     ~ImagePlugin_AdjustLevels();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_levelsAction;
+    
 private slots:
 
     void slotLevelsAdjust();

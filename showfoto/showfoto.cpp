@@ -113,9 +113,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
             
-/*    connect(m_canvas, SIGNAL(signalSelected(bool)),
-            m_cropAction, SLOT(setEnabled(bool)));*/
-            
     connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
             this, SLOT(slotChanged(bool, bool)));
             
@@ -132,6 +129,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     resize(640,480);
     setAutoSaveSettings();
+    
+    if ( urlList.isEmpty() )
+       toogleActions(false);
 }
 
 ShowFoto::~ShowFoto()
@@ -832,6 +832,19 @@ void ShowFoto::slotSelected(bool val)
          plugin; plugin = m_imagePluginLoader->pluginList().next()) {
         if (plugin) {
             plugin->setEnabledSelectionActions(val);
+        }
+    }
+}
+
+void ShowFoto::toogleActions(bool val)
+{
+    m_cropAction->setEnabled(val);
+    m_copyAction->setEnabled(val);
+
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+        if (plugin) {
+            plugin->setEnabledActions(val);
         }
     }
 }

@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_Border : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_Border(QObject *parent, const char* name,
                          const QStringList &args);
     ~ImagePlugin_Border();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_borderAction;
+    
 private slots:
 
     void slotBorder();

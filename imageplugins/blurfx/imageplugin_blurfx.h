@@ -27,6 +27,8 @@
 
 #include <digikamheaders.h>
 
+class KAction;
+
 class ImagePlugin_BlurFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
@@ -36,7 +38,13 @@ public:
     ImagePlugin_BlurFX(QObject *parent, const char* name,
                          const QStringList &args);
     ~ImagePlugin_BlurFX();
+    
+    void setEnabledActions(bool enable);
 
+private:
+
+    KAction *m_blurfxAction;
+    
 private slots:
 
     void slotBlurFX();

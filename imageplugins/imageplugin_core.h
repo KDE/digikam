@@ -40,11 +40,23 @@ public:
     ~ImagePlugin_Core();
 
     void setEnabledSelectionActions(bool enable);
+    void setEnabledActions(bool enable);
 
 private:
 
-    KAction     *m_redeyeAction;
-    KActionMenu *m_convertToAction;
+    KAction *m_redeyeAction;
+    KAction *m_BCGAction;
+    KAction *m_HSLAction;
+    KAction *m_RGBAction;
+    KAction *m_stretchContrastAction;
+    KAction *m_normalizeAction;
+    KAction *m_equalizeAction;
+    KAction *m_autolevelseAction;
+    KAction *m_invertAction;
+    KAction *m_BWAction;
+    KAction *m_aspectRatioCropAction;
+    KAction *m_sharpenAction;
+    KAction *m_blurAction;
         
 private slots:
 
