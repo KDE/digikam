@@ -26,6 +26,8 @@
 #include <qpoint.h>
 
 #include <kfileitem.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 #include <kio/previewjob.h>
 
 #include <cmath>
@@ -123,7 +125,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (d->currItem == item)
         return;
-    
+
     d->currItem = item;
     if (d->currItem)
     {
@@ -193,6 +195,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     if (!barItem || barItem == d->currItem)
         return;
 
+    
     d->currItem = barItem;
     viewport()->update();
     
@@ -321,12 +324,26 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
 
     item->m_pixmap = new QPixmap(pix);
     if (item->m_pos < height())
+    {
         viewport()->update();
+    }
 }
 
-void ThumbBarView::slotFailedPreview(const KFileItem* )
+void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
 {
+    ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
+    if (!item)
+        return;
+
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup,
+                                       d->tileSize);
     
+    item->m_pixmap = new QPixmap(pix);
+    if (item->m_pos < height())
+    {
+        viewport()->update();
+    }
 }
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view,

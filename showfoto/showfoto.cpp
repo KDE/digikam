@@ -33,6 +33,7 @@
 #include <kaccel.h>
 #include <kpropertiesdialog.h>
 #include <kdeversion.h>
+#include <kio/netaccess.h>
 
 // Local includes.
 
@@ -173,7 +174,13 @@ void ShowFoto::slotPrev()
 
 void ShowFoto::slotOpenURL(const KURL& url)
 {
-    m_canvas->load(url.path());
+    QString localFile;
+#if KDE_IS_VERSION(3,2,0)
+    KIO::NetAccess::download(url, localFile, this);
+#else
+    KIO::NetAccess::download(url, localFile);
+#endif
+    m_canvas->load(localFile);
 }
 
 void ShowFoto::slotAutoFit()
