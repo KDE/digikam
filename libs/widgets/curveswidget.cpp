@@ -93,6 +93,7 @@ CurvesWidget::~CurvesWidget()
 void CurvesWidget::reset(void)
 {
     m_grab_point = -1;    
+    m_guideVisible = false;
     repaint(false);
 }
 
