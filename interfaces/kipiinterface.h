@@ -59,16 +59,6 @@ class ImageCollection;
 class ImageInfo;
 }
 
-/*
-class DigikamAlbumAddImageJob : public KIO::job
-{
-    Q_OBJECT
-
-public:
-    DigikamAlbumAddImageJob();
-
-};
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -113,7 +103,8 @@ public:
     virtual KURL path();
     virtual KURL uploadPath();
     virtual KURL uploadRoot();
-
+    virtual QString uploadRootName();
+    
 protected:
     Digikam::AlbumInfo *album_;
     

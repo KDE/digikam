@@ -237,6 +237,11 @@ KURL DigikamImageCollection::uploadRoot()
     return (libraryPath);
 }
 
+QString DigikamImageCollection::uploadRootName()
+{
+    qDebug("toto");
+    return (i18n("My Albums"));
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
