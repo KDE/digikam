@@ -34,21 +34,28 @@
 
 // Local includes.
 
-#include "setupcamera.h"
 #include "setupgeneral.h"
+#include "setupmime.h"
+#include "setupcamera.h"
 #include "setup.h"
 
 
 Setup::Setup(QWidget* parent, const char* name)
-    : KDialogBase(IconList, i18n("Configure"), Ok|Cancel, Ok, parent,
+    : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                   name, true, true )
 {
     setWFlags(Qt::WDestructiveClose);
+    setHelp("setupwindow.anchor", "digikam");
     
     page_general = addPage(i18n("Albums"), i18n("Albums settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
                                   
     generalPage_ = new SetupGeneral(page_general);
+
+    page_mime = addPage(i18n("Mime types"), i18n("Mime types settings"),
+                           BarIcon("mime", KIcon::SizeMedium));
+                                  
+    mimePage_ = new SetupMime(page_mime);
     
     page_camera = addPage(i18n("Cameras"), i18n("Cameras settings"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
@@ -66,8 +73,9 @@ Setup::~Setup()
 
 void Setup::slotOkClicked()
 {
-    cameraPage_->applySettings();
     generalPage_->applySettings();
+    mimePage_->applySettings();
+    cameraPage_->applySettings();
     close();
 }
 

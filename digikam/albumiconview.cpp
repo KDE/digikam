@@ -1,4 +1,28 @@
-#include <kapplication.h>
+//////////////////////////////////////////////////////////////////////////////
+//
+//    ALBUMICONVIEW.CPP
+//
+//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qstring.h>
@@ -17,6 +41,8 @@
 #include <qptrlist.h>
 #include <qguardedptr.h>
 
+// KDE includes.
+
 #include <kio/previewjob.h>
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -33,6 +59,8 @@
 #include <krun.h>
 #include <kaction.h>
 #include <kstandarddirs.h>
+
+// Local includes.
 
 #include "albuminfo.h"
 #include "albummanager.h"
@@ -141,7 +169,7 @@ void AlbumIconView::applySettings(const AlbumSettings*
     if (!settings) return;
     d->albumSettings = settings;
 
-    d->imageLister->setNameFilter(d->albumSettings->getFileFilter());
+    d->imageLister->setNameFilter(d->albumSettings->getImageFileFilter());
     
     ThumbnailSize thumbSize((ThumbnailSize::Size)
                             d->albumSettings->getDefaultIconSize()); 

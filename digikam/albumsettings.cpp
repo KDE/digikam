@@ -1,27 +1,36 @@
-/* ============================================================
- * File  : albumsettings.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-12
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    ALBUMSETTINGS.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
-
+// Qt includes.
+ 
 #include <qstring.h>
+
+// KDE includes.
+
 #include <kconfig.h>
 #include <klocale.h>
+
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
@@ -34,7 +43,9 @@ public:
 
     QString     albumLibraryPath;
     QStringList albumCollectionNames;
-    QString     fileFilter;
+    QString     imageFilefilter;
+    QString     movieFilefilter;
+    QString     rawFilefilter;
 
     int            thumbnailSize;
     AlbumSettings::AlbumSortOrder albumSortOrder;
@@ -86,7 +97,9 @@ void AlbumSettings::init()
 
     d->albumSortOrder = AlbumSettings::ByCollection;
                                           
-    d->fileFilter = "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp *.xpm *.ppm *.crw";
+    d->imageFilefilter = "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp *.xpm *.ppm";
+    d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
+    d->rawFilefilter = "*.crw *.nef";
     d->thumbnailSize = ThumbnailSize::Medium;
 
     d->iconShowMime = false;
@@ -116,10 +129,20 @@ void AlbumSettings::readSettings()
                                                             (int)AlbumSettings::ByCollection));
     
     if (config->hasKey("File Filter"))
-        d->fileFilter =
+        d->imageFilefilter =
             config->readEntry("File Filter",
-                              d->fileFilter);
+                              d->imageFilefilter);
 
+    if (config->hasKey("Movie File Filter"))
+        d->movieFilefilter =
+            config->readEntry("Movie File Filter",
+                              d->movieFilefilter);
+
+    if (config->hasKey("Raw File Filter"))
+        d->rawFilefilter =
+            config->readEntry("Raw File Filter",
+                              d->rawFilefilter);
+                              
     if (config->hasKey("Default Icon Size"))
         d->thumbnailSize =
             config->readNumEntry("Default Icon Size",
@@ -145,7 +168,6 @@ void AlbumSettings::readSettings()
         d->iconShowComments =
             config->readBoolEntry("Icon Show Comments",
                                   true);
-
 }
 
 void AlbumSettings::saveSettings()
@@ -163,7 +185,13 @@ void AlbumSettings::saveSettings()
                        (int)d->albumSortOrder);
     
     config->writeEntry("File Filter",
-                       d->fileFilter);
+                       d->imageFilefilter);
+
+    config->writeEntry("Movie File Filter",
+                       d->movieFilefilter);
+                           
+    config->writeEntry("Raw File Filter",
+                       d->rawFilefilter);
     
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
@@ -226,14 +254,34 @@ AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder()
     return d->albumSortOrder;
 }
 
-void AlbumSettings::setFileFilter(const QString& filter)
+void AlbumSettings::setImageFileFilter(const QString& filter)
 {
-    d->fileFilter = filter;    
+    d->imageFilefilter = filter;    
 }
 
-QString AlbumSettings::getFileFilter() const
+QString AlbumSettings::getImageFileFilter() const
 {
-    return d->fileFilter;
+    return d->imageFilefilter;
+}
+
+void AlbumSettings::setMovieFileFilter(const QString& filter)
+{
+    d->movieFilefilter = filter;    
+}
+
+QString AlbumSettings::getMovieFileFilter() const
+{
+    return d->movieFilefilter;
+}
+
+void AlbumSettings::setRawFileFilter(const QString& filter)
+{
+    d->rawFilefilter = filter;    
+}
+
+QString AlbumSettings::getRawFileFilter() const
+{
+    return d->rawFilefilter;
 }
 
 void AlbumSettings::setDefaultIconSize(int val)

@@ -1,9 +1,37 @@
-#include "digikamcameraclient.h"
+//////////////////////////////////////////////////////////////////////////////
+//
+//    MAIN.CPP
+//
+//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// KDE includes.
+
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+
+// Local includes.
+
+#include "digikamcameraclient.h"
 
 static const char *description =
     I18N_NOOP("Digital camera interface for KDE");
@@ -36,7 +64,7 @@ int main(int argc, char **argv)
                       "http://digikam.sourceforge.net");
 
     about.addAuthor ( "Caulier Gilles",
-                      I18N_NOOP("Developer, translations coordinator, French translations"),
+                      I18N_NOOP("Developer, co-coordinator, French translations"),
                       "caulier dot gilles at free.fr",
                       "http://caulier.gilles.free.fr");
 

@@ -29,8 +29,9 @@
 #include <kdialogbase.h>
 
 class QFrame;
-class SetupCamera;
 class SetupGeneral;
+class SetupMime;
+class SetupCamera;
 
 class Setup : public KDialogBase {
 
@@ -44,10 +45,12 @@ public:
 private:
 
     QFrame * page_general;
+    QFrame * page_mime;
     QFrame * page_camera;
     
-    SetupCamera*  cameraPage_;
     SetupGeneral* generalPage_;
+    SetupMime*    mimePage_;
+    SetupCamera*  cameraPage_;
 
 private slots:
 

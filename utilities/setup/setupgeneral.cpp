@@ -72,17 +72,6 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    layout->addWidget(albumPathBox);
 
    // --------------------------------------------------------
-
-   QHGroupBox *fileFilterBox = new QHGroupBox(parent);
-
-   QLabel *fileFilterLabel = new QLabel(fileFilterBox);
-   fileFilterLabel->setText(i18n("Show only files with extensions:"));
-
-   fileFilterEdit = new QLineEdit(fileFilterBox);
-
-   layout->addWidget(fileFilterBox);
-   
-   // --------------------------------------------------------
    
    QVButtonGroup* iconSizeButtonGroup = new QVButtonGroup(parent);
    iconSizeButtonGroup->setTitle( i18n( "Default Thumbnail Size" ) );
@@ -137,7 +126,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    albumCollectionBox_->setMaximumHeight(80);
    albumCollectionBox_->setScrollBar(true);
-						  
+	  
    collectionGroupLayout->addMultiCellWidget( albumCollectionBox_,
                                               0, 2, 0, 0 );
 
@@ -152,8 +141,10 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    connect(albumCollectionBox_, SIGNAL(selectionChanged()),
            this, SLOT(slotCollectionSelectionChanged()));
+           
    connect(addCollectionButton_, SIGNAL(clicked()),
            this, SLOT(slotAddCollection()));
+           
    connect(delCollectionButton_, SIGNAL(clicked()),
            this, SLOT(slotDelCollection()));
    
@@ -163,43 +154,46 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    layout->addStretch();
 
-
    readSettings();
-   
 }
 
 SetupGeneral::~SetupGeneral()
 {
-    
 }
 
 void SetupGeneral::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
+    
     if (!settings) return;
 
     settings->setAlbumLibraryPath(albumPathEdit->text());
-    settings->setFileFilter(fileFilterEdit->text());
     
     int iconSize = ThumbnailSize::Medium;
+    
     if (smallIconButton_->isChecked())
         iconSize = ThumbnailSize::Small;
+    
     if (largeIconButton_->isChecked())
         iconSize = ThumbnailSize::Large;
+    
     if (hugeIconButton_->isChecked())
         iconSize = ThumbnailSize::Huge;
+    
     settings->setDefaultIconSize(iconSize);
-
     settings->setIconShowMime(iconShowMimeBox_->isChecked());
     settings->setIconShowSize(iconShowSizeBox_->isChecked());
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
 
     QStringList collectionList;
+    
     for (QListBoxItem *item = albumCollectionBox_->firstItem();
-         item; item = item->next()) {
-        collectionList.append(item->text());
-    }
+         item; item = item->next()) 
+         {
+         collectionList.append(item->text());
+         }
+         
     settings->setAlbumCollectionNames(collectionList);
     
     settings->saveSettings();
@@ -208,10 +202,10 @@ void SetupGeneral::applySettings()
 void SetupGeneral::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
+    
     if (!settings) return;
 
     albumPathEdit->setText(settings->getAlbumLibraryPath());
-    fileFilterEdit->setText(settings->getFileFilter());
     
     switch(settings->getDefaultIconSize()) {
     case(ThumbnailSize::Small): {
