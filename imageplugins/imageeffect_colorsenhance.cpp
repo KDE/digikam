@@ -35,6 +35,7 @@
 #include <cstring>
 
 // For to test KImageEffect API...
+
 #include <qimage.h>
 #include <kimageeffect.h>       
 
@@ -75,7 +76,7 @@ void ImageEffect_ColorsEnhance::equalizeImage()
     struct short_packet  *equalize_map;
     int                   x, y;
     unsigned int         *p, *q;
-    register long         i;               // long type in kdefx ! checked !!!
+    register long         i;               
     unsigned char         r, g, b, a;
     
     // Memory allocation. I have fixed the that because the old implementation 
@@ -497,33 +498,33 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
        return;
        }
   
-  // Create the new empty destination image data space.
-  uint* desData = new uint[w*h];
+    // Create the new empty destination image data space.
+    uint* desData = new uint[w*h];
        
-  // Create an histogram of the current image.     
-  Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h);
+    // Create an histogram of the current image.     
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(orgData, w, h);
   
-  // Create an empty instance of levels to use.
-  Digikam::ImageLevels    *levels    = new Digikam::ImageLevels();      
+    // Create an empty instance of levels to use.
+    Digikam::ImageLevels *levels = new Digikam::ImageLevels();      
   
-  // Initialize an auto levels correction of the histogram.
-  levels->levelsAuto(histogram);
+    // Initialize an auto levels correction of the histogram.
+    levels->levelsAuto(histogram);
 
-  // Recalculate the transfer arrays.
-  levels->levelsCalculateTransfers();
+    // Recalculate the transfer arrays.
+    levels->levelsCalculateTransfers();
 
-  // Calculate the LUT to apply on the image.
-  levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    // Calculate the LUT to apply on the image.
+    levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
   
-  // Apply the lut to the image.
-  levels->levelLutProcess(orgData, desData, w, h);
+    // Apply the lut to the image.
+    levels->levelLutProcess(orgData, desData, w, h);
   
-  iface.putOriginalData(desData);
+    iface.putOriginalData(desData);
   
-  delete [] orgData;
-  delete [] desData;
-  delete histogram;
-  delete levels;
+    delete [] orgData;
+    delete [] desData;
+    delete histogram;
+    delete levels;
 }
 
 //////////////////////////////////////////////////////////////////////////////
