@@ -103,62 +103,74 @@ void DigikamIO::slotProcessNext()
 
     KURL src(m_srcList.first());
     m_srcList.pop_front();
-
-    // stat the src
-    KDE_struct_stat buff_src;
-    if ( KDE_stat( QFile::encodeName(src.path()), &buff_src ) == -1 )
-    {
-        if ( errno == EACCES )
-            KMessageBox::error(0, i18n("Access denied to source %1")
-                               .arg(src.prettyURL()));
-        else
-            KMessageBox::error(0, i18n("Source %1 does not exist")
-                               .arg(src.prettyURL()));
-        emitResult();
-        return;
-    }
-
-    // stat the dest
     KURL dest(m_dest);
-
-    KDE_struct_stat buff_dest;
-    if ( KDE_stat( QFile::encodeName(dest.path()), &buff_dest ) == -1 )
-    {
-        if ( errno == EACCES )
-            KMessageBox::error(0, i18n("Access denied to destination %1")
-                               .arg(dest.prettyURL()));
-        else
-            KMessageBox::error(0, i18n("Destination folder %1 does not exist")
-                               .arg(dest.prettyURL()));
-        emitResult();
-        return;
-    }
-
-    // check that dest is directory if src is directory
-    bool srcIsDir = S_ISDIR( buff_src.st_mode );
-    bool destIsDir = S_ISDIR( buff_dest.st_mode );
-
-    if ( srcIsDir && !destIsDir )
-    {
-        KMessageBox::error(0, i18n("Source is a directory, but destination is not."));
-        emitResult();
-        return;
-    }
-
-    // check that src is not a parent of dest
-    if ( src.isParentOf( dest ) )
-    {
-        KMessageBox::error(0, i18n("Trying to copy/move a folder to its subfolder"));
-        emitResult();
-        return;
-    }
+        
+    bool useInternalCopy = false;
+    bool srcIsDir  = false;
+    bool destIsDir = false;
     
-    // check if source url is within album library path
-    KURL libURL = AlbumSettings::instance()->getAlbumLibraryPath();
-    if ( libURL.isParentOf( src ) )
+    if (src.isLocalFile())
+    {
+        // stat the src
+        KDE_struct_stat buff_src;
+        if ( KDE_stat( QFile::encodeName(src.path()), &buff_src ) == -1 )
+        {
+            if ( errno == EACCES )
+                KMessageBox::error(0, i18n("Access denied to source %1")
+                                   .arg(src.prettyURL()));
+            else
+                KMessageBox::error(0, i18n("Source %1 does not exist")
+                                   .arg(src.prettyURL()));
+            emitResult();
+            return;
+        }
+
+        // stat the dest
+        KDE_struct_stat buff_dest;
+        if ( KDE_stat( QFile::encodeName(dest.path()), &buff_dest ) == -1 )
+        {
+            if ( errno == EACCES )
+                KMessageBox::error(0, i18n("Access denied to destination %1")
+                                   .arg(dest.prettyURL()));
+            else
+                KMessageBox::error(0, i18n("Destination folder %1 does not exist")
+                                   .arg(dest.prettyURL()));
+            emitResult();
+            return;
+        }
+
+        // check that dest is directory if src is directory
+        srcIsDir  = S_ISDIR( buff_src.st_mode );
+        destIsDir = S_ISDIR( buff_dest.st_mode );
+
+        if ( srcIsDir && !destIsDir )
+        {
+            KMessageBox::error(0, i18n("Source is a directory, but destination is not."));
+            emitResult();
+            return;
+        }
+
+        // check that src is not a parent of dest
+        if ( src.isParentOf( dest ) )
+        {
+            KMessageBox::error(0, i18n("Trying to copy/move a folder to its subfolder"));
+            emitResult();
+            return;
+        }
+    
+        // check if source url is within album library path
+        KURL libURL = AlbumSettings::instance()->getAlbumLibraryPath();
+        if ( libURL.isParentOf( src ) )
+        {
+            useInternalCopy = true;
+        }
+
+    }        
+
+    if (useInternalCopy)
     {
         // copy/move within album library. handle it using the digikamio kioslave
-    
+        
         if ( destIsDir )
             dest.addPath( src.fileName() );
 
@@ -169,6 +181,7 @@ void DigikamIO::slotProcessNext()
         
         if (!m_overwriteAll)
         {
+            KDE_struct_stat buff_dest;
             while ( KDE_stat( QFile::encodeName(dest.path()), &buff_dest ) == 0 )
             {
                 if (m_autoSkip)
