@@ -28,6 +28,7 @@
 #include <qdatastream.h>
 
 #include <kmdcodec.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -63,11 +64,14 @@ ThumbDB::ThumbDB()
     d = new ThumbDBPriv;
     
     QString dbPath(QDir::homeDirPath() +
-                 "/.thumbnails/digikam-thumbnails.db");
-
-    const char* path = QFile::encodeName(dbPath);
+                   "/.thumbnails/digikam-thumbnails.db");
+    QCString encPath = QFile::encodeName(dbPath);
+    
+    const char* path = encPath; 
     d->db = gdbm_open((char*)path, 1024, GDBM_WRCREAT|GDBM_FAST,
                       0666, 0);
+     if (!d->db)
+         kdWarning() << "Failed to open Thumbnail DB file: " << dbPath << endl;
 }
 
 ThumbDB::~ThumbDB()
