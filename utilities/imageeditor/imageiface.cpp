@@ -123,6 +123,8 @@ ImageIface::~ImageIface()
     }
     
     imlib_context_free(d->context);    
+
+    delete d;
 }
 
 uint* ImageIface::getPreviewData()
