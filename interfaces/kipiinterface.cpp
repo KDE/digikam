@@ -239,7 +239,6 @@ KURL DigikamImageCollection::uploadRoot()
 
 QString DigikamImageCollection::uploadRootName()
 {
-    qDebug("toto");
     return (i18n("My Albums"));
 }
 
