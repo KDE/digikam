@@ -46,6 +46,7 @@ public:
     ~Canvas();
 
     void load(const QString& filename);
+    void preload(const QString& filename);
     int  save(const QString& filename);
     int  saveAs(const QString& filename, const QString& mimeType);
     int  saveAsTmpFile(const QString& filename, const QString& mimeType=0);
@@ -100,6 +101,7 @@ private slots:
 
     void slotSelected();
     void slotPaintSmooth();
+    void slotPaintStrips();
     void slotRequestUpdate();
     
 signals:

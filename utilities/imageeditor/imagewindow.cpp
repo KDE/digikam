@@ -287,6 +287,8 @@ void ImageWindow::slotLoadCurrent()
 
     if (it != m_urlList.end()) {
 
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        
         m_canvas->load(m_urlCurrent.path());
         m_rotatedOrFlipped = false;
 
@@ -295,6 +297,13 @@ void ImageWindow::slotLoadCurrent()
                        .arg(QString::number(index+1))
                        .arg(QString::number(m_urlList.count()));
         m_nameLabel->setText(text);
+
+        ++it;
+        if (it != m_urlList.end())
+            m_canvas->preload((*it).path());
+        
+        
+        QApplication::restoreOverrideCursor();
     }
 
     if (m_urlList.count() == 1) {

@@ -43,6 +43,7 @@
 #include <qregion.h>
 #include <qtimer.h>
 #include <qvaluelist.h>
+#include <qapplication.h>
 
 // Local includes.
 
@@ -73,8 +74,11 @@ public:
     bool               rtActive;
     bool               lbActive;
     bool               rbActive;
-    
+
     QTimer            *paintTimer;
+    QTimer            *stripPaintTimer;
+
+    QValueList<QRect>  stripList;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -96,9 +100,10 @@ Canvas::Canvas(QWidget *parent)
     d->rtActive      = false;
     d->lbActive      = false;
     d->rbActive      = false;
-    
+
     d->qpix   = 0;
     d->paintTimer = new QTimer;
+    d->stripPaintTimer = new QTimer;
 
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
@@ -114,6 +119,8 @@ Canvas::Canvas(QWidget *parent)
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
             SLOT(slotPaintSmooth()));
+    connect(d->stripPaintTimer, SIGNAL(timeout()),
+            SLOT(slotPaintStrips()));
 
     viewport()->setMouseTracking(false);
 }
@@ -122,6 +129,9 @@ Canvas::~Canvas()
 {
     d->paintTimer->stop();
     delete d->paintTimer;
+
+    d->stripPaintTimer->stop();
+    delete d->stripPaintTimer;
     
     if (d->qpix)
         delete d->qpix;
@@ -141,7 +151,14 @@ void Canvas::load(const QString& filename)
         d->rubber = 0;
         emit signalSelected(false);
     }
+
+    d->stripPaintTimer->stop();
+    d->stripList.clear();
+
     
+    viewport()->setUpdatesEnabled(false);
+    
+    d->stripList.clear();
     d->im->load(filename);
 
     d->zoom = 1.0;
@@ -151,10 +168,28 @@ void Canvas::load(const QString& filename)
         updateAutoZoom();
 
     updateContentsSize();
-    viewport()->update();
+
+    viewport()->setUpdatesEnabled(true);
+
+    //viewport()->update();
+
+    /* instead of painting the entire canvas split into
+       small strip paint events */
+
+    d->stripList.clear();
+    for (int j=0; j<viewport()->height(); j+=20)
+    {
+        d->stripList.append(QRect(0, j, viewport()->width(), 20));
+    }
+    d->stripPaintTimer->start(0, true);
 
     emit signalChanged(false);
     emit signalZoomChanged(d->zoom);
+}
+
+void Canvas::preload(const QString& filename)
+{
+    d->im->preload(filename);
 }
 
 int Canvas::save(const QString& filename)
@@ -210,7 +245,7 @@ void Canvas::updateAutoZoom()
 
 void Canvas::updateContentsSize()
 {
-    viewport()->setUpdatesEnabled(false);
+    //viewport()->setUpdatesEnabled(false);
 
     d->paintTimer->stop();
     d->ltActive      = false;
@@ -252,7 +287,7 @@ void Canvas::updateContentsSize()
     d->qpix->resize(frameRect().width(), frameRect().height());
 
     resizeContents(wZ, hZ);
-    viewport()->setUpdatesEnabled(true);
+    //viewport()->setUpdatesEnabled(true);
 }
 
 
@@ -288,6 +323,7 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
         h = int(ceil(h/d->zoom)*d->zoom) + 2*int(d->zoom);
         er = QRect(x,y,w,h);
     }
+
 
     paintViewportRect(er, d->zoom <= 1.0, !d->pressedMoving);
 
@@ -386,10 +422,9 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
     if (d->ltActive || d->rtActive ||
         d->lbActive || d->rbActive) {
 
-        if (!d->rubber) {
-            qWarning("Canvas: d->rubber == 0");
+        Q_ASSERT( d->rubber );
+        if (!d->rubber)
             return;
-        }
 
         // Set diagonally oppposite corner as anchor
         
@@ -413,7 +448,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         }
         
         viewport()->setMouseTracking(false);
-        viewport()->update();
+        //viewport()->update();
 
         //d->pressedMoved  = false;
         d->pressedMoving = true;
@@ -445,7 +480,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive))
             return;
-    
+
         drawRubber();
 
         int r, b;
@@ -460,7 +495,6 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         d->pressedMoved  = true;
         d->pressedMoving = true;
 
-        //viewport()->update();
         drawRubber();
     }
     else {
@@ -820,6 +854,19 @@ void Canvas::slotPaintSmooth()
     QRect vr(contentsToViewport(cr.topLeft()),
              cr.size());
     paintViewportRect(vr, true, true);
+}
+
+void Canvas::slotPaintStrips()
+{
+    if (d->stripList.isEmpty())
+        return;
+    
+    for (QValueList<QRect>::iterator it=d->stripList.begin();
+         it != d->stripList.end(); ++it)
+    {
+        QRect er(*it);
+        viewport()->repaint(er.x(), er.y(), er.width(), er.height(), false);
+    }
 }
 
 void Canvas::keyPressEvent(QKeyEvent *e)

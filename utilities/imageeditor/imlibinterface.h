@@ -46,6 +46,7 @@ public:
     ~ImlibInterface();
 
     bool load(const QString& filename);
+    void preload(const QString& filename);
     bool restore();
     bool save(const QString& file);
     bool saveAs(const QString& file, const QString& mimeType=0);

@@ -206,6 +206,18 @@ bool ImlibInterface::load(const QString& filename)
     return (valRet);
 }
 
+void ImlibInterface::preload(const QString& filename)
+{
+    imlib_context_push(d->context);
+    Imlib_Image im = imlib_load_image(QFile::encodeName(filename));
+    if (im)
+    {
+        imlib_context_set_image(im);
+        imlib_free_image();
+    }
+    imlib_context_pop();
+}
+
 bool ImlibInterface::restore()
 {
     return ( load(d->filename) );
