@@ -38,9 +38,8 @@ class QLabel;
 namespace Digikam
 {
 class HistogramWidget;
-}
-
 class ColorGradientWidget;
+}
 
 class HistogramViewer : public KDialogBase
 {
@@ -64,24 +63,23 @@ protected:
     
 private:
     
-    QComboBox                *m_channelCB;    
-    QComboBox                *m_scaleCB;    
+    QComboBox                    *m_channelCB;    
+    QComboBox                    *m_scaleCB;    
     
-    QSpinBox                 *m_minInterv;
-    QSpinBox                 *m_maxInterv;
+    QSpinBox                     *m_minInterv;
+    QSpinBox                     *m_maxInterv;
     
-    QLabel                   *m_labelMeanValue;
-    QLabel                   *m_labelPixelsValue;
-    QLabel                   *m_labelStdDevValue;
-    QLabel                   *m_labelCountValue;
-    QLabel                   *m_labelMedianValue;
-    QLabel                   *m_labelPercentileValue;
+    QLabel                       *m_labelMeanValue;
+    QLabel                       *m_labelPixelsValue;
+    QLabel                       *m_labelStdDevValue;
+    QLabel                       *m_labelCountValue;
+    QLabel                       *m_labelMedianValue;
+    QLabel                       *m_labelPercentileValue;
 
-    QImage                    m_image;
+    QImage                        m_image;
                     
-    ColorGradientWidget      *m_hGradient;
-    
-    Digikam::HistogramWidget *m_histogramWidget;
+    Digikam::ColorGradientWidget *m_hGradient;
+    Digikam::HistogramWidget     *m_histogramWidget;
     
     void setupGui(uint *imageData, uint width, uint height);
     void updateInformations();

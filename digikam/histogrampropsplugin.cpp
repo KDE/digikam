@@ -42,24 +42,8 @@
 
 #include <imagehistogram.h>
 #include <histogramwidget.h> 
+#include <colorgradientwidget.h> 
 #include "histogrampropsplugin.h"
-
-// This widget is created for drawing a color gradient without arrow.
-class GradientWidget : public KGradientSelector
-{
-public:
-
-    GradientWidget(Orientation o, QWidget *parent=0)
-                      : KGradientSelector (o, parent)
-    {}      
-
-protected:
-    
-    virtual void drawArrow( QPainter *painter, bool show, const QPoint &pos )
-    {
-    // Do nothing !!! We won't arrow...
-    }
-};
 
 HistogramPropsPlugin::HistogramPropsPlugin( KPropertiesDialog *propsDlg, QString fileName )
                     : KPropsDlgPlugin(propsDlg)
@@ -130,9 +114,8 @@ void HistogramPropsPlugin::setupGui(KPropertiesDialog *dialog, uint *imageData, 
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
         
-    m_hGradient = new GradientWidget( KSelector::Horizontal, page );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradient->setFixedHeight( 20 );
     topLayout->addWidget(frame);
     topLayout->addWidget(m_hGradient);
 
@@ -304,10 +287,6 @@ void HistogramPropsPlugin::updateInformations()
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     m_labelPercentileValue->setText(value.sprintf("%4.1f", percentile));
-}
-
-void HistogramPropsPlugin::applyChanges()
-{
 }
 
 #include "histogrampropsplugin.moc"

@@ -41,24 +41,9 @@
 
 #include <imagehistogram.h>
 #include <histogramwidget.h>
+#include <colorgradientwidget.h> 
 #include "histogramviewer.h"
 
-// This widget is created for drawing a color gradient without arrow.
-class ColorGradientWidget : public KGradientSelector
-{
-public:
-
-    ColorGradientWidget(Orientation o, QWidget *parent=0)
-                      : KGradientSelector (o, parent)
-    {}      
-
-protected:
-    
-    virtual void drawArrow( QPainter *painter, bool show, const QPoint &pos )
-    {
-    // Do nothing !!! We won't arrow...
-    }
-};
 
 // Constructor using local image file name.
 HistogramViewer::HistogramViewer(QWidget *parent, QString imageFile)
@@ -149,9 +134,8 @@ void HistogramViewer::setupGui(uint *imageData, uint width, uint height)
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
         
-    m_hGradient = new ColorGradientWidget( KSelector::Horizontal, plainPage() );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, plainPage() );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradient->setFixedHeight( 20 );
     topLayout->addWidget(frame);
     topLayout->addWidget(m_hGradient);
 

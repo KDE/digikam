@@ -38,9 +38,9 @@ class QLabel;
 namespace Digikam
 {
 class HistogramWidget;
+class ColorGradientWidget;
 }
 
-class GradientWidget;
 
 class HistogramPropsPlugin : public KPropsDlgPlugin
 {
@@ -50,38 +50,32 @@ public:
 
    HistogramPropsPlugin( KPropertiesDialog *propsDlg, QString imageFile);
    ~HistogramPropsPlugin();
-   
-   virtual void applyChanges();
 
 public slots:    
     
     void slotUpdateMinInterv(int min);
     void slotUpdateMaxInterv(int max);
         
-protected:
-
-    //void closeEvent(QCloseEvent *e);
-    
 private:
     
-    QComboBox                *m_channelCB;    
-    QComboBox                *m_scaleCB;    
+    QComboBox                    *m_channelCB;    
+    QComboBox                    *m_scaleCB;    
     
-    QSpinBox                 *m_minInterv;
-    QSpinBox                 *m_maxInterv;
+    QSpinBox                     *m_minInterv;
+    QSpinBox                     *m_maxInterv;
     
-    QLabel                   *m_labelMeanValue;
-    QLabel                   *m_labelPixelsValue;
-    QLabel                   *m_labelStdDevValue;
-    QLabel                   *m_labelCountValue;
-    QLabel                   *m_labelMedianValue;
-    QLabel                   *m_labelPercentileValue;
+    QLabel                       *m_labelMeanValue;
+    QLabel                       *m_labelPixelsValue;
+    QLabel                       *m_labelStdDevValue;
+    QLabel                       *m_labelCountValue;
+    QLabel                       *m_labelMedianValue;
+    QLabel                       *m_labelPercentileValue;
                 
-    GradientWidget           *m_hGradient;
     
-    QImage                    m_image;
+    QImage                        m_image;
     
-    Digikam::HistogramWidget *m_histogramWidget;
+    Digikam::ColorGradientWidget *m_hGradient;
+    Digikam::HistogramWidget     *m_histogramWidget;
     
     void setupGui(KPropertiesDialog *dialog, uint *imageData, uint width, uint height);
     void updateInformations();
