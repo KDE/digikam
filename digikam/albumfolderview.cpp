@@ -34,6 +34,8 @@
 #include <qptrlist.h>
 #include <qevent.h>
 #include <qpoint.h>
+#include <qfile.h>
+#include <qdatastream.h>
 
 // KDE includes.
 
@@ -49,6 +51,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <kstandarddirs.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -112,10 +115,14 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
+
+    loadAlbumState();
 }
 
 AlbumFolderView::~AlbumFolderView()
 {
+    saveAlbumState();
+    
     if (!thumbJob_.isNull())
         thumbJob_->kill();
 }
@@ -408,12 +415,17 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             return;
         }
 
+        // restore album's parent state based on last run
+        int fakeID = (album->type() == Album::PHYSICAL) ? 100000 : 200000;
+        fakeID += album->getID();
+        pItem->setOpen(stateAlbumOpen_.contains(fakeID) &&
+                       stateAlbumOpen_[fakeID]);
+        
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
         AlbumFolderItem* folderItem = new AlbumFolderItem(pItem, album);
         if (album->type() == Album::PHYSICAL)
         {
-            
             folderItem->setPixmap(iconLoader->loadIcon("folder",
                                                        KIcon::NoGroup,
                                                        32,
@@ -431,6 +443,13 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             TAlbum* t = dynamic_cast<TAlbum*>(album);
             folderItem->setPixmap(getBlendedIcon(t));
             album->setViewItem(folderItem);
+        }
+
+        if (album->type() == Album::PHYSICAL &&
+            fakeID == stateAlbumSel_)
+        {
+            setSelected(folderItem);
+            ensureItemVisible(folderItem);
         }
     }
 }
@@ -1102,8 +1121,8 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             for ( it = urls.begin(); it != urls.end(); ++it )
                 fileList.append((*it).filename());
                 
-            AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                                          fileList, true);
+            new AlbumFileCopyMove(srcAlbum, destAlbum,
+                                  fileList, true);
             break;
         }
         case 11:
@@ -1113,8 +1132,8 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
             for ( it = urls.begin(); it != urls.end(); ++it )
                 fileList.append((*it).filename());
                 
-            AlbumFileCopyMove* io = new AlbumFileCopyMove(srcAlbum, destAlbum,
-                                                          fileList, false);
+            new AlbumFileCopyMove(srcAlbum, destAlbum,
+                                  fileList, false);
             break;
         }
         default:
@@ -1265,6 +1284,83 @@ void AlbumFolderView::slotThemeChanged()
     setPalette(plt);
 
     viewport()->update();
+}
+
+void AlbumFolderView::loadAlbumState()
+{
+    QString filePath = locateLocal("appdata", "albumtreestate.bin");
+    QFile file(filePath);
+    if (!file.open(IO_ReadOnly))
+    {
+        kdWarning() << k_funcinfo << "Failed to open albumtreestate.bin"
+                    << endl;
+    }
+    
+    QDataStream ds(&file);
+    ds >> stateAlbumSel_;
+    ds >> stateAlbumOpen_;
+    file.close();
+}
+
+void AlbumFolderView::saveAlbumState()
+{
+    stateAlbumSel_ = 100000;
+    if (getSelected())
+    {
+        AlbumFolderItem *folderItem =
+            dynamic_cast<AlbumFolderItem*>(getSelected());
+        Album *a = folderItem->album();
+        if (a)
+        {
+            stateAlbumSel_  = a->getID();
+            stateAlbumSel_ += (a->type() == Album::PHYSICAL) ? 100000 : 200000;
+        }
+    }
+
+    stateAlbumOpen_.clear();
+
+    stateAlbumOpen_.insert(100000, true);
+    stateAlbumOpen_.insert(200000, true);
+    
+    PAlbumList pList(AlbumManager::instance()->pAlbums());
+    for (PAlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum *a = *it;
+        if (!a->isRoot() && a->getViewItem())
+        {
+            AlbumFolderItem* folderItem =
+                static_cast<AlbumFolderItem*>(a->getViewItem());
+            stateAlbumOpen_.insert(100000 + a->getID(),
+                                   folderItem->parent()->isOpen());
+        }
+    }
+
+    TAlbumList tList(AlbumManager::instance()->tAlbums());
+    for (TAlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum *a = *it;
+        if (!a->isRoot() && a->getViewItem())
+        {
+            AlbumFolderItem* folderItem =
+                static_cast<AlbumFolderItem*>(a->getViewItem());
+            stateAlbumOpen_.insert(200000 + a->getID(),
+                                   folderItem->parent()->isOpen());
+        }
+    }
+    
+    
+    QString filePath = locateLocal("appdata", "albumtreestate.bin");
+    QFile file(filePath);
+    if (!file.open(IO_WriteOnly))
+    {
+        kdWarning() << k_funcinfo << "Failed to open albumtreestate.bin"
+                    << endl;
+    }
+    
+    QDataStream ds(&file);
+    ds << stateAlbumSel_;
+    ds << stateAlbumOpen_;
+    file.close();
 }
 
 #include "albumfolderview.moc"

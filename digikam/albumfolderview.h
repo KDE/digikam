@@ -31,6 +31,7 @@
 #include <qptrlist.h>
 #include <qguardedptr.h>
 #include <qpixmap.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -101,6 +102,9 @@ private:
     
     void phyAlbumDropEvent(QDropEvent* e, PAlbum *album);
     void tagAlbumDropEvent(QDropEvent* e, TAlbum *album);
+
+    void loadAlbumState();
+    void saveAlbumState();
     
 protected:
 
@@ -127,6 +131,9 @@ private:
     QPixmap                            itemRegPix_;
     QPixmap                            itemSelPix_;
 
+    QMap<int,int>                      stateAlbumOpen_;
+    int                                stateAlbumSel_;
+    
 signals:
 
     void signalTagsAssigned();
