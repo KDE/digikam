@@ -55,6 +55,22 @@ CameraIconView::~CameraIconView()
     delete d;
 }
 
+CameraIconItem* CameraIconView::firstSelectedItem()
+{
+    CameraIconItem *iconItem = 0;
+    for (ThumbItem *item = firstItem(); item;
+         item = item->nextItem())
+    {
+        if (item->isSelected())
+         {
+             iconItem = static_cast<CameraIconItem*>(item);
+             break;
+         }
+    }
+
+    return iconItem;
+}
+
 void CameraIconView::slotNewItems(const KFileItemList& itemList)
 {
     int w = 110;

@@ -229,6 +229,29 @@ void DigikamCamera::get(const KURL& url )
 
         data(imgData);
     }
+    else if (metaData("exif") == "1")
+    {
+        char *edata = 0;
+        int esize   = 0;
+
+        m_camera->getExif(url.directory(), url.fileName(), &edata, esize);
+
+        if (!edata || !esize)
+        {
+            error(KIO::ERR_COULD_NOT_STAT,
+                  i18n("Failed to get exif information for %1")
+                  .arg(url.prettyURL()));
+        }
+        else
+        {
+            QByteArray exifData;
+            QDataStream stream( exifData, IO_WriteOnly );
+            stream.writeBytes( edata, esize);
+            delete [] edata;
+
+            data(exifData);
+        }
+    }
     
     data(QByteArray());
     finished();

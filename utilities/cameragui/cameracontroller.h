@@ -63,7 +63,8 @@ public:
     void downloadSel(const KFileItemList& items, const QString& destFolder);
     void deleteAll();
     void deleteSel(const KFileItemList& items);
-    
+
+    void getExif(const KFileItem* item);
     
 private:
 
@@ -98,6 +99,8 @@ private slots:
     void slotList();
     void slotEntries(KIO::Job*, const KIO::UDSEntryList&);
     void slotThumbnails();
+
+    void slotExifData(KIO::Job *job, const QByteArray &data);
 };
 
 #endif /* CAMERACONTROLLER_H */

@@ -57,6 +57,8 @@ private slots:
 
     void slotFileProperties();
     void slotFileProperties(CameraIconItem*);
+    void slotFileExif();
+    void slotFileExif(CameraIconItem*);
     
     void slotSelectAll();
     void slotSelectNone();

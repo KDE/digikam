@@ -24,12 +24,17 @@
 #include <kio/jobclasses.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <qstring.h>
 #include <qtimer.h>
 #include <qdatastream.h>
 #include <qguardedptr.h>
+
+#include <libkexif/kexif.h>
+#include <libkexif/kexifutils.h>
+#include <libkexif/kexifdata.h>
 
 #include "camerathumbjob.h"
 #include "cameradownloaddlg.h"
@@ -133,6 +138,33 @@ void CameraController::deleteAll()
 void CameraController::deleteSel(const KFileItemList& )
 {
     
+}
+
+void CameraController::getExif(const KFileItem* item)
+{
+    if (!item)
+        return;
+
+    slotCancel();
+    
+    KIO::TransferJob *job = KIO::get(item->url(), false, false);
+    KIO::Scheduler::assignJobToSlave(d->slave, job);
+
+    job->setWindow(d->parent);
+    job->addMetaData("exif", "1");
+    d->job = job;
+    d->state = ST_EXIF;
+
+    connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
+            this, SLOT(slotExifData(KIO::Job *, const QByteArray &)));
+    connect(job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotResult(KIO::Job*)));
+    connect(job, SIGNAL(infoMessage(KIO::Job*, const QString&)),
+            SLOT(slotInfoMessage(KIO::Job*, const QString&)));
+    connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
+            SLOT(slotPercent(KIO::Job*, unsigned long)));
+
+    emit signalBusy(true);
 }
 
 void CameraController::slotCancel()
@@ -329,6 +361,32 @@ void CameraController::slotThumbnails()
             SLOT(slotInfoMessage(KIO::Job*, const QString&)));
     connect(job, SIGNAL(percent(KIO::Job*, unsigned long)),
             SLOT(slotPercent(KIO::Job*, unsigned long)));
+}
+
+void CameraController::slotExifData(KIO::Job *job, const QByteArray &data)
+{
+    if (data.isEmpty())
+        return;
+
+    KURL url(((KIO::SimpleJob*)job)->url());
+    
+    uint  esize  = 0;
+    char* edata = 0;
+    QDataStream ds(data, IO_ReadOnly);
+    ds.readBytes(edata, esize);
+    if (!edata || !esize)
+    {
+        KMessageBox::error( d->parent,
+                            i18n("No Exif information available for %1")
+                            .arg(url.prettyURL()));
+        return;
+    }
+    
+    KExif exif(d->parent);
+    exif.loadData(url.fileName(), edata, esize);
+    delete [] edata;
+
+    exif.exec();
 }
 
 #include "cameracontroller.moc"

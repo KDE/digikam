@@ -33,6 +33,7 @@ class Job;
 class Slave;
 }
 
+class CameraIconItem;
 class CameraIconViewPriv;
 
 class CameraIconView : public ThumbView
@@ -44,6 +45,8 @@ public:
     CameraIconView(QWidget* parent);
     ~CameraIconView();
 
+    CameraIconItem* firstSelectedItem();
+    
 private:
 
     CameraIconViewPriv *d;
