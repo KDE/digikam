@@ -2,7 +2,7 @@
 Name=ImagePlugin_FilmGrain
 Name[da]=Billedplugin_Filmkorn
 Name[it]=PluginImmagini_GranaPellicola
-Name[nl]=Afbeeldingsplugin_filmkorreligheid
+Name[nl]=Afbeeldingsplugin_filmkorrel
 Name[pt]='Plugin' de Grão de Filme
 Name[pt_BR]='Plugin' de Grão de Filme
 Name[sv]=Insticksprogram för filmkorn
@@ -18,7 +18,7 @@ Comment[de]=digiKam Plugin zum Erzeugen eines Effektes von Körnigen Film
 Comment[et]=Digikami teralisuse pildiefektiplugin
 Comment[fr]=Module externe de digiKam pour simuler le grain d'un film
 Comment[it]=Plugin per l'effetto di grana della pellicola delle immagini per digiKam
-Comment[nl]=digiKam-plugin voor filmkorreligheid
+Comment[nl]=digiKam-plugin voor filmkorrel
 Comment[pt]='Plugin' de efeito de grão de filme para o digiKam
 Comment[pt_BR]='Plugin' de efeito de grão de filme para o digiKam
 Comment[sv]=Digikam insticksprogram för filmkornsbildeffekt
