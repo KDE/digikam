@@ -362,16 +362,12 @@ void CameraController::slotResult(KIO::Job *job)
         urlList << url;
 
         ImageWindow *im = ImageWindow::instance();
-        im->loadURL(urlList, url, d->model);
+        im->loadURL(urlList, url, d->model, false);
         if (im->isHidden())
             im->show();
         else
             im->raise();
         im->setFocus();
-
-        // TODO: if the image is modified by the imageviewer
-        // try and upload the image back into the camera
-        // or disable saving the image completely for a camera image
     }
 
     d->state = ST_NONE;

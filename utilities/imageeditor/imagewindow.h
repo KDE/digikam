@@ -53,7 +53,8 @@ public:
     ~ImageWindow();
 
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
-                 const QString& caption=QString::null);
+                 const QString& caption=QString::null,
+                 bool allowSaving=true);
 
     static ImageWindow* instance();
     
@@ -76,6 +77,7 @@ private:
     bool                 m_rotatedOrFlipped;
     
     bool                 m_fullScreen;
+    bool                 m_allowSaving;
     
     static ImageWindow*  m_instance;
 

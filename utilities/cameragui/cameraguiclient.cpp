@@ -89,15 +89,15 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
                                  actionCollection(),
                                  "cancel");
 
-    m_fileViewAction = new KAction(i18n("View"), 0,
+    m_fileViewAction = new KAction(i18n("&View..."), 0,
                                     this, SIGNAL(signalFileView()),
                                     actionCollection(), "file_view");
 
-    m_filePropsAction = new KAction(i18n("Properties..."), 0,
+    m_filePropsAction = new KAction(i18n("&Properties..."), 0,
                                     this, SIGNAL(signalFileProps()),
                                     actionCollection(), "file_props");
 
-    m_fileExifAction = new KAction(i18n("Exif Information..."), 0,
+    m_fileExifAction = new KAction(i18n("&Exif Information..."), 0,
                                     this, SIGNAL(signalFileExif()),
                                     actionCollection(), "file_exif");
 

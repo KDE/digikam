@@ -82,6 +82,7 @@ ImageWindow::ImageWindow()
     m_rotatedOrFlipped   = false;
     m_setExifOrientation = false;
     m_fullScreen         = false;
+    m_allowSaving        = true;
 
     // -- build the gui -------------------------------------
     
@@ -231,12 +232,16 @@ ImageWindow::~ImageWindow()
 
 void ImageWindow::loadURL(const KURL::List& urlList,
                           const KURL& urlCurrent,
-                          const QString& caption)
+                          const QString& caption,
+                          bool  allowSaving)
 {
     setCaption(caption);
     
     m_urlList    = urlList;
     m_urlCurrent = urlCurrent;
+    m_allowSaving = allowSaving;
+    m_guiClient->m_saveAction->setEnabled(false);
+    m_guiClient->m_restoreAction->setEnabled(false);
     
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
@@ -438,7 +443,10 @@ void ImageWindow::slotChanged(bool val)
                         i18n("pixels"));
 
     m_guiClient->m_restoreAction->setEnabled(val);
-    m_guiClient->m_saveAction->setEnabled(val);
+    if (m_allowSaving)
+    {
+        m_guiClient->m_saveAction->setEnabled(val);
+    }
 
     if (!val)
         m_rotatedOrFlipped = false;
@@ -654,10 +662,10 @@ void ImageWindow::slotSave()
 void ImageWindow::slotSaveResult(KIO::Job *job)
 {
     if (job->error()) 
-       {
+    {
        job->showErrorDialog(this);
        return;
-       }
+    }
     
     emit signalFileModified(m_urlCurrent);
 
