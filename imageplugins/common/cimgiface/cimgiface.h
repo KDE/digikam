@@ -41,8 +41,8 @@ class CimgIface : public QThread
 public:
 
 class EventData
-{
-public:
+    {
+    public:
     
     EventData() 
        {
@@ -53,15 +53,16 @@ public:
     bool starting;    
     bool success;
     int  progress;
-};
+    };
 
 public:
     
     CimgIface(uint *data, uint width, uint height,
               uint blurIt, double timeStep, double integralStep,
               double angularStep, double blur, double detail,
-              double gradient, double gaussian, bool normalize, 
-              bool normalize, QObject *parent=0);
+              double gradient, double gaussian, bool normalize, bool normalize, 
+              bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
+              char* visuflowMode=NULL, QObject *parent=0);
     
     ~CimgIface();
     
@@ -117,22 +118,23 @@ private:  // CImg filter interface.
     
 private:  // CImg filter data.
     
-    unsigned int nb_iter; // Number of smoothing iterations
-    float dt;             // Time step
-    float dlength;        // Integration step
-    float dtheta;         // Angular step (in degrees)
-    float sigma;          // Structure tensor blurring
-    float power1;         // Diffusion limiter along isophote
-    float power2;         // Diffusion limiter along gradient
-    float gauss_prec;     // Precision of the gaussian function
-    bool  onormalize;     // Output image normalization (in [0,255])
-    bool  linear;         // Use linear interpolation for integration
+    unsigned int nb_iter;    // Number of smoothing iterations
+    float        dt;         // Time step
+    float        dlength;    // Integration step
+    float        dtheta;     // Angular step (in degrees)
+    float        sigma;      // Structure tensor blurring
+    float        power1;     // Diffusion limiter along isophote
+    float        power2;     // Diffusion limiter along gradient
+    float        gauss_prec; // Precision of the gaussian function
+    bool         onormalize; // Output image normalization (in [0,255])
+    bool         linear;     // Use linear interpolation for integration
 
-    // internal use
-    bool restore;
-    bool inpaint;
-    bool resize;
+    // Internal use
+    bool        restore;
+    bool        inpaint;
+    bool        resize;
     const char* visuflow;
+    
     cimg_library::CImg<> dest, sum, W;
     cimg_library::CImg<> img, img0, flow,G;
     cimg_library::CImgl<> eigen;

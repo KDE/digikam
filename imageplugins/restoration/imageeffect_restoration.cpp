@@ -79,13 +79,13 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                          m_parent(parent)
 {
     QString whatsThis;
-        
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
-    m_dirty  = false;    
-    m_timer  = 0;
+    
+    m_dirty                = false;    
     m_currentRenderingMode = NoneRendering;
-    m_originalData = 0L;
+    m_timer                = 0L;
+    m_originalData         = 0L;
+    m_cimgInterface        = 0L;
         
     // About data and help button.
     
@@ -153,14 +153,21 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     QWidget* firstPage = new QWidget( mainTab );
     QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
-    mainTab->addTab( firstPage, i18n("Main") );
+    mainTab->addTab( firstPage, i18n("Preset") );
 
-    QLabel *typeLabel = new QLabel(i18n("Restoration Type:"), firstPage);
+    QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
-    m_restorationTypeCB->insertItem( i18n("Filtering") );
-    m_restorationTypeCB->insertItem( i18n("Inpainting") );
-    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the photograph restoration type."));
+    m_restorationTypeCB->insertItem( i18n("No Preset") );
+    m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
+    m_restorationTypeCB->insertItem( i18n("Reduce Gaussian Noise") );
+    m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
+    m_restorationTypeCB->insertItem( i18n("Reduce Non Synthetic Noise") );
+    m_restorationTypeCB->insertItem( i18n("Reduce Important Noise") );
+    m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
+    m_restorationTypeCB->insertItem( i18n("Video Image Restoration") );
+    m_restorationTypeCB->insertItem( i18n("Painting Effect") );
+    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration."));
 
     // Disable ComboBox until Inpainting method will be completed.
     m_restorationTypeCB->setEnabled(false);
@@ -316,6 +323,9 @@ ImageEffect_Restoration::~ImageEffect_Restoration()
 {
     // No need to delete m_previewData because it's driving by QImage.
         
+    if (m_cimgInterface)
+       delete m_cimgInterface;
+       
     if (m_originalData)
        delete [] m_originalData;
     
@@ -345,7 +355,7 @@ void ImageEffect_Restoration::slotUser1()
 {
     if (m_dirty)
        {
-       m_cancel = true;
+       m_cimgInterface->stopComputation();
        }
     else
        {
@@ -362,7 +372,7 @@ void ImageEffect_Restoration::slotUser1()
 
        switch(m_restorationTypeCB->currentItem())
           {
-          case FilteringMode:
+          case NoPreset:
             {
             m_detailInput->setValue(0.1);
             m_gradientInput->setValue(0.9);
@@ -374,25 +384,46 @@ void ImageEffect_Restoration::slotUser1()
             m_gaussianInput->setValue(3.0);
             m_linearInterpolationBox->setChecked(true);
             m_normalizeBox->setChecked(false);
-//            restore  = true;
- //           inpaint  = false;
             break;
             }
 
-          case InPaintingMode:
+          case ReduceJPEGArtefacts:
             {
-            m_detailInput->setValue(0.1);
-            m_gradientInput->setValue(100.0);
-            m_timeStepInput->setValue(50.0);
-            m_blurInput->setValue(2.0);
-            m_blurItInput->setValue(100.0);
-            m_angularStepInput->setValue(45.0);
-            m_integralStepInput->setValue(0.8);
-            m_gaussianInput->setValue(3.0);
-            m_linearInterpolationBox->setChecked(true);
-            m_normalizeBox->setChecked(false);
-   //         restore  = false;
-     //       inpaint  = true;
+            break;
+            }
+          
+          case ReduceGaussianNoise:
+            {
+            break;
+            }
+          
+          case ReduceUniformNoise:
+            {
+            break;
+            }
+          
+          case ReduceNonSyntheticNoise:
+            {
+            break;
+            }
+          
+          case ReduceImportantNoise:
+            {
+            break;
+            }
+          
+          case ReduceTexturing:
+            {
+            break;
+            }
+          
+          case VideoImageRestoration:
+            {
+            break;
+            }
+          
+          case PaintingEffect:
+            {
             break;
             }
           }                       
@@ -414,7 +445,7 @@ void ImageEffect_Restoration::slotUser1()
 
 void ImageEffect_Restoration::slotCancel()
 {
-    m_cancel = true;
+    m_cimgInterface->stopComputation();
     done(Cancel);
 }
 
@@ -425,7 +456,7 @@ void ImageEffect_Restoration::slotHelp()
 
 void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    m_cimgInterface->stopComputation();
     e->accept();    
 }
 
@@ -434,8 +465,7 @@ void ImageEffect_Restoration::slotEffect()
     if (m_dirty) return;     // Computation already in procress.
     
     m_currentRenderingMode = PreviewRendering;
-    m_dirty = true;
-    m_cancel = false;
+    m_dirty                = true;
     
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
@@ -453,12 +483,15 @@ void ImageEffect_Restoration::slotEffect()
     
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_previewImage = m_imagePreviewWidget->getOriginalClipImage();
-    uint *data  = (uint *)m_previewImage.bits();
-    int w       = m_previewImage.width();
-    int h       = m_previewImage.height();
+    uint *data     = (uint *)m_previewImage.bits();
+    int w          = m_previewImage.width();
+    int h          = m_previewImage.height();
     
     m_progressBar->setValue(0); 
-    
+
+    if (m_cimgInterface)
+       delete m_cimgInterface;
+        
     m_cimgInterface = new DigikamImagePlugins::CimgIface(data, w, h, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
@@ -470,7 +503,7 @@ void ImageEffect_Restoration::slotEffect()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    this);
+                                    true, false, false, NULL, this);
 }
 
 void ImageEffect_Restoration::slotOk()
@@ -496,6 +529,10 @@ void ImageEffect_Restoration::slotOk()
     int h                = iface.originalHeight();
     
     m_progressBar->setValue(0);
+    
+    if (m_cimgInterface)
+       delete m_cimgInterface;
+       
     m_cimgInterface = new DigikamImagePlugins::CimgIface(m_originalData, w, h, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
@@ -507,7 +544,7 @@ void ImageEffect_Restoration::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    this);
+                                    true, false, false, NULL, this);
 }
 
 void ImageEffect_Restoration::customEvent(QCustomEvent *event)
@@ -531,9 +568,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               case PreviewRendering:
                  {
                  kdDebug() << "Restoration completed..." << endl;
-                 if (!m_cancel)     
-                    m_imagePreviewWidget->setPreviewImageData(m_previewImage);
-                
+                 
+                 m_imagePreviewWidget->setPreviewImageData(m_previewImage);
                  m_imagePreviewWidget->setPreviewImageWaitCursor(false);
                  m_progressBar->setValue(0);  
                 
@@ -557,8 +593,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               case FinalRendering:
                  {
                  Digikam::ImageIface iface(0, 0);
-                 if ( !m_cancel )
-                    iface.putOriginalData(i18n("Restoration"), m_originalData);
+                 iface.putOriginalData(i18n("Restoration"), m_originalData);
        
                  delete [] m_originalData;
                  m_parent->setCursor( KCursor::arrowCursor() );
@@ -570,6 +605,22 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
         else                   // Computation Failed !
             {
             kdDebug() << "Restoration failed..." << endl;
+            m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+            m_progressBar->setValue(0);  
+            setButtonText(User1, i18n("&Reset Values"));
+            setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
+            enableButton(Ok, true);    
+            m_detailInput->setEnabled(true);
+            m_gradientInput->setEnabled(true);
+            m_timeStepInput->setEnabled(true);
+            m_blurInput->setEnabled(true);
+            m_blurItInput->setEnabled(true);
+            m_angularStepInput->setEnabled(true);
+            m_integralStepInput->setEnabled(true);
+            m_gaussianInput->setEnabled(true);
+            m_linearInterpolationBox->setEnabled(true);
+            m_normalizeBox->setEnabled(true);
+            m_dirty = false;   
             }
         }
 }

@@ -70,10 +70,17 @@ protected:
     
 private:
 
-    enum RestorationType
+    enum RestorationFilteringPreset
     {
-    FilteringMode=0,
-    InPaintingMode
+    NoPreset=0,
+    ReduceJPEGArtefacts,
+    ReduceGaussianNoise,
+    ReduceUniformNoise,
+    ReduceNonSyntheticNoise,
+    ReduceImportantNoise,
+    ReduceTexturing,
+    VideoImageRestoration,
+    PaintingEffect
     };
 
     enum RunningMode
@@ -83,7 +90,6 @@ private:
     FinalRendering
     };
 
-    bool             m_cancel;
     bool             m_dirty;
     
     int              m_currentRenderingMode;

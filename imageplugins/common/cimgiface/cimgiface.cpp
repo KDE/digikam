@@ -46,8 +46,10 @@ namespace DigikamImagePlugins
 CimgIface::CimgIface(uint *data, uint width, uint height, 
                      uint blurIt, double timeStep, double integralStep,
                      double angularStep, double blur, double detail,
-                     double gradient, double gaussian, bool normalize, 
-                     bool linearInterpolation, QObject *parent)
+                     double gradient, double gaussian, 
+                     bool normalize, bool linearInterpolation, 
+                     bool restoreMode, bool inpaintMode, bool resizeMode, 
+                     char* visuflowMode, QObject *parent)
          : QThread()
 { 
     m_imageData   = data;
@@ -55,13 +57,11 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     m_imageHeight = height;    
     m_parent      = parent;
     m_cancel      = false;
-    
-    // CImg filter mode.
-    // FIXME !
-    restore  = true;
-    inpaint  = false;
-    resize   = false;
-    visuflow = NULL;
+        
+    restore       = restoreMode;
+    inpaint       = inpaintMode;
+    resize        = resizeMode;
+    visuflow      = visuflowMode;
     
     // Get the config data
 
@@ -91,6 +91,7 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
           d->starting = false;
           d->success = false;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          delete d;
           }
        }
 }
@@ -104,6 +105,9 @@ void CimgIface::stopComputation(void)
 {
     m_cancel = true;
     wait();
+    cleanup();
+    img   = CImg<>();    
+    eigen = CImgl<>(CImg<>(), CImg<>());
 }
 
 // List of threaded operations.
@@ -115,16 +119,17 @@ void CimgIface::run()
 
 void CimgIface::startComputation()
 {
-    CimgIface::EventData *d;
+    CimgIface::EventData *d=0L;
     
     if (m_parent)
        {
        d = new CimgIface::EventData;
        d->starting = true;
-       d->success = false;
+       d->success  = false;
        d->progress = 0;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
        kdDebug() << "CimgIface::Start computation..." << endl;
+       delete d;
        }
         
     // Copy the src data into a CImg type image with three channels and no alpha. This means that a CImg is always rgba.
@@ -155,11 +160,12 @@ void CimgIface::startComputation()
           {
           d = new CimgIface::EventData;
           d->starting = false;
-          d->success = false;
+          d->success  = false;
           d->progress = 0;
           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          delete d;
           }
-           
+       
        return;
        }
     
@@ -178,18 +184,28 @@ void CimgIface::startComputation()
           }
        }
     
-    // clean up memory.
-    img = CImg<>();    
-    eigen = CImgl<>(CImg<>(), CImg<>());
-    
-    if (m_parent && !m_cancel)
+    if (m_parent)
        {
-       d = new CimgIface::EventData;
-       d->starting = false;
-       d->success = true;
-       d->progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       kdDebug() << "CimgIface::End of computation..." << endl;
+       if (!m_cancel)
+          {
+          d = new CimgIface::EventData;
+          d->starting = false;
+          d->success  = true;
+          d->progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          kdDebug() << "CimgIface::End of computation..." << endl;
+          delete d;
+          }
+       else
+          {
+          d = new CimgIface::EventData;
+          d->starting = false;
+          d->success  = false;
+          d->progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          kdDebug() << "CimgIface::Computation aborted..." << endl;
+          delete d;
+          }
        }
 }
 
@@ -245,8 +261,8 @@ void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h)
 
 void CimgIface::cleanup()
 {
-    img0 = flow = G = dest = sum= W = CImg<>();    
-    mask = CImg<uchar> ();
+    img0  = flow = G = dest = sum = W = CImg<>();    
+    mask  = CImg<uchar> ();
 }
 
 bool CimgIface::prepare()
@@ -515,7 +531,7 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
         // Integrate with linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y;
         
-        for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
             {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
@@ -526,7 +542,7 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
             
         cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
         
-        for (l=dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
             {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
@@ -540,7 +556,7 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
         // Integrate with non linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y; 
         
-        for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
             {
             float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
@@ -551,7 +567,7 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
                 
         cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
         
-        for (l = dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
+        for (l = dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) 
             {
             float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
@@ -582,7 +598,7 @@ void CimgIface::compute_LIC(int &counter)
            {
            counter++;
 
-           if (m_parent)
+           if (m_parent && !m_cancel)
               {
               // Update the progress bar in dialog.
               
@@ -593,6 +609,7 @@ void CimgIface::compute_LIC(int &counter)
               d->success = false;
               d->progress = (int)(100*progress);
               QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+              delete d;
               }
         
            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
