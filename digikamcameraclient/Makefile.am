@@ -8,8 +8,8 @@ bin_PROGRAMS = digikamcameraclient
 
 # set the include path for X, qt and KDE
 INCLUDES = \
-	-I$(top_srcdir)/digikamcameraclient/cameraui \
-	-I$(top_srcdir)/digikam \
+	-I$(top_srcdir)/digikam/digikamcameraclient/cameraui \
+	-I$(top_srcdir)/digikam/digikam \
 	$(all_includes)
 
 

@@ -4,11 +4,11 @@ lib_LTLIBRARIES = libdigikam.la
 bin_PROGRAMS = digikam
 
 INCLUDES = \
-	-I$(top_srcdir)/utilities/kexif \
-	-I$(top_srcdir)/utilities/imageviewer \
-	-I$(top_srcdir)/utilities/splashscreen \
-	-I$(top_srcdir)/utilities/setup \
-	-I$(top_srcdir)/interfaces \
+	-I$(top_srcdir)/digikam/utilities/kexif \
+	-I$(top_srcdir)/digikam/utilities/imageviewer \
+	-I$(top_srcdir)/digikam/utilities/splashscreen \
+	-I$(top_srcdir)/digikam/utilities/setup \
+	-I$(top_srcdir)/digikam/interfaces \
 	$(all_includes)
 
 libdigikam_la_SOURCES = digikamapp.cpp digikamview.cpp \
