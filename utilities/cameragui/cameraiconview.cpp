@@ -276,7 +276,7 @@ void CameraIconView::slotSelectNew()
             static_cast<CameraIconViewItem*>(item);
         if (viewItem->itemInfo()->downloaded == 0)
         {
-            viewItem->setSelected(true, true);
+            viewItem->setSelected(true, false);
         }
     }
     blockSignals(false);
