@@ -60,15 +60,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                 this, SLOT(slotBCG()),
                 actionCollection(), "implugcore_bcg");
     
-    new KAction(i18n("Color Balance..."), 0, 
+    new KAction(i18n("Red/Green/blue Balance..."), 0, 
                 this, SLOT(slotRGB()),
                 actionCollection(), "implugcore_rgb");
 
-    new KAction(i18n("HSL Balance..."), 0, 
+    new KAction(i18n("Hue/Saturation/Lightness Balance..."), 0, 
                 this, SLOT(slotHSL()),
                 actionCollection(), "implugcore_hsl");
     
-    new KAction(i18n("CMY Balance..."), 0, 
+    new KAction(i18n("Cyan/Magenta/Yellow Balance..."), 0, 
                 this, SLOT(slotCMY()),
                 actionCollection(), "implugcore_cmy");
                     
