@@ -394,7 +394,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
         
     if ( url.isValid() == false )
        {
-       errmsg = i18n("'%1' isn't a valid URL!").arg(url.path());
+       errmsg = i18n("'%1' is not a valid URL.").arg(url.path());
        return false;
        }
     else 
