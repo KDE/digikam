@@ -98,7 +98,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
         
     //General tab init.
     
-    setupGeneralTab(fileURL.path());
+    setupGeneralTab();
     
     // Exif Viewer init.
     
@@ -116,7 +116,10 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     // Init all info data.
     
     slotItemChanged();
-       
+    
+    kapp->config()->setGroup("Image Properties Dialog");
+    showPage(kapp->config()->readNumEntry("Tab Actived", 0));
+
     parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
 
@@ -124,7 +127,7 @@ ImageProperties::~ImageProperties()
 {
    
     kapp->config()->setGroup("Image Properties Dialog");
-//    kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
+    kapp->config()->writeEntry("Tab Actived", activePageIndex());
 
     saveDialogSize("Image Properties Dialog");
     
@@ -656,7 +659,7 @@ void ImageProperties::setupExifViewer(void)
 //-----------------------------------------------------------------------------------------------------------
 // General Tab implementation methods
 
-void ImageProperties::setupGeneralTab(KURL fileURL)
+void ImageProperties::setupGeneralTab()
 {
     QFrame *page = addPage( i18n("General") );
     QVBoxLayout *vlay = new QVBoxLayout( page, 0, spacingHint() );

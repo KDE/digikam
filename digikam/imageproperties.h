@@ -101,7 +101,7 @@ private:
     
     QGuardedPtr<ThumbnailJob>     m_generalThumbJob;
         
-    void setupGeneralTab(KURL fileURL);
+    void setupGeneralTab(void);
 
     // For Exif viever.
     

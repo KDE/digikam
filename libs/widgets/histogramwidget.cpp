@@ -129,7 +129,6 @@ HistogramWidget::~HistogramWidget()
        delete m_selectionHistogram;
 }
 
-
 void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
                                  uint *s_data, uint s_w, uint s_h)
 {
@@ -149,9 +148,14 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
     
     // Send signal to refresh information if necessary.
     if ( m_xmax == 0 && m_xmin == 0)
+       {
        emit signalMouseReleased( 255 );      // No current selection.
+       }
     else
+       {
+       emit signalMousePressed( m_xmin );
        emit signalMouseReleased( m_xmax );   // Current selection available.
+       }
     
 }
 
