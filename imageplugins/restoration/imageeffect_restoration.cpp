@@ -117,12 +117,12 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                      "http://www.girouette-stinner.com/castor/gimp.html");
 
     about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://www.greyc.ensicaen.fr/~dtschump/greycstoration/index.html");
+                     "http://cimg.sourceforge.net");
                         
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Restoration Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Photograph Restoration Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
