@@ -79,7 +79,8 @@ public:
     static DigikamApp* getinstance();
 
 #ifdef HAVE_KIPI
-    const  QPtrList<KAction>& menuMergeActions();
+    const  QPtrList<KAction>& menuImageActions();
+    const  QPtrList<KAction>& menuBatchActions();
 #endif
 
     void enableThumbSizePlusAction(bool val);
@@ -107,6 +108,7 @@ private:
     QPtrList<KAction>      m_kipiFileActionsImport;
     QPtrList<KAction>      m_kipiImageActions;
     QPtrList<KAction>      m_kipiToolsActions;
+    QPtrList<KAction>      m_kipiBatchActions;
 #else
     DigikamPluginManager  *pluginManager_;
 #endif

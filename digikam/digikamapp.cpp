@@ -126,9 +126,14 @@ DigikamApp* DigikamApp::getinstance()
 }
 
 #ifdef HAVE_KIPI
-const QPtrList<KAction>& DigikamApp::menuMergeActions()
+const QPtrList<KAction>& DigikamApp::menuImageActions()
 {
     return m_kipiImageActions;
+}
+
+const QPtrList<KAction>& DigikamApp::menuBatchActions()
+{
+    return m_kipiBatchActions;
 }
 #endif
 
@@ -562,15 +567,17 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList( QString::fromLatin1("file_actions_import") );
     unplugActionList( QString::fromLatin1("image_actions") );
     unplugActionList( QString::fromLatin1("tool_actions") );
+    unplugActionList( QString::fromLatin1("batch_actions") );
     
     m_kipiImageActions.clear();
     m_kipiFileActionsExport.clear();
     m_kipiFileActionsImport.clear();
     m_kipiToolsActions.clear();
+    m_kipiBatchActions.clear();
        
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     
-    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin(); it != list.end(); ++it ) 
+    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it ) 
         {
         KIPI::Plugin* plugin = (*it)->plugin;
         
@@ -591,6 +598,9 @@ void DigikamApp::slotKipiPluginPlug()
 
         else if ( plugin->category() == KIPI::TOOLSPLUGIN )
             popup = &m_kipiToolsActions;
+
+        else if ( plugin->category() == KIPI::BATCHPLUGIN )
+            popup = &m_kipiBatchActions;
 
         if ( popup ) 
             {
@@ -615,6 +625,7 @@ void DigikamApp::slotKipiPluginPlug()
     plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
     plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
     plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
+    plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
 
 #endif
 }

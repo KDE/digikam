@@ -47,6 +47,7 @@
   </Menu>
   <Menu name="Tools"><text>&amp;Tools</text>
       <ActionList name="tool_actions"/>
+      <ActionList name="batch_actions"/>
   </Menu>
   <Menu name="help"><Text>&amp;Help</Text>
    <Action name="help_tipofday"/>

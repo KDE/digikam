@@ -445,10 +445,42 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     // Merge in the plugin actions ----------------------------
 
 #ifdef HAVE_KIPI
-    const QPtrList<KAction>& mergeActions = DigikamApp::getinstance()->menuMergeActions();
+    const QPtrList<KAction>& ImageActions = DigikamApp::getinstance()->menuImageActions();
+    
+    QPtrListIterator<KAction> it1(ImageActions);
+    KAction *action;
+    bool count =0;
+    
+    while ( (action = it1.current()) != 0 ) 
+    {
+        action->plug(&popmenu);
+        ++it1;
+        count = 1;
+    }
+
+    // Don't insert a separator if we didn't plug in any actions
+    
+    if (count != 0)
+        popmenu.insertSeparator();
+    
+    const QPtrList<KAction>& BatchActions = DigikamApp::getinstance()->menuBatchActions();
+
+    QPtrListIterator<KAction> it2(BatchActions);
+    count = 0;
+    
+    while ( (action = it2.current()) != 0 ) 
+    {
+        action->plug(&popmenu);
+        ++it2;
+        count = 1;
+    }
+
+    // Don't insert a separator if we didn't plug in any actions
+    
+    if (count != 0)
+        popmenu.insertSeparator();
 #else
     const QPtrList<KAction>& mergeActions = DigikamPluginManager::instance()->menuMergeActions();
-#endif
     
     QPtrListIterator<KAction> it(mergeActions);
     KAction *action;
@@ -465,7 +497,8 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     
     if (count != 0)
         popmenu.insertSeparator();
-    
+#endif    
+
     // --------------------------------------------------------
 
     popmenu.insertItem(SmallIcon("pencil"),
