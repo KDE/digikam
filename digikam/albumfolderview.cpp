@@ -701,7 +701,7 @@ void AlbumFolderView::albumDelete(PAlbum* album)
     {
         if (!settings->getUseTrash())
         {
-            if (KMessageBox::questionYesNo(0, i18n("Delete Album '%1' from HardDisk")
+            if (KMessageBox::questionYesNo(0, i18n("Delete album '%1' from disk?")
                                            .arg(album->getTitle()))
                 != KMessageBox::Yes)
                 return;
