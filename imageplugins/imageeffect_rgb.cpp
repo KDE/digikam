@@ -47,7 +47,7 @@
 #include "imageeffect_rgb.h"
 
 ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
-               : KDialogBase(Plain, i18n("Colors balance"),
+               : KDialogBase(Plain, i18n("Color balance"),
                              Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset values"))
 {
@@ -55,13 +55,13 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
                                               0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Colors balance"),
+    QVGroupBox *gbox = new QVGroupBox(i18n("Color balance"),
                                       plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image color balance preview."));
+    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image color-balance preview."));
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addWidget(gbox);
 
@@ -69,7 +69,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel      *label = 0;
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Red :"), plainPage());
+    label    = new QLabel(i18n("Red:"), plainPage());
     m_rInput = new KDoubleNumInput(plainPage());
     m_rInput->setRange(0.0, 2.0, 0.01, true);
     m_rInput->setPrecision(2);
@@ -78,7 +78,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     hlay->addWidget(m_rInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Green :"), plainPage());
+    label    = new QLabel(i18n("Green:"), plainPage());
     m_gInput = new KDoubleNumInput(plainPage());
     m_gInput->setRange(0.0, 2.0, 0.01, true);
     m_gInput->setPrecision(2);
@@ -87,7 +87,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     hlay->addWidget(m_gInput,5);
 
     hlay     = new QHBoxLayout(topLayout);
-    label    = new QLabel(i18n("Blue :"), plainPage());
+    label    = new QLabel(i18n("Blue:"), plainPage());
     m_bInput = new KDoubleNumInput(plainPage());
     m_bInput->setRange(0.0, 2.0, 0.01, true);
     m_bInput->setPrecision(2);
