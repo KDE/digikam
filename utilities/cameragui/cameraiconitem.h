@@ -21,16 +21,17 @@
 #ifndef CAMERAICONITEM_H
 #define CAMERAICONITEM_H
 
-#include <qiconview.h>
+#include <thumbitem.h>
 #include <qstring.h>
 
 class GPItemInfo;
 
-class CameraIconViewItem : public QIconViewItem
+class CameraIconViewItem : public ThumbItem
 {
 public:
 
-    CameraIconViewItem(QIconView* parent, const GPItemInfo& itemInfo,
+    CameraIconViewItem(ThumbView* parent, const GPItemInfo& itemInfo,
+                       const QPixmap& pixmap, 
                        const QString& downloadName=QString::null);
     ~CameraIconViewItem();
 
@@ -41,13 +42,10 @@ public:
     GPItemInfo* itemInfo() const
         { return m_itemInfo; }
 
-    virtual void setPixmap(const QPixmap& icon);
-    
 protected:
 
-    virtual void calcRect(const QString & text_ = QString::null);
+    virtual void calcRect();
     virtual void paintItem(QPainter *, const QColorGroup& cg);
-    virtual void paintFocus(QPainter *, const QColorGroup& cg);
     
 private:
 

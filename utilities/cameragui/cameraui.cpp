@@ -409,7 +409,7 @@ void CameraUI::slotDownload(bool onlySelected)
                         "Importing Camera Images"));
 
     QString newDirName;
-    QIconViewItem* firstItem = m_view->firstItem();
+    ThumbItem* firstItem = m_view->firstItem();
     if (firstItem)
     {
         CameraIconViewItem* iconItem =
@@ -448,7 +448,7 @@ void CameraUI::slotDownload(bool onlySelected)
     autoAlbum  = m_autoAlbumCheck->isChecked();
 
     int total = 0;
-    for (QIconViewItem* item = m_view->firstItem(); item;
+    for (ThumbItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         if (onlySelected && !(item->isSelected()))
@@ -500,7 +500,7 @@ void CameraUI::slotDeleteSelected()
     QStringList files;
     QStringList deleteList;
     
-    for (QIconViewItem* item = m_view->firstItem(); item;
+    for (ThumbItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
@@ -545,7 +545,7 @@ void CameraUI::slotDeleteAll()
     QStringList files;
     QStringList deleteList;
     
-    for (QIconViewItem* item = m_view->firstItem(); item;
+    for (ThumbItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);

@@ -26,7 +26,6 @@
 
 #include "gpiteminfo.h"
 
-class QIconView;
 class QPushButton;
 class QToolButton;
 class QCheckBox;

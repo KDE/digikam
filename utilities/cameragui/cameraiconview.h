@@ -21,7 +21,7 @@
 #ifndef CAMERAICONVIEW_H
 #define CAMERAICONVIEW_H
 
-#include <qiconview.h>
+#include <thumbview.h>
 #include <qdict.h>
 
 class GPItemInfo;
@@ -29,7 +29,7 @@ class RenameCustomizer;
 class CameraUI;
 class CameraIconViewItem;
 
-class CameraIconView : public QIconView
+class CameraIconView : public ThumbView
 {
     Q_OBJECT
     
@@ -49,8 +49,9 @@ public:
     
 private:
 
-    QString getTemplatedName(const QString& templ,
-                             CameraIconViewItem* item);
+    QString getTemplatedName(const QString& templ, 
+                             const GPItemInfo* itemInfo,
+                             int position);
     
     QDict<CameraIconViewItem> m_itemDict;
     RenameCustomizer*         m_renamer;
@@ -76,8 +77,8 @@ public slots:
 
 private slots:
 
-    void slotContextMenu(QIconViewItem* item, const QPoint& pos);
-    void slotDoubleClicked(QIconViewItem* item);
+    void slotContextMenu(ThumbItem* item, const QPoint& pos);
+    void slotDoubleClicked(ThumbItem* item);
 };    
 
 #endif /* CAMERAICONVIEW_H */

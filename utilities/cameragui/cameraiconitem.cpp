@@ -19,6 +19,8 @@
  * ============================================================ */
 
 #include <qpainter.h>
+#include <qpixmap.h>
+#include <thumbview.h>
 
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
@@ -51,10 +53,11 @@ const char* CameraIconViewItem::new_xpm[] =
 
 QPixmap* CameraIconViewItem::m_newEmblem = 0;
 
-CameraIconViewItem::CameraIconViewItem(QIconView* parent,
+CameraIconViewItem::CameraIconViewItem(ThumbView* parent,
                                        const GPItemInfo& itemInfo,
+                                       const QPixmap& pix,
                                        const QString& downloadName)
-    : QIconViewItem(parent, itemInfo.name)
+    : ThumbItem(parent, itemInfo.name, pix)
 {
     m_itemInfo     = new GPItemInfo(itemInfo);
     m_downloadName = downloadName;
@@ -66,7 +69,7 @@ CameraIconViewItem::~CameraIconViewItem()
     delete m_itemInfo;
 }
 
-void CameraIconViewItem::calcRect(const QString&)
+void CameraIconViewItem::calcRect()
 {
     const int thumbSize = 128;
     
@@ -128,7 +131,7 @@ void CameraIconViewItem::calcRect(const QString&)
         setPixmapRect( itemPixRect );
     if ( itemTextRect != textRect() )
         setTextRect( itemTextRect );
-     setItemRect( itemRect );
+     setRect( itemRect );
 }
 
 void CameraIconViewItem::paintItem(QPainter *, const QColorGroup& cg)
@@ -201,10 +204,6 @@ void CameraIconViewItem::paintItem(QPainter *, const QColorGroup& cg)
            0, 0, r.width()+4, r.height()+4);
 }
 
-void CameraIconViewItem::paintFocus(QPainter *, const QColorGroup&)
-{
-}
-
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
 {
     m_downloadName = downloadName;
@@ -224,10 +223,4 @@ void CameraIconViewItem::setDownloaded()
         m_itemInfo->downloaded = 1;
         repaint();
     }
-}
-
-void CameraIconViewItem::setPixmap(const QPixmap& icon)
-{
-    QIconViewItem::setPixmap(icon);
-    calcRect();
 }
