@@ -20,8 +20,6 @@
  * ============================================================ */
 
 #include <qstring.h>
-#include <qdict.h>
-#include <qmap.h>
 
 #include <kdirlister.h>
 #include <kdirwatch.h>
@@ -50,7 +48,6 @@ public:
     Album*      currAlbum;
     AlbumDB*    db;
 
-    KFileItemList itemList;
     QMap<KFileItem*,QString> comments;
 };
     
@@ -60,19 +57,6 @@ AlbumLister::AlbumLister()
     d->dirLister = new KDirLister;
     d->dirWatch  = 0;
     d->currAlbum = 0;
-    d->db = AlbumManager::instance()->albumDB();
-    d->itemList.setAutoDelete(true);
-    
-    connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
-            SLOT(slotNewItems(const KFileItemList&)));
-    connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
-            SLOT(slotDeleteItem(KFileItem*)) );
-    connect(d->dirLister, SIGNAL(clear()),
-            SLOT(slotClear()));
-    connect(d->dirLister, SIGNAL(completed()),
-            SIGNAL(signalCompleted()));
-    connect(d->dirLister, SIGNAL(refreshItems(const KFileItemList&)),
-            SIGNAL(signalRefreshItems(const KFileItemList&)));
 }
 
 AlbumLister::~AlbumLister()
