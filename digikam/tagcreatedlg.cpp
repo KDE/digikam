@@ -20,7 +20,6 @@
  * ============================================================ */
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kicondialog.h>
 #include <kapplication.h>
 
@@ -32,6 +31,7 @@
 
 #include "album.h"
 #include "tagcreatedlg.h"
+#include "syncjob.h"
 
 TagCreateDlg::TagCreateDlg(TAlbum* parent)
     : KDialogBase( Plain, i18n("Create Tag"), Help|Ok|Cancel, Ok,
@@ -80,9 +80,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     if (!parent->isRoot())
     {
         m_icon = parent->getIcon();
-        m_iconButton->setIconSet( KApplication::kApplication()->iconLoader()
-                                  ->loadIcon(m_icon, KIcon::NoGroup, 32,
-                                             KIcon::DefaultState, 0, true));
+        m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
     }
 }
 
@@ -105,9 +103,7 @@ QString TagCreateDlg::icon() const
 void TagCreateDlg::slotIconChange()
 {
     m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 32);
-    m_iconButton->setIconSet( KApplication::kApplication()->iconLoader()
-                              ->loadIcon(m_icon, KIcon::NoGroup, 32,
-                                         KIcon::DefaultState, 0, true));
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));              
 }
 
 bool TagCreateDlg::tagCreate(TAlbum* parent, QString& title,
@@ -168,9 +164,8 @@ TagEditDlg::TagEditDlg(TAlbum* album)
             SLOT(slotIconChange()));
 
     m_icon = album->getIcon();
-    m_iconButton->setIconSet( KApplication::kApplication()->iconLoader()
-                              ->loadIcon(m_icon, KIcon::NoGroup, 32,
-                                         KIcon::DefaultState, 0, true));
+
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
 }
 
 TagEditDlg::~TagEditDlg()
@@ -195,9 +190,7 @@ void TagEditDlg::slotIconChange()
         return;
 
     m_icon = icon;
-    m_iconButton->setIconSet( KApplication::kApplication()->iconLoader()
-                              ->loadIcon(m_icon, KIcon::NoGroup, 32,
-                                         KIcon::DefaultState, 0, true));
+    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 32));
 }
 
 bool TagEditDlg::tagEdit(TAlbum* album, QString& title,

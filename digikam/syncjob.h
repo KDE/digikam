@@ -29,7 +29,11 @@
 #define SYNCJOB_H
 
 #include <qobject.h>
+#include <qpixmap.h>
 #include <kurl.h>
+
+class QString;
+class KFileMetaInfo;
 
 namespace KIO
 {
@@ -54,6 +58,9 @@ public:
        there is a specific need for this */
     static bool trash(const KURL::List& urls);
 
+    /* Load the image or icon for the tag thumbnail */    
+    static QPixmap getTagThumbnail(const QString &name, int size);
+
     static QString lastErrorMsg();
     static int     lastErrorCode();
     
@@ -65,16 +72,24 @@ private:
     bool delPriv(const KURL::List& urls);
     bool trashPriv(const KURL::List& urls);
 
+    QPixmap getTagThumbnailPriv(const QString &name, int size);
+
     void enter_loop();
     
     static int      lastErrorCode_;
     static QString* lastErrorMsg_;
     bool            success_;
+    
+    QPixmap         *thumbnail_;
+    int             thumbnailSize_;
 
 private slots:
 
     void slotResult( KIO::Job * job );
-    
+    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix,
+                                  const KFileMetaInfo*);
+    void slotLoadThumbnailFailed(const KURL&);
+    void slotStatThumbnailFailed(const KURL&, bool);
 };
 
 #endif /* SYNCJOB_H */

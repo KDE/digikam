@@ -29,6 +29,7 @@
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
+#include "syncjob.h"
 
 Album::Album(Album::Type type, int id, const QString& title, bool root)
 {
@@ -422,8 +423,7 @@ QPixmap TAlbum::getPixmap() const
     QPixmap pix;
     
     if (!isRoot())
-        pix = iconLoader->loadIcon(m_icon, KIcon::NoGroup, 20,
-                                   KIcon::DefaultState, 0, true);
+        pix = SyncJob::getTagThumbnail(m_icon, 20);
     else
         pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
                                    KIcon::DefaultState, 0, true);

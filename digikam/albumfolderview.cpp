@@ -74,6 +74,7 @@
 #include "thumbnailjob.h"
 #include "digikamio.h"
 #include "digikamapp.h"
+#include "syncjob.h"
 
 #include "thumbnailsize.h"
 #include "albumfolderitem.h"
@@ -385,40 +386,16 @@ QPixmap AlbumFolderView::getBlendedIcon(TAlbum* album) const
         return baseIcon;
                                           
     QString icon(album->getIcon());                                          
-    
-    if (!icon.isEmpty())
-    {
-        QPixmap pix;
-        if(icon.startsWith("/"))
-        {
-            pix = iconLoader->loadIcon(icon,
-                                        KIcon::User,
-                                        20,
-                                        KIcon::DefaultState,
-                                        0, true);
-            if(pix.isNull())
-            {
-                QString err;
-                AlbumManager::instance()->updateTAlbumIcon( album, "",
-                                                            true, err );
-            }
-        }
-        else
-        {
-            pix = iconLoader->loadIcon(icon,
-                                        KIcon::NoGroup,
-                                        20,
-                                        KIcon::DefaultState,
-                                        0, true);
-        }
+            
+    QPixmap pix = SyncJob::getTagThumbnail(album->getIcon(), 20);
         
-        if (!pix.isNull())
-        {
-            QPainter p(&baseIcon);
-            p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
-            p.end();
-        }
+    if (!pix.isNull())
+    {
+        QPainter p(&baseIcon);
+        p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
+        p.end();
     }
+
     return baseIcon;
 }
 

@@ -14,7 +14,6 @@
 #include <qapplication.h>
 #include <qdrawutil.h>
 
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include <stdlib.h>

@@ -23,6 +23,7 @@
 #include <kiconloader.h>
 
 #include <qpixmap.h>
+#include <qstring.h>
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -30,6 +31,7 @@
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
+#include "syncjob.h"
 
 #include "tagspopupmenu.h"
 
@@ -62,13 +64,12 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     if (!album)
         return 0;
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     QPopupMenu*  popup      = new QPopupMenu(this);
     connect(popup, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 
     if (!album->isRoot())
     {
-        QPixmap pix(iconLoader->loadIcon(album->getIcon(),KIcon::Small));
+        QPixmap pix = SyncJob::getTagThumbnail(album->getIcon(), KIcon::SizeSmall);
         popup->insertItem(pix, album->getTitle(), m_addToID + album->getID());
         popup->insertSeparator();
     }
@@ -84,7 +85,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
                 continue;
         }
 
-        QPixmap pix(iconLoader->loadIcon(a->getIcon(),KIcon::Small));
+        QPixmap pix = SyncJob::getTagThumbnail(a->getIcon(), KIcon::SizeSmall);
         if (a->firstChild())
         {
             popup->insertItem(pix, a->getTitle(), buildSubMenu(a->getID()));
@@ -160,8 +161,6 @@ void TagsPopupMenu::slotAboutToShow()
     if (!album)
         return;
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-
     for (Album* a = album->firstChild(); a; a = a->next())
     {
         if (m_onlyAssignedTags)
@@ -173,7 +172,7 @@ void TagsPopupMenu::slotAboutToShow()
                 continue;
         }
         
-        QPixmap pix(iconLoader->loadIcon(a->getIcon(),KIcon::Small));
+        QPixmap pix = SyncJob::getTagThumbnail(a->getIcon(), KIcon::SizeSmall);
         if (a->firstChild())
         {
             insertItem(pix, a->getTitle(), buildSubMenu(a->getID()));
