@@ -22,6 +22,7 @@ x Saving Digikam comments items in EXIF data for JPEG              <Ralf Holzer 
 x Added image sizes annotation for each album item.                <Gilles Caulier - 0.6.3>
 * Added LibKIPI support instead Digikamplugins interface.          <Gilles Caulier - 0.6.3>
 - Added config saving of Albums opened in Albums treeview.         <Gilles Caulier - 0.6.3>
+o LibExif 0.6.x support.
 o Added dockable main widgets like ShowImg.                        
 o Added subfolders Albums support.
 o Added tagging images feature.
