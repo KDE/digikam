@@ -796,83 +796,147 @@ bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression, co
               << mimeType.ascii() << ")" << endl;
     
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
-       {
-       // Imlib2 uses LZW compression (not available
-       // in most distributions) which results
-       // in corrupted tiff files. Here we use
-       // a different compression algorithm
+    {
+        // Imlib2 uses LZW compression (not available
+        // in most distributions) which results
+        // in corrupted tiff files. Here we use
+        // a different compression algorithm
        
-       // Renchi, I use this implemetation temporally until imlib2 support correctly TIFF file format 
-       return ( saveTIFF(saveFile, true) );        
-       }
+        // This function is temporarily used until we move dependency to imlib2 > 1.1
+        return ( saveTIFF(saveFile, true) );        
+    }
     
     if ( !mimeType.isEmpty() )
-       imlib_image_set_format(mimeType.ascii()); 
+        imlib_image_set_format(mimeType.ascii()); 
     
     // Always save JPEG files with the at 'JPEGcompression' % quality without compression.
             
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
-       imlib_image_attach_data_value ("quality", NULL, JPEGcompression, NULL);
+        imlib_image_attach_data_value ("quality", NULL, JPEGcompression, NULL);
             
     // Always saving PNG files with a max. compression (small size).
               
     if ( mimeType.upper() == QString("PNG") ) 
-       imlib_image_attach_data_value ("quality", NULL, 1, NULL);
+        imlib_image_attach_data_value ("quality", NULL, 1, NULL);
 
     imlib_save_image_with_error_return(QFile::encodeName(saveFile).data(), &d->errorRet);
 
     if( d->errorRet != IMLIB_LOAD_ERROR_NONE ) 
-        {
+    {
         kdWarning() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
                     << (int)d->errorRet << endl;
         return false;  // Do not reload the file if saving failed !
-        }
+    }
 
     return true;
 }
 
 
-// This fonction is temporally used until imlib2 support correctly TIFF file format.
+// This function is temporarily used until we move dependency to imlib2 > 1.1
+// backported from imlib2 1.1.x
 bool ImlibInterface::saveTIFF(const QString& saveFile, bool compress) 
 {
     TIFF   *tif;
     DATA32 *data;
-    int     y;
-    int     w;
+    uint32  w, h;
+    bool    has_alpha;
+
+    w = imlib_image_get_width();
+    h = imlib_image_get_height();
+    data = imlib_image_get_data();
+    has_alpha = imlib_image_has_alpha();
+
+    if (!data || !w || !h)
+        return false;
 
     tif = TIFFOpen(QFile::encodeName(saveFile).data(), "w");
         
     if (tif)
-       {
-       TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, imlib_image_get_width());
-       TIFFSetField(tif, TIFFTAG_IMAGELENGTH, imlib_image_get_height());
-       TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-       TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
-       TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-            
-       if (compress)
-          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
-       else
-          TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-          {
-          TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
-          TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-          w = TIFFScanlineSize(tif);
-          TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
-          TIFFDefaultStripSize(tif, 0));
-                
-          for (y = 0 ; y < imlib_image_get_height() ; ++y)
-              {
-              data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() );
-              TIFFWriteScanline(tif, data, y, 0);
-              }
-          }
-            
-       TIFFClose(tif);
-       return true;
-       }
-            
-    return false;  
+    {
+        TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  w);
+        TIFFSetField(tif, TIFFTAG_IMAGELENGTH, h);
+        TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+        TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+        TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
+
+        if (compress)
+            TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+        else
+            TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+
+        if (has_alpha)
+        {
+            TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
+            TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, EXTRASAMPLE_ASSOCALPHA);
+        }
+        else
+        {
+            TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+        }
+
+        TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+        TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tif, 0));
+        
+        uint8*              buf = 0;
+        DATA32              pixel;
+        double              alpha_factor;
+        uint32              x, y;
+        uint8               r, g, b, a = 0;
+        int                 i = 0;
+
+        buf = (uint8 *) _TIFFmalloc(TIFFScanlineSize(tif));
+
+        if (!buf)
+        {
+            TIFFClose(tif);
+            return false;
+        }
+
+        for (y = 0; y < h; y++)
+        {
+            i = 0;
+            for (x = 0; x < w; x++)
+            {
+                pixel = data[(y * w) + x];
+
+                r = (pixel >> 16) & 0xff;
+                g = (pixel >> 8) & 0xff;
+                b = pixel & 0xff;
+                if (has_alpha)
+                {
+                    /* TIFF makes you pre-mutiply the rgb components by alpha */
+                    a = (pixel >> 24) & 0xff;
+                    alpha_factor =  ((double)a / 255.0);
+                    r = uint8(r*alpha_factor);
+                    g = uint8(g*alpha_factor);
+                    b = uint8(b*alpha_factor);
+                }
+
+                /* This might be endian dependent */
+                buf[i++] = r;
+                buf[i++] = g;
+                buf[i++] = b;
+                if (has_alpha)
+                    buf[i++] = a;
+            }
+
+            if (!TIFFWriteScanline(tif, buf, y, 0))
+            {
+                _TIFFfree(buf);
+                TIFFClose(tif);
+                return false;
+            }
+
+        }
+
+        _TIFFfree(buf);
+        TIFFClose(tif);
+
+        return true;
+    }
+
+    return false;
 }
 
 ImlibInterface* ImlibInterface::instance()
