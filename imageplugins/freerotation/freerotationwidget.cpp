@@ -2,9 +2,7 @@
  * File  : freerotationwidget.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-16
- * Description : this widget is dedicaced to provide some image 
- *               tools like pixel selection, pickup pixel color, 
- *               etc.
+ * Description : 
  * 
  * Copyright 2004 by Gilles Caulier
  *
