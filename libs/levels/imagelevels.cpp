@@ -335,11 +335,11 @@ void ImageLevels::levelsLutSetup(int nchannels)
        }
 
     m_lut->nchannels = nchannels;
-    m_lut->luts      = new (uchar *)[m_lut->nchannels];
+    m_lut->luts      = new uchar*[m_lut->nchannels];
     
     for (i = 0 ; i < m_lut->nchannels ; ++i)
        {
-       m_lut->luts[i]      = new (uchar)[256];
+       m_lut->luts[i]      = new uchar[256];
 
        for (v = 0 ; v < 256 ; ++v)
           {
