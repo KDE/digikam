@@ -530,7 +530,7 @@ void ListView::ensureItemVisible(ListItem *item)
     ListItem *parent = item->parent();
     while ( parent ) {
         if ( !parent->isOpen() )
-            parent->setOpen( TRUE );
+            parent->setOpen( true );
         parent = parent->parent();
     }
 

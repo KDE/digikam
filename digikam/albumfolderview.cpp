@@ -1277,7 +1277,7 @@ void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
 
 void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    if( !e ) return;
+    if ( !e ) return;
 
     ListItem* item = itemAt(e->pos());
 
@@ -1303,6 +1303,11 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
+}
+
+void AlbumFolderView::contentsMouseReleaseEvent(QMouseEvent *)
+{
+    dragItem_ = 0;
 }
 
 void AlbumFolderView::startDrag()

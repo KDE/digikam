@@ -191,12 +191,9 @@ void ThumbnailJob::processNext()
     
     // Need to test the AlbumSettings validity instance when ThumbnailJob is used out of 
     // Digikam like when Image Properties dialog is used in Showfoto.
-    if (AlbumSettings::instance())       
-    {
-    if (AlbumSettings::instance()->getExifRotate())
+    if (AlbumSettings::instance() && AlbumSettings::instance()->getExifRotate())
         job->addMetaData("exif", "yes");
-    }
-    
+        
     connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
             this, SLOT(slotThumbData(KIO::Job *, const QByteArray &)));
 
