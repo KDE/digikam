@@ -28,9 +28,10 @@
 #include <kdialogbase.h>
 
 class QPushButton;
+class QSpinBox;
 class QSlider;
 
-class KDoubleSpinBox;
+class KProgress;
 
 namespace Digikam
 {
@@ -55,24 +56,41 @@ protected:
     
 private:
 
-    QWidget         *m_parent;
+    bool          m_cancel;
     
-    QPushButton     *m_helpButton;
+    QWidget      *m_parent;
     
-    QSlider         *m_radiusSlider;
+    QPushButton  *m_helpButton;
     
-    KDoubleSpinBox  *m_radiusInput;
+    QSpinBox     *m_brushSizeInput;
+    QSpinBox     *m_smoothInput;
+        
+    QSlider      *m_brushSizeSlider;
+    QSlider      *m_smoothSlider;
+    
+    KProgress    *m_progressBar;
 
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    
+private:
+
+    void OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness);
+    
+    inline uint MostFrequentColor(uchar* Bits, int Width, int Height, int X, 
+                                  int Y, int Radius, int Intensity); 
+                                  
+    // Function to calcule the color intensity and return the luminance (Y)
+    // component of YIQ color model.
+    inline uint GetIntensity(uint Red, uint Green, uint Blue)
+           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); } 
     
 private slots:
 
     void slotHelp();
     void slotEffect();
     void slotOk();
-    
-    void slotSliderRadiusChanged(int v);
-    void slotSpinBoxRadiusChanged(double v);
+    void slotCancel();
+    void slotUser1();
     
 };
 
