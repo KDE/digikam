@@ -43,7 +43,6 @@
 #include <libkexif/kexifentry.h>
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexiflistview.h>
-#include <libkexif/kexifutils.h>
 #include <libkexif/kexiflistviewitem.h>
 
 // Local includes.
