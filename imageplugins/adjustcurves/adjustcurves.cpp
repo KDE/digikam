@@ -184,9 +184,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 1, 1, 0, 0);
 
-    m_curvesWidget = new CurvesWidget(256, 256, imageData, width, height, frame);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
-                                             "histogram channel"));
+    m_curvesWidget = new CurvesWidget(256, 256, imageData, width, height, m_curves, frame);
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curves drawing of the selected image "
+                                          "histogram channel"));
     l->addWidget(m_curvesWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 1, 5);
     
@@ -233,7 +233,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
     adjustSize();
-    disableResize();
+    //disableResize();
 
     QTimer::singleShot(0, this, SLOT(slotResetAllChannels())); // Reset all parameters to the default values.
     parentWidget()->setCursor( KCursor::arrowCursor()  );

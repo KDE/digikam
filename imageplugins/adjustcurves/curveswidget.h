@@ -31,6 +31,7 @@ class QCustomEvent;
 namespace Digikam
 {
 class ImageHistogram;
+class ImageCurves;
 }
 
 namespace DigikamAdjustCurvesImagesPlugin
@@ -65,8 +66,9 @@ enum RepaintType
 
 public:
 
-    CurvesWidget(int w, int h,                              // Widget size.
-                 uint *i_data, uint i_w, uint i_h,          // Full image info.
+    CurvesWidget(int w, int h,                                      // Widget size.
+                 uint *i_data, uint i_w, uint i_h,                  // Full image info.
+                 Digikam::ImageCurves *curves,                      // Curves data instance to use.
                  QWidget *parent=0);
                  
     ~CurvesWidget();
@@ -99,15 +101,13 @@ protected:
     
 private:
 
-    // Current selection informations.
-    int     m_xmin;
-    int     m_xminOrg; 
-    int     m_xmax;
-    int     m_clearFlag;          // Clear drawing zone with message.
+    int                   m_clearFlag;          // Clear drawing zone with message.
     
-    bool    m_blinkFlag;         
+    bool                  m_blinkFlag;         
     
-    QTimer *m_blinkTimer;
+    QTimer               *m_blinkTimer;
+    
+    Digikam::ImageCurves *m_curves;             // Curves data instance.
     
     void customEvent(QCustomEvent *event);
 };

@@ -27,6 +27,7 @@
 
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qpoint.h>
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
@@ -40,6 +41,7 @@
 // Digikam includes.
 
 #include <digikam/imagehistogram.h>
+#include <digikam/imagecurves.h>
 
 // Local includes.
 
@@ -50,15 +52,14 @@ namespace DigikamAdjustCurvesImagesPlugin
 
 CurvesWidget::CurvesWidget(int w, int h, 
                            uint *i_data, uint i_w, uint i_h, 
-                           QWidget *parent)
+                           Digikam::ImageCurves *curves, QWidget *parent)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
     m_blinkFlag      = false;
     m_clearFlag      = HistogramNone;
-    m_xmin           = 0;
-    m_xmax           = 0;
+    m_curves         = curves;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -224,10 +225,13 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       {
       double value = 0.0; 
       int    i, j;
-    
+      int    curveVal;
+      
       i = (x * 256) / wWidth;
       j = ((x + 1) * 256) / wWidth;
 
+      curveVal   = m_curves->getCurveValue(m_channelType, i);
+             
       do
           {
           double v;
@@ -283,9 +287,27 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
       p1.drawLine(x, wHeight, x, wHeight - y);                 
       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-      p1.drawLine(x, wHeight - y, x, 0);                 
+      p1.drawLine(x, wHeight - y, x, 0);         
+      
+      // Drawing curve.   
+   
+      p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+      p1.drawPoint(x, wHeight - ((curveVal * 256) / wHeight)); 
       }
    
+   // Drawing curves points.
+      
+   p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
+            
+   for (int p = 0 ; p < 17 ; ++p)
+      {
+      QPoint curvePoint = m_curves->getCurvePoint(m_channelType, p);
+      
+      p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 3, 
+                      wHeight - 3 - ((curvePoint.y() * 256) / wHeight),
+                      6, 6 ); 
+      }
+      
    p1.end();
    bitBlt(this, 0, 0, &pm);
 }
