@@ -41,6 +41,7 @@ class KAction;
 class KActionMenu;
 class KToolBarPopupAction;
 class KToggleAction;
+class KSelectAction;
 
 class Canvas;
 class AlbumIconView;
@@ -105,6 +106,7 @@ private:
     KAction              *m_zoomMinusAction;
     KToggleAction        *m_zoomFitAction;
     KToggleAction        *m_fullScreenAction;
+    KSelectAction        *m_viewHistogramAction;
 
     KActionMenu          *m_rotateAction;
     KActionMenu          *m_flipAction;
@@ -157,6 +159,7 @@ private slots:
     void slotLoadLast();
 
     void slotToggleAutoZoom();
+    void slotViewHistogram();
     void slotToggleFullScreen();
     void slotEscapePressed();
 

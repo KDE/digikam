@@ -284,6 +284,21 @@ void ImageWindow::buildGUI()
                                            CTRL+SHIFT+Key_F,
                                            this, SLOT(slotToggleFullScreen()),
                                            actionCollection(), "toggle_fullScreen");
+					   
+    m_viewHistogramAction = new KSelectAction(i18n("View &Histogram"), "viewhistogram",
+                                              Key_H,
+                                              this, SLOT(slotViewHistogram()),
+                                              actionCollection(), "imageview_histogram");
+    m_viewHistogramAction->setEditable(false);
+
+    QStringList selectItems;
+    selectItems << i18n("Hide");
+    selectItems << i18n("Luminosity");
+    selectItems << i18n("Red");
+    selectItems << i18n("Green");
+    selectItems << i18n("Blue");
+    selectItems << i18n("Alpha");
+    m_viewHistogramAction->setItems(selectItems);
 
     // -- Transform actions ----------------------------------------------------------
     
@@ -445,6 +460,7 @@ void ImageWindow::readSettings()
 
     // GUI options.
     bool autoZoom = config->readBoolEntry("AutoZoom", true);
+    
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
@@ -460,6 +476,15 @@ void ImageWindow::readSettings()
         m_fullScreen = false;
         m_fullScreenAction->activate();
     }
+    
+    QRect histogramRect = config->readRectEntry("Histogram Rectangle");
+    if (!histogramRect.isNull())
+        m_canvas->setHistogramPosition(histogramRect.topLeft());
+    
+    int histogramType = config->readNumEntry("HistogramType", 0);
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    m_viewHistogramAction->setCurrentItem(histogramType);
+    slotViewHistogram(); // update
 }
 
 void ImageWindow::saveSettings()
@@ -469,7 +494,18 @@ void ImageWindow::saveSettings()
     
     config->setGroup("ImageViewer Settings");
     config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
+
+    int histogramType = m_viewHistogramAction->currentItem();
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    config->writeEntry("HistogramType", histogramType);
+
     config->writeEntry("FullScreen", m_fullScreen);
+    
+    QPoint pt;
+    QRect rc(0, 0, 0, 0);
+    if (m_canvas->getHistogramPosition(pt)) 
+        rc = QRect(pt.x(), pt.y(), 1, 1);
+    config->writeEntry("Histogram Rectangle", rc);
     config->sync();
 }
 
@@ -645,6 +681,12 @@ void ImageWindow::slotToggleAutoZoom()
     m_zoomMinusAction->setEnabled(!checked);
 
     m_canvas->slotToggleAutoZoom();
+}
+
+void ImageWindow::slotViewHistogram()
+{
+    int curItem = m_viewHistogramAction->currentItem();
+    m_canvas->setHistogramType(curItem);
 }
 
 void ImageWindow::slotResize()

@@ -79,6 +79,11 @@ public:
 
     void getUndoHistory(QStringList &titles);
     void getRedoHistory(QStringList &titles);
+
+    void setHistogramPosition(const QPoint& pos);
+    bool getHistogramPosition(QPoint& pos);
+
+    int setHistogramType(int t);
     
 protected:
     
@@ -92,9 +97,18 @@ protected:
 private:
 
     void updateAutoZoom();
+    bool updateHistogram(bool);
     void updateContentsSize();
     void drawRubber();
+
+    void getHistogramRect(QRect &);
     void paintViewport(const QRect& er, bool antialias);
+
+    void paintHistogram(const QRect& cr);
+    void customEvent(QCustomEvent *);
+    void createHistogramPixmap();
+    void drawHistogramPixmapBusy();
+    void drawHistogramPixmap();
 
     CanvasPrivate *d;
 
@@ -104,6 +118,9 @@ public slots:
     void slotDecreaseZoom();
     void slotSetAutoZoom(bool val);
     void slotToggleAutoZoom();
+
+    void slotShowHistogram(bool val);
+    void slotToggleShowHistogram();
 
     // image modifiers
     void slotRotate90();
@@ -126,6 +143,9 @@ private slots:
     void slotSelected();
     void slotPaintSmooth();
     void slotModified(bool anyMoreUndo, bool anyMoreRedo);
+    void slotContentsMoving(int, int);
+    void slotContentsMovingPaintHistogram();
+    void slotHistoMovingPaintHistogram();
     
 signals:
 

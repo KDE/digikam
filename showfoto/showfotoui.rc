@@ -40,6 +40,7 @@
      <Separator />
      <Action name="full_screen" /> 
      <Action name="show_thumbs" /> 
+     <Action name="view_histogram" /> 
  </Menu>
 
  <Menu name="Fix" >

@@ -23,6 +23,8 @@
 
 #include <cstdio>
 #include <cmath>
+
+#include <kdebug.h>
  
 // Qt includes.
  
@@ -44,10 +46,16 @@
 #include <qdragobject.h> 
 #include <qclipboard.h>
 
+#include <kcursor.h>
+
 // Local includes.
+#include "imagehistogram.h"
 
 #include "imlibinterface.h"
 #include "canvas.h"
+
+const int HISTOGRAM_WIDTH  = (256 * 4) / 3;
+const int HISTOGRAM_HEIGHT = (114 * 4) / 3;
 
 using namespace Digikam;
 
@@ -90,6 +98,32 @@ public:
     const int          tileSize;
     QCache<QPixmap>    tileCache;
     QPixmap*           tileTmpPix;
+
+    // state variables for histogram visibility
+    bool               showHistogram;       //!< visibility
+
+    QPixmap           *histogramPixmap;     //!< histogram pixmap buffer
+    ImageHistogram    *imageHistogram;      //!< image histogram data
+    bool               histogramReady;      //!< state for histogram data thread
+
+    // state variables for repainting when the contents of the
+    // image are "moved", i.e. the image is scrolled 
+    bool               contentsMovingRepaintingHistogram;   //!< repaint cycle state for
+                                                            //   histogram while content 
+                                                            //   is moving underneath it
+                                                            //
+    QRect              contentsMovingDirtyRect;             //!< rectangles for histogram
+                                                            //   that should be updated
+                                                            //   in the next repaint state
+
+    bool               histogramMoving;                     //!< positioning histogram with mouse
+    QRect              histogramRect;                       //!< x y width rect (\sa getHistogramRect)
+
+    QPoint             histoMovingOffset;                   //!< offset
+    QRect              histoMovingDirtyRect;                //!< dirty rectangle while moving histogram
+    bool               histoMovingRepainting;               //!< is about to repaint
+
+    int                histoChannelType;                    //!< histogram type; \sa setHistogramType
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -126,6 +160,25 @@ Canvas::Canvas(QWidget *parent)
     p.fillRect(0, 8, 8, 8, QColor(100,100,100));
     p.fillRect(8, 0, 8, 8, QColor(100,100,100));
     p.end();
+
+    d->showHistogram   = false;
+    d->histogramReady  = false;
+    d->imageHistogram  = 0;
+    
+    d->histogramPixmap = 0;
+    createHistogramPixmap();
+
+    d->contentsMovingRepaintingHistogram = false;
+   
+    d->histogramMoving = false;
+    // by default emptyRect so histogram sticks half-centered 
+    // on the canvas
+    d->histogramRect = QRect(0, 0, 0, 0);
+    d->histoMovingOffset = QPoint(0, 0);
+    d->histoMovingDirtyRect = QRect(0, 0, 0, 0);
+    d->histoMovingRepainting = false;
+
+    d->histoChannelType = Digikam::ImageHistogram::ValueChannel; 
     
     connect(d->im, SIGNAL(signalModified(bool, bool)),
             SLOT(slotModified(bool, bool)));
@@ -133,12 +186,143 @@ Canvas::Canvas(QWidget *parent)
             SLOT(slotSelected()));
     connect(d->paintTimer, SIGNAL(timeout()),
             SLOT(slotPaintSmooth()));
+    
+    connect(this, SIGNAL(contentsMoving(int, int)),
+            SLOT(slotContentsMoving(int,int)));
 
     viewport()->setMouseTracking(false);
 }
 
+
+void Canvas::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
+
+    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event->data();
+
+    if (!ed) return;
+
+    if (ed->success) {
+        d->histogramReady = true;
+        drawHistogramPixmap();
+        QRect rc;
+        getHistogramRect(rc);
+        viewport()->update(rc);
+    }
+}
+
+/**
+ * Creates a pixmap stored in d->histogramPixmap, which can be alpha
+ * blended onto the canvas. 
+ */
+void Canvas::createHistogramPixmap()
+{
+    QImage image(HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT, 8, 2);
+
+    image.setAlphaBuffer(true);
+    image.setColor(0, qRgba(0, 0, 0, 127));
+    image.setColor(1, qRgba(0xff, 0xff, 0xff, 127));
+    image.fill(1);
+
+    d->histogramPixmap = new QPixmap(image);
+}
+
+/**
+ * Draws "busy" on histogram pixmap
+ */
+void Canvas::drawHistogramPixmapBusy()
+{
+    uint   wWidth  = HISTOGRAM_WIDTH;
+    uint   wHeight = HISTOGRAM_HEIGHT;
+    QPainter p(d->histogramPixmap);
+    QFont font = p.font();
+
+    font.setBold(true);
+    font.setPointSize(12);
+    
+    p.fillRect(QRect(0, 0, wWidth, wHeight), QBrush(qRgba(0xff, 0xff, 0xff, 127)));
+    p.setPen(QPen::QPen(qRgba(0, 0, 0, 127), 1, Qt::SolidLine));
+    p.setFont(font);
+    p.drawText(QRect(0, 0, wWidth, wHeight), 
+               AlignCenter | SingleLine | WordBreak,
+               i18n("Calculating..."));
+}
+
+/**
+ * Draws new histogram on pixmap 
+ */
+void Canvas::drawHistogramPixmap()
+{
+    uint   wWidth  = HISTOGRAM_WIDTH;
+    uint   wHeight = HISTOGRAM_HEIGHT;
+    uint   x = 0, y = 0;
+    double max = 0.0;
+    ImageHistogram *histogram = d->imageHistogram;
+    ImageHistogram::HistogramChannelType type;
+
+    if (d->histoChannelType <= 0 || d->histoChannelType > 5)
+        return;
+
+    type = static_cast<ImageHistogram::HistogramChannelType>(d->histoChannelType - 1);
+    max = histogram->getMaximum(type); 
+    
+    // make transparent white
+    QPainter p(d->histogramPixmap);
+
+    p.fillRect(QRect(0, 0, wWidth, wHeight), QBrush(qRgba(0xff, 0xff, 0xff, 127)));
+
+    // logic stolen from histogramwidget.c 
+    for (x = 0 ; x < wWidth ; ++x)
+    {
+        double value = 0.0; 
+        int    i, j;
+
+        i = (x * 256) / wWidth;
+        j = i + 1;
+
+        do
+        {
+            double v = 0.0;
+
+            v = histogram->getValue(type, i);
+            i++;
+
+            if (v > value)
+            value = v;
+        }
+        while (i < j);
+
+        y = (int) ((wHeight * value) / max);
+
+        QColor hiscolor;
+
+        switch (type) {
+        case ImageHistogram::RedChannel:
+            hiscolor = qRgba(0xFF, 0, 0, 127);
+            break;
+        case ImageHistogram::GreenChannel:
+            hiscolor = qRgba(0, 0xFF, 0, 127);
+            break;
+        case ImageHistogram::BlueChannel:
+            hiscolor = qRgba(0, 0, 0xFF, 127);
+            break;
+        default:
+            hiscolor = qRgba(0, 0, 0, 127);
+            break;
+        }
+
+        p.setPen(QPen::QPen(hiscolor, 1, Qt::SolidLine));
+        p.drawLine(x, wHeight, x, wHeight - y);                 
+    }
+
+    p.end();
+}
+
 Canvas::~Canvas()
 {
+    delete d->imageHistogram;
+    delete d->histogramPixmap;
+
     d->paintTimer->stop();
     delete d->paintTimer;
 
@@ -175,7 +359,9 @@ void Canvas::load(const QString& filename)
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
-
+    if (d->showHistogram)
+	    updateHistogram(true);
+   
     emit signalChanged(false, false);
     emit signalZoomChanged(d->zoom);
 }
@@ -252,6 +438,31 @@ void Canvas::updateAutoZoom()
     emit signalZoomChanged(d->zoom);
 }
 
+/**
+ * Update histogram on canvas. If @p invalidate is true, new data is
+ * is retrieved, and the histogram is redrawn entirely. 
+ * @return Returns true if viewport() should be update()d. (Currently
+ * returns true always.)
+ */
+bool Canvas::updateHistogram(bool invalidate)
+{
+    if (invalidate && d->imageHistogram) {
+	    delete d->imageHistogram;
+	    d->imageHistogram = 0;
+    }
+	
+    if (d->imageHistogram == 0) {
+        d->histogramReady = false;
+        d->imageHistogram = new ImageHistogram(d->im->getData(),
+                                               d->im->origWidth(),
+                                               d->im->origHeight(),
+                                               this);
+        // paint busy
+        drawHistogramPixmapBusy();
+    }
+    return true;
+}
+
 void Canvas::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
@@ -306,6 +517,19 @@ void Canvas::resizeEvent(QResizeEvent* e)
     if (d->autoZoom) {
         updateAutoZoom();
     }
+    
+    // if resize, set histogram semi-centered again if part 
+    // of the histogram is outside the visible width
+    QRect rc;
+
+    getHistogramRect(rc);
+
+    if (rc.right() > visibleWidth() ||
+        rc.bottom() > visibleHeight()) 
+    {
+        d->histogramRect.setWidth(0);
+        d->histogramRect.setHeight(0);
+    }
 
     updateContentsSize();
 
@@ -328,12 +552,13 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
 
 void Canvas::paintViewport(const QRect& er, bool antialias)
 {
-    QRect cr(viewportToContents(er.topLeft()),
-             viewportToContents(er.bottomRight()));
+    QRect o_cr(viewportToContents(er.topLeft()),
+               viewportToContents(er.bottomRight())),
+	    cr = o_cr;
 
     QRegion clipRegion(er);
-    
     cr = d->pixmapRect.intersect(cr);
+
     if (!cr.isEmpty())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
@@ -441,6 +666,62 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     painter.setClipRegion(clipRegion);
     painter.fillRect(er, d->bgColor);
     painter.end();
+    
+    paintHistogram(o_cr);
+}
+
+/**
+ * Returns histogram's rectangle @hrect in viewport coordinates. If histogram's
+ * rectangle is empty, or invalid, the histogram is painted semi-centered on
+ * the canvas.
+ */
+void Canvas::getHistogramRect(QRect &hrect)
+{
+    if (d->histogramRect.isNull()) {
+        QRect phis(contentsX(), contentsY(), HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT);
+        QRect rc(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+        QPoint p;
+       
+        // "semi-centered" location (3/4 of height, half of width)
+        p = QPoint(rc.width() / 2, (3 * rc.height()) / 4);
+        phis.moveCenter(p);
+
+        d->histogramRect.setTopLeft(phis.topLeft());
+        d->histogramRect.setWidth(0);
+        d->histogramRect.setHeight(0);
+        hrect = phis;
+    } else
+        hrect = QRect(d->histogramRect.x(), d->histogramRect.y(),
+                      HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT);
+}
+
+/**
+ * Paints histogram from the histogram's pixmap. @p cr is the canvas 
+ * rectangle that was requested to update; if the histogram's area 
+ * is not in that rectangle, it is not drawn.  
+ */
+void Canvas::paintHistogram(const QRect& cr)
+{
+    if (!d->showHistogram) 
+	    return;
+    if (!d->histogramPixmap)
+	    return;
+
+    QRect rcexposed, rc, rctmp;
+
+    getHistogramRect(rc);
+    rcexposed = rc;
+    rctmp = cr;
+    rctmp.setTopLeft(contentsToViewport(rctmp.topLeft()));
+    rctmp.setBottomRight(contentsToViewport(rctmp.bottomRight()));
+    
+    rcexposed = rcexposed.intersect(rctmp);
+    if (!rcexposed.isEmpty()) {
+        bitBlt(viewport(), rcexposed.x(), rcexposed.y(),
+               d->histogramPixmap, 
+               rcexposed.x() - rc.x(), rcexposed.y() - rc.y(),
+               rcexposed.width(), rcexposed.height());
+    }               
 }
 
 void Canvas::drawRubber()
@@ -473,9 +754,38 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         return;
 
     d->midButtonPressed = false;
-    
+
     if (e->button() == Qt::LeftButton)
     {
+
+        // if histogram, and not while repainting histogram
+        // because of a contents moving event, check whether
+        // the histogram should be moved...
+        if (d->showHistogram && d->histogramReady &&
+            !d->contentsMovingRepaintingHistogram)
+        {    
+            QRect rc;
+            QPoint pt(e->x(), e->y());
+
+            pt = contentsToViewport(pt);
+            getHistogramRect(rc);
+            if (rc.contains(pt)) {
+                d->histogramMoving = true;
+                
+                // XXX leave the sticky semi-centered state 
+                d->histogramRect.setWidth(HISTOGRAM_WIDTH);
+                d->histogramRect.setHeight(HISTOGRAM_HEIGHT);
+                
+                viewport()->setMouseTracking(false);
+                setCursor(KCursor::handCursor());
+
+                // offset of cursor in histogram rect
+                d->histoMovingOffset = pt - rc.topLeft();
+                d->histoMovingDirtyRect = QRect(0, 0, 0, 0);
+                return;
+            }
+        }
+    
         if (d->ltActive || d->rtActive ||
             d->lbActive || d->rbActive) {
 
@@ -557,6 +867,56 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     }
     else if (!viewport()->hasMouseTracking())
     {
+        // if histogram repositioning in effect, clip and move the
+        // histogram
+        if (d->histogramMoving) 
+        {   
+            QPoint pt(e->x(), e->y()), pt_org;
+            QRect rc, rc_org;
+         
+            getHistogramRect(rc);
+            rc_org = rc;
+           
+            // set new histogramRect and clip within viewport
+            pt = pt_org = contentsToViewport(pt);
+            if (pt.x() < d->histoMovingOffset.x())
+                pt.setX(d->histoMovingOffset.x());
+            if (pt.y() < d->histoMovingOffset.y())
+                pt.setY(d->histoMovingOffset.y());
+            if (pt.x() - d->histoMovingOffset.x() + rc.width() > visibleWidth())
+                pt.setX(visibleWidth() - rc.width() + d->histoMovingOffset.x());
+            if (pt.y() - d->histoMovingOffset.y() + rc.height() > visibleHeight())
+                pt.setY(visibleHeight() - rc.height() + d->histoMovingOffset.y());
+            d->histogramRect.setTopLeft(pt - d->histoMovingOffset);
+
+            // if histogramRect unchanged, record offset change - but keep 
+            // the histogram at this spot
+            getHistogramRect(rc);
+            if (rc_org == rc) {
+                QPoint tmp = pt_org - rc.topLeft();
+                // clip within histogram's width and size
+                if (tmp.x() < 0) tmp.setX(0);
+                if (tmp.y() < 0) tmp.setY(0);
+                if (tmp.x() > HISTOGRAM_WIDTH)  tmp.setX(HISTOGRAM_WIDTH);
+                if (tmp.y() > HISTOGRAM_HEIGHT) tmp.setY(HISTOGRAM_HEIGHT);
+                d->histoMovingOffset = tmp;
+            }
+            
+            // combine old rectangle and new rectangle to have the "exposed" 
+            // parts of the canvas
+            rc_org.unite(rc);
+            rc_org.setTopLeft(viewportToContents(rc_org.topLeft()));
+            rc_org.setBottomRight(viewportToContents(rc_org.bottomRight()));
+
+            d->histoMovingDirtyRect = rc_org.unite(d->histoMovingDirtyRect);
+            if (d->histoMovingRepainting)
+                return;
+
+            d->histoMovingRepainting = true;
+            QTimer::singleShot(200, this, SLOT(slotHistoMovingPaintHistogram()));
+            return;
+        }
+    
         if (!d->rubber)
             return;
         
@@ -629,6 +989,23 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     if (d->pressedMoving) {
         d->pressedMoving = false;
         viewport()->update();
+    }
+
+    if (e->button() == Qt::LeftButton && d->histogramMoving) 
+    {
+        // redraw if still something dirty, and a 
+        // slotHistoMovingPaintHistogram was not fired
+        if (!d->histoMovingRepainting && 
+            !d->histoMovingDirtyRect.isEmpty())
+            slotHistoMovingPaintHistogram();
+
+        // XXX: a previous "shot" slotHistoMovingPaintHistogram
+        // might very well still be pending
+    
+        viewport()->setMouseTracking(true);
+        d->histogramMoving = false;
+        setCursor(KCursor::arrowCursor());
+        return;
     }
 
     if (d->pressedMoved && d->rubber)
@@ -751,6 +1128,30 @@ void Canvas::slotToggleAutoZoom()
     slotSetAutoZoom(!d->autoZoom);
 }
 
+void Canvas::slotShowHistogram(bool show)
+{
+    if (d->showHistogram == show)
+        return;
+    
+    bool update = true;
+
+    d->showHistogram = show;
+    if (d->showHistogram) 
+	    update = updateHistogram(false);
+    
+    if (update) { 
+	    QRect rc;
+	    getHistogramRect(rc);
+        drawHistogramPixmap();
+	    viewport()->update(rc);
+    }	
+}
+
+void Canvas::slotToggleShowHistogram()
+{
+    slotShowHistogram(!d->showHistogram);
+}
+
 void Canvas::slotRotate90()
 {
     d->im->rotate90();
@@ -868,6 +1269,54 @@ void Canvas::decreaseContrast()
     viewport()->update();
 }
 
+/**
+ * Set histogram position in viewport coords
+ */
+void Canvas::setHistogramPosition(const QPoint& pos)
+{
+    // force width and height (by default width and
+    // height are 0, which means histogram is semi-centered
+    // on the canvas)
+    d->histogramRect = QRect(pos.x(), pos.y(), HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT);
+}
+
+/**
+ * Return histogram position in viewport coords
+ */
+bool Canvas::getHistogramPosition(QPoint &pos)
+{
+    if (d->histogramRect.isNull()) 
+    { 
+        pos = QPoint(-1, -1);
+        return false;
+    }
+    else 
+    {
+        pos = d->histogramRect.topLeft();
+        return true;
+    }        
+}
+
+/**
+ * @p type: 0 = none, 1 = lumi, 2 = red, 3 = green,
+ * 4 = blue, 5 = alpha
+ */
+int Canvas::setHistogramType(int t)
+{
+    if (t == 0) {
+        d->histoChannelType = t;
+        slotShowHistogram(false);
+    } else if (t != d->histoChannelType && t > 0 && t < 6) {
+        d->histoChannelType = t;
+        slotShowHistogram(true);
+        QRect rc;
+        getHistogramRect(rc);
+        drawHistogramPixmap();
+        viewport()->update(rc);
+    }        
+    return d->histoChannelType;
+}
+
 void Canvas::slotRestore()
 {
     d->im->restore();
@@ -959,6 +1408,9 @@ void Canvas::slotSelected()
 
 void Canvas::slotModified(bool anyMoreUndo, bool anyMoreRedo)
 {
+    if (d->showHistogram)
+        updateHistogram(true);
+
     if (d->autoZoom)
         updateAutoZoom();
     d->im->zoom(d->zoom);
@@ -966,6 +1418,68 @@ void Canvas::slotModified(bool anyMoreUndo, bool anyMoreRedo)
     updateContentsSize();
     viewport()->update();
     emit signalChanged(anyMoreUndo, anyMoreRedo);
+}
+
+/**
+ * When contents are moved (scrolled), collect the "dirty" 
+ * histogram parts, and update in a timely manner.
+ */
+void Canvas::slotContentsMoving(int x, int y)
+{
+    if (!d->showHistogram) 
+        return;
+
+    QPoint po(contentsX(), contentsY()), 
+           pn(x, y);
+    
+    int dx = pn.x() - po.x(), 
+        dy = pn.y() - po.y();
+
+    if (dx || dy) {
+        QRect rchisto, rcdirty;
+            
+        getHistogramRect(rchisto);
+
+        rchisto.setTopLeft(viewportToContents(rchisto.topLeft()));
+        rchisto.setBottomRight(viewportToContents(rchisto.bottomRight()));
+        rcdirty = rchisto;
+        rcdirty.moveBy(dx, dy);
+
+        d->contentsMovingDirtyRect = rcdirty.unite(d->contentsMovingDirtyRect);
+
+        if (d->contentsMovingRepaintingHistogram)
+            return;
+
+        d->contentsMovingDirtyRect = rchisto.unite(d->contentsMovingDirtyRect);	
+        d->contentsMovingRepaintingHistogram = true;
+        QTimer::singleShot(200, this, SLOT(slotContentsMovingPaintHistogram()));
+    }	
+}
+
+/**
+ * Actual repaint when contents moved, triggered after a time-out
+ */
+void Canvas::slotContentsMovingPaintHistogram()
+{
+    QRect rcdirty = d->contentsMovingDirtyRect;
+
+    repaintContents(rcdirty);
+
+    d->contentsMovingDirtyRect = QRect(0, 0, 0, 0);
+    d->contentsMovingRepaintingHistogram = false;
+}
+
+/**
+ * Actual repaint when histogram is being grabbed and moved
+ */
+void Canvas::slotHistoMovingPaintHistogram()
+{
+    QRect rcdirty = d->histoMovingDirtyRect;
+
+    repaintContents(rcdirty);
+
+    d->histoMovingDirtyRect = QRect(0, 0, 0, 0);
+    d->histoMovingRepainting = false;
 }
 
 void Canvas::slotPaintSmooth()

@@ -52,7 +52,8 @@
    <text>&amp;View</text>
    <Action name="imageview_zoom_plus" /> 
    <Action name="imageview_zoom_minus" /> 
-   <Action name="imageview_zoom_fit" /> 
+   <Action name="imageview_zoom_fit" />
+   <Action name="imageview_histogram" />
   </Menu>
 
   <Menu name="help" >

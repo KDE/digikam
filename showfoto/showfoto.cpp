@@ -171,6 +171,21 @@ void ShowFoto::setupActions()
                           this, SLOT(slotToggleShowBar()),
                           actionCollection(), "show_thumbs");
 
+    m_viewHistogramAction = 
+        new KSelectAction(i18n("View &Histogram"), 0, Key_H,
+                          this, SLOT(slotViewHistogram()),
+                          actionCollection(), "view_histogram");
+    m_viewHistogramAction->setEditable(false);
+    
+    QStringList selectItems;
+    selectItems << i18n("Hide");
+    selectItems << i18n("Luminosity");
+    selectItems << i18n("Red");
+    selectItems << i18n("Green");
+    selectItems << i18n("Blue");
+    selectItems << i18n("Alpha");
+    m_viewHistogramAction->setItems(selectItems);
+
     // ---------------------------------------------------------------
     
     new KAction(i18n("Rotate 90"), 0, Key_9,
@@ -266,6 +281,15 @@ void ShowFoto::applySettings()
 
     if (autoFit)
         m_zoomFitAction->activate();
+
+    QRect histogramRect = m_config->readRectEntry("Histogram Rectangle");
+    if (!histogramRect.isNull())
+        m_canvas->setHistogramPosition(histogramRect.topLeft());
+    
+    int histogramType = m_config->readNumEntry("HistogramType", 0);
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    m_viewHistogramAction->setCurrentItem(histogramType);
+    slotViewHistogram(); // update
 }
 
 void ShowFoto::saveSettings()
@@ -273,6 +297,16 @@ void ShowFoto::saveSettings()
     m_config->setGroup("MainWindow");
     m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
     m_config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
+    
+    int histogramType = m_viewHistogramAction->currentItem();
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    m_config->writeEntry("HistogramType", histogramType);
+
+    QPoint pt;
+    QRect rc(0, 0, 0, 0);
+    if (m_canvas->getHistogramPosition(pt)) 
+        rc = QRect(pt.x(), pt.y(), 1, 1);
+    m_config->writeEntry("Histogram Rectangle", rc);
 }
 
 void ShowFoto::closeEvent(QCloseEvent* e)
@@ -628,6 +662,12 @@ void ShowFoto::slotToggleShowBar()
     {
         m_bar->show();
     }
+}
+
+void ShowFoto::slotViewHistogram()
+{
+    int curItem = m_viewHistogramAction->currentItem();
+    m_canvas->setHistogramType(curItem);
 }
 
 void ShowFoto::slotChangeBCG()

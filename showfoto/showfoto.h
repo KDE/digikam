@@ -26,6 +26,7 @@
 
 class KAction;
 class KToggleAction;
+class KSelectAction;
 class KConfig;
 
 class Canvas;
@@ -57,6 +58,7 @@ private slots:
     void slotEscapePressed();
     void slotFileProperties();
     void slotToggleShowBar();
+    void slotViewHistogram();
     void slotChangeBCG();
         
 private:
@@ -78,6 +80,7 @@ private:
     KAction*        m_zoomMinusAction;
     KToggleAction*  m_fullScreenAction;
     KToggleAction*  m_showBarAction;
+    KSelectAction*  m_viewHistogramAction;
     KAction*        m_cropAction;
     KAction*        m_revertAction;
     KAction*        m_saveAction;
