@@ -15,6 +15,10 @@
  *
  * Original Gaussian Blur algorithm copyrighted 2005 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ *
+ * Original channel mixer algorithm copyrighted 2002 by 
+ * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2 
+ * implementation.
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -700,9 +704,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                     j = i + n * 4;
                     
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pInBits[ j ]];
+                    nSumR += arrMult[n + Radius][pInBits[j+2]];
                     nSumG += arrMult[n + Radius][pInBits[j+1]];
-                    nSumB += arrMult[n + Radius][pInBits[j+2]];
+                    nSumB += arrMult[n + Radius][pInBits[ j ]];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -712,9 +716,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to blur bits the horizontal blur values
-            pBlur[ i ] = LimitValues (nSumR / nCount);
+            pBlur[i+2] = LimitValues (nSumR / nCount);
             pBlur[i+1] = LimitValues (nSumG / nCount);
-            pBlur[i+2] = LimitValues (nSumB / nCount);
+            pBlur[ i ] = LimitValues (nSumB / nCount);
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
@@ -738,9 +742,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                     j = i + n * LineWidth;
                       
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pBlur[ j ]];
+                    nSumR += arrMult[n + Radius][pBlur[j+2]];
                     nSumG += arrMult[n + Radius][pBlur[j+1]];
-                    nSumB += arrMult[n + Radius][pBlur[j+2]];
+                    nSumB += arrMult[n + Radius][pBlur[ j ]];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -750,9 +754,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to bits the vertical blur values
-            pOutBits[ i ] = LimitValues (nSumR / nCount);
+            pOutBits[i+2] = LimitValues (nSumR / nCount);
             pOutBits[i+1] = LimitValues (nSumG / nCount);
-            pOutBits[i+2] = LimitValues (nSumB / nCount);
+            pOutBits[ i ] = LimitValues (nSumB / nCount);
                 
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;

@@ -58,6 +58,8 @@ struct NormalizeParam
 
 private:    // Private methods used internally.
     
+    // Methods for Gaussian blur.   
+    
     static inline int GetStride (int Width)
        { 
        int LineWidth = Width * 4;
@@ -107,6 +109,8 @@ private:    // Private methods used internally.
        if (ColorValue < 0) ColorValue = 0;
        return ((uchar) ColorValue);
        };        
+       
+    // Methods for Channel mixer.   
        
     static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
        {
