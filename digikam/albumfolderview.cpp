@@ -1123,7 +1123,31 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
     else if (QUriDrag::canDecode(event))
     {
         // DnD from an external source
-            
+        
+        PAlbum *destAlbum = album;
+        KURL destURL(destAlbum->getKURL());
+        
+        KURL::List srcURLs;
+        KURLDrag::decode(event, srcURLs);
+        
+        QPopupMenu popMenu(this);
+        popMenu.insertItem( i18n("&Copy"), 10 );
+        popMenu.insertItem( i18n("&Move"), 11 );
+
+        popMenu.setMouseTracking(true);
+        int id = popMenu.exec(QCursor::pos());
+        switch(id) {
+        case 10: {
+            KIO::copy(srcURLs,destURL,true);
+            break;
+        }
+        case 11: {
+            KIO::move(srcURLs,destURL,true);
+            break;
+        }
+        default:
+            break;
+        }        
     }
     else if (CameraDragObject::canDecode(event))
     {
