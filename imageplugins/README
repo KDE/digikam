@@ -26,6 +26,7 @@ Currently implemented plugins are:
 14) LensDistortion   : A tool for to reduce optical lens distortions.
 15) SuperImpose      : A tool for to superimposed a template to an image.
 16) Perpective       : A tool for adjusting image perpective.
+17) Border           : A tool for add a border around an image.
 
 Contact :
 -----------------------------------------------------------------------

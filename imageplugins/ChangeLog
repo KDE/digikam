@@ -1,5 +1,6 @@
 v0.7.2-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
+    * New plugin 'AddBorder'.
     * 'ShearTool', 'FreeRotation, 'LensDistortion' plugins use common Image 
       Guide widget.
     * New plugin 'PerspectiveAdjustment'.
