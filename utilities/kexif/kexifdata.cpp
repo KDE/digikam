@@ -217,7 +217,7 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
     stream << 0x00000049;
 
     // don't write more than the old field length
-    unsigned int writeLen = (oldCommentLength < comment.length()) ? oldCommentLength : comment.length(); 
+    unsigned int writeLen = (oldCommentLength < comment.length() + 8) ? oldCommentLength - 8 : comment.length(); 
 
     // write comment into stream
     for(unsigned int i = 0 ; i < writeLen ; i++)
@@ -226,8 +226,7 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
     }
 
     // overwrite rest of old comment. Standard suggests \20, but that's not done in practice 
-
-    for(unsigned int i=0 ; i < oldCommentLength - comment.length() - 8 ; i++)
+    for(unsigned int i=0 ; i < oldCommentLength - writeLen - 8; i++)
     {
       stream << (Q_UINT8)0x00;
     }
