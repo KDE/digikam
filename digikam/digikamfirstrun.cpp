@@ -1,4 +1,51 @@
+/* ============================================================
+ * File  : digikamfirstrun.cpp
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2003-02-01
+ * Description : 
+ * 
+ * Copyright 2003-2004 by Renchi Raju
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published bythe Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+// C Ansi includes.
+ 
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}
+
+// C++ Includes.
+ 
 #include <iostream>
+
+// Qt includes.
+
+#include <qcheckbox.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qstring.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+
+// KDE includes.
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -9,21 +56,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qdir.h>
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
+// Local includes.
 
 #include "digikamfirstrun.h"
 
@@ -52,7 +85,7 @@ DigikamFirstRun::DigikamFirstRun( KConfig* config,
                               "or upgrading from a previous version. The way Digikam\n"
                               "organizes albums has changed from the previous versions.\n"
                               "You need to set an Album Library Path below, where New Albums \n"
-                              "can be created. \n"
+                              "can be created. Write access is required for this path. \n"
                               "(Recommended path would be a directory Pictures)") );
     topBoxLayout->addWidget( infoLabel );
 
@@ -121,17 +154,16 @@ void DigikamFirstRun::accept()
                         pathEdit_->text());
     config_->sync();
 
-
     QDialog::accept();
 
     QString ErrorMsg, URL;
 
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
-    	kdError() << ErrorMsg << endl;
-	KMessageBox::sorry(0, i18n("Cannot restart Digikam like a KDE service.\nPlease restart Digikam manually."));
+        kdError() << ErrorMsg << endl;
+        KMessageBox::sorry(0, i18n("Cannot restart Digikam like a KDE service.\n"
+                                   "Please restart Digikam manually."));
     }
-
 }
 
 void DigikamFirstRun::slotChangePath()
@@ -142,10 +174,17 @@ void DigikamFirstRun::slotChangePath()
             this);
 
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) {
-        KMessageBox::sorry(0, i18n("Cannot Use Home Directory as Album Library"));
+        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as Albums library."));
         return;
     }
-
+    
+    QFileInfo targetPath(result);
+    if (!targetPath.isWritable()) {
+        KMessageBox::sorry(0, i18n("No writable access for this path!\n"
+                                   "Please select another path or change right access!"));
+        return;
+    }
+    
     if (!result.isEmpty()) {
         pathEdit_->setText(result);
     }
@@ -162,8 +201,11 @@ void DigikamFirstRun::slotPathEdited(const QString& newPath)
         pathEdit_->setText(QDir::homeDirPath()+"/"+newPath);
     }
 
+    QFileInfo targetPath(newPath);
     QDir dir(newPath);
-    okButton_->setEnabled(dir.exists() && dir != QDir(QDir::homeDirPath ()));
+    okButton_->setEnabled(dir.exists() && 
+                          dir != QDir(QDir::homeDirPath ()) &&
+                          targetPath.isWritable());
 }
 
 #include "digikamfirstrun.moc"

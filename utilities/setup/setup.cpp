@@ -53,7 +53,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     
     page_general = addPage(i18n("Albums"), i18n("Album settings"),
                            BarIcon("folder_image", KIcon::SizeMedium));
-    generalPage_ = new SetupGeneral(page_general);
+    generalPage_ = new SetupGeneral(page_general, this);
 
     page_exif = addPage(i18n("Embedded info"), i18n("Embedded images informations settings"),
                         BarIcon("exifinfo", KIcon::SizeMedium));

@@ -1,25 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    SETUPGENERAL.CPP
-//
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * File  : setupgeneral.cpp
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2003-02-01
+ * Description : 
+ * 
+ * Copyright 2003-2004 by Renchi Raju
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published bythe Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 // QT includes.
 
@@ -36,11 +35,12 @@
 #include <qdir.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kdialog.h>
+#include <kdialogbase.h>
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
@@ -53,9 +53,10 @@
 #include "setupgeneral.h"
 
 
-SetupGeneral::SetupGeneral(QWidget* parent )
+SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
             : QWidget(parent)
 {
+   mainDialog_ = dialog;
    QVBoxLayout *layout = new QVBoxLayout( parent, 10);
    layout->setSpacing( KDialog::spacingHint() );
 
@@ -66,12 +67,15 @@ SetupGeneral::SetupGeneral(QWidget* parent )
 
    albumPathEdit = new QLineEdit(albumPathBox);
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the Digikam Albums "
-                                        "library in your computer."));
+                                        "library in your computer.\n"
+                                        "Write access is required for this path."));
                                                 
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
                                                    albumPathBox);
    connect(changePathButton, SIGNAL(clicked()),
            this, SLOT(slotChangeAlbumPath()));
+   connect( albumPathEdit, SIGNAL(textChanged(const QString&)),
+             this, SLOT(slotPathEdited(const QString&)) );           
 
    layout->addWidget(albumPathBox);
 
@@ -245,10 +249,34 @@ void SetupGeneral::slotChangeAlbumPath()
         return;
     }
 
+    QFileInfo targetPath(result);
+    if (!targetPath.isWritable()) {
+        KMessageBox::sorry(0, i18n("No writable access for this path!\n"
+                                   "Please select another path or change right access!"));
+        return;
+    }
+    
     if (!result.isEmpty()) {
         albumPathEdit->setText(result);
     }
 }
 
+void SetupGeneral::slotPathEdited(const QString& newPath)
+{
+    if (newPath.isEmpty()) {
+       mainDialog_->enableButtonOK(false);
+       return;
+    }
+
+    if (!newPath.startsWith("/")) {
+        albumPathEdit->setText(QDir::homeDirPath()+"/"+newPath);
+    }
+
+    QFileInfo targetPath(newPath);
+    QDir dir(newPath);
+    mainDialog_->enableButtonOK(dir.exists() && 
+                                dir != QDir(QDir::homeDirPath ()) &&
+                                targetPath.isWritable());
+}
 
 #include "setupgeneral.moc"
