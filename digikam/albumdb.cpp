@@ -254,6 +254,8 @@ void AlbumDB::readPAlbum(PAlbum *album)
         return;
     }
 
+    kdDebug() << "Album not in database : " << album->getURL() << endl;
+    
     /* Album not in database. first check if it is an album which was in
        database, but has been copied/moved/renamed */
 
@@ -504,7 +506,7 @@ bool AlbumDB::checkAlbum(PAlbum *album, int id)
             // also copy the tags
             
             execSql( QString("INSERT INTO ImageTags (name, dirid, tagid) "
-                             "SELECT name, %1, id FROM ImageTags "
+                             "SELECT name, %1, tagid FROM ImageTags "
                              "WHERE dirid = %2;")
                      .arg(newId)
                      .arg(id) );
@@ -860,8 +862,26 @@ void AlbumDB::renameAlbum(Album *album, const QString& newName)
     if (album->type() == Album::TAG)
     {
         renameTAlbum(static_cast<TAlbum*>(album), newName);
-        return;
     }
+    else if (album->type() == Album::PHYSICAL)
+    {
+        renamePAlbum(static_cast<PAlbum*>(album), newName);
+    }
+}
+
+void AlbumDB::renamePAlbum(PAlbum* album, const QString&)
+{
+    // album has url alredy set correctly
+
+    QString url = escapeString(album->getURL());
+    
+    // first delete any stale albums left behind
+    execSql( QString("DELETE FROM Albums WHERE url = '%1'")
+             .arg(url) );
+
+    execSql( QString("UPDATE Albums SET url = '%1' WHERE id = %2;")
+             .arg(url)
+             .arg(album->getID()) );
 }
 
 void AlbumDB::renameTAlbum(TAlbum* album, const QString& name)

@@ -72,6 +72,7 @@ public:
     
     bool createPAlbum(PAlbum* parent, const QString& name, QString& errMsg);
     bool deletePAlbum(PAlbum* album, QString& errMsg);
+    bool renamePAlbum(PAlbum* album, const QString& newName, QString& errMsg);
 
     bool createTAlbum(TAlbum* parent, const QString& name, 
                       const QString& icon, QString& errMsg);

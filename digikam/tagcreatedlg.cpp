@@ -40,7 +40,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("Create New Tag in '%1'").arg(parent->getURL()));
+    topLabel->setText( i18n("Create New Tag in '%1'").arg(parent->getPrettyURL()) );
     topLayout->addWidget(topLabel);    
 
     // --------------------------------------------------------
@@ -130,7 +130,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("Edit Tag '%1' properties").arg(album->getURL()));
+    topLabel->setText( i18n("Edit Tag '%1' properties").arg(album->getPrettyURL()) );
     topLayout->addWidget(topLabel);    
 
     // --------------------------------------------------------

@@ -84,6 +84,7 @@ private:
     void readPAlbum(PAlbum* album);
     void readTAlbum(TAlbum* album);
     void renameTAlbum(TAlbum* album, const QString& name);
+    void renamePAlbum(PAlbum* album, const QString& url);
     
     bool readIdentifier(PAlbum *album, int& id);
     void writeIdentifier(PAlbum *album, int id);

@@ -115,6 +115,8 @@ public:
     QString    getCaption() const;
     QString    getCollection() const;
     QDate      getDate() const;
+    QString    getURL() const;
+    QString    getPrettyURL() const;
     KURL       getKURL() const;
     KFileItem* fileItem() const;
 
@@ -139,6 +141,7 @@ public:
     int     getPID() const;
     QString getURL() const;
     KURL    getKURL() const;
+    QString getPrettyURL() const;
     QPixmap getPixmap() const;
     
 private:

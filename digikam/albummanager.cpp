@@ -39,6 +39,7 @@ extern "C"
 {
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdio.h>
 #include <unistd.h>
 }
 
@@ -199,6 +200,7 @@ void AlbumManager::addPAlbum(KFileItem* fileItem)
     {
         kdWarning() << k_funcinfo <<  "Could not find parent for "
                     << fileItem->url().prettyURL() << endl;
+        return;
     }
 
     d->db->readAlbum(album);
@@ -317,6 +319,74 @@ bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)
     return false;
 }
 
+bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName, QString& errMsg)
+{
+    if (!album)
+    {
+        errMsg = i18n("No such album");
+        return false;
+    }
+
+    if (album == d->rootPAlbum)
+    {
+        errMsg = i18n("Cannot rename root album");
+        return false;
+    }
+
+    if (newName.contains("/"))
+    {
+        errMsg = i18n("Album name cannot contain '/'");
+        return false;
+    }
+    
+    // first check if we have another sibling with the same name
+    Album *sibling = album->m_parent->m_firstChild;
+    while (sibling)
+    {
+        if (sibling->getTitle() == newName)
+        {
+            errMsg = i18n("Another Album with same name exists\n"
+                          "Please choose another name");
+            return false;
+        }
+        sibling = sibling->m_next;
+    }
+
+    KURL newURL = album->getKURL();
+    newURL = newURL.upURL();
+    newURL.addPath(newName);
+    newURL.cleanPath();
+    newURL.adjustPath(-1);
+
+    kdDebug() << "Renaming : " << album->getKURL().path(-1) << " to "
+              << newURL.path(-1) << endl;
+    
+    if (::rename(QFile::encodeName(album->getKURL().path(-1)),
+                 QFile::encodeName(newURL.path(-1))) != 0)
+    {
+        errMsg = i18n("Failed to rename Album");
+        return false;
+    }
+
+    // now rename the album and subalbums in the database
+
+    // all we need to do is set the title of the album which is being
+    // renamed correctly and all the sub albums will automatically get
+    // their url (not KURL) set correctly
+
+    album->setTitle(newName);
+    d->db->renameAlbum(album, newName);
+    
+    AlbumIterator it(album);
+    while ( it.current() )
+    {
+        d->db->renameAlbum(it.current(), QString(""));
+        ++it;
+    }
+    
+    return true;
+}
+
 bool AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
                                 const QString& icon, QString& errMsg)
 {
@@ -391,6 +461,12 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     if (album == d->rootTAlbum)
     {
         errMsg = i18n("Cannot edit root tag");
+        return false;
+    }
+
+    if (name.contains("/"))
+    {
+        errMsg = i18n("Tag name cannot contain '/'");
         return false;
     }
 

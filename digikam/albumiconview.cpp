@@ -1039,7 +1039,7 @@ void AlbumIconView::updateBanner()
     }
     else if (d->currentAlbum->type() == Album::TAG)
     {
-        d->albumComments = (static_cast<TAlbum*>(d->currentAlbum))->getURL();
+        d->albumComments = (static_cast<TAlbum*>(d->currentAlbum))->getPrettyURL();
         d->albumDate     = i18n("1 Item", "%n Items", count());
     }
     else

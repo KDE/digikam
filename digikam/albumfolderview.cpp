@@ -506,15 +506,15 @@ void AlbumFolderView::albumNew(PAlbum* parent)
 
 #if KDE_IS_VERSION(3,2,0)
     QString newDir = KInputDialog::getText(i18n("New Album Name"),
-                                           i18n("Creating New Album in 'My Albums%1'\n"
+                                           i18n("Creating New Album in '%1'\n"
                                                 "Enter Album Name")
-                                           .arg(parent->getURL()),
+                                           .arg(parent->getPrettyURL()),
                                            QString::null, &ok, this);
 #else
     QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
-                                           i18n("Creating New Album in 'My Albums%1'\n"
+                                           i18n("Creating New Album in '%1'\n"
                                                 "Enter Album Name")
-                                           .arg(parent->getURL()),
+                                           .arg(parent->getPrettyURL()),
                                            QString::null, &ok, this);
 #endif
     
@@ -620,13 +620,12 @@ void AlbumFolderView::albumEdit(PAlbum* album)
         // Do this last : so that if anything else changed we can
         // successfully save to the db with the old name
 
-        // todo
-        /*
         if (title != oldTitle) 
         {
-            albumMan_->renameAlbum(album, title);
+            QString errMsg;
+            if (!albumMan_->renamePAlbum(album, title, errMsg))
+                KMessageBox::error(0, errMsg);
         }
-        */
     }
 }
 
@@ -1200,7 +1199,7 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
     QPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("tag"), 
                        i18n("Assign Tag '%1' to dropped items")
-                       .arg(album->getURL()), 10);
+                       .arg(album->getPrettyURL()), 10);
 
     if (popmenu.exec(QCursor::pos()) != 10)
         return;

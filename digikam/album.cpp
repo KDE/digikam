@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kfileitem.h>
+#include <klocale.h>
 
 #include "albummanager.h"
 #include "albumdb.h"
@@ -283,9 +284,32 @@ QDate PAlbum::getDate() const
     return m_date;
 }
 
+QString PAlbum::getURL() const
+{
+    QString url("");
+    if (isRoot())
+    {
+        return "/";
+    }
+    else if (getParent())
+    {
+        url = getParent()->getURL();
+        if (!url.endsWith("/"))
+            url += "/";
+    }
+    url += m_title;
+    return url;
+}
+
 KURL PAlbum::getKURL() const
 {
     return m_fileItem->url();
+}
+
+QString PAlbum::getPrettyURL() const
+{
+    QString url = i18n("My Albums") + getURL();
+    return url;
 }
 
 KFileItem* PAlbum::fileItem() const
@@ -318,7 +342,11 @@ int TAlbum::getPID() const
 QString TAlbum::getURL() const
 {
     QString url("");
-    if (!isRoot() && getParent())
+    if (isRoot())
+    {
+        return "/";
+    }
+    if (getParent())
     {
         url = getParent()->getURL();
         if (!url.endsWith("/"))
@@ -347,6 +375,12 @@ KURL TAlbum::getKURL() const
     {
         url = KURL();
     }
+    return url;
+}
+
+QString TAlbum::getPrettyURL() const
+{
+    QString url = i18n("My Tags") + getURL();
     return url;
 }
 
