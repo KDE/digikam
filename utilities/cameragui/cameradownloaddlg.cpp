@@ -171,7 +171,8 @@ void CameraDownloadDlg::slotProcessNext()
     }
     else
     {
-        m_label->setText(i18n("Downloading File %1 ...")
+        m_label->setText(i18n("Downloading to Album '%1' : %2 ...")
+                         .arg(m_destURL.fileName())
                          .arg(fileItem->url().fileName()));
     
         QByteArray ba;
