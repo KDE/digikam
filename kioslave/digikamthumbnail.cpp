@@ -107,7 +107,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         }
 
     if (QMAX(img.width(),img.height()) != size_)
-        img = img.smoothScale(size_,size_,QImage::ScaleMin);
+        img = img.smoothScale(size_, size_, QImage::ScaleMin);
 
     if (img.depth() != 32)
         img = img.convertDepth(32);
@@ -127,20 +127,15 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         
         if (shmaddr == (void *)-1)
             {
-            error(KIO::ERR_INTERNAL,
-                  "Failed to attach to shared memory segment "
-                  + shmid);
-            kdWarning() << "Failed to attach to shared memory segment "
-                        << shmid << endl;
+            error(KIO::ERR_INTERNAL, "Failed to attach to shared memory segment " + shmid);
+            kdWarning() << "Failed to attach to shared memory segment " << shmid << endl;
             return;
             }
             
         if (img.width() * img.height() > size_ * size_)
             {
-            error(KIO::ERR_INTERNAL,
-                  "Image is too big for the shared memory segment");
-            kdWarning() << "Image is too big for the shared memory segment"
-                        << endl;
+            error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
+            kdWarning() << "Image is too big for the shared memory segment" << endl;
             shmdt((char*)shmaddr);
             return;
             }
@@ -267,14 +262,13 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// Load using Imlib2 
+// Load using Imlib2 API
 
 bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path)
 {
-    Imlib_Image imlib2_im = imlib_load_image(path.latin1());
+    Imlib_Image imlib2_im = imlib_load_image_without_cache(path.latin1());
         
-    if (imlib2_im == NULL) 
-        return false;
+    if (imlib2_im == NULL) return false;
     
     imlib_context_set_image(imlib2_im);     
     
