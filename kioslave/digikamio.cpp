@@ -369,9 +369,11 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
 
         QString tmpFile(destDirURL.path());
 
-        if (!copyFile(_src, tmpFile))
+        if (!copyFile(src.path(), tmpFile))
         {
             error(KIO::ERR_COULD_NOT_WRITE, dest.prettyURL());
+            kdWarning() << k_funcinfo << "Failed to copy file to temporary file. "
+                        << "src: " << _src << ", temp: " << tmpFile <<  endl;
             failed = true;
             return;
         }
@@ -383,6 +385,8 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
         {
             unlink( QFile::encodeName(tmpFile) );
             error(KIO::ERR_COULD_NOT_WRITE, dest.prettyURL());
+            kdWarning() << k_funcinfo << "Failed to rename temporary file to destination file: "
+                        << _dest <<  endl;
             failed = true;
         }
         else
@@ -427,7 +431,7 @@ void kio_digikamioProtocol::copyInternal(const KURL& src, const KURL& dest,
 
         QString tmpFile(destDirURL.path());
 
-        if (!copyFile(_src, tmpFile))
+        if (!copyFile(src.path(), tmpFile))
         {
             error(KIO::ERR_COULD_NOT_WRITE, dest.prettyURL());
             failed = true;
@@ -876,11 +880,17 @@ bool kio_digikamioProtocol::copyFile(const QString& src, const QString& dest)
     QFile dFile(dest);
 
     if ( !sFile.open(IO_ReadOnly) )
+    {
+        kdWarning() << k_funcinfo << "Failed to open source file for reading: "
+                    << src << endl;
         return false;
+    }
     
     if ( !dFile.open(IO_WriteOnly) )
     {
         sFile.close();
+        kdWarning() << k_funcinfo << "Failed to open dest file for writing: "
+                    << src << endl;
         return false;
     }
 
