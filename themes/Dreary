@@ -1,7 +1,7 @@
 ! "Dreary Day"
 !  Digikam Theme by Renchi Raju (2004 Aug)
 
-base.color:			     rgb:FF/FF/FF
+base.color:			     rgb:F0/F0/F0
 text.regular.color:		     rgb:00/00/00
 text.selected.color:		     rgb:FF/FF/FF
 text.special.regular.color:	     rgb:88/88/00

@@ -24,6 +24,8 @@
  * 
  * ============================================================ */
 
+#include <qfile.h>
+
 // C++ includes. 
  
 #include <cstdio>
@@ -528,7 +530,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
     char           buf[50];
     char          *nptr;
 
-    file = fopen(fileUrl.path(), "r");
+    file = fopen(QFile::encodeName(fileUrl.path()), "r");
     
     if (!file)
        return false;
@@ -596,7 +598,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
     FILE          *file;
     int            i;
 
-    file = fopen(fileUrl.path(), "w");
+    file = fopen(QFile::encodeName(fileUrl.path()), "w");
     
     if (!file)
        return false;

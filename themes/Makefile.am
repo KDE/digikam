@@ -1,2 +1,2 @@
 digikamthemesdir = $(kde_datadir)/digikam/themes
-digikamthemes_DATA = Dreary
+digikamthemes_DATA = Dreary Marine
