@@ -77,6 +77,8 @@ ImageWindow::ImageWindow()
     : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
 {
     m_instance = this;
+    m_rotatedOrFlipped   = false;
+    m_setExifOrientation = false;
 
     // -- build the gui -------------------------------------
     
@@ -166,6 +168,19 @@ ImageWindow::ImageWindow()
     connect(m_guiClient, SIGNAL(signalFlipVert()),
             m_canvas, SLOT(slotFlipVert()));
 
+    // if rotating/flipping set the rotatedflipped flag to true
+    connect(m_guiClient, SIGNAL(signalRotate90()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_guiClient, SIGNAL(signalRotate180()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_guiClient, SIGNAL(signalRotate270()),
+            SLOT(slotRotatedOrFlipped()));
+
+    connect(m_guiClient, SIGNAL(signalFlipHoriz()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_guiClient, SIGNAL(signalFlipVert()),
+            SLOT(slotRotatedOrFlipped()));
+    
     connect(m_guiClient, SIGNAL(signalCrop()),
             m_canvas, SLOT(slotCrop()));
     connect(m_guiClient, SIGNAL(signalResize()),
@@ -266,6 +281,7 @@ void ImageWindow::slotLoadCurrent()
     if (it != m_urlList.end()) {
 
         m_canvas->load(m_urlCurrent.path());
+        m_rotatedOrFlipped = false;
 
         QString text = m_urlCurrent.filename() + 
                        i18n(" (%2 of %3)")
@@ -392,6 +408,9 @@ void ImageWindow::slotChanged(bool val)
 
     m_guiClient->m_restoreAction->setEnabled(val);
     m_guiClient->m_saveAction->setEnabled(val);
+
+    if (!val)
+        m_rotatedOrFlipped = false;
 }
 
 void ImageWindow::slotSelected(bool val)
@@ -406,6 +425,11 @@ void ImageWindow::slotSelected(bool val)
             plugin->setEnabledSelectionActions(val);
         }
     }
+}
+
+void ImageWindow::slotRotatedOrFlipped()
+{
+    m_rotatedOrFlipped = true;    
 }
 
 void ImageWindow::slotFileProperties()
@@ -569,7 +593,7 @@ void ImageWindow::slotSave()
     else 
         kdWarning() << ("No Exif Data Found") << endl;
     
-    if( rotatedOrFlipped )
+    if( m_rotatedOrFlipped )
        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
 
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_urlCurrent,
@@ -598,9 +622,9 @@ void ImageWindow::slotSaveAs()
     QStringList mimetypes = KImageIO::mimeTypes( KImageIO::Writing );
      
     m_newFile = KURL(KFileDialog::getSaveFileName(m_urlCurrent.directory(),
-                                                mimetypes.join(" "),
-                                                this,
-                                                i18n("New image filename")));
+                                                  mimetypes.join(" "),
+                                                  this,
+                                                  i18n("New image filename")));
  
     // Check for cancel.
      
@@ -631,7 +655,7 @@ void ImageWindow::slotSaveAs()
     else 
        kdWarning() << ("No Exif Data Found") << endl;
     
-    if( rotatedOrFlipped )
+    if( m_rotatedOrFlipped )
        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
     
     KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_newFile,
@@ -644,13 +668,12 @@ void ImageWindow::slotSaveAs()
 void ImageWindow::slotSaveAsResult(KIO::Job *job)
 {
     if (job->error()) 
-       {
+    {
        job->showErrorDialog(this);
        return;
-       }
+    }
 
-    // Added new file URL into list if the new file have been added in the current Album
-    // and added the comments if exists.
+    // Added new file URL into list if the new file has been added in the current Album
 
     KURL su(m_urlCurrent.directory());
     PAlbum *sourcepAlbum = AlbumManager::instance()->findPAlbum(su);
@@ -664,24 +687,23 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     if (!targetpAlbum)
         return;
 
-    // Copy the comments from the original image to the target image.
+    // Copy the metadata from the original image to the target image.
                     
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QString comments( db->getItemCaption(sourcepAlbum, m_urlCurrent.fileName()) );
+    db->copyItem(sourcepAlbum, m_urlCurrent.fileName(),
+                 targetpAlbum, m_newFile.fileName());
     
-    db->setItemCaption(targetpAlbum, m_newFile.fileName(), comments);
-    
-    if ( m_urlCurrent.directory() == m_newFile.directory() &&  // Target Album = current Album ?
+    if ( sourcepAlbum == targetpAlbum &&                       // Target Album = current Album ?
          m_urlList.find(m_newFile) == m_urlList.end() )        // The image file not already exist
-       {                                                       // in the list.            
-       m_canvas->slotRestore();
-       m_canvas->load(m_newFile.path());
-       KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-       m_urlList.insert(it, m_newFile);
-       m_urlCurrent = m_newFile;
-       }
+    {                                                          // in the list.            
+        KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+        m_urlList.insert(it, m_newFile);
+        m_urlCurrent = m_newFile;
+    }
+
+    emit signalFileAdded(m_newFile);
     
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target images.
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target image.
 }
 
 

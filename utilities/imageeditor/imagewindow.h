@@ -72,8 +72,8 @@ private:
     KURL                 m_urlCurrent;
     KURL                 m_newFile;
     
-    bool                 setExifOrientation;
-    bool                 rotatedOrFlipped;
+    bool                 m_setExifOrientation;
+    bool                 m_rotatedOrFlipped;
     
     static ImageWindow*  m_instance;
 
@@ -86,6 +86,7 @@ private:
 signals:
 
     void signalFileDeleted(const KURL& url);
+    void signalFileAdded(const KURL& url);
     
 private slots:
 
@@ -104,6 +105,8 @@ private slots:
     void slotZoomChanged(float zoom);
     void slotChanged(bool);
     void slotSelected(bool);
+
+    void slotRotatedOrFlipped();
     
     void slotSave();
     void slotSaveResult(KIO::Job *job);

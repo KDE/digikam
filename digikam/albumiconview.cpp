@@ -773,6 +773,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     ImageWindow *imview = ImageWindow::instance();
 
     imview->disconnect(this);
+    connect(imview, SIGNAL(signalFileAdded(const KURL&)),
+            SLOT(slotFilesModified()));
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             SLOT(slotFilesModified()));
         
