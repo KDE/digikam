@@ -48,8 +48,6 @@ public:
 
     Album*      currAlbum;
     AlbumDB*    db;
-
-    QMap<KFileItem*,QString> comments;
 };
     
 AlbumLister::AlbumLister()
@@ -79,7 +77,6 @@ void AlbumLister::openAlbum(Album *album)
     d->dirLister->disconnect(this);
     
     d->currAlbum = album;
-    d->comments.clear();
 
     if (album->type() == Album::PHYSICAL)
     {
