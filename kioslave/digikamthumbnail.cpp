@@ -38,6 +38,8 @@
 #include <kinstance.h>
 #include <kio/global.h>
 #include <kimageio.h>
+#include <klocale.h>
+#include <kglobal.h>
 
 // C Ansi includes.
 
@@ -82,7 +84,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     
     if (size_ <= 0) 
         {
-        error(KIO::ERR_INTERNAL, "No or invalid size specified");
+        error(KIO::ERR_INTERNAL, i18n("No or invalid size specified"));
         kdWarning() << "No or invalid size specified" << endl;
         return;
         }
@@ -102,7 +104,8 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     
     if (img.isNull()) 
     {
-        error(KIO::ERR_INTERNAL, "Cannot create thumbnail for " + url.path());
+        error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
+              .arg(url.prettyURL()));
         kdWarning() << "Cannot create thumbnail for " << url.path() << endl;
         return;
     }
@@ -309,7 +312,9 @@ extern "C"
 {
     int kdemain(int argc, char **argv)
     {
+        KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamthumbnail" );
+        ( void ) KGlobal::locale();
         
         kdDebug() << "*** Starting kio_digikamthumbnail " << endl;
         

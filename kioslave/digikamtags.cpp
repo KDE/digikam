@@ -24,6 +24,7 @@
 #include <kconfig.h>
 #include <kurl.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -456,7 +457,9 @@ extern "C"
 {
     int kdemain(int argc, char **argv)
     {
+        KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamtags" );
+        ( void ) KGlobal::locale();
         
         kdDebug() << "*** kio_digikamtag started ***" << endl;
         
