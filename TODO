@@ -27,7 +27,7 @@ x Added tagging images feature.
 x Option to hide image names.
 x Added a test for checking if a camera name is already in the 
   Digikam camera list when a new camera is added.
-o View/Hide main toolbar/statusbar.
+x View/Hide main toolbar.
 o Add image date from EXIF data for each album item.               
 o Added config saving of Albums opened in Albums treeview.         
 o Custom thumbnail highlighting of album thumbnails.
@@ -46,11 +46,9 @@ o Make Folder Ability.
 o Delete Folder Ability.
 o Camera Configure Dialog.
 o Camera Capture Support.
-o DnD Upload (moved to wishlist. in case of the future parts
-  implementation there can be no DnD upload).
 o View/Hide main toolbar/statusbar.
-o Enable/Disable thumnails generation (bandwith limitation
-  in slow camera connexion).
+o Enable/Disable thumbnail generation (bandwith limitation
+  in slow camera connection).
 
   
 Thumnails interface:
@@ -76,9 +74,8 @@ x Added Color balance plugin.                                      <Gilles Cauli
 x Added HSL balance plugin.                                        <Gilles Caulier - 0.7.0>  
 x Added Free image rotation.                                       <Gilles Caulier - 0.7.0>  
 * Auto-rotate view according to EXIF orientation tag               <Ralf Holzer    - 0.7.0>
-o Added image Histogram viewer.
+x Added image Histogram viewer.
 o Added Colors autocorrection filter.                              
-o Added Settings dialog (if necessary).                                           
 
 
 SplashScreen :

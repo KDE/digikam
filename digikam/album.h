@@ -23,7 +23,6 @@
 #define ALBUM_H
 
 #include <kurl.h>
-#include <kdirlister.h>
 
 #include <qstring.h>
 #include <qdatetime.h>
@@ -147,5 +146,28 @@ private:
     bool m_pid;
 };
 
+/* Iterate over all children of this Album.
+   Note: It doesn't include the specified album */
 
+class AlbumIterator
+{
+public:
+
+    AlbumIterator(Album *album);
+    ~AlbumIterator();
+
+    AlbumIterator& operator++();
+    Album*         operator*();
+    Album*         current() const;
+    
+private:
+
+    AlbumIterator() {}
+    AlbumIterator(const AlbumIterator&) {}
+    AlbumIterator& operator=(const AlbumIterator&){ return *this; }
+    
+    Album* m_current;
+    Album* m_root;
+};
+    
 #endif /* ALBUM_H */

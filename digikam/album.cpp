@@ -365,3 +365,54 @@ QPixmap TAlbum::getPixmap() const
 
     return pix;
 }
+
+// --------------------------------------------------------------------------
+
+AlbumIterator::AlbumIterator(Album *album)
+{
+    m_root    = album;
+    m_current = album ? album->firstChild() : 0;
+}
+
+AlbumIterator::~AlbumIterator()
+{
+}
+
+AlbumIterator& AlbumIterator::operator++()
+{
+    if (!m_current)
+        return *this;
+
+    Album *album = m_current->firstChild();
+    if ( !album )
+    {
+        while ( (album = m_current->next()) == 0  )
+        {
+            m_current = m_current->getParent();
+
+            if ( m_current == m_root )
+            {
+                // we have reached the root.
+                // that means no more children
+                m_current = 0;
+                break;
+            }
+            
+            if ( m_current == 0 )
+                break;
+        }
+    }
+
+    m_current = album;
+    return *this;
+}
+
+Album* AlbumIterator::operator*()
+{
+    return m_current;
+}
+
+Album* AlbumIterator::current() const
+{
+    return m_current;
+}
