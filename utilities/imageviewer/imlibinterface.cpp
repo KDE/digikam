@@ -83,7 +83,11 @@ public:
             w     = ow;
             h     = oh;
             
-            mod = imlib_context_get_color_modifier();
+            mod = imlib_create_color_modifier();
+            imlib_context_set_color_modifier(mod);
+            
+            if (mod == NULL) qDebug ("color modifier is null");
+            
             render();
             }
         else
@@ -138,8 +142,10 @@ public:
             w  = ow;
             h  = oh;
             
-            mod = imlib_context_get_color_modifier();
-            if (!mod) qDebug ("color modifier is null");
+            mod = imlib_create_color_modifier();
+            imlib_context_set_color_modifier(mod);
+            
+            if (mod == NULL) qDebug ("color modifier is null");
             
             changed = false;
             dirty   = true;
@@ -294,14 +300,16 @@ public:
         
         double nval = gamma + val;
         
-        if ( val <= 5.0 && val >= 0.0 ) 
+        if ( nval <= 5.0 && nval >= 0.0 ) 
             {            
             imlib_context_set_image(im); 
             imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_gamma(nval);
+            imlib_apply_color_modifier();
             gamma   = nval;
             changed = true;
             dirty   = true;
+            qDebug("gamma:%f", (float)nval);
             }
         }
 
@@ -316,9 +324,11 @@ public:
             imlib_context_set_image(im); 
             imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_brightness(nval);
+            imlib_apply_color_modifier();
             brightness = nval;
             changed    = true;
             dirty      = true;
+            qDebug("brightness:%f", (float)nval);
             }
         }
 
@@ -333,9 +343,11 @@ public:
             imlib_context_set_image(im); 
             imlib_context_set_color_modifier(mod);       
             imlib_modify_color_modifier_contrast(nval);
+            imlib_apply_color_modifier();
             contrast = nval;
             changed  = true;
             dirty    = true;
+            qDebug("contrast:%f", (float)nval);
             }
         }
 
@@ -425,7 +437,7 @@ private:
     int saveTIFF(const QString& saveFile, bool compress=false) 
         {
         TIFF               *tif;
-        unsigned char      *data;
+        DATA32             *data;
         int                 y;
         int                 w;
 
@@ -450,10 +462,10 @@ private:
                     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
                                  TIFFDefaultStripSize(tif, 0));
                 
-                    for (y = 0 ; y < imlib_image_get_height() ; y++)
+                    for (y = 0 ; y < imlib_image_get_height() ; ++y)
                         {
                         //data = im->rgb_data + (y * im->rgb_width * 3);
-                        //data = (unsigned char)imlib_image_get_data() + (y * imlib_image_get_width() * 3);   //FIXME
+                        data = imlib_image_get_data() + (DATA32)( y * imlib_image_get_width() * 4 );
                         TIFFWriteScanline(tif, data, y, 0);
                         }
                     }
