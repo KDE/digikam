@@ -99,7 +99,7 @@ class DigikamImageCollection : public KIPI::ImageCollectionShared
 public:
     enum Type { AllAlbumItems, AlbumItemsSelection };
 
-    DigikamImageCollection( Type tp, Digikam::AlbumInfo *album=0 );
+    DigikamImageCollection( Type tp, QString filter, Digikam::AlbumInfo *album=0 );
     ~DigikamImageCollection();
     
     virtual QString name();
@@ -116,7 +116,8 @@ protected:
     KURL commonRoot();
     
 private:
-    Type _tp;
+    Type tp_;
+    QString imgFilter_;
 };
 
 
@@ -152,10 +153,11 @@ protected:
     QString askForCategory();
     
     // For Add images operations.
-    Digikam::AlbumInfo *m_sourceAlbum;
-    Digikam::AlbumInfo *m_targetAlbum;
-    QString             m_imageFileName;
+    Digikam::AlbumInfo    *m_sourceAlbum;
+    Digikam::AlbumInfo    *m_targetAlbum;
+    QString                m_imageFileName;
     
+    QString                imagesFileFilter_; 
     Digikam::AlbumManager *albumManager_;
 };
 

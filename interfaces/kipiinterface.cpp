@@ -40,6 +40,7 @@ extern "C"
 // Qt includes.
 
 #include <qstring.h>
+#include <qdir.h>
 
 // KDE includes.
 
@@ -181,7 +182,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
 
     if ( f == NULL )
        {
-       kdWarning() << "DigikamImageInfo::setTime : Cannot open image file !!!" << endl;
+       kdWarning() << "DigikamImageInfo::setTime() : Cannot open image file !!!" << endl;
        return;
        }
 
@@ -200,13 +201,13 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
 
     if( ti == -1 )
        {
-       kdWarning() << "DigikamImageInfo::setTime : Cannot eval local time !!!" << endl;
+       kdWarning() << "DigikamImageInfo::setTime() : Cannot eval local time !!!" << endl;
        return;
        }
 
     if( stat(imageUrl_.ascii(), &st ) == -1 )
        {
-       kdWarning() << "DigikamImageInfo::setTime : Cannot stat image file !!!" << endl;
+       kdWarning() << "DigikamImageInfo::setTime() : Cannot stat image file !!!" << endl;
        return;
        }
 
@@ -216,13 +217,13 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec spec)
     t->modtime = ti;
 
     if( utime(imageUrl_.ascii(), t ) != 0 )
-       kdWarning() << "DigikamImageInfo::setTime : Cannot change image file date and time !!!" << endl;
+       kdWarning() << "DigikamImageInfo::setTime() : Cannot change image file date and time !!!" << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DigikamImageCollection::DigikamImageCollection( Type tp, Digikam::AlbumInfo *album )
-                      : _tp( tp )
+DigikamImageCollection::DigikamImageCollection( Type tp, QString filter, Digikam::AlbumInfo *album )
+                      : tp_( tp ), imgFilter_(filter)
 {
     if (album)           // A specific Album has been specified !
        album_ = album;
@@ -266,27 +267,46 @@ KURL::List DigikamImageCollection::images()
 
     if (album_) 
         {
-        album_->openDB();
-        
-        switch ( _tp ) 
+        switch ( tp_ ) 
            {
            case AllAlbumItems:
-              items = album_->getAllItemsPath();
+              {
+              album_->openDB();
+              
+              // items = album_->getAllItemsPath();   
+              // PENDING (Gilles) 06/18/04: Disable this call because it's don't work correctly.
+              // Using the code above instead... ( Q: there is a bug in the album interface ? )
+
+              QDir albumDir(album_->getPath(), imgFilter_.latin1(),
+                            QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
+
+              QStringList Files = albumDir.entryList();
+        
+              for ( QStringList::Iterator it = Files.begin() ; it != Files.end() ; ++it )
+                  items.append(album_->getPath() + "/" + *it);
+
+              album_->closeDB();        
               break;
+              }
               
            case AlbumItemsSelection:
+              {
+              album_->openDB();   
               items = album_->getSelectedItemsPath();
+              album_->closeDB();        
               break;
+              }
               
            default:
               break;
            }
-        
-        album_->closeDB();        
         }
         
     if ( items.isEmpty() == true )
+       {
+       kdWarning() << "DigikamImageCollection::images() : images list is empty!!!" << endl;
        return KURL::List();
+       }
     else
        return KURL::List(items);
 }
@@ -330,6 +350,17 @@ QString DigikamImageCollection::uploadRootName()
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                      :KIPI::Interface( parent, name )
 {
+    // Read File Filter settings in digikamrc file.
+
+    KConfig *config = new KConfig("digikamrc");
+    config->setGroup("Album Settings");
+    QString Temp = config->readEntry("File Filter", "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp");
+    delete config;
+  
+    imagesFileFilter_ = Temp.lower() + " " + Temp.upper();
+
+    // Get AlbumManger instance.
+    
     albumManager_ = Digikam::AlbumManager::instance();
 }
 
@@ -340,7 +371,11 @@ DigikamKipiInterface::~DigikamKipiInterface()
 KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 {
     if ( albumManager_->currentAlbum() )
-       return KIPI::ImageCollection( new DigikamImageCollection( DigikamImageCollection::AllAlbumItems ) );
+       return KIPI::ImageCollection( new DigikamImageCollection
+                                         ( 
+                                         DigikamImageCollection::AllAlbumItems, 
+                                         imagesFileFilter_
+                                         ) );
     else
        return KIPI::ImageCollection(0);
 }
@@ -350,14 +385,22 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
     if ( albumManager_->currentAlbum()->getSelectedItems().isEmpty() )
        return KIPI::ImageCollection(0);
     else
-       return KIPI::ImageCollection( new DigikamImageCollection(DigikamImageCollection::AlbumItemsSelection) );
+       return KIPI::ImageCollection( new DigikamImageCollection
+                                         (
+                                         DigikamImageCollection::AlbumItemsSelection,
+                                         imagesFileFilter_
+                                         ) );
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentScope()
 {
     if ( albumManager_->currentAlbum() )
        {
-       DigikamImageCollection *images = new DigikamImageCollection( DigikamImageCollection::AlbumItemsSelection );
+       DigikamImageCollection *images = new DigikamImageCollection
+                                            ( 
+                                            DigikamImageCollection::AlbumItemsSelection,
+                                            imagesFileFilter_
+                                            );
     
        if ( images->images().isEmpty() == false )
            return currentSelection();
@@ -376,7 +419,12 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
          album ; album = album->nextAlbum())
         {
         album->openDB();
-        DigikamImageCollection* col = new DigikamImageCollection( DigikamImageCollection::AllAlbumItems, album );
+        DigikamImageCollection* col = new DigikamImageCollection
+                                          ( 
+                                          DigikamImageCollection::AllAlbumItems, 
+                                          imagesFileFilter_,
+                                          album 
+                                          );
         result.append( KIPI::ImageCollection( col ) );
         album->closeDB();
         }
@@ -460,17 +508,17 @@ void DigikamKipiInterface::delImage( const KURL& url )
           {
           if ( KIO::NetAccess::del(url) == false )
              {
-             kdWarning() << "DigikamKipiInterface::delImage : Cannot delete an image !!!" << endl;
+             kdWarning() << "DigikamKipiInterface::delImage() : Cannot delete an image !!!" << endl;
              }
           }
        else 
           {
-          kdWarning() << "DigikamKipiInterface::delImage : cannot find the Album in the Digikam Album library !!!" << endl;
+          kdWarning() << "DigikamKipiInterface::delImage() : cannot find the Album in the Digikam Album library !!!" << endl;
           }   
        }
     else 
        {
-       kdWarning() << "DigikamKipiInterface::delImage : url isn't in the Digikam Album library !!!" << endl;
+       kdWarning() << "DigikamKipiInterface::delImage() : url isn't in the Digikam Album library !!!" << endl;
        }   
 }
 
@@ -493,14 +541,7 @@ void DigikamKipiInterface::slotCurrentAlbumChanged( Digikam::AlbumInfo *album )
 
 QString DigikamKipiInterface::fileExtensions()
 {
-  // Read File Filter settings in digikamrc file.
-
-  KConfig *config = new KConfig("digikamrc");
-  config->setGroup("Album Settings");
-  QString Temp = config->readEntry("File Filter", "*.jpg *.jpeg *.tif *.tiff *.gif *.png *.bmp");
-  delete config;
-  
-  return ( Temp.lower() + " " + Temp.upper() );
+  return (imagesFileFilter_);
 }
 
 #include "kipiinterface.moc"
