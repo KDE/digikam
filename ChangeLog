@@ -1,3 +1,381 @@
+v0.7-rc1		11/01/04
+----------------------------------------------------------------------------
+
+2004-10-31 23:59  pahlibar
+
+	* configure.in.in:
+	  inlude libjpeg dependency, as some libtiff builds depend on it
+
+2004-10-31 23:43  pahlibar
+
+	* digikam/albumfiletip.cpp:
+	  reposition tooltip with global mapping with respect to viewport.
+	  fixes tooltips being moved out of screen in case of very large
+	  content rect BUG: 92350
+
+2004-10-29 13:18  aseigo
+
+	* digikam/albumfolderview.cpp: sort out the context menu so it's
+	  more KDEish
+
+2004-10-29 13:06  aseigo
+
+	* digikam/digikamapp.cpp: don't use Ctrl+F# as a keyboard shortcut.
+	  those should be left for desktop/global keybindings as a rule
+
+2004-10-29 13:05  aseigo
+
+	* digikam/: albumpropsedit.cpp, albumpropsedit.h, tagcreatedlg.cpp:
+	  make these dialogs look a bit nicer
+
+2004-10-29 13:03  aseigo
+
+	* digikam/syncjob.cpp: make this work with kio_trash if it exists
+
+2004-10-29 13:02  aseigo
+
+	* utilities/setup/: setup.cpp, setupcamera.cpp,
+	  setupcollections.cpp, setupeditor.cpp, setupexif.cpp,
+	  setupgeneral.cpp, setupgeneral.h, setupmime.cpp, setupmisc.cpp,
+	  setupplugins.cpp: margins, accels, give it a hope of working on
+	  800x600
+
+2004-10-29 11:38  cgilles
+
+	* utilities/imageeditor/imageguiclient.cpp: Fixed shortcuts
+
+2004-10-28 07:02  cgilles
+
+	* utilities/imageeditor/: imageguiclient.cpp, imageguiclient.h:
+	  Digikam Image Editor : added bug report entry in help menu.
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2004-10-28 06:40  cgilles
+
+	* utilities/cameragui/: cameraui.cpp, cameraui.h,
+	  dirselectdialog.cpp: Digikam handbook : added link to camera
+	  interface.  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2004-10-28 04:17  cgilles
+
+	* Digikam.kdevelop, digikam/digikamfirstrun.cpp,
+	  imageplugins/histogramviewer.cpp,
+	  imageplugins/imageeffect_bcg.cpp,
+	  imageplugins/imageeffect_blur.cpp,
+	  imageplugins/imageeffect_hsl.cpp,
+	  imageplugins/imageeffect_redeye.cpp,
+	  imageplugins/imageeffect_rgb.cpp,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  utilities/imageeditor/imagecommentedit.cpp,
+	  utilities/imageeditor/imageresizedlg.cpp,
+	  utilities/imageeditor/imagerotatedlg.cpp,
+	  utilities/setup/setup.cpp: Digikam handbook major update : -
+	  Added anchors ! (used for link the dialog "Help" buttons to the
+	  hanbook sections) - Fixed image button docbook implementation
+	  (not like screenshots) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-27 13:30  jahrens
+
+	* digikam/albumfolderview.cpp: it must be allowed to drag external
+	  folders on the physical root album, to copy/move the folder to
+	  the root
+
+2004-10-27 04:05  cgilles
+
+	* Digikam.kdevelop, version.h, digikam/digikam.desktop,
+	  digikam/digikamfirstrun.cpp, digikam/main.cpp,
+	  utilities/setup/setupgeneral.cpp: Fixed last commit by aaron.  -
+	  No need numerical digiKam version.  - Refixed Digikam to digiKam.
+	  - Fixed release version test for firstrun.  - Added writable
+	  test to album database path and display warning message CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-27 01:42  aseigo
+
+	* digikam/digikamui.rc: get rid of accel conflicts on the menus,
+	  simplify the toolbar, sort out the Settings menu a bit
+
+2004-10-27 00:55  aseigo
+
+	* digikam/digikamapp.cpp: insert new cameras at the top of the menu
+
+2004-10-27 00:54  aseigo
+
+	* digikam/Makefile.am: add firstrunUI.ui
+
+2004-10-27 00:53  aseigo
+
+	* digikam/: digikamfirstrun.cpp, digikamfirstrun.h, digikamui.rc,
+	  firstrunUI.ui: a more beautiful and standards compliant first run
+	  dialog
+
+2004-10-27 00:52  aseigo
+
+	* digikam/main.cpp: fix the app name in the KAboutData, clean up
+	  the firstrun check slightly
+
+2004-10-24 15:54  pahlibar
+
+	* digikam/albumfolderview.cpp:
+	  use KURL.path() and not KURL.url() if you want to pass in the
+	  path as a qstring.
+
+2004-10-24 14:53  pahlibar
+
+	* digikam/: albumiconview.cpp, albumiconview.h, imagedescedit.cpp,
+	  thumbnailjob.cpp, thumbnailjob.h:
+
+	  * minor optimization: moved the exif rotation from albumiconview
+	  to   thumbnailjob and rotate the thumbnail qimage before
+	  converting   to qpixmap. rotating the qimage is almost 5 times
+	  faster than	rotating a qpixmap.  * side effect of this is that
+	  everything using thumbnailjob gets   exif oriented thumbnails for
+	  free, including the comments/tag   editor CCBUG: 92017
+
+2004-10-24 13:51  pahlibar
+
+	* digikam/: albumiconview.cpp, albumiconview.h,
+	  exiforientation_p.h:
+	  * implemented a native exif orientation reading function based on
+	  the exif   orientation writing one in libkexif. this will be
+	  moved to libkexif   in v0.2 * performance comparisons for reading
+	  exif orientation of 609 jpeg files:	total time (for libexif
+	  based implementation) : 163304 microseconds	total time (for
+	  native implementation)	:   9925 microseconds
+
+2004-10-24 11:46  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+	  the current image was not being pushed in as the imlib image to
+	  work on in quite a few functions. fixed
+
+2004-10-23 20:40  pahlibar
+
+	* configure.in.bot, configure.in.in,
+	  utilities/imageeditor/Makefile.am:
+	  libtiff configure test added 
+
+2004-10-22 02:50  cgilles
+
+	* digikam/digikamfirstrun.cpp, digikam/digikamfirstrun.h,
+	  utilities/setup/setup.cpp, utilities/setup/setupgeneral.cpp,
+	  utilities/setup/setupgeneral.h: Digikam BUG 91828 : Added more
+	  tests if target album database path haven't write access in
+	  Digikam first run and general setup.	General setup now check the
+	  path QEdit widget like in Digikam first run and toogle the OK
+	  dialog button in according.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net,
+	  mail-kdebugs@codingdomain.com
+
+2004-10-21 21:25  pahlibar
+
+	* utilities/imageeditor/canvas.cpp:
+	  draw tiny selection handle rects at the corners of the rubber
+
+2004-10-21 20:03  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  * fixed mistake in last commit * ask for confirmation before
+	  overwriting existing file CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-21 19:15  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  * setUsePrinterResolution is available only in kde >= 3.2 * in
+	  slotSaveAs check if srcURL==targetURL and use slotSave then
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2004-10-21 14:02  pahlibar
+
+	* digikam/albumdb.cpp:
+	  fixed crash when the album library path is unwritable. Note to
+	  users, at least make the album library path writable, otherwise
+	  none of the digikam tags or comments features will work. the
+	  actual photo directories don't have to be writable BUG: 91828
+
+2004-10-21 13:53  pahlibar
+
+	* digikam/albumsettings.cpp:
+	  change startup album sort mode to By folder, as it seems to
+	  confusing new users.	BUG: 91829-done@bugs.kde.org
+
+2004-10-20 16:22  jahrens
+
+	* digikam/albumiconview.cpp:
+	  Chag stored images in his root album which he tried to move.
+	  Since the root album is only an organisational one, now
+	  preventing it from displaying images in the iconview.
+
+	  CCMAIL: 91740-done@bugs.kde.org
+
+2004-10-20 12:31  pahlibar
+
+	* imageplugins/Makefile.am, kioslave/Makefile.am,
+	  utilities/cameragui/cameracontroller.cpp:
+	  * qt <= 3.1.2 compatiblity fix. QDeepCopy is not a friend of
+	  QStringList.	  hack it by using QValueList<QString>	*
+	  imlib2_cflags was missing from some makefiles. added CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-20 11:51  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  force kprinter to use printer resolution
+
+2004-10-20 10:12  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+	  fix savetiff implementation (backported from imlib2 1.1) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-20 06:31  cgilles
+
+	* digikam/histogrampropsplugin.cpp,
+	  imageplugins/histogramviewer.cpp,
+	  libs/widgets/histogramwidget.cpp: HistogramViewer and
+	  HistogramPropPlugin: - Fixed alignment of calculated values
+	  (reported by Achim Bohnet in the past (:=))) - Improved all
+	  'Colors' at the same time mode rendering : added top value gray
+	  drawing for each color channels.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-19 16:55  pahlibar
+
+	* utilities/cameragui/: cameraiconitem.cpp, cameraiconitem.h,
+	  cameraiconview.cpp:
+	  minor code update in hope of fixing wierd repaint issues reported
+	  by a user
+
+2004-10-18 21:39  pahlibar
+
+	* imageplugins/: imageeffect_redeye.cpp, imageplugin_core.cpp:
+	  typo fix and remove unnecessary qlabel in the redeye correction
+	  dialog
+
+2004-10-18 16:04  pahlibar
+
+	* digikam/thumbdb.cpp:
+	  fixed multiple kdebug.h includes
+
+2004-10-18 15:56  pahlibar
+
+	* digikam/thumbdb.cpp:
+	  override default gdbm fatal function to prevent app from exiting
+	  if user runs out of diskspace CCMAIL: 91424-done@bugs.kde.org
+
+2004-10-18 13:20  pahlibar
+
+	* digikam/: albumpropsedit.cpp, albumpropsedit.h:
+
+	  use kdatepicker instead of qdateedit for locale aware date
+	  selection
+
+	  CCMAIL: 91597-done@bugs.kde.org
+
+2004-10-18 06:10  cgilles
+
+	* imageplugins/: imageeffect_redeye.cpp, imageplugin_core.cpp:
+	  Digikam RedEyes correction filter: added tip in dialog and for
+	  the menu entry (WISH #91845).  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2004-10-17 23:49  pahlibar
+
+	* utilities/imageeditor/: imagewindow.cpp, imagewindow.h:
+	  plug and unplug the imageguiclient actions when the imageviewer
+	  goes in and out of fullscreen. this is needed, because the
+	  toolbar gets hidden in fullscreen mode (when user chooses so) and
+	  none of the keyboard shortcut events reach the toolbar actions
+
+	  CCMAIL: 91552-done@bugs.kde.org
+
+2004-10-17 22:47  pahlibar
+
+	* digikam/listview.cpp:
+	  expanding/collapsing a tree item should not select the item
+	  CCMAIL: 91537-done@bugs.kde.org
+
+2004-10-17 22:39  pahlibar
+
+	* digikam/albumfolderview.cpp, digikam/albumiconview.cpp,
+	  digikam/albumsettings.cpp, digikam/albumsettings.h,
+	  digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/setup/setupmisc.cpp, utilities/setup/setupmisc.h:
+	  * update menu/toolbar text and icon everywhere dynamically
+	  according to user setting for   "trash" or "delete" setting * the
+	  confirmation dialog is not shown for moving to trash (konqueror
+	  behavior),   unless an album has subalbums GUI: confirmation for
+	  moving to trash option has been removed from settings
+	  (Miscellaneous) CCMAIL: 91451-done@bugs.kde.org
+
+2004-10-17 20:46  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+	  forgot to commit in this when syncjob::copy changed to file_move
+
+2004-10-17 20:43  pahlibar
+
+	* digikam/: syncjob.cpp, syncjob.h:
+	  * renamed syncjob::copy to syncjob::file_move (more like
+	  kio::netaccess). remember   to remove when we upgrade dependency
+	  to kde 3.2 * removed unnecessary qpixmap->qimage->qpixmap
+	  conversion CCMAIL: kde@jokele.de
+
+2004-10-17 07:16  jahrens
+
+	* digikam/syncjob.cpp, digikam/syncjob.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h:
+	  When the image viewer saved the modified file just before it was
+	  closed, the job result could never arrive the result function of
+	  the viewer. So signalFileModified was never emitted, and digikam
+	  not informed about the modification.
+
+	  CCMAIL: 91484-done@bugs.kde.org
+
+2004-10-17 05:47  jahrens
+
+	* digikam/tagcreatedlg.cpp: Corrected the icon size for tag edit
+	  dialog
+
+2004-10-16 19:45  jahrens
+
+	* digikam/: syncjob.cpp, syncjob.h: deleted unused slot
+
+2004-10-16 19:32  jahrens
+
+	* digikam/: album.cpp, albumfolderview.cpp, syncjob.cpp, syncjob.h,
+	  tagcreatedlg.cpp, tagspopupmenu.cpp, thumbview.cpp:
+	  Cropping tag thumbnails, so they fit the icon frame now.
+
+	  Additionally: Displaying the tag thumbnails in all dialogs now
+	  (edit/create tag dialog and in the "Comment/Tag" dialog).
+
+	  CCMAIL: 91373-done@bugs.kde.org
+
+2004-10-16 07:29  jahrens
+
+	* digikam/digikamapp.cpp: After changing the toolbar, the plugin
+	  menus have to be restored
+
+2004-10-14 23:17  cgilles
+
+	* utilities/splashscreen/digikam-splash.png: Update the
+	  splashscreen by Yves Chauffour : - remove banner on the top.	-
+	  make more transparent the bottom banner.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net, yves.chaufour@wanadoo.fr
+
+2004-10-14 09:04  pahlibar
+
+	* digikam/albumdb.cpp:
+	  escapeString wasn't being used for item name in import from xml.
+	  fixed CCMAIL: 91290-done@bugs.kde.org
+	
+	
 v0.7-beta1		10/13/04 
 ----------------------------------------------------------------------------
         * cgilles (2004-10-11): Fixed 'OpenInKonqui' action in according 
