@@ -12,9 +12,14 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Film grain image effect plugin for digiKam
+Comment[de]=digiKam Plugin zum Erzeugen eines Effektes von Körnigen Film
+Comment[fr]=Module externe de digiKam pour simuler le grain d'un film
+Comment[it]=Plugin per l'effetto di grana della pellicola delle immagini per digiKam
 Comment[nl]=Digikam-effectplugin voor filmkorreligheid
 Comment[pt]='Plugin' de efeito de grão de filme para o digiKam
 Comment[pt_BR]='Plugin' de efeito de grão de filme para o digiKam
+Comment[sv]=Digikam insticksprogram för filmkornsbildeffekt
+Comment[ta]=டிஜிகாமிற்கான ஃபிலிம் சிறுபுள்ளிகள் உள்ள பிம்ப விளைவு பொருள்
 
 X-KDE-Library=digikamimageplugin_filmgrain
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -11,9 +11,14 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Unsharped mask image filter plugin for digiKam
+Comment[de]=digiKam Plugin zum Filtern mit einer Unschärfemaske
+Comment[fr]=Module externe de digiKam pour renforcer la netteté d'une image
+Comment[it]=Plugin di effetto di maschera di contrasto delle immagini per digiKam
 Comment[nl]=Digikam-filterplugin voor onscherp afbeeldingmasker
 Comment[pt]='Plugin' de filtro de imagem não afiada para o digiKam
 Comment[pt_BR]='Plugin' de filtro de imagem não afiada para o digiKam
+Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
+Comment[ta]=டிஜிகாமிற்கான மழுங்கப்பட்ட மூடி பிம்ப அலங்கார சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_unsharp
 author=Caulier Gilles, caulier dot gilles at free dot fr

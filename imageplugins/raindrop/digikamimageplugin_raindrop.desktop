@@ -11,9 +11,14 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digiKam
+Comment[de]=digiKam Plugin zum Erzeugen eines Regentropfeneffektes
+Comment[fr]=Module externe de digiKam pour simuler des gouttes de pluies
+Comment[it]=Plugin per l'effetto a goccia di pioggia delle immagini per digiKam
 Comment[nl]=Digikam-effectplugin voor regendruppels
 Comment[pt]='Plugin' de efeito de gotas de chuva para o digiKam
 Comment[pt_BR]='Plugin' de efeito de gotas de chuva para o digiKam
+Comment[sv]=Digikam insticksprogram för regndroppsbildeffekt
+Comment[ta]=டிஜிகாமிற்கான மழைத்துளி விழுவதுபோன்ற படிம விளைவு சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at free dot fr

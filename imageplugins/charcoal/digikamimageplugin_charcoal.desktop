@@ -12,9 +12,14 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Charcoal drawing image effect plugin for digiKam
+Comment[de]=digiKam Plugin zum Erzeugen eines Kohlezeichnungseffektes
+Comment[fr]=Module externe de digiKam pour simuler le dessin au fusain
+Comment[it]=Plugin di effetto di disegno dell'immagine con carboncino per digiKam
 Comment[nl]=Digikam-effectplugin voor houtskooltekeningen
 Comment[pt]='Plugin' de efeito de desenho de imagem a carvão para o digiKam
 Comment[pt_BR]='Plugin' de efeito de desenho de imagem a carvão para o digiKam
+Comment[sv]=Digikam insticksprogram för kolteckningsbildeffekt
+Comment[ta]=டிஜிகாமிற்கான சார்க்கோல் வரையும் படிம விளைவு சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_charcoal
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -13,9 +13,14 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
+Comment[de]=digiKam Plugin zur Justierung der Bildhistogrammwerte
+Comment[fr]=Module externe de digiKam pour l'ajustement des niveaux d'une image
+Comment[it]=Plugin di regolazione dei livelli degli istogrammi delle immagini per digiKam
 Comment[nl]=Digikam-plugin voor niveaubijstelling van afbeeldinghistogram
 Comment[pt]='Plugin' de ajustar os níveis do histograma da imagem para o digiKam
 Comment[pt_BR]='Plugin' de ajustar os níveis do histograma da imagem para o digiKam
+Comment[sv]=Digikam insticksprogram för justering av nivåer i bildhistogram
+Comment[ta]=டிஜிகாமிற்க்கான பிம்ப வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_adjustlevels
 author=Caulier Gilles, caulier dot gilles at free dot fr
