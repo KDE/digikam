@@ -62,7 +62,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    // --------------------------------------------------------
 
    QHGroupBox *albumPathBox = new QHGroupBox(parent);
-   albumPathBox->setTitle(i18n("Albums Library Path"));
+   albumPathBox->setTitle(i18n("Album Library Path"));
 
    albumPathEdit = new QLineEdit(albumPathBox);
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the Digikam Albums "
@@ -78,7 +78,7 @@ SetupGeneral::SetupGeneral(QWidget* parent )
    // --------------------------------------------------------
 
    QButtonGroup *iconSizeButtonGroup = new QButtonGroup(1, Qt::Horizontal, 
-                                                        i18n("Default Thumbnails Size"),
+                                                        i18n("Default Thumbnail Size"),
                                                         parent);
    
    iconSizeButtonGroup->setRadioButtonExclusive(true);
@@ -211,7 +211,7 @@ void SetupGeneral::slotChangeAlbumPath()
             this);
 
     if (KURL(result).cmp(KURL(QDir::homeDirPath()), true)) {
-        KMessageBox::sorry(0, i18n("Sorry Cannot Use Home Directory as Albums Library"));
+        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as Albums library."));
         return;
     }
 

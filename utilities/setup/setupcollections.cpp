@@ -60,7 +60,7 @@ SetupCollections::SetupCollections(QWidget* parent )
    // --------------------------------------------------------
 
    QGroupBox* collectionGroup = new QVGroupBox(parent);
-   collectionGroup->setTitle(i18n("Albums Collection Types"));
+   collectionGroup->setTitle(i18n("Album Collection Types"));
    collectionGroup->setColumnLayout(0, Qt::Vertical );
    collectionGroup->layout()->setSpacing( 5 );
    collectionGroup->layout()->setMargin( 5 );
@@ -68,8 +68,8 @@ SetupCollections::SetupCollections(QWidget* parent )
    collectionGroupLayout->setAlignment( Qt::AlignTop );
    
    albumCollectionBox_ = new QListBox(collectionGroup);
-   QWhatsThis::add( albumCollectionBox_, i18n("<p>Here you can added or removed some Albums "
-                                              "collection types for improve the Albums sorting "
+   QWhatsThis::add( albumCollectionBox_, i18n("<p>Here you can add or remove some Album "
+                                              "collection types to improve the Album sorting "
                                               "in Digikam."));
                                                 
    albumCollectionBox_->setVScrollBarMode(QScrollView::AlwaysOn);
