@@ -2,10 +2,10 @@
  * File  : imageeffect_filmgrain.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a Digikam image editor plugin for to add film 
+ * Description : a digiKam image editor plugin for to add film 
  *               grain on an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@
 #include <qframe.h>
 #include <qdatetime.h> 
 #include <qtimer.h>
+#include <qpoint.h>
 
 // KDE includes.
 
@@ -87,7 +88,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to apply a film grain effect to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -141,14 +142,14 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Film sensibility (ISO):"), plainPage());
     
-    m_sensibilitySlider = new QSlider(2, 14, 1, 6, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
+    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
     
     m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(1600) );
+    m_sensibilityLCDValue->display( QString::number(2400) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
@@ -186,7 +187,7 @@ void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
           
-    m_sensibilitySlider->setValue(6);
+    m_sensibilitySlider->setValue(12);
     
     blockSignals(false);
     slotEffect();    
@@ -253,7 +254,7 @@ void ImageEffect_FilmGrain::slotOk()
     
     m_progressBar->setValue(0);
     FilmGrain(data, w, h, s);
-        
+
     if ( !m_cancel )
        iface.putOriginalData(data);
        
@@ -262,43 +263,116 @@ void ImageEffect_FilmGrain::slotOk()
     accept();       
 }
 
+// This method is based on the Simulate Film grain tutorial from GimpGuru.org web site 
+// available at this url : http://www.gimpguru.org/Tutorials/FilmGrain
+
 void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sensibility)
 {
-    int Graininess = (int)(Sensibility / 100.0);
+    if (Sensibility <= 0) return;
     
-    int LineWidth = Width * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    int Noise = (int)(Sensibility / 10.0);
+    int nStride = GetStride(Width);
+    register int h, w, i = 0, j = 0, k = 0;       
+    int nRand;
 
-    uchar *Bits = (uchar*) data;
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    int      BitCount = LineWidth * Height;
+    uchar*    pInBits = (uchar*)data;
+    uchar* pGrainBits = new uchar[BitCount];    // Grain blured without curves adjustment.
+    uchar*  pMaskBits = new uchar[BitCount];    // Grain mask with curves adjustment.
+    uchar*   pOutBits = new uchar[BitCount];    // Destination image with grain mask and original image merged.
     
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
     srand ((uint) dt.secsTo(Y2000));
-
-    register int i = 0, h, w, RandValue;            
     
-    for (h = 0 ; !m_cancel && (h < Height) ; ++h)
-       {
-       for (w = 0 ; !m_cancel && (w < Width) ; ++w)
-          {
-          i = h * LineWidth + 4 * w;
-                        
-          RandValue = (rand() % Graininess);
-                    
-          if (RandValue % 2) RandValue = 0;
-                    
-          if (((Bits[i+2] + Bits[i+1] + Bits[i]) / 3) > 127)
-             RandValue = -RandValue;
-                    
-          Bits[i+2] = LimitValues (Bits[i+2] + RandValue);
-          Bits[i+1] = LimitValues (Bits[i+1] + RandValue);
-          Bits[ i ] = LimitValues (Bits[ i ] + RandValue);
-          }
-       
-       // Update de progress bar in dialog.
-       m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-       kapp->processEvents(); 
-       }
+    // Make gray grain mask.
+    
+    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+        {
+        for (w = 0; !m_cancel && (w < Width); w++)
+            {
+            nRand = (rand() % Noise) - (Noise / 2);
+            
+            pGrainBits[i++] = LimitValues (128 + nRand);    // Red.
+            pGrainBits[i++] = LimitValues (128 + nRand);    // Green.
+            pGrainBits[i++] = LimitValues (128 + nRand);    // Blue.
+            pGrainBits[i++] = 0;                            // Reset Alpha (not used here).
+            }
+        
+        // Update de progress bar in dialog.
+        m_progressBar->setValue((int) (((double)h * 50.0) / Height));
+        kapp->processEvents(); 
+        }
+
+    // Blur grain mask without using Alpha.    
+    
+    for (h = 1; !m_cancel && (h < Height - 1); h++)
+        {
+        for (w = 1; !m_cancel && (w < Width - 1); w++)
+            {
+            i = h * LineWidth + 4 * w;
+            j = (h + 1) * LineWidth + 4 * w;
+            k = (h - 1) * LineWidth + 4 * w;
+
+            pGrainBits[i+2] = (pGrainBits[i-2] + pGrainBits[j-2] + pGrainBits[k-2] +
+                               pGrainBits[i+2] + pGrainBits[j+2] + pGrainBits[k+2] +
+                               pGrainBits[i+6] + pGrainBits[j+6] + pGrainBits[k+6]) / 9;
+            pGrainBits[i+1] = (pGrainBits[i-3] + pGrainBits[j-3] + pGrainBits[k-3] +
+                               pGrainBits[i+1] + pGrainBits[j+1] + pGrainBits[k+1] +
+                               pGrainBits[i+5] + pGrainBits[j+5] + pGrainBits[k+5]) / 9;
+            pGrainBits[ i ] = (pGrainBits[i-4] + pGrainBits[j-4] + pGrainBits[k-4] +
+                               pGrainBits[ i ] + pGrainBits[ j ] + pGrainBits[ k ] +
+                               pGrainBits[i+4] + pGrainBits[j+4] + pGrainBits[k+4]) / 9;
+            }
+        
+        // Update de progress bar in dialog.
+        m_progressBar->setValue((int) (50.0 + ((double)h * 50.0) / Height));
+        kapp->processEvents(); 
+        }
+        
+    // Normally, film grain tends to be most noticable in the midtones, and much less 
+    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
+
+    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves();
+    
+    // We modify only global luminosity of the grain.
+    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
+    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 9,  QPoint::QPoint(128, 128));
+    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 17, QPoint::QPoint(255, 0));
+    
+    // Calculate curves and lut to apply on grain.
+    grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
+    grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    grainCurves->curvesLutProcess((uint *)pGrainBits, (uint *)pMaskBits, Width, Height);
+    delete grainCurves;
+    
+    // Merge src image with grain using shade coefficient.
+
+    int Shade =32; // This value control the shading pixel effect between original image and grain mask.
+    i = 0;
+        
+    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+        {
+        for (w = 0; !m_cancel && (w < Width); w++)
+            {        
+            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Red.
+            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Green.
+            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Blue.
+            pOutBits[i++] = pInBits[i];                                                  // Alpha.
+            }
+        }
+    
+    // Copy target image to destination.
+    
+    if (!m_cancel) 
+       memcpy (data, pOutBits, BitCount);        
+                
+    delete [] pGrainBits;    
+    delete [] pMaskBits;
+    delete [] pOutBits;
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

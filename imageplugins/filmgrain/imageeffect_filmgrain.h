@@ -2,10 +2,10 @@
  * File  : imageeffect_filmgrain.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a Digikam image editor plugin for to add film 
+ * Description : a digiKam image editor plugin for to add film 
  *               grain on an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,6 +88,13 @@ private:
        return ((uchar) ColorValue);
        };
     
+    inline int GetStride (int Width)
+       { 
+       int LineWidth = Width * 4;
+       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
+       return (0); 
+       };
+              
 private slots:
 
     void slotHelp();
