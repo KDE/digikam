@@ -137,7 +137,7 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::HistogramWidget     *m_histogramWidget;
     
-    void setupHistogramViewer(uint *imageData, uint width, uint height, KURL fileURL);
+    void setupHistogramViewer(void);
 
     void updateInformations();
 

@@ -102,29 +102,20 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
     
     // Exif Viewer init.
     
-    mExifData = new KExifData;
-
-    if (mExifData->readFromFile(fileURL.path()))
-        setupExifViewer();
+    mExifData = 0L;
+    
+    setupExifViewer();
         
     // HistoGramViewer init.
     
     m_histogramWidget = 0L;
     m_hGradient       = 0L;
 
-    m_image.load(fileURL.path());
-    
-    if (m_image.isNull() == false)
-       {
-       if(m_image.depth() < 32)                 // we works always with 32bpp.
-          m_image = m_image.convertDepth(32);
-       
-       m_image.setAlphaBuffer(true);
-       setupHistogramViewer((uint *)m_image.bits(), m_image.width(), m_image.height(), fileURL);
-       }
+    setupHistogramViewer();
 
-    enableButton(User1, m_currItem->nextItem() != 0);
-    enableButton(User2, m_currItem->prevItem() != 0);
+    // Init all info data.
+    
+    slotItemChanged();
        
     parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
@@ -254,7 +245,7 @@ void ImageProperties::slotItemChanged()
     PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
     
     if (palbum)
-        m_filealbum->setText( palbum->getURL().remove(0,1) );
+        m_filealbum->setText( palbum->getURL().remove(0, 1) );
     
     m_filecomments->setText( m_view->itemComments(m_currItem) );
     QStringList tagPaths(m_view->itemTagPaths(m_currItem));
@@ -324,7 +315,7 @@ void ImageProperties::slotItemChanged()
        m_image.setAlphaBuffer(true);
        m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
        }
-        
+               
     // Setup buttons.
            
     enableButton(User1, m_currItem->nextItem() != 0);
@@ -336,29 +327,19 @@ void ImageProperties::slotItemChanged()
 //-----------------------------------------------------------------------------------------------------------
 // Histogram Viewer implementation methods
 
-void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint height, KURL fileURL)
+void ImageProperties::setupHistogramViewer(void)
 {
     QFrame *page = addPage( i18n("&Histogram"));
    
     QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
 
-    // -------------------------------------------------------------
+    // Setup Histogram infos tab.
                                               
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     
     m_histogramThumb = new QLabel( page );
     m_histogramThumb->setFixedHeight( 48 );
     hlay->addWidget(m_histogramThumb);
-    
-    m_HistogramThumbJob = new ThumbnailJob(fileURL, 48);
-    
-    connect(m_HistogramThumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)),
-            SLOT(slotGotHistogramThumbnail(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)));
     
     QGridLayout *grid = new QGridLayout(hlay, 2, 4);
     
@@ -419,11 +400,7 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, 
-                                                     imageData,
-                                                     width,
-                                                     height,
-                                                     frame);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, frame);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the "
                                              "selected image channel"));
     l->addWidget(m_histogramWidget, 0);
@@ -518,8 +495,6 @@ void ImageProperties::setupHistogramViewer(uint *imageData, uint width, uint hei
 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotIntervChanged(int)));
-    
-    updateInformations(); 
 }
 
 void ImageProperties::slotChannelChanged(int channel)
@@ -666,37 +641,16 @@ void ImageProperties::setupExifViewer(void)
 {
     QFrame *page = addPage( i18n("Exif") );
     QGridLayout* layout = new QGridLayout(page);
+    
+    // Setup Exif infos tab.                                         
+    
     m_listview = new KExifListView(page, true);
     
-    QGroupBox *box = new QVGroupBox(i18n("Embedded thumnail"), page);
+    QGroupBox *box = new QVGroupBox(i18n("Embedded thumbnail"), page);
     m_exifThumb = new QLabel(box);
     
     layout->addWidget(m_listview, 0, 0);
     layout->addWidget(box, 1, 0);
-        
-    QPtrList<KExifIfd> ifdList(mExifData->ifdList());
-
-    for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
-        {
-        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(),
-                                                        ifd->getName());
-        m_listview->addItems(ifd->entryList(), item );
-        }
-        
-    // Exif embedded thumbnails creation.
-    
-    QImage thumbnail(mExifData->getThumbnail());
-        
-    if (!thumbnail.isNull()) 
-        {
-        m_exifThumb->setFixedSize(thumbnail.size());
-        m_exifThumb->setPixmap(QPixmap(thumbnail));
-        }        
-    else
-        {
-        m_exifThumb->setFixedSize(0, 0);
-        m_exifThumb->setPixmap(QPixmap::QPixmap(0, 0));
-        }
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -733,7 +687,7 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     hlay1->addMultiCellWidget( type, 1, 1, 0, 0 );
     hlay1->addMultiCellWidget( m_filetype, 1, 1, 1, 2  );
     
-    QLabel *dim = new QLabel( i18n("Dimenssions:"), page);
+    QLabel *dim = new QLabel( i18n("Dimensions:"), page);
     m_filedim = new KSqueezedTextLabel(page);
     dim->setBuddy( m_filedim );
     hlay1->addMultiCellWidget( dim, 2, 2, 0, 0 );
@@ -796,60 +750,6 @@ void ImageProperties::setupGeneralTab(KURL fileURL)
     hlay2->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
                     
     vlay->addStretch(1);
-
-    // Update general info.
-    
-    m_generalThumbJob = new ThumbnailJob(fileURL, 128);
-    
-    connect(m_generalThumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)),
-            SLOT(slotGotGeneralThumbnail(const KURL&,
-                                         const QPixmap&,
-                                         const KFileMetaInfo*)));
-
-    const KFileItem* fi = m_currItem->fileItem();    
-    m_filename->setText( fileURL.fileName() );
-    m_filetype->setText( KMimeType::findByURL(fileURL)->name() );
-    KFileMetaInfo meta(fileURL);
-    
-    if (meta.isValid())
-        {
-        QSize dims;
-        
-        if (meta.containsGroup("Jpeg EXIF Data"))
-            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-        else if (meta.containsGroup("General"))
-            dims = meta.group("General").item("Dimensions").value().toSize();
-        else if (meta.containsGroup("Technical"))
-            dims = meta.group("Technical").item("Dimensions").value().toSize();
-        
-        m_filedim->setText( QString("%1x%2 %3").arg(dims.width())
-                            .arg(dims.height()).arg(i18n("pixels")) );
-        }
-   
-    m_filepath->setText( fileURL.path() );
-    QDateTime dateurl;
-    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
-    m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
-    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
-                                        .arg(KGlobal::locale()->formatNumber(fi->size(), 0)) );
-    m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
-    m_filepermissions->setText( fi->permissionsString() );
-
-    PAlbum* palbum = m_view->albumLister()->findParentAlbum(fi);
-    
-    if (palbum)
-        m_filealbum->setText( palbum->getURL().remove(0, 1) );
-    
-    m_filecomments->setText( m_view->itemComments(m_currItem) );
-    QStringList tagPaths(m_view->itemTagPaths(m_currItem));
-    
-    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-        (*it).remove(0,1);
-    
-    m_filetags->setText( tagPaths.join(", "));
 }
 
 void ImageProperties::slotGotGeneralThumbnail(const KURL&, const QPixmap& pix,

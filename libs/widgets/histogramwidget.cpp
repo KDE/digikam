@@ -46,6 +46,29 @@
 namespace Digikam
 {
 
+// Constructor without image data (needed to use updateData() method after instance created).
+
+HistogramWidget::HistogramWidget(int w, int h, 
+                                 QWidget *parent, bool selectMode)
+               : QWidget(parent, 0, Qt::WDestructiveClose)
+{
+    m_channelType    = ValueHistogram;
+    m_scaleType      = LogScaleHistogram;
+    m_colorType      = RedColor;
+    m_renderingType  = FullImageHistogram;
+    m_inSelected     = false;
+    m_selectMode     = selectMode;
+    m_xmin           = 0;
+    m_xmax           = 0;
+    
+    m_imageHistogram     = 0L;
+    m_selectionHistogram = 0L;
+
+    setMouseTracking(true);
+    setPaletteBackgroundColor(Qt::NoBackground);
+    setMinimumSize(w, h);
+}
+
 // Constructor without image selection.
 
 HistogramWidget::HistogramWidget(int w, int h, 

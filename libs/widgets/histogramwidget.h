@@ -56,9 +56,18 @@ enum HistogramType
     
 public:
 
+    // Constructor without image data (needed to use updateData() method after instance created).
+    
+    HistogramWidget(int w, int h,                              // Widget size.
+                    QWidget *parent=0, bool selectMode=true);
+
+    // Constructor with image data and without image selection data.
+    
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     QWidget *parent=0, bool selectMode=true);
+    
+    // Constructor with image data and image selection data.
     
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
