@@ -56,7 +56,7 @@ SetupExif::SetupExif(QWidget* parent )
                                             parent);
 
    iconSaveExifBox_ = new QCheckBox(iconExifGroup);
-   iconSaveExifBox_->setText(i18n("Save Album items comments as EXIF Comments in Jpeg images"));
+   iconSaveExifBox_->setText(i18n("Save Album items' comments as EXIF Comments in Jpeg images"));
 
    iconExifRotateBox_ = new QCheckBox(iconExifGroup);
    iconExifRotateBox_->setText(i18n("Rotate images and thumbnails according to EXIF tag"));

@@ -56,9 +56,9 @@ SetupMime::SetupMime(QWidget* parent )
 
    m_imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
    QWhatsThis::add( m_imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
-                                                "which will be displayed in Albums (like JPEG or TIFF)."
-                                                "When you will double-clicked on, this files will be opened "
-                                                "with Digikam ImageViewer."));
+                                                "to be displayed in Albums (such as JPEG or TIFF); "
+                                                "when these files are double-clicked on " 
+                                                "they will be opened with the Digikam ImageViewer."));
    
    layout->addWidget(imageFileFilterBox);
    
@@ -71,10 +71,9 @@ SetupMime::SetupMime(QWidget* parent )
    
    m_movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
    QWhatsThis::add( m_movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
-                                                "which will be displayed in Albums (like MPEG or AVI)."
-                                                "When you will double-clicked on, this files will be opened "
-                                                "with the default KDE desktop movies player."));
-
+                                                "to be displayed in Albums (such as MPEG or AVI); "
+                                                "when these files are double-clicked on they will "
+                                                "be opened with the default KDE movie player.")); 
    layout->addWidget(movieFileFilterBox);
 
    // --------------------------------------------------------
@@ -86,9 +85,9 @@ SetupMime::SetupMime(QWidget* parent )
    
    m_audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
    QWhatsThis::add( m_audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
-                                                "which will be displayed in Albums (like MP3 or OGG)."
-                                                "When you will double-clicked on, this files will be opened "
-                                                "with the default KDE desktop audio player."));
+                                                "to be displayed in Albums (such as MP3 or OGG); "
+                                                "when these files are double-clicked on they will " 
+                                                "be opened with the default KDE audio player."));
 
    
    layout->addWidget(audioFileFilterBox);
@@ -102,8 +101,8 @@ SetupMime::SetupMime(QWidget* parent )
 
    m_rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
    QWhatsThis::add( m_rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
-                                              "which will be displayed in Albums (like CRW for Canon camera "
-                                              "or NEF for Nikon camera)."));
+                                              "to be displayed in Albums (such as CRW, for Canon cameras, "
+                                              "or NEF, for Nikon cameras)."));
                                                 
    layout->addWidget(rawFileFilterBox);
    
