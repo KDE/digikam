@@ -52,6 +52,8 @@
 #include <kio/netaccess.h>
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
+#include <kkeydialog.h>
+#include <kedittoolbar.h>
 
 // Lib KExif includes.
 
@@ -352,6 +354,13 @@ void ShowFoto::setupActions()
                                      "digikamimageplugins", 0, 
                                      this, SLOT(slotImagePluginsHelp()),
                                      actionCollection(), "imagepluginshelp");
+    
+    // -- Configure toolbar and shortcuts ---------------------------------------------
+    
+    KStdAction::keyBindings(this, SLOT(slotEditKeys()),
+                            actionCollection());
+    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()),
+                                  actionCollection());
     
     // ---------------------------------------------------------------
     
@@ -922,11 +931,44 @@ void ShowFoto::toogleActions(bool val)
     m_BCGAction->setEnabled(val);
     
     for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+         plugin; plugin = m_imagePluginLoader->pluginList().next()) 
+    {
         if (plugin) {
             plugin->setEnabledActions(val);
         }
     }
 }
+
+void ShowFoto::slotEditKeys()
+{
+    KKeyDialog dialog(true, this);
+    dialog.insert( actionCollection(), i18n( "General" ) );
+
+    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    {
+        if (plugin)
+        {
+            dialog.insert( plugin->actionCollection(), plugin->name() );
+        }
+    }
+    
+    dialog.configure();
+}
+
+void ShowFoto::slotConfToolbars()
+{
+    saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+    KEditToolbar dlg(factory(), this);
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            SLOT(slotNewToolbarConfig()));
+    dlg.exec();
+}
+
+void ShowFoto::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+}
+
 
 #include "showfoto.moc"

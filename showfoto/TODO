@@ -3,11 +3,10 @@ todo stuff before 0.7.3 release
 
 * add Move to trash.
 * add Print image.
-* add configure 
+* add 
 * disable Fix-Incease/Decrease BCG if core plugin is available. 
 * add shofoto settings dialog. 
 * writing handbook based on digiKam handbook image editor part. 
-* use exifrestorer for save/saveas
 
 later stuff
 -----------

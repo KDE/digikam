@@ -80,7 +80,10 @@ private slots:
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
 
-            
+    void slotEditKeys();
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
+               
 private:
 
     void setupActions();
