@@ -222,6 +222,9 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
     showPage(kapp->config()->readNumEntry("Tab Actived", 0));                              // General tab.
     m_levelExifCB->setCurrentItem(kapp->config()->readNumEntry("Exif Level", 0));          // General Exif level.
     m_embeddedThumbBox->setChecked(kapp->config()->readBoolEntry("Show Exif Thumb", true));// Exif thumb on.
+    m_currentGeneralExifItemName = kapp->config()->readEntry("General Exif Item", QString::null);
+    m_currentExtendedExifItemName = kapp->config()->readEntry("Extended Exif Item", QString::null);
+    m_currentAllExifItemName = kapp->config()->readEntry("All Exif Item", QString::null);
     m_channelCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Channel", 0));     // Luminosity.
     m_scaleCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Scale", 0));         // Linear.
     m_colorsCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Color", 0));        // Red.
@@ -243,16 +246,23 @@ ImageProperties::~ImageProperties()
     m_histogramWidget->stopHistogramComputation();
    
     // Save config.
+    getCurrentExifItem();
+    
     kapp->config()->setGroup("Image Properties Dialog");
     kapp->config()->writeEntry("Tab Actived", activePageIndex());
     kapp->config()->writeEntry("Exif Level", m_levelExifCB->currentItem());
     kapp->config()->writeEntry("Show Exif Thumb", m_embeddedThumbBox->isChecked());
+    kapp->config()->writeEntry("General Exif Item", m_currentGeneralExifItemName);
+    kapp->config()->writeEntry("Extended Exif Item", m_currentExtendedExifItemName);
+    kapp->config()->writeEntry("All Exif Item", m_currentAllExifItemName);
     kapp->config()->writeEntry("Histogram Channel", m_channelCB->currentItem());
     kapp->config()->writeEntry("Histogram Scale", m_scaleCB->currentItem());
     kapp->config()->writeEntry("Histogram Color", m_colorsCB->currentItem());
     kapp->config()->writeEntry("Histogram Rendering", m_renderingCB->currentItem());
 
     saveDialogSize("Image Properties Dialog");
+    
+    kapp->config()->sync();
     
     // For Exif viewer.
     
@@ -393,7 +403,7 @@ void ImageProperties::slotItemChanged()
 
     // -------------------------------------------------------------                                         
     // Update Exif Viewer tab.
-       
+
     m_listview->clear();
     
     if (m_ExifData)
@@ -420,7 +430,7 @@ void ImageProperties::slotItemChanged()
             m_exifThumb->setFixedSize(0, 0);
             m_exifThumb->setPixmap(QPixmap::QPixmap(0, 0));
             }
-            
+
         QToolTip::add( m_listview, i18n("Select an item to see its description"));
         }
     
@@ -923,6 +933,7 @@ void ImageProperties::slotLevelExifChanged(int level)
               if (ifd->getName() == "EXIF")
                  {
                  m_listview->addItems(ifd->entryList());
+                 setCurrentExifItem();       
                  return;
                  }
               }
@@ -935,6 +946,7 @@ void ImageProperties::slotLevelExifChanged(int level)
                                                               ifd->getName());
               m_listview->addItems(ifd->entryList(), item );
               }
+          setCurrentExifItem();       
           break;
 
        default:          // General.
@@ -943,6 +955,7 @@ void ImageProperties::slotLevelExifChanged(int level)
               if (ifd->getName() == "0")
                  {
                  m_listview->addItems(ifd->entryList());
+                 setCurrentExifItem();       
                  return;
                  }
               }
@@ -956,6 +969,42 @@ void ImageProperties::slotToogleEmbeddedThumb(bool toogle)
        m_embeddedThumbnail->show();
     else
        m_embeddedThumbnail->hide();
+}
+
+void ImageProperties::getCurrentExifItem(void)
+{    
+    switch(m_levelExifCB->currentItem())
+       {
+       case 1:           // Extended.
+          m_currentExtendedExifItemName = m_listview->getCurrentItemName();
+          break;
+       
+       case 2:           // All.
+          m_currentAllExifItemName = m_listview->getCurrentItemName();
+          break;
+
+       default:          // General.
+          m_currentGeneralExifItemName = m_listview->getCurrentItemName();
+          break;
+       }
+}
+
+void ImageProperties::setCurrentExifItem(void)
+{    
+    switch(m_levelExifCB->currentItem())
+       {
+       case 1:           // Extended.
+          m_listview->setCurrentItem(m_currentExtendedExifItemName);
+          break;
+       
+       case 2:           // All.
+          m_listview->setCurrentItem(m_currentAllExifItemName);
+        break;
+
+       default:          // General.
+          m_listview->setCurrentItem(m_currentGeneralExifItemName);
+          break;
+       }
 }
 
 //-----------------------------------------------------------------------------------------------------------

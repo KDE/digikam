@@ -145,7 +145,13 @@ private:
     
     KExifListView                *m_listview;
     
+    QString                       m_currentGeneralExifItemName;
+    QString                       m_currentExtendedExifItemName;
+    QString                       m_currentAllExifItemName;
+    
     void setupExifViewer(void);
+    void getCurrentExifItem(void);
+    void setCurrentExifItem(void);
     
     // For histogram viever.
     
