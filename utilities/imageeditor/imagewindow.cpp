@@ -425,16 +425,12 @@ void ImageWindow::applySettings()
 
 void ImageWindow::readSettings()
 {
-    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
-
     KConfig* config = kapp->config();
-
-    bool autoZoom;
-
+    applyMainWindowSettings(config, "ImageViewer Settings");
     config->setGroup("ImageViewer Settings");
 
     // GUI options.
-    autoZoom = config->readBoolEntry("AutoZoom", true);
+    bool autoZoom = config->readBoolEntry("AutoZoom", true);
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
@@ -455,13 +451,12 @@ void ImageWindow::readSettings()
 void ImageWindow::saveSettings()
 {
     KConfig* config = kapp->config();
-
+    saveMainWindowSettings(config, "ImageViewer Settings");
+    
     config->setGroup("ImageViewer Settings");
     config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
     config->writeEntry("FullScreen", m_fullScreen);
     config->sync();
-
-    saveMainWindowSettings(config, "ImageViewer Settings");
 }
 
 void ImageWindow::slotLoadCurrent()
