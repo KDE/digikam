@@ -7,7 +7,7 @@
 <img src="hicolor/32x32/apps/digikamimageplugins.png">
 </td>
 <td>
-Did you know that if select a part of the image before to lauch 'RainDrops' image editor plugin, this part will be ignored by the filter. You can use this way for don't add drops on a human face for example.
+Did you know that if select a part of the image before launching 'RainDrops' image editor plugin, this part will be ignored by the filter. You can use this to, for example, not add drops on a human face.
 </td>
 </tr>
 </table>
@@ -24,7 +24,7 @@ Did you know that if select a part of the image before to lauch 'RainDrops' imag
 <img src="hicolor/32x32/apps/digikamimageplugins.png">
 </td>
 <td>
-Did you know that you can simule the old black and white photo grainess with the 'FilmGrain' image editor plugin.
+Did you know that you can simulate the graininess of black-and-white photos with the 'FilmGrain' image editor plugin.
 </td>
 </tr>
 </table>
