@@ -15,6 +15,8 @@
 #include <qdrawutil.h>
 
 #include <kdebug.h>
+#include <kcursor.h>
+#include <kglobalsettings.h>
 
 #include <stdlib.h>
 #include <iostream>
@@ -102,7 +104,8 @@ ThumbView::ThumbView(QWidget* parent, const char* name,
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(QWidget::WheelFocus);
-
+    viewport()->setMouseTracking(true);
+    
     renamingItem = 0;
     
     d = new ThumbViewPrivate;
@@ -338,7 +341,7 @@ void ThumbView::sort()
 
 void ThumbView::setEnableToolTips(bool val)
 {
-    viewport()->setMouseTracking(val);
+    d->showTips = val;
     if (!val) {
         d->toolTipItem = 0;
         d->toolTipTimer->stop();
@@ -756,22 +759,34 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     
     if (e->state() == NoButton )
     {
-        if (!isActiveWindow())
-        {
-            d->toolTipItem = 0;
-            d->toolTipTimer->stop();
-            slotToolTip();
-            return;
-        }
-        
         ThumbItem* item = findItem(e->pos());
-        if (item != d->toolTipItem)
+        
+        if(d->showTips)
         {
-            d->toolTipItem = 0;
-            slotToolTip();
+            if (!isActiveWindow())
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+                return;
+            }
             
-            d->toolTipItem = item;
-            d->toolTipTimer->start(500, true);
+            if (item != d->toolTipItem)
+            {
+                d->toolTipItem = 0;
+                slotToolTip();
+                
+                d->toolTipItem = item;
+                d->toolTipTimer->start(500, true);
+            }
+        }
+                
+        if(KGlobalSettings::changeCursorOverIcon())
+        {
+            if(item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
         }
         return;
     }
@@ -874,8 +889,6 @@ void ThumbView::contentsMouseMoveEvent(QMouseEvent *e)
     d->pressedMoved = true;
 }
 
-
-
 void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
@@ -915,24 +928,37 @@ void ThumbView::contentsMouseReleaseEvent(QMouseEvent *e)
         }
         ThumbItem *item = findItem(e->pos());
         if (item)
+        {
             item->setSelected(true, true);
+            if(KGlobalSettings::singleClick())
+                itemClickedToOpen(item);
+        }
     }
-
-    
 }
 
 void ThumbView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
+    if(KGlobalSettings::singleClick())
+        return;
+    
     ThumbItem *item = findItem(e->pos());
     if (item) {
-        blockSignals(true);
-        clearSelection();
-        if (renamingItem)
-            renamingItem->cancelRenameItem();
-        blockSignals(false);
-        item->setSelected(true);
-        emit signalDoubleClicked(item);
+        itemClickedToOpen(item);
     }
+}
+
+void ThumbView::itemClickedToOpen(ThumbItem *item)
+{
+    if(!item)
+        return;
+    
+    blockSignals(true);
+    clearSelection();
+    if (renamingItem)
+        renamingItem->cancelRenameItem();
+    blockSignals(false);
+    item->setSelected(true);
+    emit signalDoubleClicked(item);    
 }
 
 void ThumbView::contentsWheelEvent(QWheelEvent *e)

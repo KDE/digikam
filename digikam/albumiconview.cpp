@@ -66,6 +66,7 @@
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kiconeffect.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -832,12 +833,14 @@ void AlbumIconView::slotFilesModified(const KURL& url)
 
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
+    if (!item) return;
+    
     AlbumSettings *settings = AlbumSettings::instance();
 
     if (!settings) return;
 
-    if (!item) return;
-
+    KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
+        
     QString currentFileExtension =
         item->fileItem()->url().fileName().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
@@ -887,7 +890,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
                     d->currentAlbum ? d->currentAlbum->getTitle():QString(),
                     true,
                     this);  // Allow to use image properties and comments/tags dialogs
-                   
+    
     if (imview->isHidden())
         imview->show();
         

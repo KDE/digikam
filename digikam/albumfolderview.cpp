@@ -56,6 +56,8 @@
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kglobalsettings.h>
+#include <kcursor.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -94,7 +96,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
-
+    viewport()->setMouseTracking(true);
+    
     dropTarget_     = 0;
     albumSortOrder_ = (int) AlbumSettings::ByFolder;
     groupItems_.setAutoDelete(false);
@@ -1276,8 +1279,19 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if( !e ) return;
 
+    ListItem* item = itemAt(e->pos());
+
     if( e->state() == NoButton )
+    {
+        if(KGlobalSettings::changeCursorOverIcon())
+        {
+            if(item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
         return;
+    }
 
     // Dragging ?
     if( dragItem_ )

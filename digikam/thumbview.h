@@ -90,7 +90,8 @@ private:
     void appendContainer();
     void deleteContainers();
     void keySelectItem(ThumbItem* item, bool shift);
-
+    void itemClickedToOpen(ThumbItem *item);
+    
 private:
 
     ThumbItem* makeRow(ThumbItem *begin, int &y, bool &changed);

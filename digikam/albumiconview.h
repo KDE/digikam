@@ -107,7 +107,7 @@ public:
 
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
-    
+
 protected:
 
     void calcBanner();
