@@ -50,6 +50,7 @@ public:
     QString     rawFilefilter;
 
     int            thumbnailSize;
+    
     AlbumSettings::AlbumSortOrder albumSortOrder;
 
     bool iconShowMime;
@@ -102,7 +103,7 @@ void AlbumSettings::init()
 
     d->albumSortOrder = AlbumSettings::ByCollection;
                                           
-    d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm";
+    d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
     d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
