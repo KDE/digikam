@@ -130,7 +130,7 @@ void DigikamFirstRun::slotOk()
             KMessageBox::sorry(0,
                                i18n("<qt>Digikam could not create the folder shown below. "
                                     "Please select a different location."
-                                    "<p><b>%1</b></p>").arg(albumLibraryFolder),
+                                    "<p><b>%1</b></p></qt>").arg(albumLibraryFolder),
                                i18n("Create Folder Failed"));
             return;
         }
