@@ -387,13 +387,37 @@ void ListView::keyPressEvent(QKeyEvent *e)
 
     case (Qt::Key_Right): {
         if (d->selectedItem)
-            d->selectedItem->setOpen(true);
+        {
+            if (!d->selectedItem->isOpen())
+            {
+                d->selectedItem->setOpen(true);
+            }
+            else
+            {
+                ListItem *child = d->selectedItem->firstChild();
+                if (child)
+                    setSelected(child);
+            }
+        }       
         break;
     }
 
     case (Qt::Key_Left): {
         if (d->selectedItem)
-            d->selectedItem->setOpen(false);
+        {
+            if (d->selectedItem->isOpen())
+            {
+                d->selectedItem->setOpen(false);
+            }
+            else
+            {
+                ListItem* p = d->selectedItem->parent();
+                if (p && p != d->rootItem)
+                {
+                    setSelected(p);
+                }
+            }
+        }
         break;
     }
         
