@@ -53,7 +53,7 @@ private:
     void    reposition();
     void    renderArrows();
     void    updateText();
-    QString dateToString(const QDateTime& date) const;
+    QString breakString(const QString& str);
     
     AlbumIconView* m_view;
     AlbumIconItem* m_iconItem;

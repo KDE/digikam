@@ -33,6 +33,8 @@
 #include <kfileitem.h>
 #include <kfilemetainfo.h>
 #include <kglobalsettings.h>
+#include <klocale.h>
+#include <kglobal.h>
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -274,7 +276,8 @@ void AlbumFileTip::updateText()
     QDateTime date;
     date.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
     tip += cellBeg + i18n("Date:") + cellMid +
-           dateToString(date) + cellEnd;
+           KGlobal::locale()->formatDateTime(date, true, true)
+           + cellEnd;
            
     tip += cellBeg + i18n("Size:") + cellMid;
     tip += i18n("%1 bytes").arg(fi->size()) + cellEnd;
@@ -297,7 +300,7 @@ void AlbumFileTip::updateText()
     }
     
     tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +
-           m_view->itemComments(m_iconItem) + cellSpecEnd;
+           breakString( m_view->itemComments(m_iconItem) ) + cellSpecEnd;
 
     QStringList tagPaths(m_view->itemTagPaths(m_iconItem));
     for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
@@ -315,7 +318,7 @@ void AlbumFileTip::updateText()
     if (info.isValid() && !info.isEmpty() )
     {
         QStringList keys = info.preferredKeys();
-        int maxCount = 6;
+        int maxCount = 5;
         int count = 0;
         
         for (QStringList::iterator it = keys.begin();
@@ -351,20 +354,23 @@ void AlbumFileTip::updateText()
     m_label->setText(tip);
 }
 
-QString AlbumFileTip::dateToString(const QDateTime& datetime) const
+QString AlbumFileTip::breakString(const QString& str)
 {
-    QString str;
+    uint maxLen = 30;
     
-    int hr = datetime.time().hour();
-    hr = (hr > 12) ? (hr - 12) : hr;
+    if (str.length() <= maxLen)
+        return str;
 
-    str.sprintf("%4d/%2.2d/%2.2d, %2.2d:%2.2d%s",
-                datetime.date().year(),
-                datetime.date().month(),
-                datetime.date().day(),
-                hr,
-                datetime.time().minute(),
-                datetime.time() > QTime(12,0) ? "PM" : "AM");
+    
+    QString br;
 
-    return str;
+    uint i = 0;
+    while (i < str.length())
+    {
+        br.append(str[i++]);
+        if (i % maxLen == 0)
+            br.append("<br>");
+    }
+
+    return br;
 }
