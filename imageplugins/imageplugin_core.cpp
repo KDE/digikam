@@ -139,11 +139,12 @@ QStringList ImagePlugin_Core::guiDefinition() const
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_bw/ ");
     guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_sepia/ ");
 
-    // enable i18n
+    // Enable i18n for the menu options.
 
     i18n( "&Image" );
     i18n( "Fi&x" );
     i18n( "Fi&lters" );
+    i18n( "&Colors" );
     
     return guiDef;
 }
