@@ -593,12 +593,12 @@ int GPCamera::uploadItem(const QString& folder,
     CameraFile *cfile;
     gp_file_new(&cfile);
 
-    if (gp_file_open(cfile, localFile) != GP_OK) {
+    if (gp_file_open(cfile, localFile.local8Bit()) != GP_OK) {
         gp_file_unref(cfile);
         return GPError;
     }
 
-    gp_file_set_name(cfile, itemName);
+    gp_file_set_name(cfile, itemName.local8Bit());
 
     if (status) {
         delete status;

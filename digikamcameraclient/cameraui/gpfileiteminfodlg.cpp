@@ -34,7 +34,7 @@
 
 GPFileItemInfoDlg::GPFileItemInfoDlg(const GPFileItemInfo& info,
                                      QPixmap *pixmap )
-    : KDialogBase(0, QString::null, true,
+    : KDialogBase(0, (const char *) 0, true,
                   info.name,
                   Ok, Ok, true)
 {
