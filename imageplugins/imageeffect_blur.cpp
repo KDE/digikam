@@ -52,7 +52,7 @@
 #include "imageeffect_blur.h"
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
-                : KDialogBase(Plain, i18n("Blur image"),
+                : KDialogBase(Plain, i18n("Blur Image"),
                               Help|Ok|Cancel, Ok,
                               parent, 0, true, true),
                   m_parent(parent)
