@@ -1,5 +1,5 @@
 /* ============================================================
- * File  : despeckle.cpp
+ * File  : despeckle.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-24
  * Description : Despeckle image filter for ImageEditor
