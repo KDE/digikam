@@ -268,7 +268,9 @@ void ImageProperties::slotItemChanged()
 {
     if (!m_currItem)
         return;
-
+    
+    setCursor( KCursor::waitCursor() );
+    
     if (!m_HistogramThumbJob.isNull())
     {
         m_HistogramThumbJob->kill();
@@ -422,12 +424,10 @@ void ImageProperties::slotItemChanged()
             SLOT(slotFailedHistogramThumbnail(const KURL&)));     
 
     // This is necessary to stop computation because m_image.bits() is currently used by
-    // histogram algorithm.
+    // threaded histogram algorithm.
     m_histogramWidget->stopHistogramComputation();
-    
-    m_image.load(fileURL.path());
-    
-    if ( !m_image.isNull() )
+        
+    if ( m_image.load(fileURL.path()) )
        {
         if(m_image.depth() < 32)                 // we works always with 32bpp.
             m_image = m_image.convertDepth(32);
@@ -436,12 +436,16 @@ void ImageProperties::slotItemChanged()
         m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
         }
     else 
+        {
+        m_image.reset();
         m_histogramWidget->updateData(0L, 0, 0);
+        }
                
     // Setup buttons.
            
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
+    setCursor( KCursor::arrowCursor() );     
 }
 
 
