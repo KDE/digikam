@@ -37,6 +37,7 @@
 #include <qsize.h>
 #include <qpopupmenu.h>
 #include <qrect.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -220,6 +221,7 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem,
     kapp->config()->setGroup("Image Properties Dialog");
     showPage(kapp->config()->readNumEntry("Tab Actived", 0));                              // General tab.
     m_levelExifCB->setCurrentItem(kapp->config()->readNumEntry("Exif Level", 0));          // General Exif level.
+    m_embeddedThumbBox->setChecked(kapp->config()->readBoolEntry("Show Exif Thumb", true));// Exif thumb on.
     m_channelCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Channel", 0));     // Luminosity.
     m_scaleCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Scale", 0));         // Linear.
     m_colorsCB->setCurrentItem(kapp->config()->readNumEntry("Histogram Color", 0));        // Red.
@@ -244,6 +246,7 @@ ImageProperties::~ImageProperties()
     kapp->config()->setGroup("Image Properties Dialog");
     kapp->config()->writeEntry("Tab Actived", activePageIndex());
     kapp->config()->writeEntry("Exif Level", m_levelExifCB->currentItem());
+    kapp->config()->writeEntry("Show Exif Thumb", m_embeddedThumbBox->isChecked());
     kapp->config()->writeEntry("Histogram Channel", m_channelCB->currentItem());
     kapp->config()->writeEntry("Histogram Scale", m_scaleCB->currentItem());
     kapp->config()->writeEntry("Histogram Color", m_colorsCB->currentItem());
@@ -420,7 +423,9 @@ void ImageProperties::slotItemChanged()
             
         QToolTip::add( m_listview, i18n("Select an item to see its description"));
         }
-       
+    
+    slotToogleEmbeddedThumb(m_embeddedThumbBox->isChecked());
+    
     // -------------------------------------------------------------                                         
     // Update Histogram Viewer tab.
     
@@ -855,6 +860,8 @@ void ImageProperties::setupExifViewer(void)
     QFrame *page = addPage( i18n("Exif") );
     QGridLayout* layout = new QGridLayout(page);
     
+    // Setup options header.
+    
     QHBoxLayout *hlay = new QHBoxLayout(layout);
     
     m_mainExifThumb = new QLabel( page );
@@ -871,26 +878,36 @@ void ImageProperties::setupExifViewer(void)
                                          " (default).<p>"
                                          "<b>Extended</b>: display extended information about the photograph.<p>"
                                          "<b>All</b>: display all Exif sections."));  
+                                         
+    m_embeddedThumbBox = new QCheckBox(i18n("Show Exif thumbnail"), page);
+                                                                           
     hlay->addWidget(m_mainExifThumb);
     hlay->addStretch();
     hlay->addWidget(label1);
     hlay->addWidget(m_levelExifCB);
+    hlay->addStretch();
+    hlay->addWidget(m_embeddedThumbBox);
 
     // Setup Exif infos tab.                                         
     
     m_listview = new KExifListView(page, true);
     
-    QGroupBox *box = new QVGroupBox(i18n("Embedded thumbnail"), page);
-    m_exifThumb = new ExifThumbLabel(box, m_view);
+    m_embeddedThumbnail = new QVGroupBox(i18n("Embedded Exif thumbnail"), page);
+    m_exifThumb = new ExifThumbLabel(m_embeddedThumbnail, m_view);
     QWhatsThis::add( m_exifThumb, i18n("<p>You can see here the Exif thumbnail embedded in image.<p>"
                                        "If you press under with right mouse button, you can corrected the "
                                        "Exif orientation tag by a popup menu."));
                                        
     layout->addWidget(m_listview, 1, 0);
-    layout->addWidget(box, 2, 0);
+    layout->addWidget(m_embeddedThumbnail, 2, 0);
+    
+    // Setup slots connections.
     
     connect(m_levelExifCB, SIGNAL(activated(int)),
             this, SLOT(slotLevelExifChanged(int)));
+            
+    connect(m_embeddedThumbBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToogleEmbeddedThumb(bool)));            
 }
 
 void ImageProperties::slotLevelExifChanged(int level)
@@ -931,6 +948,14 @@ void ImageProperties::slotLevelExifChanged(int level)
               }
           break;
        }
+}
+
+void ImageProperties::slotToogleEmbeddedThumb(bool toogle)
+{
+    if (toogle)
+       m_embeddedThumbnail->show();
+    else
+       m_embeddedThumbnail->hide();
 }
 
 //-----------------------------------------------------------------------------------------------------------

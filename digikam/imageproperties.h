@@ -43,6 +43,7 @@ class QTextEdit;
 class QMouseEvent;
 class QPopupMenu;
 class QRect;
+class QCheckBox;
 
 class KSqueezedTextLabel;
 
@@ -134,6 +135,10 @@ private:
     
     QComboBox                    *m_levelExifCB;
     
+    QCheckBox                    *m_embeddedThumbBox; 
+    
+    QGroupBox                    *m_embeddedThumbnail;
+    
     ExifThumbLabel               *m_exifThumb;
 
     KExifData                    *m_ExifData;
@@ -196,6 +201,7 @@ private slots:
     // For Exif viever.
       
     void slotLevelExifChanged(int level);
+    void slotToogleEmbeddedThumb(bool toogle);
     
     // For histogram viever.
     
