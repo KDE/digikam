@@ -64,7 +64,7 @@ private slots:
     void slotBrown();
     void slotColdTone();
     void slotSelenium();
-    void slotPlatinium();
+    void slotPlatinum();
     
     void slotRedEye();
     void slotRatioCrop();

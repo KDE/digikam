@@ -144,9 +144,9 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                this, SLOT(slotColdTone()),
                                actionCollection(), "implugcore_coldtone") );
 
-    m_convertToAction->insert( new KAction(i18n("Platinium"), "platinium", 0,
+    m_convertToAction->insert( new KAction(i18n("Platinum"), "platinum", 0,
                                this, SLOT(slotPlatinium()),
-                               actionCollection(), "implugcore_platinium") );
+                               actionCollection(), "implugcore_platinum") );
                                
     m_convertToAction->insert( new KAction(i18n("Selenium"), "selenium", 0,
                                this, SLOT(slotSelenium()),
@@ -330,7 +330,7 @@ void ImagePlugin_Core::slotSelenium()
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
-void ImagePlugin_Core::slotPlatinium()
+void ImagePlugin_Core::slotPlatinum()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
     ImageEffect_BWSepia::changeTonality(115, 110, 106);
