@@ -40,9 +40,10 @@
 #include "albumpropsedit.h"
 
 AlbumPropsEdit::AlbumPropsEdit(const Digikam::AlbumInfo* albumInfo)
-    : KDialogBase( Plain, QString::null, Ok|Cancel, Ok,
+    : KDialogBase( Plain, QString::null, Help|Ok|Cancel, Ok,
                    0, 0, true, true )
 {
+    setHelp("albumpropsedit.anchor", "digikam");
     albumInfo_ = albumInfo;
     
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),

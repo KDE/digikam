@@ -32,9 +32,10 @@
 ImageDescEdit::ImageDescEdit(const QString& itemName,
                              const QString& itemComments,
                              QWidget *parent)
-    : KDialogBase( Plain, i18n("Image Comments"), Ok|Cancel, Ok,
+    : KDialogBase( Plain, i18n("Image Comments"), Help|Ok|Cancel, Ok,
                    parent, 0, true, true )
 {
+    setHelp("imagedescedit.anchor", "digikam");
     mItemName = itemName;
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
