@@ -50,7 +50,7 @@ public:
     uint* getSelectedData();
 
     void putPreviewData(uint* data);
-    void putOriginalData(uint* data);
+    void putOriginalData(uint* data, int w=-1, int h=-1);
     void putSelectedData(uint* data);
 
     int  previewWidth();

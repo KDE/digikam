@@ -97,7 +97,7 @@ public:
     void setBCG(double brightness, double contrast, double gamma);
     
     uint* getData();
-    void  putData(uint* data);
+    void  putData(uint* data, int w, int h);
     uint* getSelectedData();
     void  putSelectedData(uint* data);
     

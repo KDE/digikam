@@ -952,6 +952,10 @@ void Canvas::slotSelected()
 
 void Canvas::slotRequestUpdate()
 {
+    if (d->autoZoom)
+        updateAutoZoom();
+    d->im->zoom(d->zoom);
+    
     updateContentsSize();
     viewport()->update();
     emit signalChanged(true);    

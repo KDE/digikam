@@ -685,19 +685,37 @@ uint* ImlibInterface::getData()
         return 0;
 }
 
-void ImlibInterface::putData(uint* data)
+void ImlibInterface::putData(uint* data, int w, int h)
 {
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
-
-    DATA32* ptr = imlib_image_get_data();
-
-    memcpy(ptr, data, d->origWidth*d->origHeight*sizeof(DATA32));
     
-    imlib_image_put_back_data(ptr);
+    if (w != -1 && h != -1) {
+    
+        // New image size !
+            
+        Imlib_Image im = imlib_create_image_using_copied_data( w, h, data );
+        
+        imlib_context_set_image(im);
+        d->image = im;
+        imlib_context_set_image(d->image);
+        //imlib_free_image();
+        
+        d->origWidth = imlib_image_get_width();
+        d->origHeight = imlib_image_get_height();
+    }
+    else {
+        
+        // New image data size = original data size !
+        
+        DATA32* ptr = imlib_image_get_data();
 
+        memcpy(ptr, data, d->origWidth*d->origHeight*sizeof(DATA32));
+    
+        imlib_image_put_back_data(ptr);
+    }
+    
     imlib_context_pop();
-
     emit signalRequestUpdate();
 }
 
