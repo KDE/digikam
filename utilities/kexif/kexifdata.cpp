@@ -133,6 +133,7 @@ void KExifData::saveFile(const QString& filename)
 void KExifData::saveExifComment(QString& filename, QString& comment)
 {
     unsigned int count = 0;
+    Q_UINT8 byte;
 
     /* Write to new Jpeg file and replace the EXIF data with the new data on the fly */
     QFile file( filename );
@@ -142,17 +143,30 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
 
     // TODO get byte order from jpeg file!
     stream.setByteOrder(QDataStream::LittleEndian);
+ 
+    stream >> byte;
 
-    Q_UINT16 twobytes = 0x0000;
-    while(twobytes != 0xe1ff) {
-      stream >> twobytes;
-      count++;
-      if(count > 30)
-      {
-        kdDebug() << "No EXIF information found." << endl;
-        file.close();
-        return;
+    // skip un until EXIF marker is found
+    while(!stream.atEnd())
+    {
+      while(byte != 0xff) {
+        stream >> byte;
       }
+      stream >> byte;
+
+      // consume 0xff's used for padding
+      while(byte == 0xff)
+        stream >> byte;
+
+      // stop when we reach APP0 marker or start of image data
+      if(byte == 0xe1 || byte == 0xc0)  // TODO: check more markers!
+        break;
+    }
+
+    if(byte != 0xe1) {
+      kdDebug() << "No EXIF information found." << endl;
+      file.close();
+      return;
     }
 
     Q_UINT16 sectionLen;
@@ -162,10 +176,8 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
     // use counter to find byte offsets
     count = 0;
 
-    // read old EXIF data into buffer
     QMemArray<unsigned char> buf(sectionLen);
 
-    unsigned char byte;
     unsigned int pos;
     Q_UINT32 userCommentOffset = 0;
     Q_UINT32 oldCommentLength = 0;
@@ -200,7 +212,7 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
       count++;
     }
 
-    // write comment into offset position
+    // write character code ASCII into offset position
     stream << 0x49435341;
     stream << 0x00000049;
 
@@ -213,15 +225,15 @@ void KExifData::saveExifComment(QString& filename, QString& comment)
       stream << (Q_UINT8)comment.at(i).latin1();
     }
 
-    // overwrite rest of old comment 
+    // overwrite rest of old comment. Standard suggests \20, but that's not done in practice 
 
     for(unsigned int i=0 ; i < oldCommentLength - comment.length() - 8 ; i++)
     {
       stream << (Q_UINT8)0x00;
     }
 
-    delete buf;
     file.close();
+    file.flush();
 
     kdDebug() << "Wrote file '" << filename.latin1() << "'." << endl;
 
