@@ -582,16 +582,22 @@ void ImageWindow::slotDeleteCurrentItem()
     if (!palbum)
         return;
     
-    QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                    .arg(m_urlCurrent.filename()));
 
-    if (KMessageBox::warningContinueCancel(this,
-                                           warnMsg,
-                                           i18n("Warning"),
-                                           i18n("Delete"))
-        !=  KMessageBox::Continue)
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings->getUseTrash() ||
+        settings->getAskTrashConfirmation())
     {
-        return;
+        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                        .arg(m_urlCurrent.filename()));
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+            !=  KMessageBox::Continue)
+        {
+            return;
+        }
     }
 
     if (!SyncJob::userDelete(m_urlCurrent))

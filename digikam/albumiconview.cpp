@@ -761,45 +761,52 @@ void AlbumIconView::slotDeleteSelectedItems()
         }
     }
 
-    if (urlList.count() <= 0) return;
+    if (urlList.count() <= 0)
+        return;
 
-    QString warnMsg(i18n("About to delete these Image(s)\nAre you sure?"));
-    if (KMessageBox::warningContinueCancelList(this,
-                                               warnMsg,
-                                               nameList,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
-        ==  KMessageBox::Continue)
-    {
-        AlbumManager* man = AlbumManager::instance();
-        AlbumDB* db = man->albumDB();
-
-        if (SyncJob::userDelete(urlList))
+    if (!d->albumSettings->getUseTrash() ||
+        d->albumSettings->getAskTrashConfirmation())
+    {    
+        QString warnMsg(i18n("About to delete these Image(s).\nAre you sure?"));
+        if (KMessageBox::warningContinueCancelList(this,
+                                                   warnMsg,
+                                                   nameList,
+                                                   i18n("Warning"),
+                                                   i18n("Delete"))
+            !=  KMessageBox::Continue)
         {
-            for (KURL::List::const_iterator it = urlList.begin();
-                 it != urlList.end(); ++it)
-            {
-                AlbumIconItem* iconItem = findItem((*it).url());
-                if (!iconItem)
-                    continue;
-
-                PAlbum* palbum =
-                    d->imageLister->findParentAlbum(iconItem->fileItem());
-                if (palbum)
-                {
-                    db->deleteItem(palbum, iconItem->text());
-                }   
-            }
+            return;
         }
-        else
-        {
-            KMessageBox::sorry(0, i18n("Failed to delete files.\n%1")
-                               .arg(SyncJob::lastErrorMsg()));
-        }
-
-        d->imageLister->updateDirectory();
-        updateBanner();
     }
+
+    AlbumManager* man = AlbumManager::instance();
+    AlbumDB* db = man->albumDB();
+
+    if (SyncJob::userDelete(urlList))
+    {
+        for (KURL::List::const_iterator it = urlList.begin();
+             it != urlList.end(); ++it)
+        {
+            AlbumIconItem* iconItem = findItem((*it).url());
+            if (!iconItem)
+                continue;
+
+            PAlbum* palbum =
+                d->imageLister->findParentAlbum(iconItem->fileItem());
+            if (palbum)
+            {
+                db->deleteItem(palbum, iconItem->text());
+            }   
+        }
+    }
+    else
+    {
+        KMessageBox::sorry(0, i18n("Failed to delete files.\n%1")
+                           .arg(SyncJob::lastErrorMsg()));
+    }
+
+    d->imageLister->updateDirectory();
+    updateBanner();
 }
 
 void AlbumIconView::slotFilesModified()

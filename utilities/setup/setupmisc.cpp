@@ -20,7 +20,7 @@
  * ============================================================ */
 
 #include <qlayout.h>
-#include <qhgroupbox.h>
+#include <qvgroupbox.h>
 #include <qcheckbox.h>
 
 #include <klocale.h>
@@ -37,15 +37,31 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    // --------------------------------------------------------
 
-   QHGroupBox *useTrashGroupBox = new QHGroupBox(i18n("Delete Settings"),
+   QGroupBox *trashGroupBox = new QGroupBox(i18n("Delete Settings"),
                                                parent);
-   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash"),
-                                     useTrashGroupBox);
-   layout->addWidget(useTrashGroupBox);
+   trashGroupBox->setColumnLayout(0, Qt::Vertical);
+   trashGroupBox->layout()->setSpacing(5);
+   trashGroupBox->layout()->setMargin(5);
+
+   QGridLayout* lay = new QGridLayout(trashGroupBox->layout());
+   
+   m_useTrashCheck = new QCheckBox(i18n("Deleting items should move them to trash."),
+                                   trashGroupBox);
+   lay->addMultiCellWidget(m_useTrashCheck, 0, 0, 0, 1);
+
+   lay->addItem(new QSpacerItem(20, 10, QSizePolicy::Fixed, QSizePolicy::Fixed),
+                1, 0);
+   
+   m_trashConfirmationCheck = new QCheckBox(i18n("Ask for confirmation before "
+                                                 "moving items to trash."),
+                                            trashGroupBox);
+   lay->addWidget(m_trashConfirmationCheck, 1, 1);
+
+   layout->addWidget(trashGroupBox);
 
    // --------------------------------------------------------
 
-   QHGroupBox *splashGroupBox = new QHGroupBox(i18n("Splash Screen Settings"),
+   QVGroupBox *splashGroupBox = new QVGroupBox(i18n("Splash Screen Settings"),
                                                parent);
    m_showSplashCheck = new QCheckBox(i18n("Show Splash Screen at startup"),
                                      splashGroupBox);
@@ -55,6 +71,9 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    layout->addStretch();
 
+   connect(m_useTrashCheck, SIGNAL(toggled(bool)),
+           SLOT(slotUseTrashChecked(bool)));
+   
    readSettings();   
 }
 
@@ -69,6 +88,7 @@ void SetupMisc::applySettings()
 
     settings->setShowSplashScreen(m_showSplashCheck->isChecked());
     settings->setUseTrash(m_useTrashCheck->isChecked());
+    settings->setAskTrashConfirmation(m_trashConfirmationCheck->isChecked());
                                   
     settings->saveSettings();
 }
@@ -79,4 +99,14 @@ void SetupMisc::readSettings()
 
     m_showSplashCheck->setChecked(settings->getShowSplashScreen());
     m_useTrashCheck->setChecked(settings->getUseTrash());
+    m_trashConfirmationCheck->setChecked(settings->getAskTrashConfirmation());
+
+    slotUseTrashChecked(true);
 }
+
+void SetupMisc::slotUseTrashChecked(bool)
+{
+    m_trashConfirmationCheck->setEnabled(m_useTrashCheck->isChecked());
+}
+
+#include "setupmisc.moc"
