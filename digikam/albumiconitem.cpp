@@ -368,41 +368,42 @@ void AlbumIconItem::updateExtraText()
     }
     
     if ( settings->getIconShowResolution() )
-
+       {
        // get image dimensions from JPEG meta info if possible
-       if(metaInfo_->isValid() && metaInfo_->mimeType() == "image/jpeg" && metaInfo_->containsGroup("Jpeg EXIF Data")) {
+       
+       if ( metaInfo_->isValid() &&
+            metaInfo_->mimeType() == "image/jpeg" &&
+            metaInfo_->containsGroup("Jpeg EXIF Data")) 
+          {
           QSize jpegDimensions =  metaInfo_->group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-          
-          if (!firstLine)
-             extraText += "\n";
-          else
-             firstLine = false;
-
-          extraText += i18n("%1x%2 pixels").arg( jpegDimensions.width() ).arg( jpegDimensions.height() );
-       } else {
-          Imlib_Image imlib2_im =0;
+       
+          imageWidth_ = jpegDimensions.width();
+          imageHeight_ = jpegDimensions.height();
+          }
+       else   // Else using imlib2 API.
+          {
+          Imlib_Image imlib2_im = 0;
           imlib2_im = imlib_load_image(fileItem_->url().path().latin1());
 
           if (imlib2_im)
-          {
+             {
              imlib_context_set_image(imlib2_im);
              imageWidth_= imlib_image_get_width();
              imageHeight_= imlib_image_get_height();
              imlib_free_image();
+             }
           }
-
-          if (imageWidth_ != 0 && imageHeight_ != 0) 
+       
+       if (imageWidth_ != 0 && imageHeight_ != 0) 
           {
-             if (!firstLine)
-                extraText += "\n";
-             else
-                firstLine = false;
+          if (!firstLine) extraText += "\n";
+          else firstLine = false;
 
-             extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
-                .arg(QString::number(imageHeight_));
+          extraText += i18n("%1x%2 pixels").arg(QString::number(imageWidth_))
+                                           .arg(QString::number(imageHeight_));
           }
        }
-       
+    
     extraText_ = extraText;
 }
 
