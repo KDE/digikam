@@ -43,11 +43,22 @@ class Setup : public KDialogBase
 
 public:
 
-    Setup(QWidget* parent=0, const char* name=0);
+    enum Page {
+        General = 0,
+        Exif,
+        Collections,
+        Mime,
+        Editor,
+        Plugins,
+        Camera
+    };
+    
+    Setup(QWidget* parent=0, const char* name=0,
+          Page page=General);
     ~Setup();
 
     SetupPlugins* pluginsPage_;
-    
+
 private:
 
     QFrame           *page_general;

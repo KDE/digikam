@@ -41,6 +41,7 @@
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <ktip.h>
+#include <kpopupmenu.h>
 
 // Includes files for plugins support.
 
@@ -91,8 +92,10 @@ DigikamApp::DigikamApp() : KMainWindow( 0, "Digikam" )
     applyMainWindowSettings (m_config);
 
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
-    mCameraList->load();
 
+    // Load Cameras
+    loadCameras();
+    
     // Load KIPI Plugins.
     loadPlugins();
 
@@ -479,6 +482,21 @@ void DigikamApp::slotSetup()
     m_setup->show();
 }
 
+void DigikamApp::slotSetupCamera()
+{
+    m_setup = new Setup(this, 0, Setup::Camera);
+    
+    connect(m_setup, SIGNAL(okClicked()),
+            this,  SLOT(slotSetupChanged()));
+    
+    // For to show the number of KIPI plugins in the setup dialog.
+
+    KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
+    m_setup->pluginsPage_->initPlugins((int)list.count());
+    
+    m_setup->show();
+}
+
 void DigikamApp::slotSetupChanged()
 {
     m_setup->pluginsPage_->applyPlugins();
@@ -639,6 +657,16 @@ void DigikamApp::slotKipiPluginPlug()
     plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
     plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
     plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
+}
+
+void DigikamApp::loadCameras()
+{
+    mCameraList->load();
+    mCameraMenuAction->popupMenu()->insertSeparator();
+    mCameraMenuAction->insert(new KAction(i18n("Add Camera..."), 0,
+                                          this, SLOT(slotSetupCamera()),
+                                          actionCollection(),
+                                          "camera_add"));
 }
 
 void DigikamApp::populateThemes()

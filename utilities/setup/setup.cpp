@@ -43,7 +43,7 @@
 #include "setup.h"
 
 
-Setup::Setup(QWidget* parent, const char* name)
+Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                    name, true, true )
 {
@@ -81,6 +81,8 @@ Setup::Setup(QWidget* parent, const char* name)
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
+    showPage((int) page);        
+    
     show();
 }
 

@@ -83,6 +83,7 @@ private:
     void setupView();
     void setupActions();
     void loadPlugins();
+    void loadCameras();
     void populateThemes();
 
 protected:
@@ -166,6 +167,7 @@ private slots:
     void slotShowKipiHelp();
     
     void slotSetup();
+    void slotSetupCamera();
     void slotSetupChanged();
 
     void slotKipiPluginPlug();
