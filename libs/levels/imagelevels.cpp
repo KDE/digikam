@@ -45,7 +45,8 @@ ImageLevels::ImageLevels()
 { 
     m_lut    = new _Lut;
     m_levels = new _Levels;
-        
+    
+    memset(m_levels, 0, sizeof(struct _Levels));    
     m_lut->luts      = NULL;
     m_lut->nchannels = 0;
 
@@ -61,7 +62,17 @@ ImageLevels::ImageLevels()
 ImageLevels::~ImageLevels()
 { 
     if (m_lut)
+       {
+       if (m_lut->luts)
+          {
+          for (int i = 0 ; i < m_lut->nchannels ; ++i)
+              delete [] m_lut->luts[i];
+
+          delete [] m_lut->luts;
+          }
+       
        delete m_lut;
+       }
     
     if (m_levels)
        delete m_levels;
@@ -194,7 +205,7 @@ void ImageLevels::levelsAdjustByColors(int channel, uchar *black, uchar *gray, u
 
        // Calculate lightness value.
        
-       lightness = GIMP_RGB_INTENSITY (gray[0], gray[1], gray[2]);  // Renchi, why used 0, 1, 2 index.
+       lightness = (uchar)GIMP_RGB_INTENSITY (gray[0], gray[1], gray[2]);  
 
        input = levelsInputFromColor(channel, gray);
 
@@ -339,14 +350,14 @@ void ImageLevels::levelsLutSetup(int nchannels)
     
     for (i = 0 ; i < m_lut->nchannels ; ++i)
        {
-       m_lut->luts[i]      = new uchar[256];
+       m_lut->luts[i] = new uchar[256];
 
        for (v = 0 ; v < 256 ; ++v)
           {
           // to add gamma correction use func(v ^ g) ^ 1/g instead. 
           val = 255.0 * levelsLutFunc( m_lut->nchannels, i, v/255.0) + 0.5;
           
-          m_lut->luts[i][v] = CLAMP (val, 0, 255);
+          m_lut->luts[i][v] = (uchar)CLAMP (val, 0, 255);
           }
        }
 }

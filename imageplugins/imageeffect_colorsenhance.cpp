@@ -510,9 +510,6 @@ void ImageEffect_ColorsEnhance::autoLevelsCorrectionImage()
     // Initialize an auto levels correction of the histogram.
     levels->levelsAuto(histogram);
 
-    // Recalculate the transfer arrays.
-    levels->levelsCalculateTransfers();
-
     // Calculate the LUT to apply on the image.
     levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
   

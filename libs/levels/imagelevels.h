@@ -61,7 +61,8 @@ struct _Levels
     int    low_output[5];
     int    high_output[5];
     
-    uchar  input[5][256]; // this is used only by the gui (Renchi, what's that ???).
+    uchar  input[5][256]; // This is used only by the gui : rebuild the color gradient 
+                          // widget colors in according with the new input levels.
 };
 
 struct _Lut
