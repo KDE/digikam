@@ -1,4 +1,5 @@
-SUBDIRS = adjustlevels solarize despeckle oilpaint emboss charcoal unsharp raindrop filmgrain freerotation
+SUBDIRS = adjustlevels solarize despeckle oilpaint emboss charcoal unsharp \
+          raindrop filmgrain freerotation 
 
 AUTOMAKE_OPTIONS = foreign 
 
