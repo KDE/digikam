@@ -89,6 +89,11 @@ int main(int argc, char *argv[])
                           "kde at jokele.de",
                           0);
 
+    aboutData.addAuthor ( "Ralf Holzer",
+                          I18N_NOOP("Developer"),
+                          "kde at ralfhoelzer.com",
+                          0);
+    
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
                           "todd at theshoemakers.net",
@@ -157,11 +162,6 @@ int main(int argc, char *argv[])
     aboutData.addCredit ( "Richard Groult",
                           I18N_NOOP("Plugin contributor and beta tester"),
                           "Richard dot Groult at jalix.org",
-                          0);
-
-    aboutData.addCredit ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "ralf at well.com",
                           0);
                                                     
     aboutData.addCredit ( "Richard Taylor",
