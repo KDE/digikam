@@ -63,7 +63,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     collectionsPage_ = new SetupCollections(page_collections);
 
     page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types"),
-                        BarIcon("mime", KIcon::SizeMedium));
+                        BarIcon("filetypes", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
     page_editor = addPage(i18n("Image Editor"), i18n("Image Editor"),
