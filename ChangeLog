@@ -5,6 +5,8 @@ v0.6.3-beta1
           images resolution of Album items (using imlib2).
         * <Gilles Caulier> Added Exif actions settings tabs in Settings dialog.
         * <Gilles Caulier> Added a new option in .configure for KIPI support.
+        * <Ralf Holzer> Added rotation of thumbnails according to EXIF Orientation 
+        * <Ralf Holzer> Added saving of EXIF orientation on flip/rotate in imageviewer
         * <Ralf Holzer> Added saving of comments in EXIF UserComment field 
           and in JPEG COM field
         * <Gilles Caulier> Added Albums Collections and plugins management 
