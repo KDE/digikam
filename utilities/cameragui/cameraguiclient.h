@@ -47,6 +47,10 @@ signals:
     void signalCancel();
     void signalExit();
 
+    void signalSelectAll();
+    void signalSelectNone();
+    void signalSelectInvert();
+
 private slots:
 
     void slotHelp();

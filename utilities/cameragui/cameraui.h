@@ -53,6 +53,10 @@ private slots:
 
     void slotDownloadSelected();
     void slotDownloadAll();
+
+    void slotSelectAll();
+    void slotSelectNone();
+    void slotSelectInvert();
 };
 
 #endif /* CAMERAUI_H */

@@ -133,6 +133,13 @@ CameraUI::CameraUI(QWidget* parent, const QString& model,
     connect(d->controller, SIGNAL(signalBusy(bool)),
             SLOT(slotBusy(bool)));
 
+    connect(d->guiClient, SIGNAL(signalSelectAll()),
+            this, SLOT(slotSelectAll()));
+    connect(d->guiClient, SIGNAL(signalSelectNone()),
+            this, SLOT(slotSelectNone()));
+    connect(d->guiClient, SIGNAL(signalSelectInvert()),
+            this, SLOT(slotSelectInvert()));
+    
     connect(d->view, SIGNAL(signalSelectionChanged()),
             SLOT(slotSelectionChanged()));
     
@@ -264,6 +271,21 @@ void CameraUI::slotProgressHide()
 {
     d->progressBar->setProgress(0);
     d->progressBar->hide();
+}
+
+void CameraUI::slotSelectAll()
+{
+    d->view->selectAll();    
+}
+
+void CameraUI::slotSelectNone()
+{
+    d->view->clearSelection();    
+}
+
+void CameraUI::slotSelectInvert()
+{
+    d->view->invertSelection();    
 }
 
 void CameraUI::loadInitialSize()

@@ -85,8 +85,22 @@ CameraGUIClient::CameraGUIClient(QWidget *parent)
                                  actionCollection(),
                                  "cancel");
 
+    new KAction(i18n("Select All"), 0, CTRL+Key_A,
+                this, SIGNAL(signalSelectAll()),
+                actionCollection(), "select_all");
+
+    new KAction(i18n("Select None"), 0, CTRL+Key_U,
+                this, SIGNAL(signalSelectNone()),
+                actionCollection(), "select_none");
+
+    new KAction(i18n("Invert Selection"), 0, CTRL+Key_Asterisk,
+                this, SIGNAL(signalSelectInvert()),
+                actionCollection(), "select_invert");
+    
     KStdAction::quit(this, SIGNAL(signalExit()), 
                      actionCollection(), "exit");
+
+    
     
     KStdAction::help(this, SLOT(slotHelp()), actionCollection(),
                      "help");
@@ -107,6 +121,10 @@ QStringList CameraGUIClient::guiDefinition() const
     guiDef.append("MenuBar/Menu/&Camera/ /Separator/ / ");
     guiDef.append("MenuBar/Menu/&Camera/ /Action/exit/ ");
     
+    guiDef.append("MenuBar/Menu/&View/ /Action/select_all/ ");
+    guiDef.append("MenuBar/Menu/&View/ /Action/select_none/ ");
+    guiDef.append("MenuBar/Menu/&View/ /Action/select_invert/ ");
+
     guiDef.append("MenuBar/Menu/&Help/ /Action/help/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/aboutapp/ ");
     guiDef.append("MenuBar/Menu/&Help/ /Action/aboutkde/ ");
@@ -118,8 +136,8 @@ QStringList CameraGUIClient::guiDefinition() const
 
     // enable i18n
 
-    i18n( "&File" );
     i18n( "&Camera" );
+    i18n( "&View" );
     i18n( "&Help" );
     
     return guiDef;
