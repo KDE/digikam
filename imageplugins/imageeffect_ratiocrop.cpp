@@ -57,13 +57,14 @@
 
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                      : KDialogBase(Plain, i18n("Aspect Ratio Crop"),
-                                   Help|User1|Ok|Cancel, Ok,
+                                   Help|User1|User2|Ok|Cancel, Ok,
                                    parent, 0, true, true, 
-                                   i18n("&Reset Values")),
+                                   i18n("&Reset Values"), i18n("&Max. Aspect")),
                        m_parent(parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );     
+    setButtonWhatsThis ( User1, i18n("<p>Reset selection area to the image center.") );     
+    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size accordinly with the current ratio.") );     
     
     // -------------------------------------------------------------
         
@@ -255,6 +256,12 @@ void ImageEffect_RatioCrop::writeSettings(void)
 void ImageEffect_RatioCrop::slotUser1()
 {
     m_imageSelectionWidget->resetSelection();
+} 
+
+
+void ImageEffect_RatioCrop::slotUser2()
+{
+    m_imageSelectionWidget->maxAspectSelection();
 } 
 
 void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)

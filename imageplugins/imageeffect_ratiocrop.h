@@ -74,7 +74,9 @@ private:
 private slots:
 
     void slotUser1();
+    void slotUser2();
     void slotOk();
+    
     void slotXChanged(int x);
     void slotYChanged(int y);
     void slotWidthChanged(int w);

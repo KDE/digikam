@@ -115,6 +115,38 @@ void ImageSelectionWidget::resetSelection(void)
     setCenterSelection();
 }
 
+void ImageSelectionWidget::maxAspectSelection(void)
+{
+    m_localRegionSelection.setX(0);
+    m_localRegionSelection.setY(0);
+    
+    if ( !m_currentOrientation )   // Landscape
+       {
+       m_localRegionSelection.setWidth(m_w);
+       applyAspectRatio(false, false);
+       
+       if ( m_localRegionSelection.height() > m_h )
+          {
+          m_localRegionSelection.setHeight(m_h);
+          applyAspectRatio(true, false);
+          }
+       }
+    else                          // Portrait
+       {
+       m_localRegionSelection.setHeight(m_h);
+       applyAspectRatio(true, false);
+       
+       if ( m_localRegionSelection.width() > m_w )
+          {
+          m_localRegionSelection.setWidth(m_w);
+          applyAspectRatio(false, false);
+          }
+       }
+
+    updatePixmap();
+    repaint(false);
+}
+
 void ImageSelectionWidget::slotRuleThirdLines(bool ruleThirdLines)
 {
     m_ruleThirdLines = ruleThirdLines;

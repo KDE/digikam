@@ -76,6 +76,7 @@ public:
     QRect getRegionSelection(void);
     
     void  resetSelection(void);
+    void  maxAspectSelection(void);
 
 public slots:
 
