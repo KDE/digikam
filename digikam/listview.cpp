@@ -284,18 +284,20 @@ void ListView::drawArrow(QPainter* p, const QRect& r, bool open,
 
     QPointArray a;
 
-    if (open) 
-        a.setPoints( 7, -4,-2, 2,-2, -3,-1, 1,-1, -2,0, 0,0, -1,1 );
-    else 
-        a.setPoints( 7, -2,-3, -2,3, -1,-2, -1,2, 0,-1, 0,1, 1,0 );
-
+    if (open)
+        a.setPoints( 9, -4,-3, 4,-3, -3,-2, 3,-2,
+                     -2,-1, 2,-1, -1,0, 1,0, 0,1 );
+    else
+        a.setPoints( 9, -3,-4, -3,4, -2,-3, -2,3,
+                     -1,-2, -1,2, 0,-1, 0,1, 1,0 );
+    
     a.translate( r.x() + r.width() / 2, r.y() + r.height() / 2 );
     if (selected)
         p->setPen( colorGroup().highlightedText() );
     else
         p->setPen( colorGroup().buttonText() );
-    p->drawLineSegments( a, 0, 3 );
-    p->drawPoint( a[6] );
+    p->drawLineSegments( a, 0, 4 );
+    p->drawPoint( a[8] );
 
     p->restore();
 }
