@@ -77,6 +77,7 @@ private:
     bool                 m_rotatedOrFlipped;
     
     bool                 m_fullScreen;
+    bool                 m_fullScreenHideToolBar;
     bool                 m_allowSaving;
     
     int                  m_JPEGCompression;

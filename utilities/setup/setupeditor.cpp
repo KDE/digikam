@@ -23,9 +23,12 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
+#include <qhbox.h>
+#include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
+#include <qlayout.h>
 
 // KDE includes.
 
@@ -51,10 +54,8 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QGroupBox *savingOptionsGroup = new QGroupBox(1,
-                                                 Qt::Horizontal, 
-                                                 i18n("Saving images options"),
-                                                 parent);
+   QVGroupBox *savingOptionsGroup = new QVGroupBox(i18n("Saving images options"),
+                                                   parent);
 
    m_JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
    m_JPEGcompression->setRange(1, 100, 1, true );
@@ -71,25 +72,28 @@ SetupEditor::SetupEditor(QWidget* parent )
    
    // --------------------------------------------------------
    
-   QGroupBox *interfaceOptionsGroup = new QGroupBox(2,
-                                                    Qt::Horizontal, 
-                                                    i18n("Interface options"),
-                                                    parent);
+   QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface options"),
+                                                      parent);
+
+   QHBox* colorBox = new QHBox(interfaceOptionsGroup);
    
-   QLabel *backgroundColorlabel = new QLabel( i18n("Background color:"), interfaceOptionsGroup);
-   m_backgroundColor = new KColorButton(interfaceOptionsGroup);
+   QLabel *backgroundColorlabel = new QLabel( i18n("Background color:"),
+                                             colorBox );
+
+   m_backgroundColor = new KColorButton(colorBox);
    QWhatsThis::add( m_backgroundColor, i18n("<p>Select here the background color to use "
                                             "for image editor area.") );
    backgroundColorlabel->setBuddy( m_backgroundColor );
+
+   m_hideToolBar = new QCheckBox(i18n("Hide toolbar in fullscreen mode"),
+                                 interfaceOptionsGroup);
    
    layout->addWidget(interfaceOptionsGroup);
 
    // --------------------------------------------------------
    
-   QGroupBox *imagePluginsListGroup = new QGroupBox(1,
-                                                    Qt::Horizontal, 
-                                                    i18n("Image plugins list"),
-                                                    parent);
+   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image plugins list"),
+                                                      parent);
    
    m_pluginsNumber = new QLabel(imagePluginsListGroup);
 
@@ -185,6 +189,7 @@ void SetupEditor::applySettings()
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
     config->writeEntry("ImagePlugins List", getImagePluginsListEnable());            
+    config->writeEntry("FullScreen Hide ToolBar", m_hideToolBar->isChecked());
     config->sync();
 }
 
@@ -197,6 +202,7 @@ void SetupEditor::readSettings()
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
+    m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
     
     delete Black;
 }

@@ -87,8 +87,9 @@ ImageWindow::ImageWindow()
     m_instance           = this;
     m_rotatedOrFlipped   = false;
     m_setExifOrientation = false;
-    m_fullScreen         = false;
     m_allowSaving        = true;
+    m_fullScreen            = false;
+    m_fullScreenHideToolBar = false;
 
     // -- build the gui -------------------------------------
     
@@ -277,11 +278,13 @@ void ImageWindow::readSettings()
     height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
     m_fullScreen = config->readBoolEntry("FullScreen", false);
+    m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
+                                                    false);
     
     // Background color.
-    QColor *Black = new QColor(Qt::black);
-    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor", Black);
-    delete Black;
+    QColor Black(Qt::black);
+    m_canvas->m_backgroundColor = config->readColorEntry("BackgroundColor",
+                                                         &Black);
 
     // JPEG compression value.
     m_JPEGCompression = config->readNumEntry("JPEGCompression", 75);
@@ -873,7 +876,10 @@ void ImageWindow::slotToggleFullScreen()
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            m_guiClient->m_fullScreenAction->unplug(toolBar);
+            if (m_guiClient->m_fullScreenAction->isPlugged(toolBar))
+                m_guiClient->m_fullScreenAction->unplug(toolBar);
+            if (toolBar->isHidden())
+                toolBar->show();
         }
 
         m_fullScreen = false;
@@ -888,7 +894,10 @@ void ImageWindow::slotToggleFullScreen()
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            m_guiClient->m_fullScreenAction->plug(toolBar);
+            if (m_fullScreenHideToolBar)
+                toolBar->hide();
+            else
+                m_guiClient->m_fullScreenAction->plug(toolBar);
         }
 
         showFullScreen();

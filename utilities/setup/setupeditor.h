@@ -28,6 +28,7 @@
 
 class QLabel;
 class QStringList;
+class QCheckBox;
 
 class KColorButton;
 class KIntNumInput;
@@ -51,11 +52,10 @@ private:
     QStringList   m_enableImagePluginList;
     
     KColorButton *m_backgroundColor;
-    
     KIntNumInput *m_JPEGcompression;
-    
+    QCheckBox    *m_hideToolBar;
+
     QLabel       *m_pluginsNumber;
-    
     KListView    *m_pluginList;
     
     void readSettings();
