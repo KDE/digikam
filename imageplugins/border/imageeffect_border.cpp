@@ -733,8 +733,8 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     p.end();
     
     // First line around the pattern tile.
-    QImage tmp2 = patternPixmap.convertToImage().scale( src.width() + borderWidth*2, 
-                                                        src.height() + borderWidth*2 );
+    QImage tmp2 = patternPixmap.convertToImage().smoothScale( src.width() + borderWidth*2, 
+                                                              src.height() + borderWidth*2 );
     
     solid(tmp2, dest, firstColor, firstWidth);                                                 
     
