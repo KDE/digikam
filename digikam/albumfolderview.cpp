@@ -36,6 +36,7 @@
 #include <qpoint.h>
 #include <qfile.h>
 #include <qdatastream.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -116,6 +117,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
+    connect(&openAlbumTimer_, SIGNAL(timeout()),
+            this, SLOT(slotOpenAlbum()));
+            
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
 
@@ -1249,7 +1253,9 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
             return;
         }
     }
-
+    
+    openAlbumTimer_.start(750, true);
+    
     event->accept();
     if (dropTarget_ == newDropTarget) {
         return;
@@ -1269,6 +1275,8 @@ void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
 
 void AlbumFolderView::contentsDropEvent(QDropEvent* event)
 {
+    openAlbumTimer_.stop();
+    
     if (!dropTarget_||  dropTarget_->isGroupItem())
         return;
 
@@ -1503,6 +1511,14 @@ void AlbumFolderView::clearDropTarget()
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
     dropTarget_ = 0;    
+    openAlbumTimer_.stop();
+}
+
+void AlbumFolderView::slotOpenAlbum()
+{
+    openAlbumTimer_.stop();
+    if(dropTarget_ && !dropTarget_->isOpen())
+        dropTarget_->setOpen(true);
 }
 
 void AlbumFolderView::slotGotThumbnail(const KFileItem* fileItem,

@@ -32,6 +32,7 @@
 #include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qmap.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -139,9 +140,11 @@ private:
 
     QPoint                             dragStartPos_;
     ListItem                           *dragItem_;
+    QTimer                             openAlbumTimer_;    
+    
     QMap<int,int>                      stateAlbumOpen_;
     int                                stateAlbumSel_;
-    
+
 signals:
 
     void signalTagsAssigned();
@@ -159,7 +162,9 @@ private slots:
     void slotAlbumsCleared();
     void slotAllAlbumsLoaded();
     void slotAlbumImportResult(KIO::Job* job);
-    
+
+    void slotOpenAlbum();
+        
     void slotGotThumbnail(const KFileItem* fileItem, const QPixmap& thumbnail,
                           const KFileMetaInfo*);
 
