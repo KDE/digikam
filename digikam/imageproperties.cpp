@@ -72,7 +72,7 @@
 
 ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
                : KDialogBase(Tabbed, i18n("Image Properties and Meta-Data"), 
-                             Help|User1|User2|Stretch|Ok|Cancel,
+                             Help|User1|User2|Stretch|Close,
                              Ok, view, 0, true, true, 
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
@@ -108,7 +108,10 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
        m_image.setAlphaBuffer(true);
        setupHistogramViewer((uint *)m_image.bits(), m_image.width(), m_image.height(), fileURL);
        }
-    
+
+    enableButton(User1, m_currItem->nextItem() != 0);
+    enableButton(User2, m_currItem->prevItem() != 0);
+       
     parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
 
@@ -136,29 +139,29 @@ ImageProperties::~ImageProperties()
 
 void ImageProperties::slotUser1()
 {
-/*    if (!m_currItem)
+    if (!m_currItem)
         return;
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-    slotItemChanged();*/
+    slotItemChanged();
 }
 
 void ImageProperties::slotUser2()
 {
-    /*if (!m_currItem)
+    if (!m_currItem)
         return;
     
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
-    slotItemChanged();*/
+    slotItemChanged();
 }
 
 void ImageProperties::slotItemChanged()
 {
-/*    if (!m_currItem)
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    
+    if (!m_currItem)
         return;
 
-    m_modified = false;
-    
     if (!m_thumbJob.isNull())
     {
         m_thumbJob->kill();
@@ -170,8 +173,47 @@ void ImageProperties::slotItemChanged()
     }
 
     KURL fileURL(m_currItem->fileItem()->url());    
+ 
+    // Update Exif Viewer tab.
+       
+    m_listview->clear();
     
-    m_thumbJob = new ThumbnailJob(fileURL, 256);
+    if (mExifData)
+        delete mExifData;
+    
+    mExifData = new KExifData;
+    
+    if (mExifData->readFromFile(fileURL.path()))
+        {
+        QPtrList<KExifIfd> ifdList(mExifData->ifdList());
+    
+        for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
+            {
+            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), ifd->getName());
+            m_listview->addItems(ifd->entryList(), item );
+            }
+        
+        connect(m_listview, SIGNAL(signal_itemDescription(const QString&)),
+                m_textEdit, SLOT(setText(const QString&)));
+
+        // Exif embedded thumbnails listview entry creation.
+    
+        QImage thumbnail(mExifData->getThumbnail());
+        
+        if (!thumbnail.isNull()) 
+            {
+            KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), i18n("Thumbnail"));
+            KExifListViewItem *item2 = new KExifListViewItem(item, m_listview->lastItem(), "");
+            item2->setPixmap(1, QPixmap(thumbnail));
+            }        
+    
+        m_textEdit->setText(i18n("Select an item to see its description"));
+        }
+       
+    // Update Histogram Viewer tab.
+    
+    m_thumbJob = new ThumbnailJob(fileURL, 48);
+    
     connect(m_thumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
@@ -180,7 +222,18 @@ void ImageProperties::slotItemChanged()
                                   const QPixmap&,
                                   const KFileMetaInfo*)));
     
-    PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
+    m_image.load(fileURL.path());
+    
+    if (m_image.isNull() == false)
+       {
+       if(m_image.depth() < 32)                 // we works always with 32bpp.
+          m_image = m_image.convertDepth(32);
+       
+       m_image.setAlphaBuffer(true);
+       m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+       }
+        
+    /*PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
     if (!album)
     {
         kdWarning() << "Failed to find parent album for"
@@ -193,28 +246,11 @@ void ImageProperties::slotItemChanged()
 
     m_nameLabel->setText(fileURL.fileName());
     m_thumbLabel->setPixmap(QPixmap());
-    m_commentsEdit->setText(db->getItemCaption(album, fileURL.fileName()));
-
-    IntList tagIDs = db->getItemTagIDs(album, fileURL.fileName());
-    
-    QListViewItemIterator it( m_tagsView);
-    while (it.current())
-    {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
-        
-        if (tItem)
-        {
-            if (tagIDs.contains(tItem->m_album->getID()))
-                tItem->setOn(true);
-            else
-                tItem->setOn(false);
-        }
-        ++it;
-    }
+    m_commentsEdit->setText(db->getItemCaption(album, fileURL.fileName()));*/
 
     enableButton(User1, m_currItem->nextItem() != 0);
-    enableButton(User2, m_currItem->prevItem() != 0);*/
+    enableButton(User2, m_currItem->prevItem() != 0);
+    parentWidget()->setCursor( KCursor::arrowCursor() );       
 }
 
 
@@ -547,30 +583,29 @@ void ImageProperties::slotGotThumbnail(const KURL&, const QPixmap& pix,
 
 void ImageProperties::setupExifViewer(void)
 {
-    QPtrList<KExifIfd> ifdList(mExifData->ifdList());
-
     QFrame *page = addPage( i18n("Exif") );
     QGridLayout* layout = new QGridLayout(page);
-    KExifListView* listview = new KExifListView(page, true);
+    m_listview = new KExifListView(page, true);
     
     QGroupBox *textBox = new QGroupBox(1, Qt::Vertical, page);
-    QTextEdit *textEdit = new QTextEdit(textBox);
-    textEdit->setReadOnly(true);
-    textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_textEdit = new QTextEdit(textBox);
+    m_textEdit->setReadOnly(true);
+    m_textEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
     textBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
-    textEdit->setText(i18n("Select an item to see its description"));
     
-    layout->addWidget(listview, 0, 0);
+    layout->addWidget(m_listview, 0, 0);
     layout->addWidget(textBox, 1, 0);
     
+    QPtrList<KExifIfd> ifdList(mExifData->ifdList());
+
     for (KExifIfd* ifd = ifdList.first(); ifd; ifd = ifdList.next())
         {
-        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), ifd->getName());
-        listview->addItems(ifd->entryList(), item );
+        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), ifd->getName());
+        m_listview->addItems(ifd->entryList(), item );
         }
         
-    connect(listview, SIGNAL(signal_itemDescription(const QString&)),
-            textEdit, SLOT(setText(const QString&)));
+    connect(m_listview, SIGNAL(signal_itemDescription(const QString&)),
+            m_textEdit, SLOT(setText(const QString&)));
 
     // Exif embedded thumbnails listview entry creation.
     
@@ -578,10 +613,12 @@ void ImageProperties::setupExifViewer(void)
         
     if (!thumbnail.isNull()) 
         {
-        KExifListViewItem *item = new KExifListViewItem(listview, listview->lastItem(), i18n("Thumbnail"));
-        KExifListViewItem *item2 = new KExifListViewItem(item, listview->lastItem(), "");
+        KExifListViewItem *item = new KExifListViewItem(m_listview, m_listview->lastItem(), i18n("Thumbnail"));
+        KExifListViewItem *item2 = new KExifListViewItem(item, m_listview->lastItem(), "");
         item2->setPixmap(1, QPixmap(thumbnail));
         }        
+    
+    m_textEdit->setText(i18n("Select an item to see its description"));
 }
 
 

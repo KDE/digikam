@@ -67,6 +67,10 @@ public:
     
     ~HistogramWidget();
 
+    // Update histogram data method.
+    void updateData(uint *i_data, uint i_w, uint i_h, 
+                    uint *s_data=0, uint s_w=0, uint s_h=0);
+    
     int   m_channelType;     // Channel type to draw.
     int   m_scaleType;       // Scale to use for drawing.
     int   m_colorType;       // Color to use for drawing in All Colors Channel mode.

@@ -40,11 +40,13 @@
 class QComboBox;
 class QSpinBox;
 class QLabel;
+class QTextEdit;
 
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumLister;
 
+class KExifListView;
 class KExifData;
 
 namespace Digikam
@@ -79,8 +81,10 @@ private:
 
     // For Exif viever.
     
+    QTextEdit     *m_textEdit;
     KExifData     *mExifData;
-
+    KExifListView *m_listview;
+    
     void setupExifViewer(void);
     
     // For histogram viever.

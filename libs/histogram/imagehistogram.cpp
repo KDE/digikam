@@ -72,7 +72,10 @@ bool ImageHistogram::calcHistogramValues()
        }
     
     memset(m_histogram, 0, 256*sizeof(struct double_packet));
-    
+
+    if (!m_imageData && !m_imageWidth && !m_imageHeight)
+       return false;
+          
     // Form histogram (RAW DATA32 ARGB extraction method).
 
     for (i = 0 ; i < (m_imageHeight*m_imageWidth) ; ++i)

@@ -106,6 +106,29 @@ HistogramWidget::~HistogramWidget()
        delete m_selectionHistogram;
 }
 
+
+void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h, 
+                                 uint *s_data, uint s_w, uint s_h)
+{
+    // Remove form memory old histogram data.
+    if (m_imageHistogram)
+       delete m_imageHistogram;
+
+    if (m_selectionHistogram)
+       delete m_selectionHistogram;
+    
+    // Calc new histogram data   
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h);
+    
+    // Repaint histogram 
+    repaint(false);
+    
+    // Send signal to refresh information if necessary.
+    emit signalMouseReleased( m_xmax );
+}
+
+
 // This method is inspired of Gimp2.0 
 // app/widgets/gimphistogramview.c::gimp_histogram_view_expose 
 
