@@ -273,7 +273,6 @@ bool ThumbnailJob::statThumbnail()
         
     if (!ThumbDB::instance()->hasThumb(d->curr_url.path(1)))
     {
-        QImage thumb(file);
         ThumbDB::instance()->putThumb(d->curr_url.path(1), thumb);
     }
     
