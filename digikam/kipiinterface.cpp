@@ -323,9 +323,12 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     }
 
     // else load the directory and return the items found
+
+    // TODO: use a regexp to catch mix of upper-lower cases
+    QString filter = imgFilter_.lower() + " " + imgFilter_.upper();
     
     QStringList items;
-    QDir dir(album->getKURL().path(), imgFilter_,
+    QDir dir(album->getKURL().path(), filter,
              QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
     
     QStringList Files = dir.entryList();
