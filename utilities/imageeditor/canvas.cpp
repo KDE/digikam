@@ -379,6 +379,13 @@ void Canvas::paintViewportRect(const QRect& vr, bool aa, bool mask)
             QPainter p(d->qpix);
             p.setPen(QPen(QColor(250,250,255),1));
             p.drawRect(rr);
+            if (rr.width() >= 10 && rr.height() >= 10)
+            {
+                p.drawRect(rr.x(), rr.y(), 5, 5);
+                p.drawRect(rr.x(), rr.y()+rr.height()-5, 5, 5);
+                p.drawRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5);
+                p.drawRect(rr.x()+rr.width()-5, rr.y(), 5, 5);
+            }
             p.end();
 
         }
