@@ -126,7 +126,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Rain Dropping"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Rain Dropping Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -254,11 +254,11 @@ void ImageEffect_RainDrop::slotCancel()
 void ImageEffect_RainDrop::slotUser1()
 {
     blockSignals(true);
-    m_dropSlider->setValue(50);
-    m_dropSpinBox->setValue(50);
+    m_dropSlider->setValue(80);
+    m_dropSpinBox->setValue(80);
     
-    m_amountSlider->setValue(50);
-    m_amountSpinBox->setValue(50);
+    m_amountSlider->setValue(150);
+    m_amountSpinBox->setValue(150);
     
     m_coeffSlider->setValue(30);
     m_coeffSpinBox->setValue(30);
@@ -292,7 +292,7 @@ void ImageEffect_RainDrop::slotEffect()
     iface->putPreviewData((uint*)newImage.bits());
 
     delete [] data;
-
+    m_progressBar->setValue(0); 
     m_previewWidget->update();
 }
 
