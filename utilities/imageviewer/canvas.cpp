@@ -721,7 +721,7 @@ void Canvas::slotCrop()
 
 void Canvas::slotGammaPlus()
 {
-    iface->changeGamma(6);
+    iface->changeGamma(0.1);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -732,7 +732,7 @@ void Canvas::slotGammaPlus()
 
 void Canvas::slotGammaMinus()
 {
-    iface->changeGamma(-6);
+    iface->changeGamma(-0.1);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -743,7 +743,7 @@ void Canvas::slotGammaMinus()
 
 void Canvas::slotBrightnessPlus()
 {
-    iface->changeBrightness(6);
+    iface->changeBrightness(0.1);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -754,7 +754,7 @@ void Canvas::slotBrightnessPlus()
 
 void Canvas::slotBrightnessMinus()
 {
-    iface->changeBrightness(-6);
+    iface->changeBrightness(-0.1);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -765,7 +765,7 @@ void Canvas::slotBrightnessMinus()
 
 void Canvas::slotContrastPlus()
 {
-    iface->changeContrast(6);
+    iface->changeContrast(0.1);
     viewport()->repaint();
 
     emit signalChanged(true);
@@ -776,7 +776,7 @@ void Canvas::slotContrastPlus()
 
 void Canvas::slotContrastMinus()
 {
-    iface->changeContrast(-6);
+    iface->changeContrast(-0.1);
     viewport()->repaint();
 
     emit signalChanged(true);

@@ -67,6 +67,7 @@ Image Viever/Editor:
 - Added Blur/Sharpen image filters.                                <Gilles Caulier - 0.6.3>
 - Added Settings dialog.                                           <Gilles Caulier - 0.6.3>
 - Build a main popup menu like the Gimp.                           <Gilles Caulier - 0.6.3>
+- New BCG setting dialog with slidders.                            <Gilles Caulier - 0.6.3>
 o Add multithread interface for printing.
 o Added dockable toolbars.
 o Added Plugins interface.

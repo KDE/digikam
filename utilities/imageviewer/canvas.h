@@ -49,8 +49,6 @@ public:
     void preload(const QString& filename);
     int  save(const QString& filename);
     int  saveAs(const QString& filename);
-    void getBCGSettings(int& gamma, int& brightness,
-                        int& contrast);
     bool autoZoomOn();
 
 protected:
@@ -73,9 +71,9 @@ private:
 
     void drawRubber(QPainter *p);
     
-    CanvasPrivate *d;
+    CanvasPrivate  *d;
     ImlibInterface *iface;
-    int counter;
+    int             counter;
 
 public slots:
 

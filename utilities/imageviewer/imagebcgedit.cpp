@@ -1,25 +1,27 @@
-/* ============================================================
- * File  : imagebcgedit.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-03-11
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+//////////////////////////////////////////////////////////////////////////////
+//
+//    IMAGEBCGEDIT.CPP
+//
+//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
+//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+//////////////////////////////////////////////////////////////////////////////
 
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published bythe Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
-
-#include <klocale.h>
+// Qt includes.
 
 #include <qstring.h>
 #include <qlabel.h>
@@ -28,11 +30,18 @@
 #include <qgroupbox.h>
 #include <qtoolbutton.h>
 
+// KDE includes.
+
+#include <klocale.h>
+
+// Local includes.
+
 #include "imagebcgedit.h"
 
+
 ImageBCGEdit::ImageBCGEdit( QWidget *parent )
-    : KDialogBase( Plain, QString::null, User1, User1,
-                   parent, 0, true, true, i18n("Close") )
+            : KDialogBase( Plain, QString::null, User1, User1,
+                           parent, 0, true, true, i18n("Close") )
 {
     setCaption( i18n("Adjust Image" ));
 
@@ -86,16 +95,19 @@ ImageBCGEdit::ImageBCGEdit( QWidget *parent )
 
     connect(gammaIncBtn, SIGNAL(clicked()),
             this, SIGNAL(signalGammaIncrease()));
+            
     connect(gammaDecBtn, SIGNAL(clicked()),
             this, SIGNAL(signalGammaDecrease()));
 
     connect(brightnessIncBtn, SIGNAL(clicked()),
             this, SIGNAL(signalBrightnessIncrease()));
+            
     connect(brightnessDecBtn, SIGNAL(clicked()),
             this, SIGNAL(signalBrightnessDecrease()));
 
     connect(contrastIncBtn, SIGNAL(clicked()),
             this, SIGNAL(signalContrastIncrease()));
+            
     connect(contrastDecBtn, SIGNAL(clicked()),
             this, SIGNAL(signalContrastDecrease()));
 

@@ -63,12 +63,9 @@ public:
     
     void crop(int x, int y, int w, int h);
 
-    void changeGamma(int val);
-    void changeBrightness(int val);
-    void changeContrast(int val);
-
-    void getBCGSettings(int& gamma, int& brightness,
-                        int& contrast);
+    void changeGamma(double val);
+    void changeBrightness(double val);
+    void changeContrast(double val);
 
     int save(const QString& file);
     int saveAs(const QString& file);
