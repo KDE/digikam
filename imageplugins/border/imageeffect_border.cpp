@@ -54,7 +54,6 @@
 #include <kconfig.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
-#include <kimageeffect.h>
 
 // Digikam includes.
 
@@ -586,52 +585,12 @@ void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int 
     bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
 }
 
-void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth)
+void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, 
+                                const QColor &bg, int lineWidth)
 {
-    unsigned int *output;
-    int x, y;
-    
-    dest.reset();
-    dest.create(src.width() + borderWidth*2 + lineWidth*2, src.height() + borderWidth*2 + lineWidth*2, 32);
-    dest.fill(fg.rgb());
-    
-    // Copy original image.
-                         
-    bitBlt( &dest, borderWidth + lineWidth, borderWidth + lineWidth, &src, 0, 0, src.width(), src.height());
-
-    // Drawing fine line.
-    // top
-
-    for(y = borderWidth; y < borderWidth+lineWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x = borderWidth; x < dest.width()-borderWidth; ++x)
-          output[x] = bg.rgb();
-       }
-      
-    // left and right
-    
-    for(y = borderWidth; y < dest.height()-borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = borderWidth; x < borderWidth+lineWidth; ++x)
-            output[x] = bg.rgb();
-            
-       for(x = dest.width()-borderWidth-lineWidth; x < dest.width()-borderWidth; ++x)
-            output[x] = bg.rgb();
-       }
-    
-    // bottom
-    
-    for(y = dest.height()-borderWidth-lineWidth; y < dest.height()-borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-        
-       for(x = borderWidth; x < dest.width()-borderWidth; ++x)
-          output[x] = bg.rgb();
-       }        
+    QImage tmp;
+    solid(src, tmp, bg, lineWidth);
+    solid(tmp, dest, fg, borderWidth);
 }
 
 void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor, 
@@ -762,7 +721,8 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + m_borderWidth->value()*2,
                           m_previewWidget->imageIface()->originalHeight() + m_borderWidth->value()*2);
     
-    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
+    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
     // Pattern tile.
@@ -773,7 +733,8 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     p.end();
     
     // First line around the pattern tile.
-    QImage tmp2 = patternPixmap.convertToImage().scale( src.width() + borderWidth*2, src.height() + borderWidth*2 );
+    QImage tmp2 = patternPixmap.convertToImage().scale( src.width() + borderWidth*2, 
+                                                        src.height() + borderWidth*2 );
     
     solid(tmp2, dest, firstColor, firstWidth);                                                 
     
