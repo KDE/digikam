@@ -37,6 +37,7 @@
 #include <qtimer.h>
 
 #include <kmessagebox.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kconfig.h>
@@ -44,6 +45,11 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 #include <khelpmenu.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kcalendarsystem.h>
+#endif
 
 #include "albummanager.h"
 #include "album.h"
@@ -347,8 +353,31 @@ void CameraUI::slotDownloadSelected()
 
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
+
+    QString newDirName;
+    QIconViewItem* firstItem = m_view->firstItem();
+    if (firstItem)
+    {
+        CameraIconViewItem* iconItem =
+            static_cast<CameraIconViewItem*>(firstItem);
+        
+        QDateTime date;
+        date.setTime_t(iconItem->itemInfo()->mtime);
+#if KDE_IS_VERSION(3,2,0)
+        newDirName = QString("%1, %2, %3")
+                     .arg(KGlobal::locale()->calendar()->year(date.date()))
+                     .arg(KGlobal::locale()->calendar()->monthName(date.date()))
+                     .arg(KGlobal::locale()->calendar()->day(date.date()));
+#else
+        newDirName = QString("%1, %2, %3")
+                     .arg(KGlobal::locale()->monthName(date.month()))
+                     .arg(date.year())
+                     .arg(date.day());
+#endif
+    }
+    
     KURL url = DirSelectDialog::selectDir(libPath, currPath,
-                                          this, header);
+                                          this, header, newDirName);
     if (!url.isValid())
         return;
     
@@ -404,8 +433,31 @@ void CameraUI::slotDownloadAll()
 
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
+
+    QString newDirName;
+    QIconViewItem* firstItem = m_view->firstItem();
+    if (firstItem)
+    {
+        CameraIconViewItem* iconItem =
+            static_cast<CameraIconViewItem*>(firstItem);
+        
+        QDateTime date;
+        date.setTime_t(iconItem->itemInfo()->mtime);
+#if KDE_IS_VERSION(3,2,0)
+        newDirName = QString("%1, %2, %3")
+                     .arg(KGlobal::locale()->calendar()->year(date.date()))
+                     .arg(KGlobal::locale()->calendar()->monthName(date.date()))
+                     .arg(KGlobal::locale()->calendar()->day(date.date()));
+#else
+        newDirName = QString("%1, %2, %3")
+                     .arg(KGlobal::locale()->monthName(date.month()))
+                     .arg(date.year())
+                     .arg(date.day());
+#endif
+    }
+    
     KURL url = DirSelectDialog::selectDir(libPath, currPath,
-                                          this, header);
+                                          this, header, newDirName);
     if (!url.isValid())
         return;
     

@@ -48,7 +48,8 @@
 DirSelectDialog::DirSelectDialog(const QString& rootDir,
                                  const QString& startDir,
                                  QWidget* parent,
-                                 QString header)
+                                 const QString& header,
+                                 const QString& newDirString)
     : KDialogBase(parent, 0, true, i18n("Select Album"), Help|User1|Ok|Cancel)
 {
     setButtonText(User1, i18n("&New Album"));
@@ -75,6 +76,7 @@ DirSelectDialog::DirSelectDialog(const QString& rootDir,
 
     m_rootURL  = KURL(rootDir);
     m_startURL = KURL(startDir);
+    m_newDirString = newDirString;
     m_rootURL.cleanPath();
     m_startURL.cleanPath();
 
@@ -192,13 +194,13 @@ void DirSelectDialog::slotUser1()
                                            i18n("Creating new album in 'My Albums%1'\n"
                                                 "Enter album name:")
                                            .arg(relPath),
-                                           QString::null, &ok, this);
+                                           m_newDirString, &ok, this);
 #else
     QString newDir = KLineEditDlg::getText(i18n("New Album Name"),
                                            i18n("Creating new album in 'My Albums%1'\n"
                                                 "Enter album name:")
                                            .arg(relPath),
-                                           QString::null, &ok, this);
+                                           m_newDirString, &ok, this);
 #endif
 
     if (!ok)
@@ -227,9 +229,11 @@ void DirSelectDialog::slotUser1()
 }
 
 KURL DirSelectDialog::selectDir(const QString& rootDir, const QString& startDir,
-                                QWidget* parent, QString header)
+                                QWidget* parent,
+                                const QString& header, const QString& newDirString)
+
 {
-    DirSelectDialog dlg(rootDir, startDir, parent, header);
+    DirSelectDialog dlg(rootDir, startDir, parent, header, newDirString);
 
     if (dlg.exec() != QDialog::Accepted)
         return KURL();

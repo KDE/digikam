@@ -41,13 +41,16 @@ class DirSelectDialog : public KDialogBase
 public:
 
     DirSelectDialog(const QString& rootDir, const QString& startDir,
-                    QWidget *parent = 0, QString header=QString::null);
+                    QWidget *parent = 0,
+                    const QString& header=QString::null,
+                    const QString& newDirString=QString::null);
     ~DirSelectDialog();
 
     static KURL selectDir(const QString& rootDir,
                           const QString& startDir,
                           QWidget* parent=0,
-                          QString header=QString::null);
+                          const QString& header=QString::null,
+                          const QString& newDirString=QString::null);
     
 private:
 
@@ -59,6 +62,7 @@ private:
     KURL              m_rootURL;
     KURL              m_startURL;
     QValueStack<KURL> m_urlsToList;
+    QString           m_newDirString;
 
 private slots:
 
