@@ -22,23 +22,19 @@
 #define IMAGEPLUGIN_H
 
 #include <qobject.h>
+#include <kxmlguiclient.h>
 
-#include "guiclient.h"
-
-class KInstance;
 class QWidget;
 
 namespace Digikam
 {
 
-class ImagePlugin : public QObject, public GUIClient
+class ImagePlugin : public QObject, public KXMLGUIClient
 {
 public:
     
     ImagePlugin(QObject *parent, const char* name=0);
     virtual ~ImagePlugin();
-
-    void setInstance(KInstance *instance);
 
     virtual void setEnabledSelectionActions(bool enable);
 
@@ -47,7 +43,6 @@ public:
     
 private:
 
-    KInstance  *m_instance;
     QWidget    *m_parentWidget;
 };
 

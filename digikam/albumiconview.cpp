@@ -881,7 +881,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
             urlList.append(iconItem->fileItem()->url());
     }
 
-    ImageWindow *imview = ImageWindow::instance();
+    ImageWindow *imview = ImageWindow::imagewindow();
 
     imview->disconnect(this);
     

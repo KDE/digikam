@@ -770,8 +770,8 @@ void DigikamApp::slotSetupChanged()
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();
-    if (ImageWindow::instance())
-        ImageWindow::instance()->applySettings();
+    if (ImageWindow::imagewindow())
+        ImageWindow::imagewindow()->applySettings();
     m_config->sync();
 }
 

@@ -10,7 +10,7 @@ libimagecanvas_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_IMLIB2) \
 
 libimageeditor_la_SOURCES = imageiface.cpp imagewidget.cpp imageplugin.cpp \
 			    imagepluginloader.cpp \
-			    imagewindow.cpp imageguiclient.cpp \
+			    imagewindow.cpp \
 			    imageresizedlg.cpp \
 			    imageprint.cpp 
 
@@ -18,7 +18,6 @@ libimageeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 			    $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	  -I$(top_srcdir)/digikam/libs/guibuilder \
 	  -I$(top_srcdir)/digikam/libs/widgets \
 	  -I$(top_srcdir)/digikam/utilities/splashscreen \
 	  $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
@@ -29,6 +28,9 @@ digikamincludedir = $(includedir)/digikam
 
 digikamimageeditoricondir = $(kde_datadir)/digikam/icons
 digikamimageeditoricon_ICON = AUTO
+
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamimagewindowui.rc
 
 kde_servicetypes_DATA = digikamimageplugin.desktop
 

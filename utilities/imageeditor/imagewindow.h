@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <qmainwindow.h>
+#include <kmainwindow.h>
 #include <qstring.h>
 
 // Kde includes.
@@ -37,17 +37,13 @@ class QLabel;
 
 class KAccel;
 class KAction;
+class KActionMenu;
+class KToggleAction;
 
-class ImageGUIClient;
 class Canvas;
 class AlbumIconView;
 
-namespace Digikam
-{
-class GUIFactory;
-}
-
-class ImageWindow : public QMainWindow
+class ImageWindow : public KMainWindow
 {
     Q_OBJECT
 
@@ -62,14 +58,10 @@ public:
                  
     void applySettings();
     
-    static ImageWindow* instance();
+    static ImageWindow* imagewindow();
     
 private:
 
-    ImageGUIClient*      m_guiClient;
-    
-    Digikam::GUIFactory* m_guiFactory;
-    
     Canvas*              m_canvas;
     
     QPopupMenu*          m_contextMenu;
@@ -95,12 +87,45 @@ private:
     bool                 m_fullScreen;
     bool                 m_fullScreenHideToolBar;
     bool                 m_allowSaving;
+
+    // Actions
+
+    KAction       *m_navNextAction;
+    KAction       *m_navPrevAction;
+    KAction       *m_navFirstAction;
+    KAction       *m_navLastAction;
+
+    KAction       *m_saveAction;
+    KAction       *m_saveAsAction;
+    KAction       *m_restoreAction;
+    
+    KAction       *m_zoomPlusAction;
+    KAction       *m_zoomMinusAction;
+    KToggleAction *m_zoomFitAction;
+    KToggleAction *m_fullScreenAction;
+
+    KActionMenu   *m_rotateAction;
+    KActionMenu   *m_flipAction;
+    KAction       *m_rotate90Action;
+    KAction       *m_rotate180Action;
+    KAction       *m_rotate270Action;
+    KAction       *m_flipHorzAction;
+    KAction       *m_flipVertAction;
+
+    KAction       *m_resizeAction;
+    KAction       *m_cropAction;
+    
+    KAction       *m_fileprint;    
+    KAction       *m_fileproperties;
+    KAction       *m_fileDelete;
+    KAction       *m_commentedit;
     
     static ImageWindow*  m_instance;
 
 private:
 
     ImageWindow();
+    void buildGUI();
     void readSettings();
     void saveSettings();
     bool promptUserSave();
@@ -147,6 +172,10 @@ private slots:
     void slotDeleteCurrentItem();
 
     void slotImagePluginsHelp();
+
+    void slotEditKeys();
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
     
 protected:
 

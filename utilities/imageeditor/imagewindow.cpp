@@ -22,7 +22,6 @@
 // Qt includes.
 
 #include <qpopupmenu.h>
-#include <qstatusbar.h>
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qlabel.h>
@@ -31,7 +30,6 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kaction.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -46,6 +44,12 @@
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kaccel.h>
+#include <kaction.h>
+#include <kstdaccel.h>
+#include <kstdaction.h>
+#include <kstatusbar.h>
+#include <kkeydialog.h>
+#include <kedittoolbar.h>
 
 // LibKexif includes.
 
@@ -55,10 +59,8 @@
 // Local includes.
 
 #include "exifrestorer.h"
-#include "guifactory.h"
 #include "canvas.h"
 #include "imlibinterface.h"
-#include "imageguiclient.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
@@ -75,7 +77,7 @@
 #include "imagedescedit.h"
 
 
-ImageWindow* ImageWindow::instance()
+ImageWindow* ImageWindow::imagewindow()
 {
     if (!m_instance)
         new ImageWindow();
@@ -86,7 +88,7 @@ ImageWindow* ImageWindow::instance()
 ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow::ImageWindow()
-           : QMainWindow(0,0,WType_TopLevel|WDestructiveClose)
+           : KMainWindow(0,0,WType_TopLevel|WDestructiveClose)
 {
     m_instance              = this;
     m_rotatedOrFlipped      = false;
@@ -95,32 +97,12 @@ ImageWindow::ImageWindow()
     m_fullScreenHideToolBar = false;
     m_view                  = 0L;
     
-    // -- build the gui -------------------------------------
-
-    m_guiFactory = new Digikam::GUIFactory();
-    m_guiClient  = new ImageGUIClient(this);
-    m_guiFactory->insertClient(m_guiClient);
-
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next()) {
-        if (plugin) {
-            m_guiFactory->insertClient(plugin);
-            plugin->setParentWidget(this);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
-
-    m_contextMenu = new QPopupMenu(this);
-    m_guiFactory->buildGUI(this);
-    m_guiFactory->buildGUI(m_contextMenu);
 
     // -- construct the view ---------------------------------
 
     m_canvas    = new Canvas(this);
     setCentralWidget(m_canvas);
 
-    statusBar()->setSizeGripEnabled(false);
     m_nameLabel = new QLabel(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);
@@ -131,6 +113,26 @@ ImageWindow::ImageWindow()
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel,1);
 
+    // -- build the gui -------------------------------------
+
+    buildGUI();
+    
+    
+    ImagePluginLoader* loader = ImagePluginLoader::instance();
+    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+         plugin; plugin = loader->pluginList().next()) {
+        if (plugin) {
+            guiFactory()->addClient(plugin);
+            plugin->setParentWidget(this);
+            plugin->setEnabledSelectionActions(false);
+        }
+    }
+
+    // TODO: build context menu
+    //m_contextMenu = new QPopupMenu(this);
+    //m_guiFactory->buildGUI(this);
+    //m_guiFactory->buildGUI(m_contextMenu);
+    
     // -- Some Accels not available from actions -------------
 
     m_accel = new KAccel(this);
@@ -141,74 +143,7 @@ ImageWindow::ImageWindow()
 
     // -- setup connections ---------------------------
 
-    connect(m_guiClient, SIGNAL(signalNext()),
-            SLOT(slotLoadNext()));
-    connect(m_guiClient, SIGNAL(signalPrev()),
-            SLOT(slotLoadPrev()));
-    connect(m_guiClient, SIGNAL(signalFirst()),
-            SLOT(slotLoadFirst()));
-    connect(m_guiClient, SIGNAL(signalLast()),
-            SLOT(slotLoadLast()));
-    connect(m_guiClient, SIGNAL(signalExit()),
-            SLOT(close()));
-
-    connect(m_guiClient, SIGNAL(signalSave()),
-            SLOT(slotSave()));
-    connect(m_guiClient, SIGNAL(signalSaveAs()),
-            SLOT(slotSaveAs()));
-
-    connect(m_guiClient, SIGNAL(signalRestore()),
-            m_canvas, SLOT(slotRestore()));
-
-    connect(m_guiClient, SIGNAL(signalFilePrint()),
-            SLOT(slotFilePrint()));
-    connect(m_guiClient, SIGNAL(signalFileProperties()),
-            SLOT(slotFileProperties()));
-    connect(m_guiClient, SIGNAL(signalDeleteCurrentItem()),
-            SLOT(slotDeleteCurrentItem()));
-    connect(m_guiClient, SIGNAL(signalCommentsEdit()),
-            SLOT(slotCommentsEdit()));
-
-
-    connect(m_guiClient, SIGNAL(signalZoomPlus()),
-            m_canvas, SLOT(slotIncreaseZoom()));
-    connect(m_guiClient, SIGNAL(signalZoomMinus()),
-            m_canvas, SLOT(slotDecreaseZoom()));
-    connect(m_guiClient, SIGNAL(signalZoomFit()),
-            SLOT(slotToggleAutoZoom()));
-    connect(m_guiClient, SIGNAL(signalToggleFullScreen()),
-            SLOT(slotToggleFullScreen()));
-
-    connect(m_guiClient, SIGNAL(signalRotate90()),
-            m_canvas, SLOT(slotRotate90()));
-    connect(m_guiClient, SIGNAL(signalRotate180()),
-            m_canvas, SLOT(slotRotate180()));
-    connect(m_guiClient, SIGNAL(signalRotate270()),
-            m_canvas, SLOT(slotRotate270()));
-
-    connect(m_guiClient, SIGNAL(signalFlipHoriz()),
-            m_canvas, SLOT(slotFlipHoriz()));
-    connect(m_guiClient, SIGNAL(signalFlipVert()),
-            m_canvas, SLOT(slotFlipVert()));
-
-    // if rotating/flipping set the rotatedflipped flag to true
-    connect(m_guiClient, SIGNAL(signalRotate90()),
-            SLOT(slotRotatedOrFlipped()));
-    connect(m_guiClient, SIGNAL(signalRotate180()),
-            SLOT(slotRotatedOrFlipped()));
-    connect(m_guiClient, SIGNAL(signalRotate270()),
-            SLOT(slotRotatedOrFlipped()));
-
-    connect(m_guiClient, SIGNAL(signalFlipHoriz()),
-            SLOT(slotRotatedOrFlipped()));
-    connect(m_guiClient, SIGNAL(signalFlipVert()),
-            SLOT(slotRotatedOrFlipped()));
-
-    connect(m_guiClient, SIGNAL(signalCrop()),
-            m_canvas, SLOT(slotCrop()));
-    connect(m_guiClient, SIGNAL(signalResize()),
-            SLOT(slotResize()));
-
+            
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             SLOT(slotContextMenu()));
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
@@ -221,10 +156,7 @@ ImageWindow::ImageWindow()
             SLOT(slotLoadNext()));
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             SLOT(slotLoadPrev()));
-
-    connect(m_guiClient, SIGNAL(signalShowImagePluginsHelp()),
-            SLOT(slotImagePluginsHelp()));
-
+    
     // -- read settings --------------------------------
     readSettings();
     applySettings();
@@ -236,17 +168,183 @@ ImageWindow::~ImageWindow()
     m_instance = 0;
 
     saveSettings();
-    delete m_guiClient;
-    delete m_guiFactory;
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
         if (plugin) {
+            guiFactory()->removeClient(plugin);
             plugin->setParentWidget(0);
             plugin->setEnabledSelectionActions(false);
         }
     }
+}
+
+void ImageWindow::buildGUI()
+{
+    // -- File actions -----------------------------------------------------------
+    
+    m_navPrevAction = new KAction(i18n("&Previous"), "back",
+                                  KStdAccel::shortcut( KStdAccel::Prior),
+                                  this, SLOT(slotLoadPrev()),
+                                  actionCollection(), "imageview_prev");
+
+    m_navNextAction = new KAction(i18n("&Next"), "forward",
+                                  KStdAccel::shortcut( KStdAccel::Next),
+                                  this, SLOT(slotLoadNext()),
+                                  actionCollection(), "imageview_next");
+
+    m_navFirstAction = new KAction(i18n("&First"), "start",
+                                   KStdAccel::shortcut( KStdAccel::Home),
+                                   this, SLOT(slotLoadFirst()),
+                                   actionCollection(), "imageview_first");
+
+    m_navLastAction = new KAction(i18n("&Last"), "finish",
+                                  KStdAccel::shortcut( KStdAccel::End),
+                                  this, SLOT(slotLoadLast()),
+                                  actionCollection(), "imageview_last");
+
+    m_saveAction = KStdAction::save(this, SLOT(slotSave()),
+                                    actionCollection(), "imageview_save");
+    m_saveAsAction = KStdAction::saveAs(this, SLOT(slotSaveAs()),
+                                        actionCollection(), "imageview_saveas");
+    m_restoreAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+                                        actionCollection(), "imageview_restore");
+    m_saveAction->setEnabled(false);
+    m_restoreAction->setEnabled(false);
+
+    m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
+                              CTRL+Key_P,
+                              this, SLOT(slotFilePrint()),
+                              actionCollection(), "imageview_print");
+
+    m_fileproperties = new KAction(i18n("Properties"), "exifinfo",
+                                   ALT+Key_Return,
+                                   this, SLOT(slotFileProperties()),
+                                   actionCollection(), "file_properties");
+
+    m_fileproperties->setWhatsThis( i18n( "This option display the current image properties, meta-data, "
+                                          "and histogram. If you have selected a region, you can choose an "
+                                          "histogram rendering for the full image or the current image "
+                                          "selection."));
+                                   
+    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
+                                   SHIFT+Key_Delete,
+                                   this, SLOT(slotDeleteCurrentItem()),
+                                   actionCollection(), "imageview_delete");
+
+    m_commentedit = new KAction(i18n("Edit Comments && Tags..."), "imagecomment",
+                                Key_F3,
+                                this, SLOT(slotCommentsEdit()),
+                                actionCollection(), "comments_edit");
+
+
+    KStdAction::quit(this, SLOT(close()),
+                     actionCollection(), "imageview_exit");
+
+    // -- View actions ----------------------------------------------------------------
+    
+    m_zoomPlusAction = new KAction(i18n("Zoom &In"), "viewmag+",
+                                   CTRL+Key_Plus,
+                                   m_canvas, SLOT(slotIncreaseZoom()),
+                                   actionCollection(), "imageview_zoom_plus");
+
+    m_zoomMinusAction = new KAction(i18n("Zoom &Out"), "viewmag-",
+                                    CTRL+Key_Minus,
+                                    m_canvas, SLOT(slotDecreaseZoom()),
+                                    actionCollection(), "imageview_zoom_minus");
+
+    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
+                                        Key_A,
+                                        this, SLOT(slotToggleAutoZoom()),
+                                        actionCollection(), "imageview_zoom_fit");
+
+    m_fullScreenAction = new KToggleAction(i18n("Toggle Full Screen"),
+                                           "window_fullscreen",
+                                           CTRL+SHIFT+Key_F,
+                                           this, SLOT(slotToggleFullScreen()),
+                                           actionCollection(), "toggle_fullScreen");
+
+    // -- Transform actions ----------------------------------------------------------
+    
+    m_resizeAction = new KAction(i18n("&Resize..."), 0, 0,
+                                 this, SLOT(slotResize()),
+                                 actionCollection(), "imageview_resize");
+
+    m_cropAction = new KAction(i18n("&Crop"), "crop",
+                               CTRL+Key_C,
+                               m_canvas, SLOT(slotCrop()),
+                               actionCollection(), "imageview_crop");
+    m_cropAction->setEnabled(false);
+    m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
+                                     "Select the image region to enable this action.") );
+
+    // -- rotate actions -------------------------------------------------------------
+    
+    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
+                                     actionCollection(),
+                                     "imageview_rotate");
+    m_rotateAction->setDelayed(false);
+
+    m_rotate90Action  = new KAction(i18n("90 Degrees"),
+                                    0, Key_1, m_canvas, SLOT(slotRotate90()),
+                                    actionCollection(),
+                                    "rotate_90");
+    m_rotate180Action = new KAction(i18n("180 Degrees"),
+                                    0, Key_2, m_canvas, SLOT(slotRotate180()),
+                                    actionCollection(),
+                                    "rotate_180");
+    m_rotate270Action = new KAction(i18n("270 Degrees"),
+                                    0, Key_3, m_canvas, SLOT(slotRotate270()),
+                                    actionCollection(),
+                                    "rotate_270");
+    m_rotateAction->insert(m_rotate90Action);
+    m_rotateAction->insert(m_rotate180Action);
+    m_rotateAction->insert(m_rotate270Action);
+
+    // -- flip actions ---------------------------------------------------------------
+    
+    m_flipAction = new KActionMenu(i18n("Flip"),
+                                   "flip_image",
+                                   actionCollection(),
+                                   "imageview_flip");
+    m_flipAction->setDelayed(false);
+
+    m_flipHorzAction = new KAction(i18n("Horizontally"), 0,
+                                   m_canvas, SLOT(slotFlipHoriz()),
+                                   actionCollection(),
+                                   "flip_horizontal"); 
+
+    m_flipVertAction = new KAction(i18n("Vertically"), 0,
+                                   m_canvas, SLOT(slotFlipVert()),
+                                   actionCollection(),
+                                   "flip_vertical");
+    m_flipAction->insert(m_flipHorzAction);
+    m_flipAction->insert(m_flipVertAction);
+
+    // -- Configure toolbar and shortcuts ---------------------------------------------
+    
+    KStdAction::keyBindings(this, SLOT(slotEditKeys()),
+                            actionCollection());
+    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()),
+                                  actionCollection());
+
+    // --- Create the gui --------------------------------------------------------------
+    
+    createGUI("digikamimagewindowui.rc", false);
+
+    // -- if rotating/flipping set the rotatedflipped flag to true ---------------------
+
+    connect(m_rotate90Action, SIGNAL(activated()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_rotate180Action, SIGNAL(activated()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_rotate270Action, SIGNAL(activated()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_flipHorzAction, SIGNAL(activated()),
+            SLOT(slotRotatedOrFlipped()));
+    connect(m_flipVertAction, SIGNAL(activated()),
+            SLOT(slotRotatedOrFlipped()));
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList,
@@ -262,8 +360,8 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     m_urlCurrent  = urlCurrent;
     m_allowSaving = allowSaving;
     
-    m_guiClient->m_saveAction->setEnabled(false);
-    m_guiClient->m_restoreAction->setEnabled(false);
+    m_saveAction->setEnabled(false);
+    m_restoreAction->setEnabled(false);
 
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
@@ -281,11 +379,13 @@ void ImageWindow::applySettings()
 
     // JPEG quality value.
     // JPEG quality slider setting : 0 - 100 ==> imlib2 setting : 25 - 100.
-    m_JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75) + 25.0 - (75.0/99.0));
+    m_JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
+                              + 25.0 - (75.0/99.0));
 
     // PNG compression value.
     // PNG compression slider setting : 1 - 9 ==> imlib2 setting : 100 - 1.
-    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1) + 100.0 - ((1.0-100.0)/8.0));
+    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
+                             + 100.0 - ((1.0-100.0)/8.0));
 
     // TIFF compression.
     m_TIFFCompression = config->readBoolEntry("TIFFCompression", false);
@@ -293,13 +393,13 @@ void ImageWindow::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
     {
-        m_guiClient->m_fileDelete->setIcon("edittrash");
-        m_guiClient->m_fileDelete->setText(i18n("Move to Trash"));
+        m_fileDelete->setIcon("edittrash");
+        m_fileDelete->setText(i18n("Move to Trash"));
     }
     else
     {
-        m_guiClient->m_fileDelete->setIcon("editdelete");
-        m_guiClient->m_fileDelete->setText(i18n("Delete File"));
+        m_fileDelete->setIcon("editdelete");
+        m_fileDelete->setText(i18n("Delete File"));
     }
 
     m_canvas->setExifOrient(settings->getExifRotate());
@@ -307,32 +407,30 @@ void ImageWindow::applySettings()
 
 void ImageWindow::readSettings()
 {
+    setAutoSaveSettings("ImageViewer Settings");
+
     KConfig* config = kapp->config();
 
-    int width, height;
     bool autoZoom;
 
     config->setGroup("ImageViewer Settings");
 
     // GUI options.
-    width = config->readNumEntry("Width", 500);
-    height = config->readNumEntry("Height", 500);
     autoZoom = config->readBoolEntry("AutoZoom", true);
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
-    resize(width, height);
 
     if (autoZoom) {
-        m_guiClient->m_zoomFitAction->activate();
-        m_guiClient->m_zoomPlusAction->setEnabled(false);
-        m_guiClient->m_zoomMinusAction->setEnabled(false);
+        m_zoomFitAction->activate();
+        m_zoomPlusAction->setEnabled(false);
+        m_zoomMinusAction->setEnabled(false);
     }
 
     if (m_fullScreen)
     {
         m_fullScreen = false;
-        m_guiClient->m_fullScreenAction->activate();
+        m_fullScreenAction->activate();
     }
 }
 
@@ -341,9 +439,7 @@ void ImageWindow::saveSettings()
     KConfig* config = kapp->config();
 
     config->setGroup("ImageViewer Settings");
-    config->writeEntry("Width", width());
-    config->writeEntry("Height", height());
-    config->writeEntry("AutoZoom", m_guiClient->m_zoomFitAction->isChecked());
+    config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
     config->writeEntry("FullScreen", m_fullScreen);
     config->sync();
 }
@@ -386,26 +482,26 @@ void ImageWindow::slotLoadCurrent()
     }
 
     if (m_urlList.count() == 1) {
-        m_guiClient->m_navPrevAction->setEnabled(false);
-        m_guiClient->m_navNextAction->setEnabled(false);
-        m_guiClient->m_navFirstAction->setEnabled(false);
-        m_guiClient->m_navLastAction->setEnabled(false);
+        m_navPrevAction->setEnabled(false);
+        m_navNextAction->setEnabled(false);
+        m_navFirstAction->setEnabled(false);
+        m_navLastAction->setEnabled(false);
     }
     else {
-        m_guiClient->m_navPrevAction->setEnabled(true);
-        m_guiClient->m_navNextAction->setEnabled(true);
-        m_guiClient->m_navFirstAction->setEnabled(true);
-        m_guiClient->m_navLastAction->setEnabled(true);
+        m_navPrevAction->setEnabled(true);
+        m_navNextAction->setEnabled(true);
+        m_navFirstAction->setEnabled(true);
+        m_navLastAction->setEnabled(true);
     }
 
     if (index == 0) {
-        m_guiClient->m_navPrevAction->setEnabled(false);
-        m_guiClient->m_navFirstAction->setEnabled(false);
+        m_navPrevAction->setEnabled(false);
+        m_navFirstAction->setEnabled(false);
     }
 
     if (index == m_urlList.count()-1) {
-        m_guiClient->m_navNextAction->setEnabled(false);
-        m_guiClient->m_navLastAction->setEnabled(false);
+        m_navNextAction->setEnabled(false);
+        m_navLastAction->setEnabled(false);
     }
 
     // Disable some menu actions if the current root image URL
@@ -417,13 +513,13 @@ void ImageWindow::slotLoadCurrent()
 
     if (!palbum)
     {
-       m_guiClient->m_fileDelete->setEnabled(false);
-       m_guiClient->m_commentedit->setEnabled(false);
+       m_fileDelete->setEnabled(false);
+       m_commentedit->setEnabled(false);
     }
     else
     {
-       m_guiClient->m_fileDelete->setEnabled(true);
-       m_guiClient->m_commentedit->setEnabled(true);
+       m_fileDelete->setEnabled(true);
+       m_commentedit->setEnabled(true);
     }
 }
 
@@ -482,10 +578,10 @@ void ImageWindow::slotLoadLast()
 
 void ImageWindow::slotToggleAutoZoom()
 {
-    bool checked = m_guiClient->m_zoomFitAction->isChecked();
+    bool checked = m_zoomFitAction->isChecked();
 
-    m_guiClient->m_zoomPlusAction->setEnabled(!checked);
-    m_guiClient->m_zoomMinusAction->setEnabled(!checked);
+    m_zoomPlusAction->setEnabled(!checked);
+    m_zoomMinusAction->setEnabled(!checked);
 
     m_canvas->slotToggleAutoZoom();
 }
@@ -513,12 +609,10 @@ void ImageWindow::slotZoomChanged(float zoom)
                          QString::number(zoom*100, 'f', 2) +
                          QString("%"));
 
-    m_guiClient->m_zoomPlusAction->
-        setEnabled(!m_canvas->maxZoom() &&
-                   !m_guiClient->m_zoomFitAction->isChecked());
-    m_guiClient->m_zoomMinusAction->
-        setEnabled(!m_canvas->minZoom() &&
-                   !m_guiClient->m_zoomFitAction->isChecked());
+    m_zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
+                                 !m_zoomFitAction->isChecked());
+    m_zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
+                                  !m_zoomFitAction->isChecked());
 }
 
 void ImageWindow::slotChanged(bool val)
@@ -529,10 +623,10 @@ void ImageWindow::slotChanged(bool val)
                         QString(" ") +
                         i18n("pixels"));
 
-    m_guiClient->m_restoreAction->setEnabled(val);
+    m_restoreAction->setEnabled(val);
     if (m_allowSaving)
     {
-        m_guiClient->m_saveAction->setEnabled(val);
+        m_saveAction->setEnabled(val);
     }
 
     if (!val)
@@ -541,13 +635,12 @@ void ImageWindow::slotChanged(bool val)
 
 void ImageWindow::slotSelected(bool val)
 {
-    m_guiClient->m_cropAction->setEnabled(val);
+    m_cropAction->setEnabled(val);
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
         if (plugin) {
-            m_guiFactory->insertClient(plugin);
             plugin->setEnabledSelectionActions(val);
         }
     }
@@ -906,28 +999,28 @@ void ImageWindow::slotToggleFullScreen()
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_guiClient->m_fullScreenAction->isPlugged(toolBar))
-                m_guiClient->m_fullScreenAction->unplug(toolBar);
+            if (m_fullScreenAction->isPlugged(toolBar))
+                m_fullScreenAction->unplug(toolBar);
             if (toolBar->isHidden())
                 toolBar->show();
         }
 
         // -- remove the imageguiclient action accels ----
 
-        unplugActionAccel(m_guiClient->m_navNextAction);
-        unplugActionAccel(m_guiClient->m_navPrevAction);
-        unplugActionAccel(m_guiClient->m_navFirstAction);
-        unplugActionAccel(m_guiClient->m_navLastAction);
-        unplugActionAccel(m_guiClient->m_saveAction);
-        unplugActionAccel(m_guiClient->m_saveAsAction);
-        unplugActionAccel(m_guiClient->m_zoomPlusAction);
-        unplugActionAccel(m_guiClient->m_zoomMinusAction);
-        unplugActionAccel(m_guiClient->m_zoomFitAction);
-        unplugActionAccel(m_guiClient->m_cropAction);
-        unplugActionAccel(m_guiClient->m_fileprint);
-        unplugActionAccel(m_guiClient->m_fileproperties);
-        unplugActionAccel(m_guiClient->m_fileDelete);
-        unplugActionAccel(m_guiClient->m_commentedit);
+        unplugActionAccel(m_navNextAction);
+        unplugActionAccel(m_navPrevAction);
+        unplugActionAccel(m_navFirstAction);
+        unplugActionAccel(m_navLastAction);
+        unplugActionAccel(m_saveAction);
+        unplugActionAccel(m_saveAsAction);
+        unplugActionAccel(m_zoomPlusAction);
+        unplugActionAccel(m_zoomMinusAction);
+        unplugActionAccel(m_zoomFitAction);
+        unplugActionAccel(m_cropAction);
+        unplugActionAccel(m_fileprint);
+        unplugActionAccel(m_fileproperties);
+        unplugActionAccel(m_fileDelete);
+        unplugActionAccel(m_commentedit);
 
         m_fullScreen = false;
     }
@@ -944,25 +1037,25 @@ void ImageWindow::slotToggleFullScreen()
             if (m_fullScreenHideToolBar)
                 toolBar->hide();
             else
-                m_guiClient->m_fullScreenAction->plug(toolBar);
+                m_fullScreenAction->plug(toolBar);
         }
 
         // -- Insert all the imageguiclient actions into the accel --
 
-        plugActionAccel(m_guiClient->m_navNextAction);
-        plugActionAccel(m_guiClient->m_navPrevAction);
-        plugActionAccel(m_guiClient->m_navFirstAction);
-        plugActionAccel(m_guiClient->m_navLastAction);
-        plugActionAccel(m_guiClient->m_saveAction);
-        plugActionAccel(m_guiClient->m_saveAsAction);
-        plugActionAccel(m_guiClient->m_zoomPlusAction);
-        plugActionAccel(m_guiClient->m_zoomMinusAction);
-        plugActionAccel(m_guiClient->m_zoomFitAction);
-        plugActionAccel(m_guiClient->m_cropAction);
-        plugActionAccel(m_guiClient->m_fileprint);
-        plugActionAccel(m_guiClient->m_fileproperties);
-        plugActionAccel(m_guiClient->m_fileDelete);
-        plugActionAccel(m_guiClient->m_commentedit);
+        plugActionAccel(m_navNextAction);
+        plugActionAccel(m_navPrevAction);
+        plugActionAccel(m_navFirstAction);
+        plugActionAccel(m_navLastAction);
+        plugActionAccel(m_saveAction);
+        plugActionAccel(m_saveAsAction);
+        plugActionAccel(m_zoomPlusAction);
+        plugActionAccel(m_zoomMinusAction);
+        plugActionAccel(m_zoomFitAction);
+        plugActionAccel(m_cropAction);
+        plugActionAccel(m_fileprint);
+        plugActionAccel(m_fileproperties);
+        plugActionAccel(m_fileDelete);
+        plugActionAccel(m_commentedit);
 
         showFullScreen();
         m_fullScreen = true;
@@ -973,13 +1066,13 @@ void ImageWindow::slotEscapePressed()
 {
     if (m_fullScreen)
     {
-        m_guiClient->m_fullScreenAction->activate();
+        m_fullScreenAction->activate();
     }
 }
 
 bool ImageWindow::promptUserSave()
 {
-    if (m_guiClient->m_saveAction->isEnabled())
+    if (m_saveAction->isEnabled())
     {
         int result =
             KMessageBox::warningYesNoCancel(this,
@@ -1034,6 +1127,28 @@ void ImageWindow::unplugActionAccel(KAction* action)
 void ImageWindow::slotImagePluginsHelp()
 {
     KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
+}
+
+void ImageWindow::slotEditKeys()
+{
+    KKeyDialog dialog;
+    dialog.insert( actionCollection(), i18n( "General" ) );
+    
+    dialog.configure();
+}
+
+void ImageWindow::slotConfToolbars()
+{
+    saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+    KEditToolbar dlg(factory());
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            SLOT(slotNewToolbarConfig()));
+    dlg.exec();
+}
+
+void ImageWindow::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
 }
 
 #include "imagewindow.moc"

@@ -5,7 +5,6 @@ bin_PROGRAMS = digikam
 
 INCLUDES = \
 	-I$(top_srcdir)/digikam/sqlite \
-	-I$(top_srcdir)/digikam/libs/guibuilder \
 	-I$(top_srcdir)/digikam/libs/histogram \
 	-I$(top_srcdir)/digikam/libs/filters \
 	-I$(top_srcdir)/digikam/libs/levels \
@@ -42,7 +41,6 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
 			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
-		        $(top_builddir)/digikam/libs/guibuilder/libguibuilder.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		        $(top_builddir)/digikam/libs/levels/liblevels.la \
 		        $(top_builddir)/digikam/libs/curves/libcurves.la \

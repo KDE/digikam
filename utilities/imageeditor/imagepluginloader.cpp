@@ -28,6 +28,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <kxmlguiclient.h>
 
 // Local includes.
 
@@ -86,7 +87,7 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
               plugin = KParts::ComponentFactory
                        ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
 
-              if (plugin)
+              if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                  {
                  m_pluginList.append(plugin);
                 

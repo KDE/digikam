@@ -18,8 +18,6 @@
  * 
  * ============================================================ */
 
-#include <kinstance.h>
-
 #include "imageplugin.h"
 
 namespace Digikam
@@ -28,18 +26,12 @@ namespace Digikam
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
     : QObject(parent, name)
 {
-    m_instance = 0;
     m_parentWidget = 0;
 }
 
 ImagePlugin::~ImagePlugin()
 {
     
-}
-
-void ImagePlugin::setInstance(KInstance *instance)
-{
-    m_instance = instance;    
 }
 
 void ImagePlugin::setEnabledSelectionActions(bool)

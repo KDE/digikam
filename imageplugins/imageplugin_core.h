@@ -39,8 +39,6 @@ public:
                      const QStringList &args);
     ~ImagePlugin_Core();
 
-    QStringList guiDefinition() const;
-
     void setEnabledSelectionActions(bool enable);
 
 private:

@@ -758,7 +758,7 @@ void CameraController::customEvent(QCustomEvent* e)
         KURL::List urlList;
         urlList << url;
 
-        ImageWindow *im = ImageWindow::instance();
+        ImageWindow *im = ImageWindow::imagewindow();
         im->loadURL(urlList, url, file, false);
         if (im->isHidden())
             im->show();

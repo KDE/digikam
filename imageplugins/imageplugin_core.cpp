@@ -158,58 +158,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     new KAction(i18n("Aspect Ratio Crop..."), 0,
                 this, SLOT(slotRatioCrop()),
                 actionCollection(), "implugcore_ratiocrop");
-    
+
+
+    setXMLFile("digikamimageplugin_core_ui.rc");
 
     kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
 ImagePlugin_Core::~ImagePlugin_Core()
 {
-}
-
-QStringList ImagePlugin_Core::guiDefinition() const
-{
-    QStringList guiDef;
-
-    //-------------------------------
-    // Fix and Colors menu actions
-
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_bcg/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_hsl/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_rgb/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Separator/ /  ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_normalize/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_equalize/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_autolevels/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_stretch_contrast/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Separator/ /  ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Menu/&Colors/Colors/Action/implugcore_invert/ ");
-
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_colors/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_blur/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_sharpen/ ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Separator/ / ");
-    guiDef.append("MenuBar/Menu/Fi&x/Fix/Action/implugcore_redeye/ ");
-
-    //-------------------------------
-    // Transform menu actions.
-
-    guiDef.append("MenuBar/Menu/&Transform/Transform/Action/implugcore_ratiocrop/ ");
-
-    //-------------------------------
-    // Filters menu actions.
-
-    guiDef.append("MenuBar/Menu/Fi&lters/Generic/Action/implugcore_convert_to/ ");
-
-    // Enable i18n for the menu options.
-
-    i18n( "Fi&x" );
-    i18n( "Fi&lters" );
-    i18n( "&Colors" );
-    i18n( "&Transform" );
-    
-    return guiDef;
 }
 
 void ImagePlugin_Core::setEnabledSelectionActions(bool)
