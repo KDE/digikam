@@ -1,0 +1,15 @@
+[Protocol]
+exec=kio_digikamcamera
+protocol=digikamcamera
+input=none
+output=filesystem
+listing=Name,Type,Size,Date
+reading=true
+writing=true
+deleting=true
+moving=false
+linking=false
+makedir=true
+source=true
+maxInstances=1
+Description=Digikam Camera kioslave
