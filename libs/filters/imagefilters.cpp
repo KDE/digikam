@@ -803,9 +803,9 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
                 }
             else
                 {
-                pResBits[ i ] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
+                pResBits[i+2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm);
                 pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm);
-                pResBits[i+2] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm);
+                pResBits[ i ] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm);
                 }
             
             pResBits[i+3] = pBits[i+3];
