@@ -13,6 +13,9 @@
  * Original Normalize Image algorithm copyrighted 1997 by 
  * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
  *
+ * Original Gaussian Blur algorithm copyrighted 2005 by 
+ * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -597,6 +600,173 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
                          Bits[i+4] + Bits[j+4] + Bits[k+4]) / 9;
             }
         }
+}
+
+/* Function to apply the GaussianBlur on an image
+ *
+ * data             => The image data in RGBA mode.  
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * Radius           => blur matrix radius                                         
+ *                                                                                 
+ * Theory           => this is the famous gaussian blur like in photoshop or gimp.  
+ */
+void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius)
+{
+    if (!data || !Width || !Height)
+       {
+       kdWarning() << ("ImageFilters::gaussianBlurImage: no image data available!")
+                   << endl;
+       return;
+       }
+    
+    if (Radius <= 0) 
+       {
+       kdWarning() << ("ImageFilters::gaussianBlurImage: invalide Radius value!")
+                   << endl;
+       return;
+       }
+       
+    if (Radius > 100) Radius = 100;
+    
+    // Gaussian kernel computation using the Radius parameter.
+      
+    int    nKSize, nCenter;
+    double x, sd, factor, lnsd, lnfactor;
+    register int i, j, n, h, w;
+
+    nKSize = 2 * Radius + 1;
+    nCenter = nKSize / 2;
+    int *Kernel = new int[nKSize];
+
+    lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
+    lnsd = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
+    factor = exp (lnfactor);
+    sd = exp (lnsd);
+
+    for (i = 0; i < nKSize; i++)
+        {
+        x = sqrt ((i - nCenter) * (i - nCenter));
+        Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
+        }
+    
+    // Now, we need to convolve the image descriptor.
+    // I've worked hard here, but I think this is a very smart       
+    // way to convolve an array, its very hard to explain how I reach    
+    // this, but the trick here its to store the sum used by the       
+    // previous pixel, so we sum with the other pixels that wasn't get.
+    
+    int nSumR, nSumG, nSumB, nCount;
+    int nKernelWidth = Radius * 2 + 1;
+    int nStride = GetStride(Width);
+    
+    int LineWidth = Width * 4;                     
+    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    
+    int    BitCount = LineWidth * Height;
+    uchar* pInBits  = (uchar*)data;
+    uchar* pOutBits = new uchar[BitCount];
+    uchar* pBlur    = new uchar[BitCount];
+    
+    // We need to copy our bits to blur bits
+    
+    memcpy (pBlur, pInBits, BitCount);     
+
+    // We need to alloc a 2d array to help us to store the values
+    
+    int** arrMult = Alloc2DArray (nKernelWidth, 256);
+    
+    for (i = 0; i < nKernelWidth; i++)
+        for (j = 0; j < 256; j++)
+            arrMult[i][j] = j * Kernel[i];
+
+    // We need to initialize all the loop and iterator variables
+    
+    nSumR = nSumG = nSumB = nCount = i = j = 0;
+
+    // Now, we enter in the main loop
+    
+    for (h = 0; h < Height; h++, i += nStride)
+        {
+        for (w = 0; w < Width; w++, i += 4)
+            {
+            // first of all, we need to blur the horizontal lines
+                
+            for (n = -Radius; n <= Radius; n++)
+               {
+               // if is inside...
+               if (IsInside (Width, Height, w + n, h))
+                    {
+                    // we points to the pixel
+                    j = i + n * 4;
+                    
+                    // finally, we sum the pixels using a method similar to assigntables
+                    nSumR += arrMult[n + Radius][pInBits[ j ]];
+                    nSumG += arrMult[n + Radius][pInBits[j+1]];
+                    nSumB += arrMult[n + Radius][pInBits[j+2]];
+                    
+                    // we need to add to the counter, the kernel value
+                    nCount += Kernel[n + Radius];
+                    }
+                }
+                
+            if (nCount == 0) nCount = 1;                    
+                
+            // now, we return to blur bits the horizontal blur values
+            pBlur[ i ] = LimitValues (nSumR / nCount);
+            pBlur[i+1] = LimitValues (nSumG / nCount);
+            pBlur[i+2] = LimitValues (nSumB / nCount);
+            // ok, now we reinitialize the variables
+            nSumR = nSumG = nSumB = nCount = 0;
+            }
+        }
+
+    // getting the blur bits, we initialize position variables
+    i = j = 0;
+
+    // We enter in the second main loop
+    for (w = 0; w < Width; w++, i = w * 4)
+        {
+        for (h = 0; h < Height; h++, i += LineWidth)
+            {
+            // first of all, we need to blur the vertical lines
+            for (n = -Radius; n <= Radius; n++)
+                {
+                // if is inside...
+                if (IsInside(Width, Height, w, h + n))
+                    {
+                    // we points to the pixel
+                    j = i + n * LineWidth;
+                      
+                    // finally, we sum the pixels using a method similar to assigntables
+                    nSumR += arrMult[n + Radius][pBlur[ j ]];
+                    nSumG += arrMult[n + Radius][pBlur[j+1]];
+                    nSumB += arrMult[n + Radius][pBlur[j+2]];
+                    
+                    // we need to add to the counter, the kernel value
+                    nCount += Kernel[n + Radius];
+                    }
+                }
+                
+            if (nCount == 0) nCount = 1;                    
+                
+            // now, we return to bits the vertical blur values
+            pOutBits[ i ] = LimitValues (nSumR / nCount);
+            pOutBits[i+1] = LimitValues (nSumG / nCount);
+            pOutBits[i+2] = LimitValues (nSumB / nCount);
+                
+            // ok, now we reinitialize the variables
+            nSumR = nSumG = nSumB = nCount = 0;
+            }
+        }
+
+    memcpy (data, pOutBits, BitCount);   
+       
+    // now, we must free memory
+    Free2DArray (arrMult, nKernelWidth);
+    delete [] pBlur;
+    delete [] pOutBits;
+    delete [] Kernel;
 }
 
 }  // NameSpace Digikam
