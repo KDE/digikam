@@ -367,6 +367,9 @@ void ImageWindow::loadURL(const KURL::List& urlList,
                           bool  allowSaving,
                           AlbumIconView* view)
 {
+    if (!promptUserSave())
+        return;
+    
     setCaption(i18n("Digikam Image Editor - Album \"%1\"").arg(caption));
 
     m_view        = view;
