@@ -17,7 +17,8 @@ Currently implemented plugins are:
  5) Emboss             : An embossed image effect filter.
  6) Charcoal           : A charcoal drawing image effect filter.
  7) Unsharp            : An unsharped mask image filter (based on Gimp 2.0 algorithm).
- 8) RainDrop           : Added Raindrops randomly in an image.
+ 8) RainDrop           : Adding Raindrops randomly in an image.
+ 9) FilmGrain          : Adding film grain in an image.
 
 Contact :
 -----------------------------------------------------------------------

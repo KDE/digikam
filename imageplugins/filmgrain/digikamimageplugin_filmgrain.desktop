@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ImagePlugin_FilmGrain
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+
+Comment=Film grain image effect plugin for digikam
+
+X-KDE-Library=digikamimageplugin_filmgrain
+author=Gilles Caulier, caulier dot gilles at free dot fr
