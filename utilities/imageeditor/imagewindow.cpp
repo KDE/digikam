@@ -943,7 +943,7 @@ bool ImageWindow::save()
     if(!SyncJob::file_move(KURL(tmpFile), m_urlCurrent))
     {
         QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, "Error Saving File");
+        KMessageBox::error(this, errMsg, i18n("Error Saving File"));
         return false;
     }
 
