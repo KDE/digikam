@@ -101,6 +101,7 @@
 #include "cameratype.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
+#include "exiforientation_p.h"
 
 #include "albumiconitem.h"
 #include "digikamapp.h"
@@ -1690,17 +1691,25 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     }
 }
 
-void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
+void AlbumIconView::exifRotate(const QString& filePath, QPixmap& pixmap)
 {
    // Rotate thumbnail based on EXIF rotate tag
     QWMatrix matrix;
 
-    KExifData *exifData = new KExifData;
+    /*
+    KExifData exifData;
 
-    if(!exifData->readFromFile(filename)) return;
+    if(!exifData.readFromFile(filename))
+    {
+        return;
+    }
 
     KExifData::ImageOrientation orientation = exifData->getImageOrientation();
+    */
 
+    KExifData::ImageOrientation orientation
+        = getExifOrientation(filePath);
+    
     bool doXform = (orientation != KExifData::NORMAL &&
                     orientation != KExifData::UNSPECIFIED);
 
@@ -1743,8 +1752,6 @@ void AlbumIconView::exifRotate(QString filename, QPixmap& pixmap)
     //transform accordingly
     if ( doXform )
        pixmap = pixmap.xForm( matrix );
-
-    delete exifData;
 
 }
 

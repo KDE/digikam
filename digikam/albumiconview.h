@@ -124,7 +124,7 @@ private:
 
     AlbumIconViewPrivate *d;
     
-    void           exifRotate(QString filename, QPixmap& pixmap);
+    void           exifRotate(const QString& filePath, QPixmap& pixmap);
     void           updateItemRectsPixmap();
     bool           showMetaInfo();
     AlbumIconItem* findItem(const QPoint& pos);
