@@ -84,7 +84,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Film Grain"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin for add film grain to an image."),
+                                       I18N_NOOP("A Digikam image plugin to apply a film grain effect to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -146,7 +146,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(800) );
-    whatsThis = i18n("<p>Set here the film sensibility in ASA to use for simulate the film graininess.");
+    whatsThis = i18n("<p>Set here the film sensitivity in ASA to use for simulating the film graininess.");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);

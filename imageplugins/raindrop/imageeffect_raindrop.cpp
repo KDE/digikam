@@ -84,7 +84,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Raindrops"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A Digikam image plugin for to add raindrops on an image."),
+                                       I18N_NOOP("A Digikam image plugin to add raindrops to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004, Gilles Caulier", 
                                        0,
@@ -114,7 +114,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Raindrops On Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Raindrops To Image"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -127,7 +127,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Raindrops Effect Preview"), plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Raindrop Effect Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -147,7 +147,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     m_dropSpinBox = new QSpinBox(1, 200, 1, plainPage(), "m_dropSpinBox");
     
-    whatsThis = i18n("<p>Set here the raindrops size.");
+    whatsThis = i18n("<p>Set here the raindrops' size.");
     QWhatsThis::add( m_dropSpinBox, whatsThis);
     QWhatsThis::add( m_dropSlider, whatsThis);
     
@@ -158,7 +158,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Amount:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Number:"), plainPage());
     
     m_amountSlider = new QSlider(1, 500, 1, 1, Qt::Horizontal, plainPage(), "m_amountSlider");
     m_amountSlider->setTickmarks(QSlider::Below);
@@ -187,7 +187,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     m_coeffSpinBox = new QSpinBox(1, 100, 1, plainPage(), "m_coeffSpinBox");
     
-    whatsThis = i18n("<p>This value is the fish eyes effect optical distortion coefficient.");
+    whatsThis = i18n("<p>This value is the fish-eye-effect optical distortion coefficient.");
     QWhatsThis::add( m_coeffSpinBox, whatsThis);
     QWhatsThis::add( m_coeffSlider, whatsThis);                     
     
