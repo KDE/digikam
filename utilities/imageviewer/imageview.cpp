@@ -1796,6 +1796,8 @@ void ImageView::slotBCGEdit()
 {
     ImageBCGEdit *bcgEdit = new ImageBCGEdit(this);
     
+    d->canvas->ajustInit();
+    
     connect(bcgEdit, SIGNAL(signalGammaValueChanged(int)),
             d->canvas, SLOT(slotGammaChanged(int)));
             
@@ -1804,10 +1806,11 @@ void ImageView::slotBCGEdit()
             
     connect(bcgEdit, SIGNAL(signalContrastValueChanged(int)),
             d->canvas, SLOT(slotContrastChanged(int)));
-            
+    
     if ( bcgEdit->exec() == KMessageBox::Ok )
-       {
-       }
+       d->canvas->ajustAccepted();
+    else
+       d->canvas->ajustRejected();           
        
     delete bcgEdit;
 }

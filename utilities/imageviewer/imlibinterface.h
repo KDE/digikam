@@ -70,6 +70,10 @@ public:
     int save(const QString& file);
     int saveAs(const QString& file);
     void restore();
+    
+    void ajustInit(void);
+    void ajustRejected(void);
+    void ajustAccepted(void);
 
 private:
 

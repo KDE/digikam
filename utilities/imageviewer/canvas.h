@@ -50,6 +50,10 @@ public:
     int  save(const QString& filename);
     int  saveAs(const QString& filename);
     bool autoZoomOn();
+       
+    void ajustInit(void);
+    void ajustRejected(void);
+    void ajustAccepted(void);
 
 protected:
     
