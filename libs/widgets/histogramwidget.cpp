@@ -80,6 +80,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     uint   wWidth = width();
     uint   wHeight = height();
     double max;
+
+    x  = 0; y  = 0;
+    yr = 0; yg = 0; yb = 0;
+    max = 0.0;
     
     switch(m_channelType)
        {
@@ -143,6 +147,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           {
           double v;
           double vr, vg, vb;                              // For all color channels.
+
+          v  = 0.0;
+          vr = 0.0; vg = 0.0; vb = 0.0;
           
           switch(m_channelType)
              {

@@ -88,7 +88,7 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
 }
 
 
-void ImagePanIconWidget::paintEvent( QPaintEvent *e )
+void ImagePanIconWidget::paintEvent( QPaintEvent * )
 {
     m_iface->paint(this, m_rect.x(), m_rect.y(),
                    m_rect.width(), m_rect.height());
@@ -117,7 +117,7 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
        }
 }
 
-void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * e )
+void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    

@@ -123,7 +123,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
        }
 }
 
-void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent * e )
+void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
     setCursor ( KCursor::arrowCursor() );
     emit contentsMovedEvent();

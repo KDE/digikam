@@ -47,7 +47,7 @@ signals:
 
     void signalSelectionMoved( QRect rect );
 
-protected slots:
+protected:
     
     void paintEvent( QPaintEvent *e );
     void mousePressEvent ( QMouseEvent * e );

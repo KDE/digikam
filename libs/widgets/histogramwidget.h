@@ -70,7 +70,7 @@ public slots:
     void slotMinValueChanged( int min );
     void slotMaxValueChanged( int max );
         
-protected slots:
+protected:
 
     void paintEvent( QPaintEvent * );
     void mousePressEvent ( QMouseEvent * e );
