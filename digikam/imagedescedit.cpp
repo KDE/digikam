@@ -384,20 +384,26 @@ void ImageDescEdit::slotGotThumbnail(const KFileItem*, const QPixmap& pix,
 void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 
                                            const QPoint &, int )
 {
-    if (!item)
-        return;
-    
     TAlbum              *album;
-    TAlbumCheckListItem *albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
-
-    if(!albumItem)
-        album = AlbumManager::instance()->findTAlbum(0);
-    else
-        album = albumItem->m_album;
+    TAlbumCheckListItem *albumItem;
     
-    if(!album)
-        return;
+    if (!item) 
+    {
+        album = AlbumManager::instance()->findTAlbum(0);
+    }
+    else 
+    {
+        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
+        if(!albumItem)
+            album = AlbumManager::instance()->findTAlbum(0);
+        else
+            album = albumItem->m_album;
+    }
+
+    if(!album)
+        return;    
+            
     QPopupMenu popmenu(this);
 
     popmenu.insertItem(SmallIcon("tag"),
