@@ -111,13 +111,13 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
-
-    about->addAuthor("Victor Stinner", I18N_NOOP("CImg Gimp plugin"), 0,
-                     "http://www.girouette-stinner.com/castor/gimp.html");
-
+                     
     about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
                      "http://cimg.sourceforge.net");
                         
+    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"), 
+                     "gerhard at kulzer.net");
+    
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
@@ -200,7 +200,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.1, true);
     QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image."
-                         "Higher values leave details sharp."));
+                                         "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
 
@@ -209,7 +209,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
     m_gradientInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_gradientInput, i18n("<p>Anisotropic (directional) modifier of the details. Keep it small for Gaussian noise ."));
+    QWhatsThis::add( m_gradientInput, i18n("<p>Anisotropic (directional) modifier of the details. Keep it small for Gaussian noise."));
     grid2->addMultiCellWidget(m_gradientLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
 
@@ -219,7 +219,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_timeStepInput->setPrecision(2);
     m_timeStepInput->setRange(0.0, 500.0, 0.1, true);
     QWhatsThis::add( m_timeStepInput, i18n("<p>Total smoothing power: if Detail Factor sets the relative smoothing and Gradient Factor the "
-                                     "direction, Time Step sets the overall effect."));
+                                           "direction, Time Step sets the overall effect."));
     grid2->addMultiCellWidget(m_timeStepLabel, 2, 2, 0, 0);
     grid2->addMultiCellWidget(m_timeStepInput, 2, 2, 1, 1);
 
