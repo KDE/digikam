@@ -354,7 +354,7 @@ void AlbumIconItem::updateExtraText()
                 
     if ( settings->getIconShowResolution() )
        {
-       Imlib_Image imlib2_im =0;
+       Imlib_Image imlib2_im = 0;
        imlib2_im = imlib_load_image(fileItem_->url().path().latin1());
        
        if (imlib2_im)
