@@ -253,7 +253,7 @@ void ImageWindow::loadURL(const KURL::List& urlList,
                           const QString& caption,
                           bool  allowSaving)
 {
-    setCaption(caption);
+    setCaption(i18n("Digikam image editor - Album \"%1\"").arg(caption));
     
     m_urlList    = urlList;
     m_urlCurrent = urlCurrent;
