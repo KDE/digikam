@@ -31,13 +31,14 @@
   </Menu>
   
   <Menu name="Image" >
-   <text>&amp;Image</text>
-   <Action name="comments_edit" /> 
-   <Action name="file_properties" /> 
+     <text>&amp;Image</text>
+     <Action name="comments_edit" /> 
+     <Action name="file_properties" /> 
+     <Separator/>     
   </Menu>
 
   <Menu name="Fix" >
-   <text>Fi&amp;x</text>
+     <text>Fi&amp;x</text>
   </Menu>
 
   <Menu name="Transform" >
