@@ -49,19 +49,20 @@ public:
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0, bool crossVisible=true, int guideMode=HVGuideMode);
+    ImageGuideWidget(int w, int h, QWidget *parent=0, bool spotVisible=true, int guideMode=HVGuideMode);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
-    QPoint getCrossCenterPosition(void);
-    QColor getCrossCenterColor(void);
-    void setCrossVisible(bool v);
-    void resetCrossPosition(void);
+    
+    QPoint getSpotPosition(void);
+    QColor getSpotColor(void);
+    void   setSpotVisible(bool v);
+    void   resetSpotPosition(void);
 
 signals:
 
-    void crossCenterColorChanged( const QColor &color ); 
-    void crossCenterPositionChanged( const QPoint &position ); 
+    void spotColorChanged( const QColor &color ); 
+    void spotPositionChanged( const QPoint &position ); 
     
 protected:
     
@@ -87,9 +88,9 @@ private:
     
     bool        m_focus;
     bool        m_freeze;
-    bool        m_crossVisible;
+    bool        m_spotVisible;
     
-    QPixmap*    m_pixmap;
+    QPixmap    *m_pixmap;
 };
 
 }  // NameSpace Digikam
