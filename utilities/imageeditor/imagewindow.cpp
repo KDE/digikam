@@ -349,6 +349,10 @@ void ImageWindow::saveSettings()
 void ImageWindow::slotLoadCurrent()
 {
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    
+    if (m_view)
+       m_view->findItem((*it).url())->setSelected(true);
+    
     uint index = m_urlList.findIndex(m_urlCurrent);
 
     if (it != m_urlList.end()) {
