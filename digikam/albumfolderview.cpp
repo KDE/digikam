@@ -3,7 +3,7 @@
 //    ALBUMFOLDERVIEW.CPP
 //
 //    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
+//                            Gilles Caulier <caulier dot gilles at free.fr>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@
 #include <kpropsdlg.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -63,6 +64,7 @@
 #include "albuminfo.h"
 #include "thumbnailjob.h"
 #include "digikamio.h"
+#include "digikamapp.h"
 
 #include "thumbnailsize.h"
 #include "albumfolderitem.h"
@@ -530,6 +532,26 @@ void AlbumFolderView::slot_rightButtonClicked(QListViewItem* item,
      popmenu.insertItem(SmallIcon("edittrash"),
                         i18n("Delete Album from HardDisk"), 11);
 
+     // Added KIPI Batch processes plugins Actions
+                             
+     KAction *action;
+     KActionMenu* menu = new KActionMenu(i18n("Batch processes"));  
+     const QPtrList<KAction>& BatchActions = DigikamApp::getinstance()->menuBatchActions();
+     QPtrListIterator<KAction> it2(BatchActions);
+     bool count =0;
+    
+     while ( (action = it2.current()) != 0 ) 
+        {
+        menu->insert(action);
+        ++it2;
+        count = 1;
+        }
+
+     if (count != 0)
+        {
+        menu->plug(&popmenu);
+        }
+                                   
      int id = popmenu.exec(QCursor::pos());
 
      switch(id) {
