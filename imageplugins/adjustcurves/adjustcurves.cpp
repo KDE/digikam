@@ -228,9 +228,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
-    QToolTip::add( m_pickBlack, i18n( "Shadow tone color picker" ) );
+    QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
     QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
-                                       "smooth curves point on Red, Green and Blue channels."));
+                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
@@ -238,9 +238,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickGray->setToggleButton(true);
-    QToolTip::add( m_pickGray, i18n( "Middle tone color picker" ) );
+    QToolTip::add( m_pickGray, i18n( "All channels middle tone color picker" ) );
     QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
-                                      "smooth curves point on Red, Green and Blue channels."));
+                                      "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
     KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
@@ -248,9 +248,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
-    QToolTip::add( m_pickWhite, i18n( "Highlight tone color picker" ) );
+    QToolTip::add( m_pickWhite, i18n( "All channels highlight tone color picker" ) );
     QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
-                                       "smooth curves point on Red, Green and Blue channels."));
+                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
 
