@@ -10,7 +10,7 @@ KDE_CHECK_HEADER(digikam/imageplugin.h,  have_digikam=yes,  have_digikam=no)
 
 if test "$have_digikam" = "no"; then
   AC_MSG_WARN([Can't find Digikam headers. 
-Please install Digikam from kdeextrager-3 to get the most out of DigikamImagePlugins]);
+Please install Digikam from kdeextragear-3 to get the most out of DigikamImagePlugins]);
    DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
 fi
 
