@@ -71,8 +71,8 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                         BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
     
-    page_plugins = addPage(i18n("Plugins"), i18n("Plugin-management settings"),
-                           BarIcon("share", KIcon::SizeMedium));
+    page_plugins = addPage(i18n("Kipi plugins"), i18n("Kipi plugins-management settings"),
+                           BarIcon("kipi", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
     page_camera = addPage(i18n("Cameras"), i18n("Camera settings"),
