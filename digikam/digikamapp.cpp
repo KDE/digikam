@@ -605,16 +605,19 @@ void DigikamApp::slotConfToolbars()
 void DigikamApp::slotToggleFullScreen()
 {
     if (mFullScreen)
-        {
+    {
+#if QT_VERSION >= 0x030300
+        setWindowState( windowState() & ~WindowFullScreen );
+#else
         showNormal();
+#endif
         mFullScreen = false;
-        move(0, 0);
-        }
+    }
     else
-        {
+    {
         showFullScreen();
         mFullScreen = true;
-        }
+    }
 }
 
 void DigikamApp::slotShowTip()
