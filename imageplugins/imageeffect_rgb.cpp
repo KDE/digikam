@@ -121,15 +121,21 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_rSlider, SIGNAL(valueChanged(int)),
             m_rInput, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
+            m_rSlider, SLOT(setValue(int)));
+    connect(m_rInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
     connect(m_gSlider, SIGNAL(valueChanged(int)),
             m_gInput, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
+            m_gSlider, SLOT(setValue(int)));            
+    connect(m_gInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
             
     connect(m_bSlider, SIGNAL(valueChanged(int)),
             m_bInput, SLOT(setValue(int)));
+    connect(m_bInput, SIGNAL(valueChanged (int)),
+            m_bSlider, SLOT(setValue(int)));                 
     connect(m_bInput, SIGNAL(valueChanged (int)),
             SLOT(slotEffect()));
 
