@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
-#include <libkexif/kexifdata.h>
+#include <libkexif/kexifutils.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -111,9 +111,7 @@ void DigikamImageInfo::setDescription( const QString& description )
                }
 
                // set EXIF UserComment
-               KExifData *exifData = new KExifData;
-               exifData->writeComment(fileName,description);
-               delete exifData;
+               KExifUtils::writeComment(fileName,description);
            }
 
        }

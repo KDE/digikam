@@ -66,6 +66,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <libkexif/kexif.h>
+#include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
 // Local includes.
@@ -587,9 +588,7 @@ void AlbumIconView::slot_editImageComments(AlbumIconItem* iconItem)
             }
 
             // set EXIF UserComment
-            KExifData *exifData = new KExifData;
-            exifData->writeComment(fileName,comments);
-            delete exifData;
+            KExifUtils::writeComment(fileName,comments);
         }
 
         int h = iconItem->height();
@@ -1234,9 +1233,7 @@ void AlbumIconView::slotSetExifOrientation( const QString filename, int orientat
 {
     KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
 
-    KExifData *exifData = new KExifData;
-    exifData->writeOrientation(filename, o);
-    delete exifData;
+    KExifUtils::writeOrientation(filename, o);
 
     refresh(); 
 }
