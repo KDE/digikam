@@ -202,6 +202,18 @@ void ImageRotateDlg::freerotation(double angle, uint *data, int w, int h)
     
     imlib_context_set_image(imTop);
     imlib_free_image_and_decache();
+
+    imlib_context_set_image(im);
+    imlib_free_image_and_decache();
+
+    imlib_context_set_image(im2);
+    imlib_free_image_and_decache();
+
+    imlib_context_set_image(im3);
+    imlib_free_image_and_decache();
+    
+    imlib_context_set_image(im4);
+    imlib_free_image_and_decache();
     
     imlib_context_pop();
     imlib_context_free(context);
