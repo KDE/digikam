@@ -70,14 +70,9 @@ namespace DigikamFilmGrainImagesPlugin
 {
 
 ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
-                     : KDialogBase(Plain,
-                                   i18n("Film Grain"),
-                                   Help|User1|Ok|Cancel,
-                                   Ok,
-                                   parent,
-                                   0,
-                                   true,
-                                   true,
+                     : KDialogBase(Plain, i18n("Film Grain"),
+                                   Help|User1|Ok|Cancel, Ok,
+                                   parent, 0, true, true,
                                    i18n("&Reset Values")),
                        m_parent(parent)
 {
@@ -126,7 +121,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -171,6 +167,9 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    adjustSize();
+    disableResize(); 
+    
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -178,12 +177,6 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
-                       
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize(); 
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.            
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
@@ -193,13 +186,9 @@ ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 void ImageEffect_FilmGrain::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-               this, SLOT(slotEffect()));    
-               
+          
     m_sensibilitySlider->setValue(6);
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
     blockSignals(false);
     slotEffect();    
 } 

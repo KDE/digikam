@@ -124,7 +124,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -139,7 +140,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an image part on Digikam editor, "
                                            "this part will be unused by the filter. You can use this way for disable "
-					   "the Raindrops effect on a human face for example.") );
+                                           "the Raindrops effect on a human face for example.") );
     topLayout->addWidget(gbox);
     
     // -------------------------------------------------------------
@@ -153,7 +154,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_dropSlider->setTracking ( false );
     
     m_dropSpinBox = new QSpinBox(1, 200, 1, plainPage(), "m_dropSpinBox");
-    
+    m_dropSpinBox->setValue(80);
+        
     whatsThis = i18n("<p>Set here the raindrops' size.");
     QWhatsThis::add( m_dropSpinBox, whatsThis);
     QWhatsThis::add( m_dropSlider, whatsThis);
@@ -173,7 +175,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountSlider->setTracking ( false );  
     
     m_amountSpinBox = new QSpinBox(1, 500, 1, plainPage(), "m_amountSpinBox");
-    
+    m_amountSpinBox->setValue(150);
+        
     whatsThis = i18n("<p>This value controls the maximum number of raindrops.");
     QWhatsThis::add( m_amountSpinBox, whatsThis);
     QWhatsThis::add( m_amountSlider, whatsThis);                     
@@ -193,6 +196,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffSlider->setTracking ( false );  
     
     m_coeffSpinBox = new QSpinBox(1, 100, 1, plainPage(), "m_coeffSpinBox");
+    m_coeffSpinBox->setValue(30);
     
     whatsThis = i18n("<p>This value is the fish-eye-effect optical distortion coefficient.");
     QWhatsThis::add( m_coeffSpinBox, whatsThis);
@@ -210,6 +214,11 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    adjustSize();
+    disableResize();  
+    
+    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
+        
     // -------------------------------------------------------------
     
     connect(m_dropSlider, SIGNAL(valueChanged(int)),
@@ -232,12 +241,6 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
             m_coeffSlider, SLOT(setValue(int)));   
     connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));     
-
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize();      
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -265,26 +268,14 @@ void ImageEffect_RainDrop::slotCancel()
 void ImageEffect_RainDrop::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_dropSpinBox, SIGNAL(valueChanged (int)),
-              this, SLOT(slotEffect()));  
-    disconnect(m_amountSpinBox, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));     
-    disconnect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));     
-          
+      
     m_dropSlider->setValue(80);
     m_dropSpinBox->setValue(80);
     m_amountSlider->setValue(150);
     m_amountSpinBox->setValue(150);
     m_coeffSlider->setValue(30);
     m_coeffSpinBox->setValue(30);
-    
-    connect(m_dropSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));  
-    connect(m_amountSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
-    connect(m_coeffSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
+
     blockSignals(false);
     slotEffect();
 } 

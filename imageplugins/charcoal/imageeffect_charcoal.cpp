@@ -118,7 +118,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -144,6 +145,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_pencilSlider->setTracking ( false );
     
     m_pencilInput = new QSpinBox(1, 100, 1, plainPage(), "m_pencilInput");
+    m_pencilInput->setValue(30);
     whatsThis = i18n("<p>Set here the charcoal pencil size used to simulate the drawing.");
         
     QWhatsThis::add( m_pencilInput, whatsThis);
@@ -164,6 +166,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_smoothSlider->setTracking ( false );
     
     m_smoothInput = new QSpinBox(1, 100, 1, plainPage(), "m_smoothInput");
+    m_smoothInput->setValue(10);    
     whatsThis = i18n("<p>This value controls the smoothing effect of the pencil under the canvas.");
     
     QWhatsThis::add( m_smoothSlider, whatsThis);
@@ -181,8 +184,11 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    adjustSize();
+    disableResize();        
+
     // -------------------------------------------------------------
-    
+        
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
@@ -199,12 +205,6 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
             m_smoothSlider, SLOT(setValue(int)));            
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));  
-            
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize();        
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.     
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
@@ -214,24 +214,12 @@ ImageEffect_Charcoal::~ImageEffect_Charcoal()
 void ImageEffect_Charcoal::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-               this, SLOT(slotEffect()));    
-    disconnect(m_pencilInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));  
-    disconnect(m_smoothInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));             
             
     m_pencilInput->setValue(30);
     m_pencilSlider->setValue(30);
     m_smoothInput->setValue(10);
     m_smoothSlider->setValue(10);
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));    
-    connect(m_pencilInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect())); 
-    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));                  
     blockSignals(false);
     slotEffect();
 } 

@@ -79,9 +79,9 @@ namespace DigikamUnsharpFilterImagesPlugin
 {
 
 UnsharpDialog::UnsharpDialog(QWidget* parent)
-               : KDialogBase(Plain, i18n("Unsharped Mask"), Help|User1|Ok|Cancel, Ok,
-                             parent, 0, true, true, i18n("&Reset Values")),
-                 m_parent(parent)
+             : KDialogBase(Plain, i18n("Unsharped Mask"), Help|User1|Ok|Cancel, Ok,
+                           parent, 0, true, true, i18n("&Reset Values")),
+               m_parent(parent)
 {
     QString whatsThis;
     
@@ -131,7 +131,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -157,7 +158,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_radiusSlider->setTracking ( false );
     
     m_radiusInput = new QSpinBox(1, 1200, 1, plainPage(), "m_radiusInput");
-
+    m_radiusInput->setValue(50);
+    
     whatsThis = i18n("<p>A radius of 0 has no effect, "
                      "10 and above determine the blur matrix radius "
                      "that determines how much to blur the image.");
@@ -180,7 +182,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_amountSlider->setTracking ( false );
     
     m_amountInput = new QSpinBox(0, 50, 1, plainPage(), "m_amountInput");
-        
+    m_amountInput->setValue(5);
+            
     whatsThis = i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back "      
                      "into the original.");
@@ -203,7 +206,8 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     m_thresholdSlider->setTracking ( false );  
     
     m_thresholdInput = new QSpinBox(0, 255, 1, plainPage(), "m_thresholdInput");
-    
+    m_thresholdInput->setValue(0);
+        
     whatsThis = i18n("<p>The threshold, as a fraction of the maximum luminosity value, "
                      "needed to apply the difference amount.");
     
@@ -222,6 +226,9 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay5->addWidget(m_progressBar, 1);
     
+    adjustSize();
+    disableResize();  
+        
     // -------------------------------------------------------------
         
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -247,12 +254,6 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
             m_thresholdSlider, SLOT(setValue(int)));
     connect(m_thresholdInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));                                                
-    
-    // -------------------------------------------------------------
-        
-    adjustSize();
-    disableResize();          
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.    
 }
 
 UnsharpDialog::~UnsharpDialog()
@@ -280,30 +281,14 @@ void UnsharpDialog::slotCancel()
 void UnsharpDialog::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-               this, SLOT(slotEffect()));    
-    disconnect(m_radiusInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));  
-    disconnect(m_amountInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect())); 
-    disconnect(m_thresholdInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));                                                
-                           
+                
     m_radiusInput->setValue(50);
     m_radiusSlider->setValue(50);
     m_amountInput->setValue(5);
     m_amountSlider->setValue(5);
     m_thresholdInput->setValue(0);
     m_thresholdSlider->setValue(0);
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));  
-    connect(m_amountInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));             
-    connect(m_thresholdInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));                                                
+                                     
     blockSignals(false);
     slotEffect();
 } 

@@ -1,9 +1,13 @@
+v0.7.1 - 12/xx/04
+----------------------------------------------------------------------------
+    * Update and fix handbooks by Göran Jartin.
+
 v0.7.0 - 11/08/04
 ----------------------------------------------------------------------------
     * Update and fix handbooks for final release.
     * Add 'RainDrops' handbook by Gerhard Kulzer.
 
-v0.7.0-Beta1 - 14/10/04
+v0.7.0-Beta1 - 10/14/04
 ----------------------------------------------------------------------------
     * Add 'FilmGrain', 'Emboss', and 'SolarizeImage' handbooks by Gerhard Kulzer.
     * Add 'AdjustLevels', 'Despeckle', and 'unsharp' handbooks.

@@ -125,7 +125,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
     directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                "digikamimageplugins_banner_left.png");
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -151,7 +151,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     m_brushSizeSlider->setTracking ( false );
     
     m_brushSizeInput = new QSpinBox(1, 5, 1, plainPage(), "m_brushSizeInput");
-    
+    m_brushSizeInput->setValue(1);
+        
     whatsThis = i18n("<p>Set here the brush size to use for simulating the oil painting.");
     QWhatsThis::add( m_brushSizeInput, whatsThis);
     QWhatsThis::add( m_brushSizeSlider, whatsThis);
@@ -171,7 +172,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     m_smoothSlider->setTracking ( false );  
     
     m_smoothInput = new QSpinBox(10, 255, 1, plainPage(), "m_SmoothInput");
-    
+    m_smoothInput->setValue(30);
+        
     whatsThis = i18n("<p>This value controls the smoothing effect of the brush under the canvas.");
     QWhatsThis::add( m_smoothInput, whatsThis);
     QWhatsThis::add( m_smoothSlider, whatsThis);                     
@@ -188,6 +190,9 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    adjustSize();
+    disableResize();
+        
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -206,12 +211,6 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
             m_smoothSlider, SLOT(setValue(int)));   
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));         
-    
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize();               
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values.   
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
@@ -221,24 +220,12 @@ ImageEffect_OilPaint::~ImageEffect_OilPaint()
 void ImageEffect_OilPaint::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-              this, SLOT(slotEffect()));
-    disconnect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));            
-    disconnect(m_smoothInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect()));         
-    
+
     m_brushSizeInput->setValue(1);
     m_brushSizeSlider->setValue(1);
     m_smoothInput->setValue(30);
     m_smoothSlider->setValue(30);
-
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
-    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));            
-    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));         
+        
     blockSignals(false);
     slotEffect();
 } 

@@ -125,7 +125,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
     
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -151,6 +152,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     m_depthSlider->setTracking ( false );
     
     m_depthInput = new QSpinBox(10, 300, 1, plainPage(), "m_depthInput");
+    m_depthInput->setValue(30);    
     whatsThis = i18n("<p>Set here the depth of the embossing image effect.");
         
     QWhatsThis::add( m_depthInput, whatsThis);
@@ -168,6 +170,9 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
+    adjustSize();
+    disableResize(); 
+      
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -179,12 +184,6 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
             m_depthSlider, SLOT(setValue(int)));            
     connect(m_depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect())); 
-   
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize();                 
-    QTimer::singleShot(0, this, SLOT(slotUser1()));    // Reset all parameters to the default values. 
 }
 
 ImageEffect_Emboss::~ImageEffect_Emboss()
@@ -194,18 +193,10 @@ ImageEffect_Emboss::~ImageEffect_Emboss()
 void ImageEffect_Emboss::slotUser1()
 {
     blockSignals(true);
-    disconnect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-               this, SLOT(slotEffect()));
-    disconnect(m_depthInput, SIGNAL(valueChanged (int)),
-               this, SLOT(slotEffect())); 
     
     m_depthInput->setValue(30);
     m_depthSlider->setValue(30);
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));        
-    connect(m_depthInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
     blockSignals(false);
     slotEffect();
 } 

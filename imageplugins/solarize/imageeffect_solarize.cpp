@@ -101,7 +101,8 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
 
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -125,13 +126,13 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     hlay->addWidget(label,1);
     hlay->addWidget(m_numInput,5);
 
+    adjustSize();
+    disableResize();    
+    
     // -------------------------------------------------------------
 
     connect(m_numInput, SIGNAL(valueChanged (double)),
             SLOT(slotEffect()));
-
-    adjustSize();
-    disableResize();
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
@@ -183,16 +184,16 @@ void ImageEffect_Solarize::slotOk()
     int w       = iface->originalWidth();
     int h       = iface->originalHeight();
 
-    if (data) {
+    if (data) 
+       {
+       double factor = m_numInput->value();
 
-        double factor = m_numInput->value();
+       solarize(factor, data, w, h);
 
-        solarize(factor, data, w, h);
+       iface->putOriginalData(data);
 
-        iface->putOriginalData(data);
-
-        delete [] data;
-    }
+       delete [] data;
+       }
 
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();
@@ -207,34 +208,32 @@ void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
     threshold = QMAX(1,threshold);
     bool stretch = true;
 
-    for (int x=0; x<w*h; x++) {
+    for (int x=0; x<w*h; x++) 
+       {
+       a = (*ptr >> 24) & 0xff;
+       r = (*ptr >> 16) & 0xff;
+       g = (*ptr >> 8 ) & 0xff;
+       b = (*ptr      ) & 0xff;
 
-        a = (*ptr >> 24) & 0xff;
-        r = (*ptr >> 16) & 0xff;
-        g = (*ptr >> 8 ) & 0xff;
-        b = (*ptr      ) & 0xff;
+       if (stretch) 
+          {
+          r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
+          g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
+          b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
+          }
+       else 
+          {
+          if (r > threshold)
+             r = (255-r);
+          if (g > threshold)
+             g = (255-g);
+          if (b > threshold)
+             b = (255-b);
+          }
 
-
-        if (stretch) {
-
-            r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
-            g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
-            b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
-
-        }
-        else {
-
-            if (r > threshold)
-                r = (255-r);
-            if (g > threshold)
-                g = (255-g);
-            if (b > threshold)
-                b = (255-b);
-        }
-
-        *ptr = a << 24 | r << 16 | g << 8 | b;
-        ptr++;
-    }
+       *ptr = a << 24 | r << 16 | g << 8 | b;
+       ptr++;
+       }
 }
 
 }  // NameSpace DigikamSolarizeImagesPlugin

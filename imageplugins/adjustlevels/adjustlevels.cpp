@@ -126,7 +126,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
                                                                         "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left", "digikamimageplugins_banner_left.png");
+    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
+                                                 "digikamimageplugins_banner_left.png");
 
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
@@ -288,6 +289,12 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
 
+    adjustSize();
+    disableResize();
+
+    QTimer::singleShot(0, this, SLOT(slotResetAllChannels())); // Reset all parameters to the default values.
+    parentWidget()->setCursor( KCursor::arrowCursor()  );
+                    
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
@@ -341,13 +348,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     connect(m_saveButton, SIGNAL(clicked()),
             this, SLOT(slotSaveLevels()));
-
-    // -------------------------------------------------------------
-
-    adjustSize();
-    QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));     // Reset all parameters to the default values.
-    disableResize();
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
 }
 
 AdjustLevelDialog::~AdjustLevelDialog()
