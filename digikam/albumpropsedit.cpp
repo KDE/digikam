@@ -156,6 +156,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // Connections -------------------------------------------
 
+    connect(titleEdit_, SIGNAL(textChanged(const QString&)),
+            SLOT(slotTitleChanged(const QString&)));
+    
     adjustSize();
 }
 
@@ -244,3 +247,10 @@ bool AlbumPropsEdit::createNew(PAlbum  *parent,
 
     return ok;
 }
+
+void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
+{
+    enableButtonOK(!newtitle.isEmpty());    
+}
+
+#include "albumpropsedit.moc"

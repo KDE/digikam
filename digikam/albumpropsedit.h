@@ -42,6 +42,8 @@ class PAlbum;
 
 class AlbumPropsEdit : public KDialogBase
 {
+    Q_OBJECT
+    
 public:
 
     AlbumPropsEdit(PAlbum* album, bool create=false);
@@ -79,6 +81,10 @@ private:
 
     QComboBox      *collectionCombo_;
     QCheckListItem *rootCollectionItem_;
+
+private slots:
+
+   void slotTitleChanged(const QString& newtitle);
 };
 
 #endif /* ALBUMPROPSEDIT_H */
