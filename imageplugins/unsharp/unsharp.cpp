@@ -343,7 +343,7 @@ void UnsharpDialog::slotOk()
     unsharp(data, w, h, r, a, th);   
            
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Unsharpen"), data);
     
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

@@ -34,10 +34,12 @@
 
 class QPopupMenu;
 class QLabel;
+class QStringList;
 
 class KAccel;
 class KAction;
 class KActionMenu;
+class KToolBarPopupAction;
 class KToggleAction;
 
 class Canvas;
@@ -90,41 +92,41 @@ private:
 
     // Actions
 
-    KAction       *m_navNextAction;
-    KAction       *m_navPrevAction;
-    KAction       *m_navFirstAction;
-    KAction       *m_navLastAction;
+    KAction              *m_navNextAction;
+    KAction              *m_navPrevAction;
+    KAction              *m_navFirstAction;
+    KAction              *m_navLastAction;
 
-    KAction       *m_saveAction;
-    KAction       *m_saveAsAction;
-    KAction       *m_restoreAction;
+    KAction              *m_saveAction;
+    KAction              *m_saveAsAction;
+    KAction              *m_restoreAction;
     
-    KAction       *m_zoomPlusAction;
-    KAction       *m_zoomMinusAction;
-    KToggleAction *m_zoomFitAction;
-    KToggleAction *m_fullScreenAction;
+    KAction              *m_zoomPlusAction;
+    KAction              *m_zoomMinusAction;
+    KToggleAction        *m_zoomFitAction;
+    KToggleAction        *m_fullScreenAction;
 
-    KActionMenu   *m_rotateAction;
-    KActionMenu   *m_flipAction;
-    KAction       *m_rotate90Action;
-    KAction       *m_rotate180Action;
-    KAction       *m_rotate270Action;
-    KAction       *m_flipHorzAction;
-    KAction       *m_flipVertAction;
+    KActionMenu          *m_rotateAction;
+    KActionMenu          *m_flipAction;
+    KAction              *m_rotate90Action;
+    KAction              *m_rotate180Action;
+    KAction              *m_rotate270Action;
+    KAction              *m_flipHorzAction;
+    KAction              *m_flipVertAction;
 
-    KAction       *m_resizeAction;
-    KAction       *m_cropAction;
+    KAction              *m_resizeAction;
+    KAction              *m_cropAction;
     
-    KAction       *m_fileprint;    
-    KAction       *m_fileproperties;
-    KAction       *m_fileDelete;
-    KAction       *m_commentedit;
+    KAction              *m_fileprint;    
+    KAction              *m_fileproperties;
+    KAction              *m_fileDelete;
+    KAction              *m_commentedit;
     
-    KAction       *m_copyAction;
-    KAction       *m_undoAction;
-    KAction       *m_redoAction;    
+    KAction              *m_copyAction;
+    KToolBarPopupAction  *m_undoAction;
+    KToolBarPopupAction  *m_redoAction;
     
-    KAction       *m_imagePluginsHelp;
+    KAction              *m_imagePluginsHelp;
     
     static ImageWindow*  m_instance;
 
@@ -170,6 +172,9 @@ private slots:
     void slotSave();
     void slotSaveAs();
     void slotSaveAsResult(KIO::Job *job);
+
+    void slotAboutToShowUndoMenu();
+    void slotAboutToShowRedoMenu();
     
     void slotFilePrint();
     void slotFileProperties();

@@ -26,12 +26,14 @@
 #define IMAGEIFACE_H
 
 #include <qglobal.h>
+#include <klocale.h>
 
 #define MAX3(a, b, c) (QMAX(QMAX(a,b),b))
 #define MIN3(a, b, c) (QMIN(QMIN(a,b),b))
 #define ROUND(x) ((int) ((x) + 0.5))
 
 class QPaintDevice;
+class QString;
 
 namespace Digikam
 {
@@ -50,7 +52,7 @@ public:
     uint* getSelectedData();
 
     void putPreviewData(uint* data);
-    void putOriginalData(uint* data, int w=-1, int h=-1);
+    void putOriginalData(const QString &caller, uint* data, int w=-1, int h=-1);
     void putSelectedData(uint* data);
 
     int  previewWidth();

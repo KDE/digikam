@@ -395,7 +395,7 @@ void ImageEffect_RatioCrop::slotOk()
     imDest = imOrg->copy(currentPos);
     delete imOrg;
 
-    iface.putOriginalData((uint*)imDest.bits(), imDest.width(), imDest.height());
+    iface.putOriginalData(i18n("Aspect Ratio Crop"), (uint*)imDest.bits(), imDest.width(), imDest.height());
     
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

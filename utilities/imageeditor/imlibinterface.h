@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qobject.h>
+#include <klocale.h>
 
 class QWidget;
 class QString;
@@ -99,9 +100,13 @@ public:
     void setBCG(double brightness, double contrast, double gamma);
     
     uint* getData();
-    void  putData(uint* data, int w, int h, bool saveUndo=true);
+    void  putData(uint* data, int w, int h);
+    void  putData(const QString &caller, uint* data, int w, int h);
     uint* getSelectedData();
     void  putSelectedData(uint* data, bool saveUndo=true);
+
+    void getUndoHistory(QStringList &titles);
+    void getRedoHistory(QStringList &titles);
     
 signals:
 

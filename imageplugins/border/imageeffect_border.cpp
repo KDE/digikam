@@ -567,7 +567,7 @@ void ImageEffect_Border::slotOk()
           break;
        }
 
-    iface->putOriginalData((uint*)dest.bits(), dest.width(), dest.height());
+    iface->putOriginalData(i18n("Add Border"), (uint*)dest.bits(), dest.width(), dest.height());
        
     delete [] data;    
     

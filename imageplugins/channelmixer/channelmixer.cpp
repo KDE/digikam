@@ -571,7 +571,7 @@ void ChannelMixerDialog::slotOk()
                 m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);  // Blue channel gains.
        }
     
-    ifaceDest->putOriginalData(desData);
+    ifaceDest->putOriginalData(i18n("Channel Mixer"), desData);
 
     delete [] orgData;
     delete [] desData;

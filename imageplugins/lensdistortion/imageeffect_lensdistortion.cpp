@@ -636,7 +636,7 @@ void ImageEffect_LensDistortion::slotOk()
     if (data) 
        {
        wideangle(data, w, h, m, e, r, b, 0, 0);
-       if ( !m_cancel ) iface->putOriginalData(data);
+       if ( !m_cancel ) iface->putOriginalData(i18n("Lens Distortion"), data);
        }
     
     delete [] data;    

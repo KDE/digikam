@@ -365,7 +365,7 @@ void DespeckleDialog::slotOk()
     despeckle(data, w, h, r, bl, wl, af, rf);   
     
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Despeckle"), data);
        
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

@@ -292,7 +292,7 @@ void ImageEffect_OilPaint::slotOk()
     OilPaint(data, w, h, b, s);
     
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Oilpaint"), data);
        
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

@@ -251,7 +251,7 @@ void ImageEffect_FilmGrain::slotOk()
     FilmGrain(data, w, h, s);
 
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Film Grain"), data);
        
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

@@ -19,6 +19,8 @@
 #ifndef UNDOACTION_H
 #define UNDOACTION_H
 
+#include <klocale.h>
+
 namespace Digikam
 {
 class ImlibInterface;
@@ -33,10 +35,13 @@ public:
 
     virtual void rollBack() = 0;
     virtual void execute()  = 0;
+
+    QString getTitle() const;
     
 protected:
 
     Digikam::ImlibInterface* m_iface;
+    QString                  m_title;
 };
 
 class UndoActionRotate : public UndoAction
@@ -109,7 +114,8 @@ class UndoActionIrreversible : public UndoAction
 {
 public:
 
-    UndoActionIrreversible(Digikam::ImlibInterface* iface);
+    UndoActionIrreversible(Digikam::ImlibInterface* iface, 
+                           const QString &caller=i18n("unknown"));
     ~UndoActionIrreversible();
 
     void rollBack();

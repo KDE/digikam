@@ -371,7 +371,7 @@ void AdjustCurveDialog::slotOk()
     // Apply the lut to the image.
     m_curves->curvesLutProcess(orgData, desData, w, h);
 
-    ifaceDest->putOriginalData(desData);
+    ifaceDest->putOriginalData(i18n("Adjust Curve"), desData);
 
     delete [] orgData;
     delete [] desData;

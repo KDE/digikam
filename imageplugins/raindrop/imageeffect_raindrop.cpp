@@ -430,13 +430,13 @@ void ImageEffect_RainDrop::slotOk()
           bitBlt( &newImg, selectedX + selectedW, 0, &zone4, 0, 0, w, h );
           bitBlt( &newImg, selectedX, selectedY, &selectedImg, 0, 0, selectedImg.width(), selectedImg.height());
        
-          if ( !m_cancel ) iface->putOriginalData((uint*)newImg.bits());
+          if ( !m_cancel ) iface->putOriginalData(i18n("Raindrops"), (uint*)newImg.bits());
           }
        else 
           {
           rainDrops(data, w, h, 0, d, a, c, true);
           
-          if ( !m_cancel ) iface->putOriginalData(data);
+          if ( !m_cancel ) iface->putOriginalData(i18n("Raindrops"), data);
           }
        }
     

@@ -539,7 +539,7 @@ void ImageEffect_BlurFX::slotOk()
              break;                    
           }
        
-       if ( !m_cancel ) iface->putOriginalData(data);
+       if ( !m_cancel ) iface->putOriginalData(i18n("Blur Effects"), data);
        }
     
     delete [] data;    

@@ -189,7 +189,7 @@ void ImageEffect_Solarize::slotOk()
 
        solarize(factor, data, w, h);
 
-       iface->putOriginalData(data);
+       iface->putOriginalData(i18n("Solarize"), data);
 
        delete [] data;
        }

@@ -167,7 +167,7 @@ void ImageEffect_BWSepia::slotOk()
 
        blackAndWhiteConversion(data, w, h, type);
 
-       iface->putOriginalData(data);
+       iface->putOriginalData(i18n("Black & White"), data);
 
        delete [] data;
        }

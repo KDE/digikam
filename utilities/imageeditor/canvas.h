@@ -28,6 +28,7 @@
 #include <qrect.h>
 
 class QString;
+class QStringList;
 class QPixmap;
 class QPaintEvent;
 class QResizeEvent;
@@ -75,6 +76,9 @@ public:
     void decreaseBrightness();
     void increaseContrast();
     void decreaseContrast();
+
+    void getUndoHistory(QStringList &titles);
+    void getRedoHistory(QStringList &titles);
     
 protected:
     
@@ -112,9 +116,9 @@ public slots:
     void slotCrop();
     
     void slotRestore();
-    void slotUndo();
-    void slotRedo();
-    
+    void slotUndo(int steps=1);
+    void slotRedo(int steps=1);
+
     void slotCopy();
 
 private slots:

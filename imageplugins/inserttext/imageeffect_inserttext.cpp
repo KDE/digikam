@@ -378,7 +378,7 @@ void ImageEffect_InsertText::slotOk()
     
     Digikam::ImageIface iface(0, 0);
     QImage dest = m_previewWidget->makeInsertText();
-    iface.putOriginalData((uint*)dest.bits(), dest.width(), dest.height());
+    iface.putOriginalData(i18n("Insert Text"), (uint*)dest.bits(), dest.width(), dest.height());
        
     writeSettings();
     m_parent->setCursor( KCursor::arrowCursor() );        

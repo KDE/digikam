@@ -119,7 +119,7 @@ void ImageEffect_Sharpen::slotOk()
             
     Digikam::ImageFilters::sharpenImage(data, w, h, r);
            
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Sharpen"), data);
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();

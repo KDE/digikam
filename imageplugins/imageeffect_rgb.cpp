@@ -194,7 +194,7 @@ void ImageEffect_RGB::slotOk()
 
     adjustRGB(r, g, b, a, data, w, h);
 
-    iface->putOriginalData(data);
+    iface->putOriginalData(i18n("RGB"), data);
     delete [] data;
     accept();
 }

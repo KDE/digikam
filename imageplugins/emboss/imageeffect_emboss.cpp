@@ -255,7 +255,7 @@ void ImageEffect_Emboss::slotOk()
     Emboss(data, w, h, depth);
         
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Emboss"), data);
        
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

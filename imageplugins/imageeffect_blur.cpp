@@ -121,7 +121,7 @@ void ImageEffect_Blur::slotOk()
             
     Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
            
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Blur"), data);
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();

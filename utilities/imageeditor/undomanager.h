@@ -24,6 +24,7 @@
 class UndoManagerPriv;
 class UndoAction;
 class UndoCache;
+class QStringList;
 
 namespace Digikam
 {
@@ -43,6 +44,8 @@ public:
     void clear(bool clearCache=true);
     bool anyMoreUndo();
     bool anyMoreRedo();    
+    void getUndoHistory(QStringList &titles);
+    void getRedoHistory(QStringList &titles);
 
     void addAction(UndoAction* action);
 

@@ -297,7 +297,7 @@ void ImageEffect_SuperImpose::slotOk()
     
     Digikam::ImageIface iface(0, 0);
     QImage img = m_previewWidget->makeSuperImpose();
-    iface.putOriginalData( (uint*)img.bits(),
+    iface.putOriginalData(i18n("Super Impose"), (uint*)img.bits(),
                            m_previewWidget->getTemplateSize().width(),
                            m_previewWidget->getTemplateSize().height() );   
     

@@ -289,7 +289,7 @@ void ImageEffect_Charcoal::slotOk()
         memcpy(data, newImage.bits(), newImage.numBytes());
         
         if ( !m_cancel )
-           iface.putOriginalData(data);
+           iface.putOriginalData(i18n("Charcoal"), data);
         
         delete [] data;
         }

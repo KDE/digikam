@@ -532,7 +532,7 @@ void AdjustLevelDialog::slotOk()
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    ifaceDest->putOriginalData(desData);
+    ifaceDest->putOriginalData(i18n("Adjust Level"), desData);
 
     delete [] orgData;
     delete [] desData;

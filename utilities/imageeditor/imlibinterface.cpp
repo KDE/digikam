@@ -669,7 +669,7 @@ void ImlibInterface::flipVert(bool saveUndo)
 
 void ImlibInterface::crop(int x, int y, int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this));
+    d->undoMan->addAction(new UndoActionIrreversible(this, "Crop"));
 
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
@@ -690,7 +690,7 @@ void ImlibInterface::crop(int x, int y, int w, int h)
 
 void ImlibInterface::resize(int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this));
+    d->undoMan->addAction(new UndoActionIrreversible(this, "Resize"));
 
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
@@ -805,7 +805,7 @@ void ImlibInterface::changeBCG(double gamma, double brightness, double contrast)
 
 void ImlibInterface::setBCG(double brightness, double contrast, double gamma)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this));
+    d->undoMan->addAction(new UndoActionIrreversible(this, "Brithness, Contrast, Gamma"));
 
     imlib_context_push(d->context);
 
@@ -850,14 +850,16 @@ uint* ImlibInterface::getData()
         return 0;
 }
 
-void ImlibInterface::putData(uint* data, int w, int h,
-                             bool saveUndo)
+
+void ImlibInterface::putData(const QString &caller, uint* data, int w, int h)
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionIrreversible(this));
-    }
-    
+    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
+    putData(data, w, h);
+}
+
+
+void ImlibInterface::putData(uint* data, int w, int h)
+{
     imlib_context_push(d->context);
     imlib_context_set_image(d->image);
 
@@ -1106,6 +1108,16 @@ bool ImlibInterface::saveTIFF(const QString& saveFile, bool compress)
     }
 
     return false;
+}
+
+void ImlibInterface::getUndoHistory(QStringList &titles)
+{
+    d->undoMan->getUndoHistory(titles);
+}
+
+void ImlibInterface::getRedoHistory(QStringList &titles)
+{
+    d->undoMan->getRedoHistory(titles);
 }
 
 ImlibInterface* ImlibInterface::instance()

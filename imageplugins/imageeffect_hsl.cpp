@@ -157,7 +157,7 @@ void ImageEffect_HSL::slotOk()
 
     Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
 
-    iface->putOriginalData(data);
+    iface->putOriginalData(i18n("HSL"), data);
     delete [] data;
     accept();
 }

@@ -192,7 +192,7 @@ void ImagePlugin_Core::slotStretchContrast()
     
     Digikam::ImageFilters::stretchContrastImage(data, w, h);
     
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Stretch Contrast"), data);
     delete [] data;
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
@@ -210,7 +210,7 @@ void ImagePlugin_Core::slotNormalize()
     
     Digikam::ImageFilters::normalizeImage(data, w, h);
     
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Normalize"), data);
     delete [] data;
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
@@ -228,7 +228,7 @@ void ImagePlugin_Core::slotEqualize()
     
     Digikam::ImageFilters::equalizeImage(data, w, h);
     
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Equalize"), data);
     delete [] data;
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
@@ -246,7 +246,7 @@ void ImagePlugin_Core::slotAutoLevels()
     
     Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h);
     
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Auto Levels"), data);
     delete [] data;
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
@@ -264,7 +264,7 @@ void ImagePlugin_Core::slotInvert()
     
     Digikam::ImageFilters::invertImage(data, w, h);
     
-    iface.putOriginalData(data);
+    iface.putOriginalData(i18n("Invert"), data);
     delete [] data;
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );

@@ -28,16 +28,34 @@
 UndoAction::UndoAction(Digikam::ImlibInterface* iface)
     : m_iface(iface)
 {
+    m_title = i18n("unknown");
 }
 
 UndoAction::~UndoAction()
 {
 }
 
+QString UndoAction::getTitle() const
+{
+    return m_title;
+}
+
 UndoActionRotate::UndoActionRotate(Digikam::ImlibInterface* iface,
                                    UndoActionRotate::Angle angle)
     : UndoAction(iface), m_angle(angle)
 {
+    switch(m_angle)
+    {
+    case(R90):
+        m_title = i18n("Rotate 90 Degrees");
+        break;
+    case(R180):
+        m_title = i18n("Rotate 180 Degrees");
+        break;
+    case(R270):
+        m_title = i18n("Rotate 270 Degrees");
+        break;
+    }
 }
 
 UndoActionRotate::~UndoActionRotate()
@@ -84,7 +102,10 @@ UndoActionFlip::UndoActionFlip(Digikam::ImlibInterface* iface,
                                UndoActionFlip::Direction dir)
     : UndoAction(iface), m_dir(dir)
 {
-    
+    if(m_dir == Horizontal)
+        m_title = i18n("Flip Horizontal");
+    else if(m_dir == Vertical)
+        m_title = i18n("Flip Vertical");
 }
 
 UndoActionFlip::~UndoActionFlip()
@@ -120,7 +141,7 @@ UndoActionBCG::UndoActionBCG(Digikam::ImlibInterface* iface,
       m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
       m_newContrast(newContrast)
 {
-    
+    m_title = i18n("Brightness,Contrast,Gamma");    
 }
 
 UndoActionBCG::~UndoActionBCG()
@@ -138,9 +159,11 @@ void UndoActionBCG::execute()
     m_iface->changeBCG(m_newGamma, m_newBrightness, m_newContrast);
 }
 
-UndoActionIrreversible::UndoActionIrreversible(Digikam::ImlibInterface* iface)
+UndoActionIrreversible::UndoActionIrreversible(Digikam::ImlibInterface* iface, 
+                                               const QString &title)
     : UndoAction(iface)
 {
+    m_title = title;
 }
 
 UndoActionIrreversible::~UndoActionIrreversible()

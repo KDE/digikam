@@ -236,7 +236,7 @@ void ImageEffect_FreeRotation::slotOk()
     matrix.rotate(angle);
     src = src.xForm(matrix);
     Digikam::ImageFilters::smartBlurImage((uint*)src.bits(), src.width(), src.height());
-    iface.putOriginalData((uint*)src.bits(), src.width(), src.height());
+    iface.putOriginalData(i18n("Free Rotation"), (uint*)src.bits(), src.width(), src.height());
         
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

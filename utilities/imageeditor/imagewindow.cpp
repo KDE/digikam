@@ -50,6 +50,7 @@
 #include <kstatusbar.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kpopupmenu.h>
 
 // LibKexif includes.
 
@@ -243,13 +244,25 @@ void ImageWindow::buildGUI()
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                     actionCollection(), "imageview_copy");
     m_copyAction->setEnabled(false);
-        
-    m_undoAction = KStdAction::undo(m_canvas, SLOT(slotUndo()),
-                                    actionCollection(), "imageview_undo");
+
+    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
+                                           KStdAccel::shortcut(KStdAccel::Undo),
+                                           m_canvas, SLOT(slotUndo()),
+                                           actionCollection(), "imageview_undo");
+    connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowUndoMenu()));
+    connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotUndo(int)));
     m_undoAction->setEnabled(false);
 
-    m_redoAction = KStdAction::redo(m_canvas, SLOT(slotRedo()),
-                                    actionCollection(), "imageview_redo");
+    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo", 
+                                           KStdAccel::shortcut(KStdAccel::Redo),
+                                           m_canvas, SLOT(slotRedo()),
+                                           actionCollection(), "imageview_redo");
+    connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowRedoMenu()));
+    connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
            
     // -- View actions ----------------------------------------------------------------
@@ -593,6 +606,38 @@ void ImageWindow::slotLoadLast()
     
     m_urlCurrent = m_urlList.last();
     slotLoadCurrent();
+}
+
+void ImageWindow::slotAboutToShowUndoMenu()
+{
+    m_undoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getUndoHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_undoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
+}
+
+void ImageWindow::slotAboutToShowRedoMenu()
+{
+    m_redoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getRedoHistory(titles);
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_redoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
 }
 
 void ImageWindow::slotToggleAutoZoom()

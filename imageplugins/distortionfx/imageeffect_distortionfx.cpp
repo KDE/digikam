@@ -625,7 +625,7 @@ void ImageEffect_DistortionFX::slotOk()
              break;
           }
        
-       if ( !m_cancel ) iface->putOriginalData(data);
+       if ( !m_cancel ) iface->putOriginalData(i18n("Distortion Effects"), data);
        }
     
     delete [] data;    

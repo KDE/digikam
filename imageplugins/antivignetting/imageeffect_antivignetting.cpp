@@ -485,7 +485,7 @@ void ImageEffect_AntiVignetting::slotOk()
 
        if ( !m_cancel ) 
           {
-          iface->putOriginalData(data);
+          iface->putOriginalData(i18n("Anti Vignetting"), data);
           
           // Adjust Image BCG.
           iface->setOriginalBCG(b, c, g);

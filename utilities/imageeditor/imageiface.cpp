@@ -236,12 +236,12 @@ void ImageIface::putPreviewData(uint* data)
     imlib_context_pop();    
 }
 
-void ImageIface::putOriginalData(uint* data, int w, int h)
+void ImageIface::putOriginalData(const QString &caller, uint* data, int w, int h)
 {
     if (!data)
         return;
 
-    ImlibInterface::instance()->putData(data, w, h);
+    ImlibInterface::instance()->putData(caller, data, w, h);
 }
 
 void ImageIface::putSelectedData(uint* data)

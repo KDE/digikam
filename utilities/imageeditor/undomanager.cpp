@@ -22,6 +22,8 @@
 
 #include <typeinfo>
 
+#include <qstringlist.h>
+
 #include "imlibinterface.h"
 #include "undoaction.h"
 #include "undocache.h"
@@ -79,7 +81,7 @@ void UndoManager::undo()
 
         // and now, undo the action
         m_cache->getData(m_undoActions.size(), w, h, data, false);
-        m_iface->putData(data, w, h, false);
+        m_iface->putData(data, w, h);
 
         delete [] data;
     }
@@ -105,7 +107,7 @@ void UndoManager::redo()
         uint *data;
         
         m_cache->getData(m_undoActions.size() + 2, w, h, data, false);
-        m_iface->putData(data, w, h, false);
+        m_iface->putData(data, w, h);
         
         delete[] data;
     }
@@ -171,3 +173,22 @@ bool UndoManager::anyMoreRedo()
     return !m_redoActions.isEmpty();
 }
 
+void UndoManager::getUndoHistory(QStringList &titles)
+{
+    QValueList<UndoAction*>::iterator it;
+
+    for(it = m_undoActions.begin(); it != m_undoActions.end(); ++it)
+    {
+        titles.push_front((*it)->getTitle());
+    }
+}
+
+void UndoManager::getRedoHistory(QStringList &titles)
+{
+    QValueList<UndoAction*>::iterator it;
+
+    for(it = m_redoActions.begin(); it != m_redoActions.end(); ++it)
+    {
+        titles.push_front((*it)->getTitle());
+    }
+}

@@ -269,7 +269,7 @@ void ImageEffect_Infrared::slotOk()
     infrared(data, w, h, s, g);
 
     if ( !m_cancel )
-       iface.putOriginalData(data);
+       iface.putOriginalData(i18n("Infrared Film"), data);
        
     delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );

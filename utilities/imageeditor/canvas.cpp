@@ -873,14 +873,32 @@ void Canvas::slotRestore()
     d->im->restore();
 }
 
-void Canvas::slotUndo()
+void Canvas::slotUndo(int steps)
 {
-    d->im->undo();
+    while(steps > 0)
+    {
+        d->im->undo();
+        --steps;
+    }
 }
 
-void Canvas::slotRedo()
+void Canvas::getUndoHistory(QStringList &titles)
 {
-    d->im->redo();
+    d->im->getUndoHistory(titles);
+}
+
+void Canvas::getRedoHistory(QStringList &titles)
+{
+    d->im->getRedoHistory(titles);
+}
+
+void Canvas::slotRedo(int steps)
+{
+    while(steps > 0)
+    {
+        d->im->redo();
+        --steps;
+    }
 }
 
 void Canvas::slotCopy()
