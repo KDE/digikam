@@ -466,24 +466,28 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     AlbumIconItem* iconItem
         = static_cast<AlbumIconItem *>(item);
 
+    int selectedCount = selectedItems().count();
+    
     // --------------------------------------------------------
 
     QValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers =
         KTrader::self()->query(iconItem->fileItem()->mimetype(),
                                "Type == 'Application'");
-    
-    QPopupMenu *exifOrientationMenu = new QPopupMenu();
 
-    exifOrientationMenu->insertItem(i18n("Normal"), 201);
-    exifOrientationMenu->insertItem(i18n("Flipped horizontally"), 202);
-    exifOrientationMenu->insertItem(i18n("Rotated 180 degrees"), 203);
-    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees / horiz. flipped"), 204);
-    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees"), 205);
-    exifOrientationMenu->insertItem(i18n("Rotated 90 degrees / vert. flipped"), 206);
-    exifOrientationMenu->insertItem(i18n("Rotated 270 degrees"), 207);
+    QPopupMenu exifOrientationMenu;
+    if (selectedCount == 1)
+    {
+        exifOrientationMenu.insertItem(i18n("Normal"), 201);
+        exifOrientationMenu.insertItem(i18n("Flipped horizontally"), 202);
+        exifOrientationMenu.insertItem(i18n("Rotated 180 degrees"), 203);
+        exifOrientationMenu.insertItem(i18n("Rotated 90 degrees / horiz. flipped"), 204);
+        exifOrientationMenu.insertItem(i18n("Rotated 90 degrees"), 205);
+        exifOrientationMenu.insertItem(i18n("Rotated 90 degrees / vert. flipped"), 206);
+        exifOrientationMenu.insertItem(i18n("Rotated 270 degrees"), 207);
+    }
 
-    QPopupMenu *openWithMenu = new QPopupMenu();
+    QPopupMenu openWithMenu;
 
     KTrader::OfferList::Iterator iter;
     KService::Ptr ptr;
@@ -492,8 +496,8 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     for( iter = offers.begin(); iter != offers.end(); ++iter ) 
     {
         ptr = *iter;
-        openWithMenu->insertItem( ptr->pixmap(KIcon::Small),
-                                  ptr->name(), index++);
+        openWithMenu.insertItem( ptr->pixmap(KIcon::Small),
+                                 ptr->name(), index++);
         serviceVector.push_back(ptr);
     }
     
@@ -502,14 +506,17 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
     QPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("editimage"),
                        i18n("View/Edit"), 10);
-    popmenu.insertItem(i18n("Open With ..."), openWithMenu, 11);
+    popmenu.insertItem(i18n("Open With ..."), &openWithMenu, 11);
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("text_block"),
                        i18n("Edit Comments and Tags ..."), 12);
     popmenu.insertItem(SmallIcon("text_italic"),
                        i18n("View Exif Information ..."), 13);
-    popmenu.insertItem(SmallIcon("text_italic"),
-                       i18n("Set Exif Orientation"), exifOrientationMenu, 17);
+    if (selectedCount == 1)
+    {
+        popmenu.insertItem(SmallIcon("text_italic"),
+                           i18n("Set Exif Orientation"), &exifOrientationMenu, 17);
+    }
     popmenu.insertItem(i18n("Properties ..."), 14);
     popmenu.insertSeparator();
 
@@ -602,16 +609,16 @@ void AlbumIconView::slotRightButtonClicked(ThumbItem *item,
 
     //---------------------------------------------------------------
 
-    if( id >= 200) {
+    if( selectedCount == 1 && id >= 200)
+    {
         slotSetExifOrientation( iconItem->fileItem()->url().path(), id -200 );
-    } else if (id >= 100) {
+    }
+    else if (id >= 100) {
         KService::Ptr imageServicePtr = serviceVector[id-100];
         KRun::run(*imageServicePtr, iconItem->fileItem()->url());
     }
 
     serviceVector.clear();
-    delete openWithMenu;
-    delete exifOrientationMenu;
 }
 
 void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
