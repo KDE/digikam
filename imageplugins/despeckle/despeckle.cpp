@@ -205,7 +205,7 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     connect(m_radiusInput, SIGNAL(valueChanged(int)),
             m_radiusSlider, SLOT(setValue(int)));            
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));            
+            this, SLOT(slotEffect()));            
             
     connect(m_blackLevelSlider, SIGNAL(valueChanged(int)),
             m_blackLevelInput, SLOT(setValue(int)));
