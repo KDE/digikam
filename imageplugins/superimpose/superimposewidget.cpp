@@ -97,7 +97,7 @@ QImage SuperImposeWidget::makeSuperImpose(void)
     p.drawPixmap(0, 0, pixTemplate, 0, 0, size.width(), size.height());
     p.end();    
     
-    return ( target.convertToImage() );
+    return ( target.convertToImage().convertDepth(32) );
 }
 
 void SuperImposeWidget::resetEdit(void)
