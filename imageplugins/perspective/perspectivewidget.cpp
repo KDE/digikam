@@ -738,13 +738,13 @@ void PerspectiveWidget::matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2)
     Matrix3  tmp;
     double   t1, t2, t3;
 
-    for (i = 0; i < 3; ++i)
+    for (i = 0; i < 3; i++)
        {
        t1 = matrix1->coeff[i][0];
        t2 = matrix1->coeff[i][1];
        t3 = matrix1->coeff[i][2];
 
-       for (j = 0; j < 3; ++j)
+       for (j = 0; j < 3; j++)
           {
           tmp.coeff[i][j]  = t1 * matrix2->coeff[0][j];
           tmp.coeff[i][j] += t2 * matrix2->coeff[1][j];

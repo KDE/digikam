@@ -100,6 +100,8 @@ protected:
 
 private:  // Matrix 3x3 perspective transformation implementations.
         
+    // TODO : put these methods in a separate class.
+    
     struct Matrix3
     {
     double coeff[3][3];
