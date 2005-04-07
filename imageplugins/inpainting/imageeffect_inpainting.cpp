@@ -158,7 +158,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                      "caulier dot gilles at free.fr");
 
     about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://www.greyc.ensicaen.fr/~dtschump/greycstoration/index.html");
+                     "http://cimg.sourceforge.net");
 
     about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"), 
                      "gerhard at kulzer.net");
