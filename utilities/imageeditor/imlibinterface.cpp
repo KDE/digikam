@@ -494,8 +494,24 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
 
     imlib_context_set_color_modifier(d->cmod);
 
+    if (d->zoom == 1.0)
+    {
+        // this hack is needed because imlib2 renders image incorrectly
+        // if zoom == 1 and an unmodified colot modifier is applied
+        Imlib_Image tmp =
+            imlib_create_cropped_scaled_image(sx, sy, sw, sh, dw, dh);
+        if (tmp)
+        {        
+            imlib_context_set_image(tmp);
+            imlib_render_image_on_drawable(dx, dy);
+            imlib_free_image();
+        }
+    }
+    else
+    {
     imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
                                                 dx, dy, dw, dh);
+    }
 
     imlib_context_pop();
 }
