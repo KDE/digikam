@@ -97,7 +97,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Photograph Blowup"), 
+                                       I18N_NOOP("Blowup Photograph "), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to blowup a photograph."),
                                        KAboutData::License_GPL,
@@ -132,7 +132,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Photograph Blowup"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Blowup Photograph"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
