@@ -509,8 +509,8 @@ void ImlibInterface::paintOnDevice(QPaintDevice* p,
     }
     else
     {
-    imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
-                                                dx, dy, dw, dh);
+        imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh,
+                                                    dx, dy, dw, dh);
     }
 
     imlib_context_pop();
