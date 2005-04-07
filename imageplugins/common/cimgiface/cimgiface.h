@@ -105,18 +105,18 @@ private:  // CImg filter interface.
     bool process();
     
     // Compute smoothed structure tensor field G
-    void compute_smoothed_tensor();
+    inline void compute_smoothed_tensor();
 
     // Compute normalized tensor field sqrt(T) in G
-    void compute_normalized_tensor();
+    inline void compute_normalized_tensor();
 
     // Compute LIC's along different angle projections a_\alpha
-    void compute_LIC(int &counter);
-    void compute_LIC_back_forward(int x, int y);
-    void compute_W(float cost, float sint);
+    inline void compute_LIC(int &counter);
+    inline void compute_LIC_back_forward(int x, int y);
+    inline void compute_W(float cost, float sint);
 
     // Average all the LIC's
-    void compute_average_LIC();
+    inline void compute_average_LIC();
 
     // Prepare datas
     bool prepare();
@@ -131,8 +131,6 @@ private:  // CImg filter interface.
     // Clean up memory (CImg datas) to save memory
     void cleanup();
 
-    void get_geom(const char *geom, int &geom_w, int &geom_h);
-    
 private:  // CImg filter data.
     
     // CImg filter settings.

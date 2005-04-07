@@ -5,8 +5,9 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Some code come from the CImg Gimp plugin by Victor Stinner.
- * See: http://www.girouette-stinner.com/castor/gimp.html
+ * Some code come from the Fast Anisotropic Smoothing of 
+ * Multi-valued Images, using Curvature-Preserving PDE's
+ * by David Tschumperlé. 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -475,6 +476,7 @@ bool CimgIface::prepare_resize()
     return true;
 }
 
+/*
 void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h) 
 {
     char tmp[16];
@@ -482,6 +484,7 @@ void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h)
     if (tmp[0]=='%') geom_w=-geom_w;
     if (tmp[1]=='%') geom_h=-geom_h;
 }
+*/
 
 bool CimgIface::prepare_visuflow()
 {
@@ -489,7 +492,7 @@ bool CimgIface::prepare_visuflow()
     //const char *file_i   = (const char *)NULL; //cimg_option("-i",(const char*)NULL,"Input init image");
     const bool normalize = false; //cimg_option("-norm",false,"Normalize input flow");
 
-    int w,h; get_geom(geom,w,h);
+    int w,h; /*get_geom(geom,w,h);*/
     
     if (!cimg::strcasecmp(m_visuflow,"circle")) { // Create a circular vector flow
         flow = CImg<>(400,400,1,2);
@@ -525,7 +528,7 @@ bool CimgIface::prepare_visuflow()
     return true;
 }
 
-void CimgIface::compute_smoothed_tensor()
+inline void CimgIface::compute_smoothed_tensor()
 {
     if (m_visuflow || m_inpaint) return;
     
@@ -539,7 +542,7 @@ void CimgIface::compute_smoothed_tensor()
     G.blur(m_sigma);
 }
 
-void CimgIface::compute_normalized_tensor()
+inline void CimgIface::compute_normalized_tensor()
 {
     if (m_restore || m_resize) cimg_mapXY(G,x,y) 
         {
@@ -572,7 +575,7 @@ void CimgIface::compute_normalized_tensor()
     G /= cimg::max(std::fabs(stats.max), std::fabs(stats.min));
 }
 
-void CimgIface::compute_W(float cost, float sint)
+inline void CimgIface::compute_W(float cost, float sint)
 {
     cimg_mapXY(W,x,y) 
         {
@@ -587,7 +590,7 @@ void CimgIface::compute_W(float cost, float sint)
         }
 }
 
-void CimgIface::compute_LIC_back_forward(int x, int y)
+inline void CimgIface::compute_LIC_back_forward(int x, int y)
 {
     float l, X,Y, cu, cv, lsum=0;
     const float fsigma2 = 2*m_dt*(W(x,y,0)*W(x,y,0) + W(x,y,1)*W(x,y,1));
@@ -625,10 +628,11 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
         
         for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
-            float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
+            const int xi = (int)(X+0.5f), yi = (int)(Y+0.5f);
+            float u = W(xi,yi,0), v = W(xi,yi,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
+            cimg_mapV(dest,k) dest(x,y,k)+=coef*img(xi,yi,k);
             X+=m_dlength*u; Y+=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
                 
@@ -636,17 +640,18 @@ void CimgIface::compute_LIC_back_forward(int x, int y)
         
         for (l = m_dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
             {
-            float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
+            const int xi = (int)(X+0.5f), yi = (int)(Y+0.5f);
+            float u = W(xi,yi,0), v = W(xi,yi,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
+            cimg_mapV(dest,k) dest(x,y,k)+=coef*img(xi,yi,k);
             X-=m_dlength*u; Y-=m_dlength*v; cu=u; cv=v; lsum+=coef;
             }
     }
     sum(x,y)+=lsum;
 }
 
-void CimgIface::compute_LIC(int &counter)
+inline void CimgIface::compute_LIC(int &counter)
 {
     dest.fill(0);
     sum.fill(0);
@@ -683,7 +688,7 @@ void CimgIface::compute_LIC(int &counter)
         }
 }
 
-void CimgIface::compute_average_LIC()
+inline void CimgIface::compute_average_LIC()
 {
     cimg_mapXY(dest,x,y) 
     {
