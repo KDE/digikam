@@ -62,7 +62,8 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
                      double gradient, double gaussian, 
                      bool normalize, bool linearInterpolation, 
                      bool restoreMode, bool inpaintMode, bool resizeMode, 
-                     char* visuflowMode, QImage *inPaintingMask, QObject *parent)
+                     char* visuflowMode, uint *newData, int newWidth, int newHeight,
+                     QImage *inPaintingMask, QObject *parent)
          : QThread()
 { 
     m_imageData   = data;
@@ -89,9 +90,13 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
     m_onormalize  = normalize;
     m_linear      = linearInterpolation;
 
+    m_newData     = newData;
+    m_newWidth    = newWidth;
+    m_newHeight   = newHeight;
+    
     m_tmpMaskFile = QString::null;
     
-    if (inPaintingMask)
+    if (m_inpaint && inPaintingMask)
        {
        KStandardDirs dir;
        m_tmpMaskFile = dir.saveLocation("tmp");
@@ -169,10 +174,8 @@ void CimgIface::startComputation()
 
     img = CImg<>(m_imageWidth, m_imageHeight, 1, 3);
     eigen = CImgl<>(CImg<>(2,1), CImg<>(2,2));    
-
     register int x, y, i=0;
-    
-    uchar *data = (uchar *)m_imageData;
+    uchar* data = (uchar *)m_imageData;
 
     for (y = 0; y < m_imageHeight; y++) 
        {
@@ -209,10 +212,24 @@ void CimgIface::startComputation()
 
     data = (uchar*)m_imageData;
     i = 0;
-
-    for (y = 0; y < m_imageHeight; y++) 
+    int width, height;
+    
+    if (m_resize)
        {
-       for (x = 0; x < m_imageWidth; x++, i+=4) 
+       width = m_newWidth;
+       height = m_newHeight;
+       data = (uchar*)m_newData;
+       }
+    else
+       {
+       width = m_imageWidth;
+       height = m_imageHeight;
+       data = (uchar*)m_imageData;
+       }   
+       
+    for (y = 0; y < height; y++) 
+       {
+       for (x = 0; x < width; x++, i+=4) 
           {
           data[ i ] = (uchar)img(x, y, 0);
           data[i+1] = (uchar)img(x, y, 1);
@@ -292,14 +309,6 @@ bool CimgIface::process()
     return true;
 }
 
-void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h) 
-{
-    char tmp[16];
-    std::sscanf(geom,"%d%7[^0-9]%d%7[^0-9]",&geom_w,tmp,&geom_h,tmp+1);
-    if (tmp[0]=='%') geom_w=-geom_w;
-    if (tmp[1]=='%') geom_h=-geom_h;
-}
-
 void CimgIface::cleanup()
 {
     img0  = flow = G = dest = sum = W = CImg<>();    
@@ -354,8 +363,7 @@ bool CimgIface::prepare_restore()
 
 bool CimgIface::prepare_inpaint()
 {
-    //const char *file_m = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
-    const char *file_m = m_tmpMaskFile.latin1();
+    const char *file_m = m_tmpMaskFile.latin1();  // Input inpainting mask.
     
     if (!file_m) 
        {
@@ -363,10 +371,8 @@ bool CimgIface::prepare_inpaint()
        return false;
        }
 
-    //cimg_option("-dilate",0,"Inpainting mask dilatation");
-    const unsigned int dilate  = 0; 
-    //cimg_option("-init",3,"Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol)");
-    const unsigned int ip_init = 3; 
+    const unsigned int dilate  = 0; // Inpainting mask dilatation.
+    const unsigned int ip_init = 3; // Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol).
     
     if (cimg::strncasecmp("block",file_m,5)) 
         mask = CImg<uchar>(file_m);
@@ -447,21 +453,34 @@ bool CimgIface::prepare_inpaint()
 
 bool CimgIface::prepare_resize()
 {
-    const char *geom  = NULL; //cimg_option("-g",(const char*)NULL,"Output image geometry");
-    const bool anchor = true; //cimg_option("-anchor",true,"Anchor original pixels");
+    const bool anchor = true; // Anchor original pixels.
     
-    if (!geom) throw CImgArgumentException("You need to specify an output geomety (option -g)");
+    if (!m_newWidth && !m_newHeight) 
+       {
+       kdDebug() << "Unspecified output geometry !" << endl;
+       return false;
+       }
+
+    mask = CImg<uchar>(img.width, img.height, 1, 1, 255);
     
-    int w,h; get_geom(geom,w,h);
-    mask = CImg<uchar>(img.width,img.height,1,1,255);
+    if (!anchor) 
+       mask.resize(m_newWidth, m_newHeight, 1, 1, 1);
+    else 
+       mask = ~mask.resize(m_newWidth, m_newHeight, 1, 1, 4);
     
-    if (!anchor) mask.resize(w,h,1,1,1); else mask = ~mask.resize(w,h,1,1,4);
-    
-    img0 = img.get_resize(w,h,1,-100,1);
-    img.resize(w,h,1,-100,3);
-    G = CImg<>(img.width,img.height,1,3);
+    img0 = img.get_resize(m_newWidth, m_newHeight, 1, -100, 1);
+    img.resize(m_newWidth, m_newHeight, 1, -100, 3);
+    G = CImg<>(img.width, img.height, 1, 3);
     
     return true;
+}
+
+void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h) 
+{
+    char tmp[16];
+    std::sscanf(geom,"%d%7[^0-9]%d%7[^0-9]",&geom_w,tmp,&geom_h,tmp+1);
+    if (tmp[0]=='%') geom_w=-geom_w;
+    if (tmp[1]=='%') geom_h=-geom_h;
 }
 
 bool CimgIface::prepare_visuflow()

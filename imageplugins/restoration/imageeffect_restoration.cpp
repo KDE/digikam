@@ -238,7 +238,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_blurInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.1, true);
-    QWhatsThis::add( m_blurInput, i18n("<p>This value controls the smoothing regularity of the target image. Do not use an high value here else "
+    QWhatsThis::add( m_blurInput, i18n("<p>This value controls the smoothing regularity of the target image. "
+                                       "Do not use an high value here else "
                                        "target image will be completly blurred."));
     grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
     grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
@@ -520,7 +521,7 @@ void ImageEffect_Restoration::slotEffect()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, 0, this);
 }
 
 void ImageEffect_Restoration::slotOk()
@@ -560,7 +561,7 @@ void ImageEffect_Restoration::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, 0, this);
 }
 
 void ImageEffect_Restoration::customEvent(QCustomEvent *event)

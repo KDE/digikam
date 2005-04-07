@@ -65,7 +65,8 @@ public:
               double angularStep, double blur, double detail,
               double gradient, double gaussian, bool normalize, bool normalize, 
               bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
-              char* visuflowMode=NULL, QImage *inPaintingMask=0, QObject *parent=0);
+              char* visuflowMode=NULL, uint *newData=0, int newWidth=0, int newHeight=0,
+              QImage *inPaintingMask=0, QObject *parent=0);
     
     ~CimgIface();
     
@@ -74,14 +75,23 @@ public:
 
 private:
 
+    // Image data.
     uint     *m_imageData;
     int       m_imageWidth;
     int       m_imageHeight;
+
+    // Output image geometry in Resizing mode.
+    uint     *m_newData;
+    int       m_newWidth;
+    int       m_newHeight;  
     
-    bool      m_cancel;   // Used to stop thread during calculations.
+    // Used to stop thread during calculations.
+    bool      m_cancel;   
     
+    // Inpainting temp mask file path.
     QString   m_tmpMaskFile;
     
+    // Inpainting temp mask data.
     QImage    m_inPaintingMask;
     
     QObject  *m_parent;

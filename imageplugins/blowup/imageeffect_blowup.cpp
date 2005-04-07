@@ -1,8 +1,8 @@
 /* ============================================================
- * File  : imageeffect_inpainting.cpp
+ * File  : imageeffect_blowup.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2005-03-30
- * Description : a digiKam image editor plugin to inpaint
+ * Date  : 2005-04-07
+ * Description : a digiKam image editor plugin to blowup 
  *               a photograph
  * 
  * Copyright 2005 by Gilles Caulier
@@ -72,68 +72,19 @@
 
 #include "version.h"
 #include "cimgiface.h"
-#include "imageeffect_inpainting.h"
+#include "imageeffect_blowup.h"
 
-namespace DigikamInPaintingImagesPlugin
+namespace DigikamBlowUpImagesPlugin
 {
 
-class InPaintingPassivePopup : public KPassivePopup
-{
-public:
-
-    InPaintingPassivePopup(QWidget* parent) : KPassivePopup(parent), m_parent(parent) {}
-
-protected:
-
-    virtual void positionSelf() { move(m_parent->x() + 30, m_parent->y() + 30); }
-
-private:
-
-    QWidget* m_parent;
-};
-
-//------------------------------------------------------------------------------------------
-
-void ImageEffect_InPainting::inPainting(QWidget* parent)
-{
-    // -- check if we actually have a selection --------------------
-
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getSelectedData();
-    int   w    = iface.selectedWidth();
-    int   h    = iface.selectedHeight();
-
-    if (!data || !w || !h)
-    {
-        InPaintingPassivePopup* popup = new InPaintingPassivePopup(parent);
-        popup->setView(i18n("Inpainting Photograph Tool"),
-                       i18n("You need to select a region to inpaint to use "
-                            "this tool"));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    // -- run the dlg ----------------------------------------------
-
-    ImageEffect_InPainting_Dialog dlg(parent);
-
-    if (dlg.exec() != QDialog::Accepted)
-        return;
-}
-
-//------------------------------------------------------------------------------------------
-
-ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
-                             : KDialogBase(Plain, i18n("Inpainting"),
-                                           Help|User1|User2|User3|Ok|Cancel, Ok,
-                                           parent, 0, true, true,
-                                           i18n("&Reset Values"),
-                                           i18n("&Load..."),
-                                           i18n("&Save...")),
-                               m_parent(parent)
+ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
+                  : KDialogBase(Plain, i18n("Blowup"),
+                                Help|User1|User2|User3|Ok|Cancel, Ok,
+                                parent, 0, true, true,
+                                i18n("&Reset Values"),
+                                i18n("&Load..."),
+                                i18n("&Save...")),
+                    m_parent(parent)
 {
     QString whatsThis;
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
@@ -146,9 +97,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Photograph Inpainting"), 
+                                       I18N_NOOP("Photograph Blowup"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
+                                       I18N_NOOP("A digiKam image plugin to blowup a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
@@ -166,7 +117,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Inpainting Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Blowup Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
@@ -181,7 +132,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Photograph Inpainting"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Photograph Blowup"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -202,8 +153,8 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_mainTab = new QTabWidget( plainPage() );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
-    m_mainTab->addTab( firstPage, i18n("Preset") );
+    QGridLayout* grid = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
+    m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
     cimgLogoLabel->setText(QString::null);
@@ -213,31 +164,31 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
-    QLabel *typeLabel = new QLabel(i18n("Filtering Type:"), firstPage);
-    typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new QComboBox( false, firstPage ); 
-    m_inpaintingTypeCB->insertItem( i18n("None") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Small Artefact") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Medium Artefact") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Large Artefact") );
-    QWhatsThis::add( m_inpaintingTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
-                                               "<b>None</b>: Most common values. Puts settings to default.<p>"
-                                               "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
-                                               "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
-                                               "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
-
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
-    grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_inpaintingTypeCB, 0, 0, 2, 2);
+    QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
+    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_newWidth = new KIntNumInput(firstPage);
+    m_newWidth->setValue(1024);
+    QWhatsThis::add( m_newWidth, i18n("<p>Set here the new imager width in pixels."));
+    
+    QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
+    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_newHeight = new KIntNumInput(firstPage);
+    m_newHeight->setValue(768);
+    QWhatsThis::add( m_newHeight, i18n("<p>Set here the new image height in pixels."));
+    
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 1, 0, 0);
+    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_newWidth, 0, 0, 2, 2);
+    grid->addMultiCellWidget(label2, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_newHeight, 1, 1, 2, 2);
     
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
+    grid->addMultiCellWidget(m_progressBar, 2, 2, 0, 2);
         
     // -------------------------------------------------------------
-    
-    
+        
     QWidget* secondPage = new QWidget( m_mainTab );
     QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
@@ -344,12 +295,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
-    
-    connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
-            this, SLOT(slotUser1()));
 }
 
-ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
+ImageEffect_BlowUp::~ImageEffect_BlowUp()
 {
     // No need to delete m_previewData because it's driving by QImage.
         
@@ -357,7 +305,7 @@ ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
        delete m_cimgInterface;
 }
 
-void ImageEffect_InPainting_Dialog::slotUser1()
+void ImageEffect_BlowUp::slotUser1()
 {
     m_detailInput->blockSignals(true);
     m_gradientInput->blockSignals(true);
@@ -370,41 +318,17 @@ void ImageEffect_InPainting_Dialog::slotUser1()
     m_linearInterpolationBox->blockSignals(true);
     m_normalizeBox->blockSignals(true);
 
-    m_detailInput->setValue(0.1);
-    m_gradientInput->setValue(100.0);
-    m_timeStepInput->setValue(10.0);
+    m_detailInput->setValue(0.01);
+    m_gradientInput->setValue(1.0);
+    m_timeStepInput->setValue(1.0);
     m_blurInput->setValue(2.0);
-    m_blurItInput->setValue(20.0);
+    m_blurItInput->setValue(1.0);
     m_angularStepInput->setValue(45.0);
     m_integralStepInput->setValue(0.8);
-    m_gaussianInput->setValue(3.0);
+    m_gaussianInput->setValue(1.0);
     m_linearInterpolationBox->setChecked(true);
     m_normalizeBox->setChecked(false);
-
-    switch(m_inpaintingTypeCB->currentItem())
-        {
-        case RemoveSmallArtefact:
-            {
-            m_timeStepInput->setValue(20.0);
-            m_blurItInput->setValue(30.0);
-            break;
-            }
-            
-        case RemoveMediumArtefact:
-            {
-            m_timeStepInput->setValue(50.0);
-            m_blurItInput->setValue(50.0);
-            break;
-            }
-            
-        case RemoveLargeArtefact:
-            {
-            m_timeStepInput->setValue(100.0);
-            m_blurItInput->setValue(100.0);
-            break;
-            }
-        }                       
-                    
+     
     m_detailInput->blockSignals(false);
     m_gradientInput->blockSignals(false);
     m_timeStepInput->blockSignals(false);
@@ -417,7 +341,7 @@ void ImageEffect_InPainting_Dialog::slotUser1()
     m_normalizeBox->blockSignals(false);
 } 
 
-void ImageEffect_InPainting_Dialog::slotCancel()
+void ImageEffect_BlowUp::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
        {
@@ -428,17 +352,17 @@ void ImageEffect_InPainting_Dialog::slotCancel()
     done(Cancel);
 }
 
-void ImageEffect_InPainting_Dialog::slotHelp()
+void ImageEffect_BlowUp::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("inpainting", "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("blowup", "digikamimageplugins");
 }
 
-void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
+void ImageEffect_BlowUp::processCImgURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }
 
-void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
+void ImageEffect_BlowUp::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
@@ -449,7 +373,7 @@ void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void ImageEffect_InPainting_Dialog::slotOk()
+void ImageEffect_BlowUp::slotOk()
 {
     m_currentRenderingMode = FinalRendering;
     m_detailInput->setEnabled(false);
@@ -462,6 +386,8 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_gaussianInput->setEnabled(false);
     m_linearInterpolationBox->setEnabled(false);
     m_normalizeBox->setEnabled(false);
+    m_newWidth->setEnabled(false);
+    m_newHeight->setEnabled(false);
     enableButton(Ok, false);
     enableButton(User1, false);
     enableButton(User2, false);
@@ -474,50 +400,13 @@ void ImageEffect_InPainting_Dialog::slotOk()
     Digikam::ImageIface iface(0, 0);
     m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
     memcpy(m_originalImage.bits(), iface.getOriginalData(), m_originalImage.numBytes());
-    
-    // Selected area from the image and mask creation:
-    //
-    // We optimize the computation time to use the current selected area in image editor
-    // and to create an inpainting mask with it. Because inpainting is done by interpolation 
-    // neighboor pixels which can be located far from the selected area, we need to ajust the 
-    // mask size in according with the parameter algorithms, especially 'dt' (m_timeStepInput).
-    // Mask size is computed like this :
-    //
-    // (mask_radius_x + 2*dt , mask_radius_y + 2*dt)
-    //
-    // Where mask_radius_x is the 'width' of the mask, and mask_radius_y is the 'height' of the mask.
-    
-    
-    QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
-                                iface.selectedWidth(), iface.selectedHeight());
-    
-    QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
-    inPaintingMask.fill(Qt::black);
-    QPainter p(&inPaintingMask);
-    p.fillRect( selectionRect, QBrush::QBrush(Qt::white) );
-    p.end();
-    
-    int x1 = (int)(selectionRect.left()   - 2*m_timeStepInput->value());
-    int y1 = (int)(selectionRect.top()    - 2*m_timeStepInput->value());
-    int x2 = (int)(selectionRect.right()  + 2*m_timeStepInput->value());
-    int y2 = (int)(selectionRect.bottom() + 2*m_timeStepInput->value());
-    m_maskRect = QRect(x1, y1, x2-x1, y2-y1);
-    
-    // Mask area normalization. 
-    // We need to check if mask area is out of image size else inpainting give strange results.
-    
-    if (m_maskRect.left()   < 0) m_maskRect.setLeft(0);
-    if (m_maskRect.top()    < 0) m_maskRect.setTop(0);
-    if (m_maskRect.right()  > iface.originalWidth())  m_maskRect.setRight(iface.originalWidth());
-    if (m_maskRect.bottom() > iface.originalHeight()) m_maskRect.setBottom(iface.originalHeight());
-    
-    m_maskImage = inPaintingMask.convertToImage().copy(m_maskRect);
-    m_cropImage = m_originalImage.copy(m_maskRect);
+    m_resizedImage = QImage(m_newWidth->value(), m_newHeight->value(), 32);
     
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface((uint*)m_cropImage.bits(), m_cropImage.width(), m_cropImage.height(), 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface((uint*)m_originalImage.bits(), 
+                                    m_originalImage.width(), m_originalImage.height(), 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -528,11 +417,12 @@ void ImageEffect_InPainting_Dialog::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    false, true, false, NULL, 0, 0, 0,
-                                    &m_maskImage, this);
+                                    false, false, true, NULL, 
+                                    (uint*)m_resizedImage.bits(), m_resizedImage.width(), 
+                                    m_resizedImage.height(), 0, this);
 }
 
-void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
+void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
@@ -552,14 +442,9 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
               {
               case FinalRendering:
                  {
-                 kdDebug() << "Final InPainting completed..." << endl;
+                 kdDebug() << "Final BlowUp completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
-                 
-                 bitBlt(&m_originalImage, m_maskRect.left(), m_maskRect.top(), 
-                        &m_cropImage, 0, 0, m_cropImage.width(), m_cropImage.height());
-                    
-                 iface.putOriginalData(i18n("InPainting"), (uint*)m_originalImage.bits());
-       
+                 iface.putOriginalData(i18n("BlowUp"), (uint*)m_resizedImage.bits(), m_resizedImage.width(), m_resizedImage.height());
                  m_parent->setCursor( KCursor::arrowCursor() );
                  accept();       
                  break;
@@ -577,11 +462,11 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
         }
 }
 
-void ImageEffect_InPainting_Dialog::slotUser2()
+void ImageEffect_BlowUp::slotUser2()
 {
     KURL loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
-                                            QString( i18n("Photograph Inpainting Settings File to Load")) );
+                                            QString( i18n("Photograph Blowup Settings File to Load")) );
     if( loadInpaintingFile.isEmpty() )
        return;
 
@@ -590,10 +475,10 @@ void ImageEffect_InPainting_Dialog::slotUser2()
     if ( file.open(IO_ReadOnly) )   
         {
         QTextStream stream( &file );
-        if ( stream.readLine() != "# Photograph Inpainting Configuration File" )
+        if ( stream.readLine() != "# Photograph Blowup Configuration File" )
            {
            KMessageBox::error(this, 
-                        i18n("\"%1\" isn't Photograph Inpainting settings text file.")
+                        i18n("\"%1\" isn't Photograph Blowup settings text file.")
                         .arg(loadInpaintingFile.fileName()));
            file.close();            
            return;
@@ -614,16 +499,16 @@ void ImageEffect_InPainting_Dialog::slotUser2()
         blockSignals(false);
         }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Inpainting text file."));
+        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Blowup text file."));
 
     file.close();             
 }
 
-void ImageEffect_InPainting_Dialog::slotUser3()
+void ImageEffect_BlowUp::slotUser3()
 {
     KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
-                                             QString( i18n("Photograph Inpainting Settings File to Save")) );
+                                             QString( i18n("Photograph Blowup Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 
@@ -632,7 +517,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
     if ( file.open(IO_WriteOnly) )   
         {
         QTextStream stream( &file );        
-        stream << "# Photograph Inpainting Configuration File\n";    
+        stream << "# Photograph Blowup Configuration File\n";    
         stream << m_normalizeBox->isChecked() << "\n";    
         stream << m_linearInterpolationBox->isChecked() << "\n";    
         stream << m_detailInput->value() << "\n";    
@@ -650,6 +535,6 @@ void ImageEffect_InPainting_Dialog::slotUser3()
     file.close();        
 }
 
-}  // NameSpace DigikamInPaintingImagesPlugin
+}  // NameSpace DigikamBlowUpImagesPlugin
 
-#include "imageeffect_inpainting.moc"
+#include "imageeffect_blowup.moc"
