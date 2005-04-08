@@ -13,7 +13,7 @@ digikamimageplugin_blowup_la_SOURCES = imageplugin_blowup.cpp \
 	                                    imageeffect_blowup.cpp 
 
 digikamimageplugin_blowup_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	                                   $(top_srcdir)/digikamimageplugins/common/cimgiface/libcimgiface.la 
+	                              $(top_builddir)/digikamimageplugins/common/cimgiface/libcimgiface.la 
 
 digikamimageplugin_blowup_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
