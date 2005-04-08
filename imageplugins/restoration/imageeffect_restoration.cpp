@@ -417,6 +417,7 @@ void ImageEffect_Restoration::slotUser1()
             m_detailInput->setValue(0.3);
             m_blurInput->setValue(0.9);
             m_timeStepInput->setValue(100.0);
+            m_blurItInput->setValue(2.0);
             break;
             }
           
