@@ -13,7 +13,7 @@ digikamimageplugin_inpainting_la_SOURCES = imageplugin_inpainting.cpp \
 	                                    imageeffect_inpainting.cpp 
 
 digikamimageplugin_inpainting_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	                                   $(top_srcdir)/digikamimageplugins/common/cimgiface/libcimgiface.la 
+	                                  $(top_builddir)/digikamimageplugins/common/cimgiface/libcimgiface.la 
 
 digikamimageplugin_inpainting_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
