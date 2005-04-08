@@ -209,7 +209,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.1, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image."
+    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image. "
                                          "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
