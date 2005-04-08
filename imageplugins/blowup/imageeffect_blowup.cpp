@@ -153,7 +153,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_mainTab = new QTabWidget( plainPage() );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 3, 2, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -176,16 +176,20 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_newHeight->setValue(768);
     QWhatsThis::add( m_newHeight, i18n("<p>Set here the new image height in pixels."));
     
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 1, 0, 0);
+    m_preserveRatioBox = new QCheckBox(i18n("Maintain Aspect Ratio"), firstPage);
+    QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect ratio with new image sizes."));
+
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 2, 0, 0);
     grid->addMultiCellWidget(label1, 0, 0, 1, 1);
     grid->addMultiCellWidget(m_newWidth, 0, 0, 2, 2);
     grid->addMultiCellWidget(label2, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_newHeight, 1, 1, 2, 2);
+    grid->addMultiCellWidget(m_preserveRatioBox, 2, 2, 2, 2);
     
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 2, 2, 0, 2);
+    grid->addMultiCellWidget(m_progressBar, 3, 3, 0, 2);
         
     // -------------------------------------------------------------
         
@@ -198,7 +202,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image."
+    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image. "
                                          "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
@@ -295,6 +299,12 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
+            
+    connect(m_newWidth, SIGNAL(valueChanged (int)),
+            this, SLOT(slotAdjustRatioFromWidth(int)));  
+
+    connect(m_newHeight, SIGNAL(valueChanged (int)),
+            this, SLOT(slotAdjustRatioFromHeight(int)));                                      
 }
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
@@ -307,39 +317,48 @@ ImageEffect_BlowUp::~ImageEffect_BlowUp()
 
 void ImageEffect_BlowUp::slotUser1()
 {
-    m_detailInput->blockSignals(true);
-    m_gradientInput->blockSignals(true);
-    m_timeStepInput->blockSignals(true);
-    m_blurInput->blockSignals(true);
-    m_blurItInput->blockSignals(true);
-    m_angularStepInput->blockSignals(true);
-    m_integralStepInput->blockSignals(true);
-    m_gaussianInput->blockSignals(true);
-    m_linearInterpolationBox->blockSignals(true);
-    m_normalizeBox->blockSignals(true);
-
-    m_detailInput->setValue(0.01);
-    m_gradientInput->setValue(1.0);
-    m_timeStepInput->setValue(1.0);
+    Digikam::ImageIface iface(0, 0);
+    m_aspectRatio = (double)iface.originalWidth() / (double)iface.originalHeight();
+    
+    m_detailInput->setValue(0.1);
+    m_gradientInput->setValue(5.0);
+    m_timeStepInput->setValue(15.0);
     m_blurInput->setValue(2.0);
     m_blurItInput->setValue(1.0);
     m_angularStepInput->setValue(45.0);
     m_integralStepInput->setValue(0.8);
-    m_gaussianInput->setValue(1.0);
+    m_gaussianInput->setValue(3.0);
     m_linearInterpolationBox->setChecked(true);
     m_normalizeBox->setChecked(false);
-     
-    m_detailInput->blockSignals(false);
-    m_gradientInput->blockSignals(false);
-    m_timeStepInput->blockSignals(false);
-    m_blurInput->blockSignals(false);
-    m_blurItInput->blockSignals(false);
-    m_angularStepInput->blockSignals(false);
-    m_integralStepInput->blockSignals(false);
-    m_gaussianInput->blockSignals(false);
-    m_linearInterpolationBox->blockSignals(false);
-    m_normalizeBox->blockSignals(false);
+
+    m_preserveRatioBox->setChecked(true);
+    m_newWidth->blockSignals(true);
+    m_newHeight->blockSignals(true);
+    m_newWidth->setValue(iface.originalWidth());
+    m_newHeight->setValue(iface.originalHeight());
+    m_newWidth->blockSignals(false);
+    m_newHeight->blockSignals(false);
 } 
+
+void ImageEffect_BlowUp::slotAdjustRatioFromWidth(int w)
+{
+    if ( m_preserveRatioBox->isChecked() )
+       {
+       m_newHeight->blockSignals(true);
+       m_newHeight->setValue( (int) (w / m_aspectRatio) );
+       m_newHeight->blockSignals(false);
+       }
+}
+
+void ImageEffect_BlowUp::slotAdjustRatioFromHeight(int h)
+{
+    if ( m_preserveRatioBox->isChecked() )
+       {
+       m_newWidth->blockSignals(true);
+       m_newWidth->setValue( (int)(m_aspectRatio * h) );
+       m_newWidth->blockSignals(false);
+       }
+}
 
 void ImageEffect_BlowUp::slotCancel()
 {
@@ -388,6 +407,7 @@ void ImageEffect_BlowUp::slotOk()
     m_normalizeBox->setEnabled(false);
     m_newWidth->setEnabled(false);
     m_newHeight->setEnabled(false);
+    m_preserveRatioBox->setEnabled(false);
     enableButton(Ok, false);
     enableButton(User1, false);
     enableButton(User2, false);

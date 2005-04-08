@@ -73,14 +73,6 @@ protected:
     
 private:
 
-    enum BlowUpFilteringPreset
-    {
-    NoPreset=0,
-    RemoveSmallArtefact,
-    RemoveMediumArtefact,
-    RemoveLargeArtefact
-    };
-    
     enum RunningMode
     {
     NoneRendering=0,
@@ -88,6 +80,8 @@ private:
     };
 
     int              m_currentRenderingMode;
+    
+    double           m_aspectRatio;
     
     QImage           m_originalImage;
     QImage           m_resizedImage;
@@ -123,6 +117,7 @@ private:
     
     QCheckBox       *m_linearInterpolationBox;
     QCheckBox       *m_normalizeBox;
+    QCheckBox       *m_preserveRatioBox;
     
     QTabWidget      *m_mainTab;
     
@@ -143,6 +138,8 @@ private slots:
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);
+    void slotAdjustRatioFromWidth(int w);
+    void slotAdjustRatioFromHeight(int h);
 };
     
 }  // NameSpace DigikamBlowUpImagesPlugin
