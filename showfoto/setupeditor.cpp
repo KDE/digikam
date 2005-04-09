@@ -146,7 +146,7 @@ void SetupEditor::readSettings()
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreenHideToolBar", false));
     m_hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumblBar", true));
     m_useTrashCheck->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
-    m_showSplashCheck->setChecked(config->readBoolEntry("ShowSplash", false));
+    m_showSplashCheck->setChecked(config->readBoolEntry("ShowSplash", true));
 
     delete Black;
 }
