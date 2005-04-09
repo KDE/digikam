@@ -53,13 +53,16 @@ ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
                              KStdGuiItem::guiItem(KStdGuiItem::Forward), 
                              KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
-    m_view     = view; 
-    m_currItem = currItem;
-    m_currURL  = currItem->fileItem()->url();
-    m_mode     = MULTI;
+    m_view          = view; 
+    m_currItem      = currItem;
+    m_currURL       = currItem->fileItem()->url();
+    m_mode          = MULTI;
     
     m_selectionArea = 0;
-
+    m_imageData     = 0;
+    m_imageWidth    = 0;
+    m_imageHeight   = 0;
+    
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
     
@@ -81,7 +84,6 @@ ImageProperties::ImageProperties(QWidget *parent, const KURL& url, QRect *select
     m_imageData     = imageData;
     m_imageWidth    = imageWidth;
     m_imageHeight   = imageHeight;
-    
     m_selectionArea = selectionArea;
     
     setupGui();
