@@ -180,11 +180,11 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect ratio with new image sizes."));
 
     grid->addMultiCellWidget(cimgLogoLabel, 0, 2, 0, 0);
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_newWidth, 0, 0, 2, 2);
-    grid->addMultiCellWidget(label2, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_newHeight, 1, 1, 2, 2);
-    grid->addMultiCellWidget(m_preserveRatioBox, 2, 2, 2, 2);
+    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 2, 2);
+    grid->addMultiCellWidget(label1, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_newWidth, 1, 1, 2, 2);
+    grid->addMultiCellWidget(label2, 2, 2, 1, 1);
+    grid->addMultiCellWidget(m_newHeight, 2, 2, 2, 2);
     
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
