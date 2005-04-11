@@ -33,6 +33,7 @@
 #include <qfile.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -177,7 +178,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     setAutoSaveSettings();
     
     if ( urlList.isEmpty() )
+    {
        toggleActions(false);
+       QTimer::singleShot(0, this, SLOT(slotOpenFile())); 
+    }
 }
 
 ShowFoto::~ShowFoto()
@@ -1273,13 +1277,15 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
             break;
         }
     }
-
-    // Update thumbbar items preview.
-    m_bar->invalidateThumb(item2remove);
-    
+  
     // Disable menu actions if no current image.
     if ( m_bar->countItems() == 0 )    
+       {
        toggleActions(false);
+       // TODO : clear canvas !
+       }
+    else 
+       slotOpenURL(m_bar->currentItem()->url());
 }
 
 void ShowFoto::slotContextMenu()

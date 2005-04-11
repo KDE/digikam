@@ -313,37 +313,33 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
 
     d->count--;
 
-    if (d->currItem == item)
-    {
-        d->currItem = 0;
-        // emit signal
-    }
-
     if (item == d->firstItem)
     {
-	d->firstItem = d->firstItem->m_next;
-	if (d->firstItem)
-	    d->firstItem->m_prev = 0;
+        d->firstItem = d->currItem = d->firstItem->m_next;
+        if (d->firstItem)
+            d->firstItem->m_prev = 0;
         else
-            d->firstItem = d->lastItem = 0;
+            d->firstItem = d->lastItem = d->currItem = 0;
     }
     else if (item == d->lastItem)
     {
-	d->lastItem = d->lastItem->m_prev;
-	if ( d->lastItem )
-	    d->lastItem->m_next = 0;
+        d->lastItem = d->currItem = d->lastItem->m_prev;
+        if ( d->lastItem )
+           d->lastItem->m_next = 0;
         else
-            d->firstItem = d->lastItem = 0;
+            d->firstItem = d->lastItem = d->currItem = 0;
     }
     else
     {
-	ThumbBarItem *i = item;
-	if (i) {
-	    if (i->m_prev )
-		i->m_prev->m_next = i->m_next;
-	    if ( i->m_next )
-		i->m_next->m_prev = i->m_prev;
-	}
+        ThumbBarItem *i = item;
+        if (i) {
+            if (i->m_prev ){
+                i->m_prev->m_next = d->currItem = i->m_next;
+                }
+            if ( i->m_next ){
+                i->m_next->m_prev = d->currItem = i->m_prev;
+                }
+            }
     }
 
     d->itemDict.remove(item->url().url());

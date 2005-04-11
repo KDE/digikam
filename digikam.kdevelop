@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
@@ -85,11 +85,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -130,7 +130,7 @@
       <envvars/>
     </run>
     <general>
-      <useconfiguration>default</useconfiguration>
+      <useconfiguration>final</useconfiguration>
     </general>
     <configurations>
       <default>
@@ -150,6 +150,23 @@
         <f77flags/>
         <envvars/>
       </default>
+      <final>
+        <envvars/>
+        <configargs/>
+        <builddir>final</builddir>
+        <topsourcedir>../</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags>-O2 -march=pentium4 -mmmx -msse2</cxxflags>
+        <f77flags/>
+      </final>
     </configurations>
   </kdevautoproject>
   <kdevcvs>
