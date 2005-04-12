@@ -985,6 +985,13 @@ void ImageWindow::slotSaveAs()
 
     m_newFile = imageFileSaveDialog->selectedURL();
     QString format = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
+    if (format.isEmpty())
+    {
+        // if the format is empty then file format is same as that of the
+        // original file
+        format = QImageIO::imageFormat(m_urlCurrent.path());
+    }
+    
     delete imageFileSaveDialog;
 
     if (!m_newFile.isValid())
