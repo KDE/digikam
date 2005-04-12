@@ -1,5 +1,858 @@
 v0.7.3-beta1			xx/xx/05
 ----------------------------------------------------------------------------
+2005-04-11 08:56  cgilles
+
+	* digikam.kdevelop, libs/thumbbar/thumbbar.cpp,
+	  showfoto/showfoto.cpp: [no log message]
+
+2005-04-10 11:45  cgilles
+
+	* showfoto/showfoto-splash.png: Update showfoto splash from Joern
+
+2005-04-10 11:32  dannya
+
+	* imageplugins/hi32-action-adjustbcg.png,
+	  imageplugins/hi32-action-contrast.png,
+	  imageplugins/imageplugin_core.cpp,
+	  utilities/imageeditor/hi32-action-flip.png,
+	  utilities/imageeditor/hi32-action-flip_image.png,
+	  utilities/imageeditor/imagewindow.cpp: Change 2 icon names to
+	  more sane, existing ones...
+
+2005-04-09 22:08  jahrens
+
+	* showfoto/setupeditor.cpp: splash screen option in configure
+	  dialog does not match the default
+
+2005-04-09 21:46  jahrens
+
+	* showfoto/main.cpp: CVS_SILENT added me to the author list
+
+2005-04-09 15:50  cgilles
+
+	* digikam/imageproperties.cpp: Fix non-initiate data in constructor
+
+2005-04-08 13:59  cgilles
+
+	* imageplugins/imageeffect_bwsepia.cpp: Fix i18n
+
+2005-04-07 21:18  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+
+	  fix indent
+
+2005-04-07 21:17  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+
+	  reverting patch (bringing back hack). problem in imlib2 (see bug#
+	  100894).  remove when imlib2 is fixed.  BUGS: 103445
+
+2005-04-07 09:06  cgilles
+
+	* README: Fix depency to imlib2 1.2.0
+
+2005-04-06 03:56  pahlibar
+
+	* utilities/imageeditor/imlibinterface.cpp:
+
+	  remove hack. problem identified in imlib2
+
+2005-04-05 23:30  toma
+
+	* utilities/imageeditor/imagewindow.cpp: I hope nobody sees this.
+	  CVS_SILENT
+
+2005-04-05 23:16  toma
+
+	* utilities/imageeditor/: canvas.cpp, canvas.h, imagewindow.cpp,
+	  imlibinterface.cpp, imlibinterface.h: Fixed the bug where the
+	  menu items thought the image was saved correctly because the
+	  temporary file was successfully saved. But if the real image file
+	  misses write rights, that would result in a situation where it is
+	  not possible to save the modified image anymore. Bug caused by
+	  implementation of wish 87105 (redo)...  BUGS:103219
+
+2005-04-05 19:50  pahlibar
+
+	* digikam/kipiinterface.cpp:
+
+	  if user wants exif rotated image, he will get exif rotated image
+	  (in kipi as well) CCBUGS: 103282
+
+2005-04-05 17:32  pahlibar
+
+	* digikam/thumbdb.cpp:
+
+	  check if db is open before trying to close it
+
+2005-04-05 17:31  pahlibar
+
+	* utilities/imageeditor/: imageresizedlg.cpp, imageresizedlg.h:
+
+	  if user has changed values and pressed ok without allowing the
+	  focus to return to the resizedialog, then the changed signal is
+	  not fired. so check for this change before exiting.
+
+	  BUGS: 103243
+
+2005-04-05 15:20  cgilles
+
+	* showfoto/TODO: Update
+
+2005-04-04 23:14  pahlibar
+
+	* showfoto/: showfoto.cpp, showfoto.h:
+
+	  toogle -> toggle
+
+2005-04-04 14:31  cgilles
+
+	* showfoto/: main.cpp: Fix i18n
+
+2005-04-04 13:21  cgilles
+
+	* showfoto/showfoto.cpp: add current directory localtion in window
+	  caption
+
+2005-04-04 11:44  cgilles
+
+	* showfoto/: Makefile.am, TODO, imageproperties.cpp,
+	  imageproperties.h, imagepropertiesexif.cpp,
+	  imagepropertiesexif.h, imagepropertiesgeneral.cpp,
+	  imagepropertiesgeneral.h, imagepropertieshistogram.cpp,
+	  imagepropertieshistogram.h, showfoto.cpp: Showfoto : add image
+	  properties dialog like in digiKam without add libdigikam depency.
+
+2005-04-04 10:29  cgilles
+
+	* digikam/imageproperties.cpp, digikam/imageproperties.h,
+	  digikam/imagepropertieshistogram.cpp,
+	  digikam/imagepropertieshistogram.h,
+	  utilities/imageeditor/imagewindow.cpp: ImageEditor and
+	  HistogramProperties dialog: always showing histogram from
+	  modified image in image editor, and not only from image file (if
+	  not saved prealably)
+
+2005-04-04 08:00  cgilles
+
+	* showfoto/showfoto.cpp: Fix update thumbbar after delete
+
+2005-04-03 21:36  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp, showfoto/showfoto.cpp: Fix
+	  i18n
+
+2005-04-03 21:01  cgilles
+
+	* showfoto/: TODO, showfoto.cpp, showfoto.h, showfotoui.rc:
+	  Showfoto : Add RMB menu
+
+2005-04-03 19:55  cgilles
+
+	* showfoto/: TODO, setupeditor.cpp, showfoto.cpp, showfoto.h: add
+	  Move to trash/Delete File option
+
+2005-04-03 18:21  cgilles
+
+	* showfoto/: setup.cpp, setupplugins.cpp: Fix setup plugin dialog
+	  layout
+
+2005-04-03 18:11  cgilles
+
+	* showfoto/showfoto.cpp: Fix
+
+2005-04-03 18:06  cgilles
+
+	* showfoto/: TODO, setup.cpp, showfoto.cpp, showfoto.h: disable
+	  Fix-Increase/Decrease BCG if core plugin is available.
+
+2005-04-03 18:04  cgilles
+
+	* utilities/imageeditor/: imagepluginloader.cpp,
+	  imagepluginloader.h: Add new method to check if plugin _library_
+	  is loaded in memory (needed in Showfoto to check if plugin core
+	  is loaded and disable BCG menu option)
+
+2005-04-03 00:26  cgilles
+
+	* showfoto/: setup.cpp, setup.h, setupeditor.cpp, setupeditor.h,
+	  setupplugins.cpp, setupplugins.h: missing file to add
+
+2005-04-03 00:26  cgilles
+
+	* showfoto/TODO: update
+
+2005-04-03 00:25  cgilles
+
+	* showfoto/: Makefile.am, showfoto.cpp, showfoto.h,
+	  showfoto.kdevelop, showfotoui.rc: Showfoto: Add setup dialog add
+	  new option to toogle thumbbar in fullscreen mode.  load/unload
+	  plugins dynamicly in according setup.  TODO : deletefile option
+
+2005-04-01 23:58  cgilles
+
+	* libs/thumbbar/thumbbar.cpp, libs/thumbbar/thumbbar.h,
+	  showfoto/showfoto.cpp, showfoto/showfoto.h: Add statusbar
+
+2005-04-01 17:16  cgilles
+
+	* showfoto/TODO: Update
+
+2005-04-01 17:12  cgilles
+
+	* digikam/digikamapp.cpp, showfoto/Makefile.am,
+	  showfoto/showfoto-splash.png, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h, utilities/splashscreen/splashscreen.cpp,
+	  utilities/splashscreen/splashscreen.h: Showfoto Add splashscreen
+	  support.
+
+2005-04-01 16:52  cgilles
+
+	* showfoto/main.cpp: Fix
+
+2005-04-01 16:36  cgilles
+
+	* showfoto/main.cpp: add DigikamImagePlugins locale
+
+2005-04-01 16:32  cgilles
+
+	* showfoto/Makefile.am, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/Makefile.am:
+	  Showfoto: add resize image option
+
+2005-04-01 16:10  cgilles
+
+	* showfoto/TODO: Update
+
+2005-04-01 16:07  cgilles
+
+	* showfoto/Makefile.am, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/Makefile.am:
+	  Shofoto : Add Print capability
+
+2005-04-01 15:43  cgilles
+
+	* showfoto/: TODO, showfoto.cpp, showfoto.h, showfotoui.rc: Add Key
+	  shortcuts and toolbar configuration settings
+
+2005-04-01 14:18  cgilles
+
+	* showfoto/: TODO, showfoto.cpp, showfoto.h, showfotoui.rc: menu
+	  more kde compliant Add go to First/Last image options
+
+2005-04-01 13:03  cgilles
+
+	* showfoto/: TODO, showfoto.cpp: Showfoto: Disable Thumbbar in Full
+	  screenmode.  CCMAIL: digikam-devel@lists.sourceforge.net
+	  CCBUGS:102195
+
+2005-03-31 23:36  cgilles
+
+	* showfoto/TODO: Update
+
+2005-03-31 23:36  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc: Toogle
+	  internal actions.  fix menu entries.
+
+2005-03-31 22:24  cgilles
+
+	* imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h: Toogle image plugins actions if no image
+	  available in showfoto.  Warning : BC broken CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-03-31 19:12  cgilles
+
+	* utilities/imageeditor/: imageplugin.cpp, imageplugin.h: Add
+	  virtual method to enable/disable plugin actions (needed for
+	  showfoto when no current image available).
+
+2005-03-31 18:56  cgilles
+
+	* showfoto/: TODO, showfoto.cpp, showfoto.h, showfotoui.rc: Prompt
+	  user save when new image is selected on thumbbar Add Edit/copy
+	  action
+
+2005-03-31 16:54  cgilles
+
+	* showfoto/TODO: Update
+
+2005-03-31 16:52  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h: Undo/Redo actions
+
+2005-03-31 13:50  cgilles
+
+	* showfoto/showfotoui.rc: Edit menu entry
+
+2005-03-31 13:45  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc: Download
+	  plugins from memory at end
+
+2005-03-31 00:33  toma
+
+	* digikam/digikam.desktop: Adds a category to the desktop file.
+	  File is compatible with standards, so closing the bug stating it
+	  was not.  BUGS: 98466
+
+2005-03-30 14:01  cgilles
+
+	* imageplugins/imageplugin_core.cpp: Fix i18n
+
+2005-03-29 19:35  pahlibar
+
+	* showfoto/showfoto.cpp,
+	  utilities/imageeditor/imagepluginloader.cpp:
+
+	  look in digikam dirs to load plugin icons in showfoto. remove
+	  frivolous debug message
+
+2005-03-29 10:11  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h, showfotoui.rc: Add help
+	  plugins menu entry
+
+2005-03-29 09:58  cgilles
+
+	* showfoto/TODO: Update
+
+2005-03-29 09:47  cgilles
+
+	* showfoto/main.cpp: fix release number
+
+2005-03-29 09:46  cgilles
+
+	* showfoto/: Makefile.am, cr128-app-showfoto.png,
+	  cr16-app-showfoto.png, cr22-app-showfoto.png,
+	  cr32-app-showfoto.png, cr48-app-showfoto.png,
+	  cr64-app-showfoto.png: Add showfoto icon
+
+2005-03-29 08:49  cgilles
+
+	* showfoto/TODO: Update
+
+2005-03-29 08:46  cgilles
+
+	* digikam.kdevelop, showfoto/Makefile.am, showfoto/showfoto.cpp,
+	  showfoto/showfotoui.rc, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/imagepluginloader.cpp: Showfoto now support
+	  digiKam image editor plugins (digiKAm plugin core +
+	  DigikamImagePlugins) Showfoto Menu Fixed.
+
+	  Note : showfoto is a standalone digiKam image editor program !
+
+	  TODO : - disable plugin menu entries if no current image.  -
+	  writing hanbook based on digiKam handbook image editor part.	-
+	  add showfoto icon.  - implemented Redo/Undo features - disable
+	  Fix-Incease/Decrease BCG if core plugin is available.  - add Edit
+	  menu entries like in digiKam image editor.  - add shofoto
+	  settings dialog.  - disable thumbbar in full screen mode.
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net CCBUGS: 102195
+
+2005-03-29 02:26  pahlibar
+
+	* digikam/albumiconview.cpp:
+
+	  reselect the renamed item to make user life simpler BUGS: 102322
+
+2005-03-27 22:55  cgilles
+
+	* libs/widgets/imagepreviewwidget.cpp: fix signal/slot
+
+2005-03-27 18:24  cgilles
+
+	* libs/widgets/imagepreviewwidget.cpp: Polish widget to reduce
+	  dialog size
+
+2005-03-26 23:29  jahrens
+
+	* utilities/cameragui/renamecustomizer.cpp: Adjusted the renaming
+	  box margin
+
+2005-03-25 19:09  cgilles
+
+	* utilities/imageeditor/digikamimagewindowui.rc: Add separator
+
+2005-03-25 09:20  cgilles
+
+	* libs/filters/: imagefilters.cpp, imagefilters.h: digiKam image
+	  editor Adjust Levels plugin : add option to see over-exposed
+	  pixels in preview effect (like with Acdsee adjust curves tool).
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-03-25 08:04  cgilles
+
+	* libs/levels/: imagelevels.cpp, imagelevels.h: digiKam image
+	  editor Adjust Levels plugin : add option to see over-exposed
+	  pixels in preview effect (like with Acdsee adjust levels tool).
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-03-25 07:42  cgilles
+
+	* libs/curves/: imagecurves.cpp, imagecurves.h: digiKam image
+	  editor Adjust Curves plugin : add option to see over-exposed
+	  pixels in preview effect (like with Acdsee adjust curve tool).
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-03-23 12:14  cgilles
+
+	* libs/widgets/histogramwidget.cpp: tooltip more compliant to
+	  digikam
+
+2005-03-22 23:05  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Fix
+
+2005-03-22 22:49  cgilles
+
+	* libs/widgets/: histogramwidget.cpp, histogramwidget.h: Add
+	  tooltip
+
+2005-03-22 22:28  cgilles
+
+	* libs/widgets/imageguidewidget.cpp: Add tooltip
+
+2005-03-22 19:42  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Re-fix
+
+2005-03-22 19:30  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Fix
+
+2005-03-22 19:23  cgilles
+
+	* libs/widgets/: histogramwidget.cpp, imageguidewidget.cpp,
+	  imageguidewidget.h: Fix signals to sent Fix histogram color guide
+	  position
+
+2005-03-22 14:43  cgilles
+
+	* utilities/imageeditor/: imagewindow.cpp, imagewindow.h: Fix
+	  indent delete canvas in destructor
+
+2005-03-22 14:24  cgilles
+
+	* libs/thumbbar/thumbbar.h: make remove item public
+
+2005-03-22 11:45  cgilles
+
+	* showfoto/showfoto.kdevelop: fix
+
+2005-03-22 11:38  cgilles
+
+	* showfoto/showfoto.kdevelop: Add
+
+2005-03-22 11:36  cgilles
+
+	* Digikam.kdevelop, digikam.kdevelop: Fix name
+
+2005-03-22 11:19  cgilles
+
+	* showfoto/Makefile.am: Fix
+
+2005-03-22 08:44  cgilles
+
+	* libs/widgets/histogramwidget.cpp: Always disable guide in all
+	  constructors
+
+2005-03-21 15:24  cgilles
+
+	* libs/: filters/imagefilters.cpp, levels/imagelevels.cpp,
+	  levels/imagelevels.h, widgets/curveswidget.cpp,
+	  widgets/histogramwidget.cpp, widgets/histogramwidget.h,
+	  widgets/imageguidewidget.cpp, widgets/imageguidewidget.h: -
+	  Levels API : using QColor instead uchar* - Levels Adjust plugin :
+	  Add picker color tools.  - Levels Adjust plugin handbook update.
+	  - White Balance / Adjust Curves / Levels Adjust plugins : mouse
+	  tracking picker color like in Gimp and Photoshop.
+
+2005-03-21 08:41  cgilles
+
+	* libs/widgets/curveswidget.cpp: reset guide rule
+
+2005-03-21 08:19  cgilles
+
+	* libs/widgets/curveswidget.cpp: Add B/M/H tone separators Add
+	  color guide x position
+
+2005-03-21 08:07  cgilles
+
+	* libs/widgets/histogramwidget.cpp: drawing B/M/H tone separator
+
+2005-03-20 15:18  cgilles
+
+	* libs/widgets/: curveswidget.cpp, curveswidget.h: Add new pick
+	  color guide for Curve Widget (Gimp/Photoshop like) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-03-20 04:05  pahlibar
+
+	* digikam/: listview.cpp, listview.h:
+
+	  specify a sizehint for the listview for better layouting
+
+2005-03-18 23:01  jahrens
+
+	* digikam/main.cpp: Our brand new junior developer
+
+2005-03-18 22:56  toma
+
+	* digikam/: albumfolderview.cpp, digikamapp.cpp, digikamapp.h: -
+	  This will plug the import menu in the context menu of an album.
+	  - removes the "add images" from the tools menu which did not
+	  belong there.  - fixes a memleak CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-03-18 17:01  cgilles
+
+	* digikam/Makefile.am: fix
+
+2005-03-18 16:47  cgilles
+
+	* libs/thumbbar/thumbbar.cpp, libs/thumbbar/thumbbar.h,
+	  showfoto/showfoto.cpp, showfoto/showfoto.h: Missing namespace
+
+2005-03-18 16:40  cgilles
+
+	* libs/Makefile.am, libs/thumbbar/.cvsignore,
+	  libs/thumbbar/Makefile.am, libs/thumbbar/thumbbar.cpp,
+	  libs/thumbbar/thumbbar.h, showfoto/Makefile.am,
+	  showfoto/thumbbar.cpp, showfoto/thumbbar.h: Make ThumbBarView
+	  like shared lib, used in showfoto and SuperImpose plugin
+
+2005-03-18 07:52  cgilles
+
+	* libs/widgets/imageguidewidget.cpp: Fixed mouse focus rule
+
+2005-03-17 22:00  jahrens
+
+	* digikam/thumbview.cpp: CVS_SILENT fixed indenting
+
+2005-03-17 15:48  coles
+
+	* imageplugins/imageeffect_blur.cpp:
+
+	  CVS_SILENT
+
+	  Corrected typo.
+
+2005-03-17 10:21  cgilles
+
+	* libs/widgets/: imageguidewidget.cpp, imageguidewidget.h: cross ->
+	  spot
+
+2005-03-17 07:38  cgilles
+
+	* libs/widgets/: histogramwidget.cpp, histogramwidget.h: Add new
+	  flag to limit widget fick during histogram computation for small
+	  image (preview in dialog for example)
+
+2005-03-17 06:51  cgilles
+
+	* showfoto/Makefile.am: Fix tab
+
+2005-03-17 00:26  jahrens
+
+	* digikam/: albumdb.cpp, thumbview.cpp: This is a workaround, so
+	  you can use the keyboard selection. But the whole selection
+	  process has to be reworked. So I let this bug open as a reminder.
+
+	  CCBUG: 101630
+
+2005-03-16 16:09  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp: Using icon
+
+2005-03-16 16:04  ach
+
+	* kioslave/Makefile.am, showfoto/Makefile.am,
+	  utilities/cameragui/Makefile.am: There a configure check for
+	  libjpegs name.   Make use of it.  CCBUGS:98706
+
+2005-03-16 15:57  cgilles
+
+	* utilities/imageeditor/hi32-action-histogram.png: Add
+
+2005-03-16 15:47  cgilles
+
+	* showfoto/Makefile.am, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/digikamimagewindowui.rc,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h: Patch from Alfons
+	  Hoogervorst <alfons.hoogervorst@gmail.com> about histogram
+	  visible while viewing photo in digiKam image editor using
+	  blending.  CCBUGS: 98706 CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-03-16 13:19  cgilles
+
+	* libs/widgets/curveswidget.cpp: Fix CurvesWidget : adjust curves
+	  point to the widget size properly
+
+2005-03-14 10:26  cgilles
+
+	* libs/curves/imagecurves.cpp: make sure that curves is initate in
+	  Smooth mode.
+
+2005-03-14 09:25  cgilles
+
+	* libs/widgets/: curveswidget.cpp, imageguidewidget.cpp: Fix memory
+	  leak in imageguidewiget.
+
+2005-03-13 23:49  cgilles
+
+	* libs/widgets/: curveswidget.cpp, curveswidget.h: Add new option
+	  for ReadOnly operations to the curves
+
+2005-03-13 21:16  cgilles
+
+	* libs/histogram/imagehistogram.cpp: Fix ++i to i++
+
+2005-03-13 21:12  cgilles
+
+	* libs/curves/: imagecurves.cpp, imagecurves.h: Add new method to
+	  reset all data curves
+
+2005-03-13 20:28  cgilles
+
+	* libs/widgets/: Makefile.am, curveswidget.cpp, curveswidget.h:
+	  Moving curveswidget from digikamimageplugins to digikam core.  I
+	  will use this one in new WhiteBalance image editor plugin.
+
+2005-03-13 19:39  cgilles
+
+	* libs/widgets/: histogramwidget.cpp, histogramwidget.h: Fix ++i to
+	  i++
+
+2005-03-11 14:18  cgilles
+
+	* libs/widgets/: imageguidewidget.cpp, imageguidewidget.h: digiKam
+	  ImageGuideWidget : new method for get cursor position, get color
+	  under cursor.  There are two running modes : guide tool and pick
+	  up color.
+
+2005-03-11 10:32  cgilles
+
+	* utilities/splashscreen/digikam-splash.png: Splashscreen from
+	  Andreas Fischer for 0.7.3 (from digikam 0.7.x splashscreens
+	  contest)
+
+2005-03-08 22:32  jahrens
+
+	* utilities/imageeditor/: digikamimagewindowui.rc, imagewindow.cpp:
+	  RMB menu is back to imageeditor.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-03-08 10:58  cgilles
+
+	* imageplugins/imageeffect_blur.cpp: No need to use memcpy with
+	  imagepreviewwidget
+
+2005-03-07 22:29  jahrens
+
+	* imageplugins/imageeffect_blur.cpp,
+	  imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_hsl.cpp,
+	  imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageeffect_rgb.cpp,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  imageplugins/imageplugin_core.cpp,
+	  utilities/imageeditor/canvas.cpp, utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/imageiface.cpp,
+	  utilities/imageeditor/imageiface.h,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/undoaction.cpp,
+	  utilities/imageeditor/undoaction.h,
+	  utilities/imageeditor/undomanager.cpp,
+	  utilities/imageeditor/undomanager.h: Added a history based
+	  undo/redo function. The undo/redo icons in the toolbar are
+	  popup-menus, which describes the actions on the image.
+
+	  CCBUG: 87105 CCMAIL: joern.ahrens@kdemail.net
+
+2005-03-07 16:09  pahlibar
+
+	* imageplugins/pics/.cvsignore:
+
+	  stfu
+
+2005-03-07 15:39  jahrens
+
+	* utilities/imageeditor/undomanager.cpp: CVS_SILENT: forgot some
+	  debug messages
+
+2005-03-07 14:11  jahrens
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/imageeditor/canvas.cpp,
+	  utilities/imageeditor/canvas.h,
+	  utilities/imageeditor/digikamimagewindowui.rc,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/imageeditor/imagewindow.h,
+	  utilities/imageeditor/imlibinterface.cpp,
+	  utilities/imageeditor/imlibinterface.h,
+	  utilities/imageeditor/undoaction.cpp,
+	  utilities/imageeditor/undoaction.h,
+	  utilities/imageeditor/undocache.cpp,
+	  utilities/imageeditor/undocache.h,
+	  utilities/imageeditor/undomanager.cpp,
+	  utilities/imageeditor/undomanager.h: Added a redo operation for
+	  the image editor.  Now it is possible to undo/redo operations in
+	  the image editor.  Next step is the history based undo/redo.
+
+	  CCBUG: 87105 CCMAIL: joern.ahrens@kdemail.net
+
+2005-03-06 20:10  pahlibar
+
+	* digikam/albumiconview.cpp:
+
+	  update image count after file removal BUGS: 100991
+
+2005-03-06 19:30  pahlibar
+
+	* tips:
+
+	  grammatical fixed and remove the prefix "Did you know..."
+	  (redundant)
+
+2005-03-06 19:17  toma
+
+	* tips: proofreading by a dutchman.
+
+2005-03-06 19:07  toma
+
+	* tips: Digikam -> digiKam < -> &lt;
+	  > -> &gt;
+	  BUGS:100987
+
+2005-03-06 17:34  pahlibar
+
+	* digikam/digikamview.cpp:
+
+	  rename default "Open" button to "Add" in the add images dialog
+	  BUGS: 100472
+
+2005-03-04 13:32  cgilles
+
+	* imageplugins/imageeffect_blur.cpp,
+	  imageplugins/imageeffect_hsl.cpp, imageplugins/imageeffect_hsl.h,
+	  imageplugins/imageeffect_sharpen.cpp,
+	  imageplugins/imageeffect_sharpen.h,
+	  libs/filters/imagefilters.cpp, libs/filters/imagefilters.h:
+	  Moving HSL and Sharpen method to ImageFilers API
+
+2005-03-04 12:36  cgilles
+
+	* imageplugins/: imageeffect_blur.cpp, imageeffect_blur.h: digiKam
+	  Blur image editor plugin : using gaussian blur method from
+	  digiKam core instead imlib2 API
+
+2005-03-04 12:14  cgilles
+
+	* utilities/imageeditor/imagewindow.cpp: using local config
+	  instance instead kapp instance
+
+2005-03-04 10:18  cgilles
+
+	* README, digikam.lsm, version.h,
+	  utilities/imageeditor/imagewindow.cpp, utilities/setup/setup.cpp,
+	  utilities/setup/setup.h, utilities/setup/setupcamera.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupeditor.cpp, utilities/setup/setupmime.cpp:
+	  Fixed Digikam --> digiKam
+
+2005-03-03 16:18  cgilles
+
+	* imageplugins/imageeffect_ratiocrop.cpp: Digikam Ratio Crop tool :
+	  using dedicaced setting field in cmain configuration file.
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-03-03 10:23  cgilles
+
+	* imageplugins/imageeffect_bwsepia.cpp: Fix i18n
+
+2005-03-03 09:55  cgilles
+
+	* imageplugins/imageeffect_bwsepia.cpp: Fix i18n
+
+2005-03-03 09:39  cgilles
+
+	* imageplugins/: digikamimageplugin_core_ui.rc,
+	  imageplugin_core.cpp: Fix menu entry
+
+2005-03-03 07:51  cgilles
+
+	* ChangeLog, digikam.lsm, version.h: Fix release number to
+	  0.7.3-beta1
+
+2005-03-02 22:03  toma
+
+	* digikam/: albumpropsedit.h, albumpropsedit.cpp: Got a tutorial
+	  from Jokele and this is the result.
+
+2005-03-02 17:55  toma
+
+	* AUTHORS, digikam/albumpropsedit.cpp, digikam/albumpropsedit.h:
+	  This adds a new button to the album properties which calculates
+	  the average date of the images in the album based on the EXIF
+	  headers or the modification date of the images if the exif
+	  headers are not available. It sets the date property of the album
+	  to the average date. Includes the documentation.
+
+2005-03-02 14:36  cgilles
+
+	* imageplugins/Makefile.am, imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_bwsepia.h,
+	  imageplugins/imageplugin_core.cpp,
+	  imageplugins/imageplugin_core.h, imageplugins/pics/Makefile.am,
+	  imageplugins/pics/browntone.png, imageplugins/pics/bwgreen.png,
+	  imageplugins/pics/bworange.png, imageplugins/pics/bwred.png,
+	  imageplugins/pics/bwyellow.png, imageplugins/pics/coldtone.png,
+	  imageplugins/pics/neutralbw.png, imageplugins/pics/platinum.png,
+	  imageplugins/pics/selenium.png, imageplugins/pics/sepia.png,
+	  libs/filters/Makefile.am, libs/filters/imagefilters.cpp,
+	  libs/filters/imagefilters.h: New digiKam image editor plugin for
+	  black and white conversion :
+
+	  - Since digikam include colors channel mixer, using this one for
+	  BW conversion. Give best results than old implementation. BW
+	  conversion are based on gimpguru.org tutorial
+	  (http://www.gimpguru.org/Tutorials/Color2BW).
+
+	  - This plugin have a dialog with preview effect. Look the
+	  screenshot at this url :
+	  http://digikam3rdparty.free.fr/digikamimageplugins-2005/blackandwhiteconverter.png
+
+	  - Provide BW filters are :   * Neutral BW,   * BW with Green
+	  filter(NEW),	 * BW with Orange filter(NEW),	 * BW with Red
+	  filter(NEW),	 * BW with Yellow filter(NEW),	 * Sepia,   *
+	  Brown,   * Cold,   * Selenium,   * Platinum.
+
+	  CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-03-02 12:53  cgilles
+
+	* imageplugins/: hi32-action-browntone.png,
+	  hi32-action-coldtone.png, hi32-action-neutralbw.png,
+	  hi32-action-platinium.png, hi32-action-selenium.png,
+	  hi32-action-sepia.png: remove
+
+2005-03-02 09:25  ach
+
+	* digikam/main.cpp, showfoto/main.cpp: we already had a release
+	  this year
 
 
 v0.7.2				28/02/05
