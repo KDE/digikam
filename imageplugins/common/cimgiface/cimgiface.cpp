@@ -134,8 +134,8 @@ CimgIface::~CimgIface()
     if (m_tmpMaskFile != QString::null)
        {
        // Remove temporary inpainting mask.
-       QFile mask(m_tmpMaskFile);
-       mask.remove();
+       QFile maskFile(m_tmpMaskFile);
+       maskFile.remove();
        }
 }
 
@@ -312,8 +312,8 @@ bool CimgIface::process()
 
 void CimgIface::cleanup()
 {
-    img0  = flow = G = dest = sum = W = CImg<>();    
-    mask  = CImg<uchar> ();
+    img0 = flow = G = dest = sum = W = CImg<>();    
+    mask = CImg<uchar> ();
 }
 
 bool CimgIface::prepare()
@@ -358,7 +358,24 @@ bool CimgIface::prepare_restore()
     CImgStats stats(img, false);
     img.normalize((float)stats.min, (float)stats.max);
     img0 = img;
-    G = CImg<>(img.width,img.height,1,3);
+    G = CImg<>(img.width, img.height, 1, 3);
+    return true;
+}
+
+bool CimgIface::prepare_resize()
+{
+    if (!m_newWidth && !m_newHeight) 
+       {
+       kdDebug() << "Unspecified output geometry !" << endl;
+       return false;
+       }
+
+    mask = CImg<uchar>(img.dimx(), img.dimy(), 1, 1, 255);
+    mask.resize(m_newWidth, m_newHeight, 1, 1, 1);
+    img0 = img.get_resize(m_newWidth, m_newHeight, 1, -100, 1);
+    img.resize(m_newWidth, m_newHeight, 1, -100, 3);
+    G = CImg<>(img.width, img.height, 1, 3);
+    
     return true;
 }
 
@@ -449,30 +466,6 @@ bool CimgIface::prepare_inpaint()
           G(x,y,2) = sr1*v*v + sr2*u*u;
         }    
     }
-    return true;
-}
-
-bool CimgIface::prepare_resize()
-{
-    const bool anchor = true; // Anchor original pixels.
-    
-    if (!m_newWidth && !m_newHeight) 
-       {
-       kdDebug() << "Unspecified output geometry !" << endl;
-       return false;
-       }
-
-    mask = CImg<uchar>(img.width, img.height, 1, 1, 255);
-    
-    if (!anchor) 
-       mask.resize(m_newWidth, m_newHeight, 1, 1, 1);
-    else 
-       mask = ~mask.resize(m_newWidth, m_newHeight, 1, 1, 4);
-    
-    img0 = img.get_resize(m_newWidth, m_newHeight, 1, -100, 1);
-    img.resize(m_newWidth, m_newHeight, 1, -100, 3);
-    G = CImg<>(img.width, img.height, 1, 3);
-    
     return true;
 }
 
