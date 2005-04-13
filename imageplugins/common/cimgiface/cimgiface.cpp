@@ -211,30 +211,30 @@ void CimgIface::startComputation()
     
     kdDebug() << "CimgIface::Finalization..." << endl;
 
-    data = (uchar*)m_imageData;
     i = 0;
     int width, height;
+    uchar* newData;
     
     if (m_resize)
        {
-       width = m_newWidth;
-       height = m_newHeight;
-       data = (uchar*)m_newData;
+       width   = m_newWidth;
+       height  = m_newHeight;
+       newData = (uchar*)m_newData;
        }
     else
        {
-       width = m_imageWidth;
-       height = m_imageHeight;
-       data = (uchar*)m_imageData;
+       width   = m_imageWidth;
+       height  = m_imageHeight;
+       newData = (uchar*)m_imageData;
        }   
        
     for (y = 0; y < height; y++) 
        {
        for (x = 0; x < width; x++, i+=4) 
           {
-          data[ i ] = (uchar)img(x, y, 0);
-          data[i+1] = (uchar)img(x, y, 1);
-          data[i+2] = (uchar)img(x, y, 2);
+          newData[ i ] = (uchar)img(x, y, 0);
+          newData[i+1] = (uchar)img(x, y, 1);
+          newData[i+2] = (uchar)img(x, y, 2);
           }
        }
     
