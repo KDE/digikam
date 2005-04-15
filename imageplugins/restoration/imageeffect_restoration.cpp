@@ -186,7 +186,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
                                                "<b>Reduce Uniform Noise</b>: reduce small image artefacts like sensor noise.<p>"
                                                "<b>Reduce JPEG Artefacts</b>: reduce large image artefacts like JPEG compression mosaic.<p>"
-                                               "<b>Reduce Texturing</b>: reduce image artefacts like paper texture or Moire patterns"
+                                               "<b>Reduce Texturing</b>: reduce image artefacts like paper texture or Moire patterns "
                                                "of a scanned image.<p>"));
 
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
