@@ -415,7 +415,7 @@ void ImageEffect_Restoration::slotUser1()
           case ReduceJPEGArtefacts:
             {
             m_detailInput->setValue(0.3);
-            m_blurInput->setValue(0.9);
+            m_blurInput->setValue(1.0);
             m_timeStepInput->setValue(100.0);
             m_blurItInput->setValue(2.0);
             break;
@@ -423,7 +423,10 @@ void ImageEffect_Restoration::slotUser1()
           
           case ReduceTexturing:
             {
+            m_detailInput->setValue(0.5);
+            m_blurInput->setValue(1.5);
             m_timeStepInput->setValue(100.0);
+            m_blurItInput->setValue(2.0);
             break;
             }
           }                       
