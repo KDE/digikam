@@ -550,7 +550,7 @@ void ImageEffect_BlowUp::slotUser3()
         stream << m_gaussianInput->value() << "\n";    
         }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Inpainting text file."));
+        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Blowup text file."));
     
     file.close();        
 }
