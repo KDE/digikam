@@ -86,7 +86,9 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
               {
               int error;
               plugin = KParts::ComponentFactory
-                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0, &error);
+                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this,
+                                                                         service->name().local8Bit(),
+                                                                         0, &error);
 
               if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                  {
@@ -137,7 +139,9 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
           else
              {
              plugin = KParts::ComponentFactory
-                      ::createInstanceFromService<Digikam::ImagePlugin>(service, this, 0, 0);
+                       ::createInstanceFromService<Digikam::ImagePlugin>(service, this,
+                                                                         service->name().local8Bit(),
+                                                                         0);
 
              if (plugin)
                 {
@@ -162,7 +166,7 @@ void ImagePluginLoader::loadPluginsFromList(QStringList list)
                          // use the old splashscreen instance.
 }
 
-Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)
+Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& pluginName)
 {
     if( m_pluginList.isEmpty() ) return NULL;
 
@@ -170,14 +174,14 @@ Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(QString pluginName)
         
     for ( plugin = m_pluginList.first() ; plugin ; plugin = m_pluginList.next() )
        {
-       if( plugin->name() == pluginName )
+       if( QString::fromLocal8Bit(plugin->name()) == pluginName )
           return plugin;
        }
            
     return NULL;
 }
 
-bool ImagePluginLoader::pluginLibraryIsLoaded(QString libraryName)
+bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
@@ -185,7 +189,6 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(QString libraryName)
     for(iter = offers.begin(); iter != offers.end(); ++iter)
        {
        KService::Ptr service = *iter;
-       Digikam::ImagePlugin *plugin;
 
        if(service->library() == libraryName)
            {

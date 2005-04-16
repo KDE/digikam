@@ -49,7 +49,7 @@ public:
     
     // Return true if plugin library is loaded in memory.
     // 'libraryName' is internal plugin library name not i18n.
-    bool pluginLibraryIsLoaded(QString libraryName);
+    bool pluginLibraryIsLoaded(const QString& libraryName);
 
 private:
 
@@ -57,7 +57,7 @@ private:
     static ImagePluginLoader       *m_instance;
     QPtrList<Digikam::ImagePlugin>  m_pluginList;
     
-    Digikam::ImagePlugin* pluginIsLoaded(QString pluginName);
+    Digikam::ImagePlugin* pluginIsLoaded(const QString& pluginName);
 };
 
 #endif /* IMAGEPLUGINLOADER_H */
