@@ -760,11 +760,28 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
                                    newName))
         return;
 
+    QFileInfo fi(newName);
+    QString newExt(QString("*.") + fi.extension());
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if ( !(QStringList::split(" ", settings->getImageFileFilter()).contains(newExt) ||
+           QStringList::split(" ", settings->getMovieFileFilter()).contains(newExt) ||
+           QStringList::split(" ", settings->getAudioFileFilter()).contains(newExt) ||
+           QStringList::split(" ", settings->getRawFileFilter()).contains(newExt)) )
+    {
+        settings->setImageFileFilter(settings->getImageFileFilter() +
+                                     QString(" ") + newExt);
+        d->imageLister->setNameFilter(d->albumSettings->getImageFileFilter() + " " +
+                                      d->albumSettings->getMovieFileFilter() + " " +
+                                      d->albumSettings->getAudioFileFilter() + " " +
+                                      d->albumSettings->getRawFileFilter());
+    }
+    
     KURL newURL = item->fileItem()->url().upURL();
     newURL.addPath(newName);
     d->nextItemToSelect = newURL.url();
 
-    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    if (d->currentAlbum)
         d->imageLister->updateDirectory();
 
     if( renameAlbumIcon )
