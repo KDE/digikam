@@ -287,18 +287,25 @@ void ImageDescEdit::slotApply()
             AlbumSettings::instance()->getSaveExifComments())
         {
             // store as JPEG Exif comment
-            KFileMetaInfo metaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo*  metaInfo =
+                new KFileMetaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
 
             // set Jpeg comment
-             if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
-                 && metaInfo.containsGroup("Jpeg EXIF Data"))
-            {
-                kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                          << endl;
-                metaInfo["Jpeg EXIF Data"].item("Comment")
-                    .setValue(m_commentsEdit->text());
-                metaInfo.applyChanges();
-            }
+             if (metaInfo->isValid () && metaInfo->mimeType() == "image/jpeg"
+                 && metaInfo->containsGroup("Jpeg EXIF Data"))
+             {
+                 kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
+                           << endl;
+                 (*metaInfo)["Jpeg EXIF Data"].item("Comment")
+                     .setValue(m_commentsEdit->text());
+                 metaInfo->applyChanges();
+                 m_currItem->setMetaInfo(metaInfo);
+             }
+             else
+             {
+                 delete metaInfo;
+                 metaInfo = 0;
+             }
 
             // set EXIF UserComment
             //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());

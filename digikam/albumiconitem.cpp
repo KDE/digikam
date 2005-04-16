@@ -150,6 +150,23 @@ void AlbumIconItem::setPixmap(const QPixmap& thumbnail,
     }
 }
 
+void AlbumIconItem::setMetaInfo(const KFileMetaInfo* metaInfo)
+{
+    if (metaInfo_)
+    {
+        delete metaInfo_;
+        metaInfo_ = 0;
+    }
+    metaInfo_  = metaInfo;
+
+    QRect r(view_->contentsX(), view_->contentsY(),
+            view_->visibleWidth(), view_->visibleHeight());
+    if (r.intersects(rect()))
+    {
+        repaint();
+    }
+}
+
 int AlbumIconItem::compare(ThumbItem *item)
 {
     const AlbumSettings *settings = view_->settings();
