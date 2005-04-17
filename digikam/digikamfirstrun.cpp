@@ -2,8 +2,8 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-02-01
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2003-2004 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -11,16 +11,16 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
- 
+
 extern "C"
 {
 #include <sys/types.h>
@@ -29,7 +29,7 @@ extern "C"
 }
 
 // C++ Includes.
- 
+
 #include <iostream>
 
 // Qt includes.
@@ -95,7 +95,7 @@ void DigikamFirstRun::slotOk()
     QString albumLibraryFolder = ui->path->url();
     if (albumLibraryFolder.isEmpty())
     {
-        KMessageBox::sorry(0, i18n("You must select a folder for Digikam to use as the Album Library folder."));
+        KMessageBox::sorry(this, i18n("You must select a folder for Digikam to use as the Album Library folder."));
         return;
     }
 
@@ -106,14 +106,14 @@ void DigikamFirstRun::slotOk()
 
     if (KURL(albumLibraryFolder).equals(KURL(QDir::homeDirPath()), true))
     {
-        KMessageBox::sorry(0, i18n("Digikam cannot use your home folder as the Album Library folder."));
+        KMessageBox::sorry(this, i18n("Digikam cannot use your home folder as the Album Library folder."));
         return;
     }
 
     QDir targetPath(albumLibraryFolder);
     if (!targetPath.exists())
     {
-        int rc = KMessageBox::questionYesNo(0,
+        int rc = KMessageBox::questionYesNo(this,
                                    i18n("<qt>The folder you selected does not exist: "
                                         "<p><b>%1</b></p>"
                                         "Would you like Digikam to make it for you now?</qt>")
@@ -127,7 +127,7 @@ void DigikamFirstRun::slotOk()
 
         if (!targetPath.mkdir(albumLibraryFolder))
         {
-            KMessageBox::sorry(0,
+            KMessageBox::sorry(this,
                                i18n("<qt>Digikam could not create the folder shown below. "
                                     "Please select a different location."
                                     "<p><b>%1</b></p></qt>").arg(albumLibraryFolder),
@@ -135,10 +135,10 @@ void DigikamFirstRun::slotOk()
             return;
         }
     }
-    
+
     QFileInfo path(albumLibraryFolder);
     if (!path.isWritable()) {
-        KMessageBox::information(0, i18n("No write access for this path.\n"
+        KMessageBox::information(this, i18n("No write access for this path.\n"
                                          "Warning: the comments and tag features will not work."));
         return;
     }
@@ -157,7 +157,7 @@ void DigikamFirstRun::slotOk()
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
         kdError() << ErrorMsg << endl;
-        KMessageBox::sorry(0, i18n("Cannot restart Digikam automatically.\n"
+        KMessageBox::sorry(this, i18n("Cannot restart Digikam automatically.\n"
                                    "Please restart Digikam manually."));
     }
 }

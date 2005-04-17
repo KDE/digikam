@@ -81,7 +81,7 @@ DigikamApp::DigikamApp(bool detectCamera)
 
     mFullScreen = false;
     mView = 0;
-	
+
     mSplash = 0;
     if(m_config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
@@ -121,8 +121,8 @@ DigikamApp::DigikamApp(bool detectCamera)
     // Load Themes
     populateThemes();
 
-    setAutoSaveSettings();    
-    
+    setAutoSaveSettings();
+
     // Auto-detect camera if requested so
     if (detectCamera)
     {
@@ -236,15 +236,15 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_back");
     mBackwardActionMenu->setEnabled(false);
-    connect(mBackwardActionMenu->popupMenu(), 
+    connect(mBackwardActionMenu->popupMenu(),
             SIGNAL(aboutToShow()),
             this,
             SLOT(slotAboutToShowBackwardMenu()));
-    connect(mBackwardActionMenu->popupMenu(), 
+    connect(mBackwardActionMenu->popupMenu(),
             SIGNAL(activated(int)),
             mView,
             SLOT(slotAlbumHistoryBack(int)));
-       
+
     mForwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
                                     "forward",
                                     ALT+Key_Right,
@@ -253,15 +253,15 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_forward");
     mForwardActionMenu->setEnabled(false);
-    connect(mForwardActionMenu->popupMenu(), 
+    connect(mForwardActionMenu->popupMenu(),
             SIGNAL(aboutToShow()),
             this,
             SLOT(slotAboutToShowForwardMenu()));
-    connect(mForwardActionMenu->popupMenu(), 
+    connect(mForwardActionMenu->popupMenu(),
             SIGNAL(activated(int)),
             mView,
-            SLOT(slotAlbumHistoryForward(int)));    
-        
+            SLOT(slotAlbumHistoryForward(int)));
+
     mNewAction = new KAction(i18n("&New Album..."),
                                     "albumfoldernew",
                                     KStdAccel::shortcut(KStdAccel::New),
@@ -269,8 +269,8 @@ void DigikamApp::setupActions()
                                     SLOT(slot_newAlbum()),
                                     actionCollection(),
                                     "album_new");
-    mNewAction->setWhatsThis(i18n("This option create a new empty Album in the database."));
-                                         
+    mNewAction->setWhatsThis(i18n("This option creates a new empty Album in the database."));
+
     mAlbumSortAction = new KSelectAction(i18n("&Sort Albums"),
                                     0,
                                     0,
@@ -302,7 +302,7 @@ void DigikamApp::setupActions()
                                     SLOT(slot_albumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
-    mAddImagesAction->setWhatsThis(i18n("This option adding new images in the current Album."));
+    mAddImagesAction->setWhatsThis(i18n("This option adds new images to the current Album."));
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
                                     "fileopen",
@@ -322,7 +322,7 @@ void DigikamApp::setupActions()
                                     "album_propsEdit");
     mPropsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
                                         "about the Collection."));
-    
+
     mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
                                     0,
@@ -354,9 +354,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageView()),
                                     actionCollection(),
                                     "image_view");
-    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the current selected "
+    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the currently selected "
                                         "image."));
-                                        
+
     mImageCommentsAction = new KAction(i18n("Edit Image Comments && Tags..."),
                                    "imagecomment",
                                     Key_F3,
@@ -364,9 +364,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageCommentsEdit()),
                                     actionCollection(),
                                     "image_comments");
-    mImageCommentsAction->setWhatsThis(i18n("This option allows you to edit the comments and tags of the current "
+    mImageCommentsAction->setWhatsThis(i18n("This option allows you to edit the comments and tags of the currently "
                                             "selected image."));
-                                        
+
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
                                     Key_F2,
@@ -374,9 +374,9 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageRename()),
                                     actionCollection(),
                                     "image_rename");
-    mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename of the current selected "
-                                          "image."));                                    
-                                    
+    mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename of the currently selected "
+                                          "image."));
+
     mImageDeleteAction = new KAction(i18n("Delete"),
                                     "editdelete",
                                     SHIFT+Key_Delete,
@@ -393,7 +393,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_properties");
     mImagePropsAction->setWhatsThis(i18n("This option allows you to display the file properties, the meta-data "
-                                         "and the histogram of the current selected image."));
+                                         "and the histogram of the currently selected image."));
 
     mImageSortAction = new KSelectAction(i18n("&Sort Images"),
                                     0,
@@ -501,7 +501,7 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizePlus()),
                                    actionCollection(),
                                    "album_thumbSizeIncrease");
-    mThumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase the Album thumbnails size."));    
+    mThumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase the Album thumbnails size."));
 
     mThumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
                                    "viewmag-",
@@ -510,7 +510,7 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizeMinus()),
                                    actionCollection(),
                                    "album_thumbSizeDecrease");
-    mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease the Album thumbnails size."));    
+    mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease the Album thumbnails size."));
 
     mFullScreenAction = new KAction(i18n("Toggle Full Screen"),
                                    "window_fullscreen",
@@ -519,8 +519,8 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main windows in full screen mode."));    
-    
+    mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main windows in full screen mode."));
+
     mQuitAction = KStdAction::quit(this,
                                    SLOT(slot_exit()),
                                    actionCollection(),
@@ -599,11 +599,11 @@ void DigikamApp::slotAboutToShowBackwardMenu()
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();        
+        QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
             mBackwardActionMenu->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -619,7 +619,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
         for(; iter != titles.end(); ++iter,++id)
         {
             mForwardActionMenu->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -627,7 +627,7 @@ void DigikamApp::slot_albumSelected(bool val)
 {
     Album *album = mAlbumManager->currentAlbum();
     if(album && !album->isRoot())
-    {   
+    {
         mDeleteAction->setEnabled(val);
         mAddImagesAction->setEnabled(val);
         mPropsEditAction->setEnabled(val);
@@ -677,7 +677,7 @@ void DigikamApp::slot_gammaAdjustment()
    int ValRet = KApplication::kdeinitExec(QString::fromLatin1("kcmshell"), args, perror, ppid);
 
    if ( ValRet != 0 )
-      KMessageBox::error(0, i18n("Cannot start \"KGamma\" extension from KDE control center;\n"
+      KMessageBox::error(this, i18n("Cannot start \"KGamma\" extension from KDE control center;\n"
                                  "please check your installation."));
 }
 
@@ -727,14 +727,14 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
 void DigikamApp::slotCameraAutoDetect()
 {
     bool retry = false;
-    
+
     CameraType* ctype = mCameraList->autoDetect(retry);
     if (!ctype && retry)
     {
         QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
         return;
     }
-    
+
     if (ctype && ctype->action())
     {
         ctype->action()->activate();
@@ -898,7 +898,7 @@ void DigikamApp::slotKipiPluginPlug()
     m_kipiAlbumActions.clear();
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
-    
+
     int cpt = 0;
 
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
@@ -909,7 +909,7 @@ void DigikamApp::slotKipiPluginPlug()
             continue;
 
         ++cpt;
-        
+
         if(mSplash)
             mSplash->message(i18n("Loading: %1").arg((*it)->name()));
 
@@ -950,10 +950,10 @@ void DigikamApp::slotKipiPluginPlug()
 
         plugin->actionCollection()->readShortcutSettings();
     }
-    
+
     if(mSplash)
         mSplash->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
-    
+
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );

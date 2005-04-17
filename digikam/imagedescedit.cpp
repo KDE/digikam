@@ -66,7 +66,7 @@ public:
         : QCheckListItem(parent, album->getTitle()),
           m_album(album)
         {}
-    
+
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
         : QCheckListItem(parent, album->getTitle(), QCheckListItem::CheckBox),
           m_album(album)
@@ -75,12 +75,12 @@ public:
     TAlbum* m_album;
 };
 
-ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem, 
+ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
                              QWidget *parent, bool singleMode)
-             : KDialogBase(Plain, i18n("Image Comments/Tags"), 
+             : KDialogBase(Plain, i18n("Image Comments/Tags"),
                            singleMode ? Help|Stretch|Ok|Apply|Cancel : Help|User1|User2|Stretch|Ok|Apply|Cancel,
-                           Ok, parent, 0, true, true, 
-                           KStdGuiItem::guiItem(KStdGuiItem::Forward), 
+                           Ok, parent, 0, true, true,
+                           KStdGuiItem::guiItem(KStdGuiItem::Forward),
                            KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
     setHelp("tagscommentsedit.anchor", "digikam");
@@ -118,14 +118,14 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
                                        "when navigating between items"),
                                   plainPage());
     topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
-    
-    if (singleMode) 
+
+    if (singleMode)
        m_autoSaveBox->hide();
-    
+
     kapp->config()->setGroup("Image Description Dialog");
     m_autoSaveBox->setChecked(kapp->config()->readBoolEntry("Auto Save", true));
-    
-    m_tagsView->addColumn("Tags");
+
+    m_tagsView->addColumn(i18n( "Tags" ));
     m_tagsView->header()->hide();
     m_tagsView->setSelectionMode(QListView::Single);
     m_tagsView->setResizeMode(QListView::LastColumn);
@@ -133,19 +133,19 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     connect(m_commentsEdit, SIGNAL(textChanged()),
             SLOT(slotModified()));
-    
-    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*, 
-            const QPoint &, int)), this, 
-            SLOT(slotRightButtonClicked(QListViewItem*, 
+
+    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*,
+            const QPoint &, int)), this,
+            SLOT(slotRightButtonClicked(QListViewItem*,
             const QPoint&, int)));
-            
+
     slotItemChanged();
 
     resize(configDialogSize("Image Description Dialog"));
 
     m_commentsEdit->installEventFilter(this);
     m_tagsView->installEventFilter(this);
-    
+
     m_commentsEdit->setFocus();
 }
 
@@ -153,7 +153,7 @@ ImageDescEdit::~ImageDescEdit()
 {
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
-    
+
     kapp->config()->setGroup("Image Description Dialog");
     kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
@@ -189,7 +189,7 @@ bool ImageDescEdit::eventFilter(QObject *, QEvent *e)
             }
             return true;
         }
-        
+
         return false;
     }
     return false;
@@ -237,12 +237,12 @@ void ImageDescEdit::slotUser1()
         return;
 
     if (m_autoSaveBox->isChecked())
-       slotApply();    
-       
+       slotApply();
+
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-    m_currItem->setSelected(true);    
+    m_currItem->setSelected(true);
     m_view->ensureItemVisible(m_currItem);
-    
+
     slotItemChanged();
 }
 
@@ -250,14 +250,14 @@ void ImageDescEdit::slotUser2()
 {
     if (!m_currItem)
         return;
-    
+
     if (m_autoSaveBox->isChecked())
-        slotApply();    
+        slotApply();
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currItem->setSelected(true);
     m_view->ensureItemVisible(m_currItem);
-        
+
     slotItemChanged();
 }
 
@@ -266,8 +266,8 @@ void ImageDescEdit::slotApply()
     if (!m_currItem)
         return;
 
-    KURL fileURL(m_currItem->fileItem()->url());    
-    
+    KURL fileURL(m_currItem->fileItem()->url());
+
     PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
     if (!album)
     {
@@ -310,7 +310,7 @@ void ImageDescEdit::slotApply()
             // set EXIF UserComment
             //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
         }
-        
+
         m_modified = false;
     }
 
@@ -331,7 +331,7 @@ void ImageDescEdit::slotApply()
 void ImageDescEdit::slotOk()
 {
     slotApply();
-    KDialogBase::slotOk();    
+    KDialogBase::slotOk();
 }
 
 void ImageDescEdit::slotItemChanged()
@@ -340,7 +340,7 @@ void ImageDescEdit::slotItemChanged()
         return;
 
     m_modified = false;
-    
+
     if (!m_thumbJob.isNull())
     {
         m_thumbJob->kill();
@@ -351,10 +351,10 @@ void ImageDescEdit::slotItemChanged()
         delete m_thumbJob;
     }
 
-    KURL fileURL(m_currItem->fileItem()->url());    
-    
+    KURL fileURL(m_currItem->fileItem()->url());
+
     m_thumbJob = new ThumbnailJob(fileURL, 256);
-    
+
     connect(m_thumbJob,
             SIGNAL(signalThumbnailMetaInfo(const KURL&,
                                            const QPixmap&,
@@ -362,11 +362,11 @@ void ImageDescEdit::slotItemChanged()
             SLOT(slotGotThumbnail(const KURL&,
                                   const QPixmap&,
                                   const KFileMetaInfo*)));
-    
+
     connect(m_thumbJob,
             SIGNAL(signalFailed(const KURL&)),
-            SLOT(slotFailedThumbnail(const KURL&)));    
-                                  
+            SLOT(slotFailedThumbnail(const KURL&)));
+
     PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
     if (!album)
     {
@@ -375,7 +375,7 @@ void ImageDescEdit::slotItemChanged()
                     << endl;
         return;
     }
-    
+
     AlbumDB* db  = AlbumManager::instance()->albumDB();
 
     m_nameLabel->setText(fileURL.fileName());
@@ -383,13 +383,13 @@ void ImageDescEdit::slotItemChanged()
     m_commentsEdit->setText(db->getItemCaption(album, fileURL.fileName()));
 
     IntList tagIDs = db->getItemTagIDs(album, fileURL.fileName());
-    
+
     QListViewItemIterator it( m_tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* tItem =
             dynamic_cast<TAlbumCheckListItem*>(it.current());
-        
+
         if (tItem)
         {
             if (tagIDs.contains(tItem->m_album->getID()))
@@ -416,18 +416,18 @@ void ImageDescEdit::slotFailedThumbnail(const KURL&)
     m_thumbLabel->setText(i18n("Thumbnail unavailable"));
 }
 
-void ImageDescEdit::slotRightButtonClicked(QListViewItem *item, 
+void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
                                            const QPoint &, int )
 {
     TAlbum              *album;
     TAlbumCheckListItem *albumItem = 0;
-    
-    if (!item) 
+
+    if (!item)
     {
         album = AlbumManager::instance()->findTAlbum(0);
         albumItem = dynamic_cast<TAlbumCheckListItem*>(m_tagsView->firstChild());
     }
-    else 
+    else
     {
         albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
@@ -438,20 +438,20 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
 
     if(!album)
-        return;    
-            
+        return;
+
     QPopupMenu popmenu(this);
 
     popmenu.insertItem(SmallIcon("tag"),
                        i18n("New Tag"), 10);
     if (!album->isRoot())
-    {                       
+    {
         popmenu.insertItem(SmallIcon("pencil"),
                            i18n("Edit Tag Properties"), 11);
         popmenu.insertItem(SmallIcon("edittrash"),
                            i18n("Delete Tag"), 12);
     }
-    
+
     switch (popmenu.exec(QCursor::pos()))
     {
     case 10:
@@ -467,7 +467,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
     case 12:
     {
-        if (!album->isRoot()) 
+        if (!album->isRoot())
             tagDelete(album, albumItem);
         break;
     }
@@ -480,17 +480,17 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
 {
     if(!parAlbum || !item)
         return;
-        
+
     QString title, icon;
     AlbumManager *albumMan_ = AlbumManager::instance();
-    
+
     if (!TagCreateDlg::tagCreate(parAlbum, title, icon))
         return;
 
     QString errMsg;
     if (!albumMan_->createTAlbum(parAlbum, title, icon, errMsg))
     {
-        KMessageBox::error(0, errMsg);
+        KMessageBox::error(this, errMsg);
     }
     else
     {
@@ -511,22 +511,22 @@ void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
 {
     if (!album || album->isRoot())
         return;
-    
+
     AlbumManager *albumMan_ = AlbumManager::instance();
-    
+
     int result =
-        KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
+        KMessageBox::questionYesNo(this, i18n("Delete '%1' tag?")
                                    .arg(album->getTitle()));
 
     if (result == KMessageBox::Yes)
     {
         QString errMsg;
-        if (!albumMan_->deleteTAlbum(album, errMsg)) 
+        if (!albumMan_->deleteTAlbum(album, errMsg))
             KMessageBox::error(0, errMsg);
         else
         {
             if(item)
-                delete item;    
+                delete item;
         }
     }
 }
@@ -558,7 +558,7 @@ void ImageDescEdit::tagEdit(TAlbum* album)
         }
         ++it;
     }
-    
+
 }
 
 #include "imagedescedit.moc"
