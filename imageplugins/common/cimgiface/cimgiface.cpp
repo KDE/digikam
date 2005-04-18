@@ -481,11 +481,11 @@ void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h)
 
 bool CimgIface::prepare_visuflow()
 {
-    const char *geom     = "100%x100%"; //cimg_option("-g","100%x100%","Output geometry");
+    //const char *geom     = "100%x100%"; //cimg_option("-g","100%x100%","Output geometry");
     //const char *file_i   = (const char *)NULL; //cimg_option("-i",(const char*)NULL,"Input init image");
     const bool normalize = false; //cimg_option("-norm",false,"Normalize input flow");
 
-    int w,h; /*get_geom(geom,w,h);*/
+    int w=0, h=0; /*get_geom(geom,w,h);*/
     
     if (!cimg::strcasecmp(m_visuflow,"circle")) { // Create a circular vector flow
         flow = CImg<>(400,400,1,2);
