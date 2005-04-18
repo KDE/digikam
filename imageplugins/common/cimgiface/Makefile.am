@@ -10,8 +10,5 @@ libcimgiface_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = $(all_includes) 
 
-# Common arguments for optimizations
-AM_CXXFLAGS = -Wall -O3 -ffast-math
-
 # Don't use CImg interface (keyboard/mouse interaction)
-AM_CXXFLAGS += -Dcimg_OS=-1 -Dcimg_display_type=0 
+AM_CPPFLAGS = -Dcimg_OS=-1 -Dcimg_display_type=0 
