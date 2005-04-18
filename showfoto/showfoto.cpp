@@ -824,6 +824,7 @@ bool ShowFoto::save()
         return false;
     }
 
+    m_canvas->setModified( false );
     slotOpenURL(curr->url());
     m_bar->invalidateThumb(curr);
     
