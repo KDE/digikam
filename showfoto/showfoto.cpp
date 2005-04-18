@@ -844,7 +844,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #endif
     m_canvas->load(localFile);
     
-    int index = 0;
+    int index = 1;
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
     {
         if (item->url().equals(m_bar->currentItem()->url()))
@@ -856,11 +856,34 @@ void ShowFoto::slotOpenURL(const KURL& url)
     
     QString text = m_bar->currentItem()->url().filename() +
                    i18n(" (%2 of %3)")
-                   .arg(QString::number(index+1))
+                   .arg(QString::number(index))
                    .arg(QString::number(m_bar->countItems()));
     m_nameLabel->setText(text);
     
     setCaption(i18n("Showfoto - %1").arg(m_bar->currentItem()->url().directory()));
+
+    if (m_bar->countItems() == 1) {
+        m_backAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+    else {
+        m_backAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
+    }
+
+    if (index == 1) {
+        m_backAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+    }
+
+    if (index == m_bar->countItems()) {
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
 }
 
 void ShowFoto::slotAutoFit()
