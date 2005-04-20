@@ -2,8 +2,6 @@
 Name=ImagePlugin_WhiteBalance
 Name[it]=PluginImmagini_BilanciamentoDelBianco
 Name[nl]=Afbeeldingsplugin_Witbalans
-Name[pt]='Plugin' de Balanceamento de Branco
-Name[pt_BR]='Plugin' de Balanceamento de Branco
 Name[sv]=Insticksprogram för vitbalans
 
 Type=Service
