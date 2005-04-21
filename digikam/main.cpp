@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+#include <qfile.h>
 
 // KDE includes
  
@@ -57,6 +58,45 @@ extern "C"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
+// TODO: Only for testing purposes for 0.8 development. Remove
+// for production version
+static bool copyDBFile(const QString& albumLibraryPath)
+{
+    QFile sFile(albumLibraryPath + "/digikam.db");
+    QFile dFile(albumLibraryPath + "/digikam-testing.db");
+
+    if (!sFile.exists() || dFile.exists())
+        return true;
+
+    if (!sFile.open(IO_ReadOnly))
+        return false;
+    
+    if (!dFile.open(IO_WriteOnly))
+    {
+        sFile.close();
+        return false;
+    }
+
+    const int MAX_IPC_SIZE = (1024*32);
+    char buffer[MAX_IPC_SIZE];
+
+    Q_LONG len;
+    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    {
+        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
+        {
+            sFile.close();
+            dFile.close();
+            return false;
+        }
+    }
+
+    sFile.close();
+    dFile.close();
+    
+    return true;
+}
+
 static KCmdLineOptions options[] =
 {
     { "detect-camera", I18N_NOOP("Automatically detect and open camera"), 0 },
@@ -65,13 +105,13 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Description = i18n("A Photo-Management Application for KDE") + "\n" + 
+    QString description = i18n("A Photo-Management Application for KDE") + "\n" + 
                           i18n("Using Kipi library version %1").arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("digiKam"),
-                          digikam_version,        // Release number available in version.h to the top source dir.
-                          Description.latin1(),
+                          digikam_version,        
+                          description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2005, Digikam developers team"),
                           0,
@@ -193,7 +233,7 @@ int main(int argc, char *argv[])
                           0);
     
     KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+    KCmdLineArgs::addCmdLineOptions( options ); 
 
     KApplication app;
 
@@ -252,6 +292,17 @@ int main(int argc, char *argv[])
 
             config->writeEntry("Locale", currLocale);
         }
+    }
+
+    // copy the db to a new temp file. we will use this copied db for testing
+    // purposes in 0.8 development. just a safety precautions for developers
+    // working on their main photo library
+
+    if (!copyDBFile(albumPath))
+    {
+        KMessageBox::error(0, i18n("Failed to copy database file "
+                                   "to temporary one."));
+        return 0;
     }
     
     

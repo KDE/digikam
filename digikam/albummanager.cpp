@@ -170,7 +170,8 @@ void AlbumManager::setLibraryPath(const QString& path)
 
     d->libraryPath = path;
 
-    QString dbPath = path + "/digikam.db";
+    //TODO: rename back to digikam.db for production code
+    QString dbPath = path + "/digikam-testing.db";
 
 #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
