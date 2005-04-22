@@ -385,7 +385,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "image_delete");
 
-    mImagePropsAction = new KAction(i18n("Properties..."),
+    mImagePropsAction = new KAction(i18n("Properties"),
                                     "exifinfo",
                                     ALT+Key_Return,
                                     mView,

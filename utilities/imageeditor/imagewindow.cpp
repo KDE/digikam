@@ -996,7 +996,7 @@ void ImageWindow::slotSaveAs()
 
     if (!m_newFile.isValid())
     {
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\"")
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\".")
                            .arg(m_newFile.filename())
                            .arg(m_newFile.path().section('/', -2, -2)));
         kdWarning() << ("slotSaveAs:: target URL isn't valid !") << endl;

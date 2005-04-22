@@ -79,7 +79,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
  
     // -------------------------------------------------------------
     
-    QLabel *label = new QLabel(i18n("Aspect Ratio:"), plainPage());
+    QLabel *label = new QLabel(i18n("Aspect ratio:"), plainPage());
     m_ratioCB = new QComboBox( false, plainPage() );
     m_ratioCB->insertItem( i18n("Custom") );
     m_ratioCB->insertItem( "1:1" );
@@ -104,7 +104,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     topLayout->addMultiCellWidget(m_orientCB, 1, 1, 4, 4);
 
     QHBoxLayout* l2 = new QHBoxLayout((QWidget*)0, 1, 0);
-    m_customLabel1 = new QLabel(i18n("Custom Ratio: "), plainPage());
+    m_customLabel1 = new QLabel(i18n("Custom ratio:"), plainPage());
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
     m_customRatioNInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
     QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
@@ -113,7 +113,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
-    m_useRuleThirdLines = new QCheckBox( i18n("Show Rule Third Lines"), plainPage());
+    m_useRuleThirdLines = new QCheckBox( i18n("Show rule third lines"), plainPage());
     QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can display the rule third lines "
                                                "which help you to compose your photograph."));
     

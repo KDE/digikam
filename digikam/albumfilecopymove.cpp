@@ -141,7 +141,7 @@ bool AlbumFileCopyMove::rename(PAlbum* album, const QString& srcFile,
         return true;
     }
 
-    KMessageBox::error(0, i18n("Failed to Rename File\n%1")
+    KMessageBox::error(0, i18n("Failed to rename file\n%1")
                        .arg(srcFile), i18n("Rename Failed"));
     return false;    
 }

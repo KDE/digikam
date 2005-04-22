@@ -115,6 +115,7 @@ void DigikamFirstRun::slotOk()
     {
         int rc = KMessageBox::questionYesNo(this,
                                    i18n("<qt>The folder you selected does not exist: "
+
                                         "<p><b>%1</b></p>"
                                         "Would you like Digikam to make it for you now?</qt>")
                                         .arg(albumLibraryFolder),

@@ -47,7 +47,7 @@
 
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Convert to Black and White"),
+                   : KDialogBase(Plain, i18n("Convert to Black & White"),
                                  Help|Ok|Cancel, Ok,
                                  parent, 0, true, true),
                      m_parent(parent)
@@ -69,17 +69,17 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Type:"), plainPage());
     m_typeCB = new QComboBox( false, plainPage() );
-    m_typeCB->insertItem( previewEffectPic("neutralbw"), i18n("Neutral Black and White") );
-    m_typeCB->insertItem( previewEffectPic("bwgreen"),   i18n("Black and White with Green Filter") );
-    m_typeCB->insertItem( previewEffectPic("bworange"),  i18n("Black and White with Orange Filter") );
-    m_typeCB->insertItem( previewEffectPic("bwred"),     i18n("Black and White with Red Filter") );
-    m_typeCB->insertItem( previewEffectPic("bwyellow"),  i18n("Black and White with Yellow Filter") );
-    m_typeCB->insertItem( previewEffectPic("sepia"),     i18n("Black and White with Sepia Tone") );
-    m_typeCB->insertItem( previewEffectPic("browntone"), i18n("Black and White with Brown Tone") );
-    m_typeCB->insertItem( previewEffectPic("coldtone"),  i18n("Black and White with Cold Tone") );
-    m_typeCB->insertItem( previewEffectPic("selenium"),  i18n("Black and White with Selenium Tone") );
-    m_typeCB->insertItem( previewEffectPic("platinum"),  i18n("Black and White with Platinum Tone") );
-    m_typeCB->setCurrentText( i18n("Neutral Black and White") );
+    m_typeCB->insertItem( previewEffectPic("neutralbw"), i18n("Neutral Black & White") );
+    m_typeCB->insertItem( previewEffectPic("bwgreen"),   i18n("Black & White with Green Filter") );
+    m_typeCB->insertItem( previewEffectPic("bworange"),  i18n("Black & White with Orange Filter") );
+    m_typeCB->insertItem( previewEffectPic("bwred"),     i18n("Black & White with Red Filter") );
+    m_typeCB->insertItem( previewEffectPic("bwyellow"),  i18n("Black & White with Yellow Filter") );
+    m_typeCB->insertItem( previewEffectPic("sepia"),     i18n("Black & White with Sepia Tone") );
+    m_typeCB->insertItem( previewEffectPic("browntone"), i18n("Black & White with Brown Tone") );
+    m_typeCB->insertItem( previewEffectPic("coldtone"),  i18n("Black & White with Cold Tone") );
+    m_typeCB->insertItem( previewEffectPic("selenium"),  i18n("Black & White with Selenium Tone") );
+    m_typeCB->insertItem( previewEffectPic("platinum"),  i18n("Black & White with Platinum Tone") );
+    m_typeCB->setCurrentText( i18n("Neutral Black & White") );
     QWhatsThis::add( m_typeCB, i18n("<p>Select here the black and white conversion type:<p>"
                                     "<b>Neutral</b>: simulate black and white neutral film exposure.<p>"
                                     "<b>Green Filter</b>: simulate black and white film exposure using green filter. "

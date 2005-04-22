@@ -289,20 +289,20 @@ bool AlbumManager::createPAlbum(PAlbum* parent,
 {
     if (!parent)
     {
-        errMsg = i18n("No parent found for album");
+        errMsg = i18n("No parent found for album.");
         return false;
     }
 
     // sanity checks
     if (name.isEmpty())
     {
-        errMsg = i18n("Album name cannot be empty");
+        errMsg = i18n("Album name cannot be empty.");
         return false;
     }
     
     if (name.contains("/"))
     {
-        errMsg = i18n("Album name cannot contain '/'");
+        errMsg = i18n("Album name cannot contain '/'.");
         return false;
     }
     
@@ -312,7 +312,7 @@ bool AlbumManager::createPAlbum(PAlbum* parent,
     {
         if (child->getTitle() == name)
         {
-            errMsg = i18n("Another album with same name exists");
+            errMsg = i18n("Another album with same name exists.");
             return false;
         }
         child = child->m_next;

@@ -108,7 +108,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 3, 8,
                                                     KDialog::spacingHint());
 
-   QLabel* thumbnailSizeLabel = new QLabel(i18n("Default &Size:"), iconTextGroup);
+   QLabel* thumbnailSizeLabel = new QLabel(i18n("Default &size:"), iconTextGroup);
    tagSettingsLayout->addWidget(thumbnailSizeLabel , 0, 0);
    thumbnailSize_ = new QComboBox(iconTextGroup);
    //thumbnailSize_->insertItem(i18n("Tiny (32x32)"));

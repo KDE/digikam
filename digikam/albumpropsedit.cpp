@@ -122,7 +122,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     commentsEdit_->setMaximumHeight(int(commentsEdit_->fontMetrics().height() * 2.5));
 
     QLabel *dateLabel = new QLabel( plainPage( ) );
-    dateLabel->setText( i18n( "Album &Date:" ) );
+    dateLabel->setText( i18n( "Album &date:" ) );
     topLayout->addWidget( dateLabel, 5, 0, Qt::AlignAuto|Qt::AlignTop );
 
     datePicker_ = new KDatePicker( plainPage( ) );
@@ -294,7 +294,7 @@ void AlbumPropsEdit::slotAverageButtonClicked()
                                 i18n( "Could not calculate an average based "
                                       "on creation date (EXIF) or based on the "
                                       "modification date of the files." ),
-                                i18n( "Could not calculate an average" ) );
+                                i18n( "Could Not Calculate Average" ) );
     }
 }
 

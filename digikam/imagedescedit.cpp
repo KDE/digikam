@@ -443,11 +443,11 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     QPopupMenu popmenu(this);
 
     popmenu.insertItem(SmallIcon("tag"),
-                       i18n("New Tag"), 10);
+                       i18n("New Tag..."), 10);
     if (!album->isRoot())
     {
         popmenu.insertItem(SmallIcon("pencil"),
-                           i18n("Edit Tag Properties"), 11);
+                           i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("edittrash"),
                            i18n("Delete Tag"), 12);
     }

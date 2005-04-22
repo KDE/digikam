@@ -123,7 +123,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     //-------------------------------
     // Filters menu actions.
 
-    m_BWAction = new KAction(i18n("Black and White..."), "bwtonal", 0,
+    m_BWAction = new KAction(i18n("Black && White..."), "bwtonal", 0,
                      this, SLOT(slotBW()),
                      actionCollection(), "implugcore_blackwhite");
 

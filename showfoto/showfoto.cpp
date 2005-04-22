@@ -290,7 +290,7 @@ void ShowFoto::setupActions()
                                            actionCollection(), "full_screen");
 #endif
 
-    m_showBarAction = new KToggleAction(i18n("Hide thumbnails"), 0, Key_T,
+    m_showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
                                         this, SLOT(slotToggleShowBar()),
                                         actionCollection(), "show_thumbs");
 
@@ -541,7 +541,7 @@ void ShowFoto::slotOpenFile()
     KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
                                                 mimes,
                                                 this,
-                                                i18n("Open images"));
+                                                i18n("Open Images"));
         
     if (!urls.isEmpty())
     {
