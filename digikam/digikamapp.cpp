@@ -72,6 +72,8 @@
 #include "imagewindow.h"
 #include "digikamapp.h"
 #include "splashscreen.h"
+#include "thumbnailsize.h"
+#include "digikamapp.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
           : KMainWindow( 0, "Digikam" )
@@ -784,6 +786,24 @@ void DigikamApp::slotSetupChanged()
     updateDeleteTrashMenu();
     if (ImageWindow::imagewindow())
         ImageWindow::imagewindow()->applySettings();
+
+    int size = mAlbumSettings->getDefaultIconSize();
+    if (size == ThumbnailSize::Huge)
+    {
+        enableThumbSizePlusAction(false);
+        enableThumbSizeMinusAction(true);
+    }
+    else if (size == ThumbnailSize::Small)
+    {
+        enableThumbSizePlusAction(true);
+        enableThumbSizeMinusAction(false);
+    }
+    else
+    { 
+        enableThumbSizePlusAction(true);
+        enableThumbSizeMinusAction(true);
+    }
+
     m_config->sync();
 }
 
