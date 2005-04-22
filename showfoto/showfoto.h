@@ -140,14 +140,14 @@ private:
     KToggleAction         *m_showBarAction;
     
     KAction               *m_cropAction;
-    KAction               *m_imagePluginsHelp;
+    KAction               *m_imagePluginsHelpAction;
     
     KAction               *m_revertAction;
     KAction               *m_saveAction;
     KAction               *m_saveAsAction;
     KAction               *m_propertiesAction;
-    KAction               *m_fileprint;    
-    KAction               *m_fileDelete;
+    KAction               *m_filePrintAction;    
+    KAction               *m_fileDeleteAction;
     
     KAction               *m_forwardAction;
     KAction               *m_backAction;

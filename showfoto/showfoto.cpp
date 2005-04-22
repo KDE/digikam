@@ -228,7 +228,7 @@ void ShowFoto::setupActions()
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
     
-    m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
+    m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
                               CTRL+Key_P,
                               this, SLOT(slotFilePrint()),
                               actionCollection(), "print");
@@ -238,7 +238,7 @@ void ShowFoto::setupActions()
                                      this, SLOT(slotFileProperties()),
                                      actionCollection(), "file_properties");
     
-    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
+    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
                                SHIFT+Key_Delete,
                                this, SLOT(slotDeleteCurrentItem()),
                                actionCollection(), "delete");
@@ -397,7 +397,7 @@ void ShowFoto::setupActions()
                 
     // -- help actions -----------------------------------------------
     
-    m_imagePluginsHelp = new KAction(i18n("Image Plugins Handbooks"), 
+    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"), 
                                      "digikamimageplugins", 0, 
                                      this, SLOT(slotImagePluginsHelp()),
                                      actionCollection(), "imagepluginshelp");
@@ -451,13 +451,13 @@ void ShowFoto::applySettings()
     m_deleteItem2Trash = m_config->readBoolEntry("DeleteItem2Trash", true);
     if (m_deleteItem2Trash)
     {
-        m_fileDelete->setIcon("edittrash");
-        m_fileDelete->setText(i18n("Move to Trash"));
+        m_fileDeleteAction->setIcon("edittrash");
+        m_fileDeleteAction->setText(i18n("Move to Trash"));
     }
     else
     {
-        m_fileDelete->setIcon("editdelete");
-        m_fileDelete->setText(i18n("Delete File"));
+        m_fileDeleteAction->setIcon("editdelete");
+        m_fileDeleteAction->setText(i18n("Delete File"));
     }
     
     // Background color.
@@ -487,12 +487,12 @@ void ShowFoto::applySettings()
     m_config->setGroup("MainWindow");
     showBar = m_config->readBoolEntry("Show Thumbnails", true);
     autoFit = m_config->readBoolEntry("Zoom Autofit", true);
-
-    if (!showBar)
+        
+    if (!showBar && m_showBarAction->isChecked())
         m_showBarAction->activate();
 
-    if (autoFit)
-        m_zoomFitAction->activate();
+    if (autoFit && !m_zoomFitAction->isChecked())
+        m_zoomFitAction->activate();        
 
     QRect histogramRect = m_config->readRectEntry("Histogram Rectangle");
     if (!histogramRect.isNull())
@@ -1083,9 +1083,9 @@ void ShowFoto::toggleActions(bool val)
     m_viewHistogramAction->setEnabled(val);
     m_rotateAction->setEnabled(val);
     m_flipAction->setEnabled(val);
-    m_fileprint->setEnabled(val);
+    m_filePrintAction->setEnabled(val);
     m_resizeAction->setEnabled(val);
-    m_fileDelete->setEnabled(val);
+    m_fileDeleteAction->setEnabled(val);
     
     if (!m_disableBCGActions)
        m_BCGAction->setEnabled(val);
