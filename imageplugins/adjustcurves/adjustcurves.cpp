@@ -216,7 +216,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QHGroupBox *gbox3 = new QHGroupBox(i18n("All Channels' Curves"), plainPage());
     m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
     QWhatsThis::add( m_loadButton, i18n("<p>Load curve settings from a Gimp curves text file."));
-    m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
+    m_saveButton = new QPushButton(i18n("&Save As..."), gbox3);
     QWhatsThis::add( m_saveButton, i18n("<p>Save curve settings to a Gimp curves text file."));
     m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' curve values."));
@@ -278,7 +278,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's curve-adjustments preview."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
                                                       "will be over-colored. This will not have an effect on the final rendering."));
                                                           

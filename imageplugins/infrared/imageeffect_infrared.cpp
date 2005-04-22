@@ -138,7 +138,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    m_addFilmGrain = new QCheckBox( i18n("Add Film Grain"), plainPage());
+    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), plainPage());
     m_addFilmGrain->setChecked( true );
     QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to the image depending on ISO-sensitivity."));
     hlay->addWidget(m_addFilmGrain, 1);

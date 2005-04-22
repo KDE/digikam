@@ -157,9 +157,9 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Rotation:"), gbox2);
     m_textRotation = new QComboBox( false, gbox2 );
     m_textRotation->insertItem( i18n("None") );
-    m_textRotation->insertItem( i18n("90 degrees") );
-    m_textRotation->insertItem( i18n("180 degrees") );
-    m_textRotation->insertItem( i18n("270 degrees") );
+    m_textRotation->insertItem( i18n("90 Degrees") );
+    m_textRotation->insertItem( i18n("180 Degrees") );
+    m_textRotation->insertItem( i18n("270 Degrees") );
     QWhatsThis::add( m_textRotation, i18n("<p>Select here the text rotation to use."));
     gridBox2->addMultiCellWidget(label1, 3, 3, 0, 0);
     gridBox2->addMultiCellWidget(m_textRotation, 3, 3, 1, 1);
@@ -170,7 +170,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     gridBox2->addMultiCellWidget(label2, 4, 4, 0, 0);
     gridBox2->addMultiCellWidget(m_fontColorButton, 4, 4, 1, 1);
 
-    QPushButton *m_fontPropertiesButton = new QPushButton( i18n("Font Properties..."), gbox2 );
+    QPushButton *m_fontPropertiesButton = new QPushButton( i18n("Font Properties"), gbox2 );
     gridBox2->addMultiCellWidget(m_fontPropertiesButton, 5, 5, 0, 1);
 
     KIconLoader icon;

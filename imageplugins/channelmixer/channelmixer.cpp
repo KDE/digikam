@@ -226,7 +226,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     QHGroupBox *gbox3 = new QHGroupBox(i18n("All Channels' Gains"), plainPage());
     m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
     QWhatsThis::add( m_loadButton, i18n("<p>Load gains settings from a Gimp gains text file."));
-    m_saveButton = new QPushButton(i18n("&Save..."), gbox3);
+    m_saveButton = new QPushButton(i18n("&Save As..."), gbox3);
     QWhatsThis::add( m_saveButton, i18n("<p>Save gains settings to a Gimp gains text file."));
     m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all color channels' gains settings."));
@@ -254,7 +254,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                                                  "to see the color level corresponding on histogram."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
                                                       "will be over-colored. This will not have an effect on the final rendering."));
     

@@ -139,9 +139,9 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QLabel *label1 = new QLabel(i18n("New Width: "), plainPage());
+    QLabel *label1 = new QLabel(i18n("New width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height: "), plainPage());
+    QLabel *label2 = new QLabel(i18n("New height:"), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(m_newWidthLabel, 2, 2, 1, 1);

@@ -215,7 +215,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGroupBox *gbox3 = new QGroupBox(i18n("Exposure Re-adjustment"), plainPage());
+    QGroupBox *gbox3 = new QGroupBox(i18n("Exposure Re-Adjustment"), plainPage());
     QGridLayout* gridBox3 = new QGridLayout( gbox3, 3, 3, 20, spacingHint());
                           
     QLabel *label4 = new QLabel(i18n("Brightness:"), gbox3);

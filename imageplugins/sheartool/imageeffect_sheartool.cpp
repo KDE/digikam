@@ -140,16 +140,16 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("New Width: "), plainPage());
+    QLabel *label1 = new QLabel(i18n("New width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height: "), plainPage());
+    QLabel *label2 = new QLabel(i18n("New height:"), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(m_newWidthLabel, 2, 2, 1, 1);
     topLayout->addMultiCellWidget(label2, 2, 2, 3, 3);
     topLayout->addMultiCellWidget(m_newHeightLabel, 2, 2, 4, 4);
     
-    QLabel *label3 = new QLabel(i18n("Horizontal Angle:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Horizontal angle:"), plainPage());
     m_magnitudeX = new KDoubleNumInput(plainPage());
     m_magnitudeX->setPrecision(1);
     m_magnitudeX->setRange(-45.0, 45.0, 0.1, true);
@@ -158,7 +158,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     topLayout->addMultiCellWidget(label3, 3, 3, 0, 0);
     topLayout->addMultiCellWidget(m_magnitudeX, 3, 3, 1, 4);
             
-    QLabel *label4 = new QLabel(i18n("Vertical Angle:"), plainPage());
+    QLabel *label4 = new QLabel(i18n("Vertical angle:"), plainPage());
     m_magnitudeY = new KDoubleNumInput(plainPage());
     m_magnitudeY->setPrecision(1);
     m_magnitudeY->setRange(-45.0, 45.0, 0.1, true);

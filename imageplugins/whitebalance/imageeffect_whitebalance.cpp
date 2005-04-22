@@ -88,7 +88,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                       parent, 0, true, true,
                                       i18n("&Reset Values"),
                                       i18n("&Load..."),
-                                      i18n("&Save...")),
+                                      i18n("&Save As...")),
                           m_parent(parent)
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
@@ -231,7 +231,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
     QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
     
-    m_blackLabel = new QLabel(i18n("Black Point:"), gbox);
+    m_blackLabel = new QLabel(i18n("Black point:"), gbox);
     m_blackInput = new KDoubleNumInput(gbox);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
@@ -341,7 +341,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "histogram."));
     l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
     
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over Exposure Indicator"), gbox4);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
                                                       "will be over-colored. This will not have an effect on the final rendering."));
 

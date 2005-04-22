@@ -131,17 +131,17 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 4);
     
-    QLabel *label1 = new QLabel(i18n("New Width: "), plainPage());
+    QLabel *label1 = new QLabel(i18n("New width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height: "), plainPage());
+    QLabel *label2 = new QLabel(i18n("New height:"), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
-    QLabel *label3 = new QLabel(i18n("Top Left Angle: "), plainPage());
+    QLabel *label3 = new QLabel(i18n("Top left angle:"), plainPage());
     m_topLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label4 = new QLabel(i18n("Top Right Angle: "), plainPage());
+    QLabel *label4 = new QLabel(i18n("Top right angle:"), plainPage());
     m_topRightAngleLabel = new QLabel(plainPage());
-    QLabel *label5 = new QLabel(i18n("Bottom Left Angle: "), plainPage());
+    QLabel *label5 = new QLabel(i18n("Bottom left angle:"), plainPage());
     m_bottomLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label6 = new QLabel(i18n("Bottom Right Angle: "), plainPage());
+    QLabel *label6 = new QLabel(i18n("Bottom right angle:"), plainPage());
     m_bottomRightAngleLabel = new QLabel(plainPage());
     
     topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
@@ -196,10 +196,10 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
     
-    m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ) + "°" );
-    m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ) + "°" );
-    m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 ) + "°" );
-    m_bottomRightAngleLabel->setText(temp.setNum( bottomRightAngle, 'f', 1 ) + "°" );
+    m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ) + "" );
+    m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ) + "" );
+    m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 ) + "" );
+    m_bottomRightAngleLabel->setText(temp.setNum( bottomRightAngle, 'f', 1 ) + "" );
 }
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
