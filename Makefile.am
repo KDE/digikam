@@ -19,3 +19,6 @@ messages: rc.cpp
 		$(XGETTEXT) $$LIST -o $(podir)/digikam.pot; \
 	fi
 	rm -f tips.cpp
+
+include ../admin/Doxyfile.am
+
