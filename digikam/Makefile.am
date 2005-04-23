@@ -82,3 +82,6 @@ rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamui.rc
 
 KDE_OPTIONS = nofinal
+
+include ../../admin/Doxyfile.am
+
