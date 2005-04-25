@@ -1,3 +1,10 @@
+v0.7.3-Beta2 - 25/04/05
+----------------------------------------------------------------------------
+    * Blowup : fixed restoration mode rendering instead a basic linear 
+      pixels computation.
+    * Antivignetting : Fixed dialog layout using QTabWidget.
+    * Updated all handbooks. Ready for translations.
+
 v0.7.3-Beta1 - 08/02/05
 ----------------------------------------------------------------------------
     * New plugin 'Blowup Photograph' using CImg library.
