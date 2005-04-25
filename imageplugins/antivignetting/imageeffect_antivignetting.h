@@ -31,6 +31,7 @@ class QPushButton;
 class QSpinBox;
 class QSlider;
 class QLabel;
+class QTabWidget;
 
 class KProgress;
 
@@ -82,6 +83,8 @@ private:
     QSpinBox             *m_gammaSpinBox;
     
     QLabel               *m_maskPreviewLabel;
+    
+    QTabWidget           *m_mainTab;
     
     KProgress            *m_progressBar;
     

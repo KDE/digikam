@@ -154,10 +154,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *vlay = new QVBoxLayout(topLayout);
-    
     m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage());
-    vlay->addWidget(m_imagePreviewWidget);
+    topLayout->addWidget(m_imagePreviewWidget);
     
     // -------------------------------------------------------------
     
@@ -294,7 +292,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
     
-    vlay->addWidget(m_mainTab);
+    topLayout->addWidget(m_mainTab);
     
     // -------------------------------------------------------------
     

@@ -46,6 +46,7 @@
 #include <qpen.h>
 #include <qspinbox.h>
 #include <qtimer.h>
+#include <qtabwidget.h>
 
 // KDE includes.
 
@@ -108,7 +109,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 3 , marginHint(), spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -121,7 +122,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Anti Vignetting"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    topLayout->addWidget(headerFrame);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -142,26 +143,29 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the anti vignetting effect.") );
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 1);
-
+    topLayout->addWidget(gbox);
+    
     // -------------------------------------------------------------
     
-    QGroupBox *gbox2 = new QGroupBox(i18n("Filter Settings"), plainPage());
-    QGridLayout* gridBox2 = new QGridLayout( gbox2, 3, 4, 20, spacingHint());
+    m_mainTab = new QTabWidget( plainPage() );
     
-    m_maskPreviewLabel = new QLabel( gbox2 );
+    QWidget* firstPage = new QWidget( m_mainTab );
+    QGridLayout* grid = new QGridLayout( firstPage, 3, 3, marginHint(), spacingHint());
+    m_mainTab->addTab( firstPage, i18n("Filter Settings") );
+    
+    m_maskPreviewLabel = new QLabel( firstPage );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
                                               "mask applied to the image.") );
-    gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 2, 0, 0);
+    grid->addMultiCellWidget(m_maskPreviewLabel, 0, 2, 0, 0);
                           
-    QLabel *label1 = new QLabel(i18n("Density:"), gbox2);
+    QLabel *label1 = new QLabel(i18n("Density:"), firstPage);
     
-    m_densitySlider = new QSlider(10, 200, 1, 20, Qt::Horizontal, gbox2, "m_densitySlider");
+    m_densitySlider = new QSlider(10, 200, 1, 20, Qt::Horizontal, firstPage, "m_densitySlider");
     m_densitySlider->setTickmarks(QSlider::Below);
     m_densitySlider->setTickInterval(40);
     m_densitySlider->setTracking( false );
     
-    m_densitySpinBox = new QSpinBox(10, 200, 1, gbox2, "m_densitySpinBox");
+    m_densitySpinBox = new QSpinBox(10, 200, 1, firstPage, "m_densitySpinBox");
     m_densitySpinBox->setValue(20);
         
     whatsThis = i18n("<p>This value controls the degree of intensity attenuation by the filter "
@@ -169,18 +173,18 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QWhatsThis::add( m_densitySpinBox, whatsThis);
     QWhatsThis::add( m_densitySlider, whatsThis);
     
-    gridBox2->addMultiCellWidget(label1, 0, 0, 1, 1);
-    gridBox2->addMultiCellWidget(m_densitySlider, 0, 0, 2, 2);
-    gridBox2->addMultiCellWidget(m_densitySpinBox, 0, 0, 3, 3);
+    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_densitySlider, 0, 0, 2, 2);
+    grid->addMultiCellWidget(m_densitySpinBox, 0, 0, 3, 3);
     
-    QLabel *label2 = new QLabel(i18n("Power:"), gbox2);
+    QLabel *label2 = new QLabel(i18n("Power:"), firstPage);
     
-    m_powerSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, gbox2, "m_powerSlider");
+    m_powerSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, firstPage, "m_powerSlider");
     m_powerSlider->setTickmarks(QSlider::Below);
     m_powerSlider->setTickInterval(20);
     m_powerSlider->setTracking ( false );  
     
-    m_powerSpinBox = new QSpinBox(1, 100, 1, gbox2, "m_powerSpinBox");
+    m_powerSpinBox = new QSpinBox(1, 100, 1, firstPage, "m_powerSpinBox");
     m_powerSpinBox->setValue(10);
         
     whatsThis = i18n("<p>This value is used as the exponent controlling the fall-off in density "
@@ -188,18 +192,18 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QWhatsThis::add( m_powerSpinBox, whatsThis);
     QWhatsThis::add( m_powerSlider, whatsThis);                     
     
-    gridBox2->addMultiCellWidget(label2, 1, 1, 1, 1);
-    gridBox2->addMultiCellWidget(m_powerSlider, 1, 1, 2, 2);
-    gridBox2->addMultiCellWidget(m_powerSpinBox, 1, 1, 3, 3);
+    grid->addMultiCellWidget(label2, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_powerSlider, 1, 1, 2, 2);
+    grid->addMultiCellWidget(m_powerSpinBox, 1, 1, 3, 3);
     
-    QLabel *label3 = new QLabel(i18n("Radius:"), gbox2);
+    QLabel *label3 = new QLabel(i18n("Radius:"), firstPage);
     
-    m_radiusSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, gbox2, "m_radiusSlider");
+    m_radiusSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, firstPage, "m_radiusSlider");
     m_radiusSlider->setTickmarks(QSlider::Below);
     m_radiusSlider->setTickInterval(20);
     m_radiusSlider->setTracking ( false );  
     
-    m_radiusSpinBox = new QSpinBox(1, 100, 1, gbox2, "m_radiusSpinBox");
+    m_radiusSpinBox = new QSpinBox(1, 100, 1, firstPage, "m_radiusSpinBox");
     m_radiusSpinBox->setValue(10);
     
     whatsThis = i18n("<p>This value is the radius of the center filter. It is a multiple of the "
@@ -207,79 +211,78 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QWhatsThis::add( m_radiusSpinBox, whatsThis);
     QWhatsThis::add( m_radiusSlider, whatsThis);                     
     
-    gridBox2->addMultiCellWidget(label3, 2, 2, 1, 1);
-    gridBox2->addMultiCellWidget(m_radiusSlider, 2, 2, 2, 2);
-    gridBox2->addMultiCellWidget(m_radiusSpinBox, 2, 2, 3, 3);
-
-    topLayout->addMultiCellWidget(gbox2, 2, 2, 0, 0);
+    grid->addMultiCellWidget(label3, 2, 2, 1, 1);
+    grid->addMultiCellWidget(m_radiusSlider, 2, 2, 2, 2);
+    grid->addMultiCellWidget(m_radiusSpinBox, 2, 2, 3, 3);
     
     // -------------------------------------------------------------
 
-    QGroupBox *gbox3 = new QGroupBox(i18n("Exposure Re-Adjustment"), plainPage());
-    QGridLayout* gridBox3 = new QGridLayout( gbox3, 3, 3, 20, spacingHint());
-                          
-    QLabel *label4 = new QLabel(i18n("Brightness:"), gbox3);
+    QWidget* secondPage = new QWidget( m_mainTab );
+    QGridLayout* grid2 = new QGridLayout( secondPage, 3, 3, marginHint(), spacingHint());
+    m_mainTab->addTab( secondPage, i18n("Exposure Re-Adjustment") );
     
-    m_brightnessSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, gbox3, "m_brightnessSlider");
+    QLabel *label4 = new QLabel(i18n("Brightness:"), secondPage);
+    
+    m_brightnessSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, secondPage, "m_brightnessSlider");
     m_brightnessSlider->setTickmarks(QSlider::Below);
     m_brightnessSlider->setTickInterval(20);
     m_brightnessSlider->setTracking( false );
     
-    m_brightnessSpinBox = new QSpinBox(0, 100, 1, gbox3, "m_brightnessSpinBox");
+    m_brightnessSpinBox = new QSpinBox(0, 100, 1, secondPage, "m_brightnessSpinBox");
     m_brightnessSpinBox->setValue(0);
    
     whatsThis = i18n("<p>Set here the brightness re-adjustment of the target image.");
     QWhatsThis::add( m_brightnessSpinBox, whatsThis);
     QWhatsThis::add( m_brightnessSlider, whatsThis);
     
-    gridBox3->addMultiCellWidget(label4, 0, 0, 0, 0);
-    gridBox3->addMultiCellWidget(m_brightnessSlider, 0, 0, 1, 1);
-    gridBox3->addMultiCellWidget(m_brightnessSpinBox, 0, 0, 2, 2);
+    grid2->addMultiCellWidget(label4, 0, 0, 0, 0);
+    grid2->addMultiCellWidget(m_brightnessSlider, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(m_brightnessSpinBox, 0, 0, 2, 2);
     
-    QLabel *label5 = new QLabel(i18n("Contrast:"), gbox3);
+    QLabel *label5 = new QLabel(i18n("Contrast:"), secondPage);
     
-    m_contrastSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, gbox3, "m_contrastSlider");
+    m_contrastSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, secondPage, "m_contrastSlider");
     m_contrastSlider->setTickmarks(QSlider::Below);
     m_contrastSlider->setTickInterval(20);
     m_contrastSlider->setTracking ( false );  
     
-    m_contrastSpinBox = new QSpinBox(0, 100, 1, gbox3, "m_contrastSpinBox");
+    m_contrastSpinBox = new QSpinBox(0, 100, 1, secondPage, "m_contrastSpinBox");
     m_contrastSpinBox->setValue(0);
         
     whatsThis = i18n("<p>Set here the contrast re-adjustment of the target image.");
     QWhatsThis::add( m_contrastSpinBox, whatsThis);
     QWhatsThis::add( m_contrastSlider, whatsThis);                     
     
-    gridBox3->addMultiCellWidget(label5, 1, 1, 0, 0);
-    gridBox3->addMultiCellWidget(m_contrastSlider, 1, 1, 1, 1);
-    gridBox3->addMultiCellWidget(m_contrastSpinBox, 1, 1, 2, 2);
+    grid2->addMultiCellWidget(label5, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_contrastSlider, 1, 1, 1, 1);
+    grid2->addMultiCellWidget(m_contrastSpinBox, 1, 1, 2, 2);
     
-    QLabel *label6 = new QLabel(i18n("Gamma:"), gbox3);
+    QLabel *label6 = new QLabel(i18n("Gamma:"), secondPage);
     
-    m_gammaSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, gbox3, "m_gammaSlider");
+    m_gammaSlider = new QSlider(0, 100, 1, 0, Qt::Horizontal, secondPage, "m_gammaSlider");
     m_gammaSlider->setTickmarks(QSlider::Below);
     m_gammaSlider->setTickInterval(20);
     m_gammaSlider->setTracking ( false );  
     
-    m_gammaSpinBox = new QSpinBox(0, 100, 1, gbox3, "m_gammaSpinBox");
+    m_gammaSpinBox = new QSpinBox(0, 100, 1, secondPage, "m_gammaSpinBox");
     m_gammaSpinBox->setValue(0);
     
     whatsThis = i18n("<p>Set here the gamma re-adjustment of the target image.");
     QWhatsThis::add( m_gammaSpinBox, whatsThis);
     QWhatsThis::add( m_gammaSlider, whatsThis);                     
     
-    gridBox3->addMultiCellWidget(label6, 2, 2, 0, 0);
-    gridBox3->addMultiCellWidget(m_gammaSlider, 2, 2, 1, 1);
-    gridBox3->addMultiCellWidget(m_gammaSpinBox, 2, 2, 2, 2);
-    
-    topLayout->addMultiCellWidget(gbox3, 2, 2, 1, 1);
+    grid2->addMultiCellWidget(label6, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(m_gammaSlider, 2, 2, 1, 1);
+    grid2->addMultiCellWidget(m_gammaSpinBox, 2, 2, 2, 2);
 
+    topLayout->addWidget(m_mainTab);
+    
     // -------------------------------------------------------------
             
     m_progressBar = new KProgress(100, plainPage(), "m_progressbar");
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    topLayout->addMultiCellWidget(m_progressBar, 3, 3, 0, 1);
+    topLayout->addWidget(m_progressBar);
 
     adjustSize();
     disableResize();  
