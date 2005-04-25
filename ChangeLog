@@ -1,4 +1,481 @@
-v0.7.3-beta1			xx/xx/05
+v0.7.3-beta2			04/25/05
+----------------------------------------------------------------------------
+
+2005-04-25 09:17  cgilles
+
+	* digikam.lsm, version.h: 0.7.3-beta2 tag
+
+2005-04-25 09:16  cgilles
+
+	* AUTHORS: Update
+
+2005-04-24 12:43  toma
+
+	* digikam/: albumdb.cpp, albumdb.h, digikamapp.cpp
+	  (digikam_0_8_branch): Documented the functions I worked on (and
+	  some others) in albumdb class.  Removed a header.
+
+2005-04-24 00:54  toma
+
+	* Makefile.am, digikam/Makefile.am, digikam/scanlib.cpp,
+	  digikam/scanlib.h (digikam_0_8_branch): make apidox should work
+	  no for the branch as well. It doesn't show the @param from
+	  scanlib.h yet, but I'll look at that tomorrow.  To use it: cvs
+	  update everything, including the root of keg-3, "make apidox" and
+	  point your browser in the keg-3/apidox folder.  I will work on
+	  the layout a bit more later on. Thanks to Adriaan for the help.
+	  CCMAIL:digikam-devel@lists.sourceforge.net
+
+2005-04-24 00:21  adridg
+
+	* Mainpage.dox: Fake mainpages for KEG-3 and digikam
+
+2005-04-24 00:13  adridg
+
+	* Makefile.am: [Damn -m automatism] Anyway, this is adding the
+	  beginning of Doxygen support for digikam. The things to remember
+	  are:
+
+	  1) The Makefile.am must include the Doxy bla-bla 2) Each file to
+	  document must have a /** @file Foo */ header 3) You _must_
+	  document a surrounding { file, namespace, class }    for the
+	  documentation of inner things (ie. member functions)	  to be
+	  visible, so document everything.
+
+2005-04-24 00:11  adridg
+
+	* digikam/: Makefile.am, dragobjects.h: Makefile.am
+
+2005-04-23 22:45  pahlibar
+
+	* kioslave/digikamthumbnail.cpp (digikam_0_8_branch):
+
+	  remove fluffy debug statements
+
+2005-04-23 22:29  pahlibar
+
+	* kioslave/digikamtags.cpp (digikam_0_8_branch):
+
+	  recursive queries work (pahlibar crosses fingers). will need to
+	  do some testing here
+
+2005-04-23 21:07  pahlibar
+
+	* digikam/albumiconview.cpp (digikam_0_8_branch):
+
+	  refresh view in tag view in case an item's tag has been removed
+	  in the tags/comment editor
+
+2005-04-23 21:04  pahlibar
+
+	* kioslave/: digikamtags.cpp, digikamtags.h (digikam_0_8_branch):
+
+	  fix digikamtags kioslave to use the newer communication method
+	  for listing files from the db. in plain english, listing of files
+	  in a tag works.  still need to implement recursive tag listing
+
+2005-04-23 19:45  pahlibar
+
+	* digikam/: album.h, albumdb.cpp, albuminfo.h, albummanager.cpp
+	  (digikam_0_8_branch):
+
+	  start listing tag albums. note: listing of files under a tag is
+	  broken. need to fix the kioslave for that
+
+2005-04-23 18:43  toma
+
+	* digikam/: scanlib.cpp, scanlib.h (digikam_0_8_branch): Upgrade of
+	  the progress bar.
+
+2005-04-23 18:20  pahlibar
+
+	* digikam/: album.h, albumlister.cpp (digikam_0_8_branch):
+
+	  add getKURL() as pure virtual to base Album class. use getKURL()
+	  in albumlister as a generic way of obtaining album url without
+	  checking the special type for the album
+
+2005-04-23 17:36  pahlibar
+
+	* digikam/albumlister.cpp (digikam_0_8_branch):
+
+	  implement updating of current listing: recall the kioslave for a
+	  relisting.  compare the new list with current list for new items
+	  or deleted items and inform the frontend appropriately (NEEDS
+	  testing... can be done only when the Tags/Dates view is
+	  implemented)
+
+2005-04-23 17:05  pahlibar
+
+	* digikam/albumiconview.cpp (digikam_0_8_branch):
+
+	  reduce item rect size in small mode
+
+2005-04-23 16:30  cgilles
+
+	* showfoto/showfoto.cpp (digikam_0_8_branch): Showfoto : Clear
+	  canvas properly is no current image
+
+2005-04-23 16:05  cgilles
+
+	* showfoto/showfoto.cpp: Showfoto Fix : clear canvas properly when
+	  no current image available.
+
+2005-04-23 04:24  pahlibar
+
+	* digikam/albumfiletip.cpp (digikam_0_8_branch):
+
+	  modification date -> date
+
+2005-04-23 04:22  pahlibar
+
+	* digikam/albumlister.cpp (digikam_0_8_branch):
+
+	  bye bye kdirlister
+
+2005-04-23 04:15  pahlibar
+
+	* digikam/albumiconview.cpp (digikam_0_8_branch):
+
+	  we don't use dcop anymore to communicate with the camera
+
+2005-04-23 04:13  pahlibar
+
+	* digikam/albumiconview.cpp (digikam_0_8_branch):
+
+	  more cleanup. fix some todo stuff: since we are not using
+	  kfileitem anymore, we need to manually find the mimetype of the
+	  file
+
+2005-04-23 03:58  pahlibar
+
+	* digikam/: albumiconview.cpp, albumsettings.cpp, albumsettings.h
+	  (digikam_0_8_branch):
+
+	  move the full filter name generation to albumsettings and also
+	  adding a new file extension there
+
+2005-04-23 03:37  pahlibar
+
+	* digikam/albumiconview.cpp (digikam_0_8_branch):
+
+	  clean up. remove unnecessary code; adapt to new framework
+
+2005-04-23 03:12  pahlibar
+
+	* digikam/: album.cpp, album.h, albumfilecopymove.cpp,
+	  albumiconitem.cpp, albumiconitem.h, albumiconview.cpp,
+	  imageinfo.cpp, imageinfo.h (digikam_0_8_branch):
+
+	  cutting, cleaning.... renaming a file works again. its now as
+	  simple as imageinfo::setName(newName). it will also take care of
+	  updating db item
+
+2005-04-23 02:25  pahlibar
+
+	* digikam/: digikamapp.cpp, imageinfo.h, main.cpp, scanlib.cpp
+	  (digikam_0_8_branch):
+
+	  move ScanLib to main.cpp and create AlbumManager there too.
+	  beginning of doc for imageinfo.  turn off progress printing on
+	  screen
+
+2005-04-23 01:19  toma
+
+	* digikam/: scanlib.cpp, scanlib.h (digikam_0_8_branch): For those
+	  who install the branch and wonder what is going on while watching
+	  the splashscreen, here is a preliminary progress thingie.
+
+	  Also made a small optimalisation.
+
+2005-04-23 00:18  pahlibar
+
+	* digikam/digikamapp.cpp:
+
+	  backporting bugfix: fix bug when settings is changed and the
+	  current thumbnail view is changed back to default icon size, but
+	  the thumbnail zoom buttons are not kept in sync
+
+2005-04-23 00:12  pahlibar
+
+	* digikam/digikamapp.cpp (digikam_0_8_branch):
+
+	  fix bug when settings is changed and the current thumbnail view
+	  is changed back to default icon size, but the thumbnail zoom
+	  buttons are not kept in sync
+
+2005-04-22 23:31  pahlibar
+
+	* digikam/: Makefile.am, album.cpp, album.h, albumdb.cpp,
+	  albumdb.h, albumfiletip.cpp, albumfolderview.cpp,
+	  albumiconitem.cpp, albumiconitem.h, albumiconview.cpp,
+	  albumiconview.h, albuminfo.h, albumlister.cpp, albumlister.h,
+	  albummanager.cpp, albummanager.h, digikamapp.cpp,
+	  imagedescedit.cpp, imagedescedit.h, imageinfo.cpp, imageinfo.h,
+	  imageproperties.cpp, tagspopupmenu.cpp (digikam_0_8_branch):
+
+	  Working towards the design mentioned in DESIGN docs (sent to
+	  digikam-devel list).	What works: * albums listing (using db) *
+	  listing of files in album (using digikamalbums kioslave) * new
+	  ImageInfo container as a replacement for file container   (See
+	  design doc as to its features) * EXIF date (from DB) is the file
+	  datetime
+
+	  What doesn't work: * everything else :) * tag listing * tagging
+
+	  plenty of other stuff (and it sticks closely to the design docs.
+	  so please go through it) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-04-22 22:08  binner
+
+	* digikam/albumfilecopymove.cpp, digikam/albumiconview.cpp,
+	  digikam/albummanager.cpp, digikam/albumpropsedit.cpp,
+	  digikam/digikamapp.cpp, digikam/digikamfirstrun.cpp,
+	  digikam/imagedescedit.cpp, imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageplugin_core.cpp, showfoto/showfoto.cpp,
+	  utilities/imageeditor/imagewindow.cpp,
+	  utilities/setup/setupgeneral.cpp: CVS_SILENT i18n style guide
+	  fixes
+
+2005-04-22 22:03  binner
+
+	* digikam/albumfilecopymove.cpp, digikam/albumiconview.cpp,
+	  digikam/albummanager.cpp, digikam/albumpropsedit.cpp,
+	  digikam/digikamapp.cpp, digikam/digikamfirstrun.cpp,
+	  digikam/imagedescedit.cpp, imageplugins/imageeffect_bwsepia.cpp,
+	  imageplugins/imageeffect_ratiocrop.cpp,
+	  imageplugins/imageplugin_core.cpp, showfoto/setupslideshow.cpp,
+	  showfoto/showfoto.cpp, utilities/imageeditor/imagewindow.cpp,
+	  utilities/setup/setupgeneral.cpp (digikam_0_8_branch): CVS_SILENT
+	  i18n style guide fixes
+
+2005-04-22 11:12  cgilles
+
+	* version.h, showfoto/main.cpp, digikam.lsm (digikam_0_8_branch):
+	  Fix release number
+
+2005-04-22 10:48  cgilles
+
+	* showfoto/Makefile.am (digikam_0_8_branch): Fix
+
+2005-04-22 10:45  cgilles
+
+	* showfoto/showfoto.cpp (digikam_0_8_branch): fix
+
+2005-04-22 10:41  cgilles
+
+	* showfoto/showfoto.cpp (digikam_0_8_branch): Fix
+
+2005-04-22 10:29  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h (digikam_0_8_branch): fix
+	  variable name
+
+2005-04-22 10:28  cgilles
+
+	* showfoto/: showfoto.cpp, showfoto.h: Fix variable name
+
+2005-04-22 10:11  cgilles
+
+	* showfoto/: hi32-action-slideshow.png, setup.cpp, setup.h,
+	  setupslideshow.cpp, setupslideshow.h, showfoto.cpp, showfoto.h,
+	  showfotoui.rc, slideshow.cpp, slideshow.h (digikam_0_8_branch):
+	  digikam 0.8.0: showfoto slideshow support ! CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-04-22 06:17  pahlibar
+
+	* kioslave/: Makefile.am, digikamalbums.cpp, digikamalbums.h,
+	  digikamalbums.protocol (digikam_0_8_branch):
+
+	  beginnings of a kioslave for listing files from database for a
+	  PAlbum CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-04-22 01:14  pahlibar
+
+	* kioslave/: digikamio.cpp, digikamtags.cpp (digikam_0_8_branch):
+
+	  forgot to do digikam.db -> digikam-testing.db in the kioslaves
+
+2005-04-22 00:30  pahlibar
+
+	* digikam/scanlib.cpp (digikam_0_8_branch):
+
+	  a todo reminder for tom
+
+2005-04-22 00:28  pahlibar
+
+	* digikam/scanlib.cpp (digikam_0_8_branch):
+
+	  minor header reorganization
+
+2005-04-21 22:21  pahlibar
+
+	* digikam/: albumdb.cpp, albumdb.h, scanlib.cpp, scanlib.h
+	  (digikam_0_8_branch):
+
+	  general cleanup (use consistent function names and other minor
+	  fixes)
+
+2005-04-21 20:32  toma
+
+	* digikam/albumdb.cpp (digikam_0_8_branch): One more before I get
+	  fired by renchi
+
+2005-04-21 20:25  toma
+
+	* DESIGN (digikam_0_8_branch): Let us try to document things.
+
+2005-04-21 20:22  toma
+
+	* digikam/albumdb.cpp (digikam_0_8_branch): escape some + missing
+	  space
+
+2005-04-21 20:01  toma
+
+	* digikam/: scanlib.cpp, scanlib.h (digikam_0_8_branch): They are
+	  moved.
+
+2005-04-21 19:33  toma
+
+	* digikam/: Makefile.am, albumdb.cpp, albumdb.h, digikamapp.cpp,
+	  scanlib.cpp, scanlib.h (digikam_0_8_branch): Since this is the
+	  experimental branch ;-) : - Added my scanlib lib. It provides
+	  some functions to keep the data on disk in sync with the
+	  database.  - Put the lib into action.
+
+	  Some of the todo's: - revert the file filter, we should add all
+	  files to the db - make the thingie non-blocking the mainwindow -
+	  make the check on startup optional - make a progress dialog -
+	  replace kfilemetainfo to a call which only retrieves exif info
+	  from jpegs - returning qmaps is not efficient, make them an
+	  argument.  - some other things.
+
+	  For now you will see some delay the first time you start digikam,
+	  this is to store all missing images in the database.
+
+2005-04-21 19:26  pahlibar
+
+	* digikam/: albummanager.cpp, main.cpp (digikam_0_8_branch):
+
+	  copy digikam.db in albumlibrary path to digikam-testing.db .
+	  During the initial experimental phase of 0_8 development, this
+	  will be the db file being used (so that developers can safely
+	  work on their main album library path without risk of clobbering
+	  their db)
+
+2005-04-21 19:24  pahlibar
+
+	* digikam/albummanager.cpp:
+
+	  and this one too
+
+2005-04-21 19:23  pahlibar
+
+	* digikam/main.cpp:
+
+	  oops committed it in the wrong revision
+
+2005-04-21 19:19  pahlibar
+
+	* digikam/: albummanager.cpp, main.cpp:
+
+	  copy digikam.db in albumlibrary path to digikam-testing.db .
+	  During the initial experimental phase of 0_8 development, this
+	  will be the db file being used (so that developers can safely
+	  work on their main album library path without risk of clobbering
+	  their db) CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-04-20 19:42  scripty
+
+	* digikam/digikam.desktop,
+	  imageplugins/digikamimageplugin_core.desktop: CVS_SILENT made
+	  messages (.desktop file)
+
+2005-04-20 07:19  cgilles
+
+	* tips: Fix digiKam tips by Achim
+
+2005-04-20 00:38  ach
+
+	* README: Fix URL
+
+2005-04-18 12:26  cgilles
+
+	* showfoto/showfoto.cpp: Showfoto : toogle properly nav actions in
+	  according with current image index in images list.  CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-04-18 12:00  cgilles
+
+	* showfoto/showfoto.cpp: fix slotSave action to toogle canvas
+	  properly (else, it's turn around with save dialog (:=))) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-04-17 21:50  lukas
+
+	* digikam/: digikamapp.cpp, digikamfirstrun.cpp, imagedescedit.cpp,
+	  kipiinterface.cpp: i18n fixes + parents to some dialogs (which I
+	  had problems with)
+
+2005-04-16 19:28  pahlibar
+
+	* digikam/albumiconview.cpp:
+
+	  if user renames file to a new name with an extension not in the
+	  current list of filters, add the extension to the filter BUGS:
+	  103515
+
+2005-04-16 18:35  pahlibar
+
+	* utilities/imageeditor/: imagepluginloader.cpp,
+	  imagepluginloader.h:
+
+	  the service name is i18ned, whereas plugin name is from ascii.
+	  depending on the locale, it may or may not match. set plugin name
+	  to be local8bit version of service name. otherwise, the plugin
+	  will be loaded multiple times and appear multiple times in the
+	  menu BUG: 103147
+
+2005-04-16 17:42  pahlibar
+
+	* digikam/: albumiconitem.cpp, albumiconitem.h, imagedescedit.cpp:
+
+	  refresh the file metainfo if the user selects to save comments
+	  embedded in the file.  BUGS: 103458
+
+2005-04-16 15:44  jahrens
+
+	* digikam/albumfolderview.cpp: Checking if a remote directory
+	  really exists, isn't supported.
+
+	  BUG: 104005
+
+2005-04-13 18:33  dannya
+
+	* showfoto/showfoto.desktop: Add app icon reference to .desktop
+	  file...
+
+2005-04-13 00:04  scripty
+
+	* digikam/digikam.desktop, showfoto/showfoto.desktop: CVS_SILENT
+	  made messages (.desktop file)
+
+2005-04-12 18:19  pahlibar
+
+	* utilities/imageeditor/imagewindow.cpp:
+
+	  if format is empty, assume same format as source file. this fixes
+	  the exifrestorer to write out exif of original file to new file
+	  BUGS: 103618
+
+2005-04-12 10:46  cgilles
+
+	* ChangeLog: Update
+
+v0.7.3-beta1			04/11/05
 ----------------------------------------------------------------------------
 2005-04-11 08:56  cgilles
 
