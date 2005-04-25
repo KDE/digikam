@@ -329,9 +329,9 @@ void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int
           color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
                 
           newBits[i+3] = qAlpha(color);
-          newBits[i+2] = qBlue(color);
+          newBits[i+2] = qRed(color);
           newBits[i+1] = qGreen(color);
-          newBits[ i ] = qRed(color);
+          newBits[ i ] = qBlue(color);
           }
        
        // Update de progress bar in dialog.
@@ -376,9 +376,6 @@ uint ImageEffect_OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height
     // Erase the array
     memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
-    /*for (i = 0; i <= Intensity; ++i)
-        IntensityCount[i] = 0;*/
-
     for (w = X - Radius; w <= X + Radius; ++w)
         {
         for (h = Y - Radius; h <= Y + Radius; ++h)
@@ -389,20 +386,20 @@ uint ImageEffect_OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height
                 {
                 // You'll see a lot of times this formula
                 i = h * LineWidth + 4 * w;
-                I = (uint)(GetIntensity (Bits[i], Bits[i+1], Bits[i+2]) * Scale);
+                I = (uint)(GetIntensity (Bits[i+2], Bits[i+1], Bits[i]) * Scale);
                 IntensityCount[I]++;
 
                 if (IntensityCount[I] == 1)
                     {
-                    AverageColorR[I] = Bits[ i ];
+                    AverageColorR[I] = Bits[i+2];
                     AverageColorG[I] = Bits[i+1];
-                    AverageColorB[I] = Bits[i+2];
+                    AverageColorB[I] = Bits[ i ];
                     }
                 else
                     {
-                    AverageColorR[I] += Bits[ i ];
+                    AverageColorR[I] += Bits[i+2];
                     AverageColorG[I] += Bits[i+1];
-                    AverageColorB[I] += Bits[i+2];
+                    AverageColorB[I] += Bits[ i ];
                     }
                 }
             }
