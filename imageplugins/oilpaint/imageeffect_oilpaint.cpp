@@ -327,11 +327,11 @@ void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int
           {
           i = h2 * LineWidth + 4*w2;
           color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
-                
-          newBits[i+3] = qAlpha(color);
-          newBits[i+2] = qRed(color);
-          newBits[i+1] = qGreen(color);
-          newBits[ i ] = qBlue(color);
+          
+          newBits[i+3] = (uchar)(color >> 24);
+          newBits[i+2] = (uchar)(color >> 16);
+          newBits[i+1] = (uchar)(color >> 8);
+          newBits[ i ] = (uchar)(color);
           }
        
        // Update de progress bar in dialog.
