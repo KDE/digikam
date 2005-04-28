@@ -277,8 +277,8 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.01, true);
     QWhatsThis::add( m_blurInput, i18n("<p>This value controls the smoothing regularity of the target image. "
-                                       "Do not use an high value here else "
-                                       "target image will be completly blurred."));
+                                       "Do not use an high value here, else the "
+                                       "target image will be completely blurred."));
     grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
     grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
     
@@ -320,7 +320,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_gaussianInput = new KDoubleNumInput(thirdPage);
     m_gaussianInput->setPrecision(2);
     m_gaussianInput->setRange(0.0, 500.0, 0.01, true);
-    QWhatsThis::add( m_gaussianInput, i18n("<p>Set here the precision of the gaussian function."));
+    QWhatsThis::add( m_gaussianInput, i18n("<p>Set here the precision of the Gaussian function."));
     grid3->addMultiCellWidget(m_gaussianLabel, 2, 2, 0, 0);
     grid3->addMultiCellWidget(m_gaussianInput, 2, 2, 1, 1);
     
@@ -593,7 +593,7 @@ void ImageEffect_InPainting_Dialog::slotUser2()
         if ( stream.readLine() != "# Photograph Inpainting Configuration File" )
            {
            KMessageBox::error(this, 
-                        i18n("\"%1\" isn't Photograph Inpainting settings text file.")
+                        i18n("\"%1\" is not a Photograph Inpainting settings text file.")
                         .arg(loadInpaintingFile.fileName()));
            file.close();            
            return;
