@@ -660,7 +660,7 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
        memcpy((uchar*)(newData + (y - y1)*w), dest, width*bytes);
        }
 
-    delete dest;
+    delete [] dest;
 }
 
 
