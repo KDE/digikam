@@ -30,8 +30,6 @@ class QPushButton;
 class QSpinBox;
 class QSlider;
 
-class KProgress;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -68,8 +66,6 @@ private:
     QSlider     *m_amountSlider;
     QSlider     *m_thresholdSlider;
     
-    KProgress   *m_progressBar;
-        
     bool         m_cancel;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;

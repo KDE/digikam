@@ -54,7 +54,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kprogress.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
@@ -134,10 +133,11 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+    
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
 
@@ -210,14 +210,6 @@ UnsharpDialog::UnsharpDialog(QWidget* parent)
     hlay4->addWidget(m_thresholdSlider, 3);
     hlay4->addWidget(m_thresholdInput, 1);
 
-    // -------------------------------------------------------------
-    
-    QHBoxLayout *hlay5 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay5->addWidget(m_progressBar, 1);
-    
     // -------------------------------------------------------------
     
     adjustSize();
@@ -299,6 +291,14 @@ void UnsharpDialog::slotUser1()
 
 void UnsharpDialog::slotEffect()
 {
+    m_radiusInput->setEnabled(false);
+    m_radiusSlider->setEnabled(false);
+    m_amountInput->setEnabled(false);
+    m_amountSlider->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_thresholdSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
+    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
@@ -309,13 +309,21 @@ void UnsharpDialog::slotEffect()
     int    a    = m_amountSlider->value();
     int    th   = m_thresholdSlider->value();
     
-    m_progressBar->setValue(0);            
+    m_imagePreviewWidget->setProgress(0);
     unsharp(data, w, h, r, a, th);   
     
     if (m_cancel) return;
-    m_progressBar->setValue(0);    
+    
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_radiusInput->setEnabled(true);
+    m_radiusSlider->setEnabled(true);
+    m_amountInput->setEnabled(true);
+    m_amountSlider->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
+    m_thresholdSlider->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);   
 }
 
 void UnsharpDialog::slotOk()
@@ -326,7 +334,7 @@ void UnsharpDialog::slotOk()
     m_amountSlider->setEnabled(false);
     m_thresholdInput->setEnabled(false);
     m_thresholdSlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -340,7 +348,7 @@ void UnsharpDialog::slotOk()
     int    a     = m_amountSlider->value();
     int    th    = m_thresholdSlider->value();
     
-    m_progressBar->setValue(0);        
+    m_imagePreviewWidget->setProgress(0);       
     unsharp(data, w, h, r, a, th);   
            
     if ( !m_cancel )
@@ -351,8 +359,7 @@ void UnsharpDialog::slotOk()
     accept();
 }
 
-void UnsharpDialog::unsharp(uint* data, int w, int h, int r, 
-                            int a, int threshold)
+void UnsharpDialog::unsharp(uint* data, int w, int h, int r, int a, int threshold)
 {
     double radius = r / 10.0;
     double amount = a / 10.0;
@@ -420,7 +427,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, int r,
       
       if (row%5 == 0)
           {
-          m_progressBar->setValue((int)(100.0*((double)row/(3*y))));
+          m_imagePreviewWidget->setProgress((int)(100.0*((double)row/(3*y))));
           kapp->processEvents();
           }
       }
@@ -446,7 +453,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, int r,
           
       if (col%5 == 0)
          {
-         m_progressBar->setValue((int)(100.0*((double)col/(3*x) + 0.33)));          
+         m_imagePreviewWidget->setProgress((int)(100.0*((double)col/(3*x) + 0.33)));          
          kapp->processEvents();
          }
       }
@@ -487,7 +494,7 @@ void UnsharpDialog::unsharp(uint* data, int w, int h, int r,
       
       if (row%5 == 0)
          {
-         m_progressBar->setValue((int)(100.0*((double)row/(3*y) + 0.67)));
+         m_imagePreviewWidget->setProgress((int)(100.0*((double)row/(3*y) + 0.67)));
          kapp->processEvents();
          }
          
