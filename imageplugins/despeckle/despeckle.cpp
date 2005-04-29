@@ -55,7 +55,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kprogress.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
@@ -135,11 +134,12 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
@@ -218,14 +218,6 @@ DespeckleDialog::DespeckleDialog(QWidget* parent)
     QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type."));           
     hlay5->addWidget(m_useAdaptativeMethod, 1);
     hlay5->addWidget(m_useRecursiveMethod, 1);
-
-    // -------------------------------------------------------------
-        
-    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay6->addWidget(m_progressBar, 1);
 
     // -------------------------------------------------------------
             
@@ -314,6 +306,16 @@ void DespeckleDialog::slotUser1()
 
 void DespeckleDialog::slotEffect()
 {
+    m_radiusInput->setEnabled(false);
+    m_radiusSlider->setEnabled(false);
+    m_blackLevelInput->setEnabled(false);
+    m_blackLevelSlider->setEnabled(false);
+    m_whiteLevelInput->setEnabled(false);
+    m_whiteLevelSlider->setEnabled(false);
+    m_useAdaptativeMethod->setEnabled(false);
+    m_useRecursiveMethod->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
+
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
@@ -326,14 +328,23 @@ void DespeckleDialog::slotEffect()
     bool  af   = m_useAdaptativeMethod->isChecked();
     bool  rf   = m_useRecursiveMethod->isChecked();
     
-    m_progressBar->setValue(0);              
+    m_imagePreviewWidget->setProgress(0);          
     despeckle(data, w, h, r, bl, wl, af, rf);   
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(img);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_radiusInput->setEnabled(true);
+    m_radiusSlider->setEnabled(true);
+    m_blackLevelInput->setEnabled(true);
+    m_blackLevelSlider->setEnabled(true);
+    m_whiteLevelInput->setEnabled(true);
+    m_whiteLevelSlider->setEnabled(true);
+    m_useAdaptativeMethod->setEnabled(true);
+    m_useRecursiveMethod->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void DespeckleDialog::slotOk()
@@ -346,7 +357,7 @@ void DespeckleDialog::slotOk()
     m_whiteLevelSlider->setEnabled(false);
     m_useAdaptativeMethod->setEnabled(false);
     m_useRecursiveMethod->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -362,7 +373,7 @@ void DespeckleDialog::slotOk()
     bool  af    = m_useAdaptativeMethod->isChecked();
     bool  rf    = m_useRecursiveMethod->isChecked();
 
-    m_progressBar->setValue(0);               
+    m_imagePreviewWidget->setProgress(0);             
     despeckle(data, w, h, r, bl, wl, af, rf);   
     
     if ( !m_cancel )
@@ -567,7 +578,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
         
         if ((y & 15) == 0)
            {
-           m_progressBar->setValue((int)(100.0*(double) (y - sel_y1) / (double) sel_height));
+           m_imagePreviewWidget->setProgress((int)(100.0*(double) (y - sel_y1) / (double) sel_height));
            kapp->processEvents();
            }
         };

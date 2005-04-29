@@ -5,7 +5,7 @@
  * Description : noise reduction image filter for Digikam 
  *               image editor.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,8 +31,6 @@ class QPushButton;
 class QCheckBox;
 class QSpinBox;
 class QSlider;
-
-class KProgress;
 
 namespace Digikam
 {
@@ -68,8 +66,6 @@ private:
     QSlider      *m_radiusSlider;
     QSlider      *m_blackLevelSlider;
     QSlider      *m_whiteLevelSlider;
-    
-    KProgress    *m_progressBar;
     
     QCheckBox    *m_useAdaptativeMethod;
     QCheckBox    *m_useRecursiveMethod;
