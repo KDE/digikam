@@ -3,7 +3,7 @@
  * Date  : 2004-08-20
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcursor.h>
+#include <kprogress.h>
 
 // Local includes.
 
@@ -46,7 +47,7 @@ namespace Digikam
 {
 
 ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title, 
-                                       QWidget *parent)
+                                       QWidget *parent, bool progress)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     QHBoxLayout* mainLayout = new QHBoxLayout(this, 0, KDialog::spacingHint());
@@ -67,6 +68,10 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
     m_topLeftSelectionInfoLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     m_BottomRightSelectionInfoLabel = new QLabel(gbox1);
     m_BottomRightSelectionInfoLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+    
+    m_progressBar = new KProgress(100, gbox1);
+    setProgressVisible(progress);
+    
     mainLayout->addWidget(gbox1);
     
     QVGroupBox *gbox2 = new QVGroupBox(title, this);
@@ -107,6 +112,28 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
 
 ImagePreviewWidget::~ImagePreviewWidget()
 {
+}
+
+void ImagePreviewWidget::setEnable(bool b)
+{
+    m_imageRegionWidget->setEnabled(b);
+    m_imagePanIconWidget->setEnabled(b);
+}
+
+void ImagePreviewWidget::setProgress(int val)
+{
+    m_progressBar->setValue(val);
+}
+
+void ImagePreviewWidget::setProgressVisible(bool b)
+{
+    if (b) m_progressBar->show();
+    else m_progressBar->hide();
+}
+
+void ImagePreviewWidget::setProgressWhatsThis(QString desc)
+{
+    QWhatsThis::add( m_progressBar, desc);
 }
 
 void ImagePreviewWidget::setPreviewImageWaitCursor(bool enable)

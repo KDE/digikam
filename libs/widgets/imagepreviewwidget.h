@@ -3,7 +3,7 @@
  * Date  : 2004-08-20
  * Description : 
  * 
- * Copyright 2004 Gilles Caulier
+ * Copyright 2004-2005 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,8 @@
 
 class QLabel;
 
+class KProgress;
+
 namespace Digikam
 {
 
@@ -41,7 +43,7 @@ Q_OBJECT
 
 public:
     ImagePreviewWidget(uint w, uint h, const QString &title, 
-                       QWidget *parent=0);
+                       QWidget *parent=0, bool progress=false);
     ~ImagePreviewWidget();
     
     QRect  getOriginalImageRegion(void);
@@ -49,6 +51,12 @@ public:
     void   setPreviewImageData(QImage img);
     void   setPreviewImageWaitCursor(bool enable);
     void   setCenterImageRegionPosition(void);
+    
+    void   setEnable(bool b);
+    
+    void   setProgress(int val);
+    void   setProgressVisible(bool b);
+    void   setProgressWhatsThis(QString desc);
 
 public slots:
 
@@ -70,6 +78,8 @@ protected:
     QLabel    *m_previewTargetLabel;
     QLabel    *m_topLeftSelectionInfoLabel;
     QLabel    *m_BottomRightSelectionInfoLabel;
+    
+    KProgress *m_progressBar;
     
     void updateSelectionInfo(QRect rect);
     
