@@ -53,7 +53,6 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 
 // Digikam includes.
 
@@ -130,10 +129,11 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+            
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
@@ -168,13 +168,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     hlay2->addWidget(m_sensibilityLCDValue, 1);
     
     // -------------------------------------------------------------
-        
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay3->addWidget(m_progressBar, 1);
-
+    
     adjustSize();
     disableResize(); 
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
@@ -198,9 +192,7 @@ ImageEffect_Infrared::~ImageEffect_Infrared()
 void ImageEffect_Infrared::slotUser1()
 {
     m_sensibilitySlider->blockSignals(true);
-          
     m_sensibilitySlider->setValue(1);
-    
     m_sensibilitySlider->blockSignals(false);
     slotEffect();    
 } 
@@ -224,12 +216,15 @@ void ImageEffect_Infrared::closeEvent(QCloseEvent *e)
 
 void ImageEffect_Infrared::slotSensibilityChanged(int v)
 {
-    m_sensibilityLCDValue->display( QString::number(100 + 100*v) );
+    m_sensibilityLCDValue->display( QString::number(100 + 100 * v) );
     slotEffect();
 }
 
 void ImageEffect_Infrared::slotEffect()
 {
+    m_imagePreviewWidget->setEnable(false);
+    m_addFilmGrain->setEnabled(false);
+    m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     uint* data   = (uint *)image.bits();
@@ -238,20 +233,24 @@ void ImageEffect_Infrared::slotEffect()
     int   s      = 100 + 100 * m_sensibilitySlider->value();
     bool  g      = m_addFilmGrain->isChecked();
 
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     infrared(data, w, h, s, g);
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_sensibilitySlider->setEnabled(true);
+    m_addFilmGrain->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_Infrared::slotOk()
 {
+    m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -264,7 +263,7 @@ void ImageEffect_Infrared::slotOk()
     int s      = 100 + 100 * m_sensibilitySlider->value();
     bool  g    = m_addFilmGrain->isChecked();
     
-    m_progressBar->setValue(0);
+    m_imagePreviewWidget->setProgress(0);
     infrared(data, w, h, s, g);
 
     if ( !m_cancel )
@@ -322,7 +321,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
                                              0.4, greenBoost, -0.8,          // Red channel gains.
                                              0.0, 1.0,         0.0,          // Green channel gains (not used).
                                              0.0, 0.0,         1.0);         // Blue channel gains (not used).
-    m_progressBar->setValue(10);
+    m_imagePreviewWidget->setProgress(10);
     kapp->processEvents(); 
     if (m_cancel) return;
 
@@ -332,7 +331,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
     memcpy (pBWBlurBits, pBWBits, BitCount);  
         
     Digikam::ImageFilters::gaussianBlurImage((uint *)pBWBlurBits, Width, Height, blurRadius);
-    m_progressBar->setValue(20);
+    m_imagePreviewWidget->setProgress(20);
     kapp->processEvents(); 
     if (m_cancel) return;
 
@@ -363,7 +362,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
             }
         
         // Update progress bar in dialog.
-        m_progressBar->setValue((int) (30.0 + ((double)h * 10.0) / Height));
+        m_imagePreviewWidget->setProgress((int) (30.0 + ((double)h * 10.0) / Height));
         kapp->processEvents(); 
         }
 
@@ -372,7 +371,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
     if (Grain)
        Digikam::ImageFilters::gaussianBlurImage((uint *)pGrainBits, Width, Height, 3);
     
-    m_progressBar->setValue(50);
+    m_imagePreviewWidget->setProgress(50);
     kapp->processEvents(); 
     if (m_cancel) return;
         
@@ -395,7 +394,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
        delete grainCurves;
        }
     
-    m_progressBar->setValue(60);
+    m_imagePreviewWidget->setProgress(60);
     kapp->processEvents(); 
     if (m_cancel) return;
        
@@ -425,7 +424,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
             }
             
         // Update progress bar in dialog.
-        m_progressBar->setValue((int) (70.0 + ((double)h * 10.0) / Height));
+        m_imagePreviewWidget->setProgress((int) (70.0 + ((double)h * 10.0) / Height));
         kapp->processEvents(); 
         }
     
@@ -454,7 +453,7 @@ void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensi
             }
         
         // Update progress bar in dialog.
-        m_progressBar->setValue((int) (80.0 + ((double)h * 20.0) / Height));
+        m_imagePreviewWidget->setProgress((int) (80.0 + ((double)h * 20.0) / Height));
         kapp->processEvents(); 
         }
 
