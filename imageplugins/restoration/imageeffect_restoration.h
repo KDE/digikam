@@ -42,7 +42,6 @@ class QTabWidget;
 
 class KDoubleNumInput;
 class KIntNumInput;
-class KProgress;
 
 namespace Digikam
 {
@@ -118,8 +117,6 @@ private:
     // Preset Settings.
     QComboBox       *m_restorationTypeCB;  
     
-    KProgress       *m_progressBar;
-        
     // Smoothing settings.
     KDoubleNumInput *m_detailInput;
     KDoubleNumInput *m_gradientInput;

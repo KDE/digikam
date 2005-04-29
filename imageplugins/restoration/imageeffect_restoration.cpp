@@ -56,7 +56,6 @@
 #include <kglobalsettings.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -154,15 +153,18 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     topLayout->addWidget(m_imagePreviewWidget);
+    
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
     m_mainTab = new QTabWidget( plainPage() );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -190,11 +192,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
     grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
     grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 2, 2);
-    
-    m_progressBar = new KProgress(100, firstPage);
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
         
     // -------------------------------------------------------------
     
@@ -483,7 +480,7 @@ void ImageEffect_Restoration::slotEffect()
     m_currentRenderingMode = PreviewRendering;
     m_dirty                = true;
     
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
@@ -507,8 +504,8 @@ void ImageEffect_Restoration::slotEffect()
     int w          = m_previewImage.width();
     int h          = m_previewImage.height();
     
-    m_progressBar->setValue(0); 
-
+    m_imagePreviewWidget->setProgress(0);
+    
     if (m_cimgInterface)
        delete m_cimgInterface;
         
@@ -529,7 +526,7 @@ void ImageEffect_Restoration::slotEffect()
 void ImageEffect_Restoration::slotOk()
 {
     m_currentRenderingMode = FinalRendering;
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
@@ -546,7 +543,7 @@ void ImageEffect_Restoration::slotOk()
     enableButton(User2, false);
     enableButton(User3, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    m_progressBar->setValue(0);
+    m_imagePreviewWidget->setProgress(0);
     m_mainTab->setCurrentPage(0);
     
     if (m_cimgInterface)
@@ -576,7 +573,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
 
     if (d->starting)           // Computation in progress !
         {
-        m_progressBar->setValue(d->progress);  
+        m_imagePreviewWidget->setProgress(d->progress);
         }  
     else 
         {
@@ -590,14 +587,14 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  
                  m_imagePreviewWidget->setPreviewImageData(m_previewImage);
                  m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-                 m_progressBar->setValue(0);  
+                 m_imagePreviewWidget->setProgress(0);
                 
                  setButtonText(User1, i18n("&Reset Values"));
                  setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
                  enableButton(Ok, true);  
                  enableButton(User2, true);
                  enableButton(User3, true);  
-                 m_imagePreviewWidget->setEnabled(true);                 
+                 m_imagePreviewWidget->setEnable(true);                 
                  m_restorationTypeCB->setEnabled(true);
                  m_detailInput->setEnabled(true);
                  m_gradientInput->setEnabled(true);
@@ -633,13 +630,13 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                     {
                     kdDebug() << "Preview Restoration failed..." << endl;
                     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-                    m_progressBar->setValue(0);  
+                    m_imagePreviewWidget->setProgress(0);
                     setButtonText(User1, i18n("&Reset Values"));
                     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
                     enableButton(Ok, true);    
                     enableButton(User2, true);
                     enableButton(User3, true);                      
-                    m_imagePreviewWidget->setEnabled(true);                 
+                    m_imagePreviewWidget->setEnable(true);                 
                     m_restorationTypeCB->setEnabled(true);
                     m_detailInput->setEnabled(true);
                     m_gradientInput->setEnabled(true);
