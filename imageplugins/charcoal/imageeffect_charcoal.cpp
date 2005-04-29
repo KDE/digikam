@@ -47,7 +47,6 @@
 #include <kimageeffect.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 
 // Digikam includes.
 
@@ -123,10 +122,11 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
         
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+    
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
@@ -171,14 +171,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     hlay2->addWidget(m_smoothInput, 1);
 
     // -------------------------------------------------------------
-        
-    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay6->addWidget(m_progressBar, 1);
-
-    // -------------------------------------------------------------
+    
     adjustSize();
     disableResize();        
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
@@ -245,19 +238,29 @@ void ImageEffect_Charcoal::slotCancel()
 
 void ImageEffect_Charcoal::slotEffect()
 {
+    m_imagePreviewWidget->setEnable(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    m_pencilInput->setEnabled(false);
+    m_pencilSlider->setEnabled(false);
+    m_smoothInput->setEnabled(false);
+    m_smoothSlider->setEnabled(false);
     int pencil = m_pencilSlider->value();
     int smooth  = m_smoothSlider->value();
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
 
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(newImage);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_pencilInput->setEnabled(true);
+    m_pencilSlider->setEnabled(true);
+    m_smoothInput->setEnabled(true);
+    m_smoothSlider->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_Charcoal::slotOk()
@@ -266,7 +269,7 @@ void ImageEffect_Charcoal::slotOk()
     m_pencilSlider->setEnabled(false);
     m_smoothInput->setEnabled(false);
     m_smoothSlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -279,7 +282,7 @@ void ImageEffect_Charcoal::slotOk()
     int pencil = m_pencilSlider->value();
     int smooth  = m_smoothSlider->value();
 
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
         
     if (data) 
         {
@@ -302,17 +305,17 @@ void ImageEffect_Charcoal::slotOk()
 QImage ImageEffect_Charcoal::charcoal(QImage &src, double pencil, double smooth)
 {
     if (m_cancel) return src;
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     kapp->processEvents();    
     
     // Detects edges in the image using pixel neighborhoods and an edge
     // detection mask.
     QImage img(KImageEffect::edge(src, pencil));
-    m_progressBar->setValue(10); 
+    m_imagePreviewWidget->setProgress(10);
     kapp->processEvents();    
            
     if (m_cancel) return src;
-    m_progressBar->setValue(20); 
+    m_imagePreviewWidget->setProgress(20);
     kapp->processEvents();    
     
     // Blurs the image by convolving pixel neighborhoods.
@@ -321,44 +324,43 @@ QImage ImageEffect_Charcoal::charcoal(QImage &src, double pencil, double smooth)
 #else
     img = KImageEffect::blur(img, pencil);
 #endif
-    m_progressBar->setValue(30); 
+    m_imagePreviewWidget->setProgress(30);
     kapp->processEvents();    
     
     if (m_cancel) return src;
-    m_progressBar->setValue(40); 
+    m_imagePreviewWidget->setProgress(40);
     kapp->processEvents();    
     
     // Normalises the pixel values to span the full range of color values.
     // This is a contrast enhancement technique.
     KImageEffect::normalize(img);
-    m_progressBar->setValue(50); 
+    m_imagePreviewWidget->setProgress(50);
     kapp->processEvents();    
     
     if (m_cancel) return src;
-    m_progressBar->setValue(60); 
+    m_imagePreviewWidget->setProgress(60);
     kapp->processEvents();    
     
     // Invert the pixels values.
     img.invertPixels(false);
-    m_progressBar->setValue(70); 
+    m_imagePreviewWidget->setProgress(70);
     kapp->processEvents();    
     
     if (m_cancel) return src;
-    m_progressBar->setValue(80); 
+    m_imagePreviewWidget->setProgress(80);
     kapp->processEvents();    
     
     // Convert image to grayscale.
     KImageEffect::toGray(img);
-    m_progressBar->setValue(90); 
+    m_imagePreviewWidget->setProgress(90);
     kapp->processEvents();    
     
     if (m_cancel) return src;
-    m_progressBar->setValue(100); 
+    m_imagePreviewWidget->setProgress(100);
     kapp->processEvents();    
     
     return(img);
 }
-
 
 }  // NameSpace DigikamCharcoalImagesPlugin
 

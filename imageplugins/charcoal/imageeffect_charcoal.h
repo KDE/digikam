@@ -5,7 +5,7 @@
  * Description : a digikam image editor plugin for to
  *               simulate charcoal drawing.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,8 +34,6 @@
 class QPushButton;
 class QSlider;
 class QSpinBox;
-
-class KProgress;
 
 namespace Digikam
 {
@@ -71,8 +69,6 @@ private:
     
     QSpinBox    *m_pencilInput;
     QSpinBox    *m_smoothInput;
-
-    KProgress   *m_progressBar;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
