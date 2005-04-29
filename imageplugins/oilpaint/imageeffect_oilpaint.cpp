@@ -50,7 +50,6 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 
 // Digikam includes.
 
@@ -129,10 +128,11 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+            
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
 
@@ -177,12 +177,6 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     hlay3->addWidget(m_smoothInput, 1);
     
     // -------------------------------------------------------------
-        
-    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay6->addWidget(m_progressBar, 1);
 
     adjustSize();
     disableResize();
@@ -251,6 +245,11 @@ void ImageEffect_OilPaint::slotCancel()
 void ImageEffect_OilPaint::slotEffect()
 {
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    m_imagePreviewWidget->setEnable(false);
+    m_brushSizeInput->setEnabled(false);
+    m_brushSizeSlider->setEnabled(false);
+    m_smoothInput->setEnabled(false);
+    m_smoothSlider->setEnabled(false);
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     uint* data = (uint *)image.bits();
     int   w    = image.width();
@@ -258,14 +257,19 @@ void ImageEffect_OilPaint::slotEffect()
     int   b    = m_brushSizeSlider->value();
     int   s    = m_smoothSlider->value();
         
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     OilPaint(data, w, h, b, s);
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0); 
+    m_brushSizeInput->setEnabled(true);
+    m_brushSizeSlider->setEnabled(true);
+    m_smoothInput->setEnabled(true);
+    m_smoothSlider->setEnabled(true);
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_OilPaint::slotOk()
@@ -274,7 +278,7 @@ void ImageEffect_OilPaint::slotOk()
     m_brushSizeSlider->setEnabled(false);
     m_smoothInput->setEnabled(false);
     m_smoothSlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -287,7 +291,7 @@ void ImageEffect_OilPaint::slotOk()
     int   b    = m_brushSizeSlider->value();
     int   s    = m_smoothSlider->value();
         
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     OilPaint(data, w, h, b, s);
     
     if ( !m_cancel )
@@ -321,9 +325,9 @@ void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int
     int i = 0;
     uint color;
     
-    for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
+    for (int h2 = 0; !m_cancel && (h2 < h); h2++)
        {
-       for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
+       for (int w2 = 0; !m_cancel && (w2 < w); w2++)
           {
           i = h2 * LineWidth + 4*w2;
           color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
@@ -335,7 +339,7 @@ void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int
           }
        
        // Update de progress bar in dialog.
-       m_progressBar->setValue((int) (((double)h2 * 100.0) / h));
+       m_imagePreviewWidget->setProgress((int) (((double)h2 * 100.0) / h));  
        kapp->processEvents();          
        }
 }
@@ -376,9 +380,9 @@ uint ImageEffect_OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height
     // Erase the array
     memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
-    for (w = X - Radius; w <= X + Radius; ++w)
+    for (w = X - Radius; w <= X + Radius; w++)
         {
-        for (h = Y - Radius; h <= Y + Radius; ++h)
+        for (h = Y - Radius; h <= Y + Radius; h++)
             {
             // This condition helps to identify when a point doesn't exist
             
@@ -408,7 +412,7 @@ uint ImageEffect_OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height
     I = 0;
     int MaxInstance = 0;
 
-    for (i = 0 ; i <= Intensity ; ++i)
+    for (i = 0 ; i <= Intensity ; i++)
        {
        if (IntensityCount[i] > MaxInstance)
           {

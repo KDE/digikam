@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for to simulate 
  *               an oil painting.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,8 +30,6 @@
 class QPushButton;
 class QSpinBox;
 class QSlider;
-
-class KProgress;
 
 namespace Digikam
 {
@@ -68,8 +66,6 @@ private:
     QSlider      *m_brushSizeSlider;
     QSlider      *m_smoothSlider;
     
-    KProgress    *m_progressBar;
-
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
