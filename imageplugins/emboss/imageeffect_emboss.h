@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for to emboss 
  *               an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,8 +34,6 @@
 class QPushButton;
 class QSlider;
 class QSpinBox;
-
-class KProgress;
 
 namespace Digikam
 {
@@ -70,15 +68,12 @@ private:
     
     QSpinBox    *m_depthInput;
     
-    KProgress   *m_progressBar;
-    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
 
     void Emboss(uint* data, int Width, int Height, int d);
     inline int Lim_Max (int Now, int Up, int Max);
-    inline uchar LimitValues (int ColorValue);
     
 private slots:
 

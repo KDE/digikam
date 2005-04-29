@@ -51,7 +51,6 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 
 // Digikam includes.
 
@@ -130,10 +129,11 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+            
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
@@ -156,14 +156,6 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     hlay->addWidget(m_depthSlider, 3);
     hlay->addWidget(m_depthInput, 1);
     
-    // -------------------------------------------------------------
-        
-    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay6->addWidget(m_progressBar, 1);
-
     // -------------------------------------------------------------
     
     adjustSize();
@@ -219,28 +211,34 @@ void ImageEffect_Emboss::closeEvent(QCloseEvent *e)
 
 void ImageEffect_Emboss::slotEffect()
 {
+    m_imagePreviewWidget->setEnable(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    m_depthInput->setEnabled(false);
+    m_depthSlider->setEnabled(false);
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     uint* data  = (uint *)image.bits();
     int   w     = image.width();
     int   h     = image.height();
     int   depth = m_depthSlider->value();
             
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     Emboss(data, w, h, depth);
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_depthInput->setEnabled(true);
+    m_depthSlider->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_Emboss::slotOk()
 {
     m_depthInput->setEnabled(false);
     m_depthSlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -252,7 +250,7 @@ void ImageEffect_Emboss::slotOk()
     int h      = iface.originalHeight();
     int depth  = m_depthSlider->value();
     
-    m_progressBar->setValue(0);
+    m_imagePreviewWidget->setProgress(0);
     Emboss(data, w, h, depth);
         
     if ( !m_cancel )
@@ -299,7 +297,7 @@ void ImageEffect_Emboss::Emboss(uint* data, int Width, int Height, int d)
            G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
            B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
 
-           Gray = LimitValues ((R + G + B) / 3);
+           Gray = CLAMP0255 ((R + G + B) / 3);
            
            Bits[i+2] = Gray;
            Bits[i+1] = Gray;
@@ -307,7 +305,7 @@ void ImageEffect_Emboss::Emboss(uint* data, int Width, int Height, int d)
            }
        
        // Update de progress bar in dialog.
-       m_progressBar->setValue((int) (((double)h * 100.0) / Height));
+       m_imagePreviewWidget->setProgress((int) (((double)h * 100.0) / Height));
        kapp->processEvents(); 
        }
 }
@@ -336,26 +334,6 @@ int ImageEffect_Emboss::Lim_Max (int Now, int Up, int Max)
         --Up;
     return (Up);
 }    
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.  
- 
-/* This function limits the RGB values                        
- *                                                                         
- * ColorValue        => Here, is an RGB value to be analized                   
- *                                                                             
- * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is     
- *                      white color). But R, G and B values has 256 values to be used   
- *                      so, this function analize the value and limits to this range   
- */   
-                     
-uchar ImageEffect_Emboss::LimitValues (int ColorValue)
-{
-    if (ColorValue > 255)        // MAX = 255
-        ColorValue = 255;        
-    if (ColorValue < 0)          // MIN = 0
-        ColorValue = 0;
-    return ((uchar) ColorValue);
-}
     
 }  // NameSpace DigikamEmbossImagesPlugin
 
