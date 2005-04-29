@@ -53,7 +53,6 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <knuminput.h>
 
 // Digikam includes.
@@ -132,8 +131,11 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+        
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
@@ -177,14 +179,6 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay3->addWidget(m_progressBar, 1);
-
-    // -------------------------------------------------------------
-    
     adjustSize();
     disableResize(); 
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
@@ -251,7 +245,11 @@ void ImageEffect_Texture::slotTimer()
 
 void ImageEffect_Texture::slotEffect()
 {
+    m_textureType->setEnabled(false);
+    m_blendGain->setEnabled(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    m_imagePreviewWidget->setEnable(false);
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     uint* data   = (uint *)image.bits();
     int   w      = image.width();
@@ -259,20 +257,24 @@ void ImageEffect_Texture::slotEffect()
     int   b      = 255 - m_blendGain->value();
     int   t      = m_textureType->currentItem();
 
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     texture(data, w, h, b, t);
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_textureType->setEnabled(true);
+    m_blendGain->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_Texture::slotOk()
 {
+    m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -285,7 +287,7 @@ void ImageEffect_Texture::slotOk()
     int b      = 255 - m_blendGain->value();
     int t      = m_textureType->currentItem();
     
-    m_progressBar->setValue(0);
+    m_imagePreviewWidget->setProgress(0);
     texture(data, w, h, b, t);
 
     if ( !m_cancel )
@@ -412,7 +414,7 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
             }
         
         // Update progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 50.0) / height));
+        m_imagePreviewWidget->setProgress((int) (((double)h * 50.0) / height));
         kapp->processEvents(); 
         }
             
@@ -432,7 +434,7 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
             }
         
         // Update progress bar in dialog.
-        m_progressBar->setValue((int) (50.0 + ((double)h * 50.0) / height));
+        m_imagePreviewWidget->setProgress((int) (50.0 + ((double)h * 50.0) / height));
         kapp->processEvents(); 
         }
         

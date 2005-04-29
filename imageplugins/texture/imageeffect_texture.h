@@ -36,7 +36,6 @@ class QTimer;
 class QComboBox;
 
 class KIntNumInput;
-class KProgress;
 
 namespace Digikam
 {
@@ -94,8 +93,6 @@ private:
     QComboBox    *m_textureType;
 
     KIntNumInput *m_blendGain;
-    
-    KProgress    *m_progressBar;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
