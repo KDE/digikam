@@ -50,7 +50,6 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 
 // Digikam includes.
 
@@ -127,10 +126,11 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Preview"),
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
+            
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     
     // -------------------------------------------------------------
     
@@ -156,12 +156,6 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QHBoxLayout *hlay6 = new QHBoxLayout(topLayout);
-    m_progressBar = new KProgress(100, plainPage(), "progressbar");
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    hlay6->addWidget(m_progressBar, 1);
-
     adjustSize();
     disableResize(); 
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
@@ -182,9 +176,7 @@ ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 void ImageEffect_FilmGrain::slotUser1()
 {
     m_sensibilitySlider->blockSignals(true);
-          
     m_sensibilitySlider->setValue(12);
-    
     m_sensibilitySlider->blockSignals(false);
     slotEffect();    
 } 
@@ -214,27 +206,29 @@ void ImageEffect_FilmGrain::slotSensibilityChanged(int v)
 
 void ImageEffect_FilmGrain::slotEffect()
 {
+    m_imagePreviewWidget->setEnable(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     uint* data   = (uint *)image.bits();
     int   w      = image.width();
     int   h      = image.height();
-    int   s      = 400 + 200*m_sensibilitySlider->value();
+    int   s      = 400 + 200 * m_sensibilitySlider->value();
             
-    m_progressBar->setValue(0); 
+    m_imagePreviewWidget->setProgress(0);
     FilmGrain(data, w, h, s);
     
     if (m_cancel) return;
     
-    m_progressBar->setValue(0);  
+    m_imagePreviewWidget->setProgress(0);  
     m_imagePreviewWidget->setPreviewImageData(image);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_imagePreviewWidget->setEnable(true);
 }
 
 void ImageEffect_FilmGrain::slotOk()
 {
     m_sensibilitySlider->setEnabled(false);
-    m_imagePreviewWidget->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
@@ -244,9 +238,9 @@ void ImageEffect_FilmGrain::slotOk()
     uint* data = iface.getOriginalData();
     int w      = iface.originalWidth();
     int h      = iface.originalHeight();
-    int s      = 400 + 200*m_sensibilitySlider->value();
+    int s      = 400 + 200 * m_sensibilitySlider->value();
     
-    m_progressBar->setValue(0);
+    m_imagePreviewWidget->setProgress(0);
     FilmGrain(data, w, h, s);
 
     if ( !m_cancel )
@@ -297,7 +291,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
             }
         
         // Update de progress bar in dialog.
-        m_progressBar->setValue((int) (((double)h * 25.0) / Height));
+        m_imagePreviewWidget->setProgress((int) (((double)h * 25.0) / Height));
         kapp->processEvents(); 
         }
 
@@ -337,7 +331,7 @@ void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sen
             }
         
         // Update de progress bar in dialog.
-        m_progressBar->setValue((int) (50.0 + ((double)h * 50.0) / Height));
+        m_imagePreviewWidget->setProgress((int) (50.0 + ((double)h * 50.0) / Height));
         kapp->processEvents();             
         }
     

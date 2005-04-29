@@ -35,8 +35,6 @@ class QPushButton;
 class QSlider;
 class QLCDNumber;
 
-class KProgress;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -69,8 +67,6 @@ private:
     QSlider     *m_sensibilitySlider;
     
     QLCDNumber  *m_sensibilityLCDValue;
-    
-    KProgress   *m_progressBar;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
