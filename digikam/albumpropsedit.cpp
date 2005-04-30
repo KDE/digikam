@@ -59,7 +59,6 @@
 #include "albumpropsedit.h"
 
 #include <libkexif/kexifdata.h>
-#include <stdlib.h>
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
@@ -336,8 +335,8 @@ QDate AlbumPropsEdit::averageDate( bool basedOnExif ) const
     if ( amountOfImages > 0 )
     {
         QDateTime averageDateTime;
-        averageDateTime.setTime_t( baseDateTime.toTime_t() +
-                                   abs( differenceInSecs/amountOfImages ) );
+        averageDateTime.setTime_t( baseDateTime.toTime_t() -
+                                   (int)( differenceInSecs/amountOfImages ) );
         return ( averageDateTime.date() );
     }
     else
