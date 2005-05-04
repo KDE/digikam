@@ -39,7 +39,15 @@ class Sidebar : public QFrame
     Q_OBJECT
 public:
 
-    Sidebar(QWidget *parent);
+    /**
+     * The side where the bar should be visible
+     */
+    enum Side {
+        Left,
+        Right
+    };    
+    
+    Sidebar(QWidget *parent, Side side=Left);
     virtual ~Sidebar();
 
     /**

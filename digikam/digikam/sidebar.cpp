@@ -28,7 +28,7 @@
 #include <kmultitabbar.h>
 #include <kiconloader.h>
 
-Sidebar::Sidebar(QWidget *parent)
+Sidebar::Sidebar(QWidget *parent, Side side)
     : QFrame(parent, "sidebar")
 {
     m_tabs = 0;
@@ -37,15 +37,24 @@ Sidebar::Sidebar(QWidget *parent)
     
     QHBoxLayout *box = new QHBoxLayout(this);
     
-    m_tabBar = new KMultiTabBar(KMultiTabBar::Vertical, this);    
-    m_tabBar->setPosition(KMultiTabBar::Left);
+    m_tabBar = new KMultiTabBar(KMultiTabBar::Vertical, this);
     m_tabBar->setStyle(KMultiTabBar::KDEV3ICON);
     m_tabBar->showActiveTabTexts(true);
-    box->add(m_tabBar);
-
     m_stack = new QWidgetStack(this);
-    box->add(m_stack);
-    
+            
+    if(side == Left)
+    {
+        box->add(m_tabBar);
+        box->add(m_stack);
+        m_tabBar->setPosition(KMultiTabBar::Left);
+    }
+    else
+    {
+        box->add(m_stack);
+        box->add(m_tabBar);
+        m_tabBar->setPosition(KMultiTabBar::Right);
+    }
+ 
     setMinimumWidth(m_tabBar->width());
 }
 
