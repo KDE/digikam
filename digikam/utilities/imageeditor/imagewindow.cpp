@@ -127,7 +127,7 @@ ImageWindow::ImageWindow()
         }
     }
 
-    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this)); 
+    m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this)); 
     
     // -- Some Accels not available from actions -------------
 
@@ -528,7 +528,7 @@ void ImageWindow::slotLoadCurrent()
     
     if (m_view)
     {
-        IconItem* item = m_view->findItem((*it).url());
+        ThumbItem* item = m_view->findItem((*it).url());
         if (item)
         {
             item->setSelected(true);
@@ -716,7 +716,8 @@ void ImageWindow::slotResize()
 
 void ImageWindow::slotContextMenu()
 {
-    m_contextMenu->exec(QCursor::pos());
+    if (m_contextMenu)
+        m_contextMenu->exec(QCursor::pos());
 }
 
 void ImageWindow::slotZoomChanged(float zoom)
