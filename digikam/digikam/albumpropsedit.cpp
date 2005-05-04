@@ -41,7 +41,6 @@
 #include <ktextedit.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
 
@@ -55,6 +54,8 @@
 // Local includes.
 
 #include "album.h"
+#include "albumdb.h"
+#include "albummanager.h"
 #include "albumsettings.h"
 #include "albumpropsedit.h"
 
@@ -275,73 +276,17 @@ void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 void AlbumPropsEdit::slotAverageButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
-    QDate guessedDate = averageDate( true );
-    kdDebug() << "Exif-based returned: " << guessedDate << endl; 
-    if ( guessedDate.isValid() )
-    {
-        setCursor( KCursor::arrowCursor() );
-        datePicker_->setDate( guessedDate );
-    }
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    QDate avDate = db->getAlbumAverageDate( album_ );
+    setCursor( KCursor::arrowCursor() );
+
+    if ( avDate.isValid() )
+        datePicker_->setDate( avDate );
     else
-    {
-        guessedDate = averageDate ( false );
-        setCursor( KCursor::arrowCursor() );
-        kdDebug() << "File-based resturned: " << guessedDate << endl;
-        if ( guessedDate.isValid() )
-            datePicker_->setDate( guessedDate );
-        else
-            KMessageBox::error( plainPage( ), 
-                                i18n( "Could not calculate an average based "
-                                      "on creation date (EXIF) or based on the "
-                                      "modification date of the files." ),
+    KMessageBox::error( plainPage( ),
+                                i18n( "Could not calculate an average."),
                                 i18n( "Could Not Calculate Average" ) );
-    }
-}
-
-QDate AlbumPropsEdit::averageDate( bool basedOnExif ) const
-{
-    int differenceInSecs = 0;
-    int amountOfImages = 0;
-    KExifData exifData;
-    QDateTime baseDateTime;
-
-    QDir dir(album_->getKURL().path());
-    dir.setFilter( QDir::Files );
-    const QFileInfoList *list = dir.entryInfoList();
-    if (!list) return QDate();
-
-    QFileInfoListIterator it (*list);
-    QFileInfo *fi;
-    while ( ( fi = it.current() ) != 0)
-    {
-        QDateTime fileDateTime;
-        if (basedOnExif)
-        {
-            exifData.readFromFile( fi->absFilePath() );
-            fileDateTime = exifData.getExifDateTime();
-        } else
-            fileDateTime = fi->lastModified();   // fi->created() ?
-
-        if ( fileDateTime.isValid() )
-        {
-            ++amountOfImages;
-            if ( baseDateTime.isNull() )
-                baseDateTime=fileDateTime;
-            else
-                differenceInSecs += fileDateTime.secsTo( baseDateTime );
-        }
-        ++it;
-    }
-
-    if ( amountOfImages > 0 )
-    {
-        QDateTime averageDateTime;
-        averageDateTime.setTime_t( baseDateTime.toTime_t() +
-                                   abs( differenceInSecs/amountOfImages ) );
-        return ( averageDateTime.date() );
-    }
-    else
-        return QDate();
 }
 
 #include "albumpropsedit.moc"

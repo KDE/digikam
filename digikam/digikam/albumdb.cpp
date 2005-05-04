@@ -1021,6 +1021,40 @@ void AlbumDB::getItemsInTAlbum(TAlbum* album, QStringList& urls,
     }
 }
 
+QDate AlbumDB::getAlbumAverageDate(PAlbum *album)
+{
+    QStringList values;
+    execSql( QString("SELECT datetime FROM Images WHERE dirid=%1")
+            .arg( album->getID() ), &values);
+
+    int differenceInSecs = 0;
+    int amountOfImages = 0;
+    QDateTime baseDateTime;
+
+    for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        QDateTime itemDateTime = QDateTime::fromString( *it, Qt::ISODate );
+        if (itemDateTime.isValid())
+        {
+            ++amountOfImages;
+            if ( baseDateTime.isNull() )
+                baseDateTime=itemDateTime;
+            else
+                differenceInSecs += itemDateTime.secsTo( baseDateTime );
+        }
+    }
+
+    if ( amountOfImages > 0 )
+    {
+        QDateTime averageDateTime;
+        averageDateTime.setTime_t( baseDateTime.toTime_t() -
+                (int)( differenceInSecs/amountOfImages ) );
+        return ( averageDateTime.date() );
+    }
+    else
+        return QDate();
+}
+
 void AlbumDB::scanTags(TAlbum *parent)
 {
     int pid = parent->getID();

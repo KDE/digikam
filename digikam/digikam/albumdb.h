@@ -170,6 +170,7 @@ public:
     QStringList getItemsURL(TAlbum *album);
     void getItemsInTAlbum(TAlbum* album, QStringList& urls,
                           QValueList<int>& dirids);
+    QDate getAlbumAverageDate(PAlbum *album);
 
     void copyItem(PAlbum *srcAlbum,  const QString& srcFile,
                   PAlbum *destAlbum, const QString& destFile); 
