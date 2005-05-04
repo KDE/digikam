@@ -528,7 +528,7 @@ void ImageWindow::slotLoadCurrent()
     
     if (m_view)
     {
-        ThumbItem* item = m_view->findItem((*it).url());
+        IconItem* item = m_view->findItem((*it).url());
         if (item)
         {
             item->setSelected(true);
