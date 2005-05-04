@@ -58,6 +58,7 @@
 // Local includes.
 
 #include "albummanager.h"
+#include "albumlister.h"
 #include "album.h"
 #include "themeengine.h"
 #include "cameralist.h"
@@ -94,6 +95,7 @@ DigikamApp::DigikamApp(bool detectCamera)
     mAlbumSettings->readSettings();
 
     mAlbumManager = AlbumManager::instance();
+    AlbumLister::instance();
 
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
@@ -146,6 +148,7 @@ DigikamApp::~DigikamApp()
     delete mAlbumSettings;
 
     delete mAlbumManager;
+    delete AlbumLister::instance();
 
     m_instance = 0;
 }

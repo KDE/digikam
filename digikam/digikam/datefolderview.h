@@ -18,12 +18,13 @@
 #ifndef DATEFOLDERVIEW_H
 #define DATEFOLDERVIEW_H
 
-#include <qlistview.h>
+#include <qvbox.h>
+
 
 class DateFolderViewPriv;
 class DAlbum;
 
-class DateFolderView : public QListView
+class DateFolderView : public QVBox
 {
     Q_OBJECT
     

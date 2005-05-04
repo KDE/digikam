@@ -29,15 +29,19 @@
 #endif
 
 #include <qdatetime.h>
+#include <qlistview.h>
 
 #include "album.h"
 #include "albummanager.h"
+#include "monthwidget.h"
 #include "datefolderview.h"
 
 class DateFolderViewPriv
 {
 public:
 
+    QListView*   listview;
+    MonthWidget* monthview;
 };
 
 class DateFolderItem : public QListViewItem
@@ -79,18 +83,22 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : QListView(parent)
+    : QVBox(parent)
 {
     d = new DateFolderViewPriv;
+    d->listview  = new QListView(this);
+    d->monthview = new MonthWidget(this);
 
-    addColumn(i18n("My Dates"));
-    setResizeMode(QListView::LastColumn);
-    setRootIsDecorated(true);
+    d->listview->addColumn(i18n("My Dates"));
+    d->listview->setResizeMode(QListView::LastColumn);
+    d->listview->setRootIsDecorated(true);
 
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumAdded(DAlbum*)),
             SLOT(slotDAlbumAdded(DAlbum*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            d->listview, SLOT(clear()));
 
-    connect(this, SIGNAL(selectionChanged()),
+    connect(d->listview, SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
 }
 
@@ -114,10 +122,10 @@ void DateFolderView::slotDAlbumAdded(DAlbum* album)
     QString mo = KGlobal::locale()->monthName(date, false);
 #endif
     
-    QListViewItem* parent = findItem(yr, 0);
+    QListViewItem* parent = d->listview->findItem(yr, 0);
     if (!parent)
     {
-        parent = new DateFolderItem(this, yr);
+        parent = new DateFolderItem(d->listview, yr);
         parent->setPixmap(0, SmallIcon("date"));
     }
 
@@ -129,7 +137,7 @@ void DateFolderView::slotSelectionChanged()
 {
     QListViewItem* selItem = 0;
     
-    QListViewItemIterator it( this );
+    QListViewItemIterator it( d->listview );
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -140,15 +148,27 @@ void DateFolderView::slotSelectionChanged()
         ++it;
     }
 
-    DateFolderItem* dateItem = dynamic_cast<DateFolderItem*>(selItem);
-    
-    if (!dateItem)
+    if (!selItem)
     {
         AlbumManager::instance()->setCurrentAlbum(0);
+        d->monthview->setActive(false);
+        return;
+    }
+
+    DateFolderItem* dateItem = dynamic_cast<DateFolderItem*>(selItem);
+    
+    if (!dateItem || !dateItem->m_album)
+    {
+        AlbumManager::instance()->setCurrentAlbum(0);
+        d->monthview->setActive(false);
     }
     else
     {
         AlbumManager::instance()->setCurrentAlbum(dateItem->m_album);
+
+        QDate date = dateItem->m_album->getDate();        
+        d->monthview->setActive(true);
+        d->monthview->setYearMonth(date.year(), date.month());
     }
 }
 

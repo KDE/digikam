@@ -25,6 +25,7 @@
 #include <qdir.h>
 #include <qmap.h>
 #include <qvaluelist.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <kio/job.h>
@@ -62,29 +63,48 @@ public:
     Album*             currAlbum;
     AlbumDB*           db;
     QByteArray         buffer;
+
+    QMap<int,bool>     dayFilter;
+    QTimer*            filterTimer;
 };
-    
+
+AlbumLister* AlbumLister::m_instance = 0;
+
+AlbumLister* AlbumLister::instance()
+{
+    if (!m_instance)
+        new AlbumLister();
+
+    return m_instance;
+}
+
 AlbumLister::AlbumLister()
 {
+    m_instance = this;
+
     d = new AlbumListerPriv;
     d->job       = 0;
     d->state     = AlbumListerPriv::LIST;
     d->currAlbum = 0;
     d->filter    = "*";
     d->itemList.setAutoDelete(true);
+    d->filterTimer = new QTimer(this);
+
+    connect(d->filterTimer, SIGNAL(timeout()),
+            SLOT(slotFilterItems()));
 }
 
 AlbumLister::~AlbumLister()
 {
+    delete d->filterTimer;
     delete d;
+    m_instance = 0;
 }
 
 void AlbumLister::openAlbum(Album *album)
 {
-    if (!album)
-        return;
-
     d->currAlbum = album;
+    d->filterTimer->stop();
     emit signalClear();
     d->itemList.clear();        
 
@@ -93,6 +113,9 @@ void AlbumLister::openAlbum(Album *album)
         d->job->kill();
         d->job = 0;
     }
+
+    if (!album)
+        return;
 
     d->state = AlbumListerPriv::LIST;
     d->buffer.resize(0);
@@ -141,6 +164,24 @@ void AlbumLister::updateDirectory()
             SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
+void AlbumLister::setDayFilter(const QValueList<int>& days)
+{
+    d->dayFilter.clear();
+
+    for (QValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
+        d->dayFilter.insert(*it, true);
+
+    d->filterTimer->start(100, true);    
+}
+
+bool AlbumLister::matchesFilter(const ImageInfo* info) const
+{
+    if (d->dayFilter.isEmpty())
+        return true;
+
+    return d->dayFilter.contains(info->dateTime().date().day());
+}
+
 void AlbumLister::stop()
 {
     if (d->job)
@@ -158,6 +199,36 @@ void AlbumLister::setNameFilter(const QString& nameFilter)
 void AlbumLister::slotClear()
 {
     emit signalClear();
+}
+
+void AlbumLister::slotFilterItems()
+{
+    if (d->job)
+    {
+        d->filterTimer->start(100, true);
+        return;
+    }
+
+    QPtrList<ImageInfo> newItemsList;
+
+    ImageInfo* item;
+    for (ImageInfoListIterator it(d->itemList);
+         (item = it.current()); ++it)
+    {
+        if (matchesFilter(item))
+        {
+            if (!item->getViewItem())
+                newItemsList.append(item);
+        }
+        else
+        {
+            if (item->getViewItem())
+                emit signalDeleteItem(item);
+        }
+    }
+
+    if (!newItemsList.isEmpty())
+        emit signalNewItems(newItemsList);
 }
 
 void AlbumLister::slotResult(KIO::Job* job)
@@ -235,10 +306,12 @@ void AlbumLister::slotResult(KIO::Job* job)
         for (QValueList<ImageInfo*>::iterator it = newItems.begin();
              it != newItems.end(); ++it)
         {
-            newItemsList.append(*it);
+            if (matchesFilter(*it))
+                newItemsList.append(*it);
         }
-        
-        emit signalNewItems(newItemsList);
+
+        if (!newItemsList.isEmpty())
+            emit signalNewItems(newItemsList);
     }
 
 
@@ -271,11 +344,14 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
                                             QDateTime::fromString(date, Qt::ISODate),
                                             size);
 
-            itemList.append(info);
+            if (matchesFilter(info))
+                itemList.append(info);
             d->itemList.append(info);
         }
 
-        emit signalNewItems(itemList);
+        if (!itemList.isEmpty())
+            emit signalNewItems(itemList);
+
         return;
     }
 

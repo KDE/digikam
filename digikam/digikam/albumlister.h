@@ -31,7 +31,7 @@ namespace KIO
 class Job;
 }
 
-class PAlbum;
+class Album;
 class AlbumListerPriv;
 
 class AlbumLister : public QObject
@@ -40,7 +40,8 @@ class AlbumLister : public QObject
 
 public:
 
-    AlbumLister();
+    static AlbumLister* instance();
+    
     ~AlbumLister();
 
     void openAlbum(Album *album);
@@ -49,9 +50,15 @@ public:
     void setNameFilter(const QString& nameFilter);
     void updateDirectory();
 
+    void setDayFilter(const QValueList<int>& days);
+    
 private:
 
-    AlbumListerPriv *d;
+    AlbumLister();
+    bool matchesFilter(const ImageInfo* info) const;
+    
+    AlbumListerPriv    *d;
+    static AlbumLister *m_instance; 
     
 signals:
 
@@ -63,6 +70,7 @@ signals:
 private slots:
 
     void slotClear();
+    void slotFilterItems();
 
     void slotResult(KIO::Job* job);
     void slotData(KIO::Job* job, const QByteArray& data);

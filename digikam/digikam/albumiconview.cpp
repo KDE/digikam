@@ -169,7 +169,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 {
     d = new AlbumIconViewPrivate;
     d->init();
-    d->imageLister = new AlbumLister();
+    d->imageLister = AlbumLister::instance();
     d->pixMan      = new PixmapManager(this);
 
     d->toolTip = new AlbumFileTip(this);
@@ -228,7 +228,6 @@ AlbumIconView::~AlbumIconView()
 {
     delete d->pixMan;
     delete d->toolTip;
-    delete d->imageLister;
     delete d;
 }
 
