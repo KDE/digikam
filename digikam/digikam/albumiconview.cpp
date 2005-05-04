@@ -40,7 +40,6 @@
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qguardedptr.h>
 #include <qdragobject.h>
 #include <qcursor.h>
 #include <qvaluevector.h>
@@ -93,7 +92,6 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "thumbnailjob.h"
 #include "albumfilecopymove.h"
 #include "digikamio.h"
 #include "syncjob.h"
@@ -107,6 +105,7 @@ extern "C"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
+#include "pixmapmanager.h"
 
 #include "cameradragobject.h"
 #include "dragobjects.h"
@@ -130,8 +129,8 @@ public:
     AlbumLister                  *imageLister;
     Album                        *currentAlbum;
     const AlbumSettings          *albumSettings;
-    QGuardedPtr<ThumbnailJob>     thumbJob;
     QIntDict<AlbumIconGroupItem>  albumDict;
+    PixmapManager                *pixMan;           
 
     ThumbnailSize thumbSize;
 
@@ -171,6 +170,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     d = new AlbumIconViewPrivate;
     d->init();
     d->imageLister = new AlbumLister();
+    d->pixMan      = new PixmapManager(this);
 
     d->toolTip = new AlbumFileTip(this);
 
@@ -208,15 +208,15 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(this, SIGNAL(signalShowToolTip(IconItem*)),
             this, SLOT(slotShowToolTip(IconItem*)));
 
-    // -- Self connections ----------------------------------------------
-
-    connect(this, SIGNAL(contentsMoving(int, int)),
-            SLOT(slotContentsMoving(int, int)));
-
     // -- ThemeEngine connections ---------------------------------------
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
+
+    // -- Pixmap manager connections ------------------------------------
+    
+    connect(d->pixMan, SIGNAL(signalPixmap(const KURL&)),
+            SLOT(slotGotThumbnail(const KURL&)));
 
     // -- resource for broken image thumbnail ---------------------------
     KGlobal::dirs()->addResourceType("digikam_imagebroken",
@@ -226,16 +226,9 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
 AlbumIconView::~AlbumIconView()
 {
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-    }
-
-    if (!d->thumbJob.isNull())
-        delete d->thumbJob;
-
-    delete d->imageLister;
+    delete d->pixMan;
     delete d->toolTip;
+    delete d->imageLister;
     delete d;
 }
 
@@ -255,15 +248,13 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     updateBannerRectPixmap();
     updateItemRectsPixmap();
 
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-    }
-
+    d->pixMan->clear();
     d->imageLister->stop();
     d->itemDict.clear();
     d->albumDict.clear();
     clear();
+
+    d->pixMan->setThumbnailSize(d->thumbSize.size());
 
     if (d->currentAlbum)
     {
@@ -275,18 +266,14 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
     {
-
-        if (!d->thumbJob.isNull())
-        {
-            d->thumbJob->kill();
-        }
-
+        d->pixMan->clear();
         d->imageLister->stop();
         d->itemDict.clear();
         d->albumDict.clear();
         clear();
 
         d->thumbSize = thumbSize;
+        d->pixMan->setThumbnailSize(d->thumbSize.size());
 
         updateBannerRectPixmap();
         updateItemRectsPixmap();
@@ -305,11 +292,8 @@ void AlbumIconView::setAlbum(Album* album)
         clear();
 
         d->imageLister->stop();
+        d->pixMan->clear();
 
-        if (!d->thumbJob.isNull())
-        {
-            d->thumbJob->kill();
-        }
         return;
     }
 
@@ -317,11 +301,7 @@ void AlbumIconView::setAlbum(Album* album)
         return;
 
     d->imageLister->stop();
-
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-    }
+    d->pixMan->clear();
 
     d->currentAlbum = album;
     d->imageLister->openAlbum(d->currentAlbum);
@@ -341,11 +321,9 @@ void AlbumIconView::refreshIcon(AlbumIconItem* item)
 
 void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 {
-    if (d->currentAlbum->isRoot())
+    if (!d->currentAlbum || d->currentAlbum->isRoot())
         return;
 
-    KURL::List urlList;
-    
     ImageInfo* item;
     for (ImageInfoListIterator it(itemList); (item = it.current()); ++it)
     {
@@ -355,6 +333,13 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             group = new AlbumIconGroupItem(this, item->albumID());
             d->albumDict.insert(item->albumID(), group);
         }
+
+        if (!item->album())
+        {
+            kdWarning() << "No album for item: " << item->name()
+                        << ", albumID: " << item->albumID() << endl;
+            continue;
+        }
         
         AlbumIconItem* iconItem = new AlbumIconItem(group, item);
         item->setViewItem(iconItem);
@@ -362,33 +347,6 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         KURL url( item->kurl() );
         url.cleanPath();
         d->itemDict.insert(url.url(), iconItem);
-        urlList.append( url );
-    }
-
-    if (d->thumbJob.isNull())
-    {
-        d->thumbJob = new ThumbnailJob(urlList,
-                                       (int)d->thumbSize.size(),
-                                       showMetaInfo());
-        connect(d->thumbJob,
-                SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                               const QPixmap&,
-                                               const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KURL&,
-                                      const QPixmap&,
-                                      const KFileMetaInfo*)));
-        connect(d->thumbJob,
-                SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotFailedThumbnail(const KURL&)));
-
-        connect(d->thumbJob,
-                SIGNAL(signalCompleted()),
-                SLOT(slotFinishedThumbnail()));
-    }
-    else
-    {
-        d->thumbJob->addItems(urlList);
-        slotContentsMoving(contentsX(), contentsY());
     }
 
     emit signalItemsAdded();
@@ -402,8 +360,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     if (!iconItem)
         return;
 
-    if (!d->thumbJob.isNull())
-        d->thumbJob->removeItem(item->kurl());
+    d->pixMan->remove(item->kurl());
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
     {
@@ -423,17 +380,17 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     u.cleanPath();
     d->itemDict.remove(u.url());
 
-    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
+    IconGroupItem* group = firstGroup();
+    IconGroupItem* tmp;
+    while (group)
     {
-        IconGroupItem* group = firstGroup();
-        IconGroupItem* tmp;
-        while (group)
+        tmp = group->nextGroup();
+        if (group->count() == 0)
         {
-            tmp = group->nextGroup();
-            if (group->count() == 0)
-                delete group;
-            group = tmp;
+            d->albumDict.remove(((AlbumIconGroupItem*)group)->albumID());
+            delete group;
         }
+        group = tmp;
     }
 }
 
@@ -441,6 +398,7 @@ void AlbumIconView::slotImageListerClear()
 {
     d->itemDict.clear();
     d->albumDict.clear();
+    d->pixMan->clear();
     clear();
     emit signalSelectionChanged();
 }
@@ -866,7 +824,7 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 
 // ------------------------------------------------------------------------------
 
-AlbumIconItem* AlbumIconView::firstSelectedItem()
+AlbumIconItem* AlbumIconView::firstSelectedItem() const
 {
     AlbumIconItem *iconItem = 0;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
@@ -879,15 +837,14 @@ AlbumIconItem* AlbumIconView::firstSelectedItem()
     }
 
     return iconItem;
-    return 0;
 }
 
-const AlbumSettings* AlbumIconView::settings()
+const AlbumSettings* AlbumIconView::settings() const
 {
     return d->albumSettings;
 }
 
-ThumbnailSize AlbumIconView::thumbnailSize()
+ThumbnailSize AlbumIconView::thumbnailSize() const
 {
     return d->thumbSize;
 }
@@ -1092,8 +1049,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 }
 
 // make sure that we load thumbnail for items which are visible first
-void AlbumIconView::slotContentsMoving(int x, int y)
+void AlbumIconView::slotContentsMoving(int , int )
 {
+    /*
     if (d->thumbJob.isNull())
         return;
     QRect r(x, y, visibleWidth(), visibleHeight());
@@ -1111,6 +1069,7 @@ void AlbumIconView::slotContentsMoving(int x, int y)
             return;
         item = (AlbumIconItem*)item->nextItem();
     }
+    */
 }
 
 bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
@@ -1163,11 +1122,10 @@ KURL::List AlbumIconView::selectedItems()
 
 void AlbumIconView::refresh()
 {
-    if (!d->thumbJob.isNull())
-        d->thumbJob->kill();
     d->imageLister->stop();
     d->itemDict.clear();
     d->albumDict.clear();
+    d->pixMan->clear();
     clear();
 
     d->imageLister->openAlbum(d->currentAlbum);
@@ -1190,60 +1148,20 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
             continue;
 
         iconItem->imageInfo()->refresh();
-    }
-    
-    if (d->thumbJob.isNull())
-    {
-        d->thumbJob =
-            new ThumbnailJob(urlList, (int)d->thumbSize.size());
-        connect(d->thumbJob,
-                SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                               const QPixmap&,
-                                               const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KURL&,
-                                      const QPixmap&,
-                                      const KFileMetaInfo*)));
-        connect(d->thumbJob,
-                SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotFailedThumbnail(const KURL&)));
-        connect(d->thumbJob,
-                SIGNAL(signalCompleted()),
-                SLOT(slotFinishedThumbnail()));
-    }
-    else
-    {
-        d->thumbJob->addItems(urlList);
+        d->pixMan->remove(iconItem->imageInfo()->kurl());
     }
 
     // trigger a delayed update, in case we need to resort items
     triggerUpdate();
 }
 
-void AlbumIconView::slotGotThumbnail(const KURL& url, const QPixmap& pix,
-                                     const KFileMetaInfo* metaInfo)
+void AlbumIconView::slotGotThumbnail(const KURL& url)
 {
-    if(!d->currentAlbum)
-        return;
-
-    AlbumSettings *settings = AlbumSettings::instance();
-
-    if (!settings)
-        return;
-
-    AlbumIconItem *iconItem = d->itemDict.find(url.url());
+    AlbumIconItem* iconItem = findItem(url.url());
     if (!iconItem)
         return;
 
-    iconItem->setPixmap(pix, metaInfo);
-
-    if( d->currentAlbum->type() == Album::PHYSICAL &&
-        d->currentAlbum->getIcon().isEmpty())
-    {
-        QString err;
-        PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
-        AlbumManager::instance()->updatePAlbumIcon( album,
-            iconItem->imageInfo()->kurl().filename(false), true, err );
-    }
+    iconItem->repaint();
 }
 
 void AlbumIconView::slotFailedThumbnail(const KURL& url)
@@ -1260,14 +1178,6 @@ void AlbumIconView::slotFailedThumbnail(const KURL& url)
 
     QImage img(dir);
     img = img.smoothScale(size, size);
-
-    slotGotThumbnail(iconItem->imageInfo()->kurl(), QPixmap(img), 0);
-}
-
-void AlbumIconView::slotFinishedThumbnail()
-{
-    if (!d->thumbJob.isNull())
-        delete d->thumbJob;
 }
 
 void AlbumIconView::slotSelectionChanged()
@@ -1570,6 +1480,34 @@ AlbumIconItem* AlbumIconView::findItem(const QPoint& pos)
 AlbumIconItem* AlbumIconView::findItem(const QString& url) const
 {
     return d->itemDict.find(url);
+}
+
+AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
+{
+    QRect r(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+    IconItem *fItem = findFirstVisibleItem(r);
+    IconItem *lItem = findLastVisibleItem(r);
+    if (!fItem || !lItem)
+        return 0;
+    
+    AlbumIconItem* firstItem = static_cast<AlbumIconItem*>(fItem);
+    AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
+    AlbumIconItem* item = firstItem;
+    while (item)
+    {
+        if (item->dirty_)
+            return item;
+        if (item == lastItem)
+            break;
+        item = (AlbumIconItem*)item->nextItem();
+    }
+
+    return 0;
+}
+
+PixmapManager* AlbumIconView::pixmapManager() const
+{
+    return d->pixMan;    
 }
 
 void AlbumIconView::slotAlbumModified()

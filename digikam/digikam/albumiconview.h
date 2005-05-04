@@ -53,6 +53,7 @@ class AlbumSettings;
 class AlbumIconViewPrivate;
 class ThumbnailSize;
 class Album;
+class PixmapManager;
 
 class AlbumIconView : public IconView,
                       public AlbumItemHandler
@@ -66,14 +67,14 @@ public:
 
     void setAlbum(Album* album);
     void setThumbnailSize(const ThumbnailSize& thumbSize);
-    ThumbnailSize thumbnailSize();
+    ThumbnailSize thumbnailSize() const;
 
     void applySettings(const AlbumSettings* settings);
-    const AlbumSettings* settings();
+    const AlbumSettings* settings() const;
 
     void    refreshIcon(AlbumIconItem* item);
 
-    AlbumIconItem* firstSelectedItem();
+    AlbumIconItem* firstSelectedItem() const;
 
     KURL::List allItems();
     KURL::List selectedItems();
@@ -104,6 +105,8 @@ public:
 
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
+    AlbumIconItem* nextItemToThumbnail() const;
+    PixmapManager* pixmapManager() const;
 
 protected:
 
@@ -137,10 +140,8 @@ private slots:
     void slotDoubleClicked(IconItem *item);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix,
-                          const KFileMetaInfo* metaInfo);
+    void slotGotThumbnail(const KURL& url);
     void slotFailedThumbnail(const KURL& url);
-    void slotFinishedThumbnail();
     void slotSelectionChanged();
 
     void slotFilesModified();
@@ -153,7 +154,7 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
-
+    
 public slots:
 
     void slotEditImageComments(AlbumIconItem* item);
@@ -169,7 +170,6 @@ signals:
 
     void signalItemsAdded();
     void signalInFocus();
-
 };
 
 #endif // ALBUMICONVIEW_H

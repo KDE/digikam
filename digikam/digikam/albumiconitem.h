@@ -58,7 +58,6 @@ public:
 
     ImageInfo* imageInfo() const;
 
-    void setPixmap(const QPixmap& thumb, const KFileMetaInfo* metaInfo);
     void setMetaInfo(const KFileMetaInfo* metaInfo);
     QRect thumbnailRect() const;
 
@@ -73,7 +72,7 @@ private:
     ImageInfo           *info_;
     const KFileMetaInfo *metaInfo_;
     AlbumIconView       *view_;
-    QPixmap              thumbnail_;
+    bool                 dirty_;
 };
 
 

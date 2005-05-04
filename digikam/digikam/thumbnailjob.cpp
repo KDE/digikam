@@ -33,7 +33,6 @@
 #include <kdebug.h>
 
 #include "albumsettings.h"
-#include "thumbdb.h"
 #include "thumbnailjob.h"
 
 extern "C"
@@ -283,9 +282,6 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
         return;
     }
 
-    if (!ThumbDB::instance()->hasThumb(d->curr_url.path()))
-        ThumbDB::instance()->putThumb(d->curr_url.path(), thumb);
-    
     QPixmap pix(thumb);
 
     int w = pix.width();

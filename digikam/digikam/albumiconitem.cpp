@@ -43,13 +43,13 @@
 // Local includes.
 
 #include "themeengine.h"
-#include "thumbdb.h"
 #include "thumbnailsize.h"
 #include "imageinfo.h"
 #include "albumsettings.h"
+#include "icongroupitem.h"
+#include "pixmapmanager.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
-#include "icongroupitem.h"
 
 static void dateToString(const QDateTime& datetime, QString& str)
 {
@@ -108,6 +108,7 @@ AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
     view_        = (AlbumIconView*) parent->iconView();
     info_        = info;
     metaInfo_    = 0;
+    dirty_       = true;
 }
 
 
@@ -120,25 +121,6 @@ AlbumIconItem::~AlbumIconItem()
 ImageInfo* AlbumIconItem::imageInfo() const
 {
     return info_;
-}
-
-void AlbumIconItem::setPixmap(const QPixmap& thumbnail,
-                              const KFileMetaInfo* metaInfo)
-{
-    thumbnail_ = thumbnail;
-    if (metaInfo_)
-    {
-        delete metaInfo_;
-        metaInfo_ = 0;
-    }
-    metaInfo_  = metaInfo;
-
-    QRect r(view_->contentsX(), view_->contentsY(),
-            view_->visibleWidth(), view_->visibleHeight());
-    if (r.intersects(rect()))
-    {
-        repaint();
-    }
 }
 
 void AlbumIconItem::setMetaInfo(const KFileMetaInfo* metaInfo)
@@ -214,17 +196,18 @@ void AlbumIconItem::paintItem()
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    if (thumbnail_.isNull())
+
+    dirty_ = true;
+    
+    QPixmap *thumbnail = view_->pixmapManager()->find(info_->kurl());
+    if (thumbnail)
     {
-        int w = view_->thumbnailSize().size();
-        ThumbDB::instance()->getThumb(info_->kurl().path(),  thumbnail_,
-                                      w, w);
+        r = view_->itemPixmapRect();
+        p.drawPixmap(r.x() + (r.width()-thumbnail->width())/2,
+                     r.y() + (r.height()-thumbnail->height())/2,
+                     *thumbnail);
+        dirty_ = false;
     }
-            
-    r = view_->itemPixmapRect();
-    p.drawPixmap(r.x() + (r.width()-thumbnail_.width())/2,
-                 r.y() + (r.height()-thumbnail_.height())/2,
-                 thumbnail_);
     
     if (settings->getIconShowName())
     {
@@ -341,9 +324,8 @@ QRect AlbumIconItem::thumbnailRect() const
 {
     QRect pixmapRect = view_->itemPixmapRect();
     QRect r          = rect();
-    
-    return QRect(r.x()+pixmapRect.x() + (pixmapRect.width()-thumbnail_.width())/2,
-                 r.y()+pixmapRect.y() + (pixmapRect.height()-thumbnail_.height())/2,
-                 thumbnail_.width(), thumbnail_.height());
+
+    pixmapRect.moveBy(r.x(), r.y());
+    return pixmapRect;
 }
 

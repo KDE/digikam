@@ -29,6 +29,8 @@ public:
     AlbumIconGroupItem(AlbumIconView* view, int albumID);
     ~AlbumIconGroupItem();
 
+    int albumID() const { return m_albumID; }
+    
 protected:
 
     void paintBanner();
