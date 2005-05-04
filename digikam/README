@@ -1,0 +1,84 @@
+DIGIKAM
+
+Authors :
+----------------------------------------------------------------------
+See AUTHORS file for details.
+
+
+About :
+----------------------------------------------------------------------
+ digiKam is an easy to use and powerful digital photo management
+ application, which makes importing, organizing and manipulating
+ digital photos a "snap".  An easy to use interface is provided
+ to connect to your digital camera, preview the images and download
+ and/or delete them.
+
+ digiKam buildin image editor makes the common photo correction
+ a simple task.  The image editor is extensible via plugins.
+ The digikamimageplugins package contains many useful image editor
+ plugins.
+
+ digiKam can also make use of the KIPI image handling plugins to
+ extend it's capabilities even further for photo manipulations,
+ import and export, etc.  The kipi-plugins package contains many
+ very useful extentions.
+
+ Homepage: http://digikam.sourceforge.net/
+
+ digiKam is based in part on the work of the Independent JPEG Group.
+
+
+Contact :
+-----------------------------------------------------------------------
+If you have questions, comments, suggestions to make do email at :
+
+digikam-users@list.sourceforge.net
+
+
+IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
+system who can be contacted by the standard Kde help menu of digiKam. 
+A mail will be automaticly sent to the digikam development mailing list.
+There is no need to contact directly the digikam mailing list for a bug report 
+or a devel wish.
+
+The current digiKam bugs and devel wish reported to the Kde bugs report can be see 
+at this url :
+
+http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+
+
+Dependencies :
+-----------------------------------------------------------------------
+
+AutoConf >= 2.5
+AutoMake >= 1.7.0
+KDE 3.x
+gphoto2 2.x
+imlib2 >= 1.2.0
+libgdbm >= 1.8.0
+libkipi (>= 0.1) from http://extragear.kde.org/apps/kipi
+libkexif (>=0.2) from http://digikam.sourceforge.net/
+libtiff >= 3.5.x
+
+Installation :
+------------------------------------------------------------------------
+In the source directory do :
+
+1) export WANT_AUTOCONF_2_5=1
+2) export KDEDIR=KDE_installation_dir_on_your_system
+3) if you are installing libkipi/libkexif in a non-standard location
+  let pkg-config know about their paths:
+  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/path/to/installation/lib/pkgconfig
+4) make -f Makefile.cvs
+5) ./configure
+6) make
+7) su
+8) make install
+
+More specifics compilations and installations options can be used with '.configure' script.
+Check it with './configure --help' command line.
+
+Nota : use the '--enable-debug=full' option with the configure script for to provide
+a full informations bug report.
+
+

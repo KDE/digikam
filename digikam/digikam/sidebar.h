@@ -1,0 +1,94 @@
+/* ============================================================
+ * File  : sidebar.h
+ * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Date  : 2005-03-22
+ * Copyright 2005 by Jörn Ahrens
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * ============================================================ */
+
+/** @file sidebar.h */
+
+#ifndef _SIDEBAR_H_
+#define _SIDEBAR_H_
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <qsplitter.h>
+#include <qsize.h>
+
+class KMultiTabBar;
+class QWidgetStack;
+
+/**
+ * This class handles a sidebar view
+ */
+class Sidebar : public QFrame
+{
+    Q_OBJECT
+public:
+
+    Sidebar(QWidget *parent);
+    virtual ~Sidebar();
+
+    /**
+     * Appends a new tab to the sidebar
+     */
+    void appendTab(QWidget *w, const QPixmap &pic, const QString &title);
+    
+    
+    /**
+     * Deletes a tab from the tabbar
+     */
+    void deleteTab(QWidget *w);
+    
+    /**
+     * Activates a tab
+     */
+    void setActiveTab(QWidget *w);
+    
+    /**
+     * Returns the currently activated tab, or 0 if no tab is active
+    */
+    QWidget* getActiveTab();
+    
+    /**
+     * Hides the sidebar (display only the activation buttons)
+     */
+    void shrink();
+    
+    /**
+     * redisplays the whole sidebar
+     */
+    void expand();
+                
+private:
+    KMultiTabBar    *m_tabBar;
+    QWidgetStack    *m_stack;
+    QSize            m_bigSize;
+    int              m_minSize;
+    int              m_maxSize;
+    bool             m_minimized;
+    int              m_tabs;
+    int              m_activeTab;
+    
+private slots:
+    
+    /**
+     * Activates a tab
+     */
+    void clicked(int tab);
+};
+
+#endif // _SIDEBAR_H_

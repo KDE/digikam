@@ -1,0 +1,42 @@
+! "Dreary Day"
+!  Digikam Theme by Renchi Raju (2004 Aug)
+
+base.color:			     rgb:F0/F0/F0
+text.regular.color:		     rgb:00/00/00
+text.selected.color:		     rgb:FF/FF/FF
+text.special.regular.color:	     rgb:88/88/00
+text.special.selected.color:	     rgb:FF/FF/00
+
+banner.color:			     rgb:80/80/80
+banner.colorTo:			     rgb:40/40/40
+banner.bevel:			     RAISED
+banner.gradient:		     DIAGONAL
+banner.border:                       true
+banner.borderColor:                  rgb:00/00/00
+
+thumbnail.regular.color:             rgb:EF/EF/EF
+thumbnail.regular.colorTo:           rgb:C0/C0/C0
+thumbnail.regular.bevel:	     RAISED
+thumbnail.regular.gradient:          DIAGONAL
+thumbnail.regular.border:            true
+thumbnail.regular.borderColor:       rgb:70/70/70
+
+thumbnail.selected.color:	     rgb:A0/A0/A0
+thumbnail.selected.colorTo:	     rgb:40/40/40
+thumbnail.selected.bevel:	     RAISED
+thumbnail.selected.gradient:         DIAGONAL
+thumbnail.selected.border:           true
+thumbnail.selected.borderColor:      rgb:00/00/00
+
+listview.regular.color:	             rgb:E0/E0/E0
+listview.regular.bevel:	             FLAT
+listview.regular.gradient:           SOLID
+listview.regular.border:             true
+listview.regular.borderColor:        rgb:D0/D0/D0
+
+listview.selected.color:	    rgb:A0/A0/A0
+listview.selected.colorTo:	    rgb:40/40/40
+listview.selected.bevel:	    RAISED
+listview.selected.gradient:         DIAGONAL
+listview.selected.border:           true
+listview.selected.borderColor:      rgb:00/00/00

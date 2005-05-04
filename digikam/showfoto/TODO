@@ -1,0 +1,14 @@
+todo stuff before 0.7.3 release
+---------------------------------
+
+* update Showfoto splashscreen (different to digiKam).
+* writing handbook based on digiKam image editor part handbook. 
+
+later stuff
+-----------
+
+* implement api for loading digikamimageplugins (more of a
+  digiKam issue)
+* add DCOP interface.
+
+

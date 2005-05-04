@@ -1,0 +1,16 @@
+[Protocol]
+exec=kio_digikamalbums
+protocol=digikamalbums
+input=stream
+output=stream
+listing=Name,Type
+reading=false
+writing=false
+makedir=false
+linking=false
+deleting=false
+moving=false
+maxInstances=1
+Description=digiKam Albums kioslave
+Description[xx]=xxdigiKam Albums kioslavexx
+Class=:local

@@ -1,0 +1,5 @@
+#MIN_CONFIG(3.1)
+
+KDE_INIT_DOXYGEN([The API Reference], [Version $VERSION])
+KDE_CHECK_HEADERS(mntent.h)
+

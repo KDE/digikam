@@ -1,0 +1,22 @@
+[Protocol]
+exec=kio_digikamthumbnail
+protocol=digikamthumbnail
+input=stream
+output=stream
+reading=true
+source=false
+Description=Digikam thumbnail kioslave
+Description[br]=kioslave ar skeudennigoù evit Digikam
+Description[da]=Digikam miniature-kioslave
+Description[de]=Digikam Miniaturbild kioslave
+Description[es]='Kioslave' de miniaturas de Digikam
+Description[et]=Digikami pisipiltide I/O-moodul
+Description[fr]=kioslave vignettes de Digikam
+Description[it]=Kioslave delle miniature di Digikam
+Description[nl]=digiKam miniatuur kioslave
+Description[pt]='Kioslave' de miniaturas Digikam
+Description[pt_BR]='Kioslave' de miniaturas Digikam
+Description[ru]=Обработчик миниизображений digikam
+Description[sv]=I/O-slav för Digikams miniatyrbilder
+Description[ta]=டிஜிகேம் கட்டைவிரல் kioslave
+Description[xx]=xxDigikam thumbnail kioslavexx

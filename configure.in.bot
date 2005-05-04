@@ -1,0 +1,4 @@
+dnl Put here things to be done at the very end - telling users
+dnl about additional packages to install. Better yet is giving
+dnl each project / subdr its own configure.in.bot.
+

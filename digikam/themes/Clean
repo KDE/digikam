@@ -1,0 +1,45 @@
+! "Clean"
+!  Digikam Theme by Renchi Raju (2004 Aug)
+
+base.color:			     rgb:FF/FF/FF
+text.regular.color:		     rgb:00/00/00
+text.selected.color:		     rgb:FF/FF/FF
+text.special.regular.color:	     rgb:88/88/CC
+text.special.selected.color:	     rgb:FF/FF/FF
+
+banner.color:			     #608AFF
+banner.colorTo:			     #4B6CC7
+banner.bevel:			     RAISED
+banner.gradient:		     VERTICAL
+banner.border:                       false
+banner.borderColor:                  rgb:00/00/00
+
+thumbnail.regular.color:             rgb:FF/FF/FF
+thumbnail.regular.colorTo:           rgb:EF/EF/EF
+thumbnail.regular.bevel:	     RAISED
+thumbnail.regular.gradient:          VERTICAL
+thumbnail.regular.border:            true
+thumbnail.regular.borderColor:       rgb:70/70/70
+
+thumbnail.selected.color:	     #608AFF
+thumbnail.selected.colorTo:	     #4B6CC7
+thumbnail.selected.bevel:	     RAISED
+thumbnail.selected.gradient:         VERTICAL
+thumbnail.selected.border:           true
+thumbnail.selected.borderColor:      rgb:00/00/00
+
+listview.regular.color:	             #ffffff
+listview.regular.colorTo:	     #ffffff
+listview.regular.bevel:	             FLAT
+listview.regular.gradient:           SOLID
+listview.regular.border:             false
+listview.regular.borderColor:        rgb:70/70/70
+
+listview.selected.color:	     #608AFF
+listview.selected.colorTo:	     #4B6CC7
+listview.selected.bevel:	     RAISED
+listview.selected.gradient:          VERTICAL
+listview.selected.border:            true
+listview.selected.borderColor:       rgb:00/00/00
+
+				     	 						 

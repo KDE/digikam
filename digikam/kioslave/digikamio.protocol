@@ -1,0 +1,27 @@
+[Protocol]
+exec=kio_digikamio
+protocol=digikamio
+input=none
+output=filesystem
+listing=Name,Type
+reading=true
+writing=true
+makedir=false
+linking=false
+deleting=true
+moving=true
+maxInstances=4
+Description=Digikam IO kioslave
+Description[da]=Digikam kioslave
+Description[es]='Kioslave' de E/S de Digikam
+Description[et]=Digikami I/O-moodul
+Description[fr]=kioslave IO de Digikam
+Description[it]=Kioslave IO di Digikam
+Description[nl]=digiKam IO kioslave
+Description[pt]='Kioslave' Digikam IO
+Description[pt_BR]='Kioslave' Digikam IO
+Description[ru]=Обработчик ввода-вывода digikam
+Description[sv]=Digikam I/O-slav
+Description[ta]=டிஜிகேம் IO kioslave
+Description[xx]=xxDigikam IO kioslavexx
+Class=:local

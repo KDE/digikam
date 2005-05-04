@@ -1,0 +1,16 @@
+[Protocol]
+exec=kio_digikamdates
+protocol=digikamdates
+input=stream
+output=stream
+listing=Name,Type
+reading=false
+writing=false
+makedir=false
+linking=false
+deleting=false
+moving=false
+maxInstances=1
+Description=digiKam Dates kioslave
+Description[xx]=xxdigiKam Dates kioslavexx
+Class=:local
