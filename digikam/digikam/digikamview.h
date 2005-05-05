@@ -45,6 +45,7 @@ class Album;
 class AlbumHistory;
 class Sidebar;
 class DateFolderView;
+class TagFolderView;
 
 class DigikamView : public QSplitter {
 
@@ -73,6 +74,7 @@ private:
     AlbumHistory             *mAlbumHistory;
     Sidebar                  *mMainSidebar;
     DateFolderView           *mDateFolderView;
+    TagFolderView            *mTagFolderView;
     
 public slots:
 

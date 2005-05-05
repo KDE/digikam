@@ -55,6 +55,7 @@
 #include "albumhistory.h"
 #include "sidebar.h"
 #include "datefolderview.h"
+#include "tagfolderview.h"
 #include "thumbnailsize.h"
 
 #include "digikamapp.h"
@@ -71,9 +72,11 @@ DigikamView::DigikamView(QWidget *parent)
     mFolderView = new AlbumFolderView(this);
     mIconView = new AlbumIconView(this);
     mDateFolderView = new DateFolderView(this);
+    mTagFolderView = new TagFolderView(this);
     
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
+    mMainSidebar->appendTab(mTagFolderView, SmallIcon("bookmark"), i18n("Tags"));    
     mMainSidebar->setActiveTab(mFolderView);
 
     QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
