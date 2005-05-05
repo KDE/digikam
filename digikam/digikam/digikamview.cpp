@@ -77,7 +77,7 @@ DigikamView::DigikamView(QWidget *parent)
     
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
-    mMainSidebar->appendTab(mTagFolderView, SmallIcon("bookmark"), i18n("Tags"));    
+    mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
     mMainSidebar->setActiveTab(mFolderView);
 
     mRightSidebar = new Sidebar(this, Sidebar::Right);

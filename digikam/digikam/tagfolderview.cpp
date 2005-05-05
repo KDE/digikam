@@ -17,13 +17,44 @@
  * ============================================================ */
 
 #include <qintdict.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
+#include <kapplication.h>
 
 #include "tagfolderview.h"
 #include "album.h"
 #include "albummanager.h"
+#include "syncjob.h"
+
+static QPixmap getBlendedIcon(TAlbum* tag)
+{
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+    QPixmap baseIcon(iconLoader->loadIcon("tag",
+                     KIcon::NoGroup,
+                     32,
+                     KIcon::DefaultState,
+                     0, true));
+
+    if(!tag)
+        return baseIcon;
+
+    QString icon(tag->getIcon());
+
+    QPixmap pix = SyncJob::getTagThumbnail(tag->getIcon(), 20);
+
+    if (!pix.isNull())
+    {
+        QPainter p(&baseIcon);
+        p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
+        p.end();
+    }
+
+    return baseIcon;
+}
 
 //-----------------------------------------------------------------------------
 // TagFolderViewItem
@@ -89,6 +120,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
     if(tag->getParent()->isRoot())
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
+        item->setPixmap(0, getBlendedIcon(tag));
         d->dict.insert(tag->getID(), item);
     }
     else
@@ -101,6 +133,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
             return;
         }
         TagFolderViewItem *item = new TagFolderViewItem(parent, tag);
+        item->setPixmap(0, getBlendedIcon(tag));
         d->dict.insert(tag->getID(), item);        
     }
 }
