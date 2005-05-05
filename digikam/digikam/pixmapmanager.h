@@ -26,11 +26,19 @@
 
 #include "thumbnailjob.h"
 
+/** @file pixmapmanager.h */
+
 class KFileMetaInfo;
 class QPixmap;
 class QTimer;
 class AlbumIconView;
 
+/**
+ * Since there are date based folders, the number of pixmaps which
+ * could be kept in memory could potentially become too large. The
+ * pixmapmanager maintains a fixed size cache of thumbnails and loads
+ * pixmaps on demand.
+ */
 class PixmapManager : public QObject
 {
 

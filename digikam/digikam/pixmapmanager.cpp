@@ -34,6 +34,8 @@
 #include "albumsettings.h"
 #include "pixmapmanager.h"
 
+/** @file pixmapmanager.cpp */
+
 PixmapManager::PixmapManager(AlbumIconView* view)
 {
     m_view  = view;

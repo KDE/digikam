@@ -1133,15 +1133,7 @@ void AlbumDB::moveItem(PAlbum *srcAlbum,  const QString& srcFile,
 
 void AlbumDB::deleteItem(PAlbum *album, const QString& file)
 {
-    execSql( QString("DELETE FROM Images "
-                     "WHERE dirid=%1 AND name='%2';")
-             .arg(album->getID())
-             .arg(escapeString(file)) );
-
-    execSql( QString("DELETE FROM ImageTags "
-                     "WHERE dirid=%1 AND name='%2';")
-             .arg(album->getID())
-             .arg(escapeString(file)) );
+    deleteItem(album->getID(), file);
 }
 
 void AlbumDB::deleteItem(int albumID, const QString& file)

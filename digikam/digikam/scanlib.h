@@ -31,7 +31,13 @@
 
 /** 
  * Class which is responsible for keeping the database in sync
- * with the disk
+ * with the disk. Scanlib is a library that takes care of scanning the
+ * filesystem for new files and adds them in the database and checking
+ * for missing info in the database so that it can be included: if date
+ * is empty, it adds the exif or modification date (in that order) and
+ * the comment to database. If the file is not present in the database,
+ * make sure to add the file to the database and insert the date and
+ * comments.
  */
 class ScanLib
 {

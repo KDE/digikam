@@ -176,7 +176,18 @@ public:
                   PAlbum *destAlbum, const QString& destFile); 
     void moveItem(PAlbum *srcAlbum,  const QString& srcFile,
                   PAlbum *destAlbum, const QString& destFile);
+    /**
+     * Deletes an item from the database, by finding the right
+     * id and calling the function below.
+     * @param album The PAlbum which contains the file.
+     * @param file The filename of the file to delete.
+     */
     void deleteItem(PAlbum *album,   const QString& file);
+    /**
+     * Deletes an item from the database.
+     * @param albumID The id of the album.
+     * @param file The filename of the file to delete.
+     */
     void deleteItem(int albumID,     const QString& file);
 
 private:

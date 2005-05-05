@@ -1,0 +1,22 @@
+* tag filtering:
+   - implement tag filter view
+   - add filtering of items based on tags (in addition to
+     present datefiltering) inside albumlister
+
+* split albumfolderview into albumview and tagview
+   - also port albumview and tagview to qlistview [JA]
+
+* allow user to edit dates (maybe through comments tag editor) [TA]
+
+* fix changing of album library path. [TA/RR]
+
+* fix copy/move/rename of albums/images
+
+* handle external files/folders being added/deletion
+   - update db [TA]
+   - inform frontend about it
+
+* search view and search table in database
+   - need to discuss
+
+* move the storage of the 'locale' setting to settings table in db. [TA]

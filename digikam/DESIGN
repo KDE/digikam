@@ -9,5 +9,10 @@ and adds them in the database and checking for missing info in the database so
 that it can be included: if date is empty, it adds the exif or modification 
 date (in that order) and the comment to database. If the file is not present 
 in the database, make sure to add the file to the database and insert the date 
-and comments
+and comments.
+
+pixmapmanager
+Since there are date based folders, the number of pixmaps which could be
+kept in memory could potentially become too large. The pixmapmanager 
+maintains a fixed size cache of thumbnails and loads pixmaps on demand.
 
