@@ -23,12 +23,19 @@
 
 #include <qlistview.h>
 
+class Album;
+class TagFolderViewPriv;
 
 class TagFolderView : public QListView
 {
     Q_OBJECT
 public:
     TagFolderView(QWidget *parent);
+    
+private slots:
+    void    slotAlbumAdded(Album *);
+    
+    TagFolderViewPriv   *d;
 };
 
 
