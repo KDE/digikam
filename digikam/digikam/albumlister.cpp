@@ -65,6 +65,7 @@ public:
     QByteArray         buffer;
 
     QMap<int,bool>     dayFilter;
+    QValueList<int>    tagFilter;
     QTimer*            filterTimer;
 };
 
@@ -174,12 +175,44 @@ void AlbumLister::setDayFilter(const QValueList<int>& days)
     d->filterTimer->start(100, true);    
 }
 
+void AlbumLister::setTagFilter(const QValueList<int>& tags)
+{
+    d->tagFilter = tags;
+
+    d->filterTimer->start(100, true);    
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
 {
-    if (d->dayFilter.isEmpty())
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty())
         return true;
 
-    return d->dayFilter.contains(info->dateTime().date().day());
+    bool match = true;
+
+    if (!d->tagFilter.isEmpty())
+    {
+        QValueList<int> tagIDs = info->tagIDs();
+        for (QValueList<int>::iterator it = d->tagFilter.begin();
+             it != d->tagFilter.end(); ++it)
+        {
+            if (!tagIDs.contains(*it))
+            {
+                match = false;
+                break;
+            }
+        }
+    }
+    else
+    {
+        match = true;
+    }
+
+    if (!d->dayFilter.isEmpty())
+    {
+        match &= d->dayFilter.contains(info->dateTime().date().day());
+    }
+    
+    return match;
 }
 
 void AlbumLister::stop()

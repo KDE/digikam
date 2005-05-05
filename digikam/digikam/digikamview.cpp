@@ -56,6 +56,7 @@
 #include "sidebar.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
+#include "tagfilterview.h"
 #include "thumbnailsize.h"
 
 #include "digikamapp.h"
@@ -79,6 +80,12 @@ DigikamView::DigikamView(QWidget *parent)
     mMainSidebar->appendTab(mTagFolderView, SmallIcon("bookmark"), i18n("Tags"));    
     mMainSidebar->setActiveTab(mFolderView);
 
+    mRightSidebar = new Sidebar(this, Sidebar::Right);
+    mTagFilterView = new TagFilterView(this);
+
+    mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
+    mRightSidebar->setActiveTab(mTagFilterView);
+    
     QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
                              QSizePolicy::Expanding,
                              1, 1);

@@ -51,6 +51,7 @@ public:
     void updateDirectory();
 
     void setDayFilter(const QValueList<int>& days);
+    void setTagFilter(const QValueList<int>& tags);
     
 private:
 

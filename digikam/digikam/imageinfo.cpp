@@ -151,6 +151,14 @@ QStringList ImageInfo::tagPaths() const
     return tagPaths;
 }
 
+QValueList<int> ImageInfo::tagIDs() const
+{
+    PAlbum* a = album();
+
+    AlbumDB* db  = m_man->albumDB();
+    return db->getItemTagIDs(a, m_name);
+}
+
 void ImageInfo::setTag(int tagID)
 {
     PAlbum* pa = album();
@@ -177,3 +185,4 @@ void ImageInfo::refresh()
     stat(QFile::encodeName(kurl().path()), &stbuf);
     m_size = stbuf.st_size;
 }
+

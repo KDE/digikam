@@ -90,6 +90,7 @@ public:
     QString     caption() const;
     QStringList tagNames() const;
     QStringList tagPaths() const;
+    QValueList<int> tagIDs() const;
     void        setTag(int tagID);
     void        removeTag(int tagID);
     
