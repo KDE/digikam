@@ -27,6 +27,7 @@
 
 #include <kmultitabbar.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 Sidebar::Sidebar(QWidget *parent, Side side)
     : QFrame(parent, "sidebar")
@@ -88,29 +89,27 @@ void Sidebar::deleteTab(QWidget *w)
  
 void Sidebar::clicked(int tab)
 {
-    if(tab >= m_tabs)
+    if(tab >= m_tabs || tab < 0)
         return;
     
     if(tab == m_activeTab)
     {
-        if(m_stack->isHidden()) {
-            expand();
-        }
-        else {
-            shrink();
-        }
-        return;
+        m_stack->isHidden() ? expand() : shrink();
     }
-
-    if(m_activeTab >= 0)
-        m_tabBar->setTab(m_activeTab, false);
-
-    m_activeTab = tab;    
-    m_tabBar->setTab(m_activeTab, true);
-    m_stack->raiseWidget(m_activeTab);
+    else
+    {
+        if(m_activeTab >= 0)
+            m_tabBar->setTab(m_activeTab, false);
     
-    if(m_minimized)
-        expand();    
+        m_activeTab = tab;    
+        m_tabBar->setTab(m_activeTab, true);
+        m_stack->raiseWidget(m_activeTab);
+        
+        if(m_minimized)
+            expand();    
+
+        emit signalChangedTab(m_stack->visibleWidget());
+    }
 }
 
 void Sidebar::setActiveTab(QWidget *w)

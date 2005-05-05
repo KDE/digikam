@@ -97,6 +97,9 @@ private slots:
      * Activates a tab
      */
     void clicked(int tab);
+    
+signals:
+    void            signalChangedTab(QWidget *w);
 };
 
 #endif // _SIDEBAR_H_
