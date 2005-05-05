@@ -54,10 +54,8 @@ signals:
 
     void signalThumbnailMetaInfo(const KURL& url, const QPixmap& pix,
                                  const KFileMetaInfo* metaInfo);
-                       
     void signalCompleted();
     void signalFailed(const KURL& url);
-    void signalStatFailed(const KURL& url, bool isDir);
 
 private:
 

@@ -176,10 +176,6 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
         connect(job,
                 SIGNAL(signalFailed(const KURL&)),
                 SLOT(slotLoadThumbnailFailed()));
-        connect(job,
-                SIGNAL(signalStatFailed(const KURL&, bool )),
-                SLOT(slotLoadThumbnailFailed()));
-
 
         enter_loop();
         delete job;

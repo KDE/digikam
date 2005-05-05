@@ -208,7 +208,7 @@ void AlbumIconItem::paintItem()
                      *thumbnail);
         dirty_ = false;
     }
-    
+
     if (settings->getIconShowName())
     {
         r = view_->itemNameRect();

@@ -141,13 +141,11 @@ private slots:
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
     void slotGotThumbnail(const KURL& url);
-    void slotFailedThumbnail(const KURL& url);
     void slotSelectionChanged();
 
     void slotFilesModified();
     void slotFilesModified(const KURL& url);
 
-    void slotContentsMoving(int x, int y);
     void slotShowToolTip(IconItem* item);
 
     void slotThemeChanged();

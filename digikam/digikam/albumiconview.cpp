@@ -217,11 +217,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     
     connect(d->pixMan, SIGNAL(signalPixmap(const KURL&)),
             SLOT(slotGotThumbnail(const KURL&)));
-
-    // -- resource for broken image thumbnail ---------------------------
-    KGlobal::dirs()->addResourceType("digikam_imagebroken",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
 }
 
 AlbumIconView::~AlbumIconView()
@@ -1047,30 +1042,6 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     }
 }
 
-// make sure that we load thumbnail for items which are visible first
-void AlbumIconView::slotContentsMoving(int , int )
-{
-    /*
-    if (d->thumbJob.isNull())
-        return;
-    QRect r(x, y, visibleWidth(), visibleHeight());
-    IconItem *fItem = findFirstVisibleItem(r);
-    IconItem *lItem = findLastVisibleItem(r);
-    if (!fItem || !lItem)
-        return;
-    AlbumIconItem* firstItem = static_cast<AlbumIconItem*>(fItem);
-    AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
-    AlbumIconItem* item = firstItem;
-    while (item) {
-        if (d->thumbJob->setNextItemToLoad(item->imageInfo()->kurl()))
-            return;
-        if (item == lastItem)
-            return;
-        item = (AlbumIconItem*)item->nextItem();
-    }
-    */
-}
-
 bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
 {
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
@@ -1161,22 +1132,6 @@ void AlbumIconView::slotGotThumbnail(const KURL& url)
         return;
 
     iconItem->repaint();
-}
-
-void AlbumIconView::slotFailedThumbnail(const KURL& url)
-{
-    AlbumIconItem* iconItem = findItem(url.url());
-    if (!iconItem)
-        return;
-
-    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
-                                                   "image_broken.png");
-    dir = dir + "/image_broken.png";
-
-    int size = (int)d->thumbSize.size();
-
-    QImage img(dir);
-    img = img.smoothScale(size, size);
 }
 
 void AlbumIconView::slotSelectionChanged()

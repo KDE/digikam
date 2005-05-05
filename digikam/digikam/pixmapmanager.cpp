@@ -23,7 +23,10 @@
 #include <qdir.h>
 #include <qtimer.h>
 #include <qimage.h>
+
 #include <kurl.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -41,6 +44,11 @@ PixmapManager::PixmapManager(AlbumIconView* view)
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotCompleted()));
+
+    // -- resource for broken image thumbnail ---------------------------
+    KGlobal::dirs()->addResourceType("digikam_imagebroken",
+                                     KGlobal::dirs()->kde_default("data")
+                                     + "digikam/data");
 }
 
 PixmapManager::~PixmapManager()
@@ -82,6 +90,11 @@ QPixmap* PixmapManager::find(const KURL& url)
                 SLOT(slotGotThumbnail(const KURL&,
                                       const QPixmap&,
                                       const KFileMetaInfo*)));
+
+        connect(m_thumbJob,
+                SIGNAL(signalFailed(const KURL&)),
+                SLOT(slotFailedThumbnail(const KURL&)));
+
         connect(m_thumbJob, 
                 SIGNAL(signalCompleted()),
                 SLOT(slotCompleted()));
@@ -113,6 +126,21 @@ void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix,
 {
     m_cache->remove(url.path());
     QPixmap* thumb = new QPixmap(pix);
+    m_cache->insert(url.path(), thumb);
+    emit signalPixmap(url);
+}
+
+void PixmapManager::slotFailedThumbnail(const KURL& url)
+{
+    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
+                                                   "image_broken.png");
+    dir = dir + "/image_broken.png";
+
+    QImage img(dir);
+    img = img.smoothScale(m_size, m_size, QImage::ScaleMin);
+    
+    m_cache->remove(url.path());
+    QPixmap* thumb = new QPixmap(img);
     m_cache->insert(url.path(), thumb);
     emit signalPixmap(url);
 }

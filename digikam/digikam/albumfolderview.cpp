@@ -801,9 +801,8 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
                                         const QPixmap&,
                                         const KFileMetaInfo*)));
             connect(iconThumbJob_,
-                    SIGNAL(signalStatFailed(const KURL&, bool)),
-                    this,
-                    SLOT(slotThumbnailLost(const KURL&, bool)));
+                    SIGNAL(signalFailed(const KURL&)),
+                    SLOT(slotThumbnailLost(const KURL&)));
         }
         else
         {
@@ -836,11 +835,8 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     folderItem->setPixmap(thumbnail);
 }
 
-void AlbumFolderView::slotThumbnailLost(const KURL &url, bool isDir)
+void AlbumFolderView::slotThumbnailLost(const KURL &url)
 {
-    if(isDir)
-        return;
-
     PAlbum *album = AlbumManager::instance()->findPAlbum( url.directory() );
     if(!album)
         return;
