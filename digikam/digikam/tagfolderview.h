@@ -34,7 +34,8 @@ public:
     
 private slots:
     void    slotAlbumAdded(Album *);
-    
+
+private:
     TagFolderViewPriv   *d;
 };
 

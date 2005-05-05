@@ -111,7 +111,6 @@ private:
 
 private slots:
 
-    void slotRedirection(const KURL& oldURL, const KURL& newURL);
     void slotResult(KIO::Job* job);
     void slotData(KIO::Job* job, const QByteArray& data);
 

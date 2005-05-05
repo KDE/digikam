@@ -725,12 +725,6 @@ void AlbumManager::removeTAlbum(TAlbum *album)
     emit signalAlbumDeleted(album);
 }
 
-void AlbumManager::slotRedirection(const KURL& oldURL, const KURL& newURL)
-{
-    kdDebug() << oldURL.prettyURL() << " redirected to "
-              << newURL.prettyURL() << endl;
-}
-
 void AlbumManager::emitAlbumItemsSelected(bool val)
 {
     emit signalAlbumItemsSelected(val);    
