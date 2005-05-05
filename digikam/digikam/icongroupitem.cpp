@@ -245,3 +245,8 @@ void IconGroupItem::paintBanner()
     bitBlt(d->view->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
+
+int IconGroupItem::compare(IconGroupItem*)
+{
+    return 0;
+}

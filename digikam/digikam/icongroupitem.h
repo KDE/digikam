@@ -51,6 +51,8 @@ public:
     void insertItem(IconItem* item);
     void takeItem(IconItem* item);
 
+    virtual int compare(IconGroupItem *group);
+    
 protected:
     
     virtual void paintBanner();

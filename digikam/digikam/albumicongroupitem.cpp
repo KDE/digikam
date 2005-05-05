@@ -34,6 +34,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "themeengine.h"
+#include "albumsettings.h"
 #include "albumiconview.h"
 #include "albumicongroupitem.h"
 
@@ -47,6 +48,37 @@ AlbumIconGroupItem::AlbumIconGroupItem(AlbumIconView* view,
 AlbumIconGroupItem::~AlbumIconGroupItem()
 {
     
+}
+
+int AlbumIconGroupItem::compare(IconGroupItem* group)
+{
+    AlbumIconGroupItem* agroup = (AlbumIconGroupItem*)group;
+    
+    PAlbum* mine = AlbumManager::instance()->findPAlbum(m_albumID);
+    PAlbum* his = AlbumManager::instance()->findPAlbum(agroup->m_albumID);
+
+    const AlbumSettings *settings = m_view->settings();
+    
+    switch (settings->getImageSortOrder())
+    {
+    case(AlbumSettings::ByIName):
+    case(AlbumSettings::ByISize):
+    case(AlbumSettings::ByIPath):
+    {
+        return mine->getTitle().localeAwareCompare(his->getTitle());
+    }
+    case(AlbumSettings::ByIDate):
+    {
+        if (mine->getDate() < his->getDate())
+            return -1;
+        else if (mine->getDate() > his->getDate())
+            return 1;
+        else
+            return 0;
+    }
+    }
+
+    return 0;
 }
 
 void AlbumIconGroupItem::paintBanner()

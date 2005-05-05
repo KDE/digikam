@@ -99,7 +99,24 @@ public:
         QRect                 rect;
         QValueList<IconItem*> items;
     } *firstContainer, *lastContainer;
+
+    struct SortableItem 
+    {
+        IconGroupItem *group;
+    };
 };
+
+static int cmpItems( const void *n1, const void *n2 )
+{
+    if ( !n1 || !n2 )
+        return 0;
+
+    IconViewPriv::SortableItem *i1 = (IconViewPriv::SortableItem *)n1;
+    IconViewPriv::SortableItem *i2 = (IconViewPriv::SortableItem *)n2;
+
+    return i1->group->compare( i2->group );
+}
+
 
 IconView::IconView(QWidget* parent, const char* name)
     : QScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
@@ -191,6 +208,17 @@ int IconView::count() const
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         c += group->count();
+    }
+
+    return c;
+}
+
+int IconView::groupCount() const
+{
+    int c = 0;
+    for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
+    {
+        c++;
     }
 
     return c;
@@ -435,12 +463,48 @@ void IconView::triggerUpdate()
 
 void IconView::sort()
 {
+    // first sort the groups
     for (IconGroupItem* group = d->firstGroup; group;
          group = group->nextGroup())
     {
         group->sort();
     }
 
+    int gcount = groupCount();
+    
+    // then sort the groups themselves
+   IconViewPriv::SortableItem *groups
+        = new IconViewPriv::SortableItem[ gcount ];
+
+    IconGroupItem *group = d->firstGroup;
+    int i = 0;
+    for ( ; group; group = group->m_next )
+        groups[ i++ ].group = group;
+
+    qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ),
+           cmpItems );
+
+    IconGroupItem *prev = 0;
+    group = 0;
+    for ( i = 0; i < (int)gcount; ++i ) {
+        group = groups[ i ].group;
+        if ( group ) {
+            group->m_prev = prev;
+            if ( group->m_prev )
+                group->m_prev->m_next = group;
+            group->m_next = 0;
+        }
+        if ( i == 0 )
+            d->firstGroup = group;
+        if ( i == (int)gcount - 1 )
+            d->lastGroup = group;
+        prev = group;
+    }
+    
+    delete [] groups;
+
+    // set the currItem to first item
+    
     d->currItem = 0;
     if (d->firstGroup)
         d->currItem = d->firstGroup->firstItem();
@@ -1680,4 +1744,3 @@ void IconView::itemClickedToOpen(IconItem* item)
 }
 
 #include "iconview.moc"
-

@@ -48,6 +48,7 @@ public:
     IconItem* findItem(const QPoint& pos);
 
     int  count() const;
+    int  groupCount() const;
 
     void clear(bool update=true);
     void sort();

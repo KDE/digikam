@@ -31,6 +31,8 @@ public:
 
     int albumID() const { return m_albumID; }
     
+    virtual int compare(IconGroupItem* group);
+
 protected:
 
     void paintBanner();
