@@ -41,7 +41,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
 			imageinfo.cpp sidebar.cpp \
 			datefolderview.cpp pixmapmanager.cpp \
-			monthwidget.cpp
+			tagfolderview.cpp monthwidget.cpp
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
