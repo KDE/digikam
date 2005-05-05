@@ -30,7 +30,6 @@
 #include <kcalendarsystem.h>
 #endif
 
-
 #include "albummanager.h"
 #include "album.h"
 #include "themeengine.h"
@@ -56,6 +55,9 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     
     PAlbum* mine = AlbumManager::instance()->findPAlbum(m_albumID);
     PAlbum* his = AlbumManager::instance()->findPAlbum(agroup->m_albumID);
+
+    if (!mine || !his)
+        return 0;
 
     const AlbumSettings *settings = m_view->settings();
     
