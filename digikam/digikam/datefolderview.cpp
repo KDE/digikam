@@ -30,6 +30,9 @@
 
 #include <qdatetime.h>
 #include <qlistview.h>
+#include <qfont.h>
+#include <qpainter.h>
+#include <qstyle.h>
 
 #include "album.h"
 #include "albummanager.h"
@@ -58,6 +61,54 @@ public:
     {
     }
 
+    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align)
+    {
+        if (m_album)
+        {
+            QListViewItem::paintCell(p, cg, column, width, align);
+            return;
+        }
+
+        QFont f(listView()->font());
+        f.setBold(true);
+        f.setItalic(true);
+        p->setFont(f);
+
+        int w = listView()->width();
+        const QScrollBar *vBar = listView()->verticalScrollBar();
+
+        if (vBar && vBar->isVisible())
+            w -= vBar->width();
+
+        if (isSelected())
+        {
+            p->setPen(cg.color(QColorGroup::HighlightedText));
+            p->fillRect( 0, 0, w, height(), cg.highlight());
+        }
+        else
+        {
+            p->setPen(cg.color(QColorGroup::Dark));
+            p->fillRect( 0, 0, w, height(), cg.base());
+        }
+
+        int x = 2;
+
+        p->drawPixmap(QRect(x, 0, pixmap(0)->width(), pixmap(0)->height()),
+                      *pixmap(0));
+        x += pixmap(0)->width() + 2;
+
+        QRect br;
+        p->drawText(x, 0, w - x, height(), AlignLeft | AlignVCenter,
+                    text(0), -1, &br);
+        x = br.right() + 5;
+
+        if ((x < w - 6))
+        {
+            QRect rcSep(x, height()/2, w-6-x, 1);
+            listView()->style().drawPrimitive(QStyle::PE_Separator, p, rcSep, cg);
+        }
+    }
+    
     int compare(QListViewItem* i, int , bool ) const
     {
         if (!i)
@@ -126,11 +177,11 @@ void DateFolderView::slotDAlbumAdded(DAlbum* album)
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
-        parent->setPixmap(0, SmallIcon("date"));
+        parent->setPixmap(0, SmallIcon("date", 22));
     }
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
-    item->setPixmap(0, SmallIcon("date"));
+    item->setPixmap(0, SmallIcon("date", 22));
 }
 
 void DateFolderView::slotSelectionChanged()
