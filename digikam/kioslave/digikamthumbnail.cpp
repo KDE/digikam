@@ -380,6 +380,12 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     if (exif)
         exifRotate(url.path(), img);
 
+    if (img.isNull())
+    {
+        error(KIO::ERR_INTERNAL, "Thumbnail is null");
+        return;
+    }
+
     QByteArray imgData;
     QDataStream stream( imgData, IO_WriteOnly );
 
