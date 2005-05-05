@@ -20,3 +20,9 @@
    - need to discuss
 
 * move the storage of the 'locale' setting to settings table in db. [TA]
+
+* make sure there are no images in the albumdir. [TA]
+
+* make the datepicker month/year label honor the settings of kde.
+
+* fix display of date and comments
