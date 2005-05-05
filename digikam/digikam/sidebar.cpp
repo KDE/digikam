@@ -27,7 +27,6 @@
 
 #include <kmultitabbar.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 
 Sidebar::Sidebar(QWidget *parent, Side side)
     : QFrame(parent, "sidebar")
