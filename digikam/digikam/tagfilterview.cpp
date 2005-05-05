@@ -173,8 +173,7 @@ void TagFilterView::slotTimeOut()
     while (it.current())
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-        if (!item->firstChild())
-            filterTags.append(item->m_tag->getID());
+        filterTags.append(item->m_tag->getID());
         ++it;
     }
 

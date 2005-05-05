@@ -187,7 +187,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty())
         return true;
 
-    bool match = true;
+    bool match = false;
 
     if (!d->tagFilter.isEmpty())
     {
@@ -195,9 +195,9 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
         for (QValueList<int>::iterator it = d->tagFilter.begin();
              it != d->tagFilter.end(); ++it)
         {
-            if (!tagIDs.contains(*it))
+            if (tagIDs.contains(*it))
             {
-                match = false;
+                match = true;
                 break;
             }
         }
