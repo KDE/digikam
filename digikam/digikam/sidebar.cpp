@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-/** @file sidebar.h */
+/** @file sidebar.cpp */
 
 #include "sidebar.h"
 
