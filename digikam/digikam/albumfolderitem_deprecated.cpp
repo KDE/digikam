@@ -29,8 +29,8 @@
 #include "themeengine.h"
 #include "album.h"
 
-#include "albumfolderview.h"
-#include "albumfolderitem.h"
+#include "albumfolderview_deprecated.h"
+#include "albumfolderitem_deprecated.h"
 
 AlbumFolderItem::AlbumFolderItem(AlbumFolderItem *parent,
                                  const QString& name,

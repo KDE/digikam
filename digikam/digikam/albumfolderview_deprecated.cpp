@@ -75,8 +75,8 @@
 #include "syncjob.h"
 
 #include "thumbnailsize.h"
-#include "albumfolderitem.h"
-#include "albumfolderview.h"
+#include "albumfolderitem_deprecated.h"
+#include "albumfolderview_deprecated.h"
 #include "albumpropsedit.h"
 #include "tagcreatedlg.h"
 #include "albumsettings.h"
@@ -1995,4 +1995,4 @@ void AlbumFolderView::saveAlbumState()
     file.close();
 }
 
-#include "albumfolderview.moc"
+#include "albumfolderview_deprecated.moc"

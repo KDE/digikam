@@ -47,8 +47,8 @@
 #include "albummanager.h"
 #include "album.h"
 
-#include "albumfolderview.h"
-#include "albumfolderitem.h"
+#include "albumfolderview_deprecated.h"
+#include "albumfolderitem_deprecated.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albumsettings.h"
