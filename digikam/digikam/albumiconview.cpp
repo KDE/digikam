@@ -348,11 +348,11 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
 void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 {
+    if (!item->getViewItem())
+        return;
+    
     AlbumIconItem* iconItem =
         static_cast<AlbumIconItem*>(item->getViewItem());
-
-    if (!iconItem)
-        return;
 
     d->pixMan->remove(item->kurl());
 

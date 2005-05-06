@@ -141,13 +141,13 @@ IconView::IconView(QWidget* parent, const char* name)
 
 IconView::~IconView()
 {
+    clear(false);
+
     delete d->updateTimer;
     delete d->toolTipTimer;
 
     delete d->rubber;
     
-    clear(false);
-
     delete d;
 }
 
