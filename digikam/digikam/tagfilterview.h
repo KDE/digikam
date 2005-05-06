@@ -33,6 +33,10 @@ public:
     ~TagFilterView();
 
     void triggerChange();
+
+protected:
+
+    QDragObject* dragObject();
     
 private slots:
 

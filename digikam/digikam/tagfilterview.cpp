@@ -34,6 +34,7 @@
 #include "albumlister.h"
 #include "album.h"
 #include "syncjob.h"
+#include "dragobjects.h"
 #include "tagfilterview.h"
 
 static QPixmap getBlendedIcon(TAlbum* album)
@@ -71,12 +72,14 @@ public:
         : QCheckListItem(parent, tag->getTitle(), QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
+        setDragEnabled(true);
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
         : QCheckListItem(parent, tag->getTitle(), QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
+        setDragEnabled(true);
     }
 
     virtual void stateChange(bool val)
@@ -104,9 +107,10 @@ TagFilterView::TagFilterView(QWidget* parent)
     d->timer = new QTimer(this);
     
     addColumn(i18n("My Tags"));
+    header()->hide();
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
-    header()->hide();
+    setSelectionMode(QListView::Extended);
     
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotTagAdded(Album*)));
@@ -126,6 +130,30 @@ TagFilterView::~TagFilterView()
 void TagFilterView::triggerChange()
 {
     d->timer->start(50, true);
+}
+
+QDragObject* TagFilterView::dragObject()
+{
+
+    QValueList<int> dragTagIDs;
+    
+    QListViewItemIterator it(this, QListViewItemIterator::Selected);
+    while (it.current())
+    {
+        TagFilterViewItem* item = (TagFilterViewItem*)it.current();
+        dragTagIDs.append(item->m_tag->getID());
+        ++it;
+    }
+
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    QPixmap icon(iconLoader->loadIcon("tag", KIcon::NoGroup,
+                                      32,
+                                      KIcon::DefaultState,
+                                      0, true));
+    
+    TagListDrag *drag = new TagListDrag(dragTagIDs, this);
+    drag->setPixmap(icon);
+    return drag;
 }
 
 void TagFilterView::slotTagAdded(Album* album)

@@ -935,6 +935,7 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
+                             !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event))
         || event->source() == this) {
         event->ignore();
@@ -951,6 +952,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
+                             !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event))
          || event->source() == this)
     {
@@ -1035,6 +1037,54 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             default:
                 break;
             }
+        }
+    }
+    else if(TagListDrag::canDecode(event))
+    {
+        QByteArray ba = event->encodedData("digikam/taglist");
+        QDataStream ds(ba, IO_ReadOnly);
+        QValueList<int> tagIDs;
+        ds >> tagIDs;
+
+        QPopupMenu popMenu(this);
+        popMenu.insertItem(i18n("&Assign Tags to Selected Images"), 10);
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+        popMenu.setMouseTracking(true);
+        int id = popMenu.exec(QCursor::pos());
+        switch(id) {
+        case 10:
+        {
+            AlbumIconItem *albumItem = findItem(event->pos());
+            if (albumItem)
+            {
+                for (QValueList<int>::iterator it = tagIDs.begin();
+                     it != tagIDs.end(); ++it)
+                {
+                    albumItem->imageInfo()->setTag(*it);
+                }
+            }
+            
+            for (IconItem *it = firstItem(); it; it = it->nextItem())
+            {
+                if (it->isSelected())
+                {
+                    AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
+                    for (QValueList<int>::iterator it = tagIDs.begin();
+                         it != tagIDs.end(); ++it)
+                    {
+                        albumItem->imageInfo()->setTag(*it);
+                    }
+                }
+            }
+
+            d->imageLister->updateDirectory();
+            updateContents();
+            break;
+        }
+        default:
+            break;
         }
     }
     else {

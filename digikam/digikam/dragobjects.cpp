@@ -208,3 +208,31 @@ bool AlbumDrag::decode(const QMimeSource* e, KURL::List &urls,
 
     return false;
 }
+
+TagListDrag::TagListDrag(const QValueList<int>& tagIDs, QWidget *dragSource,
+                         const char *name)
+    : QDragObject( dragSource, name )
+{
+    m_tagIDs = tagIDs;
+}
+
+bool TagListDrag::canDecode(const QMimeSource* e)
+{
+    return e->provides("digikam/taglist");
+}
+
+QByteArray TagListDrag::encodedData(const char*) const
+{
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << m_tagIDs;
+    return ba;
+}
+
+const char* TagListDrag::format(int i) const
+{
+    if ( i == 0 )
+        return "digikam/taglist";
+
+    return 0;
+}

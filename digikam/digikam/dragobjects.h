@@ -108,4 +108,28 @@ private:
     int     mAlbumID;
 };
 
+/**
+ * Provides a drag object for a list of tags
+ *
+ * When a tag is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class TagListDrag : public QDragObject
+{
+public:
+
+    TagListDrag(const QValueList<int>& tagIDs, QWidget *dragSource = 0,
+                const char *name = 0);
+    static bool canDecode(const QMimeSource* e);
+    
+protected:
+
+    QByteArray  encodedData( const char* ) const;
+    const char* format(int i) const;
+    
+private:
+
+    QValueList<int> m_tagIDs;
+};
+
 #endif /* DRAGOBJECTS_H */
