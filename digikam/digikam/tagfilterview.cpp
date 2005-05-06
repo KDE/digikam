@@ -68,17 +68,20 @@ class TagFilterViewItem : public QCheckListItem
 {
 public:
 
-    TagFilterViewItem(QListView* parent, TAlbum* tag)
-        : QCheckListItem(parent, tag->getTitle(), QCheckListItem::CheckBoxController)
+    TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
+        : QCheckListItem(parent, tag ? tag->getTitle() : i18n("Not Tagged"),
+                         QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
-        setDragEnabled(true);
+        m_untagged = untagged;
+        setDragEnabled(!untagged);
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
         : QCheckListItem(parent, tag->getTitle(), QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
+        m_untagged = false;
         setDragEnabled(true);
     }
 
@@ -89,7 +92,42 @@ public:
         ((TagFilterView*)listView())->triggerChange();
     }
 
+    int compare(QListViewItem* i, int column, bool ascending) const
+    {
+        if (m_untagged)
+            return 1;
+
+        TagFilterViewItem* dItem = dynamic_cast<TagFilterViewItem*>(i);
+        if (!dItem)
+            return 0;
+
+        if (dItem && dItem->m_untagged)
+            return -1;
+
+        return QListViewItem::compare(i, column, ascending);
+    }
+
+    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align)
+    {
+        if (!m_untagged)
+        {
+            QCheckListItem::paintCell(p, cg, column, width, align);
+            return;
+        }
+
+        QFont f(listView()->font());
+        f.setBold(true);
+        f.setItalic(true);
+        p->setFont(f);
+
+        QColorGroup mcg(cg);
+        mcg.setColor(QColorGroup::Text, Qt::darkRed);
+        
+        QCheckListItem::paintCell(p, mcg, column, width, align);
+    }
+    
     TAlbum* m_tag;
+    bool    m_untagged;
 };
 
 class TagFilterViewPriv
@@ -110,6 +148,9 @@ TagFilterView::TagFilterView(QWidget* parent)
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
     setSelectionMode(QListView::Extended);
+
+    TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
+    notTaggedItem->setPixmap(0, getBlendedIcon(0));
     
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotTagAdded(Album*)));
@@ -144,7 +185,10 @@ QDragObject* TagFilterView::dragObject()
     while (it.current())
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-        dragTagIDs.append(item->m_tag->getID());
+        if (item->m_tag)
+        {
+            dragTagIDs.append(item->m_tag->getID());
+        }
         ++it;
     }
 
@@ -248,16 +292,21 @@ void TagFilterView::slotClear()
 void TagFilterView::slotTimeOut()
 {
     QValueList<int> filterTags;
+
+    bool showUnTagged = false;
     
     QListViewItemIterator it(this, QListViewItemIterator::Checked);
     while (it.current())
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-        filterTags.append(item->m_tag->getID());
+        if (item->m_tag)
+            filterTags.append(item->m_tag->getID());
+        else if (item->m_untagged)
+            showUnTagged = true;
         ++it;
     }
 
-    AlbumLister::instance()->setTagFilter(filterTags);
+    AlbumLister::instance()->setTagFilter(filterTags, showUnTagged);
 }
 
 #include "tagfilterview.moc"

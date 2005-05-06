@@ -66,6 +66,7 @@ public:
 
     QMap<int,bool>     dayFilter;
     QValueList<int>    tagFilter;
+    bool               untaggedFilter;
     QTimer*            filterTimer;
 };
 
@@ -89,6 +90,7 @@ AlbumLister::AlbumLister()
     d->currAlbum = 0;
     d->filter    = "*";
     d->itemList.setAutoDelete(true);
+    d->untaggedFilter = false;
     d->filterTimer = new QTimer(this);
 
     connect(d->filterTimer, SIGNAL(timeout()),
@@ -175,16 +177,18 @@ void AlbumLister::setDayFilter(const QValueList<int>& days)
     d->filterTimer->start(100, true);    
 }
 
-void AlbumLister::setTagFilter(const QValueList<int>& tags)
+void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
 {
     d->tagFilter = tags;
+    d->untaggedFilter = showUnTagged;
 
     d->filterTimer->start(100, true);    
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
 {
-    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty())
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
+        !d->untaggedFilter)
         return true;
 
     bool match = false;
@@ -201,6 +205,12 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
                 break;
             }
         }
+
+        match |= (d->untaggedFilter && tagIDs.isEmpty());
+    }
+    else if (d->untaggedFilter)
+    {
+        match = info->tagIDs().isEmpty();
     }
     else
     {
