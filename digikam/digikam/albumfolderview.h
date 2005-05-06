@@ -23,7 +23,12 @@
 
 #include <qlistview.h>
 
+class KURL;
+class QPixmap;
+class KFileMetaInfo;
+
 class Album;
+class PAlbum;
 class AlbumFolderViewPriv;
 
 class AlbumFolderView : public QListView
@@ -31,11 +36,16 @@ class AlbumFolderView : public QListView
     Q_OBJECT
 public:
     AlbumFolderView(QWidget *parent);
+    ~AlbumFolderView();
     
 private slots:
     void    slotAlbumAdded(Album *);
+    void    slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
+                                     const KFileMetaInfo*);
 
 private:
+    void    setAlbumThumbnail(PAlbum *album);
+    
     AlbumFolderViewPriv   *d;
 };
 

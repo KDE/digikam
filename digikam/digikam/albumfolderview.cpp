@@ -17,6 +17,8 @@
  * ============================================================ */
 
 #include <qintdict.h>
+#include <qpixmap.h>
+#include <qguardedptr.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -26,6 +28,9 @@
 #include "albumfolderview.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albummanager.h"
+#include "thumbnailjob.h"
+#include "thumbnailsize.h"
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
@@ -59,7 +64,9 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
 class AlbumFolderViewPriv
 {
 public:
+    AlbumManager                     *albumMan;
     QIntDict<AlbumFolderViewItem>    dict;
+    ThumbnailJob                     *iconThumbJob;
 };
 
 //-----------------------------------------------------------------------------
@@ -70,14 +77,27 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     : QListView(parent)
 {
     d = new AlbumFolderViewPriv();
-
+    
+    d->albumMan = AlbumManager::instance();
+    d->iconThumbJob = 0;
+    
     addColumn(i18n("My Albums"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
-    
+    setAllColumnsShowFocus(true);
+               
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
 }
+
+AlbumFolderView::~AlbumFolderView()
+{
+    if (d->iconThumbJob)
+        delete d->iconThumbJob;
+    
+    delete d;
+}
+
 
 void AlbumFolderView::slotAlbumAdded(Album *album)
 {
@@ -102,14 +122,77 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
                         << palbum->getURL() << endl;
             return;
-    }
+        }
         item = new AlbumFolderViewItem(parent, palbum);
         d->dict.insert(palbum->getID(), item);
     }
     
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
     item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                            32, KIcon::DefaultState, 0, true));
+                    32, KIcon::DefaultState, 0, true));
+    
+    setAlbumThumbnail(palbum);
 }
+
+void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
+{
+    if(!album)
+        return;
+    
+    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    
+    if(!item)
+        return;
+    
+    if(!album->getIcon().isEmpty())
+    {
+        if(!d->iconThumbJob)
+        {
+            d->iconThumbJob = new ThumbnailJob(album->getIconKURL(),
+                                               (int)ThumbnailSize::Tiny,
+                                               true);
+            connect(d->iconThumbJob,
+                    SIGNAL(signalThumbnailMetaInfo(const KURL&,
+                           const QPixmap&,
+                           const KFileMetaInfo*)),
+                    this,
+                    SLOT(slotGotThumbnailFromIcon(const KURL&,
+                         const QPixmap&,
+                         const KFileMetaInfo*)));
+            connect(d->iconThumbJob,
+                    SIGNAL(signalFailed(const KURL&)),
+                    SLOT(slotThumbnailLost(const KURL&)));
+        }
+        else
+        {
+            d->iconThumbJob->addItem(album->getIconKURL());
+        }
+    }
+    else
+    {
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
+                                                32, KIcon::DefaultState,
+                                                0, true));
+    }
+}
+
+void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
+        const QPixmap& thumbnail,
+        const KFileMetaInfo*)
+{
+    PAlbum* album = d->albumMan->findPAlbum(url.directory());
+
+    if (!album)
+        return;
+
+    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    
+    if(!item)
+        return;
+
+    item->setPixmap(0, thumbnail);
+}
+
 
 #include "albumfolderview.moc"
