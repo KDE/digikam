@@ -114,6 +114,10 @@ TagFilterView::TagFilterView(QWidget* parent)
     
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotTagAdded(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            SLOT(slotTagDeleted(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+            SLOT(slotTagMoved(TAlbum*, TAlbum*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             SLOT(slotClear()));
 
@@ -185,6 +189,55 @@ void TagFilterView::slotTagAdded(Album* album)
         item->setPixmap(0, getBlendedIcon(tag));
         d->dict.insert(tag->getID(), item);
     }
+}
+
+void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
+{
+    if (!tag || !newParent)
+        return;
+
+    TagFilterViewItem* item = d->dict.find(tag->getID());
+    if (!item)
+        return;
+
+    if (item->parent())
+    {
+        QListViewItem* oldPItem = item->parent();
+        oldPItem->takeItem(item);
+        
+        QListViewItem* newPItem = d->dict.find(newParent->getID());
+        if (newPItem)
+            newPItem->insertItem(item);
+        else
+            insertItem(item);
+    }
+    else
+    {
+        takeItem(item);
+
+        QListViewItem* newPItem = d->dict.find(newParent->getID());
+        if (newPItem)
+            newPItem->insertItem(item);
+        else
+            insertItem(item);
+    }
+}
+
+void TagFilterView::slotTagDeleted(Album* album)
+{
+    if (!album || album->isRoot())
+        return;
+
+    TAlbum* tag = dynamic_cast<TAlbum*>(album);
+    if (!tag)
+        return;
+
+    TagFilterViewItem* item = d->dict.find(tag->getID());
+    if (!item)
+        return;
+
+    d->dict.remove(tag->getID());
+    delete item;
 }
 
 void TagFilterView::slotClear()

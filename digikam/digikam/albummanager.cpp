@@ -620,6 +620,8 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
     album->getParent()->removeChild(album);
     album->setParent(parent);
     album->setPID(parent->getID());    
+
+    emit signalTAlbumMoved(album, parent);
     
     return true;
 }

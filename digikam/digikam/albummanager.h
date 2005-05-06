@@ -125,6 +125,7 @@ signals:
     void signalPAlbumIconChanged(PAlbum* album);    
     void signalTAlbumIconChanged(TAlbum* album);
     void signalDAlbumAdded(DAlbum* album);
+    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
 };
 
 #endif /* ALBUMMANAGER_H */
