@@ -106,8 +106,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     d = new TagFilterViewPriv;
     d->timer = new QTimer(this);
     
-    addColumn(i18n("My Tags"));
-    header()->hide();
+    addColumn(i18n("Tag Filters"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
     setSelectionMode(QListView::Extended);
