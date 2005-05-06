@@ -1,8 +1,3 @@
-* tag filtering:
-   - implement tag filter view
-   - add filtering of items based on tags (in addition to
-     present datefiltering) inside albumlister
-
 * split albumfolderview into albumview and tagview
    - also port albumview and tagview to qlistview [JA]
 
