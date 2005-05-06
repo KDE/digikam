@@ -36,7 +36,7 @@ class QIconViewItem;
 class KURL;
 
 class DigikamApp;
-class AlbumFolderView;
+class AlbumFolderView_Deprecated;
 class AlbumIconView;
 class AlbumIconItem;
 class AlbumSettings;
@@ -69,7 +69,7 @@ private:
 private:
 
     DigikamApp               *mParent;
-    AlbumFolderView          *mFolderView;
+    AlbumFolderView_Deprecated          *mFolderView;
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
     AlbumHistory             *mAlbumHistory;

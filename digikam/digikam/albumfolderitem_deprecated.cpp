@@ -32,7 +32,7 @@
 #include "albumfolderview_deprecated.h"
 #include "albumfolderitem_deprecated.h"
 
-AlbumFolderItem::AlbumFolderItem(AlbumFolderItem *parent,
+AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent,
                                  const QString& name,
                                  int year, int month)
     : ListItem(parent, name)
@@ -45,7 +45,7 @@ AlbumFolderItem::AlbumFolderItem(AlbumFolderItem *parent,
     highlighted_ = false;
 }
 
-AlbumFolderItem::AlbumFolderItem(AlbumFolderView *parent,
+AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderView_Deprecated *parent,
                                  Album* album)
     : ListItem(parent, album->getTitle())
 {
@@ -57,7 +57,7 @@ AlbumFolderItem::AlbumFolderItem(AlbumFolderView *parent,
     highlighted_ = false;
 }
 
-AlbumFolderItem::AlbumFolderItem(AlbumFolderItem *parent,
+AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent,
                                  Album* album)
     : ListItem(parent, album->getTitle())
 {
@@ -70,34 +70,34 @@ AlbumFolderItem::AlbumFolderItem(AlbumFolderItem *parent,
 }
 
 
-bool AlbumFolderItem::isGroupItem()
+bool AlbumFolderItem_Deprecated::isGroupItem()
 {
     return isGroup_;
 }
 
-bool AlbumFolderItem::isHighlighted()
+bool AlbumFolderItem_Deprecated::isHighlighted()
 {
     return highlighted_;
 }
 
-void AlbumFolderItem::setPixmap(const QPixmap& pixmap)
+void AlbumFolderItem_Deprecated::setPixmap(const QPixmap& pixmap)
 {
     ListItem::setPixmap(pixmap);
     highlighted_ = true;
 }
 
-Album* AlbumFolderItem::album() const
+Album* AlbumFolderItem_Deprecated::album() const
 {
     return album_;
 }
 
-int AlbumFolderItem::compare(ListItem *item) const
+int AlbumFolderItem_Deprecated::compare(ListItem *item) const
 {
     if (!isGroup_ || (year_ == 0 && month_ == 0)) {
         return ListItem::compare(item);
     }
     else {
-        AlbumFolderItem *folderItem = static_cast<AlbumFolderItem *>(item);
+        AlbumFolderItem_Deprecated *folderItem = static_cast<AlbumFolderItem_Deprecated *>(item);
 
         int myWeight  = year_*100 + month_;
         int hisWeight = folderItem->year_*100 + folderItem->month_;
@@ -111,7 +111,7 @@ int AlbumFolderItem::compare(ListItem *item) const
     }
 }
 
-void AlbumFolderItem::addDropHighlight()
+void AlbumFolderItem_Deprecated::addDropHighlight()
 {
     if (!pixmap()) return;
     pix_ = *pixmap();
@@ -123,12 +123,12 @@ void AlbumFolderItem::addDropHighlight()
 
 }
 
-void AlbumFolderItem::removeDropHighlight()
+void AlbumFolderItem_Deprecated::removeDropHighlight()
 {
     setPixmap(pix_);
 }
 
-void AlbumFolderItem::paint(QPainter *p, const QColorGroup &cg, const QRect& r)
+void AlbumFolderItem_Deprecated::paint(QPainter *p, const QColorGroup &cg, const QRect& r)
 {
     ThemeEngine* te = ThemeEngine::instance();
     

@@ -22,8 +22,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef ALBUMFOLDERVIEW_H
-#define ALBUMFOLDERVIEW_H
+#ifndef ALBUMFOLDERVIEW_DEPRECATED_H
+#define ALBUMFOLDERVIEW_DEPRECATED_H
 
 // Qt includes.
 
@@ -50,18 +50,18 @@ class ListItem;
 class Album;
 class PAlbum;
 class TAlbum;
-class AlbumFolderItem;
+class AlbumFolderItem_Deprecated;
 class AlbumManager;
 class ThumbnailJob;
 
-class AlbumFolderView : public ListView 
+class AlbumFolderView_Deprecated : public ListView 
 {
     Q_OBJECT
 
 public:
 
-    AlbumFolderView(QWidget *parent);
-    ~AlbumFolderView();
+    AlbumFolderView_Deprecated(QWidget *parent);
+    ~AlbumFolderView_Deprecated();
 
     void applySettings();
 
@@ -86,12 +86,12 @@ private:
 
     void resort();
 
-    void reparentItem(AlbumFolderItem* folderItem);
+    void reparentItem(AlbumFolderItem_Deprecated* folderItem);
 
-    AlbumFolderItem* findParent(Album *album);
-    AlbumFolderItem* findParentByFolder(Album *album);
-    AlbumFolderItem* findParentByCollection(PAlbum *album);
-    AlbumFolderItem* findParentByDate(PAlbum *album);
+    AlbumFolderItem_Deprecated* findParent(Album *album);
+    AlbumFolderItem_Deprecated* findParentByFolder(Album *album);
+    AlbumFolderItem_Deprecated* findParentByCollection(PAlbum *album);
+    AlbumFolderItem_Deprecated* findParentByDate(PAlbum *album);
 
     void clearEmptyGroupItems();
 
@@ -129,13 +129,13 @@ protected:
     
 private:
 
-    AlbumFolderItem*                   dropTarget_;
+    AlbumFolderItem_Deprecated*                   dropTarget_;
     int                                albumSortOrder_;
-    QPtrList<AlbumFolderItem>          groupItems_;
+    QPtrList<AlbumFolderItem_Deprecated>          groupItems_;
     AlbumManager*                      albumMan_;
     QGuardedPtr<ThumbnailJob>          iconThumbJob_;    
-    AlbumFolderItem*                   phyRootItem_;
-    AlbumFolderItem*                   tagRootItem_;
+    AlbumFolderItem_Deprecated*                   phyRootItem_;
+    AlbumFolderItem_Deprecated*                   tagRootItem_;
 
     QPixmap                            itemRegPix_;
     QPixmap                            itemSelPix_;
@@ -170,7 +170,7 @@ private slots:
     void slotAllAlbumsLoaded();
     void slotAlbumImportResult(KIO::Job* job);
 
-    void slotOpenAlbumFolderItem();
+    void slotOpenAlbumFolderItem_Deprecated();
         
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
                                   const KFileMetaInfo*);

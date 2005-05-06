@@ -91,7 +91,7 @@ extern "C"
 #include <X11/Xlib.h>
 }
 
-AlbumFolderView::AlbumFolderView(QWidget *parent)
+AlbumFolderView_Deprecated::AlbumFolderView_Deprecated(QWidget *parent)
                : ListView(parent)
 {
     setAcceptDrops(true);
@@ -131,7 +131,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             this, SLOT(slotTAlbumIconChanged(TAlbum*)));
 
     connect(openAlbumTimer_, SIGNAL(timeout()),
-            this, SLOT(slotOpenAlbumFolderItem()));
+            this, SLOT(slotOpenAlbumFolderItem_Deprecated()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
@@ -139,7 +139,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     loadAlbumState();
 }
 
-AlbumFolderView::~AlbumFolderView()
+AlbumFolderView_Deprecated::~AlbumFolderView_Deprecated()
 {
     saveAlbumState();
 
@@ -147,7 +147,7 @@ AlbumFolderView::~AlbumFolderView()
         iconThumbJob_->kill();
 }
 
-void AlbumFolderView::applySettings()
+void AlbumFolderView_Deprecated::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
@@ -160,10 +160,10 @@ void AlbumFolderView::applySettings()
     }
 }
 
-void AlbumFolderView::resort()
+void AlbumFolderView_Deprecated::resort()
 {
-    AlbumFolderItem* prevSelectedItem =
-        dynamic_cast<AlbumFolderItem*>(getSelected());
+    AlbumFolderItem_Deprecated* prevSelectedItem =
+        dynamic_cast<AlbumFolderItem_Deprecated*>(getSelected());
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
@@ -174,7 +174,7 @@ void AlbumFolderView::resort()
         PAlbum *album = *it;
         if (!album->isRoot() && album->getViewItem())
         {
-            reparentItem(static_cast<AlbumFolderItem*>(album->getViewItem()));
+            reparentItem(static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem()));
         }
     }
 
@@ -184,7 +184,7 @@ void AlbumFolderView::resort()
         TAlbum *album = *it;
         if (!album->isRoot() && album->getViewItem())
         {
-            reparentItem(static_cast<AlbumFolderItem*>(album->getViewItem()));
+            reparentItem(static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem()));
         }
     }
 
@@ -198,7 +198,7 @@ void AlbumFolderView::resort()
     }
 }
 
-void AlbumFolderView::reparentItem(AlbumFolderItem* folderItem)
+void AlbumFolderView_Deprecated::reparentItem(AlbumFolderItem_Deprecated* folderItem)
 {
     if (!folderItem)
         return;
@@ -222,7 +222,7 @@ void AlbumFolderView::reparentItem(AlbumFolderItem* folderItem)
     newParent->insertChild(folderItem);
 }
 
-AlbumFolderItem* AlbumFolderView::findParent(Album *album)
+AlbumFolderItem_Deprecated* AlbumFolderView_Deprecated::findParent(Album *album)
 {
     if (!album || album->isRoot())
         return 0;
@@ -255,7 +255,7 @@ AlbumFolderItem* AlbumFolderView::findParent(Album *album)
     return 0;
 }
 
-AlbumFolderItem* AlbumFolderView::findParentByFolder(Album *album)
+AlbumFolderItem_Deprecated* AlbumFolderView_Deprecated::findParentByFolder(Album *album)
 {
     if (!album)
         return 0;
@@ -264,14 +264,14 @@ AlbumFolderItem* AlbumFolderView::findParentByFolder(Album *album)
 
     if (parent)
     {
-        AlbumFolderItem *pItem = (AlbumFolderItem*)parent->getViewItem();
+        AlbumFolderItem_Deprecated *pItem = (AlbumFolderItem_Deprecated*)parent->getViewItem();
         return pItem;
     }
 
     return 0;
 }
 
-AlbumFolderItem* AlbumFolderView::findParentByDate(PAlbum* album)
+AlbumFolderItem_Deprecated* AlbumFolderView_Deprecated::findParentByDate(PAlbum* album)
 {
     if (!album)
         return 0;
@@ -285,9 +285,9 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(PAlbum* album)
                          KGlobal::locale()->monthName(date.month(), false);
 #endif
 
-    AlbumFolderItem* parentItem = 0;
+    AlbumFolderItem_Deprecated* parentItem = 0;
 
-    for (AlbumFolderItem* groupItem = groupItems_.first();
+    for (AlbumFolderItem_Deprecated* groupItem = groupItems_.first();
          groupItem; groupItem = groupItems_.next())
     {
         if (groupItem->text() == timeString)
@@ -300,7 +300,7 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(PAlbum* album)
     // Need to create a new parent item
     if (!parentItem)
     {
-        parentItem = new AlbumFolderItem(phyRootItem_, timeString,
+        parentItem = new AlbumFolderItem_Deprecated(phyRootItem_, timeString,
                                          date.year(), date.month());
         parentItem->setOpen(false);
         groupItems_.append(parentItem);
@@ -310,7 +310,7 @@ AlbumFolderItem* AlbumFolderView::findParentByDate(PAlbum* album)
 }
 
 
-AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
+AlbumFolderItem_Deprecated* AlbumFolderView_Deprecated::findParentByCollection(PAlbum* album)
 {
     if (!album)
         return 0;
@@ -324,9 +324,9 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
     if (collection.isEmpty() || !collectionList.contains(collection))
         collection = i18n("Uncategorized Albums");
 
-    AlbumFolderItem* parentItem = 0;
+    AlbumFolderItem_Deprecated* parentItem = 0;
 
-    for (AlbumFolderItem* groupItem = groupItems_.first();
+    for (AlbumFolderItem_Deprecated* groupItem = groupItems_.first();
          groupItem; groupItem = groupItems_.next()) {
         if (groupItem->text() == collection) {
             parentItem = groupItem;
@@ -336,7 +336,7 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
 
     // Need to create a new parent item
     if (!parentItem) {
-        parentItem = new AlbumFolderItem(phyRootItem_, collection,
+        parentItem = new AlbumFolderItem_Deprecated(phyRootItem_, collection,
                                          0, 0);
         parentItem->setOpen(false);
         groupItems_.append(parentItem);
@@ -345,11 +345,11 @@ AlbumFolderItem* AlbumFolderView::findParentByCollection(PAlbum* album)
     return parentItem;
 }
 
-void AlbumFolderView::clearEmptyGroupItems()
+void AlbumFolderView_Deprecated::clearEmptyGroupItems()
 {
-    AlbumFolderItem* groupItem = groupItems_.first();
+    AlbumFolderItem_Deprecated* groupItem = groupItems_.first();
     while (groupItem) {
-        AlbumFolderItem* nextGroupItem = groupItems_.next();
+        AlbumFolderItem_Deprecated* nextGroupItem = groupItems_.next();
         if (groupItem->childCount() == 0) {
             groupItems_.remove(groupItem);
             delete groupItem;
@@ -358,19 +358,19 @@ void AlbumFolderView::clearEmptyGroupItems()
     }
 }
 
-void AlbumFolderView::slotTAlbumIconChanged(TAlbum* album)
+void AlbumFolderView_Deprecated::slotTAlbumIconChanged(TAlbum* album)
 {
     if (!album || !album->getViewItem()) {
         return;
     }
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
 
     folderItem->setPixmap(getBlendedIcon(album));
 }
 
-QPixmap AlbumFolderView::getBlendedIcon(TAlbum* album) const
+QPixmap AlbumFolderView_Deprecated::getBlendedIcon(TAlbum* album) const
 {
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
@@ -397,7 +397,7 @@ QPixmap AlbumFolderView::getBlendedIcon(TAlbum* album) const
     return baseIcon;
 }
 
-void AlbumFolderView::slotAlbumAdded(Album *album)
+void AlbumFolderView_Deprecated::slotAlbumAdded(Album *album)
 {
     if (!album)
         return;
@@ -408,7 +408,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
 
         switch (album->type()) {
         case(Album::PHYSICAL): {
-            phyRootItem_ = new AlbumFolderItem(this, album);
+            phyRootItem_ = new AlbumFolderItem_Deprecated(this, album);
             phyRootItem_->setPixmap(iconLoader->loadIcon("folder_image",
                                                          KIcon::NoGroup,
                                                          32,
@@ -419,7 +419,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             break;
         }
         case(Album::TAG): {
-            tagRootItem_= new AlbumFolderItem(this, album);
+            tagRootItem_= new AlbumFolderItem_Deprecated(this, album);
             tagRootItem_->setPixmap(iconLoader->loadIcon("tag-folder",
                                                          KIcon::NoGroup,
                                                          32,
@@ -440,7 +440,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     }
     else {
 
-        AlbumFolderItem *pItem = findParent(album);
+        AlbumFolderItem_Deprecated *pItem = findParent(album);
         if (!pItem) {
             kdWarning() << k_funcinfo << "No parent viewitem for album: "
                         << album->getURL() << endl;
@@ -458,7 +458,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
 
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
-        AlbumFolderItem* folderItem = new AlbumFolderItem(pItem, album);
+        AlbumFolderItem_Deprecated* folderItem = new AlbumFolderItem_Deprecated(pItem, album);
         if (album->type() == Album::PHYSICAL)
         {
             folderItem->setPixmap(iconLoader->loadIcon("folder",
@@ -481,7 +481,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     }
 }
 
-void AlbumFolderView::slotAlbumDeleted(Album *album)
+void AlbumFolderView_Deprecated::slotAlbumDeleted(Album *album)
 {
     if (!album || !album->getViewItem())
         return;
@@ -493,14 +493,14 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
             iconThumbJob_->removeItem(p->getIcon());
     }
 
-    AlbumFolderItem* folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated* folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
     delete folderItem;
 
     clearEmptyGroupItems();
 }
 
-void AlbumFolderView::slotAlbumsCleared()
+void AlbumFolderView_Deprecated::slotAlbumsCleared()
 {
     groupItems_.clear();
     clear();
@@ -509,11 +509,11 @@ void AlbumFolderView::slotAlbumsCleared()
     tagRootItem_ = 0;
 }
 
-void AlbumFolderView::slotAllAlbumsLoaded()
+void AlbumFolderView_Deprecated::slotAllAlbumsLoaded()
 {
     stateInitialLoading_ = false;
 
-    AlbumFolderItem* folderItem = 0;
+    AlbumFolderItem_Deprecated* folderItem = 0;
 
     if (stateAlbumSel_ >= 100000 &&
         stateAlbumSel_ <  200000)
@@ -523,7 +523,7 @@ void AlbumFolderView::slotAllAlbumsLoaded()
         PAlbum* album = albumMan_->findPAlbum(id);
         if (album && album->getViewItem())
         {
-            folderItem = static_cast<AlbumFolderItem*>(album->getViewItem());
+            folderItem = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         }
     }
     else if (stateAlbumSel_ >= 200000)
@@ -533,7 +533,7 @@ void AlbumFolderView::slotAllAlbumsLoaded()
         TAlbum* album = albumMan_->findTAlbum(id);
         if (album && album->getViewItem())
         {
-            folderItem = static_cast<AlbumFolderItem*>(album->getViewItem());
+            folderItem = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         }
     }
 
@@ -547,14 +547,14 @@ void AlbumFolderView::slotAllAlbumsLoaded()
                this, SLOT(slotAllAlbumsLoaded()));
 }
 
-void AlbumFolderView::albumNew()
+void AlbumFolderView_Deprecated::albumNew()
 {
     PAlbum* album = 0;
 
     if (getSelected())
     {
-        AlbumFolderItem *folderItem =
-            dynamic_cast<AlbumFolderItem*>(getSelected());
+        AlbumFolderItem_Deprecated *folderItem =
+            dynamic_cast<AlbumFolderItem_Deprecated*>(getSelected());
         Album *a = folderItem->album();
         if (a && a->type() == Album::PHYSICAL)
         {
@@ -568,13 +568,13 @@ void AlbumFolderView::albumNew()
     albumNew(album);
 }
 
-void AlbumFolderView::albumNew(PAlbum* parent)
+void AlbumFolderView_Deprecated::albumNew(PAlbum* parent)
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings)
     {
-        kdWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
+        kdWarning() << "AlbumFolderView_Deprecated: Couldn't get Album Settings" << endl;
         return;
     }
 
@@ -621,7 +621,7 @@ void AlbumFolderView::albumNew(PAlbum* parent)
 }
 
 
-void AlbumFolderView::slotNewAlbumCreated(Album* album)
+void AlbumFolderView_Deprecated::slotNewAlbumCreated(Album* album)
 {
     disconnect(albumMan_, SIGNAL(signalAlbumAdded(Album*)),
                this, SLOT(slotNewAlbumCreated(Album*)));
@@ -632,14 +632,14 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
     }
     
     PAlbum* pa = dynamic_cast<PAlbum*>(album);
-    AlbumFolderItem* folderItem =
-         static_cast<AlbumFolderItem*>(pa->getViewItem());
+    AlbumFolderItem_Deprecated* folderItem =
+         static_cast<AlbumFolderItem_Deprecated*>(pa->getViewItem());
     
     ensureItemVisible(folderItem);
     setSelected(folderItem);
 }
 
-void AlbumFolderView::albumDelete()
+void AlbumFolderView_Deprecated::albumDelete()
 {
     Album *album = albumMan_->currentAlbum();
     if (!album)
@@ -652,7 +652,7 @@ void AlbumFolderView::albumDelete()
         albumDelete(dynamic_cast<PAlbum*>(album));
 }
 
-void AlbumFolderView::albumDelete(PAlbum* album)
+void AlbumFolderView_Deprecated::albumDelete(PAlbum* album)
 {
     if (!album || album->isRoot())
         return;
@@ -713,7 +713,7 @@ void AlbumFolderView::albumDelete(PAlbum* album)
     }
 }
 
-void AlbumFolderView::albumEdit(PAlbum* album)
+void AlbumFolderView_Deprecated::albumEdit(PAlbum* album)
 {
     if (!album || !album->getViewItem())
         return;
@@ -758,27 +758,27 @@ void AlbumFolderView::albumEdit(PAlbum* album)
     }
 }
 
-void AlbumFolderView::slotPAlbumIconChanged(PAlbum* album)
+void AlbumFolderView_Deprecated::slotPAlbumIconChanged(PAlbum* album)
 {
     if (!album || !album->getViewItem()) {
         return;
     }
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
     folderItem->highlighted_ = false;
 
     albumHighlight(album);
 }
 
-void AlbumFolderView::albumHighlight(PAlbum* album)
+void AlbumFolderView_Deprecated::albumHighlight(PAlbum* album)
 {
     if (!album || !album->getViewItem()) {
         return;
     }
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
 
     if (folderItem->isGroupItem() || folderItem->isHighlighted())
     {
@@ -820,7 +820,7 @@ void AlbumFolderView::albumHighlight(PAlbum* album)
     }
 }
 
-void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
+void AlbumFolderView_Deprecated::slotGotThumbnailFromIcon(const KURL& url,
                                        const QPixmap& thumbnail,
                                        const KFileMetaInfo*)
 {
@@ -829,13 +829,13 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     if (!album || !album->getViewItem())
         return;
 
-    AlbumFolderItem *folderItem =
-        (AlbumFolderItem*)(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        (AlbumFolderItem_Deprecated*)(album->getViewItem());
 
     folderItem->setPixmap(thumbnail);
 }
 
-void AlbumFolderView::slotThumbnailLost(const KURL &url)
+void AlbumFolderView_Deprecated::slotThumbnailLost(const KURL &url)
 {
     PAlbum *album = AlbumManager::instance()->findPAlbum( url.directory() );
     if(!album)
@@ -843,8 +843,8 @@ void AlbumFolderView::slotThumbnailLost(const KURL &url)
 
     album->deleteIcon();
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     folderItem->setPixmap(iconLoader->loadIcon("folder",
                                                KIcon::NoGroup,
@@ -857,7 +857,7 @@ void AlbumFolderView::slotThumbnailLost(const KURL &url)
 }
 
 
-void AlbumFolderView::albumImportFolder()
+void AlbumFolderView_Deprecated::albumImportFolder()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     QDir libraryDir(settings->getAlbumLibraryPath());
@@ -874,8 +874,8 @@ void AlbumFolderView::albumImportFolder()
     PAlbum* parent = 0;
     if(getSelected())
     {
-        AlbumFolderItem *folderItem =
-            dynamic_cast<AlbumFolderItem*>(getSelected());
+        AlbumFolderItem_Deprecated *folderItem =
+            dynamic_cast<AlbumFolderItem_Deprecated*>(getSelected());
         Album *a = folderItem->album();
         if (a && a->type() == Album::PHYSICAL)
         {
@@ -901,19 +901,19 @@ void AlbumFolderView::albumImportFolder()
             this, SLOT(slotAlbumImportResult(KIO::Job *)));
 }
 
-void AlbumFolderView::slotAlbumImportResult(KIO::Job* job)
+void AlbumFolderView_Deprecated::slotAlbumImportResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
 }
 
-void AlbumFolderView::tagNew()
+void AlbumFolderView_Deprecated::tagNew()
 {
     TAlbum *album = 0;
 
     if (getSelected())
     {
-        AlbumFolderItem *folderItem = static_cast<AlbumFolderItem*>(getSelected());
+        AlbumFolderItem_Deprecated *folderItem = static_cast<AlbumFolderItem_Deprecated*>(getSelected());
         Album *a = folderItem->album();
         if (a && a->type() == Album::TAG)
         {
@@ -927,7 +927,7 @@ void AlbumFolderView::tagNew()
     tagNew(album);
 }
 
-void AlbumFolderView::tagNew(TAlbum* parent)
+void AlbumFolderView_Deprecated::tagNew(TAlbum* parent)
 {
     QString title, icon;
 
@@ -939,7 +939,7 @@ void AlbumFolderView::tagNew(TAlbum* parent)
         KMessageBox::error(0, errMsg);
 }
 
-void AlbumFolderView::tagDelete()
+void AlbumFolderView_Deprecated::tagDelete()
 {
     Album *album = albumMan_->currentAlbum();
     if (!album || album->isRoot() || album->type() != Album::TAG)
@@ -948,7 +948,7 @@ void AlbumFolderView::tagDelete()
     tagDelete(dynamic_cast<TAlbum*>(album));
 }
 
-void AlbumFolderView::tagDelete(TAlbum *album)
+void AlbumFolderView_Deprecated::tagDelete(TAlbum *album)
 {
     if (!album || album->isRoot())
         return;
@@ -998,7 +998,7 @@ void AlbumFolderView::tagDelete(TAlbum *album)
     }
 }
 
-void AlbumFolderView::tagEdit()
+void AlbumFolderView_Deprecated::tagEdit()
 {
     Album *album = albumMan_->currentAlbum();
     if (!album || album->isRoot() || album->type() != Album::TAG)
@@ -1007,7 +1007,7 @@ void AlbumFolderView::tagEdit()
     tagEdit(dynamic_cast<TAlbum*>(album));
 }
 
-void AlbumFolderView::tagEdit(TAlbum* album)
+void AlbumFolderView_Deprecated::tagEdit(TAlbum* album)
 {
     if (!album || album->isRoot())
         return;
@@ -1018,8 +1018,8 @@ void AlbumFolderView::tagEdit(TAlbum* album)
         return;
     }
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
 
     if (album->getTitle() != title)
     {
@@ -1042,7 +1042,7 @@ void AlbumFolderView::tagEdit(TAlbum* album)
     emit signalTagsAssigned();
 }
 
-void AlbumFolderView::slotSelectionChanged(ListItem* item)
+void AlbumFolderView_Deprecated::slotSelectionChanged(ListItem* item)
 {
     stateAlbumSel_ = 0;
 
@@ -1052,8 +1052,8 @@ void AlbumFolderView::slotSelectionChanged(ListItem* item)
         return;
     }
 
-    AlbumFolderItem *folderItem
-        = static_cast<AlbumFolderItem *>(item);
+    AlbumFolderItem_Deprecated *folderItem
+        = static_cast<AlbumFolderItem_Deprecated *>(item);
 
     if (folderItem->isGroupItem())
     {
@@ -1070,19 +1070,19 @@ void AlbumFolderView::slotSelectionChanged(ListItem* item)
     }
 }
 
-void AlbumFolderView::slotDoubleClicked(ListItem* item)
+void AlbumFolderView_Deprecated::slotDoubleClicked(ListItem* item)
 {
      if (!item) return;
 
      item->setOpen(!item->isOpen());
 }
 
-void AlbumFolderView::slotRightButtonClicked(ListItem* item)
+void AlbumFolderView_Deprecated::slotRightButtonClicked(ListItem* item)
 {
     if (!item)
         return;
 
-     AlbumFolderItem *folderItem = dynamic_cast<AlbumFolderItem*>(item);
+     AlbumFolderItem_Deprecated *folderItem = dynamic_cast<AlbumFolderItem_Deprecated*>(item);
 
      if (!folderItem || folderItem->isGroupItem() || !folderItem->album())
          return;
@@ -1106,7 +1106,7 @@ void AlbumFolderView::slotRightButtonClicked(ListItem* item)
      }
 }
 
-void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
+void AlbumFolderView_Deprecated::contextMenuPAlbum(PAlbum* album)
 {
     QPopupMenu popmenu(this);
     KActionMenu menuImport(i18n("Import"));
@@ -1204,7 +1204,7 @@ void AlbumFolderView::contextMenuPAlbum(PAlbum* album)
     }
 }
 
-void AlbumFolderView::contextMenuTAlbum(TAlbum* album)
+void AlbumFolderView_Deprecated::contextMenuTAlbum(TAlbum* album)
 {
     QPopupMenu popmenu(this);
 
@@ -1243,7 +1243,7 @@ void AlbumFolderView::contextMenuTAlbum(TAlbum* album)
     }
 }
 
-void AlbumFolderView::resizeEvent(QResizeEvent* e)
+void AlbumFolderView_Deprecated::resizeEvent(QResizeEvent* e)
 {
     ListView::resizeEvent(e);
 
@@ -1255,18 +1255,18 @@ void AlbumFolderView::resizeEvent(QResizeEvent* e)
     }
 }
 
-void AlbumFolderView::setInFocus(bool val)
+void AlbumFolderView_Deprecated::setInFocus(bool val)
 {
     inFocus_ = val;
 }
 
-void AlbumFolderView::focusInEvent(QFocusEvent* e)
+void AlbumFolderView_Deprecated::focusInEvent(QFocusEvent* e)
 {
     emit signalInFocus();
     ListView::focusInEvent(e);
 }
 
-void AlbumFolderView::drawFrame(QPainter* p)
+void AlbumFolderView_Deprecated::drawFrame(QPainter* p)
 {
     if (inFocus_)
         drawFrameRaised(p);
@@ -1276,7 +1276,7 @@ void AlbumFolderView::drawFrame(QPainter* p)
 
 // Drag and Drop -----------------------------------------
 
-void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
+void AlbumFolderView_Deprecated::contentsMousePressEvent(QMouseEvent *e)
 {
     if( !e ) return;
 
@@ -1286,7 +1286,7 @@ void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
     ListView::contentsMousePressEvent(e);
 }
 
-void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
+void AlbumFolderView_Deprecated::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if ( !e ) return;
 
@@ -1317,20 +1317,20 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void AlbumFolderView::contentsMouseReleaseEvent(QMouseEvent *)
+void AlbumFolderView_Deprecated::contentsMouseReleaseEvent(QMouseEvent *)
 {
     //dragItem_ = 0;
 }
 
-void AlbumFolderView::leaveEvent(QEvent*)
+void AlbumFolderView_Deprecated::leaveEvent(QEvent*)
 {
     //dragItem_ = 0;    
 }
 
-void AlbumFolderView::startDrag()
+void AlbumFolderView_Deprecated::startDrag()
 {
-    AlbumFolderItem *folderItem
-        = static_cast<AlbumFolderItem *>(dragItem_);
+    AlbumFolderItem_Deprecated *folderItem
+        = static_cast<AlbumFolderItem_Deprecated *>(dragItem_);
 
     if (folderItem->isGroupItem() || folderItem->album()->isRoot())
         return;
@@ -1359,14 +1359,14 @@ void AlbumFolderView::startDrag()
     }
 }
 
-void AlbumFolderView::contentsDragEnterEvent(QDragEnterEvent*)
+void AlbumFolderView_Deprecated::contentsDragEnterEvent(QDragEnterEvent*)
 {
     // override the default drag enter event avoid selection problems
     // in case of a dropevent
     return;
 }
 
-void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
+void AlbumFolderView_Deprecated::contentsDragMoveEvent(QDragMoveEvent* event)
 {
     if( !QUriDrag::canDecode(event) &&
         !CameraDragObject::canDecode(event) &&
@@ -1379,7 +1379,7 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
 
     // Get a pointer to the new drop item
     QPoint point(0, event->pos().y());
-    AlbumFolderItem* newDropTarget = dynamic_cast<AlbumFolderItem*>(itemAt(point));
+    AlbumFolderItem_Deprecated* newDropTarget = dynamic_cast<AlbumFolderItem_Deprecated*>(itemAt(point));
     if (!newDropTarget)
     {
         clearDropTarget();
@@ -1407,8 +1407,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         //   - on tag root item
         //   - group items other than collections
 
-        AlbumFolderItem *folderDragItem =
-            dynamic_cast<AlbumFolderItem*>(dragItem_);
+        AlbumFolderItem_Deprecated *folderDragItem =
+            dynamic_cast<AlbumFolderItem_Deprecated*>(dragItem_);
         AlbumSettings* settings = AlbumSettings::instance();
 
         if( folderDragItem &&
@@ -1466,8 +1466,8 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
         //   - PAlbums
         //   - GroupItems like collections
 
-        AlbumFolderItem *folderDragItem =
-            dynamic_cast<AlbumFolderItem*>(dragItem_);
+        AlbumFolderItem_Deprecated *folderDragItem =
+            dynamic_cast<AlbumFolderItem_Deprecated*>(dragItem_);
 
         if( folderDragItem &&
             !newDropTarget->isGroupItem() &&
@@ -1515,12 +1515,12 @@ void AlbumFolderView::contentsDragMoveEvent(QDragMoveEvent* event)
     }
 }
 
-void AlbumFolderView::contentsDragLeaveEvent(QDragLeaveEvent *)
+void AlbumFolderView_Deprecated::contentsDragLeaveEvent(QDragLeaveEvent *)
 {
     clearDropTarget();
 }
 
-void AlbumFolderView::contentsDropEvent(QDropEvent* event)
+void AlbumFolderView_Deprecated::contentsDropEvent(QDropEvent* event)
 {
     openAlbumTimer_->stop();
 
@@ -1531,8 +1531,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
 
     if(dropTarget_->isGroupItem())
     {
-        AlbumFolderItem *item =
-            static_cast<AlbumFolderItem*>(dragItem_);
+        AlbumFolderItem_Deprecated *item =
+            static_cast<AlbumFolderItem_Deprecated*>(dragItem_);
         PAlbum *itemAlbum = static_cast<PAlbum*>(item->album());
         itemAlbum->setCollection(dropTarget_->text());
         resort();
@@ -1556,7 +1556,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent* event)
     dropTarget_ = 0;
 }
 
-void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
+void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
 {
     if (TagItemsDrag::canDecode(event))
         return;
@@ -1765,7 +1765,7 @@ void AlbumFolderView::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
     }
 }
 
-void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
+void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
     if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
     {
@@ -1856,8 +1856,8 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 
         if(id == 10)
         {
-            AlbumFolderItem *item =
-                static_cast<AlbumFolderItem*>(dragItem_);
+            AlbumFolderItem_Deprecated *item =
+                static_cast<AlbumFolderItem_Deprecated*>(dragItem_);
             TAlbum *itemAlbum = static_cast<TAlbum*>(item->album());
             TAlbum *parent = static_cast<TAlbum*>(album);
 
@@ -1866,8 +1866,8 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 
             ListItem *parentItem = dragItem_->parent();
             parentItem->removeChild(dragItem_);
-            AlbumFolderItem* dropItem =
-                static_cast<AlbumFolderItem*>(album->getViewItem());
+            AlbumFolderItem_Deprecated* dropItem =
+                static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
             dropItem->insertChild(dragItem_);
             if (!dropItem->isOpen())
                 dropItem->setOpen(true);
@@ -1875,7 +1875,7 @@ void AlbumFolderView::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
     }
 }
 
-void AlbumFolderView::clearDropTarget()
+void AlbumFolderView_Deprecated::clearDropTarget()
 {
     if (dropTarget_)
         dropTarget_->removeDropHighlight();
@@ -1883,20 +1883,20 @@ void AlbumFolderView::clearDropTarget()
     openAlbumTimer_->stop();
 }
 
-void AlbumFolderView::slotOpenAlbumFolderItem()
+void AlbumFolderView_Deprecated::slotOpenAlbumFolderItem_Deprecated()
 {
     openAlbumTimer_->stop();
     if(dropTarget_ && !dropTarget_->isOpen())
         dropTarget_->setOpen(true);
 }
 
-void AlbumFolderView::paintItemBase(QPainter* p, const QColorGroup&,
+void AlbumFolderView_Deprecated::paintItemBase(QPainter* p, const QColorGroup&,
                                     const QRect& r, bool selected)
 {
     p->drawPixmap(r.x(), r.y(), selected ? itemSelPix_ : itemRegPix_);
 }
 
-void AlbumFolderView::slotThemeChanged()
+void AlbumFolderView_Deprecated::slotThemeChanged()
 {
     int w = frameRect().width();
     int h = itemHeight();
@@ -1916,7 +1916,7 @@ void AlbumFolderView::slotThemeChanged()
     viewport()->update();
 }
 
-void AlbumFolderView::loadAlbumState()
+void AlbumFolderView_Deprecated::loadAlbumState()
 {
     QString filePath = locateLocal("appdata", "albumtreestate.bin");
     QFile file(filePath);
@@ -1933,13 +1933,13 @@ void AlbumFolderView::loadAlbumState()
     file.close();
 }
 
-void AlbumFolderView::saveAlbumState()
+void AlbumFolderView_Deprecated::saveAlbumState()
 {
     stateAlbumSel_ = 100000;
     if (getSelected())
     {
-        AlbumFolderItem *folderItem =
-            dynamic_cast<AlbumFolderItem*>(getSelected());
+        AlbumFolderItem_Deprecated *folderItem =
+            dynamic_cast<AlbumFolderItem_Deprecated*>(getSelected());
         Album *a = folderItem->album();
         if (a)
         {
@@ -1959,8 +1959,8 @@ void AlbumFolderView::saveAlbumState()
         PAlbum *a = *it;
         if (!a->isRoot() && a->getViewItem())
         {
-            AlbumFolderItem* folderItem =
-                static_cast<AlbumFolderItem*>(a->getViewItem());
+            AlbumFolderItem_Deprecated* folderItem =
+                static_cast<AlbumFolderItem_Deprecated*>(a->getViewItem());
             stateAlbumOpen_.insert(100000 + a->getID(),
                                    folderItem->parent()->isOpen());
         }
@@ -1972,8 +1972,8 @@ void AlbumFolderView::saveAlbumState()
         TAlbum *a = *it;
         if (!a->isRoot() && a->getViewItem())
         {
-            AlbumFolderItem* folderItem =
-                static_cast<AlbumFolderItem*>(a->getViewItem());
+            AlbumFolderItem_Deprecated* folderItem =
+                static_cast<AlbumFolderItem_Deprecated*>(a->getViewItem());
             stateAlbumOpen_.insert(200000 + a->getID(),
                                    folderItem->parent()->isOpen());
         }

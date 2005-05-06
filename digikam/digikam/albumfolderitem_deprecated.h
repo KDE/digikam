@@ -18,8 +18,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMFOLDERITEM_H
-#define ALBUMFOLDERITEM_H
+#ifndef ALBUMFOLDERITEM_DEPRECATED_H
+#define ALBUMFOLDERITEM_DEPRECATED_H
 
 #include "listitem.h"
 #include <qpixmap.h>
@@ -29,20 +29,20 @@ class QColorGroup;
 class QString;
 class QRect;
 
-class AlbumFolderView;
+class AlbumFolderView_Deprecated;
 class Album;
 
-class AlbumFolderItem : public ListItem {
+class AlbumFolderItem_Deprecated : public ListItem {
 
-    friend class AlbumFolderView;
+    friend class AlbumFolderView_Deprecated;
 
 public:
 
-    AlbumFolderItem(AlbumFolderView *parent, Album* album);
+    AlbumFolderItem_Deprecated(AlbumFolderView_Deprecated *parent, Album* album);
 
-    AlbumFolderItem(AlbumFolderItem *parent, Album* album);
+    AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent, Album* album);
 
-    AlbumFolderItem(AlbumFolderItem *parent, const QString& name,
+    AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent, const QString& name,
                     int year, int month);
 
     bool isGroupItem();

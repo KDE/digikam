@@ -70,7 +70,7 @@ DigikamView::DigikamView(QWidget *parent)
     mAlbumMan = AlbumManager::instance();
 
     mMainSidebar = new Sidebar(this);
-    mFolderView = new AlbumFolderView(this);
+    mFolderView = new AlbumFolderView_Deprecated(this);
     mIconView = new AlbumIconView(this);
     mDateFolderView = new DateFolderView(this);
     mTagFolderView = new TagFolderView(this);
@@ -205,8 +205,8 @@ void DigikamView::slotAlbumDeleted(Album *album)
     
     if(nextAlbum && nextAlbum->getViewItem())
     {
-        AlbumFolderItem *item;    
-        item = static_cast<AlbumFolderItem*>(nextAlbum->getViewItem());
+        AlbumFolderItem_Deprecated *item;    
+        item = static_cast<AlbumFolderItem_Deprecated*>(nextAlbum->getViewItem());
         mFolderView->setSelected(item);
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
@@ -219,8 +219,8 @@ void DigikamView::slotAlbumHistoryBack(int steps)
     
     if(album && album->getViewItem())
     {
-        AlbumFolderItem *item;    
-        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        AlbumFolderItem_Deprecated *item;    
+        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         mFolderView->setSelected(item);
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
@@ -234,8 +234,8 @@ void DigikamView::slotAlbumHistoryForward(int steps)
     
     if(album && album->getViewItem())
     {
-        AlbumFolderItem *item;
-        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        AlbumFolderItem_Deprecated *item;
+        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         mFolderView->setSelected(item);
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
@@ -261,8 +261,8 @@ void DigikamView::slotSelectAlbum(const KURL &url)
     Album *album = mAlbumMan->findPAlbum(url);
     if(album && album->getViewItem())
     {
-        AlbumFolderItem *item;
-        item = static_cast<AlbumFolderItem*>(album->getViewItem());
+        AlbumFolderItem_Deprecated *item;
+        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         mFolderView->setSelected(item);
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());

@@ -533,11 +533,11 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     if (!album || album->isRoot())
         return;
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
 
-    AlbumFolderView* folderView =
-        static_cast<AlbumFolderView*>(folderItem->listView());
+    AlbumFolderView_Deprecated* folderView =
+        static_cast<AlbumFolderView_Deprecated*>(folderItem->listView());
     folderView->tagEdit(album);
 
     // Now update the icon/title of the corresponding checklistitem
