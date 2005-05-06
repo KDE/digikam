@@ -202,7 +202,13 @@ void ScanLib::allFiles(const QString& directory)
     for (QStringList::iterator it = filesInAlbum.begin();
          it != filesInAlbum.end(); ++it)
     {
-        filesFoundInDB.insert(*it, true);
+        if (albumURL.isEmpty())
+        {
+            kdDebug() << "Root item found: " << *it << " in " << albumID << endl;
+            db->deleteItem( albumID, *it );
+        }
+        else
+            filesFoundInDB.insert(*it, true);
     }
 
     const QFileInfoList *list = dir.entryInfoList();
@@ -242,6 +248,10 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     QString comment;
     QDateTime datetime;
     QDir albumPath( AlbumManager::instance()->getLibraryPath());
+
+    // Do not store items found in the root of the albumdb
+    if (albumURL.isEmpty())
+        return;
 
     KFileMetaInfo itemMetaInfo( albumPath.path()+albumURL+'/'+filename );
 
