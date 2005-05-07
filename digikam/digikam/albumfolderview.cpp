@@ -159,9 +159,9 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
                     SLOT(slotGotThumbnailFromIcon(const KURL&,
                          const QPixmap&,
                          const KFileMetaInfo*)));
-            connect(d->iconThumbJob,
+            /*connect(d->iconThumbJob,
                     SIGNAL(signalFailed(const KURL&)),
-                    SLOT(slotThumbnailLost(const KURL&)));
+                    SLOT(slotThumbnailLost(const KURL&)));*/
         }
         else
         {
