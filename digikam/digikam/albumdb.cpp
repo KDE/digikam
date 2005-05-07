@@ -760,7 +760,7 @@ QString AlbumDB::getSetting(const QString& keyword)
             .arg(escapeString(keyword)),
             &values );
 
-    if (!values.isEmpty())
+    if (values.isEmpty())
         return QString::null;
     else
         return values[0];

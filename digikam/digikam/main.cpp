@@ -268,34 +268,6 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    // Check the locale setting and see if it has changed
-
-    QString currLocale(setlocale(0,0));
-    
-    config->setGroup("General Settings");
-    if (!config->hasKey("Locale"))
-    {
-        config->writeEntry("Locale", currLocale);
-    }
-    else
-    {
-        QString savedLocale = config->readEntry("Locale");
-        if (savedLocale != currLocale)
-        {
-            int result = KMessageBox::warningYesNo(0,
-                                                   i18n("Your locale has changed from the previous time "
-                                                        "digiKam was run. This can cause unexpected "
-                                                        "problems. If you are sure that you want to "
-                                                        "continue, click on 'Yes' to start digiKam. "
-                                                        "Otherwise, click on 'No' and correct your "
-                                                        "locale setting before restarting digiKam"));
-            if (result != KMessageBox::Yes)
-                return 0;
-
-            config->writeEntry("Locale", currLocale);
-        }
-    }
-
     // copy the db to a new temp file. we will use this copied db for testing
     // purposes in 0.8 development. just a safety precautions for developers
     // working on their main photo library

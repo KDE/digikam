@@ -18,9 +18,11 @@
  * 
  * ============================================================ */
 
+#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
+#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
@@ -180,6 +182,44 @@ void AlbumManager::setLibraryPath(const QString& path)
 #endif
 
     d->db->setDBPath(dbPath);
+
+    QString currLocale(setlocale(0,0));
+    QString dbLocale = d->db->getSetting("Locale");
+    if (dbLocale.isNull())
+    {
+        kdDebug() << "No locale found in database" << endl;
+
+        // Copy an existing locale from the settings file (used < 0.8)
+        // to the database.
+        KConfig* config = KGlobal::config();
+        config->setGroup("General Settings");
+        if (config->hasKey("Locale"))
+        {
+            kdDebug() << "Locale found in configfile" << endl;
+            dbLocale = config->readEntry("Locale");
+        }
+        else
+        {
+            kdDebug() << "No locale found in config file"  << endl;
+            dbLocale = currLocale;
+        }
+        d->db->setSetting("Locale",dbLocale);
+    }
+
+    if (dbLocale != currLocale)
+    {
+        int result = KMessageBox::warningYesNo(0,
+                    i18n("Your locale has changed from the previous time "
+                         "this album was opened. This can cause unexpected "
+                         "problems. If you are sure that you want to "
+                         "continue, click on 'Yes' to work with this album. "
+                         "Otherwise, click on 'No' and correct your "
+                         "locale setting before restarting digiKam"));
+        if (result != KMessageBox::Yes)
+            exit(0);
+
+        d->db->setSetting("Locale",currLocale);
+    }
 }
 
 QString AlbumManager::getLibraryPath() const
