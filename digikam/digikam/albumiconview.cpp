@@ -616,9 +616,7 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
     ImageDescEdit descEdit(this, iconItem, this);
     descEdit.exec();
 
-    if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-        d->imageLister->updateDirectory();
-
+    d->imageLister->updateDirectory();
     updateContents();
 }
 
@@ -1027,10 +1025,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         albumItem->imageInfo()->setTag(tagID);
                     }
                 }
-                if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
-                {
-                    d->imageLister->updateDirectory();
-                }
+
+                d->imageLister->updateDirectory();
                 updateContents();
                 break;
             }
