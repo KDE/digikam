@@ -80,6 +80,7 @@ IconGroupItem::IconGroupItem(IconView* parent)
 
 IconGroupItem::~IconGroupItem()
 {
+    clear(false);
     d->view->takeGroup(this);
     delete d;
 }
@@ -190,6 +191,28 @@ void IconGroupItem::takeItem(IconItem* item)
 int IconGroupItem::count() const
 {
     return d->count;
+}
+
+void IconGroupItem::clear(bool update)
+{
+    d->clearing = true;
+
+    IconItem *item = d->firstItem;
+    while (item)
+    {
+        IconItem *tmp = item->m_next;
+        delete item;
+        item = tmp;
+    }
+
+    d->firstItem = 0;
+    d->lastItem  = 0;
+    d->count     = 0;
+
+    if (update)
+        d->view->triggerUpdate();
+
+    d->clearing = false;
 }
 
 void IconGroupItem::sort()

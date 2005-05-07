@@ -46,6 +46,8 @@ public:
     IconItem* lastItem() const;
 
     int       count() const;
+
+    void      clear(bool update=true);
     void      sort();
     
     void insertItem(IconItem* item);
