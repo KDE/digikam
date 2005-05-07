@@ -25,6 +25,11 @@
 #include <qpixmap.h>
 #include <qpalette.h>
 
+#include <klocale.h>
+#include <kglobal.h>
+#include <kcalendarsystem.h>
+#include <kdeversion.h>
+
 #include "imageinfo.h"
 #include "albumlister.h"
 #include "monthwidget.h"
@@ -189,11 +194,21 @@ void MonthWidget::drawContents(QPainter *)
 
     fnBold.setPointSize(fnBold.pointSize()+2);
     p.setFont(fnBold);
+
+#if KDE_IS_VERSION(3,2,0)
     p.drawText(r, Qt::AlignCenter,
-               QString("%1, %2")
-               .arg(m_year)
-               .arg(QDate::longMonthName(m_month)));
-    
+               QString("%1 %2")
+                .arg(KGlobal::locale()->calendar()->monthName(m_month, false))
+                .arg(KGlobal::locale()->calendar()->
+                       year(QDate(m_year,m_month,1))));
+#else
+    p.drawText(r, Qt::AlignCenter,
+               QString("%1 %2")
+                .arg(KGlobal::locale()->monthName(m_month))
+                .arg(QString::number(m_year)));
+#endif
+
+
     p.end();
 
     bitBlt(this, cr.x(), cr.y(), &pix);
