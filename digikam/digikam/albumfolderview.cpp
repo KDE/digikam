@@ -42,7 +42,7 @@ public:
     AlbumFolderViewItem(QListView *parent, PAlbum *album);
     AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);    
     
-    PAlbum* getAlbum();
+    PAlbum* getAlbum() const;
     
 private:
     PAlbum      *m_album;
@@ -60,7 +60,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
     m_album = album;
 }
 
-PAlbum* AlbumFolderViewItem::getAlbum()
+PAlbum* AlbumFolderViewItem::getAlbum() const
 {
     return m_album;
 }

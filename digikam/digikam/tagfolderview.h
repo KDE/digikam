@@ -34,6 +34,7 @@ public:
     
 private slots:
     void    slotAlbumAdded(Album *);
+    void    slotSelectionChanged(QListViewItem *);    
 
 private:
     TagFolderViewPriv   *d;

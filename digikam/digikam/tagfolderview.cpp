@@ -66,6 +66,9 @@ public:
     TagFolderViewItem(QListView *parent, TAlbum *tag);
     TagFolderViewItem(QListViewItem *parent, TAlbum *tag);    
 
+    TAlbum* getTag() const;
+    
+private:
     TAlbum      *m_tag;
 };
 
@@ -81,6 +84,11 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
     m_tag = tag;
 }
 
+TAlbum* TagFolderViewItem::getTag() const
+{
+    return m_tag;
+}
+
 //-----------------------------------------------------------------------------
 // TagFolderViewPriv
 //-----------------------------------------------------------------------------
@@ -88,6 +96,7 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
 class TagFolderViewPriv
 {
 public:
+    AlbumManager                   *albumMan;    
     QIntDict<TagFolderViewItem>    dict;
 };
 
@@ -99,13 +108,16 @@ TagFolderView::TagFolderView(QWidget *parent)
     : QListView(parent)
 {
     d = new TagFolderViewPriv();
-    
+    d->albumMan = AlbumManager::instance();
+        
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
     
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
+    connect(this, SIGNAL(selectionChanged(QListViewItem *)),
+            this, SLOT(slotSelectionChanged(QListViewItem *)));    
 }
 
 void TagFolderView::slotAlbumAdded(Album *album)
@@ -136,6 +148,24 @@ void TagFolderView::slotAlbumAdded(Album *album)
         item->setPixmap(0, getBlendedIcon(tag));
         d->dict.insert(tag->getID(), item);        
     }
+}
+
+void TagFolderView::slotSelectionChanged(QListViewItem *item)
+{
+    if(!item)
+    {
+        d->albumMan->setCurrentAlbum(0);
+        return;
+    }
+    
+    TagFolderViewItem *tagitem = dynamic_cast<TagFolderViewItem*>(item);
+    if(!tagitem)
+    {
+        d->albumMan->setCurrentAlbum(0);
+        return;        
+    }
+    
+    d->albumMan->setCurrentAlbum(tagitem->getTag());
 }
 
 #include "tagfolderview.moc"
