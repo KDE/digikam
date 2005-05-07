@@ -33,6 +33,8 @@ public:
     DateFolderView(QWidget* parent);
     ~DateFolderView();
 
+    void setActive(bool val);
+    
 private slots:
 
     void slotDAlbumAdded(DAlbum* album);

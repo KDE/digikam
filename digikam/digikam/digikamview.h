@@ -128,6 +128,8 @@ private slots:
 
     void slotFolderViewInFocus();
     void slotIconViewInFocus();
+
+    void slotLeftSidebarChangedTab(QWidget* w);
     
 signals:
 

@@ -164,6 +164,12 @@ void DigikamView::setupConnections()
 
     connect(mFolderView_Deprecated, SIGNAL(signalAlbumModified()),
 	    mIconView, SLOT(slotAlbumModified()));
+
+    // -- Sidebar Connections -------------------------------------
+
+    connect(mMainSidebar, SIGNAL(signalChangedTab(QWidget*)),
+            SLOT(slotLeftSidebarChangedTab(QWidget*)));
+
 }
 
 void DigikamView::slot_sortAlbums(int order)
@@ -563,6 +569,13 @@ void DigikamView::slotIconViewInFocus()
 {
     mFolderView_Deprecated->setInFocus(false);
     mIconView->setInFocus(true);
+}
+
+void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
+{
+    mDateFolderView->setActive(w == mDateFolderView);
+    //mFolderView->setActive(w == mFolderView);
+    //mTagFolderView->setActive(w == mTagFolderView);
 }
 
 #include "digikamview.moc"

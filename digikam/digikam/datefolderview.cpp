@@ -45,6 +45,7 @@ public:
 
     QListView*   listview;
     MonthWidget* monthview;
+    bool         active;
 };
 
 class DateFolderItem : public QListViewItem
@@ -137,6 +138,7 @@ DateFolderView::DateFolderView(QWidget* parent)
     : QVBox(parent)
 {
     d = new DateFolderViewPriv;
+    d->active    = false;
     d->listview  = new QListView(this);
     d->monthview = new MonthWidget(this);
 
@@ -156,6 +158,15 @@ DateFolderView::DateFolderView(QWidget* parent)
 DateFolderView::~DateFolderView()
 {
     delete d;
+}
+
+void DateFolderView::setActive(bool val)
+{
+    d->active = val;
+    if (d->active)
+    {
+        slotSelectionChanged();
+    }
 }
 
 void DateFolderView::slotDAlbumAdded(DAlbum* album)
@@ -186,6 +197,9 @@ void DateFolderView::slotDAlbumAdded(DAlbum* album)
 
 void DateFolderView::slotSelectionChanged()
 {
+    if (!d->active)
+        return;
+    
     QListViewItem* selItem = 0;
     
     QListViewItemIterator it( d->listview );
