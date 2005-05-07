@@ -252,7 +252,7 @@ void AlbumLister::slotFilterItems()
         return;
     }
 
-    QPtrList<ImageInfo> newItemsList;
+    QPtrList<ImageInfo> newFilteredItemsList;
 
     ImageInfo* item;
     for (ImageInfoListIterator it(d->itemList);
@@ -261,17 +261,17 @@ void AlbumLister::slotFilterItems()
         if (matchesFilter(item))
         {
             if (!item->getViewItem())
-                newItemsList.append(item);
+                newFilteredItemsList.append(item);
         }
         else
         {
             if (item->getViewItem())
-                emit signalDeleteItem(item);
+                emit signalDeleteFilteredItem(item);
         }
     }
 
-    if (!newItemsList.isEmpty())
-        emit signalNewItems(newItemsList);
+    if (!newFilteredItemsList.isEmpty())
+        emit signalNewFilteredItems(newFilteredItemsList);
 }
 
 void AlbumLister::slotResult(KIO::Job* job)
@@ -292,6 +292,7 @@ void AlbumLister::slotResult(KIO::Job* job)
          it != d->itemMap.end(); ++it)
     {
         emit signalDeleteItem(it.data());
+        emit signalDeleteFilteredItem(it.data());
         d->itemList.remove(it.data());
     }
 
@@ -311,7 +312,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     QString date;
     size_t  size;
 
-    ImageInfoList itemList;
+    ImageInfoList newItemsList;
+    ImageInfoList newFilteredItemsList;
         
     QDataStream ds(data, IO_ReadOnly);
     while (!ds.atEnd())
@@ -336,12 +338,16 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
                                         size);
 
         if (matchesFilter(info))
-            itemList.append(info);
+            newFilteredItemsList.append(info);
+        newItemsList.append(info);
         d->itemList.append(info);
     }
 
-    if (!itemList.isEmpty())
-        emit signalNewItems(itemList);
+    if (!newFilteredItemsList.isEmpty())
+        emit signalNewFilteredItems(newFilteredItemsList);
+
+    if (!newItemsList.isEmpty())
+        emit signalNewItems(newItemsList);
 }
 
 #include "albumlister.moc"

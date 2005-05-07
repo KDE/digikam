@@ -65,6 +65,8 @@ signals:
 
     void signalNewItems(const ImageInfoList& items);
     void signalDeleteItem(ImageInfo* item);
+    void signalNewFilteredItems(const ImageInfoList& items);
+    void signalDeleteFilteredItem(ImageInfo* item);
     void signalClear();
     void signalCompleted();
 

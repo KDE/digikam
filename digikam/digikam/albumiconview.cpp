@@ -179,10 +179,10 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- ImageLister connections -------------------------------------
 
-    connect(d->imageLister, SIGNAL(signalNewItems(const ImageInfoList&)),
+    connect(d->imageLister, SIGNAL(signalNewFilteredItems(const ImageInfoList&)),
             this, SLOT(slotImageListerNewItems(const ImageInfoList&)));
 
-    connect(d->imageLister, SIGNAL(signalDeleteItem(ImageInfo*)),
+    connect(d->imageLister, SIGNAL(signalDeleteFilteredItem(ImageInfo*)),
             this, SLOT(slotImageListerDeleteItem(ImageInfo*)) );
 
     connect(d->imageLister, SIGNAL(signalClear()),
