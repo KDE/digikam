@@ -294,7 +294,6 @@ void IconView::selectAll()
         if (!item->isSelected())
         {
             item->setSelected(true, false);
-            d->selectedItems.insert(item, item);
         }
     }
     
@@ -316,12 +315,10 @@ void IconView::invertSelection()
         if (!item->isSelected())
         {
             item->setSelected(true, false);
-            d->selectedItems.insert(item, item);
         }
         else
         {
             item->setSelected(false, false);
-            d->selectedItems.remove(item);
         }
     }
     
@@ -338,7 +335,7 @@ void IconView::selectItem(IconItem* item, bool select)
 
     if (select)
     {
-        d->selectedItems.insert(item, item);
+        d->selectedItems.replace(item, item);
     }
     else
     {
