@@ -42,7 +42,8 @@ private slots:
     void    slotAlbumAdded(Album *);
     void    slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
                                      const KFileMetaInfo*);
-
+    void    slotSelectionChanged(QListViewItem *);
+    
 private:
     void    setAlbumThumbnail(PAlbum *album);
     

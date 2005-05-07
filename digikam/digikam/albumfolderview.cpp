@@ -41,7 +41,10 @@ class AlbumFolderViewItem : public QListViewItem
 public:
     AlbumFolderViewItem(QListView *parent, PAlbum *album);
     AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);    
-
+    
+    PAlbum* getAlbum();
+    
+private:
     PAlbum      *m_album;
 };
 
@@ -55,6 +58,11 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
     : QListViewItem(parent, album->getTitle())
 {
     m_album = album;
+}
+
+PAlbum* AlbumFolderViewItem::getAlbum()
+{
+    return m_album;
 }
 
 //-----------------------------------------------------------------------------
@@ -88,6 +96,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
                
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
+    
+    connect(this, SIGNAL(selectionChanged(QListViewItem *)),
+            this, SLOT(slotSelectionChanged(QListViewItem *)));
 }
 
 AlbumFolderView::~AlbumFolderView()
@@ -194,5 +205,24 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     item->setPixmap(0, thumbnail);
 }
 
+void AlbumFolderView::slotSelectionChanged(QListViewItem *item)
+{
+    if(!item)
+    {
+        d->albumMan->setCurrentAlbum(0);
+        return;
+    }
+    
+    AlbumFolderViewItem *albumitem = dynamic_cast<AlbumFolderViewItem*>(item);
+    if(!albumitem)
+    {
+        d->albumMan->setCurrentAlbum(0);
+        return;        
+    }
+    
+    d->albumMan->setCurrentAlbum(albumitem->getAlbum());
+}
 
 #include "albumfolderview.moc"
+
+
