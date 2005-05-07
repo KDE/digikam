@@ -1,6 +1,13 @@
 * split albumfolderview into albumview and tagview
    - also port albumview and tagview to qlistview [JA]
 
+* post conversion to qlistview: allow selection of multiple 
+  albums/tags/dates
+   - instead of a "current album" there will a list of 
+     "current urls"
+   - will lead to widesweeping changes all over the core
+     and the kioslaves
+
 * allow user to edit dates (maybe through comments tag editor) [TA]
 
 * fix changing of album library path. [TA/RR]
@@ -23,3 +30,12 @@
    - need to discuss
 
 * remove embedded comments display in digikam
+
+* when switching views, activate the new view and
+  switch the thumbnail view to that one
+
+* fix saving of curent state of digikam 
+  - splitter sizes
+  - active view
+  - closed/open state of left/right views
+  - currently selected albums in each view
