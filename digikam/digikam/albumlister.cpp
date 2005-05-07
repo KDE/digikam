@@ -24,6 +24,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qmap.h>
+#include <qpair.h>
 #include <qvaluelist.h>
 #include <qtimer.h>
 
@@ -49,25 +50,19 @@ class AlbumListerPriv
 {
 public:
 
-    enum State
-    {
-        LIST=0,
-        UPDATE
-    };
-    
-    KIO::TransferJob*  job;
-    State              state;
-    QString            filter;
-    ImageInfoList      itemList;
+    KIO::TransferJob*                     job;
+    QString                               filter;
+                                          
+    Album*                                currAlbum;
+    AlbumDB*                              db;
+                                          
+    QMap<int,bool>                        dayFilter;
+    QValueList<int>                       tagFilter;
+    bool                                  untaggedFilter;
+    QTimer*                               filterTimer;
 
-    Album*             currAlbum;
-    AlbumDB*           db;
-    QByteArray         buffer;
-
-    QMap<int,bool>     dayFilter;
-    QValueList<int>    tagFilter;
-    bool               untaggedFilter;
-    QTimer*            filterTimer;
+    ImageInfoList                         itemList;
+    QMap<QPair<int,QString>, ImageInfo*>  itemMap;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -86,7 +81,6 @@ AlbumLister::AlbumLister()
 
     d = new AlbumListerPriv;
     d->job       = 0;
-    d->state     = AlbumListerPriv::LIST;
     d->currAlbum = 0;
     d->filter    = "*";
     d->itemList.setAutoDelete(true);
@@ -109,7 +103,8 @@ void AlbumLister::openAlbum(Album *album)
     d->currAlbum = album;
     d->filterTimer->stop();
     emit signalClear();
-    d->itemList.clear();        
+    d->itemList.clear();
+    d->itemMap.clear();
 
     if (d->job)
     {
@@ -120,9 +115,6 @@ void AlbumLister::openAlbum(Album *album)
     if (!album)
         return;
 
-    d->state = AlbumListerPriv::LIST;
-    d->buffer.resize(0);
-        
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
@@ -143,14 +135,20 @@ void AlbumLister::updateDirectory()
     if (!d->currAlbum)
         return;
 
+    d->filterTimer->stop();
+
     if (d->job)
     {
         d->job->kill();
         d->job = 0;
     }
 
-    d->state = AlbumListerPriv::UPDATE;
-    d->buffer.resize(0);
+    d->itemMap.clear();
+    ImageInfo* item;
+    for (ImageInfoListIterator it(d->itemList); (item = it.current()); ++it)
+    {
+        d->itemMap.insert(QPair<int,QString>(item->albumID(), item->name()), item);
+    }
         
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
@@ -227,6 +225,8 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
 void AlbumLister::stop()
 {
+    d->filterTimer->stop();
+    
     if (d->job)
     {
         d->job->kill();
@@ -281,83 +281,22 @@ void AlbumLister::slotResult(KIO::Job* job)
     if (job->error())
     {
         kdWarning() << "Failed to list url" << endl;
+        d->itemMap.clear();
         return;
     }
 
-    if (d->state == AlbumListerPriv::UPDATE)
+   
+    typedef QMap<QPair<int,QString>, ImageInfo*> ImMap;
+
+    for (ImMap::iterator it = d->itemMap.begin();
+         it != d->itemMap.end(); ++it)
     {
-        // insert the currently listed items into a map for quick searches
-        typedef QMap<QString, ImageInfo*> ImMap;
-        ImMap currItems;
-
-        ImageInfo* item;
-        for (ImageInfoListIterator it(d->itemList);
-             (item = it.current()); ++it)
-        {
-            currItems.insert(QDir::cleanDirPath(item->kurl().path()),
-                                item);
-        }
-
-        QValueList<ImageInfo*> newItems;
-        
-        // generate a list of what the kioslave has sent us.
-        int     pid;    
-        QString path;
-        QString date;
-        size_t  size;
-    
-        QDataStream ds(d->buffer, IO_ReadOnly);
-        while (!ds.atEnd())
-        {
-            ds >> pid;
-            ds >> path;
-            ds >> date;
-            ds >> size;
-
-            if (currItems.contains(path))
-            {
-                // already present. remove it from the map
-                currItems.remove(path);
-            }
-            else
-            {
-                // new item. add it to the list of newItems
-                newItems.append(new ImageInfo(pid, path.section('/', -1),
-                                              QDateTime::fromString(date, Qt::ISODate),
-                                              size));
-            }
-        }
-
-        // now the items contained in the map are the ones which
-        // have been deleted
-        for (ImMap::iterator it = currItems.begin();
-             it != currItems.end(); ++it)
-        {
-            emit signalDeleteItem(it.data());
-            d->itemList.remove(it.data());
-        }
-
-        // now deal with the new items which have been listed
-        for (QValueList<ImageInfo*>::iterator it = newItems.begin();
-             it != newItems.end(); ++it)
-        {
-            d->itemList.append(*it);
-        }
-
-        // also emit the signal that new items have arrived
-        QPtrList<ImageInfo> newItemsList;
-        for (QValueList<ImageInfo*>::iterator it = newItems.begin();
-             it != newItems.end(); ++it)
-        {
-            if (matchesFilter(*it))
-                newItemsList.append(*it);
-        }
-
-        if (!newItemsList.isEmpty())
-            emit signalNewItems(newItemsList);
+        emit signalDeleteItem(it.data());
+        d->itemList.remove(it.data());
     }
 
-
+    d->itemMap.clear();
+    
     emit signalCompleted();
 }
 
@@ -366,41 +305,43 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    if (d->state == AlbumListerPriv::LIST)
-    {    
-        int     pid;    
-        QString path;
-        QString date;
-        size_t  size;
+    int     pid;    
+    QString path;
+    QString name;
+    QString date;
+    size_t  size;
 
-        ImageInfoList itemList;
+    ImageInfoList itemList;
         
-        QDataStream ds(data, IO_ReadOnly);
-        while (!ds.atEnd())
+    QDataStream ds(data, IO_ReadOnly);
+    while (!ds.atEnd())
+    {
+        ds >> pid;
+        ds >> path;
+        ds >> date;
+        ds >> size;
+
+        name = path.section('/', -1);
+
+        QPair<int, QString> itemIdentifier(pid, name);
+        
+        if (d->itemMap.contains(itemIdentifier))
         {
-            ds >> pid;
-            ds >> path;
-            ds >> date;
-            ds >> size;
-
-            ImageInfo* info = new ImageInfo(pid, path.section('/', -1),
-                                            QDateTime::fromString(date, Qt::ISODate),
-                                            size);
-
-            if (matchesFilter(info))
-                itemList.append(info);
-            d->itemList.append(info);
+            d->itemMap.remove(itemIdentifier);
+            continue;
         }
 
-        if (!itemList.isEmpty())
-            emit signalNewItems(itemList);
+        ImageInfo* info = new ImageInfo(pid, name, 
+                                        QDateTime::fromString(date, Qt::ISODate),
+                                        size);
 
-        return;
+        if (matchesFilter(info))
+            itemList.append(info);
+        d->itemList.append(info);
     }
 
-    int oldSize = d->buffer.size();
-    d->buffer.resize(d->buffer.size() + data.size());
-    memcpy(d->buffer.data()+oldSize, data.data(), data.size());
+    if (!itemList.isEmpty())
+        emit signalNewItems(itemList);
 }
 
 #include "albumlister.moc"
