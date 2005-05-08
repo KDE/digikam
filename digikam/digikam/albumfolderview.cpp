@@ -75,6 +75,7 @@ public:
     AlbumManager                     *albumMan;
     QIntDict<AlbumFolderViewItem>    dict;
     ThumbnailJob                     *iconThumbJob;
+    bool                             active;
 };
 
 //-----------------------------------------------------------------------------
@@ -87,6 +88,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     d = new AlbumFolderViewPriv();
     
     d->albumMan = AlbumManager::instance();
+    d->active   = false;
     d->iconThumbJob = 0;
     
     addColumn(i18n("My Albums"));
@@ -97,8 +99,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
     
-    connect(this, SIGNAL(selectionChanged(QListViewItem *)),
-            this, SLOT(slotSelectionChanged(QListViewItem *)));
+    connect(this, SIGNAL(selectionChanged()),
+            this, SLOT(slotSelectionChanged()));
 }
 
 AlbumFolderView::~AlbumFolderView()
@@ -107,6 +109,14 @@ AlbumFolderView::~AlbumFolderView()
         delete d->iconThumbJob;
     
     delete d;
+}
+
+void AlbumFolderView::setActive(bool val)
+{
+    d->active = val;
+
+    if (d->active)
+        slotSelectionChanged();
 }
 
 
@@ -189,8 +199,8 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
 }
 
 void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
-        const QPixmap& thumbnail,
-        const KFileMetaInfo*)
+                                               const QPixmap& thumbnail,
+                                               const KFileMetaInfo*)
 {
     PAlbum* album = d->albumMan->findPAlbum(url.directory());
 
@@ -205,15 +215,30 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     item->setPixmap(0, thumbnail);
 }
 
-void AlbumFolderView::slotSelectionChanged(QListViewItem *item)
+void AlbumFolderView::slotSelectionChanged()
 {
-    if(!item)
+    if (!d->active)
+        return;
+
+    QListViewItem* selItem = 0;
+    QListViewItemIterator it(this);
+    while (it.current())
+    {
+        if (it.current()->isSelected())
+        {
+            selItem = it.current();
+            break;
+        }
+        ++it;
+    }
+
+    if (!selItem)
     {
         d->albumMan->setCurrentAlbum(0);
         return;
     }
     
-    AlbumFolderViewItem *albumitem = dynamic_cast<AlbumFolderViewItem*>(item);
+    AlbumFolderViewItem *albumitem = dynamic_cast<AlbumFolderViewItem*>(selItem);
     if(!albumitem)
     {
         d->albumMan->setCurrentAlbum(0);

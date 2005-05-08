@@ -34,17 +34,23 @@ class AlbumFolderViewPriv;
 class AlbumFolderView : public QListView
 {
     Q_OBJECT
+
 public:
+
     AlbumFolderView(QWidget *parent);
     ~AlbumFolderView();
+
+    void setActive(bool val);
     
 private slots:
+
     void    slotAlbumAdded(Album *);
     void    slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
                                      const KFileMetaInfo*);
-    void    slotSelectionChanged(QListViewItem *);
+    void    slotSelectionChanged();
     
 private:
+
     void    setAlbumThumbnail(PAlbum *album);
     
     AlbumFolderViewPriv   *d;
