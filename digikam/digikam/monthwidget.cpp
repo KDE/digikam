@@ -216,9 +216,19 @@ void MonthWidget::drawContents(QPainter *)
 
 void MonthWidget::mousePressEvent(QMouseEvent *e)
 {
-    for (int i=0; i<42; i++)
+    int firstSelected = 0, lastSelected = 0;
+    if (e->state() != Qt::ControlButton)
     {
-        m_days[i].selected = false;
+        for (int i=0; i<42; i++)
+        {
+            if (m_days[i].selected)
+            {
+                if (firstSelected==0)
+                    firstSelected = i;
+                lastSelected =i;
+            }
+            m_days[i].selected = false;
+        }
     }
 
     QRect r1(0, m_currh*3, m_currw, m_currh*6);
@@ -229,7 +239,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
         int j = (e->pos().y() - 3*m_currh)/m_currh;
         for (int i=0; i<7; i++)
         {
-            m_days[j*7+i].selected = true;
+            m_days[j*7+i].selected = !m_days[j*7+i].selected;
         }
     }
     else if (r2.contains(e->pos()))
@@ -237,7 +247,18 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
         int i, j;
         i = (e->pos().x() - m_currw)/m_currw;
         j = (e->pos().y() - 3*m_currh)/m_currh;
-        m_days[j*7+i].selected = true;
+        if (e->state() == Qt::ShiftButton)
+        {
+            int endSelection = j*7+i;
+            if (endSelection > firstSelected) 
+                for (int i2=firstSelected ; i2 <= endSelection; i2++)
+                    m_days[i2].selected = true;
+            else if (endSelection < firstSelected)
+                for (int i2=lastSelected ; i2 >= endSelection; i2--)
+                    m_days[i2].selected = true;
+        }
+        else
+            m_days[j*7+i].selected = !m_days[j*7+i].selected;
     }
 
     QValueList<int> filterDays;
