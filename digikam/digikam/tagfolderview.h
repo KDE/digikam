@@ -29,14 +29,21 @@ class TagFolderViewPriv;
 class TagFolderView : public QListView
 {
     Q_OBJECT
+
 public:
+
     TagFolderView(QWidget *parent);
+    ~TagFolderView();
+
+    void setActive(bool val);
     
 private slots:
+
     void    slotAlbumAdded(Album *);
-    void    slotSelectionChanged(QListViewItem *);    
+    void    slotSelectionChanged();    
 
 private:
+
     TagFolderViewPriv   *d;
 };
 

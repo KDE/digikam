@@ -98,6 +98,7 @@ class TagFolderViewPriv
 public:
     AlbumManager                   *albumMan;    
     QIntDict<TagFolderViewItem>    dict;
+    bool                           active;
 };
 
 //-----------------------------------------------------------------------------
@@ -109,6 +110,7 @@ TagFolderView::TagFolderView(QWidget *parent)
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
+    d->active   = false;
         
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
@@ -116,8 +118,20 @@ TagFolderView::TagFolderView(QWidget *parent)
     
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
-    connect(this, SIGNAL(selectionChanged(QListViewItem *)),
-            this, SLOT(slotSelectionChanged(QListViewItem *)));    
+    connect(this, SIGNAL(selectionChanged()),
+            this, SLOT(slotSelectionChanged()));    
+}
+
+TagFolderView::~TagFolderView()
+{
+    delete d;    
+}
+
+void TagFolderView::setActive(bool val)
+{
+    d->active = val;
+    if (d->active)
+        slotSelectionChanged();
 }
 
 void TagFolderView::slotAlbumAdded(Album *album)
@@ -150,15 +164,30 @@ void TagFolderView::slotAlbumAdded(Album *album)
     }
 }
 
-void TagFolderView::slotSelectionChanged(QListViewItem *item)
+void TagFolderView::slotSelectionChanged()
 {
-    if(!item)
+    if (!d->active)
+        return;
+
+    QListViewItem* selItem = 0;
+    QListViewItemIterator it(this);
+    while (it.current())
+    {
+        if (it.current()->isSelected())
+        {
+            selItem = it.current();
+            break;
+        }
+        ++it;
+    }
+
+    if (!selItem)
     {
         d->albumMan->setCurrentAlbum(0);
         return;
     }
     
-    TagFolderViewItem *tagitem = dynamic_cast<TagFolderViewItem*>(item);
+    TagFolderViewItem *tagitem = dynamic_cast<TagFolderViewItem*>(selItem);
     if(!tagitem)
     {
         d->albumMan->setCurrentAlbum(0);

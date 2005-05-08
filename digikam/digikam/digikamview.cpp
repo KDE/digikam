@@ -575,7 +575,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
     mDateFolderView->setActive(w == mDateFolderView);
     mFolderView->setActive(w == mFolderView);
-    //mTagFolderView->setActive(w == mTagFolderView);
+    mTagFolderView->setActive(w == mTagFolderView);
 }
 
 #include "digikamview.moc"
