@@ -839,41 +839,40 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
        return;
        }
 
-    int            r, g, b, h, s, v;
-    float          gray;
-    unsigned char *c;
-    unsigned int  *ptr = data;
-
-    h = redMask;
-    s = greenMask;
-    v = blueMask;
+    int       red, green , blue;
+    int       hue, sat, lig;
+    float     gray;
+    imageData imagedata;
     
-    Digikam::rgb_to_hsl(h, s, v);
+    hue = redMask;
+    sat = greenMask;
+    lig = blueMask;
+    
+    Digikam::rgb_to_hsl(hue, sat, lig);
 
     for (int i = 0; i < width*height; i++) 
        {
-       c = (unsigned char*) ptr;
-
-       b = c[0];
-       g = c[1];
-       r = c[2];
+       imagedata.raw = data[i];
+       red           = (int)imagedata.channel.red;
+       green         = (int)imagedata.channel.green;
+       blue          = (int)imagedata.channel.blue;
         
        // Convert to grayscale using tonal mask
         
-       gray = 0.3 * r + 0.59 * g + 0.11 * b;
-       r = ROUND (gray);
-       g = r;
-       b = r;
+       gray  = 0.3 * red + 0.59 * green + 0.11 * blue;
+       red   = ROUND (gray);
+       green = red;
+       blue  = red;
 
-       r = h;
-       g = s;
+       red   = hue;
+       green = sat;
         
-       Digikam::hsl_to_rgb(r, g, b);
+       Digikam::hsl_to_rgb(red, green, blue);
         
-       c[0] = b;
-       c[1] = g;
-       c[2] = r;
-       ptr++;
+       imagedata.channel.red   = (uchar)red;
+       imagedata.channel.green = (uchar)green;
+       imagedata.channel.blue  = (uchar)blue;
+       data[i] = imagedata.raw;
        }
 }
 
