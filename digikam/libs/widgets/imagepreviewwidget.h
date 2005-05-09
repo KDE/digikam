@@ -58,6 +58,8 @@ public:
     void   setProgressVisible(bool b);
     void   setProgressWhatsThis(QString desc);
 
+    KProgress *progressBar(void) { return m_progressBar; };
+    
 public slots:
 
     // Set the top/Left conner clip position.

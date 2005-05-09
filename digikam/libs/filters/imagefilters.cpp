@@ -49,6 +49,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Digikam includes.
  
@@ -614,16 +615,21 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
         }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 /* Function to apply the GaussianBlur on an image
  *
  * data             => The image data in RGBA mode.  
  * Width            => Width of image.                          
  * Height           => Height of image.                            
  * Radius           => blur matrix radius                                         
+ * minProgress      => Min progress limit value (=0 : unused).
+ * maxProgress      => Max progress limit value (=0 : unused).
+ * m_progressBar    => Progress (=0L : unused)
  *                                                                                 
  * Theory           => this is the famous gaussian blur like in photoshop or gimp.  
  */
-void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius)
+void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius, 
+                                     int progressMin, int progressMax, KProgress *progressBar)
 {
     if (!data || !Width || !Height)
        {
@@ -730,6 +736,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
+            
+            if (progressBar)
+               {
+               progressBar->setValue( (int)(progressMin + ((double)(h) * 
+                                      (double)((progressMax-progressMin)/2)) / (double)Height) );
+               kapp->processEvents(); 
+               }
             }
         }
 
@@ -770,6 +783,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
+
+        if (progressBar)
+           {
+           progressBar->setValue( (int)(progressMin + (progressMax-progressMin)/2) + 
+                                  ((double)(w) * (double)(progressMax-progressMin) / (double)Width) );
+           kapp->processEvents(); 
+           }
         }
 
     memcpy (data, pOutBits, BitCount);   
@@ -795,46 +815,37 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
        }
         
     register int h, w, i = 0;
-    uchar nGray, red, green , blue;
-    int nStride = GetStride(Width);
-    
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
+    uchar        nGray, red, green , blue;
+    imageData    imagedata;
     
     double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
     double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
     double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
-    
-    for (h = 0; h < Height; h++, i += nStride)
+        
+    for (h = 0; h < Height; h++)
         {
-        for (w = 0; w < Width; w++, i += 4)
+        for (w = 0; w < Width; w++, i++)
             {
-            red   = pBits[i+2];
-            green = pBits[i+1];
-            blue  = pBits[ i ];
+            imagedata.raw = data[i];
+            red           = imagedata.channel.red;
+            green         = imagedata.channel.green;
+            blue          = imagedata.channel.blue;
             
             if (bMonochrome)
                 {
                 nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                pResBits[i] = pResBits[i+1] = pResBits[i+2] = nGray;
+                imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
                 }
             else
                 {
-                pResBits[i+2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
-                pResBits[ i ] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
+                imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+                imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
+                imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
                 }
             
-            pResBits[i+3] = pBits[i+3];
+            data[i] = imagedata.raw;
             }
         }
-
-    memcpy (data, pResBits, BitCount);
-    delete [] pResBits;
 }
 
 // Change color tonality of an image to appling a RGB color mask.
@@ -848,41 +859,40 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
        return;
        }
 
-    int            r, g, b, h, s, v;
-    float          gray;
-    unsigned char *c;
-    unsigned int  *ptr = data;
-
-    h = redMask;
-    s = greenMask;
-    v = blueMask;
+    int       red, green , blue;
+    int       hue, sat, lig;
+    float     gray;
+    imageData imagedata;
     
-    Digikam::rgb_to_hsl(h, s, v);
+    hue = redMask;
+    sat = greenMask;
+    lig = blueMask;
+    
+    Digikam::rgb_to_hsl(hue, sat, lig);
 
     for (int i = 0; i < width*height; i++) 
        {
-       c = (unsigned char*) ptr;
-
-       b = c[0];
-       g = c[1];
-       r = c[2];
+       imagedata.raw = data[i];
+       red           = (int)imagedata.channel.red;
+       green         = (int)imagedata.channel.green;
+       blue          = (int)imagedata.channel.blue;
         
        // Convert to grayscale using tonal mask
         
-       gray = 0.3 * r + 0.59 * g + 0.11 * b;
-       r = ROUND (gray);
-       g = r;
-       b = r;
+       gray  = 0.3 * red + 0.59 * green + 0.11 * blue;
+       red   = ROUND (gray);
+       green = red;
+       blue  = red;
 
-       r = h;
-       g = s;
+       red   = hue;
+       green = sat;
         
-       Digikam::hsl_to_rgb(r, g, b);
+       Digikam::hsl_to_rgb(red, green, blue);
         
-       c[0] = b;
-       c[1] = g;
-       c[2] = r;
-       ptr++;
+       imagedata.channel.red   = (uchar)red;
+       imagedata.channel.green = (uchar)green;
+       imagedata.channel.blue  = (uchar)blue;
+       data[i] = imagedata.raw;
        }
 }
 
@@ -980,7 +990,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
 
         if (count == 3)
         {
-
             uchar* src  = src_rows[(row + 2) & 3];
             uchar* dst  = dst_row;
             int*   neg0 = neg_rows[(row + 1) & 3] + 4;
@@ -1031,7 +1040,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
             *dst++ = *src++;
             *dst++ = *src++;
             
-            
             // Set the row...
             memcpy(dstData + y*w, dst_row, width); 
         }
@@ -1048,7 +1056,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
                 memcpy(dstData + y*w, src_rows[(h-1) & 3], width);
             }
         }
-
     }
 
     memcpy(data, dstData, w*h*sizeof(uint));
