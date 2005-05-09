@@ -12,10 +12,10 @@
 
 * fix changing of album library path. [TA/RR]
 
-* fix copy/move/rename of albums/images
+* fix copy/move/rename of albums/images [RR]
 
 * on import of new files/folders do scanning of items using the
-  copying/moving kioslave
+  copying/moving kioslave [RR]
 
 * handle internal files/folders being added/deleted
   - through albummanager 
@@ -29,10 +29,8 @@
 * search view and search table in database
    - need to discuss
 
-* remove embedded comments display in digikam
-
-* when switching views, activate the new view and
-  switch the thumbnail view to that one
+* remove embedded comments display in digikam [RR]
+  if requested, use the file listing to display image dimensions
 
 * fix saving of curent state of digikam 
   - splitter sizes
