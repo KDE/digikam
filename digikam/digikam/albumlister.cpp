@@ -120,6 +120,7 @@ void AlbumLister::openAlbum(Album *album)
     ds << AlbumManager::instance()->getLibraryPath();
     ds << album->getKURL().path();
     ds << d->filter;
+    ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();
 
     d->job = new KIO::TransferJob(album->getKURL(), KIO::CMD_SPECIAL,
@@ -155,6 +156,7 @@ void AlbumLister::updateDirectory()
     ds << AlbumManager::instance()->getLibraryPath();
     ds << d->currAlbum->getKURL().path();
     ds << d->filter;
+    ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();
 
     d->job = new KIO::TransferJob(d->currAlbum->getKURL(), KIO::CMD_SPECIAL,
@@ -307,10 +309,10 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         return;
 
     int     pid;    
-    QString path;
     QString name;
     QString date;
     size_t  size;
+    QSize   dims;
 
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
@@ -319,11 +321,10 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     while (!ds.atEnd())
     {
         ds >> pid;
-        ds >> path;
+        ds >> name;
         ds >> date;
         ds >> size;
-
-        name = path.section('/', -1);
+        ds >> dims;
 
         QPair<int, QString> itemIdentifier(pid, name);
         
@@ -335,7 +336,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
         ImageInfo* info = new ImageInfo(pid, name, 
                                         QDateTime::fromString(date, Qt::ISODate),
-                                        size);
+                                        size, dims);
 
         if (matchesFilter(info))
             newFilteredItemsList.append(info);

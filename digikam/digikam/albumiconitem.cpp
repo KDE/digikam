@@ -256,24 +256,9 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowResolution())
     {
-        if (metaInfo_ && metaInfo_->isValid())
+        QSize dims = info_->dimensions();
+        if (dims.isValid())
         {
-            QSize dims;
-            if (metaInfo_->containsGroup("Jpeg EXIF Data"))
-            {
-                dims = metaInfo_->group("Jpeg EXIF Data").
-                       item("Dimensions").value().toSize();
-            }
-            else if (metaInfo_->containsGroup("General"))
-            {
-                dims = metaInfo_->group("General").
-                       item("Dimensions").value().toSize();
-            }
-            else if (metaInfo_->containsGroup("Technical"))
-            {
-                dims = metaInfo_->group("Technical").
-                       item("Dimensions").value().toSize();
-            }
             QString resolution = QString("%1x%2 %3")
                                  .arg(dims.width())
                                  .arg(dims.height())

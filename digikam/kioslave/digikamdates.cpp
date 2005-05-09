@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kinstance.h>
+#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 #include <qfile.h>
@@ -97,11 +98,13 @@ void kio_digikamdates::special(const QByteArray& data)
     QString libraryPath;
     QString url;
     QString filter;
+    int     getDimensions;
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> url;
     ds >> filter;
+    ds >> getDimensions;
 
     QValueList<QRegExp> regex = makeFilterList(filter);
     
@@ -212,9 +215,11 @@ void kio_digikamdates::special(const QByteArray& data)
                     &values, false);
 
             QString     name;
+            QString     path;
             int         dirid;
             QString     date;
             QString     purl;
+            QSize       dims;
             struct stat stbuf;
 
             int  count = 0;
@@ -234,14 +239,39 @@ void kio_digikamdates::special(const QByteArray& data)
                 if (!matchFilterList(regex, name))
                     continue;
 
-                name = m_libraryPath + purl + "/" + name;
-                if (::stat(QFile::encodeName(name), &stbuf) != 0)
+                path = m_libraryPath + purl + "/" + name;
+                if (::stat(QFile::encodeName(path), &stbuf) != 0)
                     continue;
-        
+
+                dims = QSize();
+                if (getDimensions)
+                {
+                    KFileMetaInfo metaInfo(path);
+                    if (metaInfo.isValid())
+                    {
+                        if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                        {
+                            dims = metaInfo.group("Jpeg EXIF Data").
+                                   item("Dimensions").value().toSize();
+                        }
+                        else if (metaInfo.containsGroup("General"))
+                        {
+                            dims = metaInfo.group("General").
+                                   item("Dimensions").value().toSize();
+                        }
+                        else if (metaInfo.containsGroup("Technical"))
+                        {
+                            dims = metaInfo.group("Technical").
+                                   item("Dimensions").value().toSize();
+                        }
+                    }
+                }
+                
                 *os << dirid;
                 *os << name;
                 *os << date;
                 *os << stbuf.st_size;
+                *os << dims;
 
                 count++;
                 

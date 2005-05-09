@@ -39,9 +39,10 @@ extern "C"
 AlbumManager* ImageInfo::m_man = 0;
 
 ImageInfo::ImageInfo(int albumID, const QString& name,
-                     const QDateTime& datetime, size_t size)
+                     const QDateTime& datetime, size_t size,
+                     const QSize& dims)
     : m_albumID(albumID), m_name(name), m_datetime(datetime),
-      m_size(size), m_viewitem(0)
+      m_size(size), m_dims(dims), m_viewitem(0)
 {
     if (!m_man)
     {
@@ -85,6 +86,11 @@ size_t ImageInfo::fileSize() const
 QDateTime ImageInfo::dateTime() const
 {
     return m_datetime;
+}
+
+QSize ImageInfo::dimensions() const
+{
+    return m_dims;
 }
 
 int ImageInfo::albumID() const
@@ -185,4 +191,3 @@ void ImageInfo::refresh()
     stat(QFile::encodeName(kurl().path()), &stbuf);
     m_size = stbuf.st_size;
 }
-

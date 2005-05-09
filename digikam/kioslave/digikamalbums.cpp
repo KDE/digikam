@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kinstance.h>
+#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 #include <qfile.h>
@@ -94,11 +95,13 @@ void kio_digikamalbums::special(const QByteArray& data)
     QString libraryPath;
     QString url;
     QString filter;
+    int     getDimensions;
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> url;
     ds >> filter;
+    ds >> getDimensions;
 
     QValueList<QRegExp> regex = makeFilterList(filter);
     
@@ -126,6 +129,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     QString base = libraryPath + url + "/";
     QString name;
     QString date;
+    QSize   dims;
 
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -138,14 +142,38 @@ void kio_digikamalbums::special(const QByteArray& data)
         if (!matchFilterList(regex, name))
             continue;
 
-        name = base + name;
-        if (::stat(QFile::encodeName(name), &stbuf) != 0)
+        if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
             continue;
+
+        dims = QSize();
+        if (getDimensions)
+        {
+            KFileMetaInfo metaInfo(base + name);
+            if (metaInfo.isValid())
+            {
+                if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                {
+                    dims = metaInfo.group("Jpeg EXIF Data").
+                           item("Dimensions").value().toSize();
+                }
+                else if (metaInfo.containsGroup("General"))
+                {
+                    dims = metaInfo.group("General").
+                           item("Dimensions").value().toSize();
+                }
+                else if (metaInfo.containsGroup("Technical"))
+                {
+                    dims = metaInfo.group("Technical").
+                           item("Dimensions").value().toSize();
+                }
+            }
+        }
         
         os << id;
-        os << base + name;
+        os << name;
         os << date;
         os << stbuf.st_size;
+        os << dims;
     }
 
     SlaveBase::data(ba);

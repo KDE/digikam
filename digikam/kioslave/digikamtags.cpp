@@ -25,6 +25,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
+#include <kfilemetainfo.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -215,12 +216,14 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     QString url;
     QString filter;
     int     recurse;
+    int     getDimensions;
     int     tagID;
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> url;
     ds >> filter;
+    ds >> getDimensions;
     ds >> recurse;
 
     QValueList<QRegExp> regex = makeFilterList(filter);
@@ -297,9 +300,11 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     QByteArray  ba;
     
     QString name;
+    QString path;
     int     dirid;
     QString date;
     QString purl;
+    QSize   dims;
 
     int count = 0;
     QDataStream* os = new QDataStream(ba, IO_WriteOnly);
@@ -319,15 +324,39 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         if (!matchFilterList(regex, name))
             continue;
 
-        name = m_libraryPath + purl + "/" + name;
-        if (::stat(QFile::encodeName(name), &stbuf) != 0)
+        path = m_libraryPath + purl + "/" + name;
+        if (::stat(QFile::encodeName(path), &stbuf) != 0)
             continue;
+
+        dims = QSize();
+        if (getDimensions)
+        {
+            KFileMetaInfo metaInfo(path);
+            if (metaInfo.isValid())
+            {
+                if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                {
+                    dims = metaInfo.group("Jpeg EXIF Data").
+                           item("Dimensions").value().toSize();
+                }
+                else if (metaInfo.containsGroup("General"))
+                {
+                    dims = metaInfo.group("General").
+                           item("Dimensions").value().toSize();
+                }
+                else if (metaInfo.containsGroup("Technical"))
+                {
+                    dims = metaInfo.group("Technical").
+                           item("Dimensions").value().toSize();
+                }
+            }
+        }
         
         *os << dirid;
         *os << name;
         *os << date;
         *os << stbuf.st_size;
-
+        *os << dims;
 
         count++;
                 

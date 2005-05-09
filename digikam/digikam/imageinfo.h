@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qptrlist.h>
+#include <qsize.h>
 #include <kurl.h>
 
 class PAlbum;
@@ -43,7 +44,8 @@ public:
      * @param     size     filesize for the image
      */
     ImageInfo(int albumID, const QString& name,
-              const QDateTime& datetime, size_t size);
+              const QDateTime& datetime, size_t size,
+              const QSize& dims=QSize());
 
     /** 
      * Destructor
@@ -74,6 +76,12 @@ public:
      */
     size_t    fileSize() const;
 
+    /**
+     * @return the dimensions of the image (valid only if dimensions
+     * have been requested)
+     */
+    QSize     dimensions() const;
+    
     /**
      * @return the standard KDE url with file protocol. The path for
      * the url is the absolute path of the image
@@ -114,6 +122,7 @@ private:
     QString               m_name;
     QDateTime             m_datetime;
     size_t                m_size;
+    QSize                 m_dims;
     void*                 m_viewitem;
     static  AlbumManager* m_man;
 };
