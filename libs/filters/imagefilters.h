@@ -27,12 +27,15 @@
 
 #include <cmath>
 
+//KDE includes.
+
+#include <kprogress.h>
+
 namespace Digikam
 {
 
 class ImageFilters
 {
-
 public: // Structures to use for color management filters depending of architectures.
 
 #ifdef BIGENDIAN        // PPC like
@@ -166,7 +169,8 @@ public:   // Public methods.
     static void autoLevelsCorrectionImage(uint *data, int w, int h);
     static void invertImage(uint *data, int w, int h);
     static void smartBlurImage(uint *data, int Width, int Height);
-    static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
+    static void gaussianBlurImage(uint *data, int Width, int Height, int Radius,
+                                  int progressMin=0, int progressMax=0, KProgress *progressBar=0L);
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,
                                   float grGain, float ggGain, float gbGain,

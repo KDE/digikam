@@ -49,6 +49,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Digikam includes.
  
@@ -614,16 +615,21 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
         }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 /* Function to apply the GaussianBlur on an image
  *
  * data             => The image data in RGBA mode.  
  * Width            => Width of image.                          
  * Height           => Height of image.                            
  * Radius           => blur matrix radius                                         
+ * minProgress      => Min progress limit value (=0 : unused).
+ * maxProgress      => Max progress limit value (=0 : unused).
+ * m_progressBar    => Progress (=0L : unused)
  *                                                                                 
  * Theory           => this is the famous gaussian blur like in photoshop or gimp.  
  */
-void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius)
+void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius, 
+                                     int progressMin, int progressMax, KProgress *progressBar)
 {
     if (!data || !Width || !Height)
        {
@@ -730,6 +736,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
+            
+            if (progressBar)
+               {
+               progressBar->setValue( (int)(progressMin + ((double)(h) * 
+                                      (double)((progressMax-progressMin)/2)) / (double)Height) );
+               kapp->processEvents(); 
+               }
             }
         }
 
@@ -770,6 +783,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
+
+        if (progressBar)
+           {
+           progressBar->setValue( (int)(progressMin + (progressMax-progressMin)/2) + 
+                                  ((double)(w) * (double)(progressMax-progressMin) / (double)Width) );
+           kapp->processEvents(); 
+           }
         }
 
     memcpy (data, pOutBits, BitCount);   
@@ -1020,7 +1040,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
             *dst++ = *src++;
             *dst++ = *src++;
             
-            
             // Set the row...
             memcpy(dstData + y*w, dst_row, width); 
         }
@@ -1037,7 +1056,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
                 memcpy(dstData + y*w, src_rows[(h-1) & 3], width);
             }
         }
-
     }
 
     memcpy(data, dstData, w*h*sizeof(uint));
