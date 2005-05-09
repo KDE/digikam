@@ -33,6 +33,32 @@ namespace Digikam
 class ImageFilters
 {
 
+public: // Structures to use for color management filters depending of architectures.
+
+#ifdef BIGENDIAN        // PPC like
+    struct channels
+    {
+    uchar   alpha;
+    uchar   blue;
+    uchar   green;
+    uchar   red;
+    };
+#else                   // Intel like.
+    struct channels
+    {
+    uchar   blue;
+    uchar   green;
+    uchar   red;
+    uchar   alpha;
+    };
+#endif
+
+    union imageData
+    {
+    unsigned int raw;
+    channels     channel;
+    };
+
 private:    // Private structures used internally.
 
     struct double_packet

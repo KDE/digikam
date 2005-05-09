@@ -795,46 +795,37 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
        }
         
     register int h, w, i = 0;
-    uchar nGray, red, green , blue;
-    int nStride = GetStride(Width);
-    
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = new uchar[BitCount];
+    uchar        nGray, red, green , blue;
+    imageData    imagedata;
     
     double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
     double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
     double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
-    
-    for (h = 0; h < Height; h++, i += nStride)
+        
+    for (h = 0; h < Height; h++)
         {
-        for (w = 0; w < Width; w++, i += 4)
+        for (w = 0; w < Width; w++, i++)
             {
-            red   = pBits[i+2];
-            green = pBits[i+1];
-            blue  = pBits[ i ];
+            imagedata.raw = data[i];
+            red           = imagedata.channel.red;
+            green         = imagedata.channel.green;
+            blue          = imagedata.channel.blue;
             
             if (bMonochrome)
                 {
                 nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                pResBits[i] = pResBits[i+1] = pResBits[i+2] = nGray;
+                imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
                 }
             else
                 {
-                pResBits[i+2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                pResBits[i+1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
-                pResBits[ i ] = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
+                imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+                imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
+                imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
                 }
             
-            pResBits[i+3] = pBits[i+3];
+            data[i] = imagedata.raw;
             }
         }
-
-    memcpy (data, pResBits, BitCount);
-    delete [] pResBits;
 }
 
 // Change color tonality of an image to appling a RGB color mask.
@@ -980,7 +971,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
 
         if (count == 3)
         {
-
             uchar* src  = src_rows[(row + 2) & 3];
             uchar* dst  = dst_row;
             int*   neg0 = neg_rows[(row + 1) & 3] + 4;
