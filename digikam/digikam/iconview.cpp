@@ -31,6 +31,11 @@
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
+extern "C"
+{
+#include <stdlib.h>
+}
+
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"
