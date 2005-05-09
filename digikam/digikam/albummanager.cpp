@@ -50,6 +50,8 @@ extern "C"
 #include <sys/stat.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <locale.h>
 }
 
 typedef QDict<PAlbum>    PAlbumDict;

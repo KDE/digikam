@@ -47,11 +47,6 @@
 
 #include <libkipi/version.h>
 
-extern "C"
-{
-#include <locale.h>
-}
-
 // Local includes.
 
 #include "version.h"
