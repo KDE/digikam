@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name=ImagePlugin_BlurFX
+Name[it]=PluginImmagini_EffettiDiSfocatura
+Name[nl]=Afbeeldingsplugin_VervaagFX
+Name[sv]=Insticksprogram för oskärpeeffekt
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Blur special effects plugin for digiKam
+Comment[es]=Complemento de efectos especiales de desenfoque para digiKam
+Comment[fr]=Module externe de digiKam pour des effets spéciaux de flou
+Comment[it]=Plugin degli effetti speciali di sfocatura per digiKam
+Comment[nl]=digiKam-plugin voor vervaageffect
+Comment[pt]='Plugin' de efeitos especiais de borrão para o digiKam
+Comment[pt_BR]='Plugin' de efeitos especiais de borrão para o digiKam
+Comment[sv]=Digikam insticksprogram med specialeffekter för oskärpa
+
+X-KDE-Library=digikamimageplugin_blurfx
+author=Gilles Caulier, caulier dot gilles at free dot fr

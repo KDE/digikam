@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=ImagePlugin_Restoration
+Name[it]=PluginImmagini_Restauro
+Name[nl]=Afbeeldingsplugin_Restoratie
+Name[sv]=Insticksprogram för bildrestaurering
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=digiKam plugin to restore a photograph
+Comment[it]=Plugin di digiKam per restaurare una fotografia
+Comment[nl]=digiKam-pluin voor het herstellen van een foto
+Comment[pt]=Um 'plugin' do digiKam para restaurar uma fotografia
+Comment[pt_BR]=Um 'plugin' do digiKam para restaurar uma fotografia
+Comment[sv]=Digikam insticksprogram för restaurering av ett fotografi
+
+X-KDE-Library=digikamimageplugin_restoration
+author=Gilles Caulier, caulier dot gilles at free dot fr

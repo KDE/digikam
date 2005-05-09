@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=ImagePlugin_InPainting
+Name[it]=PluginImmagini_Reintegrazione
+Name[nl]=Afbeeldingsplugin_Inkleuren
+Name[sv]=Insticksprogram för ifyllnad
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=digiKam plugin to inpaint a photograph
+Comment[it]=Plugin di digiKam per reintegrare una fotografia
+Comment[nl]=digiKam-pluin voor het inkleuren van een foto
+Comment[pt]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
+Comment[pt_BR]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
+Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
+
+X-KDE-Library=digikamimageplugin_inpainting
+author=Gilles Caulier, caulier dot gilles at free dot fr

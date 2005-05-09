@@ -1,0 +1,27 @@
+[Desktop Entry]
+Name=ImagePlugin_AdjustCurves
+Name[da]=Billedplugin_Kurvejustering
+Name[it]=PluginImmagini_RegolaCurve
+Name[nl]=Afbeeldingsplugin_KrommenBijstellen
+Name[sv]=Insticksprogram för justering av kurvor
+Name[xx]=xxImagePlugin_AdjustCurvesxx
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+
+Comment=Image histogram adjust curves plugin for digiKam
+Comment[da]=Plugin til histogramkurvejustering i Digikam
+Comment[de]=digiKam Plugin zur Justierung der Farbkurven
+Comment[es]=Complemento para ajustar las curvas del histograma de la imagen para digiKam
+Comment[et]=Digikami pildi histogrammi tasemete kohendamise plugin
+Comment[fr]=Module externe de digiKam pour l'ajustement par courbes d'une image
+Comment[it]=Plugin di regolazione delle curve degli istogrammi delle immagini per digiKam
+Comment[nl]=digiKam-plugin voor krommenbijstelling van afbeeldinghistogram
+Comment[pt]='Plugin' de ajustar as curvas do histograma para o digiKam
+Comment[pt_BR]='Plugin' de ajustar as curvas do histograma para o digiKam
+Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
+Comment[ta]=டிஜிகாமிர்க்கான படிவ வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
+Comment[xx]=xxImage histogram adjust curves plugin for digiKamxx
+
+X-KDE-Library=digikamimageplugin_adjustcurves
+author=Caulier Gilles, caulier dot gilles at free dot fr

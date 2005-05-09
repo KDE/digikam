@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=ImagePlugin_Unsharp
+Name[da]=Billedplugin_Uskarphedsmaske
+Name[it]=PluginImmagini_MascheraContrasto
+Name[nl]=Afbeeldingsplugin_Onscherp
+Name[sr]=Сликовни прикључак — ублажавање
+Name[sr@Latn]=Slikovni priključak — ublažavanje
+Name[sv]=Insticksprogram för oskarp mask
+Name[xx]=xxImagePlugin_Unsharpxx
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Unsharp mask image filter plugin for digiKam
+Comment[da]=Plugin til forbedring af skarphed med uskarphedsfilter i Digikam
+Comment[it]=Plugin di effetto di maschera di contrasto delle immagini per digiKam
+Comment[nl]=digiKam-plugin voor onscherp-masker-filter
+Comment[pt]='Plugin' de filtro de imagem com uma máscara não-afiada para o digiKam
+Comment[pt_BR]='Plugin' de filtro de imagem com uma máscara não-afiada para o digiKam
+Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
+
+X-KDE-Library=digikamimageplugin_unsharp
+author=Caulier Gilles, caulier dot gilles at free dot fr

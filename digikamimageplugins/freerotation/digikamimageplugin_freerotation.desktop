@@ -1,0 +1,27 @@
+[Desktop Entry]
+Name=ImagePlugin_FreeRotation
+Name[da]=Billedplugin_Fri rotation
+Name[it]=PluginImmagini_RotazioneLibera
+Name[nl]=Afbeeldingsplugin_VrijeRotatie
+Name[sv]=Insticksprogram för bildrotation
+Name[xx]=xxImagePlugin_FreeRotationxx
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Free rotation plugin for digiKam
+Comment[da]=Plugin til fri rotation af billeder til Digikam
+Comment[de]=digiKam Plugin zur freien Rotation von Bildern
+Comment[es]=Complemento de rotación libre para digiKam
+Comment[et]=Digikami pildipööramisplugin
+Comment[fr]=Module externe de digiKam pour faire pivoter une image
+Comment[it]=Plugin per la rotazione libera per digiKam
+Comment[nl]=digiKam-plugin voor vrije rotatie
+Comment[pt]='Plugin' de rotação livre para o digiKam
+Comment[pt_BR]='Plugin' de rotação livre para o digiKam
+Comment[sv]=Digikam insticksprogram för bildrotation
+Comment[ta]=டிஜிகாமிற்கான எளிதாக சுழலும் செருகு பொருள்
+Comment[xx]=xxFree rotation plugin for digiKamxx
+
+X-KDE-Library=digikamimageplugin_freerotation
+author=Gilles Caulier, caulier dot gilles at free dot fr

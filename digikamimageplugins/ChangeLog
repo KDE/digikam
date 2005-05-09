@@ -1,0 +1,103 @@
+v0.7.3-Beta2 - 25/04/05
+----------------------------------------------------------------------------
+    * Blowup : fixed restoration mode rendering instead a basic linear 
+      pixels computation.
+    * Antivignetting : Fixed dialog layout using QTabWidget.
+    * Updated all handbooks. Ready for translations.
+
+v0.7.3-Beta1 - 08/02/05
+----------------------------------------------------------------------------
+    * New plugin 'Blowup Photograph' using CImg library.
+    * New plugin 'Photograph Inpainting' using CImg library.
+    * New plugin 'Photograph Restoration' using CImg library.
+    * 'AdjustCurves' plugin : add option to see over-exposed pixels in 
+       preview area.
+    * 'AdjustCurves' plugins : add black/gray/white tone picker color tools
+    * New plugin 'WhiteBalance'.
+    * New plugin 'Texture'.
+    * New plugin 'Blur FX'.
+    * New plugin 'Distortion FX'.
+    * New plugin 'Insert Text'.
+    * New plugin 'Infrared Film'.
+    * New plugin 'Channel Mixer'.
+
+v0.7.2 - 28/02/05
+----------------------------------------------------------------------------
+    * Update and fix handbooks for final release.
+    * Film Grain : new algorithm inspired of gimpguru.org tutorial.
+    * Rain Drops : new algorithm from Pieter. Improved clipping region method.
+    * Rain Drops : add 'abort' preview computation.
+
+v0.7.2-Beta1 - 08/02/05
+----------------------------------------------------------------------------
+    * Removed imlib2 depencies.
+    * Ported plugins to new xmlgui framework by Renchi.
+    * New plugin 'Add Border'.
+    * 'Shear Tool', 'Free Rotation, 'Lens Distortion' plugins use common Image 
+      Guide widget.
+    * New plugin 'Perspective Adjustment'.
+    * New plugin 'SuperImpose Template'.
+    * Patch from Renchi Raju which allows digikamimageplugins to be compiled 
+      when digikam is also present in the toplevel directory.
+    * New plugin 'Shear Tool'.
+    * New plugin 'Lens Distortion'.
+    * New plugin 'Anti Vignetting'.
+
+v0.7.1 - 01/03/05
+----------------------------------------------------------------------------
+    * Update and fix handbooks for final release.
+
+v0.7.1-beta1 - 12/17/04
+----------------------------------------------------------------------------
+    * New plugin 'Adjust Curves'.
+    * Moved 'Free Rotation' tool from Image editor core to new ImagePlugin.
+    * All plugins: disable filter setup widgets when Ok button is pressed.
+    * Fixed 'Reset Values' dialog buttons effect with ImagePreviewWidget instance.
+    * Update and fix handbooks by Göran Jartin.
+
+v0.7.0 - 11/08/04
+----------------------------------------------------------------------------
+    * Update and fix handbooks for final release.
+    * Add 'Rain Drops' handbook by Gerhard Kulzer.
+
+v0.7.0-Beta1 - 10/14/04
+----------------------------------------------------------------------------
+    * Add 'Film Grain', 'Emboss', and 'Solarize Image' handbooks by Gerhard Kulzer.
+    * Add 'Adjust Levels', 'Despeckle', and 'Unsharp' handbooks.
+    * 'Rain Drop' plugin : add disable filter effect on region pre-selection.
+    * New 'Film Grain' plugin.
+    * New 'Rain Drop image' plugin using Pieter Voloshyn algorithm. 
+    * New 'Emboss' algorithm from Pieter Voloshyn. 
+    * New 'OilPaint' algorithm from Pieter Voloshyn. 
+    * Add graphical banner with logo.
+    * Fixed digiKam headers dependencies.
+
+v0.6.0 - 09/01/04
+----------------------------------------------------------------------------
+    * Fixed internationalization problem (bad localization files name).
+    * Using QSlider/QSpinbox instead KIntNumInput and KDoubleNumInput for 
+      Despeckle, Unsharped mask, Charcoal, OilPaint, and Emboss plugins : 
+      solving a problem with the preview calculation when the sliders are moved.
+    
+v0.5.0 - 08/27/04
+----------------------------------------------------------------------------
+    * Added new 'Unsharped Mask' filter plugin using Gimp 2.0 algorithm.
+    * Updated 'Noise Reduction' filter plugin with Gimp 2.0 algorithm.
+
+v0.4.0 - 08/26/04
+----------------------------------------------------------------------------
+    * Added new 'Charcoal' drawing effect plugin using KDEImageEffect API.
+    * Added new 'Emboss' effect plugin using KDEImageEffect API.
+    * Added new 'Oil Painting' effect plugin using KDEImageEffect API.
+    
+v0.3.0 - 08/25/04
+----------------------------------------------------------------------------
+    * Added new 'Noise Reduction' filter 'Despeckle' plugin using KDEImageEffect API.
+
+v0.2.0 - 08/15/04
+----------------------------------------------------------------------------
+    * Moved 'Solarize Image' plugin from digiKam core.
+
+v0.1.0 - 08/11/04
+----------------------------------------------------------------------------
+    * Initial Creation : 'Adjust Levels' plugin.

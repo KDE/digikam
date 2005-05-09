@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=ImagePlugin_WhiteBalance
+Name[it]=PluginImmagini_BilanciamentoDelBianco
+Name[nl]=Afbeeldingsplugin_Witbalans
+Name[sv]=Insticksprogram för vitbalans
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=White balance correction plugin for digiKam
+Comment[da]=Hvid balance rettelsesplugin for digiKam
+Comment[es]=Complemento de corrección de equilibrio de blancos para digiKam
+Comment[fr]=Module externe de digiKam pour la correction du contraste
+Comment[it]=Plugin di correzione del bilanciamento del bianco per digiKam
+Comment[nl]=digiKam-plugin voor het corrigeren van de witbalans
+Comment[pt]='Plugin' de correcção de balanceamento de branco o digiKam
+Comment[pt_BR]='Plugin' de correcção de balanceamento de branco o digiKam
+Comment[sv]=Digikam insticksprogram för korrigering av vitbalans
+
+X-KDE-Library=digikamimageplugin_whitebalance
+author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=ImagePlugin_Texture
+Name[it]=PluginImmagini_Trama
+Name[nl]=Afbeeldingsplugin_Textuur
+Name[sv]=Insticksprogram för struktur
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=digiKam plugin to apply texture on image
+Comment[da]=digiKam-plugin til at anvende tekstur til billedet
+Comment[es]=Complemento de digiKam para aplicar una textura sobre una imagen
+Comment[fr]=Module externe de digiKam pour appliquer une texture à l'image
+Comment[it]=Plugin di digiKam per applicare una trama su un'immagine
+Comment[nl]=digiKam-pluin voor het toepassen van textuur op een afbeelding
+Comment[pt]=Um 'plugin' do digiKam para aplicar uma textura numa imagem.
+Comment[pt_BR]=Um 'plugin' do digiKam para aplicar uma textura numa imagem.
+Comment[sv]=Digikam insticksprogram för att lägga till struktur på en bild
+
+X-KDE-Library=digikamimageplugin_texture
+author=Gilles Caulier, caulier dot gilles at free dot fr

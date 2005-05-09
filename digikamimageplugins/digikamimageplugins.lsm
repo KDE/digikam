@@ -1,0 +1,14 @@
+Begin4
+Title:          digikamimageplugins
+Version:        0.7.3-beta2
+Entered-date:   2004-11-08
+Description:    Plugins collection for digiKam image editor and Showfoto KDE image editor
+Keywords:       KDE, Qt, digiKam, Digital Camera 
+Author:         Caulier Gilles <caulier dot gilles at free.fr>
+Maintained-by:  Caulier Gilles <caulier dot gilles at free.fr>
+Home-page:      
+Alternate-site: http://digikam.sourceforge.net
+Primary-site:   http://extragear.kde.org/apps/digikamimageplugins
+Platform:       Linux. Needs KDE 3.x and digikam 0.7.3
+Copying-policy: GPL
+End

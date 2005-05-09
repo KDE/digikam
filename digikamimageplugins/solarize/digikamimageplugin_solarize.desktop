@@ -1,0 +1,31 @@
+[Desktop Entry]
+Name=ImagePlugin_Solarize
+Name[da]=Billedplugin_Solarisér
+Name[en_GB]=ImagePlugin_Solarise
+Name[it]=PluginImmagini_Solarizza
+Name[nl]=Afbeeldingsplugin_Solarizeren
+Name[sr]=Сликовни прикључак — осунчавање
+Name[sr@Latn]=Slikovni priključak — osunčavanje
+Name[sv]=Insticksprogram för solarisering
+Name[ta]=பிம்பசொருகுப்பொருள்_சாலரைஸ்
+Name[xx]=xxImagePlugin_Solarizexx
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Image solarize effect plugin for digiKam
+Comment[da]=Solariseringsreffekt-plugin til Digikam
+Comment[de]=digiKam Plugin zum Erzeugen eines Solarisierungseffektes
+Comment[en_GB]=Image solarise effect plugin for digiKam
+Comment[es]=Complemento de efecto de solarización de imágenes para digiKam
+Comment[et]=Digikami ülesärituse pildiefektiplugin
+Comment[fr]=Module externe de digiKam pour solariser une image
+Comment[it]=Plugin di effetto di solarizzazione delle immagini per digiKam
+Comment[nl]=digiKam-plugin voor solarizeereffecten
+Comment[pt]='Plugin' de solarizar imagem para o digiKam
+Comment[pt_BR]='Plugin' de solarizar imagem para o digiKam
+Comment[sv]=Digikam insticksprogram för att solarisera bild
+Comment[ta]=டிஜிகாமிற்கான பிம்ப கறுப்பாக்கும் விளைவு சொருகுப்பொருள்
+Comment[xx]=xxImage solarize effect plugin for digiKamxx
+
+X-KDE-Library=digikamimageplugin_solarize
+author=Renchi Raju, renchi@pooh.tam.uiuc.edu

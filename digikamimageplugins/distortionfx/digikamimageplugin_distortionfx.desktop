@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name=ImagePlugin_DistortionFX
+Name[it]=PluginImmagini_EffettiDiDistorsione
+Name[nl]=Afbeeldingsplugin_vervormingseffect
+Name[sv]=Insticksprogram för förvrängningseffekt
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Distortion special effects plugin for digiKam
+Comment[es]=Complemento de efectos especiales de distorsión para digiKam
+Comment[fr]=Module externe de digiKam pour créer des effets spéciaux de distorsion
+Comment[it]=Plugin degli effetti speciali di distorsione per digiKam
+Comment[nl]=digiKam-plugin voor vervormingseffect
+Comment[pt]='Plugin' de efeitos especiais de distorção para o digiKam
+Comment[pt_BR]='Plugin' de efeitos especiais de distorção para o digiKam
+Comment[sv]=Digikam insticksprogram för förvrängningsspecialeffekt
+
+X-KDE-Library=digikamimageplugin_distortionfx
+author=Gilles Caulier, caulier dot gilles at free dot fr

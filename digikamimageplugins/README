@@ -1,0 +1,90 @@
+DIGIKAMIMAGEPLUGINS
+
+Visit the web project page available at this url:
+
+http://extragear.kde.org/apps/digikamimageplugins
+
+Resume :
+----------------------------------------------------------------------
+digiKam uses a plugin framework for additional functionalities in ImageEditor and Showfoto.
+Currently implemented plugins are:
+
+ 1) AdjustLevels     : A plugin for to adjust the image histogram levels manually.
+ 2) SolarizeImage    : A plugin for to solarize an image.
+ 3) Despeckle        : A noise reduction filter (based on Gimp 2.x algorithm).
+ 4) OilPaint         : An oil painting effect filter.
+ 5) Emboss           : An embossed image effect filter.
+ 6) Charcoal         : A charcoal drawing image effect filter.
+ 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.x algorithm).
+ 8) RainDrop         : Adding Raindrops randomly in an image.
+ 9) FilmGrain        : Adding film grain in an image.
+10) FreeRotation     : Perform an image rotation with a free angle in degrees.
+11) AdjustCurves     : A plugin for to adjust the image histogram curves.
+12) ShearTool        : A tool for shearing an image.
+13) AntiVignetting   : A tool for to reduce image vignetting.
+14) LensDistortion   : A tool for to reduce optical lens distortions.
+15) SuperImpose      : A tool for to superimposed a template to an image.
+16) Perpective       : A tool for adjusting image perpective.
+17) Border           : A tool for add a border around an image.
+18) InsertText       : A tool for add text in image.
+19) Infrared         : Simulate infrared film.
+20) ChannelMixer     : Color channels mixer tool.
+21) BlurFX           : Blurring special effects package.
+22) DistortionFX     : Distortion special effects package. 
+23) Texture          : A tool to apply a decorative texture to an image.
+24) WhiteBalance     : A tool to correct image white color balance.
+25) Restoration      : An advanced filter to restore photograph using CImg library.
+26) Inpainting       : An advanced filter to inpaint photograph area using CImg library.
+27) Blowup           : An advanced filter to blowup photograph using CImg library.
+
+Contact :
+-----------------------------------------------------------------------
+If you have questions, comments, suggestions to make do email at :
+
+digikam-users@list.sourceforge.net
+
+
+IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
+system who can be contacted by the Kde help menu of all image plugins dialog (not 
+the Main digikam help menu). 
+A mail will be automatically sent to the digikam development mailing list.
+There is no need to contact directly the digikam mailing list for a bug report 
+or a devel wish.
+
+The current DigikamImagePlugins bugs and devel wish reported to the Kde bugs report can be see 
+at this url :
+
+http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+
+Depencies :
+-----------------------------------------------------------------------
+AutoConf >= 2.5
+AutoMake >= 1.7.0
+KDE 3.x
+Digikam >= 0.7.3
+
+
+Installation :
+------------------------------------------------------------------------
+In the source directory do :
+
+1) export WANT_AUTOCONF_2_5=1
+2) export KDEDIR=KDE_installation_dir_on_your_system
+3) make -f Makefile.cvs
+4) ./configure
+5) make
+6) su
+7) make install
+
+
+Notes :
+------------------------------------------------------------------------
+
+- More specifics compilation and installation options can be used with '.configure' script.
+Checked this with './configure --help' command line.
+
+- For to buid DigikamImagePlugins, you must build and install the 'digikam' source code before 
+and restart 'make -f Makefile.cvs; ./configure; ...' commands.
+
+Nota : use the '--enable-debug=full' option with the configure script for to provide
+a full information bug report.

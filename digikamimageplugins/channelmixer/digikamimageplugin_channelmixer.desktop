@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=ImagePlugin_ChannelMixer
+Name[it]=PluginImmagini_MixerDeiCanali
+Name[nl]=Afbeeldingsplugin_KanaalMixer
+Name[sv]=Insticksprogram för kanalblandning
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+
+Comment=Image color channels mixer plugin for digiKam
+Comment[en_GB]=Image colour channels mixer plugin for digiKam
+Comment[es]=Complemento de mezcla de los canales de color de las imágenes para digiKam
+Comment[fr]=Module externe de digiKam pour mixer les canaux de couleur
+Comment[it]=Plugin di mixer dei canali dei colori per digiKam
+Comment[nl]=digiKam-plugin voor kanaalmixer
+Comment[pt]='Plugin' dos canais de cores para o digiKam
+Comment[pt_BR]='Plugin' dos canais de cores para o digiKam
+Comment[sv]=Digikam insticksprogram för att blanda bildfärgkanaler
+
+X-KDE-Library=digikamimageplugin_channelmixer
+author=Caulier Gilles, caulier dot gilles at free dot fr
