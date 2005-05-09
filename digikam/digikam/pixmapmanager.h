@@ -24,14 +24,12 @@
 #include <qpixmap.h>
 #include <kurl.h>
 
-#include "thumbnailjob.h"
-
 /** @file pixmapmanager.h */
 
-class KFileMetaInfo;
 class QPixmap;
 class QTimer;
 class AlbumIconView;
+class ThumbnailJob;
 
 /**
  * Since there are date based folders, the number of pixmaps which
@@ -70,8 +68,7 @@ signals:
 
 private slots:
 
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix,
-                          const KFileMetaInfo*);
+    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
     void slotFailedThumbnail(const KURL& url);
     void slotCompleted();
 };

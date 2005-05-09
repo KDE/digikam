@@ -28,7 +28,6 @@
 #include <qdatastream.h>
 
 #include <kglobal.h>
-#include <kfilemetainfo.h>
 #include <kio/previewjob.h>
 #include <kdebug.h>
 
@@ -51,7 +50,6 @@ public:
     KURL::List    urlList;
     int           size;
     bool          highlight;
-    bool          metainfo;
 
     KURL          curr_url;
     KURL          next_url;
@@ -73,7 +71,6 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
     d->urlList.append(url);
     d->size      = size;
     d->highlight = highlight;
-    d->metainfo  = false;
 
     d->curr_url = d->urlList.first();
     d->next_url = d->curr_url;
@@ -86,7 +83,7 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
 }
 
 ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
-                           bool metainfo, bool highlight)
+                           bool highlight)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
@@ -94,7 +91,6 @@ ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
     d->urlList   = urlList;
     d->size      = size;
     d->highlight = highlight;
-    d->metainfo  = metainfo;
     d->running   = false;
 
     d->curr_url = d->urlList.first();
@@ -298,18 +294,12 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
         p.end();
     }
 
-    KFileMetaInfo *metaInfo = 0;
-    if (d->metainfo)
-    {
-        metaInfo = new KFileMetaInfo(d->curr_url.path());
-    }
-
-    emit signalThumbnailMetaInfo(d->curr_url, pix, metaInfo);
+    emit signalThumbnail(d->curr_url, pix);
 }
 
 void ThumbnailJob::slotGotThumbnailKDE(const KFileItem*, const QPixmap& pix)
 {
-    emit signalThumbnailMetaInfo(d->curr_url, pix, 0);
+    emit signalThumbnail(d->curr_url, pix);
 
     d->running = false;
     processNext();

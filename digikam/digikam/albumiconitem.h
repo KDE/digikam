@@ -41,7 +41,6 @@ class QImage;
 class QColorGroup;
 
 class ImageInfo;
-class KFileMetaInfo;
 
 class AlbumIconView;
 
@@ -58,7 +57,6 @@ public:
 
     ImageInfo* imageInfo() const;
 
-    void setMetaInfo(const KFileMetaInfo* metaInfo);
     QRect thumbnailRect() const;
 
     virtual int compare(IconItem *item);
@@ -70,7 +68,6 @@ protected:
 private:
 
     ImageInfo           *info_;
-    const KFileMetaInfo *metaInfo_;
     AlbumIconView       *view_;
     bool                 dirty_;
 };

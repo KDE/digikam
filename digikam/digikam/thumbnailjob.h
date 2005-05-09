@@ -27,7 +27,6 @@
 
 class QPixmap;
 class QImage;
-class KFileMetaInfo;
 class KFileItem;
 
 class ThumbnailJobPriv;
@@ -41,7 +40,7 @@ public:
     ThumbnailJob(const KURL& url, int size,
                  bool highlight=true);
     ThumbnailJob(const KURL::List& urlList, int size,
-                 bool metainfo=true, bool highlight=true);
+                 bool highlight=true);
     ~ThumbnailJob();
 
     void addItem(const  KURL& url);
@@ -52,8 +51,7 @@ public:
     
 signals:
 
-    void signalThumbnailMetaInfo(const KURL& url, const QPixmap& pix,
-                                 const KFileMetaInfo* metaInfo);
+    void signalThumbnail(const KURL& url, const QPixmap& pix);
     void signalCompleted();
     void signalFailed(const KURL& url);
 

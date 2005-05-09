@@ -28,6 +28,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
+#include "thumbnailjob.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "thumbdb.h"
@@ -86,12 +87,8 @@ QPixmap* PixmapManager::find(const KURL& url)
     {
         m_thumbJob = new ThumbnailJob(url, m_size, true);
         connect(m_thumbJob,
-                SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                               const QPixmap&,
-                                               const KFileMetaInfo*)),
-                SLOT(slotGotThumbnail(const KURL&,
-                                      const QPixmap&,
-                                      const KFileMetaInfo*)));
+                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
 
         connect(m_thumbJob,
                 SIGNAL(signalFailed(const KURL&)),
@@ -123,8 +120,7 @@ void PixmapManager::clear()
     m_cache->clear();
 }
 
-void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix,
-                                     const KFileMetaInfo*)
+void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
     m_cache->remove(url.path());
     QPixmap* thumb = new QPixmap(pix);

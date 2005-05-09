@@ -32,7 +32,6 @@ class QPixmap;
 class QLabel;
 
 class KURL;
-class KFileMetaInfo;
 
 class ThumbnailJob;
 
@@ -65,8 +64,7 @@ private slots:
     void slotColorsChanged(int color);
     void slotRenderingChanged(int rendering);
     void slotIntervChanged(int);
-    void slotGotThumbnail(const KURL&, const QPixmap& pix,
-                          const KFileMetaInfo*);  
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
 
     void slotUpdateMinInterv(int min);

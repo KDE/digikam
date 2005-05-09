@@ -173,13 +173,11 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
                                                (int)ThumbnailSize::Tiny,
                                                true);
             connect(d->iconThumbJob,
-                    SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                           const QPixmap&,
-                           const KFileMetaInfo*)),
+                    SIGNAL(signalThumbnail(const KURL&,
+                                           const QPixmap&)),
                     this,
                     SLOT(slotGotThumbnailFromIcon(const KURL&,
-                         const QPixmap&,
-                         const KFileMetaInfo*)));
+                                                  const QPixmap&)));
             /*connect(d->iconThumbJob,
                     SIGNAL(signalFailed(const KURL&)),
                     SLOT(slotThumbnailLost(const KURL&)));*/
@@ -199,8 +197,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
 }
 
 void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
-                                               const QPixmap& thumbnail,
-                                               const KFileMetaInfo*)
+                                               const QPixmap& thumbnail)
 {
     PAlbum* album = d->albumMan->findPAlbum(url.directory());
 

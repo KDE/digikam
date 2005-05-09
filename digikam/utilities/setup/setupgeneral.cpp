@@ -141,10 +141,6 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    iconShowCommentsBox_->setText(i18n("Show &digiKam comments"));
    tagSettingsLayout->addMultiCellWidget(iconShowCommentsBox_, 5, 5, 0, 2);
 
-   iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowFileCommentsBox_->setText(i18n("Sho&w comments stored in file (warning: slow)"));
-   tagSettingsLayout->addMultiCellWidget(iconShowFileCommentsBox_, 6, 6, 0, 2);
-
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
    iconShowResolutionBox_->setText(i18n("Show ima&ge dimensions (warning: slow)"));
    tagSettingsLayout->addMultiCellWidget(iconShowResolutionBox_, 7, 7, 0, 2);
@@ -198,7 +194,6 @@ void SetupGeneral::applySettings()
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowResolution(iconShowResolutionBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
-    settings->setIconShowFileComments(iconShowFileCommentsBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -239,7 +234,6 @@ void SetupGeneral::readSettings()
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowResolutionBox_->setChecked(settings->getIconShowResolution());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
-    iconShowFileCommentsBox_->setChecked(settings->getIconShowFileComments());
 }
 
 void SetupGeneral::slotChangeAlbumPath()

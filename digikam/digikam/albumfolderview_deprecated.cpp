@@ -793,13 +793,11 @@ void AlbumFolderView_Deprecated::albumHighlight(PAlbum* album)
                                              (int)ThumbnailSize::Tiny,
                                              true);
             connect(iconThumbJob_,
-                    SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                                const QPixmap&,
-                                                const KFileMetaInfo*)),
+                    SIGNAL(signalThumbnail(const KURL&,
+                                           const QPixmap&)),
                     this,
                     SLOT(slotGotThumbnailFromIcon(const KURL&,
-                                        const QPixmap&,
-                                        const KFileMetaInfo*)));
+                                                  const QPixmap&)));
             connect(iconThumbJob_,
                     SIGNAL(signalFailed(const KURL&)),
                     SLOT(slotThumbnailLost(const KURL&)));
@@ -821,8 +819,7 @@ void AlbumFolderView_Deprecated::albumHighlight(PAlbum* album)
 }
 
 void AlbumFolderView_Deprecated::slotGotThumbnailFromIcon(const KURL& url,
-                                       const QPixmap& thumbnail,
-                                       const KFileMetaInfo*)
+                                                          const QPixmap& thumbnail)
 {
     PAlbum* album = albumMan_->findPAlbum(url.directory());
 

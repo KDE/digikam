@@ -28,7 +28,6 @@
 
 #include <qrect.h>
 #include <qfont.h>
-#include <kfileitem.h>
 
 #include "iconview.h"
 
@@ -37,8 +36,6 @@
 #include "imageinfo.h"
 #include "albumitemhandler.h"
 
-class KFileItem;
-class KFileItemMetaInfo;
 class QMouseEvent;
 class QResizeEvent;
 class QDragMoveEvent;
@@ -87,7 +84,6 @@ public:
     QRect    itemPixmapRect() const;
     QRect    itemNameRect() const;
     QRect    itemCommentsRect() const;
-    QRect    itemFileCommentsRect() const;
     QRect    itemResolutionRect() const;
     QRect    itemSizeRect() const;
     QRect    itemTagRect() const;
@@ -128,7 +124,6 @@ private:
 
     void    updateBannerRectPixmap();
     void    updateItemRectsPixmap();
-    bool    showMetaInfo();
 
 private slots:
 

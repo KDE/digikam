@@ -270,12 +270,10 @@ void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int ima
 
     m_thumbJob = new ThumbnailJob(url, 48);
     
-    connect(m_thumbJob, SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                                       const QPixmap&,
-                                                       const KFileMetaInfo*)),
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+                                  const QPixmap&)));
    
     connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedThumbnail(const KURL&)));     
@@ -510,8 +508,7 @@ void ImagePropertiesHistogram::updateInformation()
 }
 
 void ImagePropertiesHistogram::slotGotThumbnail(const KURL&,
-                                                const QPixmap& pix,
-                                                const KFileMetaInfo*)
+                                                const QPixmap& pix)
 {
     if (!pix.isNull())
         m_labelThumb->setPixmap(pix);

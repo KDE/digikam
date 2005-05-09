@@ -63,7 +63,6 @@ private:
     QCheckBox    *iconShowResolutionBox_;
     QCheckBox    *iconShowCommentsBox_;
     QCheckBox    *iconShowTagsBox_;
-    QCheckBox    *iconShowFileCommentsBox_;
 
     KDialogBase  *mainDialog_;
 

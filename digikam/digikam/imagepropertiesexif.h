@@ -26,7 +26,6 @@
 class QComboBox;
 class QPixmap;
 class KURL;
-class KFileMetaInfo;
 
 class KExifWidget;
 class ThumbnailJob;
@@ -54,8 +53,7 @@ private:
 private slots:
 
     void slotLevelChanged(int);
-    void slotGotThumbnail(const KURL&, const QPixmap& pix,
-                          const KFileMetaInfo*);  
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
 };
 

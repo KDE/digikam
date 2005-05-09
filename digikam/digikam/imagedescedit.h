@@ -30,22 +30,18 @@
 
 #include <kdialogbase.h>
 
-// Local includes.
-
-#include "thumbnailjob.h"
-
 class QLabel;
 class QListView;
 class QPixmap;
 class QCheckListItem;
 class QCheckBox;
 
-class KFileMetaInfo;
 class KTextEdit;
 
 class AlbumIconView;
 class AlbumIconItem;
 class TAlbum;
+class ThumbnailJob;
 
 class ImageDescEdit : public KDialogBase
 {
@@ -91,8 +87,7 @@ private slots:
     void slotUser2();
     void slotApply();
     void slotOk();
-    void slotGotThumbnail(const KURL&, const QPixmap& pix,
-                          const KFileMetaInfo*);    
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
 

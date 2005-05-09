@@ -143,7 +143,6 @@ public:
     QRect itemPixmapRect;
     QRect itemNameRect;
     QRect itemCommentsRect;
-    QRect itemFileCommentsRect;
     QRect itemResolutionRect;
     QRect itemSizeRect;
     QRect itemTagRect;
@@ -1247,11 +1246,6 @@ QRect AlbumIconView::itemCommentsRect() const
     return d->itemCommentsRect;
 }
 
-QRect AlbumIconView::itemFileCommentsRect() const
-{
-    return d->itemFileCommentsRect;
-}
-
 QRect AlbumIconView::itemResolutionRect() const
 {
     return d->itemResolutionRect;
@@ -1410,11 +1404,6 @@ void AlbumIconView::updateItemRectsPixmap()
         y = d->itemCommentsRect.bottom();
     }
 
-    if (d->albumSettings->getIconShowFileComments())
-    {
-        d->itemFileCommentsRect = QRect(margin, y, w, oneRowComRect.height());
-        y = d->itemFileCommentsRect.bottom();
-    }
 
     if (d->albumSettings->getIconShowDate())
     {
@@ -1464,12 +1453,6 @@ void AlbumIconView::slotThemeChanged()
     updateItemRectsPixmap();
 
     viewport()->update();
-}
-
-bool AlbumIconView::showMetaInfo()
-{
-    return (d->albumSettings->getIconShowResolution() ||
-            d->albumSettings->getIconShowFileComments());
 }
 
 AlbumIconItem* AlbumIconView::findItem(const QPoint& pos)

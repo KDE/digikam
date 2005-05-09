@@ -29,7 +29,6 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 #include <qapplication.h>
@@ -167,12 +166,10 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
                                              ThumbnailSize::Tiny,
                                              false);
         connect(job,
-                SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                               const QPixmap&,
-                                               const KFileMetaInfo*)),
+                SIGNAL(signalThumbnail(const KURL&,
+                                       const QPixmap&)),
                 SLOT(slotGotThumbnailFromIcon(const KURL&,
-                                              const QPixmap&,
-                                              const KFileMetaInfo*)));
+                                              const QPixmap&)));
         connect(job,
                 SIGNAL(signalFailed(const KURL&)),
                 SLOT(slotLoadThumbnailFailed()));
@@ -195,8 +192,7 @@ void SyncJob::slotLoadThumbnailFailed()
     qApp->exit_loop();
 }
 
-void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix,
-                                       const KFileMetaInfo*)
+void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix)
 {
     if(!pix.isNull() && (thumbnailSize_ < ThumbnailSize::Tiny))
     {

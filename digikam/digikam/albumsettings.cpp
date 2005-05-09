@@ -64,7 +64,6 @@ public:
     bool iconShowSize;
     bool iconShowDate;
     bool iconShowComments;
-    bool iconShowFileComments;
     bool iconShowResolution;
     bool iconShowTags;
     bool saveExifComments;
@@ -130,7 +129,6 @@ void AlbumSettings::init()
     d->iconShowSize = false;
     d->iconShowDate = true;
     d->iconShowComments = true;
-    d->iconShowFileComments = false;
     d->iconShowResolution = false;
     d->iconShowTags = true;
     d->saveExifComments = false;
@@ -196,9 +194,6 @@ void AlbumSettings::readSettings()
 
     d->iconShowComments = config->readBoolEntry("Icon Show Comments",
                                                 true);
-
-    d->iconShowFileComments = config->readBoolEntry("Icon Show File Comments",
-                                                    false);
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
 
@@ -278,9 +273,6 @@ void AlbumSettings::saveSettings()
                        
     config->writeEntry("Icon Show Comments",
                        d->iconShowComments);
-                       
-    config->writeEntry("Icon Show File Comments",
-                       d->iconShowFileComments);
                        
     config->writeEntry("Icon Show Tags",
                        d->iconShowTags);
@@ -482,16 +474,6 @@ void AlbumSettings::setIconShowComments(bool val)
 bool AlbumSettings::getIconShowComments() const
 {
     return d->iconShowComments;
-}
-
-void AlbumSettings::setIconShowFileComments(bool val)
-{
-    d->iconShowFileComments = val;
-}
-
-bool AlbumSettings::getIconShowFileComments() const
-{
-    return d->iconShowFileComments;
 }
 
 void AlbumSettings::setIconShowResolution(bool val)

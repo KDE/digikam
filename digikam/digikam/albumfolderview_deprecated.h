@@ -43,8 +43,6 @@ class QDragLeaveEvent;
 class QDropEvent;
 class QTimer;
 class KURL;
-class KFileItem;
-class KFileMetaInfo;
 
 class ListItem;
 class Album;
@@ -172,8 +170,7 @@ private slots:
 
     void slotOpenAlbumFolderItem_Deprecated();
         
-    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
-                                  const KFileMetaInfo*);
+    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
     void slotThumbnailLost(const KURL&);
 
     void slotPAlbumIconChanged(PAlbum*);    

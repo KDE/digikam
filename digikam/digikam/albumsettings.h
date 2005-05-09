@@ -104,9 +104,6 @@ public:
     void setIconShowComments(bool val);
     bool getIconShowComments() const;
 
-    void setIconShowFileComments(bool val);
-    bool getIconShowFileComments() const;
-
     void setIconShowResolution(bool val);
     bool getIconShowResolution() const;
 

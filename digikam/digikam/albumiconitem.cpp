@@ -34,7 +34,6 @@
 
 // KDE includes.
 
-#include <kfilemetainfo.h>
 #include <kurl.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -107,37 +106,17 @@ AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
 {
     view_        = (AlbumIconView*) parent->iconView();
     info_        = info;
-    metaInfo_    = 0;
     dirty_       = true;
 }
 
 
 AlbumIconItem::~AlbumIconItem()
 {
-    if (metaInfo_)
-        delete metaInfo_;
 }
 
 ImageInfo* AlbumIconItem::imageInfo() const
 {
     return info_;
-}
-
-void AlbumIconItem::setMetaInfo(const KFileMetaInfo* metaInfo)
-{
-    if (metaInfo_)
-    {
-        delete metaInfo_;
-        metaInfo_ = 0;
-    }
-    metaInfo_  = metaInfo;
-
-    QRect r(view_->contentsX(), view_->contentsY(),
-            view_->visibleWidth(), view_->visibleHeight());
-    if (r.intersects(rect()))
-    {
-        repaint();
-    }
 }
 
 int AlbumIconItem::compare(IconItem *item)
@@ -227,20 +206,6 @@ void AlbumIconItem::paintItem()
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
     }
 
-    if (settings->getIconShowFileComments())
-    {
-        if (metaInfo_ && metaInfo_->isValid() &&
-            metaInfo_->containsGroup("Jpeg EXIF Data"))
-        {
-            QString jpegComments = metaInfo_->group("Jpeg EXIF Data").
-                                   item("Comment").value().toString();
-        
-            r = view_->itemFileCommentsRect();
-            p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                        jpegComments));
-        }
-    }
-    
     p.setFont(view_->itemFontXtra());
 
     if (settings->getIconShowDate())

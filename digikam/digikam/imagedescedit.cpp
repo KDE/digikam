@@ -27,6 +27,8 @@
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kdeversion.h>
+#include <kconfig.h>
+#include <kfilemetainfo.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -56,6 +58,7 @@
 #include "albumsettings.h"
 #include "imagedescedit.h"
 #include "tagcreatedlg.h"
+#include "thumbnailjob.h"
 
 class TAlbumCheckListItem : public QCheckListItem
 {
@@ -296,7 +299,6 @@ void ImageDescEdit::slotApply()
                  (*metaInfo)["Jpeg EXIF Data"].item("Comment")
                      .setValue(m_commentsEdit->text());
                  metaInfo->applyChanges();
-                 m_currItem->setMetaInfo(metaInfo);
              }
              else
              {
@@ -353,12 +355,10 @@ void ImageDescEdit::slotItemChanged()
     m_thumbJob = new ThumbnailJob(fileURL, 256);
 
     connect(m_thumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)),
+            SIGNAL(signalThumbnail(const KURL&,
+                                   const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+                                  const QPixmap&)));
 
     connect(m_thumbJob,
             SIGNAL(signalFailed(const KURL&)),
@@ -400,8 +400,7 @@ void ImageDescEdit::slotItemChanged()
     enableButton(User2, m_currItem->prevItem() != 0);
 }
 
-void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                     const KFileMetaInfo*)
+void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     m_thumbLabel->setPixmap(pix);
 }

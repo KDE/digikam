@@ -25,7 +25,6 @@
 
 class KURL;
 class QPixmap;
-class KFileMetaInfo;
 
 class Album;
 class PAlbum;
@@ -45,8 +44,7 @@ public:
 private slots:
 
     void    slotAlbumAdded(Album *);
-    void    slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail,
-                                     const KFileMetaInfo*);
+    void    slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
     void    slotSelectionChanged();
     
 private:
