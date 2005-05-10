@@ -1067,8 +1067,10 @@ void ShowFoto::slotSelected(bool val)
     m_cropAction->setEnabled(val);
     m_copyAction->setEnabled(val);
 
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next()) {
         if (plugin) {
             plugin->setEnabledSelectionActions(val);
         }
@@ -1090,8 +1092,10 @@ void ShowFoto::toggleActions(bool val)
     if (!m_disableBCGActions)
        m_BCGAction->setEnabled(val);
     
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next()) 
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next()) 
     {
         if (plugin) {
             plugin->setEnabledActions(val);
@@ -1104,8 +1108,10 @@ void ShowFoto::slotEditKeys()
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
 
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next()) 
     {
         if (plugin)
         {
@@ -1216,8 +1222,10 @@ void ShowFoto::slotSetup()
 
 void ShowFoto::loadPlugins()
 {
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next()) 
     {
         if (plugin)
         {
@@ -1232,8 +1240,11 @@ void ShowFoto::loadPlugins()
 
 void ShowFoto::unLoadPlugins()
 {
-    for (Digikam::ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next()) {
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
         if (plugin) {
             guiFactory()->removeClient(plugin);
             plugin->setParentWidget(0);
