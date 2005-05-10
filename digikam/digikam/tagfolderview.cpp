@@ -18,16 +18,20 @@
 
 #include <qintdict.h>
 #include <qpainter.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kmessagebox.h>
 
 #include "tagfolderview.h"
 #include "album.h"
 #include "albummanager.h"
 #include "syncjob.h"
+#include "tagcreatedlg.h"
 
 static QPixmap getBlendedIcon(TAlbum* tag)
 {
@@ -197,4 +201,72 @@ void TagFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(tagitem->getTag());
 }
 
+void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
+{
+    if(e->button() == RightButton) {
+        contextMenu(e->pos());
+        return;
+    }
+    
+    QListView::contentsMousePressEvent(e);
+}
+
+void TagFolderView::contextMenu(const QPoint &pos)
+{
+    QPopupMenu popmenu(this);    
+    
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(pos));
+    
+    popmenu.insertItem(SmallIcon("tag"),
+                       i18n("New Tag..."), 10);
+    
+    if(item)
+    {
+//        popmenu.insertItem(SmallIcon("pencil"),
+//                           i18n("Edit Tag Properties..."), 11);
+//        popmenu.insertItem(SmallIcon("edittrash"),
+//                           i18n("Delete Tag"), 12);
+    }
+    
+    switch(popmenu.exec((QCursor::pos())))
+    {
+        case 10:
+        {
+            tagNew(item);
+            break;
+        }
+        case 11:
+        {
+//                tagEdit(album);
+            break;
+        }
+        case 12:
+        {
+//                tagDelete(album);
+            break;
+        }
+        default:
+            break;
+    }    
+}
+
+void TagFolderView::tagNew(TagFolderViewItem *item)
+{
+    QString title, icon;
+    TAlbum *parent;
+    
+    if(!item)
+        parent = d->albumMan->findTAlbum(0);
+    else
+        parent = item->getTag();
+
+    if(!TagCreateDlg::tagCreate(parent, title, icon))
+        return;
+
+    QString errMsg;
+    if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))
+        KMessageBox::error(0, errMsg);
+}
+
 #include "tagfolderview.moc"
+
