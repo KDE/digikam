@@ -632,6 +632,9 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
 void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius, 
                                      int progressMin, int progressMax, KProgress *progressBar, bool *cancel)
 {
+    bool False = false;
+    if (!cancel) cancel = &False;
+    
     if (!data || !Width || !Height)
        {
        kdWarning() << ("ImageFilters::gaussianBlurImage: no image data available!")
@@ -643,7 +646,7 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
        return;
 
     if (Radius > 100) Radius = 100;
-    
+ 
     // Gaussian kernel computation using the Radius parameter.
       
     int    nKSize, nCenter;
@@ -910,6 +913,9 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
 void ImageFilters::sharpenImage(uint* data, int w, int h, int r, 
                                 int progressMin, int progressMax, KProgress *progressBar, bool *cancel)
 {
+    bool False = false;
+    if (!cancel) cancel = &False;
+    
     if (!data || !w || !h)
        {
        kdWarning() << ("ImageFilters::sharpenImage: no image data available!")
