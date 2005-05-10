@@ -1,5 +1,3 @@
-#AM_CFLAGS = -fomit-frame-pointer -O3 -funroll-all-loops
-
 noinst_LTLIBRARIES = liblapack.la
  
 noinst_HEADERS = blaswrap.h clapack.h f2c.h fio.h fmt.h fp.h
