@@ -6,7 +6,7 @@ libthumbbar_la_SOURCES = thumbbar.cpp
 
 libthumbbar_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-INCLUDES = $(all_includes) 
+INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes) 
 
 digikaminclude_HEADERS = thumbbar.h 
 

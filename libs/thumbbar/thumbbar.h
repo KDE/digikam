@@ -28,6 +28,8 @@
 
 #include <kurl.h>
 
+#include "digikam_export.h"
+
 class QPixmap;
 
 class KFileItem;
@@ -38,7 +40,7 @@ namespace Digikam
 class ThumbBarItem;
 class ThumbBarViewPriv;
 
-class ThumbBarView : public QScrollView
+class DIGIKAM_EXPORT ThumbBarView : public QScrollView
 {
     Q_OBJECT
 
@@ -91,7 +93,7 @@ private:
     friend class ThumbBarItem;
 };
 
-class ThumbBarItem
+class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
@@ -120,7 +122,7 @@ private:
     friend class ThumbBarView;
 };
 
-class ThumbBarToolTip : public QToolTip
+class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 {
 public:
 
