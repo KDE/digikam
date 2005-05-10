@@ -81,6 +81,8 @@ kdelnk_DATA = digikam.desktop
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamui.rc
 
+include_HEADERS = digikam_export.h
+
 KDE_OPTIONS = nofinal
 
 include ../../admin/Doxyfile.am
