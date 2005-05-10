@@ -43,8 +43,14 @@ public:
     ImageEffect_Blur(QWidget *parent);
     ~ImageEffect_Blur();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+        
 private:
 
+    bool          m_cancel;
+    
     QWidget      *m_parent;
     
     QTimer       *m_timer;
@@ -58,6 +64,7 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotTimer();
+    void slotCancel();
 };
 
 #endif /* IMAGEEFFECT_BLUR_H */
