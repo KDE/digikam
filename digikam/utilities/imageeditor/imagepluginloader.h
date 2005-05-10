@@ -27,6 +27,8 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qstring.h>
+#include <qvaluelist.h>
+#include <qpair.h>
 
 // Local includes.
 
@@ -44,8 +46,8 @@ public:
 
     static ImagePluginLoader* instance();
 
-    QPtrList<Digikam::ImagePlugin>& pluginList();
-    void loadPluginsFromList(QStringList list);
+    QPtrList<Digikam::ImagePlugin> pluginList();
+    void loadPluginsFromList(const QStringList& list);
     
     // Return true if plugin library is loaded in memory.
     // 'libraryName' is internal plugin library name not i18n.
@@ -53,11 +55,14 @@ public:
 
 private:
 
-    SplashScreen                   *m_splash;
-    static ImagePluginLoader       *m_instance;
-    QPtrList<Digikam::ImagePlugin>  m_pluginList;
+    typedef QPair<QString,Digikam::ImagePlugin*> PluginType;
+    typedef QValueList< PluginType >             PluginList;
     
-    Digikam::ImagePlugin* pluginIsLoaded(const QString& pluginName);
+    SplashScreen                         *m_splash;
+    static ImagePluginLoader             *m_instance;
+    PluginList                            m_pluginList;
+    
+    Digikam::ImagePlugin* pluginIsLoaded(const QString& name);
 };
 
 #endif /* IMAGEPLUGINLOADER_H */
