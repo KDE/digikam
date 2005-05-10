@@ -44,11 +44,12 @@
 // KDE includes.
 
 #include <kurl.h>
+#include "digikam_export.h"
                                                                       
 namespace Digikam
 {
 
-class ImageCurves
+class DIGIKAM_EXPORT ImageCurves
 {
 
 public:
