@@ -177,7 +177,8 @@ public:   // Public methods.
                                   float brGain, float bgGain, float bbGain,
                                   bool overIndicator=false);
     static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);     
-    static void sharpenImage(uint* data, int w, int h, int r);
+    static void sharpenImage(uint* data, int w, int h, int r,
+                             int progressMin=0, int progressMax=0, KProgress *progressBar=0L, bool *cancel=(bool*)false);
     static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);
 
 };
