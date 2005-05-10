@@ -24,6 +24,7 @@
 // KDE includes.
 
 #include <kdialogbase.h>
+#include "digikam_export.h"
 
 class QSpinBox;
 class QSlider;
@@ -33,7 +34,7 @@ namespace Digikam
 class ImageWidget;
 }
 
-class ImageEffect_RGB : public KDialogBase
+class DIGIKAMIMAGEPLUGINS_EXPORT ImageEffect_RGB : public KDialogBase
 {
     Q_OBJECT
 

@@ -37,7 +37,7 @@
 
 #include <kapplication.h>
 #include <kmainwindow.h>
-
+#include "digikam_export.h"
 
 namespace KIPI
 {
@@ -61,7 +61,7 @@ class DigikamView;
 class AlbumSettings;
 class SplashScreen;
 
-class DigikamApp : public KMainWindow
+class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 {
     Q_OBJECT
 

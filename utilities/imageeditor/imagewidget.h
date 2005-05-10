@@ -22,13 +22,13 @@
 #define IMAGEWIDGET_H
 
 #include <qwidget.h>
-
+#include "digikam_export.h"
 namespace Digikam
 {
 
 class ImageIface;
 
-class ImageWidget : public QWidget
+class DIGIKAMIMAGEEDITOR_EXPORT ImageWidget : public QWidget
 {
 public:
 

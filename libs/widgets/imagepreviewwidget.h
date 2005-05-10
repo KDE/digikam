@@ -26,6 +26,7 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
+#include "digikam_export.h"
 
 class QLabel;
 
@@ -37,7 +38,7 @@ namespace Digikam
 class ImageRegionWidget;
 class ImagePanIconWidget;
 
-class ImagePreviewWidget : public QWidget
+class DIGIKAMIMAGEWIDGET_EXPORT ImagePreviewWidget : public QWidget
 {
 Q_OBJECT
 

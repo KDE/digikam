@@ -11,6 +11,7 @@ libwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/histogram \
 	-I$(top_srcdir)/digikam/libs/curves \
+	-I$(top_srcdir)/digikam/digikam \
         -I$(top_srcdir)/digikam/utilities/imageeditor \
 	$(all_includes)
 

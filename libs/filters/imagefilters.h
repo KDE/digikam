@@ -30,11 +30,12 @@
 //KDE includes.
 
 #include <kprogress.h>
-
+#include "digikam_export.h"
+												
 namespace Digikam
 {
 
-class ImageFilters
+class DIGIKAMIMAGEFILTERS_EXPORT ImageFilters
 {
 public: // Structures to use for color management filters depending of architectures.
 

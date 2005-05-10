@@ -26,10 +26,11 @@
 // Digikam includes.
 
 #include <imageplugin.h>
+#include "digikam_export.h"
 
 class KAction;
 
-class ImagePlugin_Core : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Core : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

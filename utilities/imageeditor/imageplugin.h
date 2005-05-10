@@ -28,13 +28,13 @@
 // KDE includes.
 
 #include <kxmlguiclient.h>
-
+#include "digikam_export.h"
 class QWidget;
 
 namespace Digikam
 {
 
-class ImagePlugin : public QObject, public KXMLGUIClient
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 {
 public:
     

@@ -25,12 +25,12 @@
 // Qt includes.
 
 #include <kdialogbase.h>
-
+#include "digikam_export.h"
 class KConfig;
 class KURLRequester;
 class DigikamFirstFirstRunWidget;
 
-class DigikamFirstRun : public KDialogBase
+class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
 {
     Q_OBJECT
 

@@ -27,7 +27,7 @@
 
 #include <qglobal.h>
 #include <klocale.h>
-
+#include "digikam_export.h"
 #define MAX3(a, b, c) (QMAX(QMAX(a,b),b))
 #define MIN3(a, b, c) (QMIN(QMIN(a,b),b))
 #define ROUND(x) ((int) ((x) + 0.5))
@@ -40,7 +40,7 @@ namespace Digikam
 
 class ImageIfacePriv;
 
-class ImageIface
+class DIGIKAMIMAGEEDITOR_EXPORT ImageIface
 {
 public:
 
