@@ -10,6 +10,13 @@ AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 # -----------------------------------------------------------------
 KDE_CHECK_TYPES
 
+# -------------------------------------------------------
+# Check endianness
+# -------------------------------------------------------
+AC_LANG_SAVE
+AC_LANG_C
+AC_C_BIGENDIAN
+AC_LANG_RESTORE
 
 #---------------------------------------------------------
 # imlib2-detection
