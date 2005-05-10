@@ -39,13 +39,14 @@
 // KDE includes.
 
 #include <kurl.h>
-                                                                      
+#include "digikam_export.h"
+						
 namespace Digikam
 {
 
 class ImageHistogram;
 
-class ImageLevels
+class DIGIKAM_EXPORT ImageLevels
 {
 
 private:

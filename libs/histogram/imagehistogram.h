@@ -25,13 +25,13 @@
 // Qt includes.
 
 #include <qthread.h>
-
+#include "digikam_export.h"
 class QObject;
 
 namespace Digikam
 {
 
-class ImageHistogram : public QThread
+class DIGIKAM_EXPORT ImageHistogram : public QThread
 {
 
 public:
