@@ -117,9 +117,11 @@ ImageWindow::ImageWindow()
 
     buildGUI();
         
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next()) {
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = ImagePluginLoader::instance()->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
         if (plugin) {
             guiFactory()->addClient(plugin);
             plugin->setParentWidget(this);
@@ -169,9 +171,11 @@ ImageWindow::~ImageWindow()
 
     saveSettings();
 
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next()) {
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = ImagePluginLoader::instance()->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
         if (plugin) {
             guiFactory()->removeClient(plugin);
             plugin->setParentWidget(0);
