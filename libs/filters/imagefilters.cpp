@@ -629,7 +629,7 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
  * Theory           => this is the famous gaussian blur like in photoshop or gimp.  
  */
 void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius, 
-                                     int progressMin, int progressMax, KProgress *progressBar)
+                                     int progressMin, int progressMax, KProgress *progressBar, bool *cancel)
 {
     if (!data || !Width || !Height)
        {
@@ -639,12 +639,8 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
        }
     
     if (Radius <= 0) 
-       {
-       kdWarning() << ("ImageFilters::gaussianBlurImage: invalide Radius value!")
-                   << endl;
        return;
-       }
-       
+
     if (Radius > 100) Radius = 100;
     
     // Gaussian kernel computation using the Radius parameter.
@@ -662,7 +658,7 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     factor = exp (lnfactor);
     sd = exp (lnsd);
 
-    for (i = 0; i < nKSize; i++)
+    for (i = 0; !*cancel && (i < nKSize); i++)
         {
         x = sqrt ((i - nCenter) * (i - nCenter));
         Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
@@ -694,7 +690,7 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     
     int** arrMult = Alloc2DArray (nKernelWidth, 256);
     
-    for (i = 0; i < nKernelWidth; i++)
+    for (i = 0; !*cancel && (i < nKernelWidth); i++)
         for (j = 0; j < 256; j++)
             arrMult[i][j] = j * Kernel[i];
 
@@ -704,13 +700,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
     // Now, we enter in the main loop
     
-    for (h = 0; h < Height; h++, i += nStride)
+    for (h = 0; !*cancel && (h < Height); h++, i += nStride)
         {
-        for (w = 0; w < Width; w++, i += 4)
+        for (w = 0; !*cancel && (w < Width); w++, i += 4)
             {
             // first of all, we need to blur the horizontal lines
                 
-            for (n = -Radius; n <= Radius; n++)
+            for (n = -Radius; !*cancel && (n <= Radius); n++)
                {
                // if is inside...
                if (IsInside (Width, Height, w + n, h))
@@ -750,12 +746,12 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; w < Width; w++, i = w * 4)
+    for (w = 0; !*cancel && (w < Width); w++, i = w * 4)
         {
-        for (h = 0; h < Height; h++, i += LineWidth)
+        for (h = 0; !*cancel && (h < Height); h++, i += LineWidth)
             {
             // first of all, we need to blur the vertical lines
-            for (n = -Radius; n <= Radius; n++)
+            for (n = -Radius; !*cancel && (n <= Radius); n++)
                 {
                 // if is inside...
                 if (IsInside(Width, Height, w, h + n))
@@ -786,13 +782,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
         if (progressBar)
            {
-           progressBar->setValue( (int)(progressMin + (progressMax-progressMin)/2) + 
-                                  ((double)(w) * (double)(progressMax-progressMin) / (double)Width) );
+           progressBar->setValue( (int)((progressMin + (progressMax-progressMin)/2) + 
+                                  ((double)(w) * (double)(progressMax-progressMin) / (double)Width)) );
            kapp->processEvents(); 
            }
         }
-
-    memcpy (data, pOutBits, BitCount);   
+    
+    if (!*cancel) memcpy (data, pOutBits, BitCount);   
        
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);
