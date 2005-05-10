@@ -38,7 +38,7 @@ class ImageFilters
 {
 public: // Structures to use for color management filters depending of architectures.
 
-#ifdef BIGENDIAN        // PPC like
+#ifdef WORDS_BIGENDIAN        // PPC like
     struct channels
     {
     uchar   alpha;
