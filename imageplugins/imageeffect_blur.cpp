@@ -53,7 +53,9 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                               parent, 0, true, true),
                   m_parent(parent)
 {
-    m_timer = 0;
+    m_timer  = 0;
+    m_cancel = false;
+    
     setHelp("blursharpentool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
@@ -93,6 +95,18 @@ ImageEffect_Blur::~ImageEffect_Blur()
        delete m_timer;
 }
 
+void ImageEffect_Blur::closeEvent(QCloseEvent *e)
+{
+    m_cancel = true;
+    e->accept();    
+}
+
+void ImageEffect_Blur::slotCancel()
+{
+    m_cancel = true;
+    done(Cancel);
+}
+
 void ImageEffect_Blur::slotTimer()
 {
     if (m_timer)
@@ -109,7 +123,7 @@ void ImageEffect_Blur::slotTimer()
 
 void ImageEffect_Blur::slotEffect()
 {
-    enableButtonOK(m_radiusInput->value() > 0);
+    enableButtonOK(false);
     m_radiusInput->setEnabled(false);
     m_imagePreviewWidget->setProgress(0);
     
@@ -119,8 +133,10 @@ void ImageEffect_Blur::slotEffect()
     int   h    = img.height();
     int   r    = m_radiusInput->value();
         
-    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r, 0, 100, m_imagePreviewWidget->progressBar());
+    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r, 0, 100, m_imagePreviewWidget->progressBar(), &m_cancel);
     
+    enableButtonOK(m_radiusInput->value() > 0);
+    m_cancel = false;
     m_imagePreviewWidget->setProgress(0);
     m_radiusInput->setEnabled(true);
     m_imagePreviewWidget->setPreviewImageData(img);
@@ -129,6 +145,7 @@ void ImageEffect_Blur::slotEffect()
 void ImageEffect_Blur::slotOk()
 {
     m_parent->setCursor( KCursor::waitCursor() );
+    enableButtonOK(false);
     m_radiusInput->setEnabled(false);
     m_imagePreviewWidget->setProgress(0);
     
@@ -139,7 +156,7 @@ void ImageEffect_Blur::slotOk()
     int h      = iface.originalHeight();
     int r      = m_radiusInput->value();
             
-    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r, 0, 100, m_imagePreviewWidget->progressBar());
+    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r, 0, 100, m_imagePreviewWidget->progressBar(), &m_cancel);
     
     iface.putOriginalData(i18n("Blur"), data);
     delete [] data;
