@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <qsize.h>
 
+#include <kdeversion.h>
 #include <kmultitabbar.h>
 #include <kiconloader.h>
 
@@ -38,7 +39,11 @@ Sidebar::Sidebar(QWidget *parent, Side side)
     QHBoxLayout *box = new QHBoxLayout(this);
     
     m_tabBar = new KMultiTabBar(KMultiTabBar::Vertical, this);
+#if KDE_IS_VERSION(3,3,0)
     m_tabBar->setStyle(KMultiTabBar::KDEV3ICON);
+#else
+    m_tabBar->setStyle(KMultiTabBar::KDEV3);
+#endif
     m_tabBar->showActiveTabTexts(true);
     m_stack = new QWidgetStack(this);
             
