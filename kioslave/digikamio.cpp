@@ -550,7 +550,10 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
             if (( errno == EACCES ) || (errno == EPERM)) 
                 error( KIO::ERR_ACCESS_DENIED, dest.path() );
             else if (errno == EXDEV) 
-                error( KIO::ERR_UNSUPPORTED_ACTION, QString::fromLatin1("rename"));
+                error( KIO::ERR_UNSUPPORTED_ACTION, QString("This folder is on a different "
+                                                            "filesystem through symlinks. "
+                                                            "Moving/Renaming files between "
+                                                            "them is currently unsupported"));
             else if (errno == EROFS)  // The file is on a read-only filesystem
                 error( KIO::ERR_CANNOT_DELETE, src.path() );
             else 
@@ -619,7 +622,10 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
             if (( errno == EACCES ) || (errno == EPERM)) 
                 error( KIO::ERR_ACCESS_DENIED, dest.path() );
             else if (errno == EXDEV) 
-                error( KIO::ERR_UNSUPPORTED_ACTION, QString::fromLatin1("rename"));
+                error( KIO::ERR_UNSUPPORTED_ACTION, QString("This folder is on a different "
+                                                            "filesystem through symlinks. "
+                                                            "Moving/Renaming files between "
+                                                            "them is currently unsupported"));
             else if (errno == EROFS)  // The file is on a read-only filesystem
                 error( KIO::ERR_CANNOT_DELETE, src.path() );
             else 
@@ -682,7 +688,10 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
             if (( errno == EACCES ) || (errno == EPERM)) 
                 error( KIO::ERR_ACCESS_DENIED, dest.path() );
             else if (errno == EXDEV) 
-                error( KIO::ERR_UNSUPPORTED_ACTION, QString::fromLatin1("rename"));
+                error( KIO::ERR_UNSUPPORTED_ACTION, QString("This file is on a different "
+                                                            "filesystem through symlinks. "
+                                                            "Moving/Renaming files between "
+                                                            "them is currently unsupported"));
             else if (errno == EROFS)  // The file is on a read-only filesystem
                 error( KIO::ERR_CANNOT_DELETE, src.path() );
             else 
@@ -741,7 +750,10 @@ void kio_digikamioProtocol::rename(const KURL &src, const KURL &dest,
             if (( errno == EACCES ) || (errno == EPERM)) 
                 error( KIO::ERR_ACCESS_DENIED, dest.path() );
             else if (errno == EXDEV) 
-                error( KIO::ERR_UNSUPPORTED_ACTION, QString::fromLatin1("rename"));
+                error( KIO::ERR_UNSUPPORTED_ACTION, QString("This file is on a different "
+                                                            "filesystem through symlinks. "
+                                                            "Moving/Renaming files between "
+                                                            "them is currently unsupported"));
             else if (errno == EROFS)  // The file is on a read-only filesystem
                 error( KIO::ERR_CANNOT_DELETE, src.path() );
             else 
