@@ -302,11 +302,8 @@ void ImageEffect_Refocus::slotUser1()
 
 void ImageEffect_Refocus::slotCancel()
 {
-    if (m_dirty)
-       {
-       m_cancel = true;
-       done(Cancel);
-       }
+    m_cancel = true;
+    done(Cancel);
 }
 
 void ImageEffect_Refocus::slotHelp()
@@ -316,11 +313,8 @@ void ImageEffect_Refocus::slotHelp()
 
 void ImageEffect_Refocus::closeEvent(QCloseEvent *e)
 {
-    if (m_dirty)
-       {
-       m_cancel = true;
-       e->accept();    
-       }
+    m_cancel = true;
+    e->accept();    
 }
 
 void ImageEffect_Refocus::slotTimer()
