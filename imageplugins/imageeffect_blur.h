@@ -25,8 +25,6 @@
 
 #include <kdialogbase.h>
 
-class QTimer;
-
 class KIntNumInput;
 
 namespace Digikam
@@ -43,18 +41,10 @@ public:
     ImageEffect_Blur(QWidget *parent);
     ~ImageEffect_Blur();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-        
 private:
 
-    bool          m_cancel;
-    
     QWidget      *m_parent;
     
-    QTimer       *m_timer;
-            
     KIntNumInput *m_radiusInput;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
@@ -63,8 +53,6 @@ private slots:
 
     void slotEffect();
     void slotOk();
-    void slotTimer();
-    void slotCancel();
 };
 
 #endif /* IMAGEEFFECT_BLUR_H */

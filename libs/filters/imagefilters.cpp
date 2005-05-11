@@ -615,38 +615,26 @@ void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
         }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 /* Function to apply the GaussianBlur on an image
  *
  * data             => The image data in RGBA mode.  
  * Width            => Width of image.                          
  * Height           => Height of image.                            
  * Radius           => blur matrix radius                                         
- * minProgress      => Min progress limit value.
- * maxProgress      => Max progress limit value.
- * progressBar      => Progress bar.
- * cancel           => Flag to cancel computation.
  *                                                                                 
  * Theory           => this is the famous gaussian blur like in photoshop or gimp.  
  */
-void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius, 
-                                     int progressMin, int progressMax, KProgress *progressBar, bool *cancel)
+void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radius)
 {
-    bool False = false;
-    if (!cancel) cancel = &False;
-    
     if (!data || !Width || !Height)
        {
        kdWarning() << ("ImageFilters::gaussianBlurImage: no image data available!")
                    << endl;
        return;
        }
-    
-    if (Radius <= 0) 
-       return;
 
     if (Radius > 100) Radius = 100;
- 
+    
     // Gaussian kernel computation using the Radius parameter.
       
     int    nKSize, nCenter;
@@ -662,7 +650,7 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     factor = exp (lnfactor);
     sd = exp (lnsd);
 
-    for (i = 0; !*cancel && (i < nKSize); i++)
+    for (i = 0; i < nKSize; i++)
         {
         x = sqrt ((i - nCenter) * (i - nCenter));
         Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
@@ -694,7 +682,7 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     
     int** arrMult = Alloc2DArray (nKernelWidth, 256);
     
-    for (i = 0; !*cancel && (i < nKernelWidth); i++)
+    for (i = 0; i < nKernelWidth; i++)
         for (j = 0; j < 256; j++)
             arrMult[i][j] = j * Kernel[i];
 
@@ -704,13 +692,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
     // Now, we enter in the main loop
     
-    for (h = 0; !*cancel && (h < Height); h++, i += nStride)
+    for (h = 0; h < Height; h++, i += nStride)
         {
-        for (w = 0; !*cancel && (w < Width); w++, i += 4)
+        for (w = 0; w < Width; w++, i += 4)
             {
             // first of all, we need to blur the horizontal lines
                 
-            for (n = -Radius; !*cancel && (n <= Radius); n++)
+            for (n = -Radius; n <= Radius; n++)
                {
                // if is inside...
                if (IsInside (Width, Height, w + n, h))
@@ -736,13 +724,6 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
-            
-            if (progressBar)
-               {
-               progressBar->setValue( (int)(progressMin + ((double)(h) * 
-                                      (double)((progressMax-progressMin)/2)) / (double)Height) );
-               kapp->processEvents(); 
-               }
             }
         }
 
@@ -750,12 +731,12 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; !*cancel && (w < Width); w++, i = w * 4)
+    for (w = 0; w < Width; w++, i = w * 4)
         {
-        for (h = 0; !*cancel && (h < Height); h++, i += LineWidth)
+        for (h = 0; h < Height; h++, i += LineWidth)
             {
             // first of all, we need to blur the vertical lines
-            for (n = -Radius; !*cancel && (n <= Radius); n++)
+            for (n = -Radius; n <= Radius; n++)
                 {
                 // if is inside...
                 if (IsInside(Width, Height, w, h + n))
@@ -783,16 +764,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
-
-        if (progressBar)
-           {
-           progressBar->setValue( (int)((progressMin + (progressMax-progressMin)/2) + 
-                                  ((double)(w) * (double)(progressMax-progressMin) / (double)Width)) );
-           kapp->processEvents(); 
-           }
         }
-    
-    if (!*cancel) memcpy (data, pOutBits, BitCount);   
+
+    memcpy (data, pOutBits, BitCount);   
        
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);
@@ -903,19 +877,11 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
  * w                => Width of image.                          
  * h                => Height of image.                            
  * r                => sharpen matrix radius                                         
- * minProgress      => Min progress limit value.
- * maxProgress      => Max progress limit value.
- * progressBar      => Progress bar.
- * cancel           => Flag to cancel computation.
  *                                                                                 
  * Theory           => this is the famous sharpen image filter like in photoshop or gimp.  
  */
-void ImageFilters::sharpenImage(uint* data, int w, int h, int r, 
-                                int progressMin, int progressMax, KProgress *progressBar, bool *cancel)
+void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
 {
-    bool False = false;
-    if (!cancel) cancel = &False;
-    
     if (!data || !w || !h)
        {
        kdWarning() << ("ImageFilters::sharpenImage: no image data available!")
@@ -932,7 +898,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
     int negLUT[256];
     int posLUT[256];
     
-    for (int i = 0; !*cancel && (i < 256); i++)
+    for (int i = 0; i < 256; i++)
     {
         posLUT[i] = 800 * i / fact;
         negLUT[i] = (4 + posLUT[i] - (i << 3)) >> 3;
@@ -952,7 +918,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
 
     int  width = sizeof(unsigned int)*w;
 
-    for (row = 0; !*cancel && (row < 4); row++)
+    for (row = 0; row < 4; row++)
     {
         src_rows[row] = new unsigned char[width];
         neg_rows[row] = new int[width];
@@ -966,14 +932,14 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
 
     int i;
     for ( i = width, src_ptr = src_rows[0], neg_ptr = neg_rows[0];
-         !*cancel && (i > 0);
+         i > 0;
          i--, src_ptr++, neg_ptr++)
         *neg_ptr = negLUT[*src_ptr]; 
 
     row   = 1;
     count = 1;                                    
 
-    for (int y = 0; !*cancel && (y < h); y++)
+    for (int y = 0; y < h; y++)
     {
         // Load the next pixel row...
 
@@ -989,7 +955,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
 
             memcpy(src_rows[row], data + y*w, width); 
             for (i = width, src_ptr = src_rows[row], neg_ptr = neg_rows[row];
-                 !*cancel && (i > 0);
+                 i > 0;
                  i--, src_ptr++, neg_ptr++)
                 *neg_ptr = negLUT[*src_ptr];
 
@@ -1025,7 +991,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
             *dst++ = *src++;
             wm -= 2;
 
-            while (!*cancel && (wm > 0))
+            while (wm > 0)
             {
                 pixel = (posLUT[*src++] - neg0[-4] - neg0[0] - neg0[4] -
                          neg1[-4] - neg1[4] -
@@ -1058,6 +1024,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
             *dst++ = *src++;
             *dst++ = *src++;
             
+            
             // Set the row...
             memcpy(dstData + y*w, dst_row, width); 
         }
@@ -1074,16 +1041,10 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r,
                 memcpy(dstData + y*w, src_rows[(h-1) & 3], width);
             }
         }
-        
-        if (progressBar)
-        {
-            progressBar->setValue( (int)(progressMin + ((double)(y) * 
-                                   (double)((progressMax-progressMin) / (double)h) )));
-            kapp->processEvents(); 
-        }
+
     }
 
-    if (!*cancel) memcpy(data, dstData, w*h*sizeof(uint));
+    memcpy(data, dstData, w*h*sizeof(uint));
     delete [] dstData;
 }
 
