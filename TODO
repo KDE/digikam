@@ -37,3 +37,6 @@
   - active view
   - closed/open state of left/right views
   - currently selected albums in each view
+
+* Fix PPC compatibily in image filters [GC]
+
