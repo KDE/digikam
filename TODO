@@ -29,9 +29,6 @@
 * search view and search table in database
    - need to discuss
 
-* remove embedded comments display in digikam [RR]
-  if requested, use the file listing to display image dimensions
-
 * fix saving of curent state of digikam 
   - splitter sizes
   - active view
