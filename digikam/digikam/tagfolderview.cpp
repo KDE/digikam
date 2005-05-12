@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : tagfolderview.cpp
- * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Author: Jï¿½n Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-05
- * Copyright 2005 by Jörn Ahrens
+ * Copyright 2005 by Jï¿½n Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,8 +120,10 @@ TagFolderView::TagFolderView(QWidget *parent)
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
     
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
+    connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
+            SLOT(slotAlbumDeleted(Album*)));
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));    
 }
@@ -165,6 +167,22 @@ void TagFolderView::slotAlbumAdded(Album *album)
         TagFolderViewItem *item = new TagFolderViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
         d->dict.insert(tag->getID(), item);        
+    }
+}
+
+void TagFolderView::slotAlbumDeleted(Album *album)
+{
+    if(!album)
+        return;
+
+    TAlbum *tag = dynamic_cast<TAlbum*>(album);
+    if(!tag)
+        return;
+
+    TagFolderViewItem *item = d->dict.find(tag->getID());
+    if(item) {
+        d->dict.remove(tag->getID());
+        delete item;
     }
 }
 
@@ -213,21 +231,18 @@ void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
 
 void TagFolderView::contextMenu(const QPoint &pos)
 {
-    QPopupMenu popmenu(this);    
-    
+    QPopupMenu popmenu(this);
+
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(pos));
-    
-    popmenu.insertItem(SmallIcon("tag"),
-                       i18n("New Tag..."), 10);
-    
+
+    popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
+
     if(item)
     {
-//        popmenu.insertItem(SmallIcon("pencil"),
-//                           i18n("Edit Tag Properties..."), 11);
-//        popmenu.insertItem(SmallIcon("edittrash"),
-//                           i18n("Delete Tag"), 12);
+//        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
-    
+
     switch(popmenu.exec((QCursor::pos())))
     {
         case 10:
@@ -242,19 +257,19 @@ void TagFolderView::contextMenu(const QPoint &pos)
         }
         case 12:
         {
-//                tagDelete(album);
+            tagDelete(item);
             break;
         }
         default:
             break;
-    }    
+    }
 }
 
 void TagFolderView::tagNew(TagFolderViewItem *item)
 {
     QString title, icon;
     TAlbum *parent;
-    
+
     if(!item)
         parent = d->albumMan->findTAlbum(0);
     else
@@ -266,6 +281,55 @@ void TagFolderView::tagNew(TagFolderViewItem *item)
     QString errMsg;
     if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))
         KMessageBox::error(0, errMsg);
+}
+
+void TagFolderView::tagDelete(TagFolderViewItem *item)
+{
+    if(!item)
+        return;
+
+    TAlbum *tag = item->getTag();
+    if (!tag || tag->isRoot())
+        return;
+
+    // find number of subtags
+    int children = 0;
+    AlbumIterator iter(tag);
+    while(iter.current()) {
+        children++;
+        ++iter;
+    }
+
+    if(children)
+    {
+        int result =
+            KMessageBox::warningYesNo(this, i18n("Tag '%1' has %2 subtag(s). "
+                                                 "Deleting this will also delete "
+                                                 "the subtag(s). "
+                                                 "Are you sure you want to continue?")
+                                      .arg(tag->getTitle())
+                                      .arg(children));
+
+        if(result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!d->albumMan->deleteTAlbum(tag, errMsg))
+                KMessageBox::error(0, errMsg);
+        }
+    }
+    else
+    {
+        int result =
+            KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
+                                       .arg(tag->getTitle()));
+
+        if(result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!d->albumMan->deleteTAlbum(tag, errMsg))
+                KMessageBox::error(0, errMsg);
+        }
+    }
 }
 
 #include "tagfolderview.moc"

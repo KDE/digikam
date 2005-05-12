@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : tagfolderview.h
- * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Author: Jï¿½n Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-03-22
- * Copyright 2005 by Jörn Ahrens
+ * Copyright 2005 by Jï¿½n Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,19 +38,22 @@ public:
     ~TagFolderView();
 
     void setActive(bool val);
-    
+
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
     void contextMenu(const QPoint &pos);
-    void tagNew(TagFolderViewItem *item);
-    
+
 private slots:
 
-    void    slotAlbumAdded(Album *);
-    void    slotSelectionChanged();    
+    void slotAlbumAdded(Album *);
+    void slotSelectionChanged();
+    void slotAlbumDeleted(Album*);
 
 private:
+
+    void tagNew(TagFolderViewItem *item);
+    void tagDelete(TagFolderViewItem *item);
 
     TagFolderViewPriv   *d;
 };
