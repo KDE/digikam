@@ -203,7 +203,7 @@ void DigikamView::slotDeleteTag()
 
 void DigikamView::slotEditTag()
 {
-    mFolderView_Deprecated->tagEdit();
+    mTagFolderView->tagEdit();
 }
 
 // ----------------------------------------------------------------

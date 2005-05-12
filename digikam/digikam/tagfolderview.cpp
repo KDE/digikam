@@ -271,7 +271,7 @@ void TagFolderView::contextMenu(const QPoint &pos)
 
     if(item)
     {
-//        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
@@ -284,7 +284,7 @@ void TagFolderView::contextMenu(const QPoint &pos)
         }
         case 11:
         {
-//                tagEdit(album);
+            tagEdit(item);
             break;
         }
         case 12:
@@ -319,6 +319,48 @@ void TagFolderView::tagNew(TagFolderViewItem *item)
     QString errMsg;
     if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))
         KMessageBox::error(0, errMsg);
+}
+
+void TagFolderView::tagEdit()
+{
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
+    tagEdit(item);    
+}
+
+void TagFolderView::tagEdit(TagFolderViewItem *item)
+{
+    if(!item)
+        return;
+    
+    TAlbum *tag = item->getTag();
+    if(!tag)
+        return;
+
+    QString title, icon;
+    if(!TagEditDlg::tagEdit(tag, title, icon))
+    {
+        return;
+    }
+
+    if(tag->getTitle() != title)
+    {
+        QString errMsg;
+        if(!d->albumMan->renameTAlbum(tag, title, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            item->setText(0, title);
+    }
+
+    if(tag->getIcon() != icon)
+    {
+        QString errMsg;
+        if (!d->albumMan->updateTAlbumIcon(tag, icon, false, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            item->setPixmap(0, getBlendedIcon(tag));
+    }
+
+//    emit signalTagsAssigned();
 }
 
 void TagFolderView::tagDelete()

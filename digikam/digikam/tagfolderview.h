@@ -39,6 +39,7 @@ public:
     void setActive(bool val);
     
     void tagNew();
+    void tagEdit();    
     void tagDelete();
 
 protected:
@@ -57,6 +58,7 @@ private slots:
 private:
 
     void tagNew(TagFolderViewItem *item);
+    void tagEdit(TagFolderViewItem *item);    
     void tagDelete(TagFolderViewItem *item);
 
     TagFolderViewPriv   *d;
