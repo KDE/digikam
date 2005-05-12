@@ -34,7 +34,7 @@ public:
     ~DateFolderView();
 
     void setActive(bool val);
-    
+
 private slots:
 
     void slotDAlbumAdded(DAlbum* album);

@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : albumfolderview.h
- * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Author: Jï¿½n Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-06
- * Copyright 2005 by Jörn Ahrens
+ * Copyright 2005 by Jï¿½n Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,10 @@ public:
     ~AlbumFolderView();
 
     void setActive(bool val);
+
+protected:
+    
+    void contentsMouseMoveEvent(QMouseEvent *e);
     
 private slots:
 

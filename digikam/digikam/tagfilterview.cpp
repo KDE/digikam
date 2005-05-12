@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kglobalsettings.h>
+#include <kcursor.h>
 
 #include <qheader.h>
 #include <qintdict.h>
@@ -174,6 +176,25 @@ TagFilterView::~TagFilterView()
 void TagFilterView::triggerChange()
 {
     d->timer->start(50, true);
+}
+
+void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if(!e) 
+        return;
+
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(e->pos()));
+
+    if(e->state() == NoButton)
+    {
+        if (KGlobalSettings::changeCursorOverIcon())
+        {
+            if(item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
+    }
 }
 
 QDragObject* TagFilterView::dragObject()

@@ -26,6 +26,8 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kglobalsettings.h>
+#include <kcursor.h>
 
 #include "tagfolderview.h"
 #include "album.h"
@@ -229,12 +231,34 @@ void TagFolderView::slotSelectionChanged()
 
 void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
 {
+    if(!e)
+        return;
+
     if(e->button() == RightButton) {
         contextMenu(e->pos());
         return;
     }
     
     QListView::contentsMousePressEvent(e);
+}
+
+void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if(!e) 
+        return;
+
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
+
+    if(e->state() == NoButton)
+    {
+        if(KGlobalSettings::changeCursorOverIcon())
+        {
+            if (item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
+    }
 }
 
 void TagFolderView::contextMenu(const QPoint &pos)

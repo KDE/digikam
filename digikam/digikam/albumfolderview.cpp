@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : albumfolderview.cpp
- * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Author: Jï¿½n Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-06
- * Copyright 2005 by Jörn Ahrens
+ * Copyright 2005 by Jï¿½n Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,8 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kglobalsettings.h>
+#include <kcursor.h>
 
 #include "albumfolderview.h"
 #include "album.h"
@@ -243,6 +245,25 @@ void AlbumFolderView::slotSelectionChanged()
     }
     
     d->albumMan->setCurrentAlbum(albumitem->getAlbum());
+}
+
+void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if(!e) 
+        return;
+
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(itemAt(e->pos()));
+
+    if(e->state() == NoButton)
+    {
+        if (KGlobalSettings::changeCursorOverIcon())
+        {
+            if(item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
+    }
 }
 
 #include "albumfolderview.moc"

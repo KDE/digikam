@@ -37,6 +37,7 @@ public:
 protected:
 
     QDragObject* dragObject();
+    void contentsMouseMoveEvent(QMouseEvent *e);
     
 private slots:
 

@@ -26,7 +26,6 @@
 class Album;
 class TagFolderViewPriv;
 class TagFolderViewItem;
-class QMouseEvent;
 
 class TagFolderView : public QListView
 {
@@ -42,6 +41,7 @@ public:
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseMoveEvent(QMouseEvent *e);
     void contextMenu(const QPoint &pos);
 
 private slots:
