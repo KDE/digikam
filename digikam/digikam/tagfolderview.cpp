@@ -124,6 +124,8 @@ TagFolderView::TagFolderView(QWidget *parent)
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotAlbumDeleted(Album*)));
+    connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
+            SLOT(slotAlbumsCleared()));
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));    
 }
@@ -184,6 +186,12 @@ void TagFolderView::slotAlbumDeleted(Album *album)
         d->dict.remove(tag->getID());
         delete item;
     }
+}
+
+void TagFolderView::slotAlbumsCleared()
+{
+    d->dict.clear();
+    clear();
 }
 
 void TagFolderView::slotSelectionChanged()

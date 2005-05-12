@@ -49,6 +49,7 @@ private slots:
     void slotAlbumAdded(Album *);
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
+    void slotAlbumsCleared();
 
 private:
 
