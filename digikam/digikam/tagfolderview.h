@@ -37,6 +37,9 @@ public:
     ~TagFolderView();
 
     void setActive(bool val);
+    
+    void tagNew();
+    void tagDelete();
 
 protected:
 

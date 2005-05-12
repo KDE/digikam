@@ -193,12 +193,12 @@ void DigikamView::slot_deleteAlbum()
 
 void DigikamView::slotNewTag()
 {
-    mFolderView_Deprecated->tagNew();
+    mTagFolderView->tagNew();
 }
 
 void DigikamView::slotDeleteTag()
 {
-    mFolderView_Deprecated->tagDelete();
+    mTagFolderView->tagDelete();
 }
 
 void DigikamView::slotEditTag()

@@ -297,6 +297,12 @@ void TagFolderView::contextMenu(const QPoint &pos)
     }
 }
 
+void TagFolderView::tagNew()
+{
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
+    tagNew(item);
+}
+
 void TagFolderView::tagNew(TagFolderViewItem *item)
 {
     QString title, icon;
@@ -313,6 +319,12 @@ void TagFolderView::tagNew(TagFolderViewItem *item)
     QString errMsg;
     if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))
         KMessageBox::error(0, errMsg);
+}
+
+void TagFolderView::tagDelete()
+{
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
+    tagDelete(item);
 }
 
 void TagFolderView::tagDelete(TagFolderViewItem *item)
