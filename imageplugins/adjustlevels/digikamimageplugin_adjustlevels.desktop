@@ -1,30 +1,10 @@
 [Desktop Entry]
 Name=ImagePlugin_AdjustLevels
-Name[da]=Billedplugin_Niveaujustering
-Name[it]=PluginImmagini_RegolaLivelli
-Name[nl]=Afbeeldingsplugin_NiveausBijstellen
-Name[sr]=Сликовни прикључак — подешавање нивоа
-Name[sr@Latn]=Slikovni priključak — podešavanje nivoa
-Name[sv]=Insticksprogram för nivåjustering
-Name[ta]=பிம்பசொருகுப்பொருள்_சரிசெய்யும் நிலைகள்
-Name[xx]=xxImagePlugin_AdjustLevelsxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
-Comment[da]=Plugin til niveaujustering i Digikam
-Comment[de]=digiKam Plugin zur Justierung der Bildhistogrammwerte
-Comment[es]=Complemento para ajustar los niveles del histograma de la imagen para digiKam
-Comment[et]=Digikami pildi histogrammi tasemete kohendamise plugin
-Comment[fr]=Module externe de digiKam pour l'ajustement des niveaux d'une image
-Comment[it]=Plugin di regolazione dei livelli degli istogrammi delle immagini per digiKam
-Comment[nl]=digiKam-plugin voor niveaubijstelling van afbeeldinghistogram
-Comment[pt]='Plugin' de ajustar os níveis do histograma da imagem para o digiKam
-Comment[pt_BR]='Plugin' de ajustar os níveis do histograma da imagem para o digiKam
-Comment[sv]=Digikam insticksprogram för justering av nivåer i bildhistogram
-Comment[ta]=டிஜிகாமிற்க்கான பிம்ப வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
-Comment[xx]=xxImage histogram adjust levels plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_adjustlevels
 author=Caulier Gilles, caulier dot gilles at free dot fr

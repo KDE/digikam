@@ -1,18 +1,10 @@
 [Desktop Entry]
 Name=ImagePlugin_BlowUp
-Name[it]=PluginImmagini_Espansione
-Name[nl]=Afbeeldingsplugin_Opblazen
-Name[sv]=Insticksprogram för förstoring
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
-Comment[it]=Plugin di digiKam per espandere una fotografia
-Comment[nl]=digiKam-pluin voor het opblazen van een foto
-Comment[pt]=Um 'plugin' do digiKam para explodir uma fotografia
-Comment[pt_BR]=Um 'plugin' do digiKam para explodir uma fotografia
-Comment[sv]=Digikam insticksprogram för att förstora ett fotografi
 
 X-KDE-Library=digikamimageplugin_blowup
 author=Gilles Caulier, caulier dot gilles at free dot fr
