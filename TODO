@@ -36,4 +36,5 @@
   - currently selected albums in each view
 
 * Fix PPC compatibily in image filters [GC]
-* Using threaded implementation in image filter when it's possible [GC]
+* Use threaded implementation in image filter when it's possible [GC]
+* Add doxygen comments in libs implementation [GC]
