@@ -1,10 +1,20 @@
 [Desktop Entry]
 Name=ImagePlugin_Infrared
+Name[it]=PluginImmagini_Infrarosso
+Name[nl]=Afbeeldingsplugin_Infrarood
+Name[sv]=Insticksprogram för infrarött
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Simulate infrared film plugin for digiKam
+Comment[es]=Complemento para simular una película de infrarrojos para digiKam
+Comment[fr]=Module externe de digiKam pour simuler un flim infrarouge
+Comment[it]=Plugin di simulazione di pellicola infrarossa per digiKam
+Comment[nl]=digiKam-plugin voor infraroodeffect
+Comment[pt]='Plugin' para simular um filme de infravermelhos no digiKam
+Comment[pt_BR]='Plugin' para simular um filme de infravermelhos no digiKam
+Comment[sv]=Digikam insticksprogram för att simulera infraröd film
 
 X-KDE-Library=digikamimageplugin_infrared
 author=Gilles Caulier, caulier dot gilles at free dot fr

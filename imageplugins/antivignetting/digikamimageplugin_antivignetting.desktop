@@ -1,9 +1,23 @@
 [Desktop Entry]
 Name=ImagePlugin_AntiVignetting
+Name[da]=Billedplugin_Anti-vignettering
+Name[it]=PluginImmagini_Antivignettatura
+Name[nl]=Afbeeldingsplugin_AntiVignetting
+Name[sv]=Insticksprogram för antivinjettering
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Anti Vignetting image effect plugin for digiKam
+Comment[da]=Anti-vignetteringsplugin til Digikam
+Comment[de]=digiKam Plugin zur Reduzierung von Vignettierung im Bild.
+Comment[es]=Complemento de efecto de anti-viñeta para digiKam
+Comment[et]=Digikami pildi vinjeti kohendamise plugin
+Comment[fr]=Module externe de digiKam anti-dégradés
+Comment[it]=Plugin per l'effetto delle immagini di antivignettatura per digiKam
+Comment[nl]=digiKam-plugin voor anti-vignetting
+Comment[pt]='Plugin' de efeito de anti-vinheta para o digiKam
+Comment[pt_BR]='Plugin' de efeito de anti-vinheta para o digiKam
+Comment[sv]=Digikam insticksprogram för antivinjetteringsbildeffekt
 
 X-KDE-Library=digikamimageplugin_antivignetting
 author=Gilles Caulier, caulier dot gilles at free dot fr

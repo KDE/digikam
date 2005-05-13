@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=ImagePlugin_ShearTool
+Name[da]=Billedplugin_Forskydningsværktøj
+Name[it]=PluginImmagini_DistorsioneCurvilinea
+Name[nl]=Afbeeldingsplugin_Schuintrekken
+Name[sv]=Insticksprogram med skjuvningsverktyg
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Shear tool plugin for digiKam
+Comment[da]=Forskydningsværktøjs-plugin til Digikam
+Comment[de]=digiKam Plugin zum Scheren eines Bildes.
+Comment[es]=Complemento de herramienta de inclinación para digiKam
+Comment[et]=Digikami pildinihkeplugin
+Comment[fr]=Module externe de digiKam, outil de découpage
+Comment[it]=Plugin per lo strumento di distorsione curvilinea per digiKam
+Comment[nl]=digiKam-plugin voor het schuin trekken van afbeeldingen
+Comment[pt]='Plugin' de ferramenta de inclinação para o digiKam
+Comment[pt_BR]='Plugin' de ferramenta de inclinação para o digiKam
+Comment[sv]=Digikam insticksprogram med skjuvningsverktyg
 
 X-KDE-Library=digikamimageplugin_sheartool
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -1,9 +1,27 @@
 [Desktop Entry]
 Name=ImagePlugin_Charcoal
+Name[da]=Billedplugin_Kultegning
+Name[it]=PluginImmagini_Carboncino
+Name[nl]=Afbeeldingsplugin_Houtskool
+Name[sr]=Сликовни прикључак — воштане боје
+Name[sr@Latn]=Slikovni priključak — voštane boje
+Name[sv]=Insticksprogram för kolteckning
+Name[ta]=பிம்பசொருகுப்பொருள்_கார்கோல்
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Charcoal drawing image effect plugin for digiKam
+Comment[da]=Plugin til kultegningseffekt på billeder i Digikam
+Comment[de]=digiKam Plugin zum Erzeugen eines Kohlezeichnungseffektes
+Comment[es]=Complemento de efecto de imagen dibujada al carboncillo para digiKam
+Comment[et]=Digikami söejoonistuse pildiefektiplugin
+Comment[fr]=Module externe de digiKam pour simuler le dessin au fusain
+Comment[it]=Plugin di effetto di disegno dell'immagine con carboncino per digiKam
+Comment[nl]=digiKam-plugin voor houtskooltekeningen
+Comment[pt]='Plugin' de efeito de desenho de imagem a carvão para o digiKam
+Comment[pt_BR]='Plugin' de efeito de desenho de imagem a carvão para o digiKam
+Comment[sv]=Digikam insticksprogram för kolteckningsbildeffekt
+Comment[ta]=டிஜிகாமிற்கான சார்க்கோல் வரையும் படிம விளைவு சொருகுப்பொருள்
 
 X-KDE-Library=digikamimageplugin_charcoal
 author=Gilles Caulier, caulier dot gilles at free dot fr

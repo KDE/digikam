@@ -1,9 +1,23 @@
 [Desktop Entry]
 Name=ImagePlugin_Border
+Name[da]=Billedplugin_Indramning
+Name[it]=PluginImmagini_Bordo
+Name[nl]=Afbeeldingsplugin_Rand
+Name[sv]=Insticksprogram för bildkanter
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Add border to image plugin for digiKam
+Comment[da]=Plugin til indramning af billeder i Digikam
+Comment[de]=digiKam Plugin zum Hinzufügen eines Rahmens zu einem Bild
+Comment[es]=Complemento para añadir borde a las imágenes para digiKam
+Comment[et]=Digikami pildipiirde lisamise plugin
+Comment[fr]=Module externe de digiKam pour ajouter des bordures à l'image
+Comment[it]=Plugin per l'aggiunta di bordi a un'immagire per digiKam
+Comment[nl]=digiKam-plugin voor het toevoegen van randen
+Comment[pt]='Plugin' de adicionar margem a imagem para o digiKam
+Comment[pt_BR]='Plugin' de adicionar margem a imagem para o digiKam
+Comment[sv]=Digikam insticksprogram för tillägg av kanter
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at free dot fr
