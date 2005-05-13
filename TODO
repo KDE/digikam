@@ -36,4 +36,4 @@
   - currently selected albums in each view
 
 * Fix PPC compatibily in image filters [GC]
-
+* Using threaded implementation in image filter when it's possible [GC]
