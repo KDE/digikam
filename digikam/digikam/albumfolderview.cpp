@@ -19,6 +19,8 @@
 #include <qintdict.h>
 #include <qpixmap.h>
 #include <qguardedptr.h>
+#include <qdir.h>
+#include <qpopupmenu.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -26,13 +28,16 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kcursor.h>
+#include <kmessagebox.h>
 
 #include "albumfolderview.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
+#include "albumpropsedit.h"
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
@@ -157,6 +162,27 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     setAlbumThumbnail(palbum);
 }
 
+void AlbumFolderView::slotNewAlbumCreated(Album* album)
+{
+    disconnect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
+               this, SLOT(slotNewAlbumCreated(Album*)));
+
+    if (!album)
+        return;
+    
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    if(!palbum)
+        return;
+
+    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    if(!item)
+        return;
+
+    ensureItemVisible(item);
+    setSelected(item, true);
+}
+
+
 void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
 {
     if(!album)
@@ -247,6 +273,19 @@ void AlbumFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(albumitem->getAlbum());
 }
 
+void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
+{
+    if(!e)
+        return;
+
+    if(e->button() == RightButton) {
+        contextMenu(e->pos());
+        return;
+    }
+    
+    QListView::contentsMousePressEvent(e);
+}
+
 void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if(!e) 
@@ -264,6 +303,107 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
                 unsetCursor();
         }
     }
+}
+
+void AlbumFolderView::contextMenu(const QPoint &pos)
+{
+    QPopupMenu popmenu(this);
+
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(itemAt(pos));
+
+    popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
+
+    if(item)
+    {
+//        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+//        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
+    }
+
+    switch(popmenu.exec((QCursor::pos())))
+    {
+        case 10:
+        {
+            albumNew(item);
+            break;
+        }
+        case 11:
+        {
+//            tagEdit(item);
+            break;
+        }
+        case 12:
+        {
+//            tagDelete(item);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    if(!settings)
+    {
+        kdWarning() << "AlbumFolderView_Deprecated: Couldn't get Album Settings" << endl;
+        return;
+    }
+
+    QDir libraryDir(settings->getAlbumLibraryPath());
+    if(!libraryDir.exists())
+    {
+        KMessageBox::error(0,
+                           i18n("The Albums Library has not been set correctly.\n"
+                                "Select \"Configure Digikam\" from the Settings "
+                                "menu and choose a folder to use for the Albums "
+                                "Library."));
+        return;
+    }
+
+    PAlbum *parent;
+
+    if(!item)
+        parent = d->albumMan->findPAlbum(0);
+    else
+        parent = item->getAlbum();
+
+    QString     title;
+    QString     comments;
+    QString     collection;
+    QDate       date;
+    QStringList albumCollections;
+        
+    if(!AlbumPropsEdit::createNew(parent, title, comments, date, collection, 
+                                  albumCollections))
+        return;
+
+    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+    if(albumCollections != oldAlbumCollections)
+    {
+        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+// TODO:       resort();
+    }
+    
+    QString errMsg;
+    if(d->albumMan->createPAlbum(parent, title, comments, date,
+                                 collection, errMsg))
+    {
+        connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
+                this, SLOT(slotNewAlbumCreated(Album*)));
+    }
+    else
+    {
+        KMessageBox::error(0, errMsg);
+    }
+}
+
+void AlbumFolderView::albumEdit(AlbumFolderViewItem *item)
+{
+}
+
+void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
+{
 }
 
 #include "albumfolderview.moc"

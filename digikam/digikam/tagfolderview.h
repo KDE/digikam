@@ -46,7 +46,6 @@ protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
     void contentsMouseMoveEvent(QMouseEvent *e);
-    void contextMenu(const QPoint &pos);
 
 private slots:
 
@@ -57,6 +56,7 @@ private slots:
 
 private:
 
+    void contextMenu(const QPoint &pos);
     void tagNew(TagFolderViewItem *item);
     void tagEdit(TagFolderViewItem *item);    
     void tagDelete(TagFolderViewItem *item);
