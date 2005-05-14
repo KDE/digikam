@@ -47,7 +47,7 @@ extern "C"
 }
 
 #include "digikamtags.h"
-
+#include "digikam_export.h"
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
                                                const QCString &app_socket)
     : SlaveBase("kio_digikamtags", pool_socket, app_socket)
@@ -462,7 +462,7 @@ bool kio_digikamtagsProtocol::execSql(const QString& sql,
 
 extern "C"
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAMIMAGEPLUGINS_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamtags" );

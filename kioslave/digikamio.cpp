@@ -34,7 +34,7 @@
 #include <qdir.h>
 
 #include <config.h>
-
+#include "digikam_export.h"
 extern "C" 
 {
 #include <stdlib.h>
@@ -1016,7 +1016,7 @@ QString kio_digikamioProtocol::escapeString(QString str) const
 
 extern "C"
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAMIMAGEPLUGINS_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamio" );

@@ -70,6 +70,8 @@ extern "C"
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
 
+#include "digikam_export.h"
+
 using namespace KIO;
 
 extern "C"
@@ -656,7 +658,7 @@ void kio_digikamthumbnailProtocol::createThumbnailDirs()
 
 extern "C"
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAMIMAGEPLUGINS_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamthumbnail" );
