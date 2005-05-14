@@ -1,4 +1,4 @@
-INCLUDES    = $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) -I$(top_srcdir)/digikam/sqlite $(all_includes) 
+INCLUDES    = $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) -I$(top_srcdir)/digikam/digikam -I$(top_srcdir)/digikam/sqlite $(all_includes) 
 METASOURCES = AUTO  
 KDE_CFLAGS =  -w
 
