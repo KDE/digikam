@@ -255,9 +255,10 @@ void SetupGeneral::slotChangeAlbumPath()
     }
 
     QFileInfo targetPath(result);
-    if (!targetPath.isWritable()) {
+    if (!result.isEmpty() && !targetPath.isWritable()) {
         KMessageBox::information(0, i18n("No write access for this path.\n"
                                          "Warning: the comments and tag features will not work."));
+    	return;
     }
 
     if (!result.isEmpty()) {
