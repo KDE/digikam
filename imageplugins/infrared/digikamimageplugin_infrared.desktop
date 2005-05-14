@@ -3,6 +3,7 @@ Name=ImagePlugin_Infrared
 Name[it]=PluginImmagini_Infrarosso
 Name[nl]=Afbeeldingsplugin_Infrarood
 Name[sv]=Insticksprogram för infrarött
+Name[tr]=ResimEklentisi_Kızılötesi
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -15,6 +16,7 @@ Comment[nl]=digiKam-plugin voor infraroodeffect
 Comment[pt]='Plugin' para simular um filme de infravermelhos no digiKam
 Comment[pt_BR]='Plugin' para simular um filme de infravermelhos no digiKam
 Comment[sv]=Digikam insticksprogram för att simulera infraröd film
+Comment[tr]=digiKam için kızılötesi film benzetme eklentisi
 
 X-KDE-Library=digikamimageplugin_infrared
 author=Gilles Caulier, caulier dot gilles at free dot fr

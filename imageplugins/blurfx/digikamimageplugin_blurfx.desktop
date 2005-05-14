@@ -3,6 +3,7 @@ Name=ImagePlugin_BlurFX
 Name[it]=PluginImmagini_EffettiDiSfocatura
 Name[nl]=Afbeeldingsplugin_VervaagFX
 Name[sv]=Insticksprogram för oskärpeeffekt
+Name[tr]=ResimEklentisi_Bulanıklaştır
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -15,6 +16,7 @@ Comment[nl]=digiKam-plugin voor vervaageffect
 Comment[pt]='Plugin' de efeitos especiais de borrão para o digiKam
 Comment[pt_BR]='Plugin' de efeitos especiais de borrão para o digiKam
 Comment[sv]=Digikam insticksprogram med specialeffekter för oskärpa
+Comment[tr]=digiKam için bulanıklaştırma eklentisi
 
 X-KDE-Library=digikamimageplugin_blurfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

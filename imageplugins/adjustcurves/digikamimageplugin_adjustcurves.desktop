@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Kurvejustering
 Name[it]=PluginImmagini_RegolaCurve
 Name[nl]=Afbeeldingsplugin_KrommenAanpassen
 Name[sv]=Insticksprogram för justering av kurvor
+Name[tr]=ResimEklentisi_EğriAyarla
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
