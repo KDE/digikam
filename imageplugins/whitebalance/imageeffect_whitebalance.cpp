@@ -424,7 +424,7 @@ void ImageEffect_WhiteBalance::slotUser1()
     m_darkInput->setValue(0.5);
     m_blackInput->setValue(0.0);
     m_exposureInput->setValue(0.0);
-    m_gammaInput->setValue(0.6);  
+    m_gammaInput->setValue(1.0);  
     m_saturationInput->setValue(1.0);  
     m_greenInput->setValue(1.2);  
     m_temperaturePresetCB->setCurrentItem(Neutral);
