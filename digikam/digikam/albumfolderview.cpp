@@ -182,7 +182,6 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
     setSelected(item, true);
 }
 
-
 void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
 {
     if(!album)
@@ -386,8 +385,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
     
     QString errMsg;
-    if(d->albumMan->createPAlbum(parent, title, comments, date,
-                                 collection, errMsg))
+    if(d->albumMan->createPAlbum(parent, title, comments, date, collection, errMsg))
     {
         connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
                 this, SLOT(slotNewAlbumCreated(Album*)));

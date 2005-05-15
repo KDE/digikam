@@ -21,13 +21,13 @@
 #ifndef _TAGFOLDERVIEW_H_
 #define _TAGFOLDERVIEW_H_
 
-#include <qlistview.h>
+#include <klistview.h>
 
 class Album;
 class TagFolderViewPriv;
 class TagFolderViewItem;
 
-class TagFolderView : public QListView
+class TagFolderView : public KListView
 {
     Q_OBJECT
 
@@ -45,8 +45,9 @@ public:
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-
+    void dragEnterEvent(QDragEnterEvent* e); 
+    QDragObject* dragObject();
+    
 private slots:
 
     void slotAlbumAdded(Album *);
