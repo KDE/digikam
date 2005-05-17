@@ -1,0 +1,113 @@
+<chapter id="superimpose">
+<chapterinfo>
+
+<title>Template Superimpose</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>    
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Template Superimpose</emphasis> is a masking tool to superimpose templates to an image.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+This tool allow to combine two images by superimposing them veery easily. You can use this tool to reframe your photographs and the story they tell.
+
+Existing images or artificially created graphics can be used as PNG template files containing borders, frames, gradients, and composite images that can be added to or superimposed on other images. Template files aren't installed along with the digiKam but can be found at <ulink url="http://digikam3rdparty.free.fr/Templates/">this url</ulink>. Download the content to the digiKam album database and set the <guilabel>Root Template Directory</guilabel> (see Using the Plugin section below).
+</para>
+
+<para>
+The <menuchoice><guimenu>Image</guimenu>
+<guimenuitem>Template Superimpose</guimenuitem></menuchoice> Image Editor menu is used to apply templates to an image.
+</para>
+
+<sect1 id="using-plugin-template-creation">
+<title>To create  new templates</title>
+
+<para>
+New templates can be created using any paint program, and the template must be stored on disk. Colored areas in the image will become a mask that will later be superimposed on another selected image. PNG template files must be created in RGB mode with Alpha channel. The alpha channel represents transparent areas in the template that will not show in the superposition. The selected image upon which the template file is superimposed will appear in place of the transparent areas in the template.
+</para>
+
+<para>
+There is no restriction on template size and orientation, but you must use PNG file format with max. compression (9) to reduce the template file size. If you want to add your template creation to the digiKam templates database, please send a mail to this digiKam mailing-list <email>digikam-users@lists.sourceforge.net</email>.
+</para>
+            
+</sect1>
+
+<sect1 id="using-plugin-superimpose">
+<title>Using the Plugin</title>
+
+<para>
+If you're using the plugin for the first time, you must set your local templates directory using the <guilabel>Root Directory</guilabel> button in the dialog. Select the folder where you have copied the template files. The plugin remembers this setting at the next instance.
+</para>
+
+<para>
+When the root template directory is set, a folder tree view is created which displays the template directories structure. Selecting one will update the templates preview bar automatically.
+</para>
+
+<para>
+Below the preview area, three buttons give you control over the template zoom and position on your image:
+</para>
+
+<para>
+<guilabel>Zoom In</guilabel>: this button increases the underlying image's zoom factor. The image is centered to the current mouse position. Validate with the right mouse button.
+</para>
+
+<para>
+<guilabel>Zoom Out</guilabel>: this button decreases the zoom factor. The image is centered to the current mouse position. If you want to apply the template to the full image you have to zoom out fully. Validate with the right mouse button.
+</para>
+
+<para>
+<guilabel>Move</guilabel>: use this button to pan the underlying image. Click and drag the image with the right mouse button.
+</para>
+ 
+<para>
+Click on the <guilabel>OK</guilabel> button to apply the template to the current image, which in turn will be automatically resized to the preview size.
+</para>
+           
+</sect1>
+
+<sect1 id="inaction-plugin-superimpose">
+<title>The plugin in action</title>
+
+<para>
+The Template Superimpose dialog tool in action is available below.
+</para>
+
+<figure>
+    <title>The Template Superimpose Tool Dialog</title>
+    <graphic srccredit="The Template Superimpose Tool Dialog" fileref="superimposepreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

@@ -1,0 +1,78 @@
+<chapter id="texture">
+<chapterinfo>
+
+<title>Apply Texture</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Apply Texture</emphasis> is a tool for apply decorative texture to an image.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+By adding texture to your image, whether color or black and white, you can make it look like an oil painting on canvas, an Old Masters etching, a Pop Art portrait composed of enlarged half-tone dots, or even a mural on a brick wall.The <menuchoice><guimenu>Image</guimenu>
+<guimenuitem>Apply Texture</guimenuitem></menuchoice> Image Editor menu can be used for that.
+</para>
+
+<sect1 id="using-plugin-texture">
+<title>Using the Plugin</title>
+
+<figure>
+    <title>The Apply Texture Tool Dialog</title>
+    <graphic srccredit="The Apply Texture Tool Dialog" fileref="texturedialog.png"/>
+</figure>
+
+<para>
+Two options give you control over the texture applying on image:
+</para>
+ 
+<para>
+<guilabel>Type</guilabel>: this option specifies the decorative texture style to apply under the image.
+</para>
+
+<para>
+<guilabel>Relief</guilabel>: dragging this option to the right increases the appearance of depth or three-dimensionality of the texture on image.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-texture">
+<title>The plugin in action</title>
+
+<para>
+A <guilabel>Paper</guilabel> texture effect apply to a photograph is available below. The original image is (1), the target image is (2). <guilabel>Relief</guilabel> factor used is 200.
+</para>
+
+<figure>
+    <title>The Apply Texture Effect Preview</title>
+    <graphic srccredit="The Apply Texture Effect Preview" fileref="texturepreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

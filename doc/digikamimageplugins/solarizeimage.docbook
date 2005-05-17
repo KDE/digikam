@@ -1,0 +1,72 @@
+<chapter id="solarizeimage">
+
+<chapterinfo>
+<title>Solarize Image</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Solarize Image</emphasis> is a tool for applying a solarization effect 
+on images.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+In the age of chemical image processing, solarizing (also known as Sabatier) was an effect created by 
+exposing a partially developed print to a brief flash of light, then completing the development. 
+The colored, darker areas shield the additional light from the sensitive photo layers, which has 
+the net effect of making the lighter areas darker and colors being inverted during the second exposure. 
+The result resembles a partially negative image. The plugin allows to adjust the interesting effect smoothly.
+</para>
+
+<sect1 id="using-plugin-solarize">
+<title>Using the plugin</title>
+
+<para>
+The <guilabel>Intensity</guilabel> control helps to preview the solarization by simply increasing it. 
+At about 50% intensity the image shows what was once chemically possible. If you further increase the 
+effect it will finally become a negative image, a stage of inversion not achievable on photographic paper.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-solarize">
+<title>The plugin in action</title>
+
+<para>
+This is an example of solarization effect. The original image is (1) and the corrected image is (2).
+The <guilabel>Intensity</guilabel> level applied is 30%. 
+</para>
+
+<figure>
+    <title>Solarize Image Effect Preview</title>
+    <graphic srccredit="Solarize Image Effect Preview" fileref="solarizepreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

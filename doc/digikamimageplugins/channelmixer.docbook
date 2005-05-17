@@ -1,0 +1,100 @@
+<chapter id="channelmixer">
+<chapterinfo>
+
+<title>Channel Mixer</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Channel Mixer</emphasis> is a tool to remix the color channels to improve or modify the photograph color shades.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The Channel Mixer is an another sophisticated tool to refine the images' tonality. Start it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Channel Mixer</guimenuitem></menuchoice> Image Editor menu.
+</para>
+
+<para>
+</para>
+
+<sect1 id="using-plugin-channelmixer">
+<title>Using the plugin</title>
+
+<figure>
+    <title>The Channel Mixer Tool Dialog</title>
+    <graphic srccredit="The Channel Mixer Tool Dialog" fileref="channelmixerdialog.png"/>
+</figure>
+
+<para>
+The upper left corner lets you select and display the histogram per color or intensity value. It gives a first hint of how to correct the channels by their relative distribution and amplitude. The right half of the dialog window always shows a preview of what you are doing in comparison to the original image. 
+</para>
+
+<para>
+The target photo preview has a red marker available. If you place this marker to a zone of image, a corresponding vertical line will be drawn on histogram indicating the color level value in the current channel selected.
+</para>
+
+<para>
+Now the controls are to the lower left: <guilabel>Red</guilabel>, <guilabel>Green</guilabel> and <guilabel>Blue</guilabel> slider controls enable you to mix the channels. If you check <guilabel>Preserve Luminosity</guilabel> the image will retain its overall luminosity despite you changing its color components. This feature is particularly useful when you also ticked the <guilabel>Monochrome</guilabel> box. Because the channel mixer is THE tool to make great black and white conversions of your photographs. Try to reduce the green channel for black and white portraits.
+</para>
+
+<note><para>
+Sometimes, especially when doing monochrome mixing, reducing one color channel may increase visible noise, which actually originates in the chroma noise. Chroma noise means that the little noise specs do not appear at the same location in all the color channels, but the noise patterns looks different in every channel. If that is the case you can improve the monochrome conversion by reducing the chroma noise first.
+</para></note>
+
+<para>
+<guilabel>Save</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any mixer settings that you have set can be saved to the filesystem and loaded later. The used file format is The Gimp channel mixer format.
+</para>
+
+<para>
+<guilabel>Over Exposure Indicator</guilabel> option adds up the colors if more than one channel in a pixel is over-exposed, and you will see the combined color resulting of channel gain settings. This rule is applying to target preview area and haven't effect to final rendering.
+</para>
+
+<para>
+<guilabel>Reset All</guilabel> button resets all channel mixer settings to default values.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-channelmixer">
+<title>The plugin in action</title>
+
+<para>
+Below, you can see a photograph color tone adjustments for the <guilabel>Blue</guilabel> channel. <guilabel>Preserve luminosity</guilabel> option is on. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>The Channel Mixer Tool in Action</title>
+    <graphic srccredit="The Channel Mixer Tool in Action" fileref="channelmixerpreview.png"/>
+</figure>
+
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

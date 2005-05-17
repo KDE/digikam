@@ -1,0 +1,151 @@
+<chapter id="lensdistortion">
+<chapterinfo>
+
+<title>Lens Distortion Correction</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Lens Distortion</emphasis> is a tool to correct spherical lens aberrations on the photos. It uses an algorithm copyrighted by David Hodson.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+<emphasis>Barrel distortion</emphasis> is associated with wide angle (or minimal zoom) lenses. It causes the images to appear slightly spherical (curved outward) like a barrel. You can notice this when you have straight features close to the image's peripheral sides. <emphasis>Pincushion distortion</emphasis> is the opposite defect and is associated with Telephoto lenses (maximum zoom) or underwater pictures. The images appear pinched (bent inward) toward the center. The Pincushion is often less noticeable than barrel but are equally visible near the edges. These distortions can easily be eliminated without visible loss in quality with this plugin. 
+</para>
+
+<note><para>
+This plugin treats the geometrical distortions. Chromatic abberations will not be corrected by this plugin.
+</para></note>
+
+<para>
+You can see a preview of spherical aberrations below:
+<itemizedlist>            
+    <listitem><para>(1): pincushion distortion.</para></listitem>
+    <listitem><para>(2): no distortion.</para></listitem>
+    <listitem><para>(3): barrel distortion.</para></listitem>
+</itemizedlist>    
+</para>
+
+<figure>
+    <title>Lens Distortion Types</title>
+    <graphic srccredit="Lens Distortion Types" fileref="distortions.png"/>
+</figure>
+
+<para>
+</para>
+
+<sect1 id="using-plugin-lensdistortion">
+<title>Using the plugin</title>
+
+<note><para>
+A bit of explanation first. The geometrical corrections use 4th-order polynominal coefficients.
+    <itemizedlist>
+        <listitem><para>The 1st-order coefficient changes the size of the image. The plugin calls this <guilabel>Zoom</guilabel>.</para></listitem>
+        <listitem><para>The 2nd-order coefficient treats the main geometrical distortion of lenses and can correct the convex or concave shape of the image.</para></listitem>
+        <listitem><para>The 3rd-order coefficient has a similar rounding effect but levels of towards the edges. This correction is not employed in the plugin.</para></listitem>
+        <listitem><para>The 4th-order coefficient corrects the far edges inversely to the 2nd-order rounding. Combined with the 2nd-order correction the geometrical distortions can be almost completely eliminated.</para></listitem>
+    </itemizedlist>
+</para></note>
+
+<figure>
+    <title>Lens Distortion Correction Dialog</title>
+    <graphic srccredit="Lens Distortion Correction Dialog" fileref="lensdistortiondialog.png"/>
+</figure>
+
+<para>
+Four sliders give you control over the distortion correction filter:
+</para>
+
+<para>
+<guilabel>Main</guilabel>: this value controls the amount of 2nd-order distortion. Negative values correct barrel distortions, while positive values correct pincushion distortion.
+</para>
+
+<para>
+<guilabel>Edge</guilabel>: this value controls the amount of 4th-order distortion. The Edge control has more effect at the edges of the image than at the centre.
+</para>
+
+<para>
+<guilabel>Zoom</guilabel>: this value rescales the overall image size (1st-order correction). Negative values zoom out of the image, while positive values zoom in.
+</para>
+
+<para>
+<guilabel>Brighten</guilabel>: this control adjusts the brightness in image corners. Negative values decrease the brightness image corners, while positive values increase it.
+</para>
+
+<para>
+To help you to choose the best filter settings, the plugin dialog illustrates with a thumbnail preview the distortion correction applied to a crossed mesh pattern.
+</para>
+
+<note><para>
+The barrel-pincushion correction should be done before any crop or size changes (including perspective correction). In fact the Barrel-Pincushion corrections should be the very first step on the original image. If you crop the image and then use barrel correction the effect would be obviously wrong.
+</para></note>
+
+<para>
+For helping you, the tool provide too a vertical and horizontal guide. Move the mouse cursor under image preview for display the dashed lines guide. Move the cursor to an important place in the image like the sea or a building border and press the left mouse button for freeze the dashed lines position. Now, adjust the barrel/pincushion correction accordinly with the guide.      
+</para>
+
+<para>
+When using pincushion correction the result image will have a black border in the corner. You will need this to cut out with a crop tool available in <menuchoice><guimenu>Transform</guimenu><guimenuitem>Crop</guimenuitem></menuchoice> Image Editor menu or via the zoom slider of this dialog. 
+</para>
+
+<para>
+On most images using the barrel correction is enough, however with some shots such as front pictures, frames, paintings, the next logical step is to use perspective correction to make all the angles 90 degrees. Note that when you hold your camera by hand you almost always introduce some kind of slight perspective distortion.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-lensdistortion">
+<title>The plugin in action</title>
+
+<para>
+This is an example of an barrel correction applied to an image. The original image is (1), the corrected image (2).
+</para>
+
+<para>
+The values used for this example are:
+<itemizedlist>            
+    <listitem><para>Main     = -100.</para></listitem>
+    <listitem><para>Edge     = 0.</para></listitem>
+    <listitem><para>Zoom     = -20.</para></listitem>
+    <listitem><para>Brighten = 0.</para></listitem>
+</itemizedlist>    
+</para>
+
+<figure>
+    <title>Lens Distortion Correction Preview</title>
+    <graphic srccredit="Lens Distortion Correction Preview" fileref="lensdistortionpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

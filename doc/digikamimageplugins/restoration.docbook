@@ -1,0 +1,152 @@
+<chapter id="restoration">
+<chapterinfo>
+
+<title>Photograph Restoration</title>
+
+<authorgroup>
+    
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+    
+</authorgroup>
+
+<abstract>
+
+<para>
+<ulink url="http://cimg.sourceforge.net"><inlinemediaobject>
+<imageobject><imagedata fileref="cimg-logo.png" format="PNG"/></imageobject>
+<textobject><phrase>cimglogo</phrase></textobject>
+</inlinemediaobject></ulink>
+</para>
+
+<para>
+The digiKam image plugin <emphasis>Photograph Restoration</emphasis> is definitely one of the most advanced tools to reduce photograph artefacts.
+</para>
+
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+This fantastic restoration filter is a new development providing unprecedented possibilities in the public domain to remove lots of unwanted stuff from your images. It is well adapted to deal with degraded images suffering from Gaussian noise, film grain, scratches or compression artefacts and local degradations usually encountered in digital (original or digitized) images. The smoothing happens along the image curvatures, thus preserving the meaningful content much alike our human eye would want it.
+</para>
+
+<para>
+The same algorithm can be used for colorization and texture replacement which is covered by another plugin (inpainting...). The restoration algorithm has been developed by the IMAGE team of GREC CNRS lab in Caen/France and is a part of <ulink url="http://cimg.sourceforge.net">CImg project</ulink>.
+</para>
+
+
+
+<sect1 id="using-plugin-restoration">
+<title>Using the plugin</title>
+
+<figure>
+    <title>Photograph Restoration Dialog</title>
+    <graphic srccredit="Photograph Restoration Dialog" fileref="restorationdialog.png"/>
+</figure>
+
+<para>The plugin comes with several presets as starting points and to simplify the restoration. The preset settings available are listed below:
+
+<itemizedlist>
+
+  <listitem><para><guilabel>None</guilabel>: Using most common default filter settings not optimized for any particular purpose.</para></listitem> 
+  <listitem><para><guilabel>Reduce Uniform Noise</guilabel>: Optimum settings for image noise due to sensors.</para></listitem>
+  <listitem><para><guilabel>Reduce JPEG Artefacts</guilabel>: JPEG's compression is not perfect, in fact for some types of images it is far from it. As a lossy compression algorithm, there are some compression "artefacts" - slight defaults showing in the decompressed image. This setting aims at correcting this problem.</para></listitem>
+  <listitem><para><guilabel>Reduce Texturing</guilabel>: Optimized to remove artefacts from scanning, digitizing or Moire patterns.</para></listitem>
+ 
+</itemizedlist>
+</para>
+
+<para>If you want to set filter parameters for finer adjustments, use <guilabel>Smoothing Settings</guilabel> and <guilabel>Advanced Settings</guilabel> tabs:
+
+<figure>
+    <title>Photograph Restoration Smoothing Settings</title>
+    <graphic srccredit="Photograph Restoration Smoothing Settings" fileref="restorationsettings1.png"/>
+</figure>
+
+<itemizedlist>
+  
+     <listitem><para><guilabel>Detail Preservation</guilabel> p [0, 100]: this controls the preservation of the curvatures (features). A low value forces an equal smoothing across the image, whereas bigger values preferably smooth the homogeneous regions and leaves the details sharper. A value of 0.9 should well preserve details so that no sharpening is required afterwards. </para></listitem>
+     <listitem><para><guilabel>Anisotropy</guilabel> alpha [0,1]: a low value smooths equally in all directions, whereas a value close to 1 smooths in one direction only. If you have film grain or CCD kind of noise a high value will result in wave-like pattern, whereas JPEG artefacts are suited for values close to 1. </para></listitem>
+     <listitem><para><guilabel>Smoothing</guilabel> [0, 500]: this sets the maximum overall smoothing factor (when p defines the relative smoothing). Set it according to the noise level.</para></listitem>
+     <listitem><para><guilabel>Regularity</guilabel> [0, 10]: this parameter is concerned with the bigger structures. The bigger this value, the more even the overall smoothing will be. This is necessary when much noise is present since it is then difficult to estimate the geometry. Also if you want to achieve a 'van Gogh' turbulence effect, setting it higher than 3 is recommended.</para></listitem>
+     <listitem><para><guilabel>Filter Iterations</guilabel>: number of times the blurring algorithm is applied. Usually 1 or 2 is sufficient.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>Advanced Settings:
+
+<figure>
+    <title>Photograph Restoration Advanced Settings</title>
+    <graphic srccredit="Photograph Restoration Advanced Settings" fileref="restorationsettings2.png"/>
+</figure>
+
+<itemizedlist>
+
+     <listitem><para><guilabel>Angular Step</guilabel> da [5, 90]: angular integration of the anisotropy alpha. If alpha is chosen small, da should also be chosen small. But beware, small angles result in long runs! Choose it as large as you can accept. </para></listitem>
+     <listitem><para><guilabel>Integral Step</guilabel> [0, 10]: spatial integration step width in terms of pixels. Should remain less than 1 (sub-pixel smoothing) and never be higher than 2.</para></listitem>
+<listitem><para><guilabel>Use Linear Interpolation</guilabel>: The gain in quality if you select this option is only marginal and you loose a factor of 2 in speed. Our recommendation is to leave it off.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+<guilabel>Save</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any Photograph Restoration filter settings that you have set can be saved to the filesystem in a text file and loaded later.
+</para>
+
+<warning><para>
+Photograph restoration is (comparatively) very fast in what it is doing, but it can take a long time to run and cause high CPU load. You may always abort computation by pressing <guilabel>Abort</guilabel> button during preview rendering.
+</para></warning>
+
+</sect1>
+
+<sect1 id="inaction-plugin-restoration">
+<title>The plugin in action</title>
+
+<para>
+Below, you can see a <guilabel>Reduce Uniform Noise</guilabel> Restoration type applied to a Black and White photograph taken with a Minolta(tm) 700Si camera using Ilford(tm) HP-5 film set at 3200 ISO sensitivity. You see the very prominent film grain on the faces. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>Reduce Uniform Noise Restoration Preview</title>
+    <graphic srccredit="Reduce Uniform Noise Restoration Preview" fileref="restorationpreview.png"/>
+</figure>
+
+<para>
+Below, you can see an another Photograph Restoration example using <guilabel>Reduce Texturing</guilabel> Restoration type applied to an old color photograph acquire with a digital flat scanner. You see the very prominent artefact resulting of scanner light on plastic photograph paper. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>Reduce Texturing Restoration Preview</title>
+    <graphic srccredit="Reduce Texturing Restoration Preview" fileref="restorationpreview2.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

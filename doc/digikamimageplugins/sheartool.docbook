@@ -1,0 +1,79 @@
+<chapter id="sheartool">
+<chapterinfo>
+
+<title>Shearing Image</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Shearing Image</emphasis> is a tool for shearing an image horizontally 
+or vertically.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Shear tool is used to shift an image to a direction and the other part to the opposite direction. For instance, a horizontal shearing will shift the upper part to the right and the lower part to the left. This is not a rotation: the image is distorted. In other words, it will turn a rectangle into a parallelogram. This tool is available to <menuchoice><guimenu>Transform</guimenu><guimenuitem>Shear</guimenuitem></menuchoice> menu.
+</para>
+
+<sect1 id="using-plugin-sheartool">
+<title>Using the plugin</title>
+
+<para>
+Shear your image by using the <guilabel>Horizontal Angle</guilabel> and <guilabel>Vertical Angle</guilabel> sliders (values in degrees). You can shear along either Horizontally and vertically at the same time. Press to <guilabel>Reset Values</guilabel> for re-init the sliders to zero. A shearing effect preview is available on the top of the dialog. The new target image dimmensions in pixels are displayed under the preview area.
+</para>
+
+<para>
+For helping you, the tool provide too a vertical and horizontal guide. Move the mouse cursor under image preview for display the dashed lines guide. Move the cursor to an important place in the image like the sea or a building border and press the left mouse button for freeze the dashed lines position. Now, adjust the shear correction accordinly with the guide.
+</para>
+            
+<warning><para>
+After to apply a shearing adjustment, the image inevitably gets blurred a little bit. For a single shearing, the amount of blurring is quite small, but two shearing cause twice as much blurring as one, and there is no reason to blur things more than you have to.
+</para></warning>
+                        
+<para>
+After you have sheared an image, there will be unpleasant triangular "holes" at the corners. 
+One way to fix them is to crop the image with <menuchoice><guimenu>Transform</guimenu>
+<guimenuitem>Crop</guimenuitem></menuchoice> Image Editor menu. 
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-sheartool">
+<title>The plugin in action</title>
+
+<para>
+The Shear Tool dialog in action is available below.
+</para>
+
+<figure>
+    <title>The Shear Tool Dialog</title>
+    <graphic srccredit="The Shear Tool Dialog" fileref="sheartoolpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

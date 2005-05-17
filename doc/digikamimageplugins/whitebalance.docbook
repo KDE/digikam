@@ -1,0 +1,275 @@
+<chapter id="whitebalance">
+<chapterinfo>
+
+<title>White Balance</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer dot net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>White Balance</emphasis> is an automatic tool to adjust the white-balance of a photograph.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+White Balance setting is a common hurdle for digital still cameras. In the 'good old time' of film rolls, the white balance was done by the photolab. Nowadays the poor little camera has to guess what is white and what is black. Most of the time, what the camera chooses as the white point, is not of the correct shade or hue. Using this plugin it is easy to correct this problem. It provides a variery of parameters that can be trimmed to obtain a better result.
+</para>
+
+<para>
+This plugin is based on a white color balance algorithm copyrighted by Pawel T. Jochym. Launch it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>White Balance</guimenuitem></menuchoice> Image Editor menu.
+</para>
+
+<sect1 id="using-plugin-whitebalance">
+<title>Using the plugin</title>
+
+<figure>
+    <title>The White Balance Tool Dialog</title>
+    <graphic srccredit="The White Balance Tool Dialog" fileref="whitebalancedialog.png"/>
+</figure>
+
+<para>
+To the right, both an original and a target preview image is shown. The target preview is updated dynamically according to the plugin's settings. 
+</para>
+
+<para>
+The target photo preview has a red marker available. If you place this marker to a zone of image, a corresponding vertical line will be drawn on histogram indicating the color level value in the current channel selected.
+</para>
+
+<para>
+To the top left, the plugin provides histograms that are dynamically updated when changing the parameters. This histogram is very instructive as it shows that even in well exposed photos, most of the pixels have very small luminosity. With a button you can select to show either one of the 3 colors.
+</para>
+
+<para>
+With <guilabel>Exposure</guilabel> you can digitally change the original photo exposure. Increasing the exposure is very simple, the only downside being that at the same time you are also increasing the noise in the image. Decreasing the exposure is more tricky since it is impossible to recover blown-out highlights.
+The <guilabel>Black Point</guilabel> adjustment can be used to cut the raw histogram from the left. If your photograph looks foggy (histogram has empty space on the left, black side), you probably need to use this option. The <guilabel>Exposure</guilabel> and <guilabel>Black Point</guilabel> adjustments can be automatically estimated by pressing the <guilabel>Auto Exposure Adjustments</guilabel> button. This sets the black point quite accurately, but the algorithm for setting the exposure still has to be improved.
+</para>
+
+<para>
+The contrast of your output depends on <guilabel>Shadows</guilabel>, <guilabel>Saturation</guilabel>, and <guilabel>Gamma</guilabel> parameters. The <guilabel>Shadows</guilabel> adjustment lets you enhance or diminish the shadow details in your photo.
+</para>
+
+<para>
+Increasing the contrast of your photograph can have the side effect of reducing the apparent <guilabel>Saturation</guilabel> of the photo. Use a value larger than 1 to increase the saturation and a value of less than 1 to desaturate the photo. A value of 0 will give you a black and white photo. Don't be shy to bump up the saturation of your photos a little. The general rule is that for higher Contrast (lower <guilabel>Gamma</guilabel>) you need to apply more <guilabel>Saturation</guilabel>.
+</para>
+
+<para>
+The next set of options is the mainstay of White Balance settings, which controls the ratio between the three color channels. Here you can set the color <guilabel>Temperature</guilabel>, making your picture warmer or colder. Higher temperature will result in a warmer tint. Setting the ratio between the three color channels requires two adjustments. Since the temperature adjustment mostly controls the ratio between the red and the blue channels, it is natural that the second adjustment will control the intensity of the <guilabel>Green</guilabel> channel.
+</para>
+
+<para>
+Instead of fiddling around with the above controls, you can simply use the <guilabel>Temperature Tone Color Picker</guilabel> button. Press on this button and click anywhere on the original preview image to get the output color of that area to calculate the white color balance temperature settings. This way, <guilabel>Temperature</guilabel> and <guilabel>Green</guilabel> values are automatically computed.
+</para>
+
+<para>
+In addition you can set the White Balance using the preset list. These are the white color balance temperature presets available:
+</para>
+
+<para>
+
+<informaltable><tgroup cols="3">
+            
+<thead>
+   <row>
+      <entry>Color Temperature</entry>
+      <entry>Description</entry>
+      <entry>Kelvin</entry>
+   </row>
+</thead>
+
+<tbody>
+
+   <row>
+      <entry>
+      <guilabel>40W</guilabel>
+      </entry>
+               
+      <entry>
+      40 Watt incandescent lamp.
+      </entry>
+      
+      <entry>
+      <guilabel>2680</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>200W</guilabel>
+      </entry>
+      
+      <entry>
+      200 Watt incandescent lamp, studio lights, photo floods.
+      </entry>
+      
+      <entry>
+      <guilabel>3000</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Sunrise</guilabel>
+      </entry>
+               
+      <entry>
+      Sunrise or sunset light.
+      </entry>
+      
+      <entry>
+      <guilabel>3200</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Tungsten</guilabel>
+      </entry>
+               
+      <entry>
+      Tungsten lamp or light at 1 hour from dusk or dawn.
+      </entry>
+      
+      <entry>
+      <guilabel>3400</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Neutral</guilabel>
+      </entry>
+               
+      <entry>
+      Neutral color temperature.
+      </entry>
+      
+      <entry>
+      <guilabel>4750</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Xenon</guilabel>
+      </entry>
+               
+      <entry>
+      Xenon lamp or light arc.
+      </entry>
+      
+      <entry>
+      <guilabel>5000</guilabel>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Sun</guilabel>
+      </entry>
+               
+      <entry>
+      Sunny daylight around noon.
+      </entry>
+      
+      <entry>
+      <guilabel>5500</guilabel>
+      </entry>
+   </row>   
+   
+   <row>
+      <entry>
+      <guilabel>Flash</guilabel>
+      </entry>
+               
+      <entry>
+      Electronic photo flash.
+      </entry>
+      
+      <entry>
+      <guilabel>5600</guilabel>
+      </entry>
+   </row>      
+
+   <row>
+      <entry>
+      <guilabel>Sky</guilabel>
+      </entry>
+               
+      <entry>
+      Overcast sky light.
+      </entry>
+      
+      <entry>
+      <guilabel>6500</guilabel>
+      </entry>
+   </row>    
+               
+</tbody>
+
+</tgroup></informaltable>
+
+</para>
+
+<para>
+<guilabel>Color Temperature</guilabel> is a simplified way to characterize the spectral properties of a light source. While in reality the color of light is determined by how much each point on the spectral curve contributes to its output, the result can still be summarized on a linear scale. This value is useful eg. for determining the correct the white balance in digital photography, and for specifying the right light source types in architectural lighting design. Note, however, that light sources of the same color (metamers) can vary widely in the quality of light emitted. 
+</para>
+
+<para>
+Low <guilabel>Color Temperature</guilabel> implies more yellow-red light while high color temperature implies more blue light. Daylight has a rather low color temperature near dawn, and a higher one during the day. Therefore it can be useful to install an electrical lighting system that can supply cooler light to supplement daylight when needed, and fill in with warmer light at night. This also correlates with human feelings towards the warm colors of light coming from candles or an open fireplace at night. Standard unit for color temperature is Kelvin (K).
+</para>
+
+<para>
+<guilabel>Over Exposure Indicator</guilabel> option adds up the colors if more than one channel in a pixel is over-exposed, and you will see the combined color resulting of White Color Balance controls settings. This rule is applying to target preview area and haven't effect to final rendering.
+</para>
+
+<para>
+<guilabel>Save</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any White Color Balance settings that you have set can be saved to the filesystem in a text file and loaded later.
+</para>
+
+<para>
+<guilabel>Reset All</guilabel> button resets all filter settings to default values corresponding to Neutral White Balance color. (Attention, even the neutral setting might be different from your original photograph. If you save it, the white balance will be changed.) 
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-whitebalance">
+<title>The plugin in action</title>
+
+<para>
+Below, you can see a photograph White Color Balance correction applied to a color photograph taken with an Olympus C3000Z at midday. Look like color temperature is tinted to light blue. Camera have been set with default parameter in auto exposure mode. White Color Balance setting used to correct this photograph is <guilabel>Sun</guilabel> light color temperature. <guilabel>Exposure</guilabel> settings is unchanged. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>The White Balance Tool in Action</title>
+    <graphic srccredit="The White Balance Tool in Action" fileref="whitebalancepreview.png"/>
+</figure>
+
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

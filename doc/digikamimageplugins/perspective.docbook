@@ -1,0 +1,93 @@
+<chapter id="perspective">
+<chapterinfo>
+
+<title>Perspective Adjustment</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>    
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Perspective Adjustment</emphasis> is a tool for adjusting the image's perspective.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+With this tool you can work on the the perspective in a photograph. This is very useful when working with photographs that contain keystone distortion. Keystone distortion occurs when an object is photographed from an angle rather than from a straight-on view. For example, if you take a picture of a a tall building from ground level, the edges of the building appear to meet each other at the far end.
+On the other hand you can use this tool to introduce a new perspective that is not a face-on view but to give the picture a creative spin.
+</para>
+
+<sect1 id="using-plugin-perspective">
+<title>Using the plugin</title>
+
+<para>
+All perspective transformations are performed around a fixed point called the reference point. This point is at the center of the item you are transforming and is displayed by a red circle.
+</para>
+
+<para>
+To change the perspective, use the square areas at the image corners for dragging. The perspective preview is rendered automatically. On the bottom of the dialog you'll find a set of informations witch help you to control the perspective change:
+
+<itemizedlist>
+    <listitem><para><guilabel>New Width</guilabel>: show the new image width in pixels including the empty area around the image resulting from the  geometrical transformation.</para></listitem>
+    <listitem><para><guilabel>New Height</guilabel>: show the new image height in pixels including the empty area around the image resulting from the geometrical transformation.</para></listitem>
+    <listitem><para><guilabel>Top Left Angle</guilabel>: show the current angle in degrees at the top left corner of the perspective area.</para></listitem>
+    <listitem><para><guilabel>Top Right Angle</guilabel>: show the current angle in degrees at the top right corner of the perspective area.</para></listitem>
+    <listitem><para><guilabel>Bottom Left Angle</guilabel>: show the current angle in degrees at the bottom left corner of the perspective area.</para></listitem>
+    <listitem><para><guilabel>Bottom Right Angle</guilabel>: show the current angle in degrees at the bottom right corner of the perspective area.</para></listitem>
+</itemizedlist>
+</para>
+            
+<warning><para>
+After applying the perspective adjustment, the image inevitably gets blurred a little bit. For a single adjustment, the amount of blurring is quite small, but two adjustments cause twice as much blurring as one, and there is no reason to blur things more than you have to.
+</para></warning>
+                        
+<para>
+After you have adjusted the perspective of an image there will be unpleasant triangular "holes" at the corners. 
+One way to fix them is to crop the image with <menuchoice><guimenu>Transform</guimenu>
+<guimenuitem>Crop</guimenuitem></menuchoice> Image Editor menu. 
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-perspective">
+<title>The plugin in action</title>
+
+<para>
+The Perspective Adjustment dialog in action is shown below.
+</para>
+
+<figure>
+    <title>The Perspective Adjustment Dialog</title>
+    <graphic srccredit="The Perspective Adjustment Dialog" fileref="perspectivepreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

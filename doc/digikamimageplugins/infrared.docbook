@@ -1,0 +1,84 @@
+<chapter id="infrared">
+<chapterinfo>
+
+<title>Simulate Infrared Film</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>  
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Infrared Film</emphasis> simulates traditional infrared film material.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Simulating classical infrared film material (the effect is rendered in black and white) is an interesting alienation effect that is even stronger and more dramatic than pure black and white conversion. Contrast and an abstract touch are improved, which can underpin the expression of the photographer as an artists.
+
+It is like taking a picture in black and white with a red filter on the camera lenses. Areas which reflect little red light, e.g. the sky, will show as low density, dark areas. Areas which are excellent reflectors of red light, e.g. most green foliage, will be high density areas. And snow landscapes are really dramatic.
+</para>
+
+<para>
+The algorithm is based on the method of the 'Simulate Infrared Film' tutorial of the GimpGuru.org web site available at <ulink url="http://www.gimpguru.org/Tutorials/SimulatedInfrared">this url</ulink>.
+The plugin tries to reproduce the famous Ilford(tm) SFX200 infrared film, cf. <ulink url="www.ilford.com/html/us_english/prod_html/sfx200/sfx200.html">this url</ulink>. This film has a sensitivity range of 200-800 ISO.
+</para>
+
+<sect1 id="using-plugin-infrared">
+<title>Using the plugin</title>
+
+<para>
+The left part of the dialog window lets you select the region to be shown in the preview section. Move the red rectangle with the mouse around to show the effect on different parts of the image.
+</para>
+
+<para>
+The lower part provides the two controls, Film Grain and ISO sensitivity. Check the <guilabel>Add Film Grain</guilabel> box if you want to simulate the grainy texture of a high sensitivity film. The ISO-level slider modifies the amount of filmgrain added and the predominance of green color (chlorophyll in nature) in the conversion mixer. Green pastures will become white as snow! Try it out.
+</para>
+
+<note><para>
+Because the filter mix color channel to reproduce infrared film (especially green channel), this is a non-sence to try to simulate infrared effect from black and white original photograph.
+</para></note>
+
+</sect1>
+
+<sect1 id="inaction-plugin-infrared">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the infrared film effect applied to a color image taken in New Zealand's landscapes. The original image is (1) and the converted image is (2). The film sensitivity used to simulate the infrared film is ISO-400.
+</para>
+
+<figure>
+    <title>The Infrared Image Editor Plugin in Action</title>
+    <graphic srccredit="The Infrared Image Editor Plugin in Action" fileref="infraredpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

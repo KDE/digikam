@@ -1,0 +1,192 @@
+<chapter id="blurfx">
+<chapterinfo>
+
+<title>Blur FX</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>  
+
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Blur FX</emphasis> is a series of blurring effects for digital still images.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+With this plugin, you can transform an ordinary photograph into a work of art suitable for framing using blurring operations. It use algorithms copyrighted by Pieter Voloshyn.
+</para>
+
+<sect1 id="using-plugin-blurfx">
+<title>Using the plugin</title>
+
+<para>
+These are the blurring effects available:
+</para>
+
+<para>
+
+<informaltable><tgroup cols="2">
+            
+<thead>
+   <row>
+      <entry>Type</entry>
+      <entry>Preview</entry>
+   </row>
+</thead>
+
+<tbody>
+
+   <row>
+      <entry>
+      <guilabel>Zoom Blur</guilabel>: blurs the image along radial lines starting from a specified center point. This simulates the blur of a zooming camera, thereby giving the photograph a dynamic expression as often seen in sport photography.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_zoomblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Radial Blur</guilabel>: blurs the image by roating the pixels around the specified center point. This simulates the blur of a rotating camera.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_radialblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Far Blur</guilabel>: blurs the image to simulates the effect of an unfocused camera lens. The subject seems to recede into the background.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_farblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Motion Blur</guilabel>: blurs the image by swishing the pixels horizontally. This simulates the blur of a linearly moving camera, i.e. like a shot taken from a car or train.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_motionblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Focus Blur</guilabel>: blurs the image corners to reproduce the astigmatism distortion of a lens.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_focusblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Softener Blur</guilabel>: blurs the image softly in the darker tones and strongly in the high lights. This gives photographes a dreamy and glossy soft focus effect (Hamilton effect). It's ideal for creating romantic portraits, glamour photography, or addding a warm and subtle glow.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_softenerblur.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Shake Blur</guilabel>: blurs the image by randomly moving the pixels simulating the blur of an arbitrarily moving camera.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_shakeblur.png"/>
+      </entry>
+   </row>   
+   
+   <row>
+      <entry>
+      <guilabel>Smart Blur</guilabel>: finds the edges of color in photograph and blurs them without muddying the rest of the image.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_smartblur.png"/>
+      </entry>
+   </row>      
+
+   <row>
+      <entry>
+      <guilabel>Frost Glass</guilabel>: blurs the image by simulating randomly dispersing light filtering through hoarse frosted glass.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_frostglass.png"/>
+      </entry>
+   </row>    
+
+   <row>
+      <entry>
+      <guilabel>Mosaic</guilabel>: blurs the image by dividing the photograph into rectangular cells and then recreates it by filling those cells with average pixel value.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="ZoomBlur" fileref="blurfx_mosaic.png"/>
+      </entry>
+   </row>    
+               
+</tbody>
+
+</tgroup></informaltable>
+
+</para>
+
+<warning><para>
+Some effects can take long time to run and cause high CPU load. You can always abort an effect by pressing the <guilabel>Abort</guilabel> button during preview rendering.
+</para></warning>
+
+</sect1>
+
+<sect1 id="inaction-plugin-blurfx">
+<title>The plugin in action</title>
+
+<para>
+An example of the Blur FX dialog in action is shown below.
+</para>
+
+<figure>
+    <title>The Blur FX Dialog Tool Preview</title>
+    <graphic srccredit="The Blur FX Dialog Tool Preview" fileref="blurfxpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

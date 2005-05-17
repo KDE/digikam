@@ -1,0 +1,254 @@
+<chapter id="distortionfx">
+<chapterinfo>
+
+<title>Distortion FX</title>
+
+<authorgroup>
+    
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+    
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Distortion FX</emphasis> is a series of distorting effects for digital still images.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+With this plugin, you can transform an ordinary photograph into a work of art suitable for framing using distorting operations. It use algorithms copyrighted by Pieter Voloshyn.
+</para>
+
+<sect1 id="using-plugin-distortionfx">
+<title>Using the plugin</title>
+
+<para>
+These are the distorting effects available:
+</para>
+
+<para>
+
+<informaltable><tgroup cols="2">
+            
+<thead>
+   <row>
+      <entry>Type</entry>
+      <entry>Preview</entry>
+   </row>
+</thead>
+
+<tbody>
+
+   <row>
+      <entry>
+      <guilabel>Fish Eyes</guilabel>: warps the photograph around a 3D spherical shape to reproduce the common photograh 'Fish Eyes' effect.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="FishEyes" fileref="distortionfx_fisheyes.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Twirl</guilabel>: spins the photograph to produce a Twirl pattern.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Twirl" fileref="distortionfx_twirl.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Cylinder Horizontal</guilabel>: warps the photograph around a horizontal cylinder.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="CylinderHor" fileref="distortionfx_cylinderh.png"/>
+      </entry>
+   </row>
+
+   <row>
+      <entry>
+      <guilabel>Cylinder Vertical</guilabel>: warps the photograph around a vertical cylinder.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="CylinderVert" fileref="distortionfx_cylinderv.png"/>
+      </entry>
+   </row>   
+
+   <row>
+      <entry>
+      <guilabel>Cylinder H/V</guilabel>: warps the photograph around a 2 cylinders, vertical and horizontal.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="CylinderHV" fileref="distortionfx_cylinderhv.png"/>
+      </entry>
+   </row>   
+
+   <row>
+      <entry>
+      <guilabel>Caricature</guilabel>: distorts photograph with 'Fish Eyes' effect inverted.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Caricature" fileref="distortionfx_caricature.png"/>
+      </entry>
+   </row>   
+
+   <row>
+      <entry>
+      <guilabel>Multiple Corners</guilabel>: splits the photograph like a multiple corners pattern.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Corners" fileref="distortionfx_corners.png"/>
+      </entry>
+   </row>   
+   
+   <row>
+      <entry>
+      <guilabel>Waves Horizontal</guilabel>: distorts the photograph with horizontal waves.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="WavesH" fileref="distortionfx_wavesh.png"/>
+      </entry>
+   </row> 
+            
+   <row>
+      <entry>
+      <guilabel>Waves Vertical</guilabel>: distorts the photograph with vertical waves.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="WavesV" fileref="distortionfx_wavesv.png"/>
+      </entry>
+   </row> 
+
+   <row>
+      <entry>
+      <guilabel>Block Waves 1</guilabel>: divides the image into cells and makes it look as if it is being viewed through glass blocks.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="BWaves1" fileref="distortionfx_blockwaves1.png"/>
+      </entry>
+   </row> 
+   
+   <row>
+      <entry>
+      <guilabel>Block Waves 2</guilabel>: like Block Waves 1 but with another version of glass blocks distorsion.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="BWaves2" fileref="distortionfx_blockwaves2.png"/>
+      </entry>
+   </row> 
+
+   <row>
+      <entry>
+      <guilabel>Circular Waves 1</guilabel>: distorts the photograph with circular waves.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="CWaves1" fileref="distortionfx_circularwaves1.png"/>
+      </entry>
+   </row> 
+
+   <row>
+      <entry>
+      <guilabel>Circular Waves 2</guilabel>: other variation of Circular Waves effect.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="CWaves2" fileref="distortionfx_circularwaves2.png"/>
+      </entry>
+   </row> 
+   
+   <row>
+      <entry>
+      <guilabel>Polar Coordinates</guilabel>: converts the photograph from rectangular to polar coordinates.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Polar" fileref="distortionfx_polarcoord.png"/>
+      </entry>
+   </row> 
+
+   <row>
+      <entry>
+      <guilabel>Unpolar Coordinates</guilabel>: Polar Coordinate effect inverted.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Polar" fileref="distortionfx_unpolarcoord.png"/>
+      </entry>
+   </row> 
+
+   <row>
+      <entry>
+      <guilabel>Tiles</guilabel>: splits the photograph into square blocks and move them randomly inside the image.
+      </entry>
+               
+      <entry>
+      <graphic srccredit="Tiles" fileref="distortionfx_tiles.png"/>
+      </entry>
+   </row> 
+      
+</tbody>
+
+</tgroup></informaltable>
+
+</para>
+
+<warning><para>
+Some effects can take long time to run and cause high CPU load. You can always abort an effect by pressing <guilabel>Abort</guilabel> button during preview rendering.
+</para></warning>
+
+</sect1>
+
+<sect1 id="inaction-plugin-distortionfx">
+<title>The plugin in action</title>
+
+<para>
+The Distortion FX dialog tool in action is available below.
+</para>
+
+<figure>
+    <title>The Distortion FX Dialog Tool Preview</title>
+    <graphic srccredit="The Distortion FX Dialog Tool Preview" fileref="distortionfxpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

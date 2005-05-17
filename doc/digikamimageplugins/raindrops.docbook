@@ -1,0 +1,79 @@
+<chapter id="raindrops">
+<chapterinfo>
+
+<title>Rain Drops</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Raindrops</emphasis> puts beautiful raindrops on your picture.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The digiKam image plugin <emphasis>Raindrops</emphasis> is nice little tool to put raindrops onto your images. Naturally, it renders your picture in a kind of wet look. It use an algorithm copyrighted by Pieter Voloshyn.
+</para>
+
+<sect1 id="using-plugin-raindrops">
+<title>Using the plugin</title>
+
+<para>
+Three sliders give you control over the effect filter:
+</para>
+
+<para>
+<guilabel>Drop size</guilabel> obviously allows to change the size of the drops. As the drop size doesn't 
+automatically scale with the image size it is often necessary to reduce the size for small images.
+<guilabel>Number</guilabel> changes the number and densitiy of drops. 
+<guilabel>Fish eye</guilabel> changes the optical effect of the drops across the image.
+</para>
+
+<note><para>
+You can keep a zone clear of raindrops with the digiKam Image Editor <guilabel>Select</guilabel> tool.
+Selecting the area to avoid (for example a face) before launching the <emphasis>RainDrops</emphasis> 
+filter will keep it free from rain drops.
+</para></note>
+
+</sect1>
+
+<sect1 id="inaction-plugin-raindrops">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the raindrops filter. The original image (1) shows a quiet sunset, 
+the transformed image (2) indicates a sunset after a thunderstorm. Default values have been 
+used for this example.
+</para>
+
+<figure>
+    <title>Rain Drops Image Effect Preview</title>
+    <graphic srccredit="Rain Drops Image Effect Preview" fileref="raindropspreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

@@ -1,0 +1,139 @@
+<chapter id="inpainting">
+<chapterinfo>
+
+<title>Photograph Inpainting</title>
+
+<authorgroup>
+    
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+    
+</authorgroup>
+
+<abstract>
+
+<para>
+<ulink url="http://cimg.sourceforge.net"><inlinemediaobject>
+<imageobject><imagedata fileref="cimg-logo.png" format="PNG"/></imageobject>
+<textobject><phrase>cimglogo</phrase></textobject>
+</inlinemediaobject></ulink>
+</para>
+
+<para>
+The digiKam image plugin <emphasis>Photograph Inpainting</emphasis> is definitely one of the most advanced tools to remove unwanted photograph area.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+</para>
+
+<para>
+The inpainting algorithm has been developed by the IMAGE team of GREC CNRS lab in Caen/France and is a part of <ulink url="http://cimg.sourceforge.net">CImg project</ulink>.
+</para>
+
+<sect1 id="using-plugin-inpainting">
+<title>Using the plugin</title>
+
+<figure>
+    <title>Photograph Inpainting Dialog</title>
+    <graphic srccredit="Photograph Inpainting Dialog" fileref="inpaintingdialog.png"/>
+</figure>
+
+<para>The plugin comes with several presets as starting points and to simplify the restoration. The preset settings available are listed below:
+
+<itemizedlist>
+
+  <listitem><para><guilabel>None</guilabel>: Using most common default filter settings not optimized for any particular purpose.</para></listitem> 
+  <listitem><para><guilabel>Remove Small Area</guilabel>: .</para></listitem>
+  <listitem><para><guilabel>Remove Medium Area</guilabel>: .</para></listitem>
+  <listitem><para><guilabel>Remove Large Area</guilabel>: .</para></listitem>
+ 
+</itemizedlist>
+</para>
+
+<para>If you want to set filter parameters for finer adjustments, use <guilabel>Smoothing Settings</guilabel> and <guilabel>Advanced Settings</guilabel> tabs:
+
+<figure>
+    <title>Photograph Inpainting Smoothing Settings</title>
+    <graphic srccredit="Photograph Inpainting Smoothing Settings" fileref="inpaintingsettings1.png"/>
+</figure>
+
+<itemizedlist>
+  
+     <listitem><para><guilabel>Detail Preservation</guilabel> p [0, 100]: this controls the preservation of the curvatures (features). A low value forces an equal smoothing across the image, whereas bigger values preferably smooth the homogeneous regions and leaves the details sharper. A value of 0.9 should well preserve details so that no sharpening is required afterwards. </para></listitem>
+     <listitem><para><guilabel>Anisotropy</guilabel> alpha [0,1]: a low value smooths equally in all directions, whereas a value close to 1 smooths in one direction only. If you have film grain or CCD kind of noise a high value will result in wave-like pattern, whereas JPEG artefacts are suited for values close to 1. </para></listitem>
+     <listitem><para><guilabel>Smoothing</guilabel> [0, 500]: this sets the maximum overall smoothing factor (when p defines the relative smoothing). Set it according to the noise level.</para></listitem>
+     <listitem><para><guilabel>Regularity</guilabel> [0, 10]: this parameter is concerned with the bigger structures. The bigger this value, the more even the overall smoothing will be. This is necessary when much noise is present since it is then difficult to estimate the geometry. Also if you want to achieve a 'van Gogh' turbulence effect, setting it higher than 3 is recommended.</para></listitem>
+     <listitem><para><guilabel>Filter Iterations</guilabel>: number of times the blurring algorithm is applied. Usually 1 or 2 is sufficient.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>Advanced Settings:
+
+<figure>
+    <title>Photograph Inpainting Advanced Settings</title>
+    <graphic srccredit="Photograph Inpainting Advanced Settings" fileref="inpaintingsettings2.png"/>
+</figure>
+
+<itemizedlist>
+
+     <listitem><para><guilabel>Angular Step</guilabel> da [5, 90]: angular integration of the anisotropy alpha. If alpha is chosen small, da should also be chosen small. But beware, small angles result in long runs! Choose it as large as you can accept. </para></listitem>
+     <listitem><para><guilabel>Integral Step</guilabel> [0, 10]: spatial integration step width in terms of pixels. Should remain less than 1 (sub-pixel smoothing) and never be higher than 2.</para></listitem>
+<listitem><para><guilabel>Use Linear Interpolation</guilabel>: The gain in quality if you select this option is only marginal and you loose a factor of 2 in speed. Our recommendation is to leave it off.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+<guilabel>Save</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any Photograph Inpainting filter settings that you have set can be saved to the filesystem in a text file and loaded later.
+</para>
+
+<warning><para>
+Photograph Inpainting is (comparatively) very fast in what it is doing, but it can take a long time to run and cause high CPU load. You may always abort computation by pressing <guilabel>Cancel</guilabel> button during rendering.
+</para></warning>
+
+</sect1>
+
+<sect1 id="inaction-plugin-inpainting">
+<title>The plugin in action</title>
+
+<para>
+Below, you can see a <guilabel>Remove Small Area</guilabel> Inpainting type applied to a color photograph taken at Guatemala city with an analog camera. Look like there is a strange black artefact on the face front, resulting of a bad film stockage during the travel. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>Photograph Inpainting Filter Preview</title>
+    <graphic srccredit="Photograph Inpainting Filter Preview" fileref="inpaintingpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

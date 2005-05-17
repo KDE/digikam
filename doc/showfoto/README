@@ -1,0 +1,31 @@
+Handbook README:
+----------------
+
+* How to Make Screenshot for Manual with Alpha Blending Border:
+
+- Use KSnapshot for take a shot. Use region selection option for take only 
+  important area. Remove buttons and dialog hearder for limit image file size.
+  Only use PNG file format to save.
+
+- Open your screenshot in Gimp 2.0 and make operations below:
+
+   * Script-Fu/Decor/Add Border with this options :
+      -> Border X Size = 1
+      -> Border Y Size = 1
+      -> Border Color = black (R:0, G:0, B:0)
+      -> Delata Value on Color = 1
+   * Image/Flatten Image
+   * Script-Fu/Shadow/Drop-Shadow with this options :
+      -> Offset X = 5
+      -> Offset Y = 5
+      -> Blur Radius = 10
+      -> Color = black (R:0, G:0, B:0)
+      -> Opacity = 80
+      -> Allow Resizing = On
+   * Save target image in PNG with max compression (Compression Level = 9)
+   
+      
+      
+      
+      
+            

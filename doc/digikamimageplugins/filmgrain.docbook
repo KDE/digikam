@@ -1,0 +1,77 @@
+<chapter id="filmgrain">
+<chapterinfo>
+
+<title>Film Grain</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Filmgrain</emphasis> reproduces traditional film grain techniques 
+of high speed films.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The digiKam image plugin <emphasis>Filmgrain</emphasis> is an easy tool to produce film grain on your 
+images as known from classical high speed film material as, for example, the famous B/W KodaK Tri-X. 
+In order to increase film sensitivity, manufacturers employed larger silver grains in the photo emulsion. 
+</para>
+
+<para>
+The film grain effect gives your shot a particular mood or seems to transport it in time. The treated 
+image acquires a timeless atmosphere, detached from every day life. If you want that gritty, art-house, 
+street-photography grainy film look, especially in monochromatic photos, use this plugin.
+</para>
+
+<sect1 id="using-plugin-filmgrain">
+<title>Using the plugin</title>
+
+<para>
+There is a slider calibrated in ISO-sensitivity to control the grain intensity and granularity. The 
+default is set to ISO-2400, although higher values are often required. If you still want more grain, 
+apply the filter several times.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-filmgrain">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the film grain effect applied on a black and white image. The original 
+image is (1) and the corrected image is (2). The film sensitivity used for simulate the film 
+graininess is ISO-1600.
+</para>
+
+<figure>
+    <title>The Film Grain Image Editor Plugin in Action</title>
+    <graphic srccredit="The Film Grain Image Editor Plugin in Action" fileref="filmgrainpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

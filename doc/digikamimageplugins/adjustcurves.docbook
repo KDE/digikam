@@ -1,0 +1,126 @@
+<chapter id="adjustcurves">
+<chapterinfo>
+
+<title>Adjust Curves</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Adjust Curves</emphasis> is a tool that allows histogram channel curved adjustments of color corrections.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The Curves tool is the most sophisticated tool used to adjust the images' tonality. Start it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Curves Adjust</guimenuitem></menuchoice> Image Editor menu.
+</para>
+
+<para>
+This plugin provides visual curves to modify the intensity values of the active layer (histogram) in a non-linear way. In <guilabel>Smooth</guilabel> curve edition mode, you change the curves shape by adding new curve points or by moving end point positions. Another mode is to draw all the curve manually in <guilabel>Free</guilabel> curve edition mode. In both cases the effect is immediately available in image preview area.
+</para>
+
+<sect1 id="using-plugin-adjustcurves">
+<title>Using the plugin</title>
+
+<figure>
+    <title>The Adjust Curves Tool Dialog</title>
+    <graphic srccredit="The Adjust Curves Tool Dialog" fileref="adjustcurvesdialog.png"/>
+</figure>
+
+<para>
+To the right, both an original and a target preview image is shown. The target preview is updated dynamically according to the plugin settings. To the left the following options are available:
+
+<itemizedlist>
+
+  <listitem><para>
+  Modify <guilabel>Channel</guilabel> : with this combo box you can select the specific channel to be modified by the tool:
+  
+      <itemizedlist>
+          <listitem><para><guilabel>Luminosity</guilabel>: changes the intensity of all pixels.</para></listitem>
+          <listitem><para><guilabel>Red</guilabel>: changes the Red saturation of all pixels.</para></listitem>
+          <listitem><para><guilabel>Green</guilabel>: changes the Green saturation of all pixels .</para></listitem>
+          <listitem><para><guilabel>Blue</guilabel>: changes the Blue saturation of all pixels.</para></listitem>
+          <listitem><para><guilabel>Alpha</guilabel>: changes the transparency of all pixels.</para></listitem>
+      </itemizedlist>
+  
+  </para></listitem>
+  
+  <listitem><para>Modify <guilabel>Scale</guilabel> for channel : this combo box selects a linear or logarithmic Y axis histogram display. For images taken with a digital camera the linear 
+  mode is usually the most useful. However, for images containing substantial areas of constant color, a linear histogram will often be dominated by a single bar. In this case a logarithmic histogram will be more appropriate.</para></listitem> 
+  
+  <listitem><para>Curve <guilabel>Type</guilabel> for channel : this combo box determines whether the curve can be edited using a <guilabel>Smooth</guilabel> curve or a <guilabel>Free</guilabel> hand mode curve. Smooth mode constrains the curve type to a smooth line with tension and provides a realistic render. Free mode lets you draw your curve free-hand with the mouse. With curve segments scattered all over the grid, result will be surprising but hardly repeatable.
+  </para></listitem> 
+  
+  <listitem><para>Main Curves Editing Area: the horizontal bar (x-axis) represents input values (they are value levels from 0 to 255). The vertical bar (y-axis) is only a scale for output colors of the selected channel.  The control curve is drawn on a grid and goes from bottom left corner to top right corner. Pointer x/y position is permanently displayed on the upper left part of the grid. If you click on the curve, a control point is created. You can move it to bend the curve. If you click outside the curve, a control point is also created, and the curve includes it automatically. So each point of the curve represents an 'x' level, corresponding to an 'y' color.
+  
+  If, for example, you move a curve segment to the right, i.e. to highlights, you can see that these highlights are corresponding to darker output tones and that image pixels corresponding to this curve segment will go darker.
+  
+  With color channels, moving right will decrease saturation up to reaching complementary color. To delete all control points (apart from both end points), click on the <guilabel>Reset Values</guilabel> button. To delete only one  point, move it onto another point.
+
+  The original photo preview has a red marker available. If you place this marker to a zone you want to modify, a corresponding line will be drawn on the curve grid indicating the orignal value. Create a point on that line and move it up or down to adjust it to your pleasing.
+  </para></listitem>
+  
+  <listitem><para><guilabel>Save</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any curves that you have set can be saved to the filesystem and loaded later. The used file format is The Gimp Curves format.</para></listitem>
+
+  <listitem><para><guilabel>Reset All</guilabel>: this button resets all curve values for all channels.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+The curves tool has several features that facilitate the positioning of points on the control curves. Clicking the mouse button in the original image preview area produces a vertical doted bar in the graph area of the curves tool. The bar position corresponds to the pixel value the mouse cursor is over in the image window. Clicking and dragging the mouse button interactively updates the position of the vertical bar. In this way, it is possible to see where different pixel values in the image are located on the control curve and helps to discover the locations of shadow, midtone, and highlight pixels.
+</para>
+ 
+<para>
+Using this way and the three <guilabel>Color Picker</guilabel> buttons will automatically creates control points on the curve in all channel for shadow, middle, and highlight tones. Enable the color picker button that you want use, and click on the original image preview area to produce control points on each of the Red, Green, Blue, and Luminosity control curves.
+</para>
+
+<para>
+<guilabel>Over Exposure Indicator</guilabel> option adds up the colors if more than one channel in a pixel is over-exposed, and you will see the combined color resulting of channel curve settings. This rule is applying to target preview area and haven't effect to final rendering.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-adjustcurves">
+<title>The plugin in action</title>
+
+<para>
+Below you can see a black and white photograph corrected in <guilabel>Luminosity</guilabel> channel. Shadow and highlight tone picker tool have been use to determined the curves to apply from original. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>The Adjust Curves Tool in Action</title>
+    <graphic srccredit="The Adjust Curves Tool in Action" fileref="adjustcurvespreview.png"/>
+</figure>
+
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

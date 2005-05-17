@@ -1,0 +1,94 @@
+<chapter id="freerotation">
+<chapterinfo>
+
+<title>Free Rotation</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Free Rotation</emphasis> is a tool for rotating image with a free 
+angle in degrees.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+It is easy, when taking a picture, to hold the camera not quite perfectly vertical or 
+horizontal, resulting in a picture where things are tilted at an angle. In digiKam Image 
+Editor, the way to fix this is to use the Free Rotation tool. Select 
+<menuchoice><guimenu>Transform</guimenu>
+<guimenuitem>Free Rotation</guimenuitem></menuchoice> and adjust to the target angle. 
+</para>
+
+<sect1 id="using-plugin-freerotation">
+<title>Using the plugin</title>
+
+<para>
+Rotate your image by using the <guilabel>Angle</guilabel> slider (value in degrees). Press to <guilabel>Reset Values</guilabel> for re-init the slider to zero. A rotating effect preview is available on the top of the dialog. The new target image dimmensions in pixels are displayed under the preview area.
+</para>
+
+<para>
+For helping you, the Free Rotation tool provide a vertical and horizontal 
+guide. Move the mouse cursor under image preview for display the dashed lines guide. 
+Move the cursor to an important place in the image like the sea or a building border 
+and press the left mouse button for freeze the dashed lines position. Now, adjust 
+the angle accordinly with the guide.            
+</para>
+            
+<warning><para>
+After to apply an angle adjustment to an image, you often find that things are better but 
+not quite perfect. One solution is to rotate a bit more, but there is a disadvantage to that 
+approach. Each time you rotate an image, because the rotated pixels don't line up precisely 
+with the original pixels, the image inevitably gets blurred a little bit. For a single rotation, 
+the amount of blurring is quite small, but two rotations cause twice as much blurring as one, 
+and there is no reason to blur things more than you have to. Sure, the guide tool available in 
+the Free Rotation preview can help you to apply correctly at the first time an angle adjustment 
+to an image.
+</para></warning>
+                        
+<para>
+After you have rotated an image, there will be unpleasant triangular "holes" at the corners. 
+One way to fix them is to crop the image with <menuchoice><guimenu>Transform</guimenu>
+<guimenuitem>Crop</guimenuitem></menuchoice> Image Editor menu. 
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-freerotation">
+<title>The plugin in action</title>
+
+<para>
+The Free Rotation dialog tool in action is available below.
+</para>
+
+<figure>
+    <title>The Free Rotation Tool Dialog</title>
+    <graphic srccredit="The Free Rotation Tool Dialog" fileref="freerotationpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

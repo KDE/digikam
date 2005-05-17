@@ -1,0 +1,85 @@
+<chapter id="border">
+<chapterinfo>
+
+<title>Add Border</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Add Border</emphasis> is a tool for add decorative border around an image.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Keeping the viewer's interest within the confines of the edges of a photograph is not a simple task. One of the simplest ways to hold attention into a picture is to incorporate a decorative frame around an image. This way is a kind of psychological barrier to the straying eye. The <menuchoice><guimenu>Image</guimenu>
+<guimenuitem>Add Border</guimenuitem></menuchoice> Image Editor menu can be used for that.
+</para>
+
+<sect1 id="using-plugin-border">
+<title>Using the Plugin</title>
+
+<para>
+Four options give you control over the decorative frame rendering:
+</para>
+ 
+<para>
+<guilabel>Type</guilabel>: this option specifies the decorative frame style to apply around the image. <guilabel>Solid</guilabel> style just surround the image with a colored line, <guilabel>Niepce</guilabel> style surround the image with a fine line and a large border (ideal for black and white pictures), <guilabel>Beveled</guilabel> style adds a neat dimension to your image (ideal for create button effect), and <guilabel>Decorative</guilabel> styles adds an ornamental border using patterns.
+</para>
+
+<para>
+<guilabel>Width</guilabel>: this option specifies the width in pixels of the border type to apply around the image. The maximum width value is limited to the half size of the current image. Look the preview area to see the result.
+</para>
+
+<para>
+<guilabel>First</guilabel>: this option specifies the first color to use with the current Border Type. Look the preview area to see the result.
+</para>
+
+<para>
+<guilabel>Second</guilabel>: : this option specifies the second color to use with the current Border Type. Look the preview area to see the result.
+</para>
+
+<para>
+Click on the <guilabel>OK</guilabel> button to apply the border around the current image.
+</para>
+           
+</sect1>
+
+<sect1 id="inaction-plugin-border">
+<title>The plugin in action</title>
+
+<para>
+The Add Border dialog tool in action is available below.
+</para>
+
+<figure>
+    <title>The Add Border Tool Dialog in Action</title>
+    <graphic srccredit="The Add Border Tool Dialog in Action" fileref="borderpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

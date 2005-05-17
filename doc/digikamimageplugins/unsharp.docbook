@@ -1,0 +1,97 @@
+<chapter id="unsharp">
+<chapterinfo>
+
+<title>Unsharp mask</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Unsharp Mask</emphasis> is a tool to enhance sharpness of an image. It uses the <emphasis>Unsharp</emphasis> algorithm taken from the Gimp, and it's copyrighted by Winston Chang.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Out-of-focus photographs, as well as most digitized images, need correction of sharpness. This is due to the digitizing process that must chop a color continuum up in points with slightly different colors: elements thinner than sampling frequency will be averaged into an uniform color. Thus, sharp borders are rendered a little blurred. The same phenomenon appears when printing color dots on paper.
+</para>
+
+<para>
+The Unsharp Mask filter sharpens edges of picture elements without increasing noise or blemish. It is the king of the sharpen filters. It works by comparing the image with a blurred version of itself. It is commonly used on photographic images, and it provides a much more pleasing result than the standard sharpen filter. In spite of the rather confusing name, which derives from its origins as a technique used by film developers, its result is to make the image sharper, not "Unsharp".
+</para>
+
+<para>
+Some scanners apply a sharpen filter while scanning. It's worth to disable it so that you keep control on your image.
+</para>
+
+<note><para>
+The Unsharp Mask filter is an excellent tool to remove haze from your photographs, see <ulink url="http://www.gimpguru.org/Tutorials/RemovingHaze">this url</ulink> for a demonstration.
+</para></note>
+
+
+<sect1 id="using-plugin-unsharp">
+<title>Using the plugin</title>
+
+<figure>
+    <title>Unsharp Mask Dialog</title>
+    <graphic srccredit="Unsharp Mask Dialog" fileref="unsharpdialog.png"/>
+</figure>
+
+<para>
+The image panel and the original preview help you to pan within the image. The preview window shows the filter output using the current settings.
+</para>
+
+<para>
+There are two important parameters, <guilabel>Radius</guilabel> and <guilabel>Amount</guilabel>. The default values often work pretty well, so you should try them first. Increasing either the <guilabel>Radius</guilabel> or the <guilabel>Amount</guilabel> increases the strength of the effect. Don't get carried away, though: if you make the unsharp mask too strong, it will amplify noise in the image and create the impressions of ridges next to sharp edges.
+</para>
+
+<para>
+The <guilabel>Radius</guilabel> allows you to set how many pixels on either side of an edge that will be affected by sharpening. High resolution images allow higher radius. You'd better always sharpen an image at its final resolution.
+</para>
+
+<para>
+The <guilabel>Amount</guilabel> control is the percentage of the difference between the original and the blur image that is added back into the original. It allows you to set strength of sharpening.
+</para>
+
+<para>
+The <guilabel>Threshold</guilabel> control is a fraction of the maximum RGB value, needed to apply the difference amount. It allows you to set the minimum difference in pixel values that indicates an edge where sharpening should be applied. That way, you can protect areas of smooth tonal transition from sharpening, and avoid creation of blemishes in face, sky or water surface.
+</para>
+
+</sect1>
+
+<sect1  id="inaction-plugin-unsharp">
+<title>The plugin in action</title>
+
+<para>
+This is an example of how the Unsharp Mask can change your life. The original image is (1) and the corrected image is (2). The unsharp mask was applied with <guilabel>Radius</guilabel> = 6.0, <guilabel>Amount</guilabel> = 0.5, 
+<guilabel>Threshold</guilabel> = 0.0. 
+</para>
+
+<figure>
+    <title>Unsharp Mask Tool in Action</title>
+    <graphic srccredit="Unsharp Mask Tool in Action" fileref="unsharppreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

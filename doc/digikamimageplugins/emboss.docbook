@@ -1,0 +1,70 @@
+<chapter id="emboss">
+<chapterinfo>
+
+<title>Emboss Image</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The Digikam image plugin <emphasis>Emboss</emphasis> sculptures your image into 3-D as if it were 
+stamped into wax. It use an algorithm copyrighted by Pieter Voloshyn.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The digiKam image plugin <emphasis>Emboss</emphasis> is a quick tool to render your images in a 3-D effect. 
+It works particularly well on images with simple structure where color is not the most important content. 
+The filter uses the difference between colors and luminosity to convert it into a grey, moon-like landscape 
+lit from 10 o'clock.
+</para>
+
+<sect1 id="using-plugin-emboss">
+<title>Using the plugin</title>
+
+<para>
+The <guilabel>Depth</guilabel> control allows to define the contrast of the filtering. 
+A value of 30 (10%) is the standard.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-emboss">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the emboss filter. The original image is (1) and the transformed image is (2).
+The <guilabel>Depth</guilabel> applied is 10%.
+</para>
+
+<figure>
+    <title>The Emboss Image Editor Plugin in Action</title>
+    <graphic srccredit="The Emboss Image Editor Plugin in Action" fileref="embosspreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

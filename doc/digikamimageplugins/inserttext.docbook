@@ -1,0 +1,74 @@
+<chapter id="inserttext">
+<chapterinfo>
+
+<title>Insert Text</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Insert Text</emphasis> is a tool for adding text to an image.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+This is a handy plugin as it lets you add formatted text easily to an image wherever you want, at several places when needed. 
+</para>
+
+<sect1 id="using-plugin-inserttext">
+<title>Using the Plugin</title>
+
+<para>
+This plugin seems very intuitive to use. Type in your text and place it with the mouse. Use the block settings as you please. Choose the orientation, color from a color space, and fonts with all their properties. You will have to scale the font size to the image size, the larger the image, the larger the font has to be!
+Finally choose to add a border around the text and/or a semitransparent background. Voilà, it's finished!
+</para>
+
+<para>
+Any text setting you have chosen can always be changed as long as you don't click the OK button. In saved and reloaded images the text has become part of the image, it can't be changed anymore.
+</para>
+ 
+</sect1>
+
+<sect1 id="inaction-plugin-inserttext">
+<title>The plugin in action</title>
+
+<para>
+The Insert Text dialog tool in action is shown below.
+</para>
+
+<figure>
+    <title>The Insert Text Tool Dialog in Action</title>
+    <graphic srccredit="The Insert Text Tool Dialog in Action" fileref="inserttextpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

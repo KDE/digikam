@@ -1,0 +1,70 @@
+<chapter id="oilpaint">
+<chapterinfo>
+
+<title>Oil Paint</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Oil Paint</emphasis> gives your image the look of an oilpainting. 
+It use an algorithm copyrighted by Pieter Voloshyn.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The digiKam image plugin <emphasis>Oil Paint</emphasis> helps to give your digital images a nice 
+oilpainting-like look. Pictures of nature and still lifes are well suited for this effect.
+</para>
+
+<sect1 id="using-plugin-oilpaint">
+<title>Using the plugin</title>
+
+<para>
+There are two sliders to control the effect. The upper slider selects the <guilabel>Brush Size</guilabel> 
+between 1 and 5. Bigger brushes are better suited for large images. <guilabel>Smooth</guilabel> controls 
+the smoothness or, seen from the other end, the jaggedness.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-oilpaint">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the oil paint filter effect. The original image is (1) and the transformed 
+image is (2). <guilabel>Brush Size</guilabel> for this 640 pixel size image is 1, 
+<guilabel>Smooth</guilabel> is 17.
+</para>
+
+<figure>
+    <title>Oil Paint Image Effect Preview</title>
+    <graphic srccredit="Oil Paint Image Effect Preview" fileref="oilpaintpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

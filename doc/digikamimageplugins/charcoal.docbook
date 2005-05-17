@@ -1,0 +1,70 @@
+<chapter id="charcoal">
+<chapterinfo>
+
+<title>Charcoal Drawing</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Charcoal</emphasis> is an effect filter that creates a charcoal 
+sketch-like result.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+The digiKam image plugin <emphasis>Charcoal</emphasis> uses the gradients of color and luminosity to 
+produce a grey scale charcoal sketch. The lines defining the outline of the image are pronounced. 
+Pictures with slowly changing gradients are not ideal for this effect. It is helpful to imagine what 
+scene you would pick to do as a hand sketch yourself, in order to choose the picture to start with.
+</para>
+
+<sect1 id="using-plugin-charcoal">
+<title>Using the plugin</title>
+
+<para>
+There are two sliders to control the effect on a scale of 1-100. The upper slider selects the pencil size, 
+whereas the second slider adjusts the contrast (smoothness).
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-charcoal">
+<title>The plugin in action</title>
+
+<para>
+This is an example of the charcoal filter. The original image is (1) and the transformed image is (2).
+Default values of 30 and 10 where applied. The result can be improved by adjusting the luminosity levels.
+</para>
+
+<figure>
+    <title>The Charcoal Editor Plugin in Action</title>
+    <graphic srccredit="The Charcoal Editor Plugin in Action" fileref="charcoalpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

@@ -1,0 +1,127 @@
+<chapter id="antivignetting">
+<chapterinfo>
+
+<title>Anti Vignetting</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>    
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Anti Vignetting</emphasis> is a tool to correct image vignetting (under exposure in the corners).
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Wide angle lenses, especially those used in medium and large format photography, frequently do not uniformly illuminate the entire film plane. Instead, they "vignette" the edges and corners of the image, substantially reducing the light reaching the film there. But telelenses may show vignetting too.
+</para>
+
+<para>
+The traditional solution for this is to attach a "centre filter" to the lens. This is a neutral density filter with maximum density at the optical axis of the lens, clear at the periphery, with density varying inversely to the vignetting of the lens. A centre filter has many advantages: not only does it automatically correct for full-frame images but, since it's fixed to the front of the lens, it also compensates for the off-centre vignetting which occurs when camera movements are employed for perspective or plane of focus adjustment.
+</para>
+
+<para>
+But there are disadvantages as well. Many centre filters require a 1.5 or 2 f-stop filter factor adjustment, which may, in turn, necessitate a shutter speed so slow (since wide angle lenses, even with centre filters, are best used at apertures of f/16 or smaller) that hand-holding the camera is impossible and motion blur becomes a problem when photographing moving objects.
+</para>
+
+<para>
+With the wide latitude of present-day film and the colour (or grey-scale) depth of digital camera or film scanners, it's possible to simulate the effect of a centre filter after the fact by applying an equivalent transform to a raw image taken without the filter. This plugin applies to an image a centre filter transformation. It employs an algorithm copyrighted by John Walker.
+</para>
+
+<sect1 id="using-plugin-antivignetting">
+<title>Using the plugin</title>
+
+<figure>
+    <title>The Anti Vignetting Dialog</title>
+    <graphic srccredit="The Anti Vignetting Dialog" fileref="antivignettingdialog.png"/>
+</figure>
+
+<para>
+Three sliders give you control over the vignetting correction filter, and three others over the target image exposure:
+</para>
+
+<para>
+<guilabel>Density</guilabel>: this option controls the degree of intensity attenuation by the filter at its point of maximum density. The default density is 20, which corresponds to an optical filter with a 1 f-stop filter factor. Increase the density to compensate for a greater degree of vignetting; reduce it for less.
+</para>
+
+<para>
+<guilabel>Power</guilabel>: this option determines the rate at which the filter intensity falls off from the point of maximum density toward the edges, expressed as a power factor. The default of 1 yields a linear reduction in filter density with distance from the centre. Power factors greater than 10 cause a faster fall-off (for example, a power of 20 causes the density to decrease as the square of the distance from the centre) and causes the effect of the filter to be concentrated near the centre. Powers less than 10 spread out the density of the filter toward the edges; a power of 5 causes the density to fall as the square root of the distance from the centre.
+</para>
+
+<para>
+<guilabel>Radius</guilabel>: this option specifies the radius, as a multiple of the half diagonal measure of the image, at which the density of the filter falls to zero (or, in other words, becomes transparent). The default value of 10 specifies a filter which, if centred upon the image, is transparent at its corners. A radius specification greater than 10 extends the effect of the centre filter beyond the edges of the image, while a radius less than one limits the filter's action to a region smaller than the image. When compensating for vignetting by lenses used with large format and some medium format cameras, the default radius factor of 10 is rarely correct! These lenses often "cover" an image circle substantially larger than the film to permit camera movements to control perspective and focus, and consequently have a vignetting pattern which extends well beyond the edges of the film, requiring a radius setting greater than 10 to simulate a centre filter covering the entire image circle.
+</para>
+
+<figure>
+    <title>The Exposure Re-Adjustments Settings</title>
+    <graphic srccredit="The Exposure Re-Adjustments Settings" fileref="antivignettingdialog2.png"/>
+</figure>
+
+<para>
+The only way to be sure which settings of <guilabel>Density</guilabel>, <guilabel>Power</guilabel>, and <guilabel>Radius</guilabel> best compensate for the actual optical characteristics of a given lens is to expose a uniformly illuminated scene (for example, a grey card lit by diffuse light) and perform densitometry on the resulting image. Failing that, or specifications by the lens manufacturer giving the precise degree of vignetting at one or more working apertures, you may have to experiment with different settings to find those which work best for each of your lenses. For help you in this task, the plugin dialog provide a thumbnail mask rendering applied on the image. Fortunately, the response of the human eye is logarithmic, not linear like most digital imaging sensors, so you needn't precisely compensate for the actual vignetting to create images which viewers will perceive as uniformly illuminated. 
+</para>
+
+<para>
+<guilabel>Brightness</guilabel>, <guilabel>Contrast</guilabel>, and <guilabel>Gamma</guilabel> settings: processing an image with this plugin reduces the intensity of pixels. You need to re-adjust the target image exposure with these options. These sliders give only positive values because you need only to increase this setting.
+</para>
+
+<note><para>
+If you want a finer exposure re-adjustment of the target image, leave the Brightness/Contrast/Gamma values at zero and use the Adjust Curve tool from digiKam Image Editor available on <menuchoice><guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Adjust Curve</guimenuitem></menuchoice> menu entry.
+</para></note>
+
+</sect1>
+
+<sect1 id="inaction-plugin-antivignetting">
+<title>The plugin in action</title>
+
+<para>
+This is an example of an anti vignetting correction apply to an image. The original image (1) shows a coastline eroding into a beach below with a magnificent cloudscape above, the corrected image (2). A brightness and contrast correction is also applied to the target image by this plugin.
+</para>
+
+<para>
+The values used for this example are:
+<itemizedlist>            
+    <listitem><para>Density    = 50.</para></listitem>
+    <listitem><para>Power      = 10.</para></listitem>
+    <listitem><para>Radius     = 10.</para></listitem>
+    <listitem><para>Luminosity = 30.</para></listitem>
+    <listitem><para>Contrast   = 40. </para></listitem>
+    <listitem><para>Gamma      = 0. </para></listitem>
+</itemizedlist>    
+</para>
+
+<figure>
+    <title>The Anti Vignetting Image Editor Plugin in Action</title>
+    <graphic srccredit="The Anti Vignetting Image Editor Plugin in Action" fileref="antivignettingpreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

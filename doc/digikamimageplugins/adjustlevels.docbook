@@ -1,0 +1,162 @@
+<chapter id="adjustlevels">
+<chapterinfo>
+
+<title>Adjust Levels</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Adjust Levels</emphasis> is a tool to manually adjust the 
+histogram channels of an image.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+A more sophisticated than Brightness/Contrast/Gamma Image Editor tool, and only slightly more difficult, 
+way of correcting exposure problems is to use this plugin. The dialog for this tool looks very complicated, 
+but for the basic usage we have in mind here, the only part you need to deal with is the 
+<guilabel>Input Levels</guilabel> area, specifically the sliders that appear below the histogram.
+</para>
+
+<para>
+This plugin contains a visual graph of the intensity values of the active layer or selection (histogram). 
+Below the graph are five sliders that can be clicked and dragged to constrain and change the intensity 
+level for the image. The left sliders position represents the dark areas and similarly, 
+the right position represents the light areas.
+</para>
+
+<sect1 id="using-plugin-adjustlevels">
+<title>Using the plugin</title>
+
+<figure>
+    <title>The Adjust Levels Tool Dialog</title>
+    <graphic srccredit="The Adjust Levels Tool Dialog" fileref="adjustlevelsdialog.png"/>
+</figure>
+
+<para>
+Actually the easiest way to learn how to use it is to experiment by moving the three sliders around, 
+and watching how the image is affected.
+</para>
+
+<para>
+On the right, both an original and a target preview image is available. The target preview is re-actualized 
+dynamically, in according with the plugin settings. On the left, the following options are available:
+ 
+<itemizedlist>
+
+  <listitem><para>
+  Modify levels for <guilabel>Channel</guilabel> : this combo box allows the selection of the specific 
+  channel that will be modified by the tool:
+  
+      <itemizedlist>
+          <listitem><para><guilabel>Luminosity</guilabel>: this option makes intensity changes against 
+          all pixels in the image.</para></listitem>
+          <listitem><para><guilabel>Red</guilabel>: this option makes Red saturation changes against 
+          all pixels in the image.</para></listitem>
+          <listitem><para><guilabel>Green</guilabel>: this option makes Green saturation changes against 
+          all pixels in the image.</para></listitem>
+          <listitem><para><guilabel>Blue</guilabel>: this option makes Blue saturation changes against 
+          all pixels in the image.</para></listitem>
+          <listitem><para><guilabel>Alpha</guilabel>: this option makes transparency changes against 
+          all pixels in the image.</para></listitem>
+      </itemizedlist>
+  
+  </para></listitem>
+
+  <listitem><para>Modify <guilabel>Scale</guilabel> for channel : this combo changes whether the histogram 
+  will be displayed using a linear or logarithmic Y axis. For images taken with a digital camera, the linear 
+  mode is usually the most useful. However, for images that contain substantial areas of constant color a 
+  linear histogram will often be dominated by a single bar. In this case a logarithmic histogram will often 
+  be more useful.</para></listitem>
+  
+  <listitem><para><guilabel>Input Levels</guilabel>: the input levels allow manual levels to 
+  be selected for each of the ranges. The main area is a graphic representation of image dark, 
+  mid and light tones content. They are on abscissa from level 0 (black) to level 255 (white). 
+  Pixel number for a level is on ordinate axis. The curve surface represents all the pixels of 
+  the image for the selected channel (histogram). A well balanced image is an image with levels 
+  (tones) distributed all over the whole range. An image with a blue predominant color, for example, 
+  will produce a histogram shifted to the left in Green and Red channels, signified by green and 
+  red lacking on highlights. Level ranges can be modified in three ways:
+      <itemizedlist>
+          <listitem><para>
+          Three sliders: the first on the top for dark tones, the second one on the middle for light tones, and the last one on the bottom for midtones (often called Gamma value).
+          </para></listitem>
+          <listitem><para>
+          Three input boxes to enter values directly.
+          </para></listitem>
+          <listitem><para>
+          Three Color Picker buttons using original photo preview which will automatically adjust inputs levels settings in all channels.
+          </para></listitem>
+      </itemizedlist>
+  </para></listitem>  
+  
+  <listitem><para><guilabel>Output Levels</guilabel>: the output levels allows manual selection 
+  of a constrained output level range. There are also two sliders located here that can be used 
+  to interactively change the output levels like <guilabel>Input Levels</guilabel>.</para></listitem>
+  
+  <listitem><para><guilabel>Auto</guilabel>: this button performs an automatic setting of the 
+  levels based on the pixel intensities of the image.</para></listitem>
+  
+  <listitem><para><guilabel>Save</guilabel> and <guilabel>Load</guilabel>: these buttons are used 
+  to do just that. Any Levels that you have set can be saved to the filesystem and loaded later. 
+  The used file format is The Gimp Levels format.</para></listitem>
+
+  <listitem><para><guilabel>Reset All</guilabel>: this button reset all 
+  <guilabel>Input Levels</guilabel> an <guilabel>Output Levels</guilabel> values for all 
+  channels.</para></listitem>
+  
+</itemizedlist>
+</para>
+
+<para>
+The levels tool has several features that facilitate the positioning input levels settings. Clicking the mouse button in the original image preview area produces a vertical doted bar in the graph area of histogram. The bar position corresponds to the pixel value the mouse cursor is over in the image window. Clicking and dragging the mouse button interactively updates the position of the vertical bar. In this way, it is possible to see where different pixel values in the image are located on the control input levels settings and helps to discover the locations of shadow, midtone, and highlight pixels.
+</para>
+ 
+<para>
+Using this way and the three <guilabel>Color Picker</guilabel> buttons will automatically adjust inputs levels settings in all channels for shadow, middle, and highlight tones. Enable the color picker button that you want use, and click on the original image preview area to produce input levels on each of the Red, Green, Blue, and Luminosity histogram channels.
+</para>
+
+<para>
+<guilabel>Over Exposure Indicator</guilabel> option adds up the colors if more than one channel in a pixel is over-exposed, and you will see the combined color resulting of channel level settings. This rule is applying to target preview area and haven't effect to final rendering.
+</para>
+
+</sect1>
+
+<sect1 id="inaction-plugin-adjustlevels">
+<title>The plugin in action</title>
+
+<para>
+Below, you can see an <guilabel>Input levels</guilabel> adjustment example apply on a color photograph for the Red/Green/Blue channels. Intensity/Alpha channels and <guilabel>Output Levels</guilabel> are unchanged. The original image is (1), the corrected image (2).
+</para>
+
+<figure>
+    <title>The Adjust Levels Tool in Action</title>
+    <graphic srccredit="The Adjust Levels Tool in Action" fileref="adjustlevelspreview.png"/>
+</figure>
+
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+

@@ -1,0 +1,223 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+ <!ENTITY kappname "&digikamimageplugins;">
+ <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+ <!ENTITY doc-adjustcurves SYSTEM "adjustcurves.docbook">
+ <!ENTITY doc-adjustlevels SYSTEM "adjustlevels.docbook">
+ <!ENTITY doc-antivignetting SYSTEM "antivignetting.docbook">
+ <!ENTITY doc-blowup SYSTEM "blowup.docbook"> 
+ <!ENTITY doc-border SYSTEM "border.docbook"> 
+ <!ENTITY doc-blurfx SYSTEM "blurfx.docbook"> 
+ <!ENTITY doc-channelmixer SYSTEM "channelmixer.docbook"> 
+ <!ENTITY doc-charcoal SYSTEM "charcoal.docbook"> 
+ <!ENTITY doc-despeckle SYSTEM "despeckle.docbook">
+ <!ENTITY doc-distortionfx SYSTEM "distortionfx.docbook"> 
+ <!ENTITY doc-emboss SYSTEM "emboss.docbook"> 
+ <!ENTITY doc-filmgrain SYSTEM "filmgrain.docbook"> 
+ <!ENTITY doc-freerotation SYSTEM "freerotation.docbook"> 
+ <!ENTITY doc-infrared SYSTEM "infrared.docbook"> 
+ <!ENTITY doc-inpainting SYSTEM "inpainting.docbook"> 
+ <!ENTITY doc-inserttext SYSTEM "inserttext.docbook"> 
+ <!ENTITY doc-lensdistortion SYSTEM "lensdistortion.docbook">
+ <!ENTITY doc-oilpaint SYSTEM "oilpaint.docbook">
+ <!ENTITY doc-perspective SYSTEM "perspective.docbook"> 
+ <!ENTITY doc-raindrops SYSTEM "raindrops.docbook">
+ <!ENTITY doc-restoration SYSTEM "restoration.docbook"> 
+ <!ENTITY doc-sheartool SYSTEM "sheartool.docbook"> 
+ <!ENTITY doc-solarizeimage SYSTEM "solarizeimage.docbook">
+ <!ENTITY doc-superimpose SYSTEM "superimpose.docbook"> 
+ <!ENTITY doc-texture SYSTEM "texture.docbook"> 
+ <!ENTITY doc-unsharp SYSTEM "unsharp.docbook"> 
+ <!ENTITY doc-whitebalance SYSTEM "whitebalance.docbook"> 
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The digiKam Image Plugins Handbook</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier_dot_gilles_at_free.fr</email></address></affiliation>
+    </author>
+    
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard_at_kulzer.net</email></address></affiliation>
+    </author>
+</authorgroup>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+<date>2005-05-09</date>
+<releaseinfo>0.7.3</releaseinfo> <!-- Used Kicker version here -->
+
+<copyright>
+    <year>2003</year>
+    <year>2005</year>
+    <holder>The DigikamImagePlugins developers team</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<abstract>
+
+    <para>
+        <inlinemediaobject>
+            <imageobject><imagedata fileref="logo.png" format="PNG"/></imageobject>
+            <textobject> <phrase>logo</phrase> </textobject>
+        </inlinemediaobject>
+    </para>
+    
+    <para>
+    These are the Image Plugins handbooks for digiKam Image Editor.
+    </para>
+    
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+<keyword>Image</keyword>
+<keyword>Plugins</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction to Plugins for digiKam Image Editor</title>
+
+<para>
+One of the nicest things about the digiKam Image Editor is how easily its functionality can be extended, 
+by using plugins. Plugins can manipulate images in almost any way that users can. Their advantage is 
+that it is much easier to add a capability to the Image Editor by writing a small plugin than by modifying 
+the Image Editor core. Many valuable plugins have C++ source code that only comes to 100-200 lines or so.
+</para>
+
+<para>
+Only one plugin is included in the main digiKam distribution, and it is installed automatically along 
+with the digiKam Image Editor. It provides some important features like <guilabel>Red Eye Reduction</guilabel> 
+tool and <guilabel>Auto-Levels</guilabel>. The digiKam Image Plugins package adds more functions like 
+new plugins. They add extra menus and shortcuts, and extentions to the image editor with features like new filters, 
+special effects, and advanced tools.
+</para>
+
+<para>
+The plugins included in this handbook are:
+</para>
+
+<itemizedlist>
+
+   <listitem><para>Image Filters and Enhancement
+      <itemizedlist>
+      <listitem><para><link linkend="adjustcurves">Adjust Curves</link></para></listitem>
+      <listitem><para><link linkend="adjustlevels">Adjust Levels</link></para></listitem>
+      <listitem><para><link linkend="antivignetting">Anti Vignetting Filter</link></para></listitem>
+      <listitem><para><link linkend="channelmixer">Channel Mixer</link></para></listitem>
+      <listitem><para><link linkend="despeckle">Noise Reduction</link></para></listitem>
+      <listitem><para><link linkend="inpainting">Photograph Inpainting</link></para></listitem>
+      <listitem><para><link linkend="lensdistortion">Lens Distortion Correction</link></para></listitem>
+      <listitem><para><link linkend="restoration">Photograph Restoration</link></para></listitem>
+      <listitem><para><link linkend="unsharp">Unsharped Mask</link></para></listitem>
+      <listitem><para><link linkend="whitebalance">White Balance</link></para></listitem>
+      </itemizedlist>
+   </para></listitem>
+
+   <listitem><para>Image Transformation Tools
+      <itemizedlist>
+      <listitem><para><link linkend="blowup">Blowup Photograph</link></para></listitem>
+      <listitem><para><link linkend="freerotation">Free Rotation</link></para></listitem>
+      <listitem><para><link linkend="perspective">Perspective Adjustment</link></para></listitem>
+      <listitem><para><link linkend="sheartool">Shearing Tool</link></para></listitem>
+      </itemizedlist>
+   </para></listitem>
+   
+   <listitem><para>Image Tools
+      <itemizedlist>
+      <listitem><para><link linkend="border">Add Border</link></para></listitem>
+      <listitem><para><link linkend="inserttext">Insert Text</link></para></listitem>
+      <listitem><para><link linkend="superimpose">Template Superimpose</link></para></listitem>
+      <listitem><para><link linkend="texture">Apply Texture</link></para></listitem>
+      </itemizedlist>
+   </para></listitem>
+
+   <listitem><para>Special Effects Plugins
+      <itemizedlist>
+      <listitem><para><link linkend="blurfx">Blur FX.</link></para></listitem>
+      <listitem><para><link linkend="charcoal">Simulate Charcoal Drawing.</link></para></listitem>
+      <listitem><para><link linkend="distortionfx">Distortion FX.</link></para></listitem>
+      <listitem><para><link linkend="emboss">Emboss Image.</link></para></listitem>
+      <listitem><para><link linkend="filmgrain">Add Film Grain.</link></para></listitem>
+      <listitem><para><link linkend="infrared">Simulate Infrared Film.</link></para></listitem>
+      <listitem><para><link linkend="oilpaint">Simulate Oil Painting</link></para></listitem>
+      <listitem><para><link linkend="raindrops">Add Rain Drops</link></para></listitem>
+      <listitem><para><link linkend="solarizeimage">Solarize Image</link></para></listitem>
+      </itemizedlist>
+   </para></listitem>
+
+</itemizedlist>
+
+</chapter>
+
+&doc-adjustcurves;
+&doc-adjustlevels;
+&doc-antivignetting;
+&doc-channelmixer;
+&doc-despeckle;
+&doc-inpainting;
+&doc-lensdistortion;
+&doc-restoration;
+&doc-unsharp;
+&doc-whitebalance;
+
+&doc-blowup;
+&doc-freerotation;
+&doc-perspective;
+&doc-sheartool;
+
+&doc-border;
+&doc-inserttext;
+&doc-superimpose;
+&doc-texture;
+
+&doc-blurfx;
+&doc-charcoal;
+&doc-distortionfx;
+&doc-emboss;
+&doc-filmgrain;
+&doc-infrared;
+&doc-oilpaint;
+&doc-raindrops;
+&doc-solarizeimage;
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+Copyrights for each plugin is listed in the applicable chapter.
+</para>
+
+<para>
+All Pictures copyrighted 2004-2005 by Gilles Caulier <email>caulier_dot_gilles_at_free.fr</email> and Gerhard Kulzer <email>gerhard_at_kulzer.net</email>.
+</para>
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<!--
+<appendix id="installation">
+<title>Installation</title>
+<para>To be written
+</para>
+</appendix>
+-->
+
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+End:
+-->
