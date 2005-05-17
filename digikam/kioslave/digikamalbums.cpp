@@ -620,7 +620,7 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
 {
     kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;        
 
-    // if the filename is .digikam_properties fake that we deleted it
+    // if the filename is .digikam_properties fake that we renamed it
     if (src.fileName() == ".digikam_properties")
     {
         finished();
