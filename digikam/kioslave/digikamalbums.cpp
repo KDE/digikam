@@ -477,7 +477,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
                 }
                 else
                 {
-                    kdWarning(7101) << "Couldn't write. Error:" << strerror(errno) << endl;
+                    kdWarning() << "Couldn't write. Error:" << strerror(errno) << endl;
                     error( KIO::ERR_COULD_NOT_WRITE, url.url());
                     result = -1;
                 }
@@ -499,7 +499,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     // close the file
     if ( close(fd) )
     {
-        kdWarning(7101) << "Error when closing file descriptor:" << strerror(errno) << endl;
+        kdWarning() << "Error when closing file descriptor:" << strerror(errno) << endl;
         error( KIO::ERR_COULD_NOT_WRITE, url.url());
         return;
     }
@@ -669,7 +669,7 @@ void kio_digikamalbums::listDir( const KURL& url )
         return;
     }
     
-    const QFileInfoList *list = dir.entryInfoList();
+    const QFileInfoList *list = dir.entryInfoList(QDir::All|QDir::Hidden);
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
 
@@ -762,18 +762,121 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
     error( KIO::ERR_FILE_ALREADY_EXIST, path );                
 }
 
-void kio_digikamalbums::chmod( const KURL& url, int /*permissions*/ )
+void kio_digikamalbums::chmod( const KURL& url, int permissions )
 {
     kdDebug() << k_funcinfo << " : " << url.url() << endl;            
 
-    /* TODO */
+    // get the album library path
+    QString libraryPath = url.user();
+    if (libraryPath.isEmpty())
+    {
+        error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
+        return;
+    }
+
+    QCString path( QFile::encodeName(libraryPath + url.path()));
+    if ( ::chmod( path.data(), permissions ) == -1 )
+        error( KIO::ERR_CANNOT_CHMOD, url.url() );
+    else
+        finished();
 }
 
-void kio_digikamalbums::del( const KURL& url, bool /*isfile*/)
+void kio_digikamalbums::del( const KURL& url, bool isfile)
 {
     kdDebug() << k_funcinfo << " : " << url.url() << endl;            
 
-    /* TODO */
+    // get the album library path
+    QString libraryPath = url.user();
+    if (libraryPath.isEmpty())
+    {
+        error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
+        return;
+    }
+
+    // open the db if needed
+    if (m_libraryPath != libraryPath)
+    {
+        m_libraryPath = libraryPath;
+        closeDB();
+        openDB();
+    }
+
+    // build the album list
+    buildAlbumList();
+
+    QCString path( QFile::encodeName(libraryPath + url.path()));
+    
+    if (isfile)
+    {
+	kdDebug(  ) <<  "Deleting file "<< url.url() << endl;
+
+        // if the filename is .digikam_properties fake that we deleted it
+        if (url.fileName() == ".digikam_properties")
+        {
+            finished();
+            return;
+        }
+
+        // find the Album to which this file belongs.
+        bool found;
+        AlbumInfo album = findAlbum(url.directory(), found);
+        if (!found)
+        {
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
+                  .arg(url.directory()));
+            return;
+        }
+
+        // actually delete the file
+	if ( unlink( path.data() ) == -1 )
+        {
+            if ((errno == EACCES) || (errno == EPERM))
+               error( KIO::ERR_ACCESS_DENIED, url.url());
+            else if (errno == EISDIR)
+               error( KIO::ERR_IS_DIRECTORY, url.url());
+            else
+               error( KIO::ERR_CANNOT_DELETE, url.url() );
+	    return;
+	}
+
+        // successful deletion. now remove file entry from the database
+        delImage(album.id, url.fileName());
+    }
+    else
+    {
+        kdDebug(  ) << "Deleting directory " << url.url() << endl;
+
+        // find the corresponding album entry
+        bool found;
+        AlbumInfo album = findAlbum(url.path(), found);
+        if (!found)
+        {
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
+                  .arg(url.path()));
+            return;
+        }
+      
+        if ( ::rmdir( path.data() ) == -1 )
+        {
+            if ((errno == EACCES) || (errno == EPERM))
+            {
+                error( KIO::ERR_ACCESS_DENIED, url.url());
+                return;
+            }
+            else
+            {
+                kdDebug() << "could not rmdir " << perror << endl;
+                error( KIO::ERR_COULD_NOT_RMDIR, url.url() );
+                return;
+            }
+        }
+
+        // successful deletion. now remove album entry from the database
+        delAlbum(album.id);
+    }
+
+    finished();
+    
 }
 
 bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry)
@@ -892,6 +995,12 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok) const
     return album;
 }
 
+void kio_digikamalbums::delAlbum(int albumID)
+{
+    execSql(QString("DELETE FROM Albums WHERE id='%1'")
+            .arg(albumID));    
+}
+
 bool kio_digikamalbums::findImage(int albumID, const QString& name) const
 {
     QStringList values;
@@ -934,6 +1043,19 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
             .arg(escapeString(QFileInfo(filePath).fileName()))
             .arg(datetime.toString(Qt::ISODate))
             .arg(escapeString(comment)));
+}
+
+void kio_digikamalbums::delImage(int albumID, const QString& name)
+{
+    execSql( QString("DELETE FROM Images "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(albumID)
+            .arg(escapeString(name)) );
+
+    execSql( QString("DELETE FROM ImageTags "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(albumID)
+            .arg(escapeString(name)) );
 }
 
 /* KIO slave registration */

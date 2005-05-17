@@ -78,8 +78,10 @@ private:
 
     void       buildAlbumList();
     AlbumInfo  findAlbum(const QString& url, bool& ok) const;
+    void       delAlbum(int albumID);
     bool       findImage(int albumID, const QString& name) const;
     void       addImage(int albumID, const QString& filePath);
+    void       delImage(int albumID, const QString& name);
 
 private:
     
