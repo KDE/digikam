@@ -22,6 +22,7 @@
  <!ENTITY doc-oilpaint SYSTEM "oilpaint.docbook">
  <!ENTITY doc-perspective SYSTEM "perspective.docbook"> 
  <!ENTITY doc-raindrops SYSTEM "raindrops.docbook">
+ <!ENTITY doc-refocus SYSTEM "refocus.docbook"> 
  <!ENTITY doc-restoration SYSTEM "restoration.docbook"> 
  <!ENTITY doc-sheartool SYSTEM "sheartool.docbook"> 
  <!ENTITY doc-solarizeimage SYSTEM "solarizeimage.docbook">
@@ -49,8 +50,8 @@
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
-<date>2005-05-09</date>
-<releaseinfo>0.7.3</releaseinfo> <!-- Used Kicker version here -->
+<date>2005-xx-xx</date>
+<releaseinfo>0.8.0</releaseinfo> <!-- Used Kicker version here -->
 
 <copyright>
     <year>2003</year>
@@ -117,6 +118,7 @@ The plugins included in this handbook are:
       <listitem><para><link linkend="despeckle">Noise Reduction</link></para></listitem>
       <listitem><para><link linkend="inpainting">Photograph Inpainting</link></para></listitem>
       <listitem><para><link linkend="lensdistortion">Lens Distortion Correction</link></para></listitem>
+      <listitem><para><link linkend="refocus">Refocus an Photograph</link></para></listitem>
       <listitem><para><link linkend="restoration">Photograph Restoration</link></para></listitem>
       <listitem><para><link linkend="unsharp">Unsharped Mask</link></para></listitem>
       <listitem><para><link linkend="whitebalance">White Balance</link></para></listitem>
@@ -166,6 +168,7 @@ The plugins included in this handbook are:
 &doc-despeckle;
 &doc-inpainting;
 &doc-lensdistortion;
+&doc-refocus;
 &doc-restoration;
 &doc-unsharp;
 &doc-whitebalance;

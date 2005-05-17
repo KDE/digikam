@@ -1,0 +1,156 @@
+<chapter id="refocus">
+<chapterinfo>
+
+<title>Refocus a Photograph</title>
+
+<authorgroup>
+    <author>
+        <firstname>Gilles</firstname><surname>Caulier</surname>
+        <affiliation><address><email>caulier dot gilles at free.fr</email></address></affiliation>
+    </author>
+    <author>
+        <firstname>Gerhard</firstname><surname>Kulzer</surname>
+        <affiliation><address><email>gerhard at kulzer.net</email></address></affiliation>
+    </author>        
+</authorgroup>
+
+<abstract>
+<para>
+The digiKam image plugin <emphasis>Refocus</emphasis> is a tool to enhance sharpness of an image. It uses the <emphasis>Deconvolution Filter</emphasis> algorithm copyrighted by Ernst Lippe.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Digikam</keyword>
+</keywordset>
+</chapterinfo>
+
+<title>Introduction</title>
+
+<para>
+Out-of-focus photographs, as well as most digitized images, need correction of sharpness. This is due to the digitizing process that must chop a color continuum up in points with slightly different colors: elements thinner than sampling frequency will be averaged into an uniform color. Thus, sharp borders are rendered a little blurred. The same phenomenon appears when printing color dots on paper.
+</para>
+
+<para>
+Some scanners apply a sharpen filter while scanning. It's worth to disable it so that you keep control on your image.
+</para>
+
+<para>
+This tool attempts to "refocus" an image, using a technique called <emphasis>FIR Wiener Filtering</emphasis>. The traditional technique for sharpening images is to use unsharp masking. Refocus generally produces better results than unsharp masking.
+Start it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Refocus</guimenuitem></menuchoice> Image Editor menu.
+</para>
+
+<para>
+Refocus technic cannot be compared with Unsharp Mask unlike the Sharpen or Unsharp Mask filters which increase the contrast at the edges of an image. Refocus reverses the formula by which the image got blurred. This method gives you as much of the original "in focus" image as possible. Refocus uses a very powerful deconvolution algorithm that will reclaim the data that has been spread out. In scientifical terms, blurring is usually the result of a convolution, a deconvolution will reverse the process, this is exactly what Refocus is doing.
+</para>
+
+<sect1 id="using-plugin-refocus">
+<title>Using the plugin</title>
+
+<figure>
+    <title>Refocus Dialog</title>
+    <graphic srccredit="Refocus Dialog" fileref="refocusdialog.png"/>
+</figure>
+
+<para>
+The image panel and the original preview help you to pan within the image. The preview window shows the filter output using the current settings. The plug-in has the following parameters:
+
+<itemizedlist>
+
+  <listitem><para><guilabel>Radius</guilabel>: This is the <guilabel>Radius</guilabel> of the Circular deconvolution filter. This is probably the most important parameter for using the plug-in. For normal images, the default value of 1 should give good results. Select a higher value when your image is very blurred.</para></listitem> 
+  
+  <listitem><para><guilabel>Correlation</guilabel>: Increasing the <guilabel>Correlation</guilabel> may help reducing artifacts. The correlation can range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. Using a high value for the correlation will reduce the sharpening effect of the plug-in.</para></listitem> 
+  
+  <listitem><para><guilabel>Noise</guilabel>: Increasing the <guilabel>Noise</guilabel> parameter may help reducing artifacts. The Noise can range from 0-1. When the Noise value is to low, e.g. 0 the image quality will be horrible. A useful value is 0.01. Using a high value for the Noise will reduce the sharpening effect of the plug-in.</para></listitem> 
+  
+  <listitem><para><guilabel>Matrix size</guilabel>: This parameter determines the size of the transformation matrix. Increasing the <guilabel>Matrix Size</guilabel> may give better results, especially when you have chosen large values for <guilabel>Radius</guilabel> or <guilabel>Gauss</guilabel>. Note that the plug-in will become very slow when you select large values for this parameter. In most cases you should select a value in the range 3-10.</para></listitem> 
+  
+  <listitem><para><guilabel>Gauss</guilabel>: This is the radius for the Gaussian deconvolution filter. Use this parameter when you blurring is Gaussian. In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise</guilabel> parameters, too.</para></listitem> 
+  
+  <listitem><para><guilabel>Save</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any Refocus parameters that you have set can be saved to the filesystem and loaded later.</para></listitem>
+
+  <listitem><para><guilabel>Reset All</guilabel>: this button resets all settings to default values.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+
+Below, you can see few hints to help you work with the refocus plug-in:
+
+<itemizedlist>
+
+  <listitem><para>You need to perform all color corrections on the image before using this plug-in.</para></listitem>
+  
+  <listitem><para>In many cases you should use this plug-in before performing other operations on the image. The reason is that many operations on the image will leave boundaries that are not immediately visible but that will leave nasty artifacts.</para></listitem>
+   
+  <listitem><para>When you are scanning images and compress them, e.g. to JPEG, you should use the plug-in on the uncompressed image.</para></listitem> 
+
+</itemizedlist>
+
+</para>
+
+</sect1>
+
+<sect1 id="comparison-plugin-refocus">
+<title>Comparison With Other Techniques</title>
+
+<para>
+Two other techniques that are frequently used to enhance images are:
+
+<itemizedlist>
+
+  <listitem><para>Sharpening</para></listitem>
+  
+  <listitem><para>Unsharp mask</para></listitem>
+  
+</itemizedlist>
+</para>
+
+<para>
+Sharpening applies a small convolution matrix that increases the difference between a source pixel and its immediate neighbors. FIR Wiener filtering is a more general technique because it allows a much larger neighborhood and better parameterizations. Sharpening only works when your images are very slightly blurred. Furthermore, for high values of the sharpening parameter the results frequently look "noisy". With FIR Wiener filtering this noise can be greatly reduced by selecting higher values for the <guilabel>Correlation</guilabel> and <guilabel>Noise</guilabel> parameters. 
+</para>
+
+<para>
+Unsharp masking is another very popular image enhancement technique. From a mathematical point of view its justification is a bit obscure but many people are very fond of it. The first step is to blur the source image, hence the name unsharp masking. Then the difference between the source image and the blurred image is subtracted from the source image. 
+</para>
+
+<para>
+In general, unsharp masking produces better results than sharpening. This is probably caused by the fact that unsharp masking uses a larger neighborhood than sharpening.
+</para>
+
+<para>
+From a theoretical point of view unsharp masking must always introduce artifacts. Even under optimal circumstances it can never completely undo the effect of blurring. For Wiener filtering it is possible to prove that it is the optimal linear filter. In practice, in all cases the results of the FIR Wiener filter were at least as good as those of unsharp masking. The FIR Wiener filter is frequently better in restoring small details.
+</para>
+
+<note><para>
+For more information about correction of sharpness methods used in digital imagery, you can found a technical comparison at <ulink url="http://www.bialith.com/Research/BARclockblur.htm">this url</ulink>.
+</para></note>
+
+</sect1>
+
+<sect1  id="inaction-plugin-refocus">
+<title>The plugin in action</title>
+
+<para>
+This is an example of how the Refocus can change your life. The original image is (1) and the corrected image is (2).
+</para>
+
+<figure>
+    <title>Refocus Tool in Action</title>
+    <graphic srccredit="Refocus Tool in Action" fileref="refocuspreview.png"/>
+</figure>
+
+</sect1>
+
+</chapter>
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->
+
