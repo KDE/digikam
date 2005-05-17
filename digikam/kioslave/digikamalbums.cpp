@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kinstance.h>
 #include <kfilemetainfo.h>
+#include <kmimetype.h>
 #include <kdebug.h>
 #include <kio/global.h>
 #include <kio/ioslave_defaults.h>
@@ -56,6 +57,8 @@ extern "C"
 }
 
 #include "digikamalbums.h"
+
+#define MAX_IPC_SIZE (1024*32)
 
 kio_digikamalbums::kio_digikamalbums(const QCString &pool_socket,
                                      const QCString &app_socket)
@@ -305,7 +308,85 @@ void kio_digikamalbums::get( const KURL& url )
 {
     kdDebug() << k_funcinfo << " : " << url << endl;    
 
-    /* TODO */
+    // get the libraryPath
+    QString libraryPath = url.user();
+    if (libraryPath.isEmpty())
+    {
+        error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
+        return;
+    }
+
+    // no need to open the db. we don't need to read/write to it
+    
+    QCString path(QFile::encodeName(libraryPath + url.path()));
+    KDE_struct_stat buff;
+    if ( KDE_stat( path.data(), &buff ) == -1 )
+    {
+        if ( errno == EACCES )
+           error( KIO::ERR_ACCESS_DENIED, url.url() );
+        else
+           error( KIO::ERR_DOES_NOT_EXIST, url.url() );
+        return;
+    }
+
+    if ( S_ISDIR( buff.st_mode ) )
+    {
+        error( KIO::ERR_IS_DIRECTORY, url.url() );
+        return;
+    }
+    
+    if ( !S_ISREG( buff.st_mode ) )
+    {
+        error( KIO::ERR_CANNOT_OPEN_FOR_READING, url.url() );
+        return;
+    }
+
+    int fd = KDE_open( path.data(), O_RDONLY);
+    if ( fd < 0 )
+    {
+        error( KIO::ERR_CANNOT_OPEN_FOR_READING, url.url() );
+        return;
+    }
+
+    // Determine the mimetype of the file to be retrieved, and emit it.
+    // This is mandatory in all slaves (for KRun/BrowserRun to work).
+    KMimeType::Ptr mt = KMimeType::findByURL( libraryPath + url.path(), buff.st_mode,
+                                              true);
+    emit mimeType( mt->name() );
+
+    totalSize( buff.st_size );
+
+    char buffer[ MAX_IPC_SIZE ];
+    QByteArray array;
+    KIO::filesize_t processed_size = 0;
+
+    while (1)
+    {
+       int n = ::read( fd, buffer, MAX_IPC_SIZE );
+       if (n == -1)
+       {
+          if (errno == EINTR)
+              continue;
+          error( KIO::ERR_COULD_NOT_READ, url.url());
+          close(fd);
+          return;
+       }
+       if (n == 0)
+          break; // Finished
+
+       array.setRawData(buffer, n);
+       data( array );
+       array.resetRawData(buffer, n);
+
+       processed_size += n;
+       processedSize( processed_size );
+    }
+
+    data( QByteArray() );
+    close( fd );
+
+    processedSize( buff.st_size );
+    finished();
 }
 
 void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bool /*resume*/)
