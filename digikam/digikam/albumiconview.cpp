@@ -615,7 +615,7 @@ void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
     ImageDescEdit descEdit(this, iconItem, this);
     descEdit.exec();
 
-    d->imageLister->updateDirectory();
+    d->imageLister->refresh();
     updateContents();
 }
 
@@ -723,12 +723,12 @@ void AlbumIconView::slotDeleteSelectedItems()
                            .arg(SyncJob::lastErrorMsg()));
     }
 
-    d->imageLister->updateDirectory();
+    d->imageLister->refresh();
 }
 
 void AlbumIconView::slotFilesModified()
 {
-    d->imageLister->updateDirectory();
+    d->imageLister->refresh();
 }
 
 void AlbumIconView::slotFilesModified(const KURL& url)
@@ -1025,7 +1025,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     }
                 }
 
-                d->imageLister->updateDirectory();
+                d->imageLister->refresh();
                 updateContents();
                 break;
             }
@@ -1074,7 +1074,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 }
             }
 
-            d->imageLister->updateDirectory();
+            d->imageLister->refresh();
             updateContents();
             break;
         }
@@ -1525,7 +1525,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
-        d->imageLister->updateDirectory();
+        d->imageLister->refresh();
     }
     updateContents();
 }

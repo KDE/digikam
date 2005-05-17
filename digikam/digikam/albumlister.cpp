@@ -131,7 +131,7 @@ void AlbumLister::openAlbum(Album *album)
             SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::updateDirectory()
+void AlbumLister::refresh()
 {
     if (!d->currAlbum)
         return;

@@ -46,9 +46,9 @@ public:
 
     void openAlbum(Album *album);
     void stop();
+    void refresh();
 
     void setNameFilter(const QString& nameFilter);
-    void updateDirectory();
 
     void setDayFilter(const QValueList<int>& days);
     void setTagFilter(const QValueList<int>& tags, bool showUnTagged=false);
