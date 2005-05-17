@@ -85,6 +85,8 @@ private:
     void       delImage(int albumID, const QString& name);
     void       renameImage(int oldAlbumID, const QString& oldName,
                            int newAlbumID, const QString& newName);
+    void       copyImage(int srcAlbumID, const QString& srcName,
+                         int dstAlbumID, const QString& dstName);
 
 private:
     

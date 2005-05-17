@@ -54,6 +54,7 @@ extern "C"
 #include <sqlite.h>
 #include <sys/time.h>
 #include <time.h>
+#include <utime.h>
 }
 
 #include "digikamalbums.h"
@@ -526,10 +527,11 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     finished();
 }
 
-void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bool /*overwrite*/ )
+void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
 {
     kdDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;        
 
+    // get the album library path
     QString libraryPath = src.user();
     if (libraryPath.isEmpty())
     {
@@ -537,8 +539,8 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
         return;
     }
 
+    // check that the src and dst album library paths match
     QString dstLibraryPath = dst.user();
-
     if (libraryPath != dstLibraryPath)
     {
         error(KIO::ERR_UNKNOWN,
@@ -548,6 +550,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
         return;
     }
 
+    // open the db if needed
     if (m_libraryPath != libraryPath)
     {
         m_libraryPath = libraryPath;
@@ -555,10 +558,11 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
         openDB();
     }
 
+    // build the album list
     buildAlbumList();
 
+    // find the src parent album
     bool found;
-
     AlbumInfo srcAlbum = findAlbum(src.directory(), found);
     if (!found)
     {
@@ -567,6 +571,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
         return;
     }
 
+    // find the dst parent album
     AlbumInfo dstAlbum = findAlbum(dst.directory(), found);
     if (!found)
     {
@@ -574,7 +579,9 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
               .arg(dst.directory()));
         return;
     }
-    
+
+    // if the filename is .digikam_properties, we have been asked to copy the
+    // metadata of the src album to the dst album
     if (src.fileName() == ".digikam_properties")
     {
         // copy metadata of album to destination album
@@ -591,6 +598,8 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
 
     QCString _src( QFile::encodeName(libraryPath + src.path()));
     QCString _dst( QFile::encodeName(libraryPath + dst.path()));
+
+    // stat the src file
     KDE_struct_stat buff_src;
     if ( KDE_stat( _src.data(), &buff_src ) == -1 )
     {
@@ -601,19 +610,164 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
         return;
     }
 
+    // bail out if its a directory
     if ( S_ISDIR( buff_src.st_mode ) )
     {
         error( KIO::ERR_IS_DIRECTORY, src.url() );
         return;
     }
 
+    // bail out if its a socket or fifo
     if ( S_ISFIFO( buff_src.st_mode ) || S_ISSOCK ( buff_src.st_mode ) )
     {
         error( KIO::ERR_CANNOT_OPEN_FOR_READING, src.url() );
         return;
     } 
 
-    /* LOTS OF TODO */
+    // stat the dst file
+    KDE_struct_stat buff_dest;
+    bool dest_exists = ( KDE_lstat( _dst.data(), &buff_dest ) != -1 );
+    if ( dest_exists )
+    {
+        // bail out if its a directory
+        if (S_ISDIR(buff_dest.st_mode))
+        {
+           error( KIO::ERR_DIR_ALREADY_EXIST, dst.url() );
+           return;
+        }
+
+        // if !overwrite bail out
+        if (!overwrite)
+        {
+           error( KIO::ERR_FILE_ALREADY_EXIST, dst.url() );
+           return;
+        }
+
+        // If the destination is a symlink and overwrite is TRUE,
+        // remove the symlink first to prevent the scenario where
+        // the symlink actually points to current source!
+        if (overwrite && S_ISLNK(buff_dest.st_mode))
+        {
+            remove( _dst.data() );
+        }
+    }
+
+    // now open the src file
+    int src_fd = KDE_open( _src.data(), O_RDONLY);
+    if ( src_fd < 0 )
+    {
+	error( KIO::ERR_CANNOT_OPEN_FOR_READING, src.path() );
+	return;
+    }
+
+    // get the permissions we are supposed to set
+    mode_t initialMode;
+    if (mode != -1)
+       initialMode = mode | S_IWUSR;
+    else
+       initialMode = 0666;
+
+    // open the destination file
+    int dest_fd = KDE_open(_dst.data(), O_CREAT | O_TRUNC | O_WRONLY, initialMode);
+    if ( dest_fd < 0 )
+    {
+	kdDebug() << "###### COULD NOT WRITE " << dst.url() << endl;
+        if ( errno == EACCES )
+        {
+            error( KIO::ERR_WRITE_ACCESS_DENIED, dst.url() );
+        }
+        else
+        {
+            error( KIO::ERR_CANNOT_OPEN_FOR_WRITING, dst.url() );
+        }
+        close(src_fd);
+        return;
+    }
+
+    // emit the total size for copying
+    totalSize( buff_src.st_size );
+
+    KIO::filesize_t processed_size = 0;
+    char buffer[ MAX_IPC_SIZE ];
+    int n;
+
+    while (1)
+    {
+        // read in chunks of MAX_IPC_SIZE 
+        n = ::read( src_fd, buffer, MAX_IPC_SIZE );
+
+       if (n == -1)
+       {
+          if (errno == EINTR)
+              continue;
+          error( KIO::ERR_COULD_NOT_READ, src.path());
+          close(src_fd);
+          close(dest_fd);
+          return;
+       }
+       
+       // Finished ?
+       if (n == 0)
+           break; 
+
+       // write to the destination file
+       if (write_all( dest_fd, buffer, n))
+       {
+           close(src_fd);
+           close(dest_fd);
+
+           if ( errno == ENOSPC ) // disk full
+           {
+               error( KIO::ERR_DISK_FULL, dst.url());
+               remove( _dst.data() );
+           }
+           else
+           {
+               kdWarning() << "Couldn't write[2]. Error:" << strerror(errno) << endl;
+               error( KIO::ERR_COULD_NOT_WRITE, dst.url());
+           }
+           return;
+       }
+       
+       processedSize( processed_size );
+    }
+
+    
+    close( src_fd );
+
+    if (close( dest_fd))
+    {
+        kdWarning() << "Error when closing file descriptor[2]:" << strerror(errno) << endl;
+        error( KIO::ERR_COULD_NOT_WRITE, dst.url());
+        return;
+    }
+
+    // set final permissions
+    if ( mode != -1 )
+    {
+       if (::chmod(_dst.data(), mode) != 0)
+       {
+           // Eat the error if the filesystem apparently doesn't support chmod.
+           if ( KIO::testFileSystemFlag( _dst, KIO::SupportsChmod ) )
+               warning( i18n( "Could not change permissions for\n%1" ).arg( dst.url() ) );
+       }
+    }
+
+    // copy access and modification time
+    struct utimbuf ut;
+    ut.actime = buff_src.st_atime;
+    ut.modtime = buff_src.st_mtime;
+    if ( ::utime( _dst.data(), &ut ) != 0 )
+    {
+        kdWarning() << QString::fromLatin1("Couldn't preserve access and modification time for\n%1")
+            .arg( dst.url() ) << endl;
+    }
+
+    // now copy the metadata over
+    copyImage(srcAlbum.id, src.fileName(), dstAlbum.id, dst.fileName());
+    
+    processedSize( buff_src.st_size );
+    finished();
 }
 
 void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite )
@@ -1257,6 +1411,40 @@ void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
              .arg(escapeString(oldName)) );
 }
 
+void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
+                                  int dstAlbumID, const QString& dstName)
+{
+    // first delete any entries for the destination file
+
+    execSql( QString("DELETE FROM Images "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(dstAlbumID)
+            .arg(escapeString(dstName)) );
+
+    execSql( QString("DELETE FROM ImageTags "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(dstAlbumID)
+            .arg(escapeString(dstName)) );
+
+    // now copy the metadata over
+    
+    execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
+                     "SELECT %1, '%2', caption, datetime FROM Images "
+                     "WHERE dirid=%3 AND name='%4';")
+             .arg(dstAlbumID)
+             .arg(escapeString(dstName))
+             .arg(srcAlbumID)
+             .arg(escapeString(srcName)) );
+
+    execSql( QString("INSERT INTO ImageTags (dirid, name, tagid) "
+                     "SELECT %1, '%2', tagid FROM ImageTags "
+                     "WHERE dirid=%3 AND name='%4';")
+             .arg(dstAlbumID)
+             .arg(escapeString(dstName))
+             .arg(srcAlbumID)
+             .arg(escapeString(srcName)) );
+}
+
 /* KIO slave registration */
 
 extern "C"
@@ -1279,4 +1467,3 @@ extern "C"
         return 0;
     }
 }
-
