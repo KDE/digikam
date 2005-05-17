@@ -616,11 +616,145 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int /*mode*/, bo
     /* LOTS OF TODO */
 }
 
-void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool /*overwrite*/ )
+void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite )
 {
     kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;        
 
-    /* TODO */
+    QString libraryPath = src.user();
+    if (libraryPath.isEmpty())
+    {
+        error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
+        return;
+    }
+
+    QString dstLibraryPath = dst.user();
+    if (libraryPath != dstLibraryPath)
+    {
+        error(KIO::ERR_UNKNOWN,
+              i18n("Source and Destination have different Album Library Paths.\n"
+                   "Source: %1\n"
+                   "Destination: %2")
+              .arg(src.user())
+              .arg(dst.user()));
+        return;
+    }
+
+    // open album db if needed
+    if (m_libraryPath != libraryPath)
+    {
+        m_libraryPath = libraryPath;
+        closeDB();
+        openDB();
+    }
+
+    QCString csrc( QFile::encodeName(libraryPath + src.path()));
+    QCString cdst( QFile::encodeName(libraryPath + dst.path()));
+
+    // stat the source file/folder
+    KDE_struct_stat buff_src;
+    if ( KDE_stat( csrc.data(), &buff_src ) == -1 )
+    {
+        if ( errno == EACCES )
+           error( KIO::ERR_ACCESS_DENIED, src.url() );
+        else
+           error( KIO::ERR_DOES_NOT_EXIST, src.url() );
+        return;
+    }
+
+    // stat the destination file/folder
+    KDE_struct_stat buff_dest;
+    bool dest_exists = ( KDE_stat( cdst.data(), &buff_dest ) != -1 );
+    if ( dest_exists )
+    {
+        if (S_ISDIR(buff_dest.st_mode))
+        {
+           error( KIO::ERR_DIR_ALREADY_EXIST, dst.url() );
+           return;
+        }
+
+        if (!overwrite)
+        {
+           error( KIO::ERR_FILE_ALREADY_EXIST, dst.url() );
+           return;
+        }
+    }
+
+    
+    // build album list
+    buildAlbumList();
+
+    AlbumInfo srcAlbum, dstAlbum;
+
+    // check if we are renaming an album or a image
+    bool renamingAlbum = S_ISDIR(buff_src.st_mode);
+
+    if (renamingAlbum)
+    {
+        bool found;
+        srcAlbum = findAlbum(src.path(), found);
+        if (!found)
+        {
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
+                  .arg(src.url()));
+            return;
+        }
+    }
+    else
+    {
+        bool found;
+        srcAlbum = findAlbum(src.directory(), found);
+        if (!found)
+        {
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
+                  .arg(src.directory()));
+            return;
+        }
+
+        dstAlbum = findAlbum(dst.directory(), found);
+        if (!found)
+        {
+            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database")
+                  .arg(dst.directory()));
+            return;
+        }
+    }    
+
+    // actually rename the file/folder
+    if ( ::rename(csrc.data(), cdst.data()))
+    {
+        if (( errno == EACCES ) || (errno == EPERM))
+        {
+            error( KIO::ERR_ACCESS_DENIED, dst.url() );
+        }
+        else if (errno == EXDEV)
+        {
+           error( KIO::ERR_UNSUPPORTED_ACTION, i18n("This file/folder is on a different "
+                                                    "filesystem through symlinks. "
+                                                    "Moving/Renaming files between "
+                                                    "them is currently unsupported "));
+        }
+        else if (errno == EROFS)
+        { // The file is on a read-only filesystem
+           error( KIO::ERR_CANNOT_DELETE, src.url() );
+        }
+        else {
+           error( KIO::ERR_CANNOT_RENAME, src.url() );
+        }
+        return;
+    }
+
+    // renaming done. now update the database
+    if (renamingAlbum)
+    {
+        renameAlbum(srcAlbum.url, dst.path());
+    }
+    else
+    {
+        renameImage(srcAlbum.id, src.fileName(),
+                    dstAlbum.id, dst.fileName());
+    }
+
+    finished();
 }
 
 void kio_digikamalbums::stat( const KURL& url )
@@ -1001,6 +1135,31 @@ void kio_digikamalbums::delAlbum(int albumID)
             .arg(albumID));    
 }
 
+void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL)
+{
+    // first update the url of the album which was renamed
+
+    execSql( QString("UPDATE Albums SET url='%1' WHERE url='%2'")
+             .arg(escapeString(newURL))
+             .arg(escapeString(oldURL)), 0, true );
+
+    // now find the list of all subalbums which need to be updated
+    QStringList values;
+    execSql( QString("SELECT url FROM Albums WHERE url LIKE '%1/%';")
+             .arg(oldURL), &values, true );
+
+    // and update their url
+    QString newChildURL;
+    for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        newChildURL = *it;
+        newChildURL.replace(oldURL, newURL);
+        execSql(QString("UPDATE Albums SET url='%1' WHERE url='%2'")
+                .arg(escapeString(newChildURL))
+                .arg(escapeString(*it)), 0, true);
+    }
+}
+
 bool kio_digikamalbums::findImage(int albumID, const QString& name) const
 {
     QStringList values;
@@ -1056,6 +1215,37 @@ void kio_digikamalbums::delImage(int albumID, const QString& name)
             "WHERE dirid=%1 AND name='%2';")
             .arg(albumID)
             .arg(escapeString(name)) );
+}
+
+void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
+                                    int newAlbumID, const QString& newName)
+{
+    // first delete any entries for the destination file
+
+    execSql( QString("DELETE FROM Images "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(newAlbumID)
+            .arg(escapeString(newName)) );
+
+    execSql( QString("DELETE FROM ImageTags "
+            "WHERE dirid=%1 AND name='%2';")
+            .arg(newAlbumID)
+            .arg(escapeString(newName)) );
+
+    // now update the dirid and/or name of the file
+    execSql( QString("UPDATE Images SET dirid=%1, name='%2' "
+                     "WHERE dirid=%3 AND name='%4';")
+             .arg(newAlbumID)
+             .arg(escapeString(newName))
+             .arg(oldAlbumID)
+             .arg(escapeString(oldName)) );
+
+    execSql( QString("UPDATE ImageTags SET dirid=%1, name='%2' "
+                     "WHERE dirid=%3 AND name='%4';")
+             .arg(newAlbumID)
+             .arg(escapeString(newName))
+             .arg(oldAlbumID)
+             .arg(escapeString(oldName)) );
 }
 
 /* KIO slave registration */

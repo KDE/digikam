@@ -79,9 +79,12 @@ private:
     void       buildAlbumList();
     AlbumInfo  findAlbum(const QString& url, bool& ok) const;
     void       delAlbum(int albumID);
+    void       renameAlbum(const QString& oldURL, const QString& newURL);
     bool       findImage(int albumID, const QString& name) const;
     void       addImage(int albumID, const QString& filePath);
     void       delImage(int albumID, const QString& name);
+    void       renameImage(int oldAlbumID, const QString& oldName,
+                           int newAlbumID, const QString& newName);
 
 private:
     
