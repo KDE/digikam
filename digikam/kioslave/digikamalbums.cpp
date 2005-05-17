@@ -620,6 +620,13 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
 {
     kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;        
 
+    // if the filename is .digikam_properties fake that we deleted it
+    if (src.fileName() == ".digikam_properties")
+    {
+        finished();
+        return;
+    }
+    
     QString libraryPath = src.user();
     if (libraryPath.isEmpty())
     {
@@ -992,6 +999,8 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
       
         if ( ::rmdir( path.data() ) == -1 )
         {
+            // TODO handle symlink delete
+            
             if ((errno == EACCES) || (errno == EPERM))
             {
                 error( KIO::ERR_ACCESS_DENIED, url.url());
