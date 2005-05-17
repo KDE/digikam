@@ -180,12 +180,12 @@ void TagFilterView::triggerChange()
 
 void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    if(!e) 
+    if (!e) 
         return;
 
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(e->pos()));
 
-    if(e->state() == NoButton)
+    if (e->state() == NoButton)
     {
         if (KGlobalSettings::changeCursorOverIcon())
         {
@@ -195,11 +195,12 @@ void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
                 unsetCursor();
         }
     }
+
+    QListView::contentsMouseMoveEvent(e);
 }
 
 QDragObject* TagFilterView::dragObject()
 {
-
     QValueList<int> dragTagIDs;
     
     QListViewItemIterator it(this, QListViewItemIterator::Selected);
