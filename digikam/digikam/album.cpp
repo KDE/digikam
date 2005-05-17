@@ -323,8 +323,10 @@ QString PAlbum::getURL() const
 
 KURL PAlbum::getKURL() const
 {
-    KURL u = getURL();
+    KURL u;
     u.setProtocol("digikamalbums");
+    u.setUser(AlbumManager::instance()->getLibraryPath());
+    u.setPath(getURL());
     return u;
 }
 

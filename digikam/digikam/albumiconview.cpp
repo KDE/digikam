@@ -93,7 +93,7 @@ extern "C"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumfilecopymove.h"
-#include "digikamio.h"
+#include "dio.h"
 #include "syncjob.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
@@ -976,11 +976,15 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         int id = popMenu.exec(QCursor::pos());
         switch(id) {
         case 10: {
-            new DigikamIO(srcURLs, destURL, true);
+            KIO::Job* job = DIO::move(srcURLs, destURL);
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         case 11: {
-            new DigikamIO(srcURLs, destURL, false);
+            KIO::Job* job = DIO::copy(srcURLs, destURL);
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         default:
@@ -1528,6 +1532,12 @@ void AlbumIconView::slotRemoveTag(int tagID)
         d->imageLister->refresh();
     }
     updateContents();
+}
+
+void AlbumIconView::slotDIOResult(KIO::Job* job)
+{
+    if (job->error())
+        job->showErrorDialog(this);
 }
 
 #include "albumiconview.moc"

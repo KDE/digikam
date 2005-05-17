@@ -36,6 +36,11 @@
 #include "imageinfo.h"
 #include "albumitemhandler.h"
 
+namespace KIO
+{
+class Job;
+}
+
 class QMouseEvent;
 class QResizeEvent;
 class QDragMoveEvent;
@@ -147,6 +152,8 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+
+    void slotDIOResult(KIO::Job* job);
     
 public slots:
 

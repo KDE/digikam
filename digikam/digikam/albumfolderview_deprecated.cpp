@@ -1723,43 +1723,6 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
             break;
         }
     }
-    else if (CameraDragObject::canDecode(event))
-    {
-        // todo
-        /*
-          QPopupMenu popMenu(this);
-          popMenu.insertItem( i18n("&Download"), 10 );
-          popMenu.setMouseTracking(true);
-
-          int id = popMenu.exec(QCursor::pos());
-          switch(id) {
-          case 10: {
-
-          CameraType ctype;
-          CameraDragObject::decode(event, ctype);
-
-          QByteArray arg1;
-          QDataStream stream1(arg1, IO_WriteOnly);
-          stream1 << dropTarget_->album()->getTitle();
-
-          DCOPClient *client = kapp->dcopClient();
-          client->send("digikamcameraclient", "DigikamCameraClient",
-          "cameraChangeDownloadAlbum(QString)",
-          arg1);
-
-          QByteArray arg2;
-
-          client->send("digikamcameraclient", "DigikamCameraClient",
-          "cameraDownloadSelected()",
-          arg2);
-
-          break;
-          }
-          default:
-          break;
-          }
-        */
-    }
 }
 
 void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
