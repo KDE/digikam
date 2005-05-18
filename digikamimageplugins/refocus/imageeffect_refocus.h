@@ -33,7 +33,6 @@
 
 class QPushButton;
 class QTimer;
-class QTabWidget;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -69,8 +68,6 @@ private:
     QTimer          *m_timer;
     
     QPushButton     *m_helpButton;
-    
-    QTabWidget      *m_mainTab;        
     
     KIntNumInput    *m_matrixSize;
     

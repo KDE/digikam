@@ -38,7 +38,6 @@
 #include <qimage.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qtabwidget.h>
 
 // KDE includes.
 
@@ -148,14 +147,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_mainTab = new QTabWidget( plainPage() );
+    QGridLayout* grid = new QGridLayout( topLayout, 3 , 4, spacingHint());
     
-    QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 3, marginHint(), spacingHint());
-    m_mainTab->addTab( firstPage, i18n("Main Settings") );
-    
-    QLabel *label2 = new QLabel(i18n("Sharpness:"), firstPage);
-    m_radius = new KDoubleNumInput(firstPage);
+    QLabel *label2 = new QLabel(i18n("Sharpness:"), plainPage());
+    m_radius = new KDoubleNumInput(plainPage());
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the circular convolution. It is the most important "
@@ -163,12 +158,12 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                     "should give good results. Select a higher value when your image is very blurred."));
     
     grid->addMultiCellWidget(label2, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_radius, 0, 0, 1, 3);
+    grid->addMultiCellWidget(m_radius, 0, 0, 1, 1);
     
         
     
-    QLabel *label4 = new QLabel(i18n("Correlation:"), firstPage);
-    m_correlation = new KDoubleNumInput(firstPage);
+    QLabel *label4 = new QLabel(i18n("Correlation:"), plainPage());
+    m_correlation = new KDoubleNumInput(plainPage());
     m_correlation->setPrecision(3);
     m_correlation->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help reducing artifacts. The correlation can "
@@ -177,10 +172,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                          "plug-in."));
 
     grid->addMultiCellWidget(label4, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_correlation, 1, 1, 1, 3);
+    grid->addMultiCellWidget(m_correlation, 1, 1, 1, 1);
     
-    QLabel *label5 = new QLabel(i18n("Noise filter:"), firstPage);
-    m_noise = new KDoubleNumInput(firstPage);
+    QLabel *label5 = new QLabel(i18n("Noise filter:"), plainPage());
+    m_noise = new KDoubleNumInput(plainPage());
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise filter parameter may help reducing artifacts. The Noise filter can range from "
@@ -189,26 +184,20 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                    "effect of the plug-in."));
 
     grid->addMultiCellWidget(label5, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_noise, 2, 2, 1, 3);
+    grid->addMultiCellWidget(m_noise, 2, 2, 1, 1);
     
-    // -------------------------------------------------------------
-    
-    QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 2, 3, marginHint(), spacingHint());
-    m_mainTab->addTab( secondPage, i18n("Advanced") );
-    
-    QLabel *label1 = new QLabel(i18n("Matrix Size:"), secondPage);
-    m_matrixSize = new KIntNumInput(secondPage);
+    QLabel *label1 = new QLabel(i18n("Matrix Size:"), plainPage());
+    m_matrixSize = new KIntNumInput(plainPage());
     m_matrixSize->setRange(0, 25, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the Matrix Width may give better results, especially when you have "
                                         "chosen large values for Sharpness or Gauss."));
 
-    grid2->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_matrixSize, 0, 0, 1, 3);
+    grid->addMultiCellWidget(label1, 0, 0, 3, 3);
+    grid->addMultiCellWidget(m_matrixSize, 0, 0, 4, 4);
     
-    QLabel *label3 = new QLabel(i18n("Gauss:"), secondPage);
-    m_gauss = new KDoubleNumInput(secondPage);
+    QLabel *label3 = new QLabel(i18n("Gauss:"), plainPage());
+    m_gauss = new KDoubleNumInput(plainPage());
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your blurring "
@@ -216,9 +205,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                    "nasty artifacts. When you use non-zero values you will probably have to increase the "
                                    "Correlation and/or Noise filter parameters, too."));
 
-    grid2->addMultiCellWidget(label3, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_gauss, 1, 1, 1, 3);
-    topLayout->addWidget(m_mainTab);
+    grid->addMultiCellWidget(label3, 1, 1, 3, 3);
+    grid->addMultiCellWidget(m_gauss, 1, 1, 4, 4);
     
     // -------------------------------------------------------------
     
@@ -378,7 +366,6 @@ void ImageEffect_Refocus::slotOk()
     m_correlation->setEnabled(false);
     m_noise->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
-    m_mainTab->setCurrentPage(0);
     
     enableButton(Ok, false);
     enableButton(User1, false);
