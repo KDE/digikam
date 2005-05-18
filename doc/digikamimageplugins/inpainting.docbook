@@ -104,7 +104,7 @@ The inpainting algorithm has been developed by the IMAGE team of GREC CNRS lab i
 </para>
 
 <para>
-<guilabel>Save</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any Photograph Inpainting filter settings that you have set can be saved to the filesystem in a text file and loaded later.
+<guilabel>Save As</guilabel> and <guilabel>Load</guilabel> buttons are used to do just that. Any Photograph Inpainting filter settings that you have set can be saved to the filesystem in a text file and loaded later.
 </para>
 
 <warning><para>

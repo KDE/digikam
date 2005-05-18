@@ -37,12 +37,11 @@ Some scanners apply a sharpen filter while scanning. It's worth to disable it so
 </para>
 
 <para>
-This tool attempts to "refocus" an image, using a technique called <emphasis>FIR Wiener Filtering</emphasis>. The traditional technique for sharpening images is to use unsharp masking. Refocus generally produces better results than unsharp masking.
-Start it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Refocus</guimenuitem></menuchoice> Image Editor menu.
+This tool attempts to "refocus" an image, using a technique called <emphasis>FIR Wiener Filtering</emphasis>. The traditional technique for sharpening images is to use unsharp masking. Refocus generally produces better results than Unsharp masking. Start it from the <menuchoice><guimenu>Fix</guimenu><guimenuitem>Refocus</guimenuitem></menuchoice> Image Editor menu.
 </para>
 
 <para>
-The Refocus technique works differently from Unsharp Mask and is also unlike the Sharpen filter which both increase the contrast of the feature the edges of an image. Refocus rather reverses the process by which the image got blurred by the circular aperture of the camera. This method gives you as much of the original "in focus" image as possible. Refocus uses a very powerful deconvolution algorithm that will reclaim the data that has been mixed up. In scientific terms, blurring is usually the result of a convolution, a deconvolution will reverse the process, this is exactly what Refocus is doing. Furthermore, the FIR filter technique allows to remove much of the noise and granularity that often gets accentuated in the sharpening process of all sharpening filters..
+The Refocus technique works differently from <ulink url="help:/digikamimageplugins/unsharp.html">Unsharp Mask</ulink> and is also unlike the <ulink url="help:/digikam/using-kapp-imageeditor.html#using-kapp-adjustsharpness">Sharpen Filter</ulink>  which both increase the contrast of the feature the edges of an image. Refocus rather reverses the process by which the image got blurred by the circular aperture of the camera. This method gives you as much of the original "in focus" image as possible. Refocus uses a very powerful deconvolution algorithm that will reclaim the data that has been mixed up. In scientific terms, blurring is usually the result of a convolution, a deconvolution will reverse the process, this is exactly what Refocus is doing. Furthermore, the FIR filter technique allows to remove much of the noise and granularity that often gets accentuated in the sharpening process of all sharpening filters.
 </para>
 
 <sect1 id="using-plugin-refocus">
@@ -68,7 +67,7 @@ The image panel and the original preview help you to pan within the image. The p
   
   <listitem><para><guilabel>Gauss</guilabel>: This is the radius for the Gaussian deconvolution filter. Use this parameter when your blurring is Gaussian (mostly due to previous blur filtering). In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise filter</guilabel> parameters, too.</para></listitem>
   
-  <listitem><para><guilabel>Save</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any Refocus parameters that you have set can be saved to the filesystem and loaded later.</para></listitem>
+  <listitem><para><guilabel>Save As</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any Refocus parameters that you have set can be saved to the filesystem and loaded later.</para></listitem>
 
   <listitem><para><guilabel>Reset All</guilabel>: this button resets all settings to default values.</para></listitem>
 
