@@ -70,7 +70,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "thumbnailjob.h"
-#include "digikamio.h"
+#include "dio.h"
 #include "digikamapp.h"
 #include "syncjob.h"
 
@@ -893,12 +893,12 @@ void AlbumFolderView_Deprecated::albumImportFolder()
     if(urls.empty())
         return;
 
-    KIO::CopyJob* job = KIO::copy(urls, parent->getKURL(), true);
+    KIO::Job* job = DIO::copy(urls, parent->getKURL());
     connect(job, SIGNAL(result(KIO::Job *)),
-            this, SLOT(slotAlbumImportResult(KIO::Job *)));
+            this, SLOT(slotDIOResult(KIO::Job *)));
 }
 
-void AlbumFolderView_Deprecated::slotAlbumImportResult(KIO::Job* job)
+void AlbumFolderView_Deprecated::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
@@ -1654,12 +1654,16 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
         {
         case 10:
         {
-            new DigikamIO(urls, destAlbum->getKURL(), true);
+            KIO::Job* job = DIO::move(urls, destAlbum->getKURL());
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         case 11:
         {
-            new DigikamIO(urls, destAlbum->getKURL(), false);
+            KIO::Job* job = DIO::copy(urls, destAlbum->getKURL());
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         default:
@@ -1712,11 +1716,15 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
 
         switch(id) {
         case 10: {
-            new DigikamIO(srcURLs, destAlbum->getKURL(), true);
+            KIO::Job* job = DIO::move(srcURLs, destAlbum->getKURL());
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         case 11: {
-            new DigikamIO(srcURLs, destAlbum->getKURL(), false);
+            KIO::Job* job = DIO::copy(srcURLs, destAlbum->getKURL());
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
             break;
         }
         default:

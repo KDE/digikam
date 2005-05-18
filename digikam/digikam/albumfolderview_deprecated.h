@@ -166,7 +166,7 @@ private slots:
     void slotAlbumDeleted(Album *album);
     void slotAlbumsCleared();
     void slotAllAlbumsLoaded();
-    void slotAlbumImportResult(KIO::Job* job);
+    void slotDIOResult(KIO::Job* job);
 
     void slotOpenAlbumFolderItem_Deprecated();
         
