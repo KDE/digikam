@@ -154,12 +154,12 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     QGridLayout* grid = new QGridLayout( firstPage, 2, 3, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Main Settings") );
     
-    QLabel *label2 = new QLabel(i18n("Radius:"), firstPage);
+    QLabel *label2 = new QLabel(i18n("Sharpness:"), firstPage);
     m_radius = new KDoubleNumInput(firstPage);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the circular convolution. This is probably the most important "
-                                    "parameter for using the filter. For normal images, the default value of 1 "
+    QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the circular convolution. It is the most important "
+                                    "parameter for using the plugin. For most images the default value of 1 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
     grid->addMultiCellWidget(label2, 0, 0, 0, 0);
@@ -179,13 +179,13 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     grid->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid->addMultiCellWidget(m_correlation, 1, 1, 1, 3);
     
-    QLabel *label5 = new QLabel(i18n("Noise:"), firstPage);
+    QLabel *label5 = new QLabel(i18n("Noise filter:"), firstPage);
     m_noise = new KDoubleNumInput(firstPage);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise parameter may help reducing artifacts. The Noise can range from "
-                                   "0-1. When the Noise value is to low, e.g. 0 the image quality will be horrible. A "
-                                   "useful value is 0.01. Using a high value for the Noise will reduce the sharpening "
+    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise filter parameter may help reducing artifacts. The Noise filter can range from "
+                                   "0-1 but values higher than 0.1 are rarely helpful. When the Noise filter value is too low, e.g. 0.0 the image quality will "
+                                   "be horrible. A useful value is 0.01. Using a high value for the Noise filter will reduce the sharpening "
                                    "effect of the plug-in."));
 
     grid->addMultiCellWidget(label5, 2, 2, 0, 0);
@@ -202,7 +202,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_matrixSize->setRange(0, 25, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the Matrix Width may give better results, especially when you have "
-                                        "chosen large values for Radius or Gauss."));
+                                        "chosen large values for Sharpness or Gauss."));
 
     grid2->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_matrixSize, 0, 0, 1, 3);
@@ -211,10 +211,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_gauss = new KDoubleNumInput(secondPage);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_gauss, i18n("<p>This is the radius for the Gaussian convolution. Use this parameter when you blurring "
-                                   "is Gaussian type. In most cases you should set this parameter to 0, because it causes "
+    QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your blurring "
+                                   "is of Gaussian type. In most cases you should set this parameter to 0, because it causes "
                                    "nasty artifacts. When you use non-zero values you will probably have to increase the "
-                                   "Correlation and/or Noise parameters, too."));
+                                   "Correlation and/or Noise filter parameters, too."));
 
     grid2->addMultiCellWidget(label3, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gauss, 1, 1, 1, 3);
