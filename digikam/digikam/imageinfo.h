@@ -84,10 +84,26 @@ public:
     
     /**
      * @return the standard KDE url with file protocol. The path for
-     * the url is the absolute path of the image
+     * the url is the absolute path of the image.
+     * DEPRECATED: don't use this. if you need only the file path, then
+     * use filePath(). And if you need the digikam "proper" kurl, use
+     * kurlForKIO(). At some point kurl and kurlForKIO() will be merged
+     * together
      */
     KURL      kurl() const;
 
+    /**
+     * @return the absolute file path of the image
+     */
+    QString   filePath() const;
+
+    /**
+     * @return the kurl for KIO or rather DIO. Use this instead of kurl()
+     * for metadata preserving file IO operations. Also, this method needs
+     * to be merged with kurl()
+     */
+    KURL      kurlForKIO() const;
+    
     /**
      * @return the id of the PAlbum to which this item belongs
      */

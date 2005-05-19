@@ -882,7 +882,7 @@ void AlbumIconView::startDrag()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->kurl());
+            urls.append(albumItem->imageInfo()->kurlForKIO());
             dirIDs.append(albumItem->imageInfo()->albumID());
         }
     }

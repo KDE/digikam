@@ -326,6 +326,10 @@ KURL PAlbum::getKURL() const
     KURL u;
     u.setProtocol("digikamalbums");
     u.setUser(AlbumManager::instance()->getLibraryPath());
+    // add an empty host. KURLDrag will eat away the user
+    // attribute if a host is not present. probably a URL
+    // specification
+    u.setHost(" ");
     u.setPath(getURL());
     return u;
 }

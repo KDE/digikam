@@ -111,6 +111,20 @@ KURL ImageInfo::kurl() const
     return u;
 }
 
+QString ImageInfo::filePath() const
+{
+    QString path = m_man->getLibraryPath();
+    path += album()->getURL() + "/" + m_name;
+    return path;
+}
+
+KURL ImageInfo::kurlForKIO() const
+{
+    KURL u(album()->getKURL());
+    u.addPath(m_name);
+    return u;
+}
+
 void ImageInfo::setViewItem(void *d)
 {
     m_viewitem = d;
@@ -191,3 +205,4 @@ void ImageInfo::refresh()
     stat(QFile::encodeName(kurl().path()), &stbuf);
     m_size = stbuf.st_size;
 }
+
