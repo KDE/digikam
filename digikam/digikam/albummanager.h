@@ -65,6 +65,7 @@ public:
     QString    getLibraryPath() const;
 
     void       startScan();
+    void       refresh();
     
     PAlbumList pAlbums() const;
     TAlbumList tAlbums() const;

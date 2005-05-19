@@ -348,6 +348,11 @@ void AlbumManager::startScan()
     emit signalAllAlbumsLoaded();
 }
 
+void AlbumManager::refresh()
+{
+    
+}
+
 PAlbumList AlbumManager::pAlbums() const
 {
     return d->pAlbumList;

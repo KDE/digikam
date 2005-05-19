@@ -194,7 +194,7 @@ Watch::Watch(KIO::Job* job)
 
 void Watch::slotDone(KIO::Job*)
 {
-    //TODO: AlbumManager::instance()->refresh();
+    AlbumManager::instance()->refresh();
     AlbumLister::instance()->refresh();
     delete this;
 }
