@@ -35,6 +35,8 @@ KIO::Job* del(const KURL& src);
 
 KIO::Job* del(const KURL::List& srcList);
 
+bool      renameFile(const KURL& src, const KURL& dest);
+
 }
 
 #endif /* DIO_H */

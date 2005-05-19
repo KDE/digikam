@@ -21,8 +21,7 @@ INCLUDES = \
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp \
-			albumlister.cpp albumfilecopymove.cpp \
-			thumbnailjob.cpp dragobjects.cpp \
+			albumlister.cpp thumbnailjob.cpp dragobjects.cpp \
 			listview.cpp listitem.cpp \
 			thumbview.cpp thumbitem.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \

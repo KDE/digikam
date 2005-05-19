@@ -33,7 +33,7 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "albumfilecopymove.h"
+#include "dio.h"
 #include "imageinfo.h"
 
 AlbumManager* ImageInfo::m_man = 0;
@@ -61,12 +61,14 @@ QString ImageInfo::name() const
 
 bool ImageInfo::setName(const QString& newName)
 {
-    PAlbum* a = album();
+    KURL src = kurlForKIO();
+    KURL dst = src.upURL();
+    dst.addPath(newName);
 
-    if (!AlbumFileCopyMove::rename(a, m_name, newName))
+    if (!DIO::renameFile(src, dst))
         return false;
 
-
+    PAlbum* a = album();
     if (a->getIcon() == m_name)
     {
         QString err;
