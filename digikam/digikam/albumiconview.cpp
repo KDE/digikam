@@ -641,9 +641,14 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
+    QString oldURL = item->imageInfo()->kurl().url();
+    
     if (!item->imageInfo()->setName(newName))
         return;
 
+    d->itemDict.remove(oldURL);
+    d->itemDict.insert(item->imageInfo()->kurl().url(), item);
+    
     item->repaint();
 
     // if user has inadvertently renamed a file to one with an extension
