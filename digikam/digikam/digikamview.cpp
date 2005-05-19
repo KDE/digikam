@@ -59,6 +59,7 @@
 #include "tagfolderview.h"
 #include "tagfilterview.h"
 #include "thumbnailsize.h"
+#include "dio.h"
 
 #include "digikamapp.h"
 #include "digikamview.h"
@@ -442,8 +443,7 @@ void DigikamView::slot_albumAddImages()
     
     if (!urls.isEmpty())
     {
-        KIO::CopyJob* job =
-            KIO::copy(urls, palbum->getKURL(), true);
+        KIO::Job* job = DIO::copy(urls, palbum->getKURL());
         connect(job, SIGNAL(result(KIO::Job *) ),
                 this, SLOT(slot_imageCopyResult(KIO::Job *)));
     }

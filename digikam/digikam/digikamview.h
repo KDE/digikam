@@ -29,7 +29,10 @@
 
 // KDE includes.
 
-#include <kio/job.h>
+namespace KIO
+{
+class Job;
+}
 
 class QString;
 class QIconViewItem;
