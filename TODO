@@ -12,11 +12,6 @@
 
 * fix changing of album library path. [TA/RR]
 
-* fix copy/move/rename of albums/images [RR]
-
-* on import of new files/folders do scanning of items using the
-  copying/moving kioslave [RR]
-
 * handle internal files/folders being added/deleted
   - through albummanager 
   - imageeditor
