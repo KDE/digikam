@@ -53,11 +53,37 @@ The Refocus technique works differently from <ulink url="help:/digikamimageplugi
 </figure>
 
 <para>
-The image panel and the original preview help you to pan within the image. The preview window shows the filter output using the current settings. The plug-in has the following parameters:
+The image panel and the original preview help you to pan within the image. The preview window shows the filter output using the current settings. 
+</para>
+
+<para>
+In most cases you don't know precisely what convolution caused the image degradation. There are two convolutions that are frequently used to model image degradation: 
 
 <itemizedlist>
 
-  <listitem><para><guilabel>Sharpness</guilabel>: This is the radius of the circular deconvolution filter. It is the most important parameter for using the plug-in. For most images the default value of 1 should give good results. Select a higher value when your image is very blurred.</para></listitem>
+  <listitem><para><guilabel>The Gaussian convolution</guilabel>: this one is mathematically similar to the normal distribution, with its bell-shaped curve. From a theoretical point of view the mathematical justification for using the Gaussian convolution is that when you a apply a large number of independent random convolutions the results will always approach a Gaussian convolution.</para></listitem>
+  
+  <listitem><para><guilabel>The Circular convolution</guilabel>: this one spreads each source point uniformly across a small disk with a fixed radius. Technically this describes the effects of using a (ideal) lens that is not correctly focused.</para></listitem>
+
+</itemizedlist>
+
+The refocus plug-in supports both the Gaussian and the Circular convolution plus mixtures of both. The actual convolution that is used by the plug-in is in fact the result of convolving both the Gaussian and the circular convolution with one another. Both of these convolutions are identical to the identity convolution when their parameter is equal to 0. Therefore, when the Gaussian radius equals 0, the result is a Circular convolution, and likewise when the radius equals 0 the result is a Gaussian convolution.
+</para>
+
+<para>
+In practice, in most cases the Circular convolution works much better than the Gaussian convolution. The Gaussian convolution has a very long tail, so mathematically the result of the convolution also depends on source pixels at a large distance from the original source pixel. The FIR Wiener inverse of a Gaussian convolution in most cases is heavily influenced by source pixels at a large distances, and in most cases this produces undesirable results.
+</para>
+
+<para>
+The Circular convolution generally produces much better results. One reason is that the FIR Wiener inverse of the Circular convolution in general influenced by source pixels in the immediate neighborhood of the original source pixel. Another reason is that a Circular convolution is theoretically a good mathematical model for images that are slightly unfocused.
+</para>
+
+<para>
+To set correctly the deconvolution filter, the plug-in has the following parameters:
+
+<itemizedlist>
+
+  <listitem><para><guilabel>Sharpness</guilabel>: This is the radius of the Circular convolution filter. It is the most important parameter for using the plug-in. For most images the default value of 1 should give good results. Select a higher value when your image is very blurred.</para></listitem>
   
   <listitem><para><guilabel>Correlation</guilabel>: Increasing the <guilabel>Correlation</guilabel> may help reducing artifacts. The correlation can range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. Using a high value for the correlation will reduce the sharpening effect of the plug-in.</para></listitem> 
   
@@ -65,7 +91,7 @@ The image panel and the original preview help you to pan within the image. The p
   
   <listitem><para><guilabel>Matrix size</guilabel>: This parameter determines the size of the transformation matrix. Increasing the <guilabel>Matrix Size</guilabel> may give better results, especially when you have chosen large values for <guilabel>Sharpness</guilabel> or <guilabel>Gauss</guilabel>. Note that the plug-in will become very slow when you select large values for this parameter. In most cases you should select a value in the range 3-10.</para></listitem>
   
-  <listitem><para><guilabel>Gauss</guilabel>: This is the radius for the Gaussian deconvolution filter. Use this parameter when your blurring is Gaussian (mostly due to previous blur filtering). In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise filter</guilabel> parameters, too.</para></listitem>
+  <listitem><para><guilabel>Gauss</guilabel>: This is the radius for the Gaussian convolution filter. Use this parameter when your blurring is Gaussian (mostly due to previous blur filtering). In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise filter</guilabel> parameters, too.</para></listitem>
   
   <listitem><para><guilabel>Save As</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any Refocus parameters that you have set can be saved to the filesystem and loaded later.</para></listitem>
 
