@@ -92,9 +92,7 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "albumfilecopymove.h"
 #include "dio.h"
-#include "syncjob.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
 #include "tagspopupmenu.h"
@@ -681,49 +679,34 @@ void AlbumIconView::slotDeleteSelectedItems()
     if (urlList.count() <= 0)
         return;
 
-    if (!d->albumSettings->getUseTrash())
+    QString warnMsg;
+    
+    if (d->albumSettings->getUseTrash())
     {
-        QString warnMsg = i18n("About to delete this image. Are you sure?",
-                               "About to delete these %n images. Are you sure?",
-                               nameList.count());
-
-        if (KMessageBox::warningContinueCancelList(this,
-                                                   warnMsg,
-                                                   nameList,
-                                                   i18n("Warning"),
-                                                   i18n("Delete"))
-            !=  KMessageBox::Continue)
-        {
-            return;
-        }
-    }
-
-    AlbumManager* man = AlbumManager::instance();
-    AlbumDB* db = man->albumDB();
-
-    if (SyncJob::userDelete(urlList))
-    {
-        for (KURL::List::const_iterator it = urlList.begin();
-             it != urlList.end(); ++it)
-        {
-            AlbumIconItem* iconItem = findItem((*it).url());
-            if (!iconItem)
-                continue;
-
-            PAlbum* palbum = iconItem->imageInfo()->album();
-            if (palbum)
-            {
-                db->deleteItem(palbum, iconItem->imageInfo()->name());
-            }
-        }
+        warnMsg = i18n("About to move this image to trash. Are you sure?",
+                       "About to move these %n images to trash. Are you sure?",
+                       nameList.count());
     }
     else
     {
-        KMessageBox::sorry(0, i18n("Failed to delete files.\n%1")
-                           .arg(SyncJob::lastErrorMsg()));
+        warnMsg = i18n("About to delete this image. Are you sure?",
+                       "About to delete these %n images. Are you sure?",
+                       nameList.count());
     }
 
-    d->imageLister->refresh();
+    if (KMessageBox::warningContinueCancelList(this,
+                                               warnMsg,
+                                               nameList,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+        !=  KMessageBox::Continue)
+    {
+        return;
+    }
+
+    KIO::Job* job = DIO::del(urlList);
+    connect(job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotDIOResult(KIO::Job*)));
 }
 
 void AlbumIconView::slotFilesModified()
