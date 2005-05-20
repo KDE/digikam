@@ -1017,7 +1017,7 @@
             If you have the Adjust Levels plugin installed (see the <link linkend="setupplugins">Setup Plugins Section</link>) you will have additional entry in the Fix menu called 
             <menuchoice><guimenu>Fix</guimenu>
             <guimenuitem>Colors</guimenuitem>
-            <guimenuitem>Levels Adjust</guimenuitem></menuchoice>. This tools provides an integrated way of seeing the results of adjusting multiple levels and also enables you to save level settings for application to multiple photographs. This can be useful if your camera or scanner often makes the same mistakes and you want to apply the same corrections. See the dedicated <ulink url="help:/digikamimageplugins/adjustlevels.html">Adjust Levels manual</ulink> for more information.
+            <guimenuitem>Levels Adjust</guimenuitem></menuchoice>. This tool provides an integrated way of seeing the results of adjusting multiple levels and also enables you to save level settings for application to multiple photographs. This can be useful if your camera or scanner often makes the same mistakes and you want to apply the same corrections. See the dedicated <ulink url="help:/digikamimageplugins/adjustlevels.html">Adjust Levels manual</ulink> for more information.
             
             <figure>
                 <title>The Adjust Levels Image Editor Plugin in Action</title>
