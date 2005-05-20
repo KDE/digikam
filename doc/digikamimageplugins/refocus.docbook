@@ -83,15 +83,15 @@ To set correctly the deconvolution filter, the plug-in has the following paramet
 
 <itemizedlist>
 
-  <listitem><para><guilabel>Sharpness</guilabel>: This is the radius of the Circular convolution filter. It is the most important parameter for using the plug-in. For most images the default value of 1 should give good results. Select a higher value when your image is very blurred.</para></listitem>
+  <listitem><para><guilabel>Circular Sharpness</guilabel>: This is the radius of the Circular convolution filter. It is the most important parameter for using the plug-in. For most images the default value of 1 should give good results. Select a higher value when your image is very blurred.</para></listitem>
   
   <listitem><para><guilabel>Correlation</guilabel>: Increasing the <guilabel>Correlation</guilabel> may help reducing artifacts. The correlation can range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. Using a high value for the correlation will reduce the sharpening effect of the plug-in.</para></listitem> 
   
   <listitem><para><guilabel>Noise filter</guilabel>: Increasing the <guilabel>Noise filter</guilabel> parameter helps reducing artifacts. The Noise can range from 0-1 but values higher than 0.1 are rarely helpful. When the Noise value is too low, e.g. 0 the image quality will be horrible. A useful value is 0.01. Using a high value for the Noise will even blur the image further.</para></listitem>
   
-  <listitem><para><guilabel>Matrix size</guilabel>: This parameter determines the size of the transformation matrix. Increasing the <guilabel>Matrix Size</guilabel> may give better results, especially when you have chosen large values for <guilabel>Sharpness</guilabel> or <guilabel>Gauss</guilabel>. Note that the plug-in will become very slow when you select large values for this parameter. In most cases you should select a value in the range 3-10.</para></listitem>
+  <listitem><para><guilabel>Matrix size</guilabel>: This parameter determines the size of the transformation matrix. Increasing the <guilabel>Matrix Size</guilabel> may give better results, especially when you have chosen large values for <guilabel>Circular Sharpness</guilabel> or <guilabel>Gaussian Sharpness</guilabel>. Note that the plug-in will become very slow when you select large values for this parameter. In most cases you should select a value in the range 3-10.</para></listitem>
   
-  <listitem><para><guilabel>Gauss</guilabel>: This is the radius for the Gaussian convolution filter. Use this parameter when your blurring is Gaussian (mostly due to previous blur filtering). In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise filter</guilabel> parameters, too.</para></listitem>
+  <listitem><para><guilabel>Gaussian Sharpness</guilabel>: This is the radius for the Gaussian convolution filter. Use this parameter when your blurring is Gaussian (mostly due to previous blur filtering). In most cases you should set this parameter to 0, because it causes nasty artifacts. When you use non-zero values you will probably have to increase the <guilabel>Correlation</guilabel> and/or <guilabel>Noise filter</guilabel> parameters, too.</para></listitem>
   
   <listitem><para><guilabel>Save As</guilabel> and <guilabel>Load</guilabel>: these buttons are used to do just that. Any Refocus parameters that you have set can be saved to the filesystem and loaded later.</para></listitem>
 
