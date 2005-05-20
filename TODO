@@ -34,3 +34,4 @@
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
 * Update handbooks [GC/GK]
+* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photos$hop (tm)) [GC]
