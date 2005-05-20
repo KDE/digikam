@@ -363,7 +363,7 @@ void ImageEffect_Refocus::slotEffect()
     m_imagePreviewWidget->setProgress(0);
     refocus((uint *)imTemp.bits(), imTemp.width(), imTemp.height(), ms, r, g, c, n);
     if (m_cancel) return;
-    QImage imDest = imTemp.copy(2*ms, 2*ms, imTemp.width()-2*ms, imTemp.height()-2*ms);
+    QImage imDest = imTemp.copy(2*ms, 2*ms, area.width(), area.height());
     m_imagePreviewWidget->setPreviewImageData(imDest);
     
     abortPreview();
