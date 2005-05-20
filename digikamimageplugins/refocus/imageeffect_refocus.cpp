@@ -38,6 +38,7 @@
 #include <qimage.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qrect.h>
 
 // KDE includes.
 
@@ -149,12 +150,12 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     QGridLayout* grid = new QGridLayout( topLayout, 3 , 4, spacingHint());
     
-    QLabel *label2 = new QLabel(i18n("Sharpness:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Circular Sharpness:"), plainPage());
     m_radius = new KDoubleNumInput(plainPage());
     m_radius->setPrecision(2);
-    m_radius->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the circular convolution. It is the most important "
-                                    "parameter for using the plugin. For most images the default value of 1 "
+    m_radius->setRange(0.0, 5.0, 0.001, true);
+    QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the Circular convolution. It is the most important "
+                                    "parameter for using the plugin. For most images the default value of 0.9 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
     grid->addMultiCellWidget(label2, 0, 0, 0, 0);
@@ -174,29 +175,20 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     grid->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid->addMultiCellWidget(m_correlation, 1, 1, 1, 1);
     
-    QLabel *label5 = new QLabel(i18n("Noise filter:"), plainPage());
+    QLabel *label5 = new QLabel(i18n("Noise Filter:"), plainPage());
     m_noise = new KDoubleNumInput(plainPage());
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise filter parameter may help reducing artifacts. The Noise filter can range from "
-                                   "0-1 but values higher than 0.1 are rarely helpful. When the Noise filter value is too low, e.g. 0.0 the image quality will "
-                                   "be horrible. A useful value is 0.01. Using a high value for the Noise filter will reduce the sharpening "
+    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise filter parameter may help reducing artifacts. The Noise Filter "
+                                   "can range from 0-1 but values higher than 0.1 are rarely helpful. When the Noise Filter "
+                                   "value is too low, e.g. 0.0 the image quality will be horrible. A useful value is 0.01. "
+                                   "Using a high value for the Noise Filter will reduce the sharpening "
                                    "effect of the plug-in."));
 
     grid->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid->addMultiCellWidget(m_noise, 2, 2, 1, 1);
     
-    QLabel *label1 = new QLabel(i18n("Matrix Size:"), plainPage());
-    m_matrixSize = new KIntNumInput(plainPage());
-    m_matrixSize->setRange(0, 25, 1, true);  
-    QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
-                                        "Increasing the Matrix Width may give better results, especially when you have "
-                                        "chosen large values for Sharpness or Gauss."));
-
-    grid->addMultiCellWidget(label1, 0, 0, 3, 3);
-    grid->addMultiCellWidget(m_matrixSize, 0, 0, 4, 4);
-    
-    QLabel *label3 = new QLabel(i18n("Gauss:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Gaussian Sharpness:"), plainPage());
     m_gauss = new KDoubleNumInput(plainPage());
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
@@ -205,8 +197,19 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                    "nasty artifacts. When you use non-zero values you will probably have to increase the "
                                    "Correlation and/or Noise filter parameters, too."));
 
-    grid->addMultiCellWidget(label3, 1, 1, 3, 3);
-    grid->addMultiCellWidget(m_gauss, 1, 1, 4, 4);
+    grid->addMultiCellWidget(label3, 0, 0, 3, 3);
+    grid->addMultiCellWidget(m_gauss, 0, 0, 4, 4);
+
+    
+    QLabel *label1 = new QLabel(i18n("Matrix Size:"), plainPage());
+    m_matrixSize = new KIntNumInput(plainPage());
+    m_matrixSize->setRange(0, 25, 1, true);  
+    QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
+                                        "Increasing the Matrix Width may give better results, especially when you have "
+                                        "chosen large values for Circular or Gaussian Sharpness."));
+
+    grid->addMultiCellWidget(label1, 1, 1, 3, 3);
+    grid->addMultiCellWidget(m_matrixSize, 1, 1, 4, 4);
     
     // -------------------------------------------------------------
     
@@ -321,7 +324,7 @@ void ImageEffect_Refocus::slotTimer()
 
 void ImageEffect_Refocus::slotEffect()
 {
-    if (m_dirty) return;     // Computation already in procress.
+    if (m_dirty) return;     // Computation already in process.
     
     m_cancel = false;
     m_dirty = true;
@@ -338,24 +341,35 @@ void ImageEffect_Refocus::slotEffect()
     enableButton(User3, false);
     
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    QImage image  = m_imagePreviewWidget->getOriginalClipImage();
-    uint*  data   = (uint *)image.bits();
-    int    w      = image.width();
-    int    h      = image.height();
     int    ms     = m_matrixSize->value();
     double r      = m_radius->value();
     double g      = m_gauss->value();
     double c      = m_correlation->value();
     double n      = m_noise->value();
 
+    QRect  area   = m_imagePreviewWidget->getOriginalImageRegion();
+    QRect tmpRect;
+    tmpRect.setLeft(area.left()-2*ms);
+    tmpRect.setRight(area.right()+2*ms);
+    tmpRect.setTop(area.top()-2*ms);
+    tmpRect.setBottom(area.bottom()+2*ms);
+    Digikam::ImageIface iface(0, 0);
+    uint* data    = iface.getOriginalData();
+    int w         = iface.originalWidth();
+    int h         = iface.originalHeight();
+    QImage* imOrg = new QImage((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
+    QImage imTemp = imOrg->copy(tmpRect);
+        
     m_imagePreviewWidget->setProgress(0);
-    refocus(data, w, h, ms, r, g, c, n);
-    
+    refocus((uint *)imTemp.bits(), imTemp.width(), imTemp.height(), ms, r, g, c, n);
     if (m_cancel) return;
+    QImage imDest = imTemp.copy(2*ms, 2*ms, imTemp.width()-2*ms, imTemp.height()-2*ms);
+    m_imagePreviewWidget->setPreviewImageData(imDest);
     
-    m_dirty = false;
-    m_imagePreviewWidget->setPreviewImageData(image);
     abortPreview();
+    m_dirty = false;
+    delete imOrg;
+    delete [] data;
 }
 
 void ImageEffect_Refocus::slotOk()
@@ -491,27 +505,27 @@ void ImageEffect_Refocus::refocus(uint* data, int width, int height, int matrixS
 
 // This method is inspired from Refocus gimp plugin implementation by Ernst Lippe
 
-void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, int width, int height, const double *const mat, int mat_size)
+void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, int width, int height, 
+                                         const double *const mat, int mat_size)
 {
     double    matrix[mat_size][mat_size];
     double    val;
     int       x1, y1, x2, y2, color, index1, index2, index3, index4;
-    const int bpp = 4;
-    const int imageSize = width*height*bpp;
-    const int ncolors = 3;
-    const int buf_row_width = width * bpp;
-    const int mat_offset = mat_size / 2;
-    const int eheight = height;
-    const int ewidth  = width;
+    
+    const int bpp            = 4;
+    const int ncolors        = 3;
+    const int imageSize      = width*height*bpp;
+    const int mat_offset     = mat_size / 2;
+    const int buf_row_width  = width * bpp;
     
     register uchar *tp       = (uchar*)destData;
     register uchar const *sp = (uchar*)orgData;
     
     memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
-    for (y1 = eheight - 1; !m_cancel && (y1 >= 0); y1--)
+    for (y1 = height - 1; !m_cancel && (y1 >= 0); y1--)
         {
-        for (x1 = ewidth - 1; !m_cancel && (x1 >= 0); x1--)
+        for (x1 = width - 1; !m_cancel && (x1 >= 0); x1--)
             {
             for (color = ncolors - 1; !m_cancel && (color >= 0); color--)
                 {
@@ -529,21 +543,21 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
                     }
                     
                 // Write value to destination.
-                index2 = (y1 * ewidth + x1) * bpp + color;
+                index2 = (y1 * width + x1) * bpp + color;
                     
                 if (index2 >= 0 && index2 < imageSize)
                     tp[index2] = (uchar) CLAMP (val, 0, 255);
                 }
                 
             // Copy alpha 
-            index3 = (y1 * ewidth + x1) * bpp + ncolors;
+            index3 = (y1 * width + x1) * bpp + ncolors;
             index4 = buf_row_width * y1 + bpp * x1 + ncolors;
                 
             if (index3 >= 0 && index3 < imageSize && index4 < imageSize)
                tp[index3] = sp[buf_row_width * y1 + bpp * x1 + ncolors];
             }
         
-        m_imagePreviewWidget->setProgress((int) (100.0 - ((double)y1 * 100.0) / eheight));
+        m_imagePreviewWidget->setProgress((int) (100.0 - ((double)y1 * 100.0) / height));
         kapp->processEvents();
         }
 }
