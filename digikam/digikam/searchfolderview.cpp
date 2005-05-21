@@ -69,6 +69,7 @@ SearchFolderView::SearchFolderView(QWidget* parent)
     setRootIsDecorated(false);
 
     m_active = false;
+    m_lastAddedItem = 0;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
@@ -108,6 +109,12 @@ void SearchFolderView::quickSearchNew()
             slotSelectionChanged();
         }
     }
+    else if (m_lastAddedItem)
+    {
+        clearSelection();
+        setSelected(m_lastAddedItem, true);
+        m_lastAddedItem = 0;
+    }
 }
 
 void SearchFolderView::setActive(bool val)
@@ -128,6 +135,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
     item->setPixmap(0, SmallIcon("find", 22));
+    m_lastAddedItem = item;
 }
 
 void SearchFolderView::slotAlbumDeleted(Album* a)

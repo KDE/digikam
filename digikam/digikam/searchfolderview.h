@@ -20,6 +20,8 @@
 
 #include <klistview.h>
 
+class SearchFolderItem;
+
 class SearchFolderView : public KListView
 {
     Q_OBJECT
@@ -41,7 +43,8 @@ private slots:
     
 private:
 
-    bool m_active;
+    bool              m_active;
+    SearchFolderItem* m_lastAddedItem;
 };
     
 
