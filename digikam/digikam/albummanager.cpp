@@ -259,6 +259,8 @@ void AlbumManager::startScan()
             SLOT(slotResult(KIO::Job*)));
     connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             SLOT(slotData(KIO::Job*, const QByteArray&)));
+
+    d->rootDAlbum = new DAlbum(QDate(), true);
     
     // List albums directly from db
     
@@ -837,8 +839,6 @@ void AlbumManager::slotResult(KIO::Job* job)
         return;
     }
 
-    d->rootDAlbum = new DAlbum(QDate(), true);
-    
     QDataStream ds(d->buffer, IO_ReadOnly);
     while (!ds.atEnd())
     {
@@ -846,6 +846,7 @@ void AlbumManager::slotResult(KIO::Job* job)
         ds >> date;
         DAlbum* album = new DAlbum(date);
         album->setParent(d->rootDAlbum);
+        d->dAlbumList.append(album);
         emit signalDAlbumAdded(album);
     }
 }
