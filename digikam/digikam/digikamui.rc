@@ -111,6 +111,8 @@
   <Action name="image_properties" />
   <Action name="image_rename" />
   <Separator/>
+  <Action name="search_quick" />
+  <Separator/>
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
   <Action name="full_screen" />

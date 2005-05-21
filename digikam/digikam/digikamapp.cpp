@@ -555,8 +555,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KStdAction::find(this, SLOT(slotSearchQuick()),
-                     actionCollection(), "search_quick");
+    KAction* findAction = KStdAction::find(this, SLOT(slotSearchQuick()),
+                                           actionCollection(), "search_quick");
+    findAction->setText(i18n("Quick Search"));
     
     // -----------------------------------------------------------
     
