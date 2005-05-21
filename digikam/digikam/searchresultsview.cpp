@@ -80,6 +80,14 @@ void SearchResultsView::openURL(const KURL& url)
 
 void SearchResultsView::clear()
 {
+    if (m_listJob)
+        m_listJob->kill();
+    m_listJob = 0;
+
+    if (m_previewJob)
+        m_previewJob->kill();
+    m_previewJob = 0;
+
     m_itemDict.clear();
     QIconView::clear();
 }
