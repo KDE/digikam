@@ -74,7 +74,6 @@
 #include "digikamapp.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
-#include "searchquickdialog.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
           : KMainWindow( 0, "Digikam" )
@@ -555,7 +554,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* findAction = KStdAction::find(this, SLOT(slotSearchQuick()),
+    KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
     findAction->setText(i18n("Quick Search"));
     
@@ -1041,12 +1040,6 @@ void DigikamApp::updateDeleteTrashMenu()
         mImageDeleteAction->setText(i18n("Delete"));
         mImageDeleteAction->setIcon("editdelete");
     }
-}
-
-void DigikamApp::slotSearchQuick()
-{
-    SearchQuickDialog dlg(this);
-    dlg.exec();
 }
 
 DigikamApp* DigikamApp::m_instance = 0;

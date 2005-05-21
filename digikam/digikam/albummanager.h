@@ -31,6 +31,7 @@ class Album;
 class PAlbum;
 class TAlbum;
 class DAlbum;
+class SAlbum;
 class AlbumDB;
 class AlbumItemHandler;
 class AlbumManagerPriv;
@@ -45,6 +46,7 @@ class Job;
 typedef QValueList<PAlbum*> PAlbumList;
 typedef QValueList<TAlbum*> TAlbumList;
 typedef QValueList<DAlbum*> DAlbumList;
+typedef QValueList<SAlbum*> SAlbumList;
     
 class AlbumManager : public QObject
 {
@@ -94,6 +96,10 @@ public:
     bool updateTAlbumIcon(TAlbum* album, const QString& icon, 
                           bool emitSignalChanged, QString& errMsg);
     bool moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg);
+
+    bool createSAlbum(const KURL& url, SAlbum*& renamedAlbum);
+    bool renameSAlbum(SAlbum* album, const QString& newName, QString& errMsg);
+    bool deleteSAlbum(SAlbum* album);
     
     void setItemHandler(AlbumItemHandler *handler);
     AlbumItemHandler* getItemHandler();
@@ -125,7 +131,6 @@ signals:
     void signalAllAlbumsLoaded();
     void signalPAlbumIconChanged(PAlbum* album);    
     void signalTAlbumIconChanged(TAlbum* album);
-    void signalDAlbumAdded(DAlbum* album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
 };
 

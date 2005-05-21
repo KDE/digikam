@@ -57,6 +57,7 @@
 #include "sidebar.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
+#include "searchfolderview.h"
 #include "tagfilterview.h"
 #include "thumbnailsize.h"
 #include "dio.h"
@@ -77,11 +78,13 @@ DigikamView::DigikamView(QWidget *parent)
     mIconView = new AlbumIconView(this);
     mDateFolderView = new DateFolderView(this);
     mTagFolderView = new TagFolderView(this);
+    mSearchFolderView = new SearchFolderView(this);
     
     mMainSidebar->appendTab(mFolderView_Deprecated, SmallIcon("folder"), i18n("Albums (Old)"));
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
     mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
+    mMainSidebar->appendTab(mSearchFolderView, SmallIcon("find"), i18n("Searches"));    
     mMainSidebar->setActiveTab(mFolderView_Deprecated);
 
     mRightSidebar = new Sidebar(this, Sidebar::Right);
@@ -205,6 +208,12 @@ void DigikamView::slotDeleteTag()
 void DigikamView::slotEditTag()
 {
     mTagFolderView->tagEdit();
+}
+
+void DigikamView::slotNewQuickSearch()
+{
+    mMainSidebar->setActiveTab(mSearchFolderView);
+    mSearchFolderView->quickSearchNew();
 }
 
 // ----------------------------------------------------------------
@@ -576,6 +585,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     mDateFolderView->setActive(w == mDateFolderView);
     mFolderView->setActive(w == mFolderView);
     mTagFolderView->setActive(w == mTagFolderView);
+    mSearchFolderView->setActive(w == mSearchFolderView);
 }
 
 #include "digikamview.moc"

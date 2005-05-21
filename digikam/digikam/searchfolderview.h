@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-27
+ * Date  : 2005-05-21
  * Copyright 2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -15,24 +15,22 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-#ifndef DATEFOLDERVIEW_H
-#define DATEFOLDERVIEW_H
+#ifndef SEARCHFOLDERVIEW_H
+#define SEARCHFOLDERVIEW_H
 
-#include <qvbox.h>
+#include <klistview.h>
 
-
-class DateFolderViewPriv;
-class DAlbum;
-
-class DateFolderView : public QVBox
+class SearchFolderView : public KListView
 {
     Q_OBJECT
-    
+
 public:
 
-    DateFolderView(QWidget* parent);
-    ~DateFolderView();
+    SearchFolderView(QWidget* parent);
+    ~SearchFolderView();
 
+    void quickSearchNew();
+    
     void setActive(bool val);
 
 private slots:
@@ -43,7 +41,8 @@ private slots:
     
 private:
 
-    DateFolderViewPriv* d;
+    bool m_active;
 };
+    
 
-#endif /* DATEFOLDERVIEW_H */
+#endif /* SEARCHFOLDERVIEW_H */

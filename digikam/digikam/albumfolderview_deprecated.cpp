@@ -399,7 +399,7 @@ QPixmap AlbumFolderView_Deprecated::getBlendedIcon(TAlbum* album) const
 
 void AlbumFolderView_Deprecated::slotAlbumAdded(Album *album)
 {
-    if (!album)
+    if (!album || (album->type() != Album::PHYSICAL && album->type() != Album::TAG))
         return;
 
     if (album->isRoot()) {

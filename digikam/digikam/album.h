@@ -164,6 +164,22 @@ private:
     QDate m_date;
 };
 
+class SAlbum : public Album
+{
+public:
+
+    SAlbum(const KURL& url, bool root=false);
+    ~SAlbum();
+
+    KURL  getKURL() const;
+
+private:
+
+    KURL m_kurl;
+
+    friend class AlbumManager;
+};
+
 /* Iterate over all children of this Album.
    Note: It doesn't include the specified album
 

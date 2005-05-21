@@ -70,10 +70,12 @@ public:
     PAlbum           *rootPAlbum;
     TAlbum           *rootTAlbum;
     DAlbum           *rootDAlbum;
+    SAlbum           *rootSAlbum;
 
     PAlbumList        pAlbumList;
     TAlbumList        tAlbumList;
     DAlbumList        dAlbumList;
+    SAlbumList        sAlbumList;
 
     PAlbumDict        pAlbumDict;
     PAlbumIntDict     pAlbumIntDict;
@@ -105,6 +107,7 @@ AlbumManager::AlbumManager()
     d->rootPAlbum = 0;
     d->rootTAlbum = 0;
     d->rootDAlbum = 0;
+    d->rootSAlbum = 0;
 
     d->itemHandler  = 0;
     d->currentAlbum = 0;
@@ -121,6 +124,7 @@ AlbumManager::~AlbumManager()
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
+    delete d->rootSAlbum;
 
     delete d->db;
     delete d;
@@ -156,23 +160,14 @@ void AlbumManager::setLibraryPath(const QString& path)
     d->tAlbumList.clear();
     d->dAlbumList.clear();
 
-    if (d->rootPAlbum)
-    {
-        delete d->rootPAlbum;
-        d->rootPAlbum = 0;
-    }
-
-    if (d->rootTAlbum)
-    {
-        delete d->rootTAlbum;
-        d->rootTAlbum = 0;
-    }
-
-    if (d->rootDAlbum)
-    {
-        delete d->rootDAlbum;
-        d->rootDAlbum = 0;
-    }
+    delete d->rootPAlbum;
+    delete d->rootTAlbum;
+    delete d->rootDAlbum;
+    
+    d->rootPAlbum = 0;
+    d->rootTAlbum = 0;
+    d->rootDAlbum = 0;
+    d->rootSAlbum = 0;
     
     d->libraryPath = path;
 
@@ -346,6 +341,12 @@ void AlbumManager::startScan()
         insertTAlbum(t);
         ++it;
     }
+
+    // list SAlbums directly from the db
+
+    d->rootSAlbum = new SAlbum(KURL(), true);
+
+    /* TODO: get a list of search albums from DB */
     
     emit signalAllAlbumsLoaded();
 }
@@ -675,6 +676,48 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
     return true;
 }
 
+bool AlbumManager::createSAlbum(const KURL& url, SAlbum*& renamedAlbum)
+{
+    QString name = url.queryItem("name");
+    
+    SAlbum* existingAlbum = 0;
+    for (SAlbumList::iterator it = d->sAlbumList.begin();
+         it != d->sAlbumList.end(); ++it)
+    {
+        if (name == (*it)->getKURL().queryItem("name"))
+        {
+            existingAlbum = *it;
+        }
+    }
+
+    if (existingAlbum)
+    {
+        existingAlbum->m_kurl = url;
+        renamedAlbum = existingAlbum;
+        return true;
+    }
+
+    renamedAlbum = 0;
+
+    SAlbum* album = new SAlbum(url, false);
+    album->setParent(d->rootSAlbum);
+    d->sAlbumList.append(album);
+    
+    emit signalAlbumAdded(album);
+    return true;
+}
+
+bool AlbumManager::renameSAlbum(SAlbum* /*album*/, const QString& /*newName*/, QString& /*errMsg*/)
+{
+    return true;
+}
+
+bool AlbumManager::deleteSAlbum(SAlbum* /*album*/)
+{
+    
+    return true;
+}
+
 void AlbumManager::insertPAlbum(PAlbum *album)
 {
     if (!album)
@@ -847,7 +890,7 @@ void AlbumManager::slotResult(KIO::Job* job)
         DAlbum* album = new DAlbum(date);
         album->setParent(d->rootDAlbum);
         d->dAlbumList.append(album);
-        emit signalDAlbumAdded(album);
+        emit signalAlbumAdded(album);
     }
 }
 

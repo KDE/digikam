@@ -51,9 +51,10 @@ class Sidebar;
 class DateFolderView;
 class TagFolderView;
 class TagFilterView;
+class SearchFolderView;
 
-class DigikamView : public QSplitter {
-
+class DigikamView : public QSplitter
+{
     Q_OBJECT
 
 public:
@@ -81,6 +82,7 @@ private:
     Sidebar                  *mMainSidebar;
     DateFolderView           *mDateFolderView;
     TagFolderView            *mTagFolderView;
+    SearchFolderView         *mSearchFolderView;
     Sidebar                  *mRightSidebar;
     TagFilterView            *mTagFilterView;
     
@@ -106,6 +108,9 @@ public slots:
     void slotNewTag();
     void slotDeleteTag();
     void slotEditTag();
+
+    // Search action slots
+    void slotNewQuickSearch();
     
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);

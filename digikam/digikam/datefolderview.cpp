@@ -146,8 +146,10 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->listview->setResizeMode(QListView::LastColumn);
     d->listview->setRootIsDecorated(true);
 
-    connect(AlbumManager::instance(), SIGNAL(signalDAlbumAdded(DAlbum*)),
-            SLOT(slotDAlbumAdded(DAlbum*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+            SLOT(slotAlbumAdded(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            SLOT(slotAlbumDeleted(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
@@ -169,11 +171,13 @@ void DateFolderView::setActive(bool val)
     }
 }
 
-void DateFolderView::slotDAlbumAdded(DAlbum* album)
+void DateFolderView::slotAlbumAdded(Album* a)
 {
-    if (!album)
+    if (!a || a->type() != Album::DATE)
         return;
 
+    DAlbum* album = (DAlbum*)a;
+    
     QDate date = album->getDate();
 
     QString yr = QString::number(date.year());
@@ -193,6 +197,23 @@ void DateFolderView::slotDAlbumAdded(DAlbum* album)
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
     item->setPixmap(0, SmallIcon("date", 22));
+
+    album->setViewItem(item);
+}
+
+void DateFolderView::slotAlbumDeleted(Album* a)
+{
+    if (!a || a->type() != Album::DATE)
+        return;
+
+    DAlbum* album = (DAlbum*)a;
+
+    DateFolderItem* item = (DateFolderItem*) album->getViewItem();
+    if (item)
+    {
+        delete item;
+        album->setViewItem(0);
+    }
 }
 
 void DateFolderView::slotSelectionChanged()

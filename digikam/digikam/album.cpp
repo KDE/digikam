@@ -468,6 +468,25 @@ KURL DAlbum::getKURL() const
 
 // --------------------------------------------------------------------------
 
+SAlbum::SAlbum(const KURL& url, bool root)
+    : Album(Album::SEARCH, root ? 0 : 1, url.queryItem("name"), root),
+      m_kurl(url)
+{
+    
+}
+
+SAlbum::~SAlbum()
+{
+    
+}
+
+KURL SAlbum::getKURL() const
+{
+    return m_kurl;
+}
+
+// --------------------------------------------------------------------------
+
 AlbumIterator::AlbumIterator(Album *album)
 {
     m_root    = album;
