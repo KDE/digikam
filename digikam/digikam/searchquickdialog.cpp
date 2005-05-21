@@ -65,6 +65,8 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent)
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
 
+    enableButtonOK(false);
+    
     setInitialSize(QSize(480,400));
     adjustSize();
 }
@@ -120,9 +122,12 @@ void SearchQuickDialog::slotTimeOut()
     if (m_searchEdit->text().isEmpty())
     {
         m_resultsView->clear();
+        enableButtonOK(false);
         return;
     }
 
+    enableButtonOK(true);
+    
     KURL url;
     url.setProtocol("digikamsearch");
 
