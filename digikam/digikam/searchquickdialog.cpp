@@ -66,9 +66,35 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
             SLOT(slotTimeOut()));
 
     enableButtonOK(false);
-    
     setInitialSize(QSize(480,400));
     adjustSize();
+
+    // check if we are being passed a valid url
+    if (m_url.isValid())
+    {
+        int count = m_url.queryItem("count").toInt();
+        if (count > 0)
+        {
+            QStringList strList;
+            for (int i=1; i<=count; i++)
+            {
+                QString val = m_url.queryItem(QString::number(i) + ".val");
+                if (m_url.queryItem(QString::number(i) + ".key") == "imagedate")
+                {
+                    val.remove('%');
+                    val.remove('-');
+                }
+                    
+                if (!strList.contains(val))
+                {
+                    strList.append(val);
+                }
+            }
+
+            m_searchEdit->setText(strList.join(" "));
+            m_timer->start(0, true);
+        }
+    }
 }
 
 SearchQuickDialog::~SearchQuickDialog()

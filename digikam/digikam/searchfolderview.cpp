@@ -25,6 +25,8 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qstyle.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include "album.h"
 #include "albummanager.h"
@@ -77,6 +79,9 @@ SearchFolderView::SearchFolderView(QWidget* parent)
             SLOT(slotAlbumDeleted(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(clear()));
+    connect(this,
+            SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
@@ -115,6 +120,51 @@ void SearchFolderView::quickSearchNew()
         setSelected(m_lastAddedItem, true);
         m_lastAddedItem = 0;
     }
+}
+
+void SearchFolderView::extendedSearchNew()
+{
+/* TODO:
+   add extended search
+*/    
+}
+
+void SearchFolderView::quickSearchEdit(SAlbum* album)
+{
+    if (!album)
+        return;
+
+    KURL url = album->getKURL();
+    SearchQuickDialog dlg(this, url);
+
+    if (dlg.exec() != KDialogBase::Accepted)
+        return;
+
+
+    AlbumManager::instance()->updateSAlbum(album, url);
+
+    ((SearchFolderItem*)album->getViewItem())->setText(0, album->getName());
+
+    clearSelection();
+    setSelected((SearchFolderItem*)(album->getViewItem()), true);
+}
+
+void SearchFolderView::extendedSearchEdit(SAlbum* album)
+{
+    if (!album)
+        return;
+
+/* TODO:
+   add extended search
+*/
+}
+
+void SearchFolderView::searchDelete(SAlbum* album)
+{
+    if (!album)
+        return;
+
+    AlbumManager::instance()->deleteSAlbum(album);
 }
 
 void SearchFolderView::setActive(bool val)
@@ -185,6 +235,59 @@ void SearchFolderView::slotSelectionChanged()
     else
     {
         AlbumManager::instance()->setCurrentAlbum(searchItem->m_album);
+    }
+}
+
+void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
+{
+    if (!item)
+    {
+        QPopupMenu popmenu(this);
+        popmenu.insertItem(SmallIcon("find"), i18n("New Simple Search..."), 10);
+        popmenu.insertItem(SmallIcon("find"), i18n("New Extended Search..."), 11);
+
+        switch (popmenu.exec(QCursor::pos()))
+        {
+        case 10:
+        {
+            quickSearchNew();
+            break;
+        }
+        case 11:
+        {
+            extendedSearchNew();
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    else
+    {
+        QPopupMenu popmenu(this);
+        popmenu.insertItem(SmallIcon("find"), i18n("Edit Search..."), 10);
+        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 11);
+
+        SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+        
+        switch (popmenu.exec(QCursor::pos()))
+        {
+        case 10:
+        {
+            if (sItem->m_album->isSimple())
+                quickSearchEdit(sItem->m_album);
+            else
+                extendedSearchEdit(sItem->m_album);
+            break;
+        }
+        case 11:
+        {
+            searchDelete(sItem->m_album);
+            break;
+        }
+        default:
+            break;
+        }
     }
 }
 

@@ -20,11 +20,7 @@
 
 #include <klistview.h>
 
-/* TODO:
-   contextmenu - add/delete/edit search
-   add extended search
-*/
-
+class SAlbum;
 class SearchFolderItem;
 
 class SearchFolderView : public KListView
@@ -37,6 +33,12 @@ public:
     ~SearchFolderView();
 
     void quickSearchNew();
+    void extendedSearchNew();
+
+    void quickSearchEdit(SAlbum* album);
+    void extendedSearchEdit(SAlbum* album);
+
+    void searchDelete(SAlbum* album);
     
     void setActive(bool val);
 
@@ -45,6 +47,7 @@ private slots:
     void slotAlbumAdded(Album* album);
     void slotAlbumDeleted(Album* album);
     void slotSelectionChanged();
+    void slotContextMenu(QListViewItem*, const QPoint&, int);
     
 private:
 

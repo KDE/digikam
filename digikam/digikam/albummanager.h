@@ -98,7 +98,7 @@ public:
     bool moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg);
 
     bool createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAlbum);
-    bool renameSAlbum(SAlbum* album, const QString& newName, QString& errMsg);
+    bool updateSAlbum(SAlbum* album, const KURL& newURL);
     bool deleteSAlbum(SAlbum* album);
     
     void setItemHandler(AlbumItemHandler *handler);

@@ -695,12 +695,14 @@ bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAl
     if (existingAlbum)
     {
         existingAlbum->m_kurl = url;
+        //TODO: write to db
         renamedAlbum = existingAlbum;
         return true;
     }
 
     renamedAlbum = 0;
 
+    //TODO: write to db
     SAlbum* album = new SAlbum(url, simple, false);
     album->setParent(d->rootSAlbum);
     d->sAlbumList.append(album);
@@ -709,13 +711,27 @@ bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAl
     return true;
 }
 
-bool AlbumManager::renameSAlbum(SAlbum* /*album*/, const QString& /*newName*/, QString& /*errMsg*/)
+bool AlbumManager::updateSAlbum(SAlbum* album, const KURL& newURL)
 {
+    if (!album)
+        return false;
+
+    album->m_kurl = newURL;
+    // TODO: update db
     return true;
 }
 
-bool AlbumManager::deleteSAlbum(SAlbum* /*album*/)
+bool AlbumManager::deleteSAlbum(SAlbum* album)
 {
+    if (!album)
+        return false;
+
+    emit signalAlbumDeleted(album);
+
+    // TODO: delete from db
+
+    d->sAlbumList.remove(album);
+    delete album;
     
     return true;
 }
