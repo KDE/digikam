@@ -688,6 +688,7 @@ bool AlbumManager::createSAlbum(const KURL& url, SAlbum*& renamedAlbum)
         if (name == (*it)->getKURL().queryItem("name"))
         {
             existingAlbum = *it;
+            break;
         }
     }
 

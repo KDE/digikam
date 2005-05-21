@@ -60,8 +60,7 @@ public:
 
 private:
 
-    QString miniListing(const KURL& url) const;
-    QString fullListing(const KURL& url) const;
+    QString buildQuery(const KURL& url) const;
     
     void openDB();
     void closeDB();

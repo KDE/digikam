@@ -36,6 +36,10 @@ public:
     SearchQuickDialog(QWidget* parent, KURL& url);
     ~SearchQuickDialog();
 
+protected:
+
+    void hideEvent(QHideEvent* e);
+    
 private:
 
     QString possibleDate(const QString& str, bool& exact) const;

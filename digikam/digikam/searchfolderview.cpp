@@ -79,6 +79,17 @@ void SearchFolderView::quickSearchNew()
 
     SAlbum* renamedAlbum = 0;
     AlbumManager::instance()->createSAlbum(url, renamedAlbum);
+
+    if (renamedAlbum)
+    {
+        SearchFolderItem* searchItem =
+            (SearchFolderItem*)(renamedAlbum->getViewItem());
+        if (searchItem)
+        {
+            searchItem->setText(0, url.queryItem("name"));
+            setSelected(searchItem, true);
+        }
+    }
 }
 
 void SearchFolderView::setActive(bool val)

@@ -128,12 +128,121 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     if (listingType == 0)
     {
-        //TODO: QString sqlQuery = fullListing(url);
-        warning(i18n("Search Listing not implemented"));
+        QString sqlQuery;
+
+        // query head
+        sqlQuery = "SELECT Images.name, Images.dirid, Images.datetime, Albums.url "
+                   "FROM Images, Albums "
+                   "WHERE ( ";
+
+        // query body
+        sqlQuery += buildQuery(url);
+
+        // query tail
+        sqlQuery += " ) ";
+        sqlQuery += " AND (Albums.id=Images.dirid); ";
+
+        QStringList values;
+        QString     errMsg;
+        if (!execSql(sqlQuery, &values, &errMsg))
+        {
+            error(KIO::ERR_INTERNAL, errMsg);
+            return;
+        }
+
+        QString     name;
+        QString     path;
+        int         dirid;
+        QString     date;
+        QString     purl;
+        QSize       dims;
+        struct stat stbuf;
+
+        int  count = 0;
+        QDataStream* os = new QDataStream(ba, IO_WriteOnly);
+            
+        for (QStringList::iterator it = values.begin(); it != values.end();)
+        {
+            name  = *it;
+            ++it;
+            dirid = (*it).toInt();
+            ++it;
+            date  = *it;
+            ++it;
+            purl  = *it;
+            ++it;
+
+            if (!matchFilterList(regex, name))
+                continue;
+
+            path = m_libraryPath + purl + "/" + name;
+            if (::stat(QFile::encodeName(path), &stbuf) != 0)
+                continue;
+
+            dims = QSize();
+            if (getDimensions)
+            {
+                KFileMetaInfo metaInfo(path);
+                if (metaInfo.isValid())
+                {
+                    if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                    {
+                        dims = metaInfo.group("Jpeg EXIF Data").
+                               item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("General"))
+                    {
+                        dims = metaInfo.group("General").
+                               item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("Technical"))
+                    {
+                        dims = metaInfo.group("Technical").
+                               item("Dimensions").value().toSize();
+                    }
+                }
+            }
+                
+            *os << dirid;
+            *os << name;
+            *os << date;
+            *os << stbuf.st_size;
+            *os << dims;
+
+            count++;
+                
+            if (count > 200)
+            {
+                delete os;
+                os = 0;
+
+                SlaveBase::data(ba);
+                ba.resize(0);
+
+                count = 0;
+                os = new QDataStream(ba, IO_WriteOnly);
+            }
+        }
+
+        delete os;
     }
     else
     {
-        QString sqlQuery = miniListing(url);
+        QString sqlQuery;
+
+        // query head
+        sqlQuery = "SELECT Albums.url||'/'||Images.name "
+                   "FROM Images, Albums "
+                   "WHERE ( ";
+
+        // query body
+        sqlQuery += buildQuery(url);
+
+        // query tail
+        sqlQuery += " ) ";
+        sqlQuery += " AND (Albums.id=Images.dirid) ";
+        sqlQuery += " LIMIT 500;";
+
         QStringList values;
         QString     errMsg;
         if (!execSql(sqlQuery, &values, &errMsg))
@@ -158,14 +267,13 @@ void kio_digikamsearch::special(const QByteArray& data)
     finished();
 }
 
-QString kio_digikamsearch::miniListing(const KURL& url) const
+QString kio_digikamsearch::buildQuery(const KURL& url) const
 {
     int  count = url.queryItem("count").toInt();
     if (count <= 0)
         return QString();
 
     QMap<int, RuleType> rulesMap;
-    bool needTagTables = false;
     
     for (int i=1; i<=count; i++)
     {
@@ -205,12 +313,10 @@ QString kio_digikamsearch::miniListing(const KURL& url) const
         else if (key == "tag")
         {
             rule.key = TAG;
-            needTagTables = true;
         }
         else if (key == "tagname")
         {
             rule.key = TAGNAME;
-            needTagTables = true;
         }
         else
         {
@@ -243,9 +349,7 @@ QString kio_digikamsearch::miniListing(const KURL& url) const
         rulesMap.insert(i, rule);
     }
 
-    QString sqlQuery = "SELECT Albums.url||'/'||Images.name "
-                       "FROM Images, Albums "
-                       "WHERE ( ";
+    QString sqlQuery;
     
     QStringList strList = QStringList::split(" ", url.path());
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
@@ -263,17 +367,7 @@ QString kio_digikamsearch::miniListing(const KURL& url) const
         }
     }                     
 
-    sqlQuery += " ) ";
-    sqlQuery += " AND (Albums.id=Images.dirid) ";
-    sqlQuery += " LIMIT 500;";
-
     return sqlQuery;
-}
-
-QString kio_digikamsearch::fullListing(const KURL&) const
-{
-    /* TODO */
-    return QString();
 }
 
 QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,

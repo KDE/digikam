@@ -206,8 +206,7 @@ void SearchQuickDialog::slotTimeOut()
 
 
     url.setPath(path);
-    url.addQueryItem("name", m_nameEdit->text().isEmpty() ?
-                     i18n("Last Search") : m_nameEdit->text());
+    url.addQueryItem("name", "Live Search");
     url.addQueryItem("count", num);
 
     m_url = url;
@@ -217,6 +216,14 @@ void SearchQuickDialog::slotTimeOut()
 void SearchQuickDialog::slotSearchChanged(const QString&)
 {
     m_timer->start(500, true);    
+}
+
+void SearchQuickDialog::hideEvent(QHideEvent* e)
+{
+    m_url.removeQueryItem("name");
+    m_url.addQueryItem("name", m_nameEdit->text().isEmpty() ?
+                       i18n("Last Search") : m_nameEdit->text());
+    KDialogBase::hideEvent(e);
 }
 
 #include "searchquickdialog.moc"
