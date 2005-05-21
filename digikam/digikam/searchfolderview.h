@@ -20,6 +20,11 @@
 
 #include <klistview.h>
 
+/* TODO:
+   contextmenu - add/delete/edit search
+   add extended search
+*/
+
 class SearchFolderItem;
 
 class SearchFolderView : public KListView

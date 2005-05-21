@@ -345,7 +345,7 @@ void AlbumManager::startScan()
 
     // list SAlbums directly from the db
 
-    d->rootSAlbum = new SAlbum(KURL(), true);
+    d->rootSAlbum = new SAlbum(KURL(), true, true);
 
     /* TODO: get a list of search albums from DB */
     
@@ -677,7 +677,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
     return true;
 }
 
-bool AlbumManager::createSAlbum(const KURL& url, SAlbum*& renamedAlbum)
+bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAlbum)
 {
     QString name = url.queryItem("name");
     
@@ -701,7 +701,7 @@ bool AlbumManager::createSAlbum(const KURL& url, SAlbum*& renamedAlbum)
 
     renamedAlbum = 0;
 
-    SAlbum* album = new SAlbum(url, false);
+    SAlbum* album = new SAlbum(url, simple, false);
     album->setParent(d->rootSAlbum);
     d->sAlbumList.append(album);
     

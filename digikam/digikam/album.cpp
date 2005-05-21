@@ -468,9 +468,9 @@ KURL DAlbum::getKURL() const
 
 // --------------------------------------------------------------------------
 
-SAlbum::SAlbum(const KURL& url, bool root)
+SAlbum::SAlbum(const KURL& url, bool simple, bool root)
     : Album(Album::SEARCH, root ? 0 : 1, url.queryItem("name"), root),
-      m_kurl(url)
+      m_kurl(url), m_simple(simple)
 {
     
 }
@@ -483,6 +483,16 @@ SAlbum::~SAlbum()
 KURL SAlbum::getKURL() const
 {
     return m_kurl;
+}
+
+QString SAlbum::getName() const
+{
+    return m_kurl.queryItem("name");    
+}
+
+bool SAlbum::isSimple() const
+{
+    return m_simple;
 }
 
 // --------------------------------------------------------------------------

@@ -36,7 +36,7 @@ class SearchFolderItem : public KListViewItem
 public:
 
     SearchFolderItem(KListView* parent, SAlbum* album)
-        : KListViewItem(parent, album->getKURL().queryItem("name")),
+        : KListViewItem(parent, album->getName()),
           m_album(album)
     {
         m_album->setViewItem(this);
@@ -96,7 +96,7 @@ void SearchFolderView::quickSearchNew()
         return;
 
     SAlbum* renamedAlbum = 0;
-    AlbumManager::instance()->createSAlbum(url, renamedAlbum);
+    AlbumManager::instance()->createSAlbum(url, true, renamedAlbum);
 
     if (renamedAlbum)
     {

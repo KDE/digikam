@@ -168,14 +168,18 @@ class SAlbum : public Album
 {
 public:
 
-    SAlbum(const KURL& url, bool root=false);
+    SAlbum(const KURL& url, bool simple, bool root=false);
     ~SAlbum();
 
-    KURL  getKURL() const;
+    KURL    getKURL() const;
+    QString getName() const;
+    bool    isSimple() const;
+    
 
 private:
 
     KURL m_kurl;
+    bool m_simple;
 
     friend class AlbumManager;
 };
