@@ -20,7 +20,7 @@
 
 #include <kdialogbase.h>
 #include <qcstring.h>
-#include <qdict.h>
+#include <qmap.h>
 
 class KURL;
 class QLineEdit;
@@ -51,6 +51,8 @@ private:
     SearchResultsView*   m_resultsView;
     QTimer*              m_timer;
     KURL&                m_url;
+    QMap<int,QString>    m_longMonthsMap;
+    QMap<int,QString>    m_shortMonthsMap;
     
 private slots:
 

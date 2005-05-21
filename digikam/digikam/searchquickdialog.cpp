@@ -30,6 +30,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <kdeversion.h>
+#include <kcalendarsystem.h>
+#include <kglobal.h>
 
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
@@ -95,6 +98,14 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
             m_timer->start(0, true);
         }
     }
+
+    // build a lookup table for month names
+    const KCalendarSystem* cal = KGlobal::locale()->calendar();
+    for (int i=1; i<=12; ++i)
+    {
+        m_shortMonthsMap[i] = cal->monthName(i, 2000, true);
+        m_longMonthsMap[i]  = cal->monthName(i, 2000, false);
+    }
 }
 
 SearchQuickDialog::~SearchQuickDialog()
@@ -129,8 +140,8 @@ QString SearchQuickDialog::possibleDate(const QString& str, bool& exact) const
         // hmm... not a year. is it a particular month?
         for (int i=1; i<=12; i++)
         {
-            if (str.lower() == QDate::shortMonthName(i).lower() ||
-                str.lower() == QDate::longMonthName(i).lower())
+            if (str.lower() == m_shortMonthsMap[i] ||
+                str.lower() == m_longMonthsMap[i])
             {
                 QString monGlob;
                 monGlob.sprintf("%.2d", i);
