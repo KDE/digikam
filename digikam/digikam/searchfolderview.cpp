@@ -82,6 +82,9 @@ SearchFolderView::SearchFolderView(QWidget* parent)
     connect(this,
             SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this,
+            SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+            SLOT(slotDoubleClicked(QListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
@@ -289,6 +292,19 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
             break;
         }
     }
+}
+
+void SearchFolderView::slotDoubleClicked(QListViewItem* item, const QPoint&, int)
+{
+    if (!item)
+        return;
+    
+    SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+    
+    if (sItem->m_album->isSimple())
+        quickSearchEdit(sItem->m_album);
+    else
+        extendedSearchEdit(sItem->m_album);
 }
 
 #include "searchfolderview.moc"
