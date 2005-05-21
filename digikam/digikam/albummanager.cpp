@@ -236,15 +236,16 @@ void AlbumManager::startScan()
 
     d->buffer.resize(0);
 
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << d->libraryPath;
-    ds << QString();
-    ds << AlbumSettings::instance()->getAllFileFilter();
-
     KURL u;
     u.setProtocol("digikamdates");
     u.setPath("/");
+
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << d->libraryPath;
+    ds << KURL();
+    ds << AlbumSettings::instance()->getAllFileFilter();
+
     
     d->dateListJob = new KIO::TransferJob(u, KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);

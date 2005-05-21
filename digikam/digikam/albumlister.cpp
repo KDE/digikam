@@ -118,7 +118,7 @@ void AlbumLister::openAlbum(Album *album)
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
-    ds << album->getKURL().path();
+    ds << album->getKURL();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();
@@ -154,7 +154,7 @@ void AlbumLister::refresh()
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
-    ds << d->currAlbum->getKURL().path();
+    ds << d->currAlbum->getKURL();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();

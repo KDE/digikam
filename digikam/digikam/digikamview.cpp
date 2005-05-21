@@ -212,7 +212,8 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotNewQuickSearch()
 {
-    mMainSidebar->setActiveTab(mSearchFolderView);
+    if (mMainSidebar->getActiveTab() != mSearchFolderView)
+        mMainSidebar->setActiveTab(mSearchFolderView);
     mSearchFolderView->quickSearchNew();
 }
 

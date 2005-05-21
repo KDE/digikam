@@ -71,8 +71,14 @@ SearchFolderView::~SearchFolderView()
 
 void SearchFolderView::quickSearchNew()
 {
-    SearchQuickDialog dlg(this);
-    dlg.exec();
+    KURL url;
+    SearchQuickDialog dlg(this, url);
+
+    if (dlg.exec() != KDialogBase::Accepted)
+        return;
+
+    SAlbum* renamedAlbum = 0;
+    AlbumManager::instance()->createSAlbum(url, renamedAlbum);
 }
 
 void SearchFolderView::setActive(bool val)

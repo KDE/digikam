@@ -105,7 +105,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     QString filter;
     int     getDimensions;
     int     recurse;
-    int     listingType;
+    int     listingType = 0;
 
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
@@ -113,7 +113,8 @@ void kio_digikamsearch::special(const QByteArray& data)
     ds >> filter;
     ds >> getDimensions;
     ds >> recurse;
-    ds >> listingType;
+    if (!ds.atEnd())
+        ds >> listingType;
 
     if (m_libraryPath != libraryPath)
     {
@@ -124,10 +125,11 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     QValueList<QRegExp> regex = makeFilterList(filter);
     QByteArray ba;
-    
-    if (listingType == 1)
+
+    if (listingType == 0)
     {
         //TODO: QString sqlQuery = fullListing(url);
+        warning(i18n("Search Listing not implemented"));
     }
     else
     {

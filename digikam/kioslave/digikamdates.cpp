@@ -96,16 +96,19 @@ void kio_digikamdates::special(const QByteArray& data)
     bool folders = (metaData("folders") == "yes");
 
     QString libraryPath;
+    KURL    kurl;
     QString url;
     QString filter;
     int     getDimensions;
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
-    ds >> url;
+    ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
 
+    url = kurl.path();
+    
     QValueList<QRegExp> regex = makeFilterList(filter);
     
     if (m_libraryPath != libraryPath)

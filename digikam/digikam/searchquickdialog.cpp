@@ -34,9 +34,9 @@
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
 
-SearchQuickDialog::SearchQuickDialog(QWidget* parent)
+SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     : KDialogBase(parent, 0, true, i18n("Quick Search"),
-                  Ok|Cancel)
+                  Ok|Cancel), m_url(url)
 {
     QVBox* vbox = new QVBox(this);
     vbox->setSpacing(spacingHint());
@@ -206,9 +206,11 @@ void SearchQuickDialog::slotTimeOut()
 
 
     url.setPath(path);
-    url.addQueryItem("name", "Live Search");
+    url.addQueryItem("name", m_nameEdit->text().isEmpty() ?
+                     i18n("Last Search") : m_nameEdit->text());
     url.addQueryItem("count", num);
 
+    m_url = url;
     m_resultsView->openURL(url);
 }
 

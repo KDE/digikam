@@ -22,6 +22,7 @@
 #include <qcstring.h>
 #include <qdict.h>
 
+class KURL;
 class QLineEdit;
 class QTimer;
 class SearchResultsView;
@@ -32,7 +33,7 @@ class SearchQuickDialog : public KDialogBase
 
 public:
 
-    SearchQuickDialog(QWidget* parent=0);
+    SearchQuickDialog(QWidget* parent, KURL& url);
     ~SearchQuickDialog();
 
 private:
@@ -45,6 +46,7 @@ private:
     QLineEdit*           m_nameEdit;
     SearchResultsView*   m_resultsView;
     QTimer*              m_timer;
+    KURL&                m_url;
     
 private slots:
 

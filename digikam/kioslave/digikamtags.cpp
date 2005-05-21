@@ -213,6 +213,7 @@ static bool isChildOf(int givenID, int pid, const IDPairList& idList)
 void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
     QString libraryPath;
+    KURL    kurl;
     QString url;
     QString filter;
     int     recurse;
@@ -221,11 +222,13 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
-    ds >> url;
+    ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
     ds >> recurse;
 
+    url = kurl.path();
+    
     QValueList<QRegExp> regex = makeFilterList(filter);
     
     if (m_libraryPath != libraryPath)
