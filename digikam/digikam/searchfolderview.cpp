@@ -39,8 +39,25 @@ public:
         : KListViewItem(parent, album->getKURL().queryItem("name")),
           m_album(album)
     {
+        m_album->setViewItem(this);
     }
 
+    ~SearchFolderItem()
+    {
+        m_album->setViewItem(0);
+    }
+
+    int compare(QListViewItem* i, int , bool ) const
+    {
+        if (!i)
+            return 0;
+        
+        if (text(0) == i18n("Last Search"))
+            return -1;
+
+        return text(0).localeAwareCompare(i->text(0));
+    }
+    
     SAlbum* m_album;
 };
 
@@ -86,8 +103,9 @@ void SearchFolderView::quickSearchNew()
             (SearchFolderItem*)(renamedAlbum->getViewItem());
         if (searchItem)
         {
-            searchItem->setText(0, url.queryItem("name"));
+            clearSelection();
             setSelected(searchItem, true);
+            slotSelectionChanged();
         }
     }
 }
@@ -110,8 +128,6 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
     item->setPixmap(0, SmallIcon("find", 22));
-
-    album->setViewItem(item);
 }
 
 void SearchFolderView::slotAlbumDeleted(Album* a)
@@ -125,7 +141,6 @@ void SearchFolderView::slotAlbumDeleted(Album* a)
     if (item)
     {
         delete item;
-        album->setViewItem(0);
     }
 }
 
