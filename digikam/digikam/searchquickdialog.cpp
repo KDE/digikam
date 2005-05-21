@@ -103,8 +103,8 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
     for (int i=1; i<=12; ++i)
     {
-        m_shortMonthsMap[i] = cal->monthName(i, 2000, true);
-        m_longMonthsMap[i]  = cal->monthName(i, 2000, false);
+        m_shortMonthsMap[i] = cal->monthName(i, 2000, true).lower();
+        m_longMonthsMap[i]  = cal->monthName(i, 2000, false).lower();
     }
 }
 
