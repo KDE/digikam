@@ -22,7 +22,10 @@
    - inform frontend about it
 
 * search view and search table in database
-   - need to discuss
+  - digikamsearch kioslave full listing [RR]
+  - extended search dialog [TA]
+  - saving/restoring the search url to/from the db
+  - searchfolderview and SAlbum
 
 * fix saving of curent state of digikam 
   - splitter sizes
