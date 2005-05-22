@@ -72,6 +72,14 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     setInitialSize(QSize(480,400));
     adjustSize();
 
+    // build a lookup table for month names
+    const KCalendarSystem* cal = KGlobal::locale()->calendar();
+    for (int i=1; i<=12; ++i)
+    {
+        m_shortMonths[i-1] = cal->monthName(i, 2000, true).lower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, false).lower();
+    }
+
     // check if we are being passed a valid url
     if (m_url.isValid())
     {
@@ -86,6 +94,12 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
                 {
                     val.remove('%');
                     val.remove('-');
+
+                    int num = val.toInt();
+                    if (1 <= num && num <= 12)
+                    {
+                        val = m_longMonths[num-1];
+                    }   
                 }
                     
                 if (!strList.contains(val))
@@ -97,14 +111,6 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
             m_searchEdit->setText(strList.join(" "));
             m_timer->start(0, true);
         }
-    }
-
-    // build a lookup table for month names
-    const KCalendarSystem* cal = KGlobal::locale()->calendar();
-    for (int i=1; i<=12; ++i)
-    {
-        m_shortMonthsMap[i] = cal->monthName(i, 2000, true).lower();
-        m_longMonthsMap[i]  = cal->monthName(i, 2000, false).lower();
     }
 }
 
@@ -140,8 +146,8 @@ QString SearchQuickDialog::possibleDate(const QString& str, bool& exact) const
         // hmm... not a year. is it a particular month?
         for (int i=1; i<=12; i++)
         {
-            if (str.lower() == m_shortMonthsMap[i] ||
-                str.lower() == m_longMonthsMap[i])
+            if (str.lower() == m_shortMonths[i-1] ||
+                str.lower() == m_longMonths[i-1])
             {
                 QString monGlob;
                 monGlob.sprintf("%.2d", i);
