@@ -3,7 +3,6 @@ Name=ImagePlugin_ChannelMixer
 Name[it]=PluginImmagini_MixerDeiCanali
 Name[nl]=Afbeeldingsplugin_KanaalMixer
 Name[sv]=Insticksprogram för kanalblandning
-Name[tr]=ResimEklentisi_KanalKarıştırıcı
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -17,7 +16,6 @@ Comment[nl]=digiKam-plugin voor kanaalmixer
 Comment[pt]='Plugin' dos canais de cores para o digiKam
 Comment[pt_BR]='Plugin' dos canais de cores para o digiKam
 Comment[sv]=Digikam insticksprogram för att blanda bildfärgkanaler
-Comment[tr]=digiKam için resim kanalları karıştıcı eklentisi
 
 X-KDE-Library=digikamimageplugin_channelmixer
 author=Caulier Gilles, caulier dot gilles at free dot fr
