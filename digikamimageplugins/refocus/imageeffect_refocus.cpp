@@ -523,19 +523,20 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
     
     memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
-    for (y1 = height - 1; !m_cancel && (y1 >= 0); y1--)
+    for (y1 = 0; !m_cancel && (y1 < height); y1++)
         {
-        for (x1 = width - 1; !m_cancel && (x1 >= 0); x1--)
+        for (x1 = 0; !m_cancel && (x1 < width); x1++)
             {
-            for (color = ncolors - 1; !m_cancel && (color >= 0); color--)
+            for (color = 0; !m_cancel && (color < ncolors); color++)
                 {
                 val = 0.0;
                     
-                for (y2 = mat_size - 1; !m_cancel && (y2 >= 0); y2--)
+                for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
                     {
-                    for (x2 = mat_size - 1; !m_cancel && (x2 >= 0); x2--)
+                    for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
                         {
-                        index1 = buf_row_width * (y1 + y2 - mat_offset) + bpp * (x1 + x2 - mat_offset) + color;
+                        index1 = buf_row_width * (y1 + y2 - mat_offset) + 
+                                 bpp * (x1 + x2 - mat_offset) + color;
                             
                         if ( index1 >= 0 && index1 < imageSize )
                             val += matrix[y2][x2] * sp[index1];
@@ -553,13 +554,15 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
             index3 = (y1 * width + x1) * bpp + ncolors;
             index4 = buf_row_width * y1 + bpp * x1 + ncolors;
                 
-            if (index3 >= 0 && index3 < imageSize && index4 < imageSize)
-               tp[index3] = sp[buf_row_width * y1 + bpp * x1 + ncolors];
+            if (index3 >= 0 && index3 < imageSize && 
+                index4 >= 0 && index4 < imageSize)
+               tp[index3] = sp[index4];
             }
         
-        m_imagePreviewWidget->setProgress((int) (100.0 - ((double)y1 * 100.0) / height));
+        m_imagePreviewWidget->setProgress((int) (((double)y1 * 100.0) / height));
         kapp->processEvents();
         }
+
 }
 
 }  // NameSpace DigikamRefocusImagesPlugin
