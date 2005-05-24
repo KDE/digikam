@@ -503,23 +503,19 @@ void ImageEffect_Refocus::refocus(uint* data, int width, int height, int matrixS
     delete [] newData;
 }
 
-// This method is inspired from Refocus gimp plugin implementation by Ernst Lippe
-
 void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, int width, int height, 
                                          const double *const mat, int mat_size)
 {
     double    matrix[mat_size][mat_size];
-    double    val;
-    int       x1, y1, x2, y2, color, index1, index2, index3, index4;
+    double    valRed, valGreen, valBlue;
+    int       x1, y1, x2, y2, color, index1, index2;
     
-    const int bpp            = 4;
-    const int ncolors        = 3;
-    const int imageSize      = width*height*bpp;
+    //  Big/Little Endian color manipulation compatibility.
+    int red, green, blue;
+    Digikam::ImageFilters::imageData imagedata;
+    
+    const int imageSize      = width*height;
     const int mat_offset     = mat_size / 2;
-    const int buf_row_width  = width * bpp;
-    
-    register uchar *tp       = (uchar*)destData;
-    register uchar const *sp = (uchar*)orgData;
     
     memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
@@ -527,36 +523,50 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
         {
         for (x1 = 0; !m_cancel && (x1 < width); x1++)
             {
-            for (color = 0; !m_cancel && (color < ncolors); color++)
+            valRed = valGreen = valBlue = 0.0;
+                
+            for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
                 {
-                val = 0.0;
-                    
-                for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
+                for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
                     {
-                    for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
-                        {
-                        index1 = buf_row_width * (y1 + y2 - mat_offset) + 
-                                 bpp * (x1 + x2 - mat_offset) + color;
-                            
-                        if ( index1 >= 0 && index1 < imageSize )
-                            val += matrix[y2][x2] * sp[index1];
-                        }
+                    index1 = width * (y1 + y2 - mat_offset) + 
+                             x1 + x2 - mat_offset;
+                        
+                    if ( index1 >= 0 && index1 < imageSize )
+                       {
+                       imagedata.raw = orgData[index1];
+                       red           = (int)imagedata.channel.red;
+                       green         = (int)imagedata.channel.green;
+                       blue          = (int)imagedata.channel.blue;
+                       valRed   += matrix[y2][x2] * red;
+                       valGreen += matrix[y2][x2] * green;
+                       valBlue  += matrix[y2][x2] * blue;
+                       }
                     }
-                    
-                // Write value to destination.
-                index2 = (y1 * width + x1) * bpp + color;
-                    
-                if (index2 >= 0 && index2 < imageSize)
-                    tp[index2] = (uchar) CLAMP (val, 0, 255);
+                }
+            
+            index2 = y1 * width + x1;
+                          
+            if (index2 >= 0 && index2 < imageSize)
+                {
+                // To get Alpha channel value from original (unchanged)
+                imagedata.raw = orgData[index2];
+                
+                // Overwrite RGB values to destination.
+                imagedata.channel.red   = (uchar) CLAMP (valRed, 0, 255);
+                imagedata.channel.green = (uchar) CLAMP (valGreen, 0, 255);
+                imagedata.channel.blue  = (uchar) CLAMP (valBlue, 0, 255);
+                destData[index2]        = imagedata.raw;
                 }
                 
+/*
             // Copy alpha 
             index3 = (y1 * width + x1) * bpp + ncolors;
             index4 = buf_row_width * y1 + bpp * x1 + ncolors;
                 
             if (index3 >= 0 && index3 < imageSize && 
                 index4 >= 0 && index4 < imageSize)
-               tp[index3] = sp[index4];
+               tp[index3] = sp[index4];*/
             }
         
         m_imagePreviewWidget->setProgress((int) (((double)y1 * 100.0) / height));
