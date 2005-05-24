@@ -150,6 +150,63 @@ In general, unsharp masking produces better results than sharpening. This is pro
 From a theoretical point of view unsharp masking must always introduce artifacts. Even under optimal circumstances it can never completely undo the effect of blurring. For Wiener filtering it is possible to prove that it is the optimal linear filter. In practice, in all cases the results of the FIR Wiener filter were at least as good as those of unsharp masking. The FIR Wiener filter is frequently better in restoring small details.
 </para>
 
+<para>
+Below, you can see a comparison of different filter apply on a small unfocused image:
+
+<informaltable><tgroup cols="2">
+            
+    <thead><row>
+        <entry>Preview</entry>
+        <entry>Type</entry>
+    </row></thead>
+
+    <tbody>
+        <row>
+            <entry>
+            <graphic srccredit="Orignal Blured Image Preview" fileref="refocus-notsharpened.png"/>
+            </entry>
+        
+            <entry>
+            Original blured color image to fix.
+            </entry>
+        </row>
+
+        <row>
+            <entry>
+            <graphic srccredit="Sharpening Preview" fileref="refocus-sharped.png"/>
+            </entry>
+        
+            <entry>
+            Fixed image using simple sharpening filter.
+            </entry>
+        </row>
+
+        <row>
+            <entry>
+            <graphic srccredit="Unsharp Mask Preview" fileref="refocus-unsharpmask.png"/>
+            </entry>
+        
+            <entry>
+            Fixed image using unsharp mask filter.
+            </entry>
+        </row>
+
+        <row>
+            <entry>
+            <graphic srccredit="Refocus Preview" fileref="refocus-refocus.png"/>
+            </entry>
+        
+            <entry>
+            Fixed image using Refocus filter.
+            </entry>
+        </row>
+        
+    </tbody>
+    
+</tgroup></informaltable>
+                  
+</para>
+
 <note><para>
 For more information about correction of sharpness methods used in digital imagery, you can found a technical comparison at <ulink url="http://www.bialith.com/Research/BARclockblur.htm">this url</ulink>.
 </para></note>
