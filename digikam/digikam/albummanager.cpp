@@ -715,7 +715,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
         return false;
     }
     
-    d->db->moveTAlbum(album, parent);
+    d->db->setTagParentID(album->getID(), parent->getID());
     album->getParent()->removeChild(album);
     album->setParent(parent);
     album->setPID(parent->getID());    

@@ -41,6 +41,7 @@ extern "C"
 #include "albummanager.h"
 #include "albumlister.h"
 #include "albumdb.h"
+#include "album.h"
 #include "dio.h"
 #include "dio_p.h"
 
@@ -176,8 +177,8 @@ bool renameFile(const KURL& src, const KURL& dest)
     AlbumDB* db = AlbumManager::instance()->albumDB();
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
-        db->moveItem(srcAlbum, src.fileName(),
-                     dstAlbum, KURL(dstPath).fileName());
+        db->moveItem(srcAlbum->getID(), src.fileName(),
+                     dstAlbum->getID(), KURL(dstPath).fileName());
         return true;
     }
 

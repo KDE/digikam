@@ -1799,11 +1799,7 @@ void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *al
         QValueList<int>::const_iterator itD = dirIDs.begin();
         for ( ; itU != urls.end() || itD != dirIDs.end(); ++itU, ++itD)
         {
-            PAlbum* pa = AlbumManager::instance()->findPAlbum(*itD);
-            if (pa)
-            {
-                db->setItemTag(pa, (*itU).fileName(), album);
-            }
+            db->addItemTag(*itD, (*itU).fileName(), album->getID());
         }
         db->commitTransaction();
 

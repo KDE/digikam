@@ -278,7 +278,7 @@ void AlbumPropsEdit::slotAverageButtonClicked()
     setCursor( KCursor::waitCursor() );
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumAverageDate( album_ );
+    QDate avDate = db->getAlbumAverageDate( album_->getID() );
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )

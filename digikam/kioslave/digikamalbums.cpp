@@ -395,7 +395,7 @@ void kio_digikamalbums::get( const KURL& url )
 
 void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bool /*resume*/)
 {
-    kdDebug() << k_funcinfo << " : " << url.path() << endl;
+    kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     // get the libraryPath
     QString libraryPath = url.user();
@@ -949,6 +949,7 @@ void kio_digikamalbums::listDir( const KURL& url )
     if (libraryPath.isEmpty())
     {
         error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
+        kdWarning() << "Album Library Path not supplied to kioslave" << endl;
         return;
     }
 
@@ -991,7 +992,7 @@ void kio_digikamalbums::listDir( const KURL& url )
 
 void kio_digikamalbums::mkdir( const KURL& url, int permissions )
 {
-    kdDebug() << k_funcinfo << " : " << url.path() << endl;
+    kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     QString libraryPath = url.user();
     if (libraryPath.isEmpty())

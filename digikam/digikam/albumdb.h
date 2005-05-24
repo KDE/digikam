@@ -30,9 +30,6 @@
 #include "albuminfo.h"
 
 typedef struct sqlite sqleet; // hehe.
-class Album;
-class TAlbum;
-class PAlbum;
 
 typedef QValueList<int> IntList;
 /**
@@ -150,15 +147,20 @@ public:
     void setTagIcon(int tagID, const QString& icon);
 
     /**
+     * Set the parent tagid for the tag. This is equivalent to reparenting
+     * the tag
+     * @param tagID          the id of the tag
+     * @param newParentTagID the new parentid for the tag
+     */
+    void setTagParentID(int tagID, int newParentTagID);
+    
+    /**
      * Deletes a tag from the database. This will not delete the
      * subtags of the tag.
      * @param tagID the id of the tag
      */
     void deleteTag(int tagID);
 
-
-    
-    void moveTAlbum(TAlbum *album, TAlbum *parent);
     
     void beginTransaction();
     void commitTransaction();
@@ -172,25 +174,94 @@ public:
      */
     void setSetting(const QString& keyword, const QString& value);
 
-    QString     getItemCaption(PAlbum *album, const QString& name);
-    QDateTime   getItemDate(PAlbum *album, const QString& name);
     /**
      * This function returns the value which is stored in the database
      * (table Settings).
      * @param keyword The keyword for which the value has to be returned.
      * @return The values which belongs to the keyword.
      */
-    QString     getSetting(const QString& keyword);
-    QStringList getItemTagNames(PAlbum *album, const QString& name);
-    IntList     getItemTagIDs(PAlbum *album, const QString& name);
-    IntList     getItemCommonTagIDs(const IntList& dirIDList, const QStringList& nameList);
+    QString getSetting(const QString& keyword);
 
-    void setItemCaption(PAlbum *album, const QString& name,
-                        const QString& caption);
-    void setItemTag(PAlbum *album, const QString& name, TAlbum* tag);
-    void removeItemTag(PAlbum *album, const QString& name, TAlbum* tag);
-    void removeItemAllTags(PAlbum *album, const QString& name);
+    /**
+     * Set the caption for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @param caption the caption for the item
+     */
+    void setItemCaption(int albumID, const QString& name, const QString& caption);
 
+    /**
+     * Add a tag for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @param tagID   the tagID for the tag
+     */
+    void addItemTag(int albumID, const QString& name, int tagID);
+    
+    /**
+     * Get the caption for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the caption for the item
+     */
+    QString getItemCaption(int albumID, const QString& name);
+    
+    /**
+     * Get the datetime for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the datetime for the item
+     */
+    QDateTime getItemDate(int albumID, const QString& name);
+
+    /**
+     * Get a list of names of all the tags for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the list of names of all tags for the item
+     */
+    QStringList getItemTagNames(int albumID, const QString& name);
+    
+    /**
+     * Get a list of IDs of all the tags for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the list of IDs of all tags for the item
+     */
+    IntList     getItemTagIDs(int albumID, const QString& name);
+
+    /**
+     * Given a set of items (identified by their albumID and names,
+     * get a list of ID of all common tags
+     * @param albumIDList a list of albumIDs of the items
+     * @param nameList    a list of names of the items
+     * @return the list of common IDs of the given items
+     */
+    IntList     getItemCommonTagIDs(const IntList& albumIDList,
+                                    const QStringList& nameList);
+
+    /**
+     * Remove a specific tag for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @param tagID   the tagID for the tag
+     */
+    void removeItemTag(int albumID, const QString& name, int tagID);
+
+    /**
+     * Remove all tags for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     */
+    void removeItemAllTags(int albumID, const QString& name);
+
+    /**
+     * Deletes an item from the database.
+     * @param albumID The id of the album.
+     * @param file The filename of the file to delete.
+     */
+    void deleteItem(int albumID, const QString& file);
+    
     /**
      * This can be used to find out the albumID for a given
      * folder. If it does not exist, it will be created and the
@@ -222,7 +293,7 @@ public:
     /**
      * This is simple function to put a new Item in the database,
      * without checking if it already exists, but since albumID+name
-     * has to be unique, it will simply replace the datatime and comment
+     * has to be unique, it will simply replace the datetime and comment
      * for an already existing item. 
      * @param albumID The albumID where the file is located.
      * @param name The filename
@@ -239,7 +310,7 @@ public:
     /**
      * This is simple function to put a new Item in the database,
      * without checking if it already exists, but since albumID+name
-     * has to be unique, it will simply replace the datatime and comment
+     * has to be unique, it will simply replace the datetime and comment
      * for an already existing item. 
      * @param albumID The albumID where the file is located.
      * @param name The filename
@@ -249,28 +320,38 @@ public:
      */
     bool setItemDate(int albumID, const QString& name,
                      const QDateTime& datetime);
-        
-    void getItemsInTAlbum(TAlbum* album, QStringList& urls,
-                          QValueList<int>& dirids);
-    QDate getAlbumAverageDate(PAlbum *album);
 
-    void copyItem(PAlbum *srcAlbum,  const QString& srcFile,
-                  PAlbum *destAlbum, const QString& destFile); 
-    void moveItem(PAlbum *srcAlbum,  const QString& srcFile,
-                  PAlbum *destAlbum, const QString& destFile);
     /**
-     * Deletes an item from the database, by finding the right
-     * id and calling the function below.
-     * @param album The PAlbum which contains the file.
-     * @param file The filename of the file to delete.
+     * Given a tagid, get a list of the url of all items in the tag
+     * @param  tagID the id of the tag
+     * @return a list of urls for the items in the tag. The urls are the
+     * absolute path of the items
      */
-    void deleteItem(PAlbum *album,   const QString& file);
+    QStringList getItemURLsInTag(int tagID);
+
+    QDate getAlbumAverageDate(int albumID);
+
     /**
-     * Deletes an item from the database.
-     * @param albumID The id of the album.
-     * @param file The filename of the file to delete.
+     * Move the attributes of an item to a different item. Useful when
+     * say a file is renamed
+     * @param  srcAlbumID the id of the source album
+     * @param  dstAlbumID the id of the destination album
+     * @param  srcName    the name of the source file
+     * @param  dstName    the name of the destination file
      */
-    void deleteItem(int albumID,     const QString& file);
+    void moveItem(int srcAlbumID, const QString& srcName,
+                  int dstAlbumID, const QString& dstName);
+
+    /**
+     * Copy the attributes of an item to a different item. Useful when
+     * say a file is copied
+     * @param  srcAlbumID the id of the source album
+     * @param  dstAlbumID the id of the destination album
+     * @param  srcName    the name of the source file
+     * @param  dstName    the name of the destination file
+     */
+    void copyItem(int srcAlbumID, const QString& srcName,
+                  int dstAlbumID, const QString& dstName);
 
 private:
 

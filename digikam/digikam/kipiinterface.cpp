@@ -98,24 +98,24 @@ QString DigikamImageInfo::description()
     if (p)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        return db->getItemCaption(p, _url.fileName());
+        return db->getItemCaption(p->getID(), _url.fileName());
     }
 
     return QString::null;
 }
 
-void DigikamImageInfo::setTitle( const QString& name )
+void DigikamImageInfo::setTitle( const QString&  )
 {
     // TODO: what is this supposed to do exactly?
     return;
 
-    PAlbum* p = parentAlbum();
+//     PAlbum* p = parentAlbum();
 
-    if ( p && !name.isEmpty() )
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->moveItem(p, _url.fileName(), p, name);
-    }
+//     if ( p && !name.isEmpty() )
+//     {
+//         AlbumDB* db = AlbumManager::instance()->albumDB();
+//         db->moveItem(p, _url.fileName(), p, name);
+//     }
 }
 
 void DigikamImageInfo::setDescription( const QString& description )
@@ -125,7 +125,7 @@ void DigikamImageInfo::setDescription( const QString& description )
     if ( p  )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemCaption(p, _url.fileName(), description);
+        db->setItemCaption(p->getID(), _url.fileName(), description);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveExifComments())
@@ -397,25 +397,20 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
     AlbumDB* db = AlbumManager::instance()->albumDB();
 
     QStringList     urls;
-    QValueList<int> dirIDs;
 
     db->beginTransaction();
 
-    db->getItemsInTAlbum(album, urls, dirIDs);
+    urls = db->getItemURLsInTag(album->getID());
 
     db->commitTransaction();
 
-    QString basePath(AlbumManager::instance()->getLibraryPath());
-    if (!basePath.endsWith("/"))
-        basePath += "/";
-
     KURL::List urlList;
 
-    QStringList::iterator     itU = urls.begin();
-    while (itU != urls.end())
+    QStringList::iterator     it = urls.begin();
+    while (it != urls.end())
     {
-        urlList.append(KURL(basePath + *itU));
-        itU++;
+        urlList.append(*it);
+        ++it;
     }
 
     return urlList;
@@ -633,7 +628,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     if ( palbum )
     {
         // delete the item from the database
-        albumDB_->deleteItem( palbum, url.fileName() );
+        albumDB_->deleteItem( palbum->getID(), url.fileName() );
     }
     else
     {

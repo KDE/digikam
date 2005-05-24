@@ -281,7 +281,7 @@ void ImageDescEdit::slotApply()
 
     if (m_modified)
     {
-        db->setItemCaption(album, fileURL.fileName(), m_commentsEdit->text());
+        db->setItemCaption(album->getID(), fileURL.fileName(), m_commentsEdit->text());
 
         if (AlbumSettings::instance() &&
             AlbumSettings::instance()->getSaveExifComments())
@@ -313,7 +313,7 @@ void ImageDescEdit::slotApply()
         m_modified = false;
     }
 
-    db->removeItemAllTags(album, fileURL.fileName());
+    db->removeItemAllTags(album->getID(), fileURL.fileName());
     QListViewItemIterator it(m_tagsView);
     while (it.current())
     {
@@ -321,7 +321,7 @@ void ImageDescEdit::slotApply()
             dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem && tItem->isOn())
         {
-            db->setItemTag(album, fileURL.fileName(), tItem->m_album);
+            db->addItemTag(album->getID(), fileURL.fileName(), tItem->m_album->getID());
         }
         ++it;
     }
@@ -376,9 +376,9 @@ void ImageDescEdit::slotItemChanged()
 
     m_nameLabel->setText(fileURL.fileName());
     m_thumbLabel->setPixmap(QPixmap());
-    m_commentsEdit->setText(db->getItemCaption(album, fileURL.fileName()));
+    m_commentsEdit->setText(db->getItemCaption(album->getID(), fileURL.fileName()));
 
-    IntList tagIDs = db->getItemTagIDs(album, fileURL.fileName());
+    IntList tagIDs = db->getItemTagIDs(album->getID(), fileURL.fileName());
 
     QListViewItemIterator it( m_tagsView);
     while (it.current())

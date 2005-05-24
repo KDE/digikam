@@ -223,7 +223,7 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
 
         QStringList tagPaths;
 
-        IntList tagIDs(db->getItemTagIDs(album, url.fileName()));
+        IntList tagIDs(db->getItemTagIDs(album->getID(), url.fileName()));
         
         for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
         {
@@ -235,7 +235,7 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
         }
         
         m_filealbum->setText( album->getURL().remove(0,1) );
-        m_filecomments->setText( db->getItemCaption( album, url.filename() ) );
+        m_filecomments->setText( db->getItemCaption( album->getID(), url.filename() ) );
         m_filetags->setText( tagPaths.join(", "));        
     }
 }
