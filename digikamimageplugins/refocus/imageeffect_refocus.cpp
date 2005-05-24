@@ -508,7 +508,7 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
 {
     double    matrix[mat_size][mat_size];
     double    valRed, valGreen, valBlue;
-    int       x1, y1, x2, y2, color, index1, index2;
+    int       x1, y1, x2, y2, index1, index2;
     
     //  Big/Little Endian color manipulation compatibility.
     int red, green, blue;
@@ -558,21 +558,11 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
                 imagedata.channel.blue  = (uchar) CLAMP (valBlue, 0, 255);
                 destData[index2]        = imagedata.raw;
                 }
-                
-/*
-            // Copy alpha 
-            index3 = (y1 * width + x1) * bpp + ncolors;
-            index4 = buf_row_width * y1 + bpp * x1 + ncolors;
-                
-            if (index3 >= 0 && index3 < imageSize && 
-                index4 >= 0 && index4 < imageSize)
-               tp[index3] = sp[index4];*/
             }
         
         m_imagePreviewWidget->setProgress((int) (((double)y1 * 100.0) / height));
         kapp->processEvents();
         }
-
 }
 
 }  // NameSpace DigikamRefocusImagesPlugin
