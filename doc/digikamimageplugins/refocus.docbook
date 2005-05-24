@@ -127,9 +127,9 @@ Comparison to two other techniques frequently used to enhance images are:
 
 <itemizedlist>
 
-  <listitem><para>Sharpening</para></listitem>
+  <listitem><para><ulink url="help:/digikam/using-kapp-imageeditor.html#using-kapp-adjustsharpness">Sharpen Filter</ulink></para></listitem>
   
-  <listitem><para>Unsharp mask</para></listitem>
+  <listitem><para><ulink url="help:/digikamimageplugins/unsharp.html">Unsharp Mask</ulink></para></listitem>
   
 </itemizedlist>
 </para>
