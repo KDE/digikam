@@ -667,10 +667,12 @@ void AlbumFolderView_Deprecated::albumDelete(PAlbum* album)
         ++it;
     }
 
+    int result = KMessageBox::No;
+    
     AlbumSettings* settings = AlbumSettings::instance();
     if (children)
     {
-        int result =
+        result =
             KMessageBox::warningYesNo(this, settings->getUseTrash() ?
                                       i18n("Album '%1' has %2 subalbums. "
                                            "Moving this to trash will also "
@@ -684,32 +686,26 @@ void AlbumFolderView_Deprecated::albumDelete(PAlbum* album)
                                            "Are you sure you want to continue?")
                                       .arg(album->getTitle())
                                       .arg(children));
-
-        if (result == KMessageBox::Yes)
-        {
-            QString errMsg;
-            if (!albumMan_->deletePAlbum(album, errMsg))
-            {
-                KMessageBox::error(0, errMsg);
-            }
-        }
-
     }
     else
     {
-        if (!settings->getUseTrash())
-        {
-            if (KMessageBox::questionYesNo(0, i18n("Delete album '%1' from disk?")
-                                           .arg(album->getTitle()))
-                != KMessageBox::Yes)
-                return;
-        }
+        result = KMessageBox::questionYesNo(this, settings->getUseTrash() ?
+                                            i18n("Move album '%1' to trash?")
+                                            .arg(album->getTitle()) :
+                                            i18n("Delete album '%1' from disk?")
+                                            .arg(album->getTitle()));
+    }
 
-        QString errMsg;
-        if (!albumMan_->deletePAlbum(album, errMsg))
-        {
-            KMessageBox::error(0, errMsg);
-        }
+    if (result == KMessageBox::Yes)
+    {
+        // TODO: currently trash kioslave can handle only full paths.
+        // pass full folder path to the trashing job
+        KURL u;
+        u.setProtocol("file");
+        u.setPath(album->getFolderPath());
+        KIO::Job* job = DIO::del(u);
+        connect(job, SIGNAL(result(KIO::Job *)),
+            this, SLOT(slotDIOResult(KIO::Job *)));
     }
 }
 

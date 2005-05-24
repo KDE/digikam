@@ -47,7 +47,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     QHBox* hbox = new QHBox(vbox);
     hbox->setSpacing(spacingHint());
     
-    new QLabel(i18n("Search:"), hbox);
+    new QLabel("<b>" + i18n("Search:") + "</b>", hbox);
     m_searchEdit = new QLineEdit(hbox);
     
     m_resultsView = new SearchResultsView(vbox);
