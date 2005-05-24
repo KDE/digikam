@@ -34,7 +34,6 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "albumdb.h"
 #include "albumsettings.h"
 
 #include "albumlister.h"
@@ -54,7 +53,6 @@ public:
     QString                               filter;
                                           
     Album*                                currAlbum;
-    AlbumDB*                              db;
                                           
     QMap<int,bool>                        dayFilter;
     QValueList<int>                       tagFilter;

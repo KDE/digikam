@@ -40,8 +40,9 @@ public:
      * Constructor
      * @param     albumID  id of the PAlbum to which this item belongs
      * @param     name     name of the image
-     * @param     datetime datetime for the image
-     * @param     size     filesize for the image
+     * @param     datetime datetime of the image
+     * @param     size     filesize of the image
+     * @param     dims     dimensions of the image
      */
     ImageInfo(int albumID, const QString& name,
               const QDateTime& datetime, size_t size,

@@ -27,6 +27,7 @@
 #include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kio/job.h>
+#include <kdirwatch.h>
 
 #include <qfile.h>
 #include <qdir.h>
@@ -85,6 +86,8 @@ public:
 
     KIO::TransferJob *dateListJob;
     QByteArray        buffer;
+
+    KDirWatch        *dirWatch;
 };
     
 
@@ -111,6 +114,8 @@ AlbumManager::AlbumManager()
 
     d->itemHandler  = 0;
     d->currentAlbum = 0;
+
+    d->dirWatch = 0;
 }
 
 AlbumManager::~AlbumManager()
@@ -126,6 +131,8 @@ AlbumManager::~AlbumManager()
     delete d->rootDAlbum;
     delete d->rootSAlbum;
 
+    delete d->dirWatch;
+    
     delete d->db;
     delete d;
 
@@ -148,6 +155,9 @@ void AlbumManager::setLibraryPath(const QString& path)
         d->dateListJob->kill();
         d->dateListJob = 0;
     }
+
+    delete d->dirWatch;
+    d->dirWatch = 0;
     
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
@@ -226,6 +236,12 @@ QString AlbumManager::getLibraryPath() const
 
 void AlbumManager::startScan()
 {
+    d->dirWatch = new KDirWatch(this);
+    connect(d->dirWatch, SIGNAL(dirty(const QString&)),
+            SLOT(slotDirty(const QString&)));
+
+    d->dirWatch->addDir(d->libraryPath);
+    
     // List dates using kioslave
 
     if (d->dateListJob)
@@ -289,6 +305,8 @@ void AlbumManager::startScan()
         album->setCollection(info.collection, false);
         album->setDate(info.date, false);
         album->setIcon(info.icon);
+
+        d->dirWatch->addDir(album->getFolderPath());
         
         insertPAlbum(album);
     }
@@ -405,13 +423,13 @@ bool AlbumManager::createPAlbum(PAlbum* parent,
         child = child->m_next;
     }
 
-    KURL url = parent->getKURL();
-    url.addPath(name);
-    url.cleanPath();
+    QString path = parent->getFolderPath();
+    path += "/" + name;
+    path = QDir::cleanDirPath(path);
 
     // make the directory synchronously, so that we can add the
     // album info to the database directly
-    if (::mkdir(QFile::encodeName(url.path(-1)), 0777) != 0)
+    if (::mkdir(QFile::encodeName(path), 0777) != 0)
     {
         if (errno == EACCES)
             errMsg = i18n("Access denied to path");
@@ -425,12 +443,26 @@ bool AlbumManager::createPAlbum(PAlbum* parent,
 
     // Now insert the album properties into the database
 
-    QString u(QDir::cleanDirPath(url.path()));
-    u.remove(0, QDir::cleanDirPath(d->libraryPath).length());
-    if (!u.startsWith("/"))
-        u.prepend("/");
+    path.remove(0, QDir::cleanDirPath(d->libraryPath).length());
+    if (!path.startsWith("/"))
+        path.prepend("/");
 
-    d->db->addPAlbum(u, caption, date, collection);
+    int id = d->db->addAlbum(path, caption, date, collection);
+    if (id == -1)
+    {
+        errMsg = i18n("Failed to add album to database");
+        return false;
+    }
+
+    PAlbum *album = new PAlbum(name, id, false);
+    album->setParent(parent);
+    album->setCaption(caption);
+    album->setCollection(collection);
+    album->setDate(date);
+    
+    d->dirWatch->addDir(album->getFolderPath());
+        
+    insertPAlbum(album);
 
     return true;
 }
@@ -451,7 +483,8 @@ bool AlbumManager::deletePAlbum(PAlbum* album, QString& errMsg)
 
     if (SyncJob::userDelete(album->getKURL()))
     {
-        d->db->deleteAlbum(album);
+        // TODO: delete all subalbums
+        d->db->deleteAlbum(album->getID());
         return true;
     }
     
@@ -514,13 +547,14 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName, QString& 
     // their url (not KURL) set correctly
 
     album->setTitle(newName);
-    d->db->renameAlbum(album, newName);
+    d->db->setAlbumURL(album->getID(), album->getURL());
+
+    Album* subAlbum = 0;
     
     AlbumIterator it(album);
-    while ( it.current() )
+    while ((subAlbum = it.current()) != 0)
     {
-        d->db->renameAlbum(it.current(), QString(""));
-        (*it)->setTitle(newName);
+        d->db->setAlbumURL(subAlbum->getID(), subAlbum->getURL());
         ++it;
     }
     
@@ -561,8 +595,19 @@ bool AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         child = child->m_next;
     }
 
-    if (!d->db->createTAlbum(parent, name, icon))
+    int id = d->db->addTag(parent->getID(), name, icon);
+    if (id == -1)
+    {
+        errMsg = i18n("Failed to add tag to database");
         return false;
+    }
+    
+    TAlbum *album = new TAlbum(name, id, false);
+    album->setParent(parent);
+    album->setPID(parent->getID());
+    album->setIcon(icon);
+
+    insertTAlbum(album);
     
     return true;
 }
@@ -581,7 +626,9 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
         return false;
     }
 
-    d->db->deleteAlbum(album);
+    d->db->deleteTag(album->getID());
+    // TODO: delete all subtags
+    
     removeTAlbum(album);
 
     delete album;
@@ -626,7 +673,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
         sibling = sibling->m_next;
     }
 
-    d->db->renameAlbum(album, name);
+    d->db->setTagName(album->getID(), name);
     
     return true;
 }
@@ -646,7 +693,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon,
         return false;
     }
     
-    d->db->setIcon(album, icon);
+    d->db->setTagIcon(album->getID(), icon);
+    album->setIcon(icon);
     
     if (emitSignalChanged)    
         emit signalTAlbumIconChanged(album);        
@@ -680,7 +728,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *parent, QString &errMsg)
 bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAlbum)
 {
     QString name = url.queryItem("name");
-    
+
     SAlbum* existingAlbum = 0;
     for (SAlbumList::iterator it = d->sAlbumList.begin();
          it != d->sAlbumList.end(); ++it)
@@ -691,7 +739,7 @@ bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAl
             break;
         }
     }
-
+ 
     if (existingAlbum)
     {
         existingAlbum->m_kurl = url;
@@ -699,9 +747,9 @@ bool AlbumManager::createSAlbum(const KURL& url, bool simple, SAlbum*& renamedAl
         renamedAlbum = existingAlbum;
         return true;
     }
-
+    
     renamedAlbum = 0;
-
+                                                             
     //TODO: write to db
     SAlbum* album = new SAlbum(url, simple, false);
     album->setParent(d->rootSAlbum);
@@ -793,7 +841,8 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon,
         return false;
     }
 
-    d->db->setIcon(album, icon);
+    d->db->setTagIcon(album->getID(), icon);
+    album->setIcon(icon);
 
     if(emitSignalChanged)
         emit signalPAlbumIconChanged(album);    
@@ -920,6 +969,11 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
     int oldSize = d->buffer.size();
     d->buffer.resize(d->buffer.size() + data.size());
     memcpy(d->buffer.data()+oldSize, data.data(), data.size());
+}
+
+void AlbumManager::slotDirty(const QString& path)
+{
+    kdDebug() << "Dirty: " << path << endl;
 }
 
 

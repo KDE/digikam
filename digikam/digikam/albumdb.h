@@ -53,9 +53,6 @@ public:
      */
     ~AlbumDB();
 
-    AlbumInfo::List scanAlbums();
-    AlbumInfo::List scanTags();
-    
     /**
      * Makes a connection to the database and makes sure all tables
      * are available.
@@ -63,21 +60,109 @@ public:
      */
     void setDBPath(const QString& path);
 
-    void scanTags(TAlbum *album);
-    void readAlbum(Album *album);
-    void deleteAlbum(Album *album);
-    void renameAlbum(Album *album, const QString& newName);
-    bool createTAlbum(TAlbum* parent, const QString& name, const QString& icon);
+    /**
+     * Returns all albums and their attributes in the database
+     * @return a list of albums and their attributes
+     */
+    AlbumInfo::List scanAlbums();
+    
+    /**
+     * Returns all tags and their attributes in the database
+     * @return a list of tags and their attributes
+     */
+    AlbumInfo::List scanTags();
+
+    /**
+     * Add a new album to the database with the given attributes
+     * @param url        url of the album
+     * @param caption    the album caption
+     * @param date       the date for the album
+     * @param collection the album collection
+     * @return the id of the album added or -1 if it failed
+     */
+    int addAlbum(const QString& url, const QString& caption,
+                 const QDate& date, const QString& collection);
+    
+    /**
+     * Set a new url for the album. This will not affect the url
+     * of the subalbums.
+     * @param albumID the id of the album
+     * @param url     the new url for the album
+     */
+    void setAlbumURL(int albumID, const QString& url);
+
+    /**
+     * Set a caption for the album.
+     * @param albumID the id of the album
+     * @param caption the new caption for the album
+     */
+    void setAlbumCaption(int albumID, const QString& caption);
+
+    /**
+     * Set a collection for the album.
+     * @param albumID    the id of the album
+     * @param collection the new collection for the album
+     */
+    void setAlbumCollection(int albumID, const QString& collection);
+
+    /**
+     * Set a date for the album.
+     * @param albumID  the id of the album
+     * @param date     the date for the album
+     */
+    void setAlbumDate(int albumID, const QDate& date);
+    
+    /**
+     * Set the icon for the album.
+     * @param albumID the id of the album
+     * @param icon    the icon for the album (absolute path to the icon)
+     */
+    void setAlbumIcon(int albumID, const QString& icon);
+
+    /**
+     * Deletes an album from the database. This will not delete the
+     * subalbums of the album.
+     * @param albumID the id of the album
+     */
+    void deleteAlbum(int albumID);
+
+    /**
+     * Adds a new tag to the database with given name, icon and parent id.
+     * @param parentTagID the id of the tag which will become the new tags parent
+     * @param name        the name of the tag
+     * @param icon        the icon for the path (absolute path to the icon)
+     * @return the id of the tag added or -1 if it failed
+     */
+    int addTag(int parentTagID, const QString& name, const QString& icon);
+    
+    /**
+     * Set a new name for the tag. 
+     * @param tagID the id of the tag
+     * @param name  the new name for the tag
+     */
+    void setTagName(int tagID, const QString& name);
+
+    /**
+     * Set the icon for the tag.
+     * @param tagID the id of the tag
+     * @param icon    the icon for the tag (absolute path to the icon)
+     */
+    void setTagIcon(int tagID, const QString& icon);
+
+    /**
+     * Deletes a tag from the database. This will not delete the
+     * subtags of the tag.
+     * @param tagID the id of the tag
+     */
+    void deleteTag(int tagID);
+
+
+    
     void moveTAlbum(TAlbum *album, TAlbum *parent);
-    bool addPAlbum(const QString& url, const QString& caption,
-                   const QDate& date, const QString& collection);
     
     void beginTransaction();
     void commitTransaction();
 
-    void setCaption(PAlbum *album);
-    void setCollection(PAlbum *album);
-    void setDate(PAlbum *album);
     /**
      * This adds a keyword-value combination to the database Settings table
      * if the keyword already exists, the value will be replaced with the new
@@ -86,8 +171,6 @@ public:
      * @param value The value
      */
     void setSetting(const QString& keyword, const QString& value);
-    void setIcon(TAlbum *album, const QString& icon);
-    void setIcon(PAlbum *album, const QString& icon);    
 
     QString     getItemCaption(PAlbum *album, const QString& name);
     QDateTime   getItemDate(PAlbum *album, const QString& name);
@@ -167,7 +250,6 @@ public:
     bool setItemDate(int albumID, const QString& name,
                      const QDateTime& datetime);
         
-    QStringList getItemsURL(TAlbum *album);
     void getItemsInTAlbum(TAlbum* album, QStringList& urls,
                           QValueList<int>& dirids);
     QDate getAlbumAverageDate(PAlbum *album);
@@ -198,19 +280,6 @@ private:
      */
     void initDB();
 
-    bool importXML(PAlbum *album);
-    bool exportXML(PAlbum *album);
-
-    void readPAlbum(PAlbum* album);
-    void readTAlbum(TAlbum* album);
-    void renameTAlbum(TAlbum* album, const QString& name);
-    void renamePAlbum(PAlbum* album, const QString& url);
-    
-    bool readIdentifier(PAlbum *album, int& id);
-    void writeIdentifier(PAlbum *album, int id);
-
-    bool checkAlbum(PAlbum *album, int id);
-
     /**
      * This will execute a given SQL statement to the database.
      * @param sql The SQL statement
@@ -232,8 +301,8 @@ private:
 
     void removeInvalidEntries();
     
-    sqleet*       m_db;
-    bool          m_valid;
+    sqleet*  m_db;
+    bool     m_valid;
 };
 
 #endif /* ALBUMDB_H */

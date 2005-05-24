@@ -265,7 +265,7 @@ void PAlbum::setCaption(const QString& caption, bool addToDB)
     if (addToDB)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setCaption(this);
+        db->setAlbumCaption(m_id, m_caption);
     }
 }
 
@@ -275,7 +275,7 @@ void PAlbum::setCollection(const QString& collection, bool addToDB)
     if (addToDB)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setCollection(this);
+        db->setAlbumCollection(m_id, m_collection);
     }
 }
 
@@ -285,7 +285,7 @@ void PAlbum::setDate(const QDate& date, bool addToDB)
     if (addToDB)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setDate(this);
+        db->setAlbumDate(m_id, m_date);
     }
 }
 

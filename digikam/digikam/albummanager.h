@@ -120,6 +120,7 @@ private slots:
 
     void slotResult(KIO::Job* job);
     void slotData(KIO::Job* job, const QByteArray& data);
+    void slotDirty(const QString& path);
 
 signals:
 
