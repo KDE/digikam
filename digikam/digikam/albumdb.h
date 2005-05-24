@@ -183,6 +183,34 @@ public:
     QString getSetting(const QString& keyword);
 
     /**
+     * This is simple function to put a new Item in the database,
+     * without checking if it already exists, but since albumID+name
+     * has to be unique, it will simply replace the datetime and comment
+     * for an already existing item. 
+     * @param albumID The albumID where the file is located.
+     * @param name The filename
+     * @param datetime The datetime to be stored. Should try to let that be
+     * the exif-datetime, but if not available the modification date.
+     * @param comment The user comment as found in the exif-headers of the 
+     * file.
+     * @return It will always return true. Maybe that will change.
+     */
+    bool addItem(int albumID, const QString& name,
+                 const QDateTime& datetime,
+                 const QString& comment);
+    
+    /**
+     * Update the date of a item to supplied date
+     * @param albumID The albumID where the file is located.
+     * @param name The filename
+     * @param datetime The datetime to be stored. Should try to let that be
+     * the exif-datetime, but if not available the modification date.
+     * @return It will always return true. Maybe that will change.
+     */
+    bool setItemDate(int albumID, const QString& name,
+                     const QDateTime& datetime);
+
+    /**
      * Set the caption for the item
      * @param albumID the albumID of the item
      * @param name    the name of the item
@@ -289,37 +317,6 @@ public:
      * the filename of all items.
      */
     QStringList getAllItemURLsWithoutDate();
-
-    /**
-     * This is simple function to put a new Item in the database,
-     * without checking if it already exists, but since albumID+name
-     * has to be unique, it will simply replace the datetime and comment
-     * for an already existing item. 
-     * @param albumID The albumID where the file is located.
-     * @param name The filename
-     * @param datetime The datetime to be stored. Should try to let that be
-     * the exif-datetime, but if not available the modification date.
-     * @param comment The user comment as found in the exif-headers of the 
-     * file.
-     * @return It will always return true. Maybe that will change.
-     */
-    bool setItemDateComment(int albumID, const QString& name,
-                            const QDateTime& datetime,
-                            const QString& comment);
-    
-    /**
-     * This is simple function to put a new Item in the database,
-     * without checking if it already exists, but since albumID+name
-     * has to be unique, it will simply replace the datetime and comment
-     * for an already existing item. 
-     * @param albumID The albumID where the file is located.
-     * @param name The filename
-     * @param datetime The datetime to be stored. Should try to let that be
-     * the exif-datetime, but if not available the modification date.
-     * @return It will always return true. Maybe that will change.
-     */
-    bool setItemDate(int albumID, const QString& name,
-                     const QDateTime& datetime);
 
     /**
      * Given a tagid, get a list of the url of all items in the tag

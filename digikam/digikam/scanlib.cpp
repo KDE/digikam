@@ -271,7 +271,7 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     }
 
     AlbumDB* dbstore = AlbumManager::instance()->albumDB();
-    dbstore->setItemDateComment(albumID, filename, datetime,comment);
+    dbstore->addItem(albumID, filename, datetime,comment);
 }
 
 void ScanLib::updateItemDate(const QString& albumURL,

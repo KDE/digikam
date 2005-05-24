@@ -661,10 +661,10 @@ int AlbumDB::getOrCreateAlbumId(const QString& folder)
     return albumID;
 }
 
-bool AlbumDB::setItemDateComment(int albumID, 
-                                 const QString& name,
-                                 const QDateTime& datetime, 
-                                 const QString& comment)
+bool AlbumDB::addItem(int albumID, 
+                      const QString& name,
+                      const QDateTime& datetime, 
+                      const QString& comment)
 {
     execSql ( QString ("REPLACE INTO Images "
                        "( caption , datetime, name, dirid ) "
