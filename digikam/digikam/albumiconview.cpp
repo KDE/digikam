@@ -90,7 +90,6 @@ extern "C"
 // Local includes.
 
 #include "album.h"
-#include "albumdb.h"
 #include "albummanager.h"
 #include "dio.h"
 #include "albumlister.h"
