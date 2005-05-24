@@ -35,7 +35,6 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
-#include <qimage.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qrect.h>
@@ -64,6 +63,8 @@
 #include "matrix.h"
 #include "version.h"
 #include "imageeffect_refocus.h"
+
+#define MAX_MATRIX_SIZE 25
 
 namespace DigikamRefocusImagesPlugin
 {
@@ -179,7 +180,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_noise = new KDoubleNumInput(plainPage());
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise filter parameter may help reducing artifacts. The Noise Filter "
+    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise Filter parameter may help reducing artifacts. The Noise Filter "
                                    "can range from 0-1 but values higher than 0.1 are rarely helpful. When the Noise Filter "
                                    "value is too low, e.g. 0.0 the image quality will be horrible. A useful value is 0.01. "
                                    "Using a high value for the Noise Filter will reduce the sharpening "
@@ -192,10 +193,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_gauss = new KDoubleNumInput(plainPage());
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your blurring "
-                                   "is of Gaussian type. In most cases you should set this parameter to 0, because it causes "
-                                   "nasty artifacts. When you use non-zero values you will probably have to increase the "
-                                   "Correlation and/or Noise filter parameters, too."));
+    QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your "
+                                   "blurring is of Gaussian type. In most cases you should set this parameter to 0, because "
+                                   "it causes nasty artifacts. When you use non-zero values you will probably have to "
+                                   "increase the Correlation and/or Noise Filter parameters, too."));
 
     grid->addMultiCellWidget(label3, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_gauss, 0, 0, 4, 4);
@@ -203,7 +204,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     QLabel *label1 = new QLabel(i18n("Matrix Size:"), plainPage());
     m_matrixSize = new KIntNumInput(plainPage());
-    m_matrixSize->setRange(0, 25, 1, true);  
+    m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the Matrix Width may give better results, especially when you have "
                                         "chosen large values for Circular or Gaussian Sharpness."));
@@ -236,6 +237,56 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
 
     connect(m_noise, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));                        
+
+    // -------------------------------------------------------------
+    
+    // Image creation with dummy borders (mosaic mode). It needs to do it before to apply deconvolution filter 
+    // on original image border pixels including on matrix size area. This way limit artefacts on image border.
+    
+    Digikam::ImageIface iface(0, 0);
+        
+    uint*  data = iface.getOriginalData();
+    int    w    = iface.originalWidth();
+    int    h    = iface.originalHeight();
+    
+    m_img.create( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, 32 );
+    
+    QImage tmp;
+    QImage org(w, h, 32);
+    memcpy(org.bits(), data, org.numBytes());            
+    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, &org, 0, 0, w, h);
+    
+    // Create dummy top border
+    tmp = org.copy(0, 0, w, 2*MAX_MATRIX_SIZE).mirror(false, true);
+    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 0, &tmp, 0, 0, w, 2*MAX_MATRIX_SIZE);
+    
+    // Create dummy bottom border
+    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE).mirror(false, true);
+    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h, &tmp, 0, 0, w, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy right border
+    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, h).mirror(true, false);
+    bitBlt(&m_img, 0, 2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, h);
+    
+    // Create dummy left border
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h).mirror(true, false);
+    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, h);
+    
+    // Create dummy top/left corner
+    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
+    bitBlt(&m_img, 0, 0, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy top/right corner
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
+    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, 0, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy bottom/left corner
+    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
+    bitBlt(&m_img, 0, h+2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy bottom/right corner
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
+    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
 }
 
 ImageEffect_Refocus::~ImageEffect_Refocus()
@@ -353,12 +404,8 @@ void ImageEffect_Refocus::slotEffect()
     tmpRect.setRight(area.right()+2*ms);
     tmpRect.setTop(area.top()-2*ms);
     tmpRect.setBottom(area.bottom()+2*ms);
-    Digikam::ImageIface iface(0, 0);
-    uint* data    = iface.getOriginalData();
-    int w         = iface.originalWidth();
-    int h         = iface.originalHeight();
-    QImage* imOrg = new QImage((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
-    QImage imTemp = imOrg->copy(tmpRect);
+    tmpRect.moveBy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    QImage imTemp = m_img.copy(tmpRect);
         
     m_imagePreviewWidget->setProgress(0);
     refocus((uint *)imTemp.bits(), imTemp.width(), imTemp.height(), ms, r, g, c, n);
@@ -368,8 +415,6 @@ void ImageEffect_Refocus::slotEffect()
     
     abortPreview();
     m_dirty = false;
-    delete imOrg;
-    delete [] data;
 }
 
 void ImageEffect_Refocus::slotOk()
@@ -386,24 +431,29 @@ void ImageEffect_Refocus::slotOk()
     enableButton(User2, false);
     enableButton(User3, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
         
-    uint*  data   = iface.getOriginalData();
-    int    w      = iface.originalWidth();
-    int    h      = iface.originalHeight();
-    int    ms     = m_matrixSize->value();
-    double r      = m_radius->value();
-    double g      = m_gauss->value();
-    double c      = m_correlation->value();
-    double n      = m_noise->value();
+    Digikam::ImageIface iface(0, 0);
+    
+    uint*  data = (uint*)m_img.bits();
+    int    w    = m_img.width();
+    int    h    = m_img.height();
+    int    ms   = m_matrixSize->value();
+    double r    = m_radius->value();
+    double g    = m_gauss->value();
+    double c    = m_correlation->value();
+    double n    = m_noise->value();
     
     m_imagePreviewWidget->setProgress(0);
     refocus(data, w, h, ms, r, g, c, n);
 
     if ( !m_cancel )
-       iface.putOriginalData(i18n("Refocus"), data);
+       {
+       iface.putOriginalData(i18n("Refocus"), 
+             (uint*)m_img.copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 
+                               iface.originalWidth(), iface.originalHeight())
+                         .bits());
+       }
        
-    delete [] data;
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();       
 }
@@ -510,7 +560,7 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
     double    valRed, valGreen, valBlue;
     int       x1, y1, x2, y2, index1, index2;
     
-    //  Big/Little Endian color manipulation compatibility.
+    // Big/Little Endian color manipulation compatibility.
     int red, green, blue;
     Digikam::ImageFilters::imageData imagedata;
     

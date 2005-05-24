@@ -65,6 +65,8 @@ private:
 
     QWidget         *m_parent;
     
+    QImage           m_img;
+    
     QTimer          *m_timer;
     
     QPushButton     *m_helpButton;
