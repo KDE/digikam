@@ -424,17 +424,6 @@ void ImageEffect_Refocus::slotEffect()
        delete m_refocusFilter;
         
     m_refocusFilter = new Refocus(&imTemp, ms, r, g, c, n, this);
-    
-    //FIXME
-    /*
-    if (m_cancel) return;
-    QImage imDest = imTemp.copy(2*ms, 2*ms, area.width(), area.height());
-    m_imagePreviewWidget->setPreviewImageData(imDest);
-    
-    abortPreview();
-    m_dirty = false;
-    */
-    
 }
 
 void ImageEffect_Refocus::slotOk()
@@ -466,24 +455,6 @@ void ImageEffect_Refocus::slotOk()
        delete m_refocusFilter;
         
     m_refocusFilter = new Refocus(&m_img, ms, r, g, c, n, this);
-    
-    // FIXME
-    /*
-    Digikam::ImageIface iface(0, 0);
-    refocus(data, w, h, ms, r, g, c, n);
-
-    if ( !m_cancel )
-       {
-       iface.putOriginalData(i18n("Refocus"), 
-             (uint*)m_img.copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 
-                               iface.originalWidth(), iface.originalHeight())
-                         .bits());
-       }
-       
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();
-    */
-    
 }
 
 void ImageEffect_Refocus::customEvent(QCustomEvent *event)
