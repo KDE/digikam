@@ -63,7 +63,7 @@ public:
     CimgIface(uint *data, uint width, uint height,
               uint blurIt, double timeStep, double integralStep,
               double angularStep, double blur, double detail,
-              double gradient, double gaussian, bool normalize, bool normalize, 
+              double gradient, double gaussian, bool normalize, bool linearInterpolation, 
               bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
               char* visuflowMode=NULL, uint *newData=0, int newWidth=0, int newHeight=0,
               QImage *inPaintingMask=0, QObject *parent=0);
