@@ -567,7 +567,7 @@ void AdjustCurveDialog::slotSaveCurves()
 {
     KURL saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    saveCurvesFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Gimp Curves File to Save")) );
     if( saveCurvesFile.isEmpty() )

@@ -727,7 +727,7 @@ void ChannelMixerDialog::slotSaveGains()
     KURL saveGainsFileUrl;
     FILE *fp = 0L;
     
-    saveGainsFileUrl = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    saveGainsFileUrl = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                                QString( "*" ), this,
                                                QString( i18n("Gimp Gains Mixer File to Save")) );
     if( saveGainsFileUrl.isEmpty() )

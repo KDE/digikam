@@ -696,7 +696,7 @@ void AdjustLevelDialog::slotSaveLevels()
 {
     KURL saveLevelsFile;
 
-    saveLevelsFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    saveLevelsFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Gimp Levels File to Save")) );
     if( saveLevelsFile.isEmpty() )

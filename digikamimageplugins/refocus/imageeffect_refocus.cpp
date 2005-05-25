@@ -497,9 +497,9 @@ void ImageEffect_Refocus::slotUser2()
 
 void ImageEffect_Refocus::slotUser3()
 {
-    KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("Photograph Refocus Settings File to Save")) );
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Refocus Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 

@@ -914,7 +914,7 @@ void ImageEffect_WhiteBalance::slotUser2()
 
 void ImageEffect_WhiteBalance::slotUser3()
 {
-    KURL saveWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("White Color Balance Settings File to Save")) );
     if( saveWhiteBalanceFile.isEmpty() )
