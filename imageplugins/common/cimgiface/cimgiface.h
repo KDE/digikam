@@ -159,6 +159,6 @@ private:  // CImg filter data.
     
 };    
 
-}  // NameSpace Digikam
+}  // NameSpace DigikamImagePlugins
 
 #endif /* CIMGIFACE_H */
