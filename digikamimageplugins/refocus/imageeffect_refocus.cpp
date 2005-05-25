@@ -73,7 +73,6 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                  i18n("&Save As...")),
                      m_parent(parent)
 {
-    m_dirty  = false; 
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_refocusFilter        = 0L;
@@ -314,10 +313,9 @@ void ImageEffect_Refocus::abortPreview()
 
 void ImageEffect_Refocus::slotUser1()
 {
-    if (m_dirty)
+    if (m_currentRenderingMode != NoneRendering)
        {
        m_refocusFilter->stopComputation();
-       abortPreview();
        }
     else
        {
@@ -385,11 +383,10 @@ void ImageEffect_Refocus::slotTimer()
 
 void ImageEffect_Refocus::slotEffect()
 {
-    if (m_dirty) return;     // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     // Computation already in process.
     
     m_currentRenderingMode = PreviewRendering;
-    m_dirty = true;
-    
+
     m_matrixSize->setEnabled(false);
     m_radius->setEnabled(false);
     m_gauss->setEnabled(false);
@@ -487,7 +484,6 @@ void ImageEffect_Refocus::customEvent(QCustomEvent *event)
                  m_imagePreviewWidget->setPreviewImageData(imDest);
     
                  abortPreview();
-                 m_dirty = false;
                  break;
                  }
               
@@ -516,8 +512,8 @@ void ImageEffect_Refocus::customEvent(QCustomEvent *event)
                 case PreviewRendering:
                     {
                     kdDebug() << "Preview Refocus failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
-                    m_dirty = false;   
                     break;
                     }
                 

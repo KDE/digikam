@@ -115,10 +115,10 @@ void Refocus::startComputation()
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
        }
 
-    QDateTime endDate = QDateTime::currentDateTime();
-    
     refocusImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
                  m_matrixSize, m_radius, m_gauss, m_correlation, m_noise);
+    
+    QDateTime endDate = QDateTime::currentDateTime();    
     
     if (!m_cancel)
        {
