@@ -44,6 +44,10 @@ extern "C"
  
 #include <qglobal.h>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "matrix.h"
@@ -132,9 +136,9 @@ void RefocusMatrix::convolve_mat (CMat * result, const CMat * const mata, const 
         {
         for (xr = -result->radius; xr <= result->radius; xr++)
             {
-            const int ya_low = QMAX (-mata->radius, yr - matb->radius);
+            const int ya_low  = QMAX (-mata->radius, yr - matb->radius);
             const int ya_high = QMIN (mata->radius, yr + matb->radius);
-            const int xa_low = QMAX (-mata->radius, xr - matb->radius);
+            const int xa_low  = QMAX (-mata->radius, xr - matb->radius);
             const int xa_high = QMIN (mata->radius, xr + matb->radius);
             register double val = 0.0;
     
@@ -144,12 +148,12 @@ void RefocusMatrix::convolve_mat (CMat * result, const CMat * const mata, const 
                     {
                     val += c_mat_elt (mata, xa, ya) *
                         c_mat_elt (matb, xr - xa, yr - ya);
-                    };
-                };
+                    }
+                }
             
             *c_mat_eltptr (result, xr, yr) = val;
-            };
-        };
+            }
+        }
 }
 
 void RefocusMatrix::convolve_star_mat (CMat * result, const CMat * const mata, const CMat * const matb)
@@ -172,12 +176,12 @@ void RefocusMatrix::convolve_star_mat (CMat * result, const CMat * const mata, c
                     {
                     val += c_mat_elt (mata, xa, ya) *
                         c_mat_elt (matb, xr + xa, yr + ya);
-                    };
-                };
+                    }
+                }
             
             *c_mat_eltptr (result, xr, yr) = val;
-            };
-        };
+            }
+        }
 }
 
 void RefocusMatrix::convolve_mat_fun (CMat * result, const CMat * const mata, double (f) (int, int))
@@ -195,12 +199,12 @@ void RefocusMatrix::convolve_mat_fun (CMat * result, const CMat * const mata, do
                 for (xa = -mata->radius; xa <= mata->radius; xa++)
                     {
                     val += c_mat_elt (mata, xa, ya) * f (xr - xa, yr - ya);
-                    };
-                };
+                    }
+                }
             
             *c_mat_eltptr (result, xr, yr) = val;
-            };
-        };
+            }
+        }
 }
 
 int RefocusMatrix::as_idx (const int k, const int l, const int m)
@@ -224,10 +228,10 @@ void RefocusMatrix::print_c_mat (FILE * file, const CMat * const mat)
         for (x = -mat->radius; x <= mat->radius; x++)
             {
             fprintf (file, "%f ", c_mat_elt (mat, x, y));
-            };
+            }
         
         fprintf (file, "\n");
-        };
+        }
 }
 
 void RefocusMatrix::print_matrix (FILE * file, Mat * matrix)
@@ -239,10 +243,10 @@ void RefocusMatrix::print_matrix (FILE * file, Mat * matrix)
         for (col_idx = 0; col_idx < matrix->cols; col_idx++)
             {
             fprintf (file, "%f ", mat_elt (matrix, row_idx, col_idx));
-            };
+            }
         
         fprintf (file, "\n");
-        };
+        }
 }
 
 Mat *RefocusMatrix::make_s_matrix (CMat * mat, int m, double noise_factor)
@@ -266,11 +270,11 @@ Mat *RefocusMatrix::make_s_matrix (CMat * mat, int m, double noise_factor)
                         {
                         *mat_eltptr (result, as_idx (xr, yr, m),
                                     as_idx (xc, yc, m)) += noise_factor;
-                        };
-                    };
-                };
-            };
-        };
+                        }
+                    }
+                }
+            }
+        }
     
     return (result);
 }
@@ -295,11 +299,11 @@ Mat *RefocusMatrix::make_s_cmatrix (CMat * mat, int m, double noise_factor)
                         {
                         *mat_eltptr (result, as_cidx (xr, yr),
                                     as_cidx (xc, yc)) += noise_factor;
-                        };
-                    };
-                };
-            };
-        };
+                        }
+                    }
+                }
+            }
+        }
     
     return (result);
 }
@@ -321,8 +325,8 @@ Mat *RefocusMatrix::copy_vec (const CMat * const mat, const int m)
             {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
             index++;
-            };
-        };
+            }
+        }
     
     Q_ASSERT (index == SQR (2 * m + 1));
     return (result);
@@ -339,8 +343,8 @@ Mat *RefocusMatrix::copy_cvec (const CMat * const mat, const int m)
             {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
             index++;
-            };
-        };
+            }
+        }
     
     Q_ASSERT (index == as_cidx (m + 1, 0));
     return (result);
@@ -356,8 +360,9 @@ CMat *RefocusMatrix::copy_cvec2mat (const Mat * const cvec, const int m)
         for (x = -m; x <= m; x++)
             {
             *c_mat_eltptr (result, x, y) = mat_elt (cvec, as_cidx (x, y), 0);
-            };
-        };
+            }
+        }
+        
     return (result);
 }
 
@@ -371,8 +376,9 @@ CMat *RefocusMatrix::copy_vec2mat (const Mat * const cvec, const int m)
         for (x = -m; x <= m; x++)
             {
             *c_mat_eltptr (result, x, y) = mat_elt (cvec, as_idx (x, y, m), 0);
-            };
-        };
+            }
+        }
+        
     return (result);
 }
 
@@ -400,7 +406,7 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
         {
         s = make_s_matrix (&a, m, noise_factor);
         b = copy_vec (&h_conv_ruv, m);
-        };
+        }
     
     #ifdef RF_DEBUG
     fprintf (stderr, "Convolution:\n");
@@ -423,7 +429,7 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
     else
         {
         result = copy_vec2mat (b, m);
-        };
+        }
     
     #ifdef RF_DEBUG
     fprintf (stderr, "Deconvolution:\n");
@@ -461,14 +467,15 @@ CMat *RefocusMatrix::compute_g_matrix (const CMat * const convolution, const int
             {
             sum += c_mat_elt (g, r, c);
             }
-        };
+        }
+        
     for (r = -g->radius; r <= g->radius; r++)
         {
         for (c = -g->radius; c <= g->radius; c++)
             {
             *c_mat_eltptr (g, r, c) /= sum;
             }
-        };
+        }
     
     return (g);
 }
@@ -593,12 +600,14 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
             {
             xlo = 0;
             symmetry_factor *= 2;
-            };
+            }
+            
         if (ylo < 0)
             {
             ylo = 0;
             symmetry_factor *= 2;
-            };
+            }
+            
         if (SQR (xlo) + SQR (yhi) > SQR (radius))
             {
             xc1 = xlo;
@@ -610,7 +619,8 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
         else
             {
             xc1 = xhi;
-            };
+            }
+            
         if (SQR (xlo) + SQR (ylo) > SQR (radius))
             {
             xc2 = xlo;
@@ -622,7 +632,8 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
         else
             {
             xc2 = xhi;
-            };
+            }
+            
         return (((yhi - ylo) * (xc1 - xlo) +
                 circle_integral (xc2, radius) - circle_integral (xc1, radius) -
                 (xc2 - xc1) * ylo) * symmetry_factor / (M_PI * SQR (radius)));
