@@ -58,6 +58,7 @@
 #include "albumsettings.h"
 #include "imagedescedit.h"
 #include "tagcreatedlg.h"
+#include "syncjob.h"
 #include "thumbnailjob.h"
 
 class TAlbumCheckListItem : public QCheckListItem
@@ -148,6 +149,16 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_tagsView->installEventFilter(this);
 
     m_commentsEdit->setFocus();
+
+    AlbumManager* man = AlbumManager::instance();
+    connect(man, SIGNAL(signalAlbumAdded(Album*)),
+            SLOT(slotAlbumAdded(Album*)));
+    connect(man, SIGNAL(signalAlbumDeleted(Album*)),
+            SLOT(slotAlbumDeleted(Album*)));
+    connect(man, SIGNAL(signalAlbumRenamed(Album*)),
+            SLOT(slotAlbumRenamed(Album*)));
+    connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
+            SLOT(slotAlbumIconChanged(Album*)));
 }
 
 ImageDescEdit::~ImageDescEdit()
@@ -196,34 +207,38 @@ bool ImageDescEdit::eventFilter(QObject *, QEvent *e)
     return false;
 }
 
-
 void ImageDescEdit::populateTags()
 {
     m_tagsView->clear();
 
-    TAlbum* rootTag = AlbumManager::instance()->findTAlbum(0);
-    if (!rootTag)
-        return;
-
-    TAlbumCheckListItem* item = new TAlbumCheckListItem(m_tagsView, rootTag);
-    //TODO: item->setPixmap(0, rootTag->getPixmap());
-    item->setOpen(true);
-    populateTags(item, rootTag);
-}
-
-void ImageDescEdit::populateTags(QCheckListItem* parItem, TAlbum* parAlbum)
-{
-    TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-    if (!child)
-        return;
-
-    while (child)
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TAlbumCheckListItem* item = new TAlbumCheckListItem(parItem, child);
-        //TODO: item->setPixmap(0, child->getPixmap());
-        item->setOpen(true);
-        populateTags(item, child);
-        child = dynamic_cast<TAlbum*>(child->next());
+        TAlbum* tag  = (TAlbum*)(*it);
+
+        TAlbumCheckListItem* viewItem = 0;
+        
+        if (tag->isRoot())
+        {
+            viewItem = new TAlbumCheckListItem(m_tagsView, tag);
+        }
+        else
+        {
+            QCheckListItem* parentItem  =
+                (QCheckListItem*)(tag->parent()->extraData(this));
+            if (!parentItem)
+            {
+                kdWarning() << "Failed to find parent for Tag " << tag->title()
+                            << endl;
+                continue;
+            }
+
+            viewItem = new TAlbumCheckListItem(parentItem, tag);
+        }
+
+        viewItem->setOpen(true);
+        viewItem->setPixmap(0, tagThumbnail(tag));
+        tag->setExtraData(this, viewItem);
     }
 }
 
@@ -238,7 +253,7 @@ void ImageDescEdit::slotUser1()
         return;
 
     if (m_autoSaveBox->isChecked())
-       slotApply();
+        slotApply();
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currItem->setSelected(true);
@@ -291,20 +306,20 @@ void ImageDescEdit::slotApply()
                 new KFileMetaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
 
             // set Jpeg comment
-             if (metaInfo->isValid () && metaInfo->mimeType() == "image/jpeg"
-                 && metaInfo->containsGroup("Jpeg EXIF Data"))
-             {
-                 kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                           << endl;
-                 (*metaInfo)["Jpeg EXIF Data"].item("Comment")
-                     .setValue(m_commentsEdit->text());
-                 metaInfo->applyChanges();
-             }
-             else
-             {
-                 delete metaInfo;
-                 metaInfo = 0;
-             }
+            if (metaInfo->isValid () && metaInfo->mimeType() == "image/jpeg"
+                && metaInfo->containsGroup("Jpeg EXIF Data"))
+            {
+                kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
+                          << endl;
+                (*metaInfo)["Jpeg EXIF Data"].item("Comment")
+                    .setValue(m_commentsEdit->text());
+                metaInfo->applyChanges();
+            }
+            else
+            {
+                delete metaInfo;
+                metaInfo = 0;
+            }
 
             // set EXIF UserComment
             //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
@@ -532,30 +547,118 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     if (!album || album->isRoot())
         return;
 
-    /* TODO
+    QString title;
+    QString icon;
     
-    AlbumFolderItem_Deprecated *folderItem =
-        static_cast<AlbumFolderItem_Deprecated*>(album->extraData(folderView));
+    if (!TagEditDlg::tagEdit(album, title, icon))
+        return;
 
-    AlbumFolderView_Deprecated* folderView =
-        static_cast<AlbumFolderView_Deprecated*>(folderItem->listView());
-    folderView->tagEdit(album);
-
-    // Now update the icon/title of the corresponding checklistitem
-
-    QListViewItemIterator it(m_tagsView);
-    while (it.current())
+    
+    AlbumManager *albumMan = AlbumManager::instance();
+    if (album->title() != title)
     {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->m_album == album)
+        QString errMsg;
+        if (!albumMan->renameTAlbum(album, title, errMsg))
         {
-            tItem->setText(0, album->getTitle());
-            tItem->setPixmap(0, album->getPixmap());
+            KMessageBox::error(this, errMsg);
+            return;
         }
-        ++it;
     }
-    */
+
+    if (album->icon() != icon)
+    {
+        QString errMsg;
+        if (!albumMan->updateTAlbumIcon(album, icon, true, errMsg));
+        {
+            KMessageBox::error(this, errMsg);
+        }
+    }
+}
+
+void ImageDescEdit::slotAlbumAdded(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+    
+    QCheckListItem* parentItem  =
+        (QCheckListItem*)(album->parent()->extraData(this));
+
+    if (!parentItem)
+    {
+        kdWarning() << "Failed to find parent for Tag " << album->title()
+                    << endl;
+        return;
+    }
+        
+    TAlbumCheckListItem* viewItem = new TAlbumCheckListItem(parentItem, album);
+    viewItem->setOpen(true);
+    viewItem->setPixmap(0, tagThumbnail(album));
+    album->setExtraData(this, viewItem);
+}
+
+void ImageDescEdit::slotAlbumDeleted(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    delete viewItem;
+    album->removeExtraData(this);
+}
+
+void ImageDescEdit::slotAlbumIconChanged(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+    
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    if (!viewItem)
+    {
+        kdWarning() << "Failed to find view item for Tag "
+                    << album->title() << endl;
+        return;
+    }
+
+    viewItem->setPixmap(0, tagThumbnail(album));
+}
+
+void ImageDescEdit::slotAlbumRenamed(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+    
+    TAlbum* album = (TAlbum*)a;
+
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    if (!viewItem)
+    {
+        kdWarning() << "Failed to find view item for Tag "
+                    << album->title() << endl;
+        return;
+    }
+
+    viewItem->setText(0, album->title());
+}
+
+QPixmap ImageDescEdit::tagThumbnail(TAlbum* album) const
+{
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+    QPixmap pix;
+    
+    if (!album->isRoot())
+        pix = SyncJob::getTagThumbnail(album->icon(), 20);
+    else
+        pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
+                                   KIcon::DefaultState, 0, true);
+
+    return pix;
 }
 
 #include "imagedescedit.moc"

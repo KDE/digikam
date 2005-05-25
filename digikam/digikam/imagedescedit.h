@@ -41,6 +41,7 @@ class KTextEdit;
 class AlbumIconView;
 class AlbumIconItem;
 class TAlbum;
+class Album;
 class ThumbnailJob;
 
 class ImageDescEdit : public KDialogBase
@@ -76,8 +77,8 @@ private:
     
     QGuardedPtr<ThumbnailJob> m_thumbJob;
 
-    void populateTags();
-    void populateTags(QCheckListItem* parItem, TAlbum* parAlbum);
+    void     populateTags();
+    QPixmap  tagThumbnail(TAlbum* album) const;
     
 private slots:
 
@@ -91,6 +92,10 @@ private slots:
     void slotFailedThumbnail(const KURL&);
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
 
+    void slotAlbumAdded(Album* a);
+    void slotAlbumDeleted(Album* a);
+    void slotAlbumIconChanged(Album* a);
+    void slotAlbumRenamed(Album* a);
 };
  
 #endif  // IMAGEDESCEDIT_H

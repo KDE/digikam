@@ -414,7 +414,8 @@ signals:
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
     void signalAllAlbumsLoaded();
-    void signalAlbumIconChanged(Album* album);    
+    void signalAlbumIconChanged(Album* album);
+    void signalAlbumRenamed(Album* album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
 };
 

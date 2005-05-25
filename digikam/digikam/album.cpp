@@ -404,23 +404,6 @@ QString TAlbum::icon() const
     return m_icon;    
 }
 
-/*
-QPixmap TAlbum::getPixmap() const
-{
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-
-    QPixmap pix;
-    
-    if (!isRoot())
-        pix = SyncJob::getTagThumbnail(m_icon, 20);
-    else
-        pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
-                                   KIcon::DefaultState, 0, true);
-
-    return pix;
-}
-*/
-
 // --------------------------------------------------------------------------
 
 int DAlbum::m_uniqueID = 0;

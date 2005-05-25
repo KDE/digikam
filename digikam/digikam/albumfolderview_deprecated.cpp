@@ -125,6 +125,8 @@ AlbumFolderView_Deprecated::AlbumFolderView_Deprecated(QWidget *parent)
             this, SLOT(slotAlbumsCleared()));
     connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
+    connect(albumMan_, SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
@@ -760,6 +762,19 @@ void AlbumFolderView_Deprecated::slotAlbumIconChanged(Album* album)
     {
         folderItem->setPixmap(getBlendedIcon((TAlbum*)album));
     }
+}
+
+void AlbumFolderView_Deprecated::slotAlbumRenamed(Album* album)
+{
+    if (!album || !album->extraData(this))
+    {
+        return;
+    }
+    
+    AlbumFolderItem_Deprecated *folderItem =
+        static_cast<AlbumFolderItem_Deprecated*>(album->extraData(this));
+
+    folderItem->setText(album->title());
 }
 
 void AlbumFolderView_Deprecated::albumHighlight(PAlbum* album)

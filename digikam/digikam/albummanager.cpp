@@ -670,6 +670,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         ++it;
     }
 
+    emit signalAlbumRenamed(album);
+    
     //TODO: Update pAlbumDict
     
     return true;
@@ -816,6 +818,8 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     }
 
     d->db->setTagName(album->id(), name);
+    album->setTitle(name);
+    emit signalAlbumRenamed(album);
     
     return true;
 }
@@ -902,8 +906,12 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const KURL& newURL)
 
     // TODO: update db
 
+    QString oldName = album->title();
+    
     album->m_kurl = newURL;
     album->setTitle(newURL.queryItem("name"));
+    if (oldName != album->title())
+        emit signalAlbumRenamed(album);
 
     return true;
 }
