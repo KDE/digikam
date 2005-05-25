@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Kurvejustering
 Name[it]=PluginImmagini_RegolaCurve
 Name[nl]=Afbeeldingsplugin_KrommenAanpassen
 Name[sv]=Insticksprogram för justering av kurvor
+Name[tr]=ResimEklentisi_EğriAyarla
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -20,6 +21,7 @@ Comment[pt]='Plugin' de ajustar as curvas do histograma para o digiKam
 Comment[pt_BR]='Plugin' de ajustar as curvas do histograma para o digiKam
 Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
 Comment[ta]=டிஜிகாமிர்க்கான படிவ வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
+Comment[tr]=digiKam için resim histogram eğrileri ayarlama eklentisi
 Comment[zh_CN]=digiKam 的直方图调整曲线插件
 
 X-KDE-Library=digikamimageplugin_adjustcurves

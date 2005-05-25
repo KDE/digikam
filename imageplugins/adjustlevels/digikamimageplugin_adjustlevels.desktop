@@ -7,6 +7,7 @@ Name[sr]=Сликовни прикључак — подешавање нивоа
 Name[sr@Latn]=Slikovni priključak — podešavanje nivoa
 Name[sv]=Insticksprogram för nivåjustering
 Name[ta]=பிம்பசொருகுப்பொருள்_சரிசெய்யும் நிலைகள்
+Name[tr]=ResimEklentisi_DüzeyAyarla
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -23,6 +24,7 @@ Comment[pt]='Plugin' de ajustar os níveis do histograma da imagem para o digiKa
 Comment[pt_BR]='Plugin' de ajustar os níveis do histograma da imagem para o digiKam
 Comment[sv]=Digikam insticksprogram för justering av nivåer i bildhistogram
 Comment[ta]=டிஜிகாமிற்க்கான பிம்ப வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
+Comment[tr]=digiKam için resim histogram düzeyleri ayarlama eklentisi
 Comment[zh_CN]=digiKam 的图像直方图调整级别插件
 
 X-KDE-Library=digikamimageplugin_adjustlevels

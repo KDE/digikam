@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Forskydningsværktøj
 Name[it]=PluginImmagini_DistorsioneCurvilinea
 Name[nl]=Afbeeldingsplugin_Schuintrekken
 Name[sv]=Insticksprogram med skjuvningsverktyg
+Name[tr]=ResimEklentisi_EğmeAracı
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -19,6 +20,7 @@ Comment[nl]=digiKam-plugin voor het schuin trekken van afbeeldingen
 Comment[pt]='Plugin' de ferramenta de inclinação para o digiKam
 Comment[pt_BR]='Plugin' de ferramenta de inclinação para o digiKam
 Comment[sv]=Digikam insticksprogram med skjuvningsverktyg
+Comment[tr]=digiKam için eğme aracı eklentisi
 
 X-KDE-Library=digikamimageplugin_sheartool
 author=Gilles Caulier, caulier dot gilles at free dot fr

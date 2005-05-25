@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Fri rotation
 Name[it]=PluginImmagini_RotazioneLibera
 Name[nl]=Afbeeldingsplugin_VrijeRotatie
 Name[sv]=Insticksprogram för bildrotation
+Name[tr]=ResimEklentisi_SerbestDöndürme
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -20,6 +21,7 @@ Comment[pt]='Plugin' de rotação livre para o digiKam
 Comment[pt_BR]='Plugin' de rotação livre para o digiKam
 Comment[sv]=Digikam insticksprogram för bildrotation
 Comment[ta]=டிஜிகாமிற்கான எளிதாக சுழலும் செருகு பொருள்
+Comment[tr]=digiKam için serbest döndürme eklentisi
 
 X-KDE-Library=digikamimageplugin_freerotation
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -6,6 +6,7 @@ Name[nl]=Afbeeldingsplugin_Onscherp
 Name[sr]=Сликовни прикључак — ублажавање
 Name[sr@Latn]=Slikovni priključak — ublažavanje
 Name[sv]=Insticksprogram för oskarp mask
+Name[tr]=ResimEklentisi_Yumuşat
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -17,6 +18,7 @@ Comment[nl]=digiKam-plugin voor onscherp-masker-filter
 Comment[pt]='Plugin' de filtro de imagem com uma máscara não-afiada para o digiKam
 Comment[pt_BR]='Plugin' de filtro de imagem com uma máscara não-afiada para o digiKam
 Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
+Comment[tr]=digiKam için resim bulanıklaştırma filtresi eklentisi
 
 X-KDE-Library=digikamimageplugin_unsharp
 author=Caulier Gilles, caulier dot gilles at free dot fr

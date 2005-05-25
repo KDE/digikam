@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Anti-vignettering
 Name[it]=PluginImmagini_Antivignettatura
 Name[nl]=Afbeeldingsplugin_AntiVignetting
 Name[sv]=Insticksprogram för antivinjettering
+Name[tr]=ResimEklentisi_KenarKararmalarınıDüzelt
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -18,6 +19,7 @@ Comment[nl]=digiKam-plugin voor anti-vignetting
 Comment[pt]='Plugin' de efeito de anti-vinheta para o digiKam
 Comment[pt_BR]='Plugin' de efeito de anti-vinheta para o digiKam
 Comment[sv]=Digikam insticksprogram för antivinjetteringsbildeffekt
+Comment[tr]=digiKam için kenar kararmalarını düzeltme eklentisi
 
 X-KDE-Library=digikamimageplugin_antivignetting
 author=Gilles Caulier, caulier dot gilles at free dot fr

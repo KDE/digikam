@@ -3,6 +3,7 @@ Name=ImagePlugin_Restoration
 Name[it]=PluginImmagini_Restauro
 Name[nl]=Afbeeldingsplugin_Restoratie
 Name[sv]=Insticksprogram för bildrestaurering
+Name[tr]=ResimEklentisi_Onarım
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -14,6 +15,7 @@ Comment[nl]=digiKam-pluin voor het herstellen van een foto
 Comment[pt]=Um 'plugin' do digiKam para restaurar uma fotografia
 Comment[pt_BR]=Um 'plugin' do digiKam para restaurar uma fotografia
 Comment[sv]=Digikam insticksprogram för restaurering av ett fotografi
+Comment[tr]=Fotoğraf onarmak için digiKam eklentisi
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at free dot fr

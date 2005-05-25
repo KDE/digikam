@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Indramning
 Name[it]=PluginImmagini_Bordo
 Name[nl]=Afbeeldingsplugin_Rand
 Name[sv]=Insticksprogram för bildkanter
+Name[tr]=ResimEklentisi_Çerçeve
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -18,6 +19,7 @@ Comment[nl]=digiKam-plugin voor het toevoegen van randen
 Comment[pt]='Plugin' de adicionar margem a imagem para o digiKam
 Comment[pt_BR]='Plugin' de adicionar margem a imagem para o digiKam
 Comment[sv]=Digikam insticksprogram för tillägg av kanter
+Comment[tr]=digiKam için resme çerçeve eklenme eklentisi
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at free dot fr

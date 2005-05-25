@@ -5,6 +5,7 @@ Name[it]=PluginImmagini_GocciaDiPioggia
 Name[nl]=Afbeeldingsplugin_regendruppels
 Name[sv]=Insticksprogram för regndroppar
 Name[ta]=பிம்பசொருகுப்பொருள்_மழைத்துளி
+Name[tr]=ResimEklentisi_YağmurDamlaları
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -20,6 +21,7 @@ Comment[pt]='Plugin' de efeito de gotas de chuva para o digiKam
 Comment[pt_BR]='Plugin' de efeito de gotas de chuva para o digiKam
 Comment[sv]=Digikam insticksprogram för regndroppsbildeffekt
 Comment[ta]=டிஜிகாமிற்கான மழைத்துளி விழுவதுபோன்ற படிம விளைவு சொருகுப்பொருள்
+Comment[tr]=digiKam için yağmur damlaları eklentisi
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Indkopiering
 Name[it]=PluginImmagini_Sovrapposizione
 Name[nl]=Afbeeldingsplugin_SjabloonToevoegen
 Name[sv]=Insticksprogram för överlagring
+Name[tr]=ResimEklentisi_Büyüt
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -19,6 +20,7 @@ Comment[nl]=digiKam-plugin voor het aanbrengen van een sjabloon op de afbeelding
 Comment[pt]='Plugin' de sobreposição de modelos para o digiKam
 Comment[pt_BR]='Plugin' de sobreposição de modelos para o digiKam
 Comment[sv]=Digikam insticksprogram för överlagringsmall
+Comment[tr]=digiKam için şablon büyütme eklentisi
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at free dot fr

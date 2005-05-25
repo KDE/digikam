@@ -3,6 +3,7 @@ Name=ImagePlugin_InsertText
 Name[it]=PluginImmagini_InserisciTesto
 Name[nl]=Afbeeldingsplugin_TekstInvoegen
 Name[sv]=Insticksprogram för infoga text
+Name[tr]=ResimEklentisi_MetinEkle
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -15,6 +16,7 @@ Comment[nl]=digiKam-plugin voor het invoegen van tekst
 Comment[pt]='Plugin' para inserir texto numa imagem para o digiKam
 Comment[pt_BR]='Plugin' para inserir texto numa imagem para o digiKam
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
+Comment[tr]=digiKam için resme metin ekleme eklentisi
 
 X-KDE-Library=digikamimageplugin_inserttext
 author=Gilles Caulier, caulier dot gilles at free dot fr

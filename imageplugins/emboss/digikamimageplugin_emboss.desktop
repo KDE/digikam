@@ -7,6 +7,7 @@ Name[sr]=Сликовни прикључак — рељеф
 Name[sr@Latn]=Slikovni priključak — reljef
 Name[sv]=Insticksprogram för reliefeffekt
 Name[ta]=பிம்பசொருகுப்பொருள்_எம்போஸ்
+Name[tr]=ResimEklentisi_Kabart
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -22,6 +23,7 @@ Comment[pt]='Plugin' de efeito de elevar imagem para o digiKam
 Comment[pt_BR]='Plugin' de efeito de elevar imagem para o digiKam
 Comment[sv]=Digikam insticksprogram för reliefbildeffekt
 Comment[ta]=டிஜிகாமிற்கான மேல்தூக்கி நிற்கும் பிம்ப விளைவு செருகுபொருள்
+Comment[tr]=digiKam için resim kabartma etkisi eklentisi
 
 X-KDE-Library=digikamimageplugin_emboss
 author=Gilles Caulier, caulier dot gilles at free dot fr

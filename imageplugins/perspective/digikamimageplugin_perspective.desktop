@@ -4,6 +4,7 @@ Name[da]=Billedplugin_Perspektivværktøj
 Name[it]=PluginImmagini_Prospettiva
 Name[nl]=Afbeeldingsplugin_Perspectief
 Name[sv]=Insticksprogram för perspektiv
+Name[tr]=ResimEklentisi_Perspektif
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -19,6 +20,7 @@ Comment[nl]=digiKam-plugin voor perspectief
 Comment[pt]='Plugin' de ferramenta de perspectiva para o digiKam
 Comment[pt_BR]='Plugin' de ferramenta de perspectiva para o digiKam
 Comment[sv]=Digikam insticksprogram med perspektivverktyg
+Comment[tr]=digiKam için perspektif aracı eklentisi
 
 X-KDE-Library=digikamimageplugin_perspective
 author=Gilles Caulier, caulier dot gilles at free dot fr

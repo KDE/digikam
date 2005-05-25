@@ -3,6 +3,7 @@ Name=ImagePlugin_WhiteBalance
 Name[it]=PluginImmagini_BilanciamentoDelBianco
 Name[nl]=Afbeeldingsplugin_Witbalans
 Name[sv]=Insticksprogram för vitbalans
+Name[tr]=ResimEklentisi_BeyazDengesi
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -16,6 +17,7 @@ Comment[nl]=digiKam-plugin voor het corrigeren van de witbalans
 Comment[pt]='Plugin' de correcção de balanceamento de branco o digiKam
 Comment[pt_BR]='Plugin' de correcção de balanceamento de branco o digiKam
 Comment[sv]=Digikam insticksprogram för korrigering av vitbalans
+Comment[tr]=digiKam için beyaz dengesi düzeltme eklentisi
 
 X-KDE-Library=digikamimageplugin_whitebalance
 author=Gilles Caulier, caulier dot gilles at free dot fr
