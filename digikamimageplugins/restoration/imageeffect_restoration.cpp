@@ -87,7 +87,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
     
-    m_dirty                = false;    
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_originalData         = 0L;
@@ -395,7 +394,7 @@ void ImageEffect_Restoration::slotTimer()
 
 void ImageEffect_Restoration::slotUser1()
 {
-    if (m_dirty)
+    if (m_currentRenderingMode != NoneRendering)
        {
        m_cimgInterface->stopComputation();
        }
@@ -499,10 +498,9 @@ void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
 
 void ImageEffect_Restoration::slotEffect()
 {
-    if (m_dirty) return;     // Computation already in procress.
+    if (m_currentRenderingMode != NoneRendering) return;  // Computation already in procress.
     
     m_currentRenderingMode = PreviewRendering;
-    m_dirty                = true;
     
     m_imagePreviewWidget->setEnable(false);
     m_restorationTypeCB->setEnabled(false);
@@ -610,7 +608,6 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  kdDebug() << "Preview Restoration completed..." << endl;
                  m_imagePreviewWidget->setPreviewImageData(m_previewImage);
                  abortPreview();
-                 m_dirty = false;   
                  break;
                  }
               
@@ -632,8 +629,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                 case PreviewRendering:
                     {
                     kdDebug() << "Preview Restoration failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
-                    m_dirty = false;   
                     break;
                     }
                 

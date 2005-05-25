@@ -86,8 +86,6 @@ private:
     PreviewRendering,
     FinalRendering
     };
-
-    bool             m_dirty;
     
     int              m_currentRenderingMode;
     
