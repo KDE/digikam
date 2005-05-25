@@ -110,8 +110,8 @@ public:
      */
     int       albumID() const;
 
-    /*
-     *@return the PAlbum to which this item belongs
+    /** 
+     * @return the PAlbum to which this item belongs
      */
     PAlbum*   album() const;
 
@@ -125,9 +125,27 @@ public:
      * @param caption the new caption for this item
      */
     void  setCaption(const QString& caption);
-    
+
+    /**
+     * @return a list of names of all tags assigned to this item
+     * @see tagPaths
+     */
     QStringList tagNames() const;
+
+    /**
+     * @return a list of complete path of all tags assigned to this item. The
+     * complete path for a tag is '/' separated string of its hierarchy
+     * @see tagPaths
+     */
     QStringList tagPaths() const;
+
+    
+    /**
+     * @return a list of IDs of tags assigned to this item
+     * @see tagNames
+     * @see tagPaths
+     * @see Album::id()
+     */
     QValueList<int> tagIDs() const;
 
     /**
@@ -146,8 +164,19 @@ public:
      * Remove all tags from the item (removes it from database)
      */
     void        removeAllTags();
-    
+
+    /**
+     * Assign a viewitem for this item. This is useful when a view has a
+     * corresponding viewitem for this item and wants to access the viewitem, given
+     * this item
+     * @see getViewItem()
+     */
     void        setViewItem(void *d);
+    
+    /**
+     * Returns the viewitem associated with this item a viewitem for this item. This is useful when a view has a
+     * @see setViewItem()
+     */
     void*       getViewItem() const;
 
     /**
