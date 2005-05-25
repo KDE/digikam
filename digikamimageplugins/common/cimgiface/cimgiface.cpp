@@ -191,9 +191,9 @@ void CimgIface::startComputation()
        for (x = 0; x < m_imageWidth; x++, i++) 
           {
           imagedata.raw = m_imageData[i];
-          img(x, y, 0) = (int)imagedata.channel.red;
+          img(x, y, 0) = (int)imagedata.channel.blue;
           img(x, y, 1) = (int)imagedata.channel.green;
-          img(x, y, 2) = (int)imagedata.channel.blue;
+          img(x, y, 2) = (int)imagedata.channel.red;
           }
        }
 
@@ -245,9 +245,9 @@ void CimgIface::startComputation()
           imagedata.raw = newData[i];  
           
           // Overwrite RGB values to destination.
-          imagedata.channel.red   = (uchar) img(x, y, 0);
+          imagedata.channel.blue  = (uchar) img(x, y, 0);
           imagedata.channel.green = (uchar) img(x, y, 1);
-          imagedata.channel.blue  = (uchar) img(x, y, 2);
+          imagedata.channel.red   = (uchar) img(x, y, 2);
           newData[i]              = imagedata.raw;
           }
        }
