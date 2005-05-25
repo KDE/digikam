@@ -94,8 +94,9 @@ public:
 
 private:
 
-    static void print_c_mat (FILE * file, const CMat * const mat);
-    static void print_matrix (FILE * file, Mat * matrix);
+    // Debug methods.
+    static void print_c_mat (const CMat * const mat);
+    static void print_matrix (Mat * matrix);
 
     static Mat *allocate_matrix (int nrows, int ncols);
     static double *mat_eltptr (Mat * mat, const int r, const int c);
@@ -119,6 +120,7 @@ private:
     static double circle_integral (const double x, const double radius);
     static double circle_intensity (const int x, const int y, const double radius);               
     
+    // CLapack interface.
     static int dgesv (const int N, const int NRHS, double *A, const int lda, double *B, const int ldb);
 
 };

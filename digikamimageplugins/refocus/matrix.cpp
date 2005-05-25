@@ -22,6 +22,9 @@
  * 
  * ============================================================ */
 
+// Uncomment this line to debug matrix computation.
+//#define RF_DEBUG 1
+  
 // Square 
 #define SQR(x) ((x) * (x))
 
@@ -36,9 +39,7 @@ extern "C"
 
 // C++ includes.
 
-#include <cstring>
 #include <cmath>
-#include <cstdlib>
 
 // Qt includes. 
  
@@ -219,33 +220,37 @@ int RefocusMatrix::as_cidx (const int k, const int l)
     return ((a * (a + 1)) / 2 + b);
 }
 
-void RefocusMatrix::print_c_mat (FILE * file, const CMat * const mat)
+void RefocusMatrix::print_c_mat (const CMat * const mat)
 {
     register int x, y;
     
     for (y = -mat->radius; y <= mat->radius; y++)
         {
+        QString output, num;
+        
         for (x = -mat->radius; x <= mat->radius; x++)
             {
-            fprintf (file, "%f ", c_mat_elt (mat, x, y));
+            output.append( num.setNum( c_mat_elt (mat, x, y) ) );
             }
         
-        fprintf (file, "\n");
+        kdDebug() << output << endl;
         }
 }
 
-void RefocusMatrix::print_matrix (FILE * file, Mat * matrix)
+void RefocusMatrix::print_matrix (Mat * matrix)
 {
     int col_idx, row_idx;
     
     for (row_idx = 0; row_idx < matrix->rows; row_idx++)
         {
+        QString output, num;
+        
         for (col_idx = 0; col_idx < matrix->cols; col_idx++)
             {
-            fprintf (file, "%f ", mat_elt (matrix, row_idx, col_idx));
+            output.append( num.setNum( mat_elt (matrix, row_idx, col_idx) ) );
             }
         
-        fprintf (file, "\n");
+        kdDebug() << output << endl;
         }
 }
 
@@ -409,13 +414,12 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
         }
     
     #ifdef RF_DEBUG
-    fprintf (stderr, "Convolution:\n");
-    print_c_mat (stderr, convolution);
-    fprintf (stderr, "h_conv_ruv:\n");
-    print_c_mat (stderr, &h_conv_ruv);
-    fprintf (stderr, "Value of s:\n");
-    print_matrix (stderr, s);
-    fprintf (stderr, "\n");
+    kdDebug() << "Convolution:" << endl;
+    print_c_mat (convolution);
+    kdDebug() << "h_conv_ruv:" << endl;
+    print_c_mat (&h_conv_ruv);
+    kdDebug() << "Value of s:" << endl;
+    print_matrix (s);
     #endif
     
     Q_ASSERT (s->cols == s->rows);
@@ -432,9 +436,8 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
         }
     
     #ifdef RF_DEBUG
-    fprintf (stderr, "Deconvolution:\n");
-    print_c_mat (stderr, result);
-    fprintf (stderr, "\n");
+    kdDebug() << "Deconvolution:" << endl;
+    print_c_mat (result);
     #endif
     
     finish_c_mat (&a);
@@ -450,10 +453,9 @@ CMat *RefocusMatrix::compute_g_matrix (const CMat * const convolution, const int
                                        const double musq, const bool symmetric)
 {
     #ifdef RF_DEBUG
-    fprintf (stderr, "matrix size: %i\n", m);
-    fprintf (stderr, "correlation: %f\n", gamma);
-    fprintf (stderr, "noise: %f\n", noise_factor);
-    fprintf (stderr, "\n");
+    kdDebug() << "matrix size: " << m << endl;
+    kdDebug() << "correlation: " << gamma << endl;
+    kdDebug() << "noise: " << noise_factor << endl;
     #endif
     
     CMat *g = compute_g (convolution, m, gamma, noise_factor, musq, symmetric);
@@ -517,8 +519,7 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
     register int x, y;
     
     #ifdef RF_DEBUG
-    fprintf (stderr, "gauss: %f\n", gradius);
-    fprintf (stderr, "\n");
+    kdDebug() << "gauss: " << gradius << endl;
     #endif
     
     init_c_mat (convolution, m);
@@ -643,8 +644,7 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
 void RefocusMatrix::make_circle_convolution (const double radius, CMat * convolution, const int m)
 {
     #ifdef RF_DEBUG
-    fprintf (stderr, "radius: %f\n", radius);
-    fprintf (stderr, "\n");
+    kdDebug() << "radius: " << radius << endl;
     #endif
     
     fill_matrix (convolution, m, circle_intensity, radius);
@@ -656,7 +656,9 @@ int RefocusMatrix::dgesv (const int N, const int NRHS, double *A, const int lda,
     integer i_N = N, i_NHRS = NRHS, i_lda = lda, i_ldb = ldb, info;
     integer *ipiv = new integer[N];
 
+    // CLapack call.
     dgesv_ (&i_N, &i_NHRS, A, &i_lda, ipiv, B, &i_ldb, &info);
+    
     delete [] ipiv;
     result = info;
     return (result);
