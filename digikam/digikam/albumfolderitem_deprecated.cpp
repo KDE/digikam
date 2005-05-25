@@ -47,7 +47,7 @@ AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecate
 
 AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderView_Deprecated *parent,
                                  Album* album)
-    : ListItem(parent, album->getTitle())
+    : ListItem(parent, album->title())
 {
     isGroup_     = false;
     isRoot_      = true;
@@ -59,7 +59,7 @@ AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderView_Deprecate
 
 AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent,
                                  Album* album)
-    : ListItem(parent, album->getTitle())
+    : ListItem(parent, album->title())
 {
     isGroup_     = false;
     isRoot_      = false;

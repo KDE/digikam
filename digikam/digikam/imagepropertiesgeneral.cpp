@@ -223,19 +223,19 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
 
         QStringList tagPaths;
 
-        IntList tagIDs(db->getItemTagIDs(album->getID(), url.fileName()));
+        IntList tagIDs(db->getItemTagIDs(album->id(), url.fileName()));
         
         for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
         {
             TAlbum* ta = man->findTAlbum(*it);
             if (ta)
             {
-                tagPaths.append(ta->getURL().remove(0,1));
+                tagPaths.append(ta->url().remove(0,1));
             }
         }
         
-        m_filealbum->setText( album->getURL().remove(0,1) );
-        m_filecomments->setText( db->getItemCaption( album->getID(), url.filename() ) );
+        m_filealbum->setText( album->url().remove(0,1) );
+        m_filecomments->setText( db->getItemCaption( album->id(), url.filename() ) );
         m_filetags->setText( tagPaths.join(", "));        
     }
 }

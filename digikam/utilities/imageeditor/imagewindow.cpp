@@ -1103,8 +1103,8 @@ void ImageWindow::slotSaveAsResult(KIO::Job *job)
     // Copy the metadata from the original image to the target image.
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->copyItem(sourcepAlbum->getID(), m_urlCurrent.fileName(),
-                 targetpAlbum->getID(), m_newFile.fileName());
+    db->copyItem(sourcepAlbum->id(), m_urlCurrent.fileName(),
+                 targetpAlbum->id(), m_newFile.fileName());
 
     if ( sourcepAlbum == targetpAlbum &&                       // Target Album = current Album ?
          m_urlList.find(m_newFile) == m_urlList.end() )        // The image file not already exist

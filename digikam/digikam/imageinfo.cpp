@@ -69,7 +69,7 @@ bool ImageInfo::setName(const QString& newName)
         return false;
 
     PAlbum* a = album();
-    if (a->getIcon() == m_name)
+    if (a->icon() == m_name)
     {
         QString err;
         AlbumManager::instance()->updatePAlbumIcon( a, newName,
@@ -108,7 +108,7 @@ PAlbum* ImageInfo::album() const
 KURL ImageInfo::kurl() const
 {
     KURL u(m_man->getLibraryPath());
-    u.addPath(album()->getURL());
+    u.addPath(album()->url());
     u.addPath(m_name);
     return u;
 }
@@ -116,13 +116,13 @@ KURL ImageInfo::kurl() const
 QString ImageInfo::filePath() const
 {
     QString path = m_man->getLibraryPath();
-    path += album()->getURL() + "/" + m_name;
+    path += album()->url() + "/" + m_name;
     return path;
 }
 
 KURL ImageInfo::kurlForKIO() const
 {
-    KURL u(album()->getKURL());
+    KURL u(album()->kurl());
     u.addPath(m_name);
     return u;
 }
@@ -160,7 +160,7 @@ QStringList ImageInfo::tagPaths() const
         TAlbum* ta = m_man->findTAlbum(*it);
         if (ta)
         {
-            tagPaths.append(ta->getURL());
+            tagPaths.append(ta->url());
         }
     }
 

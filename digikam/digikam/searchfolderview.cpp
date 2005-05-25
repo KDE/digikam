@@ -38,15 +38,15 @@ class SearchFolderItem : public KListViewItem
 public:
 
     SearchFolderItem(KListView* parent, SAlbum* album)
-        : KListViewItem(parent, album->getName()),
+        : KListViewItem(parent, album->title()),
           m_album(album)
     {
-        m_album->setViewItem(this);
+        m_album->setExtraData(parent, this);
     }
 
     ~SearchFolderItem()
     {
-        m_album->setViewItem(0);
+        m_album->removeExtraData(listView());
     }
 
     int compare(QListViewItem* i, int , bool ) const
@@ -103,25 +103,18 @@ void SearchFolderView::quickSearchNew()
     if (dlg.exec() != KDialogBase::Accepted)
         return;
 
-    SAlbum* renamedAlbum = 0;
-    AlbumManager::instance()->createSAlbum(url, true, renamedAlbum);
+    SAlbum* album = AlbumManager::instance()->createSAlbum(url, true);
 
-    if (renamedAlbum)
+    if (album)
     {
         SearchFolderItem* searchItem =
-            (SearchFolderItem*)(renamedAlbum->getViewItem());
+            (SearchFolderItem*)(album->extraData(this));
         if (searchItem)
         {
             clearSelection();
             setSelected(searchItem, true);
             slotSelectionChanged();
         }
-    }
-    else if (m_lastAddedItem)
-    {
-        clearSelection();
-        setSelected(m_lastAddedItem, true);
-        m_lastAddedItem = 0;
     }
 }
 
@@ -137,7 +130,7 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     if (!album)
         return;
 
-    KURL url = album->getKURL();
+    KURL url = album->kurl();
     SearchQuickDialog dlg(this, url);
 
     if (dlg.exec() != KDialogBase::Accepted)
@@ -146,10 +139,10 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
 
     AlbumManager::instance()->updateSAlbum(album, url);
 
-    ((SearchFolderItem*)album->getViewItem())->setText(0, album->getName());
+    ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
 
     clearSelection();
-    setSelected((SearchFolderItem*)(album->getViewItem()), true);
+    setSelected((SearchFolderItem*)(album->extraData(this)), true);
 }
 
 void SearchFolderView::extendedSearchEdit(SAlbum* album)
@@ -198,7 +191,7 @@ void SearchFolderView::slotAlbumDeleted(Album* a)
 
     SAlbum* album = (SAlbum*)a;
 
-    SearchFolderItem* item = (SearchFolderItem*) album->getViewItem();
+    SearchFolderItem* item = (SearchFolderItem*) album->extraData(this);
     if (item)
     {
         delete item;

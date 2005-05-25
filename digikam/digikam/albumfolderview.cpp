@@ -56,13 +56,13 @@ private:
 };
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
-    : QListViewItem(parent, album->getTitle())
+    : QListViewItem(parent, album->title())
 {
     m_album = album;
 }
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
-    : QListViewItem(parent, album->getTitle())
+    : QListViewItem(parent, album->title())
 {
     m_album = album;
 }
@@ -137,22 +137,22 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
         return;
     
     AlbumFolderViewItem *item;
-    if(palbum->getParent()->isRoot())
+    if(palbum->parent()->isRoot())
     {
         item = new AlbumFolderViewItem(this, palbum);
-        d->dict.insert(palbum->getID(), item);
+        d->dict.insert(palbum->id(), item);
     }
     else
     {
-        AlbumFolderViewItem *parent = d->dict.find(palbum->getParent()->getID());
+        AlbumFolderViewItem *parent = d->dict.find(palbum->parent()->id());
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << palbum->getURL() << endl;
+                        << palbum->url() << endl;
             return;
         }
         item = new AlbumFolderViewItem(parent, palbum);
-        d->dict.insert(palbum->getID(), item);
+        d->dict.insert(palbum->id(), item);
     }
     
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
@@ -174,7 +174,7 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
     if(!palbum)
         return;
 
-    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    AlbumFolderViewItem *item = d->dict.find(album->id());
     if(!item)
         return;
 
@@ -187,16 +187,16 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     if(!album)
         return;
     
-    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    AlbumFolderViewItem *item = d->dict.find(album->id());
     
     if(!item)
         return;
     
-    if(!album->getIcon().isEmpty())
+    if(!album->icon().isEmpty())
     {
         if(!d->iconThumbJob)
         {
-            d->iconThumbJob = new ThumbnailJob(album->getIconKURL(),
+            d->iconThumbJob = new ThumbnailJob(album->iconKURL(),
                                                (int)ThumbnailSize::Tiny,
                                                true);
             connect(d->iconThumbJob,
@@ -211,7 +211,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
         }
         else
         {
-            d->iconThumbJob->addItem(album->getIconKURL());
+            d->iconThumbJob->addItem(album->iconKURL());
         }
     }
     else
@@ -231,7 +231,7 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     if (!album)
         return;
 
-    AlbumFolderViewItem *item = d->dict.find(album->getID());
+    AlbumFolderViewItem *item = d->dict.find(album->id());
     
     if(!item)
         return;

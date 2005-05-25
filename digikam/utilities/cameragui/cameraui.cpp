@@ -402,7 +402,7 @@ void CameraUI::slotDownload(bool onlySelected)
         currPath = libPath;
     else
     {
-        currPath = ((PAlbum*)album)->getKURL().path();
+        currPath = ((PAlbum*)album)->folderPath();
     }
 
     QString header(i18n("Select Destination Album for "

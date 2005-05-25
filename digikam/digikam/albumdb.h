@@ -67,7 +67,7 @@ public:
      * Returns all tags and their attributes in the database
      * @return a list of tags and their attributes
      */
-    AlbumInfo::List scanTags();
+    TagInfo::List scanTags();
 
     /**
      * Add a new album to the database with the given attributes
@@ -259,7 +259,7 @@ public:
     IntList     getItemTagIDs(int albumID, const QString& name);
 
     /**
-     * Given a set of items (identified by their albumID and names,
+     * Given a set of items (identified by their albumID and names),
      * get a list of ID of all common tags
      * @param albumIDList a list of albumIDs of the items
      * @param nameList    a list of names of the items

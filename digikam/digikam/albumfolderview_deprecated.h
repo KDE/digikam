@@ -127,13 +127,13 @@ protected:
     
 private:
 
-    AlbumFolderItem_Deprecated*                   dropTarget_;
-    int                                albumSortOrder_;
-    QPtrList<AlbumFolderItem_Deprecated>          groupItems_;
-    AlbumManager*                      albumMan_;
-    QGuardedPtr<ThumbnailJob>          iconThumbJob_;    
-    AlbumFolderItem_Deprecated*                   phyRootItem_;
-    AlbumFolderItem_Deprecated*                   tagRootItem_;
+    AlbumFolderItem_Deprecated*           dropTarget_;
+    int                                   albumSortOrder_;
+    QPtrList<AlbumFolderItem_Deprecated>  groupItems_;
+    AlbumManager*                         albumMan_;
+    QGuardedPtr<ThumbnailJob>             iconThumbJob_;    
+    AlbumFolderItem_Deprecated*           phyRootItem_;
+    AlbumFolderItem_Deprecated*           tagRootItem_;
 
     QPixmap                            itemRegPix_;
     QPixmap                            itemSelPix_;
@@ -173,8 +173,7 @@ private slots:
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
     void slotThumbnailLost(const KURL&);
 
-    void slotPAlbumIconChanged(PAlbum*);    
-    void slotTAlbumIconChanged(TAlbum*);    
+    void slotAlbumIconChanged(Album*);    
     
     void slotThemeChanged();
 };

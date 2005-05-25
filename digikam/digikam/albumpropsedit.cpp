@@ -77,12 +77,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     if (create)
     {
         topLabel->setText( i18n( "<qt><b>Create new Album in </b>%1</qt>")
-                           .arg(album->getTitle()));
+                           .arg(album->title()));
     }
     else
     {
         topLabel->setText( i18n( "<qt><b><i>%1</i> Album Properties</b></qt>")
-                           .arg(album->getTitle()));
+                           .arg(album->title()));
     }
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
@@ -151,7 +151,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         collectionCombo_->insertItem( QString::null );
         QStringList collections = settings->getAlbumCollectionNames();
         collectionCombo_->insertStringList( collections );
-        int collectionIndex = collections.findIndex( album->getCollection() );
+        int collectionIndex = collections.findIndex( album->collection() );
         if ( collectionIndex != -1 )
         {
             // + 1 because of the empty item
@@ -166,9 +166,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     }
     else
     {
-        titleEdit_->setText( album->getTitle() );
-        commentsEdit_->setText( album->getCaption() );
-        datePicker_->setDate( album->getDate() );
+        titleEdit_->setText( album->title() );
+        commentsEdit_->setText( album->caption() );
+        datePicker_->setDate( album->date() );
     }
 
     // Connections -------------------------------------------
@@ -278,7 +278,7 @@ void AlbumPropsEdit::slotAverageButtonClicked()
     setCursor( KCursor::waitCursor() );
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumAverageDate( album_->getID() );
+    QDate avDate = db->getAlbumAverageDate( album_->id() );
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )

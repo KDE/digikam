@@ -67,13 +67,13 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     case(AlbumSettings::ByISize):
     case(AlbumSettings::ByIPath):
     {
-        return mine->getTitle().localeAwareCompare(his->getTitle());
+        return mine->url().localeAwareCompare(his->url());
     }
     case(AlbumSettings::ByIDate):
     {
-        if (mine->getDate() < his->getDate())
+        if (mine->date() < his->date())
             return -1;
-        else if (mine->getDate() > his->getDate())
+        else if (mine->date() > his->date())
             return 1;
         else
             return 0;
@@ -88,7 +88,7 @@ void AlbumIconGroupItem::paintBanner()
     AlbumManager* man = AlbumManager::instance();
     PAlbum* album = man->findPAlbum(m_albumID);
 
-    QDate  date  = album->getDate();
+    QDate  date  = album->date();
 
 #if KDE_IS_VERSION(3,2,0)
     QString dateAndComments = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", count())
@@ -100,8 +100,8 @@ void AlbumIconGroupItem::paintBanner()
                               .arg(QString::number(date.year()));
 #endif
 
-    if (!album->getCaption().isEmpty())
-        dateAndComments += " - " + album->getCaption();
+    if (!album->caption().isEmpty())
+        dateAndComments += " - " + album->caption();
 
     
     QRect r(0, 0, rect().width(), rect().height());
@@ -128,7 +128,7 @@ void AlbumIconGroupItem::paintBanner()
 
     QRect tr;
     p.drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop, album->getPrettyURL(),
+               Qt::AlignLeft | Qt::AlignTop, album->prettyURL(),
                -1, &tr);
 
     r.setY(tr.height() + 2);

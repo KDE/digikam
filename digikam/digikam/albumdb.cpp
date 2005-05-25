@@ -205,7 +205,6 @@ AlbumInfo::List AlbumDB::scanAlbums()
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
         AlbumInfo info;
-        info.type = AlbumInfo::PHYSICAL;
         
         info.id = (*it).toInt();
         ++it;
@@ -226,9 +225,9 @@ AlbumInfo::List AlbumDB::scanAlbums()
     return aList;
 }
 
-AlbumInfo::List AlbumDB::scanTags()
+TagInfo::List AlbumDB::scanTags()
 {
-    AlbumInfo::List aList;
+    TagInfo::List tList;
 
     QStringList values;
     execSql( QString("SELECT id, pid, name, icon "
@@ -236,8 +235,7 @@ AlbumInfo::List AlbumDB::scanTags()
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
-        AlbumInfo info;
-        info.type = AlbumInfo::TAG;
+        TagInfo info;
         
         info.id   = (*it).toInt();
         ++it;
@@ -248,10 +246,10 @@ AlbumInfo::List AlbumDB::scanTags()
         info.icon = *it;
         ++it;
 
-        aList.append(info);        
+        tList.append(info);        
     }
     
-    return aList;
+    return tList;
 }
 
 void AlbumDB::deleteAlbum(int albumID)

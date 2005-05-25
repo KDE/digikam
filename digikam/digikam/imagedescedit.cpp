@@ -65,12 +65,12 @@ class TAlbumCheckListItem : public QCheckListItem
 public:
 
     TAlbumCheckListItem(QListView* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle()),
+        : QCheckListItem(parent, album->title()),
           m_album(album)
         {}
 
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle(), QCheckListItem::CheckBox),
+        : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox),
           m_album(album)
         {}
 
@@ -206,7 +206,7 @@ void ImageDescEdit::populateTags()
         return;
 
     TAlbumCheckListItem* item = new TAlbumCheckListItem(m_tagsView, rootTag);
-    item->setPixmap(0, rootTag->getPixmap());
+    //TODO: item->setPixmap(0, rootTag->getPixmap());
     item->setOpen(true);
     populateTags(item, rootTag);
 }
@@ -220,7 +220,7 @@ void ImageDescEdit::populateTags(QCheckListItem* parItem, TAlbum* parAlbum)
     while (child)
     {
         TAlbumCheckListItem* item = new TAlbumCheckListItem(parItem, child);
-        item->setPixmap(0, child->getPixmap());
+        //TODO: item->setPixmap(0, child->getPixmap());
         item->setOpen(true);
         populateTags(item, child);
         child = dynamic_cast<TAlbum*>(child->next());
@@ -281,7 +281,7 @@ void ImageDescEdit::slotApply()
 
     if (m_modified)
     {
-        db->setItemCaption(album->getID(), fileURL.fileName(), m_commentsEdit->text());
+        db->setItemCaption(album->id(), fileURL.fileName(), m_commentsEdit->text());
 
         if (AlbumSettings::instance() &&
             AlbumSettings::instance()->getSaveExifComments())
@@ -313,7 +313,7 @@ void ImageDescEdit::slotApply()
         m_modified = false;
     }
 
-    db->removeItemAllTags(album->getID(), fileURL.fileName());
+    db->removeItemAllTags(album->id(), fileURL.fileName());
     QListViewItemIterator it(m_tagsView);
     while (it.current())
     {
@@ -321,7 +321,7 @@ void ImageDescEdit::slotApply()
             dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem && tItem->isOn())
         {
-            db->addItemTag(album->getID(), fileURL.fileName(), tItem->m_album->getID());
+            db->addItemTag(album->id(), fileURL.fileName(), tItem->m_album->id());
         }
         ++it;
     }
@@ -376,9 +376,9 @@ void ImageDescEdit::slotItemChanged()
 
     m_nameLabel->setText(fileURL.fileName());
     m_thumbLabel->setPixmap(QPixmap());
-    m_commentsEdit->setText(db->getItemCaption(album->getID(), fileURL.fileName()));
+    m_commentsEdit->setText(db->getItemCaption(album->id(), fileURL.fileName()));
 
-    IntList tagIDs = db->getItemTagIDs(album->getID(), fileURL.fileName());
+    IntList tagIDs = db->getItemTagIDs(album->id(), fileURL.fileName());
 
     QListViewItemIterator it( m_tagsView);
     while (it.current())
@@ -388,7 +388,7 @@ void ImageDescEdit::slotItemChanged()
 
         if (tItem)
         {
-            if (tagIDs.contains(tItem->m_album->getID()))
+            if (tagIDs.contains(tItem->m_album->id()))
                 tItem->setOn(true);
             else
                 tItem->setOn(false);
@@ -492,7 +492,7 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
         TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
         while (child)
         {
-            if (child->getTitle() == title)
+            if (child->title() == title)
             {
                 new TAlbumCheckListItem(item, child);
                 return;
@@ -511,7 +511,7 @@ void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
 
     int result =
         KMessageBox::questionYesNo(this, i18n("Delete '%1' tag?")
-                                   .arg(album->getTitle()));
+                                   .arg(album->title()));
 
     if (result == KMessageBox::Yes)
     {
@@ -532,8 +532,10 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     if (!album || album->isRoot())
         return;
 
+    /* TODO
+    
     AlbumFolderItem_Deprecated *folderItem =
-        static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
+        static_cast<AlbumFolderItem_Deprecated*>(album->extraData(folderView));
 
     AlbumFolderView_Deprecated* folderView =
         static_cast<AlbumFolderView_Deprecated*>(folderItem->listView());
@@ -553,7 +555,7 @@ void ImageDescEdit::tagEdit(TAlbum* album)
         }
         ++it;
     }
-
+    */
 }
 
 #include "imagedescedit.moc"

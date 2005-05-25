@@ -321,7 +321,7 @@ void AlbumFileTip::updateText()
     if (album)
     {
         tip += cellBeg + i18n("Album:") + cellMid +
-               album->getURL().remove(0,1) + cellEnd;
+               album->url().remove(0,1) + cellEnd;
     }
 
     tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +

@@ -219,11 +219,12 @@ void DigikamView::slotNewQuickSearch()
 
 // ----------------------------------------------------------------
 
-void DigikamView::slotAlbumDeleted(Album *album)
+void DigikamView::slotAlbumDeleted(Album *)
 {
+    /* TODO
     Album *nextAlbum = mAlbumHistory->deleteAlbum(album);
-    
-    if(nextAlbum && nextAlbum->getViewItem())
+
+    if (nextAlbum && nextAlbum->getViewItem())
     {
         AlbumFolderItem_Deprecated *item;    
         item = static_cast<AlbumFolderItem_Deprecated*>(nextAlbum->getViewItem());
@@ -231,13 +232,15 @@ void DigikamView::slotAlbumDeleted(Album *album)
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
     }
+    */
 }
 
-void DigikamView::slotAlbumHistoryBack(int steps)
+void DigikamView::slotAlbumHistoryBack(int )
 {
+    /* TODO
     Album *album = mAlbumHistory->back(steps);
-    
-    if(album && album->getViewItem())
+
+    if (album && album->getViewItem())
     {
         AlbumFolderItem_Deprecated *item;    
         item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
@@ -246,13 +249,15 @@ void DigikamView::slotAlbumHistoryBack(int steps)
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
     }
     return;
+    */
 }
 
-void DigikamView::slotAlbumHistoryForward(int steps)
+void DigikamView::slotAlbumHistoryForward(int )
 {
+    /* TODO
     Album *album = mAlbumHistory->forward(steps);
-    
-    if(album && album->getViewItem())
+
+    if (album && album->getViewItem())
     {
         AlbumFolderItem_Deprecated *item;
         item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
@@ -260,7 +265,8 @@ void DigikamView::slotAlbumHistoryForward(int steps)
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
     }
-    return;    
+    return;
+    */
 }
 
 void DigikamView::getBackwardHistory(QStringList &titles)
@@ -273,9 +279,10 @@ void DigikamView::getForwardHistory(QStringList &titles)
     mAlbumHistory->getForwardHistory(titles);
 }
 
-void DigikamView::slotSelectAlbum(const KURL &url)
+void DigikamView::slotSelectAlbum(const KURL &)
 {
-    if(url.isEmpty())
+    /* TODO
+    if (url.isEmpty())
         return;
     
     Album *album = mAlbumMan->findPAlbum(url);
@@ -287,6 +294,7 @@ void DigikamView::slotSelectAlbum(const KURL &url)
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
     }
+    */
 }
 
 // ----------------------------------------------------------------
@@ -326,7 +334,7 @@ void DigikamView::slot_albumOpenInKonqui()
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
        
-    new KRun(palbum->getKURL()); // KRun will delete itself.
+    new KRun(palbum->folderPath()); // KRun will delete itself.
 }
 
 void DigikamView::slot_imageSelected()
@@ -453,7 +461,7 @@ void DigikamView::slot_albumAddImages()
     
     if (!urls.isEmpty())
     {
-        KIO::Job* job = DIO::copy(urls, palbum->getKURL());
+        KIO::Job* job = DIO::copy(urls, palbum->kurl());
         connect(job, SIGNAL(result(KIO::Job *) ),
                 this, SLOT(slot_imageCopyResult(KIO::Job *)));
     }

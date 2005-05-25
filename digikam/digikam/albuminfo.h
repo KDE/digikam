@@ -18,13 +18,16 @@
 #ifndef ALBUMINFO_H
 #define ALBUMINFO_H
 
+/** @file albuminfo.h */
+
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
 
-/*
- * A container class for transporting info from AlbumDB
- * to AlbumManager
+/**
+ * \class AlbumInfo
+ * A container class for transporting album information
+ * from the database to AlbumManager
  */
 class AlbumInfo
 {
@@ -32,80 +35,44 @@ public:
 
     typedef QValueList<AlbumInfo> List;
     
-    enum Type
-    {
-        PHYSICAL=0,
-        TAG,
-        DATE,
-        SEARCH
-    };
-
-    // common for all album types
-    Type     type;
     int      id;
-    QString  icon;
-
-    // only for TAG albums
-    int      pid;
-    QString  name;
-
-    // only for PHYSICAL albums
     QString  url;
     QString  caption;
     QString  collection;
     QDate    date;
+    QString  icon;
 
-    AlbumInfo() {}
-        
-    
-    AlbumInfo(const AlbumInfo& info)
-    {
-        type       = info.type;
-        id         = info.id;
-        icon       = info.icon;
-                   
-        pid        = info.pid;
-        name       = info.name;
-
-        url        = info.url;
-        caption    = info.caption;
-        collection = info.collection;
-        date       = info.date;
-    }
-
-    AlbumInfo& operator=(const AlbumInfo& info)
-    {
-        if (this != &info)
-        {
-            type       = info.type;
-            id         = info.id;
-            icon       = info.icon;
-                       
-            pid        = info.pid;
-            name       = info.name;
-
-            url        = info.url;
-            caption    = info.caption;
-            collection = info.collection;
-            date       = info.date;
-        }
-        return *this;
-    }
-    
-    // need for sorting
+    /**
+     * needed for sorting
+     */
     bool operator<(const AlbumInfo& info)
     {
-        switch (type)
-        {
-        case(PHYSICAL):
-            return url < info.url;
-        case(TAG):
-            return id  < info.id;
-        default:
-            break;
-        }
-        
-        return true;
+        return url < info.url;
+    }
+};
+
+/**
+ * \class TagInfo
+ * A container class for transporting tag information
+ * from the database to AlbumManager
+ */
+class TagInfo
+{
+public:
+
+    typedef QValueList<TagInfo> List;
+    
+    int      id;
+    int      pid;
+    QString  name;
+    QString  icon;
+
+    /**
+     * needed for sorting
+     */
+    bool operator<(const TagInfo& info)
+    {
+        return pid < info.pid;
     }
 };
 

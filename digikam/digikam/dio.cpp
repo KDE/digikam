@@ -177,8 +177,8 @@ bool renameFile(const KURL& src, const KURL& dest)
     AlbumDB* db = AlbumManager::instance()->albumDB();
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
-        db->moveItem(srcAlbum->getID(), src.fileName(),
-                     dstAlbum->getID(), KURL(dstPath).fileName());
+        db->moveItem(srcAlbum->id(), src.fileName(),
+                     dstAlbum->id(), KURL(dstPath).fileName());
         return true;
     }
 

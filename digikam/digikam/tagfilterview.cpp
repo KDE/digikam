@@ -52,9 +52,9 @@ static QPixmap getBlendedIcon(TAlbum* album)
     if(!album)
         return baseIcon;
 
-    QString icon(album->getIcon());
+    QString icon(album->icon());
 
-    QPixmap pix = SyncJob::getTagThumbnail(album->getIcon(), 20);
+    QPixmap pix = SyncJob::getTagThumbnail(album->icon(), 20);
 
     if (!pix.isNull())
     {
@@ -71,7 +71,7 @@ class TagFilterViewItem : public QCheckListItem
 public:
 
     TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
-        : QCheckListItem(parent, tag ? tag->getTitle() : i18n("Not Tagged"),
+        : QCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
                          QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
@@ -80,7 +80,7 @@ public:
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
-        : QCheckListItem(parent, tag->getTitle(), QCheckListItem::CheckBoxController)
+        : QCheckListItem(parent, tag->title(), QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
         m_untagged = false;
@@ -209,7 +209,7 @@ QDragObject* TagFilterView::dragObject()
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
         if (item->m_tag)
         {
-            dragTagIDs.append(item->m_tag->getID());
+            dragTagIDs.append(item->m_tag->id());
         }
         ++it;
     }
@@ -234,25 +234,25 @@ void TagFilterView::slotTagAdded(Album* album)
     if (!tag)
         return;
 
-    if (tag->getParent()->isRoot())
+    if (tag->parent()->isRoot())
     {
         TagFilterViewItem* item = new TagFilterViewItem(this, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->getID(), item);
+        d->dict.insert(tag->id(), item);
     }
     else
     {
-        TagFilterViewItem* parent = d->dict.find(tag->getParent()->getID());
+        TagFilterViewItem* parent = d->dict.find(tag->parent()->id());
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << tag->getURL() << endl;
+                        << tag->url() << endl;
             return;
         }
 
         TagFilterViewItem* item = new TagFilterViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->getID(), item);
+        d->dict.insert(tag->id(), item);
     }
 }
 
@@ -261,7 +261,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    TagFilterViewItem* item = d->dict.find(tag->getID());
+    TagFilterViewItem* item = d->dict.find(tag->id());
     if (!item)
         return;
 
@@ -270,7 +270,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
         QListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
         
-        QListViewItem* newPItem = d->dict.find(newParent->getID());
+        QListViewItem* newPItem = d->dict.find(newParent->id());
         if (newPItem)
             newPItem->insertItem(item);
         else
@@ -280,7 +280,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     {
         takeItem(item);
 
-        QListViewItem* newPItem = d->dict.find(newParent->getID());
+        QListViewItem* newPItem = d->dict.find(newParent->id());
         if (newPItem)
             newPItem->insertItem(item);
         else
@@ -297,11 +297,11 @@ void TagFilterView::slotTagDeleted(Album* album)
     if (!tag)
         return;
 
-    TagFilterViewItem* item = d->dict.find(tag->getID());
+    TagFilterViewItem* item = d->dict.find(tag->id());
     if (!item)
         return;
 
-    d->dict.remove(tag->getID());
+    d->dict.remove(tag->id());
     delete item;
 }
 
@@ -322,7 +322,7 @@ void TagFilterView::slotTimeOut()
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
         if (item->m_tag)
-            filterTags.append(item->m_tag->getID());
+            filterTags.append(item->m_tag->id());
         else if (item->m_untagged)
             showUnTagged = true;
         ++it;

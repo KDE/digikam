@@ -121,9 +121,9 @@ public:
             return text(0).localeAwareCompare(i->text(0));
         } 
 
-        if (m_album->getDate() == dItem->m_album->getDate())
+        if (m_album->date() == dItem->m_album->date())
             return 0;
-        else if (m_album->getDate() > dItem->m_album->getDate())
+        else if (m_album->date() > dItem->m_album->date())
             return 1;
         else
             return -1;
@@ -178,7 +178,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
 
     DAlbum* album = (DAlbum*)a;
     
-    QDate date = album->getDate();
+    QDate date = album->date();
 
     QString yr = QString::number(date.year());
     
@@ -198,7 +198,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
     item->setPixmap(0, SmallIcon("date", 22));
 
-    album->setViewItem(item);
+    album->setExtraData(this, item);
 }
 
 void DateFolderView::slotAlbumDeleted(Album* a)
@@ -208,11 +208,11 @@ void DateFolderView::slotAlbumDeleted(Album* a)
 
     DAlbum* album = (DAlbum*)a;
 
-    DateFolderItem* item = (DateFolderItem*) album->getViewItem();
+    DateFolderItem* item = (DateFolderItem*) album->extraData(this);
     if (item)
     {
         delete item;
-        album->setViewItem(0);
+        album->removeExtraData(this);
     }
 }
 
@@ -252,7 +252,7 @@ void DateFolderView::slotSelectionChanged()
     {
         AlbumManager::instance()->setCurrentAlbum(dateItem->m_album);
 
-        QDate date = dateItem->m_album->getDate();        
+        QDate date = dateItem->m_album->date();        
         d->monthview->setActive(true);
         d->monthview->setYearMonth(date.year(), date.month());
     }

@@ -50,9 +50,9 @@ static QPixmap getBlendedIcon(TAlbum* tag)
     if(!tag)
         return baseIcon;
 
-    QString icon(tag->getIcon());
+    QString icon(tag->icon());
 
-    QPixmap pix = SyncJob::getTagThumbnail(tag->getIcon(), 20);
+    QPixmap pix = SyncJob::getTagThumbnail(tag->icon(), 20);
 
     if (!pix.isNull())
     {
@@ -81,13 +81,13 @@ private:
 };
 
 TagFolderViewItem::TagFolderViewItem(QListView *parent, TAlbum *tag)
-    : KListViewItem(parent, tag->getTitle())
+    : KListViewItem(parent, tag->title())
 {
     m_tag = tag;
 }
 
 TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
-    : KListViewItem(parent, tag->getTitle())
+    : KListViewItem(parent, tag->title())
 {
     m_tag = tag;
 }
@@ -157,24 +157,24 @@ void TagFolderView::slotAlbumAdded(Album *album)
     if(!tag)
         return;
     
-    if(tag->getParent()->isRoot())
+    if(tag->parent()->isRoot())
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->getID(), item);
+        d->dict.insert(tag->id(), item);
     }
     else
     {
-        TagFolderViewItem *parent = d->dict.find(tag->getParent()->getID());
+        TagFolderViewItem *parent = d->dict.find(tag->parent()->id());
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << tag->getURL() << endl;
+                        << tag->title() << endl;
             return;
         }
         TagFolderViewItem *item = new TagFolderViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->getID(), item);        
+        d->dict.insert(tag->id(), item);        
     }
 }
 
@@ -187,9 +187,9 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!tag)
         return;
 
-    TagFolderViewItem *item = d->dict.find(tag->getID());
+    TagFolderViewItem *item = d->dict.find(tag->id());
     if(item) {
-        d->dict.remove(tag->getID());
+        d->dict.remove(tag->id());
         delete item;
     }
 }
@@ -327,7 +327,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
         return;
     }
 
-    if(tag->getTitle() != title)
+    if(tag->title() != title)
     {
         QString errMsg;
         if(!d->albumMan->renameTAlbum(tag, title, errMsg))
@@ -336,7 +336,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
             item->setText(0, title);
     }
 
-    if(tag->getIcon() != icon)
+    if(tag->icon() != icon)
     {
         QString errMsg;
         if (!d->albumMan->updateTAlbumIcon(tag, icon, false, errMsg))
@@ -378,7 +378,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
                                                  "Deleting this will also delete "
                                                  "the subtag(s). "
                                                  "Are you sure you want to continue?")
-                                      .arg(tag->getTitle())
+                                      .arg(tag->title())
                                       .arg(children));
 
         if(result == KMessageBox::Yes)
@@ -392,7 +392,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     {
         int result =
             KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
-                                       .arg(tag->getTitle()));
+                                       .arg(tag->title()));
 
         if(result == KMessageBox::Yes)
         {
@@ -408,7 +408,7 @@ QDragObject* TagFolderView::dragObject()
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
     if(!item)
         return 0;
-    TagDrag *t = new TagDrag(item->getTag()->getID(), this);
+    TagDrag *t = new TagDrag(item->getTag()->id(), this);
     t->setPixmap(getBlendedIcon(item->getTag()));
     return t;
 }

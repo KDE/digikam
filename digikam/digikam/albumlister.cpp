@@ -116,12 +116,12 @@ void AlbumLister::openAlbum(Album *album)
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
-    ds << album->getKURL();
+    ds << album->kurl();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();
 
-    d->job = new KIO::TransferJob(album->getKURL(), KIO::CMD_SPECIAL,
+    d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
     connect(d->job, SIGNAL(result(KIO::Job*)),
             SLOT(slotResult(KIO::Job*)));
@@ -152,12 +152,12 @@ void AlbumLister::refresh()
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
-    ds << d->currAlbum->getKURL();
+    ds << d->currAlbum->kurl();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
     ds << AlbumSettings::instance()->getRecurseTags();
 
-    d->job = new KIO::TransferJob(d->currAlbum->getKURL(), KIO::CMD_SPECIAL,
+    d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
     connect(d->job, SIGNAL(result(KIO::Job*)),
             SLOT(slotResult(KIO::Job*)));

@@ -130,7 +130,7 @@ void AlbumHistory::getBackwardHistory(QStringList &list) const
     AlbumStack::const_iterator iter = m_backwardStack->begin();
     for(; iter != m_backwardStack->fromLast(); ++iter)
     {
-        list.push_front((*iter)->getTitle());
+        list.push_front((*iter)->title());
     }
 }
         
@@ -142,7 +142,7 @@ void AlbumHistory::getForwardHistory(QStringList &list) const
     AlbumStack::const_iterator iter;
     for(iter = m_forwardStack->begin(); iter != m_forwardStack->end(); ++iter)
     {
-        list.append((*iter)->getTitle());
+        list.append((*iter)->title());
     }    
 }
 

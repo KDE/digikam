@@ -355,7 +355,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
     {
         PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
-        if(album && album->getIconKURL().equals(iconItem->imageInfo()->kurl()))
+        if(album && album->iconKURL().equals(iconItem->imageInfo()->kurl()))
         {
             QString err;
             AlbumManager::instance()->updatePAlbumIcon( album,  "",
@@ -781,7 +781,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     imview->loadURL(urlList, 
                     item->imageInfo()->kurl(),
-                    d->currentAlbum ? d->currentAlbum->getTitle():QString(),
+                    d->currentAlbum ? d->currentAlbum->title():QString(),
                     true,
                     this);  // Allow to use image properties and comments/tags dialogs
     
@@ -948,7 +948,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         d->currentAlbum->type() == Album::PHYSICAL)
     {
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
-        KURL destURL(palbum->getKURL());
+        KURL destURL(palbum->kurl());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
@@ -992,7 +992,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         {
             QPopupMenu popMenu(this);
             popMenu.insertItem(i18n("&Assign Tag '%1' to Selected Images")
-                .arg(talbum->getPrettyURL()), 10 );
+                .arg(talbum->prettyURL()), 10 );
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 

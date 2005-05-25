@@ -98,7 +98,7 @@ QString DigikamImageInfo::description()
     if (p)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        return db->getItemCaption(p->getID(), _url.fileName());
+        return db->getItemCaption(p->id(), _url.fileName());
     }
 
     return QString::null;
@@ -125,7 +125,7 @@ void DigikamImageInfo::setDescription( const QString& description )
     if ( p  )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemCaption(p->getID(), _url.fileName(), description);
+        db->setItemCaption(p->id(), _url.fileName(), description);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveExifComments())
@@ -159,7 +159,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     if ( p )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemDate(p->getID(), _url.fileName(), time);
+        db->setItemDate(p->id(), _url.fileName(), time);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
 }
@@ -250,10 +250,10 @@ QString DigikamImageCollection::name()
 {
     if ( album_->type() == Album::TAG )
     {
-        return i18n("Tag: %1").arg(album_->getTitle());
+        return i18n("Tag: %1").arg(album_->title());
     }
     else
-        return album_->getTitle();
+        return album_->title();
 }
 
 QString DigikamImageCollection::category()
@@ -261,12 +261,12 @@ QString DigikamImageCollection::category()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getCollection();
+        return p->collection();
     }
     else if ( album_->type() == Album::TAG )
     {
         TAlbum *p = dynamic_cast<TAlbum*>(album_);
-        return i18n("Tag: %1").arg(p->getURL());
+        return i18n("Tag: %1").arg(p->url());
     }
     else
         return QString::null;
@@ -277,7 +277,7 @@ QDate DigikamImageCollection::date()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getDate();
+        return p->date();
     }
     else
         return QDate();
@@ -288,7 +288,7 @@ QString DigikamImageCollection::comment()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getCaption();
+        return p->caption();
     }
     else
         return QString::null;
@@ -367,13 +367,13 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     QString filter = imgFilter_.lower() + " " + imgFilter_.upper();
 
     QStringList items;
-    QDir dir(album->getKURL().path(), filter,
+    QDir dir(album->kurl().path(), filter,
              QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
 
     QStringList Files = dir.entryList();
 
     for ( QStringList::Iterator it = Files.begin() ; it != Files.end() ; ++it )
-        items.append(album->getKURL().path(1) + *it);
+        items.append(album->kurl().path(1) + *it);
 
     return KURL::List(items);
 }
@@ -400,7 +400,7 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     db->beginTransaction();
 
-    urls = db->getItemURLsInTag(album->getID());
+    urls = db->getItemURLsInTag(album->id());
 
     db->commitTransaction();
 
@@ -422,7 +422,7 @@ KURL DigikamImageCollection::path()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getKURL();
+        return p->url();
     }
     else
     {
@@ -430,7 +430,7 @@ KURL DigikamImageCollection::path()
                     << "kipiinterface::DigikamImageCollection::path:Requesting kurl "
                        "from a virtual album"
                     << endl;
-        return KURL(album_->getURL());
+        return QString();
     }
 }
 
@@ -439,7 +439,7 @@ KURL DigikamImageCollection::uploadPath()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getKURL();
+        return p->kurl();
     }
     else
     {
@@ -447,7 +447,7 @@ KURL DigikamImageCollection::uploadPath()
                     << "kipiinterface::DigikamImageCollection::uploadPath:Requesting kurl "
                        "from a virtual album"
                     << endl;
-        return KURL(album_->getURL());
+        return KURL();
     }
 }
 
@@ -531,8 +531,8 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 
     QString fileFilter(fileExtensions());
 
-    PAlbumList palbumList = albumManager_->pAlbums();
-    for ( QValueList<PAlbum*>::Iterator it = palbumList.begin();
+    AlbumList palbumList = albumManager_->allPAlbums();
+    for ( AlbumList::Iterator it = palbumList.begin();
           it != palbumList.end(); ++it )
     {
         // don't add the root album
@@ -549,8 +549,8 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
      * Disable this till the imagesgallery plugin is fixed
      */
 
-    TAlbumList talbumList = albumManager_->tAlbums();
-    for ( QValueList<TAlbum*>::Iterator it = talbumList.begin();
+    AlbumList talbumList = albumManager_->allTAlbums();
+    for ( AlbumList::Iterator it = talbumList.begin();
           it != talbumList.end(); ++it )
     {
         // don't add the root album
@@ -604,7 +604,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
         return false;
     }
 
-    // Renchi: No need to have an 'AlbumDB::addItem()' method ?
+    // TODO: scan in item
 
     albumManager_->refreshItemHandler( url );
 
@@ -628,7 +628,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     if ( palbum )
     {
         // delete the item from the database
-        albumDB_->deleteItem( palbum->getID(), url.fileName() );
+        albumDB_->deleteItem( palbum->id(), url.fileName() );
     }
     else
     {
