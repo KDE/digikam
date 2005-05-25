@@ -43,10 +43,10 @@ namespace DigikamRefocusImagesPlugin
 **/
 typedef struct
 {
-    int radius;                  /* Radius of the matrix */
-    int row_stride;              /* Size of one row = 2 * radius + 1 */
-    double *data;                  /* Contents of matrix */
-    double *center;                /* Points to element with index (0, 0) */
+    int     radius;                // Radius of the matrix 
+    int     row_stride;            // Size of one row = 2 * radius + 1 
+    double *data;                  // Contents of matrix 
+    double *center;                // Points to element with index (0, 0) 
 }
 CMat;
 
@@ -60,9 +60,9 @@ CMat;
 **/
 typedef struct
 {
-    int rows;                    /* Number of rows in the matrix */
-    int cols;                    /* Number of columns in the matrix */
-    double *data;                  /* Content of the matrix */
+    int     rows;                  // Number of rows in the matrix 
+    int     cols;                  // Number of columns in the matrix 
+    double *data;                  // Content of the matrix 
 }
 Mat;
 
@@ -73,7 +73,8 @@ public:
 
     static void fill_matrix (CMat * matrix, const int m, double f (int, int, double), const double fun_arg);
     
-    static void fill_matrix2 (CMat * matrix, const int m, double f (const int, const int, const double, const double),
+    static void fill_matrix2 (CMat * matrix, const int m, 
+                              double f (const int, const int, const double, const double), 
                               const double fun_arg1, const double fun_arg2);
     
     static void make_circle_convolution (const double radius, CMat *convolution, const int m);
@@ -116,7 +117,7 @@ private:
     static CMat *compute_g (const CMat * const convolution, const int m, const double gamma,
                                            const double noise_factor, const double musq, const bool symmetric);
     static double circle_integral (const double x, const double radius);
-    static double circle_intensity (const int x, const int y, const double radius);                                           
+    static double circle_intensity (const int x, const int y, const double radius);               
     
     static int dgesv (const int N, const int NRHS, double *A, const int lda, double *B, const int ldb);
 
