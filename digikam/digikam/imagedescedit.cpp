@@ -48,8 +48,6 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
-#include "albumfolderview_deprecated.h"
-#include "albumfolderitem_deprecated.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
