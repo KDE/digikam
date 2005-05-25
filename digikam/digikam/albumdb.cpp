@@ -755,7 +755,7 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
 
 void AlbumDB::setAlbumURL(int albumID, const QString& url)
 {
-    QString u = escapeString(u);
+    QString u = escapeString(url);
     
     // first delete any stale albums left behind
     execSql( QString("DELETE FROM Albums WHERE url = '%1'")
@@ -763,7 +763,7 @@ void AlbumDB::setAlbumURL(int albumID, const QString& url)
 
     // now update the album url
     execSql( QString("UPDATE Albums SET url = '%1' WHERE id = %2;")
-             .arg(url)
+             .arg(u)
              .arg(albumID) );
 }
 
