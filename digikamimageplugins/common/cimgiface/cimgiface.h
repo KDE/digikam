@@ -33,7 +33,6 @@
 #include "CImg.h"
 
 class QObject;
-class QImage;
 
 namespace DigikamImagePlugins
 {
