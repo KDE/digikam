@@ -564,8 +564,8 @@ void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, in
     int red, green, blue;
     Digikam::ImageFilters::imageData imagedata;
     
-    const int imageSize      = width*height;
-    const int mat_offset     = mat_size / 2;
+    const int imageSize  = width*height;
+    const int mat_offset = mat_size / 2;
     
     memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
