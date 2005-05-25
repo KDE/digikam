@@ -355,6 +355,30 @@ ImageEffect_Restoration::~ImageEffect_Restoration()
     delete m_iface;
 }
 
+void ImageEffect_Restoration::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_imagePreviewWidget->setProgress(0);
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
+    enableButton(Ok, true);    
+    enableButton(User2, true);
+    enableButton(User3, true);                      
+    m_imagePreviewWidget->setEnable(true);                 
+    m_restorationTypeCB->setEnabled(true);
+    m_detailInput->setEnabled(true);
+    m_gradientInput->setEnabled(true);
+    m_timeStepInput->setEnabled(true);
+    m_blurInput->setEnabled(true);
+    m_blurItInput->setEnabled(true);
+    m_angularStepInput->setEnabled(true);
+    m_integralStepInput->setEnabled(true);
+    m_gaussianInput->setEnabled(true);
+    m_linearInterpolationBox->setEnabled(true);
+    m_normalizeBox->setEnabled(true);
+}
+
 void ImageEffect_Restoration::slotTimer()
 {
     if (m_timer)
@@ -584,28 +608,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               case PreviewRendering:
                  {
                  kdDebug() << "Preview Restoration completed..." << endl;
-                 
                  m_imagePreviewWidget->setPreviewImageData(m_previewImage);
-                 m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-                 m_imagePreviewWidget->setProgress(0);
-                
-                 setButtonText(User1, i18n("&Reset Values"));
-                 setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-                 enableButton(Ok, true);  
-                 enableButton(User2, true);
-                 enableButton(User3, true);  
-                 m_imagePreviewWidget->setEnable(true);                 
-                 m_restorationTypeCB->setEnabled(true);
-                 m_detailInput->setEnabled(true);
-                 m_gradientInput->setEnabled(true);
-                 m_timeStepInput->setEnabled(true);
-                 m_blurInput->setEnabled(true);
-                 m_blurItInput->setEnabled(true);
-                 m_angularStepInput->setEnabled(true);
-                 m_integralStepInput->setEnabled(true);
-                 m_gaussianInput->setEnabled(true);
-                 m_linearInterpolationBox->setEnabled(true);
-                 m_normalizeBox->setEnabled(true);
+                 abortPreview();
                  m_dirty = false;   
                  break;
                  }
@@ -615,7 +619,6 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  kdDebug() << "Final Restoration completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
                  iface.putOriginalData(i18n("Restoration"), m_originalData);
-       
                  m_parent->setCursor( KCursor::arrowCursor() );
                  accept();       
                  break;
@@ -629,25 +632,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                 case PreviewRendering:
                     {
                     kdDebug() << "Preview Restoration failed..." << endl;
-                    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-                    m_imagePreviewWidget->setProgress(0);
-                    setButtonText(User1, i18n("&Reset Values"));
-                    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-                    enableButton(Ok, true);    
-                    enableButton(User2, true);
-                    enableButton(User3, true);                      
-                    m_imagePreviewWidget->setEnable(true);                 
-                    m_restorationTypeCB->setEnabled(true);
-                    m_detailInput->setEnabled(true);
-                    m_gradientInput->setEnabled(true);
-                    m_timeStepInput->setEnabled(true);
-                    m_blurInput->setEnabled(true);
-                    m_blurItInput->setEnabled(true);
-                    m_angularStepInput->setEnabled(true);
-                    m_integralStepInput->setEnabled(true);
-                    m_gaussianInput->setEnabled(true);
-                    m_linearInterpolationBox->setEnabled(true);
-                    m_normalizeBox->setEnabled(true);
+                    abortPreview();
                     m_dirty = false;   
                     break;
                     }

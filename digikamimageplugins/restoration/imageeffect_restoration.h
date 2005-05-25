@@ -132,11 +132,14 @@ private:
     QCheckBox       *m_linearInterpolationBox;
     QCheckBox       *m_normalizeBox;
     
-    DigikamImagePlugins::CimgIface       *m_cimgInterface;
+    DigikamImagePlugins::CimgIface *m_cimgInterface;
     
-    Digikam::ImagePreviewWidget          *m_imagePreviewWidget;
-    Digikam::ImageIface                  *m_iface;    
+    Digikam::ImagePreviewWidget    *m_imagePreviewWidget;
+    Digikam::ImageIface            *m_iface;    
     
+private:
+    
+    void abortPreview(void);
     void customEvent(QCustomEvent *event);
     
 private slots:
