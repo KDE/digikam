@@ -282,4 +282,9 @@ void CameraIconView::slotSelectNew()
     emit signalSelectionChanged();
 }
 
+void CameraIconView::startDrag()
+{
+    
+}
+
 #include "cameraiconview.moc"

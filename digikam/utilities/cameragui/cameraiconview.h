@@ -46,6 +46,10 @@ public:
                       const QPixmap& pixmap);
 
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
+
+protected:
+
+    void startDrag();
     
 private:
 
