@@ -137,6 +137,13 @@ void* ImageInfo::getViewItem() const
     return m_viewitem;
 }
 
+void ImageInfo::setCaption(const QString& caption)
+{
+    AlbumDB* db  = m_man->albumDB();
+    return db->setItemCaption(m_albumID, m_name, caption);
+    
+}
+
 QString ImageInfo::caption() const
 {
     AlbumDB* db  = m_man->albumDB();
@@ -183,6 +190,12 @@ void ImageInfo::removeTag(int tagID)
 {
     AlbumDB* db  = m_man->albumDB();
     db->removeItemTag(m_albumID, m_name, tagID);
+}
+
+void ImageInfo::removeAllTags()
+{
+    AlbumDB *db = m_man->albumDB();
+    db->removeItemAllTags(m_albumID, m_name);
 }
 
 void ImageInfo::refresh()

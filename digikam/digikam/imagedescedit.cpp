@@ -51,7 +51,6 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
-#include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -286,61 +285,41 @@ void ImageDescEdit::slotApply()
     if (!m_currItem)
         return;
 
-    KURL fileURL(m_currItem->imageInfo()->kurl());
-
-    PAlbum *album = m_currItem->imageInfo()->album();
-    if (!album)
-    {
-        kdWarning() << "Failed to find parent album for"
-                    << fileURL << endl;
-        return;
-    }
-
-    AlbumDB* db  = AlbumManager::instance()->albumDB();
+    ImageInfo* info = m_currItem->imageInfo();
 
     if (m_modified)
     {
-        db->setItemCaption(album->id(), fileURL.fileName(), m_commentsEdit->text());
+        info->setCaption(m_commentsEdit->text());
 
         if (AlbumSettings::instance() &&
             AlbumSettings::instance()->getSaveExifComments())
         {
             // store as JPEG Exif comment
-            KFileMetaInfo*  metaInfo =
-                new KFileMetaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo  metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
 
             // set Jpeg comment
-            if (metaInfo->isValid () && metaInfo->mimeType() == "image/jpeg"
-                && metaInfo->containsGroup("Jpeg EXIF Data"))
+            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
+                && metaInfo.containsGroup("Jpeg EXIF Data"))
             {
                 kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
                           << endl;
-                (*metaInfo)["Jpeg EXIF Data"].item("Comment")
+                metaInfo["Jpeg EXIF Data"].item("Comment")
                     .setValue(m_commentsEdit->text());
-                metaInfo->applyChanges();
+                metaInfo.applyChanges();
             }
-            else
-            {
-                delete metaInfo;
-                metaInfo = 0;
-            }
-
-            // set EXIF UserComment
-            //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
         }
 
         m_modified = false;
     }
 
-    db->removeItemAllTags(album->id(), fileURL.fileName());
+    info->removeAllTags();
     QListViewItemIterator it(m_tagsView);
     while (it.current())
     {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
+        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem && tItem->isOn())
         {
-            db->addItemTag(album->id(), fileURL.fileName(), tItem->m_album->id());
+            info->setTag(tItem->m_album->id());
         }
         ++it;
     }
@@ -369,7 +348,8 @@ void ImageDescEdit::slotItemChanged()
         delete m_thumbJob;
     }
 
-    KURL fileURL(m_currItem->imageInfo()->kurl());
+    ImageInfo* info = m_currItem->imageInfo();
+    KURL fileURL(info->kurl());
 
     m_thumbJob = new ThumbnailJob(fileURL, 256);
 
@@ -391,13 +371,11 @@ void ImageDescEdit::slotItemChanged()
         return;
     }
 
-    AlbumDB* db  = AlbumManager::instance()->albumDB();
-
-    m_nameLabel->setText(fileURL.fileName());
+    m_nameLabel->setText(info->name());
     m_thumbLabel->setPixmap(QPixmap());
-    m_commentsEdit->setText(db->getItemCaption(album->id(), fileURL.fileName()));
+    m_commentsEdit->setText(info->caption());
 
-    IntList tagIDs = db->getItemTagIDs(album->id(), fileURL.fileName());
+    QValueList<int> tagIDs = info->tagIDs();
 
     QListViewItemIterator it( m_tagsView);
     while (it.current())

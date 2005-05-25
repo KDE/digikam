@@ -110,14 +110,42 @@ public:
      */
     int       albumID() const;
 
+    /*
+     *@return the PAlbum to which this item belongs
+     */
     PAlbum*   album() const;
 
-    QString     caption() const;
+    /** 
+     * @return the caption for this item
+     */
+    QString  caption() const;
+
+    /**
+     * Set the caption (writes it to database)
+     * @param caption the new caption for this item
+     */
+    void  setCaption(const QString& caption);
+    
     QStringList tagNames() const;
     QStringList tagPaths() const;
     QValueList<int> tagIDs() const;
+
+    /**
+     * Adds a tag to the item (writes it to database)
+     * @param tagID the ID of the tag to add
+     */
     void        setTag(int tagID);
+
+    /**
+     * Remove a tag from the item (removes it from database)
+     * @param tagID the ID of the tag to remove
+     */
     void        removeTag(int tagID);
+
+    /**
+     * Remove all tags from the item (removes it from database)
+     */
+    void        removeAllTags();
     
     void        setViewItem(void *d);
     void*       getViewItem() const;
