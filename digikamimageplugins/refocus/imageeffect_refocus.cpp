@@ -20,12 +20,6 @@
  * 
  * ============================================================ */
  
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
-
 // Qt includes.
 
 #include <qvgroupbox.h>
@@ -53,6 +47,7 @@
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -60,7 +55,7 @@
 
 // Local includes.
 
-#include "matrix.h"
+#include "refocus.h"
 #include "version.h"
 #include "imageeffect_refocus.h"
 
@@ -78,14 +73,15 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                  i18n("&Save As...")),
                      m_parent(parent)
 {
-    m_timer = 0;
+    m_dirty  = false; 
+    m_currentRenderingMode = NoneRendering;
+    m_timer                = 0L;
+    m_refocusFilter        = 0L;
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );    
-    m_cancel = false;
-    m_dirty  = false;   
     
     // About data and help button.
     
@@ -291,12 +287,16 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
 
 ImageEffect_Refocus::~ImageEffect_Refocus()
 {
+    if (m_refocusFilter)
+       delete m_refocusFilter;    
+    
     if (m_timer)
        delete m_timer;
 }
 
 void ImageEffect_Refocus::abortPreview()
 {
+    m_currentRenderingMode = NoneRendering;
     m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_matrixSize->setEnabled(true);
@@ -316,7 +316,7 @@ void ImageEffect_Refocus::slotUser1()
 {
     if (m_dirty)
        {
-       m_cancel = true;
+       m_refocusFilter->stopComputation();
        abortPreview();
        }
     else
@@ -344,7 +344,12 @@ void ImageEffect_Refocus::slotUser1()
 
 void ImageEffect_Refocus::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_refocusFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
@@ -355,7 +360,12 @@ void ImageEffect_Refocus::slotHelp()
 
 void ImageEffect_Refocus::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_refocusFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     e->accept();    
 }
 
@@ -377,8 +387,9 @@ void ImageEffect_Refocus::slotEffect()
 {
     if (m_dirty) return;     // Computation already in process.
     
-    m_cancel = false;
+    m_currentRenderingMode = PreviewRendering;
     m_dirty = true;
+    
     m_matrixSize->setEnabled(false);
     m_radius->setEnabled(false);
     m_gauss->setEnabled(false);
@@ -387,7 +398,7 @@ void ImageEffect_Refocus::slotEffect()
     m_imagePreviewWidget->setEnable(false);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
+    enableButton(Ok,    false);
     enableButton(User2, false);
     enableButton(User3, false);
     
@@ -398,7 +409,7 @@ void ImageEffect_Refocus::slotEffect()
     double c      = m_correlation->value();
     double n      = m_noise->value();
 
-    QRect  area   = m_imagePreviewWidget->getOriginalImageRegion();
+    QRect area    = m_imagePreviewWidget->getOriginalImageRegion();
     QRect tmpRect;
     tmpRect.setLeft(area.left()-2*ms);
     tmpRect.setRight(area.right()+2*ms);
@@ -408,17 +419,28 @@ void ImageEffect_Refocus::slotEffect()
     QImage imTemp = m_img.copy(tmpRect);
         
     m_imagePreviewWidget->setProgress(0);
-    refocus((uint *)imTemp.bits(), imTemp.width(), imTemp.height(), ms, r, g, c, n);
+    
+    if (m_refocusFilter)
+       delete m_refocusFilter;
+        
+    m_refocusFilter = new Refocus(&imTemp, ms, r, g, c, n, this);
+    
+    //FIXME
+    /*
     if (m_cancel) return;
     QImage imDest = imTemp.copy(2*ms, 2*ms, area.width(), area.height());
     m_imagePreviewWidget->setPreviewImageData(imDest);
     
     abortPreview();
     m_dirty = false;
+    */
+    
 }
 
 void ImageEffect_Refocus::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+
     m_matrixSize->setEnabled(false);
     m_radius->setEnabled(false);
     m_gauss->setEnabled(false);
@@ -426,17 +448,12 @@ void ImageEffect_Refocus::slotOk()
     m_noise->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
     
-    enableButton(Ok, false);
+    enableButton(Ok,    false);
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
     m_parent->setCursor( KCursor::waitCursor() );
         
-    Digikam::ImageIface iface(0, 0);
-    
-    uint*  data = (uint*)m_img.bits();
-    int    w    = m_img.width();
-    int    h    = m_img.height();
     int    ms   = m_matrixSize->value();
     double r    = m_radius->value();
     double g    = m_gauss->value();
@@ -444,6 +461,15 @@ void ImageEffect_Refocus::slotOk()
     double n    = m_noise->value();
     
     m_imagePreviewWidget->setProgress(0);
+    
+    if (m_refocusFilter)
+       delete m_refocusFilter;
+        
+    m_refocusFilter = new Refocus(&m_img, ms, r, g, c, n, this);
+    
+    // FIXME
+    /*
+    Digikam::ImageIface iface(0, 0);
     refocus(data, w, h, ms, r, g, c, n);
 
     if ( !m_cancel )
@@ -455,7 +481,80 @@ void ImageEffect_Refocus::slotOk()
        }
        
     m_parent->setCursor( KCursor::arrowCursor() );
-    accept();       
+    accept();
+    */
+    
+}
+
+void ImageEffect_Refocus::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
+
+    Refocus::EventData *d = (Refocus::EventData*) event->data();
+
+    if (!d) return;
+
+    int   ms   = m_matrixSize->value();
+    QRect area = m_imagePreviewWidget->getOriginalImageRegion();
+    
+    if (d->starting)           // Computation in progress !
+        {
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Refocus completed..." << endl;
+                 
+                 QImage imDest = m_refocusFilter->getTargetImage()
+                                 .copy(2*ms, 2*ms, area.width(), area.height());
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+    
+                 abortPreview();
+                 m_dirty = false;
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Refocus completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Refocus"), 
+                         (uint*)m_refocusFilter->getTargetImage()
+                                     .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 
+                                           iface.originalWidth(), iface.originalHeight())
+                                     .bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Refocus failed..." << endl;
+                    abortPreview();
+                    m_dirty = false;   
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
 }
 
 void ImageEffect_Refocus::slotUser2()
@@ -521,99 +620,6 @@ void ImageEffect_Refocus::slotUser3()
     file.close();        
 }
 
-void ImageEffect_Refocus::refocus(uint* data, int width, int height, int matrixSize, 
-                                  double radius, double gauss, double correlation, double noise)
-{
-    CMat *matrix=0;
-    
-    uint* newData = new uint[width*height];
-    
-    // Compute matrix
-    
-    CMat circle, gaussian, convolution;
-    
-    RefocusMatrix::make_gaussian_convolution (gauss, &gaussian, matrixSize);
-    RefocusMatrix::make_circle_convolution (radius, &circle, matrixSize);
-    RefocusMatrix::init_c_mat (&convolution, matrixSize);
-    RefocusMatrix::convolve_star_mat (&convolution, &gaussian, &circle);
-    
-    matrix = RefocusMatrix::compute_g_matrix (&convolution, matrixSize, correlation, noise, 0.0, true);
-    
-    RefocusMatrix::finish_c_mat (&convolution);
-    RefocusMatrix::finish_c_mat (&gaussian);
-    RefocusMatrix::finish_c_mat (&circle);
-
-    // Apply deconvolution kernel to image.
-    convolve_image(data, newData, width, height, matrix->data, 2 * matrixSize + 1);
-    
-    if (!m_cancel)
-       memcpy(data, newData, width*height*4);  
-
-    delete matrix;   
-    delete [] newData;
-}
-
-void ImageEffect_Refocus::convolve_image(const uint *orgData, uint *destData, int width, int height, 
-                                         const double *const mat, int mat_size)
-{
-    double    matrix[mat_size][mat_size];
-    double    valRed, valGreen, valBlue;
-    int       x1, y1, x2, y2, index1, index2;
-    
-    // Big/Little Endian color manipulation compatibility.
-    int red, green, blue;
-    Digikam::ImageFilters::imageData imagedata;
-    
-    const int imageSize  = width*height;
-    const int mat_offset = mat_size / 2;
-    
-    memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
-    
-    for (y1 = 0; !m_cancel && (y1 < height); y1++)
-        {
-        for (x1 = 0; !m_cancel && (x1 < width); x1++)
-            {
-            valRed = valGreen = valBlue = 0.0;
-                
-            for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
-                {
-                for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
-                    {
-                    index1 = width * (y1 + y2 - mat_offset) + 
-                             x1 + x2 - mat_offset;
-                        
-                    if ( index1 >= 0 && index1 < imageSize )
-                       {
-                       imagedata.raw = orgData[index1];
-                       red           = (int)imagedata.channel.red;
-                       green         = (int)imagedata.channel.green;
-                       blue          = (int)imagedata.channel.blue;
-                       valRed   += matrix[y2][x2] * red;
-                       valGreen += matrix[y2][x2] * green;
-                       valBlue  += matrix[y2][x2] * blue;
-                       }
-                    }
-                }
-            
-            index2 = y1 * width + x1;
-                          
-            if (index2 >= 0 && index2 < imageSize)
-                {
-                // To get Alpha channel value from original (unchanged)
-                imagedata.raw = orgData[index2];
-                
-                // Overwrite RGB values to destination.
-                imagedata.channel.red   = (uchar) CLAMP (valRed, 0, 255);
-                imagedata.channel.green = (uchar) CLAMP (valGreen, 0, 255);
-                imagedata.channel.blue  = (uchar) CLAMP (valBlue, 0, 255);
-                destData[index2]        = imagedata.raw;
-                }
-            }
-        
-        m_imagePreviewWidget->setProgress((int) (((double)y1 * 100.0) / height));
-        kapp->processEvents();
-        }
-}
 
 }  // NameSpace DigikamRefocusImagesPlugin
 

@@ -11,7 +11,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_refocus.la
 
 digikamimageplugin_refocus_la_SOURCES = imageplugin_refocus.cpp imageeffect_refocus.cpp \
-	                                matrix.cpp 
+	                                matrix.cpp refocus.cpp 
 
 digikamimageplugin_refocus_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	                               $(top_srcdir)/digikamimageplugins/refocus/clapack/liblapack.la 

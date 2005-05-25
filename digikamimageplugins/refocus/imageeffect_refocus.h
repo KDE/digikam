@@ -37,6 +37,8 @@ class QTimer;
 class KIntNumInput;
 class KDoubleNumInput;
 
+class Refocus;
+
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -59,8 +61,16 @@ protected:
     void closeEvent(QCloseEvent *e);
     
 private:
-
-    bool             m_cancel;
+    
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+    
+    int              m_currentRenderingMode;
+    
     bool             m_dirty;
 
     QWidget         *m_parent;
@@ -78,17 +88,15 @@ private:
     KDoubleNumInput *m_correlation;
     KDoubleNumInput *m_noise;
     
+    Refocus         *m_refocusFilter;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
     
     void abortPreview(void);
+    void customEvent(QCustomEvent *event);
 
-    void refocus(uint* data, int width, int height, int matrixSize, 
-                 double radius, double gauss, double correlation, double noise);
-                 
-    void convolve_image(const uint *orgData, uint *destData, int width, int height, const double *const mat, int mat_size);
-                         
 private slots:
 
     void slotHelp();
