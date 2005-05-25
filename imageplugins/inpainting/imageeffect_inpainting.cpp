@@ -621,9 +621,9 @@ void ImageEffect_InPainting_Dialog::slotUser2()
 
 void ImageEffect_InPainting_Dialog::slotUser3()
 {
-    KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("Photograph Inpainting Settings File to Save")) );
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Inpainting Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 

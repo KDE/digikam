@@ -704,9 +704,9 @@ void ImageEffect_Restoration::slotUser2()
 
 void ImageEffect_Restoration::slotUser3()
 {
-    KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("Photograph Restoration Settings File to Save")) );
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Restoration Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 

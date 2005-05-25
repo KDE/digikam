@@ -526,9 +526,9 @@ void ImageEffect_BlowUp::slotUser2()
 
 void ImageEffect_BlowUp::slotUser3()
 {
-    KURL saveRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("Photograph Blowup Settings File to Save")) );
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Blowup Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 
