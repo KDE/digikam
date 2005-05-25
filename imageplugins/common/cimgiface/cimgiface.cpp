@@ -48,6 +48,10 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 // Local includes.
  
 #include "cimgiface.h"
@@ -170,21 +174,26 @@ void CimgIface::startComputation()
        d->progress = 0;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
        }
-        
-    // Copy the src data into a CImg type image with three channels and no alpha. This means that a CImg is always rgba.
+
+    // Big/Little Endian color manipulation compatibility.
+    int red, green, blue;
+    Digikam::ImageFilters::imageData imagedata;
+                   
+    // Copy the src data into a CImg type image with three channels and no alpha. 
+    // This means that a CImg is always RGBA.
 
     img = CImg<>(m_imageWidth, m_imageHeight, 1, 3);
     eigen = CImgl<>(CImg<>(2,1), CImg<>(2,2));    
     register int x, y, i=0;
-    uchar* data = (uchar *)m_imageData;
 
     for (y = 0; y < m_imageHeight; y++) 
        {
-       for (x = 0; x < m_imageWidth; x++, i+=4) 
+       for (x = 0; x < m_imageWidth; x++, i++) 
           {
-          img(x, y, 0) = data[ i ];
-          img(x, y, 1) = data[i+1];
-          img(x, y, 2) = data[i+2];
+          imagedata.raw = m_imageData[i];
+          img(x, y, 0) = (int)imagedata.channel.red;
+          img(x, y, 1) = (int)imagedata.channel.green;
+          img(x, y, 2) = (int)imagedata.channel.blue;
           }
        }
 
@@ -213,28 +222,33 @@ void CimgIface::startComputation()
 
     i = 0;
     int width, height;
-    uchar* newData;
+    uint* newData;
     
     if (m_resize)
        {
        width   = m_newWidth;
        height  = m_newHeight;
-       newData = (uchar*)m_newData;
+       newData = m_newData;
        }
     else
        {
        width   = m_imageWidth;
        height  = m_imageHeight;
-       newData = (uchar*)m_imageData;
+       newData = m_imageData;
        }   
        
     for (y = 0; y < height; y++) 
        {
-       for (x = 0; x < width; x++, i+=4) 
+       for (x = 0; x < width; x++, i++) 
           {
-          newData[ i ] = (uchar)img(x, y, 0);
-          newData[i+1] = (uchar)img(x, y, 1);
-          newData[i+2] = (uchar)img(x, y, 2);
+          // To get Alpha channel value from original (unchanged)
+          imagedata.raw = newData[i];  
+          
+          // Overwrite RGB values to destination.
+          imagedata.channel.red   = (uchar) img(x, y, 0);
+          imagedata.channel.green = (uchar) img(x, y, 1);
+          imagedata.channel.blue  = (uchar) img(x, y, 2);
+          newData[i]              = imagedata.raw;
           }
        }
     

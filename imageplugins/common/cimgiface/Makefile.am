@@ -8,7 +8,8 @@ libcimgiface_la_SOURCES = cimgiface.cpp
 
 libcimgiface_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-INCLUDES = $(all_includes) 
+INCLUDES = -I$(top_srcdir)/digikamimageplugins/common/include \
+	   $(all_includes) $(LIBDIGIKAM_CFLAGS) 
 
 # Don't use CImg interface (keyboard/mouse interaction)
 AM_CPPFLAGS = -Dcimg_OS=-1 -Dcimg_display_type=0 
