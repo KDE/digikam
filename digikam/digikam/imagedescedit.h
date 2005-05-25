@@ -71,9 +71,9 @@ private:
     QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
-    void tagNew(TAlbum* parAlbum, QCheckListItem *item);
+    void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);
-    void tagDelete(TAlbum *album, QCheckListItem *item);
+    void tagDelete(TAlbum *album);
     
     QGuardedPtr<ThumbnailJob> m_thumbJob;
 

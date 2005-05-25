@@ -164,6 +164,12 @@ ImageDescEdit::~ImageDescEdit()
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        (*it)->removeExtraData(this);
+    }
+    
     kapp->config()->setGroup("Image Description Dialog");
     kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
@@ -428,21 +434,19 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
                                            const QPoint &, int )
 {
     TAlbum              *album;
-    TAlbumCheckListItem *albumItem = 0;
 
     if (!item)
     {
         album = AlbumManager::instance()->findTAlbum(0);
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(m_tagsView->firstChild());
     }
     else
     {
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
+        TAlbumCheckListItem* viewItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
-        if(!albumItem)
+        if(!viewItem)
             album = AlbumManager::instance()->findTAlbum(0);
         else
-            album = albumItem->m_album;
+            album = viewItem->m_album;
     }
 
     if(!album)
@@ -464,7 +468,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     {
     case 10:
     {
-        tagNew(album, albumItem);
+        tagNew(album);
         break;
     }
     case 11:
@@ -476,7 +480,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     case 12:
     {
         if (!album->isRoot())
-            tagDelete(album, albumItem);
+            tagDelete(album);
         break;
     }
     default:
@@ -484,9 +488,9 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
 }
 
-void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
+void ImageDescEdit::tagNew(TAlbum* parAlbum)
 {
-    if(!parAlbum || !item)
+    if (!parAlbum)
         return;
 
     QString title, icon;
@@ -500,22 +504,9 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
     {
         KMessageBox::error(this, errMsg);
     }
-    else
-    {
-        TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-        while (child)
-        {
-            if (child->title() == title)
-            {
-                new TAlbumCheckListItem(item, child);
-                return;
-            }
-            child = dynamic_cast<TAlbum*>(child->next());
-        }
-    }
 }
 
-void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
+void ImageDescEdit::tagDelete(TAlbum *album)
 {
     if (!album || album->isRoot())
         return;
@@ -530,12 +521,7 @@ void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
     {
         QString errMsg;
         if (!albumMan_->deleteTAlbum(album, errMsg))
-            KMessageBox::error(0, errMsg);
-        else
-        {
-            if(item)
-                delete item;
-        }
+            KMessageBox::error(this, errMsg);
     }
 }
 
