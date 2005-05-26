@@ -240,9 +240,9 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     Digikam::ImageIface iface(0, 0);
         
-    uint*  data = iface.getOriginalData();
-    int    w    = iface.originalWidth();
-    int    h    = iface.originalHeight();
+    uint* data = iface.getOriginalData();
+    int   w    = iface.originalWidth();
+    int   h    = iface.originalHeight();
     
     m_img.create( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, 32 );
     
@@ -282,6 +282,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     // Create dummy bottom/right corner
     tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
     bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    
+    delete [] data;
 }
 
 ImageEffect_Refocus::~ImageEffect_Refocus()

@@ -67,6 +67,8 @@ public:
     
 private:
 
+    Refocus::EventData m_eventData;
+
     // Original Image data.
     QImage    m_orgImage;
 

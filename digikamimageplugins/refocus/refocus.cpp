@@ -102,17 +102,14 @@ void Refocus::run()
 
 void Refocus::startComputation()
 {
-    Refocus::EventData *d;
-    
     QDateTime startDate = QDateTime::currentDateTime();
     
     if (m_parent)
        {
-       d = new Refocus::EventData;
-       d->starting = true;
-       d->success  = false;
-       d->progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       m_eventData.starting = true;
+       m_eventData.success  = false;
+       m_eventData.progress = 0;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
        }
 
     refocusImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
@@ -124,11 +121,10 @@ void Refocus::startComputation()
        {
        if (m_parent)
           {
-          d = new Refocus::EventData;
-          d->starting = false;
-          d->success  = true;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          m_eventData.starting = false;
+          m_eventData.success  = true;
+          m_eventData.progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
           }
           
        kdDebug() << "Refocus::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
@@ -137,11 +133,10 @@ void Refocus::startComputation()
        {
        if (m_parent)
           {
-          d = new Refocus::EventData;
-          d->starting = false;
-          d->success  = false;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          m_eventData.starting = false;
+          m_eventData.success  = false;
+          m_eventData.progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
           }
           
        kdDebug() << "Refocus::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
@@ -180,9 +175,11 @@ void Refocus::refocusImage(const uint* data, int width, int height, int matrixSi
 void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int height, 
                             const double *const mat, int mat_size)
 {
-    double    matrix[mat_size][mat_size];
-    double    valRed, valGreen, valBlue;
-    int       x1, y1, x2, y2, index1, index2;
+    Refocus::EventData d;
+    
+    double matrix[mat_size][mat_size];
+    double valRed, valGreen, valBlue;
+    int    x1, y1, x2, y2, index1, index2;
     
     // Big/Little Endian color manipulation compatibility.
     int red, green, blue;
@@ -235,12 +232,10 @@ void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int 
             }
         
         // Update the progress bar in dialog.
-            
-        Refocus::EventData *d = new Refocus::EventData;
-        d->starting = true;
-        d->success = false;
-        d->progress = (int)((int) (((double)y1 * 100.0) / height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+        m_eventData.starting = true;
+        m_eventData.success  = false;
+        m_eventData.progress = (int)((int) (((double)y1 * 100.0) / height));
+        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
 }
 
