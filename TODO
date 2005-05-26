@@ -31,6 +31,12 @@
   - closed/open state of left/right views
   - currently selected albums in each view
 
+* find a safe and clean solution for dialogs/views which access items
+  in the albumiconview (the properties dialog, comments editor,
+  image viewer). If the items get deleted while the dialog box is open,
+  since these dialogs hold pointers to the items, an easy crash is the
+  result
+
 * Fix PPC compatibily in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
