@@ -174,7 +174,7 @@ public:
     void        setViewItem(void *d);
     
     /**
-     * Returns the viewitem associated with this item a viewitem for this item. This is useful when a view has a
+     * Returns the viewitem associated with this item a viewitem for this item.
      * @see setViewItem()
      */
     void*       getViewItem() const;

@@ -225,7 +225,11 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
 void AlbumLister::stop()
 {
+    d->currAlbum = 0;
     d->filterTimer->stop();
+    emit signalClear();
+    d->itemList.clear();
+    d->itemMap.clear();
     
     if (d->job)
     {

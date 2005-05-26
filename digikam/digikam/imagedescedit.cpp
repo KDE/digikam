@@ -239,9 +239,12 @@ void ImageDescEdit::populateTags()
             viewItem = new TAlbumCheckListItem(parentItem, tag);
         }
 
-        viewItem->setOpen(true);
-        viewItem->setPixmap(0, tagThumbnail(tag));
-        tag->setExtraData(this, viewItem);
+        if (viewItem)
+        {
+            viewItem->setOpen(true);
+            viewItem->setPixmap(0, tagThumbnail(tag));
+            tag->setExtraData(this, viewItem);
+        }
     }
 }
 
@@ -489,7 +492,18 @@ void ImageDescEdit::tagDelete(TAlbum *album)
     if (!album || album->isRoot())
         return;
 
-    AlbumManager *albumMan_ = AlbumManager::instance();
+    AlbumManager *albumMan = AlbumManager::instance();
+
+    if (album == albumMan->currentAlbum() ||
+        album->isAncestorOf(albumMan->currentAlbum()))
+    {
+        KMessageBox::error(this, i18n("You are currently viewing items in the "
+                                      "tag '%1' that you are about to delete? "
+                                      "You will need to close this dialog first "
+                                      "if you want to delete the tag" )
+                           .arg(album->title()));
+        return;
+    }
 
     int result =
         KMessageBox::questionYesNo(this, i18n("Delete '%1' tag?")
@@ -498,7 +512,7 @@ void ImageDescEdit::tagDelete(TAlbum *album)
     if (result == KMessageBox::Yes)
     {
         QString errMsg;
-        if (!albumMan_->deleteTAlbum(album, errMsg))
+        if (!albumMan->deleteTAlbum(album, errMsg))
             KMessageBox::error(this, errMsg);
     }
 }
