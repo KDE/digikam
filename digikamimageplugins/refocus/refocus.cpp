@@ -74,10 +74,9 @@ Refocus::Refocus(QImage *orgImage, int matrixSize, double radius,
        {
        if (m_parent)           // If parent then send event about a problem.
           {
-          Refocus::EventData *d = new Refocus::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          m_eventData.starting = false;
+          m_eventData.success  = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
           }
        }
 }

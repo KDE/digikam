@@ -78,7 +78,7 @@ private:
 
     // To post event from thread to parent.    
     QObject  *m_parent;
-    Refocus::EventData m_eventData;
+    EventData m_eventData;
     
 protected:
 
