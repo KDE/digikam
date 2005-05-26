@@ -52,7 +52,7 @@ ImagePreviewWidget::ImagePreviewWidget(uint w, uint h, const QString &title,
 {
     QHBoxLayout* mainLayout = new QHBoxLayout(this, 0, KDialog::spacingHint());
     
-    QVGroupBox *gbox1 = new QVGroupBox(i18n("Image Preview Selection"), this);
+    QVGroupBox *gbox1 = new QVGroupBox(i18n("Selection"), this);
     QFrame *frame3 = new QFrame(gbox1);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
