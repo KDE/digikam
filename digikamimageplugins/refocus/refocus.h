@@ -67,8 +67,6 @@ public:
     
 private:
 
-    Refocus::EventData m_eventData;
-
     // Original Image data.
     QImage    m_orgImage;
 
@@ -78,9 +76,10 @@ private:
     // Used to stop thread during calculations.
     bool      m_cancel;   
 
-    // Parent object to post event from thread.    
+    // To post event from thread to parent.    
     QObject  *m_parent;
-
+    Refocus::EventData m_eventData;
+    
 protected:
 
     virtual void run();
