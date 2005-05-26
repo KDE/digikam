@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : tagfolderview.h
- * Author: J�n Ahrens <joern.ahrens@kdemail.net>
+ * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-03-22
- * Copyright 2005 by J�n Ahrens
+ * Copyright 2005 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,13 +21,14 @@
 #ifndef _TAGFOLDERVIEW_H_
 #define _TAGFOLDERVIEW_H_
 
-#include <klistview.h>
+#include <qlistview.h>
 
 class Album;
 class TagFolderViewPriv;
 class TagFolderViewItem;
+class QDropEvent;
 
-class TagFolderView : public KListView
+class TagFolderView : public QListView
 {
     Q_OBJECT
 
@@ -45,7 +46,14 @@ public:
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
-    void dragEnterEvent(QDragEnterEvent* e); 
+    void contentsMouseReleaseEvent(QMouseEvent *e);
+    void contentsMouseMoveEvent(QMouseEvent *e);
+
+    void contentsDragEnterEvent(QDragEnterEvent *e);
+    void contentsDragMoveEvent(QDragMoveEvent *e); 
+    void contentsDropEvent(QDropEvent *e);
+    void leaveEvent(QEvent*);
+    void startDrag();
     QDragObject* dragObject();
     
 private slots:
