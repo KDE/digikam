@@ -39,6 +39,7 @@
 
 // Local includes.
  
+#include "imagefilters.h"
 #include "imagehistogram.h"
 
 namespace Digikam
@@ -65,10 +66,9 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent
        {
        if (m_parent)
           {
-          ImageHistogram::EventData *d = new ImageHistogram::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          m_eventData.starting = false;
+          m_eventData.success = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
           }
        }
 }
@@ -100,17 +100,13 @@ void ImageHistogram::run()
 void ImageHistogram::calcHistogramValues()
 {
     register uint  i;                   
-    unsigned char  blue, green, red, alpha;
     int            max;
-    unsigned int  *p;
-    ImageHistogram::EventData *d;
     
     if (m_parent)
        {
-       d = new ImageHistogram::EventData;
-       d->starting = true;
-       d->success = false;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       m_eventData.starting = true;
+       m_eventData.success  = false;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
        }
         
     m_histogram = new double_packet[256];
@@ -121,10 +117,9 @@ void ImageHistogram::calcHistogramValues()
     
        if (m_parent)
           {
-          d = new ImageHistogram::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+          m_eventData.starting = false;
+          m_eventData.success  = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
           }
            
        return;
@@ -132,16 +127,19 @@ void ImageHistogram::calcHistogramValues()
     
     memset(m_histogram, 0, 256*sizeof(struct double_packet));
 
+    // Big/Little Endian color manipulation compatibility.
+    uchar blue, green, red, alpha;
+    ImageFilters::imageData imagedata;
+    
     // Form histogram (RAW DATA32 ARGB extraction method).
 
     for (i = 0 ; (i < m_imageHeight*m_imageWidth) && m_runningFlag ; i++)
       {
-      p = m_imageData + i;
-      
-      blue  = (unsigned char)(*p);
-      green = (unsigned char)(*p >> 8);
-      red   = (unsigned char)(*p >> 16);
-      alpha = (unsigned char)(*p >> 24);
+      imagedata.raw = m_imageData[i];
+      red           = imagedata.channel.red;
+      green         = imagedata.channel.green;
+      blue          = imagedata.channel.blue;      
+      alpha         = imagedata.channel.alpha;      
          
       m_histogram[blue].blue++;
       m_histogram[green].green++;
@@ -156,10 +154,9 @@ void ImageHistogram::calcHistogramValues()
 
     if (m_parent && m_runningFlag)
        {
-       d = new ImageHistogram::EventData;
-       d->starting = false;
-       d->success = true;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+       m_eventData.starting = false;
+       m_eventData.success = true;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
        }
 }
 

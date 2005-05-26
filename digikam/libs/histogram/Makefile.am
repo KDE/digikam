@@ -6,7 +6,8 @@ libhistogram_la_SOURCES = imagehistogram.cpp
 
 libhistogram_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-INCLUDES= $(all_includes) 
+INCLUDES = -I$(top_srcdir)/digikam/libs/filters \
+	   $(all_includes) 
 
 digikaminclude_HEADERS = imagehistogram.h 
 
