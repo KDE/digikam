@@ -461,11 +461,10 @@ void TagFolderView::startDrag()
 
 QDragObject* TagFolderView::dragObject()
 {
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(d->dragItem);
-    if(!item)
+    if(!d->dragItem)
         return 0;
-    TagDrag *t = new TagDrag(item->getTag()->id(), this);
-    t->setPixmap(getBlendedIcon(item->getTag()));
+    TagDrag *t = new TagDrag(d->dragItem->getTag()->id(), this);
+    t->setPixmap(getBlendedIcon(d->dragItem->getTag()));
 
     return t;
 }
