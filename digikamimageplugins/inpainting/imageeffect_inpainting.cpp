@@ -517,7 +517,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface((uint*)m_cropImage.bits(), m_cropImage.width(), m_cropImage.height(), 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&m_cropImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -528,7 +528,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    false, true, false, NULL, 0, 0, 0,
+                                    false, true, false, NULL, 0, 0, 
                                     &m_maskImage, this);
 }
 
@@ -554,9 +554,9 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
                  {
                  kdDebug() << "Final InPainting completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
-                 
+                 QImage target = m_cimgInterface->getTargetImage();
                  bitBlt(&m_originalImage, m_maskRect.left(), m_maskRect.top(), 
-                        &m_cropImage, 0, 0, m_cropImage.width(), m_cropImage.height());
+                        &target, 0, 0, target.width(), target.height());
                     
                  iface.putOriginalData(i18n("InPainting"), (uint*)m_originalImage.bits());
        

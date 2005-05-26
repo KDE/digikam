@@ -44,6 +44,7 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qfile.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -309,8 +310,6 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
 {
-    // No need to delete m_previewData because it's driving by QImage.
-        
     if (m_cimgInterface)
        delete m_cimgInterface;
 }
@@ -418,15 +417,13 @@ void ImageEffect_BlowUp::slotOk()
     m_progressBar->setValue(0);
 
     Digikam::ImageIface iface(0, 0);
-    m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
-    memcpy(m_originalImage.bits(), iface.getOriginalData(), m_originalImage.numBytes());
-    m_resizedImage = QImage(m_newWidth->value(), m_newHeight->value(), 32);
+    QImage originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
+    memcpy(originalImage.bits(), iface.getOriginalData(), originalImage.numBytes());
     
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface((uint*)m_originalImage.bits(), 
-                                    m_originalImage.width(), m_originalImage.height(), 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&originalImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -438,8 +435,8 @@ void ImageEffect_BlowUp::slotOk()
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
                                     false, false, true, NULL, 
-                                    (uint*)m_resizedImage.bits(), m_resizedImage.width(), 
-                                    m_resizedImage.height(), 0, this);
+                                    m_newWidth->value(), 
+                                    m_newHeight->value(), 0, this);
 }
 
 void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
@@ -464,7 +461,9 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
                  {
                  kdDebug() << "Final BlowUp completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
-                 iface.putOriginalData(i18n("BlowUp"), (uint*)m_resizedImage.bits(), m_resizedImage.width(), m_resizedImage.height());
+                 QImage resizedImage = m_cimgInterface->getTargetImage();
+                 iface.putOriginalData(i18n("BlowUp"), (uint*)resizedImage.bits(), 
+                                       resizedImage.width(), resizedImage.height());
                  m_parent->setCursor( KCursor::arrowCursor() );
                  accept();       
                  break;

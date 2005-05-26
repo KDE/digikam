@@ -42,6 +42,7 @@
 #include <qevent.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -89,14 +90,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
-    m_originalData         = 0L;
     m_cimgInterface        = 0L;
 
-    m_iface          = new Digikam::ImageIface(0, 0);
-    m_originalData   = m_iface->getOriginalData();
-    m_originalWidth  = m_iface->originalWidth();
-    m_originalHeight = m_iface->originalHeight();        
-    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -345,13 +340,8 @@ ImageEffect_Restoration::~ImageEffect_Restoration()
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    if (m_originalData)
-       delete [] m_originalData;
-    
     if (m_timer)
        delete m_timer;
-    
-    delete m_iface;
 }
 
 void ImageEffect_Restoration::abortPreview()
@@ -521,17 +511,14 @@ void ImageEffect_Restoration::slotEffect()
     enableButton(User3, false);
     
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    m_previewImage = m_imagePreviewWidget->getOriginalClipImage();
-    uint *data     = (uint *)m_previewImage.bits();
-    int w          = m_previewImage.width();
-    int h          = m_previewImage.height();
+    QImage previewImage = m_imagePreviewWidget->getOriginalClipImage();
     
     m_imagePreviewWidget->setProgress(0);
     
     if (m_cimgInterface)
        delete m_cimgInterface;
         
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(data, w, h, 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&previewImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -542,7 +529,7 @@ void ImageEffect_Restoration::slotEffect()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, 0, 0, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, this);
 }
 
 void ImageEffect_Restoration::slotOk()
@@ -571,7 +558,11 @@ void ImageEffect_Restoration::slotOk()
     if (m_cimgInterface)
        delete m_cimgInterface;
        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(m_originalData, m_originalWidth, m_originalHeight, 
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    memcpy( orgImage.bits(), iface.getOriginalData(), orgImage.numBytes() );
+    
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&orgImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -582,7 +573,7 @@ void ImageEffect_Restoration::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, 0, 0, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, this);
 }
 
 void ImageEffect_Restoration::customEvent(QCustomEvent *event)
@@ -606,7 +597,9 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
               case PreviewRendering:
                  {
                  kdDebug() << "Preview Restoration completed..." << endl;
-                 m_imagePreviewWidget->setPreviewImageData(m_previewImage);
+                 
+                 QImage imDest = m_cimgInterface->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
                  abortPreview();
                  break;
                  }
@@ -615,7 +608,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  {
                  kdDebug() << "Final Restoration completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
-                 iface.putOriginalData(i18n("Restoration"), m_originalData);
+                 iface.putOriginalData(i18n("Restoration"), (uint*)m_cimgInterface->getTargetImage().bits());
                  m_parent->setCursor( KCursor::arrowCursor() );
                  accept();       
                  break;

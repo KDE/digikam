@@ -25,7 +25,6 @@
 
 // Qt include.
 
-#include <qimage.h>
 #include <qstring.h>
 
 // KDE include.
@@ -46,7 +45,6 @@ class KIntNumInput;
 namespace Digikam
 {
 class ImagePreviewWidget;
-class ImageIface;
 }
 
 namespace DigikamImagePlugins
@@ -89,12 +87,6 @@ private:
     
     int              m_currentRenderingMode;
     
-    uint            *m_originalData;
-    int              m_originalWidth;
-    int              m_originalHeight;
-    
-    QImage           m_previewImage;
-    
     QTimer          *m_timer;
     
     QWidget         *m_parent;
@@ -133,7 +125,6 @@ private:
     DigikamImagePlugins::CimgIface *m_cimgInterface;
     
     Digikam::ImagePreviewWidget    *m_imagePreviewWidget;
-    Digikam::ImageIface            *m_iface;    
     
 private:
     

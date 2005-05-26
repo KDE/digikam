@@ -59,12 +59,12 @@ class EventData
 
 public:
     
-    CimgIface(uint *data, uint width, uint height,
+    CimgIface(QImage *orgImage,
               uint blurIt, double timeStep, double integralStep,
               double angularStep, double blur, double detail,
               double gradient, double gaussian, bool normalize, bool linearInterpolation, 
               bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
-              char* visuflowMode=NULL, uint *newData=0, int newWidth=0, int newHeight=0,
+              char* visuflowMode=NULL, int newWidth=0, int newHeight=0,
               QImage *inPaintingMask=0, QObject *parent=0);
     
     ~CimgIface();
@@ -72,17 +72,16 @@ public:
     void startComputation(void);
     void stopComputation(void);
 
+        
+    QImage getTargetImage(void) { return m_destImage; };
+    
 private:
 
-    // Image data.
-    uint     *m_imageData;
-    int       m_imageWidth;
-    int       m_imageHeight;
-
-    // Output image geometry in Resizing mode.
-    uint     *m_newData;
-    int       m_newWidth;
-    int       m_newHeight;  
+    // Original Image data.
+    QImage    m_orgImage;
+    
+    // Output image data.
+    QImage    m_destImage; 
     
     // Used to stop thread during calculations.
     bool      m_cancel;   
@@ -93,7 +92,9 @@ private:
     // Inpainting temp mask data.
     QImage    m_inPaintingMask;
     
+    // To post event from thread to parent.    
     QObject  *m_parent;
+    EventData m_eventData;
 
 protected:
 
