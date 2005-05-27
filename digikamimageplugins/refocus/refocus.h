@@ -38,6 +38,8 @@ class Refocus : public QThread
 
 public:
 
+// Class used to post status of computation to parent.
+
 class EventData
     {
     public:
@@ -67,13 +69,13 @@ public:
     
 private:
 
-    // Original Image data.
+    // Copy of original Image data.
     QImage    m_orgImage;
 
     // Output image data.
     QImage    m_destImage;
     
-    // Used to stop thread during calculations.
+    // Used to stop compution loop.
     bool      m_cancel;   
 
     // To post event from thread to parent.    

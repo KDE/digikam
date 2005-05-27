@@ -42,6 +42,8 @@ class CimgIface : public QThread
 
 public:
 
+// Class used to post status of computation to parent.
+
 class EventData
     {
     public:
@@ -71,20 +73,23 @@ public:
     
     void startComputation(void);
     void stopComputation(void);
-
         
     QImage getTargetImage(void) { return m_destImage; };
     
 private:
 
-    // Original Image data.
+    // Copy of original Image data.
     QImage    m_orgImage;
     
     // Output image data.
     QImage    m_destImage; 
     
-    // Used to stop thread during calculations.
+    // Used to stop compution loop.
     bool      m_cancel;   
+    
+    // To post event from thread to parent.  
+    QObject  *m_parent;
+    EventData m_eventData;
     
     // Inpainting temp mask file path.
     QString   m_tmpMaskFile;
@@ -92,9 +97,6 @@ private:
     // Inpainting temp mask data.
     QImage    m_inPaintingMask;
     
-    // To post event from thread to parent.    
-    QObject  *m_parent;
-    EventData m_eventData;
 
 protected:
 
