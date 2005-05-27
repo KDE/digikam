@@ -2,6 +2,8 @@
 Name=ImagePlugin_DistortionFX
 Name[it]=PluginImmagini_EffettiDiDistorsione
 Name[nl]=Afbeeldingsplugin_vervormingseffect
+Name[sr]=Сликовни прикључак — Ефекти изобличења
+Name[sr@Latn]=Slikovni priključak — Efekti izobličenja
 Name[sv]=Insticksprogram för förvrängningseffekt
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -13,6 +15,8 @@ Comment[it]=Plugin degli effetti speciali di distorsione per digiKam
 Comment[nl]=digiKam-plugin voor vervormingseffect
 Comment[pt]='Plugin' de efeitos especiais de distorção para o digiKam
 Comment[pt_BR]='Plugin' de efeitos especiais de distorção para o digiKam
+Comment[sr]=digiKam-ов прикључак за ефекте изобличења
+Comment[sr@Latn]=digiKam-ov priključak za efekte izobličenja
 Comment[sv]=Digikam insticksprogram för förvrängningsspecialeffekt
 
 X-KDE-Library=digikamimageplugin_distortionfx

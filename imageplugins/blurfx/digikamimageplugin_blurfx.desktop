@@ -2,6 +2,8 @@
 Name=ImagePlugin_BlurFX
 Name[it]=PluginImmagini_EffettiDiSfocatura
 Name[nl]=Afbeeldingsplugin_VervaagFX
+Name[sr]=Сликовни прикључак — Ефекти замућења
+Name[sr@Latn]=Slikovni priključak — Efekti zamućenja
 Name[sv]=Insticksprogram för oskärpeeffekt
 Name[tr]=ResimEklentisi_Bulanıklaştır
 Type=Service
@@ -15,6 +17,8 @@ Comment[it]=Plugin degli effetti speciali di sfocatura per digiKam
 Comment[nl]=digiKam-plugin voor vervaageffect
 Comment[pt]='Plugin' de efeitos especiais de borrão para o digiKam
 Comment[pt_BR]='Plugin' de efeitos especiais de borrão para o digiKam
+Comment[sr]=Прикључци ефекта замућења за digiKam
+Comment[sr@Latn]=Priključci efekta zamućenja za digiKam
 Comment[sv]=Digikam insticksprogram med specialeffekter för oskärpa
 Comment[tr]=digiKam için bulanıklaştırma eklentisi
 

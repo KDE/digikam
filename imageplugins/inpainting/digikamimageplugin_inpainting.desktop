@@ -2,6 +2,8 @@
 Name=ImagePlugin_InPainting
 Name[it]=PluginImmagini_Reintegrazione
 Name[nl]=Afbeeldingsplugin_Inkleuren
+Name[sr]=Сликовни прикључак — Пребојавање
+Name[sr@Latn]=Slikovni priključak — Prebojavanje
 Name[sv]=Insticksprogram för ifyllnad
 
 Type=Service
@@ -12,6 +14,8 @@ Comment[it]=Plugin di digiKam per reintegrare una fotografia
 Comment[nl]=digiKam-pluin voor het inkleuren van een foto
 Comment[pt]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
 Comment[pt_BR]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
+Comment[sr]=digiKam-ов прикључак за пребојавање фотографије
+Comment[sr@Latn]=digiKam-ov priključak za prebojavanje fotografije
 Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
 
 X-KDE-Library=digikamimageplugin_inpainting

@@ -3,6 +3,8 @@ Name=ImagePlugin_Perspective
 Name[da]=Billedplugin_Perspektivværktøj
 Name[it]=PluginImmagini_Prospettiva
 Name[nl]=Afbeeldingsplugin_Perspectief
+Name[sr]=Сликовни прикључак — Перспектива
+Name[sr@Latn]=Slikovni priključak — Perspektiva
 Name[sv]=Insticksprogram för perspektiv
 Name[tr]=ResimEklentisi_Perspektif
 
@@ -19,6 +21,8 @@ Comment[it]=Plugin per lo strumento di prospettiva per digiKam
 Comment[nl]=digiKam-plugin voor perspectief
 Comment[pt]='Plugin' de ferramenta de perspectiva para o digiKam
 Comment[pt_BR]='Plugin' de ferramenta de perspectiva para o digiKam
+Comment[sr]=digiKam-ов прикључак за перспективу
+Comment[sr@Latn]=digiKam-ov priključak za perspektivu
 Comment[sv]=Digikam insticksprogram med perspektivverktyg
 Comment[tr]=digiKam için perspektif aracı eklentisi
 

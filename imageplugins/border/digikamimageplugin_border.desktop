@@ -3,6 +3,8 @@ Name=ImagePlugin_Border
 Name[da]=Billedplugin_Indramning
 Name[it]=PluginImmagini_Bordo
 Name[nl]=Afbeeldingsplugin_Rand
+Name[sr]=Сликовни прикључак — Оквир
+Name[sr@Latn]=Slikovni priključak — Okvir
 Name[sv]=Insticksprogram för bildkanter
 Name[tr]=ResimEklentisi_Çerçeve
 Type=Service
@@ -18,6 +20,8 @@ Comment[it]=Plugin per l'aggiunta di bordi a un'immagire per digiKam
 Comment[nl]=digiKam-plugin voor het toevoegen van randen
 Comment[pt]='Plugin' de adicionar margem a imagem para o digiKam
 Comment[pt_BR]='Plugin' de adicionar margem a imagem para o digiKam
+Comment[sr]=Прикључак за digiKam који додаје оквир на слику
+Comment[sr@Latn]=Priključak za digiKam koji dodaje okvir na sliku
 Comment[sv]=Digikam insticksprogram för tillägg av kanter
 Comment[tr]=digiKam için resme çerçeve eklenme eklentisi
 

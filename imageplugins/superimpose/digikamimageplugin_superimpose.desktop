@@ -3,6 +3,8 @@ Name=ImagePlugin_SuperImpose
 Name[da]=Billedplugin_Indkopiering
 Name[it]=PluginImmagini_Sovrapposizione
 Name[nl]=Afbeeldingsplugin_SjabloonToevoegen
+Name[sr]=Сликовни прикључак — Надоградња
+Name[sr@Latn]=Slikovni priključak — Nadogradnja
 Name[sv]=Insticksprogram för överlagring
 Name[tr]=ResimEklentisi_Büyüt
 
@@ -19,6 +21,8 @@ Comment[it]=Plugin di sovrapposizione di modelli per digiKam
 Comment[nl]=digiKam-plugin voor het aanbrengen van een sjabloon op de afbeelding
 Comment[pt]='Plugin' de sobreposição de modelos para o digiKam
 Comment[pt_BR]='Plugin' de sobreposição de modelos para o digiKam
+Comment[sr]=digiKam-ов прикључак надоградњу шаблонима
+Comment[sr@Latn]=digiKam-ov priključak nadogradnju šablonima
 Comment[sv]=Digikam insticksprogram för överlagringsmall
 Comment[tr]=digiKam için şablon büyütme eklentisi
 

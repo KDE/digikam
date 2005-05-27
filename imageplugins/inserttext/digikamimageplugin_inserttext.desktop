@@ -2,6 +2,8 @@
 Name=ImagePlugin_InsertText
 Name[it]=PluginImmagini_InserisciTesto
 Name[nl]=Afbeeldingsplugin_TekstInvoegen
+Name[sr]=Сликовни прикључак — Убаци текст
+Name[sr@Latn]=Slikovni priključak — Ubaci tekst
 Name[sv]=Insticksprogram för infoga text
 Name[tr]=ResimEklentisi_MetinEkle
 Type=Service
@@ -15,6 +17,8 @@ Comment[it]=Plugin per l'aggiunta di testo nell'immagire per digiKam
 Comment[nl]=digiKam-plugin voor het invoegen van tekst
 Comment[pt]='Plugin' para inserir texto numa imagem para o digiKam
 Comment[pt_BR]='Plugin' para inserir texto numa imagem para o digiKam
+Comment[sr]=digiKam-ов прикључак за убацивање текста у слику
+Comment[sr@Latn]=digiKam-ov priključak za ubacivanje teksta u sliku
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
 Comment[tr]=digiKam için resme metin ekleme eklentisi
 

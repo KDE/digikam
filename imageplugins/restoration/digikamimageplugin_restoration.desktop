@@ -2,6 +2,8 @@
 Name=ImagePlugin_Restoration
 Name[it]=PluginImmagini_Restauro
 Name[nl]=Afbeeldingsplugin_Restoratie
+Name[sr]=Сликовни прикључак — Рестаурација
+Name[sr@Latn]=Slikovni priključak — Restauracija
 Name[sv]=Insticksprogram för bildrestaurering
 Name[tr]=ResimEklentisi_Onarım
 
@@ -14,6 +16,8 @@ Comment[it]=Plugin di digiKam per restaurare una fotografia
 Comment[nl]=digiKam-pluin voor het herstellen van een foto
 Comment[pt]=Um 'plugin' do digiKam para restaurar uma fotografia
 Comment[pt_BR]=Um 'plugin' do digiKam para restaurar uma fotografia
+Comment[sr]=digiKam-ов прикључак за поправку фотографија
+Comment[sr@Latn]=digiKam-ov priključak za popravku fotografija
 Comment[sv]=Digikam insticksprogram för restaurering av ett fotografi
 Comment[tr]=Fotoğraf onarmak için digiKam eklentisi
 

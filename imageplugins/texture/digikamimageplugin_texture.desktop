@@ -2,6 +2,8 @@
 Name=ImagePlugin_Texture
 Name[it]=PluginImmagini_Trama
 Name[nl]=Afbeeldingsplugin_Textuur
+Name[sr]=Сликовни прикључак — Текстуре
+Name[sr@Latn]=Slikovni priključak — Teksture
 Name[sv]=Insticksprogram för struktur
 Name[tr]=ResimEklentisi_Doku
 
@@ -17,6 +19,8 @@ Comment[it]=Plugin di digiKam per applicare una trama su un'immagine
 Comment[nl]=digiKam-pluin voor het toepassen van textuur op een afbeelding
 Comment[pt]=Um 'plugin' do digiKam para aplicar uma textura numa imagem.
 Comment[pt_BR]=Um 'plugin' do digiKam para aplicar uma textura numa imagem.
+Comment[sr]=digiKam-ов прикључак за додавање текстура у слику
+Comment[sr@Latn]=digiKam-ov priključak za dodavanje tekstura u sliku
 Comment[sv]=Digikam insticksprogram för att lägga till struktur på en bild
 Comment[tr]=Bir resme doku eklemek için digiKam eklentisi
 

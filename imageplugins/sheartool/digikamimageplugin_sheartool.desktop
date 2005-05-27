@@ -3,6 +3,8 @@ Name=ImagePlugin_ShearTool
 Name[da]=Billedplugin_Forskydningsværktøj
 Name[it]=PluginImmagini_DistorsioneCurvilinea
 Name[nl]=Afbeeldingsplugin_Schuintrekken
+Name[sr]=Сликовни прикључак — Алат за искошавање
+Name[sr@Latn]=Slikovni priključak — Alat za iskošavanje
 Name[sv]=Insticksprogram med skjuvningsverktyg
 Name[tr]=ResimEklentisi_EğmeAracı
 
@@ -19,6 +21,8 @@ Comment[it]=Plugin per lo strumento di distorsione curvilinea per digiKam
 Comment[nl]=digiKam-plugin voor het schuin trekken van afbeeldingen
 Comment[pt]='Plugin' de ferramenta de inclinação para o digiKam
 Comment[pt_BR]='Plugin' de ferramenta de inclinação para o digiKam
+Comment[sr]=digiKam-ов прикључак за искошавање
+Comment[sr@Latn]=digiKam-ov priključak za iskošavanje
 Comment[sv]=Digikam insticksprogram med skjuvningsverktyg
 Comment[tr]=digiKam için eğme aracı eklentisi
 

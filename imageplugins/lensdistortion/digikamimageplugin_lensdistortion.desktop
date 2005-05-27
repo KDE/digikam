@@ -3,6 +3,8 @@ Name=ImagePlugin_LensDistortion
 Name[da]=Billedplugin_Linseforvrængning
 Name[it]=PluginImmagini_DistorsioneLenticolare
 Name[nl]=Afbeeldingsplugin_Lensafwijking
+Name[sr]=Сликовни прикључак — Изобличење сочива
+Name[sr@Latn]=Slikovni priključak — Izobličenje sočiva
 Name[sv]=Insticksprogram för linsförvrängning
 Name[tr]=ResimEklentisi_MercekÇarpıtması
 Type=Service
@@ -18,6 +20,8 @@ Comment[it]=Plugin di correzione dell'aberrazione sferica delle immagini per dig
 Comment[nl]=digiKam-plugin voor het corrigeren van bolvormige afwijkingen
 Comment[pt]='Plugin' de correcção de distorção esférica para o digiKam
 Comment[pt_BR]='Plugin' de correcção de distorção esférica para o digiKam
+Comment[sr]=digiKam-ов прикључак за исправљање сферног искривљења слике
+Comment[sr@Latn]=digiKam-ov priključak za ispravljanje sfernog iskrivljenja slike
 Comment[sv]=Digikam insticksprogram för korrigering av sfärisk avvikelse i bild
 Comment[tr]=digiKam için resim küresel sapma düzeltme eklentisi
 

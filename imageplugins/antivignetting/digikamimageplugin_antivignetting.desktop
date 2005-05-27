@@ -3,6 +3,8 @@ Name=ImagePlugin_AntiVignetting
 Name[da]=Billedplugin_Anti-vignettering
 Name[it]=PluginImmagini_Antivignettatura
 Name[nl]=Afbeeldingsplugin_AntiVignetting
+Name[sr]=Сликовни прикључак — Девињетизација
+Name[sr@Latn]=Slikovni priključak — Devinjetizacija
 Name[sv]=Insticksprogram för antivinjettering
 Name[tr]=ResimEklentisi_KenarKararmalarınıDüzelt
 Type=Service
@@ -18,6 +20,8 @@ Comment[it]=Plugin per l'effetto delle immagini di antivignettatura per digiKam
 Comment[nl]=digiKam-plugin voor anti-vignetting
 Comment[pt]='Plugin' de efeito de anti-vinheta para o digiKam
 Comment[pt_BR]='Plugin' de efeito de anti-vinheta para o digiKam
+Comment[sr]=Digikam-ов прикључак за ефекат девињетизације
+Comment[sr@Latn]=Digikam-ov priključak za efekat devinjetizacije
 Comment[sv]=Digikam insticksprogram för antivinjetteringsbildeffekt
 Comment[tr]=digiKam için kenar kararmalarını düzeltme eklentisi
 

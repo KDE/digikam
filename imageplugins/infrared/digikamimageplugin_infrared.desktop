@@ -2,6 +2,8 @@
 Name=ImagePlugin_Infrared
 Name[it]=PluginImmagini_Infrarosso
 Name[nl]=Afbeeldingsplugin_Infrarood
+Name[sr]=Сликовни прикључак — Инфрацрвено
+Name[sr@Latn]=Slikovni priključak — Infracrveno
 Name[sv]=Insticksprogram för infrarött
 Name[tr]=ResimEklentisi_Kızılötesi
 
@@ -16,6 +18,8 @@ Comment[it]=Plugin di simulazione di pellicola infrarossa per digiKam
 Comment[nl]=digiKam-plugin voor infraroodeffect
 Comment[pt]='Plugin' para simular um filme de infravermelhos no digiKam
 Comment[pt_BR]='Plugin' para simular um filme de infravermelhos no digiKam
+Comment[sr]=digiKam-ов прикључак који симулира инфрацрвени филм
+Comment[sr@Latn]=digiKam-ov priključak koji simulira infracrveni film
 Comment[sv]=Digikam insticksprogram för att simulera infraröd film
 Comment[tr]=digiKam için kızılötesi film benzetme eklentisi
 
