@@ -473,7 +473,8 @@ void ImageEffect_InPainting_Dialog::slotOk()
 
     Digikam::ImageIface iface(0, 0);
     m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
-    memcpy(m_originalImage.bits(), iface.getOriginalData(), m_originalImage.numBytes());
+    uint *data = iface.getOriginalData();
+    memcpy( m_originalImage.bits(), data, m_originalImage.numBytes() );
     
     // Selected area from the image and mask creation:
     //
@@ -530,6 +531,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
                                     m_linearInterpolationBox->isChecked(),
                                     false, true, false, NULL, 0, 0, 
                                     &m_maskImage, this);
+    delete [] data;                                           
 }
 
 void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
