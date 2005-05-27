@@ -418,7 +418,8 @@ void ImageEffect_BlowUp::slotOk()
 
     Digikam::ImageIface iface(0, 0);
     QImage originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
-    memcpy(originalImage.bits(), iface.getOriginalData(), originalImage.numBytes());
+    uint *data = iface.getOriginalData();
+    memcpy( originalImage.bits(), data, originalImage.numBytes() );
     
     if (m_cimgInterface)
        delete m_cimgInterface;
@@ -437,6 +438,7 @@ void ImageEffect_BlowUp::slotOk()
                                     false, false, true, NULL, 
                                     m_newWidth->value(), 
                                     m_newHeight->value(), 0, this);
+    delete [] data;                                       
 }
 
 void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
