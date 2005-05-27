@@ -52,7 +52,6 @@ protected:
     void contentsDragEnterEvent(QDragEnterEvent *e);
     void contentsDragMoveEvent(QDragMoveEvent *e); 
     void contentsDropEvent(QDropEvent *e);
-    void leaveEvent(QEvent*);
     void startDrag();
     QDragObject* dragObject();
     
@@ -62,10 +61,10 @@ private slots:
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
     void slotAlbumsCleared();
-
+    void slotContextMenu(QListViewItem*, const QPoint&, int);
+    
 private:
 
-    void contextMenu(const QPoint &pos);
     void tagNew(TagFolderViewItem *item);
     void tagEdit(TagFolderViewItem *item);    
     void tagDelete(TagFolderViewItem *item);

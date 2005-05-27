@@ -131,6 +131,9 @@ TagFolderView::TagFolderView(QWidget *parent)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     
+    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
@@ -242,11 +245,6 @@ void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
 {
     QListView::contentsMousePressEvent(e);
 
-    if(e->button() == RightButton) {
-        contextMenu(e->pos());
-        return;
-    }
-
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
     if(item && e->button() == LeftButton) {
         d->dragStartPos = e->pos();
@@ -292,19 +290,14 @@ void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void TagFolderView::leaveEvent(QEvent*)
-{
-}
-
-void TagFolderView::contextMenu(const QPoint &pos)
+void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
-
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(pos));
-
+    
+    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
 
-    if(item)
+    if(tag)
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
@@ -314,17 +307,17 @@ void TagFolderView::contextMenu(const QPoint &pos)
     {
         case 10:
         {
-            tagNew(item);
+            tagNew(tag);
             break;
         }
         case 11:
         {
-            tagEdit(item);
+            tagEdit(tag);
             break;
         }
         case 12:
         {
-            tagDelete(item);
+            tagDelete(tag);
             break;
         }
         default:
