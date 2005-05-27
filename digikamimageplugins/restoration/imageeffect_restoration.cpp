@@ -559,10 +559,11 @@ void ImageEffect_Restoration::slotOk()
        delete m_cimgInterface;
        
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    memcpy( orgImage.bits(), iface.getOriginalData(), orgImage.numBytes() );
+    QImage originalImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( originalImage.bits(), data, originalImage.numBytes() );
     
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(&orgImage, 
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&originalImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -574,6 +575,7 @@ void ImageEffect_Restoration::slotOk()
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
                                     true, false, false, NULL, 0, 0, 0, this);
+    delete [] data;                                    
 }
 
 void ImageEffect_Restoration::customEvent(QCustomEvent *event)
