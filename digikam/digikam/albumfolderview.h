@@ -53,12 +53,12 @@ private slots:
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
     void slotSelectionChanged();
     void slotNewAlbumCreated(Album* album);
+    void slotContextMenu(QListViewItem*, const QPoint&, int);
     
 private:
 
     void setAlbumThumbnail(PAlbum *album);
 
-    void contextMenu(const QPoint &pos);
     void albumNew(AlbumFolderViewItem *item);
     void albumEdit(AlbumFolderViewItem *item);    
     void albumDelete(AlbumFolderViewItem *item);

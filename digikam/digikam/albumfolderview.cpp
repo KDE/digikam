@@ -106,6 +106,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
     
+    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));    
+    
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
 }
@@ -277,11 +280,6 @@ void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
     if(!e)
         return;
 
-    if(e->button() == RightButton) {
-        contextMenu(e->pos());
-        return;
-    }
-    
     QListView::contentsMousePressEvent(e);
 }
 
@@ -304,15 +302,15 @@ void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void AlbumFolderView::contextMenu(const QPoint &pos)
+void AlbumFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
 
-    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(itemAt(pos));
+    AlbumFolderViewItem *album = dynamic_cast<AlbumFolderViewItem*>(item);
 
     popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
 
-    if(item)
+    if(album)
     {
 //        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
 //        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
@@ -322,17 +320,17 @@ void AlbumFolderView::contextMenu(const QPoint &pos)
     {
         case 10:
         {
-            albumNew(item);
+            albumNew(album);
             break;
         }
         case 11:
         {
-//            tagEdit(item);
+//            tagEdit(album);
             break;
         }
         case 12:
         {
-//            tagDelete(item);
+//            tagDelete(album);
             break;
         }
         default:
