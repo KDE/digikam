@@ -70,8 +70,6 @@ private:
     };
     
     int              m_currentRenderingMode;
-    
-    bool             m_dirty;
 
     QWidget         *m_parent;
     

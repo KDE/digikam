@@ -1,4 +1,5 @@
 /* ============================================================
+ * File  : refocus.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-25
  * Description : Refocus threaded image filter.
@@ -26,7 +27,6 @@
 
 #include <qthread.h>
 #include <qimage.h>
-#include <qstring.h>
 
 class QObject;
 

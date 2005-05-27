@@ -1,4 +1,5 @@
 /* ============================================================
+ * File  : refocus.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-25
  * Description : Refocus threaded image filter.
@@ -27,6 +28,7 @@
 #include <qobject.h>
 #include <qdatetime.h> 
 #include <qevent.h>
+#include <qstring.h>
 
 // KDE includes.
 
