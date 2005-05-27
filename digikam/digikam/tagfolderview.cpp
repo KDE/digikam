@@ -264,7 +264,7 @@ void TagFolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseMoveEvent(e);
+   QListView::contentsMouseMoveEvent(e);
 
     if(e->state() == NoButton)
     {
@@ -289,7 +289,6 @@ void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
             d->dragItem = 0;
             return;
         }
-        startDrag();
     }
 }
 
@@ -471,6 +470,8 @@ QDragObject* TagFolderView::dragObject()
 
 void TagFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
+    QListView::contentsDragEnterEvent(e);
+    
     if(!e)
         return;
 
@@ -482,10 +483,13 @@ void TagFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 
 void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    if(!e)
-        return;
-
     QListView::contentsDragMoveEvent(e);
+    
+    if(!e)
+    {   
+        d->dragItem = 0;
+        return;
+    }
 
     if(d->dragItem == itemAt(e->pos()))
     {
