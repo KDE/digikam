@@ -11,6 +11,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image color channels mixer plugin for digiKam
+Comment[el]=Μείκτης καναλιών χρώματος εικόνας για το digiKam
 Comment[en_GB]=Image colour channels mixer plugin for digiKam
 Comment[es]=Complemento de mezcla de los canales de color de las imágenes para digiKam
 Comment[fr]=Module externe de digiKam pour mixer les canaux de couleur
