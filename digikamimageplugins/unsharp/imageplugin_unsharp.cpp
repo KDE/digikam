@@ -34,7 +34,7 @@
 
 // Local includes.
 
-#include "unsharp.h"
+#include "imageeffect_unsharp.h"
 #include "imageplugin_unsharp.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_unsharp,
@@ -64,7 +64,7 @@ void ImagePlugin_Unsharp::setEnabledActions(bool enable)
 
 void ImagePlugin_Unsharp::slotUnsharp()
 {
-    DigikamUnsharpFilterImagesPlugin::UnsharpDialog dlg(parentWidget());
+    DigikamUnsharpMaskImagesPlugin::ImageEffect_Unsharp dlg(parentWidget());
     dlg.exec();
 }
 

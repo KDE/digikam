@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_unsharp.la
 
 digikamimageplugin_unsharp_la_SOURCES = imageplugin_unsharp.cpp \
-	                                unsharp.cpp 
+	                                imageeffect_unsharp.cpp unsharp.cpp 
 
 digikamimageplugin_unsharp_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

@@ -1,10 +1,10 @@
 /* ============================================================
  * File  : unsharp.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-27
- * Description : Unsharped mask image filter for ImageEditor
+ * Date  : 2005-05-25
+ * Description : Unsharp Mask threaded image filter.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,62 +18,84 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+ 
+ 
+#ifndef UNSHARPMASK_H
+#define UNSHARPMASK_H
 
-#ifndef DESPECKLE_H
-#define DESPECKLE_H
+// Qt includes.
 
-// KDE include.
+#include <qthread.h>
+#include <qimage.h>
 
-#include <kdialogbase.h>
+class QObject;
 
-class QPushButton;
-class QSpinBox;
-class QSlider;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
-
-namespace DigikamUnsharpFilterImagesPlugin
+namespace DigikamUnsharpMaskImagesPlugin
 {
 
-class UnsharpDialog : public KDialogBase
+class UnsharpMask : public QThread
 {
-    Q_OBJECT
 
 public:
 
-    UnsharpDialog(QWidget* parent);
-    ~UnsharpDialog();
+// Class used to post status of computation to parent.
 
-protected:
+class EventData
+    {
+    public:
+    
+    EventData() 
+       {
+       starting = false;
+       success  = false; 
+       }
+    
+    bool starting;    
+    bool success;
+    int  progress;
+    };
 
-    void closeEvent(QCloseEvent *e);
-   
+public:
+    
+    UnsharpMask(QImage *orgImage, int radius, 
+                int amount, int threshold, QObject *parent=0);
+    
+    ~UnsharpMask();
+    
+    void   startComputation(void);
+    void   stopComputation(void);
+    
+    QImage getTargetImage(void) { return m_destImage; };
     
 private:
 
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
-    QSpinBox    *m_radiusInput;
-    QSpinBox    *m_amountInput;
-    QSpinBox    *m_thresholdInput;
-    
-    QSlider     *m_radiusSlider;
-    QSlider     *m_amountSlider;
-    QSlider     *m_thresholdSlider;
-    
-    bool         m_cancel;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    // Copy of original Image data.
+    QImage    m_orgImage;
 
-private:    
+    // Output image data.
+    QImage    m_destImage;
     
-    void unsharp(uint* data, int w, int h, int r, 
-                 int a, int threshold);
+    // Used to stop compution loop.
+    bool      m_cancel;   
+
+    // To post event from thread to parent.    
+    QObject  *m_parent;
+    EventData m_eventData;
+    
+protected:
+
+    virtual void run();
+
+private:  // Unsharp Mask filter data.
+
+    int m_radius;
+    int m_amount;
+    int m_threshold;
+    
+private:  // Unsharp Mask filter methods.
+
+    void unsharpImage(uint* data, int w, int h, int r, 
+                      int a, int threshold);
                  
     inline void blur_line (double *ctable, double *cmatrix, int cmatrix_length,
                            uchar *cur_col, uchar *dest_col, int y, long bytes);  
@@ -81,17 +103,9 @@ private:
     int gen_convolve_matrix (double radius, double **cmatrix_p);    
     
     double* gen_lookup_table (double *cmatrix, int cmatrix_length);
-       
-private slots:
-
-    void slotHelp();
-    void slotUser1();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
     
-};
+};    
 
-}  // NameSpace DigikamUnsharpFilterImagesPlugin
+}  // NameSpace DigikamUnsharpMaskImagesPlugin
 
-#endif /* DESPECKLE_H */
+#endif /* UNSHARPMASK_H */
