@@ -11,11 +11,11 @@ Currently implemented plugins are:
 
  1) AdjustLevels     : A plugin for to adjust the image histogram levels manually.
  2) SolarizeImage    : A plugin for to solarize an image.
- 3) Despeckle        : A noise reduction filter (based on Gimp 2.x algorithm).
+ 3) NoiseReduction   : A noise reduction filter (based on Despeckle Gimp 2.x algorithm).
  4) OilPaint         : An oil painting effect filter.
  5) Emboss           : An embossed image effect filter.
  6) Charcoal         : A charcoal drawing image effect filter.
- 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.x algorithm).
+ 7) Unsharp          : An unsharp mask image filter (based on Gimp 2.x algorithm).
  8) RainDrop         : Adding Raindrops randomly in an image.
  9) FilmGrain        : Adding film grain in an image.
 10) FreeRotation     : Perform an image rotation with a free angle in degrees.
