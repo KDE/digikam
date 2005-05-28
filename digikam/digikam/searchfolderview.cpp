@@ -33,12 +33,12 @@
 #include "searchquickdialog.h"
 #include "searchfolderview.h"
 
-class SearchFolderItem : public KListViewItem
+class SearchFolderItem : public QListViewItem
 {
 public:
 
-    SearchFolderItem(KListView* parent, SAlbum* album)
-        : KListViewItem(parent, album->title()),
+    SearchFolderItem(QListView* parent, SAlbum* album)
+        : QListViewItem(parent, album->title()),
           m_album(album)
     {
         m_album->setExtraData(parent, this);
@@ -64,13 +64,12 @@ public:
 };
 
 SearchFolderView::SearchFolderView(QWidget* parent)
-    : KListView(parent)
+    : FolderView(parent)
 {
     addColumn(i18n("My Searches"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(false);
 
-    m_active = false;
     m_lastAddedItem = 0;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
@@ -163,15 +162,6 @@ void SearchFolderView::searchDelete(SAlbum* album)
     AlbumManager::instance()->deleteSAlbum(album);
 }
 
-void SearchFolderView::setActive(bool val)
-{
-    m_active = val;
-    if (m_active)
-    {
-        slotSelectionChanged();
-    }
-}
-
 void SearchFolderView::slotAlbumAdded(Album* a)
 {
     if (!a || a->type() != Album::SEARCH)
@@ -200,7 +190,7 @@ void SearchFolderView::slotAlbumDeleted(Album* a)
 
 void SearchFolderView::slotSelectionChanged()
 {
-    if (!m_active)
+    if (!active())
         return;
     
     QListViewItem* selItem = 0;

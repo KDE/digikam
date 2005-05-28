@@ -108,7 +108,6 @@ class TagFolderViewPriv
 public:
     AlbumManager                    *albumMan;    
     QIntDict<TagFolderViewItem>     dict;
-    bool                            active;
     TagFolderViewItem               *dragItem;
     QPoint                          dragStartPos;
 };
@@ -118,11 +117,10 @@ public:
 //-----------------------------------------------------------------------------
 
 TagFolderView::TagFolderView(QWidget *parent)
-    : QListView(parent)
+    : FolderView(parent)
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
-    d->active   = false;
     d->dragItem = 0;
         
     addColumn(i18n("My Tags"));
@@ -147,13 +145,6 @@ TagFolderView::TagFolderView(QWidget *parent)
 TagFolderView::~TagFolderView()
 {
     delete d;    
-}
-
-void TagFolderView::setActive(bool val)
-{
-    d->active = val;
-    if (d->active)
-        slotSelectionChanged();
 }
 
 void TagFolderView::slotAlbumAdded(Album *album)
@@ -210,7 +201,7 @@ void TagFolderView::slotAlbumsCleared()
 
 void TagFolderView::slotSelectionChanged()
 {
-    if (!d->active)
+    if (!active())
         return;
 
     QListViewItem* selItem = 0;
@@ -243,7 +234,7 @@ void TagFolderView::slotSelectionChanged()
 
 void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
 {
-    QListView::contentsMousePressEvent(e);
+    FolderView::contentsMousePressEvent(e);
 
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
     if(item && e->button() == LeftButton) {
@@ -255,14 +246,14 @@ void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
 
 void TagFolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseReleaseEvent(e);
+    FolderView::contentsMouseReleaseEvent(e);
 
     d->dragItem = 0;
 }
 
 void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-   QListView::contentsMouseMoveEvent(e);
+    FolderView::contentsMouseMoveEvent(e);
 
     if(e->state() == NoButton)
     {
@@ -463,7 +454,7 @@ QDragObject* TagFolderView::dragObject()
 
 void TagFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
-    QListView::contentsDragEnterEvent(e);
+    FolderView::contentsDragEnterEvent(e);
     
     if(!e)
         return;
@@ -476,7 +467,7 @@ void TagFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 
 void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    QListView::contentsDragMoveEvent(e);
+    FolderView::contentsDragMoveEvent(e);
     
     if(!e)
     {   
@@ -498,7 +489,7 @@ void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void TagFolderView::contentsDropEvent(QDropEvent *e)
 {
-    QListView::contentsDropEvent(e);
+    FolderView::contentsDropEvent(e);
 
     if(!d->dragItem)
         return;

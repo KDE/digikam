@@ -21,14 +21,14 @@
 #ifndef _TAGFOLDERVIEW_H_
 #define _TAGFOLDERVIEW_H_
 
-#include <qlistview.h>
+#include "folderview.h"
 
 class Album;
 class TagFolderViewPriv;
 class TagFolderViewItem;
 class QDropEvent;
 
-class TagFolderView : public QListView
+class TagFolderView : public FolderView
 {
     Q_OBJECT
 
@@ -37,8 +37,6 @@ public:
     TagFolderView(QWidget *parent);
     ~TagFolderView();
 
-    void setActive(bool val);
-    
     void tagNew();
     void tagEdit();    
     void tagDelete();

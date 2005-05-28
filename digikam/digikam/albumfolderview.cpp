@@ -82,7 +82,6 @@ public:
     AlbumManager                     *albumMan;
     QIntDict<AlbumFolderViewItem>    dict;
     ThumbnailJob                     *iconThumbJob;
-    bool                             active;
 };
 
 //-----------------------------------------------------------------------------
@@ -90,12 +89,11 @@ public:
 //-----------------------------------------------------------------------------
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-    : QListView(parent)
+    : FolderView(parent)
 {
     d = new AlbumFolderViewPriv();
     
     d->albumMan = AlbumManager::instance();
-    d->active   = false;
     d->iconThumbJob = 0;
     
     addColumn(i18n("My Albums"));
@@ -120,15 +118,6 @@ AlbumFolderView::~AlbumFolderView()
     
     delete d;
 }
-
-void AlbumFolderView::setActive(bool val)
-{
-    d->active = val;
-
-    if (d->active)
-        slotSelectionChanged();
-}
-
 
 void AlbumFolderView::slotAlbumAdded(Album *album)
 {
@@ -244,14 +233,14 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
 
 void AlbumFolderView::slotSelectionChanged()
 {
-    if (!d->active)
+    if(!active())
         return;
-
+    
     QListViewItem* selItem = 0;
     QListViewItemIterator it(this);
-    while (it.current())
+    while(it.current())
     {
-        if (it.current()->isSelected())
+        if(it.current()->isSelected())
         {
             selItem = it.current();
             break;
@@ -259,7 +248,7 @@ void AlbumFolderView::slotSelectionChanged()
         ++it;
     }
 
-    if (!selItem)
+    if(!selItem)
     {
         d->albumMan->setCurrentAlbum(0);
         return;
@@ -280,7 +269,7 @@ void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
     if(!e)
         return;
 
-    QListView::contentsMousePressEvent(e);
+    FolderView::contentsMousePressEvent(e);
 }
 
 void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)

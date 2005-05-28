@@ -18,12 +18,12 @@
 #ifndef SEARCHFOLDERVIEW_H
 #define SEARCHFOLDERVIEW_H
 
-#include <klistview.h>
+#include "folderview.h"
 
 class SAlbum;
 class SearchFolderItem;
 
-class SearchFolderView : public KListView
+class SearchFolderView : public FolderView
 {
     Q_OBJECT
 
@@ -40,8 +40,6 @@ public:
 
     void searchDelete(SAlbum* album);
     
-    void setActive(bool val);
-
 private slots:
 
     void slotAlbumAdded(Album* album);
@@ -52,7 +50,6 @@ private slots:
     
 private:
 
-    bool              m_active;
     SearchFolderItem* m_lastAddedItem;
 };
     

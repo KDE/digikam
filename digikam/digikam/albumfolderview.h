@@ -21,7 +21,7 @@
 #ifndef _ALBUMFOLDERVIEW_H_
 #define _ALBUMFOLDERVIEW_H_
 
-#include <qlistview.h>
+#include "folderview.h"
 
 class KURL;
 class QPixmap;
@@ -31,7 +31,7 @@ class PAlbum;
 class AlbumFolderViewPriv;
 class AlbumFolderViewItem;
 
-class AlbumFolderView : public QListView
+class AlbumFolderView : public FolderView
 {
     Q_OBJECT
 
@@ -39,8 +39,6 @@ public:
 
     AlbumFolderView(QWidget *parent);
     ~AlbumFolderView();
-
-    void setActive(bool val);
 
 protected:
 
