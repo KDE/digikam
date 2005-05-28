@@ -57,8 +57,8 @@ class EventData
 
 public:
     
-    UnsharpMask(QImage *orgImage, int radius, 
-                int amount, int threshold, QObject *parent=0);
+    UnsharpMask(QImage *orgImage, double radius, 
+                double amount, int threshold, QObject *parent=0);
     
     ~UnsharpMask();
     
@@ -88,14 +88,14 @@ protected:
 
 private:  // Unsharp Mask filter data.
 
-    int m_radius;
-    int m_amount;
-    int m_threshold;
+    double m_radius;
+    double m_amount;
+    int    m_threshold;
     
 private:  // Unsharp Mask filter methods.
 
-    void unsharpImage(uint* data, int w, int h, int r, 
-                      int a, int threshold);
+    void unsharpImage(uint* data, int w, int h, double radius, 
+                      double amount, int threshold);
                  
     inline void blur_line (double *ctable, double *cmatrix, int cmatrix_length,
                            uchar *cur_col, uchar *dest_col, int y, long bytes);  

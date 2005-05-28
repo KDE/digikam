@@ -29,7 +29,7 @@
 class QPushButton;
 class QTimer;
 
-class KIntNumInput;
+class KDoubleNumInput;
 
 class UnsharpMask;
 
@@ -63,19 +63,19 @@ private:
     FinalRendering
     };
     
-    int           m_currentRenderingMode;
+    int              m_currentRenderingMode;
 
-    QWidget      *m_parent;
+    QWidget         *m_parent;
         
-    QTimer       *m_timer;
+    QTimer          *m_timer;
     
-    QPushButton  *m_helpButton;
+    QPushButton     *m_helpButton;
     
-    KIntNumInput *m_radiusInput;
-    KIntNumInput *m_amountInput;
-    KIntNumInput *m_thresholdInput;
+    KDoubleNumInput *m_radiusInput;
+    KDoubleNumInput *m_amountInput;
+    KDoubleNumInput *m_thresholdInput;
     
-    UnsharpMask  *m_unsharpFilter;
+    UnsharpMask     *m_unsharpFilter;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
 

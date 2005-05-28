@@ -51,8 +51,8 @@
 namespace DigikamUnsharpMaskImagesPlugin
 {
 
-UnsharpMask::UnsharpMask(QImage *orgImage, int radius, 
-                         int amount, int threshold, QObject *parent)
+UnsharpMask::UnsharpMask(QImage *orgImage, double radius, 
+                         double amount, int threshold, QObject *parent)
            : QThread()
 { 
     m_orgImage  = orgImage->copy();
@@ -146,10 +146,8 @@ void UnsharpMask::startComputation()
        }
 }
 
-void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int threshold)
+void UnsharpMask::unsharpImage(uint* data, int w, int h, double radius, double amount, int threshold)
 {
-    double  radius = r / 10.0;
-    double  amount = a / 10.0;
     int     bytes = 4;      // bpp in image.
     int     x1 = 0;         // Full image used.
     int     x2 = w;
@@ -166,19 +164,18 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
     int     cmatrix_length;
     double *ctable;
 
-    uint* newData = new uint[w*h];
+    uint* newData = (uint*)m_destImage.bits();
     
     // these are counters for loops 
     int row, col;  
 
     // these are used for the merging step 
     int diff;
-    int value;
-    int u,v;
+    int u, v;
 
     // find height and width of subregion to act on 
-    x = x2-x1;
-    y = y2-y1;
+    x = x2 - x1;
+    y = y2 - y1;
 
     // generate convolution matrix and make sure it's smaller than each dimension 
     cmatrix_length = gen_convolve_matrix(radius, &cmatrix);
@@ -191,8 +188,8 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
     dest_row = new uchar[x * bytes];
 
     // find height and width of subregion to act on 
-    x = x2-x1;
-    y = y2-y1;
+    x = x2 - x1;
+    y = y2 - y1;
 
     // blank out a region of the destination memory area, I think 
     
@@ -231,15 +228,15 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
   
     for (col = 0 ; !m_cancel && (col < x) ; col++)
       {
-      for (int n = 0 ; n < y ; ++n)
+      for (int n = 0 ; n < y ; n++)
           memcpy(cur_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
             
-      for (int n = 0 ; n < y ; ++n)
+      for (int n = 0 ; n < y ; n++)
           memcpy(dest_col + (n*bytes), newData + x1+col+w*(n+y1), bytes);
       
       blur_line(ctable, cmatrix, cmatrix_length, cur_col, dest_col, y, bytes);
       
-      for (int n = 0 ; n < y ; ++n)
+      for (int n = 0 ; n < y ; n++)
           memcpy(newData + x1+col+w*(n+y1), dest_col + (n*bytes), bytes);
           
       // update progress bar in dialog every five columns.
@@ -257,31 +254,23 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
   
     for (row = 0 ; !m_cancel && (row < y) ; row++)
       {
-      value = 0;
       // get source row 
       memcpy(cur_row, data + x1 + (y1+row)*w, x*bytes); 
       
       // get dest row 
-
       memcpy(dest_row, newData + x1 + (y1+row)*w, x*bytes); 
       
       // combine the two 
-      
       for (u = 0; u < x; u++)
          {
          for (v = 0; v < bytes; v++)
             {
             diff = (cur_row[u*bytes+v] - dest_row[u*bytes+v]);
+            
             // do tresholding 
-          
-            if (abs (2 * diff) < threshold)
-               diff = 0;
+            if (abs (2 * diff) < threshold) diff = 0;
 
-            value = (int)(cur_row[u*bytes+v] + amount * diff);
-
-            if (value < 0) dest_row[u*bytes+v] = 0;
-            else if (value > 255) dest_row[u*bytes+v] = 255;
-            else  dest_row[u*bytes+v] = value;
+            dest_row[u*bytes+v] = (uchar) CLAMP (cur_row[u*bytes+v] + amount * diff, 0, 255);
             }
          }
       
@@ -298,8 +287,6 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
       memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
       }
 
-    memcpy((uint*)m_destImage.bits(), newData, w*h*bytes);  
-    
     // free the memory we took 
     delete [] cur_row;
     delete [] dest_row;
@@ -307,7 +294,6 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, int r, int a, int thres
     delete [] dest_col;
     delete [] cmatrix;
     delete [] ctable;
-    delete [] newData;
 }
 
 /*
