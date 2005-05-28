@@ -29,6 +29,7 @@
 class QPushButton;
 class QTimer;
 
+class KIntNumInput;
 class KDoubleNumInput;
 
 class UnsharpMask;
@@ -73,7 +74,8 @@ private:
     
     KDoubleNumInput *m_radiusInput;
     KDoubleNumInput *m_amountInput;
-    KDoubleNumInput *m_thresholdInput;
+    
+    KIntNumInput    *m_thresholdInput;
     
     UnsharpMask     *m_unsharpFilter;
     

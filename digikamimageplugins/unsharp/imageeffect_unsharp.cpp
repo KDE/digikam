@@ -168,10 +168,9 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("Threshold:"), plainPage());
     
-    m_thresholdInput = new KDoubleNumInput(plainPage(), "m_thresholdInput");
-    m_thresholdInput->setPrecision(1);
-    m_thresholdInput->setRange(0.0, 255.0, 1.0, true);
-    m_thresholdInput->setValue(0.0);
+    m_thresholdInput = new KIntNumInput(plainPage(), "m_thresholdInput");
+    m_thresholdInput->setRange(0, 255, 1, true);
+    m_thresholdInput->setValue(0);
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
@@ -196,7 +195,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     connect(m_amountInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                                                            
             
-    connect(m_thresholdInput, SIGNAL(valueChanged (double)),
+    connect(m_thresholdInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));                                                
 }
 
@@ -278,7 +277,7 @@ void ImageEffect_Unsharp::slotUser1()
                 
        m_radiusInput->setValue(5.0);
        m_amountInput->setValue(0.5);
-       m_thresholdInput->setValue(0.0);
+       m_thresholdInput->setValue(0);
                                      
        m_radiusInput->blockSignals(false);
        m_amountInput->blockSignals(false);
@@ -306,7 +305,7 @@ void ImageEffect_Unsharp::slotEffect()
    
     double r  = m_radiusInput->value();
     double a  = m_amountInput->value();
-    int    th = (int)m_thresholdInput->value();
+    int    th = m_thresholdInput->value();
     
     m_imagePreviewWidget->setProgress(0);
 
@@ -331,7 +330,7 @@ void ImageEffect_Unsharp::slotOk()
     
     double r  = m_radiusInput->value();
     double a  = m_amountInput->value();
-    int    th = (int)m_thresholdInput->value();
+    int    th = m_thresholdInput->value();
     
     m_imagePreviewWidget->setProgress(0);       
 
