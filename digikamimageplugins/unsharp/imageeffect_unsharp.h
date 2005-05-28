@@ -2,7 +2,7 @@
  * File  : imageeffect_unsharp.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-27
- * Description : Unsharped mask image filter for digiKam Image Editor
+ * Description : Unsharp mask image filter for digiKam Image Editor
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
