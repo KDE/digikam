@@ -136,64 +136,59 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
+    QGridLayout* grid = new QGridLayout( topLayout, 3 , 3, spacingHint());
+    
     QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
     
     m_radiusInput = new KIntNumInput(plainPage(), "m_radiusInput");
     m_radiusInput->setRange(1, 20, 1, true);
-    m_radiusInput->setValue(3);
     
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "1 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
     
-    hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_radiusInput, 4);
+    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
     
     m_blackLevelInput = new KIntNumInput(plainPage(), "m_blackLevelInput");
     m_blackLevelInput->setRange(0, 255, 1, true);
-    m_blackLevelInput->setValue(7);
     
     QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls the black "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
     
-    hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_blackLevelInput, 4);
-
+    grid->addMultiCellWidget(label2, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_blackLevelInput, 1, 1, 1, 1);
+    
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
     QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
     
     m_whiteLevelInput = new KIntNumInput(plainPage(), "m_blackLevelInput");
     m_whiteLevelInput->setRange(0, 255, 1, true);
-    m_whiteLevelInput->setValue(248);
     
     QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls the white "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
-                     
-    hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_whiteLevelInput, 4);
 
+    grid->addMultiCellWidget(label3, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_whiteLevelInput, 2, 2, 1, 1);
+                                              
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay5 = new QHBoxLayout(topLayout);
     m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), plainPage());
-    m_useAdaptativeMethod->setChecked( true );
     QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
+    
+    grid->addMultiCellWidget(m_useAdaptativeMethod, 0, 0, 3, 3);
+    
     m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), plainPage());
-    m_useRecursiveMethod->setChecked( false );
     QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type."));           
-    hlay5->addWidget(m_useAdaptativeMethod, 1);
-    hlay5->addWidget(m_useRecursiveMethod, 1);
-
+    grid->addMultiCellWidget(m_useRecursiveMethod, 1, 1, 3, 3);
+    
     // -------------------------------------------------------------
             
     adjustSize();
@@ -298,21 +293,28 @@ void ImageEffect_Despeckle::slotUser1()
        m_radiusInput->blockSignals(true);
        m_blackLevelInput->blockSignals(true);
        m_whiteLevelInput->blockSignals(true);
-                
+       m_useAdaptativeMethod->blockSignals(true);
+       m_useRecursiveMethod->blockSignals(true);
+                       
        m_radiusInput->setValue(3);
        m_blackLevelInput->setValue(7);
        m_whiteLevelInput->setValue(248);
+       m_useAdaptativeMethod->setChecked( true );
+       m_useRecursiveMethod->setChecked(false);
         
        m_radiusInput->blockSignals(false);
        m_blackLevelInput->blockSignals(false);
        m_whiteLevelInput->blockSignals(false);
+       m_useAdaptativeMethod->blockSignals(false);
+       m_useRecursiveMethod->blockSignals(false);
        slotEffect();
        }
 } 
 
 void ImageEffect_Despeckle::slotEffect()
 {
-    if (m_currentRenderingMode == PreviewRendering) return;     // Computation already in process.
+    // Computation already in progress.
+    if (m_currentRenderingMode == PreviewRendering) return;     
     
     m_currentRenderingMode = PreviewRendering;
     

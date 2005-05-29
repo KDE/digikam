@@ -2,7 +2,7 @@
  * File  : imageeffect_despeckle.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-24
- * Description : noise reduction image filter for Digikam 
+ * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
  * Copyright 2004-2005 by Gilles Caulier
