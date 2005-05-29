@@ -298,7 +298,7 @@ void ImageEffect_Unsharp::slotEffect()
     m_imagePreviewWidget->setEnable(false);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok,    false);
+    enableButton(Ok, false);
         
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
@@ -367,7 +367,7 @@ void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
               {
               case PreviewRendering:
                  {
-                 kdDebug() << "Preview UnsharpMask completed..." << endl;
+                 kdDebug() << "Preview Unsharp Mask completed..." << endl;
                  
                  QImage imDest = m_unsharpFilter->getTargetImage();
                  m_imagePreviewWidget->setPreviewImageData(imDest);
@@ -378,11 +378,11 @@ void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
               
               case FinalRendering:
                  {
-                 kdDebug() << "Final UnsharpMask completed..." << endl;
+                 kdDebug() << "Final Unsharp Mask completed..." << endl;
                  
                  Digikam::ImageIface iface(0, 0);
   
-                 iface.putOriginalData(i18n("UnsharpMask"), 
+                 iface.putOriginalData(i18n("Unsharp Mask"), 
                                        (uint*)m_unsharpFilter->getTargetImage().bits());
                     
                  m_parent->setCursor( KCursor::arrowCursor() );
@@ -397,7 +397,7 @@ void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
                 {
                 case PreviewRendering:
                     {
-                    kdDebug() << "Preview UnsharpMask failed..." << endl;
+                    kdDebug() << "Preview Unsharp Mask failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;
