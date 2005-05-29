@@ -175,7 +175,7 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     m_whiteLevelInput->setRange(0, 255, 1, true);
     m_whiteLevelInput->setValue(248);
     
-    QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls adjust the white "
+    QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls adjust the white "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
                      
