@@ -1,11 +1,10 @@
 /* ============================================================
  * File  : despeckle.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-24
- * Description : noise reduction image filter for Digikam 
- *               image editor.
+ * Date  : 2005-05-25
+ * Description : Despeckle threaded image filter.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,74 +18,89 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
+  
 #ifndef DESPECKLE_H
 #define DESPECKLE_H
 
-// KDE include.
+// Qt includes.
 
-#include <kdialogbase.h>
+#include <qthread.h>
+#include <qimage.h>
 
-class QPushButton;
-class QCheckBox;
-class QSpinBox;
-class QSlider;
+class QObject;
 
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
-
-namespace DigikamDespeckleFilterImagesPlugin
+namespace DigikamNoiseReductionImagesPlugin
 {
 
-class DespeckleDialog : public KDialogBase
+class Despeckle : public QThread
 {
-    Q_OBJECT
 
 public:
 
-    DespeckleDialog(QWidget* parent);
-    ~DespeckleDialog();
+// Class used to post status of computation to parent.
 
-protected:
+class EventData
+    {
+    public:
+    
+    EventData() 
+       {
+       starting = false;
+       success  = false; 
+       }
+    
+    bool starting;    
+    bool success;
+    int  progress;
+    };
 
-    void closeEvent(QCloseEvent *e);
-   
+public:
+    
+    Despeckle(QImage *orgImage, int radius, int black_level, int white_level, 
+              bool adaptativeFilter, bool recursiveFilter, QObject *parent=0);
+    
+    ~Despeckle();
+    
+    void   startComputation(void);
+    void   stopComputation(void);
+    
+    QImage getTargetImage(void) { return m_destImage; };
     
 private:
 
-    QWidget      *m_parent;
-    QPushButton  *m_helpButton;
-    
-    QSpinBox     *m_radiusInput;
-    QSpinBox     *m_blackLevelInput;
-    QSpinBox     *m_whiteLevelInput;
-        
-    QSlider      *m_radiusSlider;
-    QSlider      *m_blackLevelSlider;
-    QSlider      *m_whiteLevelSlider;
-    
-    QCheckBox    *m_useAdaptativeMethod;
-    QCheckBox    *m_useRecursiveMethod;
-    
-    bool          m_cancel;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-    void despeckle(uint* data, int w, int h, int despeckle_radius, 
-                   int black_level, int white_level, 
-                   bool adaptativeFilter, bool recursiveFilter);
-    
-private slots:
+    // Copy of original Image data.
+    QImage    m_orgImage;
 
-    void slotHelp();
-    void slotUser1();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-};
+    // Output image data.
+    QImage    m_destImage;
+    
+    // Used to stop compution loop.
+    bool      m_cancel;   
 
-}  // NameSpace DigikamDespeckleFilterImagesPlugin
+    // To post event from thread to parent.    
+    QObject  *m_parent;
+    EventData m_eventData;
+    
+protected:
+
+    virtual void run();
+
+private:  // Despeckle filter data.
+
+    int  m_radius;
+    int  m_black_level;
+    int  m_white_level;
+    bool m_adaptativeFilter;
+    bool m_recursiveFilter; 
+    
+private:  // Despeckle filter methods.
+
+    void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
+                                   int black_level, int white_level, 
+                                   bool adaptativeFilter, bool recursiveFilter);
+
+};    
+
+}  // NameSpace DigikamNoiseReductionImagesPlugin
 
 #endif /* DESPECKLE_H */

@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_despeckle.la
 
 digikamimageplugin_despeckle_la_SOURCES = imageplugin_despeckle.cpp \
-	                                  despeckle.cpp 
+	                                  imageeffect_despeckle.cpp despeckle.cpp 
 
 digikamimageplugin_despeckle_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

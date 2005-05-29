@@ -30,7 +30,7 @@
 
 // Local includes.
 
-#include "despeckle.h"
+#include "imageeffect_despeckle.h"
 #include "imageplugin_despeckle.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_despeckle,
@@ -60,9 +60,8 @@ void ImagePlugin_Despeckle::setEnabledActions(bool enable)
 
 void ImagePlugin_Despeckle::slotDespeckle()
 {
-    DigikamDespeckleFilterImagesPlugin::DespeckleDialog dlg(parentWidget());
+    DigikamNoiseReductionImagesPlugin::ImageEffect_Despeckle dlg(parentWidget());
     dlg.exec();
 }
-
 
 #include "imageplugin_despeckle.moc"

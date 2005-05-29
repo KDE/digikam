@@ -1,16 +1,15 @@
 /* ============================================================
  * File  : despeckle.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-24
- * Description : noise reduction image filter for Digikam 
- *               image editor.
+ * Date  : 2005-05-25
+ * Description : Despeckle threaded image filter.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
  *
  * Despeckle algorithm come from plug-ins/common/despeckle.c 
  * Gimp 2.0 source file and copyrighted 
  * 1997-1998 by Michael Sweet (mike at easysw.com)
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,40 +22,25 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
+  
 #define TILE_HEIGHT       64 
  
-// C++ include.
-
-#include <cstring>
+// C++ includes. 
+ 
+#include <cmath>
+#include <cstdlib>
 
 // Qt includes.
 
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qslider.h>
-#include <qspinbox.h>
+#include <qobject.h>
+#include <qdatetime.h> 
+#include <qevent.h>
 #include <qstring.h>
-#include <qimage.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
-#include <kaboutdata.h>
-#include <khelpmenu.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
 
 // Digikam includes.
 
@@ -64,341 +48,111 @@
 
 // Local includes.
 
-#include "version.h"
 #include "despeckle.h"
 
-namespace DigikamDespeckleFilterImagesPlugin
+namespace DigikamNoiseReductionImagesPlugin
 {
 
-DespeckleDialog::DespeckleDialog(QWidget* parent)
-               : KDialogBase(Plain, i18n("Noise Reduction"), Help|User1|Ok|Cancel, Ok,
-                             parent, 0, true, true, i18n("&Reset Values")),
-                 m_parent(parent)
-{
-    QString whatsThis;
-    
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
+Despeckle::Despeckle(QImage *orgImage, int radius, int black_level, int white_level, 
+                     bool adaptativeFilter, bool recursiveFilter, QObject *parent)
+         : QThread()
+{ 
+    m_orgImage  = orgImage->copy();
+    m_parent    = parent;
+    m_cancel    = false;
         
-    // About data and help button.
-    
-    KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Noise Reduction"), 
-                                       digikamimageplugins_version,
-                                       I18N_NOOP("A despeckle image filter plugin for digiKam."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
-                                       0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
-    
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+    // Get the config data
 
-    about->addAuthor("Michael Sweet", I18N_NOOP("Despeckle algorithm author from Gimp"),
-                     "mike at easysw.com");
-                         
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Noise Reduction Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    m_radius           = radius;
+    m_black_level      = black_level;
+    m_white_level      = white_level;
+    m_adaptativeFilter = adaptativeFilter;
+    m_recursiveFilter  = recursiveFilter;
     
-    // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-    
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Noise Reduction"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
-    hlay1->addWidget(m_imagePreviewWidget);
-    
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
-
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
-    
-    m_radiusSlider = new QSlider(1, 20, 1, 3, Qt::Horizontal, plainPage(), "m_radiusSlider");
-    m_radiusSlider->setTickmarks(QSlider::Below);
-    m_radiusSlider->setTickInterval(1);
-    m_radiusSlider->setTracking ( false );
-    
-    m_radiusInput = new QSpinBox(1, 20, 1, plainPage(), "m_radiusInput");
-    m_radiusInput->setValue(3);
-    whatsThis = i18n("<p>A radius of 0 has no effect, "
-                     "1 and above determine the blur matrix radius "
-                     "that determines how much to blur the image.");
-    QWhatsThis::add( m_radiusInput, whatsThis);
-    QWhatsThis::add( m_radiusSlider, whatsThis);
-    
-    hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_radiusSlider, 3);
-    hlay2->addWidget(m_radiusInput, 1);
-    
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
-    
-    m_blackLevelSlider = new QSlider(0, 255, 1, 7, Qt::Horizontal, plainPage(), "m_blackLevelSlider");
-    m_blackLevelSlider->setTickmarks(QSlider::Below);
-    m_blackLevelSlider->setTickInterval(20);
-    m_blackLevelSlider->setTracking ( false );  
-    
-    m_blackLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_blackLevelInput");
-    m_blackLevelInput->setValue(7);    
-    whatsThis = i18n("<p>This value controls adjust the black "
-                     "levels used by the adaptive filter to "
-                     "adjust the filter radius.");
-    QWhatsThis::add( m_blackLevelInput, whatsThis);
-    QWhatsThis::add( m_blackLevelSlider, whatsThis);                     
-    
-    hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_blackLevelSlider, 3);
-    hlay3->addWidget(m_blackLevelInput, 1);
-
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
-    
-    m_whiteLevelSlider = new QSlider(0, 255, 1, 248, Qt::Horizontal, plainPage(), "m_whiteLevelSlider");
-    m_whiteLevelSlider->setTickmarks(QSlider::Below);
-    m_whiteLevelSlider->setTickInterval(20);
-    m_whiteLevelSlider->setTracking ( false );  
-    
-    m_whiteLevelInput = new QSpinBox(0, 255, 1, plainPage(), "m_whiteLevelInput");
-    m_whiteLevelInput->setValue(248);    
-    whatsThis = i18n("<p>This value controls adjust the white "
-                     "levels used by the adaptive filter to "
-                     "adjust the filter radius.");
-    
-    QWhatsThis::add( m_whiteLevelInput, whatsThis);
-    QWhatsThis::add( m_whiteLevelSlider, whatsThis);                         
-    
-    hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_whiteLevelSlider, 3);
-    hlay4->addWidget(m_whiteLevelInput, 1);
-
-    // -------------------------------------------------------------
-    
-    QHBoxLayout *hlay5 = new QHBoxLayout(topLayout);
-    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), plainPage());
-    m_useAdaptativeMethod->setChecked( true );
-    QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
-    m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), plainPage());
-    m_useRecursiveMethod->setChecked( false );
-    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type."));           
-    hlay5->addWidget(m_useAdaptativeMethod, 1);
-    hlay5->addWidget(m_useRecursiveMethod, 1);
-
-    // -------------------------------------------------------------
-            
-    adjustSize();
-    disableResize(); 
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-    
-    // -------------------------------------------------------------
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
-    
-    connect(m_radiusSlider, SIGNAL(valueChanged(int)),
-            m_radiusInput, SLOT(setValue(int)));
-    connect(m_radiusInput, SIGNAL(valueChanged(int)),
-            m_radiusSlider, SLOT(setValue(int)));            
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));            
-            
-    connect(m_blackLevelSlider, SIGNAL(valueChanged(int)),
-            m_blackLevelInput, SLOT(setValue(int)));
-    connect(m_blackLevelInput, SIGNAL(valueChanged(int)),
-            m_blackLevelSlider, SLOT(setValue(int)));   
-    connect(m_blackLevelInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));
-
-    connect(m_whiteLevelSlider, SIGNAL(valueChanged(int)),
-            m_whiteLevelInput, SLOT(setValue(int)));
-    connect(m_whiteLevelInput, SIGNAL(valueChanged(int)),
-            m_whiteLevelSlider, SLOT(setValue(int)));
-    connect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));                                                
-            
-    connect(m_useAdaptativeMethod, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));             
-    
-    connect(m_useRecursiveMethod, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));             
+    m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
+        
+    if (m_orgImage.width() && m_orgImage.height())
+       {
+       if (m_parent)
+          start();             // m_parent is valide, start thread ==> run()
+       else
+          startComputation();  // no parent : no using thread.
+       }
+    else  // No image data 
+       {
+       if (m_parent)           // If parent then send event about a problem.
+          {
+          m_eventData.starting = false;
+          m_eventData.success  = false;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+          }
+       }
 }
 
-DespeckleDialog::~DespeckleDialog()
-{
+Despeckle::~Despeckle()
+{ 
+    stopComputation();
 }
 
-void DespeckleDialog::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("despeckle", "digikamimageplugins");
-}
-
-void DespeckleDialog::closeEvent(QCloseEvent *e)
+void Despeckle::stopComputation(void)
 {
     m_cancel = true;
-    e->accept();    
+    wait();
 }
 
-void DespeckleDialog::slotCancel()
+// List of threaded operations.
+
+void Despeckle::run()
 {
-    m_cancel = true;
-    done(Cancel);
+    startComputation();
 }
 
-void DespeckleDialog::slotUser1()
+void Despeckle::startComputation()
 {
-    m_radiusInput->blockSignals(true);
-    m_radiusSlider->blockSignals(true);
-    m_blackLevelInput->blockSignals(true);
-    m_blackLevelSlider->blockSignals(true);
-    m_whiteLevelInput->blockSignals(true);
-    m_whiteLevelSlider->blockSignals(true);
-            
-    m_radiusInput->setValue(3);
-    m_radiusSlider->setValue(3);
-    m_blackLevelInput->setValue(7);
-    m_blackLevelSlider->setValue(7);
-    m_whiteLevelInput->setValue(248);
-    m_whiteLevelSlider->setValue(248);
-
-    m_radiusInput->blockSignals(false);
-    m_radiusSlider->blockSignals(false);
-    m_blackLevelInput->blockSignals(false);
-    m_blackLevelSlider->blockSignals(false);
-    m_whiteLevelInput->blockSignals(false);
-    m_whiteLevelSlider->blockSignals(false);
-    slotEffect();
-} 
-
-void DespeckleDialog::slotEffect()
-{
-    m_radiusInput->setEnabled(false);
-    m_radiusSlider->setEnabled(false);
-    m_blackLevelInput->setEnabled(false);
-    m_blackLevelSlider->setEnabled(false);
-    m_whiteLevelInput->setEnabled(false);
-    m_whiteLevelSlider->setEnabled(false);
-    m_useAdaptativeMethod->setEnabled(false);
-    m_useRecursiveMethod->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    QImage img = m_imagePreviewWidget->getOriginalClipImage();
-   
-    uint* data = (uint *)img.bits();
-    int   w    = img.width();
-    int   h    = img.height();
-    int   r    = m_radiusSlider->value();
-    int   bl   = m_blackLevelSlider->value();
-    int   wl   = m_whiteLevelSlider->value();
-    bool  af   = m_useAdaptativeMethod->isChecked();
-    bool  rf   = m_useRecursiveMethod->isChecked();
+    QDateTime startDate = QDateTime::currentDateTime();
     
-    m_imagePreviewWidget->setProgress(0);          
-    despeckle(data, w, h, r, bl, wl, af, rf);   
+    if (m_parent)
+       {
+       m_eventData.starting = true;
+       m_eventData.success  = false;
+       m_eventData.progress = 0;
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+       }
+
+    despeckleImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                   m_radius, m_black_level, m_white_level, m_adaptativeFilter, m_recursiveFilter);
     
-    if (m_cancel) return;
+    QDateTime endDate = QDateTime::currentDateTime();    
     
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageData(img);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_radiusInput->setEnabled(true);
-    m_radiusSlider->setEnabled(true);
-    m_blackLevelInput->setEnabled(true);
-    m_blackLevelSlider->setEnabled(true);
-    m_whiteLevelInput->setEnabled(true);
-    m_whiteLevelSlider->setEnabled(true);
-    m_useAdaptativeMethod->setEnabled(true);
-    m_useRecursiveMethod->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);
+    if (!m_cancel)
+       {
+       if (m_parent)
+          {
+          m_eventData.starting = false;
+          m_eventData.success  = true;
+          m_eventData.progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+          }
+          
+       kdDebug() << "Despeckle::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
+       }
+    else
+       {
+       if (m_parent)
+          {
+          m_eventData.starting = false;
+          m_eventData.success  = false;
+          m_eventData.progress = 0;
+          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+          }
+          
+       kdDebug() << "Despeckle::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
+       }
 }
 
-void DespeckleDialog::slotOk()
-{
-    m_radiusInput->setEnabled(false);
-    m_radiusSlider->setEnabled(false);
-    m_blackLevelInput->setEnabled(false);
-    m_blackLevelSlider->setEnabled(false);
-    m_whiteLevelInput->setEnabled(false);
-    m_whiteLevelSlider->setEnabled(false);
-    m_useAdaptativeMethod->setEnabled(false);
-    m_useRecursiveMethod->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    
-    uint* data = iface.getOriginalData();
-    int   w     = iface.originalWidth();
-    int   h     = iface.originalHeight();
-    int   r     = m_radiusSlider->value();
-    int   bl    = m_blackLevelSlider->value();
-    int   wl    = m_whiteLevelSlider->value();
-    bool  af    = m_useAdaptativeMethod->isChecked();
-    bool  rf    = m_useRecursiveMethod->isChecked();
-
-    m_imagePreviewWidget->setProgress(0);             
-    despeckle(data, w, h, r, bl, wl, af, rf);   
-    
-    if ( !m_cancel )
-       iface.putOriginalData(i18n("Despeckle"), data);
-       
-    delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();
-}
-
-/*
- * Despeckle an image using a median filter.
- *
- * A median filter basically collects pixel values in a region around the
- * target pixel, sorts them, and uses the median value. This code uses a
- * circular row buffer to improve performance.
- *
- * The adaptive filter is based on the median filter but analizes the histogram
- * of the region around the target pixel and adjusts the despeckle radius
- * accordingly.
- */
-
-void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius, 
-                                int black_level, int white_level, 
-                                bool adaptativeFilter, bool recursiveFilter)
+void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
+                               int black_level, int white_level, 
+                               bool adaptativeFilter, bool recursiveFilter)
 {
     uchar      **src_rows,       // Source pixel rows 
                 *dst_row,        // Destination pixel row 
@@ -430,8 +184,10 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
      int         sel_width = w;  // Selection width 
      int         sel_height = h; // Selection height                  
      int         img_bpp = 4;    // Bytes-per-pixel in image
-                 
+
      QImage      image, region;                 
+     
+     uint* newData = (uint*)m_destImage.bits();                 
                  
      // Setup for filter...
 
@@ -468,7 +224,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
      // Despeckle...
  
-     for (y = sel_y1 ; !m_cancel && (y < sel_y2) ; y ++)
+     for (y = sel_y1 ; !m_cancel && (y < sel_y2) ; y++)
         {
         if ((y + despeckle_radius) >= lasty && lasty < sel_y2)
            {
@@ -485,7 +241,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
            rowcount += i;
            lasty    += i;
            row      = (row + i) % max_row;
-           };
+           }
 
         // Now find the median pixels and save the results...
       
@@ -495,7 +251,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
         if (y >= (sel_y1 + radius) && y < (sel_y2 - radius))
            {
-           for (x = 0 ; !m_cancel && (x < width) ; x ++)
+           for (x = 0 ; !m_cancel && (x < width) ; x++)
               {
               hist0   = 0;
               hist255 = 0;
@@ -513,6 +269,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
               for (sort_ptr = sort, trow = startrow ;
                    trow != endrow ; trow = (trow + 1) % max_row)
+                 {
                  for (tx = xmin, src_ptr = src_rows[trow] + xmin;
                       tx < xmax;
                       tx += img_bpp, src_ptr += img_bpp)
@@ -524,7 +281,8 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
                     if (*sort_ptr < white_level && *sort_ptr > black_level)
                        sort_ptr ++;
-                    };
+                    }
+                 }
 
               // Shell sort the color values...
            
@@ -533,7 +291,9 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
               if (sort_count > 1)
                  {
                  for (d = sort_count / 2; d > 0; d = d / 2)
-                    for (i = d; i < sort_count; i ++)
+                    {
+                    for (i = d; i < sort_count; i++)
+                       {
                        for (j = i - d, sort_ptr = sort + j;
                             j >= 0 && sort_ptr[0] > sort_ptr[d];
                             j -= d, sort_ptr -= d)
@@ -541,7 +301,9 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
                           t           = sort_ptr[0];
                           sort_ptr[0] = sort_ptr[d];
                           sort_ptr[d] = t;
-                          };
+                          }
+                       }
+                    }
 
                  // Assign the median value...
            
@@ -557,7 +319,7 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
 
                  if (recursiveFilter)
                     src_rows[(row + y - lasty + max_row) % max_row][x] = dst_row[x];
-                 };
+                 }
 
               // Check the histogram and adjust the radius accordingly...
 
@@ -566,22 +328,24 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
                  if (hist0 >= radius || hist255 >= radius)
                     {
                     if (radius < despeckle_radius)
-                       radius ++;
+                       radius++;
                     }
                  else if (radius > 1)
-                    radius --;
-                 };
-              };
-           };
-         
-        memcpy (data + (w * y), dst_row, width);
-        
-        if ((y & 15) == 0)
-           {
-           m_imagePreviewWidget->setProgress((int)(100.0*(double) (y - sel_y1) / (double) sel_height));
-           kapp->processEvents();
+                    radius--;
+                 }
+              }
            }
-        };
+         
+        memcpy (newData + (w * y), dst_row, width);
+        
+        if ( y%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = (int)(100.0*(double) (y - sel_y1) / (double) sel_height);
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
+        }
 
      // OK, we're done.  Free all memory used...
    
@@ -590,6 +354,4 @@ void DespeckleDialog::despeckle(uint* data, int w, int h, int despeckle_radius,
      delete [] sort;
 }
 
-}  // NameSpace DigikamDespeckleFilterImagesPlugin
-
-#include "despeckle.moc"
+}  // NameSpace DigikamNoiseReductionImagesPlugin
