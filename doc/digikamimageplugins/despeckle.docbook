@@ -63,7 +63,7 @@ imperfections are removed.
 </para>
 
 <para>
-The <guilabel>Black Level</guilabel> and <guilabel>White Level</guilabel> controls adjust the 
+The <guilabel>Black Level</guilabel> and <guilabel>White Level</guilabel> controls the 
 levels used by the adaptive filter to adjust the filter radius. <guilabel>Black Level</guilabel> 
 Removes pixels darker than set value, and <guilabel>White Level</guilabel> the lighter pixels.
 </para>
