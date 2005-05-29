@@ -181,9 +181,9 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
                  sel_y1 = 0,
                  sel_y2 = h;
                  
-     int         sel_width = w;  // Selection width 
+     int         sel_width  = w; // Selection width 
      int         sel_height = h; // Selection height                  
-     int         img_bpp = 4;    // Bytes-per-pixel in image
+     int         img_bpp    = 4; // Bytes-per-pixel in image
 
      QImage      image, region;                 
      
@@ -195,19 +195,15 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
      memcpy(image.bits(), data, image.numBytes());
 
      size        = despeckle_radius * 2 + 1;
-     
      max_row     = 2 * TILE_HEIGHT;
-     
      width       = w * img_bpp;
-
      src_rows    = new uchar*[max_row];
      src_rows[0] = new uchar[max_row * width];
+     dst_row     = new uchar[width],
+     sort        = new uchar[size * size];
 
      for (row = 1 ; row < max_row ; row ++)
          src_rows[row] = src_rows[0] + row * width;
-
-     dst_row = new uchar[width],
-     sort    = new uchar[size * size];
 
      // Pre-load the first "size" rows for the filter...
 
@@ -249,7 +245,7 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
 
         memcpy (dst_row, src_rows[(row + y - lasty + max_row) % max_row], width);
 
-        if (y >= (sel_y1 + radius) && y < (sel_y2 - radius))
+        if (y >= sel_y1 && y < sel_y2)
            {
            for (x = 0 ; !m_cancel && (x < width) ; x++)
               {
@@ -258,11 +254,9 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
               xmin    = x - radius * img_bpp;
               xmax    = x + (radius + 1) * img_bpp;
 
-              if (xmin < 0)
-                 xmin = x % img_bpp;
+              if (xmin < 0) xmin = x % img_bpp;
 
-              if (xmax > width)
-                 xmax = width;
+              if (xmax > width) xmax = width;
 
               startrow = (row + y - lasty - radius + max_row) % max_row;
               endrow   = (row + y - lasty + radius + 1 + max_row) % max_row;
