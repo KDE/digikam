@@ -422,7 +422,7 @@ void ImageEffect_Refocus::slotEffect()
     if (m_refocusFilter)
        delete m_refocusFilter;
         
-    m_refocusFilter = new Refocus(&imTemp, ms, r, g, c, n, this);
+    m_refocusFilter = new Refocus(&imTemp, this, ms, r, g, c, n);
 }
 
 void ImageEffect_Refocus::slotOk()
@@ -453,7 +453,7 @@ void ImageEffect_Refocus::slotOk()
     if (m_refocusFilter)
        delete m_refocusFilter;
         
-    m_refocusFilter = new Refocus(&m_img, ms, r, g, c, n, this);
+    m_refocusFilter = new Refocus(&m_img, this, ms, r, g, c, n);
 }
 
 void ImageEffect_Refocus::customEvent(QCustomEvent *event)

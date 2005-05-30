@@ -37,7 +37,7 @@ public:
     Despeckle(QImage *orgImage, QObject *parent=0, int radius=3, int black_level=7, int white_level=248, 
               bool adaptativeFilter=true, bool recursiveFilter=false);
     
-    ~Despeckle();
+    ~Despeckle(){};
     
 private:  // Despeckle filter data.
 

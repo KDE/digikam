@@ -138,7 +138,6 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     m_radiusInput = new KDoubleNumInput(plainPage(), "m_radiusInput");
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.1, 120.0, 0.1, true);
-    m_radiusInput->setValue(5.0);
             
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "10 and above determine the blur matrix radius "
@@ -155,7 +154,6 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     m_amountInput = new KDoubleNumInput(plainPage(), "m_amountInput");
     m_amountInput->setPrecision(2);
     m_amountInput->setRange(0.0, 5.0, 0.01, true);
-    m_amountInput->setValue(0.5);
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
@@ -170,7 +168,6 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     m_thresholdInput = new KIntNumInput(plainPage(), "m_thresholdInput");
     m_thresholdInput->setRange(0, 255, 1, true);
-    m_thresholdInput->setValue(0);
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
@@ -312,7 +309,7 @@ void ImageEffect_Unsharp::slotEffect()
     if (m_unsharpFilter)
        delete m_unsharpFilter;
         
-    m_unsharpFilter = new UnsharpMask(&img, r, a, th, this);
+    m_unsharpFilter = new UnsharpMask(&img, this, r, a, th);
 }
 
 void ImageEffect_Unsharp::slotOk()
@@ -342,7 +339,7 @@ void ImageEffect_Unsharp::slotOk()
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    m_unsharpFilter = new UnsharpMask(&orgImage, r, a, th, this);
+    m_unsharpFilter = new UnsharpMask(&orgImage, this, r, a, th);
            
     delete [] data;
 }

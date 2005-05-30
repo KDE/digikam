@@ -23,21 +23,9 @@
  
 #include <cmath>
 
-// Qt includes.
-
-#include <qobject.h>
-#include <qdatetime.h> 
-#include <qevent.h>
-#include <qstring.h>
-
 // KDE includes.
 
-#include <kapplication.h>
 #include <kdebug.h>
-
-// Digikam includes.
-
-#include <digikamheaders.h>
 
 // Local includes.
 
@@ -47,101 +35,23 @@
 namespace DigikamRefocusImagesPlugin
 {
 
-Refocus::Refocus(QImage *orgImage, int matrixSize, double radius, 
-                 double gauss, double correlation, double noise, QObject *parent)
-       : QThread()
+Refocus::Refocus(QImage *orgImage, QObject *parent, int matrixSize, double radius, 
+                 double gauss, double correlation, double noise)
+       : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_orgImage    = orgImage->copy();
-    m_parent      = parent;
-    m_cancel      = false;
-        
-    // Get the config data
-
     m_matrixSize  = matrixSize;
     m_radius      = radius;
     m_gauss       = gauss;
     m_correlation = correlation;
     m_noise       = noise;
-    
-    m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
-        
-    if (m_orgImage.width() && m_orgImage.height())
-       {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
-       }
-    else  // No image data 
-       {
-       if (m_parent)           // If parent then send event about a problem.
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-       }
+    m_name        = "Refocus";
 }
 
-Refocus::~Refocus()
-{ 
-    stopComputation();
-}
-
-void Refocus::stopComputation(void)
+void Refocus::filterImage(void)
 {
-    m_cancel = true;
-    wait();
-}
-
-// List of threaded operations.
-
-void Refocus::run()
-{
-    startComputation();
-}
-
-void Refocus::startComputation()
-{
-    QDateTime startDate = QDateTime::currentDateTime();
-    
-    if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
-
     refocusImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                 m_matrixSize, m_radius, m_gauss, m_correlation, m_noise);
-    
-    QDateTime endDate = QDateTime::currentDateTime();    
-    
-    if (!m_cancel)
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = true;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "Refocus::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-    else
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "Refocus::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
+                 m_matrixSize, m_radius, m_gauss, 
+                 m_correlation, m_noise);
 }
 
 void Refocus::refocusImage(const uint* data, int width, int height, int matrixSize, 

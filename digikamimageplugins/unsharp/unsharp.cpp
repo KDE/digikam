@@ -28,22 +28,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
-
-#include <qobject.h>
-#include <qdatetime.h> 
-#include <qevent.h>
-#include <qstring.h>
-
-// KDE includes.
-
-#include <kapplication.h>
-#include <kdebug.h>
-
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "unsharp.h"
@@ -51,99 +35,20 @@
 namespace DigikamUnsharpMaskImagesPlugin
 {
 
-UnsharpMask::UnsharpMask(QImage *orgImage, double radius, 
-                         double amount, int threshold, QObject *parent)
-           : QThread()
+UnsharpMask::UnsharpMask(QImage *orgImage, QObject *parent, double radius, 
+                         double amount, int threshold)
+           : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_orgImage  = orgImage->copy();
-    m_parent    = parent;
-    m_cancel    = false;
-        
-    // Get the config data
-
     m_radius    = radius;
     m_amount    = amount;
     m_threshold = threshold;
-    
-    m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
-        
-    if (m_orgImage.width() && m_orgImage.height())
-       {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
-       }
-    else  // No image data 
-       {
-       if (m_parent)           // If parent then send event about a problem.
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-       }
+    m_name      = "UnsharpMask";
 }
 
-UnsharpMask::~UnsharpMask()
-{ 
-    stopComputation();
-}
-
-void UnsharpMask::stopComputation(void)
+void UnsharpMask::filterImage(void)
 {
-    m_cancel = true;
-    wait();
-}
-
-// List of threaded operations.
-
-void UnsharpMask::run()
-{
-    startComputation();
-}
-
-void UnsharpMask::startComputation()
-{
-    QDateTime startDate = QDateTime::currentDateTime();
-    
-    if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
-
     unsharpImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
                  m_radius, m_amount, m_threshold);
-    
-    QDateTime endDate = QDateTime::currentDateTime();    
-    
-    if (!m_cancel)
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = true;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "UnsharpMask::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-    else
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "UnsharpMask::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
 }
 
 void UnsharpMask::unsharpImage(uint* data, int w, int h, double radius, double amount, int threshold)

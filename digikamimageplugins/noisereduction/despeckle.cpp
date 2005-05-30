@@ -46,10 +46,7 @@ Despeckle::Despeckle(QImage *orgImage, QObject *parent, int radius, int black_le
     m_white_level      = white_level;
     m_adaptativeFilter = adaptativeFilter;
     m_recursiveFilter  = recursiveFilter;
-}
-
-Despeckle::~Despeckle()
-{ 
+    m_name             = "Despeckle";
 }
 
 void Despeckle::filterImage(void)
@@ -58,7 +55,6 @@ void Despeckle::filterImage(void)
                    m_radius, m_black_level, m_white_level, 
                    m_adaptativeFilter, m_recursiveFilter);
 }
-
 
 void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
                                int black_level, int white_level, 
@@ -225,7 +221,7 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
                     src_rows[(row + y - lasty + max_row) % max_row][x] = dst_row[x];
                  }
 
-              // Check the histogram and adjust the radius accordingly...
+              // Check the histogram and adjust the radius in according...
 
               if (adaptativeFilter)
                  {

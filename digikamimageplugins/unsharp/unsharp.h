@@ -18,74 +18,27 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
- 
+  
 #ifndef UNSHARPMASK_H
 #define UNSHARPMASK_H
 
-// Qt includes.
+// Digikam includes.
 
-#include <qthread.h>
-#include <qimage.h>
-
-class QObject;
+#include <digikamheaders.h>
 
 namespace DigikamUnsharpMaskImagesPlugin
 {
 
-class UnsharpMask : public QThread
+class UnsharpMask : public Digikam::ThreadedFilter
 {
 
 public:
-
-// Class used to post status of computation to parent.
-
-class EventData
-    {
-    public:
     
-    EventData() 
-       {
-       starting = false;
-       success  = false; 
-       }
+    UnsharpMask(QImage *orgImage, QObject *parent=0, double radius=5.0, 
+                double amount=0.5, int threshold=0);
     
-    bool starting;    
-    bool success;
-    int  progress;
-    };
-
-public:
+    ~UnsharpMask(){};
     
-    UnsharpMask(QImage *orgImage, double radius, 
-                double amount, int threshold, QObject *parent=0);
-    
-    ~UnsharpMask();
-    
-    void   startComputation(void);
-    void   stopComputation(void);
-    
-    QImage getTargetImage(void) { return m_destImage; };
-    
-private:
-
-    // Copy of original Image data.
-    QImage    m_orgImage;
-
-    // Output image data.
-    QImage    m_destImage;
-    
-    // Used to stop compution loop.
-    bool      m_cancel;   
-
-    // To post event from thread to parent.    
-    QObject  *m_parent;
-    EventData m_eventData;
-    
-protected:
-
-    virtual void run();
-
 private:  // Unsharp Mask filter data.
 
     double m_radius;
@@ -94,6 +47,9 @@ private:  // Unsharp Mask filter data.
     
 private:  // Unsharp Mask filter methods.
 
+
+    virtual void filterImage(void);
+    
     void unsharpImage(uint* data, int w, int h, double radius, 
                       double amount, int threshold);
                  
