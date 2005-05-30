@@ -77,10 +77,10 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Free Rotation"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to process image free "
+                                       I18N_NOOP("A digiKam image plugin to process free image"
                                        "rotation."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -185,8 +185,7 @@ void ImageEffect_FreeRotation::slotUser1()
 
 void ImageEffect_FreeRotation::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("freerotation",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("freerotation", "digikamimageplugins");
 }
 
 void ImageEffect_FreeRotation::slotEffect()
