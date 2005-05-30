@@ -1615,7 +1615,7 @@
                 </figure>
                 
                 <para>
-                You should be careful with this though, or the results will not look very natural: sharpening increases the apparent sharpness of edges in the photograph, but also amplifies noise. The generally most  useful technique for sharpening a fuzzy photograph is called the Unsharp Mask. It is a plug-in available from <ulink url="http://extragear.kde.org/apps/digikamimageplugins">DigikamImagePlugins project</ulink>, and you can access it by the
+                You should be careful with this though, or the results will not look very natural: sharpening increases the apparent sharpness of edges in the photograph, but also amplifies noise. The generally most useful technique for sharpening a fuzzy photograph is called the Unsharp Mask. It is a plug-in available from <ulink url="http://extragear.kde.org/apps/digikamimageplugins">DigikamImagePlugins project</ulink>, and you can access it by the
                 <menuchoice><guimenu>Fix</guimenu>
                 <guimenuitem>Unsharp Mask</guimenuitem></menuchoice> menu entry.
                 See the dedicated <ulink url="help:/digikamimageplugins/unsharp.html">Unsharp Mask 
@@ -3398,6 +3398,22 @@
                 </para>     
             </listitem>
         </varlistentry>                
+
+        <varlistentry>
+            <term><menuchoice>
+                <guimenu>Fix</guimenu><guimenuitem>Refocus</guimenuitem>
+            </menuchoice></term>
+            <listitem>
+                <para><action>
+                    Image Editor plugin to refocus the current image.
+                </action></para>
+                <para>
+                    See the dedicated 
+                    <ulink url="help:/digikamimageplugins/refocus.html">Refocus Photograph manual</ulink> 
+                    for more information.
+                </para>     
+            </listitem>
+        </varlistentry>
                         
     </variablelist>
     </para>

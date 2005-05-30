@@ -1757,7 +1757,23 @@
                 </para>     
             </listitem>
         </varlistentry>                
-                        
+
+        <varlistentry>
+            <term><menuchoice>
+                <guimenu>Fix</guimenu><guimenuitem>Refocus</guimenuitem>
+            </menuchoice></term>
+            <listitem>
+                <para><action>
+                    Image Editor plugin to refocus the current image.
+                </action></para>
+                <para>
+                    See the dedicated 
+                    <ulink url="help:/digikamimageplugins/refocus.html">Refocus Photograph manual</ulink> 
+                    for more information.
+                </para>     
+            </listitem>
+        </varlistentry>
+                                
     </variablelist>
     </para>
 
