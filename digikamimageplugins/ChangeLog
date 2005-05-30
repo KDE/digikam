@@ -1,6 +1,7 @@
 v0.8.0-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
-    * Unsharp Mask : using separate thread from GUI to compute image filter.
+    * Unsharp Mask, Noise Reduction : using separate thread from GUI to 
+      compute image filter.
     * CImg interface : fix memory leak and make a threadsafe implementation.    
     * New plugin 'Refocus'.
     
