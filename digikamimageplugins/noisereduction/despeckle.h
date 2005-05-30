@@ -22,69 +22,23 @@
 #ifndef DESPECKLE_H
 #define DESPECKLE_H
 
-// Qt includes.
+// Digikam includes.
 
-#include <qthread.h>
-#include <qimage.h>
-
-class QObject;
+#include <digikamheaders.h>
 
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-class Despeckle : public QThread
+class Despeckle : public Digikam::ThreadedFilter
 {
 
 public:
-
-// Class used to post status of computation to parent.
-
-class EventData
-    {
-    public:
     
-    EventData() 
-       {
-       starting = false;
-       success  = false; 
-       }
-    
-    bool starting;    
-    bool success;
-    int  progress;
-    };
-
-public:
-    
-    Despeckle(QImage *orgImage, int radius, int black_level, int white_level, 
-              bool adaptativeFilter, bool recursiveFilter, QObject *parent=0);
+    Despeckle(QImage *orgImage, QObject *parent=0, int radius=3, int black_level=7, int white_level=248, 
+              bool adaptativeFilter=true, bool recursiveFilter=false);
     
     ~Despeckle();
     
-    void   startComputation(void);
-    void   stopComputation(void);
-    
-    QImage getTargetImage(void) { return m_destImage; };
-    
-private:
-
-    // Copy of original Image data.
-    QImage    m_orgImage;
-
-    // Output image data.
-    QImage    m_destImage;
-    
-    // Used to stop compution loop.
-    bool      m_cancel;   
-
-    // To post event from thread to parent.    
-    QObject  *m_parent;
-    EventData m_eventData;
-    
-protected:
-
-    virtual void run();
-
 private:  // Despeckle filter data.
 
     int  m_radius;
@@ -94,6 +48,8 @@ private:  // Despeckle filter data.
     bool m_recursiveFilter; 
     
 private:  // Despeckle filter methods.
+
+    virtual void filterImage(void);
 
     void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
                                    int black_level, int white_level, 

@@ -342,7 +342,7 @@ void ImageEffect_Despeckle::slotEffect()
     if (m_despeckleFilter)
        delete m_despeckleFilter;
         
-    m_despeckleFilter = new Despeckle(&img, r, bl, wl, af, rf, this);
+    m_despeckleFilter = new Despeckle(&img, this, r, bl, wl, af, rf);
 }
 
 void ImageEffect_Despeckle::slotOk()
@@ -376,7 +376,7 @@ void ImageEffect_Despeckle::slotOk()
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    m_despeckleFilter = new Despeckle(&orgImage, r, bl, wl, af, rf, this);
+    m_despeckleFilter = new Despeckle(&orgImage, this, r, bl, wl, af, rf);
            
     delete [] data;
 }

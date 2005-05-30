@@ -30,22 +30,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
-
-#include <qobject.h>
-#include <qdatetime.h> 
-#include <qevent.h>
-#include <qstring.h>
-
-// KDE includes.
-
-#include <kapplication.h>
-#include <kdebug.h>
-
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "despeckle.h"
@@ -53,102 +37,28 @@
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-Despeckle::Despeckle(QImage *orgImage, int radius, int black_level, int white_level, 
-                     bool adaptativeFilter, bool recursiveFilter, QObject *parent)
-         : QThread()
+Despeckle::Despeckle(QImage *orgImage, QObject *parent, int radius, int black_level, int white_level, 
+                     bool adaptativeFilter, bool recursiveFilter)
+         : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_orgImage  = orgImage->copy();
-    m_parent    = parent;
-    m_cancel    = false;
-        
-    // Get the config data
-
     m_radius           = radius;
     m_black_level      = black_level;
     m_white_level      = white_level;
     m_adaptativeFilter = adaptativeFilter;
     m_recursiveFilter  = recursiveFilter;
-    
-    m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
-        
-    if (m_orgImage.width() && m_orgImage.height())
-       {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
-       }
-    else  // No image data 
-       {
-       if (m_parent)           // If parent then send event about a problem.
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-       }
 }
 
 Despeckle::~Despeckle()
 { 
-    stopComputation();
 }
 
-void Despeckle::stopComputation(void)
+void Despeckle::filterImage(void)
 {
-    m_cancel = true;
-    wait();
+    despeckleImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
+                   m_radius, m_black_level, m_white_level, 
+                   m_adaptativeFilter, m_recursiveFilter);
 }
 
-// List of threaded operations.
-
-void Despeckle::run()
-{
-    startComputation();
-}
-
-void Despeckle::startComputation()
-{
-    QDateTime startDate = QDateTime::currentDateTime();
-    
-    if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
-
-    despeckleImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                   m_radius, m_black_level, m_white_level, m_adaptativeFilter, m_recursiveFilter);
-    
-    QDateTime endDate = QDateTime::currentDateTime();    
-    
-    if (!m_cancel)
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = true;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "Despeckle::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-    else
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "Despeckle::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-}
 
 void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
                                int black_level, int white_level, 
