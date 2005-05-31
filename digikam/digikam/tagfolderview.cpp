@@ -107,8 +107,6 @@ class TagFolderViewPriv
 public:
     AlbumManager                    *albumMan;    
     QIntDict<TagFolderViewItem>     dict;
-    TagFolderViewItem               *dragItem;
-    QPoint                          dragStartPos;
 };
 
 //-----------------------------------------------------------------------------
@@ -120,7 +118,6 @@ TagFolderView::TagFolderView(QWidget *parent)
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
-    d->dragItem = 0;
         
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
@@ -229,41 +226,6 @@ void TagFolderView::slotSelectionChanged()
     }
 
     d->albumMan->setCurrentAlbum(tagitem->getTag());
-}
-
-void TagFolderView::contentsMousePressEvent(QMouseEvent *e)
-{
-    FolderView::contentsMousePressEvent(e);
-
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
-    if(item && e->button() == LeftButton) {
-        d->dragStartPos = e->pos();
-        d->dragItem = item;
-        return;
-    }
-}
-
-void TagFolderView::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-    FolderView::contentsMouseReleaseEvent(e);
-
-    d->dragItem = 0;
-}
-
-void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    FolderView::contentsMouseMoveEvent(e);
-
-    if(d->dragItem && 
-       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
-    {
-        TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
-        if(!item)
-        {
-            d->dragItem = 0;
-            return;
-        }
-    }
 }
 
 void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
@@ -422,17 +384,14 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
 }
 
-void TagFolderView::startDrag()
-{
-    dragObject()->drag();        
-}
-
 QDragObject* TagFolderView::dragObject()
 {
-    if(!d->dragItem)
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
+    if(!item)
         return 0;
-    TagDrag *t = new TagDrag(d->dragItem->getTag()->id(), this);
-    t->setPixmap(getBlendedIcon(d->dragItem->getTag()));
+    
+    TagDrag *t = new TagDrag(item->getTag()->id(), this);
+    t->setPixmap(getBlendedIcon(item->getTag()));
 
     return t;
 }
@@ -454,13 +413,7 @@ void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     FolderView::contentsDragMoveEvent(e);
     
-    if(!e)
-    {   
-        d->dragItem = 0;
-        return;
-    }
-
-    if(d->dragItem == itemAt(e->pos()))
+    if(dragItem() == itemAt(e->pos()))
     {
         e->ignore();
         return;
@@ -475,11 +428,11 @@ void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 void TagFolderView::contentsDropEvent(QDropEvent *e)
 {
     FolderView::contentsDropEvent(e);
-
+    /*
     if(!d->dragItem)
         return;
 
-    d->dragItem = 0;
+    d->dragItem = 0;*/
 }
 
 #include "tagfolderview.moc"

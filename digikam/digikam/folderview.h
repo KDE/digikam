@@ -24,6 +24,7 @@
 #include <qlistview.h>
 
 class FolderViewPriv;
+class FolderItem;
 
 class FolderView : public QListView
 {
@@ -43,8 +44,14 @@ public:
     
 protected:
 
-    void resizeEvent(QResizeEvent* e);
+    void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsMouseMoveEvent(QMouseEvent *e);
+        
+    void startDrag();
+    FolderItem* dragItem() const;
+    
+    void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);
  
 protected slots:

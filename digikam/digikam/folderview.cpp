@@ -21,9 +21,12 @@
 #include <kdebug.h>
 
 #include <qpixmap.h>
+#include <qapp.h>
 
 #include "themeengine.h"
 #include "folderview.h"
+#include "folderitem.h"
+#include "dragobjects.h"
 
 //-----------------------------------------------------------------------------
 // FolderViewPriv
@@ -37,6 +40,8 @@ public:
     QPixmap     itemRegPix;
     QPixmap     itemSelPix;
     int         itemHeight;
+    QPoint      dragStartPos;    
+    FolderItem  *dragItem;
 };
 
 //-----------------------------------------------------------------------------
@@ -49,6 +54,7 @@ FolderView::FolderView(QWidget *parent)
     d = new FolderViewPriv;
     
     d->active = false;
+    d->dragItem = 0;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
@@ -127,6 +133,46 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
+    
+    if(d->dragItem && 
+       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+    {
+        FolderItem *item = dynamic_cast<FolderItem*>(itemAt(e->pos()));
+        if(!item)
+        {
+            d->dragItem = 0;
+            return;
+        }
+    }    
+}
+
+void FolderView::contentsMousePressEvent(QMouseEvent *e)
+{
+    QListView::contentsMousePressEvent(e);
+
+    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(e->pos()));
+    if(item && e->button() == LeftButton) {
+        d->dragStartPos = e->pos();
+        d->dragItem = item;
+        return;
+    }
+}
+
+void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+    QListView::contentsMouseReleaseEvent(e);
+
+    d->dragItem = 0;
+}
+
+void FolderView::startDrag()
+{
+    dragObject()->drag();        
+}
+
+FolderItem* FolderView::dragItem() const
+{
+    return d->dragItem;
 }
 
 bool FolderView::mouseInItemRect(QListViewItem* item, int x) const

@@ -43,14 +43,9 @@ public:
 
 protected:
 
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-
     void contentsDragEnterEvent(QDragEnterEvent *e);
     void contentsDragMoveEvent(QDragMoveEvent *e); 
     void contentsDropEvent(QDropEvent *e);
-    void startDrag();
     QDragObject* dragObject();
     
 private slots:
