@@ -1,5 +1,6 @@
 * split albumfolderview into albumview and tagview
    - also port albumview and tagview to qlistview [JA]
+   - add dnd stuff to the base class and derived classes [JA]
 
 * allow user to edit dates (maybe through comments tag editor) [TA]
 
