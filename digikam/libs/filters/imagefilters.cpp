@@ -850,7 +850,7 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
     int       hue, sat, lig;
     float     gray;
     
-    int       red, green , blue;
+    int       red, green, blue;
     imageData imagedata;
     
     hue = redMask;
@@ -959,6 +959,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
             // Grab the next row...
 
             memcpy(src_rows[row], data + y*w, width); 
+            
             for (i = width, src_ptr = src_rows[row], neg_ptr = neg_rows[row];
                  i > 0;
                  i--, src_ptr++, neg_ptr++)
@@ -1062,9 +1063,9 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
     
     // Calculate HSL Transfers.
 
-    int value;
+    int          value;
     register int i;
-    HSLParam hsl;
+    HSLParam     hsl;
     
     for (i = 0; i < 256; i++)
        {
@@ -1102,32 +1103,29 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
        }
         
     // Apply HSL.
-    uchar* c;
-    int r, g, b;
-
-    unsigned int* ptr = data;
-
-    for (i = 0 ; i < w*h ; i++) 
+    
+    int       red, green, blue;
+    imageData imagedata;
+    
+    for (int i = 0; i < w*h; i++) 
        {
-       c = (unsigned char*) ptr;
-
-       b = c[0];
-       g = c[1];
-       r = c[2];
-
-       Digikam::rgb_to_hsl(r, g, b);
+       imagedata.raw = data[i];
+       red           = (int)imagedata.channel.red;
+       green         = (int)imagedata.channel.green;
+       blue          = (int)imagedata.channel.blue;
+        
+       Digikam::rgb_to_hsl(red, green, blue);
          
-       r = hsl.htransfer[r];
-       g = hsl.stransfer[g];
-       b = hsl.ltransfer[b];
+       red   = hsl.htransfer[red];
+       green = hsl.stransfer[green];
+       blue  = hsl.ltransfer[blue];
 
-       Digikam::hsl_to_rgb (r, g, b);
-
-       c[0] = b;
-       c[1] = g;
-       c[2] = r;
-
-       ptr++;
+       Digikam::hsl_to_rgb(red, green, blue);
+        
+       imagedata.channel.red   = (uchar)red;
+       imagedata.channel.green = (uchar)green;
+       imagedata.channel.blue  = (uchar)blue;
+       data[i] = imagedata.raw;
        }
 }
        
