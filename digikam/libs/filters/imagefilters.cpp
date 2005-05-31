@@ -116,7 +116,7 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
        intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);
        intensity.blue  += histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);
        intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i);
-       map[i] = intensity;
+       map[i]          = intensity;
        }
     
     low =  map[0];
@@ -465,28 +465,36 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
 void ImageFilters::normalizeImage(uint *data, int w, int h)
 {
     NormalizeParam  param;
-    int             x, i, b;
+    int             x, i;
     uchar           range;
-    uchar          *p;
 
     // Find min. and max. values.
     
     param.min   = 255;
     param.max   = 0;
 
-    for (i = 0 ; i < h*w ; i++)
-        {
-        p = (uchar *)(data + i);
-        
-        for (b = 0 ; b < 3 ; b++)
-           {
-           if (p[b] < param.min)
-              param.min = p[b];
-           if (p[b] > param.max)
-              param.max = p[b];
-           }
-        }
+    uchar         red, green, blue;
+    imageData     imagedata;
     
+    for (i = 0; i < w*h; i++)
+        {
+        imagedata.raw = data[i];
+        red = imagedata.channel.red;
+        
+        if (red < param.min) param.min = red;
+        if (red > param.max) param.max = red;
+
+        green = imagedata.channel.green;
+        
+        if (green < param.min) param.min = green;
+        if (green > param.max) param.max = green;
+
+        blue = imagedata.channel.blue;
+    
+        if (blue < param.min) param.min = blue;
+        if (blue > param.max) param.max = blue;
+        }
+
     // Calculate LUT. 
 
     range = (uchar)(param.max - param.min);
@@ -501,14 +509,20 @@ void ImageFilters::normalizeImage(uint *data, int w, int h)
 
     // Apply LUT to image.
        
-    for (i = 0 ; i < h*w ; i++)
+    for (i = 0; i < w*h; i++)
         {
-        p = (uchar *)(data + i);
+        imagedata.raw = data[i];
         
-        for (b = 0 ; b < 3 ; b++)
-           p[b] = param.lut[p[b]];
-  
-        p[3] = p[3];
+        red = imagedata.channel.red;
+        imagedata.channel.red = param.lut[red];
+
+        green = imagedata.channel.green;
+        imagedata.channel.green = param.lut[green];
+        
+        blue = imagedata.channel.blue;
+        imagedata.channel.blue = param.lut[blue];
+        
+        data[i] = imagedata.raw;
         }
 }
 
@@ -562,30 +576,22 @@ void ImageFilters::invertImage(uint *data, int w, int h)
        return;
        }
        
-    int           x, y;
-    unsigned int *q;
-    uchar         red, green, blue, alpha;
+    int           i;
+    uchar         red, green, blue;
     imageData     imagedata;
     
-    for(y = 0 ; y < h ; y++)
-       {
-       q = data + (w * y);
-                   
-       for(x = 0 ; x < w ; x++)
-          {
-          imagedata.raw = q[x];
-          red           = imagedata.channel.red;
-          green         = imagedata.channel.green;
-          blue          = imagedata.channel.blue;
-          alpha         = imagedata.channel.alpha;
+    for (i = 0; i < w*h; i++)
+        {
+        imagedata.raw = data[i];
+        red           = imagedata.channel.red;
+        green         = imagedata.channel.green;
+        blue          = imagedata.channel.blue;
     
-          imagedata.channel.red   = 255 - red;
-          imagedata.channel.green = 255 - green;
-          imagedata.channel.blue  = 255 - blue;
-          imagedata.channel.alpha = 255 - alpha;
-          q[x] = imagedata.raw;
-          }
-      }
+        imagedata.channel.red   = 255 - red;
+        imagedata.channel.green = 255 - green;
+        imagedata.channel.blue  = 255 - blue;
+        data[i] = imagedata.raw;
+        }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -802,7 +808,7 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
        return;
        }
         
-    register int h, w, i = 0;
+    register int i;
     uchar        nGray, red, green , blue;
     imageData    imagedata;
     
@@ -810,29 +816,26 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
     double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
     double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
         
-    for (h = 0; h < Height; h++)
+    for (i = 0; i < Width*Height; i++)
         {
-        for (w = 0; w < Width; w++, i++)
+        imagedata.raw = data[i];
+        red           = imagedata.channel.red;
+        green         = imagedata.channel.green;
+        blue          = imagedata.channel.blue;
+            
+        if (bMonochrome)
             {
-            imagedata.raw = data[i];
-            red           = imagedata.channel.red;
-            green         = imagedata.channel.green;
-            blue          = imagedata.channel.blue;
-            
-            if (bMonochrome)
-                {
-                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
-                }
-            else
-                {
-                imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
-                imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
-                }
-            
-            data[i] = imagedata.raw;
+            nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+            imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
             }
+        else
+            {
+            imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+            imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
+            imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
+            }
+        
+        data[i] = imagedata.raw;
         }
 }
 
