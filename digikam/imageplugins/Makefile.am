@@ -12,7 +12,7 @@ INCLUDES    = -I$(top_srcdir)/digikam/utilities/imageeditor \
 kde_module_LTLIBRARIES = digikamimageplugin_core.la
 
 digikamimageplugin_core_la_SOURCES = \
-	imageplugin_core.cpp \
+	imageplugin_core.cpp imageeffect_autocorrection.cpp \
 	imageeffect_bwsepia.cpp imageeffect_ratiocrop.cpp \
 	imageeffect_bcg.cpp imageeffect_redeye.cpp \
 	imageeffect_blur.cpp imageeffect_sharpen.cpp \

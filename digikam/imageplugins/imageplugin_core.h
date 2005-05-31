@@ -48,10 +48,7 @@ private:
     KAction *m_BCGAction;
     KAction *m_HSLAction;
     KAction *m_RGBAction;
-    KAction *m_stretchContrastAction;
-    KAction *m_normalizeAction;
-    KAction *m_equalizeAction;
-    KAction *m_autolevelseAction;
+    KAction *m_autoCorrectionAction;
     KAction *m_invertAction;
     KAction *m_BWAction;
     KAction *m_aspectRatioCropAction;
@@ -65,10 +62,7 @@ private slots:
     void slotBCG();
     void slotRGB();
     void slotHSL();
-    void slotStretchContrast();
-    void slotNormalize();
-    void slotEqualize();
-    void slotAutoLevels();
+    void slotAutoCorrection();
     void slotInvert();
     
     void slotBW();

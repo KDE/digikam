@@ -165,9 +165,54 @@ void ImageEffect_BWSepia::slotOk()
        {
        int type = m_typeCB->currentItem();
 
+       QString name;
+       
+       switch (type)
+          {
+          case BWNeutral:
+             name = i18n("Neutral Black && White");
+          break;
+
+          case BWGreenFilter:
+             name = i18n("Black && White With Green Filter");
+          break;
+
+          case BWOrangeFilter:
+             name = i18n("Black && White With Orange Filter");
+          break;
+
+          case BWRedFilter:
+             name = i18n("Black && White With Red Filter");
+          break;
+
+          case BWYellowFilter:
+             name = i18n("Black && White With Yellow Filter");
+          break;
+
+          case BWSepia:
+             name = i18n("Black && White Sepia");
+          break;
+
+          case BWBrown:
+             name = i18n("Black && White Brown");
+          break;
+
+          case BWCold:
+             name = i18n("Black && White Cold");
+          break;
+
+          case BWSelenium:
+             name = i18n("Black && White Selenium");
+          break;
+          
+          case BWPlatinum:
+             name = i18n("Black && White Platinum");
+          break;
+          }
+          
        blackAndWhiteConversion(data, w, h, type);
 
-       iface->putOriginalData(i18n("Black & White"), data);
+       iface->putOriginalData(name, data);
 
        delete [] data;
        }
