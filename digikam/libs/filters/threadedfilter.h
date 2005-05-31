@@ -66,10 +66,10 @@ public:
     
     ~ThreadedFilter(){ stopComputation(); };
     
-    void   startComputation(void);
-    void   stopComputation(void);
-    
     QImage getTargetImage(void) { return m_destImage; };
+    
+    void startComputation(void);
+    void stopComputation(void);
     
 protected:
 
@@ -96,6 +96,9 @@ protected:
     
     // Main image filter method.
     virtual void filterImage(void){};
+    
+    // Clean up filter data if necessary. Call by stopComputation() method.
+    virtual void cleanupFilter(void){};
     
 };    
 

@@ -37,20 +37,12 @@ extern "C"
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qevent.h>
 #include <qfile.h>
-#include <qdatetime.h> 
 
 // KDE includes.
 
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-
-// Digikam includes.
-
-#include <digikamheaders.h>
 
 // Local includes.
  
@@ -69,12 +61,8 @@ CimgIface::CimgIface(QImage *orgImage,
                      bool restoreMode, bool inpaintMode, bool resizeMode, 
                      char* visuflowMode, int newWidth, int newHeight,
                      QImage *inPaintingMask, QObject *parent)
-         : QThread()
+         : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_orgImage   = orgImage->copy();  
-    m_parent     = parent;
-    m_cancel     = false;
-        
     m_restore    = restoreMode;
     m_inpaint    = inpaintMode;
     m_resize     = resizeMode;
@@ -110,29 +98,10 @@ CimgIface::CimgIface(QImage *orgImage,
        m_inPaintingMask.save(m_tmpMaskFile, "PNG");
        kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
        }
-        
-    if (m_orgImage.width() && m_orgImage.height())
-       {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
-       }
-    else  // No image data 
-       {
-       if (m_parent)           // If parent then send event about a problem.
-          {
-          m_eventData.starting = false;
-          m_eventData.success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-       }
 }
 
 CimgIface::~CimgIface()
 { 
-    stopComputation();
-    
     if (m_tmpMaskFile != QString::null)
        {
        // Remove temporary inpainting mask.
@@ -141,35 +110,16 @@ CimgIface::~CimgIface()
        }
 }
 
-void CimgIface::stopComputation(void)
+void CimgIface::cleanupFilter(void)
 {
-    m_cancel = true;
-    wait();
     cleanup();
     img   = CImg<>();    
     eigen = CImgl<>(CImg<>(), CImg<>());
 }
 
-// List of threaded operations.
-
-void CimgIface::run()
+void CimgIface::filterImage()
 {
-    startComputation();
-}
-
-void CimgIface::startComputation()
-{
-    QDateTime startDate = QDateTime::currentDateTime();
     kdDebug() << "CimgIface::Initialization..." << endl;
-    
-    if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
-
     // Big/Little Endian color manipulation compatibility.
     Digikam::ImageFilters::imageData imagedata;
                    
@@ -235,33 +185,6 @@ void CimgIface::startComputation()
           imagedata.channel.red   = (uchar) img(x, y, 2);
           newData[i]              = imagedata.raw;
           }
-       }
-    
-    QDateTime endDate = QDateTime::currentDateTime();
-    
-    if (!m_cancel)
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = true;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "CimgIface::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-    else
-       {
-       if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
-          
-       kdDebug() << "CimgIface::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
 }
 

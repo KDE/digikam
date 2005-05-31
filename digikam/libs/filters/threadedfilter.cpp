@@ -73,6 +73,7 @@ void ThreadedFilter::stopComputation(void)
 {
     m_cancel = true;
     wait();
+    cleanupFilter();
 }
 
 void ThreadedFilter::startComputation()
