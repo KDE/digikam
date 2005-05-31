@@ -957,6 +957,8 @@
                 <graphic srccredit="The Hue Saturation Lightness Tool in Action" fileref="editorhsladjust.png"/>
             </figure>
                                     
+            <anchor id="autocolorcorrectiontool.anchor"/>
+
             <para>
             The <guilabel>Normalize</guilabel>, <guilabel>Equalize</guilabel>, <guilabel>Auto Levels</guilabel>, and <guilabel>Stretch Contrast</guilabel> functions under the <guilabel>Fix</guilabel> menu will attempt to work out the best color levels automatically. You will need to experiment with the effects of these functions to see what works best with your photograph. 
             
