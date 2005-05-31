@@ -81,7 +81,6 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     int                   x, y;
     unsigned int         *q;
     register long         i;               
-    unsigned char         r, g, b, a;
     
     // Create an histogram of the current image.     
     Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
@@ -111,7 +110,7 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     memset(&high,      0, sizeof(struct double_packet));            
     memset(&low,       0, sizeof(struct double_packet));
     
-    for(i = 0 ; i <= 255 ; ++i)
+    for(i = 0 ; i <= 255 ; i++)
        {
        intensity.red   += histogram->getValue(Digikam::ImageHistogram::RedChannel, i);
        intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);
@@ -124,14 +123,17 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     high = map[255];
     memset(equalize_map, 0, 256*sizeof(short_packet));
     
-    for(i = 0 ; i <= 255 ; ++i)
+    for(i = 0 ; i <= 255 ; i++)
        {
        if(high.red != low.red)
           equalize_map[i].red=(unsigned short)((65535*(map[i].red-low.red))/(high.red-low.red));
+       
        if(high.green != low.green)
           equalize_map[i].green=(unsigned short)((65535*(map[i].green-low.green))/(high.green-low.green));
+       
        if(high.blue != low.blue)
           equalize_map[i].blue=(unsigned short)((65535*(map[i].blue-low.blue))/(high.blue-low.blue));
+       
        if(high.alpha != low.alpha)
           equalize_map[i].alpha=(unsigned short)((65535*(map[i].alpha-low.alpha))/(high.alpha-low.alpha));
        }
@@ -140,32 +142,39 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     delete [] map;
     
     // Stretch the histogram.
+
+    uchar     red, green, blue, alpha;
+    imageData imagedata;
     
-    for(y = 0 ; y < h ; ++y)
+    for(y = 0 ; y < h ; y++)
        {
        q = data + (w * y);
-            
-       for(x = 0 ; x < w ; ++x)
+                   
+       for(x = 0 ; x < w ; x++)
           {
+          imagedata.raw = q[x];
+          red           = imagedata.channel.red;
+          green         = imagedata.channel.green;
+          blue          = imagedata.channel.blue;
+          alpha         = imagedata.channel.alpha;
+    
           if(low.red != high.red)
-             r = (equalize_map[(unsigned char)(q[x] >> 16)].red)/257;
-          else
-             r = (unsigned char)(q[x] >> 16);      
+             red = (equalize_map[red].red)/257;
+                  
           if(low.green != high.green)
-             g = (equalize_map[(unsigned char)(q[x] >> 8)].green)/257;
-          else
-             g = (unsigned char)(q[x] >> 8);       
+             green = (equalize_map[green].green)/257;
+             
           if(low.blue != high.blue)
-             b = (equalize_map[(unsigned char)(q[x])].blue)/257;
-          else
-             b = (unsigned char)(q[x]);            
+             blue = (equalize_map[blue].blue)/257;
+             
           if(low.alpha != high.alpha)
-             a = (equalize_map[(unsigned char)(q[x] >> 24)].alpha)/257;
-          else
-             a = (unsigned char)(q[x] >> 24);      
-          
-          q[x] = (unsigned int)(a << 24) + (unsigned int)(r << 16) + 
-                 (unsigned int)(g << 8)  + (unsigned int)(b);                
+             alpha = (equalize_map[alpha].alpha)/257;
+                       
+          imagedata.channel.red   = red;
+          imagedata.channel.green = green;
+          imagedata.channel.blue  = blue;
+          imagedata.channel.alpha = alpha;
+          q[x] = imagedata.raw;
           }
        }
     
@@ -192,7 +201,6 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     unsigned int         *q;
     register long         i;
     unsigned long         threshold_intensity;
-    unsigned char         r, g, b, a;
         
     // Create an histogram of the current image.     
     Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
@@ -382,7 +390,7 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     
     memset(normalize_map, 0, 256*sizeof(struct short_packet));
     
-    for(i = 0 ; i <= (long)255 ; ++i)
+    for(i = 0 ; i <= (long)255 ; i++)
        {
        if(i < (long) low.red)
           normalize_map[i].red = 0;
@@ -413,31 +421,38 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
           normalize_map[i].alpha = (unsigned short)((65535*(i-low.alpha))/(high.alpha-low.alpha));
        }
 
-    for(y = 0 ; y < h ; ++y)
+    uchar     red, green, blue, alpha;
+    imageData imagedata;
+    
+    for(y = 0 ; y < h ; y++)
        {
        q = data + (w * y);
-            
-       for(x = 0 ; x < w ; ++x)
+                   
+       for(x = 0 ; x < w ; x++)
           {
+          imagedata.raw = q[x];
+          red           = imagedata.channel.red;
+          green         = imagedata.channel.green;
+          blue          = imagedata.channel.blue;
+          alpha         = imagedata.channel.alpha;
+    
           if(low.red != high.red)
-             r = (normalize_map[(unsigned char)(q[x] >> 16)].red)/257;
-          else
-             r = (unsigned char)(q[x] >> 16);      
+             red = (normalize_map[red].red)/257;
+                  
           if(low.green != high.green)
-             g = (normalize_map[(unsigned char)(q[x] >> 8)].green)/257;
-          else
-             g = (unsigned char)(q[x] >> 8);       
+             green = (normalize_map[green].green)/257;
+             
           if(low.blue != high.blue)
-             b = (normalize_map[(unsigned char)(q[x])].blue)/257;
-          else
-             b = (unsigned char)(q[x]);            
+             blue = (normalize_map[blue].blue)/257;
+             
           if(low.alpha != high.alpha)
-             a = (normalize_map[(unsigned char)(q[x] >> 24)].alpha)/257;
-          else
-             a = (unsigned char)(q[x] >> 24);      
-          
-          q[x] = (unsigned int)(a << 24) + (unsigned int)(r << 16) + 
-                 (unsigned int)(g << 8)  + (unsigned int)(b);                
+             alpha = (normalize_map[alpha].alpha)/257;
+                       
+          imagedata.channel.red   = red;
+          imagedata.channel.green = green;
+          imagedata.channel.blue  = blue;
+          imagedata.channel.alpha = alpha;
+          q[x] = imagedata.raw;
           }
        }
     
@@ -449,21 +464,21 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
 
 void ImageFilters::normalizeImage(uint *data, int w, int h)
 {
-    NormalizeParam param;
-    int    x, i, b;
-    uchar  range;
-    uchar *p;
+    NormalizeParam  param;
+    int             x, i, b;
+    uchar           range;
+    uchar          *p;
 
     // Find min. and max. values.
     
     param.min   = 255;
     param.max   = 0;
 
-    for (i = 0 ; i < h*w ; ++i)
+    for (i = 0 ; i < h*w ; i++)
         {
         p = (uchar *)(data + i);
         
-        for (b = 0 ; b < 3 ; ++b)
+        for (b = 0 ; b < 3 ; b++)
            {
            if (p[b] < param.min)
               param.min = p[b];
@@ -478,7 +493,7 @@ void ImageFilters::normalizeImage(uint *data, int w, int h)
 
     if (range != 0)
        {
-       for (x = (int)param.min ; x <= (int)param.max ; ++x)
+       for (x = (int)param.min ; x <= (int)param.max ; x++)
           param.lut[x] = (uchar)(255 * (x - param.min) / range);
        }
     else
@@ -486,11 +501,11 @@ void ImageFilters::normalizeImage(uint *data, int w, int h)
 
     // Apply LUT to image.
        
-    for (i = 0 ; i < h*w ; ++i)
+    for (i = 0 ; i < h*w ; i++)
         {
         p = (uchar *)(data + i);
         
-        for (b = 0 ; b < 3 ; ++b)
+        for (b = 0 ; b < 3 ; b++)
            p[b] = param.lut[p[b]];
   
         p[3] = p[3];
@@ -547,32 +562,30 @@ void ImageFilters::invertImage(uint *data, int w, int h)
        return;
        }
        
-    // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
-
-    int LineWidth = w * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-      
-    uchar* bits    = (uchar*)data;
-    uchar* newBits = (uchar*)desData;
-
-    int i = 0;
+    int           x, y;
+    unsigned int *q;
+    uchar         red, green, blue, alpha;
+    imageData     imagedata;
     
-    for (int y = 0 ; y < h ; ++y)
-        {
-        for (int x = 0 ; x < w ; ++x)
-            {
-            i = y * LineWidth + 4 * x;
-
-            newBits[i+3] = 255 - bits[i+3];
-            newBits[i+2] = 255 - bits[i+2];
-            newBits[i+1] = 255 - bits[i+1];
-            newBits[ i ] = 255 - bits[ i ];
-            }
-        }
-                        
-    memcpy (data, desData, w*h*4);
-    delete [] desData;
+    for(y = 0 ; y < h ; y++)
+       {
+       q = data + (w * y);
+                   
+       for(x = 0 ; x < w ; x++)
+          {
+          imagedata.raw = q[x];
+          red           = imagedata.channel.red;
+          green         = imagedata.channel.green;
+          blue          = imagedata.channel.blue;
+          alpha         = imagedata.channel.alpha;
+    
+          imagedata.channel.red   = 255 - red;
+          imagedata.channel.green = 255 - green;
+          imagedata.channel.blue  = 255 - blue;
+          imagedata.channel.alpha = 255 - alpha;
+          q[x] = imagedata.raw;
+          }
+      }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -834,9 +847,10 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
        return;
        }
 
-    int       red, green , blue;
     int       hue, sat, lig;
     float     gray;
+    
+    int       red, green , blue;
     imageData imagedata;
     
     hue = redMask;
