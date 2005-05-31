@@ -37,12 +37,13 @@
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumpropsedit.h"
+#include "folderitem.h"
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
 //-----------------------------------------------------------------------------
 
-class AlbumFolderViewItem : public QListViewItem
+class AlbumFolderViewItem : public FolderItem
 {
 public:
     AlbumFolderViewItem(QListView *parent, PAlbum *album);
@@ -55,13 +56,13 @@ private:
 };
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
-    : QListViewItem(parent, album->title())
+    : FolderItem(parent, album->title())
 {
     m_album = album;
 }
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
-    : QListViewItem(parent, album->title())
+    : FolderItem(parent, album->title())
 {
     m_album = album;
 }

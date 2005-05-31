@@ -34,6 +34,7 @@
 #include "syncjob.h"
 #include "tagcreatedlg.h"
 #include "dragobjects.h"
+#include "folderitem.h"
 
 static QPixmap getBlendedIcon(TAlbum* tag)
 {
@@ -66,7 +67,7 @@ static QPixmap getBlendedIcon(TAlbum* tag)
 // TagFolderViewItem
 //-----------------------------------------------------------------------------
 
-class TagFolderViewItem : public QListViewItem
+class TagFolderViewItem : public FolderItem
 {
 public:
     TagFolderViewItem(QListView *parent, TAlbum *tag);
@@ -79,14 +80,14 @@ private:
 };
 
 TagFolderViewItem::TagFolderViewItem(QListView *parent, TAlbum *tag)
-    : QListViewItem(parent, tag->title())
+    : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
     m_tag = tag;
 }
 
 TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
-    : QListViewItem(parent, tag->title())
+    : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
     m_tag = tag;
