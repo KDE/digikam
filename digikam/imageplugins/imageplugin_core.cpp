@@ -79,7 +79,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotRGB()),
                       actionCollection(), "implugcore_rgb");
 
-    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autolevels", 0,
+    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 0,
                                  this, SLOT(slotAutoCorrection()),
                                  actionCollection(), "implugcore_autocorrection");
 
