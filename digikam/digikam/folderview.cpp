@@ -70,14 +70,29 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
-            QListViewItem *item = dynamic_cast<QListViewItem*>(itemAt(e->pos()));
-            if (item)
+            QPoint vp = contentsToViewport(e->pos());
+            QListViewItem *item = itemAt(vp);
+            if (mouseInItemRect(item, vp.x()))
                 setCursor(KCursor::handCursor());
             else
                 unsetCursor();
         }
         return;
     }
+}
+
+bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
+{
+    if (!item)
+        return false;
+    
+    x += contentsX();
+
+    int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
+    offset    += itemMargin();
+    int width = item->width(fontMetrics(), this, 0);
+    
+    return (x > offset && x < (offset + width));
 }
 
 

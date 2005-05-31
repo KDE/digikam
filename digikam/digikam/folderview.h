@@ -46,7 +46,9 @@ protected slots:
     virtual void slotSelectionChanged() = 0;
     
 private:
-    
+
+    bool mouseInItemRect(QListViewItem* item, int x) const;
+
     FolderViewPriv      *d;
 };
 
