@@ -40,11 +40,6 @@ public:
     AlbumFolderView(QWidget *parent);
     ~AlbumFolderView();
 
-protected:
-
-    void contentsMousePressEvent(QMouseEvent *e);    
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    
 private slots:
 
     void slotAlbumAdded(Album *);

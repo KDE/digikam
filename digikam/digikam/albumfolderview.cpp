@@ -21,13 +21,12 @@
 #include <qguardedptr.h>
 #include <qdir.h>
 #include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kglobalsettings.h>
-#include <kcursor.h>
 #include <kmessagebox.h>
 
 #include "albumfolderview.h"
@@ -262,33 +261,6 @@ void AlbumFolderView::slotSelectionChanged()
     }
     
     d->albumMan->setCurrentAlbum(albumitem->getAlbum());
-}
-
-void AlbumFolderView::contentsMousePressEvent(QMouseEvent *e)
-{
-    if(!e)
-        return;
-
-    FolderView::contentsMousePressEvent(e);
-}
-
-void AlbumFolderView::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    if(!e) 
-        return;
-
-    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(itemAt(e->pos()));
-
-    if(e->state() == NoButton)
-    {
-        if (KGlobalSettings::changeCursorOverIcon())
-        {
-            if(item)
-                setCursor(KCursor::handCursor());
-            else
-                unsetCursor();
-        }
-    }
 }
 
 void AlbumFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)

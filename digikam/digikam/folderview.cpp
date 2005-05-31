@@ -16,6 +16,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
+#include <kglobalsettings.h>
+#include <kcursor.h>
 #include <kdebug.h>
 
 #include "folderview.h"
@@ -59,5 +61,24 @@ bool FolderView::active()
 {
     return d->active;
 }
+
+void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    QListView::contentsMouseMoveEvent(e);
+
+    if(e->state() == NoButton)
+    {
+        if(KGlobalSettings::changeCursorOverIcon())
+        {
+            QListViewItem *item = dynamic_cast<QListViewItem*>(itemAt(e->pos()));
+            if (item)
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
+        return;
+    }
+}
+
 
 #include "folderview.moc"

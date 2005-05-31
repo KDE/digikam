@@ -36,7 +36,11 @@ public:
 
     void setActive(bool val);
     bool active();
-        
+
+protected:
+
+    void contentsMouseMoveEvent(QMouseEvent *e);
+ 
 protected slots:
     
     virtual void slotSelectionChanged() = 0;

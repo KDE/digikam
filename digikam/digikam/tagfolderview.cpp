@@ -27,8 +27,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
-#include <kcursor.h>
 
 #include "tagfolderview.h"
 #include "album.h"
@@ -254,20 +252,6 @@ void TagFolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 void TagFolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     FolderView::contentsMouseMoveEvent(e);
-
-    if(e->state() == NoButton)
-    {
-        if(KGlobalSettings::changeCursorOverIcon())
-        {
-            TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
-            if (item)
-                setCursor(KCursor::handCursor());
-            else
-                unsetCursor();
-        }
-        d->dragItem = 0;
-        return;
-    }
 
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
