@@ -31,7 +31,6 @@
 #include "thumbnailjob.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
-#include "thumbdb.h"
 #include "albumsettings.h"
 #include "pixmapmanager.h"
 
