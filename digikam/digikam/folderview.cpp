@@ -57,7 +57,7 @@ void FolderView::setActive(bool val)
         slotSelectionChanged();
 }
 
-bool FolderView::active()
+bool FolderView::active() const
 {
     return d->active;
 }

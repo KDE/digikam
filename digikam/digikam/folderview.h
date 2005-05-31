@@ -35,7 +35,7 @@ public:
     ~FolderView();
 
     void setActive(bool val);
-    bool active();
+    bool active() const;
 
 protected:
 
