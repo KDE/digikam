@@ -18,12 +18,12 @@
 #ifndef TAGFILTERVIEW_H
 #define TAGFILTERVIEW_H
 
-#include <qlistview.h>
+#include "folderview.h"
 
 class Album;
 class TagFilterViewPriv;
 
-class TagFilterView : public QListView
+class TagFilterView : public FolderView
 {
     Q_OBJECT
 
@@ -37,7 +37,6 @@ public:
 protected:
 
     QDragObject* dragObject();
-    void contentsMouseMoveEvent(QMouseEvent *e);
     
 private slots:
 

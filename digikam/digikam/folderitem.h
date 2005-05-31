@@ -39,4 +39,21 @@ private:
     bool m_special;
 };
 
+class FolderCheckListItem : public QCheckListItem
+{
+public:
+
+    FolderCheckListItem(QListView* parent, const QString& text,
+                        QCheckListItem::Type tt);
+    FolderCheckListItem(QListViewItem* parent, const QString& text,
+                        QCheckListItem::Type tt);
+    virtual ~FolderCheckListItem();
+
+protected:
+
+    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
+    void setup();
+};
+    
+
 #endif /* FOLDERITEM_H */

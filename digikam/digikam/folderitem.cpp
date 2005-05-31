@@ -108,3 +108,108 @@ void FolderItem::setup()
 
     setHeight(h);
 }
+
+FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
+                                         QCheckListItem::Type tt)
+    : QCheckListItem(parent, text, tt)
+{
+}
+
+FolderCheckListItem::FolderCheckListItem(QListViewItem* parent, const QString& text,
+                                         QCheckListItem::Type tt)
+    : QCheckListItem(parent, text, tt)
+{
+}
+
+FolderCheckListItem::~FolderCheckListItem()
+{
+}
+
+void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
+                                    int column, int width, int)
+{
+    FolderView *fv = dynamic_cast<FolderView*>(listView());
+    if (!fv)
+        return;
+
+    
+    QFontMetrics fm(p->fontMetrics());
+
+    QString t = text(column);
+
+    int margin = fv->itemMargin();
+    int r      = margin;
+    const QPixmap* icon = pixmap(column);
+
+    int styleflags = QStyle::Style_Default;
+    switch (state())
+    {
+    case(QCheckListItem::Off):
+        styleflags |= QStyle::Style_Off;
+        break;
+    case(QCheckListItem::NoChange):
+        styleflags |= QStyle::Style_NoChange;
+        break;
+    case(QCheckListItem::On):
+        styleflags |= QStyle::Style_On;
+        break;
+    }
+
+    if (isSelected())
+        styleflags |= QStyle::Style_Selected;
+
+    if (isEnabled() && fv->isEnabled())
+        styleflags |= QStyle::Style_Enabled;
+
+    if ((type() == QCheckListItem::CheckBox) ||
+        (type() == QCheckListItem::CheckBoxController))
+    {
+        int boxsize = fv->style().pixelMetric(QStyle::PM_CheckListButtonSize, fv); 
+        int x = 0;
+        int y = (height() - boxsize)/2 + margin;
+        r += boxsize + 4;
+
+        p->fillRect(0, 0, r, height(), cg.base());
+        
+        fv->style().drawPrimitive(QStyle::PE_CheckListIndicator, p,
+                                  QRect(x, y, boxsize, height()),
+                                  cg, styleflags, QStyleOption(this));
+    }
+
+    
+    if (isSelected())
+    {
+        p->drawPixmap(r, 0, fv->itemBasePixmapSelected());
+        p->setPen(cg.highlightedText());
+    }
+    else
+    {
+        p->drawPixmap(r, 0, fv->itemBasePixmapRegular());
+        p->setPen(cg.text());
+    }
+
+    
+    if (icon)
+    {
+        int xo = r;
+        int yo = (height() - icon->height())/2;
+
+        p->drawPixmap( xo, yo, *icon );
+
+        r += icon->width() + fv->itemMargin();
+    }
+
+    p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t);
+}
+
+void FolderCheckListItem::setup()
+{
+    widthChanged();
+
+    FolderView *fv = dynamic_cast<FolderView*>(listView());
+    int h = fv->itemHeight();
+    if (h % 2 > 0)
+        h++;
+
+    setHeight(h);
+}

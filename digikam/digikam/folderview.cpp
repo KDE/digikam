@@ -52,6 +52,8 @@ FolderView::FolderView(QWidget *parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
+
+    setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     fontChange(font());
 }
 

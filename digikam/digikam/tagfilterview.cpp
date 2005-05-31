@@ -37,6 +37,7 @@
 #include "album.h"
 #include "syncjob.h"
 #include "dragobjects.h"
+#include "folderitem.h"
 #include "tagfilterview.h"
 
 static QPixmap getBlendedIcon(TAlbum* album)
@@ -66,13 +67,13 @@ static QPixmap getBlendedIcon(TAlbum* album)
     return baseIcon;
 }
 
-class TagFilterViewItem : public QCheckListItem
+class TagFilterViewItem : public FolderCheckListItem
 {
 public:
 
     TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
-        : QCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
-                         QCheckListItem::CheckBoxController)
+        : FolderCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
+                              QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
         m_untagged = untagged;
@@ -80,7 +81,7 @@ public:
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
-        : QCheckListItem(parent, tag->title(), QCheckListItem::CheckBoxController)
+        : FolderCheckListItem(parent, tag->title(), QCheckListItem::CheckBoxController)
     {
         m_tag = tag;
         m_untagged = false;
@@ -113,7 +114,7 @@ public:
     {
         if (!m_untagged)
         {
-            QCheckListItem::paintCell(p, cg, column, width, align);
+            FolderCheckListItem::paintCell(p, cg, column, width, align);
             return;
         }
 
@@ -125,7 +126,7 @@ public:
         QColorGroup mcg(cg);
         mcg.setColor(QColorGroup::Text, Qt::darkRed);
         
-        QCheckListItem::paintCell(p, mcg, column, width, align);
+        FolderCheckListItem::paintCell(p, mcg, column, width, align);
     }
     
     TAlbum* m_tag;
@@ -141,7 +142,7 @@ public:
 };
 
 TagFilterView::TagFilterView(QWidget* parent)
-    : QListView(parent)
+    : FolderView(parent)
 {
     d = new TagFilterViewPriv;
     d->timer = new QTimer(this);
@@ -176,27 +177,6 @@ TagFilterView::~TagFilterView()
 void TagFilterView::triggerChange()
 {
     d->timer->start(50, true);
-}
-
-void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    if (!e) 
-        return;
-
-    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(e->pos()));
-
-    if (e->state() == NoButton)
-    {
-        if (KGlobalSettings::changeCursorOverIcon())
-        {
-            if(item)
-                setCursor(KCursor::handCursor());
-            else
-                unsetCursor();
-        }
-    }
-
-    QListView::contentsMouseMoveEvent(e);
 }
 
 QDragObject* TagFilterView::dragObject()
