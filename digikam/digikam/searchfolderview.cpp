@@ -31,14 +31,16 @@
 #include "album.h"
 #include "albummanager.h"
 #include "searchquickdialog.h"
+#include "folderitem.h"
 #include "searchfolderview.h"
 
-class SearchFolderItem : public QListViewItem
+class SearchFolderItem : public FolderItem
 {
+    
 public:
 
     SearchFolderItem(QListView* parent, SAlbum* album)
-        : QListViewItem(parent, album->title()),
+        : FolderItem(parent, album->title()),
           m_album(album)
     {
         m_album->setExtraData(parent, this);
