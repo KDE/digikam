@@ -46,7 +46,7 @@
 
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
-                          : KDialogBase(Plain, i18n("Auto-Correction"),
+                          : KDialogBase(Plain, i18n("Auto Color Correction"),
                                         Help|Ok|Cancel, Ok,
                                         parent, 0, true, true),
                             m_parent(parent)
