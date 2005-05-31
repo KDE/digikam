@@ -405,7 +405,8 @@ void AlbumManager::scanDAlbums()
 AlbumList AlbumManager::allPAlbums() const
 {
     AlbumList list;
-    list.append(d->rootPAlbum);
+    if (d->rootPAlbum)
+        list.append(d->rootPAlbum);
 
     AlbumIterator it(d->rootPAlbum);
     while (it.current())
@@ -420,7 +421,8 @@ AlbumList AlbumManager::allPAlbums() const
 AlbumList AlbumManager::allTAlbums() const
 {
     AlbumList list;
-    list.append(d->rootTAlbum);
+    if (d->rootTAlbum)
+        list.append(d->rootTAlbum);
 
     AlbumIterator it(d->rootTAlbum);
     while (it.current())
@@ -435,7 +437,8 @@ AlbumList AlbumManager::allTAlbums() const
 AlbumList AlbumManager::allSAlbums() const
 {
     AlbumList list;
-    list.append(d->rootSAlbum);
+    if (d->rootSAlbum)
+        list.append(d->rootSAlbum);
 
     AlbumIterator it(d->rootSAlbum);
     while (it.current())
@@ -450,7 +453,8 @@ AlbumList AlbumManager::allSAlbums() const
 AlbumList AlbumManager::allDAlbums() const
 {
     AlbumList list;
-    list.append(d->rootDAlbum);
+    if (d->rootDAlbum)
+        list.append(d->rootDAlbum);
 
     AlbumIterator it(d->rootDAlbum);
     while (it.current())

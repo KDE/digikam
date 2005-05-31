@@ -37,13 +37,23 @@ public:
     void setActive(bool val);
     bool active() const;
 
+    int      itemHeight() const;
+    QPixmap  itemBasePixmapRegular() const;
+    QPixmap  itemBasePixmapSelected() const;
+    
 protected:
 
+    void resizeEvent(QResizeEvent* e);
     void contentsMouseMoveEvent(QMouseEvent *e);
+    void fontChange(const QFont& oldFont);
  
 protected slots:
     
-    virtual void slotSelectionChanged() = 0;
+    virtual void slotSelectionChanged();
+
+private slots:
+
+    void slotThemeChanged();
     
 private:
 

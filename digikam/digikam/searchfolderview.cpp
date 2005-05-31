@@ -170,7 +170,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
     SAlbum* album = (SAlbum*)a;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
-    item->setPixmap(0, SmallIcon("find", 22));
+    item->setPixmap(0, SmallIcon("find", 32));
     m_lastAddedItem = item;
 }
 

@@ -20,6 +20,9 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
+#include <qpixmap.h>
+
+#include "themeengine.h"
 #include "folderview.h"
 
 //-----------------------------------------------------------------------------
@@ -29,7 +32,11 @@
 class FolderViewPriv
 {
 public:
+
     bool        active;
+    QPixmap     itemRegPix;
+    QPixmap     itemSelPix;
+    int         itemHeight;
 };
 
 //-----------------------------------------------------------------------------
@@ -42,6 +49,10 @@ FolderView::FolderView(QWidget *parent)
     d = new FolderViewPriv;
     
     d->active = false;
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            SLOT(slotThemeChanged()));
+    fontChange(font());
 }
 
 FolderView::~FolderView()
@@ -60,6 +71,41 @@ void FolderView::setActive(bool val)
 bool FolderView::active() const
 {
     return d->active;
+}
+
+int FolderView::itemHeight() const
+{
+    return d->itemHeight;
+}
+
+QPixmap FolderView::itemBasePixmapRegular() const
+{
+    return d->itemRegPix;    
+}
+
+QPixmap FolderView::itemBasePixmapSelected() const
+{
+    return d->itemSelPix;    
+}
+
+void FolderView::resizeEvent(QResizeEvent* e)
+{
+    QListView::resizeEvent(e);
+
+    int w = frameRect().width();
+    int h = itemHeight();
+    if (d->itemRegPix.width() != w ||
+        d->itemRegPix.height() != h)
+    {
+        slotThemeChanged();
+    }
+}
+
+void FolderView::fontChange(const QFont& oldFont)
+{
+    d->itemHeight = QMAX(32 + 2*itemMargin(), fontMetrics().height());
+    QListView::fontChange(oldFont);
+    slotThemeChanged();
 }
 
 void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
@@ -95,5 +141,31 @@ bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
     return (x > offset && x < (offset + width));
 }
 
+void FolderView::slotThemeChanged()
+{
+    int w = frameRect().width();
+    int h = itemHeight();
+
+    d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
+    d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
+
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    cg.setColor(QColorGroup::Link, ThemeEngine::instance()->textSpecialRegColor());
+    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::instance()->textSpecialSelColor());
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
+
+    viewport()->update();
+}
+
+void FolderView::slotSelectionChanged()
+{
+    QListView::selectionChanged();    
+}
 
 #include "folderview.moc"

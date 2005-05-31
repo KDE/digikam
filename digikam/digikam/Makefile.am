@@ -43,7 +43,8 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
 			albumfolderview.cpp searchfolderview.cpp dio.cpp \
 			searchresultsview.cpp searchresultsitem.cpp \
-			searchquickdialog.cpp folderview.cpp
+			searchquickdialog.cpp \
+			folderview.cpp folderitem.cpp
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \

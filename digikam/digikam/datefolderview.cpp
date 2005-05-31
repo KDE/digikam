@@ -37,79 +37,33 @@
 #include "album.h"
 #include "albummanager.h"
 #include "monthwidget.h"
+#include "folderitem.h"
+#include "folderview.h"
 #include "datefolderview.h"
 
 class DateFolderViewPriv
 {
 public:
 
-    QListView*   listview;
+    FolderView*  listview;
     MonthWidget* monthview;
     bool         active;
 };
 
-class DateFolderItem : public QListViewItem
+class DateFolderItem : public FolderItem
 {
 public:
 
     DateFolderItem(QListView* parent, const QString& name)
-        : QListViewItem(parent, name), m_album(0)
+        : FolderItem(parent, name, true), m_album(0)
     {
     }
 
     DateFolderItem(QListViewItem* parent, const QString& name, DAlbum* album)
-        : QListViewItem(parent, name), m_album(album)
+        : FolderItem(parent, name), m_album(album)
     {
     }
 
-    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align)
-    {
-        if (m_album)
-        {
-            QListViewItem::paintCell(p, cg, column, width, align);
-            return;
-        }
-
-        QFont f(listView()->font());
-        f.setBold(true);
-        f.setItalic(true);
-        p->setFont(f);
-
-        int w = listView()->width();
-        const QScrollBar *vBar = listView()->verticalScrollBar();
-
-        if (vBar && vBar->isVisible())
-            w -= vBar->width();
-
-        if (isSelected())
-        {
-            p->setPen(cg.color(QColorGroup::HighlightedText));
-            p->fillRect( 0, 0, w, height(), cg.highlight());
-        }
-        else
-        {
-            p->setPen(cg.color(QColorGroup::Dark));
-            p->fillRect( 0, 0, w, height(), cg.base());
-        }
-
-        int x = 2;
-
-        p->drawPixmap(QRect(x, 0, pixmap(0)->width(), pixmap(0)->height()),
-                      *pixmap(0));
-        x += pixmap(0)->width() + 2;
-
-        QRect br;
-        p->drawText(x, 0, w - x, height(), AlignLeft | AlignVCenter,
-                    text(0), -1, &br);
-        x = br.right() + 5;
-
-        if ((x < w - 6))
-        {
-            QRect rcSep(x, height()/2, w-6-x, 1);
-            listView()->style().drawPrimitive(QStyle::PE_Separator, p, rcSep, cg);
-        }
-    }
-    
     int compare(QListViewItem* i, int , bool ) const
     {
         if (!i)
@@ -139,7 +93,7 @@ DateFolderView::DateFolderView(QWidget* parent)
 {
     d = new DateFolderViewPriv;
     d->active    = false;
-    d->listview  = new QListView(this);
+    d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
 
     d->listview->addColumn(i18n("My Dates"));
@@ -192,11 +146,11 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
-        parent->setPixmap(0, SmallIcon("date", 22));
+        parent->setPixmap(0, SmallIcon("date", 32));
     }
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
-    item->setPixmap(0, SmallIcon("date", 22));
+    item->setPixmap(0, SmallIcon("date", 32));
 
     album->setExtraData(this, item);
 }
