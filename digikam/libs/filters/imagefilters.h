@@ -31,6 +31,10 @@
 
 #include <kprogress.h>
 
+// Big/little endian detection from .configure script.
+
+#include "config.h"
+
 namespace Digikam
 {
 
@@ -42,9 +46,9 @@ public: // Structures to use for color management filters depending of architect
     struct channels
     {
     uchar   alpha;
-    uchar   blue;
-    uchar   green;
     uchar   red;
+    uchar   green;
+    uchar   blue;
     };
 #else                   // Intel like.
     struct channels
