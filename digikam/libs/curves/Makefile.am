@@ -8,6 +8,7 @@ libcurves_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/histogram \
+	-I$(top_srcdir)/digikam/libs/filters \
 	$(all_includes) 
 
 digikaminclude_HEADERS = imagecurves.h 
