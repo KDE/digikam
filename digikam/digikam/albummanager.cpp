@@ -306,6 +306,8 @@ void AlbumManager::scanPAlbums()
 
         insertPAlbum(album);
     } 
+
+    // TODO: remove deleted PAlbums
 }
 
 void AlbumManager::scanTAlbums()
@@ -362,6 +364,8 @@ void AlbumManager::scanTAlbums()
         // also insert it in the map we are doing lookup of parent tags
         tmap.insert(info.id, album);
     }
+
+    // TODO: remove deleted TAlbums
 }
 
 void AlbumManager::scanSAlbums()
@@ -1047,16 +1051,46 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    // TODO: only add newly listed albums
+    // insert all the DAlbums into a qmap for quick access
+    QMap<QDate, DAlbum*> albumMap;
+    
+    AlbumIterator it(d->rootDAlbum);
+    while (it.current())
+    {
+        DAlbum* a = (DAlbum*)(*it);
+        albumMap.insert(a->date(), a);
+        ++it;
+    }
+    
     QDataStream ds(data, IO_ReadOnly);
     while (!ds.atEnd())
     {
         QDate date;
         ds >> date;
+
+        // Do we already have this album
+        if (albumMap.contains(date))
+        {
+            // already there. remove from map
+            albumMap.remove(date);
+            continue;
+        }
+
+        // new album. create one
         DAlbum* album = new DAlbum(date);
         album->setParent(d->rootDAlbum);
         emit signalAlbumAdded(album);
-        
+    }
+
+    // Now the items contained in the map are the ones which
+    // have been deleted. 
+    for (QMap<QDate,DAlbum*>::iterator it = albumMap.begin();
+         it != albumMap.end(); ++it)
+    {
+        DAlbum* album = it.data();
+        emit signalAlbumDeleted(album);
+        d->albumIntDict.remove(album->globalID());
+        delete album;
     }
 }
 
