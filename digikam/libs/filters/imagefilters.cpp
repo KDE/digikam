@@ -78,8 +78,6 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     struct double_packet  high, low, intensity;
     struct double_packet *map;
     struct short_packet  *equalize_map;
-    int                   x, y;
-    unsigned int         *q;
     register long         i;               
     
     // Create an histogram of the current image.     
@@ -146,36 +144,31 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     uchar     red, green, blue, alpha;
     imageData imagedata;
     
-    for(y = 0 ; y < h ; y++)
+    for(i = 0 ; i < w*h ; i++)
        {
-       q = data + (w * y);
-                   
-       for(x = 0 ; x < w ; x++)
-          {
-          imagedata.raw = q[x];
-          red           = imagedata.channel.red;
-          green         = imagedata.channel.green;
-          blue          = imagedata.channel.blue;
-          alpha         = imagedata.channel.alpha;
-    
-          if(low.red != high.red)
-             red = (equalize_map[red].red)/257;
-                  
-          if(low.green != high.green)
-             green = (equalize_map[green].green)/257;
-             
-          if(low.blue != high.blue)
-             blue = (equalize_map[blue].blue)/257;
-             
-          if(low.alpha != high.alpha)
-             alpha = (equalize_map[alpha].alpha)/257;
-                       
-          imagedata.channel.red   = red;
-          imagedata.channel.green = green;
-          imagedata.channel.blue  = blue;
-          imagedata.channel.alpha = alpha;
-          q[x] = imagedata.raw;
-          }
+       imagedata.raw = data[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if(low.red != high.red)
+           red = (equalize_map[red].red)/257;
+                
+       if(low.green != high.green)
+           green = (equalize_map[green].green)/257;
+            
+       if(low.blue != high.blue)
+           blue = (equalize_map[blue].blue)/257;
+            
+       if(low.alpha != high.alpha)
+           alpha = (equalize_map[alpha].alpha)/257;
+                    
+       imagedata.channel.red   = red;
+       imagedata.channel.green = green;
+       imagedata.channel.blue  = blue;
+       imagedata.channel.alpha = alpha;
+       data[i] = imagedata.raw;
        }
     
     delete [] equalize_map;
@@ -197,8 +190,6 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     struct double_packet  high, low, intensity;
     struct short_packet  *normalize_map;
     long long             number_pixels;
-    int                   x, y;
-    unsigned int         *q;
     register long         i;
     unsigned long         threshold_intensity;
         
@@ -424,36 +415,31 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     uchar     red, green, blue, alpha;
     imageData imagedata;
     
-    for(y = 0 ; y < h ; y++)
+    for(i = 0 ; i < w*h ; i++)
        {
-       q = data + (w * y);
-                   
-       for(x = 0 ; x < w ; x++)
-          {
-          imagedata.raw = q[x];
-          red           = imagedata.channel.red;
-          green         = imagedata.channel.green;
-          blue          = imagedata.channel.blue;
-          alpha         = imagedata.channel.alpha;
-    
-          if(low.red != high.red)
-             red = (normalize_map[red].red)/257;
-                  
-          if(low.green != high.green)
-             green = (normalize_map[green].green)/257;
-             
-          if(low.blue != high.blue)
-             blue = (normalize_map[blue].blue)/257;
-             
-          if(low.alpha != high.alpha)
-             alpha = (normalize_map[alpha].alpha)/257;
-                       
-          imagedata.channel.red   = red;
-          imagedata.channel.green = green;
-          imagedata.channel.blue  = blue;
-          imagedata.channel.alpha = alpha;
-          q[x] = imagedata.raw;
-          }
+       imagedata.raw = data[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if(low.red != high.red)
+           red = (normalize_map[red].red)/257;
+                
+       if(low.green != high.green)
+           green = (normalize_map[green].green)/257;
+            
+       if(low.blue != high.blue)
+           blue = (normalize_map[blue].blue)/257;
+            
+       if(low.alpha != high.alpha)
+           alpha = (normalize_map[alpha].alpha)/257;
+                    
+       imagedata.channel.red   = red;
+       imagedata.channel.green = green;
+       imagedata.channel.blue  = blue;
+       imagedata.channel.alpha = alpha;
+       data[i] = imagedata.raw;
        }
     
     delete [] normalize_map;
