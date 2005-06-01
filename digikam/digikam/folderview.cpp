@@ -19,9 +19,9 @@
 #include <kglobalsettings.h>
 #include <kcursor.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include <qpixmap.h>
-#include <qapp.h>
 
 #include "themeengine.h"
 #include "folderview.h"
