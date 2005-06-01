@@ -47,6 +47,9 @@ protected:
     void contentsMousePressEvent(QMouseEvent *e);
     void contentsMouseReleaseEvent(QMouseEvent *e);
     void contentsMouseMoveEvent(QMouseEvent *e);
+    void contentsDragEnterEvent(QDragEnterEvent *e);
+    void contentsDragMoveEvent(QDragMoveEvent *e);
+    virtual bool acceptDrop(const QDropEvent *e) const;
         
     void startDrag();
     FolderItem* dragItem() const;

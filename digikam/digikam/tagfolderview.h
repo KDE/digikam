@@ -43,10 +43,9 @@ public:
 
 protected:
 
-    void contentsDragEnterEvent(QDragEnterEvent *e);
-    void contentsDragMoveEvent(QDragMoveEvent *e); 
     void contentsDropEvent(QDropEvent *e);
     QDragObject* dragObject();
+    bool acceptDrop(const QDropEvent *e) const;
     
 private slots:
 

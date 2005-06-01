@@ -21,6 +21,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qlistview.h>
+//#include 
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -74,6 +75,8 @@ public:
     TagFolderViewItem(QListViewItem *parent, TAlbum *tag);    
 
     TAlbum* getTag() const;
+
+    bool acceptDrop(const QMimeSource *e) const;
     
 private:
     TAlbum      *m_tag;
@@ -96,6 +99,11 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
 TAlbum* TagFolderViewItem::getTag() const
 {
     return m_tag;
+}
+
+bool TagFolderViewItem::acceptDrop(const QMimeSource *e) const
+{
+    return(TagDrag::canDecode(e) || TagListDrag::canDecode(e));
 }
 
 //-----------------------------------------------------------------------------
@@ -396,33 +404,18 @@ QDragObject* TagFolderView::dragObject()
     return t;
 }
 
-void TagFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
+bool TagFolderView::acceptDrop(const QDropEvent *e) const
 {
-    FolderView::contentsDragEnterEvent(e);
-    
-    if(!e)
-        return;
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
+    TagFolderViewItem *drag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
-    e->accept(
-        TagDrag::canDecode(e) ||
-        TagListDrag::canDecode(e)
-    );    
-}
-
-void TagFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
-{
-    FolderView::contentsDragMoveEvent(e);
-    
-    if(dragItem() == itemAt(e->pos()))
+    if(!item || drag == item
+       || drag->getTag()->isAncestorOf(item->getTag()))
     {
-        e->ignore();
-        return;
+        return false;
     }
 
-    e->accept(
-        TagDrag::canDecode(e) ||
-        TagListDrag::canDecode(e)
-    );
+    return item->acceptDrop(e);
 }
 
 void TagFolderView::contentsDropEvent(QDropEvent *e)

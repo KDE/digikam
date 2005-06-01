@@ -175,6 +175,25 @@ FolderItem* FolderView::dragItem() const
     return d->dragItem;
 }
 
+void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
+{
+    QListView::contentsDragMoveEvent(e);
+    
+    e->accept(acceptDrop(e));
+}
+
+void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
+{
+    QListView::contentsDragMoveEvent(e);
+    
+    e->accept(acceptDrop(e));
+}
+
+bool FolderView::acceptDrop(const QDropEvent *) const
+{
+    return false;
+}
+
 bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
 {
     if (!item)
