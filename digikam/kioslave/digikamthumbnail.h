@@ -32,13 +32,13 @@ class KURL;
 class QCString;
 class QString;
 class QImage;
+class QApplication;
 
 class kio_digikamthumbnailProtocol : public KIO::SlaveBase
 {
 public:
 
-    kio_digikamthumbnailProtocol(const QCString &pool_socket,
-                                 const QCString &app_socket);
+    kio_digikamthumbnailProtocol(int argc, char** argv);
     virtual ~kio_digikamthumbnailProtocol();
     virtual void get(const KURL& url);
 
@@ -46,6 +46,7 @@ private:
 
     bool loadJPEG(QImage& image, const QString& path);
     bool loadImlib2(QImage& image, const QString& path);
+    bool loadKDEThumbCreator(QImage& image, const QString& path);
     bool loadDCRAW(QImage& image,  const QString& path);
     void createThumbnailDirs();
 
@@ -58,6 +59,10 @@ private:
 
     QString smallThumbPath_;
     QString bigThumbPath_;
+
+    QApplication *app_;
+    int           argc_;
+    char**        argv_;
 };
 
 #endif  // _digikamthumbnail_H_

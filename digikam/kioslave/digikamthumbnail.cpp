@@ -32,6 +32,8 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qwmatrix.h>
+#include <qregexp.h>
+#include <qapplication.h>
 
 // KDE includes.
 
@@ -45,6 +47,10 @@
 #include <kstandarddirs.h>
 #include <kmdcodec.h>
 #include <ktempfile.h>
+#include <ktrader.h>
+#include <klibloader.h>
+#include <kmimetype.h>
+#include <kio/thumbcreator.h>
 
 // C Ansi includes.
 
@@ -59,6 +65,7 @@ extern "C"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 #include <png.h>
 }
 
@@ -277,10 +284,13 @@ static QImage loadPNG(const QString& path)
     return qimage;
 }
 
-kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(const QCString &pool_socket,
-                                                           const QCString &app_socket)
-    : SlaveBase("kio_digikamthumbnail", pool_socket, app_socket)
+kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv) 
+    : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
 {
+    argc_ = argc;
+    argv_ = argv;
+    app_  = 0;
+    
     createThumbnailDirs();
 }
 
@@ -334,18 +344,22 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         // Try JPEG loading...
         if ( !loadJPEG(img, url.path()) )
         {
-            // Try to load with imlib2 API...
+            // Try to load with imlib2
             if ( !loadImlib2(img, url.path()) )
             {
-                // Try to load with QT/KDELib API...
+                // Try to load with QT/KDELib
                 if (!img.load(url.path()))
                 {
-                    // Try to load with dcraw
-                    loadDCRAW( img, url.path() );
+                    // Try to load with KDE thumbcreators
+                    if (!loadKDEThumbCreator(img, url.path()))
+                    {
+                        // Try to load with dcraw
+                        loadDCRAW( img, url.path() );
+                    }
                 }
             }
         }
-
+        
         if (img.isNull())
         {
             error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
@@ -646,6 +660,78 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     return true;
 }
 
+bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image,
+                                                       const QString& path)
+{
+    // this sucks royally. some of the thumbcreators need an instance of
+    // app running so that they can use pixmap. till they get their 
+    // code fixed, we will have to create a qapp instance.
+    if (!app_)
+        app_ = new QApplication(argc_, argv_);
+    
+    QString mimeType = KMimeType::findByURL(path)->name();
+    if (mimeType.isEmpty())
+    {
+        kdDebug() << "Mimetype not found" << endl;
+        return false;
+    }
+
+    QString mimeTypeAlt = mimeType.replace(QRegExp("/.*"), "/*");
+    
+    QString plugin;
+    
+    KTrader::OfferList plugins = KTrader::self()->query("ThumbCreator");
+    for (KTrader::OfferList::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
+    {
+        QStringList mimeTypes = (*it)->property("MimeTypes").toStringList();
+        for (QStringList::ConstIterator mt = mimeTypes.begin(); mt != mimeTypes.end(); ++mt)
+        {
+            if  ((*mt) == mimeType || (*mt) == mimeTypeAlt)
+            {
+                plugin=(*it)->library();
+                break;
+            }
+        }
+        
+        if (!plugin.isEmpty())
+            break;
+    }
+
+    if (plugin.isEmpty())
+    {
+        kdDebug() << "No relevant plugin found " << endl;
+        return false;
+    }
+
+    KLibrary *library = KLibLoader::self()->library(QFile::encodeName(plugin));
+    if (!library)
+    {
+        kdDebug() << "Plugin library not found " << plugin << endl;
+        return false;
+    }
+
+    ThumbCreator *creator = 0;
+    newCreator create = (newCreator)library->symbol("new_creator");
+    if (create)
+        creator = create();
+
+    if (!creator)
+    {
+        kdDebug() << "Cannot load ThumbCreator " << plugin << endl;
+        return false;
+    }
+
+    if (!creator->create(path, cachedSize_, cachedSize_, image))
+    {
+        kdDebug() << "Cannot create thumbnail for " << path << endl;
+        delete creator;
+        return false;
+    }  
+
+    delete creator;
+    return true;
+}
+
 void kio_digikamthumbnailProtocol::createThumbnailDirs()
 {
     QString path = QDir::homeDirPath() + "/.thumbnails/";
@@ -676,7 +762,7 @@ extern "C"
 
         KImageIO::registerFormats();
 
-        kio_digikamthumbnailProtocol slave(argv[2], argv[3]);
+        kio_digikamthumbnailProtocol slave(argc, argv);
         slave.dispatchLoop();
 
         return 0;
