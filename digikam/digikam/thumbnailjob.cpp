@@ -28,7 +28,6 @@
 #include <qdatastream.h>
 
 #include <kglobal.h>
-#include <kio/previewjob.h>
 #include <kdebug.h>
 
 #include "albumsettings.h"
@@ -203,15 +202,7 @@ void ThumbnailJob::slotResult(KIO::Job *job)
     
     if (job->error())
     {
-        KIO::PreviewJob* job = KIO::filePreview(d->curr_url, d->size);
-        
-        connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
-                SLOT(slotGotThumbnailKDE(const KFileItem*, const QPixmap&)));
-        connect(job, SIGNAL(failed(const KFileItem*)),
-                SLOT(slotFailedThumbnailKDE(const KFileItem*)));
-
-        d->running  = true;
-        return;
+        emit signalFailed(d->curr_url);
     }
 
     d->running  = false;
@@ -295,22 +286,6 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
     }
 
     emit signalThumbnail(d->curr_url, pix);
-}
-
-void ThumbnailJob::slotGotThumbnailKDE(const KFileItem*, const QPixmap& pix)
-{
-    emit signalThumbnail(d->curr_url, pix);
-
-    d->running = false;
-    processNext();
-}
-
-void ThumbnailJob::slotFailedThumbnailKDE(const KFileItem*)
-{
-    emit signalFailed(d->curr_url);
-
-    d->running = false;
-    processNext();
 }
 
 #include "thumbnailjob.moc"

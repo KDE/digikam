@@ -27,7 +27,6 @@
 
 class QPixmap;
 class QImage;
-class KFileItem;
 
 class ThumbnailJobPriv;
 
@@ -69,8 +68,6 @@ protected slots:
 
     void slotResult(KIO::Job *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
-    void slotGotThumbnailKDE(const KFileItem* fileItem, const QPixmap&);
-    void slotFailedThumbnailKDE(const KFileItem* fileItem);
 };
 
 #endif /* THUMBNAILJOB_H */
