@@ -37,7 +37,6 @@
 MonthWidget::MonthWidget(QWidget* parent)
     : QFrame(parent, 0, Qt::WNoAutoErase)
 {
-    setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
     init();
 
     QDate date = QDate::currentDate();
@@ -118,7 +117,7 @@ void MonthWidget::drawContents(QPainter *)
     fnOrig.setBold(false);
     
     QPainter p(&pix);
-    p.fillRect(0, 0, cr.width(), cr.height(), cg.base());
+    p.fillRect(0, 0, cr.width(), cr.height(), cg.background());
 
     QRect r(0, 0, m_currw, m_currh);
     QRect rsmall;
