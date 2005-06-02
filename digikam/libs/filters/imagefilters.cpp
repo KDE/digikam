@@ -581,46 +581,6 @@ void ImageFilters::invertImage(uint *data, int w, int h)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// Performs blur image with less pixels.
-
-void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
-{
-    if (!data || !Width || !Height)
-       {
-       kdWarning() << ("ImageFilters::smartBlurImage: no image data available!")
-                   << endl;
-       return;
-       }
-       
-    int LineWidth = Width * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    uchar* Bits = (uchar*)data;
-        
-    register int i = 0, j = 0, k = 0;
-    
-    for (int h = 1; h < Height - 1; h++)
-        {
-        for (int w = 1; w < Width - 1; w++)
-            {
-            i = h * LineWidth + 4 * w;
-            j = (h + 1) * LineWidth + 4 * w;
-            k = (h - 1) * LineWidth + 4 * w;
-
-            Bits[i+2] = (Bits[i-2] + Bits[j-2] + Bits[k-2] +
-                         Bits[i+2] + Bits[j+2] + Bits[k+2] +
-                         Bits[i+6] + Bits[j+6] + Bits[k+6]) / 9;
-            Bits[i+1] = (Bits[i-3] + Bits[j-3] + Bits[k-3] +
-                         Bits[i+1] + Bits[j+1] + Bits[k+1] +
-                         Bits[i+5] + Bits[j+5] + Bits[k+5]) / 9;
-            Bits[ i ] = (Bits[i-4] + Bits[j-4] + Bits[k-4] +
-                         Bits[ i ] + Bits[ j ] + Bits[ k ] +
-                         Bits[i+4] + Bits[j+4] + Bits[k+4]) / 9;
-            }
-        }
-}
-
-//////////////////////////////////////////////////////////////////////////////
 /* Function to apply the GaussianBlur on an image
  *
  * data             => The image data in RGBA mode.  

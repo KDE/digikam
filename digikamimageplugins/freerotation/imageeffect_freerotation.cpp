@@ -234,7 +234,7 @@ void ImageEffect_FreeRotation::slotOk()
     memcpy(src.bits(), data, src.numBytes());
     matrix.rotate(angle);
     src = src.xForm(matrix);
-    Digikam::ImageFilters::smartBlurImage((uint*)src.bits(), src.width(), src.height());
+    Digikam::ImageFilters::gaussianBlurImage((uint*)src.bits(), src.width(), src.height(), 1);
     iface.putOriginalData(i18n("Free Rotation"), (uint*)src.bits(), src.width(), src.height());
         
     delete [] data;

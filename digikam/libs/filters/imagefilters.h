@@ -165,7 +165,6 @@ public:   // Public methods.
     static void normalizeImage(uint *data, int w, int h);
     static void autoLevelsCorrectionImage(uint *data, int w, int h);
     static void invertImage(uint *data, int w, int h);
-    static void smartBlurImage(uint *data, int Width, int Height);
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,

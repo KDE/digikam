@@ -248,7 +248,7 @@ void ImageEffect_ShearTool::slotOk()
     memcpy(src.bits(), data, src.numBytes());
     matrix.shear( tan(DEGREES_TO_RADIANS(hAngle) ), tan(DEGREES_TO_RADIANS(vAngle) ));
     src = src.xForm(matrix);
-    Digikam::ImageFilters::smartBlurImage((uint*)src.bits(), src.width(), src.height());
+    Digikam::ImageFilters::gaussianBlurImage((uint*)src.bits(), src.width(), src.height(), 1);
     iface.putOriginalData(i18n("Shear Tool"), (uint*)src.bits(), src.width(), src.height());
         
     delete [] data;
