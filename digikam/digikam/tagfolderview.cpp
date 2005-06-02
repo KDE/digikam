@@ -406,26 +406,55 @@ QDragObject* TagFolderView::dragObject()
 
 bool TagFolderView::acceptDrop(const QDropEvent *e) const
 {
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
-    TagFolderViewItem *drag = dynamic_cast<TagFolderViewItem*>(dragItem());
+    QPoint vp = contentsToViewport(e->pos());
+    TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
+    TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
-    if(!item || drag == item
-       || drag->getTag()->isAncestorOf(item->getTag()))
+    if(!itemDrop || itemDrag == itemDrop
+       || itemDrag->getTag()->isAncestorOf(itemDrop->getTag()))
     {
         return false;
     }
 
-    return item->acceptDrop(e);
+    return itemDrop->acceptDrop(e);
 }
 
 void TagFolderView::contentsDropEvent(QDropEvent *e)
 {
     FolderView::contentsDropEvent(e);
-    /*
-    if(!d->dragItem)
+
+    if(!acceptDrop(e))
         return;
 
-    d->dragItem = 0;*/
+    QPoint vp = contentsToViewport(e->pos());
+    TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
+    TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
+    if(!itemDrop || !itemDrag)
+        return;
+
+    if(TagDrag::canDecode(e))
+    {
+        QPopupMenu popMenu(this);
+        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+        popMenu.setMouseTracking(true);
+        int id = popMenu.exec(QCursor::pos());
+
+        if(id == 10)
+        {
+            QString errMsg;
+            d->albumMan->moveTAlbum(itemDrag->getTag(), itemDrop->getTag(), errMsg);
+
+            TagFolderViewItem *itemDragParent = 
+                dynamic_cast<TagFolderViewItem*>(dragItem()->parent());
+            itemDragParent->takeItem(itemDrag);
+            itemDrop->insertItem(itemDrag);
+
+            if(!itemDrop->isOpen())
+                itemDrop->setOpen(true);
+        }
+    }
 }
 
 #include "tagfolderview.moc"
