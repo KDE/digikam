@@ -177,7 +177,7 @@ FolderItem* FolderView::dragItem() const
 
 void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
-    QListView::contentsDragMoveEvent(e);
+    QListView::contentsDragEnterEvent(e);
     
     e->accept(acceptDrop(e));
 }
