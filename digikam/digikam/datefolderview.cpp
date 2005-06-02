@@ -188,10 +188,11 @@ void DateFolderView::slotSelectionChanged()
         ++it;
     }
 
+    d->monthview->setActive(false);
+    
     if (!selItem)
     {
         AlbumManager::instance()->setCurrentAlbum(0);
-        d->monthview->setActive(false);
         return;
     }
 
