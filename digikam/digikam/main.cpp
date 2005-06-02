@@ -278,10 +278,13 @@ int main(int argc, char *argv[])
     AlbumManager* man = new AlbumManager();
     man->setLibraryPath(albumPath);
 
-    ScanLib sLib;
-    if(config->readBoolEntry("Scan At Start", true))
+    config->setGroup("General Settings");
+    if (config->readBoolEntry("Scan At Start", true))
+    {
+        ScanLib sLib;
         sLib.findMissingItems();
-    sLib.updateItemsWithoutDate();
+        sLib.updateItemsWithoutDate();
+    }
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
