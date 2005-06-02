@@ -162,20 +162,6 @@ if test "x$have_libkexif" != "xyes"; then
 fi
 
 #------------------------------------------------------------------
-# Check for gdbm
-#------------------------------------------------------------------
-
-KDE_CHECK_HEADER(gdbm.h, have_gdbm=yes, have_gdbm=no)
-
-if test "$have_gdbm" = "no"; then
-  AC_WARN([Can't find gdbm headers, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
-else
-  LIB_GDBM="-lgdbm"
-  AC_SUBST(LIB_GDBM)
-fi
-
-#------------------------------------------------------------------
 # Check for libtiff
 #------------------------------------------------------------------
 

@@ -51,17 +51,6 @@ else
   echo "-- libkipi found.................. YES"
 fi
 
-
-if test "x$have_gdbm" != "xyes"; then
-  echo "-- gdbm found..................... NO"
-  echo ""
-  echo "digiKam needs gdbm. You need to install the gdbm development package."
-  echo ""
-  all_tests=bad
-else
-  echo "-- gdbm found..................... YES"
-fi
-
 if test "x$have_tiff" != "xyes"; then
   echo "-- libtiff found.................. NO"
   echo ""
