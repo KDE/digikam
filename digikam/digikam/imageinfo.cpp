@@ -22,6 +22,7 @@
 /** @file imageinfo.cpp */
 
 #include <qfile.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -69,6 +70,12 @@ bool ImageInfo::setName(const QString& newName)
         return false;
 
     PAlbum* a = album();
+    if (!a)
+    {
+        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        return false;
+    }
+    
     if (a->icon() == m_name)
     {
         QString err;
@@ -107,22 +114,43 @@ PAlbum* ImageInfo::album() const
 
 KURL ImageInfo::kurl() const
 {
+    PAlbum* a = album();
+    if (!a)
+    {
+        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        return KURL();
+    }
+    
     KURL u(m_man->getLibraryPath());
-    u.addPath(album()->url());
+    u.addPath(a->url());
     u.addPath(m_name);
     return u;
 }
 
 QString ImageInfo::filePath() const
 {
+    PAlbum* a = album();
+    if (!a)
+    {
+        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        return QString();
+    }
+
     QString path = m_man->getLibraryPath();
-    path += album()->url() + "/" + m_name;
+    path += a->url() + "/" + m_name;
     return path;
 }
 
 KURL ImageInfo::kurlForKIO() const
 {
-    KURL u(album()->kurl());
+    PAlbum* a = album();
+    if (!a)
+    {
+        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        return KURL();
+    }
+
+    KURL u(a->kurl());
     u.addPath(m_name);
     return u;
 }
