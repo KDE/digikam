@@ -356,11 +356,11 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
 }
 
-void AlbumFolderView::albumEdit(AlbumFolderViewItem *item)
+void AlbumFolderView::albumEdit(AlbumFolderViewItem* /*item*/)
 {
 }
 
-void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
+void AlbumFolderView::albumDelete(AlbumFolderViewItem* /*item*/)
 {
 }
 
