@@ -960,7 +960,7 @@
             <anchor id="autocolorcorrectiontool.anchor"/>
 
             <para>
-            The <guilabel>Normalize</guilabel>, <guilabel>Equalize</guilabel>, <guilabel>Auto Levels</guilabel>, and <guilabel>Stretch Contrast</guilabel> functions under the <guilabel>Fix</guilabel> menu will attempt to work out the best color levels automatically. You will need to experiment with the effects of these functions to see what works best with your photograph. 
+            The <guilabel>Normalize</guilabel>, <guilabel>Equalize</guilabel>, <guilabel>Auto Levels</guilabel>, and <guilabel>Stretch Contrast</guilabel> available from <guilabel>Fix</guilabel><guimenuitem>Auto-Correction</guimenuitem></menuchoice> menu entry menu will attempt to work out the best color levels automatically. You will need to experiment with the effects of these functions to see what works best with your photograph. 
             
             <itemizedlist>
             
@@ -1537,33 +1537,10 @@
     
         <varlistentry>
             <term><menuchoice>
-                <guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Normalize</guimenuitem>
+                <guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Auto-Correction</guimenuitem>
             </menuchoice></term>
             <listitem><para><action>Automatic color correction of the current image by an histogram 
-            normalization.</action></para></listitem>
-        </varlistentry>
-    
-        <varlistentry>
-            <term><menuchoice>
-                <guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Equalize</guimenuitem>
-            </menuchoice></term>
-            <listitem><para><action>Automatic color correction of the current image by an histogram 
-            equalization.</action></para></listitem>
-        </varlistentry>
-            
-        <varlistentry>
-            <term><menuchoice>
-                <guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Auto 
-                Levels</guimenuitem>
-            </menuchoice></term>
-            <listitem><para><action>Automatic color correction of the current image by an histogram auto-levels adjustment.</action></para></listitem>
-        </varlistentry>
-
-        <varlistentry>
-            <term><menuchoice>
-                <guimenu>Fix</guimenu><guimenuitem>Colors</guimenuitem><guimenuitem>Stretch Contrast</guimenuitem>
-            </menuchoice></term>
-            <listitem><para><action>Automatic contrast enhance of the current image.</action></para></listitem>
+            manipulation.</action></para></listitem>
         </varlistentry>
         
         <varlistentry>
