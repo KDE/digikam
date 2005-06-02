@@ -47,11 +47,9 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("hsladjusttool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness Adjustments"),
-                                      plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
@@ -95,13 +93,13 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_lInput->setValue(0.0);
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
             
     connect(m_sInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
             
     connect(m_lInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     enableButtonOK( false );
     adjustSize();
@@ -157,7 +155,7 @@ void ImageEffect_HSL::slotOk()
 
     Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
 
-    iface->putOriginalData(i18n("HSL"), data);
+    iface->putOriginalData(i18n("HSL Adjustments"), data);
     delete [] data;
     accept();
 }

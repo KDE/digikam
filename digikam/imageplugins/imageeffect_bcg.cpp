@@ -46,11 +46,9 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("bcgadjusttool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Brightness/Contrast/Gamma Adjustments"),
-                                      plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
@@ -94,13 +92,13 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_gInput->setValue(0.0);
 
     connect(m_bInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
             
     connect(m_cInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
             
     connect(m_gInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     enableButtonOK( false );
     adjustSize();

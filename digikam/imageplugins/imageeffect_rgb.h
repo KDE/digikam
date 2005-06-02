@@ -3,7 +3,7 @@
  * Date  : 2004-07-11
  * Description : RGB adjustement plugin for ImageEditor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

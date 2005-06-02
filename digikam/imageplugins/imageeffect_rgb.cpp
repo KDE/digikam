@@ -3,7 +3,7 @@
  * Date  : 2004-07-11
  * Description : RGB adjustement plugin for ImageEditor
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,11 +52,9 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("colorbalancetool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Color Balance"),
-                                      plainPage());
+    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
     QFrame *frame = new QFrame(gbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
@@ -122,21 +120,21 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_rInput, SIGNAL(valueChanged (int)),
             m_rSlider, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     connect(m_gSlider, SIGNAL(valueChanged(int)),
             m_gInput, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             m_gSlider, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     connect(m_bSlider, SIGNAL(valueChanged(int)),
             m_bInput, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
             m_bSlider, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     enableButtonOK( false );
     adjustSize();
@@ -194,7 +192,7 @@ void ImageEffect_RGB::slotOk()
 
     adjustRGB(r, g, b, a, data, w, h);
 
-    iface->putOriginalData(i18n("RGB"), data);
+    iface->putOriginalData(i18n("Color Balance"), data);
     delete [] data;
     accept();
 }

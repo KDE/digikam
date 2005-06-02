@@ -57,9 +57,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, 
-                                                           i18n("Sharpen Image Preview Effect"), 
-                                                           plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
 
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
