@@ -640,11 +640,12 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
        }
     
     if (Radius > 100) Radius = 100;
+    if (Radius <= 0) return;
     
     // Gaussian kernel computation using the Radius parameter.
       
-    int    nKSize, nCenter;
-    double x, sd, factor, lnsd, lnfactor;
+    int          nKSize, nCenter;
+    double       x, sd, factor, lnsd, lnfactor;
     register int i, j, n, h, w;
 
     nKSize = 2 * Radius + 1;
@@ -670,19 +671,14 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     
     int nSumR, nSumG, nSumB, nCount;
     int nKernelWidth = Radius * 2 + 1;
-    int nStride = GetStride(Width);
+    imageData imagedata;
     
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar* pInBits  = (uchar*)data;
-    uchar* pOutBits = new uchar[BitCount];
-    uchar* pBlur    = new uchar[BitCount];
+    uint* pOutBits = new uint[Width*Height];
+    uint* pBlur    = new uint[Width*Height];
     
     // We need to copy our bits to blur bits
     
-    memcpy (pBlur, pInBits, BitCount);     
+    memcpy (pBlur, data, Width*Height*4);       
 
     // We need to alloc a 2d array to help us to store the values
     
@@ -698,9 +694,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
     // Now, we enter in the main loop
     
-    for (h = 0; h < Height; h++, i += nStride)
+    for (h = 0; h < Height; h++)
         {
-        for (w = 0; w < Width; w++, i += 4)
+        for (w = 0; w < Width; w++, i++)
             {
             // first of all, we need to blur the horizontal lines
                 
@@ -710,12 +706,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                if (IsInside (Width, Height, w + n, h))
                     {
                     // we points to the pixel
-                    j = i + n * 4;
+                    j = i + n;
                     
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pInBits[j+2]];
-                    nSumG += arrMult[n + Radius][pInBits[j+1]];
-                    nSumB += arrMult[n + Radius][pInBits[ j ]];
+                    imagedata.raw = data[j];
+                    nSumR += arrMult[n + Radius][imagedata.channel.red];
+                    nSumG += arrMult[n + Radius][imagedata.channel.green];
+                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -725,9 +722,11 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to blur bits the horizontal blur values
-            pBlur[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            pBlur[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            pBlur[i]                = imagedata.raw;
+            
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
@@ -737,9 +736,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; w < Width; w++, i = w * 4)
+    for (w = 0; w < Width; w++, i = w)
         {
-        for (h = 0; h < Height; h++, i += LineWidth)
+        for (h = 0; h < Height; h++, i += Width)
             {
             // first of all, we need to blur the vertical lines
             for (n = -Radius; n <= Radius; n++)
@@ -748,12 +747,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                 if (IsInside(Width, Height, w, h + n))
                     {
                     // we points to the pixel
-                    j = i + n * LineWidth;
+                    j = i + n * Width;
                       
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pBlur[j+2]];
-                    nSumG += arrMult[n + Radius][pBlur[j+1]];
-                    nSumB += arrMult[n + Radius][pBlur[ j ]];
+                    imagedata.raw = pBlur[j];
+                    nSumR += arrMult[n + Radius][imagedata.channel.red];
+                    nSumG += arrMult[n + Radius][imagedata.channel.green];
+                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -762,17 +762,21 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                 
             if (nCount == 0) nCount = 1;                    
                 
+            // To preserve Alpha channel.
+            imagedata.raw = data[i];
+                
             // now, we return to bits the vertical blur values
-            pOutBits[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            pOutBits[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            pOutBits[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            pOutBits[i]             = imagedata.raw;
                 
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
         }
 
-    memcpy (data, pOutBits, BitCount);   
+    memcpy (data, pOutBits, Width*Height*4);   
        
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);

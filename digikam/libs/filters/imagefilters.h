@@ -100,15 +100,8 @@ private:    // Private structures used internally.
             
 private:    // Private methods used internally.
     
-    // Methods for Gaussian blur.   
+    // Methods for Gaussian Blur.   
     
-    static inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-
     // function to allocate a 2d array   
     static inline int** Alloc2DArray (int Columns, int Rows)
        {
@@ -142,7 +135,7 @@ private:    // Private methods used internally.
        return (bIsWOk && bIsHOk);
        };       
 
-    // Methods for Channel mixer.   
+    // Methods for Channel Mixer.   
        
     static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
        {
