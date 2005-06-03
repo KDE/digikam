@@ -74,8 +74,6 @@ public:
 
     TAlbum* getTag() const;
 
-    bool acceptDrop(const QMimeSource *e) const;
-    
 private:
     TAlbum      *m_tag;
 };
@@ -97,11 +95,6 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
 TAlbum* TagFolderViewItem::getTag() const
 {
     return m_tag;
-}
-
-bool TagFolderViewItem::acceptDrop(const QMimeSource *e) const
-{
-    return(TagDrag::canDecode(e) || TagListDrag::canDecode(e));
 }
 
 //-----------------------------------------------------------------------------
@@ -407,14 +400,25 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
-
-    if(!itemDrop || itemDrag == itemDrop
-       || itemDrag->getTag()->isAncestorOf(itemDrop->getTag()))
+ 
+    if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
     {
-        return false;
+        // Allow dragging at the root, to move the tag at the root
+        if(!itemDrop)
+            return true;
+        
+        // Dragging an item on itself makes no sense
+        if(itemDrag == itemDrop)
+            return false;
+
+        // Dragging a parent on its child makes no sense
+        if(itemDrag && itemDrag->getTag()->isAncestorOf(itemDrop->getTag()))
+            return false;
+        
+        return true;
     }
 
-    return itemDrop->acceptDrop(e);
+    return false;
 }
 
 void TagFolderView::contentsDropEvent(QDropEvent *e)
@@ -427,7 +431,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
-    if(!itemDrop || !itemDrag)
+    if(!itemDrag)
         return;
 
     if(TagDrag::canDecode(e))
@@ -441,16 +445,44 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if(id == 10)
         {
-            QString errMsg;
-            d->albumMan->moveTAlbum(itemDrag->getTag(), itemDrop->getTag(), errMsg);
-
             TagFolderViewItem *itemDragParent = 
-                dynamic_cast<TagFolderViewItem*>(dragItem()->parent());
-            itemDragParent->takeItem(itemDrag);
-            itemDrop->insertItem(itemDrag);
+                    dynamic_cast<TagFolderViewItem*>(dragItem()->parent());
+            
+            if(itemDragParent)
+                itemDragParent->takeItem(itemDrag);
+            else
+                takeItem(itemDrag);
+            
+            QString errMsg;
+            if(!itemDrop)
+            {
+                // move dragItem to the root
+                TAlbum *rootAlbum = d->albumMan->findTAlbum(0);
+                TAlbum *tag = itemDrag->getTag();
 
-            if(!itemDrop->isOpen())
-                itemDrop->setOpen(true);
+                d->albumMan->moveTAlbum(tag, rootAlbum, errMsg);
+                TagFolderViewItem *item = new TagFolderViewItem(this, tag);
+                item->setPixmap(0, getBlendedIcon(tag));
+                
+                while(QListViewItem *child = itemDrag->firstChild())
+                {
+                    itemDrag->takeItem(child);
+                    item->insertItem(child);
+                }
+                if(itemDrag->isOpen())
+                    item->setOpen(true);
+                delete itemDrag;                
+                setSelected(item, true);
+            }
+            else
+            {
+                // move dragItem below dropItem
+                d->albumMan->moveTAlbum(itemDrag->getTag(), itemDrop->getTag(), errMsg);
+                itemDrop->insertItem(itemDrag);
+                if(!itemDrop->isOpen())
+                    itemDrop->setOpen(true);
+                setSelected(itemDrag, true);                
+            }
         }
     }
 }
