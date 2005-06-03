@@ -51,9 +51,9 @@ private:  // Despeckle filter methods.
 
     virtual void filterImage(void);
 
-    void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius, 
-                                   int black_level, int white_level, 
-                                   bool adaptativeFilter, bool recursiveFilter);
+    void despeckleImage(uint* data, int w, int h, int despeckle_radius, 
+                        int black_level, int white_level, 
+                        bool adaptativeFilter, bool recursiveFilter);
 
 };    
 
