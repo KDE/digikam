@@ -595,7 +595,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
 
         QString err;
         AlbumManager::instance()->updateTAlbumIcon( album,
-                iconItem->imageInfo()->name(), true, err );
+                iconItem->imageInfo()->filePath(), true, err );
     }
 }
 
