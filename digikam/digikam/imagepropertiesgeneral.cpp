@@ -177,9 +177,9 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 
     // -- File system information ---------------------------------------------------
     
-    KFileItem* fi = new KFileItem(KFileItem::Unknown,
-                                  KFileItem::Unknown,
-                                  url);
+    KFileItem fi(KFileItem::Unknown,
+                 KFileItem::Unknown,
+                 url);
     m_filename->setText( url.fileName() );
     m_filetype->setText( KMimeType::findByURL(url)->comment() );
 
@@ -205,12 +205,12 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
     }
 
     QDateTime dateurl;
-    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
+    dateurl.setTime_t(fi.time(KIO::UDS_MODIFICATION_TIME));
     m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
-    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
-                                        .arg(KGlobal::locale()->formatNumber(fi->size(), 0)) );
-    m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
-    m_filepermissions->setText( fi->permissionsString() );
+    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
+                                        .arg(KGlobal::locale()->formatNumber(fi.size(), 0)) );
+    m_fileowner->setText( i18n("%1 - %2").arg(fi.user()).arg(fi.group()) );
+    m_filepermissions->setText( fi.permissionsString() );
 
     // -- digiKam metadata ---------------------------------------------------
 
