@@ -96,6 +96,9 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
+
+    void slotItemDeleted(AlbumIconItem* iconItem);
+    void slotCleared();
 };
  
 #endif  // IMAGEDESCEDIT_H

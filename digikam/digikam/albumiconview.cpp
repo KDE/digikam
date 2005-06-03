@@ -184,9 +184,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(d->imageLister, SIGNAL(signalClear()),
             this, SLOT(slotImageListerClear()));
 
-    connect(d->imageLister, SIGNAL(signalCompleted()),
-            this, SLOT(slotImageListerCompleted()));
-
     // -- Icon connections --------------------------------------------
 
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
@@ -238,10 +235,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     updateBannerRectPixmap();
     updateItemRectsPixmap();
 
-    d->pixMan->clear();
     d->imageLister->stop();
-    d->itemDict.clear();
-    d->albumDict.clear();
     clear();
 
     d->pixMan->setThumbnailSize(d->thumbSize.size());
@@ -256,10 +250,7 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
     {
-        d->pixMan->clear();
         d->imageLister->stop();
-        d->itemDict.clear();
-        d->albumDict.clear();
         clear();
 
         d->thumbSize = thumbSize;
@@ -277,12 +268,8 @@ void AlbumIconView::setAlbum(Album* album)
     if (!album)
     {
         d->currentAlbum = 0;
-        d->itemDict.clear();
-        d->albumDict.clear();
-        clear();
-
         d->imageLister->stop();
-        d->pixMan->clear();
+        clear();
 
         return;
     }
@@ -291,7 +278,7 @@ void AlbumIconView::setAlbum(Album* album)
         return;
 
     d->imageLister->stop();
-    d->pixMan->clear();
+    clear();
 
     d->currentAlbum = album;
     d->imageLister->openAlbum(d->currentAlbum);
@@ -308,6 +295,18 @@ void AlbumIconView::refreshIcon(AlbumIconItem* item)
     emit signalSelectionChanged();
 }
 
+void AlbumIconView::clear(bool update)
+{
+    emit signalCleared();
+
+    d->pixMan->clear();
+    d->itemDict.clear();
+    d->albumDict.clear();
+    
+    IconView::clear(update);
+
+    emit signalSelectionChanged();
+}
 
 void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 {
@@ -347,8 +346,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     if (!item->getViewItem())
         return;
     
-    AlbumIconItem* iconItem =
-        static_cast<AlbumIconItem*>(item->getViewItem());
+    AlbumIconItem* iconItem = static_cast<AlbumIconItem*>(item->getViewItem());
 
     d->pixMan->remove(item->kurl());
 
@@ -363,6 +361,8 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
         }
     }
 
+    emit signalItemDeleted(iconItem);
+    
     delete iconItem;
     item->setViewItem(0);
 
@@ -386,15 +386,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
 void AlbumIconView::slotImageListerClear()
 {
-    d->itemDict.clear();
-    d->albumDict.clear();
-    d->pixMan->clear();
     clear();
-    emit signalSelectionChanged();
-}
-
-void AlbumIconView::slotImageListerCompleted()
-{
 }
 
 void AlbumIconView::slotDoubleClicked(IconItem *item)
@@ -1129,9 +1121,6 @@ KURL::List AlbumIconView::selectedItems()
 void AlbumIconView::refresh()
 {
     d->imageLister->stop();
-    d->itemDict.clear();
-    d->albumDict.clear();
-    d->pixMan->clear();
     clear();
 
     d->imageLister->openAlbum(d->currentAlbum);

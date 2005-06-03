@@ -50,7 +50,7 @@ public:
     int  count() const;
     int  groupCount() const;
 
-    void clear(bool update=true);
+    virtual void clear(bool update=true);
     void sort();
 
     void clearSelection();

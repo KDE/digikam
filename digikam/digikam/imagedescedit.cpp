@@ -78,7 +78,8 @@ public:
 ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
                              QWidget *parent, bool singleMode)
              : KDialogBase(Plain, i18n("Image Comments/Tags"),
-                           singleMode ? Help|Stretch|Ok|Apply|Cancel : Help|User1|User2|Stretch|Ok|Apply|Cancel,
+                           singleMode ? Help|Stretch|Ok|Apply|Cancel :
+                           Help|User1|User2|Stretch|Ok|Apply|Cancel,
                            Ok, parent, 0, true, true,
                            KStdGuiItem::guiItem(KStdGuiItem::Forward),
                            KStdGuiItem::guiItem(KStdGuiItem::Back))
@@ -156,6 +157,11 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
             SLOT(slotAlbumRenamed(Album*)));
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             SLOT(slotAlbumIconChanged(Album*)));
+
+    connect(m_view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+            SLOT(slotItemDeleted(AlbumIconItem*)));
+    connect(m_view, SIGNAL(signalCleared()),
+            SLOT(slotCleared()));
 }
 
 ImageDescEdit::~ImageDescEdit()
@@ -635,6 +641,22 @@ QPixmap ImageDescEdit::tagThumbnail(TAlbum* album) const
                                    KIcon::DefaultState, 0, true);
 
     return pix;
+}
+
+void ImageDescEdit::slotItemDeleted(AlbumIconItem* iconItem)
+{
+    if (m_currItem != iconItem)
+        return;
+
+    // uh oh. our current item got deleted. close
+    m_currItem = 0;
+    close();
+}
+
+void ImageDescEdit::slotCleared()
+{
+    // if the iconview has been cleared, bail out and close
+    close();
 }
 
 #include "imagedescedit.moc"

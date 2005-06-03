@@ -103,12 +103,13 @@ public:
     QFont    itemFontXtra() const;
 
     void     setInFocus(bool val);
+     void    clear(bool update=true);
 
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
     AlbumIconItem* nextItemToThumbnail() const;
     PixmapManager* pixmapManager() const;
-
+    
 protected:
 
     void resizeEvent(QResizeEvent* e);
@@ -135,7 +136,6 @@ private slots:
     void slotImageListerNewItems(const ImageInfoList& itemList);
     void slotImageListerDeleteItem(ImageInfo* item);
     void slotImageListerClear();
-    void slotImageListerCompleted();
 
     void slotDoubleClicked(IconItem *item);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
@@ -170,6 +170,8 @@ signals:
 
     void signalItemsAdded();
     void signalInFocus();
+    void signalItemDeleted(AlbumIconItem* iconItem);
+    void signalCleared();
 };
 
 #endif // ALBUMICONVIEW_H
