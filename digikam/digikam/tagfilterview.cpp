@@ -53,8 +53,6 @@ static QPixmap getBlendedIcon(TAlbum* album)
     if(!album)
         return baseIcon;
 
-    QString icon(album->icon());
-
     QPixmap pix = SyncJob::getTagThumbnail(album->icon(), 20);
 
     if (!pix.isNull())
