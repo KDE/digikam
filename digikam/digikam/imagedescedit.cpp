@@ -358,7 +358,8 @@ void ImageDescEdit::slotItemChanged()
     }
 
     ImageInfo* info = m_currItem->imageInfo();
-    KURL fileURL(info->filePath());
+    KURL fileURL;
+    fileURL.setPath(info->filePath());
 
     m_thumbJob = new ThumbnailJob(fileURL, 256);
 

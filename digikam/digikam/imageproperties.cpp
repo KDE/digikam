@@ -171,10 +171,13 @@ void ImageProperties::slotItemChanged()
     setCaption(i18n("Properties for '%1'").
                arg(m_currItem->imageInfo()->name()));
 
+    KURL fileURL;
+    fileURL.setPath(m_currItem->imageInfo()->filePath());
+    
     m_generalPage->setCurrentItem(m_currItem->imageInfo());
-    m_histogramPage->setData(m_currItem->imageInfo()->filePath(),
+    m_histogramPage->setData(fileURL,
                              m_imageData, m_imageWidth, m_imageHeight);
-    m_exifPage->setCurrentURL(m_currItem->imageInfo()->filePath());
+    m_exifPage->setCurrentURL(fileURL);
 
     setCursor( KCursor::arrowCursor() );
 }

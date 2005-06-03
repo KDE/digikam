@@ -145,7 +145,8 @@ ImagePropertiesGeneral::~ImagePropertiesGeneral()
 
 void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 {
-    KURL url = info->filePath();
+    KURL url;
+    url.setPath(info->filePath());
     
     // ------------------------------------------------------------------------------
 
