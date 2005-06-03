@@ -28,8 +28,11 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QSpinBox;
-class QSlider;
+class QTimer;
+
+class KIntNumInput;
+
+class OilPaint;
 
 namespace Digikam
 {
@@ -53,33 +56,34 @@ protected:
     void closeEvent(QCloseEvent *e);
     
 private:
-
-    bool          m_cancel;
+    
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+        
+    int           m_currentRenderingMode;
+    
+    QTimer       *m_timer;
     
     QWidget      *m_parent;
     
     QPushButton  *m_helpButton;
     
-    QSpinBox     *m_brushSizeInput;
-    QSpinBox     *m_smoothInput;
-        
-    QSlider      *m_brushSizeSlider;
-    QSlider      *m_smoothSlider;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
+    KIntNumInput *m_brushSizeInput;
+    KIntNumInput *m_smoothInput;
 
-    void OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness);
+    OilPaint     *m_oilpaintFilter;
+                
+    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+
+private:
     
-    inline uint MostFrequentColor(uchar* Bits, int Width, int Height, int X, 
-                                  int Y, int Radius, int Intensity); 
-                                  
-    // Function to calcule the color intensity and return the luminance (Y)
-    // component of YIQ color model.
-    inline uint GetIntensity(uint Red, uint Green, uint Blue)
-           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); } 
-    
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+                    
 private slots:
 
     void slotHelp();
@@ -87,6 +91,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotTimer(); 
     
 };
 

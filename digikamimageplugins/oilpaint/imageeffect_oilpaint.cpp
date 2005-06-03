@@ -7,9 +7,6 @@
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
- * Original OilPaint algorithm copyrighted 2004 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -34,8 +31,6 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qimage.h>
-#include <qslider.h>
-#include <qspinbox.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
@@ -47,9 +42,11 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <knuminput.h>
 
 // Digikam includes.
 
@@ -58,6 +55,7 @@
 // Local includes.
 
 #include "version.h"
+#include "oilpaint.h"
 #include "imageeffect_oilpaint.h"
 
 namespace DigikamOilPaintImagesPlugin
@@ -69,10 +67,12 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                   parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
+    m_currentRenderingMode = NoneRendering;
+    m_timer                = 0L;
+    m_oilpaintFilter       = 0L;
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
@@ -139,42 +139,26 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Brush size:"), plainPage());
     
-    m_brushSizeSlider = new QSlider(1, 5, 1, 1, Qt::Horizontal, plainPage(), "m_brushSizeSlider");
-    m_brushSizeSlider->setTickmarks(QSlider::Below);
-    m_brushSizeSlider->setTickInterval(1);
-    m_brushSizeSlider->setTracking ( false );
-    
-    m_brushSizeInput = new QSpinBox(1, 5, 1, plainPage(), "m_brushSizeInput");
-    m_brushSizeInput->setValue(1);
-        
-    whatsThis = i18n("<p>Set here the brush size to use for simulating the oil painting.");
-    QWhatsThis::add( m_brushSizeInput, whatsThis);
-    QWhatsThis::add( m_brushSizeSlider, whatsThis);
+    m_brushSizeInput = new KIntNumInput(plainPage(), "m_brushSizeInput");
+    m_brushSizeInput->setRange(1, 5, 1, true);
+    QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
+                                            "simulating the oil painting.") );
     
     hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_brushSizeSlider, 3);
-    hlay2->addWidget(m_brushSizeInput, 1);
+    hlay2->addWidget(m_brushSizeInput, 4);
     
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
     
-    m_smoothSlider = new QSlider(10, 255, 1, 30, Qt::Horizontal, plainPage(), "m_smoothSlider");
-    m_smoothSlider->setTickmarks(QSlider::Below);
-    m_smoothSlider->setTickInterval(20);
-    m_smoothSlider->setTracking ( false );  
-    
-    m_smoothInput = new QSpinBox(10, 255, 1, plainPage(), "m_SmoothInput");
-    m_smoothInput->setValue(30);
-        
-    whatsThis = i18n("<p>This value controls the smoothing effect of the brush under the canvas.");
-    QWhatsThis::add( m_smoothInput, whatsThis);
-    QWhatsThis::add( m_smoothSlider, whatsThis);                     
-    
+    m_smoothInput = new KIntNumInput(plainPage(), "m_SmoothInput");
+    m_smoothInput->setRange(10, 255, 1, true);
+    QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
+                                         "of the brush under the canvas.") );
+
     hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_smoothSlider, 3);
-    hlay3->addWidget(m_smoothInput, 1);
+    hlay3->addWidget(m_smoothInput, 4);
     
     // -------------------------------------------------------------
 
@@ -187,43 +171,34 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_brushSizeSlider, SIGNAL(valueChanged(int)),
-            m_brushSizeInput, SLOT(setValue(int)));
-    connect(m_brushSizeInput, SIGNAL(valueChanged(int)),
-            m_brushSizeSlider, SLOT(setValue(int)));            
     connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));            
+            this, SLOT(slotTimer()));            
             
-    connect(m_smoothSlider, SIGNAL(valueChanged(int)),
-            m_smoothInput, SLOT(setValue(int)));
-    connect(m_smoothInput, SIGNAL(valueChanged(int)),
-            m_smoothSlider, SLOT(setValue(int)));   
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));         
+            this, SLOT(slotTimer()));         
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
 {
+    if (m_oilpaintFilter)
+       delete m_oilpaintFilter;    
+    
+    if (m_timer)
+       delete m_timer;
 }
 
-void ImageEffect_OilPaint::slotUser1()
+void ImageEffect_OilPaint::abortPreview()
 {
-    m_brushSizeInput->blockSignals(true);
-    m_brushSizeSlider->blockSignals(true);
-    m_smoothInput->blockSignals(true);
-    m_smoothSlider->blockSignals(true);
-
-    m_brushSizeInput->setValue(1);
-    m_brushSizeSlider->setValue(1);
-    m_smoothInput->setValue(30);
-    m_smoothSlider->setValue(30);
-        
-    m_brushSizeInput->blockSignals(false);
-    m_brushSizeSlider->blockSignals(false);
-    m_smoothInput->blockSignals(false);
-    m_smoothSlider->blockSignals(false);
-    slotEffect();
-} 
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_brushSizeInput->setEnabled(true);
+    m_smoothInput->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);   
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+}
 
 void ImageEffect_OilPaint::slotHelp()
 {
@@ -232,207 +207,179 @@ void ImageEffect_OilPaint::slotHelp()
 
 void ImageEffect_OilPaint::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_oilpaintFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     e->accept();    
 }
 
 void ImageEffect_OilPaint::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_oilpaintFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
+void ImageEffect_OilPaint::slotTimer()
+{
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
+}
+
+void ImageEffect_OilPaint::slotUser1()
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_oilpaintFilter->stopComputation();
+       }
+    else
+       {    
+        m_brushSizeInput->blockSignals(true);
+        m_smoothInput->blockSignals(true);
+    
+        m_brushSizeInput->setValue(1);
+        m_smoothInput->setValue(30);
+            
+        m_brushSizeInput->blockSignals(false);
+        m_smoothInput->blockSignals(false);
+        slotEffect();
+        }
+} 
+
 void ImageEffect_OilPaint::slotEffect()
 {
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    m_imagePreviewWidget->setEnable(false);
+    // Computation already in progress.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
+    
     m_brushSizeInput->setEnabled(false);
-    m_brushSizeSlider->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    m_smoothSlider->setEnabled(false);
+    m_imagePreviewWidget->setEnable(false);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+    
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    uint* data = (uint *)image.bits();
-    int   w    = image.width();
-    int   h    = image.height();
-    int   b    = m_brushSizeSlider->value();
-    int   s    = m_smoothSlider->value();
+    
+    int b        = m_brushSizeInput->value();
+    int s        = m_smoothInput->value();
         
-    m_imagePreviewWidget->setProgress(0);
-    OilPaint(data, w, h, b, s);
-    
-    if (m_cancel) return;
-    
-    m_imagePreviewWidget->setProgress(0); 
-    m_brushSizeInput->setEnabled(true);
-    m_brushSizeSlider->setEnabled(true);
-    m_smoothInput->setEnabled(true);
-    m_smoothSlider->setEnabled(true);
-    m_imagePreviewWidget->setPreviewImageData(image);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_imagePreviewWidget->setEnable(true);
+    m_imagePreviewWidget->setProgress(0);          
+
+    if (m_oilpaintFilter)
+       delete m_oilpaintFilter;
+        
+    m_oilpaintFilter = new OilPaint(&image, this, b, s);
 }
 
 void ImageEffect_OilPaint::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+    
     m_brushSizeInput->setEnabled(false);
-    m_brushSizeSlider->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    m_smoothSlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
+    
+    int b = m_brushSizeInput->value();
+    int s = m_smoothInput->value();
+        
+    m_imagePreviewWidget->setProgress(0);             
+    
+    if (m_oilpaintFilter)
+       delete m_oilpaintFilter;
+    
     Digikam::ImageIface iface(0, 0);
-    
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
-    int   b    = m_brushSizeSlider->value();
-    int   s    = m_smoothSlider->value();
-        
-    m_imagePreviewWidget->setProgress(0);
-    OilPaint(data, w, h, b, s);
-    
-    if ( !m_cancel )
-       iface.putOriginalData(i18n("Oilpaint"), data);
-       
-    delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();
-}
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to apply the OilPaint effect.                
- *                                                                                    
- * data             => The image data in RGBA mode.                            
- * w                => Width of image.                          
- * h                => Height of image.                          
- * BrushSize        => Brush size.
- * Smoothness       => Smooth value.                                                
- *                                                                                  
- * Theory           => Using MostFrequentColor function we take the main color in  
- *                     a matrix and simply write at the original position.            
- */                                                                                 
-    
-void ImageEffect_OilPaint::OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness)
-{
-    int LineWidth = w * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-      
-    uchar* newBits = (uchar*)data;
-    int i = 0;
-    uint color;
-    
-    for (int h2 = 0; !m_cancel && (h2 < h); h2++)
-       {
-       for (int w2 = 0; !m_cancel && (w2 < w); w2++)
-          {
-          i = h2 * LineWidth + 4*w2;
-          color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
-          
-          newBits[i+3] = (uchar)(color >> 24);
-          newBits[i+2] = (uchar)(color >> 16);
-          newBits[i+1] = (uchar)(color >> 8);
-          newBits[ i ] = (uchar)(color);
-          }
-       
-       // Update de progress bar in dialog.
-       m_imagePreviewWidget->setProgress((int) (((double)h2 * 100.0) / h));  
-       kapp->processEvents();          
-       }
-}
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to determine the most frequent color in a matrix                        
- *                                                                                
- * Bits             => Bits array                                                    
- * Width            => Image width                                                   
- * Height           => Image height                                                 
- * X                => Position horizontal                                           
- * Y                => Position vertical                                            
- * Radius           => Is the radius of the matrix to be analized                  
- * Intensity        => Intensity to calcule                                         
- *                                                                                  
- * Theory           => This function creates a matrix with the analized pixel in   
- *                     the center of this matrix and find the most frequenty color   
- */
-
-uint ImageEffect_OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height, int X, 
-                                              int Y, int Radius, int Intensity)
-{
-    int i, w, h, I;
-    uint color;
-    
-    double Scale = Intensity / 255.0;
-    int LineWidth = 4 * Width;
-    
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);   // Don't take off this step
-        
-    // Alloc some arrays to be used
-    uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
-    uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorG  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorB  = new uint[(Intensity + 1)  * sizeof (uint)];
-
-    // Erase the array
-    memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
-
-    for (w = X - Radius; w <= X + Radius; w++)
-        {
-        for (h = Y - Radius; h <= Y + Radius; h++)
-            {
-            // This condition helps to identify when a point doesn't exist
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-            if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
-                {
-                // You'll see a lot of times this formula
-                i = h * LineWidth + 4 * w;
-                I = (uint)(GetIntensity (Bits[i+2], Bits[i+1], Bits[i]) * Scale);
-                IntensityCount[I]++;
+    m_oilpaintFilter = new OilPaint(&orgImage, this, b, s);
+           
+    delete [] data;
+}
 
-                if (IntensityCount[I] == 1)
+void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
+
+    OilPaint::EventData *d = (OilPaint::EventData*) event->data();
+
+    if (!d) return;
+    
+    if (d->starting)           // Computation in progress !
+        {
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Oil Paint completed..." << endl;
+                 
+                 QImage imDest = m_oilpaintFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+    
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Oil Paint completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Oil Paint"), 
+                                       (uint*)m_oilpaintFilter->getTargetImage().bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
                     {
-                    AverageColorR[I] = Bits[i+2];
-                    AverageColorG[I] = Bits[i+1];
-                    AverageColorB[I] = Bits[ i ];
+                    kdDebug() << "Preview Oil Paint failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
                     }
-                else
-                    {
-                    AverageColorR[I] += Bits[i+2];
-                    AverageColorG[I] += Bits[i+1];
-                    AverageColorB[I] += Bits[ i ];
-                    }
+                
+                case FinalRendering:
+                    break;
                 }
             }
         }
-
-    I = 0;
-    int MaxInstance = 0;
-
-    for (i = 0 ; i <= Intensity ; i++)
-       {
-       if (IntensityCount[i] > MaxInstance)
-          {
-          I = i;
-          MaxInstance = IntensityCount[i];
-          }
-       }
-
-    int R, G, B;
-    R = AverageColorR[I] / MaxInstance;
-    G = AverageColorG[I] / MaxInstance;
-    B = AverageColorB[I] / MaxInstance;
-    color = qRgb (R, G, B);
-
-    delete [] IntensityCount;        // free all the arrays
-    delete [] AverageColorR;
-    delete [] AverageColorG;
-    delete [] AverageColorB;
-
-    return (color);                    // return the most frequenty color
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin

@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_oilpaint.la 
 
 digikamimageplugin_oilpaint_la_SOURCES = imageplugin_oilpaint.cpp \
-	                                 imageeffect_oilpaint.cpp 
+	                                 imageeffect_oilpaint.cpp oilpaint.cpp 
 
 digikamimageplugin_oilpaint_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
