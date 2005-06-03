@@ -321,6 +321,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        histogram = m_selectionHistogram;
     else 
        histogram = m_imageHistogram;
+
+    if (!histogram)
+        return;
     
     x  = 0; y  = 0;
     yr = 0; yg = 0; yb = 0;
