@@ -50,11 +50,9 @@ static QPixmap getBlendedIcon(TAlbum* tag)
     if(!tag)
         return baseIcon;
 
-    QString icon(tag->icon());
-
     QPixmap pix = SyncJob::getTagThumbnail(tag->icon(), 20);
 
-    if (!pix.isNull())
+    if(!pix.isNull())
     {
         QPainter p(&baseIcon);
         p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
@@ -399,7 +397,7 @@ QDragObject* TagFolderView::dragObject()
         return 0;
     
     TagDrag *t = new TagDrag(item->getTag()->id(), this);
-    t->setPixmap(getBlendedIcon(item->getTag()));
+    t->setPixmap(*item->pixmap(0));
 
     return t;
 }
