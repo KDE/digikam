@@ -29,6 +29,7 @@
 
 class QPushButton;
 class QCheckBox;
+class QTimer;
 
 class KIntNumInput;
 

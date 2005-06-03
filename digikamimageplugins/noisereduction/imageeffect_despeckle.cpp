@@ -28,8 +28,6 @@
 #include <qtooltip.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-#include <qslider.h>
-#include <qspinbox.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qlayout.h>
