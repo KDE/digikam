@@ -788,7 +788,7 @@ void AlbumIconView::slotProperties(AlbumIconItem* item)
 {
     if (!item) return;
 
-    ImageProperties properties(ImageProperties::MULTI, this, item);
+    ImageProperties properties(ImageProperties::MULTI, this, this, item);
     properties.exec();
 }
 

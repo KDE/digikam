@@ -24,7 +24,6 @@
 // KDE includes.
 
 #include <kdialogbase.h>
-#include <kurl.h>
 
 class AlbumIconView;
 class AlbumIconItem;
@@ -44,7 +43,8 @@ public:
         MULTI
     };
 
-    ImageProperties(enum Mode mode, AlbumIconView* view, AlbumIconItem* currItem,
+    ImageProperties(enum Mode mode, QWidget* parent,
+                    AlbumIconView* view, AlbumIconItem* currItem,
                     QRect* selectionArea=0, uint* imageData=0,
                     int imageWidth=0, int imageHeight=0);
 

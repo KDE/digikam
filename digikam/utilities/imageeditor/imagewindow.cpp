@@ -778,20 +778,23 @@ void ImageWindow::slotRotatedOrFlipped()
 
 void ImageWindow::slotFileProperties()
 {
-    /*
-    if (m_urlCurrent.isValid())
+    if (m_urlCurrent.isValid() && m_view)
     {
+        AlbumIconItem* item = (AlbumIconItem*)m_view->findItem(m_urlCurrent.url());
+        if (!item)
+            return;
+        
         QRect sel = m_canvas->getSelectedArea();
         uint* data   = Digikam::ImlibInterface::instance()->getData();
         int   width  = Digikam::ImlibInterface::instance()->origWidth();
         int   height = Digikam::ImlibInterface::instance()->origHeight();
             
-        ImageProperties properties(this, m_urlCurrent, 
+        ImageProperties properties(ImageProperties::SINGLE, this,
+                                   m_view, item,
                                    sel.isNull() ? 0 : &sel,
                                    data, width, height);
         properties.exec();
     }
-    */
 }
 
 void ImageWindow::slotCommentsEdit()

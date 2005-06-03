@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kurl.h>
 
 // Local includes.
 
@@ -47,12 +48,13 @@
 
 // Constructor with AlbumIconView and AlbumIconItem instance.
 
-ImageProperties::ImageProperties(enum Mode mode, AlbumIconView* view, AlbumIconItem* currItem,
+ImageProperties::ImageProperties(enum Mode mode, QWidget* parent,
+                                 AlbumIconView* view, AlbumIconItem* currItem,
                                  QRect* selectionArea, uint* imageData,
                                  int imageWidth, int imageHeight)
     : KDialogBase(Tabbed, QString::null,
                   (mode == MULTI) ? Help|User1|User2|Stretch|Close : Help|Stretch|Close,
-                  Close, view, 0, true, true),
+                  Close, parent, 0, true, true),
       m_view(view), m_currItem(currItem), m_mode(mode)
 {
     if (m_mode == MULTI)
