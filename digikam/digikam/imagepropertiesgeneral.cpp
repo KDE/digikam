@@ -30,9 +30,7 @@
 #include <kfilemetainfo.h>
 #include <kglobal.h>
 
-#include "album.h"
-#include "albumdb.h"
-#include "albummanager.h"
+#include "imageinfo.h"
 #include "thumbnailjob.h"
 #include "imagepropertiesgeneral.h"
 
@@ -145,8 +143,10 @@ ImagePropertiesGeneral::~ImagePropertiesGeneral()
         m_thumbJob->kill();
 }
 
-void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
+void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 {
+    KURL url = info->filePath();
+    
     // ------------------------------------------------------------------------------
 
     if (!m_thumbJob.isNull())
@@ -174,7 +174,7 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
     m_filecomments->clear();
     m_filetags->clear();
 
-    // -- File system informations ---------------------------------------------------
+    // -- File system information ---------------------------------------------------
     
     KFileItem* fi = new KFileItem(KFileItem::Unknown,
                                   KFileItem::Unknown,
@@ -213,31 +213,9 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
 
     // -- digiKam metadata ---------------------------------------------------
 
-    AlbumManager* man = AlbumManager::instance();    
-    KURL u            = url.upURL();
-    PAlbum* album     = man->findPAlbum(u);
-    
-    if (album)
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-
-        QStringList tagPaths;
-
-        IntList tagIDs(db->getItemTagIDs(album->id(), url.fileName()));
-        
-        for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
-        {
-            TAlbum* ta = man->findTAlbum(*it);
-            if (ta)
-            {
-                tagPaths.append(ta->url().remove(0,1));
-            }
-        }
-        
-        m_filealbum->setText( album->url().remove(0,1) );
-        m_filecomments->setText( db->getItemCaption( album->id(), url.filename() ) );
-        m_filetags->setText( tagPaths.join(", "));        
-    }
+    m_filealbum->setText( info->name() );
+    m_filecomments->setText( info->caption() );
+    m_filetags->setText( info->tagPaths().join("\n") );        
 }
 
 void ImagePropertiesGeneral::slotGotThumbnail(const KURL&, const QPixmap& pix)

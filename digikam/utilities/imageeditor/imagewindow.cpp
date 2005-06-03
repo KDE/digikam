@@ -778,6 +778,7 @@ void ImageWindow::slotRotatedOrFlipped()
 
 void ImageWindow::slotFileProperties()
 {
+    /*
     if (m_urlCurrent.isValid())
     {
         QRect sel = m_canvas->getSelectedArea();
@@ -790,6 +791,7 @@ void ImageWindow::slotFileProperties()
                                    data, width, height);
         properties.exec();
     }
+    */
 }
 
 void ImageWindow::slotCommentsEdit()

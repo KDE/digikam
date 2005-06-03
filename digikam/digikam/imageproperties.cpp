@@ -47,45 +47,32 @@
 
 // Constructor with AlbumIconView and AlbumIconItem instance.
 
-ImageProperties::ImageProperties(AlbumIconView* view, AlbumIconItem* currItem)
-               : KDialogBase(Tabbed, QString::null, 
-                             Help|User1|User2|Stretch|Close,
-                             Close, view, 0, true, true, 
-                             KStdGuiItem::guiItem(KStdGuiItem::Forward), 
-                             KStdGuiItem::guiItem(KStdGuiItem::Back))
+ImageProperties::ImageProperties(enum Mode mode, AlbumIconView* view, AlbumIconItem* currItem,
+                                 QRect* selectionArea, uint* imageData,
+                                 int imageWidth, int imageHeight)
+    : KDialogBase(Tabbed, QString::null,
+                  (mode == MULTI) ? Help|User1|User2|Stretch|Close : Help|Stretch|Close,
+                  Close, view, 0, true, true),
+      m_view(view), m_currItem(currItem), m_mode(mode)
 {
-    m_view          = view; 
-    m_currItem      = currItem;
-    m_currURL       = currItem->imageInfo()->kurl();
-    m_mode          = MULTI;
-    
-    m_selectionArea = 0;
-    m_imageData     = 0;
-    m_imageWidth    = 0;
-    m_imageHeight   = 0;
-    
-    enableButton(User1, m_currItem->nextItem() != 0);
-    enableButton(User2, m_currItem->prevItem() != 0);
-    
-    setupGui();
-}
+    if (m_mode == MULTI)
+    {
+        setButtonGuiItem(User1, KStdGuiItem::guiItem(KStdGuiItem::Forward));
+        setButtonGuiItem(User2, KStdGuiItem::guiItem(KStdGuiItem::Back));
 
+        enableButton(User1, m_currItem->nextItem() != 0);
+        enableButton(User2, m_currItem->prevItem() != 0);
+    }
 
-ImageProperties::ImageProperties(QWidget *parent, const KURL& url, QRect *selectionArea, 
-                                 uint* imageData, int imageWidth, int imageHeight)
-               : KDialogBase(Tabbed, QString::null, 
-                             Help|Stretch|Close,
-                             Close, parent, 0, true, true)
-{
-    m_view          = 0L;
-    m_currItem      = 0L;
-    m_currURL       = url;
-    m_mode          = SINGLE;
-    
     m_imageData     = imageData;
     m_imageWidth    = imageWidth;
     m_imageHeight   = imageHeight;
     m_selectionArea = selectionArea;
+
+    connect(m_view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+            SLOT(slotItemDeleted(AlbumIconItem*)));
+    connect(m_view, SIGNAL(signalCleared()),
+            SLOT(slotCleared()));
     
     setupGui();
 }
@@ -109,7 +96,7 @@ void ImageProperties::setupGui(void)
     slotItemChanged();
     
     resize(configDialogSize("Image Properties Dialog"));
-    parentWidget()->setCursor( KCursor::arrowCursor() );       
+    parentWidget()->setCursor( KCursor::arrowCursor() );
 }
 
 ImageProperties::~ImageProperties()
@@ -139,7 +126,6 @@ void ImageProperties::slotUser1()
     }
         
     m_currItem  = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
-    m_currURL   = m_currItem->imageInfo()->kurl();    
     m_currItem->setSelected(true);
     m_view->ensureItemVisible(m_currItem);
     
@@ -164,7 +150,6 @@ void ImageProperties::slotUser2()
     }
     
     m_currItem    = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
-    m_currURL     = m_currItem->imageInfo()->kurl();    
     m_currItem->setSelected(true);
     m_view->ensureItemVisible(m_currItem);
     
@@ -176,19 +161,34 @@ void ImageProperties::slotUser2()
 
 void ImageProperties::slotItemChanged()
 {
-    if (!m_currURL.isValid())
+    if (!m_currItem)
         return;
 
-    
     setCursor(KCursor::waitCursor());
 
-    setCaption(i18n("Properties for '%1'").arg(m_currURL.fileName()));
+    setCaption(i18n("Properties for '%1'").
+               arg(m_currItem->imageInfo()->name()));
 
-    m_generalPage->setCurrentURL(m_currURL);
-    m_histogramPage->setData(m_currURL, m_imageData, m_imageWidth, m_imageHeight);
-    m_exifPage->setCurrentURL(m_currURL);
+    m_generalPage->setCurrentItem(m_currItem->imageInfo());
+    m_histogramPage->setData(m_currItem->imageInfo()->filePath(),
+                             m_imageData, m_imageWidth, m_imageHeight);
+    m_exifPage->setCurrentURL(m_currItem->imageInfo()->filePath());
 
     setCursor( KCursor::arrowCursor() );
+}
+
+void ImageProperties::slotItemDeleted(AlbumIconItem* item)
+{
+    if (m_currItem == item)
+    {
+        m_currItem = 0;
+        close();
+    }
+}
+
+void ImageProperties::slotCleared()
+{
+    close();
 }
 
 #include "imageproperties.moc"
