@@ -198,6 +198,8 @@ QString SearchAdvancedRule::urlOperator() const
         return("LT");
     if ( m_operator->currentText() == i18n("="))
         return("EQ");
+
+    return string;
 }
 
 QString SearchAdvancedRule::urlValue() const

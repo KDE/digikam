@@ -27,8 +27,6 @@
 #include <qdatetime.h>
 #include <qmap.h>
 
-#include <kdepimmacros.h>
-
 #include "kdatepickerpopup.h"
 
 class QEvent;

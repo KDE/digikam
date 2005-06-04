@@ -24,7 +24,6 @@
 #include <qdatetime.h>
 #include <qpopupmenu.h>
 
-#include <kdepimmacros.h>
 #include <kdatepicker.h>
 
 /**
