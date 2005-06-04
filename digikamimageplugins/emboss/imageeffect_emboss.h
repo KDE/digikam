@@ -2,7 +2,7 @@
  * File  : imageeffect_emboss.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a Digikam image editor plugin for to emboss 
+ * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -32,8 +32,11 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QSlider;
-class QSpinBox;
+class QTimer;
+
+class KIntNumInput;
+
+class Emboss;
 
 namespace Digikam
 {
@@ -58,22 +61,31 @@ protected:
     
 private:
 
-    bool         m_cancel;
-
-    QWidget     *m_parent;
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+        
+    int           m_currentRenderingMode;
     
-    QPushButton *m_helpButton;
+    QTimer       *m_timer;
     
-    QSlider     *m_depthSlider;
+    QWidget      *m_parent;
     
-    QSpinBox    *m_depthInput;
+    QPushButton  *m_helpButton;
+    
+    KIntNumInput *m_depthInput;
+    
+    Emboss       *m_embossFilter;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
-
-    void Emboss(uint* data, int Width, int Height, int d);
-    inline int Lim_Max (int Now, int Up, int Max);
+    
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
     
 private slots:
 
@@ -82,7 +94,8 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
-   
+    void slotTimer(); 
+    
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin
