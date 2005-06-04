@@ -31,6 +31,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "searchquickdialog.h"
+#include "searchadvanceddialog.h"
 #include "folderitem.h"
 #include "searchfolderview.h"
 
@@ -121,9 +122,23 @@ void SearchFolderView::quickSearchNew()
 
 void SearchFolderView::extendedSearchNew()
 {
-/* TODO:
-   add extended search
-*/    
+    KURL url;
+    SearchAdvancedDialog dlg(this, url);
+    if (dlg.exec() != KDialogBase::Accepted)
+        return;
+    SAlbum* album = AlbumManager::instance()->createSAlbum(url, true);
+
+    if (album)
+    {
+        SearchFolderItem* searchItem =
+                (SearchFolderItem*)(album->extraData(this));
+        if (searchItem)
+        {
+            clearSelection();
+            setSelected(searchItem, true);
+            slotSelectionChanged();
+        }
+    }
 }
 
 void SearchFolderView::quickSearchEdit(SAlbum* album)
