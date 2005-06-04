@@ -1,6 +1,13 @@
 * split albumfolderview into albumview and tagview
    - also port albumview and tagview to qlistview [JA]
    - add dnd stuff to the base class and derived classes [JA]
+   - add dnd to albumfolder view [JA]
+   - add context menu [JA]
+     - edit album properties
+     - delete album
+     - import
+     - batch
+     - duplicate images
 
 * allow user to edit dates (maybe through comments tag editor) [TA]
 
