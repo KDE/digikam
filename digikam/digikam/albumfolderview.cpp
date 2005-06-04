@@ -1,8 +1,8 @@
 /* ============================================================
  * File  : albumfolderview.cpp
- * Author: J�n Ahrens <joern.ahrens@kdemail.net>
+ * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-06
- * Copyright 2005 by J�n Ahrens
+ * Copyright 2005 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +29,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-#include "albumfolderview_deprecated.h"
+#include "albumfolderview.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albummanager.h"
@@ -364,6 +364,6 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem* /*item*/)
 {
 }
 
-#include "albumfolderview_deprecated.moc"
+#include "albumfolderview.moc"
 
 

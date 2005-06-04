@@ -26,7 +26,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			thumbview.cpp thumbitem.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
-		        albumfolderview_deprecated.cpp albumfolderitem_deprecated.cpp \
+		        albumfolderview.cpp albumfolderitem_deprecated.cpp \
 				albumfolderview_old.cpp \
 		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
