@@ -76,7 +76,7 @@
 
 #include "thumbnailsize.h"
 #include "albumfolderitem_deprecated.h"
-#include "albumfolderview_old.h"
+#include "albumfolderview_deprecated.h"
 #include "albumpropsedit.h"
 #include "tagcreatedlg.h"
 #include "albumsettings.h"
@@ -1963,4 +1963,4 @@ void AlbumFolderView_Deprecated::saveAlbumState()
     file.close();
 }
 
-#include "albumfolderview_old.moc"
+#include "albumfolderview_deprecated.moc"
