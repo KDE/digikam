@@ -115,7 +115,7 @@ private:    // Private methods used internally.
            lpcArray[i] = new int[Rows];
 
        return (lpcArray);
-       }   
+       };   
     
     // Function to deallocates the 2d array previously created
     static inline void Free2DArray (int** lpcArray, int Columns)
@@ -126,7 +126,7 @@ private:    // Private methods used internally.
 
        // now, we delete the main pointer
        delete [] lpcArray;
-       }   
+       };   
        
     static inline bool IsInside (int Width, int Height, int X, int Y)
        {
@@ -145,7 +145,7 @@ private:    // Private methods used internally.
            return (1.0);
 
        return( fabs (1.0 / lfSum) );
-       }
+       };
 
     static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, 
                                  uchar R, uchar G, uchar B, double Norm, 
@@ -156,7 +156,7 @@ private:    // Private methods used internally.
        
        if (overIndicator && lfMix > 255) lfMix = 0;        
        return( (uchar)CLAMP (lfMix, 0, 255) );
-       }       
+       };      
 
 public:   // Public methods.
 
