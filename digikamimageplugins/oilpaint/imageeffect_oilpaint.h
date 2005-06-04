@@ -2,7 +2,7 @@
  * File  : imageeffect_oilpaint.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-25
- * Description : a Digikam image editor plugin for to simulate 
+ * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier

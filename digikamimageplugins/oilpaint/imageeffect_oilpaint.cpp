@@ -2,7 +2,7 @@
  * File  : imageeffect_oilpaint.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-25
- * Description : a Digikam image editor plugin for to simulate 
+ * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -249,16 +249,16 @@ void ImageEffect_OilPaint::slotUser1()
        }
     else
        {    
-        m_brushSizeInput->blockSignals(true);
-        m_smoothInput->blockSignals(true);
+       m_brushSizeInput->blockSignals(true);
+       m_smoothInput->blockSignals(true);
     
-        m_brushSizeInput->setValue(1);
-        m_smoothInput->setValue(30);
+       m_brushSizeInput->setValue(1);
+       m_smoothInput->setValue(30);
             
-        m_brushSizeInput->blockSignals(false);
-        m_smoothInput->blockSignals(false);
-        slotEffect();
-        }
+       m_brushSizeInput->blockSignals(false);
+       m_smoothInput->blockSignals(false);
+       slotEffect();
+       }
 } 
 
 void ImageEffect_OilPaint::slotEffect()
@@ -339,7 +339,7 @@ void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
               {
               case PreviewRendering:
                  {
-                 kdDebug() << "Preview Oil Paint completed..." << endl;
+                 kdDebug() << "Preview Oil Painting completed..." << endl;
                  
                  QImage imDest = m_oilpaintFilter->getTargetImage();
                  m_imagePreviewWidget->setPreviewImageData(imDest);
@@ -350,7 +350,7 @@ void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
               
               case FinalRendering:
                  {
-                 kdDebug() << "Final Oil Paint completed..." << endl;
+                 kdDebug() << "Final Oil Painting completed..." << endl;
                  
                  Digikam::ImageIface iface(0, 0);
   
@@ -369,7 +369,7 @@ void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
                 {
                 case PreviewRendering:
                     {
-                    kdDebug() << "Preview Oil Paint failed..." << endl;
+                    kdDebug() << "Preview Oil Painting failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;
