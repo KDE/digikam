@@ -29,7 +29,7 @@
 #include "themeengine.h"
 #include "album.h"
 
-#include "albumfolderview_deprecated.h"
+#include "albumfolderview_old.h"
 #include "albumfolderitem_deprecated.h"
 
 AlbumFolderItem_Deprecated::AlbumFolderItem_Deprecated(AlbumFolderItem_Deprecated *parent,
