@@ -57,6 +57,9 @@ private:
     void albumDelete(AlbumFolderViewItem *item);
 
     AlbumFolderViewPriv   *d;
+    
+signals:
+    void signalAlbumModified();
 };
 
 

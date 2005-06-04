@@ -29,7 +29,9 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
+#include "album.h"
 #include "albumfolderview.h"
+#include "albumpropsedit.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albummanager.h"
@@ -274,7 +276,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 
     if(album)
     {
-//        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Properties..."), 11);
 //        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
@@ -287,7 +289,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         }
         case 11:
         {
-//            tagEdit(album);
+            albumEdit(album);
             break;
         }
         case 12:
@@ -356,8 +358,51 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
 }
 
-void AlbumFolderView::albumEdit(AlbumFolderViewItem* /*item*/)
+void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
 {
+    PAlbum *album = item->getAlbum();
+    
+    if (!album)
+        return;
+
+    QString     oldTitle(album->title());
+    QString     oldComments(album->caption());
+    QString     oldCollection(album->collection());
+    QDate       oldDate(album->date());
+    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+
+    QString     title, comments, collection;
+    QDate       date;
+    QStringList albumCollections;
+
+    if (AlbumPropsEdit::editProps(album, title, comments, date, 
+                                  collection, albumCollections))
+    {
+        if (comments != oldComments)
+            album->setCaption(comments);
+
+        if (date != oldDate && date.isValid())
+            album->setDate(date);
+
+        if (collection != oldCollection)
+            album->setCollection(collection);
+
+        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+//        resort();
+
+    // Do this last : so that if anything else changed we can
+    // successfully save to the db with the old name
+
+        if (title != oldTitle)
+        {
+            QString errMsg;
+            if (!d->albumMan->renamePAlbum(album, title, errMsg))
+                KMessageBox::error(0, errMsg);
+        }
+
+        emit signalAlbumModified();
+    }
+    
 }
 
 void AlbumFolderView::albumDelete(AlbumFolderViewItem* /*item*/)
