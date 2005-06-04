@@ -11,6 +11,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
+Comment[et]=DigiKami foto suurendamise plugin
 Comment[it]=Plugin di digiKam per espandere una fotografia
 Comment[nl]=digiKam-pluin voor het opblazen van een foto
 Comment[pt]=Um 'plugin' do digiKam para explodir uma fotografia
