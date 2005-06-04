@@ -2,7 +2,7 @@
  * File  : imageeffect_solarize.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : a Digikam image plugin for to solarize
+ * Description : a digiKam image plugin for to solarize
  *               an image.
  *
  * Copyright 2004 by Renchi Raju
@@ -49,7 +49,6 @@
 
 #include "version.h"
 #include "imageeffect_solarize.h"
-
 
 namespace DigikamSolarizeImagesPlugin
 {
@@ -131,7 +130,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     // -------------------------------------------------------------
 
     connect(m_numInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
@@ -141,8 +140,7 @@ ImageEffect_Solarize::~ImageEffect_Solarize()
 
 void ImageEffect_Solarize::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("solarizeimage",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("solarizeimage", "digikamimageplugins");
 }
 
 void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
@@ -155,8 +153,7 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
 
 void ImageEffect_Solarize::slotEffect()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint * data = iface->getPreviewData();
     int w       = iface->previewWidth();
@@ -176,8 +173,7 @@ void ImageEffect_Solarize::slotEffect()
 void ImageEffect_Solarize::slotOk()
 {
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
     int w       = iface->originalWidth();
@@ -200,19 +196,20 @@ void ImageEffect_Solarize::slotOk()
 
 void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
 {
-    uint *ptr  = data;
-    uint a,r,g,b;
+    uint a, r, g, b;
+    Digikam::ImageFilters::imageData imagedata;
 
-    uint threshold = (uint)((100-factor)*(255+1)/100);
-    threshold = QMAX(1,threshold);
+    uint threshold = (uint)((100 - factor)*(255 + 1) / 100);
+    threshold = QMAX(1, threshold);
     bool stretch = true;
 
-    for (int x=0; x<w*h; x++) 
+    for (int x = 0; x < w*h; x++) 
        {
-       a = (*ptr >> 24) & 0xff;
-       r = (*ptr >> 16) & 0xff;
-       g = (*ptr >> 8 ) & 0xff;
-       b = (*ptr      ) & 0xff;
+       imagedata.raw = data[x];
+       r             = (uint)imagedata.channel.red;
+       g             = (uint)imagedata.channel.green;
+       b             = (uint)imagedata.channel.blue;
+       a             = (uint)imagedata.channel.alpha;
 
        if (stretch) 
           {
@@ -222,16 +219,16 @@ void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
           }
        else 
           {
-          if (r > threshold)
-             r = (255-r);
-          if (g > threshold)
-             g = (255-g);
-          if (b > threshold)
-             b = (255-b);
+          if (r > threshold) r = (255-r);
+          if (g > threshold) g = (255-g);
+          if (b > threshold) b = (255-b);
           }
 
-       *ptr = a << 24 | r << 16 | g << 8 | b;
-       ptr++;
+       imagedata.channel.red   = r;
+       imagedata.channel.green = g;
+       imagedata.channel.blue  = b;         
+       imagedata.channel.alpha = a;         
+       data[x] = imagedata.raw;
        }
 }
 
