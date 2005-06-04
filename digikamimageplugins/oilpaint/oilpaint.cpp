@@ -2,7 +2,7 @@
  * File  : oilpaint.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-25
- * Description : Oilpaint threaded image filter.
+ * Description : OilPainting threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -64,24 +64,15 @@ void OilPaint::filterImage(void)
     
 void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smoothness)
 {
-    int LineWidth = w * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-      
-    uchar* newBits = (uchar*)m_destImage.bits();    
-    int  i = 0;
-    uint color;
+    uint* newBits = (uint*)m_destImage.bits();    
+    int          i = 0;
     
     for (int h2 = 0; !m_cancel && (h2 < h); h2++)
        {
        for (int w2 = 0; !m_cancel && (w2 < w); w2++)
           {
-          i = h2 * LineWidth + 4*w2;
-          color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
-          
-          newBits[i+3] = (uchar)(color >> 24);
-          newBits[i+2] = (uchar)(color >> 16);
-          newBits[i+1] = (uchar)(color >> 8);
-          newBits[ i ] = (uchar)(color);
+          i = h2 * w + w2;
+          newBits[i] = MostFrequentColor (data, w, h, w2, h2, BrushSize, Smoothness);
           }
        
        // Update de progress bar in dialog.
@@ -108,16 +99,14 @@ void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smooth
  *                     the center of this matrix and find the most frequenty color   
  */
 
-uint OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height, int X, 
+uint OilPaint::MostFrequentColor (uint* Bits, int Width, int Height, int X, 
                                   int Y, int Radius, int Intensity)
 {
-    int i, w, h, I;
-    uint color;
+    int  i, w, h, I;
+    uint red, green, blue;
+    Digikam::ImageFilters::imageData imagedata;
     
     double Scale = Intensity / 255.0;
-    int LineWidth = 4 * Width;
-    
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);   // Don't take off this step
         
     // Alloc some arrays to be used
     uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
@@ -137,21 +126,27 @@ uint OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height, int X,
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
                 {
                 // You'll see a lot of times this formula
-                i = h * LineWidth + 4 * w;
-                I = (uint)(GetIntensity (Bits[i+2], Bits[i+1], Bits[i]) * Scale);
+                i = h * Width + w;
+                
+                imagedata.raw = Bits[i];
+                red           = (uint)imagedata.channel.red;
+                green         = (uint)imagedata.channel.green;
+                blue          = (uint)imagedata.channel.blue;
+                       
+                I = (uint)(GetIntensity (red, green, blue) * Scale);
                 IntensityCount[I]++;
 
                 if (IntensityCount[I] == 1)
                     {
-                    AverageColorR[I] = Bits[i+2];
-                    AverageColorG[I] = Bits[i+1];
-                    AverageColorB[I] = Bits[ i ];
+                    AverageColorR[I] = red;
+                    AverageColorG[I] = green;
+                    AverageColorB[I] = blue;
                     }
                 else
                     {
-                    AverageColorR[I] += Bits[i+2];
-                    AverageColorG[I] += Bits[i+1];
-                    AverageColorB[I] += Bits[ i ];
+                    AverageColorR[I] += red;
+                    AverageColorG[I] += green;
+                    AverageColorB[I] += blue;
                     }
                 }
             }
@@ -169,18 +164,22 @@ uint OilPaint::MostFrequentColor (uchar* Bits, int Width, int Height, int X,
           }
        }
 
-    int R, G, B;
-    R = AverageColorR[I] / MaxInstance;
-    G = AverageColorG[I] / MaxInstance;
-    B = AverageColorB[I] / MaxInstance;
-    color = qRgb (R, G, B);
-
-    delete [] IntensityCount;        // free all the arrays
+    // To get Alpha channel value from original (unchanged)
+    imagedata.raw = Bits[Y * Width + X];
+                
+    // Overwrite RGB values to destination.
+    imagedata.channel.red   = AverageColorR[I] / MaxInstance;
+    imagedata.channel.green = AverageColorG[I] / MaxInstance;
+    imagedata.channel.blue  = AverageColorB[I] / MaxInstance;
+    
+    // free all the arrays
+    delete [] IntensityCount;        
     delete [] AverageColorR;
     delete [] AverageColorG;
     delete [] AverageColorB;
 
-    return (color);                    // return the most frequenty color
+    // return the most frequenty color
+    return (imagedata.raw);   
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin

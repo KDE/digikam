@@ -2,7 +2,7 @@
  * File  : oilpaint.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-25
- * Description : Despeckle threaded image filter.
+ * Description : OilPainting threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -38,24 +38,24 @@ public:
     
     ~OilPaint(){};
     
-private:  // Despeckle filter data.
+private:  // OilPaint filter data.
 
     int m_brushSize;
     int m_smoothness;
     
-private:  // Despeckle filter methods.
+private:  // OilPaint filter methods.
 
     virtual void filterImage(void);
 
     void oilpaintImage(uint* data, int w, int h, int BrushSize, int Smoothness);
 
-    uint MostFrequentColor (uchar* Bits, int Width, int Height, int X, 
+    uint MostFrequentColor (uint* Bits, int Width, int Height, int X, 
                             int Y, int Radius, int Intensity);
     
     // Function to calcule the color intensity and return the luminance (Y)
     // component of YIQ color model.
     inline uint GetIntensity(uint Red, uint Green, uint Blue)
-           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); } 
+           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); };
 };    
 
 }  // NameSpace DigikamOilPaintImagesPlugin
