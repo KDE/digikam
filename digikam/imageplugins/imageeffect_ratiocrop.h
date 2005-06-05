@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-06
- * Description : Ratio crop tool for ImageEditor
+ * Description : Ratio crop tool for digiKam image editor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@
 class QLabel;
 class QComboBox;
 class QCheckBox;
+class QPushButton;
 
 class KIntNumInput;
 class KIntSpinBox;
@@ -58,6 +59,9 @@ private:
     
     QCheckBox    *m_useRuleThirdLines;
     
+    QPushButton  *m_centerWidth;
+    QPushButton  *m_centerHeight;
+    
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;
     KIntNumInput *m_xInput;    
@@ -67,6 +71,8 @@ private:
     KIntSpinBox  *m_customRatioDInput;
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
+
+private:
     
     void readSettings(void);
     void writeSettings(void);
@@ -78,7 +84,9 @@ private slots:
     void slotUser1();
     void slotUser2();
     void slotOk();
-    
+
+    void slotCenterWidth(void);
+    void slotCenterHeight(void);
     void slotXChanged(int x);
     void slotYChanged(int y);
     void slotWidthChanged(int w);

@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-09
- * Description : 
+ * Description : image selection widget used by ratio crop tool.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,12 +58,19 @@ public:
     Paysage
     };
 
+    enum CenterType
+    {
+    CenterWidth = 0,           // Center selection to the center of image width.
+    CenterHeight,              // Center selection to the center of image height.
+    CenterImage                // Center selection to the center of image.
+    };
+    
     ImageSelectionWidget(int width, int height, QWidget *parent=0, 
                          float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
                          int orient=Landscape, bool ruleThirdLines=false);
     ~ImageSelectionWidget();
 
-    void  setCenterSelection(void);
+    void  setCenterSelection(int centerType=CenterImage);
     void  setSelectionX(int x);
     void  setSelectionY(int y);
     void  setSelectionWidth(int w);
@@ -147,6 +154,8 @@ private:
     int         m_currentOrientation;
     
     float       m_currentAspectRatioValue;
+                
+private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     void regionSelectionMoved( bool targetDone );

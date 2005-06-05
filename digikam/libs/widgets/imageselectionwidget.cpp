@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-09
- * Description : 
+ * Description : image selection widget used by ratio crop tool.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,13 +129,63 @@ int ImageSelectionWidget::getMinHeightRange(void)
 
 void ImageSelectionWidget::resetSelection(void)
 {
-    m_regionSelection.setX(0);
-    m_regionSelection.setY(0);
+    m_regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
     m_regionSelection.setWidth((int)(m_iface->originalWidth()/2.0));
     m_regionSelection.setHeight((int)(m_iface->originalHeight()/2.0));
     realToLocalRegion();
     applyAspectRatio(false, false);
-    setCenterSelection();
+    m_localRegionSelection.moveBy(
+      (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
+      (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
+    applyAspectRatio(false, true, false);
+    regionSelectionChanged(true);
+}
+
+void ImageSelectionWidget::setCenterSelection(int centerType)
+{
+    localToRealRegion();
+    
+    switch (centerType)
+       {
+       case CenterWidth:
+          m_regionSelection.moveLeft(0);
+          break;
+       
+       case CenterHeight:
+          m_regionSelection.moveTop(0);
+          break;
+       
+       case CenterImage:
+          m_regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
+          break;
+       }
+    
+    realToLocalRegion();
+    applyAspectRatio(false, false);
+    
+    switch (centerType)
+       {
+       case CenterWidth:
+          m_localRegionSelection.moveBy(
+            (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
+            0);
+          break;
+       
+       case CenterHeight:
+          m_localRegionSelection.moveBy(
+            0, 
+            (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
+          break;
+       
+       case CenterImage:
+          m_localRegionSelection.moveBy(
+            (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
+            (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
+          break;
+       }
+       
+    applyAspectRatio(false, true, false);
+    regionSelectionChanged(true);
 }
 
 void ImageSelectionWidget::maxAspectSelection(void)
@@ -296,15 +346,6 @@ void ImageSelectionWidget::setSelectionHeight(int h)
 
 void ImageSelectionWidget::slotTimerDone(void)
 {
-    regionSelectionChanged(true);
-}
-
-void ImageSelectionWidget::setCenterSelection(void)
-{
-    m_localRegionSelection.moveBy(
-      (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
-      (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
-    applyAspectRatio(false, true, false);
     regionSelectionChanged(true);
 }
 

@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-06
- * Description : Ratio crop tool for ImageEditor
+ * Description : Ratio crop tool for digiKam image editor
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qimage.h>
+#include <qpushbutton.h>
 
 // KDE includes.
 
@@ -59,8 +60,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                        m_parent(parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
-    setButtonWhatsThis ( User1, i18n("<p>Reset selection area to the image center.") );     
-    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size according to the current ratio.") );     
+    setButtonWhatsThis ( User1, i18n("<p>Reset selection area to the default values.") );     
+    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size according "
+                                     "to the current ratio.") );     
     
     // -------------------------------------------------------------
         
@@ -71,9 +73,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
-    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>You can see here the aspect ratio selection preview used for "
-                                                  "cropping. You can use the mouse for moving and resizing the crop "
-                                                  "area."));
+    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>You can see here the aspect ratio selection preview "
+                                                  "used for cropping. You can use the mouse for moving and "
+                                                  " resizing the crop area."));
     l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
     topLayout->addMultiCellWidget(gbox, 0, 0, 0, 4);
  
@@ -133,8 +135,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_centerWidth = new QPushButton(i18n("Center"), plainPage());
+    QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
     topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
-    topLayout->addMultiCellWidget(m_widthInput, 3, 3, 3, 4);
+    topLayout->addMultiCellWidget(m_widthInput, 3, 3, 2, 3);
+    topLayout->addMultiCellWidget(m_centerWidth, 3, 3, 4, 4);
     
     m_yInput = new KIntNumInput(plainPage());
     m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
@@ -144,8 +149,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+    m_centerHeight = new QPushButton(i18n("Center"), plainPage());
+    QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
-    topLayout->addMultiCellWidget(m_heightInput, 4, 4, 3, 4);
+    topLayout->addMultiCellWidget(m_heightInput, 4, 4, 2, 3);
+    topLayout->addMultiCellWidget(m_centerHeight, 4, 4, 4, 4);
     
     // -------------------------------------------------------------
     
@@ -188,6 +196,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));      
 
+    connect(m_centerWidth, SIGNAL(clicked()),
+            this, SLOT(slotCenterWidth()));
+
+    connect(m_centerHeight, SIGNAL(clicked()),
+            this, SLOT(slotCenterHeight()));
+                                                
     // -------------------------------------------------------------
                 
     readSettings();             
@@ -208,13 +222,15 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
     m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
     
-    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 3) );                 // 3:4 per default.
+    // 3:4 per default.
+    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 3) );                 
     m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
     m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
     
     applyRatioChanges(m_ratioCB->currentItem());
 
-    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    // Paysage per default.
+    // Paysage per default.
+    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    
     
     if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
        {
@@ -260,6 +276,16 @@ void ImageEffect_RatioCrop::slotUser2()
     m_imageSelectionWidget->maxAspectSelection();
 } 
 
+void ImageEffect_RatioCrop::slotCenterWidth()
+{
+    m_imageSelectionWidget->setCenterSelection(Digikam::ImageSelectionWidget::CenterWidth);
+} 
+
+void ImageEffect_RatioCrop::slotCenterHeight()
+{
+    m_imageSelectionWidget->setCenterSelection(Digikam::ImageSelectionWidget::CenterHeight);
+} 
+    
 void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
 {
     m_xInput->blockSignals(true);
