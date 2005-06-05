@@ -108,7 +108,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));    
-    
+    connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
+            this, SLOT(slotAlbumIconChanged(Album*)));
+        
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));    
     
@@ -260,6 +262,17 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
         return;
 
     item->setPixmap(0, thumbnail);
+}
+
+void AlbumFolderView::slotAlbumIconChanged(Album* album)
+{
+    if(!album || album->type() != Album::PHYSICAL)
+        return;
+
+    AlbumFolderViewItem *item = d->dict.find(album->id());
+
+    if(item)
+        setAlbumThumbnail((PAlbum*)album);
 }
 
 void AlbumFolderView::slotSelectionChanged()

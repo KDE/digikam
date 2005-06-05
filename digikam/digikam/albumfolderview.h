@@ -50,7 +50,8 @@ private slots:
     void slotAlbumAdded(Album *);
     void slotNewAlbumCreated(Album* album);
     void slotAlbumDeleted(Album *album);
-                
+    void slotAlbumIconChanged(Album* album);
+                            
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     
     void slotDIOResult(KIO::Job* job);
