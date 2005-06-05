@@ -40,6 +40,7 @@
 #include "thumbnailsize.h"
 #include "albumpropsedit.h"
 #include "folderitem.h"
+#include "dio.h"
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
@@ -103,8 +104,10 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
                
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
+    connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));    
     
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));    
@@ -174,6 +177,37 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
 
     ensureItemVisible(item);
     setSelected(item, true);
+}
+
+void AlbumFolderView::slotAlbumDeleted(Album *album)
+{
+    kdDebug()<<"LLLLLLLLLLLLLLLLLLLLLLLLL\n";
+    if(!album)
+        return;
+    kdDebug() << "LLLLAAAAAAAAAAAAAAAAAAAAAA\n";
+
+    if(album->type() == Album::PHYSICAL)
+    {
+        kdDebug()<<"LLLLBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\n";
+        PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+        if(!palbum->icon().isEmpty() && !d->iconThumbJob)
+            d->iconThumbJob->removeItem(palbum->icon());
+
+        AlbumFolderViewItem* item = d->dict.find(palbum->id());
+        if(item)
+        {
+            AlbumFolderViewItem *itemParent = 
+                    dynamic_cast<AlbumFolderViewItem*>(item->parent());
+            
+            if(itemParent)
+                itemParent->takeItem(item);
+            else
+                takeItem(item);
+
+            delete item;
+          //TODO    clearEmptyGroupItems();
+        }
+    }
 }
 
 void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
@@ -266,35 +300,35 @@ void AlbumFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(albumitem->getAlbum());
 }
 
-void AlbumFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
+void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
 
-    AlbumFolderViewItem *album = dynamic_cast<AlbumFolderViewItem*>(item);
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
 
     popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
 
-    if(album)
+    if(item)
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Properties..."), 11);
-//        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
+        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
     switch(popmenu.exec((QCursor::pos())))
     {
         case 10:
         {
-            albumNew(album);
+            albumNew(item);
             break;
         }
         case 11:
         {
-            albumEdit(album);
+            albumEdit(item);
             break;
         }
         case 12:
         {
-//            tagDelete(album);
+            albumDelete(item);
             break;
         }
         default:
@@ -358,6 +392,73 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
 }
 
+void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
+{
+    PAlbum *album = item->getAlbum();
+    
+    if(!album || album->isRoot())
+        return;
+
+    // find number of subalbums
+    int children = 0;
+    AlbumIterator it(album);
+    while(it.current())
+    {
+        children++;
+        ++it;
+    }
+
+    int result = KMessageBox::No;
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (children)
+    {
+        if(settings->getUseTrash())
+        {
+            result = KMessageBox::warningYesNo(this,
+                        i18n("Album '%1' has %2 subalbums. "
+                             "Moving this to trash will also move the "
+                             "subalbums to trash. "
+                             "Are you sure you want to continue?")
+                             .arg(album->title())
+                             .arg(children));
+        }
+        else
+        {
+            result = KMessageBox::warningYesNo(this,
+                        i18n("Album '%1' has %2 subalbums. "
+                             "Deleting this will also delete "
+                             "the subalbums. "
+                             "Are you sure you want to continue?")
+                             .arg(album->title())
+                             .arg(children));
+        }
+    }
+    else
+    {
+        result = KMessageBox::questionYesNo(this, settings->getUseTrash() ?
+                i18n("Move album '%1' to trash?").arg(album->title()) :
+                i18n("Delete album '%1' from disk?").arg(album->title()));
+    }
+
+    if(result == KMessageBox::Yes)
+    {
+        // TODO: currently trash kioslave can handle only full paths.
+        // pass full folder path to the trashing job
+        KURL u;
+        u.setProtocol("file");
+        u.setPath(album->folderPath());
+        KIO::Job* job = DIO::del(u);
+        connect(job, SIGNAL(result(KIO::Job *)),
+                this, SLOT(slotDIOResult(KIO::Job *)));
+    }
+}
+
+void AlbumFolderView::slotDIOResult(KIO::Job* job)
+{
+    if (job->error())
+        job->showErrorDialog(this);
+}
+
 void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
 {
     PAlbum *album = item->getAlbum();
@@ -375,25 +476,25 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
     QDate       date;
     QStringList albumCollections;
 
-    if (AlbumPropsEdit::editProps(album, title, comments, date, 
+    if(AlbumPropsEdit::editProps(album, title, comments, date, 
                                   collection, albumCollections))
     {
-        if (comments != oldComments)
+        if(comments != oldComments)
             album->setCaption(comments);
 
-        if (date != oldDate && date.isValid())
+        if(date != oldDate && date.isValid())
             album->setDate(date);
 
-        if (collection != oldCollection)
+        if(collection != oldCollection)
             album->setCollection(collection);
 
         AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
-//        resort();
+//TODO        resort();
 
     // Do this last : so that if anything else changed we can
     // successfully save to the db with the old name
 
-        if (title != oldTitle)
+        if(title != oldTitle)
         {
             QString errMsg;
             if (!d->albumMan->renamePAlbum(album, title, errMsg))
@@ -403,10 +504,6 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         emit signalAlbumModified();
     }
     
-}
-
-void AlbumFolderView::albumDelete(AlbumFolderViewItem* /*item*/)
-{
 }
 
 #include "albumfolderview.moc"

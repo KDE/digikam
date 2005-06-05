@@ -21,6 +21,8 @@
 #ifndef _ALBUMFOLDERVIEW_H_
 #define _ALBUMFOLDERVIEW_H_
 
+#include <kio/job.h>
+
 #include "folderview.h"
 
 class KURL;
@@ -42,11 +44,16 @@ public:
 
 private slots:
 
-    void slotAlbumAdded(Album *);
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
     void slotSelectionChanged();
+    
+    void slotAlbumAdded(Album *);
     void slotNewAlbumCreated(Album* album);
+    void slotAlbumDeleted(Album *album);
+                
     void slotContextMenu(QListViewItem*, const QPoint&, int);
+    
+    void slotDIOResult(KIO::Job* job);
     
 private:
 
