@@ -141,7 +141,7 @@
        </para>
 
        <para>
-       <ulink url="http://lists.sourceforge.net/lists/listinfo/digikam-users">&digikam; Users Mailing 
+       <ulink url="https://mail.kde.org/mailman/listinfo/digikam-users">&digikam; Users Mailing 
        List joining instructions.</ulink>
        </para>
 
@@ -159,7 +159,7 @@
 
        <para>
        The best way to start getting involved with &digikam; is to join the Developers Mailing List.
-       <ulink url="http://lists.sourceforge.net/lists/listinfo/digikam-devel">&digikam; Developer Mailing 
+       <ulink url="https://mail.kde.org/mailman/listinfo/digikam-devel">&digikam; Developer Mailing 
        List joining instructions.</ulink>
        </para>
        </sect2>
@@ -4031,7 +4031,7 @@ Because &digikam; depends on <emphasis>libkipi</emphasis> and <emphasis>libkexif
 </note>
 
 <para>
-Since &digikam; uses autoconf and automake you should not have trouble compiling it. If you run into problems please report them to <email>digikam-users@lists.sourceforge.net</email>.
+Since &digikam; uses autoconf and automake you should not have trouble compiling it. If you run into problems please report them to <email>digikam-users@kde.org</email>.
 </para>
 
 </sect1>
