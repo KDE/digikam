@@ -2,7 +2,7 @@
 <kdevelop>
   <general>
     <author>digiKam team</author>
-    <email>digikam-devel@lists.sourceforge.net</email>
+    <email>digikam-devel@kde.org</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
