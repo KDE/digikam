@@ -226,13 +226,13 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
             d->iconThumbJob = new ThumbnailJob(album->iconKURL(),
                                                (int)ThumbnailSize::Tiny,
                                                true);
-            connect(d->iconThumbJob,
+            connect(d->iconThumbJob, 
                     SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                     this,
                     SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
-            /*connect(d->iconThumbJob,
+            connect(d->iconThumbJob,
                     SIGNAL(signalFailed(const KURL&)),
-                    SLOT(slotThumbnailLost(const KURL&)));*/
+                    SLOT(slotThumbnailLost(const KURL&)));
         }
         else
         {
@@ -253,7 +253,7 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
 {
     PAlbum* album = d->albumMan->findPAlbum(url.directory());
 
-    if (!album)
+    if(!album)
         return;
 
     AlbumFolderViewItem *item = d->dict.find(album->id());
@@ -262,6 +262,24 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
         return;
 
     item->setPixmap(0, thumbnail);
+}
+
+void AlbumFolderView::slotThumbnailLost(const KURL &url)
+{
+    PAlbum *album = AlbumManager::instance()->findPAlbum(url.directory());
+    if(!album)
+        return;
+    
+    AlbumFolderViewItem *item = d->dict.find(album->id());
+    if(item)
+    {
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup, 32,
+                                                KIcon::DefaultState, 0, true));
+
+        QString errMsg;
+        d->albumMan->updatePAlbumIcon(album, "", false, errMsg);
+    }
 }
 
 void AlbumFolderView::slotAlbumIconChanged(Album* album)

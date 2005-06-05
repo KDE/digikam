@@ -45,6 +45,7 @@ public:
 private slots:
 
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
+    void slotThumbnailLost(const KURL &url);    
     void slotSelectionChanged();
     
     void slotAlbumAdded(Album *);
