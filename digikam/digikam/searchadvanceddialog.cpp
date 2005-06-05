@@ -94,8 +94,6 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
             SLOT(slotGroupRules()));
     connect(m_ungroupButton, SIGNAL(clicked()),
             SLOT(slotUnGroupRules()));
-    connect(m_title, SIGNAL(textChanged(const QString &)),
-            SLOT(slotEnableSaveButton()));
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
 }
@@ -158,7 +156,6 @@ void SearchAdvancedDialog::slotDelRules()
     if (m_baseList.isEmpty())
     {
         m_optionsCombo->setEnabled(false);
-        m_saveButton->setEnabled(false);
     }
 }
 

@@ -55,7 +55,6 @@ private:
     QPushButton*       m_delButton;
     QPushButton*       m_groupButton;
     QPushButton*       m_ungroupButton;
-    QPushButton*       m_saveButton;
     QComboBox*         m_optionsCombo;
     QLineEdit*         m_title;
     QValueList<SearchAdvancedBase*>  m_baseList;
