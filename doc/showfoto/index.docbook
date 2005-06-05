@@ -108,7 +108,7 @@
        </para>
 
        <para>
-       <ulink url="http://lists.sourceforge.net/lists/listinfo/digikam-users">&showfoto; Users Mailing 
+       <ulink url="https://mail.kde.org/mailman/listinfo/digikam-users">&showfoto; Users Mailing 
        List joining instructions.</ulink>
        </para>
 
@@ -126,7 +126,7 @@
 
        <para>
        The best way to start getting involved with &showfoto; is to join the Developers Mailing List.
-       <ulink url="http://lists.sourceforge.net/lists/listinfo/digikam-devel">&showfoto; Developer Mailing 
+       <ulink url="https://mail.kde.org/mailman/listinfo/digikam-devel">&showfoto; Developer Mailing 
        List joining instructions.</ulink>
        </para>
        </sect2>
@@ -2356,7 +2356,7 @@ Because &showfoto; depends on <emphasis>libkexif</emphasis>, you must build or i
 </note>
 
 <para>
-Since &showfoto; uses autoconf and automake you should not have trouble compiling it. If you run into problems please report them to <email>digikam-users@lists.sourceforge.net</email>.
+Since &showfoto; uses autoconf and automake you should not have trouble compiling it. If you run into problems please report them to <email>digikam-users@kde.org</email>.
 </para>
 
 </sect1>
