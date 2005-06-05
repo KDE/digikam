@@ -133,6 +133,9 @@ TagFolderView::TagFolderView(QWidget *parent)
             SLOT(slotAlbumDeleted(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
             SLOT(slotAlbumsCleared()));
+    connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
+            this, SLOT(slotAlbumIconChanged(Album*)));
+    
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));    
 }
@@ -225,6 +228,17 @@ void TagFolderView::slotSelectionChanged()
     }
 
     d->albumMan->setCurrentAlbum(tagitem->getTag());
+}
+
+void TagFolderView::slotAlbumIconChanged(Album* album)
+{
+    if(!album || album->type() != Album::TAG)
+        return;
+
+    TagFolderViewItem *item = d->dict.find(album->id());
+
+    if(item)
+        item->setPixmap(0, getBlendedIcon((TAlbum*)album));
 }
 
 void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
