@@ -181,14 +181,11 @@ void AlbumFolderView::slotNewAlbumCreated(Album* album)
 
 void AlbumFolderView::slotAlbumDeleted(Album *album)
 {
-    kdDebug()<<"LLLLLLLLLLLLLLLLLLLLLLLLL\n";
     if(!album)
         return;
-    kdDebug() << "LLLLAAAAAAAAAAAAAAAAAAAAAA\n";
 
     if(album->type() == Album::PHYSICAL)
     {
-        kdDebug()<<"LLLLBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\n";
         PAlbum* palbum = dynamic_cast<PAlbum*>(album);
         if(!palbum->icon().isEmpty() && !d->iconThumbJob)
             d->iconThumbJob->removeItem(palbum->icon());
@@ -228,11 +225,9 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
                                                (int)ThumbnailSize::Tiny,
                                                true);
             connect(d->iconThumbJob,
-                    SIGNAL(signalThumbnail(const KURL&,
-                                           const QPixmap&)),
+                    SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                     this,
-                    SLOT(slotGotThumbnailFromIcon(const KURL&,
-                                                  const QPixmap&)));
+                    SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
             /*connect(d->iconThumbJob,
                     SIGNAL(signalFailed(const KURL&)),
                     SLOT(slotThumbnailLost(const KURL&)));*/
