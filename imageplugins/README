@@ -41,7 +41,7 @@ Contact :
 -----------------------------------------------------------------------
 If you have questions, comments, suggestions to make do email at :
 
-digikam-users@list.sourceforge.net
+digikam-users@kde.org
 
 
 IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
@@ -61,7 +61,7 @@ Depencies :
 AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
-Digikam >= 0.7.3
+digiKam >= 0.7.3
 
 
 Installation :
