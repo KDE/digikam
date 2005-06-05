@@ -48,6 +48,7 @@ private slots:
     void slotChangeButtonStates();
     void slotTimeOut();
     void slotPropertyChanged();
+    void slotOk();
 
 private:
     QVBox*             m_box;

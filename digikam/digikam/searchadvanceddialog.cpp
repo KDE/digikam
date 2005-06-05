@@ -55,10 +55,14 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     m_box->setFrameStyle(QFrame::Panel|QFrame::Raised);
     m_box->layout()->setSpacing(5);
     m_box->layout()->setMargin(5);
+    m_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_box->layout()->setAlignment(Qt::AlignTop);
     lay->addWidget(m_box);
 
     QHGroupBox* box = 0;
     box = new QHGroupBox(vbox);
+    box->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    
     m_optionsCombo = new QComboBox( box );
     m_optionsCombo->insertItem(i18n("As Well As"));
     m_optionsCombo->insertItem(i18n("Or"));
@@ -68,6 +72,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     lay->addWidget(box);
 
     box = new QHGroupBox(vbox);
+    box->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_groupButton   = new QPushButton(i18n("&Group"), box);
     m_ungroupButton = new QPushButton(i18n("&Ungroup"), box);
     lay->addWidget(box);
@@ -112,12 +117,14 @@ void SearchAdvancedDialog::slotAddRule()
             SearchAdvancedRule::AND :
             SearchAdvancedRule::OR);
     m_baseList.append(rule);
-    connect( rule, SIGNAL( baseItemToggled() ) ,
+    connect( rule, SIGNAL( signalBaseItemToggled() ) ,
              SLOT( slotChangeButtonStates() ) );
-    connect( rule, SIGNAL( propertyChanged() ),
+    connect( rule, SIGNAL( signalPropertyChanged() ),
             SLOT(slotPropertyChanged()));
 
-    m_optionsCombo->setEnabled(true);
+    m_addButton->setEnabled(false);
+    m_optionsCombo->setEnabled(false);
+    adjustSize();
 }
 
 void SearchAdvancedDialog::slotDelRules()
@@ -153,10 +160,12 @@ void SearchAdvancedDialog::slotDelRules()
 
     adjustSize();
     slotChangeButtonStates();
-    if (m_baseList.isEmpty())
-    {
+    slotPropertyChanged();
+    if (m_baseList.isEmpty()) {
         m_optionsCombo->setEnabled(false);
+        m_addButton->setEnabled(true);
     }
+    adjustSize();
 }
 
 void SearchAdvancedDialog::slotGroupRules()
@@ -228,11 +237,12 @@ void SearchAdvancedDialog::slotGroupRules()
         m_box->layout()->add((*it)->widget());
     }
 
-    connect( group, SIGNAL( baseItemToggled() ) ,
+    connect( group, SIGNAL( signalBaseItemToggled() ) ,
              SLOT( slotChangeButtonStates() ) );
  
     adjustSize();
     slotChangeButtonStates();
+    slotPropertyChanged();
 }
 
 void SearchAdvancedDialog::slotUnGroupRules()
@@ -286,12 +296,21 @@ void SearchAdvancedDialog::slotUnGroupRules()
 
     adjustSize();
     slotChangeButtonStates();
+    slotPropertyChanged();
 }
 
 void SearchAdvancedDialog::slotPropertyChanged()
 {
     m_timer->start(500, true);
 }
+
+void SearchAdvancedDialog::slotOk()
+{
+    // calculate the latest url and name.
+    slotTimeOut();
+    KDialogBase::slotOk();
+}
+
 void SearchAdvancedDialog::slotTimeOut()
 {
     if (m_baseList.isEmpty())
@@ -299,9 +318,10 @@ void SearchAdvancedDialog::slotTimeOut()
     
     typedef QValueList<SearchAdvancedBase*>  BaseList;
 
-    QString grouping = " (";
+    QString grouping;
     int     count  = 0;
-
+    bool    emptyVal = false;
+    
     KURL url;
     url.setProtocol("digikamsearch");
 
@@ -312,22 +332,27 @@ void SearchAdvancedDialog::slotTimeOut()
         if (base->type() == SearchAdvancedBase::RULE)
         {
             SearchAdvancedRule* rule = (SearchAdvancedRule*)base;
-            if (rule->option() != SearchAdvancedBase::NONE)
-                grouping += (rule->option() == SearchAdvancedBase::AND) ?
+            QString val = rule->urlValue();
+            if ( !val.isEmpty() )
+            {
+                if (rule->option() != SearchAdvancedBase::NONE &&
+                    !count == 0 )
+                    grouping += (rule->option() == SearchAdvancedBase::AND) ?
                         " AND " : " OR ";
-
-            grouping += " " + QString::number(++count) + " ";
-            url.addQueryItem( QString::number(count) + ".key", rule->urlKey());
-            url.addQueryItem( QString::number(count) + ".op", rule->urlOperator());
-            url.addQueryItem( QString::number(count) + ".val", rule->urlValue());
+                grouping += QString::number(++count);
+                url.addQueryItem( QString::number(count) + ".key", rule->urlKey());
+                url.addQueryItem( QString::number(count) + ".op", rule->urlOperator());
+                url.addQueryItem( QString::number(count) + ".val", val);
+            }
+            else
+                emptyVal = true;
         }
         else
         {
             SearchAdvancedGroup* group = (SearchAdvancedGroup*)base;
-            if (group->option() != SearchAdvancedBase::NONE)
-                grouping += (group->option() == SearchAdvancedBase::AND) ?
-                        " AND " : " OR ";
-            grouping += " ( ";
+
+            QString tempGrouping;
+            int curCount = count;
 
             QValueList<SearchAdvancedRule*> childRules = group->childRules();
             for (QValueList<SearchAdvancedRule*>::iterator iter =
@@ -335,27 +360,46 @@ void SearchAdvancedDialog::slotTimeOut()
                  iter != childRules.end(); ++iter)
             {
                 SearchAdvancedRule* rule = (SearchAdvancedRule*)(*iter);
-                if (rule->option() != SearchAdvancedBase::NONE)
-                    grouping += (rule->option() == SearchAdvancedBase::AND) ?
+                QString val = rule->urlValue();
+                if ( !val.isEmpty() )
+                {
+                    if (rule->option() != SearchAdvancedBase::NONE &&
+                    !count == 0 )
+                        tempGrouping += (rule->option() == SearchAdvancedBase::AND) ?
                             " AND " : " OR ";
-
-                grouping += " " + QString::number(++count) + " ";
-                url.addQueryItem( QString::number(count) + ".key", rule->urlKey());
-                url.addQueryItem( QString::number(count) + ".op", rule->urlOperator());
-                url.addQueryItem( QString::number(count) + ".val",  rule->urlValue());
+                    tempGrouping += QString::number(++count);
+                    url.addQueryItem( QString::number(count) + ".key", rule->urlKey());
+                    url.addQueryItem( QString::number(count) + ".op", rule->urlOperator());
+                    url.addQueryItem( QString::number(count) + ".val", val);
+                }
+                else
+                    emptyVal = true;
             }
 
-            grouping +=  " ) ";
+            if (!tempGrouping.isEmpty())
+            {
+                if (group->option() != SearchAdvancedBase::NONE &&
+                    !curCount == 0 )
+                    grouping += (group->option() == SearchAdvancedBase::AND) ?
+                            " AND " : " OR ";
+                    grouping += "(" + tempGrouping + ")";
+            }
         }
     }
 
-    grouping += " )";
     url.setPath(grouping);
     url.addQueryItem("name", m_title->text());
     url.addQueryItem("count", QString::number(count));
     m_url = url;
-    m_resultsView->openURL( url );
-    kdDebug() << url.url() << endl;
+    if (!count == 0) 
+        m_resultsView->openURL( url );
+    kdDebug() << url << endl;
+
+    if (!m_baseList.isEmpty())
+    {
+        m_addButton->setEnabled( !emptyVal );
+        m_optionsCombo->setEnabled( !emptyVal );
+    }
 }
 
 

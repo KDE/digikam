@@ -64,12 +64,12 @@ public:
     virtual void removeOption() = 0;
 
 signals:
-    void baseItemToggled();
-    void propertyChanged();
+    void signalBaseItemToggled();
+    void signalPropertyChanged();
 
 protected slots:
-    void slotToggle() { emit baseItemToggled(); }
-    void slotRuleChanged() { emit propertyChanged(); }
+    void slotToggle() { emit signalBaseItemToggled(); }
+    void slotRuleChanged() { emit signalPropertyChanged(); }
 
 protected:
     enum Option m_option;
