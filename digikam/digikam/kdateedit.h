@@ -46,7 +46,7 @@ class QEvent;
   @author David Jarvie <software@astrojar.org.uk>
   @author Tobias Koenig <tokoe@kde.org>
 */
-class KDE_EXPORT KDateEdit : public QComboBox
+class KDateEdit : public QComboBox
 {
   Q_OBJECT
 

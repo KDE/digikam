@@ -41,7 +41,7 @@
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class KDE_EXPORT KDatePickerPopup: public QPopupMenu
+class KDatePickerPopup: public QPopupMenu
 {
     Q_OBJECT
   public:
