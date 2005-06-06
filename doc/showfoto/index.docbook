@@ -778,7 +778,11 @@
                     <para>
                     When first looking at an image, the eye of the viewer rarely settles at the centre of the image, but instead from the top left to right, and then to the lower left and right again. This pattern is most unconscious but has been well-documented. It is probably associated with the western reading pattern. From the photographer's point of view, the goal then becomes to guide the gaze of the viewer to the subject, being aware of the way many people perceive an image.
                     </para>
-                                 
+                    
+                    <para>
+                    On the right of the dialog, two buttons are available for move selection automaticly to the width or the height center of image.
+                    </para>
+                                                     
                     <para>
                     On the bottom of the dialog, the <guilabel>Max. Ratio</guilabel> button lets you set the selection area size to the maximum, accordingly with the current aspect ratio settings an orientation.
                     </para>
