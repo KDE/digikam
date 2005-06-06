@@ -469,7 +469,7 @@ void DigikamView::slot_albumAddImages()
 
 void DigikamView::slotAlbumImportFolder()
 {
-    mFolderView_Deprecated->albumImportFolder();
+    mFolderView->albumImportFolder();
 }
 
 void DigikamView::slot_albumHighlight()

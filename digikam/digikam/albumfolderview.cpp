@@ -29,6 +29,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <kfiledialog.h>
 
 #include "digikamapp.h"
 #include "album.h"
@@ -685,6 +686,51 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
     }
 }
+
+void AlbumFolderView::albumImportFolder()
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    QDir libraryDir(settings->getAlbumLibraryPath());
+    if(!libraryDir.exists())
+    {
+        KMessageBox::error(0,
+                           i18n("The Albums Library has not been set correctly.\n"
+                                "Select \"Configure Digikam\" from the Settings "
+                                "menu and choose a folder to use for the Albums "
+                                "Library."));
+        return;
+    }
+
+    PAlbum* parent = 0;
+    if(selectedItem())
+    {
+        AlbumFolderViewItem *folderItem =
+                dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+        Album *album = folderItem->getAlbum();
+        if (album && album->type() == Album::PHYSICAL)
+        {
+            parent = dynamic_cast<PAlbum*>(album);
+        }
+    }
+    if(!parent)
+        parent = dynamic_cast<PAlbum*>(d->albumMan->findPAlbum(0));
+
+    QString libraryPath = parent->folderPath();
+
+    KFileDialog dlg(QString::null, "inode/directory", this, "importFolder", true);
+    dlg.setMode(KFile::Directory |  KFile::Files);
+    if(dlg.exec() != QDialog::Accepted)
+        return;
+
+    KURL::List urls = dlg.selectedURLs();
+    if(urls.empty())
+        return;
+
+    KIO::Job* job = DIO::copy(urls, parent->kurl());
+    connect(job, SIGNAL(result(KIO::Job *)),
+            this, SLOT(slotDIOResult(KIO::Job *)));
+}
+
 
 #include "albumfolderview.moc"
 

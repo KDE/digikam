@@ -42,6 +42,8 @@ public:
     AlbumFolderView(QWidget *parent);
     ~AlbumFolderView();
 
+    void albumImportFolder();
+    
 private slots:
 
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
