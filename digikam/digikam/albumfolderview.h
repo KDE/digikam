@@ -57,6 +57,12 @@ private slots:
     
     void slotDIOResult(KIO::Job* job);
     
+protected:
+        
+    void contentsDropEvent(QDropEvent *e);
+    QDragObject* dragObject();
+    bool acceptDrop(const QDropEvent *e) const;
+    
 private:
 
     void setAlbumThumbnail(PAlbum *album);

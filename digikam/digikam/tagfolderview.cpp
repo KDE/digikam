@@ -121,6 +121,7 @@ TagFolderView::TagFolderView(QWidget *parent)
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
+    
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     
@@ -180,14 +181,17 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!album)
         return;
 
-    TAlbum *tag = dynamic_cast<TAlbum*>(album);
-    if(!tag)
-        return;
+    if(album->type() == Album::TAG)
+    {
+        TAlbum *tag = dynamic_cast<TAlbum*>(album);
+        if(!tag)
+            return;
 
-    TagFolderViewItem *item = d->dict.find(tag->id());
-    if(item) {
-        d->dict.remove(tag->id());
-        delete item;
+        TagFolderViewItem *item = d->dict.find(tag->id());
+        if(item) {
+            d->dict.remove(tag->id());
+            delete item;
+        }
     }
 }
 
@@ -476,7 +480,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
                 d->albumMan->moveTAlbum(tag, rootAlbum, errMsg);
                 TagFolderViewItem *item = new TagFolderViewItem(this, tag);
-                item->setPixmap(0, getBlendedIcon(tag));
+                item->setPixmap(0, *itemDrag->pixmap(0));
                 
                 while(QListViewItem *child = itemDrag->firstChild())
                 {
