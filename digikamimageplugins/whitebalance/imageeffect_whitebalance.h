@@ -80,7 +80,7 @@ private:
     
     uint                          m_rgbMax;
     
-    float                         curve[256];
+    float                         m_curve[256];
     float                         m_mr, m_mg, m_mb;
         
 private:
@@ -159,7 +159,8 @@ private:
     void setRGBmult(void);
     void setLUTv(void);
     void whiteBalance(uint *data, int w, int h);
-
+    inline uchar pixelColor(int colorMult, int index, int value);
+    
 private slots:
 
     void slotHelp();

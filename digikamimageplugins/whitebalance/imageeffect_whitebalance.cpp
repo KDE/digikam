@@ -807,70 +807,61 @@ void ImageEffect_WhiteBalance::setLUTv(void)
               << " WP:"   << m_WP
               << endl;
     
-    curve[0] = 0;
+    m_curve[0] = 0;
     
     for (int i = 1; i < 256; i++)
         {
         float x = (float)(i - m_BP)/(m_WP - m_BP);
-        curve[i]  = (i < m_BP) ? 0 : MAXOUT * pow(x, g);
-        curve[i] *= (1 - m_dark * exp(-x * x / 0.002));
-        curve[i] /= (float)i;
+        m_curve[i]  = (i < m_BP) ? 0 : MAXOUT * pow(x, g);
+        m_curve[i] *= (1 - m_dark * exp(-x * x / 0.002));
+        m_curve[i] /= (float)i;
         }
 }
 
 void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height)
 {  
-    int   x, y, c;
-    uint   i;
-
-    uchar *pOutBits = new uchar[width*height*4];
-    uchar *rp = (uchar *)data;
-    uchar *p  = pOutBits;
+    int  x, y;
+    uint i, j=0;
+    Digikam::ImageFilters::imageData imagedata;
          
     for (y = 0 ; y < height ; y++)
         {
-        for (x = 0 ; x < width ; x++, p += 4, rp += 4) 
+        for (x = 0 ; x < width ; x++, j++) 
             {
             int v, rv[3];
-            
-            rv[0] = (int)(rp[0] * m_mb);
-            rv[1] = (int)(rp[1] * m_mg);
-            rv[2] = (int)(rp[2] * m_mr);
+
+            imagedata.raw = data[j];
+            rv[0] = (int)(imagedata.channel.blue  * m_mb);
+            rv[1] = (int)(imagedata.channel.green * m_mg);
+            rv[2] = (int)(imagedata.channel.red   * m_mr);
             v = QMAX(rv[0], rv[1]);
             v = QMAX(v, rv[2]); 
             
             if (m_clipSat) v = QMIN(v, (int)m_rgbMax);
             i = v;
 
-            for (c = 0 ; c < 3 ; c++) 
-                {
-                int r, o;
-                
-                r = (m_clipSat && rv[c] > (int)m_rgbMax) ? m_rgbMax : rv[c];
-
-                if (v <= m_BP) 
-                    p[c] = o = 0;
-                else if (m_overExp && v > m_WP) 
-                    {
-                    if (m_WBind)
-                        r = (rv[c] > m_WP) ? 0 : r;
-                    else
-                        r = 0;
-                    }
-                
-                o = (int)((i - m_saturation*(i - r)) * curve[i]);
-                o = QMAX(o, 0);
-                o = (o > MAXOUT) ? 255 : o;
-                
-                p[c] = (uchar)o;
-                }
+            imagedata.channel.blue  = pixelColor(rv[0], i, v);
+            imagedata.channel.green = pixelColor(rv[1], i, v);
+            imagedata.channel.red   = pixelColor(rv[2], i, v);
+            data[j]                 = imagedata.raw;
             }
         }
-
-    memcpy (data, pOutBits, width*height*4);       
-            
-    delete [] pOutBits;    
 }
+
+uchar ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, int value)
+{
+    int r = (m_clipSat && colorMult > (int)m_rgbMax) ? m_rgbMax : colorMult;
+
+    if (value > m_BP && m_overExp && value > m_WP) 
+        {
+        if (m_WBind) 
+           r = (colorMult > m_WP) ? 0 : r;
+        else 
+           r = 0;
+        }
+    
+    return( (uchar)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 0, MAXOUT) );
+}               
 
 void ImageEffect_WhiteBalance::slotUser2()
 {
