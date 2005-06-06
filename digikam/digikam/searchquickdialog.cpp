@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+/** @file searchquickdialog.cpp */
+
 #include <qlineedit.h>
 #include <qtimer.h>
 #include <qlayout.h>

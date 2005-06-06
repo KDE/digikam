@@ -19,6 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/** @file searchadvanceddialog.cpp */
+
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>

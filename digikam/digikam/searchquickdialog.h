@@ -15,6 +15,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
+/** @file searchquickdialog.h */
+
 #ifndef SEARCHQUICKDIALOG_H
 #define SEARCHQUICKDIALOG_H
 
@@ -26,13 +28,27 @@ class QLineEdit;
 class QTimer;
 class SearchResultsView;
 
+/** @class SearchQuickDialog
+ * 
+ * This is the dialog for the quick search
+ * @author Renchi Raju
+ * 
+ */
 class SearchQuickDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
+    /**
+     * Constructor
+     * @param parent parent window
+     * @param url holds the url for the search
+     */
     SearchQuickDialog(QWidget* parent, KURL& url);
+    /**
+     * Destructor
+     */
     ~SearchQuickDialog();
 
 protected:

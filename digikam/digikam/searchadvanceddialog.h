@@ -19,6 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/** @file searchadvanceddialog.h */
+
 #ifndef SEARCHADVANCEDDIALOG_H
 #define SEARCHADVANCEDDIALOG_H
 
@@ -32,12 +34,28 @@ class QTimer;
 class SearchAdvancedBase;
 class SearchResultsView;
 
+/** @class SearchAdvancedDialog
+ * 
+ * This is the dialog for the advanced search
+ * @author Tom Albers
+ * @author Renchi Raju
+ * 
+ */
 class SearchAdvancedDialog : public KDialogBase
 {
     Q_OBJECT
     
 public:
+    /**
+     * Constructor
+     * @param parent parent window
+     * @param url holds the url for the search
+     */
     SearchAdvancedDialog(QWidget* parent, KURL& url);
+
+    /**
+     * Destructor
+     */
     ~SearchAdvancedDialog();
 
 private slots:
