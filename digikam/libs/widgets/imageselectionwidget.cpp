@@ -143,8 +143,6 @@ void ImageSelectionWidget::resetSelection(void)
 
 void ImageSelectionWidget::setCenterSelection(int centerType)
 {
-    localToRealRegion();
-    
     switch (centerType)
        {
        case CenterWidth:

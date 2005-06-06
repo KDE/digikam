@@ -42,6 +42,7 @@
 #include <knuminput.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 
 // Digikam includes.
 
@@ -102,8 +103,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     topLayout->addMultiCellWidget(label, 1, 1, 0, 0);
     topLayout->addMultiCellWidget(m_ratioCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(label2, 1, 1, 3, 3);
-    topLayout->addMultiCellWidget(m_orientCB, 1, 1, 4, 4);
+    topLayout->addMultiCellWidget(label2, 1, 1, 2, 2);
+    topLayout->addMultiCellWidget(m_orientCB, 1, 1, 3, 4);
 
     QHBoxLayout* l2 = new QHBoxLayout((QWidget*)0, 1, 0);
     m_customLabel1 = new QLabel(i18n("Custom ratio:"), plainPage());
@@ -127,6 +128,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     l2->addWidget( m_useRuleThirdLines );
     topLayout->addMultiCellLayout(l2, 2, 2, 0, 4);
 
+    // -------------------------------------------------------------
+    
     m_xInput = new KIntNumInput(plainPage());
     QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
@@ -135,7 +138,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    m_centerWidth = new QPushButton(i18n("Center"), plainPage());
+    m_centerWidth = new QPushButton(plainPage());
+    KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
+    m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
     QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
     topLayout->addMultiCellWidget(m_xInput, 3, 3, 0, 1);
     topLayout->addMultiCellWidget(m_widthInput, 3, 3, 2, 3);
@@ -149,7 +155,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
-    m_centerHeight = new QPushButton(i18n("Center"), plainPage());
+    m_centerHeight = new QPushButton(plainPage());
+    KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
+    m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
     QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
     topLayout->addMultiCellWidget(m_yInput, 4, 4, 0, 1);
     topLayout->addMultiCellWidget(m_heightInput, 4, 4, 2, 3);
