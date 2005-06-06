@@ -38,13 +38,14 @@ public:
 
     /**
      * Constructor
+     * @param     ID       unique ID for this image
      * @param     albumID  id of the PAlbum to which this item belongs
      * @param     name     name of the image
      * @param     datetime datetime of the image
      * @param     size     filesize of the image
      * @param     dims     dimensions of the image
      */
-    ImageInfo(int albumID, const QString& name,
+    ImageInfo(long ID, int albumID, const QString& name,
               const QDateTime& datetime, size_t size,
               const QSize& dims=QSize());
 
@@ -105,6 +106,11 @@ public:
      */
     KURL      kurlForKIO() const;
     
+    /**
+     * @return the unique image id for this item
+     */
+    long      id() const;
+
     /**
      * @return the id of the PAlbum to which this item belongs
      */
@@ -191,7 +197,8 @@ private:
     ImageInfo() {}
     ImageInfo(const ImageInfo& ) {}
     ImageInfo& operator=(const ImageInfo& ) {return *this;}
-    
+
+    long                  m_ID;
     int                   m_albumID;
     QString               m_name;
     QDateTime             m_datetime;

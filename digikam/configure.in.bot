@@ -4,6 +4,17 @@ dnl about additional packages to install.
 echo ""
 echo "-- digiKam configure results -------------------"
 
+if test "x$have_sqlite3" != "xyes"; then
+  echo "-- sqlite3 found.................. NO"
+  echo ""
+  echo "digiKam needs sqlite3. You need to install sqlite3 3.x, e.g. from"
+  echo "http://www.sqlite.org"
+  echo ""
+  all_tests=bad
+else
+  echo "-- sqlite3 found.................. YES"
+fi
+
 if test -z "$ac_imlib2_config"; then
   echo "-- imlib2 found................... NO"
   echo ""

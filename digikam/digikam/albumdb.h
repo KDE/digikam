@@ -29,9 +29,11 @@
 #include <qdatetime.h>
 #include "albuminfo.h"
 
-typedef struct sqlite sqleet; // hehe.
+typedef struct sqlite3 sqleet3; // hehe.
 
-typedef QValueList<int> IntList;
+typedef QValueList<int>  IntList;
+typedef QValueList<long> LongList;
+
 /**
  * This class is responsible for the communication
  * with the sqlite database.
@@ -112,9 +114,9 @@ public:
     /**
      * Set the icon for the album.
      * @param albumID the id of the album
-     * @param icon    the icon for the album (absolute path to the icon)
+     * @param iconID  the id of the icon file
      */
-    void setAlbumIcon(int albumID, const QString& icon);
+    void setAlbumIcon(int albumID, long iconID);
 
     /**
      * Deletes an album from the database. This will not delete the
@@ -127,10 +129,10 @@ public:
      * Adds a new tag to the database with given name, icon and parent id.
      * @param parentTagID the id of the tag which will become the new tags parent
      * @param name        the name of the tag
-     * @param icon        the icon for the path (absolute path to the icon)
+     * @param icon        the id of the icon file
      * @return the id of the tag added or -1 if it failed
      */
-    int addTag(int parentTagID, const QString& name, const QString& icon);
+    int addTag(int parentTagID, const QString& name, long iconID);
     
     /**
      * Set a new name for the tag. 
@@ -142,9 +144,9 @@ public:
     /**
      * Set the icon for the tag.
      * @param tagID the id of the tag
-     * @param icon    the icon for the tag (absolute path to the icon)
+     * @param iconID the id of the icon file
      */
-    void setTagIcon(int tagID, const QString& icon);
+    void setTagIcon(int tagID, long iconID);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
@@ -193,12 +195,21 @@ public:
      * the exif-datetime, but if not available the modification date.
      * @param comment The user comment as found in the exif-headers of the 
      * file.
-     * @return It will always return true. Maybe that will change.
+     * @return the id of item added or -1 if it fails
      */
-    bool addItem(int albumID, const QString& name,
+    long addItem(int albumID, const QString& name,
                  const QDateTime& datetime,
                  const QString& comment);
     
+    /**
+     * Update the date of a item to supplied date
+     * @param imageID The ID of the item
+     * @param datetime The datetime to be stored. Should try to let that be
+     * the exif-datetime, but if not available the modification date.
+     * @return It will always return true. Maybe that will change.
+     */
+    bool setItemDate(long imageID, const QDateTime& datetime);
+
     /**
      * Update the date of a item to supplied date
      * @param albumID The albumID where the file is located.
@@ -209,6 +220,13 @@ public:
      */
     bool setItemDate(int albumID, const QString& name,
                      const QDateTime& datetime);
+    
+    /**
+     * Set the caption for the item
+     * @param imageID the id of the item
+     * @param caption the caption for the item
+     */
+    void setItemCaption(long imageID, const QString& caption);
 
     /**
      * Set the caption for the item
@@ -217,6 +235,13 @@ public:
      * @param caption the caption for the item
      */
     void setItemCaption(int albumID, const QString& name, const QString& caption);
+    
+    /**
+     * Add a tag for the item
+     * @param imageID the ID of the item
+     * @param tagID   the tagID for the tag
+     */
+    void addItemTag(long imageID, int tagID);
 
     /**
      * Add a tag for the item
@@ -228,6 +253,13 @@ public:
     
     /**
      * Get the caption for the item
+     * @param imageID the id  of the item
+     * @return the caption for the item
+     */
+    QString getItemCaption(long imageID);
+
+    /**
+     * Get the caption for the item
      * @param albumID the albumID of the item
      * @param name    the name of the item
      * @return the caption for the item
@@ -236,52 +268,45 @@ public:
     
     /**
      * Get the datetime for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
+     * @param imageID the ID of the item
      * @return the datetime for the item
      */
-    QDateTime getItemDate(int albumID, const QString& name);
+    QDateTime getItemDate(long imageID);
 
     /**
      * Get a list of names of all the tags for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
+     * @param imageID the ID of the item
      * @return the list of names of all tags for the item
      */
-    QStringList getItemTagNames(int albumID, const QString& name);
-    
-    /**
-     * Get a list of IDs of all the tags for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
-     * @return the list of IDs of all tags for the item
-     */
-    IntList     getItemTagIDs(int albumID, const QString& name);
+    QStringList getItemTagNames(long imageID);
 
     /**
-     * Given a set of items (identified by their albumID and names),
+     * Get a list of IDs of all the tags for the item
+     * @param imageID the ID of the item
+     * @return the list of IDs of all tags for the item
+     */
+    IntList     getItemTagIDs(long imageID);
+
+    /**
+     * Given a set of items (identified by their IDs),
      * get a list of ID of all common tags
-     * @param albumIDList a list of albumIDs of the items
-     * @param nameList    a list of names of the items
+     * @param imageIDList a list of IDs of the items
      * @return the list of common IDs of the given items
      */
-    IntList     getItemCommonTagIDs(const IntList& albumIDList,
-                                    const QStringList& nameList);
+    IntList     getItemCommonTagIDs(const LongList& imageIDList);
 
     /**
      * Remove a specific tag for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
+     * @param imageID the ID of the item
      * @param tagID   the tagID for the tag
      */
-    void removeItemTag(int albumID, const QString& name, int tagID);
+    void removeItemTag(long imageID, int tagID);
 
     /**
      * Remove all tags for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
+     * @param imageID the ID of the item
      */
-    void removeItemAllTags(int albumID, const QString& name);
+    void removeItemAllTags(long imageID);
 
     /**
      * Deletes an item from the database.
@@ -350,14 +375,6 @@ public:
     void copyItem(int srcAlbumID, const QString& srcName,
                   int dstAlbumID, const QString& dstName);
 
-private:
-
-    /**
-     * Checks the available tables and creates them if they are not 
-     * available.
-     */
-    void initDB();
-
     /**
      * This will execute a given SQL statement to the database.
      * @param sql The SQL statement
@@ -367,6 +384,16 @@ private:
      */
     bool execSql(const QString& sql, QStringList* const values = 0, 
                  const bool debug = false);
+
+    bool isValid() const { return m_valid; }
+    
+private:
+
+    /**
+     * Checks the available tables and creates them if they are not 
+     * available.
+     */
+    void initDB();
 
     /**
      * Escapes text fields. This is needed for all queries to the database
@@ -379,7 +406,7 @@ private:
 
     void removeInvalidEntries();
     
-    sqleet*  m_db;
+    sqleet3* m_db;
     bool     m_valid;
 };
 

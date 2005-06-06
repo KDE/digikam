@@ -8,7 +8,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,7 @@ class AlbumInfo
 public:
 
     typedef QValueList<AlbumInfo> List;
-    
+
     int      id;
     QString  url;
     QString  caption;
@@ -61,7 +61,7 @@ class TagInfo
 public:
 
     typedef QValueList<TagInfo> List;
-    
+
     int      id;
     int      pid;
     QString  name;
@@ -72,6 +72,7 @@ public:
      */
     bool operator<(const TagInfo& info)
     {
+        //TODO: Fix
         return pid < info.pid;
     }
 };

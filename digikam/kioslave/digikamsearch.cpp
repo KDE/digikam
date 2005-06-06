@@ -2,19 +2,19 @@
  * File  : digikamsearch.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-21
- * Description : 
+ * Description :
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <kglobal.h>
@@ -37,7 +37,7 @@
 
 #include <config.h>
 
-extern "C" 
+extern "C"
 {
 #include <stdlib.h>
 #include <unistd.h>
@@ -46,7 +46,6 @@ extern "C"
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sqlite.h>
 #include <sys/time.h>
 #include <time.h>
 #include <utime.h>
@@ -58,12 +57,10 @@ kio_digikamsearch::kio_digikamsearch(const QCString &pool_socket,
                                      const QCString &app_socket)
     : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
-    m_db    = 0;
 }
 
 kio_digikamsearch::~kio_digikamsearch()
 {
-    closeDB();
 }
 
 static QValueList<QRegExp> makeFilterList( const QString &filter )
@@ -119,8 +116,8 @@ void kio_digikamsearch::special(const QByteArray& data)
     if (m_libraryPath != libraryPath)
     {
         m_libraryPath = libraryPath;
-        closeDB();
-        openDB();
+        m_db.closeDB();
+        m_db.openDB(libraryPath);
     }
 
     QValueList<QRegExp> regex = makeFilterList(filter);
@@ -131,7 +128,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         QString sqlQuery;
 
         // query head
-        sqlQuery = "SELECT Images.name, Images.dirid, Images.datetime, Albums.url "
+        sqlQuery = "SELECT Images.id, Images.name, Images.dirid, Images.datetime, Albums.url "
                    "FROM Images, Albums "
                    "WHERE ( ";
 
@@ -144,12 +141,13 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         QStringList values;
         QString     errMsg;
-        if (!execSql(sqlQuery, &values, &errMsg))
+        if (!m_db.execSql(sqlQuery, &values))
         {
             error(KIO::ERR_INTERNAL, errMsg);
             return;
         }
 
+        long        imageid;
         QString     name;
         QString     path;
         int         dirid;
@@ -160,9 +158,11 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         int  count = 0;
         QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-            
+
         for (QStringList::iterator it = values.begin(); it != values.end();)
         {
+            imageid = (*it).toLong();
+            ++it;
             name  = *it;
             ++it;
             dirid = (*it).toInt();
@@ -202,7 +202,8 @@ void kio_digikamsearch::special(const QByteArray& data)
                     }
                 }
             }
-                
+
+            *os << imageid;
             *os << dirid;
             *os << name;
             *os << date;
@@ -210,7 +211,7 @@ void kio_digikamsearch::special(const QByteArray& data)
             *os << dims;
 
             count++;
-                
+
             if (count > 200)
             {
                 delete os;
@@ -245,12 +246,12 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         QStringList values;
         QString     errMsg;
-        if (!execSql(sqlQuery, &values, &errMsg))
+        if (!m_db.execSql(sqlQuery, &values))
         {
             error(KIO::ERR_INTERNAL, errMsg);
             return;
         }
-    
+
         QDataStream ds(ba, IO_WriteOnly);
         for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
         {
@@ -260,10 +261,10 @@ void kio_digikamsearch::special(const QByteArray& data)
             }
         }
     }
-    
+
     SlaveBase::data(ba);
 
-    
+
     finished();
 }
 
@@ -274,7 +275,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
         return QString();
 
     QMap<int, RuleType> rulesMap;
-    
+
     for (int i=1; i<=count; i++)
     {
         RuleType rule;
@@ -350,7 +351,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
     }
 
     QString sqlQuery;
-    
+
     QStringList strList = QStringList::split(" ", url.path());
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
     {
@@ -361,11 +362,11 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
             RuleType rule = rulesMap[num];
             sqlQuery += subQuery(rule.key, rule.op, rule.val);
         }
-        else 
+        else
         {
             sqlQuery += " " + *it + " ";
         }
-    }                     
+    }
 
     return sqlQuery;
 }
@@ -403,17 +404,17 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     }
     case(TAG):
     {
-        query = " (Images.dirid||','||Images.name IN "
-                "   (SELECT dirid||','||name FROM ImageTags "
+        query = " (Images.id IN "
+                "   (SELECT imageid FROM ImageTags "
                 "    WHERE tagid $$##$$ $$@@$$)) ";
         break;
     }
     case(TAGNAME):
     {
-        query = " (Images.dirid||','||Images.name IN "
-                "   (SELECT dirid||','||name FROM ImageTags "
-                "    WHERE tagid IN "
-                "    (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
+        query = " (Images.id IN "
+                "  (SELECT imageid FROM ImageTags "
+                "   WHERE tagid IN "
+                "   (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
         break;
     }
     case(IMAGENAME):
@@ -478,113 +479,8 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
         break;
     }
     }
-    
+
     return query;
-}
-
-void kio_digikamsearch::openDB()
-{
-    // TODO: change to digikam.db for production code
-    QString dbPath = m_libraryPath + "/digikam-testing.db";
-
-#ifdef NFS_HACK
-    dbPath = QDir::homeDirPath() + "/.kde/share/apps/digikam/"  +
-             KIO::encodeFileName(QDir::cleanDirPath(dbPath));
-#endif
-
-    char *errMsg = 0;
-    m_db = sqlite_open(QFile::encodeName(dbPath), 0, &errMsg);
-    if (m_db == 0)
-    {
-        error(KIO::ERR_UNKNOWN, i18n("Failed to open digiKam database."));
-        free(errMsg);
-        return;
-    }
-}
-
-void kio_digikamsearch::closeDB()
-{
-    if (m_db)
-    {
-        sqlite_close(m_db);
-    }
-    
-    m_db = 0;
-}
-
-bool kio_digikamsearch::execSql(const QString& sql, QStringList* const values, 
-                                QString* const errMsg, const bool debug) const
-{
-    if ( debug )
-        kdDebug() << "SQL-query: " << sql << endl;
-
-    if ( !m_db )
-    {
-        if (errMsg)
-            *errMsg = i18n("Database not open");
-        kdWarning() << k_funcinfo << "SQLite pointer == NULL"
-                    << endl;
-        return false;
-    }
-
-    const char* tail;
-    sqlite_vm* vm;
-    char* errorStr;
-    int error;
-    
-    //compile SQL program to virtual machine
-    error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
-
-    if ( error != SQLITE_OK )
-    {
-        if (errMsg)
-            *errMsg = i18n("Sqlite compile error: %1 on query: %2")
-                      .arg(errorStr)
-                      .arg(sql);
-        kdWarning() << k_funcinfo << "sqlite_compile error: "
-                    << errorStr 
-                    << " on query: " << sql << endl;
-        sqlite_freemem( errorStr );
-        return false;
-    }
-
-    int number;
-    const char** value;
-    const char** colName;
-    //execute virtual machine by iterating over rows
-    while ( true ) {
-        error = sqlite_step( vm, &number, &value, &colName );
-        if ( error == SQLITE_DONE || error == SQLITE_ERROR )
-            break;
-        //iterate over columns
-        for ( int i = 0; values && i < number; i++ ) {
-            *values << QString::fromLocal8Bit( value [i] );
-        }
-    }
-    
-    //deallocate vm resources
-    sqlite_finalize( vm, &errorStr );
-
-    if ( error != SQLITE_DONE )
-    {
-        if (errMsg)
-            *errMsg = i18n("Sqlite step error: %1 on query: %2")
-                      .arg(errorStr)
-                      .arg(sql);
-        kdWarning() << k_funcinfo << "sqlite_step error: "
-                    << errorStr
-                    << " on query: " << sql << endl;
-        return false;
-    }
-
-    return true;
-}
-
-QString kio_digikamsearch::escapeString(const QString& str) const
-{
-    QString st(str);
-    st.replace( "'", "''" );
-    return st;
 }
 
 /* KIO slave registration */
@@ -596,7 +492,7 @@ extern "C"
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamsearch" );
         KGlobal::locale();
-        
+
         if (argc != 4) {
             kdDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
                       << endl;
@@ -605,7 +501,7 @@ extern "C"
 
         kio_digikamsearch slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         return 0;
     }
 }

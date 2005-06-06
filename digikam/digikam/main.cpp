@@ -51,48 +51,11 @@
 
 #include "version.h"
 #include "scanlib.h"
+#include "upgradedb_sqlite2tosqlite3.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
-
-// TODO: Only for testing purposes for 0.8 development. Remove
-// for production version
-static bool copyDBFile(const QString& albumLibraryPath)
-{
-    QFile sFile(albumLibraryPath + "/digikam.db");
-    QFile dFile(albumLibraryPath + "/digikam-testing.db");
-
-    if (!sFile.exists() || dFile.exists())
-        return true;
-
-    if (!sFile.open(IO_ReadOnly))
-        return false;
-    
-    if (!dFile.open(IO_WriteOnly))
-    {
-        sFile.close();
-        return false;
-    }
-
-    const int MAX_IPC_SIZE = (1024*32);
-    char buffer[MAX_IPC_SIZE];
-
-    Q_LONG len;
-    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
-        {
-            sFile.close();
-            dFile.close();
-            return false;
-        }
-    }
-
-    sFile.close();
-    dFile.close();
-    
-    return true;
-}
 
 static KCmdLineOptions options[] =
 {
@@ -267,19 +230,18 @@ int main(int argc, char *argv[])
     // purposes in 0.8 development. just a safety precautions for developers
     // working on their main photo library
 
-    if (!copyDBFile(albumPath))
+    if (!upgradeDB_Sqlite2ToSqlite3(albumPath))
     {
-        KMessageBox::error(0, i18n("Failed to copy database file "
-                                   "to temporary one."));
+        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
         return 0;
     }
-
 
     AlbumManager* man = new AlbumManager();
     man->setLibraryPath(albumPath);
 
     config->setGroup("General Settings");
-    if (config->readBoolEntry("Scan At Start", true))
+    if (config->readBoolEntry("Scan At Start", true) ||
+        man->albumDB()->getSetting("Scanned").isEmpty())
     {
         ScanLib sLib;
         sLib.findMissingItems();

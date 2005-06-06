@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-18
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file albumdb.cpp */
@@ -35,7 +35,7 @@
 #include <cstdlib>
 
 extern "C" {
-#include <sqlite.h>
+#include <sqlite3.h>
 #include <sys/time.h>
 #include <time.h>
 }
@@ -43,7 +43,7 @@ extern "C" {
 #include "albummanager.h"
 #include "albumdb.h"
 
-typedef struct sqlite_vm sqlite_vm;
+typedef struct sqlite3_stmt sqlite3_stmt;
 
 AlbumDB::AlbumDB()
 {
@@ -54,28 +54,27 @@ AlbumDB::AlbumDB()
 AlbumDB::~AlbumDB()
 {
     removeInvalidEntries();
-    
+
     if (m_db) {
-        sqlite_close(m_db);
+        sqlite3_close(m_db);
     }
 }
 
 void AlbumDB::setDBPath(const QString& path)
 {
     if (m_db) {
-        sqlite_close(m_db);
+        sqlite3_close(m_db);
 	m_db = 0;
     }
 
     m_valid = false;
-    
-    char *errMsg = 0;
-    m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
+
+    sqlite3_open(QFile::encodeName(path), &m_db);
     if (m_db == 0)
     {
-        kdWarning() << k_funcinfo << "Cannot open database: "
-                    << errMsg << endl;
-        free(errMsg);
+        kdWarning() << "Cannot open database: "
+                    << sqlite3_errmsg(m_db)
+                    << endl;
     }
     else
     {
@@ -86,11 +85,11 @@ void AlbumDB::setDBPath(const QString& path)
 void AlbumDB::initDB()
 {
     m_valid = false;
-    
+
     // Check if we have the required tables
 
     QStringList values;
-    
+
     if (!execSql( QString("SELECT name FROM sqlite_master"
                           " WHERE type='table'"
                           " ORDER BY name;"),
@@ -100,95 +99,157 @@ void AlbumDB::initDB()
     }
 
     if (!values.contains("Albums"))
-    { 
-        if (!execSql( QString("CREATE TABLE Albums"
-                              " (id INTEGER PRIMARY KEY,"
-			      "  url TEXT NOT NULL UNIQUE,"
-                              "  date DATE NOT NULL,"
-                              "  caption TEXT,"
-                              "  collection TEXT,"
-                              "  ignoreprops BOOLEAN,"
-                              "  icon TEXT);") ))
+    {
+        if (!execSql( QString("CREATE TABLE Albums\n"
+                              " (id INTEGER PRIMARY KEY,\n"
+			      "  url TEXT NOT NULL UNIQUE,\n"
+                              "  date DATE NOT NULL,\n"
+                              "  caption TEXT,\n"
+                              "  collection TEXT,\n"
+                              "  icon INTEGER);") ))
         {
             return;
         }
-	
-        if (!execSql( QString("CREATE TABLE Tags"
-                              " (id INTEGER PRIMARY KEY,"
-			      "  pid INTEGER,"
-			      "  name TEXT NOT NULL,"
-                              "  icon TEXT,"
+
+        if (!execSql( QString("CREATE TABLE Tags\n"
+                              " (id INTEGER PRIMARY KEY,\n"
+			      "  pid INTEGER,\n"
+			      "  name TEXT NOT NULL,\n"
+                              "  icon INTEGER,\n"
+                              "  iconkde TEXT,\n"
 			      "  UNIQUE (name, pid));") ))
         {
             return;
         }
 
-        if (!execSql( QString("CREATE TABLE Images"
-                              " (name TEXT NOT NULL,"
-                              "  dirid INTEGER NOT NULL,"
-                              "  caption TEXT,"
-                              "  datetime DATETIME,"
+        if (!execSql( QString("CREATE TABLE TagsTree\n"
+                              " (id INTEGER NOT NULL,\n"
+			      "  pid INTEGER NOT NULL,\n"
+			      "  UNIQUE (id, pid));") ))
+        {
+            return;
+        }
+
+        if (!execSql( QString("CREATE TABLE Images\n"
+                              " (id INTEGER PRIMARY KEY,\n"
+                              "  name TEXT NOT NULL,\n"
+                              "  dirid INTEGER NOT NULL,\n"
+                              "  caption TEXT,\n"
+                              "  datetime DATETIME,\n"
                               "  UNIQUE (name, dirid));") ))
         {
             return;
         }
 
- 
-        if (!execSql( QString("CREATE TABLE ImageTags"
-                              " (name TEXT NOT NULL,"
-                              "  dirid INTEGER NOT NULL,"
-                              "  tagid INTEGER NOT NULL, "
-                              " UNIQUE (name, dirid, tagid));") ))
+
+        if (!execSql( QString("CREATE TABLE ImageTags\n"
+                              " (imageid INTEGER NOT NULL,\n"
+                              "  tagid INTEGER NOT NULL,\n"
+                              "  UNIQUE (imageid, tagid));") ))
         {
             return;
         }
-        
+
+        if (!execSql( QString("CREATE TABLE ImageProperties\n"
+                              " (imageid  INTEGER NOT NULL,\n"
+                              "  property TEXT    NOT NULL,\n"
+                              "  value    TEXT    NOT NULL,\n"
+                              "  UNIQUE (imageid, property));") ))
+        {
+            return;
+        }
+
+        if ( !execSql( QString( "CREATE TABLE YearMonths  \n"
+                                " (year  INTEGER NOT NULL, \n"
+                                "  month INTEGER NOT NULL, \n"
+                                "  UNIQUE (year, month));" ) ))
+        {
+            return;
+        }
+
+        if (!execSql( QString("CREATE TABLE Settings         \n"
+                              "(keyword TEXT NOT NULL UNIQUE,\n"
+                              " value TEXT);") ))
+            return;
+        else
+            setSetting("DBVersion","1");
+
+        // TODO: see which more indices are needed
         // create indices
         execSql("CREATE INDEX dir_index ON Images    (dirid);");
         execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
 
-
         // create triggers
 
-        // trigger: delete from ImageProps/ImageTags if Album has been deleted
+        // trigger: delete from Images/ImageTags/ImageProperties
+        // if Album has been deleted
         execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
                 "BEGIN\n"
-                " DELETE FROM Images     WHERE dirid = old.id;\n"
-                " DELETE FROM ImageTags  WHERE dirid = old.id;\n"
+                " DELETE FROM ImageTags\n"
+                "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+                " DELETE From ImageProperties\n"
+                "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+                " DELETE FROM Images\n"
+                "   WHERE dirid = old.id;\n"
                 "END;");
 
-        // trigger: delete from ImageTags if Tag has been deleted 
-	// also delete tags whose parent are this
-	// note: deleting the tag will recursively delete all subtags
+        // trigger: delete from ImageTags/ImageProperties
+        // if Image has been deleted
+        execSql("CREATE TRIGGER delete_image DELETE ON Images\n"
+                "BEGIN\n"
+                "  DELETE FROM ImageTags\n"
+                "    WHERE imageid=OLD.id;\n"
+                "  DELETE From ImageProperties "
+                "    WHERE imageid=OLD.id;\n"
+                "END;");
+
+        // trigger: delete from ImageTags if Tag has been deleted
         execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
                 "BEGIN\n"
-                " DELETE FROM ImageTags WHERE tagid = old.id;\n"
-                " DELETE FROM Tags       WHERE pid   = old.id;\n"
+                "  DELETE FROM ImageTags WHERE tagid=old.id;\n"
                 "END;");
 
+        // trigger: insert into TagsTree if Tag has been added
+        execSql("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
+                "BEGIN\n"
+                "  INSERT INTO TagsTree\n"
+                "    SELECT NEW.id, NEW.pid\n"
+                "    UNION\n"
+                "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
+                "END;");
 
-        // insert some initial tags
-        execSql( QString("INSERT INTO Tags "
-                         "VALUES(null, 0, '%1', 'tag-events');")
-                 .arg(i18n("Events")) );
-        execSql( QString("INSERT INTO Tags "
-                         "VALUES(null, 0, '%1', 'tag-people');")
-                 .arg(i18n("People")) );
-        execSql( QString("INSERT INTO Tags "
-                         "VALUES(null, 0, '%2', 'tag-places');")
-                 .arg(i18n("Places")) );
-    }
+        // trigger: delete from TagsTree if Tag has been deleted
+        execSql("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
+                "BEGIN\n"
+                " DELETE FROM Tags\n"
+                "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+                " DELETE FROM TagsTree\n"
+                "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+                " DELETE FROM TagsTree\n"
+                "    WHERE id=OLD.id;\n"
+                "END;");
 
-    // Before 0.8 this table did not exist, so we have to check
-    // and add it seperately.
-    if (!values.contains("Settings"))
-    {
-        if (!execSql( QString("CREATE TABLE Settings "
-                              "(keyword TEXT NOT NULL UNIQUE,"
-                              "value TEXT);") ))
-            return;
-        else
-            setSetting("DBVersion","1");
+        // trigger: delete from TagsTree if Tag has been deleted
+        execSql("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
+                "BEGIN\n"
+                "  DELETE FROM TagsTree\n"
+                "    WHERE\n"
+                "      ((id = Old.id)\n"
+                "        OR\n"
+                "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
+                "      AND\n"
+                "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
+                "  INSERT INTO TagsTree\n"
+                "     SELECT New.id, New.pid\n"
+                "     UNION\n"
+                "     SELECT New.id, pid FROM TagsTree WHERE id=New.pid\n"
+                "     UNION\n"
+                "     SELECT id, New.pid FROM TagsTree WHERE pid=New.id\n"
+                "     UNION\n"
+                "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
+                "        WHERE\n"
+                "        A.pid = New.id AND B.id = New.pid;\n"
+                "END;");
     }
 
     m_valid = true;
@@ -198,14 +259,17 @@ AlbumInfo::List AlbumDB::scanAlbums()
 {
     AlbumInfo::List aList;
 
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+
     QStringList values;
-    execSql( QString("SELECT id, url, date, caption, collection, icon "
-                     "FROM Albums;"), &values );
+    execSql( QString( "SELECT id, url, date, caption, collection, \n "
+                      "  (SELECT name FROM Images WHERE Images.id=Albums.icon) \n "
+                      "  FROM Albums;" ),  &values );
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
         AlbumInfo info;
-        
+
         info.id = (*it).toInt();
         ++it;
         info.url = *it;
@@ -216,12 +280,15 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.collection = *it;
         ++it;
-        info.icon = *it;
+        if (!(*it).isEmpty())
+        {
+            info.icon = basePath + info.url + "/" + *it;
+        }
         ++it;
-        
-        aList.append(info);        
+
+        aList.append(info);
     }
-    
+
     return aList;
 }
 
@@ -229,56 +296,44 @@ TagInfo::List AlbumDB::scanTags()
 {
     TagInfo::List tList;
 
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+
     QStringList values;
-    execSql( QString("SELECT id, pid, name, icon "
-                     "FROM Tags;"), &values );
+    execSql( QString( "SELECT id, pid, name, \n "
+                      "(SELECT Albums.url||'/'||Images.name FROM Images, Albums \n "
+                      " WHERE Images.id=Tags.icon AND Albums.id=Images.dirid), \n "
+                      " iconkde FROM Tags;" ),  &values );
+
+    QString iconURL, iconKDE;
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
         TagInfo info;
-        
-        info.id   = (*it).toInt();
+
+        info.id     = (*it).toInt();
         ++it;
-        info.pid  = (*it).toInt();
+        info.pid    = (*it).toInt();
         ++it;
-        info.name = *it;
+        info.name   = *it;
         ++it;
-        info.icon = *it;
+        iconURL    = *it;
+        ++it;
+        iconKDE     = *it;
         ++it;
 
-        tList.append(info);        
+        if ( iconURL.isEmpty() )
+        {
+            info.icon = iconKDE;
+        }
+        else
+        {
+            info.icon = basePath + iconURL;
+        }
+
+        tList.append(info);
     }
-    
+
     return tList;
-}
-
-void AlbumDB::deleteAlbum(int albumID)
-{
-    execSql( QString("DELETE FROM Albums WHERE id='%1'")
-             .arg(albumID) );
-}
-
-int AlbumDB::addTag(int parentTagID, const QString& name, const QString& icon)
-{
-    if (!m_db)
-        return -1;
-
-    if (!execSql( QString("INSERT INTO Tags (pid, name, icon) "
-                          "VALUES( %1, '%2', '%3')")
-                  .arg(parentTagID)
-                  .arg(escapeString(name))
-                  .arg(escapeString(icon)) ))
-    {
-        return -1;
-    }
-
-    return sqlite_last_insert_rowid(m_db);
-}
-
-void AlbumDB::deleteTag(int tagID)
-{
-    execSql( QString("DELETE FROM Tags WHERE id=%1")
-                 .arg(tagID) );
 }
 
 void AlbumDB::beginTransaction()
@@ -296,7 +351,7 @@ int AlbumDB::addAlbum(const QString& url, const QString& caption,
 {
     if (!m_db)
         return -1;
-    
+
     execSql( QString("REPLACE INTO Albums (url, date, caption, collection) "
                      "VALUES('%1', '%2', '%3', '%4');")
              .arg(escapeString(url))
@@ -304,10 +359,9 @@ int AlbumDB::addAlbum(const QString& url, const QString& caption,
              .arg(escapeString(caption))
              .arg(escapeString(collection)));
 
-    int id = sqlite_last_insert_rowid(m_db);
+    int id = sqlite3_last_insert_rowid(m_db);
     return id;
 }
-
 
 void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
 {
@@ -325,22 +379,51 @@ void AlbumDB::setAlbumCollection(int albumID, const QString& collection)
 
 void AlbumDB::setAlbumDate(int albumID, const QDate& date)
 {
-    execSql( QString("UPDATE Albums SET date='%1' WHERE id = %2;")
+    execSql( QString("UPDATE Albums SET date='%1' WHERE id=%2;")
              .arg(date.toString(Qt::ISODate))
              .arg(albumID) );
 }
 
-void AlbumDB::setAlbumIcon(int albumID, const QString& icon)
+void AlbumDB::setAlbumIcon(int albumID, long iconID)
 {
-    execSql( QString("UPDATE Albums SET icon='%1' WHERE id=%2;")
-             .arg(escapeString(icon))
+    execSql( QString("UPDATE Albums SET icon=%1 WHERE id=%2;")
+             .arg(iconID)
              .arg(albumID) );
 }
 
-void AlbumDB::setTagIcon(int tagID, const QString& icon)
+void AlbumDB::deleteAlbum(int albumID)
 {
-    execSql( QString("UPDATE Tags SET icon='%1' WHERE id=%2;")
-             .arg(escapeString(icon))
+    execSql( QString("DELETE FROM Albums WHERE id='%1'")
+             .arg(albumID) );
+}
+
+int AlbumDB::addTag(int parentTagID, const QString& name, long iconID)
+{
+    if (!m_db)
+        return -1;
+
+    if (!execSql( QString("INSERT INTO Tags (pid, name, icon) "
+                          "VALUES( %1, '%2', %3)")
+                  .arg(parentTagID)
+                  .arg(escapeString(name))
+                  .arg(iconID) ))
+    {
+        return -1;
+    }
+
+    return sqlite3_last_insert_rowid(m_db);
+}
+
+void AlbumDB::deleteTag(int tagID)
+{
+    execSql( QString("DELETE FROM Tags WHERE id=%1")
+                 .arg(tagID) );
+}
+
+void AlbumDB::setTagIcon(int tagID, long iconID)
+{
+    execSql( QString("UPDATE Tags SET icon=%1 WHERE id=%2;")
+             .arg(iconID)
              .arg(tagID) );
 }
 
@@ -380,49 +463,53 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     if ( debug )
         kdDebug() << "SQL-query: " << sql << endl;
 
-    if ( !m_db ) {
+    if ( !m_db )
+    {
         kdWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
         return false;
     }
 
-    const char* tail;
-    sqlite_vm* vm;
-    char* errorStr;
-    int error;
-    
-    //compile SQL program to virtual machine
-    error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
+    const char*   tail;
+    sqlite3_stmt* stmt;
+    int           error;
 
-    if ( error != SQLITE_OK ) {
-        kdWarning() << k_funcinfo << "sqlite_compile error: "
-                    << errorStr 
-                    << " on query: " << sql << endl;
-        sqlite_freemem( errorStr );
+    //compile SQL program to virtual machine
+    error = sqlite3_prepare(m_db, sql.utf8(), -1, &stmt, &tail);
+    if ( error != SQLITE_OK )
+    {
+        kdWarning() << k_funcinfo
+                    << "sqlite_compile error: "
+                    << sqlite3_errmsg(m_db)
+                    << " on query: "
+                    << sql << endl;
         return false;
     }
 
-    int number;
-    const char** value;
-    const char** colName;
-    //execute virtual machine by iterating over rows
-    while ( true ) {
-        error = sqlite_step( vm, &number, &value, &colName );
+    int cols = sqlite3_column_count(stmt);
+
+    while ( true )
+    {
+        error = sqlite3_step( stmt );
+
         if ( error == SQLITE_DONE || error == SQLITE_ERROR )
             break;
+
         //iterate over columns
-        for ( int i = 0; values && i < number; i++ ) {
-            *values << QString::fromLocal8Bit( value [i] );
+        for ( int i = 0; values && i < cols; i++ )
+        {
+            *values << QString::fromUtf8( (const char*)sqlite3_column_text( stmt, i ) );
         }
     }
-    
-    //deallocate vm resources
-    sqlite_finalize( vm, &errorStr );
 
-    if ( error != SQLITE_DONE ) {
-        kdWarning() << k_funcinfo << "sqlite_step error: "
-                    << errorStr
-                    << " on query: " << sql << endl;
+    sqlite3_finalize( stmt );
+
+    if ( error != SQLITE_DONE )
+    {
+        kdWarning() << "sqlite_step error: "
+                    << sqlite3_errmsg( m_db )
+                    << " on query: "
+                    << sql << endl;
         return false;
     }
 
@@ -437,11 +524,11 @@ QString AlbumDB::escapeString(QString str) const
 
 void AlbumDB::removeInvalidEntries()
 {
-    if (!m_db || !m_valid)
+    if (!m_db || !m_valid || !AlbumManager::instance())
         return;
-    
+
     beginTransaction();
-    
+
     QStringList values;
 
     execSql( QString("SELECT url FROM Albums;"),
@@ -457,8 +544,23 @@ void AlbumDB::removeInvalidEntries()
                      .arg(escapeString(*it)));
         }
     }
-    
+
     commitTransaction();
+}
+
+QString AlbumDB::getItemCaption(long imageID)
+{
+    QStringList values;
+
+    execSql( QString("SELECT caption FROM Images "
+                     "WHERE id=%1;")
+             .arg(imageID),
+             &values );
+
+    if (!values.isEmpty())
+        return values[0];
+    else
+        return QString::null;
 }
 
 QString AlbumDB::getItemCaption(int albumID, const QString& name)
@@ -477,14 +579,13 @@ QString AlbumDB::getItemCaption(int albumID, const QString& name)
         return QString::null;
 }
 
-QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
+QDateTime AlbumDB::getItemDate(long imageID)
 {
     QStringList values;
 
     execSql( QString("SELECT datetime FROM Images "
-                     "WHERE dirid=%1 AND name='%2';")
-             .arg(albumID)
-             .arg(escapeString(name)),
+                     "WHERE id=%1;")
+             .arg(imageID),
              &values );
 
     if (!values.isEmpty())
@@ -493,36 +594,34 @@ QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
         return QDateTime::fromString(values[0], Qt::ISODate);
 }
 
-QStringList AlbumDB::getItemTagNames(int albumID, const QString& name)
+QStringList AlbumDB::getItemTagNames(long imageID)
 {
     QStringList values;
 
-    execSql( QString("SELECT Tags.name FROM ImageTags Join Tags "
-                     "ON (ImageTags.dirid=%1 AND ImageTags.name='%2') "
-                     "WHERE Tags.id=ImageTags.tagid "
-                     "ORDER BY Tags.name;")
-             .arg(albumID)
-             .arg(escapeString(name)),
+    execSql( QString("SELECT name FROM Tags \n "
+                     "WHERE id IN (SELECT tagid FROM ImageTags \n "
+                     "             WHERE imageid=%1) \n "
+                     "ORDER BY name;")
+             .arg(imageID),
              &values );
 
     return values;
 }
 
-IntList AlbumDB::getItemTagIDs(int albumID, const QString& name)
+IntList AlbumDB::getItemTagIDs(long imageID)
 {
     QStringList values;
 
-    execSql( QString("SELECT tagid FROM ImageTags "
-                     "WHERE dirid=%1 AND name='%2';")
-             .arg(albumID)
-             .arg(escapeString(name)),
+    execSql( QString("SELECT tagid FROM ImageTags \n "
+                     "WHERE imageID=%1;")
+             .arg(imageID),
              &values );
 
     IntList ids;
-    
+
     if (values.isEmpty())
         return ids;
-    
+
     for (QStringList::iterator it=values.begin(); it != values.end(); ++it)
     {
         ids << (*it).toInt();
@@ -530,33 +629,27 @@ IntList AlbumDB::getItemTagIDs(int albumID, const QString& name)
     return ids;
 }
 
-IntList AlbumDB::getItemCommonTagIDs(const IntList& dirIDList, const QStringList& nameList)
+IntList AlbumDB::getItemCommonTagIDs(const LongList& imageIDList)
 {
     IntList ids;
-    
-    if (dirIDList.isEmpty() || dirIDList.count() != nameList.count())
+
+    if (imageIDList.isEmpty())
         return ids;
 
     QStringList values;
 
-    QString sql = QString("SELECT tagid FROM ImageTags "
-                          "WHERE (dirid=%1 AND name='%2')")
-                  .arg(dirIDList.first())
-                  .arg(escapeString(nameList.first()));
+    QString sql = QString("SELECT DISTINCT tagid FROM ImageTags "
+                          "WHERE imageid=%1 ")
+                  .arg(imageIDList.first());
 
-    IntList::const_iterator     diter = dirIDList.begin();
-    QStringList::const_iterator niter = nameList.begin();
+    LongList::const_iterator iter = imageIDList.begin();
+    ++iter;
 
-    ++diter;
-    ++niter;
-
-    while (diter != dirIDList.end())
+    while (iter != imageIDList.end())
     {
-        sql += QString(" OR (dirid=%1 AND name='%2')")
-               .arg(*diter)
-               .arg(escapeString(*niter));
-        ++diter;
-        ++niter;
+        sql += QString(" OR imageid=%2 ")
+               .arg(*iter);
+        ++iter;
     }
 
     sql += QString(";");
@@ -564,12 +657,22 @@ IntList AlbumDB::getItemCommonTagIDs(const IntList& dirIDList, const QStringList
 
     if (values.isEmpty())
         return ids;
-    
+
     for (QStringList::iterator it=values.begin(); it != values.end(); ++it)
     {
         ids << (*it).toInt();
     }
     return ids;
+}
+
+void AlbumDB::setItemCaption(long imageID,const QString& caption)
+{
+    QStringList values;
+
+    execSql( QString("UPDATE Images SET caption='%1' "
+                     "WHERE id='%1';")
+             .arg(escapeString(caption))
+             .arg(imageID) );
 }
 
 void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& caption)
@@ -583,29 +686,37 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
              .arg(escapeString(name)) );
 }
 
-void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
+void AlbumDB::addItemTag(long imageID, int tagID)
 {
-    execSql( QString("REPLACE INTO ImageTags VALUES('%1', %2, %3);")
-                 .arg(escapeString(name))
-                 .arg(albumID)
+    execSql( QString("REPLACE INTO ImageTags (imageid, tagid) "
+                     "VALUES(%1, %2);")
+                 .arg(imageID)
                  .arg(tagID) );
 }
 
-void AlbumDB::removeItemTag(int albumID, const QString& name, int tagID)
+void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
+{
+    execSql( QString("REPLACE INTO ImageTags (imageid, tagid) \n "
+                     "(SELECT id, %1 FROM Images \n "
+                     " WHERE dirid=%2 AND name='%3');")
+             .arg(tagID)
+             .arg(albumID)
+             .arg(escapeString(name)) );
+}
+
+void AlbumDB::removeItemTag(long imageID, int tagID)
 {
     execSql( QString("DELETE FROM ImageTags "
-                     "WHERE dirid=%1 AND name='%2' AND tagid='%3';")
-             .arg(albumID)
-             .arg(escapeString(name))
+                     "WHERE imageID=%1 AND tagid=%3;")
+             .arg(imageID)
              .arg(tagID) );
 }
 
-void AlbumDB::removeItemAllTags(int albumID, const QString& name)
+void AlbumDB::removeItemAllTags(long imageID)
 {
     execSql( QString("DELETE FROM ImageTags "
-                     "WHERE dirid=%1 AND name='%2';")
-             .arg(albumID)
-             .arg(escapeString(name)) );
+                     "WHERE imageID=%1;")
+             .arg(imageID) );
 }
 
 QStringList AlbumDB::getItemNamesInAlbum(int albumID)
@@ -635,7 +746,7 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
     {
         *it = libraryPath + *it;
     }
-    
+
     return values;
 }
 
@@ -652,16 +763,16 @@ int AlbumDB::getOrCreateAlbumId(const QString& folder)
                 "VALUES ('%1','%2')")
                 .arg(escapeString(folder))
                 .arg(QDateTime::currentDateTime().toString(Qt::ISODate)) );
-        albumID = sqlite_last_insert_rowid(m_db);
-    } else 
+        albumID = sqlite3_last_insert_rowid(m_db);
+    } else
         albumID = values[0].toInt();
 
     return albumID;
 }
 
-bool AlbumDB::addItem(int albumID, 
+long AlbumDB::addItem(int albumID,
                       const QString& name,
-                      const QDateTime& datetime, 
+                      const QDateTime& datetime,
                       const QString& comment)
 {
     execSql ( QString ("REPLACE INTO Images "
@@ -671,8 +782,19 @@ bool AlbumDB::addItem(int albumID,
               .arg(datetime.toString(Qt::ISODate))
               .arg(escapeString(name))
               .arg(albumID) );
-    
-    return true; 
+
+    return sqlite3_last_insert_rowid(m_db);
+}
+
+bool AlbumDB::setItemDate(long imageID,
+                          const QDateTime& datetime)
+{
+    execSql ( QString ("UPDATE Images SET datetime='%1'"
+                       "WHERE id=%1;")
+              .arg(datetime.toString(Qt::ISODate))
+              .arg(imageID) );
+
+    return true;
 }
 
 bool AlbumDB::setItemDate(int albumID, const QString& name,
@@ -684,7 +806,7 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
               .arg(albumID)
               .arg(escapeString(name)) );
 
-    return true; 
+    return true;
 }
 
 QStringList AlbumDB::getItemURLsInTag(int tagID)
@@ -692,17 +814,17 @@ QStringList AlbumDB::getItemURLsInTag(int tagID)
     QStringList values;
 
     QString basePath(AlbumManager::instance()->getLibraryPath());
-    
-    execSql( QString("SELECT Albums.url||'/'||ImageTags.name "
-                     "FROM Albums JOIN ImageTags "
-                     "ON ImageTags.tagid=%1 AND Albums.id=ImageTags.dirid;")
+
+    execSql( QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+                     "WHERE Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=%1) "
+                     "AND Albums.id=Images.dirid;")
              .arg(tagID), &values );
 
     for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
     {
         *it = basePath + *it;
     }
-    
+
     return values;
 }
 
@@ -746,17 +868,12 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
             "WHERE dirid=%1 AND name='%2';")
             .arg(albumID)
             .arg(escapeString(file)) );
-
-    execSql( QString("DELETE FROM ImageTags "
-            "WHERE dirid=%1 AND name='%2';")
-            .arg(albumID)
-            .arg(escapeString(file)) );
 }
 
 void AlbumDB::setAlbumURL(int albumID, const QString& url)
 {
     QString u = escapeString(url);
-    
+
     // first delete any stale albums left behind
     execSql( QString("DELETE FROM Albums WHERE url = '%1'")
              .arg(u) );
@@ -780,15 +897,8 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
 
     // first delete any stale database entries if any
     deleteItem(dstAlbumID, dstName);
- 
+
     execSql( QString("UPDATE Images SET dirid=%1, name='%2' "
-                     "WHERE dirid=%3 AND name='%4';")
-             .arg(dstAlbumID)
-             .arg(escapeString(dstName))
-             .arg(srcAlbumID)
-             .arg(escapeString(srcName)) );
-     
-    execSql( QString("UPDATE ImageTags SET dirid=%1, name='%2' "
                      "WHERE dirid=%3 AND name='%4';")
              .arg(dstAlbumID)
              .arg(escapeString(dstName))
@@ -810,11 +920,13 @@ void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(srcAlbumID)
              .arg(escapeString(srcName)) );
 
+    /* TODO: Fix copy of tags and other properties
+
     execSql( QString("INSERT INTO ImageTags (dirid, name, tagid) "
                      "SELECT %1, '%2', tagid FROM ImageTags "
                      "WHERE dirid=%3 AND name='%4';")
              .arg(dstAlbumID)
              .arg(escapeString(dstName))
              .arg(srcAlbumID)
-             .arg(escapeString(srcName)) );
+             .arg(escapeString(srcName)) ); */
 }

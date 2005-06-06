@@ -1,10 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-09
- * Description :
+ * Date  : 2005-06-05
+ * Copyright 2005 by Renchi Raju
  *
- * Copyright 2004 by Renchi Raju
-
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -15,34 +13,36 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
  * ============================================================ */
 
-#ifndef DIGIKAMTAGS_H
-#define DIGIKAMTAGS_H
+#ifndef SQLITEDB_H
+#define SQLITEDB_H
 
-#include <kio/slavebase.h>
 #include <qstring.h>
-#include "sqlitedb.h"
 
-class KURL;
-class QCString;
+class QStringList;
 
-class kio_digikamtagsProtocol : public KIO::SlaveBase
+class SqliteDB
 {
 public:
 
-    kio_digikamtagsProtocol(const QCString &pool_socket,
-                            const QCString &app_socket);
-    virtual ~kio_digikamtagsProtocol();
+    SqliteDB();
+    ~SqliteDB();
 
-    void special(const QByteArray& data);
+    void openDB(const QString& directory);
+    void closeDB();
+
+    bool execSql(const QString& sql, QStringList* const values = 0,
+                 bool debug = false) const;
+
+    void    setSetting( const QString& keyword, const QString& value );
+    QString getSetting( const QString& keyword );
 
 private:
 
-    SqliteDB           m_db;
-    QString            m_libraryPath;
+    mutable struct sqlite3* m_db;
 };
 
+extern QString escapeString(const QString& str);
 
-#endif /* DIGIKAMTAGS_H */
+#endif /* SQLITEDB_H */

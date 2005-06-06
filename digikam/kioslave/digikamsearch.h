@@ -9,7 +9,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,8 @@
 
 #include <kio/slavebase.h>
 
-typedef struct sqlite sqleet;
+#include "sqlitedb.h"
+
 class QStringList;
 
 class kio_digikamsearch : public KIO::SlaveBase
@@ -50,8 +51,8 @@ public:
         LIKE,
         NLIKE
     };
-    
-    
+
+
     kio_digikamsearch(const QCString &pool_socket,
                       const QCString &app_socket);
     ~kio_digikamsearch();
@@ -61,17 +62,11 @@ public:
 private:
 
     QString buildQuery(const KURL& url) const;
-    
-    void openDB();
-    void closeDB();
-    bool execSql(const QString& sql, QStringList* const values = 0,
-                 QString* const errMsg = 0, const bool debug = false) const;
-    QString escapeString(const QString& str) const;
 
     QString subQuery(enum SKey key, enum SOperator op, const QString& val) const;
 
 private:
-    
+
     class RuleType
     {
     public:
@@ -81,7 +76,7 @@ private:
         QString   val;
     };
 
-    mutable sqleet*       m_db;
+    SqliteDB              m_db;
     QString               m_libraryPath;
 };
 

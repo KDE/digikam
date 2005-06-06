@@ -66,7 +66,7 @@ void ScanLib::findMissingItems()
     struct timeval tv1, tv2, tv3;
     gettimeofday(&tv1, 0);
 
-    QString albumPath = 
+    QString albumPath =
             QDir::cleanDirPath(AlbumManager::instance()->getLibraryPath());
     m_progressBar->setAllowCancel( false );
     m_progressBar->showCancelButton (false );
@@ -88,14 +88,14 @@ void ScanLib::findMissingItems()
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
     db->setSetting("Scanned",
-                     QDateTime::currentDateTime().toString(Qt::ISODate));
+                   QDateTime::currentDateTime().toString(Qt::ISODate));
 
     kdDebug() << "Count all files took: time taken: "
-              << (((tv2.tv_sec-tv1.tv_sec)*1000000 + 
+              << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
                    (tv2.tv_usec-tv1.tv_usec))/1000)
               << " ms" << endl;
     kdDebug() << "Finding Missing Items: time taken: "
-            << (((tv3.tv_sec-tv2.tv_sec)*1000000 + 
+            << (((tv3.tv_sec-tv2.tv_sec)*1000000 +
                  (tv3.tv_usec-tv2.tv_usec))/1000)
             << " ms" << endl;
 }
@@ -131,7 +131,7 @@ void ScanLib::updateItemsWithoutDate()
     {
         m_progressBar->progressBar()->advance(1);
         ++counter;
-        if ( counter % 30 == 0 ) 
+        if ( counter % 30 == 0 )
             kapp->processEvents();
         QFileInfo fi(*it);
         QString albumURL = fi.dirPath();
@@ -152,7 +152,7 @@ void ScanLib::updateItemsWithoutDate()
     gettimeofday(&tv2, 0);
 
     kdDebug() << "Updating items date: time taken: "
-              << (((tv2.tv_sec-tv1.tv_sec)*1000000 + 
+              << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
                    (tv2.tv_usec-tv1.tv_usec))/1000)
               << " ms" << endl;
 }
@@ -164,7 +164,7 @@ int ScanLib::countItemsInFolder(const QString& directory)
     QDir dir( directory );
     if ( !dir.exists() or !dir.isReadable() )
         return 0;
-    
+
     const QFileInfoList *list = dir.entryInfoList();
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
@@ -185,7 +185,7 @@ void ScanLib::allFiles(const QString& directory)
     QDir dir( directory );
     if ( !dir.exists() or !dir.isReadable() )
     {
-        kdWarning() << "Folder does not exist or is not readable: " 
+        kdWarning() << "Folder does not exist or is not readable: "
                     << directory << endl;
         return;
     }
@@ -241,8 +241,8 @@ void ScanLib::allFiles(const QString& directory)
     }
 }
 
-void ScanLib::storeItemInDatabase(const QString& albumURL, 
-                                  const QString& filename, 
+void ScanLib::storeItemInDatabase(const QString& albumURL,
+                                  const QString& filename,
                                   int albumID)
 {
     QString comment;
@@ -252,7 +252,6 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     // Do not store items found in the root of the albumdb
     if (albumURL.isEmpty())
         return;
-
     KFileMetaInfo itemMetaInfo( albumPath.path()+albumURL+'/'+filename );
 
     if (itemMetaInfo.isValid() &&
@@ -263,8 +262,8 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
         datetime = itemMetaInfo.group("Jpeg EXIF Data").
                    item("Date/time").value().toDateTime();
     }
-
-    if ( !datetime.isValid() ) 
+    
+    if ( !datetime.isValid() )
     {
         QFileInfo info( albumPath.path()+albumURL+'/'+filename );
         datetime = info.lastModified();
@@ -289,7 +288,7 @@ void ScanLib::updateItemDate(const QString& albumURL,
                    item("Date/time").value().toDateTime();
     }
 
-    if ( !datetime.isValid() ) 
+    if ( !datetime.isValid() )
     {
         QFileInfo info( albumPath.path()+albumURL+'/'+filename );
         datetime = info.lastModified();

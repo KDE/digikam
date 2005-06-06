@@ -1,14 +1,32 @@
 #MIN_CONFIG(3)
 
-AM_INIT_AUTOMAKE(digikam,0.7.0)
+AM_INIT_AUTOMAKE(digikam,0.8.0)
 
 AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
 AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 
 # -----------------------------------------------------------------
-# sqlite type check
+# sqlite2 type check
 # -----------------------------------------------------------------
 KDE_CHECK_TYPES
+
+# -----------------------------------------------------------------
+# sqlite3 check
+# -----------------------------------------------------------------
+
+LIB_SQLITE3=""
+
+if test x$PKGCONFIGFOUND = xyes; then
+   PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
+
+   if test x$have_sqlite3 = xyes; then
+      LIB_SQLITE3=`pkg-config --libs sqlite3`
+   else
+      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+   fi
+fi
+
+AC_SUBST(LIB_SQLITE3)
 
 # -------------------------------------------------------
 # Check endianness

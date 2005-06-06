@@ -27,8 +27,8 @@
 #include <kio/slavebase.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
+#include <sqlitedb.h>
 
-typedef struct sqlite sqleet;
 class QStringList;
 
 class AlbumInfo
@@ -36,7 +36,7 @@ class AlbumInfo
 public:
 
     int      id;
-    QString  icon;
+    long     icon;
     QString  url;
     QString  caption;
     QString  collection;
@@ -67,12 +67,6 @@ public:
     
 private:
 
-    void openDB();
-    void closeDB();
-    bool execSql(const QString& sql, QStringList* const values = 0, 
-                 const bool debug = false) const;
-    QString escapeString(const QString& str) const;
-
     bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
 
@@ -89,8 +83,8 @@ private:
                          int dstAlbumID, const QString& dstName);
 
 private:
-    
-    mutable sqleet*       m_db;
+
+    SqliteDB              m_sqlDB;
     QString               m_libraryPath;
     QValueList<AlbumInfo> m_albumList;
 };

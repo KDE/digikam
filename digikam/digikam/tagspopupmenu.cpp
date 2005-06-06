@@ -105,27 +105,21 @@ void TagsPopupMenu::slotAboutToShow()
 
     if (m_onlyAssignedTags)
     {
-        QStringList nameList;
-        IntList     dirIDList;
+        LongList  idList;
         for (IconItem *it = m_view->firstItem(); it; it = it->nextItem())
         {
             if (it->isSelected())
             {
                 AlbumIconItem* item = static_cast<AlbumIconItem*>(it);
-                PAlbum *album = item->imageInfo()->album();
-                if (album)
-                {
-                    nameList .append(item->imageInfo()->name());
-                    dirIDList.append(album->id());
-                }
+                idList.append(item->imageInfo()->id());
             }
         }
 
-        if (nameList.isEmpty())
+        if (idList.isEmpty())
             return;
 
-        m_assignedTags = man->albumDB()->getItemCommonTagIDs(dirIDList,
-                                                             nameList);
+        m_assignedTags = man->albumDB()->getItemCommonTagIDs(idList);
+
         if (m_assignedTags.isEmpty())
             return;
 

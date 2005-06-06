@@ -39,10 +39,10 @@ extern "C"
 
 AlbumManager* ImageInfo::m_man = 0;
 
-ImageInfo::ImageInfo(int albumID, const QString& name,
+ImageInfo::ImageInfo(long ID, int albumID, const QString& name,
                      const QDateTime& datetime, size_t size,
                      const QSize& dims)
-    : m_albumID(albumID), m_name(name), m_datetime(datetime),
+    : m_ID(ID), m_albumID(albumID), m_name(name), m_datetime(datetime),
       m_size(size), m_dims(dims), m_viewitem(0)
 {
     if (!m_man)
@@ -100,6 +100,11 @@ QDateTime ImageInfo::dateTime() const
 QSize ImageInfo::dimensions() const
 {
     return m_dims;
+}
+
+long ImageInfo::id() const
+{
+    return m_ID;    
 }
 
 int ImageInfo::albumID() const
@@ -168,20 +173,19 @@ void* ImageInfo::getViewItem() const
 void ImageInfo::setCaption(const QString& caption)
 {
     AlbumDB* db  = m_man->albumDB();
-    return db->setItemCaption(m_albumID, m_name, caption);
-    
+    return db->setItemCaption(m_ID, caption);
 }
 
 QString ImageInfo::caption() const
 {
     AlbumDB* db  = m_man->albumDB();
-    return db->getItemCaption(m_albumID, m_name);
+    return db->getItemCaption(m_ID);
 }
 
 QStringList ImageInfo::tagNames() const
 {
     AlbumDB* db  = m_man->albumDB();
-    return db->getItemTagNames(m_albumID, m_name);
+    return db->getItemTagNames(m_ID);
 }
 
 QStringList ImageInfo::tagPaths() const
@@ -189,7 +193,7 @@ QStringList ImageInfo::tagPaths() const
     QStringList tagPaths;
     
     AlbumDB* db  = m_man->albumDB();
-    IntList tagIDs = db->getItemTagIDs(m_albumID, m_name);
+    IntList tagIDs = db->getItemTagIDs(m_ID);
     for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
     {
         TAlbum* ta = m_man->findTAlbum(*it);
@@ -205,33 +209,33 @@ QStringList ImageInfo::tagPaths() const
 QValueList<int> ImageInfo::tagIDs() const
 {
     AlbumDB* db  = m_man->albumDB();
-    return db->getItemTagIDs(m_albumID, m_name);
+    return db->getItemTagIDs(m_ID);
 }
 
 void ImageInfo::setTag(int tagID)
 {
     AlbumDB* db  = m_man->albumDB();
-    db->addItemTag(m_albumID, m_name, tagID);
+    db->addItemTag(m_ID, tagID);
 }
 
 void ImageInfo::removeTag(int tagID)
 {
     AlbumDB* db  = m_man->albumDB();
-    db->removeItemTag(m_albumID, m_name, tagID);
+    db->removeItemTag(m_ID, tagID);
 }
 
 void ImageInfo::removeAllTags()
 {
     AlbumDB *db = m_man->albumDB();
-    db->removeItemAllTags(m_albumID, m_name);
+    db->removeItemAllTags(m_ID);
 }
 
 void ImageInfo::refresh()
 {
-    m_datetime = m_man->albumDB()->getItemDate(m_albumID, m_name);
+    m_datetime = m_man->albumDB()->getItemDate(m_ID);
 
     struct stat stbuf;
-    stat(QFile::encodeName(kurl().path()), &stbuf);
+    stat(QFile::encodeName(filePath()), &stbuf);
     m_size = stbuf.st_size;
 }
 

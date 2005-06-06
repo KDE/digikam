@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-15
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <kdebug.h>
@@ -62,7 +62,7 @@ Album* Album::parent() const
 
 Album* Album::firstChild() const
 {
-    return m_firstChild;    
+    return m_firstChild;
 }
 
 Album* Album::lastChild() const
@@ -72,7 +72,7 @@ Album* Album::lastChild() const
 
 Album* Album::next() const
 {
-    return m_next;    
+    return m_next;
 }
 
 Album* Album::prev() const
@@ -135,7 +135,7 @@ void Album::removeChild(Album* child)
 void Album::clear()
 {
     m_clearing = true;
-        
+
     Album* child = m_firstChild;
     Album* nextChild;
     while (child)
@@ -243,12 +243,12 @@ PAlbum::PAlbum(const QString& title, int id,  bool root)
 
 PAlbum::~PAlbum()
 {
-    
+
 }
 
 void PAlbum::setCaption(const QString& caption)
 {
-    m_caption = caption;    
+    m_caption = caption;
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
     db->setAlbumCaption(id(), m_caption);
@@ -327,9 +327,8 @@ QString PAlbum::icon() const
 
 KURL PAlbum::iconKURL() const
 {
-    KURL u(AlbumManager::instance()->getLibraryPath());
-    u.addPath(url());
-    u.addPath(m_icon);
+    KURL u;
+    u.setPath( m_icon );
     return u;
 }
 
@@ -380,7 +379,7 @@ KURL TAlbum::kurl() const
 {
     KURL url;
     url.setProtocol("digikamtags");
-    
+
     if (isRoot())
     {
         url.setPath("/");
@@ -401,7 +400,7 @@ KURL TAlbum::kurl() const
 
 QString TAlbum::icon() const
 {
-    return m_icon;    
+    return m_icon;
 }
 
 // --------------------------------------------------------------------------
@@ -440,12 +439,12 @@ SAlbum::SAlbum(const KURL& url, bool simple, bool root)
     : Album(Album::SEARCH, root ? 0 : 1, root),
       m_kurl(url), m_simple(simple)
 {
-    setTitle(url.queryItem("name"));    
+    setTitle(url.queryItem("name"));
 }
 
 SAlbum::~SAlbum()
 {
-    
+
 }
 
 KURL SAlbum::kurl() const
@@ -489,7 +488,7 @@ AlbumIterator& AlbumIterator::operator++()
                 m_current = 0;
                 break;
             }
-            
+
             if ( m_current == 0 )
                 break;
         }

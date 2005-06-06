@@ -20,7 +20,7 @@ INCLUDES = \
 	$(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
-			albumitemhandler.cpp albumdb.cpp \
+			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
 			albumlister.cpp thumbnailjob.cpp dragobjects.cpp \
 			listview.cpp listitem.cpp \
 			thumbview.cpp thumbitem.cpp \
@@ -45,10 +45,11 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchresultsview.cpp searchresultsitem.cpp \
 			searchquickdialog.cpp searchadvanceddialog.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatepickerpopup.cpp \
-			folderview.cpp folderitem.cpp
+			folderview.cpp folderitem.cpp \
+			upgradedb_sqlite2tosqlite3.cpp
 
 
-libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
+libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) \
 			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \

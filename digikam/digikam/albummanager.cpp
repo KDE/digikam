@@ -177,8 +177,7 @@ void AlbumManager::setLibraryPath(const QString& path)
     
     d->libraryPath = cleanPath;
 
-    //TODO: rename back to digikam.db for production code
-    QString dbPath = cleanPath + "/digikam-testing.db";
+    QString dbPath = cleanPath + "/digikam3.db";
 
 #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
@@ -277,7 +276,7 @@ void AlbumManager::scanPAlbums()
         if (info.url.isEmpty() || info.url == "/")
             continue;
 
-        // Have we already added this album
+        // Have we already added this album?
         if (d->pAlbumDict.find(info.url))
             continue;
 
@@ -700,6 +699,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon,
         return false;
     }
 
+    /* TODO:
     d->db->setAlbumIcon(album->id(), icon);
     album->m_icon = icon;
 
@@ -707,6 +707,9 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon,
         emit signalAlbumIconChanged(album);    
 
     return true;
+    */
+
+    return false;
 }
 
 TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
@@ -743,6 +746,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         child = child->m_next;
     }
 
+    /* TODO
     int id = d->db->addTag(parent->id(), name, icon);
     if (id == -1)
     {
@@ -757,6 +761,8 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     insertTAlbum(album);
     
     return album;
+    */
+    return 0;
 }
 
 bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
@@ -869,7 +875,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon,
         errMsg = i18n("Cannot edit root tag");
         return false;
     }
-    
+
+    /* TODO
     d->db->setTagIcon(album->id(), icon);
     album->m_icon = icon;
     
@@ -877,6 +884,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon,
         emit signalAlbumIconChanged(album);
     
     return true;
+    */
+    return false;
 }
 
 SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)

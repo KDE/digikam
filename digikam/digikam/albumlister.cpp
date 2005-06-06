@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-26
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <qstring.h>
@@ -51,9 +51,9 @@ public:
 
     KIO::TransferJob*                     job;
     QString                               filter;
-                                          
+
     Album*                                currAlbum;
-                                          
+
     QMap<int,bool>                        dayFilter;
     QValueList<int>                       tagFilter;
     bool                                  untaggedFilter;
@@ -148,7 +148,7 @@ void AlbumLister::refresh()
     {
         d->itemMap.insert(QPair<int,QString>(item->albumID(), item->name()), item);
     }
-        
+
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
@@ -172,7 +172,7 @@ void AlbumLister::setDayFilter(const QValueList<int>& days)
     for (QValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
         d->dayFilter.insert(*it, true);
 
-    d->filterTimer->start(100, true);    
+    d->filterTimer->start(100, true);
 }
 
 void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
@@ -180,7 +180,7 @@ void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
     d->tagFilter = tags;
     d->untaggedFilter = showUnTagged;
 
-    d->filterTimer->start(100, true);    
+    d->filterTimer->start(100, true);
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
@@ -219,7 +219,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
     {
         match &= d->dayFilter.contains(info->dateTime().date().day());
     }
-    
+
     return match;
 }
 
@@ -230,7 +230,7 @@ void AlbumLister::stop()
     emit signalClear();
     d->itemList.clear();
     d->itemMap.clear();
-    
+
     if (d->job)
     {
         d->job->kill();
@@ -289,7 +289,7 @@ void AlbumLister::slotResult(KIO::Job* job)
         return;
     }
 
-   
+
     typedef QMap<QPair<int,QString>, ImageInfo*> ImMap;
 
     for (ImMap::iterator it = d->itemMap.begin();
@@ -301,7 +301,7 @@ void AlbumLister::slotResult(KIO::Job* job)
     }
 
     d->itemMap.clear();
-    
+
     emit signalCompleted();
 }
 
@@ -310,7 +310,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    int     pid;    
+    long    id;
+    int     pid;
     QString name;
     QString date;
     size_t  size;
@@ -318,10 +319,11 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
-        
+
     QDataStream ds(data, IO_ReadOnly);
     while (!ds.atEnd())
     {
+        ds >> id;
         ds >> pid;
         ds >> name;
         ds >> date;
@@ -329,14 +331,14 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         ds >> dims;
 
         QPair<int, QString> itemIdentifier(pid, name);
-        
+
         if (d->itemMap.contains(itemIdentifier))
         {
             d->itemMap.remove(itemIdentifier);
             continue;
         }
 
-        ImageInfo* info = new ImageInfo(pid, name, 
+        ImageInfo* info = new ImageInfo(id, pid, name,
                                         QDateTime::fromString(date, Qt::ISODate),
                                         size, dims);
 
