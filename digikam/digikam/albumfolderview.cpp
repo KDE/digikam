@@ -604,9 +604,6 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         if(id == 10)
         {
-            AlbumFolderViewItem *itemDragParent = 
-                    dynamic_cast<AlbumFolderViewItem*>(dragItem()->parent());
-            
             PAlbum *album = itemDrag->getAlbum();
             PAlbum *destAlbum;
             if(!itemDrop)
