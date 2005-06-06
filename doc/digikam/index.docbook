@@ -1520,6 +1520,10 @@
                     </para>
                                  
                     <para>
+                    On the right of the dialog, two buttons are available for move selection automaticly to the width or the height center of image.
+                    </para>
+                    
+                    <para>
                     On the bottom of the dialog, the <guilabel>Max. Ratio</guilabel> button lets you set the selection area size to the maximum, accordingly with the current aspect ratio settings an orientation.
                     </para>
                            
