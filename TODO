@@ -13,6 +13,8 @@
 
 * fix changing of album library path. [TA/RR]
 
+* before deleting items from database, ask confirmation to user [TA]
+
 * handle internal files/folders being added/deleted
   - through albummanager 
   - imageeditor
