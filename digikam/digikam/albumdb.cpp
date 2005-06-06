@@ -64,7 +64,7 @@ void AlbumDB::setDBPath(const QString& path)
 {
     if (m_db) {
         sqlite3_close(m_db);
-	m_db = 0;
+        m_db = 0;
     }
 
     m_valid = false;
@@ -102,7 +102,7 @@ void AlbumDB::initDB()
     {
         if (!execSql( QString("CREATE TABLE Albums\n"
                               " (id INTEGER PRIMARY KEY,\n"
-			      "  url TEXT NOT NULL UNIQUE,\n"
+                              "  url TEXT NOT NULL UNIQUE,\n"
                               "  date DATE NOT NULL,\n"
                               "  caption TEXT,\n"
                               "  collection TEXT,\n"
@@ -113,19 +113,19 @@ void AlbumDB::initDB()
 
         if (!execSql( QString("CREATE TABLE Tags\n"
                               " (id INTEGER PRIMARY KEY,\n"
-			      "  pid INTEGER,\n"
-			      "  name TEXT NOT NULL,\n"
+                              "  pid INTEGER,\n"
+                              "  name TEXT NOT NULL,\n"
                               "  icon INTEGER,\n"
                               "  iconkde TEXT,\n"
-			      "  UNIQUE (name, pid));") ))
+                              "  UNIQUE (name, pid));") ))
         {
             return;
         }
 
         if (!execSql( QString("CREATE TABLE TagsTree\n"
                               " (id INTEGER NOT NULL,\n"
-			      "  pid INTEGER NOT NULL,\n"
-			      "  UNIQUE (id, pid));") ))
+                              "  pid INTEGER NOT NULL,\n"
+                              "  UNIQUE (id, pid));") ))
         {
             return;
         }
@@ -190,7 +190,7 @@ void AlbumDB::initDB()
                 " DELETE From ImageProperties\n"
                 "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
                 " DELETE FROM Images\n"
-                "   WHERE dirid = old.id;\n"
+                "   WHERE dirid = OLD.id;\n"
                 "END;");
 
         // trigger: delete from ImageTags/ImageProperties
@@ -206,7 +206,7 @@ void AlbumDB::initDB()
         // trigger: delete from ImageTags if Tag has been deleted
         execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
                 "BEGIN\n"
-                "  DELETE FROM ImageTags WHERE tagid=old.id;\n"
+                "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
                 "END;");
 
         // trigger: insert into TagsTree if Tag has been added
@@ -234,21 +234,21 @@ void AlbumDB::initDB()
                 "BEGIN\n"
                 "  DELETE FROM TagsTree\n"
                 "    WHERE\n"
-                "      ((id = Old.id)\n"
+                "      ((id = OLD.id)\n"
                 "        OR\n"
                 "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
                 "      AND\n"
                 "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
                 "  INSERT INTO TagsTree\n"
-                "     SELECT New.id, New.pid\n"
+                "     SELECT NEW.id, NEW.pid\n"
                 "     UNION\n"
-                "     SELECT New.id, pid FROM TagsTree WHERE id=New.pid\n"
+                "     SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid\n"
                 "     UNION\n"
-                "     SELECT id, New.pid FROM TagsTree WHERE pid=New.id\n"
+                "     SELECT id, NEW.pid FROM TagsTree WHERE pid=NEW.id\n"
                 "     UNION\n"
                 "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
                 "        WHERE\n"
-                "        A.pid = New.id AND B.id = New.pid;\n"
+                "        A.pid = NEW.id AND B.id = NEW.pid;\n"
                 "END;");
     }
 
