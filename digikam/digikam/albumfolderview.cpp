@@ -28,7 +28,9 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
+#include "digikamapp.h"
 #include "album.h"
 #include "albumfolderview.h"
 #include "albumpropsedit.h"
@@ -338,15 +340,76 @@ void AlbumFolderView::slotSelectionChanged()
 void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
-
-    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
-
+    KActionMenu menuImport(i18n("Import"));
+    KActionMenu menuKIPIBatch(i18n("Batch Processes"));        
+        
     popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
-
+    
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if(item)
     {
-        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Properties..."), 11);
-        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Album"), 12);
+        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Album Properties..."), 11);
+        
+        popmenu.insertSeparator();
+        
+        KAction *action;
+        // Add KIPI Albums plugins Actions
+        const QPtrList<KAction>& albumActions =
+                DigikamApp::getinstance()->menuAlbumActions();
+        if(!albumActions.isEmpty())
+        {
+            QPtrListIterator<KAction> it(albumActions);
+            while((action = it.current()))
+            {
+                action->plug(&popmenu);
+                ++it;
+            }
+        }
+        
+        // Add All Import Actions
+        const QPtrList<KAction> importActions =
+                DigikamApp::getinstance()->menuImportActions();
+        if(!importActions.isEmpty())
+        {
+            QPtrListIterator<KAction> it3(importActions);
+            while((action = it3.current()))
+            {
+                menuImport.insert(action);
+                ++it3;
+            }
+            menuImport.plug(&popmenu);
+        }
+        
+        // Add KIPI Batch processes plugins Actions
+        const QPtrList<KAction>& batchActions =
+                DigikamApp::getinstance()->menuBatchActions();
+        if(!batchActions.isEmpty())
+        {
+            QPtrListIterator<KAction> it2(batchActions);
+            while((action = it2.current()))
+            {
+                menuKIPIBatch.insert(action);
+                ++it2;
+            }
+            menuKIPIBatch.plug(&popmenu);
+        }
+        
+        if(!albumActions.isEmpty() || !batchActions.isEmpty() ||
+           !importActions.isEmpty())
+        {
+            popmenu.insertSeparator();
+        }
+        
+        if(AlbumSettings::instance()->getUseTrash())
+        {
+            popmenu.insertItem(SmallIcon("edittrash"),
+                               i18n("Move Album to Trash"), 12);
+        }
+        else
+        {
+            popmenu.insertItem(SmallIcon("editdelete"),
+                               i18n("Delete Album"), 12);
+        }
     }
 
     switch(popmenu.exec((QCursor::pos())))
