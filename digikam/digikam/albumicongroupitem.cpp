@@ -25,10 +25,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-#include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
-#endif
 
 #include "albummanager.h"
 #include "album.h"
@@ -88,21 +85,22 @@ void AlbumIconGroupItem::paintBanner()
     AlbumManager* man = AlbumManager::instance();
     PAlbum* album = man->findPAlbum(m_albumID);
 
-    QDate  date  = album->date();
+    QString dateAndComments;
+    QString prettyURL;
+    
+    if (album)
+    {
+        QDate  date  = album->date();
+        
+        dateAndComments = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", count())
+                          .arg(KGlobal::locale()->calendar()->monthName(date, false))
+                          .arg(KGlobal::locale()->calendar()->year(date));
+        
+        if (!album->caption().isEmpty())
+            dateAndComments += " - " + album->caption();
 
-#if KDE_IS_VERSION(3,2,0)
-    QString dateAndComments = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", count())
-                              .arg(KGlobal::locale()->calendar()->monthName(date, false))
-                              .arg(KGlobal::locale()->calendar()->year(date));
-#else
-    QString dateAndComments = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", count())
-                              .arg(KGlobal::locale()->monthName(date.month()))
-                              .arg(QString::number(date.year()));
-#endif
-
-    if (!album->caption().isEmpty())
-        dateAndComments += " - " + album->caption();
-
+        prettyURL = album->prettyURL();
+    }        
     
     QRect r(0, 0, rect().width(), rect().height());
 
@@ -128,7 +126,7 @@ void AlbumIconGroupItem::paintBanner()
 
     QRect tr;
     p.drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop, album->prettyURL(),
+               Qt::AlignLeft | Qt::AlignTop, prettyURL,
                -1, &tr);
 
     r.setY(tr.height() + 2);
