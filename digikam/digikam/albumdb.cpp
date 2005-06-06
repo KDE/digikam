@@ -22,14 +22,10 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kconfig.h>
 
-#include <qdom.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qmap.h>
-#include <qtextstream.h>
 
 #include <cstdio>
 #include <cstdlib>
