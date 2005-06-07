@@ -258,9 +258,9 @@ AlbumInfo::List AlbumDB::scanAlbums()
     QString basePath(AlbumManager::instance()->getLibraryPath());
 
     QStringList values;
-    execSql( QString( "SELECT id, url, date, caption, collection, \n "
-                      "  (SELECT name FROM Images WHERE Images.id=Albums.icon) \n "
-                      "  FROM Albums;" ),  &values );
+    execSql( "SELECT A.id, A.url, A.date, A.caption, A.collection, I.name \n "
+             "FROM Albums AS A LEFT OUTER JOIN Images AS I \n "
+             "ON A.icon=I.id;", &values);
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -295,12 +295,11 @@ TagInfo::List AlbumDB::scanTags()
     QString basePath(AlbumManager::instance()->getLibraryPath());
 
     QStringList values;
-    execSql( QString( "SELECT id, pid, name, \n "
-                      "(SELECT Albums.url||'/'||Images.name FROM Images, Albums \n "
-                      " WHERE Images.id=Tags.icon AND Albums.id=Images.dirid), \n "
-                      " iconkde FROM Tags;" ),  &values );
+    execSql( "SELECT T.id, T.pid, T.name, A.url, I.name, T.iconkde \n "
+             "FROM Tags AS T LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+             "  LEFT OUTER JOIN Albums AS A ON A.id=I.dirid; ", &values );
 
-    QString iconURL, iconKDE;
+    QString iconName, iconKDE, albumURL;
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -312,18 +311,20 @@ TagInfo::List AlbumDB::scanTags()
         ++it;
         info.name   = *it;
         ++it;
-        iconURL    = *it;
+        albumURL    = *it;
+        ++it;
+        iconName    = *it;
         ++it;
         iconKDE     = *it;
         ++it;
 
-        if ( iconURL.isEmpty() )
+        if ( albumURL.isEmpty() )
         {
             info.icon = iconKDE;
         }
         else
         {
-            info.icon = basePath + iconURL;
+            info.icon = basePath + albumURL + "/" + iconName;
         }
 
         tList.append(info);
@@ -861,9 +862,9 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 void AlbumDB::deleteItem(int albumID, const QString& file)
 {
     execSql( QString("DELETE FROM Images "
-            "WHERE dirid=%1 AND name='%2';")
-            .arg(albumID)
-            .arg(escapeString(file)) );
+                     "WHERE dirid=%1 AND name='%2';")
+             .arg(albumID)
+             .arg(escapeString(file)) );
 }
 
 void AlbumDB::setAlbumURL(int albumID, const QString& url)
