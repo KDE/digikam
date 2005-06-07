@@ -119,64 +119,42 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
-        QString oldFilter = m_db.getSetting( "ItemNameFilter" );
-        if ( filter != oldFilter )
+        typedef QPair<int, int> YearMonth;
+        QMap<YearMonth, bool> yearMonthMap;
+        
+        QStringList values;
+        m_db.execSql( "SELECT name, datetime FROM Images;", &values );
+
+        QString name, dateStr;
+        QDate date;
+        for ( QStringList::iterator it = values.begin(); it != values.end(); )
         {
-            typedef QPair<int, int> YearMonth;
-            QMap<YearMonth, bool> yearMonthMap;
+            name    = *it;
+            ++it;
+            dateStr = *it;
+            ++it;
+            
+            if ( !matchFilterList( regex, name ) )
+                continue;
 
-            m_db.execSql( "DELETE FROM YearMonths;" );
+            date = QDate::fromString( dateStr,  Qt::ISODate );
+            if ( !date.isValid() )
+                continue;
 
-            QStringList values;
-            m_db.execSql( "SELECT name, datetime FROM Images;", &values );
-
-            QString name, dateStr;
-            QDate date;
-            for ( QStringList::iterator it = values.begin(); it != values.end(); )
+            if ( !yearMonthMap.contains(YearMonth(date.year(), date.month())) )
             {
-                name    = *it;
-                ++it;
-                dateStr = *it;
-                ++it;
-
-                if ( !matchFilterList( regex, name ) )
-                    continue;
-
-                date = QDate::fromString( dateStr,  Qt::ISODate );
-                if ( !date.isValid() )
-                    continue;
-
-                if ( !yearMonthMap.contains(YearMonth(date.year(), date.month())) )
-                {
-                    yearMonthMap.insert( YearMonth( date.year(), date.month() ), true );
-                }
+                yearMonthMap.insert( YearMonth( date.year(), date.month() ), true );
             }
-
-            m_db.execSql( "BEGIN TRANSACTION;" );
-            for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin(); it != yearMonthMap.end();
-                  ++it )
-            {
-                m_db.execSql( QString( "REPLACE INTO YearMonths (year, month) VALUES(%1, %2);" )
-                              .arg( it.key().first )
-                              .arg( it.key().second ) );
-            }
-            m_db.execSql( "COMMIT TRANSACTION;" );
-
-            m_db.setSetting( "ItemNameFilter", filter );
         }
 
-        QStringList values;
-        m_db.execSql( "SELECT * FROM YearMonths;", &values );
-
         QDataStream os(ba, IO_WriteOnly);
-
+        
         int year, month;
-        for ( QStringList::iterator it = values.begin(); it != values.end();  )
+        for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin();
+              it != yearMonthMap.end(); ++it )
         {
-            year  = ( *it ).toInt();
-            ++it;
-            month = ( *it ).toInt();
-            ++it;
+            year  = it.key().first;
+            month = it.key().second;
 
             QDate date( year,  month,  1 );
             os << date;
