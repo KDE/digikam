@@ -385,7 +385,8 @@ void ImageEffect_Refocus::slotTimer()
 
 void ImageEffect_Refocus::slotEffect()
 {
-    if (m_currentRenderingMode == PreviewRendering) return;     // Computation already in process.
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
     
     m_currentRenderingMode = PreviewRendering;
 
