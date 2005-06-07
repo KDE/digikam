@@ -49,18 +49,18 @@ class AlbumListerPriv
 {
 public:
 
-    KIO::TransferJob*                     job;
-    QString                               filter;
+    KIO::TransferJob*          job;
+    QString                    filter;
 
-    Album*                                currAlbum;
+    Album*                     currAlbum;
 
-    QMap<int,bool>                        dayFilter;
-    QValueList<int>                       tagFilter;
-    bool                                  untaggedFilter;
-    QTimer*                               filterTimer;
+    QMap<int,bool>             dayFilter;
+    QValueList<int>            tagFilter;
+    bool                       untaggedFilter;
+    QTimer*                    filterTimer;
 
-    ImageInfoList                         itemList;
-    QMap<QPair<int,QString>, ImageInfo*>  itemMap;
+    ImageInfoList              itemList;
+    QMap<Q_LLONG, ImageInfo*>  itemMap;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -146,7 +146,7 @@ void AlbumLister::refresh()
     ImageInfo* item;
     for (ImageInfoListIterator it(d->itemList); (item = it.current()); ++it)
     {
-        d->itemMap.insert(QPair<int,QString>(item->albumID(), item->name()), item);
+        d->itemMap.insert(item->id(), item);
     }
 
     QByteArray ba;
@@ -290,7 +290,7 @@ void AlbumLister::slotResult(KIO::Job* job)
     }
 
 
-    typedef QMap<QPair<int,QString>, ImageInfo*> ImMap;
+    typedef QMap<Q_LLONG, ImageInfo*> ImMap;
 
     for (ImMap::iterator it = d->itemMap.begin();
          it != d->itemMap.end(); ++it)
@@ -310,8 +310,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    long    id;
-    int     pid;
+    Q_LLONG imageID;
+    int     albumID;
     QString name;
     QString date;
     size_t  size;
@@ -323,23 +323,22 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     QDataStream ds(data, IO_ReadOnly);
     while (!ds.atEnd())
     {
-        ds >> id;
-        ds >> pid;
+        ds >> imageID;
+        ds >> albumID;
         ds >> name;
         ds >> date;
         ds >> size;
         ds >> dims;
 
-        QPair<int, QString> itemIdentifier(pid, name);
-
-        if (d->itemMap.contains(itemIdentifier))
+        if (d->itemMap.contains(imageID))
         {
-            d->itemMap.remove(itemIdentifier);
+            d->itemMap.remove(imageID);
             continue;
         }
 
-        ImageInfo* info = new ImageInfo(id, pid, name,
-                                        QDateTime::fromString(date, Qt::ISODate),
+        ImageInfo* info = new ImageInfo(imageID, albumID, name,
+                                        QDateTime::fromString(date,
+                                                              Qt::ISODate),
                                         size, dims);
 
         if (matchesFilter(info))

@@ -148,7 +148,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
     QByteArray  ba;
 
-    long    imageid;
+    Q_LLONG imageid;
     QString name;
     QString path;
     int     dirid;
@@ -162,7 +162,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
-        imageid = (*it).toLong();
+        imageid = (*it).toLongLong();
         ++it;
         name  = *it;
         ++it;

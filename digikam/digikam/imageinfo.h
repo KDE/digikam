@@ -45,7 +45,7 @@ public:
      * @param     size     filesize of the image
      * @param     dims     dimensions of the image
      */
-    ImageInfo(long ID, int albumID, const QString& name,
+    ImageInfo(Q_LLONG ID, int albumID, const QString& name,
               const QDateTime& datetime, size_t size,
               const QSize& dims=QSize());
 
@@ -109,7 +109,7 @@ public:
     /**
      * @return the unique image id for this item
      */
-    long      id() const;
+    Q_LLONG   id() const;
 
     /**
      * @return the id of the PAlbum to which this item belongs
@@ -198,7 +198,7 @@ private:
     ImageInfo(const ImageInfo& ) {}
     ImageInfo& operator=(const ImageInfo& ) {return *this;}
 
-    long                  m_ID;
+    Q_LLONG               m_ID;
     int                   m_albumID;
     QString               m_name;
     QDateTime             m_datetime;

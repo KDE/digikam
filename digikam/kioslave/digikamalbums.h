@@ -36,7 +36,7 @@ class AlbumInfo
 public:
 
     int      id;
-    long     icon;
+    Q_LLONG  icon;
     QString  url;
     QString  caption;
     QString  collection;

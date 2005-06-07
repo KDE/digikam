@@ -147,7 +147,7 @@ void kio_digikamsearch::special(const QByteArray& data)
             return;
         }
 
-        long        imageid;
+        Q_LLONG     imageid;
         QString     name;
         QString     path;
         int         dirid;
@@ -161,7 +161,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         for (QStringList::iterator it = values.begin(); it != values.end();)
         {
-            imageid = (*it).toLong();
+            imageid = (*it).toLongLong();
             ++it;
             name  = *it;
             ++it;

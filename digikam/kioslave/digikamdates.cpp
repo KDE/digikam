@@ -188,7 +188,7 @@ void kio_digikamdates::special(const QByteArray& data)
                          .arg(moStr1,2),
                          &values, false);
 
-            long        imageid;
+            Q_LLONG     imageid;
             QString     name;
             QString     path;
             int         dirid;
@@ -202,7 +202,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
             for (QStringList::iterator it = values.begin(); it != values.end();)
             {
-                imageid = (*it).toLong();
+                imageid = (*it).toLongLong();
                 ++it;
                 name  = *it;
                 ++it;

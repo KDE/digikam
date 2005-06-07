@@ -39,7 +39,7 @@ extern "C"
 
 AlbumManager* ImageInfo::m_man = 0;
 
-ImageInfo::ImageInfo(long ID, int albumID, const QString& name,
+ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
                      const QDateTime& datetime, size_t size,
                      const QSize& dims)
     : m_ID(ID), m_albumID(albumID), m_name(name), m_datetime(datetime),
@@ -102,7 +102,7 @@ QSize ImageInfo::dimensions() const
     return m_dims;
 }
 
-long ImageInfo::id() const
+Q_LLONG ImageInfo::id() const
 {
     return m_ID;    
 }

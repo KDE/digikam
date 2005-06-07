@@ -105,7 +105,7 @@ void TagsPopupMenu::slotAboutToShow()
 
     if (m_onlyAssignedTags)
     {
-        LongList  idList;
+        LLongList  idList;
         for (IconItem *it = m_view->firstItem(); it; it = it->nextItem())
         {
             if (it->isSelected())

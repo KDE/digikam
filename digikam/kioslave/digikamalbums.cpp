@@ -143,7 +143,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     QDataStream os(ba, IO_WriteOnly);
     
     QString base = libraryPath + url + "/";
-    long    id;
+    Q_LLONG id;
     QString name;
     QString date;
     QSize   dims;
@@ -151,7 +151,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
-        id   = (*it).toLong();
+        id   = (*it).toLongLong();
         ++it;
         name = *it;
         ++it;
@@ -1180,7 +1180,7 @@ void kio_digikamalbums::buildAlbumList()
         ++it;
         info.collection = *it;
         ++it;
-        info.icon = (*it).toLong();
+        info.icon = (*it).toLongLong();
         ++it;
         
         m_albumList.append(info);        
