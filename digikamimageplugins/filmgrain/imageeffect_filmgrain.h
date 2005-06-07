@@ -35,6 +35,8 @@ class QPushButton;
 class QSlider;
 class QLCDNumber;
 
+class FilmGrain;
+
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -55,10 +57,17 @@ public:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    
+        
 private:
 
-    bool         m_cancel;
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+    
+    int          m_currentRenderingMode;
 
     QWidget     *m_parent;
     
@@ -68,29 +77,15 @@ private:
     
     QLCDNumber  *m_sensibilityLCDValue;
     
+    FilmGrain   *m_filmgrainFilter;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
 
-    void FilmGrain(uint* data, int Width, int Height, int Sensibility);
+private:
     
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-    
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-              
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+            
 private slots:
 
     void slotHelp();

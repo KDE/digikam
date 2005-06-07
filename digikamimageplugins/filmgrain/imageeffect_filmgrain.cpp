@@ -36,9 +36,7 @@
 #include <qslider.h>
 #include <qlayout.h>
 #include <qframe.h>
-#include <qdatetime.h> 
 #include <qtimer.h>
-#include <qpoint.h>
 
 // KDE includes.
 
@@ -50,6 +48,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -58,6 +57,7 @@
 // Local includes.
 
 #include "version.h"
+#include "filmgrain.h"
 #include "imageeffect_filmgrain.h"
 
 namespace DigikamFilmGrainImagesPlugin
@@ -70,17 +70,19 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                    i18n("&Reset Values")),
                        m_parent(parent)
 {
+    m_currentRenderingMode = NoneRendering;
+    m_filmgrainFilter      = 0L;
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Film Grain"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to apply a film grain effect to an image."),
+                                       I18N_NOOP("A digiKam image plugin to apply a film grain "
+                                                 "effect to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier", 
                                        0,
@@ -162,8 +164,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+    connect( m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+             this, SLOT(slotEffect()) );
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
@@ -171,19 +173,47 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 {
+    if (m_filmgrainFilter)
+       delete m_filmgrainFilter;   
 }
 
+void ImageEffect_FilmGrain::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_sensibilitySlider->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);    
+    enableButton(Ok, true);  
+    enableButton(User2, true);
+    enableButton(User3, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+}
+ 
 void ImageEffect_FilmGrain::slotUser1()
 {
-    m_sensibilitySlider->blockSignals(true);
-    m_sensibilitySlider->setValue(12);
-    m_sensibilitySlider->blockSignals(false);
-    slotEffect();    
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_filmgrainFilter->stopComputation();
+       }
+    else
+       {
+       m_sensibilitySlider->blockSignals(true);
+       m_sensibilitySlider->setValue(12);
+       m_sensibilitySlider->blockSignals(false);
+       slotEffect();    
+       }
 } 
 
 void ImageEffect_FilmGrain::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_filmgrainFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
@@ -194,7 +224,12 @@ void ImageEffect_FilmGrain::slotHelp()
 
 void ImageEffect_FilmGrain::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_filmgrainFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     e->accept();    
 }
 
@@ -206,143 +241,116 @@ void ImageEffect_FilmGrain::slotSensibilityChanged(int v)
 
 void ImageEffect_FilmGrain::slotEffect()
 {
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
+    m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);    
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    uint* data   = (uint *)image.bits();
-    int   w      = image.width();
-    int   h      = image.height();
     int   s      = 400 + 200 * m_sensibilitySlider->value();
-            
+    
     m_imagePreviewWidget->setProgress(0);
-    FilmGrain(data, w, h, s);
     
-    if (m_cancel) return;
-    
-    m_imagePreviewWidget->setProgress(0);  
-    m_imagePreviewWidget->setPreviewImageData(image);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_imagePreviewWidget->setEnable(true);
+    if (m_filmgrainFilter)
+       delete m_filmgrainFilter;
+        
+    m_filmgrainFilter = new FilmGrain(&image, this, s);
 }
 
 void ImageEffect_FilmGrain::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+
     m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
         
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    int s      = 400 + 200 * m_sensibilitySlider->value();
-    
-    m_imagePreviewWidget->setProgress(0);
-    FilmGrain(data, w, h, s);
+    int s = 400 + 200 * m_sensibilitySlider->value();
 
-    if ( !m_cancel )
-       iface.putOriginalData(i18n("Film Grain"), data);
-       
+            
+    if (m_filmgrainFilter)
+       delete m_filmgrainFilter;
+               
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    
+    m_filmgrainFilter = new FilmGrain(&orgImage, this, s);
+           
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();       
 }
 
-// This method is based on the Simulate Film grain tutorial from GimpGuru.org web site 
-// available at this url : http://www.gimpguru.org/Tutorials/FilmGrain
-
-void ImageEffect_FilmGrain::FilmGrain(uint* data, int Width, int Height, int Sensibility)
+void ImageEffect_FilmGrain::customEvent(QCustomEvent *event)
 {
-    if (Sensibility <= 0) return;
-    
-    int Noise = (int)(Sensibility / 10.0);
-    int nStride = GetStride(Width);
-    register int h, w, i = 0;       
-    int nRand;
+    if (!event) return;
 
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+    FilmGrain::EventData *d = (FilmGrain::EventData*) event->data();
+
+    if (!d) return;
     
-    int      BitCount = LineWidth * Height;
-    uchar*    pInBits = (uchar*)data;
-    uchar* pGrainBits = new uchar[BitCount];    // Grain blured without curves adjustment.
-    uchar*  pMaskBits = new uchar[BitCount];    // Grain mask with curves adjustment.
-    uchar*   pOutBits = new uchar[BitCount];    // Destination image with grain mask and original image merged.
-    
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    srand ((uint) dt.secsTo(Y2000));
-    
-    // Make gray grain mask.
-    
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+    if (d->starting)           // Computation in progress !
         {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
             {
-            nRand = (rand() % Noise) - (Noise / 2);
-            
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Red.
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Green.
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Blue.
-            pGrainBits[i++] = 0;                            // Reset Alpha (not used here).
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Film Grain completed..." << endl;
+                 
+                 QImage imDest = m_filmgrainFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+    
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Film Grain completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Film Grain"), 
+                                       (uint*)m_filmgrainFilter->getTargetImage().bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
             }
-        
-        // Update de progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (((double)h * 25.0) / Height));
-        kapp->processEvents(); 
-        }
-
-    // Smooth grain mask using gaussian blur.    
-    
-    Digikam::ImageFilters::gaussianBlurImage((uint *)pGrainBits, Width, Height, 3);
-            
-    // Normally, film grain tends to be most noticable in the midtones, and much less 
-    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
-
-    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves();
-    
-    // We modify only global luminosity of the grain.
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
-    
-    // Calculate curves and lut to apply on grain.
-    grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
-    grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    grainCurves->curvesLutProcess((uint *)pGrainBits, (uint *)pMaskBits, Width, Height);
-    delete grainCurves;
-    
-    // Merge src image with grain using shade coefficient.
-
-    int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
-    i = 0;
-        
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++)
-            {        
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Red.
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Green.
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Blue.
-            pOutBits[i++] = pInBits[i];                                                  // Alpha.
-            }
-        
-        // Update de progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (50.0 + ((double)h * 50.0) / Height));
-        kapp->processEvents();             
-        }
-    
-    // Copy target image to destination.
-    
-    if (!m_cancel) 
-       memcpy (data, pOutBits, BitCount);        
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Film Grain failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
                 
-    delete [] pGrainBits;    
-    delete [] pMaskBits;
-    delete [] pOutBits;
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
