@@ -306,6 +306,10 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     }
     db3.commitTransaction();
 
+    // -- Remove invalid entries ----------------------------------------
+    db3.execSql("DELETE FROM Images WHERE dirid=-1");
+
+    // -- update setting entry ------------------------------------------
     db3.setSetting("UpgradedFromSqlite2", "yes");
 
     kdDebug() << "Successfully upgraded database to sqlite3 " << endl;
