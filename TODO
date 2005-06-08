@@ -40,11 +40,12 @@
   since these dialogs hold pointers to the items, an easy crash is the
   result
 
-* Fix PPC compatibily in image filters [GC]
+* Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
 * Update handbooks [GC/GK]
 * Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
+* CD/DVD album folders+database backup/restore tool [GC]
 
 Post 0.8
 ------------------------------------------------------------------------------------
