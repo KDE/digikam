@@ -404,8 +404,6 @@ private:
      */
     QString escapeString(QString str) const;
 
-    void removeInvalidEntries();
-    
     sqleet3* m_db;
     bool     m_valid;
 };

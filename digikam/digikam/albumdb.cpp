@@ -49,8 +49,6 @@ AlbumDB::AlbumDB()
 
 AlbumDB::~AlbumDB()
 {
-    removeInvalidEntries();
-
     if (m_db)
     {
         sqlite3_close(m_db);
@@ -522,32 +520,6 @@ QString AlbumDB::escapeString(QString str) const
 {
     str.replace( "'", "''" );
     return str;
-}
-
-void AlbumDB::removeInvalidEntries()
-{
-    if (!m_db || !m_valid || !AlbumManager::instance())
-        return;
-
-    beginTransaction();
-
-    QStringList values;
-
-    execSql( QString("SELECT url FROM Albums;"),
-             &values );
-
-    QString basePath(AlbumManager::instance()->getLibraryPath());
-
-    for (QStringList::Iterator it = values.begin(); it != values.end(); ++it)
-    {
-        QFileInfo fi(basePath + *it);
-        if (!fi.exists() || !fi.isDir()) {
-            execSql( QString("DELETE FROM Albums WHERE url='%1';")
-                     .arg(escapeString(*it)));
-        }
-    }
-
-    commitTransaction();
 }
 
 QString AlbumDB::getItemCaption(Q_LLONG imageID)

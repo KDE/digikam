@@ -244,8 +244,7 @@ int main(int argc, char *argv[])
         man->albumDB()->getSetting("Scanned").isEmpty())
     {
         ScanLib sLib;
-        sLib.findMissingItems();
-        sLib.updateItemsWithoutDate();
+        sLib.startScan();
     }
 
     // Register image formats (especially for TIFF )

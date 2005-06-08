@@ -24,9 +24,11 @@
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kprogress.h>
+#include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
 
+#include <qapplication.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
@@ -37,6 +39,7 @@
 extern "C" {
 #include <sys/time.h>
 #include <time.h>
+#include <stdlib.h>
 }
 
 #include "albumdb.h"
@@ -61,13 +64,89 @@ ScanLib::~ScanLib()
     delete m_progressBar;
 }
 
+void ScanLib::startScan()
+{
+    struct timeval tv1, tv2;
+
+    gettimeofday(&tv1, 0);
+    findFoldersWhichDoNotExist();
+    gettimeofday(&tv2, 0);
+    timing("Finding non-existing folders",tv1, tv2);
+
+    gettimeofday(&tv1, 0);
+    findMissingItems();
+    gettimeofday(&tv2, 0);
+    timing("Finding items not in the database or disk",tv1, tv2);
+
+    gettimeofday(&tv1, 0);
+    updateItemsWithoutDate();
+    gettimeofday(&tv2, 0);
+    timing("Updating items without date",tv1, tv2);
+
+    deleteStaleEntries();
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    db->setSetting("Scanned",
+                   QDateTime::currentDateTime().toString(Qt::ISODate));
+
+}
+
+void ScanLib::findFoldersWhichDoNotExist()
+{
+    QMap<QString, int> toBeDeleted;
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    AlbumInfo::List aList = db->scanAlbums();
+    for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        AlbumInfo info = *it;
+        info.url = QDir::cleanDirPath(info.url);
+        QFileInfo fi(basePath + info.url);
+        if (!fi.exists() || !fi.isDir())
+            toBeDeleted[info.url] = info.id;
+    }
+
+    kapp->processEvents();
+    
+    if (!toBeDeleted.isEmpty())
+    {
+        int rc = KMessageBox::warningYesNoList(   0,
+            i18n("There seem to be a folder in the database which does not "
+                    "appear to be on disk. This folder should be deleted from "
+                    "the database, but that means you might loose information, "
+                    "because all images related to this folder will be deleted "
+                    "from the database as well. digiKam can not continue "
+                    "without deleting the items from the database because all "
+                    "views depends on the information in the database. Do you "
+                    "want them to be removed?",
+                 "There seem to be %n folders in the database which do not "
+                    "appear to be on disk. These folders should be deleted from "
+                    "the database, but that means you might loose information, "
+                    "because all images related to this folder will be deleted "
+                    "from the database as well. digiKam can not continue "
+                    "without deleting the items from the database because all "
+                    "views depends on the information in the database. Do you "
+                    "want them to be removed?",
+                 toBeDeleted.count()),
+            toBeDeleted.keys(),
+            i18n("Folders are Missing"));
+
+        if (rc != KMessageBox::Yes)
+            exit(0);
+
+        QMapIterator<QString,int> it;
+        for (it = toBeDeleted.begin() ; it != toBeDeleted.end(); ++it)
+        {
+            kdDebug() << "Removing folder: " << it.key() << endl;
+            db->deleteAlbum( it.data() );
+        }
+    }
+}
+
 void ScanLib::findMissingItems()
 {
-    struct timeval tv1, tv2, tv3;
-    gettimeofday(&tv1, 0);
-
-    QString albumPath =
-            QDir::cleanDirPath(AlbumManager::instance()->getLibraryPath());
+    QString albumPath = QDir::cleanDirPath(
+            AlbumManager::instance()->getLibraryPath());
     m_progressBar->setAllowCancel( false );
     m_progressBar->showCancelButton (false );
     m_progressBar->progressBar()->setProgress( 0 );
@@ -77,34 +156,14 @@ void ScanLib::findMissingItems()
     m_progressBar->show();
     kapp->processEvents();
 
-    gettimeofday(&tv2, 0);
-
     allFiles( albumPath );
 
     m_progressBar->hide();
     kapp->processEvents();
-
-    gettimeofday(&tv3, 0);
-
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setSetting("Scanned",
-                   QDateTime::currentDateTime().toString(Qt::ISODate));
-
-    kdDebug() << "Count all files took: time taken: "
-              << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
-                   (tv2.tv_usec-tv1.tv_usec))/1000)
-              << " ms" << endl;
-    kdDebug() << "Finding Missing Items: time taken: "
-            << (((tv3.tv_sec-tv2.tv_sec)*1000000 +
-                 (tv3.tv_usec-tv2.tv_usec))/1000)
-            << " ms" << endl;
 }
 
 void ScanLib::updateItemsWithoutDate()
 {
-    struct timeval tv1, tv2;
-    gettimeofday(&tv1, 0);
-
     AlbumDB* db = AlbumManager::instance()->albumDB();
     QStringList urls = db->getAllItemURLsWithoutDate();
 
@@ -124,8 +183,10 @@ void ScanLib::updateItemsWithoutDate()
     m_progressBar->show();
     kapp->processEvents();
 
-    QString base = QDir::cleanDirPath(AlbumManager::instance()->getLibraryPath());
+    QString base = QDir::cleanDirPath(
+            AlbumManager::instance()->getLibraryPath());
 
+    QMap<QString, int> filesToBeDeleted;
     int counter=0;
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
@@ -140,21 +201,13 @@ void ScanLib::updateItemsWithoutDate()
         if (fi.exists())
             updateItemDate(albumURL, fi.fileName(), albumID);
         else
-        {
-            kdDebug() << "Stale: " << fi.fileName() << " in " << albumID << endl;
-            db->deleteItem( albumID, fi.fileName() );
-        }
+            if (m_filesToBeDeleted.findIndex(qMakePair(fi.fileName(),albumID))
+                == -1)
+                m_filesToBeDeleted.append(qMakePair(fi.fileName(),albumID));
     }
 
     m_progressBar->hide();
     kapp->processEvents();
-
-    gettimeofday(&tv2, 0);
-
-    kdDebug() << "Updating items date: time taken: "
-              << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
-                   (tv2.tv_usec-tv1.tv_usec))/1000)
-              << " ms" << endl;
 }
 
 int ScanLib::countItemsInFolder(const QString& directory)
@@ -190,7 +243,8 @@ void ScanLib::allFiles(const QString& directory)
         return;
     }
 
-    QString base = QDir::cleanDirPath(AlbumManager::instance()->getLibraryPath());
+    QString base = QDir::cleanDirPath(
+            AlbumManager::instance()->getLibraryPath());
     QString albumURL = directory;
     albumURL = QDir::cleanDirPath(albumURL.remove(base));
 
@@ -204,8 +258,10 @@ void ScanLib::allFiles(const QString& directory)
     {
         if (albumURL.isEmpty())
         {
-            kdDebug() << "Root item found: " << *it << " in " << albumID << endl;
-            db->deleteItem( albumID, *it );
+            kdDebug() << "Root item found: " << *it
+                    << " in " << albumID << endl;
+            if (m_filesToBeDeleted.findIndex(qMakePair(*it,albumID)) == -1)
+                m_filesToBeDeleted.append(qMakePair(*it,albumID));
         }
         else
             filesFoundInDB.insert(*it, true);
@@ -233,11 +289,13 @@ void ScanLib::allFiles(const QString& directory)
     }
 
     // Removing items from the db which we did not see on disk.
-    QMapIterator<QString,bool> it2;
-    for (it2 = filesFoundInDB.begin() ; it2 != filesFoundInDB.end(); ++it2)
+    if (!filesFoundInDB.isEmpty())
     {
-        kdDebug() << "Stale: " << it2.key() << " in " << albumID << endl;
-        db->deleteItem( albumID, it2.key() );
+        QMapIterator<QString,bool> it2;
+        for (it2 = filesFoundInDB.begin() ; it2 != filesFoundInDB.end(); ++it2)
+            if (m_filesToBeDeleted.findIndex(qMakePair(it2.key(),albumID))
+                == -1)
+                m_filesToBeDeleted.append(qMakePair(it2.key(),albumID));
     }
 }
 
@@ -296,4 +354,56 @@ void ScanLib::updateItemDate(const QString& albumURL,
 
     AlbumDB* dbstore = AlbumManager::instance()->albumDB();
     dbstore->setItemDate(albumID, filename, datetime);
+}
+
+void ScanLib::deleteStaleEntries()
+{
+    QStringList listToBeDeleted;
+    QValueList< QPair<QString,int> >::iterator it;
+    for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end();
+         ++it)
+        listToBeDeleted.append((*it).first);
+        
+    if ( !m_filesToBeDeleted.isEmpty() )
+    {
+        int rc = KMessageBox::warningYesNoList(   0,
+          i18n("There seem to be an item in the database which does not "
+                  "appear to be on disk or is located in the root folder of "
+                  "the path. This file should be deleted from the "
+                  "database, but that means you might loose information. "
+                  "digiKam can not continue without deleting the item from "
+                  "the database because all views depends on the information "
+                  "in the database. Do you want it to be removed?",
+               "There seem to be %n items in the database which do not "
+                  "appear to be on disk or are located in the root folder of "
+                  "the path. These files should be deleted from the "
+                  "database, but that means you might loose information. "
+                  "digiKam can not continue without deleting these item from "
+                  "the database because all views depends on the information "
+                  "in the database. Do you want them to be removed?",
+               listToBeDeleted.count()),
+          listToBeDeleted,
+          i18n("Files are Missing"));
+
+        if (rc != KMessageBox::Yes)
+            exit(0);
+
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end();
+             ++it)
+        {
+            kdDebug() << "Removing: " << (*it).first << " in "
+                      << (*it).second << endl;
+            db->deleteItem( (*it).second, (*it).first );
+        }
+    }
+}
+
+void ScanLib::timing(const QString& text, struct timeval tv1, struct timeval tv2)
+{
+    kdDebug() << "ScanLib: "
+            << text + ": "
+            << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
+                 (tv2.tv_usec-tv1.tv_usec))/1000)
+            << " ms" << endl;
 }

@@ -26,6 +26,7 @@
 #include <kurl.h>
 #include <kprogress.h>
 #include <qstring.h>
+#include <qmap.h>
 
 /** @file scanlib.h */
 
@@ -53,6 +54,19 @@ public:
     ~ScanLib();
 
     /**
+     * This will execute findFoldersWhichDoNotExist(),
+     * findMissingItems() and updateItemsWithoutDate()
+     * and deletes all items from the database after confirmation.
+     */
+    void startScan();
+
+    /**
+     * This checks if all albums in the database still existing
+     * on the disk
+     */
+    void findFoldersWhichDoNotExist();
+            
+    /**
     * This calls allFiles with the albumPath.
     */
     void findMissingItems();
@@ -70,7 +84,6 @@ private:
     * @param directory The path to the start searching from
     * @return The amount of items
     */
-
     int countItemsInFolder(const QString& directory);
 
     /** 
@@ -109,9 +122,24 @@ private:
                         int albumID);
 
     /**
+     * This will delete all items stored in m_filesToBeDeleted
+     */
+    void deleteStaleEntries();
+
+    /**
      * Member variable so we can update the progress bar everywhere
      */
-    KProgressDialog   *m_progressBar;
+    KProgressDialog     *m_progressBar;
+
+    /**
+     * Member to store stale filesystem
+     */
+    QValueList< QPair<QString,int> >  m_filesToBeDeleted;
+
+    /**
+     * This is used to print out some timings.
+     */
+    void timing(const QString& text, struct timeval tv1, struct timeval tv2);
 };
 
 #endif /* SCANLIB_H */
