@@ -78,9 +78,9 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
         for (w = 0; !m_cancel && (w < Width); w++, i++)
             {
             nRand = (rand() % Noise) - (Noise / 2);
-            grainData.channel.red   = LimitValues (128 + nRand); // Red.
-            grainData.channel.green = LimitValues (128 + nRand); // Green.
-            grainData.channel.blue  = LimitValues (128 + nRand); // Blue.
+            grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
+            grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
+            grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
             grainData.channel.alpha = 0;                         // Reset Alpha (not used here).
             pGrainBits[i] = grainData.raw;
             }
