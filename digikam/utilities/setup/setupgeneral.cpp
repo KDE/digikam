@@ -68,6 +68,8 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                         "library in your computer.\n"
                                         "Write access is required for this path."));
+   // TODO: disable this till changing album library path is fixed
+   albumPathEdit->setEnabled( false );
 
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
                                                    albumPathBox);
