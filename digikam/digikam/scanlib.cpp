@@ -71,7 +71,7 @@ void ScanLib::startScan()
     gettimeofday(&tv1, 0);
     findFoldersWhichDoNotExist();
     gettimeofday(&tv2, 0);
-    timing("Finding non-existing folders",tv1, tv2);
+    timing("Finding non-existing Albums",tv1, tv2);
 
     gettimeofday(&tv1, 0);
     findMissingItems();
@@ -111,25 +111,25 @@ void ScanLib::findFoldersWhichDoNotExist()
     if (!toBeDeleted.isEmpty())
     {
         int rc = KMessageBox::warningYesNoList(   0,
-            i18n("There seem to be a folder in the database which does not "
-                 "appear to be on disk. This folder should be deleted from "
+            i18n("There seem to be an album in the database which does not "
+                 "appear to be on disk. This album should be deleted from "
                  "the database, but that means you might loose information, "
-                 "because all images related to this folder will be deleted "
+                 "because all images related to this album will be deleted "
                  "from the database as well. digiKam can not continue "
                  "without deleting the items from the database because all "
                  "views depends on the information in the database. Do you "
                  "want them to be removed?",
-                 "There seem to be %n folders in the database which do not "
-                 "appear to be on disk. These folders should be deleted from "
+                 "There seem to be %n albums in the database which do not "
+                 "appear to be on disk. These albums should be deleted from "
                  "the database, but that means you might loose information, "
-                 "because all images related to this folder will be deleted "
+                 "because all images related to this albums will be deleted "
                  "from the database as well. digiKam can not continue "
                  "without deleting the items from the database because all "
                  "views depends on the information in the database. Do you "
                  "want them to be removed?",
                  toBeDeleted.count()),
             toBeDeleted.keys(),
-            i18n("Folders are Missing"));
+            i18n("Albums are Missing"));
 
         if (rc != KMessageBox::Yes)
             exit(0);
@@ -137,7 +137,7 @@ void ScanLib::findFoldersWhichDoNotExist()
         QMapIterator<QString,int> it;
         for (it = toBeDeleted.begin() ; it != toBeDeleted.end(); ++it)
         {
-            kdDebug() << "Removing folder: " << it.key() << endl;
+            kdDebug() << "Removing Album: " << it.key() << endl;
             db->deleteAlbum( it.data() );
         }
     }
@@ -368,14 +368,14 @@ void ScanLib::deleteStaleEntries()
     {
         int rc = KMessageBox::warningYesNoList(   0,
           i18n("There seem to be an item in the database which does not "
-               "appear to be on disk or is located in the root folder of "
+               "appear to be on disk or is located in the root album of "
                "the path. This file should be deleted from the "
                "database, but that means you might loose information. "
                "digiKam can not continue without deleting the item from "
                "the database because all views depends on the information "
                "in the database. Do you want it to be removed?",
                "There seem to be %n items in the database which do not "
-               "appear to be on disk or are located in the root folder of "
+               "appear to be on disk or are located in the root album of "
                "the path. These files should be deleted from the "
                "database, but that means you might loose information. "
                "digiKam can not continue without deleting these item from "
