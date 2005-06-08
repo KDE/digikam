@@ -37,6 +37,7 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
+#include <qimage.h>
 
 // KDE includes.
 

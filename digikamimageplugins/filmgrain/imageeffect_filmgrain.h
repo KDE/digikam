@@ -23,10 +23,6 @@
 #ifndef IMAGEEFFECT_FILMGRAIN_H
 #define IMAGEEFFECT_FILMGRAIN_H
 
-// Qt include.
-
-#include <qimage.h>
-
 // KDE include.
 
 #include <kdialogbase.h>
