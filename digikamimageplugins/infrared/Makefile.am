@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_infrared.la
 
 digikamimageplugin_infrared_la_SOURCES = imageplugin_infrared.cpp \
-	                                 imageeffect_infrared.cpp 
+	                                 imageeffect_infrared.cpp infrared.cpp 
 
 digikamimageplugin_infrared_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

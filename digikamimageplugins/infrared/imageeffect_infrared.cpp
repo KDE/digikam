@@ -20,8 +20,6 @@
  * 
  * ============================================================ */
 
-#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ((((t) >> 8) + (t)) >> 8)) 
- 
 // C++ include.
 
 #include <cstring>
@@ -31,6 +29,7 @@
 // Qt includes.
 
 #include <qvgroupbox.h>
+#include <qimage.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
@@ -40,7 +39,6 @@
 #include <qframe.h>
 #include <qdatetime.h> 
 #include <qtimer.h>
-#include <qpoint.h>
 #include <qcheckbox.h>
 
 // KDE includes.
@@ -53,6 +51,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -61,6 +60,7 @@
 // Local includes.
 
 #include "version.h"
+#include "infrared.h"
 #include "imageeffect_infrared.h"
 
 namespace DigikamInfraredImagesPlugin
@@ -73,10 +73,11 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
                                    i18n("&Reset Values")),
                        m_parent(parent)
 {
+    m_currentRenderingMode = NoneRendering;
+    m_infraredFilter       = 0L;
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
@@ -175,31 +176,58 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+    connect( m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+             this, SLOT(slotEffect()) );
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
              
-    connect(m_addFilmGrain, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                        
+    connect( m_addFilmGrain, SIGNAL(toggled (bool)),
+             this, SLOT(slotEffect()) );                        
 }
 
 ImageEffect_Infrared::~ImageEffect_Infrared()
 {
+    if (m_infraredFilter)
+       delete m_infraredFilter;   
+}
+
+void ImageEffect_Infrared::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_sensibilitySlider->setEnabled(true);
+    m_addFilmGrain->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);    
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
 void ImageEffect_Infrared::slotUser1()
 {
-    m_sensibilitySlider->blockSignals(true);
-    m_sensibilitySlider->setValue(1);
-    m_sensibilitySlider->blockSignals(false);
-    slotEffect();    
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_infraredFilter->stopComputation();
+       }
+    else
+       {
+       m_sensibilitySlider->blockSignals(true);
+       m_sensibilitySlider->setValue(1);
+       m_sensibilitySlider->blockSignals(false);
+       slotEffect();    
+       }
 } 
 
 void ImageEffect_Infrared::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_infraredFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
@@ -210,7 +238,12 @@ void ImageEffect_Infrared::slotHelp()
 
 void ImageEffect_Infrared::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_infraredFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     e->accept();    
 }
 
@@ -222,32 +255,34 @@ void ImageEffect_Infrared::slotSensibilityChanged(int v)
 
 void ImageEffect_Infrared::slotEffect()
 {
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
     m_imagePreviewWidget->setEnable(false);
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    uint* data   = (uint *)image.bits();
-    int   w      = image.width();
-    int   h      = image.height();
     int   s      = 100 + 100 * m_sensibilitySlider->value();
     bool  g      = m_addFilmGrain->isChecked();
 
     m_imagePreviewWidget->setProgress(0);
-    infrared(data, w, h, s, g);
     
-    if (m_cancel) return;
-    
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageData(image);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_sensibilitySlider->setEnabled(true);
-    m_addFilmGrain->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);
+    if (m_infraredFilter)
+       delete m_infraredFilter;
+        
+    m_infraredFilter = new Infrared(&image, this, s, g);
 }
 
 void ImageEffect_Infrared::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+    
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
@@ -255,219 +290,84 @@ void ImageEffect_Infrared::slotOk()
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-        
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    int s      = 100 + 100 * m_sensibilitySlider->value();
-    bool  g    = m_addFilmGrain->isChecked();
     
-    m_imagePreviewWidget->setProgress(0);
-    infrared(data, w, h, s, g);
-
-    if ( !m_cancel )
-       iface.putOriginalData(i18n("Infrared Film"), data);
-       
+    int  s    = 100 + 100 * m_sensibilitySlider->value();
+    bool g    = m_addFilmGrain->isChecked();
+    
+    if (m_infraredFilter)
+       delete m_infraredFilter;
+               
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    
+    m_infraredFilter = new Infrared(&orgImage, this, s, g);
+           
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();       
 }
 
-// This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site 
-// available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
-
-void ImageEffect_Infrared::infrared(uint* data, int Width, int Height, int Sensibility, bool Grain)
+void ImageEffect_Infrared::customEvent(QCustomEvent *event)
 {
-    if (Sensibility <= 0) return;
-    
-    // Infrared film variables depending of Sensibility.
-    // This way try to reproduce famous Ilford SFX200 infrared film
-    // http://www.ilford.com/html/us_english/prod_html/sfx200/sfx200.html
-    // Note : this film have a sensibility escursion from 200 to 800 ISO.
-    
-    int        Noise = (int)((Sensibility + 3000.0) / 10.0); // Infrared film grain.
-    int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared hightlight effect [2 to 5].
-    float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
-    
-    int   nStride = GetStride(Width);
-    register int h, w, i = 0;       
-    int nRand;
+    if (!event) return;
 
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int        BitCount = LineWidth * Height;
-    uchar*      pInBits = (uchar*)data;
-    uchar*      pBWBits = new uchar[BitCount];    // Black and White conversion.
-    uchar*  pBWBlurBits = new uchar[BitCount];    // Black and White with blur.
-    uchar*   pGrainBits = new uchar[BitCount];    // Grain blured without curves adjustment.
-    uchar*    pMaskBits = new uchar[BitCount];    // Grain mask with curves adjustment.
-    uchar* pOverlayBits = new uchar[BitCount];    // Overlay to merge with original converted in gray scale.
-    uchar*     pOutBits = new uchar[BitCount];    // Destination image with grain mask and original image merged.
-    
-    //------------------------------------------
-    // 1 - Create GrayScale green boosted image.
-    //------------------------------------------
-    
-    // Convert to gray scale with boosting Green channel. 
-    // Infrared film increase green color.
+    Infrared::EventData *d = (Infrared::EventData*) event->data();
 
-    memcpy (pBWBits, pInBits, BitCount);  
+    if (!d) return;
     
-    Digikam::ImageFilters::channelMixerImage((uint *)pBWBits, Width, Height, // Image data.
-                                             true,                           // Preserve luminosity.    
-                                             true,                           // Monochrome.
-                                             0.4, greenBoost, -0.8,          // Red channel gains.
-                                             0.0, 1.0,         0.0,          // Green channel gains (not used).
-                                             0.0, 0.0,         1.0);         // Blue channel gains (not used).
-    m_imagePreviewWidget->setProgress(10);
-    kapp->processEvents(); 
-    if (m_cancel) return;
-
-    // Apply a Gaussian blur to the black and white image.
-    // This way simulate Infrared film dispersion for the highlights.
-
-    memcpy (pBWBlurBits, pBWBits, BitCount);  
-        
-    Digikam::ImageFilters::gaussianBlurImage((uint *)pBWBlurBits, Width, Height, blurRadius);
-    m_imagePreviewWidget->setProgress(20);
-    kapp->processEvents(); 
-    if (m_cancel) return;
-
-    //-----------------------------------------------------------------
-    // 2 - Create Gaussian blured averlay mask with grain if necessary.
-    //-----------------------------------------------------------------
-    
-    // Create gray grain mask.
-    
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    srand ((uint) dt.secsTo(Y2000));
-    
-    i = 0;
-    
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+    if (d->starting)           // Computation in progress !
         {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
             {
-            if (Grain)
-               {
-               nRand = (rand() % Noise) - (Noise / 2);
-               pGrainBits[i++] = LimitValues (128 + nRand);    // Blue.
-               pGrainBits[i++] = LimitValues (128 + nRand);    // Green.
-               pGrainBits[i++] = LimitValues (128 + nRand);    // Red.
-               pGrainBits[i++] = 0;                            // Reset Alpha (not used here).
-               }
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Infrared completed..." << endl;
+                 
+                 QImage imDest = m_infraredFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+    
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Infrared completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Infrared"), 
+                                       (uint*)m_infraredFilter->getTargetImage().bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
             }
-        
-        // Update progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (30.0 + ((double)h * 10.0) / Height));
-        kapp->processEvents(); 
-        }
-
-    // Smooth grain mask using gaussian blur.    
-   
-    if (Grain)
-       Digikam::ImageFilters::gaussianBlurImage((uint *)pGrainBits, Width, Height, 3);
-    
-    m_imagePreviewWidget->setProgress(50);
-    kapp->processEvents(); 
-    if (m_cancel) return;
-        
-    // Normally, film grain tends to be most noticable in the midtones, and much less 
-    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
-    
-    if (Grain)
-       {
-       Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves();
-    
-       // We modify only global luminosity of the grain.
-       grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
-       grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
-       grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
-    
-       // Calculate curves and lut to apply on grain.
-       grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
-       grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-       grainCurves->curvesLutProcess((uint *)pGrainBits, (uint *)pMaskBits, Width, Height);
-       delete grainCurves;
-       }
-    
-    m_imagePreviewWidget->setProgress(60);
-    kapp->processEvents(); 
-    if (m_cancel) return;
-       
-    // Merge gray scale image with grain using shade coefficient.
-
-    int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
-    i = 0;
-    
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++)
-            {        
-            if (Grain)  // Merging grain.
-               {
-               pOverlayBits[i++] = (pBWBlurBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Blue.
-               pOverlayBits[i++] = (pBWBlurBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Green.
-               pOverlayBits[i++] = (pBWBlurBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Red.
-               pOverlayBits[i++] = pBWBlurBits[i];                                                  // Alpha.
-               }               
-            else        // Use gray scale image without grain.
-               {
-               pOverlayBits[i++] = pBWBlurBits[i];    // Blue.
-               pOverlayBits[i++] = pBWBlurBits[i];    // Green.
-               pOverlayBits[i++] = pBWBlurBits[i];    // Red.
-               pOverlayBits[i++] = pBWBlurBits[i];    // Alpha.
-               }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Infrared failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
             }
-            
-        // Update progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (70.0 + ((double)h * 10.0) / Height));
-        kapp->processEvents(); 
         }
-    
-    //------------------------------------------
-    // 3 - Merge Grayscale image & overlay mask.
-    //------------------------------------------
-    
-    // Merge overlay and gray scale image using 'Overlay' Gimp method for increase the highlight.
-    // The result is usually a brighter picture. 
-    // Overlay mode composite value computation is D =  A * (B + (2 * B) * (255 - A)).
-    
-    i = 0;
-    uint tmp, tmpM;
-        
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++)
-            {     
-            pOutBits[i++] = INT_MULT(pBWBits[i], pBWBits[i] + 
-                                     INT_MULT(2 * pOverlayBits[i], 255 - pBWBits[i], tmpM), tmp);  // Blue.
-            pOutBits[i++] = INT_MULT(pBWBits[i], pBWBits[i] + 
-                                     INT_MULT(2 * pOverlayBits[i], 255 - pBWBits[i], tmpM), tmp);  // Green.
-            pOutBits[i++] = INT_MULT(pBWBits[i], pBWBits[i] + 
-                                     INT_MULT(2 * pOverlayBits[i], 255 - pBWBits[i], tmpM), tmp);  // Red.
-            pOutBits[i++] = pBWBits[i];                                                            // Alpha.
-            }
-        
-        // Update progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (80.0 + ((double)h * 20.0) / Height));
-        kapp->processEvents(); 
-        }
-
-    // Copy target image to destination.
-    
-    if (!m_cancel) 
-       memcpy (data, pOutBits, BitCount);        
-    
-    delete [] pBWBits;
-    delete [] pBWBlurBits;
-    delete [] pGrainBits;    
-    delete [] pMaskBits;
-    delete [] pOverlayBits;
-    delete [] pOutBits;
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin
