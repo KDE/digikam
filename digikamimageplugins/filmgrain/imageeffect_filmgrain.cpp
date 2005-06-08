@@ -187,8 +187,6 @@ void ImageEffect_FilmGrain::abortPreview()
     m_sensibilitySlider->setEnabled(true);
     m_imagePreviewWidget->setEnable(true);    
     enableButton(Ok, true);  
-    enableButton(User2, true);
-    enableButton(User3, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
@@ -277,7 +275,6 @@ void ImageEffect_FilmGrain::slotOk()
     m_parent->setCursor( KCursor::waitCursor() );
         
     int s = 400 + 200 * m_sensibilitySlider->value();
-
             
     if (m_filmgrainFilter)
        delete m_filmgrainFilter;
