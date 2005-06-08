@@ -37,6 +37,8 @@ class QComboBox;
 
 class KIntNumInput;
 
+class Texture;
+
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -54,6 +56,10 @@ public:
     ImageEffect_Texture(QWidget* parent);
     ~ImageEffect_Texture();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+    
 private:
 
     enum TextureTypes 
@@ -75,14 +81,15 @@ private:
     MossTexture,
     StoneTexture
     };
-        
-protected:
 
-    void closeEvent(QCloseEvent *e);
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
     
-private:
-
-    bool          m_cancel;
+    int           m_currentRenderingMode;
 
     QWidget      *m_parent;
     
@@ -94,19 +101,16 @@ private:
 
     KIntNumInput *m_blendGain;
     
+    Texture      *m_textureFilter;
+    
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
     
 private:
-
-    void texture(uint* data, int width, int height, int blendGain, int texture);
     
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-              
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+    QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h);
+        
 private slots:
 
     void slotHelp();

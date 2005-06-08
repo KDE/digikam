@@ -8,7 +8,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_texture.la
 
 digikamimageplugin_texture_la_SOURCES = imageplugin_texture.cpp \
-	                                imageeffect_texture.cpp 
+	                                imageeffect_texture.cpp texture.cpp 
 
 digikamimageplugin_texture_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

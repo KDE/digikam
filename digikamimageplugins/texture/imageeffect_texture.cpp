@@ -20,8 +20,6 @@
  * 
  * ============================================================ */
 
-#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ((((t) >> 8) + (t)) >> 8)) 
- 
 // C++ include.
 
 #include <cstring>
@@ -54,6 +52,7 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -62,6 +61,7 @@
 // Local includes.
 
 #include "version.h"
+#include "texture.h"
 #include "imageeffect_texture.h"
 
 namespace DigikamTextureImagesPlugin
@@ -74,18 +74,20 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
                                  i18n("&Reset Values")),
                      m_parent(parent)
 {
-    m_timer = 0;
+    m_currentRenderingMode = NoneRendering;
+    m_textureFilter        = 0L;
+    m_timer                = 0;
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Apply Texture"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to apply a decorative texture to an image."),
+                                       I18N_NOOP("A digiKam image plugin to apply a decorative "
+                                       "texture to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
@@ -197,24 +199,51 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
 ImageEffect_Texture::~ImageEffect_Texture()
 {
+    if (m_textureFilter)
+       delete m_textureFilter;       
+    
     if (m_timer)
        delete m_timer;
 }
 
+
+void ImageEffect_Texture::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_textureType->setEnabled(true);
+    m_blendGain->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);    
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+}
+
 void ImageEffect_Texture::slotUser1()
 {
-    blockSignals(true);
-
-    m_textureType->setCurrentItem(PaperTexture);    // Solid.
-    m_blendGain->setValue(200);
-    
-    blockSignals(false);
-    slotEffect();    
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_textureFilter->stopComputation();
+       }
+    else
+       {
+       blockSignals(true);
+       m_textureType->setCurrentItem(PaperTexture);    
+       m_blendGain->setValue(200);
+       blockSignals(false);
+       slotEffect();    
+       }
 } 
 
 void ImageEffect_Texture::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_textureFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     done(Cancel);
 }
 
@@ -225,7 +254,12 @@ void ImageEffect_Texture::slotHelp()
 
 void ImageEffect_Texture::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_textureFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
     e->accept();    
 }
 
@@ -245,33 +279,36 @@ void ImageEffect_Texture::slotTimer()
 
 void ImageEffect_Texture::slotEffect()
 {
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setEnable(false);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+        
+    QImage image   = m_imagePreviewWidget->getOriginalClipImage();
+    QImage texture = makeTextureImage( m_textureType->currentItem(), 
+                                       image.width(), image.height() );
     
-    QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    uint* data   = (uint *)image.bits();
-    int   w      = image.width();
-    int   h      = image.height();
     int   b      = 255 - m_blendGain->value();
-    int   t      = m_textureType->currentItem();
-
-    m_imagePreviewWidget->setProgress(0);
-    texture(data, w, h, b, t);
-    
-    if (m_cancel) return;
     
     m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageData(image);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_textureType->setEnabled(true);
-    m_blendGain->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);
+    
+    if (m_textureFilter)
+       delete m_textureFilter;
+        
+    m_textureFilter = new Texture(&image, this, b, &texture);
 }
 
 void ImageEffect_Texture::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+    
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
@@ -279,29 +316,88 @@ void ImageEffect_Texture::slotOk()
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-        
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    int b      = 255 - m_blendGain->value();
-    int t      = m_textureType->currentItem();
     
-    m_imagePreviewWidget->setProgress(0);
-    texture(data, w, h, b, t);
-
-    if ( !m_cancel )
-       iface.putOriginalData(i18n("Apply Texture"), data);
+    int b = 255 - m_blendGain->value();
+    
+    if (m_textureFilter)
+       delete m_textureFilter;
        
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    QImage texture = makeTextureImage( m_textureType->currentItem(), 
+                                       iface.originalWidth(), iface.originalHeight() );
+    
+    m_textureFilter = new Texture(&orgImage, this, b, &texture);
+           
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();       
 }
 
-// This method is based on the Simulate Texture Film tutorial from GimpGuru.org web site 
-// available at this url : http://www.gimpguru.org/Tutorials/SimulatedTexture/
+void ImageEffect_Texture::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
 
-void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGain, int texture)
+    Texture::EventData *d = (Texture::EventData*) event->data();
+
+    if (!d) return;
+    
+    if (d->starting)           // Computation in progress !
+        {
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Texture completed..." << endl;
+                 
+                 QImage imDest = m_textureFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+    
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Texture completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Texture"), 
+                                       (uint*)m_textureFilter->getTargetImage().bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Texture failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
+}
+
+QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)
 {
     QString pattern;
     
@@ -372,7 +468,7 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
           break;
        }
 
-    QPixmap texturePixmap(width, height);
+    QPixmap texturePixmap(w, h);
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
@@ -385,62 +481,9 @@ void ImageEffect_Texture::texture(uint* data, int width, int height, int blendGa
                 QPixmap::QPixmap(path + pattern + ".png")) );
     p.end();
 
-    QImage textureImg = texturePixmap.convertToImage();
-    
-    int   nStride = GetStride(width);    
-    int LineWidth = width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    uchar* pInData = (uchar*)data;
-    uchar* pTeData = textureImg.bits();
-        
-    int    BitCount = LineWidth * height;
-    uchar* pTransparent = new uchar[BitCount];    
-    memset(pTransparent, 128, BitCount);
-
-    register int i = 0, h, w;
-    
-    
-    for (h = 0; !m_cancel && (h < height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < width); w++)
-            {     
-            // Make textured transparent layout.
-            
-            pTeData[i++] = (pTeData[i] * (255 - blendGain) + pTransparent[i] * blendGain) >> 8;    // Blue.
-            pTeData[i++] = (pTeData[i] * (255 - blendGain) + pTransparent[i] * blendGain) >> 8;    // Green.
-            pTeData[i++] = (pTeData[i] * (255 - blendGain) + pTransparent[i] * blendGain) >> 8;    // Red.
-            i++;                                                                                   // Alpha.
-            }
-        
-        // Update progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (((double)h * 50.0) / height));
-        kapp->processEvents(); 
-        }
-            
-    uint   tmp, tmpM;
-    i = 0;
-
-    for (h = 0; !m_cancel && (h < height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < width); w++)
-            {     
-            // Merge layout and image using overlay method.
-            
-            pInData[i++] = INT_MULT(pInData[i], pInData[i] + INT_MULT(2 * pTeData[i], 255 - pInData[i], tmpM), tmp);  // Blue.
-            pInData[i++] = INT_MULT(pInData[i], pInData[i] + INT_MULT(2 * pTeData[i], 255 - pInData[i], tmpM), tmp);  // Green.
-            pInData[i++] = INT_MULT(pInData[i], pInData[i] + INT_MULT(2 * pTeData[i], 255 - pInData[i], tmpM), tmp);  // Red.
-            i++;                                                                                                      // Alpha.
-            }
-        
-        // Update progress bar in dialog.
-        m_imagePreviewWidget->setProgress((int) (50.0 + ((double)h * 50.0) / height));
-        kapp->processEvents(); 
-        }
-        
-    delete [] pTransparent;
+    return( texturePixmap.convertToImage() );
 }
-
+    
 }  // NameSpace DigikamTextureImagesPlugin
 
 #include "imageeffect_texture.moc"
