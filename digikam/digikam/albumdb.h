@@ -386,6 +386,12 @@ public:
                  const bool debug = false);
 
     bool isValid() const { return m_valid; }
+
+    /**
+     * To be used only if you are sure of what you are doing
+     * @return the last inserted row in one the db table.
+     */
+    Q_LLONG lastInsertedRow();
     
 private:
 

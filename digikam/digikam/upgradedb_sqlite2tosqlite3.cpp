@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-05
+ * Date	 : 2005-06-05
  * Description :
  *
  * Copyright 2005 by Renchi Raju
@@ -13,17 +13,19 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
 
-#include <kdebug.h>
 #include <qmap.h>
 #include <qpair.h>
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+
+#include <kdebug.h>
+#include <iostream>
 
 #include "albumdb.h"
 #include "albumdb_sqlite2.h"
@@ -32,7 +34,7 @@
 
 struct _Album
 {
-    int     id;
+    int	    id;
     QString url;
     QString date;
     QString caption;
@@ -43,19 +45,10 @@ struct _Album
 
 struct _Tag
 {
-    int     id;
-    int     pid;
+    int	    id;
+    int	    pid;
     QString name;
     QString icon;
-};
-
-struct _Image
-{
-    int     id;
-    int     dirid;
-    QString name;
-    QString datetime;
-    QString caption;
 };
 
 static QString escapeString(QString str)
@@ -64,54 +57,77 @@ static QString escapeString(QString str)
     return str;
 }
 
-bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath)
+Q_LLONG findOrAddImage(AlbumDB* db, int dirid, const QString& name,
+		       const QString& caption)
 {
+    QStringList values;
+    
+    db->execSql(QString("SELECT id FROM Images WHERE dirid=%1 AND name='%2'")
+		.arg(dirid)
+		.arg(escapeString(name)), &values);
+
+    if (!values.isEmpty())
+    {
+	return values.first().toLongLong();
+    }
+    
+    db->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
+			"VALUES(%1, '%2', '%3');")
+		.arg(dirid)
+		.arg(escapeString(name))
+		.arg(escapeString(caption)), &values);
+
+    return db->lastInsertedRow();
+}
+
+
+bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
+{
+    QString libraryPath = QDir::cleanDirPath(_libraryPath);
+
     AlbumDB db3;
     db3.setDBPath(libraryPath + "/digikam3.db");
-
+    
     if (!db3.isValid())
     {
-        kdWarning() << "Failed to open new Album Database" << endl;
-        return false;
+	kdWarning() << "Failed to open new Album Database" << endl;
+	return false;
     }
 
     if (db3.getSetting("UpgradedFromSqlite2") == "yes")
-        return true;
-
-    kdDebug() << "Upgrading database to sqlite3 " << endl;
+	return true;
 
     QFileInfo fi(libraryPath + "/digikam.db");
     if (!fi.exists())
     {
-        // no old database.
-        return true;
+	kdDebug() << "No old database present. Not upgrading" << endl;
+	db3.setSetting("UpgradedFromSqlite2", "yes");
+	return true;
     }
 
     AlbumDB_Sqlite2 db2;
     db2.setDBPath(libraryPath + "/digikam.db");
     if (!db2.isValid())
     {
-        kdWarning() << "Failed to initialize Old Album Database" << endl;
-        return false;
+	kdDebug() << "Failed to initialize Old Album Database" << endl;
+	return false;
     }
 
+    // delete entries from sqlite3 database
+    db3.execSql("DELETE FROM Albums;");
+    db3.execSql("DELETE FROM Tags;");
+    db3.execSql("DELETE FROM TagsTree;");
+    db3.execSql("DELETE FROM Images;");
+    db3.execSql("DELETE FROM ImageTags;");
+    db3.execSql("DELETE FROM ImageProperties;");
+    
     QStringList values;
 
+    // update albums -------------------------------------------------
+    
     values.clear();
     db2.execSql("SELECT id, url, date, caption, collection, icon FROM Albums;",
-                &values);
-
-    // 1. get list of albums from sqlite2.
-    // 2. insert list of albums into sqlite3.
-    // 3. get list of tags from sqlite3.
-    // 4. insert list of tags into sqlite3.
-    // 5. get list of images from sqlite2.
-    // 6. insert list of images into sqlite3 with new album id. (get new id of images)
-    // 7. get list of imagetags from sqlite2.
-    // 8. update list of imagetags with id of images
-    // 9. insert list of imagetags into sqlite3
-    // 10. do something with the icons
-
+		&values);
 
     typedef QValueList<_Album> AlbumList;
     AlbumList albumList;
@@ -122,38 +138,39 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath)
     db3.beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
-        _Album album;
+	_Album album;
 
-        album.id         = (*it).toInt();
-        ++it;
-        album.url        = (*it);
-        ++it;
-        album.date       = (*it);
-        ++it;
-        album.caption    = (*it);
-        ++it;
-        album.collection = (*it);
-        ++it;
-        album.icon   = (*it);
-        ++it;
+	album.id	 = (*it).toInt();
+	++it;
+	album.url	 = (*it);
+	++it;
+	album.date	 = (*it);
+	++it;
+	album.caption	 = (*it);
+	++it;
+	album.collection = (*it);
+	++it;
+	album.icon	 = (*it);
+	++it;
 
-        albumList.append(album);
-        albumMap.insert(album.url, album.id);
+	albumList.append(album);
+	albumMap.insert(album.url, album.id);
 
-        db3.execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
-                            "VALUES(%1, '%2', '%3', '%4', '%5');")
-                    .arg(album.id)
-                    .arg(escapeString(album.url))
-                    .arg(album.date)
-                    .arg(escapeString(album.caption))
-                    .arg(escapeString(album.collection)));
+	db3.execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
+			    "VALUES(%1, '%2', '%3', '%4', '%5');")
+		    .arg(album.id)
+		    .arg(escapeString(album.url))
+		    .arg(escapeString(album.date))
+		    .arg(escapeString(album.caption))
+		    .arg(escapeString(album.collection)));
     }
     db3.commitTransaction();
 
+    // update tags -------------------------------------------------
+    
     values.clear();
     db2.execSql("SELECT id, pid, name, icon FROM Tags;",
-                &values);
-
+		&values);
 
     typedef QValueList<_Tag> TagList;
     TagList tagList;
@@ -161,132 +178,87 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath)
     db3.beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
-        _Tag tag;
+	_Tag tag;
 
-        tag.id         = (*it).toInt();
-        ++it;
-        tag.pid        = (*it).toInt();
-        ++it;
-        tag.name       = (*it);
-        ++it;
-        tag.icon   = (*it);
-        ++it;
+	tag.id	 = (*it).toInt();
+	++it;
+	tag.pid	 = (*it).toInt();
+	++it;
+	tag.name = (*it);
+	++it;
+	tag.icon = (*it);
+	++it;
 
-        tagList.append(tag);
+	tagList.append(tag);
 
-        db3.execSql(QString("INSERT INTO Tags (id, pid, name) "
-                            "VALUES(%1, %2, '%3');")
-                    .arg(tag.id)
-                    .arg(tag.pid)
-                    .arg(tag.name));
+	db3.execSql(QString("INSERT INTO Tags (id, pid, name) "
+			    "VALUES(%1, %2, '%3');")
+		    .arg(tag.id)
+		    .arg(tag.pid)
+		    .arg(escapeString(tag.name)));
     }
     db3.commitTransaction();
 
-    typedef QPair<int,QString> OldImageIDType;
-    typedef QMap<OldImageIDType, int> OldNewImageMapType;
-
-    OldNewImageMapType oldNewImageMap;
-
+    // update images -------------------------------------------------
+    
     values.clear();
-    db2.execSql("SELECT dirid, name, datetime, caption FROM Images;",
-                &values);
+    db2.execSql("SELECT dirid, name, caption FROM Images;",
+		&values);
 
     db3.beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
-        _Image image;
+	int dirid	= (*it).toInt();
+	++it;
+	QString name	= (*it);
+	++it;
+	QString caption = (*it);
+	++it;
 
-        image.dirid    = (*it).toInt();
-        ++it;
-        image.name     = (*it);
-        ++it;
-        image.datetime = (*it);
-        ++it;
-        image.caption  = (*it);
-        ++it;
-
-        image.id = db3.addItem(image.dirid, image.name,
-                               QDateTime(), image.caption);
-
-        oldNewImageMap.insert(OldImageIDType(image.dirid,image.name),
-                              image.id);
+	findOrAddImage(&db3, dirid, name, caption);
     }
     db3.commitTransaction();
 
+    // update imagetags -----------------------------------------------
+    
     values.clear();
     db2.execSql("SELECT dirid, name, tagid FROM ImageTags;",
-                &values);
+		&values);
     db3.beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
-        int dirid = (*it).toInt();
-        ++it;
+	int dirid = (*it).toInt();
+	++it;
 
-        QString name = (*it);
-        ++it;
+	QString name = (*it);
+	++it;
 
-        int tagid = (*it).toInt();
-        ++it;
+	int tagid = (*it).toInt();
+	++it;
 
-        OldNewImageMapType::iterator it =
-            oldNewImageMap.find(OldImageIDType(dirid, name));
-
-        if (it == oldNewImageMap.end())
-        {
-            continue;
-        }
-
-        int id = it.data();
-
-        db3.execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
-                    .arg(id).arg(tagid));
+	Q_LLONG imageid = findOrAddImage(&db3, dirid, name, QString());
+	
+	db3.execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
+		    .arg(imageid).arg(tagid));
     }
     db3.commitTransaction();
 
-    // update album icons
-    db3.beginTransaction();
-    for (AlbumList::iterator it = albumList.begin(); it != albumList.end(); ++it)
-    {
-        _Album album = *it;
-
-        if (album.icon.isEmpty())
-            continue;
-
-        OldNewImageMapType::iterator it =
-            oldNewImageMap.find(OldImageIDType(album.id, album.icon));
-
-        if (it == oldNewImageMap.end())
-        {
-            continue;
-        }
-
-        db3.execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
-                    .arg(it.data())
-                    .arg(album.id));
-    }
-    db3.commitTransaction();
-
-    // -- update album icons ---------------------------------------------------
+    // update album icons -------------------------------------------------
 
     db3.beginTransaction();
-    for (AlbumList::iterator it = albumList.begin(); it != albumList.end(); ++it)
+    for (AlbumList::iterator it = albumList.begin(); it != albumList.end();
+	 ++it)
     {
-        _Album album = *it;
+	_Album album = *it;
 
-        if (album.icon.isEmpty())
-            continue;
+	if (album.icon.isEmpty())
+	    continue;
 
-        OldNewImageMapType::iterator it =
-            oldNewImageMap.find(OldImageIDType(album.id, album.icon));
+	Q_LLONG imageid = findOrAddImage(&db3, album.id, album.icon, QString());
 
-        if (it == oldNewImageMap.end())
-        {
-            continue;
-        }
-
-        db3.execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
-                    .arg(it.data())
-                    .arg(album.id));
+	db3.execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
+		    .arg(imageid)
+		    .arg(album.id));
     }
     db3.commitTransaction();
 
@@ -295,45 +267,41 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath)
     db3.beginTransaction();
     for (TagList::iterator it = tagList.begin(); it != tagList.end(); ++it)
     {
-        _Tag tag = *it;
+	_Tag tag = *it;
 
-        if (tag.icon.isEmpty())
-            continue;
+	if (tag.icon.isEmpty())
+	    continue;
 
-        QFileInfo fi(tag.icon);
-        if (fi.isRelative())
-        {
-            db3.execSql(QString("UPDATE Tags SET iconkde='%1' WHERE id=%2")
-                        .arg(escapeString(tag.icon))
-                        .arg(tag.id));
-            continue;
-        }
+	QFileInfo fi(tag.icon);
+	if (fi.isRelative())
+	{
+	    db3.execSql(QString("UPDATE Tags SET iconkde='%1' WHERE id=%2")
+			.arg(escapeString(tag.icon))
+			.arg(tag.id));
+	    continue;
+	}
 
-        tag.icon = QDir::cleanDirPath(tag.icon);
-        fi.setFile(tag.icon.remove(libraryPath));
+	tag.icon = QDir::cleanDirPath(tag.icon);
+	fi.setFile(tag.icon.remove(libraryPath));
 
-        QString url  = fi.dirPath(true);
-        QString name = fi.fileName();
+	QString url  = fi.dirPath(true);
+	QString name = fi.fileName();
 
-        AlbumMap::iterator it1 = albumMap.find(url);
-        if (it1 == albumMap.end())
-        {
-            continue;
-        }
+	AlbumMap::iterator it1 = albumMap.find(url);
+	if (it1 == albumMap.end())
+	{
+	    kdDebug() << "Could not find album with url: " << url << endl;
+	    kdDebug() << "Most likely an external directory. Rejecting." << endl;
+	    continue;
+	}
 
-        int dirid = it1.data();
+	int dirid = it1.data();
 
-        OldNewImageMapType::iterator it2 = oldNewImageMap.find(OldImageIDType(dirid, name));
-        if (it2 == oldNewImageMap.end())
-        {
-            continue;
-        }
+	Q_LLONG imageid = findOrAddImage(&db3, dirid, name, QString());;
 
-        int imageid = it2.data();
-
-        db3.execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
-                    .arg(imageid)
-                    .arg(tag.id));
+	db3.execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
+		    .arg(imageid)
+		    .arg(tag.id));
 
     }
     db3.commitTransaction();
@@ -342,5 +310,267 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath)
 
     kdDebug() << "Successfully upgraded database to sqlite3 " << endl;
 
+    // -- Check for db consistency ----------------------------------------
+
+    std::cout << "Checking database consistency" << std::endl;
+
+    
+    std::cout << "Checking Albums..................";
+    values.clear();
+    db2.execSql("SELECT id, url, date, caption, collection FROM Albums;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	_Album album;
+	album.id	 = (*it).toInt();
+	++it;
+	album.url	 = (*it);
+	++it;
+	album.date	 = (*it);
+	++it;
+	album.caption	 = (*it);
+	++it;
+	album.collection = (*it);
+	++it;
+
+	QStringList list;
+	db3.execSql(QString("SELECT id FROM Albums WHERE \n"
+			    "	 id=%1 AND \n"
+			    "	 url='%2' AND \n"
+			    "	 date='%3' AND \n"
+			    "	 caption='%4' AND \n"
+			    "	 collection='%5';")
+		    .arg(album.id)
+		    .arg(escapeString(album.url))
+		    .arg(escapeString(album.date))
+		    .arg(escapeString(album.caption))
+		    .arg(escapeString(album.collection)), &list, false);
+	if (list.size() != 1)
+	{
+	    std::cerr << "Failed" << std::endl;
+	    kdWarning() << "" << endl;
+	    kdWarning() << "Consistency check failed for Album: "
+		      << album.url << endl;
+	    return false;
+	}
+    }
+    std::cout << "(" << values.count()/5 << " Albums) "	 << "OK" << std::endl;
+
+    
+    std::cout << "Checking Tags....................";
+    values.clear();
+    db2.execSql("SELECT id, pid, name FROM Tags;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	int id	     = (*it).toInt();
+	++it;
+	int pid	     = (*it).toInt();
+	++it;
+	QString name = (*it);
+	++it;
+
+	QStringList list;
+	db3.execSql(QString("SELECT id FROM Tags WHERE \n"
+			    "	 id=%1 AND \n"
+			    "	 pid=%2 AND \n"
+			    "	 name='%3';")
+		    .arg(id)
+		    .arg(pid)
+		    .arg(escapeString(name)),
+		    &list, false);
+	if (list.size() != 1)
+	{
+	    std::cerr << "Failed" << std::endl;
+	    kdWarning() << "" << endl;
+	    kdWarning() << "Consistency check failed for Tag: "
+		      << name << endl;
+	    return false;
+	}
+    }
+    std::cout << "(" << values.count()/3 << " Tags) "  << "OK" << std::endl;
+
+    
+    std::cout << "Checking Images..................";
+    values.clear();
+    db2.execSql("SELECT Albums.url, Images.name, Images.caption "
+		"FROM Images, Albums WHERE Albums.id=Images.dirid;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	QString url  = (*it);
+	++it;
+	QString name = (*it);
+	++it;
+	QString caption = (*it);
+	++it;
+
+	QStringList list;
+	db3.execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
+			    "Albums.url = '%1' AND \n "
+			    "Images.dirid = Albums.id AND \n "
+			    "Images.name = '%2' AND \n "
+			    "Images.caption = '%3';")
+		    .arg(escapeString(url))
+		    .arg(escapeString(name))
+		    .arg(escapeString(caption)),
+		    &list, false);
+	if (list.size() != 1)
+	{
+	    std::cerr << "Failed" << std::endl;
+	    kdWarning() << "" << endl;
+	    kdWarning() << "Consistency check failed for Image: "
+		      << url << ", " << name << ", " << caption	 << endl;
+	    return false;
+	}
+    }
+    std::cout << "(" << values.count()/3 << " Images) " << "OK" << std::endl;
+
+    
+    std::cout << "Checking ImageTags...............";
+    values.clear();
+    db2.execSql("SELECT Albums.url, ImageTags.name, ImageTags.tagid "
+		"FROM ImageTags, Albums WHERE \n "
+		"   Albums.id=ImageTags.dirid;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	QString url   = (*it);
+	++it;
+	QString name  = (*it);
+	++it;
+	int	tagid = (*it).toInt();
+	++it;
+
+	QStringList list;
+	db3.execSql(QString("SELECT Images.id FROM Albums, Images, ImageTags WHERE \n "
+			    "Albums.url = '%1' AND \n "
+			    "Images.dirid = Albums.id AND \n "
+			    "Images.name = '%2' AND \n "
+			    "ImageTags.imageid = Images.id AND \n "
+			    "ImageTags.tagid = %3;")
+		    .arg(escapeString(url))
+		    .arg(escapeString(name))
+		    .arg(tagid),
+		    &list, false);
+	if (list.size() != 1)
+	{
+	    std::cerr << "Failed" << std::endl;
+	    kdWarning() << "" << endl;
+	    kdWarning() << "Consistency check failed for ImageTag: "
+		      << url << ", " << name << ", " << tagid << endl;
+	    return false;
+	}
+    }
+    std::cout << "(" << values.count()/3 << " ImageTags) " << "OK" << std::endl;
+
+    std::cout << "Checking Album icons ...............";
+    values.clear();
+    db2.execSql("SELECT url, icon FROM Albums;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	QString url    = (*it);
+	++it;
+	QString icon   = (*it);
+	++it;
+
+	if (icon.isEmpty())
+	    continue;
+	
+	QStringList list;
+	db3.execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
+			    "Albums.url = '%1' AND \n "
+			    "Images.id = Albums.icon AND \n "
+			    "Images.name = '%2';")
+		    .arg(escapeString(url))
+		    .arg(escapeString(icon)), &list);
+
+	if (list.size() != 1)
+	{
+	    std::cerr << "Failed" << std::endl;
+	    kdWarning() << "" << endl;
+	    kdWarning() << "Consistency check failed for Album Icon: "
+		      << url << ", " << icon << endl;
+
+	    return false;
+	}
+    }
+    std::cout << "(" << values.count()/2 << " Album Icons) " << "OK" << std::endl;
+
+    
+    std::cout << "Checking Tag icons ...............";
+    values.clear();
+    db2.execSql("SELECT id, icon FROM Tags;", &values);
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+	int id	     = (*it).toInt();
+	++it;
+	QString icon = (*it);
+	++it;
+
+	if (icon.isEmpty())
+	    continue;
+
+	if (!icon.startsWith("/"))
+	{
+	    QStringList list;
+	    db3.execSql(QString("SELECT id FROM Tags WHERE \n "
+				"id = %1 AND \n "
+				"iconkde = '%2';")
+			.arg(id)
+			.arg(escapeString(icon)), &list);
+
+	    if (list.size() != 1)
+	    {
+		std::cerr << "Failed" << std::endl;
+		kdWarning() << "" << endl;
+		kdWarning() << "Consistency check failed for Tag Icon: "
+			  << id << ", " << icon << endl;
+
+		return false;
+	    }
+	}
+	else
+	{
+	    icon = QDir::cleanDirPath(icon);
+	    QFileInfo fi(icon.remove(libraryPath));
+
+	    QString url	 = fi.dirPath(true);
+	    QString name = fi.fileName();
+
+	    QStringList list;
+
+	    list.clear();
+	    db3.execSql(QString("SELECT id FROM Albums WHERE url='%1'")
+			.arg(escapeString(url)), &list);
+	    if (list.isEmpty())
+	    {
+		kdWarning() << "Tag icon not in Album Library Path, Rejecting " << endl;
+		kdWarning() << "(" << icon << ")" << endl;
+		continue;
+	    }
+
+	    list.clear();
+	    db3.execSql(QString("SELECT Images.id FROM Images, Tags WHERE \n "
+				" Images.dirid=(SELECT id FROM Albums WHERE url='%1') AND \n "
+				" Images.name='%2' AND \n "
+				" Tags.id=%3 AND \n "
+				" Tags.icon=Images.id")
+			.arg(escapeString(url))
+			.arg(escapeString(name))
+			.arg(id), &list);
+	    if (list.size() != 1)
+	    {
+		std::cerr << "Failed." << std::endl;
+		kdWarning() << "" << endl;
+		kdWarning() << "Consistency check failed for Tag Icon: "
+			  << id << ", " << icon << endl;
+
+		return false;
+	    }
+	    
+	}
+    }
+    std::cout << "(" << values.count()/2 << " Tag Icons) " << "OK" << std::endl;
+
+    std::cout << "" << std::endl;
+    std::cout << "All Tests: A-OK" << std::endl;
+    
     return true;
 }

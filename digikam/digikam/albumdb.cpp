@@ -155,13 +155,10 @@ void AlbumDB::initDB()
             return;
         }
 
-        // todo: add search table
-        
-        // todo: delete this table
-        if ( !execSql( QString( "CREATE TABLE YearMonths  \n"
-                                " (year  INTEGER NOT NULL, \n"
-                                "  month INTEGER NOT NULL, \n"
-                                "  UNIQUE (year, month));" ) ))
+        if ( !execSql( QString( "CREATE TABLE Searches  \n"
+                                " (id INTEGER PRIMARY KEY, \n"
+                                "  name TEXT NOT NULL UNIQUE, \n"
+                                "  url  TEXT NOT NULL);" ) ) )
         {
             return;
         }
@@ -200,6 +197,10 @@ void AlbumDB::initDB()
                 "    WHERE imageid=OLD.id;\n"
                 "  DELETE From ImageProperties\n "
                 "    WHERE imageid=OLD.id;\n"
+                "  UPDATE Albums SET icon=null \n "
+                "    WHERE icon=OLD.id;\n"
+                "  UPDATE Tags SET icon=null \n "
+                "    WHERE icon=OLD.id;\n"
                 "END;");
 
         // trigger: delete from ImageTags if Tag has been deleted
@@ -903,4 +904,9 @@ void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(escapeString(dstName))
              .arg(srcAlbumID)
              .arg(escapeString(srcName)) ); */
+}
+
+Q_LLONG AlbumDB::lastInsertedRow()
+{
+    return sqlite3_last_insert_rowid(m_db);    
 }
