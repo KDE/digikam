@@ -23,7 +23,7 @@
 
 #include <kdeversion.h>
 
-#if KDE_IS_VERSION(3,3,90)
+#ifdef __KDE_HAVE_GCC_VISIBILITY
 
 #include <kdemacros.h>
 
