@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=showFoto
 Name[it]=visualizzaFoto
+Name[pa]=ਸ਼ੋਫੋਟੋ
 Name[sv]=Showfoto
 Name[ta]=புகைப்படத்தைக் காட்டு
 GenericName=Image Viewer
@@ -23,6 +24,7 @@ GenericName[ja]=画像ビューア
 GenericName[lt]=Paveikslėlių žiūriklis
 GenericName[ms]=Pelihat Imej
 GenericName[nl]=Afbeeldingweergaveprogramma
+GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
 GenericName[pl]=Przeglądarka obrazków
 GenericName[pt]=Visualizador de Imagens
 GenericName[pt_BR]=Visualizador de Imagens
