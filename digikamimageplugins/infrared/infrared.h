@@ -34,7 +34,7 @@ class Infrared : public Digikam::ThreadedFilter
 
 public:
     
-    Infrared(QImage *orgImage, QObject *parent=0, int sensibility=12, bool grain=true);
+    Infrared(QImage *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
     
     ~Infrared(){};
     
