@@ -38,8 +38,8 @@ namespace DigikamFilmGrainImagesPlugin
 FilmGrain::FilmGrain(QImage *orgImage, QObject *parent, int sensibility)
          : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_sensibility      = sensibility;
-    m_name             = "FilmGrain";
+    m_sensibility = sensibility;
+    m_name        = "FilmGrain";
 }
 
 void FilmGrain::filterImage(void)
@@ -55,18 +55,17 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     if (Sensibility <= 0) return;
     
     int Noise = (int)(Sensibility / 10.0);
-    int nStride = GetStride(Width);
     register int h, w, i = 0;       
     int nRand;
-
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
-    int      BitCount = LineWidth * Height;
-    uchar*    pInBits = (uchar*)data;
-    uchar* pGrainBits = new uchar[BitCount];    // Grain blured without curves adjustment.
-    uchar*  pMaskBits = new uchar[BitCount];    // Grain mask with curves adjustment.
-    uchar*   pOutBits = m_destImage.bits();     // Destination image with grain mask and original image merged.
+    uint* pGrainBits = new uint[Width*Height];    // Grain blured without curves adjustment.
+    uint*  pMaskBits = new uint[Width*Height];    // Grain mask with curves adjustment.
+    uint*   pOutBits = (uint*)m_destImage.bits(); // Destination image with merged grain mask and original.
+    
+    Digikam::ImageFilters::imageData inData;    
+    Digikam::ImageFilters::imageData grainData;    
+    Digikam::ImageFilters::imageData maskData;    
+    Digikam::ImageFilters::imageData outData;    
     
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
@@ -74,16 +73,16 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     
     // Make gray grain mask.
     
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
+    for (h = 0; !m_cancel && (h < Height); h++)
         {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); w++, i++)
             {
             nRand = (rand() % Noise) - (Noise / 2);
-            
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Red.
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Green.
-            pGrainBits[i++] = LimitValues (128 + nRand);    // Blue.
-            pGrainBits[i++] = 0;                            // Reset Alpha (not used here).
+            grainData.channel.red   = LimitValues (128 + nRand); // Red.
+            grainData.channel.green = LimitValues (128 + nRand); // Green.
+            grainData.channel.blue  = LimitValues (128 + nRand); // Blue.
+            grainData.channel.alpha = 0;                         // Reset Alpha (not used here).
+            pGrainBits[i] = grainData.raw;
             }
         
         // Update de progress bar in dialog.
@@ -95,7 +94,13 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
 
     // Smooth grain mask using gaussian blur.    
     
-    Digikam::ImageFilters::gaussianBlurImage((uint *)pGrainBits, Width, Height, 3);
+    Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 3);
+    
+    // Update de progress bar in dialog.
+    m_eventData.starting = true;
+    m_eventData.success  = false;
+    m_eventData.progress = 30;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
             
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
@@ -110,36 +115,40 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     // Calculate curves and lut to apply on grain.
     grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
     grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    grainCurves->curvesLutProcess((uint *)pGrainBits, (uint *)pMaskBits, Width, Height);
+    grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
     delete grainCurves;
+    
+    // Update de progress bar in dialog.
+    m_eventData.starting = true;
+    m_eventData.success  = false;
+    m_eventData.progress = 40;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
     
     // Merge src image with grain using shade coefficient.
 
     int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
     i = 0;
         
-    for (h = 0; !m_cancel && (h < Height); h++, i += nStride)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++)
-            {        
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Red.
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Green.
-            pOutBits[i++] = (pInBits[i] * (255 - Shade) + pMaskBits[i] * Shade) >> 8;    // Blue.
-            pOutBits[i++] = pInBits[i];                                                  // Alpha.
-            }
+    for (h = 0; !m_cancel && (h < Height); h++)
+       {
+       for (w = 0; !m_cancel && (w < Width); w++, i++)
+          {        
+          inData.raw            = data[i];
+          maskData.raw          = pMaskBits[i];
+          outData.channel.red   = (inData.channel.red*(255-Shade)   + maskData.channel.red*Shade) >> 8;
+          outData.channel.green = (inData.channel.green*(255-Shade) + maskData.channel.green*Shade) >> 8;
+          outData.channel.blue  = (inData.channel.blue*(255-Shade)  + maskData.channel.blue*Shade) >> 8;
+          outData.channel.alpha = inData.channel.alpha;
+          pOutBits[i]           = outData.raw;
+          }
         
-        // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (50.0 + ((double)h * 50.0) / Height);
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-        }
+       // Update de progress bar in dialog.
+       m_eventData.starting = true;
+       m_eventData.success  = false;
+       m_eventData.progress = (int) (50.0 + ((double)h * 50.0) / Height);
+       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+       }
     
-    // Copy target image to destination.
-    
-    if (!m_cancel) 
-       memcpy (data, pOutBits, BitCount);        
-                
     delete [] pGrainBits;    
     delete [] pMaskBits;
 }

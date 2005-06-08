@@ -132,7 +132,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     hlay1->addWidget(m_imagePreviewWidget);
             
     m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of "
+                                                    "the task completed."));
     
     // -------------------------------------------------------------
     
@@ -253,7 +254,7 @@ void ImageEffect_FilmGrain::slotEffect()
     enableButton(Ok, false);
 
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    int   s      = 400 + 200 * m_sensibilitySlider->value();
+    int s = 400 + 200 * m_sensibilitySlider->value();
     
     m_imagePreviewWidget->setProgress(0);
     
