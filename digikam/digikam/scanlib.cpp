@@ -249,7 +249,12 @@ void ScanLib::allFiles(const QString& directory)
     albumURL = QDir::cleanDirPath(albumURL.remove(base));
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    int albumID = db->getOrCreateAlbumId(albumURL);
+
+    int albumID;
+    // Do not create a root album, but do not leave yet.
+    if (!albumURL.isEmpty())
+        albumID = db->getOrCreateAlbumId(albumURL);
+    
     QStringList filesInAlbum = db->getItemNamesInAlbum( albumID );
 
     QMap<QString, bool> filesFoundInDB;
