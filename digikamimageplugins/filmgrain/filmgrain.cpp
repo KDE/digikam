@@ -81,7 +81,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
             grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
             grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
             grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
-            grainData.channel.alpha = 0;                         // Reset Alpha (not used here).
+            grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
             pGrainBits[i] = grainData.raw;
             }
         
