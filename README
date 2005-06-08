@@ -61,7 +61,7 @@ gphoto2 2.x
 imlib2 >= 1.2.0
 libgdbm >= 1.8.0
 libkipi (>= 0.1) from http://extragear.kde.org/apps/kipi
-libkexif (>=0.2) from http://digikam.sourceforge.net/
+libkexif (>=0.2) from http://www.digikam.org/
 libtiff >= 3.5.x
 
 Installation :

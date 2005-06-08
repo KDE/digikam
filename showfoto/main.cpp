@@ -52,12 +52,12 @@ int main(int argc, char *argv[])
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2005, digiKam developers team"),
                           0,
-                          "http://digikam.sourceforge.net");
+                          "http://www.digikam.org");
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Developer"),
                           "renchi at pooh.tam.uiuc.edu",
-                          "http://digikam.sourceforge.net");
+                          "http://www.digikam.org");
 
     aboutData.addAuthor ( "Caulier Gilles",
                           I18N_NOOP("Developer"),
