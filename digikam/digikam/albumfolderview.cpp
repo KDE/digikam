@@ -16,7 +16,6 @@
  * GNU General Public License for more details.
  * ============================================================ */
  
-#include <qintdict.h>
 #include <qpixmap.h>
 #include <qguardedptr.h>
 #include <qdir.h>
@@ -89,7 +88,6 @@ class AlbumFolderViewPriv
 {
 public:
     AlbumManager                     *albumMan;
-    QIntDict<AlbumFolderViewItem>    dict;
     ThumbnailJob                     *iconThumbJob;
 };
 
@@ -148,11 +146,13 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     if(palbum->parent()->isRoot())
     {
         item = new AlbumFolderViewItem(this, palbum);
-        d->dict.insert(palbum->id(), item);
+        palbum->setExtraData(this, item);
     }
     else
     {
-        AlbumFolderViewItem *parent = d->dict.find(palbum->parent()->id());
+        AlbumFolderViewItem* parent =
+            (AlbumFolderViewItem*) palbum->parent()->extraData(this);
+        
         if(!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Album "
@@ -160,7 +160,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
             return;
         }
         item = new AlbumFolderViewItem(parent, palbum);
-        d->dict.insert(palbum->id(), item);
+        palbum->setExtraData(this, item);
     }
     
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
@@ -168,26 +168,6 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
                     32, KIcon::DefaultState, 0, true));
     
     setAlbumThumbnail(palbum);
-}
-
-void AlbumFolderView::slotNewAlbumCreated(Album* album)
-{
-    disconnect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
-               this, SLOT(slotNewAlbumCreated(Album*)));
-
-    if(!album)
-        return;
-    
-    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-    if(!palbum)
-        return;
-
-    AlbumFolderViewItem *item = d->dict.find(album->id());
-    if(!item)
-        return;
-
-    ensureItemVisible(item);
-    setSelected(item, true);
 }
 
 void AlbumFolderView::slotAlbumDeleted(Album *album)
@@ -204,7 +184,7 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
         if(!palbum->icon().isEmpty() && !d->iconThumbJob)
             d->iconThumbJob->removeItem(palbum->icon());
 
-        AlbumFolderViewItem* item = d->dict.find(palbum->id());
+        AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
         if(item)
         {
             AlbumFolderViewItem *itemParent = 
@@ -226,7 +206,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     if(!album)
         return;
     
-    AlbumFolderViewItem *item = d->dict.find(album->id());
+    AlbumFolderViewItem* item = (AlbumFolderViewItem*) album->extraData(this);
     
     if(!item)
         return;
@@ -268,7 +248,7 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     if(!album)
         return;
 
-    AlbumFolderViewItem *item = d->dict.find(album->id());
+    AlbumFolderViewItem* item = (AlbumFolderViewItem*)album->extraData(this);
     
     if(!item)
         return;
@@ -282,7 +262,8 @@ void AlbumFolderView::slotThumbnailLost(const KURL &url)
     if(!album)
         return;
     
-    AlbumFolderViewItem *item = d->dict.find(album->id());
+    AlbumFolderViewItem *item = (AlbumFolderViewItem*)album->extraData(this);
+
     if(item)
     {
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
@@ -299,7 +280,7 @@ void AlbumFolderView::slotAlbumIconChanged(Album* album)
     if(!album || album->type() != Album::PHYSICAL)
         return;
 
-    AlbumFolderViewItem *item = d->dict.find(album->id());
+    AlbumFolderViewItem *item = (AlbumFolderViewItem*)album->extraData(this);
 
     if(item)
         setAlbumThumbnail((PAlbum*)album);
@@ -478,16 +459,25 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
         AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
 // TODO:       resort();
     }
-    
+
     QString errMsg;
-    if(d->albumMan->createPAlbum(parent, title, comments, date, collection, errMsg))
-    {
-        connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
-                this, SLOT(slotNewAlbumCreated(Album*)));
-    }
-    else
+    PAlbum* album = d->albumMan->createPAlbum(parent, title, comments,
+                                              date, collection, errMsg);
+    if (!album)
     {
         KMessageBox::error(0, errMsg);
+        return;
+    }
+
+    // by this time the signalAlbumAdded has been fired and the appropriate
+    // AlbumFolderViewItem has been created. Now make this folderviewitem visible
+
+    AlbumFolderViewItem* newItem = (AlbumFolderViewItem*)album->extraData(this);
+    if (newItem)
+    {
+        item->setOpen(true);
+        ensureItemVisible(newItem);
+        setSelected(newItem, true);
     }
 }
 

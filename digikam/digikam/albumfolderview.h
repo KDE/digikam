@@ -51,7 +51,6 @@ private slots:
     void slotSelectionChanged();
     
     void slotAlbumAdded(Album *);
-    void slotNewAlbumCreated(Album* album);
     void slotAlbumDeleted(Album *album);
     void slotAlbumIconChanged(Album* album);
                             
