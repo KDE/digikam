@@ -266,6 +266,18 @@ void AlbumManager::refresh()
 
 void AlbumManager::scanPAlbums()
 {
+    // first insert all the current TAlbums into a map for quick lookup
+    typedef QMap<QString, PAlbum*> AlbumMap;
+    AlbumMap amap;
+
+    AlbumIterator it(d->rootPAlbum);
+    while (it.current())
+    {
+        PAlbum* a = (PAlbum*)(*it);
+        amap.insert(a->url(), a);
+        ++it;
+    }
+
     AlbumInfo::List aList = d->db->scanAlbums();
     qHeapSort(aList);
     
@@ -277,9 +289,14 @@ void AlbumManager::scanPAlbums()
             continue;
 
         // Have we already added this album?
-        if (d->pAlbumDict.find(info.url))
+        AlbumMap::iterator iter = amap.find(info.url);
+        if (iter != amap.end())
+        {
+            // remove it from AlbumMap
+            amap.remove(iter);
             continue;
-
+        }
+        
         // New album. Get its parent
         KURL u = info.url;
         QString name = u.fileName();
@@ -306,7 +323,20 @@ void AlbumManager::scanPAlbums()
         insertPAlbum(album);
     } 
 
-    // TODO: remove deleted PAlbums
+    // now albums in AlbumMap are the deleted albums
+    for (AlbumMap::iterator it = amap.begin(); it != amap.end(); ++it)
+    {
+        // the albums have to be deleted with children being deleted first.
+        // removePAlbum takes care of that.
+        // So never delete the PAlbum using it.data(). instead check if the
+        // PAlbum is still in the Album Dict before trying to delete it.
+        PAlbum* album = d->pAlbumDict.find(it.key());
+        if (!album)
+            continue;
+
+        removePAlbum(album);
+        delete album;
+    }
 }
 
 void AlbumManager::scanTAlbums()
