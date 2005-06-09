@@ -117,7 +117,10 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             this, SLOT(slotAlbumDeleted(Album*)));    
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
-        
+
+    //TODO: connect to albumMan signalAlbumRenamed signal
+    //      and rename folderviewitem
+    
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));    
     
