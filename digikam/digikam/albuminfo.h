@@ -72,7 +72,7 @@ public:
      */
     bool operator<(const TagInfo& info)
     {
-        //TODO: Fix
+        //TODO: would this cause failure?
         return pid < info.pid;
     }
 };
