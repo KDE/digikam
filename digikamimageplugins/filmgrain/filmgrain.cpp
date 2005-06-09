@@ -55,7 +55,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     if (Sensibility <= 0) return;
     
     int Noise = (int)(Sensibility / 10.0);
-    register int h, w, i = 0;       
+    register int i;       
     int nRand;
     
     uint* pGrainBits = new uint[Width*Height];    // Grain blured without curves adjustment.
@@ -73,22 +73,19 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     
     // Make gray grain mask.
     
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
         {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
-            {
-            nRand = (rand() % Noise) - (Noise / 2);
-            grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
-            grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
-            grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
-            grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
-            pGrainBits[i] = grainData.raw;
-            }
+        nRand = (rand() % Noise) - (Noise / 2);
+        grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
+        grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
+        grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
+        grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
+        pGrainBits[i] = grainData.raw;
         
         // Update de progress bar in dialog.
         m_eventData.starting = true;
         m_eventData.success  = false;
-        m_eventData.progress = (int) (((double)h * 25.0) / Height);
+        m_eventData.progress = (int) (((double)i * 25.0) / (Width*Height));
         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
 
@@ -127,27 +124,23 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     // Merge src image with grain using shade coefficient.
 
     int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
-    i = 0;
         
-    for (h = 0; !m_cancel && (h < Height); h++)
-       {
-       for (w = 0; !m_cancel && (w < Width); w++, i++)
-          {        
-          inData.raw            = data[i];
-          maskData.raw          = pMaskBits[i];
-          outData.channel.red   = (inData.channel.red*(255-Shade)   + maskData.channel.red*Shade) >> 8;
-          outData.channel.green = (inData.channel.green*(255-Shade) + maskData.channel.green*Shade) >> 8;
-          outData.channel.blue  = (inData.channel.blue*(255-Shade)  + maskData.channel.blue*Shade) >> 8;
-          outData.channel.alpha = inData.channel.alpha;
-          pOutBits[i]           = outData.raw;
-          }
-        
-       // Update de progress bar in dialog.
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = (int) (50.0 + ((double)h * 50.0) / Height);
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
+        {        
+        inData.raw            = data[i];
+        maskData.raw          = pMaskBits[i];
+        outData.channel.red   = (inData.channel.red*(255-Shade)   + maskData.channel.red*Shade) >> 8;
+        outData.channel.green = (inData.channel.green*(255-Shade) + maskData.channel.green*Shade) >> 8;
+        outData.channel.blue  = (inData.channel.blue*(255-Shade)  + maskData.channel.blue*Shade) >> 8;
+        outData.channel.alpha = inData.channel.alpha;
+        pOutBits[i]           = outData.raw;
+    
+        // Update de progress bar in dialog.
+        m_eventData.starting = true;
+        m_eventData.success  = false;
+        m_eventData.progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
+        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        }
     
     delete [] pGrainBits;    
     delete [] pMaskBits;
