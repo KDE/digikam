@@ -649,6 +649,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     if(AlbumDrag::canDecode(e))
     {
+        // TODO: Copy?
         QPopupMenu popMenu(this);
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
