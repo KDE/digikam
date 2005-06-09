@@ -68,7 +68,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
                                                              // [2 to 5].
     float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
     
-    register int h, w, i = 0;       
+    register int i;       
     int nRand;
 
     uint*      pBWBits = new uint[Width*Height];    // Black and White conversion.
@@ -128,27 +128,22 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
     srand ((uint) dt.secsTo(Y2000));
     
-    i = 0;
-    
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
         {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
+        if (Grain)
             {
-            if (Grain)
-               {
-               nRand = (rand() % Noise) - (Noise / 2);
-               grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
-               grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
-               grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
-               grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
-               pGrainBits[i] = grainData.raw;
-               }
+            nRand = (rand() % Noise) - (Noise / 2);
+            grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
+            grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
+            grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
+            grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
+            pGrainBits[i] = grainData.raw;
             }
-                
+
         // Update de progress bar in dialog.
         m_eventData.starting = true;
         m_eventData.success  = false;
-        m_eventData.progress = (int) (30.0 + ((double)h * 10.0) / Height);
+        m_eventData.progress = (int) (30.0 + ((double)i * 10.0) / (Width*Height));
         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
 
@@ -193,16 +188,13 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     // Merge gray scale image with grain using shade coefficient.
 
     int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
-    i = 0;
     
-    for (h = 0; !m_cancel && (h < Height); h++)
-       {
-       for (w = 0; !m_cancel && (w < Width); w++, i++)
-          {        
-          bwblurData.raw = pBWBlurBits[i];
-          maskData.raw   = pMaskBits[i];
-       
-          if (Grain)  // Merging grain.
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
+        {        
+        bwblurData.raw = pBWBlurBits[i];
+        maskData.raw   = pMaskBits[i];
+    
+        if (Grain)  // Merging grain.
             {
             overData.channel.red   = (bwblurData.channel.red*(255-Shade)   + maskData.channel.red*Shade) >> 8;
             overData.channel.green = (bwblurData.channel.green*(255-Shade) + maskData.channel.green*Shade) >> 8;
@@ -210,18 +202,17 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
             overData.channel.alpha = bwblurData.channel.alpha;
             pOverlayBits[i] = overData.raw;
             }               
-         else        // Use gray scale image without grain.
+        else        // Use gray scale image without grain.
             {
             pOverlayBits[i] = bwblurData.raw;
             }
-         }
-
-       // Update de progress bar in dialog.
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = (int) (70.0 + ((double)h * 10.0) / Height);
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
+        
+        // Update de progress bar in dialog.
+        m_eventData.starting = true;
+        m_eventData.success  = false;
+        m_eventData.progress = (int) (70.0 + ((double)i * 10.0) / (Width*Height));
+        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        }
     
     //------------------------------------------
     // 3 - Merge Grayscale image & overlay mask.
@@ -231,32 +222,28 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     // The result is usually a brighter picture. 
     // Overlay mode composite value computation is D =  A * (B + (2 * B) * (255 - A)).
     
-    i = 0;
     uint tmp, tmpM;
         
-    for (h = 0; !m_cancel && (h < Height); h++)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
-            {     
-            bwData.raw            = pBWBits[i];
-            overData.raw          = pOverlayBits[i];
-            outData.channel.red   = INT_MULT(bwData.channel.red, bwData.channel.red + 
-                                             INT_MULT(2 * overData.channel.red,
-                                                      255 - bwData.channel.red, tmpM), tmp);
-            outData.channel.green = INT_MULT(bwData.channel.green, bwData.channel.green + 
-                                             INT_MULT(2 * overData.channel.green,
-                                                      255 - bwData.channel.green, tmpM), tmp);
-            outData.channel.blue  = INT_MULT(bwData.channel.blue, bwData.channel.blue + 
-                                             INT_MULT(2 * overData.channel.blue,
-                                                      255 - bwData.channel.blue, tmpM), tmp);
-            outData.channel.alpha = bwData.channel.alpha;
-            pOutBits[i]           = outData.raw;
-            }
-        
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
+        {     
+        bwData.raw            = pBWBits[i];
+        overData.raw          = pOverlayBits[i];
+        outData.channel.red   = INT_MULT(bwData.channel.red, bwData.channel.red + 
+                                            INT_MULT(2 * overData.channel.red,
+                                                    255 - bwData.channel.red, tmpM), tmp);
+        outData.channel.green = INT_MULT(bwData.channel.green, bwData.channel.green + 
+                                            INT_MULT(2 * overData.channel.green,
+                                                    255 - bwData.channel.green, tmpM), tmp);
+        outData.channel.blue  = INT_MULT(bwData.channel.blue, bwData.channel.blue + 
+                                            INT_MULT(2 * overData.channel.blue,
+                                                    255 - bwData.channel.blue, tmpM), tmp);
+        outData.channel.alpha = bwData.channel.alpha;
+        pOutBits[i]           = outData.raw;
+
         // Update de progress bar in dialog.
         m_eventData.starting = true;
         m_eventData.success  = false;
-        m_eventData.progress = (int) (80.0 + ((double)h * 20.0) / Height);
+        m_eventData.progress = (int) (80.0 + ((double)i * 20.0) / (Width*Height));
         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
 
