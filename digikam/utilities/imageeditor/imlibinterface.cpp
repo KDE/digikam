@@ -33,6 +33,7 @@ extern "C"
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 // Qt includes.
 
@@ -211,10 +212,10 @@ bool ImlibInterface::load(const QString& filename)
             imlib_context_set_image(d->image);
             DATA32* data = imlib_image_get_data_for_reading_only();
             memcpy(data, qtimage.bits(), qtimage.numBytes());
-            kdDebug() << "Loaded image with kde imageio resources: "
-                      << filename
+            std::cout << "Loaded image with kde imageio resources: "
+                      << filename.ascii()
                       << ", width="  << qtimage.width()
-                      << ", height=" << qtimage.height() << endl;
+                      << ", height=" << qtimage.height() << std::endl;
         }
     }
 
