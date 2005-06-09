@@ -705,9 +705,20 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         ++it;
     }
 
-    emit signalAlbumRenamed(album);
+    // Update AlbumDict. basically clear it and rebuild from scratch
+    {
+        d->pAlbumDict.clear();
+        d->pAlbumDict.insert(d->rootPAlbum->url(), d->rootPAlbum);
+        AlbumIterator it(d->rootPAlbum);
+        PAlbum* subAlbum = 0;
+        while ((subAlbum = (PAlbum*)it.current()) != 0)
+        {
+            d->pAlbumDict.insert(subAlbum->url(), subAlbum);
+            ++it;
+        }
+    }
     
-    //TODO: Update pAlbumDict
+    emit signalAlbumRenamed(album);
     
     return true;
 }
