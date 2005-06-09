@@ -56,7 +56,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     
     int Noise = (int)(Sensibility / 10.0);
     register int i;       
-    int nRand;
+    int nRand, progress;
     
     uint* pGrainBits = new uint[Width*Height];    // Grain blured without curves adjustment.
     uint*  pMaskBits = new uint[Width*Height];    // Grain mask with curves adjustment.
@@ -83,10 +83,15 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
         pGrainBits[i] = grainData.raw;
         
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (((double)i * 25.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (((double)i * 25.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
 
     // Smooth grain mask using gaussian blur.    
@@ -136,10 +141,15 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
         pOutBits[i]           = outData.raw;
     
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
     
     delete [] pGrainBits;    

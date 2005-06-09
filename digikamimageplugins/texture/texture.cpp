@@ -62,6 +62,7 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
     Digikam::ImageFilters::imageData outData;  
     
     register int i;
+    int progress;
 
     // Make textured transparent layout.
     
@@ -80,10 +81,15 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
         pTeData[i]           = teData.raw; 
 
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (((double)i * 50.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (((double)i * 50.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
             
     uint tmp, tmpM;
@@ -108,10 +114,15 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
         pOutBits[i]           = outData.raw;
         
         // Update progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
         
     delete [] pTransparent;

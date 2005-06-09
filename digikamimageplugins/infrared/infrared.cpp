@@ -69,7 +69,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
     
     register int i;       
-    int nRand;
+    int nRand, progress;
 
     uint*      pBWBits = new uint[Width*Height];    // Black and White conversion.
     uint*  pBWBlurBits = new uint[Width*Height];    // Black and White with blur.
@@ -141,10 +141,15 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
             }
 
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (30.0 + ((double)i * 10.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (30.0 + ((double)i * 10.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
 
     // Smooth grain mask using gaussian blur.    
@@ -208,10 +213,15 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
             }
         
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (70.0 + ((double)i * 10.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (70.0 + ((double)i * 10.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
     
     //------------------------------------------
@@ -241,10 +251,15 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
         pOutBits[i]           = outData.raw;
 
         // Update de progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int) (80.0 + ((double)i * 20.0) / (Width*Height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        progress = (int) (80.0 + ((double)i * 20.0) / (Width*Height));
+        
+        if (progress%5 == 0)
+           {
+           m_eventData.starting = true;
+           m_eventData.success  = false;
+           m_eventData.progress = progress;
+           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+           }
         }
 
     delete [] pBWBits;
