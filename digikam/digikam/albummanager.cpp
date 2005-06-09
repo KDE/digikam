@@ -393,8 +393,6 @@ void AlbumManager::scanTAlbums()
         // also insert it in the map we are doing lookup of parent tags
         tmap.insert(info.id, album);
     }
-
-    // TODO: remove deleted TAlbums
 }
 
 void AlbumManager::scanSAlbums()
