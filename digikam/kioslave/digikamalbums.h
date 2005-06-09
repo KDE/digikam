@@ -71,7 +71,7 @@ private:
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
 
     void       buildAlbumList();
-    AlbumInfo  findAlbum(const QString& url, bool& ok) const;
+    AlbumInfo  findAlbum(const QString& url, bool& ok);
     void       delAlbum(int albumID);
     void       renameAlbum(const QString& oldURL, const QString& newURL);
     bool       findImage(int albumID, const QString& name) const;

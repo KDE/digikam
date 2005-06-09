@@ -1187,7 +1187,7 @@ void kio_digikamalbums::buildAlbumList()
     }
 }
 
-AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok) const
+AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok)
 {
     ok = false;
 
@@ -1203,6 +1203,27 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok) const
         }
     }
 
+    if (!ok)
+    {
+        QFileInfo fi(m_libraryPath + url);
+        if (!fi.exists() || !fi.isDir())
+            return album;
+
+        m_sqlDB.execSql(QString("INSERT INTO Albums (url, date) "
+                                "VALUES('%1', '%2')")
+                        .arg(url)
+                        .arg(fi.lastModified().date().toString(Qt::ISODate)));
+
+        album.id   = m_sqlDB.lastInsertedRow();
+        album.url  = url;
+        album.date = fi.lastModified().date();
+        album.icon = 0;
+        
+        m_albumList.append(album);
+
+        ok = true;
+    }
+    
     return album;
 }
 
