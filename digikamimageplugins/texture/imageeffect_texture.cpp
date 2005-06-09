@@ -295,7 +295,7 @@ void ImageEffect_Texture::slotEffect()
     QImage texture = makeTextureImage( m_textureType->currentItem(), 
                                        image.width(), image.height() );
     
-    int   b      = 255 - m_blendGain->value();
+    int b = 255 - m_blendGain->value();
     
     m_imagePreviewWidget->setProgress(0);
     

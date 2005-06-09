@@ -61,63 +61,56 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
     Digikam::ImageFilters::imageData inData;  
     Digikam::ImageFilters::imageData outData;  
     
-    register int i = 0, h, w;
+    register int i;
 
     // Make textured transparent layout.
     
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
         {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
-            {     
-            // Get Alpha channel (unchaged).
-            teData.raw            = pTeData[i];   
-            
-            // Overwrite RGB.
-            teData.channel.red   = (teData.channel.red * (255 - blendGain) + 
-                                   transData.channel.red * blendGain) >> 8;
-            teData.channel.green = (teData.channel.green * (255 - blendGain) + 
-                                   transData.channel.green * blendGain) >> 8;
-            teData.channel.blue  = (teData.channel.blue * (255 - blendGain) + 
-                                   transData.channel.blue * blendGain) >> 8;
-            pTeData[i]           = teData.raw; 
-            }
+        // Get Alpha channel (unchanged).
+        teData.raw           = pTeData[i];   
+        
+        // Overwrite RGB.
+        teData.channel.red   = (teData.channel.red * (255 - blendGain) + 
+                                transData.channel.red * blendGain) >> 8;
+        teData.channel.green = (teData.channel.green * (255 - blendGain) + 
+                                transData.channel.green * blendGain) >> 8;
+        teData.channel.blue  = (teData.channel.blue * (255 - blendGain) + 
+                                transData.channel.blue * blendGain) >> 8;
+        pTeData[i]           = teData.raw; 
 
         // Update de progress bar in dialog.
         m_eventData.starting = true;
         m_eventData.success  = false;
-        m_eventData.progress = (int) (((double)h * 50.0) / Height);
+        m_eventData.progress = (int) (((double)i * 50.0) / (Width*Height));
         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
             
     uint tmp, tmpM;
-    i = 0;
 
     // Merge layout and image using overlay method.
     
-    for (h = 0; !m_cancel && (h < Height); h++)
-        {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
-            {     
-            inData.raw            = data[i];
-            outData.raw           = pOutBits[i];
-            teData.raw            = pTeData[i];
-            outData.channel.red   = INT_MULT(inData.channel.red, inData.channel.red + 
-                                             INT_MULT(2 * teData.channel.red, 
-                                                      255 - inData.channel.red, tmpM), tmp);
-            outData.channel.green = INT_MULT(inData.channel.green, inData.channel.green + 
-                                             INT_MULT(2 * teData.channel.green, 
-                                                      255 - inData.channel.green, tmpM), tmp);
-            outData.channel.blue  = INT_MULT(inData.channel.blue, inData.channel.blue + 
-                                             INT_MULT(2 * teData.channel.blue, 
-                                                      255 - inData.channel.blue, tmpM), tmp);
-            outData.channel.alpha = inData.channel.alpha;
-            pOutBits[i]           = outData.raw;
-            }
+    for (i = 0; !m_cancel && (i < Width*Height); i++)
+        {     
+        inData.raw            = data[i];
+        outData.raw           = pOutBits[i];
+        teData.raw            = pTeData[i];
+        outData.channel.red   = INT_MULT(inData.channel.red, inData.channel.red + 
+                                            INT_MULT(2 * teData.channel.red, 
+                                                    255 - inData.channel.red, tmpM), tmp);
+        outData.channel.green = INT_MULT(inData.channel.green, inData.channel.green + 
+                                            INT_MULT(2 * teData.channel.green, 
+                                                    255 - inData.channel.green, tmpM), tmp);
+        outData.channel.blue  = INT_MULT(inData.channel.blue, inData.channel.blue + 
+                                            INT_MULT(2 * teData.channel.blue, 
+                                                    255 - inData.channel.blue, tmpM), tmp);
+        outData.channel.alpha = inData.channel.alpha;
+        pOutBits[i]           = outData.raw;
         
         // Update progress bar in dialog.
         m_eventData.starting = true;
         m_eventData.success  = false;
-        m_eventData.progress = (int) (50.0 + ((double)h * 50.0) / Height);
+        m_eventData.progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
         }
         
