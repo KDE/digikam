@@ -16,7 +16,6 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-#include <qintdict.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
@@ -100,7 +99,7 @@ TAlbum* TagFolderViewItem::getTag() const
 
 int TagFolderViewItem::id() const
 {
-    return m_tag ? m_tag->globalID() : 0;
+    return m_tag ? m_tag->id() : 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -111,7 +110,6 @@ class TagFolderViewPriv
 {
 public:
     AlbumManager                    *albumMan;    
-    QIntDict<TagFolderViewItem>     dict;
 };
 
 //-----------------------------------------------------------------------------
@@ -165,11 +163,12 @@ void TagFolderView::slotAlbumAdded(Album *album)
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->globalID(), item);
+        tag->setExtraData(this, item);
     }
     else
     {
-        TagFolderViewItem *parent = d->dict.find(tag->parent()->globalID());
+        TagFolderViewItem *parent = 
+                (TagFolderViewItem*)tag->parent()->extraData(this);
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
@@ -178,7 +177,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
         }
         TagFolderViewItem *item = new TagFolderViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->globalID(), item);        
+        tag->setExtraData(this, item);        
     }
 }
 
@@ -193,9 +192,17 @@ void TagFolderView::slotAlbumDeleted(Album *album)
         if(!tag)
             return;
 
-        TagFolderViewItem *item = d->dict.find(tag->globalID());
-        if(item) {
-            d->dict.remove(tag->globalID());
+        TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this); 
+        if(item) 
+        {
+            TagFolderViewItem *itemParent = 
+                    dynamic_cast<TagFolderViewItem*>(item->parent());
+            
+            if(itemParent)
+                itemParent->takeItem(item);
+            else
+                takeItem(item);
+            
             delete item;
         }
     }
@@ -203,7 +210,6 @@ void TagFolderView::slotAlbumDeleted(Album *album)
 
 void TagFolderView::slotAlbumsCleared()
 {
-    d->dict.clear();
     clear();
 }
 
@@ -245,8 +251,7 @@ void TagFolderView::slotAlbumIconChanged(Album* album)
     if(!album || album->type() != Album::TAG)
         return;
 
-    TagFolderViewItem *item = d->dict.find(album->globalID());
-
+    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this);
     if(item)
         item->setPixmap(0, getBlendedIcon((TAlbum*)album));
 }
@@ -513,7 +518,12 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
 void TagFolderView::selectItem(int id)
 {
-    TagFolderViewItem *item = d->dict.find(id);
+    TAlbum* tag = d->albumMan->findTAlbum(id);
+    if(!tag)
+        return;
+    
+    TagFolderViewItem *item = 
+            (TagFolderViewItem*)tag->extraData(this);
     if(item)
     {
         setSelected(item, true);
