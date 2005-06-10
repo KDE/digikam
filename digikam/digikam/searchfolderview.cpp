@@ -131,7 +131,7 @@ void SearchFolderView::extendedSearchNew()
     SearchAdvancedDialog dlg(this, url);
     if (dlg.exec() != KDialogBase::Accepted)
         return;
-    SAlbum* album = AlbumManager::instance()->createSAlbum(url, true);
+    SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
 
     if (album)
     {
