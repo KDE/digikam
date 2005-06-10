@@ -24,6 +24,7 @@
 #include <qwidgetstack.h>
 #include <qlayout.h>
 #include <qsize.h>
+#include <qdatastream.h>
 
 #include <kdeversion.h>
 #include <kmultitabbar.h>
@@ -65,6 +66,31 @@ Sidebar::Sidebar(QWidget *parent, Side side)
 
 Sidebar::~Sidebar()
 {
+}
+
+void Sidebar::loadViewState(QDataStream &stream)
+{
+    if(!stream.atEnd())
+    {
+        int tab;
+        int minimized;
+        
+        stream >> tab;
+        stream >> minimized;
+        
+        if(minimized)
+            m_activeTab = tab;
+        else
+            m_activeTab = -1;
+        
+        clicked(tab);
+    }
+}
+
+void Sidebar::saveViewState(QDataStream &stream)
+{
+    stream << m_activeTab;
+    stream << (int)m_minimized;
 }
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)

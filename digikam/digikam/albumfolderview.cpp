@@ -21,6 +21,7 @@
 #include <qdir.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qdatastream.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -56,6 +57,7 @@ public:
     AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);    
     
     PAlbum* getAlbum() const;
+    int id() const;
     
 private:
     PAlbum      *m_album;
@@ -78,6 +80,11 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
 PAlbum* AlbumFolderViewItem::getAlbum() const
 {
     return m_album;
+}
+
+int AlbumFolderViewItem::id() const
+{
+    return m_album->id();
 }
 
 //-----------------------------------------------------------------------------
@@ -126,13 +133,12 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
+    
 }
 
 AlbumFolderView::~AlbumFolderView()
 {
-    if(d->iconThumbJob)
-        delete d->iconThumbJob;
-    
+    delete d->iconThumbJob;
     delete d;
 }
 
@@ -725,6 +731,20 @@ void AlbumFolderView::albumImportFolder()
             this, SLOT(slotDIOResult(KIO::Job *)));
 }
 
+void AlbumFolderView::selectItem(int id)
+{
+    PAlbum* album = d->albumMan->findPAlbum(id);
+    if(!album)
+        return;
+    
+    AlbumFolderViewItem *item = 
+            (AlbumFolderViewItem*)album->extraData(this);
+    if(item)
+    {
+        setSelected(item, true);
+        ensureItemVisible(item);
+    }    
+}
 
 #include "albumfolderview.moc"
 

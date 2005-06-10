@@ -42,6 +42,16 @@ public:
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
     
+    /**
+     * load the last state from the view from disk
+     */
+    virtual void loadViewState(QDataStream &stream);
+    
+    /**
+     * writes the views state to disk
+     */
+    virtual void saveViewState(QDataStream &stream);
+    
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
@@ -56,6 +66,8 @@ protected:
     
     void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);
+    
+    virtual void selectItem(int id);
  
 protected slots:
     

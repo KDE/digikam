@@ -63,6 +63,11 @@ public:
         return text(0).localeAwareCompare(i->text(0));
     }
     
+    int id() const
+    {
+        return m_album->globalID();
+    }
+    
     SAlbum* m_album;
 };
 
@@ -306,5 +311,11 @@ void SearchFolderView::slotDoubleClicked(QListViewItem* item, const QPoint&, int
     else
         extendedSearchEdit(sItem->m_album);
 }
+
+void SearchFolderView::selectItem(int id)
+{
+
+}
+
 
 #include "searchfolderview.moc"

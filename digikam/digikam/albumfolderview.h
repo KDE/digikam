@@ -32,6 +32,7 @@ class Album;
 class PAlbum;
 class AlbumFolderViewPriv;
 class AlbumFolderViewItem;
+class QDataStream;
 
 class AlbumFolderView : public FolderView
 {
@@ -64,6 +65,8 @@ protected:
     QDragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
     
+    void selectItem(int id);
+   
 private:
 
     void setAlbumThumbnail(PAlbum *album);
@@ -71,6 +74,7 @@ private:
     void albumNew(AlbumFolderViewItem *item);
     void albumEdit(AlbumFolderViewItem *item);    
     void albumDelete(AlbumFolderViewItem *item);
+
 
     AlbumFolderViewPriv   *d;
     

@@ -30,6 +30,7 @@
 
 class KMultiTabBar;
 class QWidgetStack;
+class QDataStream;
 
 /**
  * This class handles a sidebar view
@@ -81,6 +82,16 @@ public:
      */
     void expand();
                 
+    /**
+     * load the last view state from disk
+     */
+    void loadViewState(QDataStream &stream);
+    
+    /**
+     * save the view state to disk
+     */
+    void saveViewState(QDataStream &stream);
+    
 private:
     KMultiTabBar    *m_tabBar;
     QWidgetStack    *m_stack;

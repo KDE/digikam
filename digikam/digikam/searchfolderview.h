@@ -48,6 +48,10 @@ private slots:
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     void slotDoubleClicked(QListViewItem*, const QPoint&, int);
     
+protected:
+    
+    void selectItem(int id);    
+    
 private:
 
     SearchFolderItem* m_lastAddedItem;

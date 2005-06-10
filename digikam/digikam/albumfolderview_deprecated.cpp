@@ -123,8 +123,8 @@ AlbumFolderView_Deprecated::AlbumFolderView_Deprecated(QWidget *parent)
             this, SLOT(slotAlbumDeleted(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
-    connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
-            this, SLOT(slotAllAlbumsLoaded()));
+//    connect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
+//            this, SLOT(slotAllAlbumsLoaded()));
     connect(albumMan_, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
     connect(albumMan_, SIGNAL(signalAlbumIconChanged(Album*)),
@@ -501,7 +501,7 @@ void AlbumFolderView_Deprecated::slotAlbumsCleared()
 void AlbumFolderView_Deprecated::slotAllAlbumsLoaded()
 {
     stateInitialLoading_ = false;
-
+    /*
     AlbumFolderItem_Deprecated* folderItem = 0;
 
     if (stateAlbumSel_ >= 100000 &&
@@ -533,7 +533,7 @@ void AlbumFolderView_Deprecated::slotAllAlbumsLoaded()
     ensureItemVisible(folderItem);
 
     disconnect(albumMan_, SIGNAL(signalAllAlbumsLoaded()),
-               this, SLOT(slotAllAlbumsLoaded()));
+    this, SLOT(slotAllAlbumsLoaded()));*/
 }
 
 void AlbumFolderView_Deprecated::albumNew()
@@ -1886,7 +1886,7 @@ void AlbumFolderView_Deprecated::slotThemeChanged()
 
 void AlbumFolderView_Deprecated::loadAlbumState()
 {
-    QString filePath = locateLocal("appdata", "albumtreestate.bin");
+/*    QString filePath = locateLocal("appdata", "albumtreestate.bin");
     QFile file(filePath);
     if (!file.open(IO_ReadOnly))
     {
@@ -1898,7 +1898,7 @@ void AlbumFolderView_Deprecated::loadAlbumState()
     QDataStream ds(&file);
     ds >> stateAlbumSel_;
     ds >> stateAlbumOpen_;
-    file.close();
+    file.close();*/
 }
 
 void AlbumFolderView_Deprecated::saveAlbumState()

@@ -22,6 +22,7 @@
 #include <kapplication.h>
 
 #include <qpixmap.h>
+#include <qmap.h>
 
 #include "themeengine.h"
 #include "folderview.h"
@@ -37,9 +38,11 @@ class FolderViewPriv
 public:
 
     bool        active;
+    
     QPixmap     itemRegPix;
     QPixmap     itemSelPix;
     int         itemHeight;
+    
     QPoint      dragStartPos;    
     FolderItem  *dragItem;
 };
@@ -230,9 +233,57 @@ void FolderView::slotThemeChanged()
     viewport()->update();
 }
 
+void FolderView::loadViewState(QDataStream &stream)
+{
+    if(!stream.atEnd())
+    {
+        int selected;
+        stream >> selected;
+        
+        QMap<int, int> openFolders;
+        stream >> openFolders;
+        
+        FolderItem *item;
+        int id;
+        QListViewItemIterator it(this);
+        for( ; it.current(); ++it)
+        {
+            item = dynamic_cast<FolderItem*>(it.current());
+            id = item->id();
+            if(openFolders.contains(id))
+                setOpen(item, openFolders[id]);
+        }
+        
+        selectItem(selected);
+    }
+}
+
+void FolderView::saveViewState(QDataStream &stream)
+{
+    FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
+    
+    if(item)
+        stream << item->id();
+    else
+        stream << 0;
+
+    QListViewItemIterator it(this);
+    QMap<int, int> openFolders;
+    for( ; it.current(); ++it)
+    {
+        item = dynamic_cast<FolderItem*>(it.current());
+        openFolders.insert(item->id(), isOpen(item));
+    }
+    stream << openFolders;
+}
+
 void FolderView::slotSelectionChanged()
 {
     QListView::selectionChanged();    
 }
 
+void FolderView::selectItem(int)
+{
+}
+    
 #include "folderview.moc"

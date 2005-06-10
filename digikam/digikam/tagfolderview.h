@@ -47,6 +47,8 @@ protected:
     QDragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
     
+    void selectItem(int id);    
+    
 private slots:
 
     void slotAlbumAdded(Album *);

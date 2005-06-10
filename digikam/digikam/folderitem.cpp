@@ -109,6 +109,11 @@ void FolderItem::setup()
     setHeight(h);
 }
 
+int FolderItem::id() const
+{
+    return 0;
+}
+
 FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
                                          QCheckListItem::Type tt)
     : QCheckListItem(parent, text, tt)

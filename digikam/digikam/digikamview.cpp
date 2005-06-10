@@ -41,6 +41,7 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -85,7 +86,6 @@ DigikamView::DigikamView(QWidget *parent)
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
     mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
     mMainSidebar->appendTab(mSearchFolderView, SmallIcon("find"), i18n("Searches"));    
-    mMainSidebar->setActiveTab(mFolderView_Deprecated);
 
     mRightSidebar = new Sidebar(this, Sidebar::Right);
     mTagFilterView = new TagFilterView(this);
@@ -93,13 +93,6 @@ DigikamView::DigikamView(QWidget *parent)
     mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
     mRightSidebar->setActiveTab(mTagFilterView);
     
-    QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
-                             QSizePolicy::Expanding,
-                             1, 1);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
-
     setOpaqueResize(false);
 
     setupConnections();
@@ -110,24 +103,12 @@ DigikamView::DigikamView(QWidget *parent)
     mIconView->setInFocus(false);
 
     mAlbumHistory = new AlbumHistory();    
-    
-    KConfig *config = kapp->config();
-    config->setGroup("MainWindow");
-    if(config->hasKey("SplitterSizes"))
-        setSizes(config->readIntListEntry("SplitterSizes"));
-    else {
-        mFolderView_Deprecated->setSizePolicy(leftSzPolicy);
-        mIconView->setSizePolicy(rightSzPolicy);
-    }
-
 }
 
 DigikamView::~DigikamView()
 {
-    KConfig *config = kapp->config();
-    config->setGroup("MainWindow");
-    config->writeEntry("SplitterSizes", sizes());
-
+    saveViewState();
+    
     delete mAlbumHistory;
     mAlbumMan->setItemHandler(0);
 }
@@ -148,6 +129,8 @@ void DigikamView::setupConnections()
             this, SLOT(slot_albumsCleared()));
     connect(mAlbumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
+    connect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
+            this, SLOT(slotAllAlbumsLoaded()));    
     
     // -- IconView Connections -------------------------------------
 
@@ -174,6 +157,88 @@ void DigikamView::setupConnections()
     connect(mMainSidebar, SIGNAL(signalChangedTab(QWidget*)),
             SLOT(slotLeftSidebarChangedTab(QWidget*)));
 
+}
+
+void DigikamView::loadViewState()
+{
+    QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
+                             QSizePolicy::Expanding,
+                             1, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Expanding,
+                              2, 1);
+    KConfig *config = kapp->config();
+    config->setGroup("MainWindow");
+    if(config->hasKey("SplitterSizes"))
+    {
+        setSizes(config->readIntListEntry("SplitterSizes"));
+    }
+    else 
+    {
+        mFolderView_Deprecated->setSizePolicy(leftSzPolicy);
+        mIconView->setSizePolicy(rightSzPolicy);
+    }    
+    
+    QFile file(locateLocal("appdata", "viewstate.bin"));
+    if(!file.open(IO_ReadOnly))
+    {
+        kdWarning() << k_funcinfo << "Failed to open viewtreestate.bin"
+                << endl;
+        return;
+    }
+    QDataStream stream(&file);
+    
+    stream >> mInitialAlbumID;
+                
+    mMainSidebar->loadViewState(stream);
+
+    mFolderView->loadViewState(stream);
+    mTagFolderView->loadViewState(stream);
+    mSearchFolderView->loadViewState(stream);
+//    mDateFolderView->loadViewState(
+
+}
+
+void DigikamView::saveViewState()
+{
+    KConfig *config = kapp->config();
+    config->setGroup("MainWindow");
+    config->writeEntry("SplitterSizes", sizes());
+    
+    QFile file(locateLocal("appdata", "viewstate.bin"));
+    if(!file.open(IO_WriteOnly))
+    {
+        kdWarning() << k_funcinfo << "Failed to open viewtreestate.bin"
+                    << endl;
+        return;
+    }
+    QDataStream stream(&file);
+    
+    Album *album = AlbumManager::instance()->currentAlbum();
+    if(album)
+    {
+        stream << album->globalID();
+    }
+    else
+    {
+        stream << 0;
+    }
+    
+    mMainSidebar->saveViewState(stream);
+    mFolderView->saveViewState(stream);
+    mTagFolderView->saveViewState(stream); 
+    mSearchFolderView->saveViewState(stream);
+//    mDateFolderView->saveViewState(
+}
+
+void DigikamView::slotAllAlbumsLoaded()
+{
+    disconnect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
+               this, SLOT(slotAllAlbumsLoaded()));
+    
+    loadViewState();
+    Album *album = mAlbumMan->findAlbum(mInitialAlbumID);
+    mAlbumMan->setCurrentAlbum(album);
 }
 
 void DigikamView::slot_sortAlbums(int order)

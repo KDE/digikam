@@ -70,6 +70,8 @@ public:
 private:
 
     void setupConnections();
+    void loadViewState();
+    void saveViewState();
 
 private:
 
@@ -85,6 +87,7 @@ private:
     SearchFolderView         *mSearchFolderView;
     Sidebar                  *mRightSidebar;
     TagFilterView            *mTagFilterView;
+    int                      mInitialAlbumID;
     
 public slots:
 
@@ -126,6 +129,8 @@ public slots:
 
 private slots:
 
+    void slotAllAlbumsLoaded();
+    
     void slot_imageSelected();
     void slot_albumSelected(Album* album);
 

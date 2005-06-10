@@ -29,6 +29,8 @@ public:
 
     virtual ~FolderItem();
     
+    virtual int id() const;
+    
 protected:
 
     void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
