@@ -36,10 +36,7 @@
 #include <qframe.h>
 #include <qtimer.h>
 #include <qcombobox.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpen.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -467,7 +464,7 @@ QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)
           pattern = "stone-texture";
           break;
        }
-
+    
     QPixmap texturePixmap(w, h);
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
@@ -475,13 +472,15 @@ QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)
     QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
     
     // Texture tile.
-    QPainter p(&texturePixmap);
-    p.fillRect( 0, 0, texturePixmap.width(), texturePixmap.height(),
-                QBrush::QBrush(Qt::black,
-                QPixmap::QPixmap(path + pattern + ".png")) );
-    p.end();
 
-    return( texturePixmap.convertToImage() );
+    QImage texture(path + pattern + ".png");
+    QImage textureImg(w, h, 32);
+    
+    for (int x = 0 ; x < w ; x+=texture.width())
+       for (int y = 0 ; y < h ; y+=texture.height())
+          bitBlt(&textureImg, x, y, &texture, 0, 0, texture.width(), texture.height(), 0);
+   
+    return( textureImg );
 }
     
 }  // NameSpace DigikamTextureImagesPlugin
