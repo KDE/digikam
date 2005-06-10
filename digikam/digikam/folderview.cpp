@@ -239,7 +239,7 @@ void FolderView::loadViewState(QDataStream &stream)
     {
         int selected;
         stream >> selected;
-        
+
         QMap<int, int> openFolders;
         stream >> openFolders;
         
@@ -253,7 +253,6 @@ void FolderView::loadViewState(QDataStream &stream)
             if(openFolders.contains(id))
                 setOpen(item, openFolders[id]);
         }
-        
         selectItem(selected);
     }
 }

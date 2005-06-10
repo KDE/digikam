@@ -65,7 +65,7 @@ public:
     
     int id() const
     {
-        return m_album->globalID();
+        return m_album ? m_album->globalID() : 0;
     }
     
     SAlbum* m_album;
@@ -314,7 +314,17 @@ void SearchFolderView::slotDoubleClicked(QListViewItem* item, const QPoint&, int
 
 void SearchFolderView::selectItem(int id)
 {
-
+    SAlbum *album = AlbumManager::instance()->findSAlbum(id);
+    if(!album)
+        return;
+        
+    SearchFolderItem *item = 
+            (SearchFolderItem*)album->extraData(this);
+    if(item)
+    {
+        setSelected(item, true);
+        ensureItemVisible(item);
+    }    
 }
 
 

@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -45,9 +46,12 @@ class DateFolderViewPriv
 {
 public:
 
-    FolderView*  listview;
-    MonthWidget* monthview;
-    bool         active;
+    FolderView*             listview;
+    MonthWidget*            monthview;
+    bool                    active;
+    
+    QMap<QString, int>      *openFolders;
+    QString                 selected;
 };
 
 class DateFolderItem : public FolderItem
@@ -83,6 +87,12 @@ public:
             return -1;
     }
     
+    QString date() const
+    {
+        // If an album is set, return it's date, otherwise just the year
+        return m_album ? m_album->date().toString() : text(0);
+    }
+    
     DAlbum* m_album;
 };
     
@@ -95,6 +105,7 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->active    = false;
     d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
+    d->openFolders = 0;
 
     d->listview->addColumn(i18n("My Dates"));
     d->listview->setResizeMode(QListView::LastColumn);
@@ -104,6 +115,8 @@ DateFolderView::DateFolderView(QWidget* parent)
             SLOT(slotAlbumAdded(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotAlbumDeleted(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+            SLOT(slotAllDAlbumsLoaded()));    
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
@@ -113,6 +126,7 @@ DateFolderView::DateFolderView(QWidget* parent)
 
 DateFolderView::~DateFolderView()
 {
+    delete d->openFolders;
     delete d;
 }
 
@@ -122,6 +136,28 @@ void DateFolderView::setActive(bool val)
     if (d->active)
     {
         slotSelectionChanged();
+    }
+}
+
+void DateFolderView::slotAllDAlbumsLoaded()
+{
+    if(d->openFolders)
+    {
+        DateFolderItem *item;
+        QString id;
+        QListViewItemIterator it(d->listview);
+        for( ; it.current(); ++it)
+        {
+            item = dynamic_cast<DateFolderItem*>(it.current());
+            id = item->date();
+            if(d->openFolders->contains(id))
+                d->listview->setOpen(item, (*d->openFolders)[id]);
+            if(id == d->selected)
+                d->listview->setSelected(item, true);
+        }
+        
+        delete d->openFolders;
+        d->openFolders = 0;
     }
 }
 
@@ -212,5 +248,39 @@ void DateFolderView::slotSelectionChanged()
         d->monthview->setYearMonth(date.year(), date.month());
     }
 }
+
+void DateFolderView::loadViewState(QDataStream &stream)
+{
+    if(!stream.atEnd())
+    {
+        stream >> d->selected;
+
+        d->openFolders = new QMap<QString, int>;
+        stream >> *d->openFolders;
+    }
+}
+
+void DateFolderView::saveViewState(QDataStream &stream)
+{
+    DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
+    
+    if(item)
+        stream << item->date();
+    else
+        stream << 0;
+
+    QListViewItemIterator it(d->listview);
+    QMap<QString, int> openFolders;
+    item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
+    while(item)
+    {
+        // Storing the years only, a month cannot be open
+        openFolders.insert(item->date(), d->listview->isOpen(item));
+        item = dynamic_cast<DateFolderItem*>(item->nextSibling());
+    }
+    stream << openFolders;
+}
+
+
 
 #include "datefolderview.moc"

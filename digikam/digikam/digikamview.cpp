@@ -195,8 +195,7 @@ void DigikamView::loadViewState()
     mFolderView->loadViewState(stream);
     mTagFolderView->loadViewState(stream);
     mSearchFolderView->loadViewState(stream);
-//    mDateFolderView->loadViewState(
-
+    mDateFolderView->loadViewState(stream);
 }
 
 void DigikamView::saveViewState()
@@ -228,7 +227,7 @@ void DigikamView::saveViewState()
     mFolderView->saveViewState(stream);
     mTagFolderView->saveViewState(stream); 
     mSearchFolderView->saveViewState(stream);
-//    mDateFolderView->saveViewState(
+    mDateFolderView->saveViewState(stream);
 }
 
 void DigikamView::slotAllAlbumsLoaded()

@@ -84,7 +84,7 @@ PAlbum* AlbumFolderViewItem::getAlbum() const
 
 int AlbumFolderViewItem::id() const
 {
-    return m_album->id();
+    return m_album ? m_album->id() : 0;
 }
 
 //-----------------------------------------------------------------------------

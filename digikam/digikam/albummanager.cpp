@@ -1117,6 +1117,8 @@ void AlbumManager::slotResult(KIO::Job* job)
         kdWarning() << k_funcinfo << "Failed to list dates" << endl;
         return;
     }
+    
+    emit signalAllDAlbumsLoaded();
 }
 
 

@@ -420,6 +420,7 @@ signals:
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
     void signalAllAlbumsLoaded();
+    void signalAllDAlbumsLoaded();    
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);

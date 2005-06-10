@@ -100,7 +100,7 @@ TAlbum* TagFolderViewItem::getTag() const
 
 int TagFolderViewItem::id() const
 {
-    return m_tag->globalID();
+    return m_tag ? m_tag->globalID() : 0;
 }
 
 //-----------------------------------------------------------------------------

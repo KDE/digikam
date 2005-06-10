@@ -35,8 +35,20 @@ public:
 
     void setActive(bool val);
 
+    /**
+     * load the last view state from disk
+     */
+    void loadViewState(QDataStream &stream);
+    
+    /**
+     * writes the view state to disk
+     */
+    void saveViewState(QDataStream &stream);
+    
+    
 private slots:
 
+    void slotAllDAlbumsLoaded();
     void slotAlbumAdded(Album* album);
     void slotAlbumDeleted(Album* album);
     void slotSelectionChanged();
