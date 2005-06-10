@@ -467,7 +467,7 @@ int AlbumDB::addSearch(const QString& name, const KURL& url)
     QString str("INSERT INTO Searches (name, url) \n"
                 "VALUES('$$@@$$', '$$##$$');");
     str.replace("$$@@$$", escapeString(name));
-    str.replace("$$#$$$", escapeString(url.url()));
+    str.replace("$$##$$", escapeString(url.url()));
     
     if (!execSql(str))
     {
@@ -484,7 +484,7 @@ void AlbumDB::updateSearch(int searchID, const QString& name,
                           "WHERE id=%1")
                   .arg(searchID);
     str.replace("$$@@$$", escapeString(name));
-    str.replace("$$#$$$", escapeString(url.url()));
+    str.replace("$$##$$", escapeString(url.url()));
 
     execSql(str);
 }
