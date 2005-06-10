@@ -97,6 +97,11 @@ int main(int argc, char *argv[])
                           "kde at ralfhoelzer.com",
                           0);
     
+    aboutData.addAuthor ( "Tom Albers",
+                          I18N_NOOP("Developer"),
+                          "tomalbers at kde.nl",
+                          0);
+    
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
                           "todd at theshoemakers.net",
@@ -187,11 +192,6 @@ int main(int argc, char *argv[])
                           "yves dot chaufour at wanadoo.fr",
                           0);
 
-    aboutData.addCredit ( "Tom Albers",
-                          I18N_NOOP("digiKam bugs.kde.org frontman, patches and feedback"),
-                          "tomalbers at kde.nl",
-                          0);
-    
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); 
 
