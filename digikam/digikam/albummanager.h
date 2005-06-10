@@ -198,6 +198,12 @@ public:
      * @param id the id for the DAlbum
      */
     DAlbum*   findDAlbum(int id) const;
+    
+    /**
+     * @return a Album with the given globalID
+     * @param id the global id for the album
+     */
+    Album*    findAlbum(int gid) const;
     //@}
 
     /** @name Operations on PAlbum

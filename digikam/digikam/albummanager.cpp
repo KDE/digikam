@@ -557,6 +557,12 @@ DAlbum* AlbumManager::findDAlbum(int id) const
     return (DAlbum*)(d->albumIntDict.find(gid));
 }
 
+Album* AlbumManager::findAlbum(int gid) const
+{
+    return d->albumIntDict.find(gid);
+}
+
+
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
                                    const QString& name,
                                    const QString& caption,
@@ -784,6 +790,8 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         }
         child = child->m_next;
     }
+
+    errMsg = i18n("TODO: Adding new tags has to be implemented");
 
     /* TODO
     int id = d->db->addTag(parent->id(), name, icon);
