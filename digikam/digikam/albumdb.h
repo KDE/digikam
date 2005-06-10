@@ -27,6 +27,7 @@
 #include <qvaluelist.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+#include <kurl.h>
 #include "albuminfo.h"
 
 typedef struct sqlite3 sqleet3; // hehe.
@@ -71,6 +72,12 @@ public:
      */
     TagInfo::List scanTags();
 
+    /**
+     * Returns all searches from the database
+     * @return a list of searches from the database
+     */
+    SearchInfo::List scanSearches();
+    
     /**
      * Add a new album to the database with the given attributes
      * @param url        url of the album
@@ -163,6 +170,26 @@ public:
      */
     void deleteTag(int tagID);
 
+    /**
+     * Add a new search to the database with the given attributes
+     * @param name       name of the search
+     * @param url        url of the search
+     * @return the id of the album added or -1 if it failed
+     */
+    int addSearch(const QString& name, const KURL& url);
+
+    /**
+     * Updates Search with new attributes
+     * @param name       name of the search
+     * @param url        url of the search
+     */
+    void updateSearch(int searchID, const QString& name, const KURL& url);
+    
+    /**
+     * Delete a search from the database.
+     * @param searchID the id of the search
+     */
+    void deleteSearch(int searchID);
     
     void beginTransaction();
     void commitTransaction();

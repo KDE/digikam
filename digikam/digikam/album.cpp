@@ -435,8 +435,8 @@ KURL DAlbum::kurl() const
 
 // --------------------------------------------------------------------------
 
-SAlbum::SAlbum(const KURL& url, bool simple, bool root)
-    : Album(Album::SEARCH, root ? 0 : 1, root),
+SAlbum::SAlbum(int id, const KURL& url, bool simple, bool root)
+    : Album(Album::SEARCH, id, root),
       m_kurl(url), m_simple(simple)
 {
     setTitle(url.queryItem("name"));

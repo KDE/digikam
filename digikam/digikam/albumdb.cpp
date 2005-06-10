@@ -337,6 +337,30 @@ TagInfo::List AlbumDB::scanTags()
     return tList;
 }
 
+SearchInfo::List AlbumDB::scanSearches()
+{
+    SearchInfo::List searchList;    
+
+    QStringList values;
+    execSql( "SELECT id, name, url FROM Searches;", &values);
+
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+        SearchInfo info;
+
+        info.id   = (*it).toInt();
+        ++it;
+        info.name = (*it);
+        ++it;
+        info.url  = (*it);
+        ++it;
+
+        searchList.append(info);        
+    }
+
+    return searchList;
+}
+
 void AlbumDB::beginTransaction()
 {
     execSql( "BEGIN TRANSACTION;" );
@@ -430,11 +454,46 @@ void AlbumDB::setTagIcon(int tagID, Q_LLONG iconID)
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 {
-    execSql( QString("UPDATE Tags SET pid='%1' WHERE id=%2;")
+    execSql( QString("UPDATE Tags SET pid=%1 WHERE id=%2;")
              .arg(newParentTagID)
              .arg(tagID) );
 }
 
+int AlbumDB::addSearch(const QString& name, const KURL& url)
+{
+    if (!m_db)
+	return -1;
+
+    QString str("INSERT INTO Searches (name, url) \n"
+                "VALUES('$$@@$$', '$$##$$');");
+    str.replace("$$@@$$", escapeString(name));
+    str.replace("$$#$$$", escapeString(url.url()));
+    
+    if (!execSql(str))
+    {
+	return -1;
+    }
+
+    return sqlite3_last_insert_rowid(m_db);
+}
+
+void AlbumDB::updateSearch(int searchID, const QString& name,
+			   const KURL& url)
+{
+    QString str = QString("UPDATE Searches SET name='$$@@$$', url='$$##$$' \n"
+                          "WHERE id=%1")
+                  .arg(searchID);
+    str.replace("$$@@$$", escapeString(name));
+    str.replace("$$#$$$", escapeString(url.url()));
+
+    execSql(str);
+}
+
+void AlbumDB::deleteSearch(int searchID)
+{
+    execSql( QString("DELETE FROM Searches WHERE id=%1")
+             .arg(searchID) );
+}
 
 void AlbumDB::setSetting(const QString& keyword,
                          const QString& value )

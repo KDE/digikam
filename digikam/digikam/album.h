@@ -369,7 +369,7 @@ class SAlbum : public Album
 {
 public:
 
-    SAlbum(const KURL& url, bool simple, bool root=false);
+    SAlbum(int id, const KURL& url, bool simple, bool root=false);
     ~SAlbum();
 
     KURL    kurl() const;

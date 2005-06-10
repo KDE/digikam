@@ -247,7 +247,7 @@ void AlbumManager::startScan()
     d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
     insertTAlbum(d->rootTAlbum);
 
-    d->rootSAlbum = new SAlbum(KURL(), true, true);
+    d->rootSAlbum = new SAlbum(0, KURL(), true, true);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
@@ -359,6 +359,7 @@ void AlbumManager::scanPAlbums()
 
 void AlbumManager::scanTAlbums()
 {
+    // list TAlbums directly from the db
     // first insert all the current TAlbums into a map for quick lookup
     typedef QMap<int, TAlbum*> TagMap;
     TagMap tmap;
@@ -416,8 +417,37 @@ void AlbumManager::scanTAlbums()
 void AlbumManager::scanSAlbums()
 {
     // list SAlbums directly from the db
+    // first insert all the current SAlbums into a map for quick lookup
+    typedef QMap<int, SAlbum*> SearchMap;
+    SearchMap sMap;
 
-    /* TODO: get a list of search albums from DB */
+    AlbumIterator it(d->rootSAlbum);
+    while (it.current())
+    {
+        SAlbum* t = (SAlbum*)(*it);
+        sMap.insert(t->id(), t);
+        ++it;
+    }
+
+    // Retrieve the list of searches from the database
+    SearchInfo::List sList = d->db->scanSearches();
+
+    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    {
+        SearchInfo info = *it;
+
+        // check if we have already added this search
+        if (sMap.contains(info.id))
+            continue;
+
+        bool simple = (info.url.queryItem("1.key") == QString::fromLatin1("keyword"));
+        
+        // Its a new album.
+        SAlbum* album = new SAlbum(info.id, info.url, simple, false);
+        album->setParent(d->rootSAlbum);
+        d->albumIntDict.insert(album->globalID(), album);
+        emit signalAlbumAdded(album);
+    }
 }
 
 void AlbumManager::scanDAlbums()
@@ -965,13 +995,16 @@ SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)
         {
             SAlbum* sa = (SAlbum*)album;
             sa->m_kurl = url;
-            //TODO: write to db
+            d->db->updateSearch(sa->id(), url.queryItem("name"), url);
             return sa;
         }
     }
     
-    //TODO: write to db
-    SAlbum* album = new SAlbum(url, simple, false);
+    int id = d->db->addSearch(url.queryItem("name"), url);
+    if (id == -1)
+        return 0;
+    
+    SAlbum* album = new SAlbum(id, url, simple, false);
     album->setTitle(url.queryItem("name"));
     album->setParent(d->rootSAlbum);
 
@@ -986,7 +1019,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const KURL& newURL)
     if (!album)
         return false;
 
-    // TODO: update db
+    d->db->updateSearch(album->id(), newURL.queryItem("name"), newURL);
 
     QString oldName = album->title();
     
@@ -1005,8 +1038,8 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     emit signalAlbumDeleted(album);
 
-    // TODO: delete from db
-
+    d->db->deleteSearch(album->id());
+    
     d->albumIntDict.remove(album->globalID());
     delete album;
     
@@ -1155,6 +1188,7 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
         // new album. create one
         DAlbum* album = new DAlbum(date);
         album->setParent(d->rootDAlbum);
+        d->albumIntDict.insert(album->globalID(), album);
         emit signalAlbumAdded(album);
     }
 

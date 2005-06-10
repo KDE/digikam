@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
+#include <kurl.h>
 
 /**
  * \class AlbumInfo
@@ -74,6 +75,30 @@ public:
     {
         //TODO: would this cause failure?
         return pid < info.pid;
+    }
+};
+
+/**
+ * \class SearchInfo
+ * A container class for transporting search information
+ * from the database to AlbumManager
+ */
+class SearchInfo
+{
+public:
+
+    typedef QValueList<SearchInfo> List;
+
+    int      id;
+    QString  name;
+    KURL     url;
+
+    /**
+     * needed for sorting
+     */
+    bool operator<(const SearchInfo& info)
+    {
+        return id < info.id;
     }
 };
 
