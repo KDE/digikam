@@ -33,7 +33,7 @@ class FolderView : public QListView
 public:
 
     FolderView(QWidget *parent);
-    ~FolderView();
+    virtual ~FolderView();
 
     void setActive(bool val);
     bool active() const;
