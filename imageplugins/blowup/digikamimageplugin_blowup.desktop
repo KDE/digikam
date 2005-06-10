@@ -2,6 +2,7 @@
 Name=ImagePlugin_BlowUp
 Name[it]=PluginImmagini_Espansione
 Name[nl]=Afbeeldingsplugin_Opblazen
+Name[pt_BR]=Plug-in de explosão
 Name[sr]=Сликовни прикључак — Разнеси
 Name[sr@Latn]=Slikovni priključak — Raznesi
 Name[sv]=Insticksprogram för förstoring
@@ -15,7 +16,7 @@ Comment[et]=DigiKami foto suurendamise plugin
 Comment[it]=Plugin di digiKam per espandere una fotografia
 Comment[nl]=digiKam-pluin voor het opblazen van een foto
 Comment[pt]=Um 'plugin' do digiKam para explodir uma fotografia
-Comment[pt_BR]=Um 'plugin' do digiKam para explodir uma fotografia
+Comment[pt_BR]=Plug-in do efeito de explosão de fotografia do digiKam
 Comment[sr]=digiKam-ов прикључак за разбијање фотографије
 Comment[sr@Latn]=digiKam-ov priključak za razbijanje fotografije
 Comment[sv]=Digikam insticksprogram för att förstora ett fotografi

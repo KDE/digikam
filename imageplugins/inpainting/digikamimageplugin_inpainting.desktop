@@ -2,6 +2,7 @@
 Name=ImagePlugin_InPainting
 Name[it]=PluginImmagini_Reintegrazione
 Name[nl]=Afbeeldingsplugin_Inkleuren
+Name[pt_BR]=Plug-in de coloração de imagens 
 Name[sr]=Сликовни прикључак — Пребојавање
 Name[sr@Latn]=Slikovni priključak — Prebojavanje
 Name[sv]=Insticksprogram för ifyllnad
@@ -14,7 +15,7 @@ Comment[et]=DigiKami foto objektide kaotamise plugin
 Comment[it]=Plugin di digiKam per reintegrare una fotografia
 Comment[nl]=digiKam-pluin voor het inkleuren van een foto
 Comment[pt]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
-Comment[pt_BR]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
+Comment[pt_BR]=Plug-in de coloração de fotos do digiKam
 Comment[sr]=digiKam-ов прикључак за пребојавање фотографије
 Comment[sr@Latn]=digiKam-ov priključak za prebojavanje fotografije
 Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
