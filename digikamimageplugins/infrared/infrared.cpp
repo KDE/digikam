@@ -38,11 +38,12 @@ namespace DigikamInfraredImagesPlugin
 {
 
 Infrared::Infrared(QImage *orgImage, QObject *parent, int sensibility, bool grain)
-         : Digikam::ThreadedFilter(orgImage, parent)
+         : Digikam::ThreadedFilter(orgImage, parent, "Infrared")
 { 
     m_sensibility = sensibility;
     m_grain       = grain;
     m_name        = "Infrared";
+    initFilter();    
 }
 
 void Infrared::filterImage(void)
@@ -100,10 +101,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
                                              0.4, greenBoost, -0.8,  // Red channel gains.
                                              0.0, 1.0,         0.0,  // Green channel gains (not used).
                                              0.0, 0.0,         1.0); // Blue channel gains (not used).
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 10;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 10 );   
     if (m_cancel) return;
 
     // Apply a Gaussian blur to the black and white image.
@@ -112,10 +110,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     memcpy (pBWBlurBits, pBWBits, Width*Height*sizeof(uint));  
         
     Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 20;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 20 );   
     if (m_cancel) return;
 
     //-----------------------------------------------------------------
@@ -144,12 +139,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
         progress = (int) (30.0 + ((double)i * 10.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( progress );   
         }
 
     // Smooth grain mask using gaussian blur.    
@@ -158,10 +148,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
        Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 3);
     
     Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 50;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 50 );   
     if (m_cancel) return;
         
     // Normally, film grain tends to be most noticable in the midtones, and much less 
@@ -184,10 +171,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
        }
     
     Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 60;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 60 );   
     if (m_cancel) return;
        
     // Merge gray scale image with grain using shade coefficient.
@@ -216,12 +200,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
         progress = (int) (70.0 + ((double)i * 10.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( progress );   
         }
     
     //------------------------------------------
@@ -254,12 +233,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
         progress = (int) (80.0 + ((double)i * 20.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( progress );   
         }
 
     delete [] pBWBits;

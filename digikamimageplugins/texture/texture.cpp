@@ -34,11 +34,11 @@ namespace DigikamTextureImagesPlugin
 {
 
 Texture::Texture(QImage *orgImage, QObject *parent, int blendGain, QImage *textureImg)
-       : Digikam::ThreadedFilter(orgImage, parent)
+       : Digikam::ThreadedFilter(orgImage, parent, "Texture")
 { 
     m_textureImg = textureImg->copy();
     m_blendGain  = blendGain;
-    m_name       = "Texture";
+    initFilter();
 }
 
 void Texture::filterImage(void)
@@ -84,12 +84,7 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
         progress = (int) (((double)i * 50.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress(progress);
         }
             
     uint tmp, tmpM;
@@ -117,12 +112,7 @@ void Texture::textureImage(uint* data, int Width, int Height, int blendGain)
         progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress(progress);
         }
         
     delete [] pTransparent;

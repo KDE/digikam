@@ -37,12 +37,12 @@ namespace DigikamUnsharpMaskImagesPlugin
 
 UnsharpMask::UnsharpMask(QImage *orgImage, QObject *parent, double radius, 
                          double amount, int threshold)
-           : Digikam::ThreadedFilter(orgImage, parent)
+           : Digikam::ThreadedFilter(orgImage, parent, "UnsharpMask")
 { 
     m_radius    = radius;
     m_amount    = amount;
     m_threshold = threshold;
-    m_name      = "UnsharpMask";
+    initFilter();
 }
 
 void UnsharpMask::filterImage(void)
@@ -117,12 +117,7 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, double radius, double a
       // update progress bar in dialog every five columns.
       
       if (row%5 == 0)
-         {
-         m_eventData.starting = true;
-         m_eventData.success  = false;
-         m_eventData.progress = (int)(100.0*((double)row/(3*y)));
-         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-         }
+         postProgress( (int)(100.0*((double)row/(3*y))) );
       }
 
     // allocate column buffers 
@@ -147,12 +142,7 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, double radius, double a
       // update progress bar in dialog every five columns.
       
       if (col%5 == 0)
-         {
-         m_eventData.starting = true;
-         m_eventData.success  = false;
-         m_eventData.progress = (int)(100.0*((double)col/(3*x) + 0.33));
-         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-         }
+         postProgress( (int)(100.0*((double)col/(3*x) + 0.33)) );
       }
 
     // merge the source and destination (which currently contains the blurred version) images 
@@ -182,12 +172,7 @@ void UnsharpMask::unsharpImage(uint* data, int w, int h, double radius, double a
       // update progress bar in dialog every five rows.
       
       if (row%5 == 0)
-         {
-         m_eventData.starting = true;
-         m_eventData.success  = false;
-         m_eventData.progress = (int)(100.0*((double)row/(3*y) + 0.67));
-         QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-         }
+         postProgress( (int)(100.0*((double)row/(3*y) + 0.67)) );      
          
       memcpy(newData + x1 + (y1+row)*w, dest_row, x*bytes); 
       }

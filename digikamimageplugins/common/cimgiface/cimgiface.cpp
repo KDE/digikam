@@ -98,6 +98,8 @@ CimgIface::CimgIface(QImage *orgImage,
        m_inPaintingMask.save(m_tmpMaskFile, "PNG");
        kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
        }
+    
+    initFilter();       
 }
 
 CimgIface::~CimgIface()
@@ -153,12 +155,7 @@ void CimgIface::filterImage()
        // Everything went wrong.
        
        if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }    
+          postProgress( 0, false, false );   
           
        return;
        }
@@ -580,10 +577,7 @@ inline void CimgIface::compute_LIC(int &counter)
               
               double progress = counter;
               progress /= (double)dest.width * dest.height * m_nb_iter * (180 / m_dtheta);
-              m_eventData.starting = true;
-              m_eventData.success = false;
-              m_eventData.progress = (int)(100*progress);
-              QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+              postProgress( (int)(100*progress) );   
               }
         
            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);

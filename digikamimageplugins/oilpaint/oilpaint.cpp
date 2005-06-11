@@ -35,11 +35,11 @@ namespace DigikamOilPaintImagesPlugin
 {
 
 OilPaint::OilPaint(QImage *orgImage, QObject *parent, int brushSize, int smoothness)
-        : Digikam::ThreadedFilter(orgImage, parent)
+        : Digikam::ThreadedFilter(orgImage, parent, "OilPaint")
 { 
     m_brushSize  = brushSize;
     m_smoothness = smoothness;
-    m_name       = "OilPaint";
+    initFilter();
 }
 
 void OilPaint::filterImage(void)
@@ -65,7 +65,7 @@ void OilPaint::filterImage(void)
 void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smoothness)
 {
     uint* newBits = (uint*)m_destImage.bits();    
-    int          i = 0;
+    int          i = 0, progress;
     
     for (int h2 = 0; !m_cancel && (h2 < h); h2++)
        {
@@ -75,11 +75,9 @@ void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smooth
           newBits[i] = MostFrequentColor (data, w, h, w2, h2, BrushSize, Smoothness);
           }
        
-       // Update de progress bar in dialog.
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = (int) (((double)h2 * 100.0) / h);
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+       progress = (int) (((double)h2 * 100.0) / h);
+       if ( progress%5 == 0 )
+          postProgress( progress );   
        }
 }
 

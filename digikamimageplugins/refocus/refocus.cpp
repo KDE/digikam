@@ -37,14 +37,14 @@ namespace DigikamRefocusImagesPlugin
 
 Refocus::Refocus(QImage *orgImage, QObject *parent, int matrixSize, double radius, 
                  double gauss, double correlation, double noise)
-       : Digikam::ThreadedFilter(orgImage, parent)
+       : Digikam::ThreadedFilter(orgImage, parent, "Refocus")
 { 
     m_matrixSize  = matrixSize;
     m_radius      = radius;
     m_gauss       = gauss;
     m_correlation = correlation;
     m_noise       = noise;
-    m_name        = "Refocus";
+    initFilter();
 }
 
 void Refocus::filterImage(void)
@@ -143,10 +143,7 @@ void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int 
             }
         
         // Update the progress bar in dialog.
-        m_eventData.starting = true;
-        m_eventData.success  = false;
-        m_eventData.progress = (int)((int) (((double)y1 * 100.0) / height));
-        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+        postProgress( (int)(((double)y1 * 100.0) / height) );        
         }
 }
 

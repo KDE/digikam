@@ -36,10 +36,10 @@ namespace DigikamFilmGrainImagesPlugin
 {
 
 FilmGrain::FilmGrain(QImage *orgImage, QObject *parent, int sensibility)
-         : Digikam::ThreadedFilter(orgImage, parent)
+         : Digikam::ThreadedFilter(orgImage, parent, "FilmGrain")
 { 
     m_sensibility = sensibility;
-    m_name        = "FilmGrain";
+    initFilter();
 }
 
 void FilmGrain::filterImage(void)
@@ -86,12 +86,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
         progress = (int) (((double)i * 25.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( progress );   
         }
 
     // Smooth grain mask using gaussian blur.    
@@ -99,10 +94,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 3);
     
     // Update de progress bar in dialog.
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 30;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 30 );   
             
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
@@ -121,10 +113,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     delete grainCurves;
     
     // Update de progress bar in dialog.
-    m_eventData.starting = true;
-    m_eventData.success  = false;
-    m_eventData.progress = 40;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    postProgress( 40 );   
     
     // Merge src image with grain using shade coefficient.
 
@@ -144,12 +133,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
         progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
         
         if (progress%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = progress;
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( progress );   
         }
     
     delete [] pGrainBits;    

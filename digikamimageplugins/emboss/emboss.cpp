@@ -35,10 +35,10 @@ namespace DigikamEmbossImagesPlugin
 {
 
 Emboss::Emboss(QImage *orgImage, QObject *parent, int depth)
-      : Digikam::ThreadedFilter(orgImage, parent)
+      : Digikam::ThreadedFilter(orgImage, parent, "Emboss")
 { 
     m_depth = depth;
-    m_name  = "Emboss";
+    initFilter();
 }
 
 void Emboss::filterImage(void)
@@ -67,7 +67,7 @@ void Emboss::embossImage(uint* data, int Width, int Height, int d)
     uint *Bits = (uint*) m_destImage.bits();
     float Depth = d / 10.0;
 
-    int    i = 0, j = 0;
+    int    i = 0, j = 0, progress;
     int    red = 0, green = 0, blue = 0;
     uchar  gray = 0, r1, r2, g1, g2, b1, b2;
     Digikam::ImageFilters::imageData imagedata;
@@ -105,11 +105,9 @@ void Emboss::embossImage(uint* data, int Width, int Height, int d)
            Bits[i] = imagedata.raw;
            }
        
-       // Update de progress bar in dialog.
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = (int) (((double)h * 100.0) / Height);
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+       progress = (int) (((double)h * 100.0) / Height);
+       if ( progress%5 == 0 )
+          postProgress( progress );   
        }
 }
 

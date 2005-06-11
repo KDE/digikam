@@ -39,14 +39,14 @@ namespace DigikamNoiseReductionImagesPlugin
 
 Despeckle::Despeckle(QImage *orgImage, QObject *parent, int radius, int black_level, int white_level, 
                      bool adaptativeFilter, bool recursiveFilter)
-         : Digikam::ThreadedFilter(orgImage, parent)
+         : Digikam::ThreadedFilter(orgImage, parent, "Despeckle")
 { 
     m_radius           = radius;
     m_black_level      = black_level;
     m_white_level      = white_level;
     m_adaptativeFilter = adaptativeFilter;
     m_recursiveFilter  = recursiveFilter;
-    m_name             = "Despeckle";
+    initFilter();
 }
 
 void Despeckle::filterImage(void)
@@ -239,12 +239,7 @@ void Despeckle::despeckleImage(uint* data, int w, int h, int despeckle_radius,
         memcpy (newData + (w * y), dst_row, width);
         
         if ( y%5 == 0)
-           {
-           m_eventData.starting = true;
-           m_eventData.success  = false;
-           m_eventData.progress = (int)(100.0*(double) (y - sel_y1) / (double) sel_height);
-           QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-           }
+           postProgress( (int)(100.0*(double) (y - sel_y1) / (double) sel_height) );   
         }
 
      // OK, we're done.  Free all memory used...
