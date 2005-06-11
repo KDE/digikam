@@ -62,7 +62,7 @@ class EventData
 
 public:
     
-    ThreadedFilter(QImage *orgImage, QObject *parent=0);
+    ThreadedFilter(QImage *orgImage, QObject *parent=0, QString name=QString::null);
     
     ~ThreadedFilter(){ stopComputation(); };
     
@@ -91,7 +91,10 @@ protected:
     
 protected:
 
-    // List of threaded operations.
+    // Start filter operation before threaded method. Must be calls by your constructor.
+    virtual void initFilter(void);
+        
+    // List of threaded operations by filter.
     virtual void run(){ startComputation(); };
     
     // Main image filter method.
@@ -99,6 +102,9 @@ protected:
     
     // Clean up filter data if necessary. Call by stopComputation() method.
     virtual void cleanupFilter(void){};
+    
+    // Post Event to parent about progress.
+    void postProgress(int progress=0, bool starting=true, bool success=false);
     
 };    
 

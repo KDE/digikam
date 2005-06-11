@@ -40,16 +40,19 @@
 namespace Digikam
 {
 
-ThreadedFilter::ThreadedFilter(QImage *orgImage, QObject *parent)
+ThreadedFilter::ThreadedFilter(QImage *orgImage, QObject *parent, QString name)
               : QThread()
 { 
     m_orgImage = orgImage->copy();
     m_parent   = parent;
     m_cancel   = false;
-    m_name     = QString::null;
-        
+    m_name     = name;
+}
+    
+void ThreadedFilter::initFilter(void)
+{            
     m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
-        
+    
     if (m_orgImage.width() && m_orgImage.height())
        {
        if (m_parent)
@@ -61,9 +64,7 @@ ThreadedFilter::ThreadedFilter(QImage *orgImage, QObject *parent)
        {
        if (m_parent)           // If parent then send event about a problem.
           {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+          postProgress(0, false, false);
           kdDebug() << m_name << "::No valid image data !!! ..." << endl;
           }
        }
@@ -76,17 +77,20 @@ void ThreadedFilter::stopComputation(void)
     cleanupFilter();
 }
 
+void ThreadedFilter::postProgress(int progress, bool starting, bool success)
+{
+    m_eventData.progress = progress;
+    m_eventData.starting = starting;
+    m_eventData.success  = success;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+}
+
 void ThreadedFilter::startComputation()
 {
     QDateTime startDate = QDateTime::currentDateTime();
     
     if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       m_eventData.progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
+       postProgress(0, true, false);
 
     filterImage();
     
@@ -95,24 +99,14 @@ void ThreadedFilter::startComputation()
     if (!m_cancel)
        {
        if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = true;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
+          postProgress(0, false, true);
           
        kdDebug() << m_name << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
     else
        {
        if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          m_eventData.progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
+          postProgress(0, false, false);
           
        kdDebug() << m_name << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
