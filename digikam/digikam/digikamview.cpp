@@ -191,6 +191,7 @@ void DigikamView::loadViewState()
     stream >> mInitialAlbumID;
                 
     mMainSidebar->loadViewState(stream);
+    mRightSidebar->loadViewState(stream);    
 
     mFolderView->loadViewState(stream);
     mTagFolderView->loadViewState(stream);
@@ -224,6 +225,8 @@ void DigikamView::saveViewState()
     }
     
     mMainSidebar->saveViewState(stream);
+    mRightSidebar->saveViewState(stream);
+    
     mFolderView->saveViewState(stream);
     mTagFolderView->saveViewState(stream); 
     mSearchFolderView->saveViewState(stream);
