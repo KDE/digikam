@@ -50,6 +50,7 @@ class Job;
 namespace Digikam
 {
 class ThumbBarView;
+class ThumbBarItem;
 }
 
 class ShowFoto : public KMainWindow
@@ -124,6 +125,7 @@ private:
     ImagePluginLoader     *m_imagePluginLoader;
     
     Digikam::ThumbBarView *m_bar;
+    Digikam::ThumbBarItem *m_currentItem;
     
     SplashScreen          *m_splash;
     

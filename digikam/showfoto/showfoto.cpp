@@ -96,6 +96,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_fullScreenHideThumbBar = true;
     m_config                 = kapp->config();
     m_config->setGroup("ImageViewer Settings");
+    m_currentItem = 0;
     
     if(m_config->readBoolEntry("ShowSplash", true) &&
        !kapp->isRestored())
@@ -577,20 +578,18 @@ void ShowFoto::slotOpenFile()
 
 void ShowFoto::slotFileProperties()
 {
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    
-    if (curr)
+    if (m_currentItem)
     {
-        if (curr->url().isValid())
+        if (m_currentItem->url().isValid())
         {
             QRect sel = m_canvas->getSelectedArea();
             uint* data   = Digikam::ImlibInterface::instance()->getData();
             int   width  = Digikam::ImlibInterface::instance()->origWidth();
             int   height = Digikam::ImlibInterface::instance()->origHeight();
                 
-            ImageProperties properties(this, curr->url(), 
-                                    sel.isNull() ? 0 : &sel,
-                                    data, width, height);
+            ImageProperties properties(this, m_currentItem->url(), 
+                                       sel.isNull() ? 0 : &sel,
+                                       data, width, height);
             properties.exec();
         }
     }
@@ -621,6 +620,7 @@ void ShowFoto::slotNext()
     if (curr && curr->next())
     {
         m_bar->setSelected(curr->next());
+        m_currentItem = m_bar->currentItem();
     }
 }
 
@@ -633,6 +633,7 @@ void ShowFoto::slotPrev()
     if (curr && curr->prev())
     {
         m_bar->setSelected(curr->prev());
+        m_currentItem = m_bar->currentItem();
     }
 }
 
@@ -643,14 +644,13 @@ void ShowFoto::slotSave()
 
 void ShowFoto::slotSaveAs()
 {
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (!curr)
+    if (!m_currentItem)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
         return;
     }
     
-    KURL url(curr->url());
+    KURL url(m_currentItem->url());
     
     // The typemines listed is the base imagefiles supported by imlib2.
     QStringList mimetypes;
@@ -764,8 +764,7 @@ void ShowFoto::slotSaveAs()
 
 bool ShowFoto::promptUserSave()
 {
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (!curr)
+    if (!m_currentItem)
         return true;
     
     if (m_saveAction->isEnabled())
@@ -774,7 +773,7 @@ bool ShowFoto::promptUserSave()
             KMessageBox::warningYesNoCancel(this,
                                             i18n("The image '%1\' has been modified.\n"
                                                  "Do you want to save it?")
-                                                 .arg(curr->url().filename()),
+                                                 .arg(m_currentItem->url().filename()),
                                             QString::null,
                                             KStdGuiItem::save(),
                                             KStdGuiItem::discard());
@@ -794,14 +793,13 @@ bool ShowFoto::promptUserSave()
 
 bool ShowFoto::save()
 {
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (!curr)
+    if (!m_currentItem)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
         return true;
     }
 
-    KURL url = curr->url();
+    KURL url = m_currentItem->url();
     if (!url.isLocalFile())
     {
         KMessageBox::sorry(this, i18n("No support for saving non-local files"));
@@ -844,8 +842,8 @@ bool ShowFoto::save()
     }
 
     m_canvas->setModified( false );
-    slotOpenURL(curr->url());
-    m_bar->invalidateThumb(curr);
+    slotOpenURL(m_currentItem->url());
+    m_bar->invalidateThumb(m_currentItem);
     
     return true;
 }
@@ -855,6 +853,10 @@ void ShowFoto::slotOpenURL(const KURL& url)
     if(!promptUserSave())
         return;
 
+    m_currentItem = m_bar->currentItem();
+    if(!m_currentItem)
+        return;
+    
     QString localFile;
 #if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
@@ -866,20 +868,20 @@ void ShowFoto::slotOpenURL(const KURL& url)
     int index = 1;
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
     {
-        if (item->url().equals(m_bar->currentItem()->url()))
-            {
+        if (item->url().equals(m_currentItem->url()))
+        {
             break;
-            }
-    index++;
+        }
+        index++;
     }
     
-    QString text = m_bar->currentItem()->url().filename() +
+    QString text = m_currentItem->url().filename() +
                    i18n(" (%2 of %3)")
                    .arg(QString::number(index))
                    .arg(QString::number(m_bar->countItems()));
     m_nameLabel->setText(text);
     
-    setCaption(i18n("Showfoto - %1").arg(m_bar->currentItem()->url().directory()));
+    setCaption(i18n("Showfoto - %1").arg(m_currentItem->url().directory()));
 
     if (m_bar->countItems() == 1) {
         m_backAction->setEnabled(false);
@@ -1166,7 +1168,7 @@ void ShowFoto::slotFilePrint()
         return;
 
     KPrinter printer;
-    printer.setDocName( m_bar->currentItem()->url().filename() );
+    printer.setDocName( m_currentItem->url().filename() );
     printer.setCreator( "ShowFoto");
 #if KDE_IS_VERSION(3,2,0)
     printer.setUsePrinterResolution(true);
@@ -1179,11 +1181,11 @@ void ShowFoto::slotFilePrint()
         QImage image((uchar*)data, width, height, 32, 0, 0, QImage::IgnoreEndian);
         image = image.copy();
     
-        ImagePrint printOperations(image, printer, m_bar->currentItem()->url().filename());
+        ImagePrint printOperations(image, printer, m_currentItem->url().filename());
         if (!printOperations.printImageWithQt())
         {
             KMessageBox::error(this, i18n("Failed to print file: '%1'")
-                               .arg(m_bar->currentItem()->url().filename()));
+                               .arg(m_currentItem->url().filename()));
         }
     }
 }
@@ -1275,7 +1277,7 @@ void ShowFoto::unLoadPlugins()
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-    KURL urlCurrent(m_bar->currentItem()->url());
+    KURL urlCurrent(m_currentItem->url());
 
     if (!m_deleteItem2Trash)
     {
@@ -1322,7 +1324,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
     // No error, remove item in thumbbar.
     
-    Digikam::ThumbBarItem *item2remove = m_bar->currentItem();
+    Digikam::ThumbBarItem *item2remove = m_currentItem;
     
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
      {
@@ -1340,7 +1342,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
        m_canvas->load(QString::null);
        }
     else 
-       slotOpenURL(m_bar->currentItem()->url());
+        slotOpenURL(m_currentItem->url());
 }
 
 void ShowFoto::slotContextMenu()
