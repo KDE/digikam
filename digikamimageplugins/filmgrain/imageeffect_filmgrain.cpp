@@ -350,6 +350,8 @@ void ImageEffect_FilmGrain::customEvent(QCustomEvent *event)
                 }
             }
         }
+
+    delete d;        
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

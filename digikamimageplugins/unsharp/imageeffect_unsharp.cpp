@@ -405,6 +405,8 @@ void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
                 }
             }
         }
+
+    delete d;        
 }
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin

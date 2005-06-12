@@ -368,6 +368,8 @@ void ImageEffect_Infrared::customEvent(QCustomEvent *event)
                 }
             }
         }
+
+    delete d;        
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin

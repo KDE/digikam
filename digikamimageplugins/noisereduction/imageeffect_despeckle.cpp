@@ -440,6 +440,8 @@ void ImageEffect_Despeckle::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

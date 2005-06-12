@@ -380,6 +380,8 @@ void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin

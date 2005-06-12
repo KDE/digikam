@@ -354,6 +354,8 @@ void ImageEffect_Emboss::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
     
 }  // NameSpace DigikamEmbossImagesPlugin

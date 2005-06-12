@@ -392,6 +392,8 @@ void ImageEffect_Texture::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
 
 QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)

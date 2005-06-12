@@ -481,6 +481,8 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
                 }
             }
         }
+
+    delete d;        
 }
 
 void ImageEffect_BlowUp::slotUser2()

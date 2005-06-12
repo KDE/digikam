@@ -525,6 +525,8 @@ void ImageEffect_Refocus::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
 
 void ImageEffect_Refocus::slotUser2()

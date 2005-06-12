@@ -634,6 +634,8 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                 }
             }
         }
+    
+    delete d;        
 }
 
 void ImageEffect_Restoration::slotUser2()
