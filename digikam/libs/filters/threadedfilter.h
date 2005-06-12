@@ -87,7 +87,6 @@ protected:
 
     // To post event from thread to parent.    
     QObject  *m_parent;
-    EventData m_eventData;
     
 protected:
 

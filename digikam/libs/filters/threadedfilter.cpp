@@ -79,10 +79,11 @@ void ThreadedFilter::stopComputation(void)
 
 void ThreadedFilter::postProgress(int progress, bool starting, bool success)
 {
-    m_eventData.progress = progress;
-    m_eventData.starting = starting;
-    m_eventData.success  = success;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
+    EventData *eventData = new EventData();
+    eventData->progress = progress;
+    eventData->starting = starting;
+    eventData->success  = success;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
 }
 
 void ThreadedFilter::startComputation()
