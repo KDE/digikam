@@ -169,6 +169,14 @@ public:
     void setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID);
 
     /**
+     * Get the icon for the tag.
+     * @param tagID the id of the tag
+     * @return the path for the icon file. this could be either a simple filename
+     * which can be loaded by kiconloader or an absolute filepath to the file
+     */
+    QString getTagIcon(int tagID);
+    
+    /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
      * the tag
      * @param tagID          the id of the tag

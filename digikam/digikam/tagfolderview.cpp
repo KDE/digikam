@@ -348,7 +348,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
     if(tag->icon() != icon)
     {
         QString errMsg;
-        if (!d->albumMan->updateTAlbumIcon(tag, icon, errMsg))
+        if (!d->albumMan->updateTAlbumIcon(tag, icon, 0, errMsg))
             KMessageBox::error(0, errMsg);
         else
             item->setPixmap(0, getBlendedIcon(tag));

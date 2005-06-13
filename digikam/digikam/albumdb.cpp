@@ -501,6 +501,43 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID)
     }
 }
 
+QString AlbumDB::getTagIcon(int tagID)
+{
+    QStringList values;
+    execSql( QString("SELECT A.url, I.name, T.iconkde \n "
+                     "FROM Tags AS T LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                     "  LEFT OUTER JOIN Albums AS A ON A.id=I.dirid \n "
+                     "WHERE T.id=%1;")
+             .arg(tagID), &values );
+
+    if (values.isEmpty())
+        return QString();
+    
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+
+    QString iconName, iconKDE, albumURL, icon;
+
+    QStringList::iterator it = values.begin();
+
+    albumURL    = *it;
+    ++it;
+    iconName    = *it;
+    ++it;
+    iconKDE     = *it;
+    ++it;
+
+    if ( albumURL.isEmpty() )
+    {
+        icon = iconKDE;
+    }
+    else
+    {
+        icon = basePath + albumURL + "/" + iconName;
+    }
+
+    return icon;
+}
+
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 {
     execSql( QString("UPDATE Tags SET pid=%1 WHERE id=%2;")

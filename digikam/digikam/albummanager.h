@@ -312,11 +312,16 @@ public:
      * Update the icon for a TAlbum. 
      * @return true if the operation succeeds, false otherwise
      * @param album the album for which icon should be changed
-     * @param iconkde  a simple filename which can be loaded by KIconLoader
+     * @param iconKDE  a simple filename which can be loaded by KIconLoader
+     * @param iconID   id of the icon image file
      * @param errMsg this will contain the error message describing why the
      * operation failed
+     * \note if iconKDE is not empty then iconID is used. So if you want to set
+     * the icon to a file which can be loaded by KIconLoader, pass it in as
+     * iconKDE. otherwise pass a null QString to iconKDE and set iconID
      */
-    bool updateTAlbumIcon(TAlbum* album, const QString& iconkde, QString& errMsg);
+    bool updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
+                          Q_LLONG iconID, QString& errMsg);
     //@}
     
 

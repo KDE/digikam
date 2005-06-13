@@ -947,7 +947,8 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
     return true;
 }
 
-bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconkde, QString& errMsg)
+bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
+                                    Q_LLONG iconID, QString& errMsg)
 {
     if (!album)
     {
@@ -961,8 +962,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconkde, QStri
         return false;
     }
 
-    d->db->setTagIcon(album->id(), iconkde, 0);
-    album->m_icon = iconkde;
+    d->db->setTagIcon(album->id(), iconKDE, iconID);
+    album->m_icon = d->db->getTagIcon(album->id());
     
     emit signalAlbumIconChanged(album);
     
