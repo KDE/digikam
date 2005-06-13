@@ -32,8 +32,6 @@ class QTimer;
 
 class KIntNumInput;
 
-class OilPaint;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -41,6 +39,7 @@ class ImagePreviewWidget;
 
 namespace DigikamOilPaintImagesPlugin
 {
+class OilPaint;
 
 class ImageEffect_OilPaint : public KDialogBase
 {

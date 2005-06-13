@@ -33,8 +33,6 @@ class QTimer;
 
 class KIntNumInput;
 
-class Despeckle;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -42,6 +40,7 @@ class ImagePreviewWidget;
 
 namespace DigikamNoiseReductionImagesPlugin
 {
+class Despeckle;
 
 class ImageEffect_Despeckle : public KDialogBase
 {

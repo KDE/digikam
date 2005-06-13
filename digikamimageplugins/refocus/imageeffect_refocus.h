@@ -37,8 +37,6 @@ class QTimer;
 class KIntNumInput;
 class KDoubleNumInput;
 
-class Refocus;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -46,6 +44,7 @@ class ImagePreviewWidget;
 
 namespace DigikamRefocusImagesPlugin
 {
+class Refocus;
 
 class ImageEffect_Refocus : public KDialogBase
 {

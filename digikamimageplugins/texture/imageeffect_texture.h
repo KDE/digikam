@@ -44,7 +44,6 @@ class ImagePreviewWidget;
 
 namespace DigikamTextureImagesPlugin
 {
-
 class Texture;
 
 class ImageEffect_Texture : public KDialogBase

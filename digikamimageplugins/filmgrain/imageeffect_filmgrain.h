@@ -31,8 +31,6 @@ class QPushButton;
 class QSlider;
 class QLCDNumber;
 
-class FilmGrain;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -40,6 +38,7 @@ class ImagePreviewWidget;
 
 namespace DigikamFilmGrainImagesPlugin
 {
+class FilmGrain;
 
 class ImageEffect_FilmGrain : public KDialogBase
 {

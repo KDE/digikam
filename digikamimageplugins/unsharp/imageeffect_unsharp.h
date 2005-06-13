@@ -32,8 +32,6 @@ class QTimer;
 class KIntNumInput;
 class KDoubleNumInput;
 
-class UnsharpMask;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -41,6 +39,7 @@ class ImagePreviewWidget;
 
 namespace DigikamUnsharpMaskImagesPlugin
 {
+class UnsharpMask;
 
 class ImageEffect_Unsharp : public KDialogBase
 {

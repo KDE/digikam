@@ -32,8 +32,6 @@ class QSlider;
 class QLCDNumber;
 class QCheckBox;
 
-class Infrared;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -41,6 +39,7 @@ class ImagePreviewWidget;
 
 namespace DigikamInfraredImagesPlugin
 {
+class Infrared;
 
 class ImageEffect_Infrared : public KDialogBase
 {

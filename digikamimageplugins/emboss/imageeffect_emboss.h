@@ -36,8 +36,6 @@ class QTimer;
 
 class KIntNumInput;
 
-class Emboss;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -45,6 +43,7 @@ class ImagePreviewWidget;
 
 namespace DigikamEmbossImagesPlugin
 {
+class Emboss;
 
 class ImageEffect_Emboss : public KDialogBase
 {
