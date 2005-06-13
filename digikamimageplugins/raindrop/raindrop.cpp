@@ -137,12 +137,12 @@ void RainDrop::filterImage(void)
 void RainDrop::rainDropsImage(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, 
                               int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
-    int    nRandSize, i;
-    int    nCounter = 0;
-    int    nRandX, nRandY;
-    int    nWidth = Width;
-    int    nHeight = Height;
     bool   bResp;
+    int    nRandSize, i;
+    int    nRandX, nRandY;
+    int    nCounter = 0;
+    int    nWidth   = Width;
+    int    nHeight  = Height;
 
     if (Amount <= 0)
         return;
@@ -153,12 +153,8 @@ void RainDrop::rainDropsImage(uint *data, int Width, int Height, int MinDropSize
     if (MaxDropSize <= 0)
         return;
 
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int BitCount = LineWidth * Height;
-    uchar* pResBits = new uchar[BitCount];
-    memcpy (pResBits, data, BitCount);     
+    uint* pResBits = new uint[Width*Height];
+    memcpy (pResBits, data, Width*Height*sizeof(uint));     
 
     uchar *pStatusBits = new uchar[nHeight * nWidth];
     memset(pStatusBits, 0, sizeof(nHeight * nWidth));
@@ -203,12 +199,12 @@ void RainDrop::rainDropsImage(uint *data, int Width, int Height, int MinDropSize
     delete [] pStatusBits;
     
     if (!m_cancel) 
-       memcpy (data, pResBits, BitCount);        
+       memcpy (data, pResBits, Width*Height*sizeof(uint));        
                 
     delete [] pResBits;
 }
 
-bool RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits,
+bool RainDrop::CreateRainDrop(uint *pBits, int Width, int Height, uint *pResBits, uchar* pStatusBits,
                               int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
     register int w, h, nw1, nh1, nw2, nh2;
@@ -216,9 +212,10 @@ bool RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uc
     int          pos1, pos2, nBright;
     double       lfRadius, lfOldRadius, lfAngle, lfDiv;
     
-    uchar *pBits    = (uchar*)data; 
-    uchar *pResBits = (uchar*)dest;
-
+    // Big/Little Endian color manipulation compatibility.
+    uchar red, green, blue;
+    Digikam::ImageFilters::imageData imagedata;
+    
     int nTotalR, nTotalG, nTotalB, nBlurPixels, nBlurRadius;
 
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
@@ -317,9 +314,19 @@ bool RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uc
                                     nBright = 20;
                                 }
 
+                            imagedata.raw = pBits[pos1];                                
+                            red           = imagedata.channel.red;
+                            green         = imagedata.channel.green;
+                            blue          = imagedata.channel.blue;
+                            
+                            imagedata.channel.red   = LimitValues(red + nBright);
+                            imagedata.channel.green = LimitValues(green + nBright);
+                            imagedata.channel.blue  = LimitValues(blue + nBright);
+                            pResBits[pos2]        = imagedata.raw;
+                            
+/*                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
                             pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
-                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
-                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);
+                            pResBits[pos2++] = LimitValues (pBits[pos1++] + nBright);*/
                             }
                         }
                     }
@@ -349,10 +356,11 @@ bool RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uc
                             if (IsInside (Width, Height, nw2, nh2))
                                 {
                                 pos1 = SetPosition (Width, nw2, nh2);
-
-                                nTotalB += pResBits[pos1++];
-                                nTotalG += pResBits[pos1++];
-                                nTotalR += pResBits[pos1++];
+                                
+                                imagedata.raw = pResBits[pos1];         
+                                nTotalR += imagedata.channel.red;
+                                nTotalG += imagedata.channel.green;
+                                nTotalB += imagedata.channel.blue;
                                 nBlurPixels++;
                                 }
                             }
@@ -365,9 +373,14 @@ bool RainDrop::CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uc
                         {
                         pos1 = SetPosition (Width, nw1, nh1);
 
-                        pResBits[pos1++] = nTotalB / nBlurPixels;
+                        imagedata.channel.red   = nTotalR / nBlurPixels;
+                        imagedata.channel.green = nTotalG / nBlurPixels;
+                        imagedata.channel.blue  = nTotalB / nBlurPixels;
+                        pResBits[pos1]        = imagedata.raw;
+                        
+                        /*pResBits[pos1++] = nTotalB / nBlurPixels;
                         pResBits[pos1++] = nTotalG / nBlurPixels;
-                        pResBits[pos1++] = nTotalR / nBlurPixels;
+                        pResBits[pos1++] = nTotalR / nBlurPixels;*/
                         }
                     }
                 }

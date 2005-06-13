@@ -59,7 +59,7 @@ private:  // RainDrop filter methods.
     void rainDropsImage(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, int Amount, 
                         int Coeff, bool bLimitRange, int progressMin, int progressMax);
                    
-    bool CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits, int X, int Y, 
+    bool CreateRainDrop(uint *pBits, int Width, int Height, uint *pResBits, uchar* pStatusBits, int X, int Y, 
                         int DropSize, double Coeff, bool bLimitRange);
     
     bool CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
@@ -82,22 +82,10 @@ private:  // RainDrop filter methods.
        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
        return (bIsWOk && bIsHOk);
        };
-    
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-
-    inline int GetLineWidth (int Width)
-       {
-       return ((Width * 4) + GetStride (Width)); 
-       };
-            
+          
     inline int SetPosition (int Width, int X, int Y)
        {
-       return (Y * GetLineWidth(Width) + 4 * X); 
+       return (Y * Width + X); 
        };
     
 };    
