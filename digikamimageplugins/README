@@ -1,8 +1,9 @@
 DIGIKAMIMAGEPLUGINS
 
-Visit the web project page available at this url:
+Visit the web project page available at these url:
 
-http://extragear.kde.org/apps/digikamimageplugins
+DIGIKAM             : http://www.digikam.org
+DIGIKAMIMAGEPLUGINS : http://extragear.kde.org/apps/digikamimageplugins
 
 Resume :
 ----------------------------------------------------------------------
@@ -62,7 +63,7 @@ Depencies :
 AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
-digiKam >= 0.7.3
+digiKam >= 0.8.0
 
 
 Installation :
