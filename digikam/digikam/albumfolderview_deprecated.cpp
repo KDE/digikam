@@ -853,8 +853,9 @@ void AlbumFolderView_Deprecated::slotThumbnailLost(const KURL &url)
                                                KIcon::DefaultState,
                                                0, true));
 
-    QString errMsg;
-    AlbumManager::instance()->updatePAlbumIcon(album, "", false, errMsg);
+    //QString errMsg;
+    // No point fixing this. this class is going away anyway
+    //AlbumManager::instance()->updatePAlbumIcon(album, "", false, errMsg);
 }
 
 
@@ -1621,9 +1622,10 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
 
             if(id == 12)
             {
-                QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum,
-                    urls.first().filename(), true, errMsg);
+                // No point fixing this. this class is going away anyway
+                //QString errMsg;
+                //AlbumManager::instance()->updatePAlbumIcon(destAlbum,
+                //    urls.first().filename(), true, errMsg);
             }
             return;
         }

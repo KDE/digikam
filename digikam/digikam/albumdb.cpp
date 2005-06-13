@@ -416,6 +416,31 @@ void AlbumDB::setAlbumIcon(int albumID, Q_LLONG iconID)
              .arg(albumID) );
 }
 
+    
+QString AlbumDB::getAlbumIcon(int albumID)
+{
+    QStringList values;
+    execSql( QString("SELECT Albums.url, Images.name FROM Albums "
+                     "LEFT OUTER JOIN Images ON Albums.icon=Images.id "
+                     "WHERE Albums.id=%1;")
+             .arg(albumID), &values );
+    if (values.isEmpty())
+        return QString();
+
+    QStringList::iterator it = values.begin();
+    QString url  = *it;
+    ++it;
+    QString icon = *it;
+    if (icon.isEmpty())
+        return QString();
+
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+    basePath += url;
+    basePath += "/" + icon;
+
+    return basePath;
+}
+
 void AlbumDB::deleteAlbum(int albumID)
 {
     execSql( QString("DELETE FROM Albums WHERE id='%1'")

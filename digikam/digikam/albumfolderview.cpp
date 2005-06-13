@@ -278,9 +278,6 @@ void AlbumFolderView::slotThumbnailLost(const KURL &url)
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
         item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup, 32,
                                                 KIcon::DefaultState, 0, true));
-
-        QString errMsg;
-        d->albumMan->updatePAlbumIcon(album, "", false, errMsg);
     }
 }
 

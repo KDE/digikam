@@ -777,8 +777,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     return true;
 }
 
-bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon, 
-                                    bool emitSignalChanged, QString& errMsg)
+bool AlbumManager::updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errMsg)
 {
     if (!album)
     {
@@ -792,17 +791,12 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, const QString& icon,
         return false;
     }
 
-    /* TODO:
-    d->db->setAlbumIcon(album->id(), icon);
-    album->m_icon = icon;
+    d->db->setAlbumIcon(album->id(), iconID);
+    album->m_icon = d->db->getAlbumIcon(album->id());
 
-    if (emitSignalChanged)
-        emit signalAlbumIconChanged(album);    
+    emit signalAlbumIconChanged(album);    
 
     return true;
-    */
-
-    return false;
 }
 
 TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,

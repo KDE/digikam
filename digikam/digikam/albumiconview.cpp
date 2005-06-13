@@ -575,8 +575,9 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon( album,
-                iconItem->imageInfo()->name(), true, err );
+        AlbumManager::instance()->updatePAlbumIcon( album, 
+                                                    iconItem->imageInfo()->id(),
+                                                    err );
     }
     else if (d->currentAlbum->type() == Album::TAG)
     {

@@ -246,15 +246,12 @@ public:
      * Update the icon for an album. The @p icon is the name (and not full path)
      * of the file in the album
      * @return true if the operation succeeds, false otherwise
-     * @param album the album for which icon should be changed
-     * @param icon the filename of the new icon
-     * @param emitSignalChanged if true the signal signalAlbumIconChanged is
-     * also emitted
-     * @param errMsg this will contain the error message describing why the
-     * operation failed
+     * @param album  the album for which icon should be changed
+     * @param iconID the filename of the new icon
+     * @param errMsg if the operation fails, this will contain the error message
+     * describing why the operation failed
      */
-    bool updatePAlbumIcon(PAlbum *album, const QString& icon, 
-                          bool emitSignalChanged, QString& errMsg);
+    bool updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errMsg);
     //@}
     
     /** @name Operations on TAlbum

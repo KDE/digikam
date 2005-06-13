@@ -126,6 +126,12 @@ public:
     void setAlbumIcon(int albumID, Q_LLONG iconID);
 
     /**
+     * Get the fullpath for the album icon file
+     * @param albumID the id of the album
+     */
+    QString getAlbumIcon(int albumID);
+    
+    /**
      * Deletes an album from the database. This will not delete the
      * subalbums of the album.
      * @param albumID the id of the album
