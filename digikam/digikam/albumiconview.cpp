@@ -350,17 +350,6 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
     d->pixMan->remove(item->kurl());
 
-    if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
-    {
-        PAlbum *album = dynamic_cast<PAlbum*>(d->currentAlbum);
-        if(album && album->iconKURL().equals(iconItem->imageInfo()->kurl()))
-        {
-            QString err;
-            AlbumManager::instance()->updatePAlbumIcon( album,  "",
-                                                        true, err );
-        }
-    }
-
     emit signalItemDeleted(iconItem);
     
     delete iconItem;
@@ -589,7 +578,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         AlbumManager::instance()->updatePAlbumIcon( album,
                 iconItem->imageInfo()->name(), true, err );
     }
-    else
+    else if (d->currentAlbum->type() == Album::TAG)
     {
         TAlbum *album = static_cast<TAlbum*>(d->currentAlbum);
 

@@ -76,13 +76,6 @@ bool ImageInfo::setName(const QString& newName)
         return false;
     }
     
-    if (a->icon() == m_name)
-    {
-        QString err;
-        AlbumManager::instance()->updatePAlbumIcon( a, newName,
-                                                    false, err );
-    }
-    
     m_name = newName;
     return true;
 }
