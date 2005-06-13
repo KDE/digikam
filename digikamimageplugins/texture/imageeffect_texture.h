@@ -37,8 +37,6 @@ class QComboBox;
 
 class KIntNumInput;
 
-class Texture;
-
 namespace Digikam
 {
 class ImagePreviewWidget;
@@ -46,6 +44,8 @@ class ImagePreviewWidget;
 
 namespace DigikamTextureImagesPlugin
 {
+
+class Texture;
 
 class ImageEffect_Texture : public KDialogBase
 {
@@ -109,7 +109,7 @@ private:
     
     void abortPreview(void);
     void customEvent(QCustomEvent *event);
-    QString makeTextureImage(int texture);
+    QString getTexturePath(int texture);
         
 private slots:
 

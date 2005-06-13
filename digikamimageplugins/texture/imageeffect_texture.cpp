@@ -289,7 +289,7 @@ void ImageEffect_Texture::slotEffect()
     enableButton(Ok, false);
         
     QImage image   = m_imagePreviewWidget->getOriginalClipImage();
-    QString texture = makeTextureImage( m_textureType->currentItem() );
+    QString texture = getTexturePath( m_textureType->currentItem() );
     
     int b = 255 - m_blendGain->value();
     
@@ -322,7 +322,7 @@ void ImageEffect_Texture::slotOk()
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    QString texture = makeTextureImage( m_textureType->currentItem() );
+    QString texture = getTexturePath( m_textureType->currentItem() );
     
     m_textureFilter = new Texture(&orgImage, this, b, texture);
            
@@ -394,7 +394,7 @@ void ImageEffect_Texture::customEvent(QCustomEvent *event)
     delete d;        
 }
 
-QString ImageEffect_Texture::makeTextureImage(int texture)
+QString ImageEffect_Texture::getTexturePath(int texture)
 {
     QString pattern;
     
