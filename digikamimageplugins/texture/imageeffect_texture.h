@@ -109,7 +109,7 @@ private:
     
     void abortPreview(void);
     void customEvent(QCustomEvent *event);
-    QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h);
+    QString makeTextureImage(int texture);
         
 private slots:
 

@@ -34,21 +34,22 @@ class Texture : public Digikam::ThreadedFilter
 
 public:
     
-    Texture(QImage *orgImage, QObject *parent=0, int blendGain=200, QImage *textureImg=0);
+    Texture(QImage *orgImage, QObject *parent=0, int blendGain=200, 
+            QString texturePath=QString::null);
     
     ~Texture(){};
             
 private:  // Texture filter data.
 
-    int    m_blendGain;
+    int     m_blendGain;
     
-    QImage m_textureImg;
+    QString m_texturePath;
+    
+    QImage  m_textureImg;
     
 private:  // Texture filter methods.
 
     virtual void filterImage(void);
-
-    void textureImage(uint* data, int Width, int Height, int blendGain);
 
 };    
 

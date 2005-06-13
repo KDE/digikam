@@ -289,8 +289,7 @@ void ImageEffect_Texture::slotEffect()
     enableButton(Ok, false);
         
     QImage image   = m_imagePreviewWidget->getOriginalClipImage();
-    QImage texture = makeTextureImage( m_textureType->currentItem(), 
-                                       image.width(), image.height() );
+    QString texture = makeTextureImage( m_textureType->currentItem() );
     
     int b = 255 - m_blendGain->value();
     
@@ -299,7 +298,7 @@ void ImageEffect_Texture::slotEffect()
     if (m_textureFilter)
        delete m_textureFilter;
         
-    m_textureFilter = new Texture(&image, this, b, &texture);
+    m_textureFilter = new Texture(&image, this, b, texture);
 }
 
 void ImageEffect_Texture::slotOk()
@@ -323,10 +322,9 @@ void ImageEffect_Texture::slotOk()
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    QImage texture = makeTextureImage( m_textureType->currentItem(), 
-                                       iface.originalWidth(), iface.originalHeight() );
+    QString texture = makeTextureImage( m_textureType->currentItem() );
     
-    m_textureFilter = new Texture(&orgImage, this, b, &texture);
+    m_textureFilter = new Texture(&orgImage, this, b, texture);
            
     delete [] data;
 }
@@ -396,7 +394,7 @@ void ImageEffect_Texture::customEvent(QCustomEvent *event)
     delete d;        
 }
 
-QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)
+QString ImageEffect_Texture::makeTextureImage(int texture)
 {
     QString pattern;
     
@@ -467,22 +465,9 @@ QImage ImageEffect_Texture::makeTextureImage(int texture, int w, int h)
           break;
        }
     
-    QPixmap texturePixmap(w, h);
-    
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
-    QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
-    
-    // Texture tile.
-
-    QImage texture(path + pattern + ".png");
-    QImage textureImg(w, h, 32);
-    
-    for (int x = 0 ; x < w ; x+=texture.width())
-       for (int y = 0 ; y < h ; y+=texture.height())
-          bitBlt(&textureImg, x, y, &texture, 0, 0, texture.width(), texture.height(), 0);
-   
-    return( textureImg );
+    return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
 }
     
 }  // NameSpace DigikamTextureImagesPlugin
