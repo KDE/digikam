@@ -16,7 +16,6 @@
 * before deleting items from database, ask confirmation to user [TA]
 
 * handle internal files/folders being added/deleted
-  - through albummanager 
   - imageeditor
   - camera interface
 
@@ -24,9 +23,7 @@
    - update db [TA]
    - inform frontend about it
 
-* search view and search table in database
-  - extended search dialog [TA]
-  - saving/restoring the search url to/from the db
+* extended search dialog [TA]
 
 * fix saving of curent state of digikam 
   - splitter sizes
