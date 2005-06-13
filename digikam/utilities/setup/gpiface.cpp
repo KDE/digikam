@@ -30,35 +30,39 @@ extern "C" {
 
 int GPIface::autoDetect(QString& model, QString& port)
 {
-    CameraList camList;
+    CameraList *camList;
     CameraAbilitiesList *abilList;
     GPPortInfoList *infoList;
     const char *camModel_, *camPort_;
     GPContext *context;
 
     context = gp_context_new ();
-
+    gp_list_new (&camList);
+    
     gp_abilities_list_new (&abilList);
     gp_abilities_list_load (abilList, context);
     gp_port_info_list_new (&infoList);
     gp_port_info_list_load (infoList);
     gp_abilities_list_detect (abilList, infoList,
-                              &camList, context);
+                              camList, context);
     gp_abilities_list_free (abilList);
     gp_port_info_list_free (infoList);
 
     gp_context_unref( context );
 
-    int count = gp_list_count (&camList);
+    int count = gp_list_count (camList);
 
     if (count<=0) {
+        gp_list_free (camList);
         return -1;
     }
 
     for (int i = 0; i < count; i++) {
-        gp_list_get_name  (&camList, i, &camModel_);
-        gp_list_get_value (&camList, i, &camPort_);
+        gp_list_get_name  (camList, i, &camModel_);
+        gp_list_get_value (camList, i, &camPort_);
     }
+
+    gp_list_free (camList);
 
     model = camModel_;
     port  = camPort_;
