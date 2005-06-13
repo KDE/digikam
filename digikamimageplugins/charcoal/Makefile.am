@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_charcoal.la
 
 digikamimageplugin_charcoal_la_SOURCES = imageplugin_charcoal.cpp \
-	                                 imageeffect_charcoal.cpp 
+	                                 imageeffect_charcoal.cpp charcoal.cpp 
 
 digikamimageplugin_charcoal_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

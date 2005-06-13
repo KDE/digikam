@@ -2,7 +2,7 @@
  * File  : imageeffect_charcoal.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digikam image editor plugin for to
+ * Description : a digiKam image editor plugin for to
  *               simulate charcoal drawing.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -32,8 +32,9 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QSlider;
-class QSpinBox;
+class QTimer;
+
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -42,6 +43,7 @@ class ImagePreviewWidget;
 
 namespace DigikamCharcoalImagesPlugin
 {
+class Charcoal;
 
 class ImageEffect_Charcoal : public KDialogBase
 {
@@ -58,24 +60,33 @@ protected:
     
 private:
 
-    bool         m_cancel;
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
     
-    QWidget     *m_parent;
+    int           m_currentRenderingMode;
+        
+    QWidget      *m_parent;
     
-    QPushButton *m_helpButton;
+    QTimer       *m_timer;
     
-    QSlider     *m_pencilSlider;
-    QSlider     *m_smoothSlider;
+    QPushButton  *m_helpButton;
     
-    QSpinBox    *m_pencilInput;
-    QSpinBox    *m_smoothInput;
+    KIntNumInput *m_pencilInput;
+    KIntNumInput *m_smoothInput;
+    
+    Charcoal     *m_charcoalFilter;
     
     Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
 
-    QImage charcoal(QImage &src, double pencil, double smooth);
+private:
     
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+            
 private slots:
 
     void slotHelp();
@@ -83,7 +94,8 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
-        
+    void slotTimer();   
+            
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin

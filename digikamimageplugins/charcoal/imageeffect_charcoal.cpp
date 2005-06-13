@@ -44,9 +44,9 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kimageeffect.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -55,6 +55,7 @@
 // Local includes.
 
 #include "version.h"
+#include "charcoal.h"
 #include "imageeffect_charcoal.h"
 
 namespace DigikamCharcoalImagesPlugin
@@ -66,10 +67,12 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                                   parent, 0, true, true, i18n("&Reset Values")),
                       m_parent(parent)
 {
+    m_currentRenderingMode = NoneRendering;
+    m_charcoalFilter       = 0L;
+    m_timer                = 0;
     QString whatsThis;
-    
+        
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
@@ -133,42 +136,27 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label1 = new QLabel(i18n("Pencil size:"), plainPage());
     
-    m_pencilSlider = new QSlider(1, 100, 1, 30, Qt::Horizontal, plainPage(), "m_pencilSlider");
-    m_pencilSlider->setTickmarks(QSlider::Below);
-    m_pencilSlider->setTickInterval(10);
-    m_pencilSlider->setTracking ( false );
-    
-    m_pencilInput = new QSpinBox(1, 100, 1, plainPage(), "m_pencilInput");
-    m_pencilInput->setValue(30);
-    whatsThis = i18n("<p>Set here the charcoal pencil size used to simulate the drawing.");
-        
-    QWhatsThis::add( m_pencilInput, whatsThis);
-    QWhatsThis::add( m_pencilSlider, whatsThis);
+    m_pencilInput = new KIntNumInput(plainPage());
+    m_pencilInput->setRange(1, 100, 1, true);  
+    m_pencilInput->setValue(5);
+    QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
     hlay->addWidget(label1, 1);
-    hlay->addWidget(m_pencilSlider, 3);
-    hlay->addWidget(m_pencilInput, 1);
+    hlay->addWidget(m_pencilInput, 4);
     
     // -------------------------------------------------------------
     
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
     QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
     
-    m_smoothSlider = new QSlider(1, 100, 1, 10, Qt::Horizontal, plainPage(), "m_smoothSlider");
-    m_smoothSlider->setTickmarks(QSlider::Below);
-    m_smoothSlider->setTickInterval(10);
-    m_smoothSlider->setTracking ( false );
-    
-    m_smoothInput = new QSpinBox(1, 100, 1, plainPage(), "m_smoothInput");
-    m_smoothInput->setValue(10);    
-    whatsThis = i18n("<p>This value controls the smoothing effect of the pencil under the canvas.");
-    
-    QWhatsThis::add( m_smoothSlider, whatsThis);
-    QWhatsThis::add( m_smoothInput, whatsThis);
-                 
+    m_smoothInput = new KIntNumInput(plainPage());
+    m_smoothInput->setRange(1, 100, 1, true);  
+    m_smoothInput->setValue(10);
+    QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
+                                         "under the canvas."));
+
     hlay2->addWidget(label2, 1);
-    hlay2->addWidget(m_smoothSlider, 3);
-    hlay2->addWidget(m_smoothInput, 1);
+    hlay2->addWidget(m_smoothInput, 4);
 
     // -------------------------------------------------------------
     
@@ -181,43 +169,65 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_pencilSlider, SIGNAL(valueChanged(int)),
-            m_pencilInput, SLOT(setValue(int)));
     connect(m_pencilInput, SIGNAL(valueChanged(int)),
-            m_pencilSlider, SLOT(setValue(int)));            
-    connect(m_pencilInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));  
+            this, SLOT(slotTimer()));      
                 
-    connect(m_smoothSlider, SIGNAL(valueChanged(int)),
-            m_smoothInput, SLOT(setValue(int)));
     connect(m_smoothInput, SIGNAL(valueChanged(int)),
-            m_smoothSlider, SLOT(setValue(int)));            
-    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));  
+            this, SLOT(slotTimer()));      
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
 {
+    if (m_charcoalFilter)
+       delete m_charcoalFilter;       
+    
+    if (m_timer)
+       delete m_timer;
+}
+
+void ImageEffect_Charcoal::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_pencilInput->setEnabled(true);
+    m_smoothInput->setEnabled(true);
+    m_imagePreviewWidget->setEnable(true);    
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
 void ImageEffect_Charcoal::slotUser1()
 {
-    m_pencilInput->blockSignals(true);
-    m_pencilInput->blockSignals(true);
-    m_smoothInput->blockSignals(true);
-    m_smoothSlider->blockSignals(true);
-            
-    m_pencilInput->setValue(30);
-    m_pencilSlider->setValue(30);
-    m_smoothInput->setValue(10);
-    m_smoothSlider->setValue(10);
-    
-    m_pencilInput->blockSignals(false);
-    m_pencilInput->blockSignals(false);
-    m_smoothInput->blockSignals(false);
-    m_smoothSlider->blockSignals(false);
-    slotEffect();
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_charcoalFilter->stopComputation();
+       }
+    else
+       {
+       m_pencilInput->blockSignals(true);
+       m_smoothInput->blockSignals(true);
+                
+       m_pencilInput->setValue(5);
+       m_smoothInput->setValue(10);
+        
+       m_pencilInput->blockSignals(false);
+       m_smoothInput->blockSignals(false);
+       slotEffect();
+       }
 } 
+
+void ImageEffect_Charcoal::slotCancel()
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_charcoalFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+       
+    done(Cancel);
+}
 
 void ImageEffect_Charcoal::slotHelp()
 {
@@ -226,140 +236,148 @@ void ImageEffect_Charcoal::slotHelp()
 
 void ImageEffect_Charcoal::closeEvent(QCloseEvent *e)
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_charcoalFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+           
     e->accept();    
 }
 
-void ImageEffect_Charcoal::slotCancel()
+void ImageEffect_Charcoal::slotTimer()
 {
-    m_cancel = true;
-    done(Cancel);
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
 }
 
 void ImageEffect_Charcoal::slotEffect()
 {
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
+    m_pencilInput->setEnabled(false);
+    m_smoothInput->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    m_pencilInput->setEnabled(false);
-    m_pencilSlider->setEnabled(false);
-    m_smoothInput->setEnabled(false);
-    m_smoothSlider->setEnabled(false);
-    int pencil = m_pencilSlider->value();
-    int smooth  = m_smoothSlider->value();
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+        
+    double pencil = (double)m_pencilInput->value();
+    double smooth = (double)m_smoothInput->value();
     m_imagePreviewWidget->setProgress(0);
     
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
-
-    if (m_cancel) return;
     
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageData(newImage);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_pencilInput->setEnabled(true);
-    m_pencilSlider->setEnabled(true);
-    m_smoothInput->setEnabled(true);
-    m_smoothSlider->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);
+    if (m_charcoalFilter)
+       delete m_charcoalFilter;
+        
+    m_charcoalFilter = new Charcoal(&image, this, pencil, smooth);
 }
 
 void ImageEffect_Charcoal::slotOk()
 {
+    m_currentRenderingMode = FinalRendering;
+    
     m_pencilInput->setEnabled(false);
-    m_pencilSlider->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    m_smoothSlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
     
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    int pencil = m_pencilSlider->value();
-    int smooth  = m_smoothSlider->value();
+    double pencil = (double)m_pencilInput->value();
+    double smooth = (double)m_smoothInput->value();
 
     m_imagePreviewWidget->setProgress(0);
         
-    if (data) 
-        {
-        QImage image( w, h, 32 );
-        memcpy(image.bits(), data, image.numBytes());
-
-        QImage newImage = charcoal(image, (double)pencil/10.0, (double)smooth/10.0);
-        memcpy(data, newImage.bits(), newImage.numBytes());
-        
-        if ( !m_cancel )
-           iface.putOriginalData(i18n("Charcoal"), data);
-        
-        delete [] data;
-        }
+    if (m_charcoalFilter)
+       delete m_charcoalFilter;
+       
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
-    m_parent->setCursor( KCursor::arrowCursor() );        
-    accept();
+    m_charcoalFilter = new Charcoal(&orgImage, this, pencil, smooth);
+           
+    delete [] data;
 }
 
-QImage ImageEffect_Charcoal::charcoal(QImage &src, double pencil, double smooth)
+void ImageEffect_Charcoal::customEvent(QCustomEvent *event)
 {
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(0);
-    kapp->processEvents();    
+    if (!event) return;
+
+    Charcoal::EventData *d = (Charcoal::EventData*) event->data();
+
+    if (!d) return;
     
-    // Detects edges in the image using pixel neighborhoods and an edge
-    // detection mask.
-    QImage img(KImageEffect::edge(src, pencil));
-    m_imagePreviewWidget->setProgress(10);
-    kapp->processEvents();    
-           
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(20);
-    kapp->processEvents();    
+    if (d->starting)           // Computation in progress !
+        {
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Charcoal completed..." << endl;
+                 
+                 QImage imDest = m_charcoalFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
     
-    // Blurs the image by convolving pixel neighborhoods.
-#if KDE_VERSION >= 0x30200
-    img = KImageEffect::blur(img, pencil, smooth);
-#else
-    img = KImageEffect::blur(img, pencil);
-#endif
-    m_imagePreviewWidget->setProgress(30);
-    kapp->processEvents();    
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Charcoal completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);
+  
+                 iface.putOriginalData(i18n("Charcoal"), 
+                                       (uint*)m_charcoalFilter->getTargetImage().bits());
+                    
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Charcoal failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
     
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(40);
-    kapp->processEvents();    
-    
-    // Normalises the pixel values to span the full range of color values.
-    // This is a contrast enhancement technique.
-    KImageEffect::normalize(img);
-    m_imagePreviewWidget->setProgress(50);
-    kapp->processEvents();    
-    
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(60);
-    kapp->processEvents();    
-    
-    // Invert the pixels values.
-    img.invertPixels(false);
-    m_imagePreviewWidget->setProgress(70);
-    kapp->processEvents();    
-    
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(80);
-    kapp->processEvents();    
-    
-    // Convert image to grayscale.
-    KImageEffect::toGray(img);
-    m_imagePreviewWidget->setProgress(90);
-    kapp->processEvents();    
-    
-    if (m_cancel) return src;
-    m_imagePreviewWidget->setProgress(100);
-    kapp->processEvents();    
-    
-    return(img);
+    delete d;        
 }
 
 }  // NameSpace DigikamCharcoalImagesPlugin
