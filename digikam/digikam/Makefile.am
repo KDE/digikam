@@ -27,7 +27,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
 		        albumfolderview.cpp albumfolderitem_deprecated.cpp \
-				albumfolderview_deprecated.cpp \
+			albumfolderview_deprecated.cpp \
 		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
 		        albumsettings.cpp imageproperties.cpp \
@@ -46,7 +46,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchquickdialog.cpp searchadvanceddialog.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatepickerpopup.cpp \
 			folderview.cpp folderitem.cpp \
-			upgradedb_sqlite2tosqlite3.cpp
+			upgradedb_sqlite2tosqlite3.cpp jpegreader.cpp
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) \

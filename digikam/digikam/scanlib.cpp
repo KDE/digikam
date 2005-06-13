@@ -22,7 +22,6 @@
 
 
 #include <kdebug.h>
-#include <kfilemetainfo.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
@@ -44,6 +43,7 @@ extern "C" {
 
 #include "albumdb.h"
 #include "albummanager.h"
+#include "jpegreader.h"
 #include "scanlib.h"
 
 /** @file scanlib.cpp*/
@@ -358,28 +358,21 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
                                   const QString& filename,
                                   int albumID)
 {
-    QString comment;
-    QDateTime datetime;
-    QDir albumPath( AlbumManager::instance()->getLibraryPath());
-
     // Do not store items found in the root of the albumdb
     if (albumURL.isEmpty())
         return;
 
-    KFileMetaInfo itemMetaInfo( albumPath.path()+albumURL+'/'+filename );
-
-    if (itemMetaInfo.isValid() &&
-        itemMetaInfo.containsGroup("Jpeg EXIF Data"))
-    {
-        comment = itemMetaInfo.group("Jpeg EXIF Data").
-                  item("Comment").value().toString();
-        datetime = itemMetaInfo.group("Jpeg EXIF Data").
-                   item("Date/time").value().toDateTime();
-    }
-
+    QString comment;
+    QDateTime datetime;
+    
+    QString filePath( AlbumManager::instance()->getLibraryPath());
+    filePath += albumURL + '/' + filename;
+    
+    readJPEGMetaData(filePath, comment, datetime);
+    
     if ( !datetime.isValid() )
     {
-        QFileInfo info( albumPath.path()+albumURL+'/'+filename );
+        QFileInfo info( filePath );
         datetime = info.lastModified();
     }
 
@@ -391,20 +384,17 @@ void ScanLib::updateItemDate(const QString& albumURL,
                              const QString& filename,
                              int albumID)
 {
+    QString comment;
     QDateTime datetime;
-    QDir albumPath( AlbumManager::instance()->getLibraryPath());
-
-    KFileMetaInfo itemMetaInfo( albumPath.path()+albumURL+'/'+filename );
-    if (itemMetaInfo.isValid() &&
-        itemMetaInfo.containsGroup("Jpeg EXIF Data"))
-    {
-        datetime = itemMetaInfo.group("Jpeg EXIF Data").
-                   item("Date/time").value().toDateTime();
-    }
-
+    
+    QString filePath( AlbumManager::instance()->getLibraryPath());
+    filePath += albumURL + '/' + filename;
+    
+    readJPEGMetaData(filePath, comment, datetime);
+    
     if ( !datetime.isValid() )
     {
-        QFileInfo info( albumPath.path()+albumURL+'/'+filename );
+        QFileInfo info( filePath );
         datetime = info.lastModified();
     }
 
