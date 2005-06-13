@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_raindrop.la 
 
 digikamimageplugin_raindrop_la_SOURCES = imageplugin_raindrop.cpp \
-	                                 imageeffect_raindrop.cpp 
+	                                 imageeffect_raindrop.cpp raindrop.cpp 
 
 digikamimageplugin_raindrop_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 

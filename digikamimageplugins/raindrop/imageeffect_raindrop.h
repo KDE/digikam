@@ -2,8 +2,8 @@
  * File  : imageeffect_raindrop.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-09-30
- * Description : a Digikam image plugin for to simulate 
- *               a rain droppping on an image.
+ * Description : a digiKam image plugin for to add
+ *               raindrops on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -42,6 +42,7 @@ class ImageWidget;
 
 namespace DigikamRainDropImagesPlugin
 {
+class RainDrop;
 
 class ImageEffect_RainDrop : public KDialogBase
 {
@@ -58,67 +59,37 @@ protected:
     
 private:
     
-    bool                  m_cancel;
-    bool                  m_dirty;
     
-    QWidget              *m_parent;
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
     
-    QPushButton          *m_helpButton;
+    int           m_currentRenderingMode;
+        
+    QWidget      *m_parent;
+    
+    QPushButton  *m_helpButton;
 
-    QTimer               *m_timer;
+    QTimer       *m_timer;
             
-    KIntNumInput         *m_dropInput;
-    KIntNumInput         *m_amountInput;
-    KIntNumInput         *m_coeffInput;    
+    KIntNumInput *m_dropInput;
+    KIntNumInput *m_amountInput;
+    KIntNumInput *m_coeffInput;    
     
-    KProgress            *m_progressBar;
+    KProgress    *m_progressBar;
+    
+    RainDrop     *m_raindropFilter;
     
     Digikam::ImageWidget *m_previewWidget;
-
-    void rainDrops(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, int Amount, 
-                   int Coeff, bool bLimitRange, int progressMin=0, int progressMax=100);
-                   
-    bool CreateRainDrop(uint *data, int Width, int Height, uchar *dest, uchar* pStatusBits, int X, int Y, 
-                        int DropSize, double Coeff, bool bLimitRange);
     
-    bool CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
+private:
     
-    bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
-                        
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-    
-    inline bool IsInside (int Width, int Height, int X, int Y)
-       {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-       };
-    
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-
-    inline int GetLineWidth (int Width)
-       {
-       return ((Width * 4) + GetStride (Width)); 
-       };
-            
-    inline int SetPosition (int Width, int X, int Y)
-       {
-       return (Y * GetLineWidth(Width) + 4 * X); 
-       };
-    
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+        
 private slots:
 
     void slotHelp();
