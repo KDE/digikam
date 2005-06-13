@@ -119,7 +119,6 @@ void AlbumLister::openAlbum(Album *album)
     ds << album->kurl();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
-    ds << AlbumSettings::instance()->getRecurseTags();
 
     d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
@@ -155,7 +154,6 @@ void AlbumLister::refresh()
     ds << d->currAlbum->kurl();
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
-    ds << AlbumSettings::instance()->getRecurseTags();
 
     d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);

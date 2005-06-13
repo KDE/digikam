@@ -54,7 +54,6 @@ public:
     AlbumSettings::AlbumSortOrder albumSortOrder;
     AlbumSettings::ImageSortOrder  imageSortOrder;
 
-    bool recurseTags;
     bool showToolTips;
     bool showSplash;
     bool useTrash;
@@ -120,7 +119,6 @@ void AlbumSettings::init()
     d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
     d->thumbnailSize = ThumbnailSize::Medium;
 
-    d->recurseTags  = false;
     d->showToolTips = true;
     d->showSplash   = true;
     d->useTrash     = true;
@@ -176,8 +174,6 @@ void AlbumSettings::readSettings()
                               
     d->thumbnailSize = config->readNumEntry("Default Icon Size",
                              ThumbnailSize::Medium);
-
-    d->recurseTags   = config->readBoolEntry("Recurse Tags", false);
 
     d->showToolTips   = config->readBoolEntry("Show ToolTips", true);
     
@@ -254,8 +250,6 @@ void AlbumSettings::saveSettings()
     
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
-
-    config->writeEntry("Recurse Tags", d->recurseTags);
 
     config->writeEntry("Show ToolTips", d->showToolTips);
     
@@ -534,16 +528,6 @@ void AlbumSettings::setExifSetOrientation(bool val)
 bool AlbumSettings::getExifSetOrientation() const
 {
     return d->exifSetOrientation;
-}
-
-void AlbumSettings::setRecurseTags(bool val)
-{
-    d->recurseTags = val;
-}
-
-bool AlbumSettings::getRecurseTags() const
-{
-    return d->recurseTags;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

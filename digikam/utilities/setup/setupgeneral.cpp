@@ -91,19 +91,6 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    layout->addWidget(tipSettingBox);
 
    // --------------------------------------------------------
-
-   QVGroupBox *tagSettingBox = new QVGroupBox(parent);
-   tagSettingBox->setTitle(i18n("Tag Settings"));
-
-   recurseTagsBox_ = new QCheckBox(tagSettingBox);
-   recurseTagsBox_->setText(i18n("Show items in su&b-tags"));
-   QWhatsThis::add( recurseTagsBox_, i18n("<p>When showing items in a Tag, also "
-                                          "show items in sub-Tags."));
-
-   layout->addWidget(tagSettingBox);
-
-
-   // --------------------------------------------------------
    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
    iconTextGroup->setColumnLayout(0, Qt::Vertical );
    iconTextGroup->layout()->setMargin(KDialog::marginHint());
@@ -187,7 +174,6 @@ void SetupGeneral::applySettings()
     }
 
     settings->setDefaultIconSize(iconSize);
-    settings->setRecurseTags(recurseTagsBox_->isChecked());
     settings->setShowToolTips(showToolTipsBox_->isChecked());
 
     settings->setIconShowName(iconShowNameBox_->isChecked());
@@ -227,7 +213,6 @@ void SetupGeneral::readSettings()
             break;
     }
 
-    recurseTagsBox_->setChecked(settings->getRecurseTags());
     showToolTipsBox_->setChecked(settings->getShowToolTips());
 
     iconShowNameBox_->setChecked(settings->getIconShowName());

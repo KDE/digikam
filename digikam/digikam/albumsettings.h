@@ -122,9 +122,6 @@ public:
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
 
-    void setRecurseTags(bool val);
-    bool getRecurseTags() const;
-
     void setShowToolTips(bool val);
     bool getShowToolTips() const;
     

@@ -67,7 +67,6 @@ void SearchResultsView::openURL(const KURL& url)
     ds << url;
     ds << m_filter;
     ds << 0; // getting dimensions (not needed here)
-    ds << 0; // recursive tags (not needed here)
     ds << 2; // miniListing (Use 1 for full listing)
 
     m_listJob = new KIO::TransferJob(url, KIO::CMD_SPECIAL,

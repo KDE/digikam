@@ -101,7 +101,6 @@ void kio_digikamsearch::special(const QByteArray& data)
     KURL    url;
     QString filter;
     int     getDimensions;
-    int     recurse;
     int     listingType = 0;
 
     QDataStream ds(data, IO_ReadOnly);
@@ -109,7 +108,6 @@ void kio_digikamsearch::special(const QByteArray& data)
     ds >> url;
     ds >> filter;
     ds >> getDimensions;
-    ds >> recurse;
     if (!ds.atEnd())
         ds >> listingType;
 

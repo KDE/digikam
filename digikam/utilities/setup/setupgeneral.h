@@ -54,7 +54,6 @@ private:
 
     QComboBox    *thumbnailSize_;
 
-    QCheckBox    *recurseTagsBox_;
     QCheckBox    *showToolTipsBox_;
 
     QCheckBox    *iconShowNameBox_;

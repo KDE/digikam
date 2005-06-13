@@ -96,7 +96,6 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     KURL    kurl;
     QString url;
     QString filter;
-    int     recurse;
     int     getDimensions;
     int     tagID;
 
@@ -105,7 +104,6 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
-    ds >> recurse;
 
     url = kurl.path();
 
@@ -122,29 +120,16 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
     QStringList values;
 
-    if (recurse)
-    {
-        m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
-                               "       Images.datetime, Albums.url \n "
-                               " FROM Images, Albums \n "
-                               " WHERE Images.id IN \n "
-                               "       (SELECT imageid FROM ImageTags \n "
-                               "        WHERE tagid=%1 \n "
-                               "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
-                               "   AND Albums.id=Images.dirid \n " )
-                      .arg(tagID)
-                      .arg(tagID), &values );
-    }
-    else
-    {
-        m_db.execSql( QString( "SELECT Images.id, Images.name, Images.dirid, \n "
-                               "       Images.datetime, Albums.url \n "
-                               " FROM Images, Albums \n "
-                               " WHERE Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=%1) \n "
-                               "   AND Albums.id=Images.dirid \n "
-                               " ORDER BY Albums.id;" )
-                      .arg(tagID), &values );
-    }
+    m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
+                           "       Images.datetime, Albums.url \n "
+                           " FROM Images, Albums \n "
+                           " WHERE Images.id IN \n "
+                           "       (SELECT imageid FROM ImageTags \n "
+                           "        WHERE tagid=%1 \n "
+                           "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
+                           "   AND Albums.id=Images.dirid \n " )
+                  .arg(tagID)
+                  .arg(tagID), &values );
 
     QByteArray  ba;
 
