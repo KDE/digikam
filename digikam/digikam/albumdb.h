@@ -142,10 +142,14 @@ public:
      * Adds a new tag to the database with given name, icon and parent id.
      * @param parentTagID the id of the tag which will become the new tags parent
      * @param name        the name of the tag
-     * @param icon        the id of the icon file
+     * @param iconKDE     the name of the icon file (this is filename which kde
+     * iconloader can load up)
+     * @param iconID      the id of the icon file
+     * Note: if the iconKDE parameter is empty, then the iconID parameter is used
      * @return the id of the tag added or -1 if it failed
      */
-    int addTag(int parentTagID, const QString& name, Q_LLONG iconID);
+    int addTag(int parentTagID, const QString& name,
+               const QString& iconKDE, Q_LLONG iconID);
     
     /**
      * Set a new name for the tag. 

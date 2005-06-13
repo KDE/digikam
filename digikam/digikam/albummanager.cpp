@@ -800,7 +800,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errM
 }
 
 TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
-                                   const QString& icon, QString& errMsg)
+                                   const QString& iconkde, QString& errMsg)
 {
     if (!parent)
     {
@@ -835,8 +835,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
 
     errMsg = i18n("TODO: Adding new tags has to be implemented");
 
-    /* TODO
-    int id = d->db->addTag(parent->id(), name, icon);
+    int id = d->db->addTag(parent->id(), name, iconkde, 0);
     if (id == -1)
     {
         errMsg = i18n("Failed to add tag to database");
@@ -844,14 +843,12 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     }
     
     TAlbum *album = new TAlbum(name, id, false);
-    album->m_icon = icon;
+    album->m_icon = iconkde;
     album->setParent(parent);
 
     insertTAlbum(album);
     
     return album;
-    */
-    return 0;
 }
 
 bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)

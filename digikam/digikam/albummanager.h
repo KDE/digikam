@@ -265,12 +265,13 @@ public:
      * @return the newly created TAlbum or 0 if it fails
      * @param parent  the parent album under which to create the new Album
      * @param name    the name of the new album
-     * @param icon    the icon for the new album
+     * @param iconkde the iconkde for the new album (this is a filename which
+     * kde iconloader can load up
      * @param errMsg  this will contain the error message describing why the
      * operation failed
      */
     TAlbum* createTAlbum(TAlbum* parent, const QString& name, 
-                         const QString& icon, QString& errMsg);
+                         const QString& iconkde, QString& errMsg);
 
     
     /**

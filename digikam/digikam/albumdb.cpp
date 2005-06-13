@@ -447,21 +447,36 @@ void AlbumDB::deleteAlbum(int albumID)
              .arg(albumID) );
 }
 
-int AlbumDB::addTag(int parentTagID, const QString& name, Q_LLONG iconID)
+int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
+                    Q_LLONG iconID)
 {
     if (!m_db)
         return -1;
 
-    if (!execSql( QString("INSERT INTO Tags (pid, name, icon) "
-                          "VALUES( %1, '%2', %3)")
+    if (!execSql( QString("INSERT INTO Tags (pid, name) "
+                          "VALUES( %1, '%2')")
                   .arg(parentTagID)
-                  .arg(escapeString(name))
-                  .arg(iconID) ))
+                  .arg(escapeString(name))))
     {
         return -1;
     }
 
-    return sqlite3_last_insert_rowid(m_db);
+    int id = sqlite3_last_insert_rowid(m_db);
+
+    if (!iconKDE.isEmpty())
+    {
+        execSql( QString("UPDATE Tags SET iconkde='%1' WHERE id=%2;")
+                 .arg(escapeString(iconKDE))
+                 .arg(id));
+    }
+    else
+    {
+        execSql( QString("UPDATE Tags SET icon=%1 WHERE id=%2;")
+                 .arg(iconID)
+                 .arg(id));
+    }
+    
+    return id;
 }
 
 void AlbumDB::deleteTag(int tagID)
