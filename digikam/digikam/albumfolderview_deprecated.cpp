@@ -1031,7 +1031,9 @@ void AlbumFolderView_Deprecated::tagEdit(TAlbum* album)
         else
             folderItem->setText(title);
     }
-
+    
+    // No point fixing this. this is going away anyway
+    /*
     if (album->icon() != icon)
     {
         QString errMsg;
@@ -1040,7 +1042,8 @@ void AlbumFolderView_Deprecated::tagEdit(TAlbum* album)
         else
             folderItem->setPixmap(getBlendedIcon(album));
     }
-
+    */
+    
     emit signalTagsAssigned();
 }
 
@@ -1778,9 +1781,12 @@ void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *al
 
             if(id == 12)
             {
+                // No point fixing this.
+                /*
                 QString errMsg;
                 AlbumManager::instance()->updateTAlbumIcon(album,
                     urls.first().path(), true, errMsg);
+                */
             }
             return;
         }

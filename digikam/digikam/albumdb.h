@@ -161,9 +161,12 @@ public:
     /**
      * Set the icon for the tag.
      * @param tagID the id of the tag
+     * @param iconKDE the filename for the kde icon file
      * @param iconID the id of the icon file
+     * Note: Only one of the iconKDE or iconID parameters is used.
+     * if the iconKDE parameter is empty, then the iconID parameter is used
      */
-    void setTagIcon(int tagID, Q_LLONG iconID);
+    void setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting

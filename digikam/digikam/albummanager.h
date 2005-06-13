@@ -309,20 +309,14 @@ public:
     bool moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg);
     
     /**
-     * Update the icon for a TAlbum. The @p icon can one of the following:
-     * either a absolute path of the file or a simple filename which can be loaded
-     * by KIconLoader
+     * Update the icon for a TAlbum. 
      * @return true if the operation succeeds, false otherwise
      * @param album the album for which icon should be changed
-     * @param icon  either a absolute path of the file or a simple filename which
-     * can be loaded by KIconLoader
-     * @param emitSignalChanged if true the signal signalAlbumIconChanged is
-     * also emitted
+     * @param iconkde  a simple filename which can be loaded by KIconLoader
      * @param errMsg this will contain the error message describing why the
      * operation failed
      */
-    bool updateTAlbumIcon(TAlbum* album, const QString& icon, 
-                          bool emitSignalChanged, QString& errMsg);
+    bool updateTAlbumIcon(TAlbum* album, const QString& iconkde, QString& errMsg);
     //@}
     
 

@@ -581,11 +581,13 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
     }
     else if (d->currentAlbum->type() == Album::TAG)
     {
+        /* TODO
         TAlbum *album = static_cast<TAlbum*>(d->currentAlbum);
 
         QString err;
         AlbumManager::instance()->updateTAlbumIcon( album,
                 iconItem->imageInfo()->filePath(), true, err );
+        */
     }
 }
 

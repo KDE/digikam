@@ -551,7 +551,7 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     if (album->icon() != icon)
     {
         QString errMsg;
-        if (!albumMan->updateTAlbumIcon(album, icon, true, errMsg));
+        if (!albumMan->updateTAlbumIcon(album, icon, errMsg));
         {
             KMessageBox::error(this, errMsg);
         }

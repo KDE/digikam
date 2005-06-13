@@ -947,12 +947,11 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
     return true;
 }
 
-bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon, 
-                                    bool emitSignalChanged, QString& errMsg)
+bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconkde, QString& errMsg)
 {
     if (!album)
     {
-        errMsg = i18n("No such album");
+        errMsg = i18n("No such tag");
         return false;
     }
 
@@ -962,16 +961,12 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& icon,
         return false;
     }
 
-    /* TODO
-    d->db->setTagIcon(album->id(), icon);
-    album->m_icon = icon;
+    d->db->setTagIcon(album->id(), iconkde, 0);
+    album->m_icon = iconkde;
     
-    if (emitSignalChanged)    
-        emit signalAlbumIconChanged(album);
+    emit signalAlbumIconChanged(album);
     
     return true;
-    */
-    return false;
 }
 
 SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)

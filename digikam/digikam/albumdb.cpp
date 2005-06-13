@@ -485,11 +485,20 @@ void AlbumDB::deleteTag(int tagID)
                  .arg(tagID) );
 }
 
-void AlbumDB::setTagIcon(int tagID, Q_LLONG iconID)
+void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID)
 {
-    execSql( QString("UPDATE Tags SET icon=%1 WHERE id=%2;")
-             .arg(iconID)
-             .arg(tagID) );
+    if (!iconKDE.isEmpty())
+    {
+        execSql( QString("UPDATE Tags SET iconkde='%1' WHERE id=%2;")
+                 .arg(escapeString(iconKDE))
+                 .arg(tagID));
+    }
+    else
+    {
+        execSql( QString("UPDATE Tags SET icon=%1 WHERE id=%2;")
+                 .arg(iconID)
+                 .arg(tagID));
+    }
 }
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
