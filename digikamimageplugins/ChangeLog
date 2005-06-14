@@ -2,7 +2,7 @@ v0.8.0-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
     * Fix PPC compatibility (big/little endian problem with color image data).
     * Refocus, UnsharpMask, NoiseReduction, OilPaint, Emboss, FilmGrain, 
-      Infrared, Charcoal : 
+      Infrared, Charcoal, AntiVignetting, LensDistortion : 
       using separate thread from GUI to compute image filters.
     * CImg interface : fix memory leak and make a threadsafe implementation.    
     * New plugin 'Refocus'.
