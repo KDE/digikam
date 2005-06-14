@@ -230,6 +230,8 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             emit signalHistogramComputationFailed();
             }
         }
+     
+    delete d;
 }
 
 void HistogramWidget::stopHistogramComputation(void)

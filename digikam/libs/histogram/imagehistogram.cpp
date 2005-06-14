@@ -65,11 +65,7 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent
     else
        {
        if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
+          postProgress(false, false);
        }
 }
 
@@ -79,6 +75,14 @@ ImageHistogram::~ImageHistogram()
     
     if (m_histogram)
        delete [] m_histogram;
+}
+
+void ImageHistogram::postProgress(bool starting, bool success)
+{
+    EventData *eventData = new EventData();
+    eventData->starting = starting;
+    eventData->success  = success;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
 }
 
 void ImageHistogram::stopCalcHistogramValues(void)
@@ -103,11 +107,7 @@ void ImageHistogram::calcHistogramValues()
     int            max;
     
     if (m_parent)
-       {
-       m_eventData.starting = true;
-       m_eventData.success  = false;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
+       postProgress(true, false);
         
     m_histogram = new double_packet[256];
     
@@ -116,11 +116,7 @@ void ImageHistogram::calcHistogramValues()
        kdWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
     
        if (m_parent)
-          {
-          m_eventData.starting = false;
-          m_eventData.success  = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-          }
+          postProgress(false, false);
            
        return;
        }
@@ -153,11 +149,7 @@ void ImageHistogram::calcHistogramValues()
       }
 
     if (m_parent && m_runningFlag)
-       {
-       m_eventData.starting = false;
-       m_eventData.success = true;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, &m_eventData));
-       }
+       postProgress(false, true);
 }
 
 double ImageHistogram::getCount(int channel, int start, int end)
