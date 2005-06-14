@@ -39,7 +39,7 @@ public:
     
     ~AntiVignetting(){};
             
-private:  // Texture filter data.
+private:  
 
     double m_density;
     double m_power;
@@ -50,7 +50,7 @@ private:  // Texture filter data.
     
     bool   m_normalize;
     
-private:  // Texture filter methods.
+private: 
 
     virtual void filterImage(void);
 

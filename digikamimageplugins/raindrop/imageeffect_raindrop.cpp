@@ -277,7 +277,6 @@ void ImageEffect_RainDrop::closeEvent(QCloseEvent *e)
     e->accept();    
 }
 
-
 void ImageEffect_RainDrop::slotTimer()
 {
     if (m_timer)
