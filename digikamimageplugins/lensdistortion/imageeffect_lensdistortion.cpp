@@ -41,8 +41,6 @@
 #include <qbrush.h>
 #include <qpen.h>
 #include <qframe.h>
-#include <qslider.h>
-#include <qspinbox.h>
 #include <qtimer.h>
 
 // KDE includes.
@@ -57,6 +55,8 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
+#include <knuminput.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -65,7 +65,7 @@
 // Local includes.
 
 #include "version.h"
-#include "pixelaccess.h"
+#include "lensdistortion.h"
 #include "imageeffect_lensdistortion.h"
 
 namespace DigikamLensDistortionImagesPlugin
@@ -77,10 +77,12 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                         parent, 0, true, true, i18n("&Reset Values")),
                             m_parent(parent)
 {
+    m_currentRenderingMode = NoneRendering;
+    m_timer                = 0L;
+    m_lensdistortionFilter = 0L;
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    m_cancel = false;
     
     // About data and help button.
     
@@ -90,7 +92,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to reduce spherical aberration caused "
                                                  "by a lens to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -160,74 +162,57 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                               "applied to a cross pattern.") );
     gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
         
+    // -------------------------------------------------------------
+    
     QLabel *label1 = new QLabel(i18n("Main:"), gbox2);
-    m_mainSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_mainSlider");
-    m_mainSlider->setTickmarks(QSlider::Below);
-    m_mainSlider->setTickInterval(200);
-    m_mainSlider->setTracking ( false );
-    m_mainSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_mainSpinBox");
-    m_mainSpinBox->setValue(0);
-        
-    whatsThis = i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
-                     "distortion, while positive values correct lens pincushion distortion.");
     
-    QWhatsThis::add( m_mainSpinBox, whatsThis);
-    QWhatsThis::add( m_mainSlider, whatsThis);
-    
+    m_mainInput = new KDoubleNumInput(gbox2);
+    m_mainInput->setPrecision(1);
+    m_mainInput->setRange(-100.0, 100.0, 0.1, true);
+    QWhatsThis::add( m_mainInput, i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
+                                       "distortion, while positive values correct lens pincushion distortion."));
+
     gridBox2->addMultiCellWidget(label1, 1, 1, 0, 0);
-    gridBox2->addMultiCellWidget(m_mainSlider, 1, 1, 1, 1);
-    gridBox2->addMultiCellWidget(m_mainSpinBox, 1, 1, 2, 2);
+    gridBox2->addMultiCellWidget(m_mainInput, 1, 1, 1, 2);
+    
+    // -------------------------------------------------------------
     
     QLabel *label2 = new QLabel(i18n("Edge:"), gbox2);
-    m_edgeSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_edgeSlider");
-    m_edgeSlider->setTickmarks(QSlider::Below);
-    m_edgeSlider->setTickInterval(200);
-    m_edgeSlider->setTracking ( false );  
-    m_edgeSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_edgeSpinBox");
-    m_edgeSpinBox->setValue(0);
-        
-    whatsThis = i18n("<p>This value controls in the same manner as the Main control, but has more effect "
-                     "at the edges of the image than at the center.");
     
-    QWhatsThis::add( m_edgeSpinBox, whatsThis);
-    QWhatsThis::add( m_edgeSlider, whatsThis);                     
-    
+    m_edgeInput = new KDoubleNumInput(gbox2);
+    m_edgeInput->setPrecision(1);
+    m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
+    QWhatsThis::add( m_edgeInput, i18n("<p>This value controls in the same manner as the Main control, but has more effect "
+                                       "at the edges of the image than at the center."));
+
     gridBox2->addMultiCellWidget(label2, 2, 2, 0, 0);
-    gridBox2->addMultiCellWidget(m_edgeSlider, 2, 2, 1, 1);
-    gridBox2->addMultiCellWidget(m_edgeSpinBox, 2, 2, 2, 2);
+    gridBox2->addMultiCellWidget(m_edgeInput, 2, 2, 1, 2);
+    
+    // -------------------------------------------------------------
     
     QLabel *label3 = new QLabel(i18n("Zoom:"), gbox2);
-    m_rescaleSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_rescaleSlider");
-    m_rescaleSlider->setTickmarks(QSlider::Below);
-    m_rescaleSlider->setTickInterval(200);
-    m_rescaleSlider->setTracking ( false );  
-    m_rescaleSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_rescaleSpinBox");
-    m_rescaleSpinBox->setValue(0);
     
-    whatsThis = i18n("<p>This value rescales the overall image size.");
-    QWhatsThis::add( m_rescaleSpinBox, whatsThis);
-    QWhatsThis::add( m_rescaleSlider, whatsThis);                     
+    m_rescaleInput = new KDoubleNumInput(gbox2);
+    m_rescaleInput->setPrecision(1);
+    m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
+    QWhatsThis::add( m_rescaleInput, i18n("<p>This value rescales the overall image size."));
     
     gridBox2->addMultiCellWidget(label3, 3, 3, 0, 0);
-    gridBox2->addMultiCellWidget(m_rescaleSlider, 3, 3, 1, 1);
-    gridBox2->addMultiCellWidget(m_rescaleSpinBox, 3, 3, 2, 2);
+    gridBox2->addMultiCellWidget(m_rescaleInput, 3, 3, 1, 2);
 
+    // -------------------------------------------------------------
+    
     QLabel *label4 = new QLabel(i18n("Brighten:"), gbox2);
-    m_brightenSlider = new QSlider(-1000, 1000, 1, 0, Qt::Horizontal, gbox2, "m_brightenSlider");
-    m_brightenSlider->setTickmarks(QSlider::Below);
-    m_brightenSlider->setTickInterval(200);
-    m_brightenSlider->setTracking ( false );  
     
-    m_brightenSpinBox = new QSpinBox(-1000, 1000, 1, gbox2, "m_brightenSpinBox");
-    m_brightenSpinBox->setValue(0);
-    
-    whatsThis = i18n("<p>This value adjust the brightness in image corners.");
-    QWhatsThis::add( m_brightenSpinBox, whatsThis);
-    QWhatsThis::add( m_brightenSlider, whatsThis);                     
-    
+    m_brightenInput = new KDoubleNumInput(gbox2);
+    m_brightenInput->setPrecision(1);
+    m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
+    QWhatsThis::add( m_brightenInput, i18n("<p>This value adjust the brightness in image corners."));
+
     gridBox2->addMultiCellWidget(label4, 4, 4, 0, 0);
-    gridBox2->addMultiCellWidget(m_brightenSlider, 4, 4, 1, 1);
-    gridBox2->addMultiCellWidget(m_brightenSpinBox, 4, 4, 2, 2);
+    gridBox2->addMultiCellWidget(m_brightenInput, 4, 4, 1, 2);
+    
+    // -------------------------------------------------------------
     
     m_progressBar = new KProgress(100, gbox2, "progressbar");
     m_progressBar->setValue(0);
@@ -240,110 +225,137 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     adjustSize();
     disableResize();  
-
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
     
-    connect(m_mainSlider, SIGNAL(valueChanged(int)),
-            m_mainSpinBox, SLOT(setValue(int)));
-    connect(m_mainSpinBox, SIGNAL(valueChanged(int)),
-            m_mainSlider, SLOT(setValue(int)));            
-    connect(m_mainSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));            
+    connect(m_mainInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));            
             
-    connect(m_edgeSlider, SIGNAL(valueChanged(int)),
-            m_edgeSpinBox, SLOT(setValue(int)));
-    connect(m_edgeSpinBox, SIGNAL(valueChanged(int)),
-            m_edgeSlider, SLOT(setValue(int)));   
-    connect(m_edgeSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
+    connect(m_edgeInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));            
 
-    connect(m_rescaleSlider, SIGNAL(valueChanged(int)),
-            m_rescaleSpinBox, SLOT(setValue(int)));
-    connect(m_rescaleSpinBox, SIGNAL(valueChanged(int)),
-            m_rescaleSlider, SLOT(setValue(int)));   
-    connect(m_rescaleSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
-    
-    connect(m_brightenSlider, SIGNAL(valueChanged(int)),
-            m_brightenSpinBox, SLOT(setValue(int)));
-    connect(m_brightenSpinBox, SIGNAL(valueChanged(int)),
-            m_brightenSlider, SLOT(setValue(int)));   
-    connect(m_brightenSpinBox, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));     
+    connect(m_rescaleInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_brightenInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));            
 }
 
 ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 {
+    if (m_lensdistortionFilter)
+       delete m_lensdistortionFilter;    
+    
+    if (m_timer)
+       delete m_timer;
 }
 
-void ImageEffect_LensDistortion::slotHelp()
+void ImageEffect_LensDistortion::abortPreview()
 {
-    KApplication::kApplication()->invokeHelp("lensdistortion",
-                                             "digikamimageplugins");
-}
-
-void ImageEffect_LensDistortion::closeEvent(QCloseEvent *e)
-{
-    m_cancel = true;
-    e->accept();    
+    m_currentRenderingMode = NoneRendering;
+    m_progressBar->setValue(0); 
+    m_mainInput->setEnabled(true);
+    m_edgeInput->setEnabled(true);
+    m_rescaleInput->setEnabled(true);
+    m_brightenInput->setEnabled(true);
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
 void ImageEffect_LensDistortion::slotCancel()
 {
-    m_cancel = true;
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_lensdistortionFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+    
     done(Cancel);
+}
+
+void ImageEffect_LensDistortion::slotHelp()
+{
+    KApplication::kApplication()->invokeHelp("lensdistortion", "digikamimageplugins");
+}
+
+void ImageEffect_LensDistortion::closeEvent(QCloseEvent *e)
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_lensdistortionFilter->stopComputation();
+       m_parent->setCursor( KCursor::arrowCursor() );
+       }
+    
+    e->accept();    
 }
 
 void ImageEffect_LensDistortion::slotUser1()
 {
-    m_mainSlider->blockSignals(true);
-    m_mainSpinBox->blockSignals(true);
-    m_edgeSlider->blockSignals(true);
-    m_edgeSpinBox->blockSignals(true);
-    m_rescaleSlider->blockSignals(true);
-    m_rescaleSpinBox->blockSignals(true);
-    m_brightenSlider->blockSignals(true);
-    m_brightenSpinBox->blockSignals(true);
-      
-    m_mainSlider->setValue(0);
-    m_mainSpinBox->setValue(0);
-    m_edgeSlider->setValue(0);
-    m_edgeSpinBox->setValue(0);
-    m_rescaleSlider->setValue(0);
-    m_rescaleSpinBox->setValue(0);
-    m_brightenSlider->setValue(0);
-    m_brightenSpinBox->setValue(0);
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_lensdistortionFilter->stopComputation();
+       }
+    else
+       {
+       m_mainInput->blockSignals(true);
+       m_edgeInput->blockSignals(true);
+       m_rescaleInput->blockSignals(true);
+       m_brightenInput->blockSignals(true);
+        
+       m_mainInput->setValue(0.0);
+       m_edgeInput->setValue(0.0);
+       m_rescaleInput->setValue(0.0);
+       m_brightenInput->setValue(0.0);
+        
+       m_mainInput->blockSignals(false);
+       m_edgeInput->blockSignals(false);
+       m_rescaleInput->blockSignals(false);
+       m_brightenInput->blockSignals(false);
     
-    m_mainSlider->blockSignals(false);
-    m_mainSpinBox->blockSignals(false);
-    m_edgeSlider->blockSignals(false);
-    m_edgeSpinBox->blockSignals(false);
-    m_rescaleSlider->blockSignals(false);
-    m_rescaleSpinBox->blockSignals(false);
-    m_brightenSlider->blockSignals(false);
-    m_brightenSpinBox->blockSignals(false);
-
-    slotEffect();
+       slotEffect();
+       }
 } 
+
+void ImageEffect_LensDistortion::slotTimer()
+{
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
+}
 
 void ImageEffect_LensDistortion::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
 
-    // All data from the image
-    uint* data  = iface->getPreviewData();
-    int w       = iface->previewWidth();
-    int h       = iface->previewHeight();
-    double m    = (double)(m_mainSlider->value() /10.0);
-    double e    = (double)(m_edgeSlider->value() / 10.0);
-    double r    = (double)(m_rescaleSlider->value() /10.0);
-    double b    = (double)(m_brightenSlider->value() /10.0);
+    m_mainInput->setEnabled(false);
+    m_edgeInput->setEnabled(false);
+    m_rescaleInput->setEnabled(false);
+    m_brightenInput->setEnabled(false);
+    
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok, false);
+
+    double m = m_mainInput->value();
+    double e = m_edgeInput->value();
+    double r = m_rescaleInput->value();
+    double b = m_brightenInput->value();
 
     m_progressBar->setValue(0); 
 
-    // Calc preview.    
+    // Calc transform preview.    
     QImage preview(120, 120, 32);
     memset(preview.bits(), 255, preview.numBytes());
     QPixmap pix (preview);
@@ -353,127 +365,124 @@ void ImageEffect_LensDistortion::slotEffect()
     pt.drawRect( 0, 0, pix.width(), pix.height() );
     pt.end();
     QImage preview2(pix.convertToImage());
-    wideangle((uint*)preview2.bits(), preview2.width(), preview2.height(), m, e, r, b, 0, 0, false);
-    m_maskPreviewLabel->setPixmap(QPixmap::QPixmap(preview2));
+    LensDistortion transformPreview(&preview2, 0L, m, e, r, b, 0, 0);
+    m_maskPreviewLabel->setPixmap(QPixmap::QPixmap(transformPreview.getTargetImage()));
 
-    // Calc image transformations.    
-    wideangle(data, w, h, m, e, r, b, 0, 0);
-    
-    iface->putPreviewData(data);
-           
-    delete [] data;
     m_progressBar->setValue(0); 
-    m_previewWidget->update();
+
+    if (m_lensdistortionFilter)
+       delete m_lensdistortionFilter;
+    
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    QImage orgImage(iface->originalWidth(), iface->originalHeight(), 32);
+    uint *data = iface->getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    
+    m_lensdistortionFilter = new LensDistortion(&orgImage, this, m, e, r, b, 0, 0);
+    
+    delete [] data;
 }
 
 void ImageEffect_LensDistortion::slotOk()
 {
-    m_mainSlider->setEnabled(false);
-    m_mainSpinBox->setEnabled(false);
-    m_edgeSlider->setEnabled(false);
-    m_edgeSpinBox->setEnabled(false);
-    m_rescaleSlider->setEnabled(false);
-    m_rescaleSpinBox->setEnabled(false);
-    m_brightenSlider->setEnabled(false);
-    m_brightenSpinBox->setEnabled(false);
+    m_currentRenderingMode = FinalRendering;
+    
+    m_mainInput->setEnabled(false);
+    m_edgeInput->setEnabled(false);
+    m_rescaleInput->setEnabled(false);
+    m_brightenInput->setEnabled(false);
     
     enableButton(Ok, false);
     enableButton(User1, false);
     
     m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-    double m    = (double)(m_mainSlider->value() /10.0);
-    double e    = (double)(m_edgeSlider->value() / 10.0);
-    double r    = (double)(m_rescaleSlider->value() /10.0);
-    double b    = (double)(m_brightenSlider->value() /10.0);
+    
+    double m = m_mainInput->value();
+    double e = m_edgeInput->value();
+    double r = m_rescaleInput->value();
+    double b = m_brightenInput->value();
 
     m_progressBar->setValue(0); 
         
-    if (data) 
-       {
-       wideangle(data, w, h, m, e, r, b, 0, 0);
-       if ( !m_cancel ) iface->putOriginalData(i18n("Lens Distortion"), data);
-       }
+    if (m_lensdistortionFilter)
+       delete m_lensdistortionFilter;
+
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
-    delete [] data;    
-    m_parent->setCursor( KCursor::arrowCursor() );        
-    accept();
+    m_lensdistortionFilter = new LensDistortion(&orgImage, this, m, e, r, b, 0, 0);
+           
+    delete [] data;       
 }
 
-void ImageEffect_LensDistortion::wideangle(uint *data, int Width, int Height, double main, 
-                                           double edge, double rescale, double brighten,
-                                           int centre_x, int centre_y, bool progress)
+void ImageEffect_LensDistortion::customEvent(QCustomEvent *event)
 {
-    m_normallise_radius_sq = 4.0 / (Width * Width + Height * Height);
-    m_centre_x             = Width * (100.0 + centre_x) / 200.0;
-    m_centre_y             = Height * (100.0 + centre_y) / 200.0;
-    m_mult_sq              = main / 200.0;
-    m_mult_qd              = edge / 200.0;
-    m_rescale              = pow(2.0, - rescale / 100.0);
-    m_brighten             = - brighten / 10.0;
+    if (!event) return;
+
+    LensDistortion::EventData *d = (LensDistortion::EventData*) event->data();
+
+    if (!d) return;
     
-    PixelAccess *pa = new PixelAccess(data, Width, Height);
-
-    /*
-     * start at image (i, j), increment by (step, step)
-     * output goes to dst, which is w x h x d in size
-     * NB: d <= image.bpp
-     */
-   
-    // We working on the full image.
-    int    i = 0, j = 0, dstWidth = Width, dstHeight = Height, dstDepth = 4;
-    uchar* dst = (uchar*)data;
-    int    step = 1;
-  
-    int    dstI, dstJ;
-    int    iLimit, jLimit;
-    double srcX, srcY, mag;
-
-    iLimit = i + dstWidth * step;
-    jLimit = j + dstHeight * step;
-
-    for (dstJ = j ; !m_cancel && (dstJ < jLimit) ; dstJ += step) 
-       {
-       for (dstI = i ; !m_cancel && (dstI < iLimit) ; dstI += step) 
-          {
-          // Get source Coordinates.
-          double radius_sq;
-          double off_x;
-          double off_y;
-          double radius_mult;
-
-          off_x       = dstI - m_centre_x;
-          off_y       = dstJ - m_centre_y;
-          radius_sq   = (off_x * off_x) + (off_y * off_y);
-
-          radius_sq  *= m_normallise_radius_sq;
-
-          radius_mult = radius_sq * m_mult_sq + radius_sq * radius_sq * m_mult_qd;
-          mag         = radius_mult;
-          radius_mult = m_rescale * (1.0 + radius_mult);
-
-          srcX        = m_centre_x + radius_mult * off_x;
-          srcY        = m_centre_y + radius_mult * off_y;
-
-          brighten = 1.0 + mag * m_brighten;
-          pa->pixelAccessGetCubic(srcX, srcY, brighten, dst, dstDepth);
-          dst += dstDepth;
-          }
+    if (d->starting)           // Computation in progress !
+        {
+        m_progressBar->setValue(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview LensDistortion completed..." << endl;
+                 Digikam::ImageIface* iface = m_previewWidget->imageIface();
+                 
+                 QImage imDest = m_lensdistortionFilter->getTargetImage();
+                 iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
+                                                                  iface->previewHeight())).bits());
+                 
+                 m_previewWidget->update();
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final LensDistortion completed..." << endl;
+                 
+                 Digikam::ImageIface iface(0, 0);    
      
-       // Update progress bar in dialog.
-       
-       if (progress)
-          {
-          m_progressBar->setValue((int) (((double)dstJ * 100.0) / jLimit));
-          kapp->processEvents(); 
-          }
-       }
-       
-    delete pa;
+                 iface.putOriginalData(i18n("Lens Distortion"), 
+                                       (uint*)m_lensdistortionFilter->getTargetImage().bits());
+                                                           
+                 m_parent->setCursor( KCursor::arrowCursor() );
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview LensDistortion failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
+    
+    delete d;        
 }
 
 }  // NameSpace DigikamLensDistortionImagesPlugin

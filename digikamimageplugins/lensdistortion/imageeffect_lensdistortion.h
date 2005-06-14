@@ -32,12 +32,12 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QSpinBox;
-class QSlider;
 class QGridLayout;
 class QGroupBox;
+class QTimer;
 
 class KProgress;
+class KDoubleNumInput;
 
 namespace Digikam
 {
@@ -46,6 +46,7 @@ class ImageGuideWidget;
 
 namespace DigikamLensDistortionImagesPlugin
 {
+class LensDistortion;
 
 class ImageEffect_LensDistortion : public KDialogBase
 {
@@ -56,45 +57,44 @@ public:
     ImageEffect_LensDistortion(QWidget *parent);
     ~ImageEffect_LensDistortion();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+
 private:
 
-    double                m_normallise_radius_sq;
-    double                m_centre_x;
-    double                m_centre_y;
-    double                m_mult_sq;
-    double                m_mult_qd;
-    double                m_rescale;
-    double                m_brighten;
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
     
-    bool                  m_cancel;
-    
+    int                   m_currentRenderingMode;
+        
     QWidget              *m_parent;
     
     QPushButton          *m_helpButton;
 
-    QSlider              *m_mainSlider;
-    QSlider              *m_edgeSlider;        
-    QSlider              *m_rescaleSlider;    
-    QSlider              *m_brightenSlider;    
+    QTimer               *m_timer;
     
-    QSpinBox             *m_mainSpinBox;
-    QSpinBox             *m_edgeSpinBox;
-    QSpinBox             *m_rescaleSpinBox;
-    QSpinBox             *m_brightenSpinBox;
+    QLabel               *m_maskPreviewLabel;
+        
+    KDoubleNumInput      *m_mainInput;
+    KDoubleNumInput      *m_edgeInput;
+    KDoubleNumInput      *m_rescaleInput;
+    KDoubleNumInput      *m_brightenInput;
 
     KProgress            *m_progressBar;
 
-    QLabel               *m_maskPreviewLabel;
+    LensDistortion       *m_lensdistortionFilter;
     
     Digikam::ImageGuideWidget *m_previewWidget;
     
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
-    void wideangle(uint *data, int Width, int Height, double main, double edge, 
-                   double rescale, double brighten, int centre_x, int centre_y,
-                   bool progress=true);
+private:
+        
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
     
 private slots:
 
@@ -103,6 +103,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotTimer();       
 };
 
 }  // NameSpace DigikamLensDistortionImagesPlugin

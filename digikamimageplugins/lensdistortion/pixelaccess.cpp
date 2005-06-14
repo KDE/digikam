@@ -51,7 +51,7 @@ PixelAccess::PixelAccess(uint *data, int Width, int Height)
     m_image.create( m_imageWidth, m_imageHeight, 32 );
     memcpy(m_image.bits(), m_srcPR, m_image.numBytes());
     
-    for ( int i = 0 ; i < PixelAccessRegions ; ++i ) 
+    for ( int i = 0 ; i < PixelAccessRegions ; i++ ) 
        {
        m_buffer[i] = new uchar[m_height * m_width * m_depth];
        
@@ -67,7 +67,7 @@ PixelAccess::PixelAccess(uint *data, int Width, int Height)
 
 PixelAccess::~PixelAccess()
 {
-    for( int i = 0 ; i < PixelAccessRegions ; ++i ) 
+    for( int i = 0 ; i < PixelAccessRegions ; i++ ) 
        delete [] m_buffer[i];
 }
 
@@ -89,7 +89,7 @@ void PixelAccess::pixelAccessSelectRegion(int n)
     c    = m_tileMinY[n];
     d    = m_tileMaxY[n];
 
-    for( i = n ; i > 0 ; --i) 
+    for( i = n ; i > 0 ; i--) 
        {
        m_buffer[i]   = m_buffer[i-1];
        m_tileMinX[i] = m_tileMinX[i-1];
@@ -127,7 +127,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     rowEnd = j + m_height;
     if (rowEnd > m_imageHeight) rowEnd = m_imageHeight;
 
-    for( int y = rowStart ; y < rowEnd ; ++y ) 
+    for( int y = rowStart ; y < rowEnd ; y++ ) 
        {
        line = pixelAccessAddress(lineStart, y);
 
@@ -195,7 +195,7 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
 
     // Or maybe it was a while back... 
     
-    for ( int i = 1 ; i < PixelAccessRegions ; ++i) 
+    for ( int i = 1 ; i < PixelAccessRegions ; i++) 
        {
        if ((xInt >= m_tileMinX[i]) && (xInt < m_tileMaxX[i]) &&
            (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) ) 
@@ -251,12 +251,12 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, int srcDepth, ucha
     // Note: if dstDepth < srcDepth, we calculate unneeded pixels here 
     // later - select or create index array.
   
-    for (c = 0 ; c < 4 * srcDepth ; ++c) 
+    for (c = 0 ; c < 4 * srcDepth ; c++) 
        {
        verts[c] = vm1 * src[c] + v * src[c+rowStride] + vp1 * src[c+rowStride*2] + vp2 * src[c+rowStride*3];
        }
   
-    for (c = 0 ; c < dstDepth ; ++c) 
+    for (c = 0 ; c < dstDepth ; c++) 
        {
        float result;
        result = um1 * verts[c] + u * verts[c+srcDepth] + up1 * verts[c+srcDepth*2] + up2 * verts[c+srcDepth*3];
