@@ -7,7 +7,8 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_lensdistortion.la 
 
 digikamimageplugin_lensdistortion_la_SOURCES = imageplugin_lensdistortion.cpp \
-	                                       imageeffect_lensdistortion.cpp 
+	                                       imageeffect_lensdistortion.cpp \
+	                                       pixelaccess.cpp 
 
 digikamimageplugin_lensdistortion_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) 
 
