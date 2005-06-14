@@ -39,7 +39,8 @@ public:
         TAGNAME,
         IMAGENAME,
         IMAGECAPTION,
-        IMAGEDATE
+        IMAGEDATE,
+        KEYWORD
     };
 
     enum SOperator

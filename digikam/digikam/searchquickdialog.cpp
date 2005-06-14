@@ -103,7 +103,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
                         val = m_longMonths[num-1];
                     }   
                 }
-                    
+
                 if (!strList.contains(val))
                 {
                     strList.append(val);
@@ -111,6 +111,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
             }
 
             m_searchEdit->setText(strList.join(" "));
+            m_nameEdit->setText(url.queryItem("name"));
             m_timer->start(0, true);
         }
     }
@@ -209,42 +210,11 @@ void SearchQuickDialog::slotTimeOut()
 
             continue;
         }
-        
-        path += QString(" ( %1 OR %2 OR %3 OR %4 OR %5 OR %6 ) ")
-                .arg(count + 1)
-                .arg(count + 2)
-                .arg(count + 3)
-                .arg(count + 4)
-                .arg(count + 5)
-                .arg(count + 6);
+
+        path += QString(" %1 ").arg(count + 1);
 
         num = QString::number(++count);
-        url.addQueryItem(num + ".key", "albumname");
-        url.addQueryItem(num + ".op", "like");
-        url.addQueryItem(num + ".val", *it);
-
-        num = QString::number(++count);
-        url.addQueryItem(num + ".key", "imagename");
-        url.addQueryItem(num + ".op", "like");
-        url.addQueryItem(num + ".val", *it);
-
-        num = QString::number(++count);
-        url.addQueryItem(num + ".key", "tagname");
-        url.addQueryItem(num + ".op", "like");
-        url.addQueryItem(num + ".val", *it);
-
-        num = QString::number(++count);
-        url.addQueryItem(num + ".key", "albumcaption");
-        url.addQueryItem(num + ".op", "like");
-        url.addQueryItem(num + ".val", *it);
-
-        num = QString::number(++count);
-        url.addQueryItem(num + ".key", "albumcollection");
-        url.addQueryItem(num + ".op", "like");
-        url.addQueryItem(num + ".val", *it);
-
-        num = QString::number(++count);
-        url.addQueryItem(num + ".key", "imagecaption");
+        url.addQueryItem(num + ".key", "keyword");
         url.addQueryItem(num + ".op", "like");
         url.addQueryItem(num + ".val", *it);
     }

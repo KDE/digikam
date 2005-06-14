@@ -280,12 +280,17 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
     }
     else
     {
+        SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+
         QPopupMenu popmenu(this);
         popmenu.insertItem(SmallIcon("find"), i18n("Edit Search..."), 10);
-        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 11);
+        if ( sItem->m_album->isSimple() )
+        {
+            popmenu.insertItem(SmallIcon("find"),
+                               i18n("Edit as Extended Search..."), 11);
+        }
+        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 12);
 
-        SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
-        
         switch (popmenu.exec(QCursor::pos()))
         {
         case 10:
@@ -297,6 +302,10 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
             break;
         }
         case 11:
+        {
+            extendedSearchEdit(sItem->m_album);
+        }
+        case 12:
         {
             searchDelete(sItem->m_album);
             break;
@@ -325,14 +334,14 @@ void SearchFolderView::selectItem(int id)
     SAlbum *album = AlbumManager::instance()->findSAlbum(id);
     if(!album)
         return;
-        
+
     SearchFolderItem *item = 
             (SearchFolderItem*)album->extraData(this);
     if(item)
     {
         setSelected(item, true);
         ensureItemVisible(item);
-    }    
+    }
 }
 
 

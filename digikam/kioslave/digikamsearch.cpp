@@ -235,6 +235,7 @@ void kio_digikamsearch::special(const QByteArray& data)
                    "WHERE ( ";
 
         // query body
+        
         sqlQuery += buildQuery(url);
 
         // query tail
@@ -317,6 +318,10 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
         {
             rule.key = TAGNAME;
         }
+        else if (key == "keyword")
+        {
+            rule.key = KEYWORD;
+        }
         else
         {
             kdWarning() << "Unknown rule type: " << key << " passed to kioslave"
@@ -358,7 +363,32 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
         if (ok)
         {
             RuleType rule = rulesMap[num];
-            sqlQuery += subQuery(rule.key, rule.op, rule.val);
+            if (rule.key == KEYWORD)
+            {
+                QValueList<SKey> todo;
+                todo.append( ALBUMNAME );
+                todo.append( IMAGENAME );
+                todo.append( TAGNAME );
+                todo.append( ALBUMCAPTION );
+                todo.append( ALBUMCOLLECTION );
+                todo.append( IMAGECAPTION );
+
+                sqlQuery += "(";
+                QValueListIterator<SKey> it;
+                it = todo.begin();
+                while ( it != todo.end() )
+                {
+                    sqlQuery += subQuery(*it, rule.op, rule.val);
+                    ++it;
+                    if ( it != todo.end() )
+                        sqlQuery += " OR ";
+                }
+                sqlQuery += ")";
+            }
+            else
+            {
+                sqlQuery += subQuery(rule.key, rule.op, rule.val);
+            }
         }
         else
         {
@@ -430,7 +460,12 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
         query = " (Images.datetime $$##$$ $$@@$$) ";
         break;
     }
+    case (KEYWORD):
+    {
+        kdWarning() << "KEYWORD Detected which is not possible" << endl;
+        break;
     }
+}
 
     switch (op)
     {

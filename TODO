@@ -24,13 +24,8 @@
 * search view and search table in database
   - extended search dialog 
         - i18n missing
-  - saving/restoring the search url to/from the db:
-        - determine difference between simple and extended search
   - kioslave:
-        - add keywords keyword
         - if parent tag / album is choosen, the images of the childeren should match
-  - simple search:
-        - use keywords keyword
 
 * fix saving of curent state of digikam 
   - splitter sizes
