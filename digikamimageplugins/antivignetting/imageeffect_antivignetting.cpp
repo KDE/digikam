@@ -449,7 +449,6 @@ void ImageEffect_AntiVignetting::slotOk()
     delete [] data;       
 }
 
-
 void ImageEffect_AntiVignetting::customEvent(QCustomEvent *event)
 {
     if (!event) return;
