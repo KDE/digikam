@@ -13,8 +13,6 @@
 
 * fix changing of album library path. [TA/RR]
 
-* before deleting items from database, ask confirmation to user [TA]
-
 * handle internal files/folders being added/deleted
   - imageeditor
   - camera interface
@@ -23,7 +21,16 @@
    - update db [TA]
    - inform frontend about it
 
-* extended search dialog [TA]
+* search view and search table in database
+  - extended search dialog 
+        - i18n missing
+  - saving/restoring the search url to/from the db:
+        - determine difference between simple and extended search
+  - kioslave:
+        - add keywords keyword
+        - if parent tag / album is choosen, the images of the childeren should match
+  - simple search:
+        - use keywords keyword
 
 * fix saving of curent state of digikam 
   - splitter sizes

@@ -59,6 +59,7 @@ public:
     ~SearchAdvancedDialog();
 
 private slots:
+    void fillWidgets(const KURL& url);
     void slotAddRule();
     void slotDelRules();
     void slotGroupRules();

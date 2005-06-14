@@ -24,9 +24,6 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
-#include "qobject.h"
-#include "qwidget.h"
-
 class QHBox;
 class QVBox;
 class QCheckBox;
@@ -35,6 +32,7 @@ class QLineEdit;
 class QVGroupBox;
 class QLabel;
 class KDateEdit;
+class KURL;
 
 /** @class SearchAdvancedBase
  *
@@ -131,10 +129,6 @@ signals:
      */
     void signalPropertyChanged();
 
-protected slots:
-    void slotToggle() { emit signalBaseItemToggled(); }
-    void slotRuleChanged() { emit signalPropertyChanged(); }
-
 protected:
     enum Option m_option;
     enum Type m_type;
@@ -157,6 +151,7 @@ public:
      * Constructor
      * @param parent The parent
      * @param option Holds the Option of the rule, see the enum.
+     *
      */
     SearchAdvancedRule(QWidget* parent, Option option);
 
@@ -176,6 +171,12 @@ public:
      * @return True if the rule is checked, false if not
      */
     bool     isChecked() const;
+
+    /**
+     * Sets the values of the rule.
+     * @param url The url which sets defaults for the rule.
+     */
+    void    setValues(const KURL& url);
 
     /**
      * Sets the option of the rule, so this holds the
@@ -223,29 +224,38 @@ public:
      */
     QString urlValue() const;
 
+    enum valueWidgetTypes
+    {
+        NOWIDGET = 0,
+        LINEEDIT,
+        DATE,
+        ALBUMS,
+        TAGS
+    };
+
 private:
+    void setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType);
+
     QVBox*     m_box;
 
     QHBox*     m_hbox;
     QHBox*     m_valueBox;
-    
+
     QLabel*    m_label;
     QCheckBox* m_check;
 
     QComboBox* m_key;
     QComboBox* m_operator;
-    QLineEdit* m_value;
+
+    QLineEdit* m_lineEdit;
     KDateEdit* m_dateEdit;
+    QComboBox* m_valueCombo;
+
+    QMap<int, int> m_itemsIndexIDMap;
 
     QHBox*     m_optionsBox;
 
-    enum valueWidgetTypes
-    {
-        LINEEDIT= 0,
-        DATE,
-        COMBOBOX
-    };
-    enum valueWidgetTypes   m_valueWidget;
+    enum valueWidgetTypes   m_widgetType;
 
 private slots:
     void slotKeyChanged(int);
@@ -279,7 +289,7 @@ public:
      * determines if the rule is checked or not
      * @return bool, which indicated if the base item is checked
      */
-    bool     isChecked() const;
+    bool isChecked() const;
 
     /**
      * sets the option of the group

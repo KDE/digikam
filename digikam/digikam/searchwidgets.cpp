@@ -30,52 +30,62 @@
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
 #include <qlayout.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kdateedit.h>
+#include <kdebug.h>
+#include <kurl.h>
 
-#include "searchwidgets.h"
+#include <album.h>
+#include <albuminfo.h>
+#include <albummanager.h>
+#include <searchwidgets.h>
 
 static struct
 {
     QString keyText;
     QString key;
-    bool    precise;
+    SearchAdvancedRule::valueWidgetTypes cat;
 }
 RuleKeyTable[] =
 {
-    { "Album",            "album",           true  },
-    { "Album Name",       "albumname",       false },
-    { "Album Caption",    "albumcaption",    false },
-    { "Album Collection", "albumcollection", false },
-    { "Tag",              "tag",             true  },
-    { "Tag Name",         "tagname",         false },
-    { "Image Name",       "imagename",       false },
-    { "Image Date",       "imagedate",       true  },
-    { "Image Caption",    "imagecaption",    false },
-    { "Keyword",          "keyword",         false },
+    { "Album",            "album",           SearchAdvancedRule::ALBUMS },
+    { "Album Name",       "albumname",       SearchAdvancedRule::LINEEDIT },
+    { "Album Caption",    "albumcaption",    SearchAdvancedRule::LINEEDIT },
+    { "Album Collection", "albumcollection", SearchAdvancedRule::LINEEDIT },
+    { "Tag",              "tag",             SearchAdvancedRule::TAGS },
+    { "Tag Name",         "tagname",         SearchAdvancedRule::LINEEDIT },
+    { "Image Name",       "imagename",       SearchAdvancedRule::LINEEDIT },
+    { "Image Date",       "imagedate",       SearchAdvancedRule::DATE     },
+    { "Image Caption",    "imagecaption",    SearchAdvancedRule::LINEEDIT },
+    { "Keyword",          "keyword",         SearchAdvancedRule::LINEEDIT },
 };
 static const int RuleKeyTableCount = 10;
 
-/* unused atm 
 static struct
 {
     QString keyText;
     QString key;
+    SearchAdvancedRule::valueWidgetTypes cat;
 }
 
 RuleOpTable[] =
 {
-    { "contains",           "LIKE" },
-    { "does not contain",   "NLIKE"},
-    { "equals",             "EQ"},
-    { "does not equal",     "NE"},
-    { ">",                  "GT"},
-    { "<",                  "LT"},
-    { "=",                  "EQ"},
+    { "contains",           "LIKE",         SearchAdvancedRule::LINEEDIT },
+    { "does not contain",   "NLIKE",        SearchAdvancedRule::LINEEDIT },
+    { "equals",             "EQ",           SearchAdvancedRule::LINEEDIT },
+    { "does not equal",     "NE",           SearchAdvancedRule::LINEEDIT },
+    { "equals",             "EQ",           SearchAdvancedRule::ALBUMS },
+    { "does not equal",     "NE",           SearchAdvancedRule::ALBUMS },
+    { "equals",             "EQ",           SearchAdvancedRule::TAGS },
+    { "does not equal",     "NE",           SearchAdvancedRule::TAGS },
+    { ">",                  "GT",           SearchAdvancedRule::DATE },
+    { "<",                  "LT",           SearchAdvancedRule::DATE },
+    { "=",                  "EQ",           SearchAdvancedRule::DATE },
 };
-static const int RuleOpTableCount = 7;
-*/
+static const int RuleOpTableCount = 11;
+
 
 
 SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
@@ -94,7 +104,6 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
                                     m_optionsBox);
         QFrame* hline = new QFrame(m_optionsBox);
         hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
-
         label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     }
@@ -105,25 +114,72 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     for (int i=0; i< RuleKeyTableCount; i++)
         m_key->insertItem( RuleKeyTable[i].keyText, i );
     m_operator = new QComboBox( m_hbox );
-    slotKeyChanged( 0 );
-
-
     m_valueBox = new QHBox(m_hbox);
-    m_value = new QLineEdit( m_valueBox, "lineedit" );
-    m_valueWidget = LINEEDIT;
+    m_widgetType = NOWIDGET;
+
+    slotKeyChanged( 0 );
 
     m_check = new QCheckBox(m_hbox);
     m_check->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     m_box->show();
 
-    connect( m_key, SIGNAL( activated(int) ), this, SLOT(slotKeyChanged(int)));
-    connect( m_key, SIGNAL( activated(int) ), this, SLOT(slotRuleChanged()));
-    connect( m_operator, SIGNAL( activated(int) ), this, SLOT(slotRuleChanged()));
-    connect( m_check, SIGNAL( toggled( bool ) ), this, SLOT(slotToggle()));
-    connect( m_value, SIGNAL ( textChanged(const QString&) ),
-             this, SLOT(slotRuleChanged()));
+
+    connect( m_key, SIGNAL( activated(int) ),
+             this, SLOT(slotKeyChanged(int)));
+    connect( m_key, SIGNAL( activated(int) ),
+             this, SIGNAL( signalPropertyChanged() ));
+    connect( m_operator, SIGNAL( activated(int) ),
+             this, SIGNAL( signalPropertyChanged() ));
+    connect( m_check, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( signalBaseItemToggled() ));
 }
+
+void SearchAdvancedRule::setValues(const KURL& url)
+{
+    if (url.isEmpty())
+        return;
+
+    // set the key widget
+    for (int i=0; i< RuleKeyTableCount; i++)
+        if (RuleKeyTable[i].key == url.queryItem("1.key"))
+        {
+            m_key->setCurrentText( RuleKeyTable[i].keyText );
+        }
+
+    // set the operator and the last widget
+    slotKeyChanged( m_key->currentItem() );
+    for (int i=0; i< RuleOpTableCount; i++)
+        if ( RuleOpTable[i].key == url.queryItem("1.op") &&
+             RuleOpTable[i].cat == m_widgetType )
+        {
+            m_operator->setCurrentText( RuleOpTable[i].keyText );
+        }
+
+    // Set the value for the last widget.
+    QString value = url.queryItem("1.val");
+    if (m_widgetType == LINEEDIT)
+        m_lineEdit->setText( value );
+
+    if (m_widgetType == DATE)
+        m_dateEdit->setDate( QDate::fromString( value, Qt::ISODate) );
+
+    if (m_widgetType == TAGS || m_widgetType == ALBUMS)
+    {
+        bool ok;
+        int  num = value.toInt(&ok);
+        if (ok)
+        {
+            QMapIterator<int,int> it;
+            for (it = m_itemsIndexIDMap.begin() ; it != m_itemsIndexIDMap.end(); ++it)
+                if (it.data() == num)
+                    m_valueCombo->setCurrentItem( it.key() );
+        }
+    }
+
+
+}
+
 
 SearchAdvancedRule::~SearchAdvancedRule()
 {
@@ -133,49 +189,105 @@ SearchAdvancedRule::~SearchAdvancedRule()
 void SearchAdvancedRule::slotKeyChanged(int id)
 {
     QString currentOperator = m_operator->currentText();
+    valueWidgetTypes currentType = m_widgetType;
+
     m_operator->clear();
+    m_widgetType = RuleKeyTable[id].cat;
 
-    if (RuleKeyTable[id].precise)
+    for (int i=0; i< RuleOpTableCount; i++)
+        if ( RuleOpTable[i].cat == m_widgetType )
     {
-        if (RuleKeyTable[id].key == "imagedate")
-        {
-            m_operator->insertItem("<");
-            m_operator->insertItem("=");
-            m_operator->insertItem(">");
-            if ( currentOperator == "<" || currentOperator == "=" ||
-                 currentOperator == ">" )
-                m_operator->setCurrentText( currentOperator );
-            delete m_value;
-            
-            m_dateEdit = new KDateEdit(m_valueBox,"datepicker");
-            m_valueWidget=DATE;
-            m_dateEdit->show();
+        m_operator->insertItem( RuleOpTable[i].keyText );
 
-            connect( m_dateEdit,
-                     SIGNAL( dateChanged(const QDate& ) ),
-                     this, SLOT(slotRuleChanged()));
-        }
-        else
-        {
-            m_operator->insertItem(i18n("equals"));
-            m_operator->insertItem(i18n("does not equal"));
-            if ( currentOperator == i18n("equals") ||
-                 currentOperator == i18n("does not equal"))
-                m_operator->setCurrentText( currentOperator );
-        }
-    }
-    else
-    {
-        m_operator->insertItem(i18n("contains"));
-        m_operator->insertItem(i18n("does not contain"));
-        m_operator->insertItem(i18n("equals"));
-        m_operator->insertItem(i18n("does not equal"));
-        if ( currentOperator == i18n("contains") ||
-             currentOperator == i18n("does not contain") ||
-             currentOperator == i18n("equals") ||
-             currentOperator == i18n("does not equal"))
+        if ( currentOperator == RuleOpTable[i].key )
             m_operator->setCurrentText( currentOperator );
-     }
+    }
+
+    setValueWidget( currentType, m_widgetType );
+}
+
+void SearchAdvancedRule::setValueWidget(
+        valueWidgetTypes oldType,
+        valueWidgetTypes newType)
+{
+    if (oldType == newType)
+        return;
+
+    if (m_lineEdit && oldType == LINEEDIT)
+        delete m_lineEdit;
+
+    if (m_dateEdit && oldType == DATE)
+        delete m_dateEdit;
+
+    if (m_valueCombo && (oldType == ALBUMS || oldType == TAGS))
+        delete m_valueCombo;
+
+    if (newType == DATE)
+    {
+        m_dateEdit = new KDateEdit( m_valueBox,"datepicker");
+        m_dateEdit->show();
+
+        connect( m_dateEdit, SIGNAL( dateChanged(const QDate& ) ),
+                 this, SIGNAL(signalPropertyChanged()));
+    }
+    else if (newType == LINEEDIT)
+    {
+        m_lineEdit = new QLineEdit( m_valueBox, "lineedit" );
+        m_lineEdit->show();
+
+        connect( m_lineEdit, SIGNAL ( textChanged(const QString&) ),
+                 this, SIGNAL(signalPropertyChanged()));
+
+    }
+    else if (newType == ALBUMS)
+    {
+        m_valueCombo = new QComboBox( m_valueBox, "albumscombo" );
+
+        AlbumManager* aManager = AlbumManager::instance();
+        AlbumList aList = aManager->allPAlbums();
+
+        m_itemsIndexIDMap.clear();
+        int index = 0;
+        for ( AlbumList::Iterator it = aList.begin();
+              it != aList.end(); ++it )
+        {
+            PAlbum *album = (PAlbum*)(*it);
+            m_valueCombo->insertItem( album->title(), index );
+            m_itemsIndexIDMap.insert(index, album->id());
+            index++;
+        }
+
+        m_valueCombo->show();
+
+        connect( m_valueCombo, SIGNAL( activated(int) ),
+                 this, SIGNAL( signalPropertyChanged() ));
+    }
+    else if (newType == TAGS)
+    {
+        m_valueCombo = new QComboBox( m_valueBox, "tagscombo" );
+        m_valueCombo->setMaxCount(10000);
+
+        AlbumManager* aManager = AlbumManager::instance();
+        AlbumList tList = aManager->allTAlbums();
+
+        m_itemsIndexIDMap.clear();
+        int index = 0;
+        for ( AlbumList::Iterator it = tList.begin();
+              it != tList.end(); ++it )
+        {
+            TAlbum *album = (TAlbum*)(*it);
+            m_valueCombo->insertItem( album->title(), index );
+            kdDebug() << index << album->id() << endl;
+            m_itemsIndexIDMap.insert(index, album->id());
+            ++index;
+
+        }
+
+        m_valueCombo->show();
+
+        connect( m_valueCombo, SIGNAL( activated(int) ),
+                 this, SIGNAL( signalPropertyChanged() ));
+    }
 }
 
 QString SearchAdvancedRule::urlKey() const
@@ -186,20 +298,15 @@ QString SearchAdvancedRule::urlKey() const
 QString SearchAdvancedRule::urlOperator() const
 {
     QString string;
-    if ( m_operator->currentText() == i18n("contains"))
-        return("LIKE");
-    if ( m_operator->currentText() == i18n("does not contain"))
-        return("NLIKE");
-    if ( m_operator->currentText() == i18n("equals"))
-        return("EQ");
-    if ( m_operator->currentText() == i18n("does not equal"))
-        return("NE");
-    if ( m_operator->currentText() == i18n(">"))
-        return("GT");
-    if ( m_operator->currentText() == i18n("<"))
-        return("LT");
-    if ( m_operator->currentText() == i18n("="))
-        return("EQ");
+
+    int countItems = 0;
+    for (int i=0; i< RuleOpTableCount; i++)
+        if ( RuleOpTable[i].cat == m_widgetType )
+        {
+            if ( countItems == m_operator->currentItem() )
+                string = RuleOpTable[i].key;
+            ++countItems;
+        }
 
     return string;
 }
@@ -207,10 +314,16 @@ QString SearchAdvancedRule::urlOperator() const
 QString SearchAdvancedRule::urlValue() const
 {
     QString string;
-    if (m_valueWidget == LINEEDIT)
-        string.append( m_value->text() );
-    else if (m_valueWidget == DATE)
-        string.append( m_dateEdit->date().toString(Qt::ISODate) );
+
+    if (m_widgetType == LINEEDIT)
+        string = m_lineEdit->text() ;
+
+    else if (m_widgetType == DATE)
+        string = m_dateEdit->date().toString(Qt::ISODate) ;
+
+    else if (m_widgetType == TAGS || m_widgetType == ALBUMS)
+        string = QString::number(m_itemsIndexIDMap[ m_valueCombo->currentItem() ]);
+
     return string;
 }
 
@@ -231,9 +344,9 @@ void SearchAdvancedRule::addOption(Option option)
         removeOption();
         return;
     }
-    
+
     m_box->layout()->remove(m_hbox);
-    
+
     m_optionsBox = new QHBox(m_box);
     new QLabel(i18n( option == AND ? "As well as" : "Or" ),
                m_optionsBox);
@@ -260,7 +373,8 @@ void SearchAdvancedRule::addCheck()
     m_check->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_check->show();
 
-    connect( m_check, SIGNAL( toggled( bool ) ), this, SLOT(slotToggle()));
+    connect( m_check, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( signalBaseItemToggled() ));
 }
 
 void SearchAdvancedRule::removeCheck()
@@ -279,7 +393,8 @@ SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
     m_option   = SearchAdvancedRule::NONE;
     m_box->show();
 
-    connect( m_check, SIGNAL( toggled( bool ) ), this, SLOT(slotToggle()));
+    connect( m_check, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( signalBaseItemToggled() ));
 }
 
 SearchAdvancedGroup::~SearchAdvancedGroup()
@@ -289,7 +404,7 @@ SearchAdvancedGroup::~SearchAdvancedGroup()
 
 QWidget* SearchAdvancedGroup::widget() const
 {
-    return m_box;    
+    return m_box;
 }
 
 bool SearchAdvancedGroup::isChecked() const
@@ -328,7 +443,7 @@ void SearchAdvancedGroup::removeRules()
             rule->addOption(m_option);
         }
         rule->addCheck();
-        
+
         rule->widget()->reparent((QWidget*)m_box->parent(), QPoint(0,0));
         rule->widget()->show();
     }

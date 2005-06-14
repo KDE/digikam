@@ -472,8 +472,8 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     case(NLIKE):
     {
         query.replace("$$##$$", "NOT LIKE");
-        query.replace("$$@@$$", QString::fromLatin1("%") + escapeString(val)
-                      + QString::fromLatin1("%"));
+        query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
+                      + QString::fromLatin1("%'"));
         break;
     }
     }

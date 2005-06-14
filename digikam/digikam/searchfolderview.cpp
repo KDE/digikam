@@ -170,10 +170,18 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
 {
     if (!album)
         return;
+    KURL url = album->kurl();
+    SearchAdvancedDialog dlg(this, url);
 
-/* TODO:
-   add extended search
-*/
+    if (dlg.exec() != KDialogBase::Accepted)
+        return;
+
+    AlbumManager::instance()->updateSAlbum(album, url);
+
+    ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
+
+    clearSelection();
+    setSelected((SearchFolderItem*)(album->extraData(this)), true);
 }
 
 void SearchFolderView::searchDelete(SAlbum* album)
