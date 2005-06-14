@@ -489,7 +489,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 
     QStringList strList = QStringList::split(" ", url.path());
 
-    SearchAdvancedGroup* group;
+    SearchAdvancedGroup* group = 0;
     bool groupingActive=false;
     SearchAdvancedBase::Option type = type=SearchAdvancedRule::NONE;
 
