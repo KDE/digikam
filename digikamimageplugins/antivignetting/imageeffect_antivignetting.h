@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for to reduce 
  *               vignetting on an image.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,11 +28,12 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QSpinBox;
-class QSlider;
 class QLabel;
 class QTabWidget;
+class QTimer;
 
+class KIntNumInput;
+class KDoubleNumInput;
 class KProgress;
 
 namespace Digikam
@@ -42,6 +43,7 @@ class ImageWidget;
 
 namespace DigikamAntiVignettingImagesPlugin
 {
+class AntiVignetting;
 
 class ImageEffect_AntiVignetting : public KDialogBase
 {
@@ -56,40 +58,46 @@ protected:
 
     void closeEvent(QCloseEvent *e);
     
-    void antiVignetting(uint *data, int Width, int Height, 
-                        double density, double power, double radius,
-                        int xshift, int yshift, bool progress=true);
-    
 private:
+
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
     
-    bool                  m_cancel;
+    int                   m_currentRenderingMode;
     
     QWidget              *m_parent;
     
     QPushButton          *m_helpButton;
 
-    QSlider              *m_densitySlider;
-    QSlider              *m_powerSlider;        
-    QSlider              *m_radiusSlider;    
-    QSlider              *m_brightnessSlider;    
-    QSlider              *m_contrastSlider;    
-    QSlider              *m_gammaSlider;    
-    
-    QSpinBox             *m_densitySpinBox;
-    QSpinBox             *m_powerSpinBox;
-    QSpinBox             *m_radiusSpinBox;
-    QSpinBox             *m_brightnessSpinBox;
-    QSpinBox             *m_contrastSpinBox;
-    QSpinBox             *m_gammaSpinBox;
-    
     QLabel               *m_maskPreviewLabel;
     
     QTabWidget           *m_mainTab;
     
+    QTimer               *m_timer;
+        
+    KIntNumInput         *m_brightnessInput;
+    KIntNumInput         *m_contrastInput;
+    KIntNumInput         *m_gammaInput;
+    
+    KDoubleNumInput      *m_densityInput;
+    KDoubleNumInput      *m_powerInput;
+    KDoubleNumInput      *m_radiusInput;
+    
     KProgress            *m_progressBar;
+    
+    AntiVignetting       *m_antivignettingFilter;
     
     Digikam::ImageWidget *m_previewWidget;
 
+private:
+    
+    void abortPreview(void);
+    void customEvent(QCustomEvent *event);
+        
 private slots:
 
     void slotHelp();
@@ -97,6 +105,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
+    void slotTimer();   
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin

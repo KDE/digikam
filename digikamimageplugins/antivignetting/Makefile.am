@@ -7,7 +7,8 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_antivignetting.la 
 
 digikamimageplugin_antivignetting_la_SOURCES = imageplugin_antivignetting.cpp \
-	                                       imageeffect_antivignetting.cpp 
+	                                       imageeffect_antivignetting.cpp \
+					       antivignetting.cpp 
 
 digikamimageplugin_antivignetting_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
