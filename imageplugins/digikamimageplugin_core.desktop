@@ -1,35 +1,9 @@
 [Desktop Entry]
 Name=ImagePlugin_Core
-Name[da]=Billedplugin_kerne
-Name[it]=PluginImmagini_Nocciolo
-Name[nl]=Afbeeldingsplugin_Kern
-Name[pt_BR]=Plug-in de Imagens Principal
-Name[sr]=Сликовни прикључак — језгро
-Name[sr@Latn]=Slikovni priključak — jezgro
-Name[sv]=Insticksprogram med bildkärna
-Name[ta]=பிம்ப சொருகுபொருள்_கோர்
-Name[tr]=ResimEklentisi_Çekirdek
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam Core Image Plugin
-Comment[da]=Grundlæggende Digikam billed-plugin
-Comment[de]=digiKam Kernplugin
-Comment[el]=Βασικό πρόσθετο εικόνας του digiKam
-Comment[es]=Complemento central de imagen de digiKam
-Comment[et]=DigiKami peamine pildiplugin
-Comment[fr]=Module d'image du noyau digiKam
-Comment[it]=Plugin delle immagini centrale di digiKam
-Comment[nl]=digiKam kernafbeeldingsplugin
-Comment[pt]='Plugin' Nuclear de Imagem do digiKam
-Comment[pt_BR]=Plug-in Principal de Imagens do digikam
-Comment[ru]=Модуль ядра изображений digiKam
-Comment[sr]=Језгро digiKam-ових сликовних прикључака
-Comment[sr@Latn]=Jezgro digiKam-ovih slikovnih priključaka
-Comment[sv]=Insticksprogram med bildkärna för Digikam
-Comment[ta]=டிஜிகேம் கருவக படிம செருகு பொருள்
-Comment[tr]=digiKam Çekirdek Resim Eklentisi
-Comment[zh_CN]=digiKam 核心图像插件
 
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
