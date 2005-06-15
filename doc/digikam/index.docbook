@@ -68,7 +68,7 @@
 <legalnotice>&FDLNotice;</legalnotice>
 
 <date>2005-05-09</date>
-<releaseinfo>0.7.3</releaseinfo>
+<releaseinfo>0.8.0</releaseinfo>
 
 <abstract>
     
@@ -1506,9 +1506,13 @@
                     </tgroup></informaltable>
                     
                     <para>
-                    <guilabel>Show Rule of Thirds Lines</guilabel> line option is a guiding element to better compose your images. This guide is a grid that divides the picture into thirds in every direction (that makes for 9 parts). These proportions are close to the golden rule and are derived from the field of view of the human eye. They are used, often with slight variations throughout a large number of commonly used objects. Within that frame there are precise areas where the important parts of the image should be placed. The same principle is used to determine the position of the horizon and the proportion of ground to sky.
+                    <guilabel>Show Guide Lines</guilabel> option is a guiding element to better compose your images. This guide is a grid that divides the picture into thirds in every direction (that makes for 9 parts). These proportions are close to the golden rule and are derived from the field of view of the human eye. They are used, often with slight variations throughout a large number of commonly used objects. Within that frame there are precise areas where the important parts of the image should be placed. The same principle is used to determine the position of the horizon and the proportion of ground to sky.
                     </para>
-
+                    
+                    <para>
+                    Many photographers and artists are aware of the rule of thirds, where a picture is divided into three sections vertically and horizontally and lines and points of intersection represent places to position important visual elements. The golden ratio and its application are similar although the golden ratio is not as well known and its' points of intersection are closer together. Moving a horizon in a landscape to the position of one third is often more effective than placing it in the middle, but it could also be placed near the bottom one quarter or sixth. There is nothing obligatory about applying the rule of thirds. In placing visual elements for effective composition, one must assess many factors including color, dominance, size and balance together with proportion. Often a certain amount of imbalance or tension can make an image more effective. 
+                    </para>
+                    
                     <figure>
                         <title>Photograph Composition Example Using Rule Third Lines</title>
                         <graphic srccredit="Photograph Composition Example Using Rule Third Lines Example" 
