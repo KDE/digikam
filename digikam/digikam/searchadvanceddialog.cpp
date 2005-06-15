@@ -49,7 +49,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QVBox* vbox = new QVBox(hbox);
     vbox->setSpacing(spacingHint());
     
-    QVBoxLayout* lay = new QVBoxLayout(vbox);
+    QVBoxLayout* lay = new QVBoxLayout(vbox->layout());
     lay->setSpacing(5);
     lay->setMargin(5);
 
