@@ -1,3 +1,337 @@
+v0.7.3			06/15/05
+----------------------------------------------------------------------------
+
+2005-06-15 06:37  cgilles
+
+	* extragear/graphics/digikam/libs/widgets/curveswidget.cpp,
+	  extragear/graphics/digikam/libs/widgets/histogramwidget.cpp,
+	  extragear/graphics/digikam/utilities/imageeditor/canvas.cpp: Fix
+	  memory leak;
+
+2005-06-15 06:30  cgilles
+
+	* extragear/graphics/digikam/digikam.lsm,
+	  extragear/graphics/digikam/version.h: 0.7.3
+
+2005-06-13 19:26  pahlibar
+
+	* extragear/graphics/digikam/utilities/setup/gpiface.cpp: applied
+	  patch from Uli: don't depend on CameraList internals
+
+2005-06-11 10:06  jahrens
+
+	* extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  extragear/graphics/digikam/showfoto/showfoto.h: BUG: 107155
+
+2005-06-08 09:26  cgilles
+
+	* extragear/graphics/digikam/digikam/digikam_export.h: Fix
+	  compilation rules with KDE 3.3.x under Mandriva 10.2 Thanks to
+	  Laurent Montel. IMPORTANT: This rules do not exist under digikam
+	  0.8.0 experimental SVN branche. Take a care in the future! CCMAIL:
+	  montel@kde.org, renchi@pooh.tam.uiuc.edu
+
+2005-06-08 06:54  cgilles
+
+	* extragear/graphics/digikam/README,
+	  extragear/graphics/digikam/configure.in.bot,
+	  extragear/graphics/digikam/digikam.lsm,
+	  extragear/graphics/digikam/digikam/main.cpp,
+	  extragear/graphics/digikam/showfoto/main.cpp: Fixed url
+
+2005-06-08 06:10  cgilles
+
+	* extragear/graphics/digikam/README: Fix url
+
+2005-06-08 06:10  cgilles
+
+	* extragear/graphics/digikam/TODO: Cleanup
+
+2005-06-05 08:00  cgilles
+
+	* extragear/graphics/digikam/showfoto/showfoto.kdevelop: Fix ML
+
+2005-06-05 07:59  cgilles
+
+	* extragear/graphics/digikam/README,
+	  extragear/graphics/digikam/digikam.kdevelop,
+	  extragear/graphics/digikam/tips: Fix ML
+
+2005-05-25 20:06  pahlibar
+
+	* extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+	  extragear/graphics/digikam/utilities/cameragui/cameraiconview.h:
+	  prevent drag
+
+2005-05-18 14:05  jriddell
+
+	* extragear/graphics/digikam/digikam/pics/cr128-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/cr16-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/cr22-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/cr32-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/cr48-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/cr64-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi128-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi16-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi22-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi32-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi48-app-digikam.png,
+	  extragear/graphics/digikam/digikam/pics/hi64-app-digikam.png,
+	  extragear/graphics/digikam/showfoto/cr128-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/cr16-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/cr22-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/cr32-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/cr48-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/cr64-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi128-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi16-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi22-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi32-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi48-app-showfoto.png,
+	  extragear/graphics/digikam/showfoto/hi64-app-showfoto.png,
+	  Move application icons to global theme Makes them usable in Gnome, 
+	  see thread on kde-core-devel
+
+2005-05-14 18:15  cartman
+
+	* extragear/graphics/digikam/kioslave/Makefile.am: Let it find
+	  digikam_export.h
+
+2005-05-14 13:56  mlaurent
+
+	* extragear/graphics/digikam/kioslave/digikamio.cpp,
+	  extragear/graphics/digikam/kioslave/digikamtags.cpp,
+	  extragear/graphics/digikam/kioslave/digikamthumbnail.cpp: Fix
+	  export
+
+2005-05-14 13:43  mlaurent
+
+	* extragear/graphics/digikam/utilities/setup/setupgeneral.cpp: Don't
+	  display messagebox when test is empty Don't change url when we
+	  can't write into directory
+
+2005-05-11 14:59  pahlibar
+
+	* extragear/graphics/digikam/kioslave/digikamio.cpp: CCBUGS: 105303
+	  give a more detailed info if user uses symlinks to external
+	  files/folders in the album library path and then tries to move it.
+	  I'm not going to work on this in the trunk (0.7.x series). The
+	  file copy/move kioslave will undergo a rewrite in the experimental
+	  branch to work well with kio::jobs and if necessary will be
+	  backported
+
+2005-05-11 07:36  cgilles
+
+	* extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h,
+	  extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: revert
+
+2005-05-10 22:00  mlaurent
+
+	* extragear/graphics/digikam/libs/thumbbar/Makefile.am,
+	  extragear/graphics/digikam/libs/thumbbar/thumbbar.h: Last fixe (I
+	  hope)
+
+2005-05-10 21:49  mlaurent
+
+	* extragear/graphics/digikam/libs/widgets/colorgradientwidget.h,
+	  extragear/graphics/digikam/libs/widgets/curveswidget.h: Other
+	  export fix
+
+2005-05-10 21:48  mlaurent
+
+	* extragear/graphics/digikam/libs/curves/Makefile.am,
+	  extragear/graphics/digikam/libs/histogram/Makefile.am,
+	  extragear/graphics/digikam/libs/levels/Makefile.am: Fix Makefile
+
+2005-05-10 21:40  mlaurent
+
+	* extragear/graphics/digikam/libs/curves/imagecurves.h,
+	  extragear/graphics/digikam/libs/widgets/histogramwidget.h: Other
+	  fix for digikamimageplugins
+
+2005-05-10 21:30  mlaurent
+
+	* extragear/graphics/digikam/libs/histogram/imagehistogram.h,
+	  extragear/graphics/digikam/libs/levels/Makefile.am,
+	  extragear/graphics/digikam/libs/levels/imagelevels.h,
+	  extragear/graphics/digikam/libs/widgets/imageguidewidget.h: Fix
+	  export. Sorry I didn't know that digikma was in beta test. But
+	  it's necessary to finish export
+
+2005-05-10 15:50  mlaurent
+
+	* extragear/graphics/digikam/digikam/Makefile.am: Install
+	  digikam_export
+
+2005-05-10 14:43  mlaurent
+
+	* extragear/graphics/digikam/configure.in.in,
+	  extragear/graphics/digikam/digikam/digikam_export.h,
+	  extragear/graphics/digikam/digikam/digikamapp.h,
+	  extragear/graphics/digikam/digikam/digikamfirstrun.h,
+	  extragear/graphics/digikam/imageplugins/Makefile.am,
+	  extragear/graphics/digikam/imageplugins/imageeffect_rgb.h,
+	  extragear/graphics/digikam/imageplugins/imageplugin_core.h,
+	  extragear/graphics/digikam/libs/filters/Makefile.am,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  extragear/graphics/digikam/libs/widgets/Makefile.am,
+	  extragear/graphics/digikam/libs/widgets/imagepreviewwidget.h,
+	  extragear/graphics/digikam/libs/widgets/imageselectionwidget.h,
+	  extragear/graphics/digikam/showfoto/Makefile.am,
+	  extragear/graphics/digikam/utilities/imageeditor/imageiface.h,
+	  extragear/graphics/digikam/utilities/imageeditor/imageplugin.h,
+	  extragear/graphics/digikam/utilities/imageeditor/imagewidget.h:
+	  Add -fvisibility support
+
+2005-05-10 07:57  cgilles
+
+	* extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: Fix crash
+	  with IR and filmgrain filter using gaussian blur
+
+2005-05-10 07:29  cgilles
+
+	* extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h: Add
+	  missing sharpen filter progress and cancel like in other filter
+	  plugin (homogenous)
+
+2005-05-10 07:28  cgilles
+
+	* extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: Add
+	  missing sharpen filter progress and cancel like in other filter
+	  plugins (homogenous)
+
+2005-05-10 07:00  cgilles
+
+	* extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  extragear/graphics/digikam/imageplugins/imageeffect_blur.h: cancel
+	  operation is possible.
+
+2005-05-10 06:59  cgilles
+
+	* extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: Gaussian
+	  blur : cancel operation is possible.
+
+2005-05-10 06:34  pahlibar
+
+	* extragear/graphics/digikam/showfoto/showfoto.cpp: iterator fix in
+	  showfoto
+
+2005-05-10 06:23  pahlibar
+
+	* extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  since we no longer return a copy of the pluginlist and not a
+	  reference to it, correct the iterator for it. (this prevented
+	  plugin actions being embedded correctly) CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-05-10 05:40  pahlibar
+
+	* extragear/graphics/digikam/configure.in.in,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: add
+	  configure check for endianess CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-05-10 00:22  pahlibar
+
+	* extragear/graphics/digikam/utilities/imageeditor/imagepluginloader.cpp,
+	  extragear/graphics/digikam/utilities/imageeditor/imagepluginloader.h:
+	  plugin->name() is the QObject name() function and we don't have
+	  any control over it (the name is set internally by klibloader). So
+	  we need to hold the name of the service separately. instead of
+	  adding a function to the imageplugin base which will break BC,
+	  hold the names of the service in a separate list and use it to
+	  check if the plugin has already been loaded or not. this prevents
+	  plugins being loaded twice. BUGS: 103147
+
+2005-05-09 14:58  cgilles
+
+	* extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  extragear/graphics/digikam/libs/widgets/imagepreviewwidget.h:
+	  Missing add progress bar in blur plugin (homogenous with other
+	  plugin).
+
+2005-05-09 11:30  cgilles
+
+	* extragear/graphics/digikam/libs/filters/imagefilters.cpp:
+	  ChangeTonality : Fix Big/little endian compatibility. BW filter is
+	  now fixed. To test under PPC. CCMAIL:
+	  digikam-devel@lists.sourceforge.net
+
+2005-05-09 09:54  cgilles
+
+	* extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  extragear/graphics/digikam/libs/filters/imagefilters.h: Fix
+	  BigEndian/Little endian compatibilty with Channel Mixer. Untested
+	  yet to PPC. CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-05-08 07:50  mlaurent
+
+	* extragear/graphics/digikam/TODO: Minor update
+
+2005-05-04 19:49  pahlibar
+
+	* extragear/graphics/digikam/utilities/imageeditor/digikamimagewindowui.rc,
+	  extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  BUGS: 105007 The context menu is built out of xmlgui. if the user
+	  has an old version of ui.rc file present locally in his .kde/...
+	  directory (because of for eg, a shortcut change), then the context
+	  menu is not created because no xmlui representation for it exists
+	  in it the local ui.rc. fix a crash related to that. (Note:
+	  whenever you are changing the xmlui files and you want the user to
+	  see these changes, bump up the version number of the ui.rc)
+
+2005-05-04 06:20  
+
+	* extragear/graphics, extragear/graphics/Makefile.am.in,
+	  extragear/graphics/Makefile.cvs, extragear/graphics/README,
+	  extragear/graphics/configure.in.bot,
+	  extragear/graphics/configure.in.in, extragear/graphics/digikam,
+	  extragear/graphics/digikamimageplugins, extragear/graphics/doc,
+	  extragear/graphics/doc/Makefile.am,
+	  extragear/graphics/doc/digikam,
+	  extragear/graphics/doc/digikamimageplugins,
+	  extragear/graphics/doc/gwenview, extragear/graphics/doc/kimdaba,
+	  extragear/graphics/doc/kst, extragear/graphics/doc/showfoto,
+	  extragear/graphics/doc/showimg, extragear/graphics/gwenview,
+	  extragear/graphics/kimdaba, extragear/graphics/kst,
+	  extragear/graphics/showimg, extragear/libs, extragear/multimedia,
+	  kdeextragear-1, kdeextragear-2, kdeextragear-3,
+	  kdeextragear-libs-1: setup extragear/
+
+2005-05-02 08:26  cgilles
+
+	* kdeextragear-3/digikam/Makefile.am: For testing : non-ignore *.ui
+	  files from digiKam project for strings extraction (inspired from
+	  koffice). CCMAIL: digikam-devel@lists.sourceforge.net
+
+2005-04-30 13:06  toma
+
+	* kdeextragear-3/digikam/digikam/albumpropsedit.cpp: While porting
+	  this function to the experimental branch, I ran into this bug in
+	  the logica. When you are young, you make stupid mistakes.
+	  Calculation of the average date in an album is based on the
+	  difference in days to the first image. When calculating the
+	  average date of an album, you can not use abs(), because that will
+	  ignore a negative difference.
+
+2005-04-29 11:44  cgilles
+
+	* kdeextragear-3/digikam/libs/widgets/imagepreviewwidget.cpp,
+	  kdeextragear-3/digikam/libs/widgets/imagepreviewwidget.h: Add
+	  progress bar. Unused actually but not experimental (tested with
+	  refocus plugin).
+
 v0.7.3-beta2			04/25/05
 ----------------------------------------------------------------------------
 
