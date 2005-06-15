@@ -129,8 +129,10 @@ void SearchFolderView::extendedSearchNew()
 {
     KURL url;
     SearchAdvancedDialog dlg(this, url);
+
     if (dlg.exec() != KDialogBase::Accepted)
         return;
+    
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
 
     if (album)
@@ -304,6 +306,7 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
         case 11:
         {
             extendedSearchEdit(sItem->m_album);
+            break;
         }
         case 12:
         {
