@@ -575,6 +575,8 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
                 }
             }
         }
+	
+    delete d;
 }
 
 void ImageEffect_InPainting_Dialog::slotUser2()
