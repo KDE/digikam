@@ -36,6 +36,7 @@
 #include <kdateedit.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <kdialog.h>
 
 #include <album.h>
 #include <albuminfo.h>
@@ -93,7 +94,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
     m_box = new QVBox(parent);
-    m_box->layout()->setSpacing(5);
+    m_box->layout()->setSpacing(KDialog::spacingHint());
 
     m_optionsBox   = 0;
     m_option       = option;
@@ -109,6 +110,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     }
 
     m_hbox = new QHBox(m_box);
+    m_hbox->layout()->setSpacing(KDialog::spacingHint());
 
     m_key = new QComboBox( m_hbox, "key" );
     for (int i=0; i< RuleKeyTableCount; i++)
@@ -387,7 +389,7 @@ SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
     : SearchAdvancedBase(SearchAdvancedBase::GROUP)
 {
     m_box      = new QHBox(parent);
-    m_box->layout()->setSpacing(5);
+    m_box->layout()->setSpacing(KDialog::spacingHint());
     m_groupbox = new QVGroupBox(m_box);
     m_check    = new QCheckBox(m_box);
     m_option   = SearchAdvancedRule::NONE;
