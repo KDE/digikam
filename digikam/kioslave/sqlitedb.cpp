@@ -71,7 +71,7 @@ void SqliteDB::closeDB()
 }
 
 bool SqliteDB::execSql(const QString& sql, QStringList* const values,
-                       bool debug ) const
+                       QString* errMsg, bool debug ) const
 {
     if ( debug )
         kdDebug() << "SQL-query: " << sql << endl;
@@ -80,6 +80,10 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
     {
         kdWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
+        if (errMsg)
+        {
+            *errMsg = QString::fromLatin1("SQLite database not open");
+        }
         return false;
     }
 
@@ -96,6 +100,13 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
                     << sqlite3_errmsg(m_db)
                     << " on query: "
                     << sql << endl;
+        if (errMsg)
+        {
+            *errMsg = QString::fromLatin1("sqlite_compile error: ") +
+                      QString::fromLatin1(sqlite3_errmsg(m_db)) +
+                      QString::fromLatin1(" on query: ") +
+                      sql;
+        }
         return false;
     }
 
@@ -123,6 +134,13 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
                     << sqlite3_errmsg( m_db )
                     << " on query: "
                     << sql << endl;
+        if (errMsg)
+        {
+            *errMsg = QString::fromLatin1("sqlite_step error: ") +
+                      QString::fromLatin1(sqlite3_errmsg(m_db)) +
+                      QString::fromLatin1(" on query: ") +
+                      sql;
+        }
         return false;
     }
 

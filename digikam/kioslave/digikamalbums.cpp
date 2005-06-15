@@ -1239,12 +1239,12 @@ void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL
 
     m_sqlDB.execSql( QString("UPDATE Albums SET url='%1' WHERE url='%2'")
                      .arg(escapeString(newURL))
-                     .arg(escapeString(oldURL)), 0, true );
+                     .arg(escapeString(oldURL)));
 
     // now find the list of all subalbums which need to be updated
     QStringList values;
     m_sqlDB.execSql( QString("SELECT url FROM Albums WHERE url LIKE '%1/%';")
-                     .arg(oldURL), &values, true );
+                     .arg(oldURL), &values );
 
     // and update their url
     QString newChildURL;
@@ -1254,7 +1254,7 @@ void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL
         newChildURL.replace(oldURL, newURL);
         m_sqlDB.execSql(QString("UPDATE Albums SET url='%1' WHERE url='%2'")
                         .arg(escapeString(newChildURL))
-                        .arg(escapeString(*it)), 0, true);
+                        .arg(escapeString(*it)));
     }
 }
 

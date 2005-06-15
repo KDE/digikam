@@ -66,6 +66,8 @@ private:
 
     QString subQuery(enum SKey key, enum SOperator op, const QString& val) const;
 
+    QString possibleDate(const QString& str, bool& exact) const;
+    
 private:
 
     class RuleType
@@ -79,6 +81,8 @@ private:
 
     SqliteDB              m_db;
     QString               m_libraryPath;
+    QString               m_longMonths[12];
+    QString               m_shortMonths[12];
 };
 
 

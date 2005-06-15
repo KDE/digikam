@@ -32,9 +32,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kdeversion.h>
-#include <kcalendarsystem.h>
-#include <kglobal.h>
 
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
@@ -74,14 +71,6 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     setInitialSize(QSize(480,400));
     adjustSize();
 
-    // build a lookup table for month names
-    const KCalendarSystem* cal = KGlobal::locale()->calendar();
-    for (int i=1; i<=12; ++i)
-    {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, true).lower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, false).lower();
-    }
-
     // check if we are being passed a valid url
     if (m_url.isValid())
     {
@@ -89,27 +78,16 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
         if (count > 0)
         {
             QStringList strList;
+
             for (int i=1; i<=count; i++)
             {
                 QString val = m_url.queryItem(QString::number(i) + ".val");
-                if (m_url.queryItem(QString::number(i) + ".key") == "imagedate")
-                {
-                    val.remove('%');
-                    val.remove('-');
-
-                    int num = val.toInt();
-                    if (1 <= num && num <= 12)
-                    {
-                        val = m_longMonths[num-1];
-                    }   
-                }
-
                 if (!strList.contains(val))
                 {
                     strList.append(val);
                 }
             }
-
+            
             m_searchEdit->setText(strList.join(" "));
             m_nameEdit->setText(url.queryItem("name"));
             m_timer->start(0, true);
@@ -120,47 +98,6 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
 SearchQuickDialog::~SearchQuickDialog()
 {
     delete m_timer;    
-}
-
-QString SearchQuickDialog::possibleDate(const QString& str, bool& exact) const
-{
-    QDate date = QDate::fromString(str, Qt::ISODate);
-    if (date.isValid())
-    {
-        exact = true;
-        return date.toString(Qt::ISODate);
-    }
-
-    exact = false;
-
-    bool ok;
-    int num = str.toInt(&ok);
-    if (ok)
-    {
-        // ok. its an int, does it look like a year?
-        if (1970 <= num && num <= QDate::currentDate().year())
-        {
-            // very sure its a year
-            return QString("%1-%-%").arg(num);
-        }
-    }
-    else
-    {
-        // hmm... not a year. is it a particular month?
-        for (int i=1; i<=12; i++)
-        {
-            if (str.lower() == m_shortMonths[i-1] ||
-                str.lower() == m_longMonths[i-1])
-            {
-                QString monGlob;
-                monGlob.sprintf("%.2d", i);
-                monGlob = "%-" + monGlob + "-%";
-                return monGlob;
-            }
-        }
-    }
-
-    return QString::null;
 }
 
 void SearchQuickDialog::slotTimeOut()
@@ -185,31 +122,6 @@ void SearchQuickDialog::slotTimeOut()
     {
         if (count != 0)
             path += " AND ";
-
-        bool exact;
-        QString possDate = possibleDate(*it, exact);
-        if (!possDate.isEmpty())
-        {
-            path += QString(" %1 ")
-                    .arg(++count);
-
-            if (exact)
-            {
-                num = QString::number(count);
-                url.addQueryItem(num + ".key", "imagedate");
-                url.addQueryItem(num + ".op", "eq");
-                url.addQueryItem(num + ".val", possDate);
-            }
-            else
-            {
-                num = QString::number(count);
-                url.addQueryItem(num + ".key", "imagedate");
-                url.addQueryItem(num + ".op", "like");
-                url.addQueryItem(num + ".val", possDate);
-            }
-
-            continue;
-        }
 
         path += QString(" %1 ").arg(count + 1);
 

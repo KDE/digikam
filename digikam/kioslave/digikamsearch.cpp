@@ -19,6 +19,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kinstance.h>
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
@@ -57,6 +58,14 @@ kio_digikamsearch::kio_digikamsearch(const QCString &pool_socket,
                                      const QCString &app_socket)
     : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
+    // build a lookup table for month names
+    const KCalendarSystem* cal = KGlobal::locale()->calendar();
+    for (int i=1; i<=12; ++i)
+    {
+        m_shortMonths[i-1] = cal->monthName(i, 2000, true).lower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, false).lower();
+    }
+
 }
 
 kio_digikamsearch::~kio_digikamsearch()
@@ -245,7 +254,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         QStringList values;
         QString     errMsg;
-        if (!m_db.execSql(sqlQuery, &values))
+        if (!m_db.execSql(sqlQuery, &values, &errMsg))
         {
             error(KIO::ERR_INTERNAL, errMsg);
             return;
@@ -365,25 +374,45 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
             RuleType rule = rulesMap[num];
             if (rule.key == KEYWORD)
             {
-                QValueList<SKey> todo;
-                todo.append( ALBUMNAME );
-                todo.append( IMAGENAME );
-                todo.append( TAGNAME );
-                todo.append( ALBUMCAPTION );
-                todo.append( ALBUMCOLLECTION );
-                todo.append( IMAGECAPTION );
-
-                sqlQuery += "(";
-                QValueListIterator<SKey> it;
-                it = todo.begin();
-                while ( it != todo.end() )
+                bool exact;
+                QString possDate = possibleDate(rule.val, exact);
+                if (!possDate.isEmpty())
                 {
-                    sqlQuery += subQuery(*it, rule.op, rule.val);
-                    ++it;
-                    if ( it != todo.end() )
-                        sqlQuery += " OR ";
+                    rule.key = IMAGEDATE;
+                    rule.val = possDate;
+                    if (exact)
+                    {
+                        rule.op = EQ;
+                    }
+                    else
+                    {
+                        rule.op = LIKE;
+                    }
+
+                    sqlQuery += subQuery(rule.key, rule.op, rule.val);                    
                 }
-                sqlQuery += ")";
+                else
+                {
+                    QValueList<SKey> todo;
+                    todo.append( ALBUMNAME );
+                    todo.append( IMAGENAME );
+                    todo.append( TAGNAME );
+                    todo.append( ALBUMCAPTION );
+                    todo.append( ALBUMCOLLECTION );
+                    todo.append( IMAGECAPTION );
+
+                    sqlQuery += "(";
+                    QValueListIterator<SKey> it;
+                    it = todo.begin();
+                    while ( it != todo.end() )
+                    {
+                        sqlQuery += subQuery(*it, rule.op, rule.val);
+                        ++it;
+                        if ( it != todo.end() )
+                            sqlQuery += " OR ";
+                    }
+                    sqlQuery += ")";
+                }
             }
             else
             {
@@ -465,7 +494,7 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
         kdWarning() << "KEYWORD Detected which is not possible" << endl;
         break;
     }
-}
+    }
 
     switch (op)
     {
@@ -539,3 +568,44 @@ extern "C"
     }
 }
 
+QString kio_digikamsearch::possibleDate(const QString& str, bool& exact) const
+{
+    QDate date = QDate::fromString(str, Qt::ISODate);
+    if (date.isValid())
+    {
+        exact = true;
+        // TODO: not correct
+        return (date.toString(Qt::ISODate) + "%");
+    }
+
+    exact = false;
+
+    bool ok;
+    int num = str.toInt(&ok);
+    if (ok)
+    {
+        // ok. its an int, does it look like a year?
+        if (1970 <= num && num <= QDate::currentDate().year())
+        {
+            // very sure its a year
+            return QString("%1-%-%").arg(num);
+        }
+    }
+    else
+    {
+        // hmm... not a year. is it a particular month?
+        for (int i=1; i<=12; i++)
+        {
+            if (str.lower() == m_shortMonths[i-1] ||
+                str.lower() == m_longMonths[i-1])
+            {
+                QString monGlob;
+                monGlob.sprintf("%.2d", i);
+                monGlob = "%-" + monGlob + "-%";
+                return monGlob;
+            }
+        }
+    }
+
+    return QString::null;
+}

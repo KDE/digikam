@@ -33,7 +33,7 @@ public:
     void closeDB();
 
     bool execSql(const QString& sql, QStringList* const values = 0,
-                 bool debug = false) const;
+                 QString* const errMsg = 0, bool debug = false) const;
 
     Q_LLONG lastInsertedRow() const;
     

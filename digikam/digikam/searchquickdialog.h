@@ -57,17 +57,11 @@ protected:
     
 private:
 
-    QString possibleDate(const QString& str, bool& exact) const;
-    
-private:
-
     QLineEdit*           m_searchEdit;
     QLineEdit*           m_nameEdit;
     SearchResultsView*   m_resultsView;
     QTimer*              m_timer;
     KURL&                m_url;
-    QString              m_longMonths[12];
-    QString              m_shortMonths[12];
     
 private slots:
 
