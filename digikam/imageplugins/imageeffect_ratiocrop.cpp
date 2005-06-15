@@ -31,9 +31,9 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qcombobox.h>
-#include <qcheckbox.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -116,16 +116,22 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customRatioDInput = new KIntSpinBox(1, 100, 1, 1, 10, plainPage());
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
-    m_useRuleThirdLines = new QCheckBox( i18n("Show rule third lines"), plainPage());
-    QWhatsThis::add( m_useRuleThirdLines, i18n("<p>With this option, you can display the rule third lines "
-                                               "which help you to compose your photograph."));
-    
+    QLabel *labelGuideLines = new QLabel(i18n("Guide Lines:"), plainPage());
+    m_guideLinesCB = new QComboBox( false, plainPage() );
+    m_guideLinesCB->insertItem( i18n("Rules Of Thirds") );
+    m_guideLinesCB->insertItem( i18n("Golden Mean") );
+    m_guideLinesCB->insertItem( i18n("None") );
+    m_guideLinesCB->setCurrentText( "None" );
+    QWhatsThis::add( m_guideLinesCB, i18n("<p>With this option, you can display guide lines "
+                                          "which help you to compose your photograph."));
+                                               
     l2->addWidget( m_customLabel1 );
     l2->addWidget( m_customRatioNInput );
     l2->addWidget( m_customLabel2 );
     l2->addWidget( m_customRatioDInput );
     l2->addStretch();
-    l2->addWidget( m_useRuleThirdLines );
+    l2->addWidget( labelGuideLines );
+    l2->addWidget( m_guideLinesCB );
     topLayout->addMultiCellLayout(l2, 2, 2, 0, 4);
 
     // -------------------------------------------------------------
@@ -184,8 +190,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_customRatioDInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotCustomRatioChanged()));
 
-    connect(m_useRuleThirdLines, SIGNAL(toggled (bool)),
-            m_imageSelectionWidget, SLOT(slotRuleThirdLines(bool)));            
+    connect(m_guideLinesCB, SIGNAL(activated(int)),
+            m_imageSelectionWidget, SLOT(slotGuideLines(int)));            
                                                                                 
     connect(m_widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
@@ -210,12 +216,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     connect(m_centerHeight, SIGNAL(clicked()),
             this, SLOT(slotCenterHeight()));
-                                                
+    
     // -------------------------------------------------------------
-                
-    readSettings();             
+
     adjustSize();
-    disableResize();     
+    disableResize(); 
+    QTimer::singleShot(0, this, SLOT(slotInitGUI())); 
 }
 
 ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
@@ -223,11 +229,22 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
     writeSettings();
 }
 
+void ImageEffect_RatioCrop::slotInitGUI(void)
+{
+    readSettings(); 
+}
+
 void ImageEffect_RatioCrop::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Aspect Ratio Crop Tool Settings");
     
+    // No guide lines per default.
+    m_guideLinesCB->setCurrentItem( config->readNumEntry("Guide Lines Type", 
+                                    Digikam::ImageSelectionWidget::GuideNone) );   
+    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());            
+                                        
+                                    
     m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
     m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
     
@@ -253,8 +270,6 @@ void ImageEffect_RatioCrop::readSettings(void)
        }
     
     m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());       
-    
-    m_useRuleThirdLines->setChecked( config->readBoolEntry("Use Rule Third Lines", false) );
 }
     
 void ImageEffect_RatioCrop::writeSettings(void)
@@ -271,7 +286,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Custom Aspect Ratio Width", m_widthInput->value() );
     config->writeEntry( "Custom Aspect Ratio Height", m_heightInput->value() );
     
-    config->writeEntry( "Use Rule Third Lines", m_useRuleThirdLines->isChecked() );
+    config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
     config->sync();
 }
 

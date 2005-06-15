@@ -61,14 +61,14 @@ namespace Digikam
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent, 
                       float aspectRatioValue, int aspectRatioType, int orient,
-                      bool ruleThirdLines)
+                      int guideLinesType)
                     : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_currentAspectRatioType  = aspectRatioType; 
     m_currentAspectRatioValue = aspectRatioValue;
     m_currentOrientation      = orient; 
     m_currentResizing         = ResizingNone;
-    m_ruleThirdLines          = ruleThirdLines;
+    m_guideLinesType          = guideLinesType;
     m_timerW = 0;
     m_timerH = 0;
 
@@ -218,9 +218,9 @@ void ImageSelectionWidget::maxAspectSelection(void)
     repaint(false);
 }
 
-void ImageSelectionWidget::slotRuleThirdLines(bool ruleThirdLines)
+void ImageSelectionWidget::slotGuideLines(int guideLinesType)
 {
-    m_ruleThirdLines = ruleThirdLines;
+    m_guideLinesType = guideLinesType;
     updatePixmap();
     repaint(false);
 }
@@ -543,9 +543,9 @@ void ImageSelectionWidget::updatePixmap(void)
     int ty = m_localRegionSelection.y();
     int by = m_localRegionSelection.y() + m_localRegionSelection.height();
     
-    for (int j=0 ; j<m_h ; ++j)
+    for (int j=0 ; j<m_h ; j++)
     {
-        for (int i=0 ; i<m_w ; ++i)
+        for (int i=0 ; i<m_w ; i++)
         {
             if (i < lx || i >= rx || j < ty || j >= by)
             {
@@ -569,26 +569,49 @@ void ImageSelectionWidget::updatePixmap(void)
     bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
     QPainter p(m_pixmap);
     
-    // Drawing 'rule of thirds' lines.
+    // Drawing guide lines.
     
-    if (m_ruleThirdLines)
+    switch (m_guideLinesType)
        {
-       p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
-    
-       int xThird = m_localRegionSelection.width() / 3;
-       int yThird = m_localRegionSelection.height() / 3;
-    
-       p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
-                   m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
-       p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
-                   m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
-    
-       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
-                   m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
-       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
-                   m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
-       }
-           
+       case RulesOfThirds:
+            {
+            p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
+            
+            int xThird = m_localRegionSelection.width() / 3;
+            int yThird = m_localRegionSelection.height() / 3;
+            
+            p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
+            p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
+            
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
+            break;
+            }
+            
+       case GoldenMean:
+            {
+            p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
+            
+            int xThird = (int)(m_localRegionSelection.width() / 1.618);
+            int yThird = (int)(m_localRegionSelection.height() / 1.618);
+            
+            p.drawLine( m_localRegionSelection.left()  + xThird, m_localRegionSelection.top(),
+                        m_localRegionSelection.left()  + xThird, m_localRegionSelection.bottom() );
+            p.drawLine( m_localRegionSelection.right() - xThird, m_localRegionSelection.top(),
+                        m_localRegionSelection.right() - xThird, m_localRegionSelection.bottom() );
+            
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top()    + yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top()    + yThird );
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.bottom() - yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.bottom() - yThird );
+            break;
+            }
+       }    
+              
     // Drawing selection borders.
     
     p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));

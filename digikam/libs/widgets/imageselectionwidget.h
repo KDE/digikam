@@ -65,9 +65,19 @@ public:
     CenterImage                // Center selection to the center of image.
     };
     
+    // Proportion : Golden Ratio and Rule of Thirds. More information at this url: 
+    // http://photoinf.com/General/Robert_Berdan/Composition_and_the_Elements_of_Visual_Design.htm
+    
+    enum GuideLineType
+    {
+    RulesOfThirds = 0,         // Line guides position to 1/3 width and height.
+    GoldenMean,                // Line guides position to 1/1.618 width and height.
+    GuideNone                  // No guide line.
+    };
+    
     ImageSelectionWidget(int width, int height, QWidget *parent=0, 
                          float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
-                         int orient=Landscape, bool ruleThirdLines=false);
+                         int orient=Landscape, int guideLinesType=GuideNone);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(int centerType=CenterImage);
@@ -91,7 +101,7 @@ public:
 
 public slots:
 
-    void slotRuleThirdLines(bool ruleThirdLines);
+    void slotGuideLines(int guideLinesType);
     
 signals:
 
@@ -104,8 +114,7 @@ protected:
     
     void paintEvent( QPaintEvent *e );
     void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void mouseReleaseEvent ( QMouseEvent * e );    void mouseMoveEvent ( QMouseEvent * e );
 
 protected slots:
 
@@ -124,7 +133,7 @@ private:
     
     ImageIface *m_iface;
     
-    bool        m_ruleThirdLines;
+    int         m_guideLinesType;
     
     uint       *m_data;
     int         m_w;

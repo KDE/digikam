@@ -27,7 +27,6 @@
 
 class QLabel;
 class QComboBox;
-class QCheckBox;
 class QPushButton;
 
 class KIntNumInput;
@@ -56,8 +55,7 @@ private:
     
     QComboBox    *m_ratioCB;
     QComboBox    *m_orientCB;
-    
-    QCheckBox    *m_useRuleThirdLines;
+    QComboBox    *m_guideLinesCB;
     
     QPushButton  *m_centerWidth;
     QPushButton  *m_centerHeight;
@@ -85,6 +83,7 @@ private slots:
     void slotUser2();
     void slotOk();
 
+    void slotInitGUI(void);
     void slotCenterWidth(void);
     void slotCenterHeight(void);
     void slotXChanged(int x);
