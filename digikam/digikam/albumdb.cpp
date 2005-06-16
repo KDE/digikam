@@ -1040,15 +1040,17 @@ void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(srcAlbumID)
              .arg(escapeString(srcName)) );
 
-    /* TODO: Fix copy of tags and other properties
-
-    execSql( QString("INSERT INTO ImageTags (dirid, name, tagid) "
-                     "SELECT %1, '%2', tagid FROM ImageTags "
-                     "WHERE dirid=%3 AND name='%4';")
+    execSql( QString("INSERT INTO ImageTags (imageid, tagid) \n"
+                     "SELECT I.id, T.tagid FROM Images AS I, ImageTags AS T WHERE \n"
+                     "     I.id=(SELECT Images.id FROM Images WHERE \n"
+                     "           dirid=%1 AND name='%2') \n"
+                     "AND  T.tagid IN (SELECT tagid FROM ImageTags WHERE \n"
+                     "                   imageid=(SELECT id FROM Images WHERE \n"
+                     "                             dirid=%3 AND name='%3'))")
              .arg(dstAlbumID)
              .arg(escapeString(dstName))
              .arg(srcAlbumID)
-             .arg(escapeString(srcName)) ); */
+             .arg(escapeString(srcName)) );
 }
 
 Q_LLONG AlbumDB::lastInsertedRow()
