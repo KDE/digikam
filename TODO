@@ -14,7 +14,6 @@
 * fix changing of album library path. [TA/RR]
 
 * handle internal files/folders being added/deleted
-  - imageeditor
   - camera interface
 
 * handle external files/folders being added/deletion
@@ -24,8 +23,6 @@
 * search view and search table in database
   - extended search dialog 
         - i18n missing
-  - kioslave:
-        - if parent tag / album is choosen, the images of the childeren should match
 
 * fix saving of curent state of digikam 
   - splitter sizes
