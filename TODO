@@ -13,12 +13,11 @@
 
 * fix changing of album library path. [TA/RR]
 
-* handle internal files/folders being added/deleted
-  - camera interface
-
-* handle external files/folders being added/deletion
-   - update db [TA]
-   - inform frontend about it
+* handle files/folders being added/deleted
+  - kdirwatch is in place in albummanager. add directory scanning
+    support to digikamalbums kioslave and use it to scan in new
+    items (this should take care of all cases: camera files being
+    downloaded, users adding files/folders from outside digikam)
 
 * search view and search table in database
   - extended search dialog 
