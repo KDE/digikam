@@ -34,7 +34,6 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
 #include <kprinter.h>
 #include <ktempfile.h>
 #include <kimageio.h>
@@ -51,6 +50,8 @@
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kpopupmenu.h>
+
+#include <cstdio>
 
 // LibKexif includes.
 
@@ -921,10 +922,12 @@ void ImageWindow::slotSave()
 
 bool ImageWindow::save()
 {
-    QString tmpFile = locateLocal("tmp", m_urlCurrent.filename());
+    KTempFile tmpFile(m_urlCurrent.directory(false), QString::null);
+    tmpFile.setAutoDelete(true);
 
-    bool result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, 
+    bool result = m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, 
                                           m_PNGCompression, m_TIFFCompression);
+    
     
     if (!result)
     {
@@ -940,23 +943,24 @@ bool ImageWindow::save()
     if (exifHolder.hasExif())
     {
         ExifRestorer restorer;
-        restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+        restorer.readFile(tmpFile.name(), ExifRestorer::EntireImage);
         restorer.insertExifData(exifHolder.exifData());
-        restorer.writeFile(tmpFile);
+        restorer.writeFile(tmpFile.name());
     }
     else
-        kdWarning() << ("slotSave::No Exif Data Found") << endl;
+        kdDebug() << "slotSave::No Exif Data Found" << endl;
 
     if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-        KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+        KExifUtils::writeOrientation(tmpFile.name(), KExifData::NORMAL);
 
-    if(!SyncJob::file_move(KURL(tmpFile), m_urlCurrent))
+    if (::rename(QFile::encodeName(tmpFile.name()),
+                 QFile::encodeName(m_urlCurrent.path())) != 0)
     {
-        QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, i18n("Error Saving File"));
+        KMessageBox::error(this, i18n("Failed to overwrite original file"),
+                           i18n("Error Saving File"));
         return false;
     }
-
+    
     m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
@@ -975,26 +979,25 @@ void ImageWindow::slotSaveAs()
               << "image/x-tga" << "image/x-bmp" <<  "image/x-xpm"
               << "image/x-portable-anymap";
 
-    KFileDialog *imageFileSaveDialog = new KFileDialog(m_urlCurrent.directory(),
-                                                       QString::null,
-                                                       this,
-                                                       "imageFileSaveDialog",
-                                                       false);
+    KFileDialog imageFileSaveDialog(m_urlCurrent.directory(),
+                                    QString::null,
+                                    this,
+                                    "imageFileSaveDialog",
+                                    false);
 
-    imageFileSaveDialog->setOperationMode( KFileDialog::Saving );
-    imageFileSaveDialog->setMode( KFile::File );
-    imageFileSaveDialog->setCaption( i18n("New Image File Name") );
-    imageFileSaveDialog->setMimeFilter(mimetypes);
+    imageFileSaveDialog.setOperationMode( KFileDialog::Saving );
+    imageFileSaveDialog.setMode( KFile::File );
+    imageFileSaveDialog.setCaption( i18n("New Image File Name") );
+    imageFileSaveDialog.setMimeFilter(mimetypes);
 
     // Check for cancel.
-    if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
+    if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
     {
-       delete imageFileSaveDialog;
        return;
     }
 
-    m_newFile = imageFileSaveDialog->selectedURL();
-    QString format = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
+    KURL newURL = imageFileSaveDialog.selectedURL();
+    QString format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
     if (format.isEmpty())
     {
         // if the format is empty then file format is same as that of the
@@ -1002,49 +1005,56 @@ void ImageWindow::slotSaveAs()
         format = QImageIO::imageFormat(m_urlCurrent.path());
     }
     
-    delete imageFileSaveDialog;
-
-    if (!m_newFile.isValid())
+    if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\".")
-                           .arg(m_newFile.filename())
-                           .arg(m_newFile.path().section('/', -2, -2)));
-        kdWarning() << ("slotSaveAs:: target URL isn't valid !") << endl;
+                           .arg(newURL.filename())
+                           .arg(newURL.path().section('/', -2, -2)));
+        kdWarning() << k_funcinfo << "target URL isn't valid !" << endl;
         return;
     }
 
+    // if new and original url are save use slotSave() ------------------------------
+    
     KURL currURL(m_urlCurrent);
     currURL.cleanPath();
-    m_newFile.cleanPath();
+    newURL.cleanPath();
 
-    if (currURL.equals(m_newFile))
+    if (currURL.equals(newURL))
     {
         slotSave();
         return;
     }
 
-    QFileInfo fi(m_newFile.path());
+    // Check for overwrite ----------------------------------------------------------
+    
+    QFileInfo fi(newURL.path());
     if ( fi.exists() )
     {
         int result =
             KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
                                                   "Are you sure you want to continue?")
-                                       .arg(m_newFile.filename()) );
+                                       .arg(newURL.filename()) );
 
         if (result != KMessageBox::Yes)
             return;
     }
 
-    QString tmpFile = locateLocal("tmp", m_newFile.filename());
 
-    int result = m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
-                                         m_TIFFCompression, format.lower());
+    // Now do the actual saving -----------------------------------------------------
+
+    KTempFile tmpFile(newURL.directory(false), QString::null);
+    tmpFile.setAutoDelete(true);
+
+    int result = m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression,
+                                         m_PNGCompression, m_TIFFCompression,
+                                         format.lower());
 
     if (result == false)
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                           .arg(m_newFile.filename())
-                           .arg(m_newFile.path().section('/', -2, -2)));
+                           .arg(newURL.filename())
+                           .arg(newURL.path().section('/', -2, -2)));
 
         return;
     }
@@ -1059,69 +1069,66 @@ void ImageWindow::slotSaveAs()
         if (exifHolder.hasExif())
         {
             ExifRestorer restorer;
-            restorer.readFile(tmpFile, ExifRestorer::EntireImage);
+            restorer.readFile(tmpFile.name(), ExifRestorer::EntireImage);
             restorer.insertExifData(exifHolder.exifData());
-            restorer.writeFile(tmpFile);
+            restorer.writeFile(tmpFile.name());
         }
         else
-            kdWarning() << ("slotSaveAs::No Exif Data Found") << endl;
+        {
+            kdWarning() << "slotSaveAs::No Exif Data Found" << endl;
+        }
 
         if( m_rotatedOrFlipped )
-            KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);
+            KExifUtils::writeOrientation(tmpFile.name(), KExifData::NORMAL);
     }
 
-    KIO::FileCopyJob* job = KIO::file_move(KURL(tmpFile), m_newFile,
-                                           -1, true, false, false);
-
-    connect(job, SIGNAL(result(KIO::Job *) ),
-            this, SLOT(slotSaveAsResult(KIO::Job *)));
-}
-
-void ImageWindow::slotSaveAsResult(KIO::Job *job)
-{
-    if (job->error())
+    if (::rename(QFile::encodeName(tmpFile.name()),
+                 QFile::encodeName(newURL.path())) != 0)
     {
-      job->showErrorDialog(this);
-      return;
-    }
-
-    // Added new file URL into list if the new file has been added in the current Album
-
-    KURL su(m_urlCurrent.directory());
-    PAlbum *sourcepAlbum = AlbumManager::instance()->findPAlbum(su);
-
-    if (!sourcepAlbum)
-    {
-        kdWarning() << ("slotSaveAsResult::Cannot found the source album!") << endl;
+        KMessageBox::error(this, i18n("Failed to save to new file"),
+                           i18n("Error Saving File"));
         return;
     }
 
-    KURL tu(m_newFile.directory());
-    PAlbum *targetpAlbum = AlbumManager::instance()->findPAlbum(tu);
+    // Find the src and dest albums ------------------------------------------
 
-    if (!targetpAlbum)
+    KURL srcDirURL(QDir::cleanDirPath(m_urlCurrent.directory()));
+    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+    if (!srcAlbum)
     {
-        kdWarning() << ("slotSaveAsResult::Cannot found the target album!") << endl;
+        kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
         return;
     }
 
-    // Copy the metadata from the original image to the target image.
+    KURL dstDirURL(QDir::cleanDirPath(newURL.directory()));
+    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+    if (!dstAlbum)
+    {
+        kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
+        return;
+    }
+    
+    
+    // Now copy the metadata of the original file to the new file ------------
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->copyItem(sourcepAlbum->id(), m_urlCurrent.fileName(),
-                 targetpAlbum->id(), m_newFile.fileName());
+    db->copyItem(srcAlbum->id(), m_urlCurrent.fileName(),
+                 dstAlbum->id(), newURL.fileName());
 
-    if ( sourcepAlbum == targetpAlbum &&                       // Target Album = current Album ?
-         m_urlList.find(m_newFile) == m_urlList.end() )        // The image file not already exist
-    {                                                          // in the list.
+    // Add new file URL into list if the new file has been added in the current Album
+    
+    if ( srcAlbum == dstAlbum &&                        // Target Album = current Album ?
+         m_urlList.find(newURL) == m_urlList.end() )    // The image file not already exist
+    {                                                   // in the list.
         KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-        m_urlList.insert(it, m_newFile);
-        m_urlCurrent = m_newFile;
+        m_urlList.insert(it, newURL);
+        m_urlCurrent = newURL;
     }
 
-    emit signalFileAdded(m_newFile);
+    emit signalFileAdded(newURL);
 
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));      // Load the new target image.
+    m_canvas->setModified( false );
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
 void ImageWindow::slotToggleFullScreen()
