@@ -254,7 +254,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         QStringList values;
         QString     errMsg;
-        if (!m_db.execSql(sqlQuery, &values, &errMsg))
+        if (!m_db.execSql(sqlQuery, &values, &errMsg, true))
         {
             error(KIO::ERR_INTERNAL, errMsg);
             return;
@@ -542,6 +542,19 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     }
     }
 
+    // special case for imagedate. If the key is imagedate and the operator is EQ,
+    // we need to split it into two rules
+    if (key == IMAGEDATE && op == EQ)
+    {
+        QDate date = QDate::fromString(val, Qt::ISODate);
+        if (!date.isValid())
+            return query;
+
+        query = QString(" (Images.datetime > '%1' AND Images.datetime < '%2') ")
+                .arg(date.addDays(-1).toString(Qt::ISODate))
+                .arg(date.addDays( 1).toString(Qt::ISODate));
+    }
+    
     return query;
 }
 
@@ -574,8 +587,7 @@ QString kio_digikamsearch::possibleDate(const QString& str, bool& exact) const
     if (date.isValid())
     {
         exact = true;
-        // TODO: not correct
-        return (date.toString(Qt::ISODate) + "%");
+        return date.toString(Qt::ISODate);
     }
 
     exact = false;
