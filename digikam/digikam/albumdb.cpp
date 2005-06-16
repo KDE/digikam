@@ -1046,7 +1046,7 @@ void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
                      "           dirid=%1 AND name='%2') \n"
                      "AND  T.tagid IN (SELECT tagid FROM ImageTags WHERE \n"
                      "                   imageid=(SELECT id FROM Images WHERE \n"
-                     "                             dirid=%3 AND name='%3'))")
+                     "                             dirid=%3 AND name='%4'))")
              .arg(dstAlbumID)
              .arg(escapeString(dstName))
              .arg(srcAlbumID)
