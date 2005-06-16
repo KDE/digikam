@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Name=showFoto
 GenericName=Image Viewer
+GenericName[et]=Pildinäitaja
 Comment=digiKam photo viewer
+Comment[et]=DigiKami fotode näitaja
 Exec=showfoto %i %m -caption "%c" %U
 Icon=showfoto
 Type=Application

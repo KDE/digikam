@@ -4,3 +4,4 @@ Type=ServiceType
 X-KDE-ServiceType=Digikam/ImagePlugin
 X-KDE-DerivedName=Digikam ImagePlugin
 Comment=A digiKam Image Plugin
+Comment[et]=DigiKami pildiplugin

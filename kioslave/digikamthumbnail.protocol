@@ -6,3 +6,4 @@ output=stream
 reading=true
 source=false
 Description=Digikam thumbnail kioslave
+Description[et]=DigiKami pisipiltide I/O-moodul

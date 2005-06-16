@@ -12,4 +12,5 @@ deleting=false
 moving=false
 maxInstances=1
 Description=Digikam tags kioslave
+Description[et]=DigiKami siltide I/O-moodul
 Class=:local
