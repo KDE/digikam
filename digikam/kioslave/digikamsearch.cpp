@@ -254,7 +254,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         QStringList values;
         QString     errMsg;
-        if (!m_db.execSql(sqlQuery, &values, &errMsg, true))
+        if (!m_db.execSql(sqlQuery, &values, &errMsg))
         {
             error(KIO::ERR_INTERNAL, errMsg);
             return;

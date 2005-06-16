@@ -62,7 +62,7 @@ extern "C"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
-#include "dirselectdialog.h"
+#include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
 #include "gpiteminfodlg.h"
@@ -394,16 +394,10 @@ void CameraUI::slotDownloadAll()
 void CameraUI::slotDownload(bool onlySelected)
 {
     AlbumManager* man = AlbumManager::instance();
-    QString libPath(man->getLibraryPath());
-    QString currPath;
 
     Album* album = man->currentAlbum();
-    if (!album || album->type() != Album::PHYSICAL)
-        currPath = libPath;
-    else
-    {
-        currPath = ((PAlbum*)album)->folderPath();
-    }
+    if (album && album->type() != Album::PHYSICAL)
+        album = 0;
 
     QString header(i18n("Select Destination Album for "
                         "Importing Camera Images"));
@@ -429,12 +423,19 @@ void CameraUI::slotDownload(bool onlySelected)
                      .arg(date.date().day());
 #endif
     }
-    
-    KURL url = DirSelectDialog::selectDir(libPath, currPath,
-                                          this, header, newDirName,
-                                          m_autoAlbumCheck->isChecked());
-    if (!url.isValid())
+
+
+    album = AlbumSelectDialog::selectAlbum(this,
+                                           (PAlbum*)album,
+                                           header,
+                                           newDirName,
+                                           m_autoAlbumCheck->isChecked());
+
+    if (!album)
         return;
+
+    KURL url;
+    url.setPath(((PAlbum*)album)->folderPath());
     
     m_controller->downloadPrep();
 
