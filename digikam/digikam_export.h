@@ -21,12 +21,12 @@
 #ifndef _DIGIKAM_EXPORT_H
 #define _DIGIKAM_EXPORT_H
 
-#include <kdeversion.h>
 
-#ifdef __KDE_HAVE_GCC_VISIBILITY
-
+#ifdef KDEMACROS_USABLE
 #include <kdemacros.h>
+#endif
 
+#ifdef KDE_EXPORT
 #define DIGIKAM_EXPORT KDE_EXPORT
 #define DIGIKAMIMAGEPLUGINS_EXPORT KDE_EXPORT
 #define DIGIKAMIMAGEEDITOR_EXPORT KDE_EXPORT
