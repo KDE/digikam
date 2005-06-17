@@ -38,6 +38,7 @@ class QSplitter;
 class Sidebar : public KMultiTabBar
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -48,13 +49,27 @@ public:
         Right
     };    
     
+    /**
+     * Creates a new sidebar
+     * @param parent sidebar's parent
+     * @param side where the sidebar should be displayed. At the left or right border.
+     */
     Sidebar(QWidget *parent, Side side=Left);
     virtual ~Sidebar();
 
+    /**
+     * The width of the widget stack can be changed by a QSplitter.
+     * @param sp sets the splitter, which should handle the width. The splitter normally
+     *           is part of the main view.
+     */
     void setSplitter(QSplitter *sp);
+    void setSplitterSizePolicy(QSizePolicy p);
     
     /**
      * Appends a new tab to the sidebar
+     * @param w widget which is activated by this tab
+     * @param pic icon which is shown in this tab
+     * @param title text which is shown it this tab
      */
     void appendTab(QWidget *w, const QPixmap &pic, const QString &title);
     
@@ -94,7 +109,8 @@ public:
     void saveViewState(QDataStream &stream);
     
 private:
-    Side            m_side;
+    
+    Side             m_side;
     QWidgetStack    *m_stack;
     QSplitter       *m_splitter;
     QSize            m_bigSize;
@@ -112,6 +128,10 @@ private slots:
     void clicked(int tab);
     
 signals:
+    
+    /**
+     * is emitted, when another tab is activated
+     */
     void            signalChangedTab(QWidget *w);
 };
 
