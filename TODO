@@ -3,6 +3,7 @@
   - dnd from external sources [JA]
   - Copy/Paste [JA]
   - doxygen comments... [JA]
+  - dnd image on folderitem [JA]
 
 * revise the history function, so it is able to work with the new views/sidebar [JA]
 
