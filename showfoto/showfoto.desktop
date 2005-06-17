@@ -2,8 +2,11 @@
 Encoding=UTF-8
 Name=showFoto
 GenericName=Image Viewer
+GenericName[br]=Gweler ar skeudennoù
 GenericName[et]=Pildinäitaja
+GenericName[ga]=Amharcán Íomhánna
 Comment=digiKam photo viewer
+Comment[br]=Gweler foto digiKam
 Comment[et]=DigiKami fotode näitaja
 Exec=showfoto %i %m -caption "%c" %U
 Icon=showfoto
