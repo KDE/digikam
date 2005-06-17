@@ -140,7 +140,8 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
-        FolderItem *item = dynamic_cast<FolderItem*>(itemAt(e->pos()));
+        QPoint vp = contentsToViewport(e->pos());
+        FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
         if(!item)
         {
             d->dragItem = 0;
@@ -153,7 +154,8 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
     QListView::contentsMousePressEvent(e);
 
-    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(e->pos()));
+    QPoint vp = contentsToViewport(e->pos());
+    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
     if(item && e->button() == LeftButton) {
         d->dragStartPos = e->pos();
         d->dragItem = item;

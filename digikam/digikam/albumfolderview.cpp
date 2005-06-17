@@ -609,8 +609,10 @@ QDragObject* AlbumFolderView::dragObject()
     
     PAlbum *album = item->getAlbum();
     AlbumDrag *a = new AlbumDrag(album->kurl(), album->id(), this);
+    if(!a)
+        return 0;
     a->setPixmap(*item->pixmap(0));
-
+    
     return a;
 }
 
