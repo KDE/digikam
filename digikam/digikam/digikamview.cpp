@@ -29,6 +29,7 @@
 #include <qimage.h>
 #include <qevent.h>
 #include <qapplication.h>
+#include <qsplitter.h>
 
 // KDE includes.
 
@@ -67,19 +68,29 @@
 #include "digikamview.h"
 
 DigikamView::DigikamView(QWidget *parent)
-    : QSplitter(Qt::Horizontal, parent)
+    : QHBox(parent)
 {
     mParent = static_cast<DigikamApp *>(parent);
 
     mAlbumMan = AlbumManager::instance();
 
-    mMainSidebar = new Sidebar(this);
+    mMainSidebar = new Sidebar(this, Sidebar::Left);
+    
+    mSplitter = new QSplitter(this);
+    
+    mMainSidebar->setSplitter(mSplitter);
+    
+    mIconView = new AlbumIconView(mSplitter);
+    
+    mRightSidebar = new Sidebar(this, Sidebar::Right);    
+    mRightSidebar->setSplitter(mSplitter);    
+    
     mFolderView_Deprecated = new AlbumFolderView_Deprecated(this);
-    mFolderView = new AlbumFolderView(this);    
-    mIconView = new AlbumIconView(this);
+    mFolderView = new AlbumFolderView(this);
     mDateFolderView = new DateFolderView(this);
     mTagFolderView = new TagFolderView(this);
     mSearchFolderView = new SearchFolderView(this);
+    mTagFilterView = new TagFilterView(this);    
     
     mMainSidebar->appendTab(mFolderView_Deprecated, SmallIcon("folder"), i18n("Albums (Old)"));
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
@@ -87,13 +98,10 @@ DigikamView::DigikamView(QWidget *parent)
     mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
     mMainSidebar->appendTab(mSearchFolderView, SmallIcon("find"), i18n("Searches"));    
 
-    mRightSidebar = new Sidebar(this, Sidebar::Right);
-    mTagFilterView = new TagFilterView(this);
-
     mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
     mRightSidebar->setActiveTab(mTagFilterView);
     
-    setOpaqueResize(false);
+    mSplitter->setOpaqueResize(false);
 
     setupConnections();
 
@@ -171,7 +179,7 @@ void DigikamView::loadViewState()
     config->setGroup("MainWindow");
     if(config->hasKey("SplitterSizes"))
     {
-        setSizes(config->readIntListEntry("SplitterSizes"));
+        mSplitter->setSizes(config->readIntListEntry("SplitterSizes"));
     }
     else 
     {
@@ -203,7 +211,7 @@ void DigikamView::saveViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
-    config->writeEntry("SplitterSizes", sizes());
+    config->writeEntry("SplitterSizes", mSplitter->sizes());
     
     QFile file(locateLocal("appdata", "viewstate.bin"));
     if(!file.open(IO_WriteOnly))

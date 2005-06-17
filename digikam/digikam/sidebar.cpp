@@ -22,8 +22,6 @@
 
 #include <qsplitter.h>
 #include <qwidgetstack.h>
-#include <qlayout.h>
-#include <qsize.h>
 #include <qdatastream.h>
 
 #include <kdeversion.h>
@@ -31,41 +29,32 @@
 #include <kiconloader.h>
 
 Sidebar::Sidebar(QWidget *parent, Side side)
-    : QFrame(parent, "sidebar")
+    : KMultiTabBar(KMultiTabBar::Vertical, parent, "sidebar")
 {
     m_tabs = 0;
     m_activeTab = -1;
     m_minimized = false;
-    
-    QHBoxLayout *box = new QHBoxLayout(this);
-    
-    m_tabBar = new KMultiTabBar(KMultiTabBar::Vertical, this);
-#if KDE_IS_VERSION(3,3,0)
-    m_tabBar->setStyle(KMultiTabBar::KDEV3ICON);
-#else
-    m_tabBar->setStyle(KMultiTabBar::KDEV3);
-#endif
-    m_tabBar->showActiveTabTexts(true);
-    m_stack = new QWidgetStack(this);
-            
-    if(side == Left)
-    {
-        box->add(m_tabBar);
-        box->add(m_stack);
-        m_tabBar->setPosition(KMultiTabBar::Left);
-    }
-    else
-    {
-        box->add(m_stack);
-        box->add(m_tabBar);
-        m_tabBar->setPosition(KMultiTabBar::Right);
-    }
- 
-    setMinimumWidth(m_tabBar->width());
+    m_side = side;    
 }
 
 Sidebar::~Sidebar()
 {
+}
+
+void Sidebar::setSplitter(QSplitter *sp)
+{
+#if KDE_IS_VERSION(3,3,0)
+    setStyle(KMultiTabBar::KDEV3ICON);
+#else
+    setStyle(KMultiTabBar::KDEV3);
+#endif
+    showActiveTabTexts(true);
+    m_stack = new QWidgetStack(sp);
+            
+    if(m_side == Left)
+        setPosition(KMultiTabBar::Left);
+    else
+        setPosition(KMultiTabBar::Right);
 }
 
 void Sidebar::loadViewState(QDataStream &stream)
@@ -95,10 +84,11 @@ void Sidebar::saveViewState(QDataStream &stream)
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
 {
-    m_tabBar->appendTab(pic, m_tabs, title);
+    w->reparent(m_stack, QPoint(0,0));
+    KMultiTabBar::appendTab(pic, m_tabs, title);
     m_stack->addWidget(w, m_tabs);
 
-    connect(m_tabBar->tab(m_tabs), SIGNAL(clicked(int)),
+    connect(tab(m_tabs), SIGNAL(clicked(int)),
             this, SLOT(clicked(int)));
     
     m_tabs++;
@@ -113,7 +103,7 @@ void Sidebar::deleteTab(QWidget *w)
     if(tab == m_activeTab)
         m_activeTab = -1;
     
-    m_tabBar->removeTab(tab);
+    removeTab(tab);
     //TODO show another widget
 }
  
@@ -129,10 +119,10 @@ void Sidebar::clicked(int tab)
     else
     {
         if(m_activeTab >= 0)
-            m_tabBar->setTab(m_activeTab, false);
+            setTab(m_activeTab, false);
     
         m_activeTab = tab;    
-        m_tabBar->setTab(m_activeTab, true);
+        setTab(m_activeTab, true);
         m_stack->raiseWidget(m_activeTab);
         
         if(m_minimized)
@@ -164,7 +154,7 @@ void Sidebar::shrink()
     m_maxSize = maximumWidth();
             
     m_stack->hide();
-    setFixedWidth(m_tabBar->width());
+    setFixedWidth(width());
 }
 
 void Sidebar::expand()

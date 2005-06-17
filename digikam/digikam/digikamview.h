@@ -23,7 +23,7 @@
 #define DIGIKAMVIEW_H
 
 // Qt includes.
-#include <qsplitter.h>
+#include <qhbox.h>
 #include <qstringlist.h>
 #include <qmap.h>
 
@@ -53,7 +53,7 @@ class TagFolderView;
 class TagFilterView;
 class SearchFolderView;
 
-class DigikamView : public QSplitter
+class DigikamView : public QHBox
 {
     Q_OBJECT
 
@@ -88,6 +88,7 @@ private:
     Sidebar                  *mRightSidebar;
     TagFilterView            *mTagFilterView;
     int                      mInitialAlbumID;
+    QSplitter                *mSplitter;
     
 public slots:
 

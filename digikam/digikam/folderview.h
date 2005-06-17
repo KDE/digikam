@@ -26,6 +26,12 @@
 class FolderViewPriv;
 class FolderItem;
 
+/**
+ * \class FolderView
+ * \brief Base class for a tree view
+ */
+
+
 class FolderView : public QListView
 {
     Q_OBJECT

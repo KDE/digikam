@@ -25,17 +25,17 @@
 #include <config.h>
 #endif
 
-#include <qsplitter.h>
-#include <qsize.h>
+#include <kmultitabbar.h>
 
 class KMultiTabBar;
 class QWidgetStack;
 class QDataStream;
+class QSplitter;
 
 /**
  * This class handles a sidebar view
  */
-class Sidebar : public QFrame
+class Sidebar : public KMultiTabBar
 {
     Q_OBJECT
 public:
@@ -51,11 +51,12 @@ public:
     Sidebar(QWidget *parent, Side side=Left);
     virtual ~Sidebar();
 
+    void setSplitter(QSplitter *sp);
+    
     /**
      * Appends a new tab to the sidebar
      */
     void appendTab(QWidget *w, const QPixmap &pic, const QString &title);
-    
     
     /**
      * Deletes a tab from the tabbar
@@ -93,8 +94,9 @@ public:
     void saveViewState(QDataStream &stream);
     
 private:
-    KMultiTabBar    *m_tabBar;
+    Side            m_side;
     QWidgetStack    *m_stack;
+    QSplitter       *m_splitter;
     QSize            m_bigSize;
     int              m_minSize;
     int              m_maxSize;
