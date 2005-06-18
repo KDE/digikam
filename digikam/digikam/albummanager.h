@@ -201,7 +201,7 @@ public:
     
     /**
      * @return a Album with the given globalID
-     * @param id the global id for the album
+     * @param gid the global id for the album
      */
     Album*    findAlbum(int gid) const;
     //@}

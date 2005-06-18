@@ -201,6 +201,7 @@ public:
 
     /**
      * Updates Search with new attributes
+     * @param searchID   the id of the search
      * @param name       name of the search
      * @param url        url of the search
      */
