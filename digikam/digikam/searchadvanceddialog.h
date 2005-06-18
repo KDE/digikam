@@ -70,7 +70,7 @@ private slots:
     void slotOk();
 
 private:
-    QVBox*             m_box;
+    QVBox*             m_rulesBox;
     QPushButton*       m_addButton;
     QPushButton*       m_delButton;
     QPushButton*       m_groupButton;

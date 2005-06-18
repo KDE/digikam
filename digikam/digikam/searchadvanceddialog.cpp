@@ -43,49 +43,78 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
                   Ok|Cancel), m_url(url)
 {
 
-    QHBox* hbox = new QHBox(this);
-    hbox->setSpacing(spacingHint());
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
 
-    QVBox* vbox = new QVBox(hbox);
-    vbox->setSpacing(spacingHint());
-    
-    QVBoxLayout* lay = new QVBoxLayout(vbox->layout());
-    lay->setSpacing(5);
-    lay->setMargin(5);
+    // two columns, one for the rules, one for the preview.
+    QHBoxLayout* hbox = new QHBoxLayout( page );
+    hbox->setSpacing( spacingHint() );
+    QVBoxLayout* leftSide = new QVBoxLayout( hbox );
+    m_resultsView   = new SearchResultsView( page );
+    m_resultsView->setMinimumSize( QSize(200, 200) );
+    hbox->addWidget( m_resultsView );
 
-    m_box = new QVBox(vbox);
-    m_box->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    m_box->layout()->setSpacing(5);
-    m_box->layout()->setMargin(5);
-    m_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_box->layout()->setAlignment(Qt::AlignTop);
-    lay->addWidget(m_box);
+    // Box for all the rules
+    m_rulesBox = new QVBox( page );
+    m_rulesBox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    m_rulesBox->layout()->setSpacing( spacingHint() );
+    m_rulesBox->layout()->setMargin( 5 );
+    m_rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    m_rulesBox->layout()->setAlignment( Qt::AlignTop );
+    leftSide->addWidget( m_rulesBox );
 
-    QHGroupBox* box = 0;
-    box = new QHGroupBox(vbox);
-    box->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    // Push the rulesbox to top and the buttons down.
+    leftSide->addStretch(10);
 
-    m_optionsCombo = new QComboBox( box );
+    // Box for the add/delete
+    QGroupBox* groupbox = 0;
+    groupbox            = new QGroupBox( page, "groupbox");
+    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    m_optionsCombo      = new QComboBox( groupbox );
     m_optionsCombo->insertItem(i18n("As Well As"));
     m_optionsCombo->insertItem(i18n("Or"));
     m_optionsCombo->setEnabled(false);
-    m_addButton = new QPushButton(i18n("&Add"), box);
-    m_delButton = new QPushButton(i18n("&Del"), box);
-    lay->addWidget(box);
+    m_addButton         = new QPushButton(i18n("&Add"), groupbox);
+    m_delButton         = new QPushButton(i18n("&Del"), groupbox);
 
-    box = new QHGroupBox(vbox);
-    box->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    m_groupButton   = new QPushButton(i18n("&Group"), box);
-    m_ungroupButton = new QPushButton(i18n("&Ungroup"), box);
-    lay->addWidget(box);
+    QHBoxLayout* box = 0;
+    box = new QHBoxLayout( groupbox );
+    box->setSpacing( spacingHint() );
+    box->setMargin( 5 );
+    box->addWidget( m_optionsCombo );
+    box->addWidget( m_addButton );
+    box->addStretch( 10 );
+    box->addWidget( m_delButton );
+    leftSide->addWidget( groupbox );
 
-    box = new QHGroupBox(vbox);
-    QLabel* label = new QLabel(i18n("Save Search As"), box);
-    m_title = new QLineEdit(box,"searchTitle");
+    // Box for the group/ungroup
+    groupbox            = new QGroupBox( page, "groupbox");
+    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    m_groupButton       = new QPushButton(i18n("&Group"), groupbox);
+    m_ungroupButton     = new QPushButton(i18n("&Ungroup"), groupbox);
+
+    box = new QHBoxLayout( groupbox );
+    box->setSpacing( spacingHint() );
+    box->setMargin( 5 );
+    box->addWidget( m_groupButton );
+    box->addStretch( 10 );
+    box->addWidget( m_ungroupButton );
+    leftSide->addWidget( groupbox );
+
+    // box for saving the search.
+    groupbox = new QGroupBox( page, "groupbox");
+    QLabel* label = new QLabel(i18n("&Save Search As"), groupbox);
+    m_title = new QLineEdit(groupbox, "searchTitle");
+    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+
+    box = new QHBoxLayout( groupbox );
+    box->setSpacing( spacingHint() );
+    box->setMargin( 5 );
+    box->addWidget( label );
+    box->addWidget( m_title );
     label->setBuddy(m_title);
-    lay->addWidget(box);
+    leftSide->addWidget( groupbox );
 
-    m_resultsView = new SearchResultsView(hbox);
     m_timer = new QTimer(this);
 
     if ( url.isEmpty() )
@@ -99,7 +128,6 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
         fillWidgets( url );
     }
 
-    setMainWidget(hbox);
     slotChangeButtonStates();
     m_timer->start(0, true);
 
@@ -125,7 +153,7 @@ SearchAdvancedDialog::~SearchAdvancedDialog()
 void SearchAdvancedDialog::slotAddRule()
 {
     SearchAdvancedRule* rule = new SearchAdvancedRule(
-        m_box, m_baseList.isEmpty() ?
+        m_rulesBox, m_baseList.isEmpty() ?
             SearchAdvancedRule::NONE :
             m_optionsCombo->currentText() == i18n("As Well As") ?
             SearchAdvancedRule::AND : SearchAdvancedRule::OR);
@@ -231,7 +259,7 @@ void SearchAdvancedDialog::slotGroupRules()
     BaseList::iterator it = itemsToGroup.begin();
     SearchAdvancedRule* rule = (SearchAdvancedRule*)(*it);
 
-    SearchAdvancedGroup* group = new SearchAdvancedGroup(m_box);
+    SearchAdvancedGroup* group = new SearchAdvancedGroup(m_rulesBox);
     BaseList::iterator itPos = m_baseList.find(rule);
     m_baseList.insert(itPos, group);    
 
@@ -250,8 +278,8 @@ void SearchAdvancedDialog::slotGroupRules()
     for (BaseList::iterator it = m_baseList.begin();
          it != m_baseList.end(); ++it)
     {
-        m_box->layout()->remove((*it)->widget());
-        m_box->layout()->add((*it)->widget());
+        m_rulesBox->layout()->remove((*it)->widget());
+        m_rulesBox->layout()->add((*it)->widget());
     }
 
     connect( group, SIGNAL( signalBaseItemToggled() ) ,
@@ -307,8 +335,8 @@ void SearchAdvancedDialog::slotUnGroupRules()
     for (BaseList::iterator it = m_baseList.begin();
          it != m_baseList.end(); ++it)
     { 
-        m_box->layout()->remove((*it)->widget());
-        m_box->layout()->add((*it)->widget());
+        m_rulesBox->layout()->remove((*it)->widget());
+        m_rulesBox->layout()->add((*it)->widget());
     }
 
     adjustSize();
@@ -499,7 +527,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         int  num = (*it).toInt(&ok);
         if (ok)
         {
-            SearchAdvancedRule* rule = new SearchAdvancedRule( m_box, type );
+            SearchAdvancedRule* rule = new SearchAdvancedRule( m_rulesBox, type );
             rule->setValues( rulesMap[num] );
 
             connect( rule, SIGNAL( signalBaseItemToggled() ) ,
@@ -522,7 +550,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         }
         else if (*it == "(")
         {
-            group = new SearchAdvancedGroup(m_box);
+            group = new SearchAdvancedGroup(m_rulesBox);
             m_baseList.append(group);
             connect( group, SIGNAL( signalBaseItemToggled() ) ,
                      this, SLOT( slotChangeButtonStates() ) );

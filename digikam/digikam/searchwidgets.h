@@ -237,8 +237,8 @@ private:
     void setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType);
 
     QVBox*     m_box;
+    QWidget*   m_hbox;
 
-    QHBox*     m_hbox;
     QHBox*     m_valueBox;
 
     QLabel*    m_label;

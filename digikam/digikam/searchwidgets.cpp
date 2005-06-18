@@ -94,38 +94,48 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
     m_box = new QVBox(parent);
-    m_box->layout()->setSpacing(KDialog::spacingHint());
+    m_box->layout()->setSpacing( KDialog::spacingHint() );
+    m_box->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     m_optionsBox   = 0;
     m_option       = option;
     if (option != NONE)
     {
-        m_optionsBox  = new QHBox(m_box);
+        m_optionsBox  = new QHBox( m_box );
         QLabel* label = new QLabel( i18n(option == AND ? "As well as" : "Or"),
                                     m_optionsBox);
-        QFrame* hline = new QFrame(m_optionsBox);
-        hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
-        label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        QFrame* hline = new QFrame( m_optionsBox );
+        hline->setFrameStyle( QFrame::HLine|QFrame::Sunken );
+        label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+        hline->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
     }
 
-    m_hbox = new QHBox(m_box);
-    m_hbox->layout()->setSpacing(KDialog::spacingHint());
+    m_hbox = new QWidget( m_box );
+    m_hbox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     m_key = new QComboBox( m_hbox, "key" );
     for (int i=0; i< RuleKeyTableCount; i++)
         m_key->insertItem( RuleKeyTable[i].keyText, i );
+
     m_operator = new QComboBox( m_hbox );
-    m_valueBox = new QHBox(m_hbox);
+    m_operator->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+    m_valueBox = new QHBox( m_hbox );
     m_widgetType = NOWIDGET;
 
     slotKeyChanged( 0 );
+    m_check = new QCheckBox( m_hbox );
 
-    m_check = new QCheckBox(m_hbox);
-    m_check->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    QHBoxLayout* m_hboxLayout = new QHBoxLayout( m_hbox );
+
+    m_hboxLayout->setSpacing( KDialog::spacingHint() );
+    m_hboxLayout->addWidget( m_key );
+    m_hboxLayout->addWidget( m_operator );
+    m_hboxLayout->addWidget( m_valueBox );
+    m_hboxLayout->addStretch( 5 );
+    m_hboxLayout->addWidget( m_check );
 
     m_box->show();
-
 
     connect( m_key, SIGNAL( activated(int) ),
              this, SLOT(slotKeyChanged(int)));
@@ -157,6 +167,7 @@ void SearchAdvancedRule::setValues(const KURL& url)
         {
             m_operator->setCurrentText( RuleOpTable[i].keyText );
         }
+    m_operator->adjustSize();
 
     // Set the value for the last widget.
     QString value = url.queryItem("1.val");
@@ -204,7 +215,7 @@ void SearchAdvancedRule::slotKeyChanged(int id)
         if ( currentOperator == RuleOpTable[i].key )
             m_operator->setCurrentText( currentOperator );
     }
-
+    m_operator->adjustSize();
     setValueWidget( currentType, m_widgetType );
 }
 
