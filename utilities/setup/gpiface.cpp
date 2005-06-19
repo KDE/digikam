@@ -57,17 +57,35 @@ int GPIface::autoDetect(QString& model, QString& port)
         return -1;
     }
 
-    for (int i = 0; i < count; i++) {
-        gp_list_get_name  (camList, i, &camModel_);
-        gp_list_get_value (camList, i, &camPort_);
+    camModel_ = 0;
+    camPort_  = 0;
+    
+    for (int i = 0; i < count; i++)
+    {
+        if (gp_list_get_name  (camList, i, &camModel_) != GP_OK)
+        {
+            gp_list_free (camList);
+            return -1;
+        }
+
+        if (gp_list_get_value (camList, i, &camPort_) != GP_OK)
+        {
+            gp_list_free (camList);
+            return -1;
+        }
+
+        if (camModel_ && camPort_)
+        {
+            model = QString::fromLatin1(camModel_);
+            port  = QString::fromLatin1(camPort_);
+            gp_list_free (camList);
+            return 0;
+        }
     }
 
     gp_list_free (camList);
 
-    model = camModel_;
-    port  = camPort_;
-
-    return 0;
+    return -1;
 }
 
 void GPIface::getSupportedCameras(int& count, QStringList& clist)
