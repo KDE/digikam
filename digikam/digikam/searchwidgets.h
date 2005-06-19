@@ -40,7 +40,7 @@ class KURL;
  * This class inherits everything from QLabel, and adds one
  * signal to it, when double clicked on it.
  */
-class RuleLabel: public QLabel
+class SearchRuleLabel: public QLabel
 {
     Q_OBJECT
 public:
@@ -50,7 +50,7 @@ public:
      * @param name The name
      * @param f WFlags
      */
-    RuleLabel( const QString & text,
+    SearchRuleLabel( const QString & text,
                QWidget * parent,
                const char * name=0,
                WFlags f=0 );

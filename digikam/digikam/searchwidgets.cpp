@@ -87,7 +87,7 @@ RuleOpTable[] =
 };
 static const int RuleOpTableCount = 11;
 
-RuleLabel::RuleLabel( const QString & text,
+SearchRuleLabel::SearchRuleLabel( const QString & text,
                       QWidget * parent,
                       const char * name,
                       WFlags f )
@@ -95,7 +95,7 @@ RuleLabel::RuleLabel( const QString & text,
 {
 }
 
-void RuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
+void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
 {
    emit signalDoubleClick( e );
 }
@@ -113,7 +113,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     if (option != NONE)
     {
         m_optionsBox  = new QHBox( m_box );
-        m_label = new RuleLabel( i18n(option == AND ? "As well as" : "Or"),
+        m_label = new SearchRuleLabel( i18n(option == AND ? "As well as" : "Or"),
                                     m_optionsBox);
         QFrame* hline = new QFrame( m_optionsBox );
         hline->setFrameStyle( QFrame::HLine|QFrame::Sunken );
