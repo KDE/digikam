@@ -167,7 +167,6 @@ void SearchAdvancedRule::setValues(const KURL& url)
         {
             m_operator->setCurrentText( RuleOpTable[i].keyText );
         }
-    m_operator->adjustSize();
 
     // Set the value for the last widget.
     QString value = url.queryItem("1.val");
@@ -265,9 +264,12 @@ void SearchAdvancedRule::setValueWidget(
               it != aList.end(); ++it )
         {
             PAlbum *album = (PAlbum*)(*it);
-            m_valueCombo->insertItem( album->title(), index );
-            m_itemsIndexIDMap.insert(index, album->id());
-            index++;
+            if ( !album->isRoot() )
+            {
+                m_valueCombo->insertItem( album->url(), index );
+                m_itemsIndexIDMap.insert(index, album->id());
+                index++;
+            }
         }
 
         m_valueCombo->show();
@@ -289,11 +291,12 @@ void SearchAdvancedRule::setValueWidget(
               it != tList.end(); ++it )
         {
             TAlbum *album = (TAlbum*)(*it);
-            m_valueCombo->insertItem( album->title(), index );
-            kdDebug() << index << album->id() << endl;
-            m_itemsIndexIDMap.insert(index, album->id());
-            ++index;
-
+            if ( !album->isRoot() )
+            {
+                m_valueCombo->insertItem( album->url(), index );
+                m_itemsIndexIDMap.insert( index, album->id() );
+                ++index;
+            }
         }
 
         m_valueCombo->show();

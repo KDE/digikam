@@ -68,8 +68,11 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     // Box for the add/delete
     QGroupBox* groupbox = 0;
-    groupbox            = new QGroupBox( page, "groupbox");
-    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    groupbox            = new QGroupBox( i18n("Add/Delete Option"),
+                                         page, "groupbox" );
+    groupbox->setColumnLayout(0, Qt::Vertical );
+    groupbox->layout()->setSpacing( KDialog::spacingHint() );
+    groupbox->layout()->setMargin( KDialog::marginHint() );
     m_optionsCombo      = new QComboBox( groupbox );
     m_optionsCombo->insertItem(i18n("As Well As"));
     m_optionsCombo->insertItem(i18n("Or"));
@@ -78,9 +81,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     m_delButton         = new QPushButton(i18n("&Del"), groupbox);
 
     QHBoxLayout* box = 0;
-    box = new QHBoxLayout( groupbox );
-    box->setSpacing( spacingHint() );
-    box->setMargin( 5 );
+    box = new QHBoxLayout( groupbox->layout() );
     box->addWidget( m_optionsCombo );
     box->addWidget( m_addButton );
     box->addStretch( 10 );
@@ -88,14 +89,15 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     leftSide->addWidget( groupbox );
 
     // Box for the group/ungroup
-    groupbox            = new QGroupBox( page, "groupbox");
-    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    groupbox            = new QGroupBox( i18n("Group or Ungroup Options"),
+                                         page, "groupbox" );
+    groupbox->setColumnLayout(0, Qt::Vertical );
+    groupbox->layout()->setSpacing( KDialog::spacingHint() );
+    groupbox->layout()->setMargin( KDialog::marginHint() );
     m_groupButton       = new QPushButton(i18n("&Group"), groupbox);
     m_ungroupButton     = new QPushButton(i18n("&Ungroup"), groupbox);
 
-    box = new QHBoxLayout( groupbox );
-    box->setSpacing( spacingHint() );
-    box->setMargin( 5 );
+    box = new QHBoxLayout( groupbox->layout() );
     box->addWidget( m_groupButton );
     box->addStretch( 10 );
     box->addWidget( m_ungroupButton );
@@ -103,13 +105,13 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     // box for saving the search.
     groupbox = new QGroupBox( page, "groupbox");
+    groupbox->setColumnLayout(0, Qt::Vertical );
+    groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save Search As"), groupbox);
     m_title = new QLineEdit(groupbox, "searchTitle");
-    groupbox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    groupbox->setFrameStyle( QFrame::NoFrame );
 
-    box = new QHBoxLayout( groupbox );
-    box->setSpacing( spacingHint() );
-    box->setMargin( 5 );
+    box = new QHBoxLayout( groupbox->layout() );
     box->addWidget( label );
     box->addWidget( m_title );
     label->setBuddy(m_title);
