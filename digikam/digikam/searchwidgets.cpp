@@ -87,7 +87,18 @@ RuleOpTable[] =
 };
 static const int RuleOpTableCount = 11;
 
+RuleLabel::RuleLabel( const QString & text,
+                      QWidget * parent,
+                      const char * name,
+                      WFlags f )
+    : QLabel(  text, parent, name, f )
+{
+}
 
+void RuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
+{
+   emit signalDoubleClick( e );
+}
 
 SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
                                        SearchAdvancedRule::Option option)
@@ -102,12 +113,16 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     if (option != NONE)
     {
         m_optionsBox  = new QHBox( m_box );
-        QLabel* label = new QLabel( i18n(option == AND ? "As well as" : "Or"),
+        m_label = new RuleLabel( i18n(option == AND ? "As well as" : "Or"),
                                     m_optionsBox);
         QFrame* hline = new QFrame( m_optionsBox );
         hline->setFrameStyle( QFrame::HLine|QFrame::Sunken );
-        label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+        m_label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         hline->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+        connect( m_label, SIGNAL( signalDoubleClick( QMouseEvent* ) ),
+                 this,  SLOT( slotLabelDoubleClick() ));
+    
     }
 
     m_hbox = new QWidget( m_box );
@@ -196,6 +211,21 @@ void SearchAdvancedRule::setValues(const KURL& url)
 SearchAdvancedRule::~SearchAdvancedRule()
 {
     delete m_box;
+}
+
+void SearchAdvancedRule::slotLabelDoubleClick()
+{
+    if (m_option == AND)
+    {
+        m_option=OR;
+        m_label->setText("Or");
+    }
+    else
+    {
+        m_option=AND;
+        m_label->setText("As Well As");
+    }
+    emit signalPropertyChanged();
 }
 
 void SearchAdvancedRule::slotKeyChanged(int id)

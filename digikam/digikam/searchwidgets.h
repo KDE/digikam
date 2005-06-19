@@ -29,10 +29,42 @@ class QVBox;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
+class QLabel;
 class QVGroupBox;
 class QLabel;
 class KDateEdit;
 class KURL;
+
+/** @class RuleLabel
+ *
+ * This class inherits everything from QLabel, and adds one
+ * signal to it, when double clicked on it.
+ */
+class RuleLabel: public QLabel
+{
+    Q_OBJECT
+public:
+    /** Constructor. See for more info the QLabel clas.
+     * @param text Text of the label
+     * @param parent The parent widget
+     * @param name The name
+     * @param f WFlags
+     */
+    RuleLabel( const QString & text,
+               QWidget * parent,
+               const char * name=0,
+               WFlags f=0 );
+private:
+    void mouseDoubleClickEvent( QMouseEvent * e );
+
+signals:
+    /**
+     * Signal which gets emitted when a double clicked
+     * event occurs
+     * @param e the mouse event received
+     */
+    void signalDoubleClick( QMouseEvent * e );
+};
 
 /** @class SearchAdvancedBase
  *
@@ -132,8 +164,6 @@ signals:
 protected:
     enum Option m_option;
     enum Type m_type;
-
-
 };
 
 class SearchAdvancedGroup;
@@ -235,13 +265,13 @@ public:
 
 private:
     void setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType);
+    QLabel*    m_label;
 
     QVBox*     m_box;
     QWidget*   m_hbox;
 
     QHBox*     m_valueBox;
 
-    QLabel*    m_label;
     QCheckBox* m_check;
 
     QComboBox* m_key;
@@ -259,6 +289,7 @@ private:
 
 private slots:
     void slotKeyChanged(int);
+    void slotLabelDoubleClick();
 };
 
 /** @class SearchAdvancedGroup
