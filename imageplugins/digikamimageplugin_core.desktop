@@ -1,10 +1,16 @@
 [Desktop Entry]
 Name=ImagePlugin_Core
+Name[nl]=Afbeeldingsplugin_Kern
+Name[sr]=Сликовни прикључак — језгро
+Name[sr@Latn]=Slikovni priključak — jezgro
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam Core Image Plugin
 Comment[et]=DigiKami peamine pildiplugin
+Comment[nl]=digiKam kernafbeeldingsplugin
+Comment[sr]=Језгро digiKam-ових сликовних прикључака
+Comment[sr@Latn]=Jezgro digiKam-ovih slikovnih priključaka
 
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu

@@ -13,4 +13,5 @@ moving=true
 maxInstances=4
 Description=Digikam IO kioslave
 Description[et]=DigiKami I/O-moodul
+Description[nl]=digiKam IO kioslave
 Class=:local

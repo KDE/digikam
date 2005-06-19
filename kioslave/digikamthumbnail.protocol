@@ -8,3 +8,6 @@ source=false
 Description=Digikam thumbnail kioslave
 Description[br]=kioslave ar skeudennigoù evit Digikam
 Description[et]=DigiKami pisipiltide I/O-moodul
+Description[nl]=digiKam miniatuur kioslave
+Description[sr]=kioslave Digikam-ових умањених приказа
+Description[sr@Latn]=kioslave Digikam-ovih umanjenih prikaza

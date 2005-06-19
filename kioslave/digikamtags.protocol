@@ -13,4 +13,7 @@ moving=false
 maxInstances=1
 Description=Digikam tags kioslave
 Description[et]=DigiKami siltide I/O-moodul
+Description[nl]=digiKam tags kioslave
+Description[sr]=kioslave Digikam-ових ознака
+Description[sr@Latn]=kioslave Digikam-ovih oznaka
 Class=:local
