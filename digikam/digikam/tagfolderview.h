@@ -57,11 +57,14 @@ private slots:
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);    
     void slotContextMenu(QListViewItem*, const QPoint&, int);
-    
+    void slotABCContextMenu();
+
 private:
 
-    void tagNew(TagFolderViewItem *item);
-    void tagEdit(TagFolderViewItem *item);    
+    void tagNew(TagFolderViewItem *item,
+                const QString& _title=QString(),
+                const QString& _icon=QString() );
+    void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
 
     TagFolderViewPriv   *d;

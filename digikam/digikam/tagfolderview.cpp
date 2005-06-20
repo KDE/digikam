@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -109,7 +110,8 @@ int TagFolderViewItem::id() const
 class TagFolderViewPriv
 {
 public:
-    AlbumManager                    *albumMan;    
+    AlbumManager                    *albumMan;
+    QPopupMenu                      *ABCMenu;
 };
 
 //-----------------------------------------------------------------------------
@@ -259,7 +261,10 @@ void TagFolderView::slotAlbumIconChanged(Album* album)
 void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
-    
+    d->ABCMenu = new QPopupMenu;
+    connect( d->ABCMenu, SIGNAL( aboutToShow() ),
+             SLOT( slotABCContextMenu() ) );
+
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
 
@@ -269,7 +274,11 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
-    switch(popmenu.exec((QCursor::pos())))
+    popmenu.insertItem( i18n("Create Tag from AddressBook"), d->ABCMenu);
+
+
+    int choice = popmenu.exec((QCursor::pos()));
+    switch( choice )
     {
         case 10:
         {
@@ -289,6 +298,36 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         default:
             break;
     }
+
+    if ( choice > 12 )
+    {
+        tagNew( tag, d->ABCMenu->text( choice ), "tag-people" );
+    }
+
+    delete d->ABCMenu;
+    d->ABCMenu = 0;
+}
+
+void TagFolderView::slotABCContextMenu()
+{
+    d->ABCMenu->clear();
+
+    int counter = 12;
+    KABC::AddressBook* ab = KABC::StdAddressBook::self();
+    KABC::AddressBook::Iterator it;
+    for ( it = ab->begin(); it != ab->end(); ++it )
+    {
+        KABC::Addressee addr = (*it);
+        QString name = addr.formattedName();
+        if ( !name.isNull() )
+            d->ABCMenu->insertItem( name, ++counter );
+    }
+
+    if (counter == 12)
+    {
+        d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
+        d->ABCMenu->setItemEnabled( counter, false );
+    }
 }
 
 void TagFolderView::tagNew()
@@ -297,9 +336,12 @@ void TagFolderView::tagNew()
     tagNew(item);
 }
 
-void TagFolderView::tagNew(TagFolderViewItem *item)
+void TagFolderView::tagNew( TagFolderViewItem *item,
+                            const QString& _title,
+                            const QString& _icon )
 {
-    QString title, icon;
+    QString title = _title;
+    QString icon  = _icon;
     TAlbum *parent;
 
     if(!item)
@@ -307,8 +349,11 @@ void TagFolderView::tagNew(TagFolderViewItem *item)
     else
         parent = item->getTag();
 
-    if(!TagCreateDlg::tagCreate(parent, title, icon))
-        return;
+    if (title.isNull())
+    {
+        if(!TagCreateDlg::tagCreate(parent, title, icon))
+            return;
+    }
 
     QString errMsg;
     if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))

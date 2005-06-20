@@ -49,7 +49,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			upgradedb_sqlite2tosqlite3.cpp jpegreader.cpp
 
 
-libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) \
+libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
