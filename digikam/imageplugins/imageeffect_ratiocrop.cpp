@@ -45,6 +45,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kcolorbutton.h>
 
 // Digikam includes.
 
@@ -173,7 +174,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 3, 3, marginHint(), spacingHint());
+    QGridLayout* grid2 = new QGridLayout( secondPage, 4, 4, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Composition Guide") );
     
     QLabel *labelGuideLines = new QLabel(i18n("Guide Type:"), secondPage);
@@ -204,14 +205,20 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), secondPage);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically golden guides."));
 
+    QLabel *labelColorGuide = new QLabel(i18n("Color:"), secondPage);
+    m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), secondPage );
+    QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
+    
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 1);
     grid2->addMultiCellWidget(m_goldenSectionBox, 1, 1, 0, 1);
     grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 1);
     grid2->addMultiCellWidget(m_goldenSpiralBox, 3, 3, 0, 1);
-    grid2->addMultiCellWidget(m_goldenTriangleBox, 1, 1, 2, 3);
-    grid2->addMultiCellWidget(m_flipHorBox, 2, 2, 2, 3);
-    grid2->addMultiCellWidget(m_flipVerBox, 3, 3, 2, 3);
+    grid2->addMultiCellWidget(m_goldenTriangleBox, 1, 1, 2, 2);
+    grid2->addMultiCellWidget(m_flipHorBox, 2, 2, 2, 2);
+    grid2->addMultiCellWidget(m_flipVerBox, 3, 3, 2, 2);
+    grid2->addMultiCellWidget(labelColorGuide, 1, 1, 4, 4);
+    grid2->addMultiCellWidget(m_guideColorBt, 1, 1, 5, 5);
     
     topLayout->addWidget(m_mainTab);
     
@@ -256,6 +263,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));   
     
+    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
+            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor &)));         
+            
     connect(m_widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
 
@@ -294,6 +304,7 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 
 void ImageEffect_RatioCrop::readSettings(void)
 {
+    QColor *defaultGuideColor = new QColor( 250, 250, 255 );
     KConfig *config = kapp->config();
     config->setGroup("Aspect Ratio Crop Tool Settings");
     
@@ -306,6 +317,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_goldenTriangleBox->setChecked( config->readBoolEntry("Golden Triangle", false) );
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
+    m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());            
                                     
     m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
@@ -332,7 +344,8 @@ void ImageEffect_RatioCrop::readSettings(void)
        m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
        }
     
-    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());       
+    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());    
+    delete defaultGuideColor;   
 }
     
 void ImageEffect_RatioCrop::writeSettings(void)
@@ -356,6 +369,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Golden Triangle", m_goldenTriangleBox->isChecked() );
     config->writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
     config->writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
+    config->writeEntry( "Guide Color", m_guideColorBt->color() );
     config->sync();
 }
 

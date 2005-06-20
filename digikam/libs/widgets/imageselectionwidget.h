@@ -25,6 +25,7 @@
 
 #include <qwidget.h>
 #include <qrect.h>
+#include <qcolor.h>
 
 class QPixmap;
 class QTimer;
@@ -108,6 +109,7 @@ public:
 public slots:
 
     void slotGuideLines(int guideLinesType);
+    void slotChangeGuideColor(const QColor &color);
     
 signals:
 
@@ -172,7 +174,9 @@ private:
     
     QTimer     *m_timerW;
     QTimer     *m_timerH;
-    
+
+    QColor      m_guideColor;
+        
     int         m_currentAspectRatioType;
     int         m_currentAspectRatio;
     int         m_currentResizing;

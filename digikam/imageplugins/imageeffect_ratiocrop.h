@@ -33,6 +33,7 @@ class QCheckBox;
 
 class KIntNumInput;
 class KIntSpinBox;
+class KColorButton;
 
 namespace Digikam
 {
@@ -78,6 +79,8 @@ private:
      
     KIntSpinBox  *m_customRatioNInput;
     KIntSpinBox  *m_customRatioDInput;
+    
+    KColorButton *m_guideColorBt;
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
 
