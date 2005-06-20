@@ -50,6 +50,7 @@ public:
     RATIO04X05,                // 4:5
     RATIO05x07,                // 5:7
     RATIO07x10,                // 7:10
+    RATIOGOLDEN,               // Golden ratio : 1:1.618 
     RATIONONE                  // No aspect ratio.
     };
 

@@ -285,7 +285,11 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
 
        case RATIO04X05:          
           m_currentAspectRatioValue = 0.8; 
-          break;                                         
+          break;  
+          
+       case RATIOGOLDEN:          
+          m_currentAspectRatioValue = INVPHI; 
+          break;                                                   
        }
     
     applyAspectRatio(false);
