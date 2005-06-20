@@ -676,69 +676,76 @@ void ImageSelectionWidget::updatePixmap(void)
 
             int w = m_localRegionSelection.width();
             int h = m_localRegionSelection.height();                
-            QRect R1(-w/2, -h/2, (int)(w/PHI), h);
-            QRect R2((int)(w*(INVPHI - 0.5)), (int)(h*(0.5 - INVPHI)), (int)(w*(1 - INVPHI)), (int)(h/PHI)); 
-            QRect R3((int)(w/2 - R2.width()/PHI), -h/2, (int)(R2.width()/PHI), h - R2.height());
-            QRect R4(R2.x(), R1.y(), R3.x() - R2.x(), (int)(R3.height()/PHI));
-            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()/PHI), R3.height() - R4.height());
-            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()/PHI), R3.x() - R5.right(), (int)(R5.height()/PHI));
-            QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), (int)(R6.width()/PHI), R5.height() - R6.height());
+            
+            QRect R1(-w/2, -h/2, 
+                     (int)(w/PHI), h);
+            QRect R2((int)(w*(INVPHI - 0.5)), (int)(h*(0.5 - INVPHI)), 
+                     (int)(w*(1 - INVPHI)), (int)(h/PHI)); 
+            QRect R3((int)(w/2 - R2.width()/PHI), -h/2, 
+                     (int)(R2.width()/PHI), h - R2.height());
+            QRect R4(R2.x(), R1.y(), R3.x() - R2.x(), 
+                     (int)(R3.height()/PHI));
+            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()/PHI), 
+                     R3.height() - R4.height());
+            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()/PHI), 
+                     R3.x() - R5.right(), (int)(R5.height()/PHI));
+            QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), 
+                     (int)(R6.width()/PHI), R5.height() - R6.height());
                                             
             // Drawing Golden sections.
             if (m_drawGoldenSection)
                {            
-               p.drawLine( -m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 - R2.height(),
-                            m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 - R2.height());
+               p.drawLine( R1.left(), R2.top(),
+                           R2.right(), R2.top());
                 
-               p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 + R2.height(),
-                            m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 + R2.height());
+               p.drawLine( R1.left(), R1.top() + R2.height(),
+                           R2.right(), R1.top() + R2.height());
                 
-               p.drawLine( m_localRegionSelection.width()/2 - R1.width(), -m_localRegionSelection.height()/2,
-                           m_localRegionSelection.width()/2 - R1.width(),  m_localRegionSelection.height()/2 );
+               p.drawLine( R2.right() - R1.width(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom() );
                 
-               p.drawLine( -m_localRegionSelection.width()/2 + R1.width(), -m_localRegionSelection.height()/2,
-                           -m_localRegionSelection.width()/2 + R1.width(),  m_localRegionSelection.height()/2);
+               p.drawLine( R1.topRight(), R1.bottomRight() );
                }
                             
             // Drawing Golden triangle guides.
             if (m_drawGoldenTriangle)
                {            
-               p.drawLine( -m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2,
-                            m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 );
+               p.drawLine( R1.left(),  R1.bottom(),
+                           R2.right(), R1.top() );
                 
-               p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
-                            m_localRegionSelection.width()/2 - R1.width(), m_localRegionSelection.height()/2);
+               p.drawLine( R1.left(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom());
 
-               p.drawLine( -m_localRegionSelection.width()/2 + R1.width(), -m_localRegionSelection.height()/2,
-                            m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 );
+               p.drawLine( R1.left() + R1.width(), R1.top(),
+                           R2.right(), R1.bottom() );
                }
                 
             // Drawing Golden spiral sections.
             if (m_drawGoldenSpiralSection)
                {            
-               p.drawRect( R1 );
-               p.drawRect( R2 );
-               p.drawRect( R3 );
-               p.drawRect( R4 );
-               p.drawRect( R5 );
-               p.drawRect( R6 );
-               p.drawRect( R7 );
+               p.drawLine( R1.topRight(),   R1.bottomRight() );
+               p.drawLine( R2.topLeft(),    R2.topRight() );
+               p.drawLine( R3.topLeft(),    R3.bottomLeft() );
+               p.drawLine( R4.bottomLeft(), R4.bottomRight() );
+               p.drawLine( R5.topRight(),   R5.bottomRight() );
+               p.drawLine( R6.topLeft(),    R6.topRight() );
+               p.drawLine( R7.topLeft(),    R7.bottomLeft() );
                }
                                         
             // Drawing Golden Spiral.
             if (m_drawGoldenSpiral)
                {
                p.drawArc ( R1.left(), 
-                           -R1.height() - m_localRegionSelection.height()/2,
+                           R1.top() - R1.height(),
                            2*R1.width(), 2*R1.height(), 
                            180*16, 90*16);                       
                
-               p.drawArc ( m_localRegionSelection.width()/2 - 2*R2.width(),
-                           m_localRegionSelection.height()/2 - 2*R2.height(),
+               p.drawArc ( R2.right() - 2*R2.width(),
+                           R1.bottom() - 2*R2.height(),
                            2*R2.width(), 2*R2.height(),
                            270*16, 90*16);                       
                 
-               p.drawArc ( m_localRegionSelection.width()/2 - 2*R3.width(),
+               p.drawArc ( R2.right() - 2*R3.width(),
                            R3.top(),
                            2*R3.width(), 2*R3.height(),
                            0, 90*16);                       
