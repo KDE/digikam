@@ -18,16 +18,22 @@
  * 
  * ============================================================ */
  
-#define OPACITY  0.7
-#define RCOL     0xAA
-#define GCOL     0xAA
-#define BCOL     0xAA
+#define OPACITY   0.7
+#define RCOL      0xAA
+#define GCOL      0xAA
+#define BCOL      0xAA
 
-#define MINRANGE 50
- 
+#define MINRANGE  50
+
+// Fibanocci irrationel Golden Number.
+#define PHI       1.618033988 
+// 1/PHI
+#define INVPHI    0.61803398903633
+
 // C++ includes.
 
 #include <cstdio>
+#include <cmath>
 
 // Qt includes.
 
@@ -69,9 +75,9 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     m_currentOrientation      = orient; 
     m_currentResizing         = ResizingNone;
     m_guideLinesType          = guideLinesType;
-    m_timerW = 0;
-    m_timerH = 0;
-
+    m_timerW                  = 0;
+    m_timerH                  = 0;
+    
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -84,6 +90,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     setMouseTracking(true);
     
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
+    setGoldenGuideTypes(true, false, false, false, false, false);
     updatePixmap();
 }
 
@@ -139,6 +146,18 @@ void ImageSelectionWidget::resetSelection(void)
       (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
     applyAspectRatio(false, true, false);
     regionSelectionChanged(true);
+}
+
+void ImageSelectionWidget::setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
+                                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
+                                               bool flipHorGoldenGuide, bool flipVerGoldenGuide)
+{
+    m_drawGoldenSection       = drawGoldenSection;
+    m_drawGoldenSpiralSection = drawGoldenSpiralSection;
+    m_drawGoldenSpiral        = drawGoldenSpiral;
+    m_drawGoldenTriangle      = drawGoldenTriangle;
+    m_flipHorGoldenGuide      = flipHorGoldenGuide;
+    m_flipVerGoldenGuide      = flipVerGoldenGuide;
 }
 
 void ImageSelectionWidget::setCenterSelection(int centerType)
@@ -568,8 +587,26 @@ void ImageSelectionWidget::updatePixmap(void)
     QPixmap pix(image);
     bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
     QPainter p(m_pixmap);
+
+    // Drawing selection borders.
+    
+    p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));
+    p.drawRect(m_localRegionSelection);
+    
+    // Drawing selection corners.
+    
+    p.drawRect(m_localTopLeftCorner);
+    p.drawRect(m_localBottomLeftCorner);
+    p.drawRect(m_localTopRightCorner);
+    p.drawRect(m_localBottomRightCorner);        
     
     // Drawing guide lines.
+    
+    // Constraint drawing only on local selection region.
+    // This is needed because arcs and incurved lines can draw
+    // outside a little of local selection region.
+    p.setClipping(true);
+    p.setClipRect(m_localRegionSelection);
     
     switch (m_guideLinesType)
        {
@@ -592,38 +629,147 @@ void ImageSelectionWidget::updatePixmap(void)
             break;
             }
             
-       case GoldenMean:
+       case HarmoniousTriangles:
             {
             p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
             
-            int xThird = (int)(m_localRegionSelection.width() / 1.618);
-            int yThird = (int)(m_localRegionSelection.height() / 1.618);
+            // Move coordinates to local center selection.            
+            p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
             
-            p.drawLine( m_localRegionSelection.left()  + xThird, m_localRegionSelection.top(),
-                        m_localRegionSelection.left()  + xThird, m_localRegionSelection.bottom() );
-            p.drawLine( m_localRegionSelection.right() - xThird, m_localRegionSelection.top(),
-                        m_localRegionSelection.right() - xThird, m_localRegionSelection.bottom() );
+            // Flip horizontal.
+            if (m_flipHorGoldenGuide)
+                p.scale(-1, 1);                                    
+
+            // Flip verical.
+            if (m_flipVerGoldenGuide)
+                p.scale(1, -1);         
             
-            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top()    + yThird,
-                        m_localRegionSelection.right(), m_localRegionSelection.top()    + yThird );
-            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.bottom() - yThird,
-                        m_localRegionSelection.right(), m_localRegionSelection.bottom() - yThird );
+            p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
+                         m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2);
+            
+            float w = (float)m_localRegionSelection.width();
+            float h = (float)m_localRegionSelection.height();
+            int   d = (int)((h*cos(atan(w/h)) / (cos(atan(h/w)))));
+                         
+            p.drawLine( -m_localRegionSelection.width()/2 + d, -m_localRegionSelection.height()/2,
+                        -m_localRegionSelection.width()/2,      m_localRegionSelection.height()/2);
+            
+            p.drawLine( m_localRegionSelection.width()/2,     -m_localRegionSelection.height()/2,
+                        m_localRegionSelection.width()/2 - d,  m_localRegionSelection.height()/2);
+            break;
+            }
+       
+       case GoldenMean:
+            {
+            p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
+                        
+            // Move coordinates to local center selection.            
+            p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
+            
+            // Flip horizontal.
+            if (m_flipHorGoldenGuide)
+                p.scale(-1, 1);                                    
+
+            // Flip verical.
+            if (m_flipVerGoldenGuide)
+                p.scale(1, -1);         
+
+            int w = m_localRegionSelection.width();
+            int h = m_localRegionSelection.height();                
+            QRect R1(-w/2, -h/2, (int)(w/PHI), h);
+            QRect R2((int)(w*(INVPHI - 0.5)), (int)(h*(0.5 - INVPHI)), (int)(w*(1 - INVPHI)), (int)(h/PHI)); 
+            QRect R3((int)(w/2 - R2.width()/PHI), -h/2, (int)(R2.width()/PHI), h - R2.height());
+            QRect R4(R2.x(), R1.y(), R3.x() - R2.x(), (int)(R3.height()/PHI));
+            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()/PHI), R3.height() - R4.height());
+            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()/PHI), R3.x() - R5.right(), (int)(R5.height()/PHI));
+            QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), (int)(R6.width()/PHI), R5.height() - R6.height());
+                                            
+            // Drawing Golden sections.
+            if (m_drawGoldenSection)
+               {            
+               p.drawLine( -m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 - R2.height(),
+                            m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 - R2.height());
+                
+               p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 + R2.height(),
+                            m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 + R2.height());
+                
+               p.drawLine( m_localRegionSelection.width()/2 - R1.width(), -m_localRegionSelection.height()/2,
+                           m_localRegionSelection.width()/2 - R1.width(),  m_localRegionSelection.height()/2 );
+                
+               p.drawLine( -m_localRegionSelection.width()/2 + R1.width(), -m_localRegionSelection.height()/2,
+                           -m_localRegionSelection.width()/2 + R1.width(),  m_localRegionSelection.height()/2);
+               }
+                            
+            // Drawing Golden triangle guides.
+            if (m_drawGoldenTriangle)
+               {            
+               p.drawLine( -m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2,
+                            m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2 );
+                
+               p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
+                            m_localRegionSelection.width()/2 - R1.width(), m_localRegionSelection.height()/2);
+
+               p.drawLine( -m_localRegionSelection.width()/2 + R1.width(), -m_localRegionSelection.height()/2,
+                            m_localRegionSelection.width()/2, m_localRegionSelection.height()/2 );
+               }
+                
+            // Drawing Golden spiral sections.
+            if (m_drawGoldenSpiralSection)
+               {            
+               p.drawRect( R1 );
+               p.drawRect( R2 );
+               p.drawRect( R3 );
+               p.drawRect( R4 );
+               p.drawRect( R5 );
+               p.drawRect( R6 );
+               p.drawRect( R7 );
+               }
+                                        
+            // Drawing Golden Spiral.
+            if (m_drawGoldenSpiral)
+               {
+               p.drawArc ( R1.left(), 
+                           -R1.height() - m_localRegionSelection.height()/2,
+                           2*R1.width(), 2*R1.height(), 
+                           180*16, 90*16);                       
+               
+               p.drawArc ( m_localRegionSelection.width()/2 - 2*R2.width(),
+                           m_localRegionSelection.height()/2 - 2*R2.height(),
+                           2*R2.width(), 2*R2.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( m_localRegionSelection.width()/2 - 2*R3.width(),
+                           R3.top(),
+                           2*R3.width(), 2*R3.height(),
+                           0, 90*16);                       
+                
+               p.drawArc ( R4.left(),
+                           R4.top(),
+                           2*R4.width(), 2*R4.height(),
+                           90*16, 90*16);                       
+                
+               p.drawArc ( R5.left(),
+                           R5.top()-R5.height(),
+                           2*R5.width(), 2*R5.height(),
+                           180*16, 90*16);                       
+                
+               p.drawArc ( R6.left()-R6.width(),
+                           R6.top()-R6.height(),
+                           2*R6.width(), 2*R6.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( R7.left()-R7.width(),
+                           R7.top(),
+                           2*R7.width(), 2*R7.height(),
+                           0, 90*16);                       
+               }
+                
             break;
             }
        }    
+    
+    p.setClipping(false);
               
-    // Drawing selection borders.
-    
-    p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));
-    p.drawRect(m_localRegionSelection);
-    
-    // Drawing selection corners.
-    
-    p.drawRect(m_localTopLeftCorner);
-    p.drawRect(m_localBottomLeftCorner);
-    p.drawRect(m_localTopRightCorner);
-    p.drawRect(m_localBottomRightCorner);
-
     p.end();
 }
 

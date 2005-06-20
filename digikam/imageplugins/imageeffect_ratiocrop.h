@@ -28,6 +28,8 @@
 class QLabel;
 class QComboBox;
 class QPushButton;
+class QTabWidget;
+class QCheckBox;
 
 class KIntNumInput;
 class KIntSpinBox;
@@ -60,6 +62,15 @@ private:
     QPushButton  *m_centerWidth;
     QPushButton  *m_centerHeight;
     
+    QTabWidget   *m_mainTab;  
+    
+    QCheckBox    *m_goldenSectionBox;
+    QCheckBox    *m_goldenSpiralSectionBox;
+    QCheckBox    *m_goldenSpiralBox;
+    QCheckBox    *m_goldenTriangleBox;
+    QCheckBox    *m_flipHorBox;
+    QCheckBox    *m_flipVerBox;
+    
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;
     KIntNumInput *m_xInput;    
@@ -83,7 +94,6 @@ private slots:
     void slotUser2();
     void slotOk();
 
-    void slotInitGUI(void);
     void slotCenterWidth(void);
     void slotCenterHeight(void);
     void slotXChanged(int x);
@@ -96,6 +106,8 @@ private slots:
     void slotSelectionChanged(QRect rect );
     void slotSelectionWidthChanged(int newWidth);
     void slotSelectionHeightChanged(int newHeight);
+    void slotGuideTypeChanged(int t);
+    void slotGoldenGuideTypeChanged(void);
 };
 
 #endif /* IMAGEEFFECT_RATIOCROP_H */

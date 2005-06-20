@@ -71,9 +71,12 @@ public:
     enum GuideLineType
     {
     RulesOfThirds = 0,         // Line guides position to 1/3 width and height.
-    GoldenMean,                // Line guides position to 1/1.618 width and height.
+    HarmoniousTriangles,       // Harmonious Triangle to improve composition.
+    GoldenMean,                // Guides tools using Phi ratio (1.618).
     GuideNone                  // No guide line.
     };
+    
+public:
     
     ImageSelectionWidget(int width, int height, QWidget *parent=0, 
                          float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
@@ -88,7 +91,10 @@ public:
     void  setSelectionOrientation(int orient);
     void  setSelectionAspectRatioType(int aspectRatioType);
     void  setSelectionAspectRatioValue(float aspectRatioValue);
-    
+    void  setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
+                              bool drawGoldenSpiral,   bool drawGoldenTriangle,
+                              bool flipHorGoldenGuide, bool flipVerGoldenGuide);    
+                              
     int   getOriginalImageWidth(void);
     int   getOriginalImageHeight(void);
     QRect getRegionSelection(void);
@@ -119,7 +125,7 @@ protected:
 protected slots:
 
     void slotTimerDone(void);
-                
+
 private:
 
     enum ResizingMode
@@ -133,8 +139,18 @@ private:
     
     ImageIface *m_iface;
     
-    int         m_guideLinesType;
+    // Golden guide types.
+    bool        m_drawGoldenSection;
+    bool        m_drawGoldenSpiralSection;
+    bool        m_drawGoldenSpiral;
+    bool        m_drawGoldenTriangle;
     
+    // Golden guide translations.
+    bool        m_flipHorGoldenGuide;
+    bool        m_flipVerGoldenGuide;
+    
+    int         m_guideLinesType;
+        
     uint       *m_data;
     int         m_w;
     int         m_h;
