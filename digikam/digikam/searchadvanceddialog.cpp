@@ -166,11 +166,9 @@ void SearchAdvancedDialog::slotAddRule()
     connect( rule, SIGNAL( signalPropertyChanged() ),
              SLOT(slotPropertyChanged()));
 
-    m_addButton->setEnabled(false);
-    m_optionsCombo->setEnabled(false);
-    if (!m_title->text().isEmpty())
-        enableButtonOK( true );
+    slotChangeButtonStates();
     adjustSize();
+    slotPropertyChanged();
 }
 
 void SearchAdvancedDialog::slotDelRules()

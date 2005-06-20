@@ -35,7 +35,7 @@ class QLabel;
 class KDateEdit;
 class KURL;
 
-/** @class RuleLabel
+/** @class SearchRuleLabel
  *
  * This class inherits everything from QLabel, and adds one
  * signal to it, when double clicked on it.

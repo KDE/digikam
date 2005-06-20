@@ -51,16 +51,16 @@ static struct
 }
 RuleKeyTable[] =
 {
-    { "Album",            "album",           SearchAdvancedRule::ALBUMS },
-    { "Album Name",       "albumname",       SearchAdvancedRule::LINEEDIT },
-    { "Album Caption",    "albumcaption",    SearchAdvancedRule::LINEEDIT },
-    { "Album Collection", "albumcollection", SearchAdvancedRule::LINEEDIT },
-    { "Tag",              "tag",             SearchAdvancedRule::TAGS },
-    { "Tag Name",         "tagname",         SearchAdvancedRule::LINEEDIT },
-    { "Image Name",       "imagename",       SearchAdvancedRule::LINEEDIT },
-    { "Image Date",       "imagedate",       SearchAdvancedRule::DATE     },
-    { "Image Caption",    "imagecaption",    SearchAdvancedRule::LINEEDIT },
-    { "Keyword",          "keyword",         SearchAdvancedRule::LINEEDIT },
+    { i18n("Album"),            "album",           SearchAdvancedRule::ALBUMS },
+    { i18n("Album Name"),       "albumname",       SearchAdvancedRule::LINEEDIT },
+    { i18n("Album Caption"),    "albumcaption",    SearchAdvancedRule::LINEEDIT },
+    { i18n("Album Collection"), "albumcollection", SearchAdvancedRule::LINEEDIT },
+    { i18n("Tag"),              "tag",             SearchAdvancedRule::TAGS },
+    { i18n("Tag Name"),         "tagname",         SearchAdvancedRule::LINEEDIT },
+    { i18n("Image Name"),       "imagename",       SearchAdvancedRule::LINEEDIT },
+    { i18n("Image Date"),       "imagedate",       SearchAdvancedRule::DATE     },
+    { i18n("Image Caption"),    "imagecaption",    SearchAdvancedRule::LINEEDIT },
+    { i18n("Keyword"),          "keyword",         SearchAdvancedRule::LINEEDIT },
 };
 static const int RuleKeyTableCount = 10;
 
@@ -73,17 +73,17 @@ static struct
 
 RuleOpTable[] =
 {
-    { "contains",           "LIKE",         SearchAdvancedRule::LINEEDIT },
-    { "does not contain",   "NLIKE",        SearchAdvancedRule::LINEEDIT },
-    { "equals",             "EQ",           SearchAdvancedRule::LINEEDIT },
-    { "does not equal",     "NE",           SearchAdvancedRule::LINEEDIT },
-    { "equals",             "EQ",           SearchAdvancedRule::ALBUMS },
-    { "does not equal",     "NE",           SearchAdvancedRule::ALBUMS },
-    { "equals",             "EQ",           SearchAdvancedRule::TAGS },
-    { "does not equal",     "NE",           SearchAdvancedRule::TAGS },
-    { ">",                  "GT",           SearchAdvancedRule::DATE },
-    { "<",                  "LT",           SearchAdvancedRule::DATE },
-    { "=",                  "EQ",           SearchAdvancedRule::DATE },
+    { i18n("contains"),           "LIKE",         SearchAdvancedRule::LINEEDIT },
+    { i18n("does not contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
+    { i18n("equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
+    { i18n("does not equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
+    { i18n("equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
+    { i18n("does not equal"),     "NE",           SearchAdvancedRule::ALBUMS },
+    { i18n("equals"),             "EQ",           SearchAdvancedRule::TAGS },
+    { i18n("does not equal"),     "NE",           SearchAdvancedRule::TAGS },
+    { i18n("after"),              "GT",           SearchAdvancedRule::DATE },
+    { i18n("before"),             "LT",           SearchAdvancedRule::DATE },
+    { i18n("equals"),             "EQ",           SearchAdvancedRule::DATE },
 };
 static const int RuleOpTableCount = 11;
 
@@ -113,8 +113,9 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     if (option != NONE)
     {
         m_optionsBox  = new QHBox( m_box );
-        m_label = new SearchRuleLabel( i18n(option == AND ? "As well as" : "Or"),
-                                    m_optionsBox);
+        m_label = new SearchRuleLabel( option == AND ?
+                                       i18n("As well as") : i18n("Or"),
+                                       m_optionsBox);
         QFrame* hline = new QFrame( m_optionsBox );
         hline->setFrameStyle( QFrame::HLine|QFrame::Sunken );
         m_label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
@@ -122,7 +123,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
 
         connect( m_label, SIGNAL( signalDoubleClick( QMouseEvent* ) ),
                  this,  SLOT( slotLabelDoubleClick() ));
-    
+
     }
 
     m_hbox = new QWidget( m_box );
@@ -218,12 +219,12 @@ void SearchAdvancedRule::slotLabelDoubleClick()
     if (m_option == AND)
     {
         m_option=OR;
-        m_label->setText("Or");
+        m_label->setText( i18n("Or") );
     }
     else
     {
         m_option=AND;
-        m_label->setText("As Well As");
+        m_label->setText( i18n("As Well As") );
     }
     emit signalPropertyChanged();
 }
@@ -296,7 +297,7 @@ void SearchAdvancedRule::setValueWidget(
             PAlbum *album = (PAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertItem( album->url(), index );
+                m_valueCombo->insertItem( album->url().remove(0,1), index );
                 m_itemsIndexIDMap.insert(index, album->id());
                 index++;
             }
@@ -323,7 +324,7 @@ void SearchAdvancedRule::setValueWidget(
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertItem( album->url(), index );
+                m_valueCombo->insertItem( album->url().remove(0,1), index );
                 m_itemsIndexIDMap.insert( index, album->id() );
                 ++index;
             }
@@ -380,7 +381,7 @@ QWidget* SearchAdvancedRule::widget() const
 
 bool SearchAdvancedRule::isChecked() const
 {
-    return (m_check && m_check->isChecked());    
+    return (m_check && m_check->isChecked());
 }
 
 void SearchAdvancedRule::addOption(Option option)
@@ -394,8 +395,8 @@ void SearchAdvancedRule::addOption(Option option)
     m_box->layout()->remove(m_hbox);
 
     m_optionsBox = new QHBox(m_box);
-    new QLabel(i18n( option == AND ? "As well as" : "Or" ),
-               m_optionsBox);
+    new QLabel( option == AND ? i18n("As well as") : i18n("Or") ,
+                m_optionsBox);
     QFrame* hline = new QFrame(m_optionsBox);
     hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
     hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -507,7 +508,7 @@ void SearchAdvancedGroup::addOption(Option option)
 {
     m_option = option;
     m_groupbox->setTitle(
-            i18n(m_option == SearchAdvancedRule::AND ? "As well as" : "Or"));
+            m_option == SearchAdvancedRule::AND ? i18n("As well as") : i18n("Or"));
 }
 
 void SearchAdvancedGroup::removeOption()
