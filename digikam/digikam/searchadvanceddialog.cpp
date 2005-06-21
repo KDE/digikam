@@ -74,8 +74,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
     m_optionsCombo      = new QComboBox( groupbox );
-    m_optionsCombo->insertItem(i18n("As Well As"));
-    m_optionsCombo->insertItem(i18n("Or"));
+    m_optionsCombo->insertItem(i18n("As Well As"), 0);
+    m_optionsCombo->insertItem(i18n("Or"), 1);
     m_optionsCombo->setEnabled(false);
     m_addButton         = new QPushButton(i18n("&Add"), groupbox);
     m_delButton         = new QPushButton(i18n("&Del"), groupbox);
@@ -154,11 +154,14 @@ SearchAdvancedDialog::~SearchAdvancedDialog()
 
 void SearchAdvancedDialog::slotAddRule()
 {
-    SearchAdvancedRule* rule = new SearchAdvancedRule(
-        m_rulesBox, m_baseList.isEmpty() ?
-            SearchAdvancedRule::NONE :
-            m_optionsCombo->currentText() == i18n("As Well As") ?
-            SearchAdvancedRule::AND : SearchAdvancedRule::OR);
+    SearchAdvancedBase::Option type = type=SearchAdvancedBase::NONE;
+    if ( !m_baseList.isEmpty() )
+        if (m_optionsCombo->currentItem() == 0 )
+            type = SearchAdvancedBase::AND;
+        else
+            type = SearchAdvancedBase::OR;
+
+    SearchAdvancedRule* rule = new SearchAdvancedRule( m_rulesBox, type );
     m_baseList.append(rule);
 
     connect( rule, SIGNAL( signalBaseItemToggled() ) ,
@@ -519,7 +522,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 
     SearchAdvancedGroup* group = 0;
     bool groupingActive=false;
-    SearchAdvancedBase::Option type = type=SearchAdvancedRule::NONE;
+    SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
 
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
     {
