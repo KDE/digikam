@@ -60,7 +60,6 @@ for lang in i18nlangs
 end
 i18nlangs = i18nlangsCleaned
 
-
 Dir.mkdir( "l10n" )
 Dir.chdir( "l10n" )
 
@@ -141,12 +140,25 @@ puts "\n"
 # Remove SVN data folder
 `find -name ".svn" | xargs rm -rf`
 
-`mv * ..`
+`/bin/mv * ..`
 Dir.chdir( ".." ) # name-version
 `rmdir #{egmodule}`
 
-`find | xargs touch`
+# Move some important files to the root folder
+Dir.chdir( "#{name}" )
+`/bin/mv -f digikam.lsm ..`
+`/bin/mv -f AUTHORS ..`
+`/bin/mv -f ChangeLog ..`
+`/bin/mv -f COPYING ..`
+`/bin/mv -f INSTALL ..`
+`/bin/mv -f README ..`
+`/bin/mv -f TODO ..`
+`/bin/mv -f HACKING ..`
+Dir.chdir( ".." )
 
+
+# Generate makefiles
+`find | xargs touch`
 
 puts "\n"
 puts "Generating Makefiles..  "
