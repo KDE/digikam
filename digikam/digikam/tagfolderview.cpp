@@ -267,15 +267,14 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag from AddressBook"),
+                       d->ABCMenu);
 
     if(tag)
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
-
-    popmenu.insertItem( i18n("Create Tag from AddressBook"), d->ABCMenu);
-
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -299,7 +298,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
             break;
     }
 
-    if ( choice > 12 )
+    if ( choice > 100 )
     {
         tagNew( tag, d->ABCMenu->text( choice ), "tag-people" );
     }
@@ -312,7 +311,7 @@ void TagFolderView::slotABCContextMenu()
 {
     d->ABCMenu->clear();
 
-    int counter = 12;
+    int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     KABC::AddressBook::Iterator it;
     for ( it = ab->begin(); it != ab->end(); ++it )
@@ -323,7 +322,7 @@ void TagFolderView::slotABCContextMenu()
             d->ABCMenu->insertItem( name, ++counter );
     }
 
-    if (counter == 12)
+    if (counter == 100)
     {
         d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
