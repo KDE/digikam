@@ -15,5 +15,6 @@ Description=Digikam IO kioslave
 Description[et]=DigiKami I/O-moodul
 Description[it]=Kioslave IO di Digikam
 Description[nl]=digiKam IO kioslave
+Description[pt]='kioslave' de E/S do Digikam
 Description[sv]=Digikam I/O-slav
 Class=:local

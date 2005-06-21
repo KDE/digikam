@@ -15,6 +15,7 @@ Description=Digikam tags kioslave
 Description[et]=DigiKami siltide I/O-moodul
 Description[it]=Kioslave dei tag di Digikam
 Description[nl]=digiKam tags kioslave
+Description[pt]='kioslave' de marcas do digiKam
 Description[sr]=kioslave Digikam-ових ознака
 Description[sr@Latn]=kioslave Digikam-ovih oznaka
 Description[sv]=I/O-slav för Digikams taggar
