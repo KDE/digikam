@@ -1579,47 +1579,75 @@
                             The ratio is demonstrated in the Fibonacci series: 1, 1, 2, 3, 5, 8, 13, 21, 34 etc., where each succeeding number after 1 is equal to the sum of the two preceding numbers. The ratio formed 1:1.618 is the Golden Mean. A composition following this rule is considered visually harmonious.
                             </para>
                             
-                            <figure>
-                                <title>Photograph Composition Example Using Golden Spiral</title>
-                                <graphic srccredit="Photograph Composition Example Using Golden Spiral" 
-                                fileref="goldenspiralexample.png"/>
-                            </figure>
-                            
                             <para>
-                            The Golden Mean provide more fluid guidelines when used to compose an image. For example, using the <guilabel>Golden Spiral</guilabel> guide in your photographs will increase your odds of getting captivating results. As opposed to Rule of Thirds, the Golden Spiral forms a fluid line for the eye to trace through the picture. This style of composition will invite the viewer's gaze into the picture along the line of the spiral, creating a more symmetrical visual flow, and an overall compelling viewing experience.
-                            </para>
-
-                            <figure>
-                                <title>Photograph Composition Example Using Golden Spiral Sections</title>
-                                <graphic srccredit="Photograph Composition Example Using Golden Spiral Sections" 
-                                fileref="goldenspiralsectionsexample.png"/>
-                            </figure>
-                                                        
-                            <para>                                                        
-                            And one more rule is a <guilabel>Golden Spiral Sections</guilabel> (or Golden Rectangles). These rectangles are used to build the Golden Spiral. There should be something, leading the eye to the center of the composition. It could be a line or several subjects. This "something" could just be there without leading the eyes, but it would make its job.
-                            </para>
-                                                        
-                            <para>
-                            The <guilabel>Golden Triangles</guilabel> is a derivative of the Golden Spiral discussed above. Its vertices are the midpoints of the sides of the Golden Rectangle. Note that unlike Harmonious Triangles, Golden Triangles aren't triangles rectangle. Placing diagonals along these lines can make an otherwise static subject appear more dynamic.
-                            </para>
+                            The Golden Mean provide more fluid guidelines when used to compose an image. These guides are listed below:
                             
-                            <figure>
-                                <title>Photograph Composition Example Using Golden Triangle</title>
-                                <graphic srccredit="Photograph Composition Example Using Golden Triangles" 
-                                fileref="goldentrianglesexample.png"/>
-                            </figure>
+                            <itemizedlist>                            
+                        
+                                <listitem>                                                        
                             
-                            <para>                                         
-                            Like the Rules Of Thirds the <guilabel>Golden Sections</guilabel> affects the ratio of a picture size, as well as the placement of the main subjects in the photo. This ratio is close to the 35mm ratio, so you don't need to change the size of the photo in most cases. But you need to consider the composition: main subject should lie on one of the four lines or four intersections (subject's eye for example). Truthfully speaking, these rules are not the same. Rule of Thirds is a simplified version of the Golden Mean.
-                            </para>
-
-                            <figure>
-                                <title>Photograph Composition Example Using Golden Sections</title>
-                                <graphic srccredit="Photograph Composition Example Using Golden Sections" 
-                                fileref="goldensectionsexample.png"/>
-                            </figure>                                                                                                   
-                        </listitem>
+                                    <para>
+                                    For example, using the <guilabel>Golden Spiral</guilabel> guide in your photographs will increase your odds of getting captivating results. As opposed to Rule of Thirds, the Golden Spiral forms a fluid line for the eye to trace through the picture. This style of composition will invite the viewer's gaze into the picture along the line of the spiral, creating a more symmetrical visual flow, and an overall compelling viewing experience.
+                                    </para>
+        
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Spiral</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Spiral" 
+                                        fileref="goldenspiralexample.png"/>
+                                    </figure>
+                                    
+                                </listitem>
+                                    
+                                <listitem>
+                                                    
+                                    <para>                                                        
+                                    And one more rule is a <guilabel>Golden Spiral Sections</guilabel> (or Golden Rectangles). These rectangles are used to build the Golden Spiral. There should be something, leading the eye to the center of the composition. It could be a line or several subjects. This "something" could just be there without leading the eyes, but it would make its job.
+                                    </para>
+                                                                
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Spiral Sections</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Spiral Sections" 
+                                        fileref="goldenspiralsectionsexample.png"/>
+                                    </figure>
+                                
+                                </listitem>
+                                
+                                <listitem>
+                                                            
+                                    <para>
+                                    The <guilabel>Golden Triangles</guilabel> is a derivative of the Golden Spiral discussed above. Its vertices are the midpoints of the sides of the Golden Rectangle. Note that unlike Harmonious Triangles, Golden Triangles aren't triangles rectangle. Placing diagonals along these lines can make an otherwise static subject appear more dynamic.
+                                    </para>
+                                    
+                                    <para>
+                                    When you use Golden Triangles to break up your frame, you're creating an effect dubbed by professional photographic experts named Dynamic Symmetry. Try to keep your focal subject on one of the intersecting points, and place other visual information into the triangles you've already divided out. The result will be a very attractive composition you may not have otherwise attained.
+                                    </para>
+                                    
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Triangle</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Triangles" 
+                                        fileref="goldentrianglesexample.png"/>
+                                    </figure>
+                                
+                                </listitem>
+                                
+                                <listitem>
+                                                            
+                                    <para>                                         
+                                    Like the Rules Of Thirds the <guilabel>Golden Sections</guilabel> affects the ratio of a picture size, as well as the placement of the main subjects in the photo. This ratio is close to the 35mm ratio, so you don't need to change the size of the photo in most cases. But you need to consider the composition: main subject should lie on one of the four lines or four intersections (subject's eye for example). Truthfully speaking, these rules are not the same. Rule of Thirds is a simplified version of the Golden Mean.
+                                    </para>
+        
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Sections</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Sections" 
+                                        fileref="goldensectionsexample.png"/>
+                                    </figure>                                                                                                   
+                                </listitem>
     
+                            </itemizedlist>
+                            </para>
+                            
+                       </listitem>
+     
                     </itemizedlist>
                     
                     </para>
