@@ -1534,21 +1534,29 @@
                             </para>
                                                         
                             <para>
-                            Many photographers and artists are aware of the rule of thirds, where a picture is divided into three sections vertically and horizontally and lines and points of intersection represent places to position important visual elements. Moving a horizon in a landscape to the position of one third is often more effective than placing it in the middle, but it could also be placed near the bottom one quarter or sixth. There is nothing obligatory about applying the rule of thirds. In placing visual elements for effective composition, one must assess many factors including color, dominance, size and balance together with proportion. Often a certain amount of imbalance or tension can make an image more effective. 
+                            Many photographers and artists are aware of the Rules Of Thirds, where a picture is divided into three sections vertically and horizontally and lines and points of intersection represent places to position important visual elements. Moving a horizon in a landscape to the position of one third is often more effective than placing it in the middle, but it could also be placed near the bottom one quarter or sixth. There is nothing obligatory about applying the Rules Of Thirds. In placing visual elements for effective composition, one must assess many factors including color, dominance, size and balance together with proportion. Often a certain amount of imbalance or tension can make an image more effective. 
                             </para>
                             
                             <figure>
-                                <title>Photograph Composition Example Using Rule Third Lines</title>
-                                <graphic srccredit="Photograph Composition Example Using Rule Third Lines Example" 
+                                <title>Photograph Composition Example Using Rules of Third</title>
+                                <graphic srccredit="Photograph Composition Example Using Rules of Third" 
                                 fileref="rulethirdlinesexample.png"/>
                             </figure>
                                                     
                         </listitem>
     
                         <listitem>
+                        
                             <para>
                             <guilabel>Harmonious Triangles</guilabel>: Harmonious divisions rely on the principle of similarity. Like Rules Of Thirds guide, Harmonious triangles are another division of the image using a rectangle into equiangular harmonious triangles based on the diagonal.
                             </para>
+                            
+                            <figure>
+                                <title>Photograph Composition Example Using Harmonious Triangles</title>
+                                <graphic srccredit="Photograph Composition Example Using Harmonious Triangles" 
+                                fileref="harmonioustrianglesexample.png"/>
+                            </figure>
+                            
                         </listitem>
                 
                         <listitem>
@@ -1565,13 +1573,25 @@
                             The ratio is demonstrated in the Fibonacci series: 1, 1, 2, 3, 5, 8, 13, 21, 34 etc., where each succeeding number after 1 is equal to the sum of the two preceding numbers. The ratio formed 1:1.618 is the Golden Mean. A composition following this rule is considered visually harmonious.
                             </para>
                             
+                            <figure>
+                                <title>Photograph Composition Example Using Golden Spiral</title>
+                                <graphic srccredit="Photograph Composition Example Using Golden Spiral" 
+                                fileref="goldenspiralexample.png"/>
+                            </figure>
+                            
                             <para>
-                            The Golden Mean provide more fluid guidelines when used to compose an image. For example, using the <guilabel>Golden Spiral</guilabel> guide in your photographs will increase your odds of getting captivating results.  As opposed to Rule of Thirds, the Golden Spiral forms a fluid line for the eye to trace through the picture. This style of composition will invite the viewer's gaze into the picture along the line of the spiral, creating a more symmetrical visual flow, and an overall compelling viewing experience.
+                            The Golden Mean provide more fluid guidelines when used to compose an image. For example, using the <guilabel>Golden Spiral</guilabel> guide in your photographs will increase your odds of getting captivating results. As opposed to Rule of Thirds, the Golden Spiral forms a fluid line for the eye to trace through the picture. This style of composition will invite the viewer's gaze into the picture along the line of the spiral, creating a more symmetrical visual flow, and an overall compelling viewing experience.
                             </para>
                             
                             <para>
-                            The <guilabel>Golden Triangle</guilabel> is a derivative of the Golden Spiral discussed above. Its vertices are the midpoints of the sides of the Golden Rectangle. Placing diagonals along these lines can make an otherwise static subject appear more dynamic.
+                            The <guilabel>Golden Triangles</guilabel> is a derivative of the Golden Spiral discussed above. Its vertices are the midpoints of the sides of the Golden Rectangle. Placing diagonals along these lines can make an otherwise static subject appear more dynamic.
                             </para>
+                            
+                            <figure>
+                                <title>Photograph Composition Example Using Golden Triangle</title>
+                                <graphic srccredit="Photograph Composition Example Using Golden Triangles" 
+                                fileref="goldentrianglesexample.png"/>
+                            </figure>
                                                         
                         </listitem>
     
