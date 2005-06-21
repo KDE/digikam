@@ -154,7 +154,7 @@ SearchAdvancedDialog::~SearchAdvancedDialog()
 
 void SearchAdvancedDialog::slotAddRule()
 {
-    SearchAdvancedBase::Option type = type=SearchAdvancedBase::NONE;
+    SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
     if ( !m_baseList.isEmpty() )
         if (m_optionsCombo->currentItem() == 0 )
             type = SearchAdvancedBase::AND;
