@@ -1652,6 +1652,14 @@
                     
                     </para>
                     
+                    <para>
+                    The <guilabel>Flip Horizontal</guilabel> and <guilabel>Flip Vertical</guilabel> options can be used to apply flip transformation to the harmonious divisions.
+                    </para>
+                    
+                    <para>
+                    The <guilabel>Color</guilabel> button lets you set the guidelines color. If you have an high color contrast image, the guidelines may become invisible. By this way, you can adapt the color guide to the current image.
+                    </para>
+                
                 </sect4>
             
             </sect3>
