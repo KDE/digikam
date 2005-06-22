@@ -488,9 +488,20 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum)
         return;
 
     QString errMsg;
-    if (!albumMan_->createTAlbum(parAlbum, title, icon, errMsg))
+    TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);
+    
+    if (!album)
     {
         KMessageBox::error(this, errMsg);
+    }
+    else
+    {
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
+        if (viewItem)
+        {
+            m_tagsView->setSelected(viewItem, true);
+            m_tagsView->ensureItemVisible(viewItem);
+        }
     }
 }
 
