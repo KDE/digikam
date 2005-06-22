@@ -19,7 +19,7 @@
  * ============================================================ */
 
 #include <qfile.h>
-
+#include <libkexif/kexifdata.h>
 
 #include "jpegreader.h"
 
@@ -27,7 +27,6 @@
 extern "C" {
 #include <stdio.h>
 #include <jpeglib.h>
-#include <libexif/exif-data.h>
 }         
 
 #define M_COM  0xFE
@@ -89,20 +88,12 @@ void readJPEGMetaData(const QString& filePath,
         }
         else if (marker->marker == M_EXIF)
         {
-            ExifData* edata = exif_data_new_from_data(marker->data,
-                                                      marker->data_length);
-            if (edata)
-            {
-                ExifEntry* entry = exif_data_get_entry(edata, EXIF_TAG_DATE_TIME);
-                if (entry)
-                {
-                    if (entry->data)
-                        datetime = QDateTime::fromString((const char*)entry->data,
-                                                         Qt::ISODate);
-                    exif_data_free(edata);
-                }
-            }
+            KExifData exifData;
+            if (!exifData.readFromData((char*)marker->data,
+                                       marker->data_length))
+                continue;
 
+            datetime = exifData.getExifDateTime();
         }
 
         marker = marker->next;
