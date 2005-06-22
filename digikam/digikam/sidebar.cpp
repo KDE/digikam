@@ -154,7 +154,16 @@ void Sidebar::shrink()
     m_maxSize = maximumWidth();
             
     m_stack->hide();
-    setFixedWidth(width());
+
+    KMultiTabBarTab* tab = tabs()->first();
+    if (tab)
+    {
+        setFixedWidth(tab->width());
+    }
+    else
+    {
+        setFixedWidth(width());
+    }
 }
 
 void Sidebar::expand()
