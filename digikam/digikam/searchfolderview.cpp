@@ -65,7 +65,7 @@ public:
     
     int id() const
     {
-        return m_album ? m_album->globalID() : 0;
+        return m_album ? m_album->id() : 0;
     }
     
     SAlbum* m_album;
