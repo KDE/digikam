@@ -102,7 +102,6 @@ public:
     QFont    itemFontCom() const;
     QFont    itemFontXtra() const;
 
-    void     setInFocus(bool val);
      void    clear(bool update=true);
 
     AlbumIconItem* findItem(const QPoint& pos);
@@ -114,9 +113,6 @@ protected:
 
     void resizeEvent(QResizeEvent* e);
 
-    void focusInEvent(QFocusEvent* e);
-    void drawFrame(QPainter* p);
-    
     // DnD
     void startDrag();
     void contentsDragMoveEvent(QDragMoveEvent *e);
@@ -169,7 +165,6 @@ public slots:
 signals:
 
     void signalItemsAdded();
-    void signalInFocus();
     void signalItemDeleted(AlbumIconItem* iconItem);
     void signalCleared();
 };

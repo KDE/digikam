@@ -107,9 +107,6 @@ DigikamView::DigikamView(QWidget *parent)
 
     mAlbumMan->setItemHandler(mIconView);
 
-    mFolderView_Deprecated->setInFocus(true);
-    mIconView->setInFocus(false);
-
     mAlbumHistory = new AlbumHistory();    
 }
 
@@ -148,14 +145,8 @@ void DigikamView::setupConnections()
     connect(mIconView,  SIGNAL(signalItemsAdded()),
             this, SLOT(slot_albumHighlight()));
 
-    connect(mIconView, SIGNAL(signalInFocus()),
-            SLOT(slotIconViewInFocus()));
-
     connect(mFolderView_Deprecated, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
-
-    connect(mFolderView_Deprecated, SIGNAL(signalInFocus()),
-            SLOT(slotFolderViewInFocus()));
 
     connect(mFolderView_Deprecated, SIGNAL(signalAlbumModified()),
 	    mIconView, SLOT(slotAlbumModified()));
@@ -650,18 +641,6 @@ void DigikamView::slotSortImages(int order)
         return;
     settings->setImageSortOder((AlbumSettings::ImageSortOrder) order);
     mIconView->slotUpdate();
-}
-
-void DigikamView::slotFolderViewInFocus()
-{
-    mFolderView_Deprecated->setInFocus(true);
-    mIconView->setInFocus(false);
-}
-
-void DigikamView::slotIconViewInFocus()
-{
-    mFolderView_Deprecated->setInFocus(false);
-    mIconView->setInFocus(true);
 }
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)

@@ -120,7 +120,6 @@ public:
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
-        inFocus       = false;
     }
 
     AlbumLister                  *imageLister;
@@ -155,8 +154,6 @@ public:
 
     QDict<AlbumIconItem> itemDict;
     AlbumFileTip*        toolTip;
-
-    bool                 inFocus;
 };
 
 
@@ -817,25 +814,6 @@ void AlbumIconView::resizeEvent(QResizeEvent *e)
 
     if (d->bannerRect.width() != frameRect().width())
         updateBannerRectPixmap();
-}
-
-void AlbumIconView::setInFocus(bool val)
-{
-    d->inFocus = val;
-}
-
-void AlbumIconView::focusInEvent(QFocusEvent* e)
-{
-    emit signalInFocus();
-    IconView::focusInEvent(e);
-}
-
-void AlbumIconView::drawFrame(QPainter* p)
-{
-    if (d->inFocus)
-        drawFrameRaised(p);
-    else
-        drawFrameSunken(p);
 }
 
 // -- DnD ---------------------------------------------------

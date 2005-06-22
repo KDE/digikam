@@ -140,9 +140,6 @@ private slots:
 
     void slot_imageCopyResult(KIO::Job* job);
 
-    void slotFolderViewInFocus();
-    void slotIconViewInFocus();
-
     void slotLeftSidebarChangedTab(QWidget* w);
     
 signals:

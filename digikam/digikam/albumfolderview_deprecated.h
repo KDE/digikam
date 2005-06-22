@@ -78,8 +78,6 @@ public:
     void tagEdit();
     void tagEdit(TAlbum* album);
 
-    void setInFocus(bool val);
-    
 private:
 
     void resort();
@@ -119,8 +117,6 @@ protected:
     virtual void startDrag();
     
     void resizeEvent(QResizeEvent* e);
-    void focusInEvent(QFocusEvent* e);
-    void drawFrame(QPainter* p);
 
     void paintItemBase(QPainter* p, const QColorGroup& group,
                        const QRect& r, bool selected);
@@ -145,13 +141,10 @@ private:
     QMap<int,int>                      stateAlbumOpen_;
     int                                stateAlbumSel_;
     bool                               stateInitialLoading_;
-
-    bool                               inFocus_;
     
 signals:
 
     void signalTagsAssigned();
-    void signalInFocus();
     void signalAlbumModified();
     
 private slots:
