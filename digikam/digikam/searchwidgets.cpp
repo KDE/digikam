@@ -127,14 +127,15 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     }
 
     m_hbox = new QWidget( m_box );
-    m_hbox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    m_hbox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
     m_key = new QComboBox( m_hbox, "key" );
+    m_key->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
     for (int i=0; i< RuleKeyTableCount; i++)
         m_key->insertItem( RuleKeyTable[i].keyText, i );
 
     m_operator = new QComboBox( m_hbox );
-    m_operator->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
     m_valueBox = new QHBox( m_hbox );
     m_widgetType = NOWIDGET;
@@ -143,13 +144,11 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     m_check = new QCheckBox( m_hbox );
 
     QHBoxLayout* m_hboxLayout = new QHBoxLayout( m_hbox );
-
     m_hboxLayout->setSpacing( KDialog::spacingHint() );
     m_hboxLayout->addWidget( m_key );
     m_hboxLayout->addWidget( m_operator );
     m_hboxLayout->addWidget( m_valueBox );
-    m_hboxLayout->addStretch( 5 );
-    m_hboxLayout->addWidget( m_check );
+    m_hboxLayout->addWidget( m_check, 0, Qt::AlignRight );
 
     m_box->show();
 
@@ -268,6 +267,7 @@ void SearchAdvancedRule::setValueWidget(
     if (newType == DATE)
     {
         m_dateEdit = new KDateEdit( m_valueBox,"datepicker");
+        m_dateEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         m_dateEdit->show();
 
         connect( m_dateEdit, SIGNAL( dateChanged(const QDate& ) ),
@@ -276,6 +276,7 @@ void SearchAdvancedRule::setValueWidget(
     else if (newType == LINEEDIT)
     {
         m_lineEdit = new QLineEdit( m_valueBox, "lineedit" );
+        m_lineEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         m_lineEdit->show();
 
         connect( m_lineEdit, SIGNAL ( textChanged(const QString&) ),
@@ -285,6 +286,7 @@ void SearchAdvancedRule::setValueWidget(
     else if (newType == ALBUMS)
     {
         m_valueCombo = new QComboBox( m_valueBox, "albumscombo" );
+        m_valueCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::instance();
         AlbumList aList = aManager->allPAlbums();
@@ -311,7 +313,7 @@ void SearchAdvancedRule::setValueWidget(
     else if (newType == TAGS)
     {
         m_valueCombo = new QComboBox( m_valueBox, "tagscombo" );
-        m_valueCombo->setMaxCount(10000);
+        m_valueCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::instance();
         AlbumList tList = aManager->allTAlbums();

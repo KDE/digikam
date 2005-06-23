@@ -21,8 +21,8 @@
     downloaded, users adding files/folders from outside digikam)
 
 * search view and search table in database
-  - extended search dialog 
-        - i18n missing
+  - kio
+        - bug: tag ne tagX fails to show images without any tags.
 
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
   - splitter sizes
