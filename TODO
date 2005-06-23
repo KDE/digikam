@@ -14,12 +14,6 @@
 
 * fix changing of album library path. [TA/RR]
 
-* handle files/folders being added/deleted
-  - kdirwatch is in place in albummanager. add directory scanning
-    support to digikamalbums kioslave and use it to scan in new
-    items (this should take care of all cases: camera files being
-    downloaded, users adding files/folders from outside digikam)
-
 * search view and search table in database
   - kio
         - bug: tag ne tagX fails to show images without any tags.
