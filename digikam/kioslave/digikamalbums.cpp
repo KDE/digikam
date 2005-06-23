@@ -1378,46 +1378,97 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
     if (!url.endsWith("/"))
         subURL += "/";
     subURL = escapeString( subURL);
-    
-    QStringList currAlbumList;
-    m_sqlDB.execSql( QString("SELECT url FROM Albums WHERE ") +
-                     QString("url LIKE '") + subURL + QString("%' ") +
-                     QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
-                     &currAlbumList );
 
-    const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
-    if (!infoList)
-        return;
-
-    QFileInfoListIterator it(*infoList);
-    QFileInfo* fi;
-
-    QStringList newAlbumList;
-    while ((fi = it.current()) != 0)
     {
-        ++it;
-
-        if (fi->fileName() == "." || fi->fileName() == "..")
-        {
-            continue;
-        }
-
-        QString u = QDir::cleanDirPath(url + "/" + fi->fileName());
+        // scan albums
         
-        if (currAlbumList.contains(u))
+        QStringList currAlbumList;
+        m_sqlDB.execSql( QString("SELECT url FROM Albums WHERE ") +
+                         QString("url LIKE '") + subURL + QString("%' ") +
+                         QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
+                         &currAlbumList );
+
+
+        const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
+        if (!infoList)
+            return;
+        
+        QFileInfoListIterator it(*infoList);
+        QFileInfo* fi;
+        
+        QStringList newAlbumList;
+        while ((fi = it.current()) != 0)
         {
-            continue;
+            ++it;
+            
+            if (fi->fileName() == "." || fi->fileName() == "..")
+            {
+                continue;
+            }
+            
+            QString u = QDir::cleanDirPath(url + "/" + fi->fileName());
+            
+            if (currAlbumList.contains(u))
+            {
+                continue;
+            }
+
+            newAlbumList.append(u);
         }
 
-        newAlbumList.append(u);
+        for (QStringList::iterator it = newAlbumList.begin();
+             it != newAlbumList.end(); ++it)
+        {
+            kdDebug() << "New Album: " << *it << endl;
+            findAlbum(*it);
+            scanAlbum(*it);
+        }
     }
 
-    for (QStringList::iterator it = newAlbumList.begin();
-         it != newAlbumList.end(); ++it)
+    if (url != "/")
     {
-        kdDebug() << "New Album: " << *it << endl;
-        findAlbum(*it);
-        scanAlbum(*it);
+        // scan files
+
+        QStringList values;
+
+        m_sqlDB.execSql( QString("SELECT id FROM Albums WHERE url='%1'")
+                         .arg(url), &values );
+        if (values.isEmpty())
+            return;
+
+        int albumID = values.first().toInt();
+
+        QStringList currItemList;
+        m_sqlDB.execSql( QString("SELECT name FROM Images WHERE dirid=%1")
+                         .arg(albumID), &currItemList );
+        
+        const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
+        if (!infoList)
+            return;
+
+        QFileInfoListIterator it(*infoList);
+        QFileInfo* fi;
+
+        // add any new files we find to the db
+        while ((fi = it.current()) != 0)
+        {
+            ++it;
+
+            if (currItemList.contains(fi->fileName()))
+            {
+                currItemList.remove(fi->fileName());
+                continue;
+            }
+
+            addImage(albumID, m_libraryPath + url + "/" + fi->fileName());
+        }
+
+        // currItemList now contains deleted file list. remove them from db
+        for (QStringList::iterator it = currItemList.begin();
+             it != currItemList.end(); ++it)
+        {
+            delImage(albumID, *it);
+        }
     }
 }
 
