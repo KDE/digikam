@@ -145,7 +145,7 @@ void SearchFolderView::extendedSearchNew()
     if (dlg.exec() != KDialogBase::Accepted)
         return;
 
-    // Check if there is not already an album with that namespace
+    // Check if there is not already an album with that name
     // and return if user aborts the dialog.
     if ( ! checkName( url ) )
         return;

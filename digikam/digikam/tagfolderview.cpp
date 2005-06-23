@@ -355,8 +355,15 @@ void TagFolderView::tagNew( TagFolderViewItem *item,
     }
 
     QString errMsg;
-    if(!d->albumMan->createTAlbum(parent, title, icon, errMsg))
+    TAlbum* newAlbum = d->albumMan->createTAlbum(parent, title, icon, errMsg);
+
+    if( !newAlbum )
         KMessageBox::error(0, errMsg);
+    else
+    {
+        TagFolderViewItem *item = (TagFolderViewItem*)newAlbum->extraData(this);
+        ensureItemVisible( item );
+    }
 }
 
 void TagFolderView::tagEdit()
