@@ -362,7 +362,8 @@ void TagFolderView::tagNew( TagFolderViewItem *item,
     else
     {
         TagFolderViewItem *item = (TagFolderViewItem*)newAlbum->extraData(this);
-        ensureItemVisible( item );
+        if ( item )
+            ensureItemVisible( item );
     }
 }
 
