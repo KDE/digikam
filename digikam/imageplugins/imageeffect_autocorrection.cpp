@@ -82,7 +82,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                     "image so that the darkest point becomes black, and the "
                                     "brightest point becomes as bright as possible without "
                                     "altering its hue. This is often a \"magic fix\" for "
-                                    "images that are dim or washed out..<p>"
+                                    "images that are dim or washed out.<p>"
                                     "<b>Equalize</b>: this option adjusts the brightness of colors across the "
                                     "active image so that the histogram for the Value channel "
                                     "is as nearly as possible flat, that is, so that each possible "

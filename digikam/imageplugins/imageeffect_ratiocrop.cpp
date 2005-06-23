@@ -203,10 +203,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWhatsThis::add( m_goldenTriangleBox, i18n("<p>Enable this option to show golden triangles."));
 
     m_flipHorBox = new QCheckBox(i18n("Flip Horizontally"), secondPage);
-    QWhatsThis::add( m_flipHorBox, i18n("<p>Enable this option to flip horizontally golden guides."));
+    QWhatsThis::add( m_flipHorBox, i18n("<p>Enable this option to flip horizontally guidelines."));
 
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), secondPage);
-    QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically golden guides."));
+    QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
     QLabel *labelColorGuide = new QLabel(i18n("Color:"), secondPage);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), secondPage );
@@ -321,7 +321,8 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
-    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());            
+    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
+    m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());          
                                     
     m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
     m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
