@@ -110,16 +110,17 @@ void kio_digikamalbums::special(const QByteArray& data)
     QString url;
     QString filter;
     int     getDimensions;
+    int     scan = 0;
     
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
+    if (!ds.atEnd())
+        ds >> scan;
 
-    url = kurl.path();
-    
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    libraryPath = QDir::cleanDirPath(libraryPath);
     
     if (m_libraryPath != libraryPath)
     {
@@ -128,6 +129,17 @@ void kio_digikamalbums::special(const QByteArray& data)
         m_sqlDB.openDB(libraryPath);
     }
 
+    url = QDir::cleanDirPath(kurl.path());
+    
+    if (scan)
+    {
+        scanAlbum(url);
+        finished();
+        return;
+    }
+    
+    QValueList<QRegExp> regex = makeFilterList(filter);
+    
     QStringList values;
     m_sqlDB.execSql(QString("SELECT id FROM Albums WHERE url='%1';")
                     .arg(escapeString(url)), &values);
@@ -327,9 +339,8 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     buildAlbumList();
 
     // get the parent album
-    bool found;
-    AlbumInfo album = findAlbum(url.directory(), found);
-    if (!found)
+    AlbumInfo album = findAlbum(url.directory());
+    if (album.id == -1)
     {
         error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
               .arg(url.directory()));
@@ -475,9 +486,8 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     buildAlbumList();
 
     // find the src parent album
-    bool found;
-    AlbumInfo srcAlbum = findAlbum(src.directory(), found);
-    if (!found)
+    AlbumInfo srcAlbum = findAlbum(src.directory());
+    if (srcAlbum.id == -1)
     {
         error(KIO::ERR_UNKNOWN, QString("Source album %1 not found in database")
               .arg(src.directory()));
@@ -485,8 +495,8 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     }
 
     // find the dst parent album
-    AlbumInfo dstAlbum = findAlbum(dst.directory(), found);
-    if (!found)
+    AlbumInfo dstAlbum = findAlbum(dst.directory());
+    if (dstAlbum.id == -1)
     {
         error(KIO::ERR_UNKNOWN, QString("Destination album %1 not found in database")
               .arg(dst.directory()));
@@ -764,9 +774,8 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
 
     if (renamingAlbum)
     {
-        bool found;
-        srcAlbum = findAlbum(src.path(), found);
-        if (!found)
+        srcAlbum = findAlbum(src.path());
+        if (srcAlbum.id == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
                   .arg(src.url()));
@@ -775,17 +784,16 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
     }
     else
     {
-        bool found;
-        srcAlbum = findAlbum(src.directory(), found);
-        if (!found)
+        srcAlbum = findAlbum(src.directory());
+        if (srcAlbum.id == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
                   .arg(src.directory()));
             return;
         }
 
-        dstAlbum = findAlbum(dst.directory(), found);
-        if (!found)
+        dstAlbum = findAlbum(dst.directory());
+        if (dstAlbum.id == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database")
                   .arg(dst.directory()));
@@ -1027,9 +1035,8 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
         }
 
         // find the Album to which this file belongs.
-        bool found;
-        AlbumInfo album = findAlbum(url.directory(), found);
-        if (!found)
+        AlbumInfo album = findAlbum(url.directory());
+        if (album.id == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
                   .arg(url.directory()));
@@ -1056,9 +1063,8 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
         kdDebug(  ) << "Deleting directory " << url.url() << endl;
 
         // find the corresponding album entry
-        bool found;
-        AlbumInfo album = findAlbum(url.path(), found);
-        if (!found)
+        AlbumInfo album = findAlbum(url.path());
+        if (album.id == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
                   .arg(url.path()));
@@ -1187,23 +1193,22 @@ void kio_digikamalbums::buildAlbumList()
     }
 }
 
-AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok)
+AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
 {
-    ok = false;
-
     AlbumInfo album;
     for (QValueList<AlbumInfo>::const_iterator it = m_albumList.begin();
          it != m_albumList.end(); ++it)
     {
         if ((*it).url == url)
         {
-            ok = true;
             album = *it;
-            break;
+            return album;
         }
     }
 
-    if (!ok)
+    album.id = -1;
+    
+    if (addIfNotExists)
     {
         QFileInfo fi(m_libraryPath + url);
         if (!fi.exists() || !fi.isDir())
@@ -1220,8 +1225,6 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool& ok)
         album.icon = 0;
         
         m_albumList.append(album);
-
-        ok = true;
     }
     
     return album;
@@ -1355,6 +1358,92 @@ void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
                      .arg(escapeString(dstName))
                      .arg(srcAlbumID)
                      .arg(escapeString(srcName)));
+}
+
+void kio_digikamalbums::scanAlbum(const QString& url)
+{
+    scanOneAlbum(url);
+    removeInvalidAlbums();
+}
+
+void kio_digikamalbums::scanOneAlbum(const QString& url)
+{
+    QDir dir(m_libraryPath + url);
+    if (!dir.exists() || !dir.isReadable())
+    {
+        return;
+    }
+
+    QString subURL = url;
+    if (!url.endsWith("/"))
+        subURL += "/";
+    subURL = escapeString( subURL);
+    
+    QStringList currAlbumList;
+    m_sqlDB.execSql( QString("SELECT url FROM Albums WHERE ") +
+                     QString("url LIKE '") + subURL + QString("%' ") +
+                     QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
+                     &currAlbumList );
+
+    const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
+    if (!infoList)
+        return;
+
+    QFileInfoListIterator it(*infoList);
+    QFileInfo* fi;
+
+    QStringList newAlbumList;
+    while ((fi = it.current()) != 0)
+    {
+        ++it;
+
+        if (fi->fileName() == "." || fi->fileName() == "..")
+        {
+            continue;
+        }
+
+        QString u = QDir::cleanDirPath(url + "/" + fi->fileName());
+        
+        if (currAlbumList.contains(u))
+        {
+            continue;
+        }
+
+        newAlbumList.append(u);
+    }
+
+    for (QStringList::iterator it = newAlbumList.begin();
+         it != newAlbumList.end(); ++it)
+    {
+        kdDebug() << "New Album: " << *it << endl;
+        findAlbum(*it);
+        scanAlbum(*it);
+    }
+}
+
+void kio_digikamalbums::removeInvalidAlbums()
+{
+    QStringList urlList;
+
+    m_sqlDB.execSql(QString("SELECT url FROM Albums;"),
+                    &urlList);
+
+    m_sqlDB.execSql("BEGIN TRANSACTION");
+
+    struct stat stbuf;
+    
+    for (QStringList::iterator it = urlList.begin();
+         it != urlList.end(); ++it)
+    {
+        if (::stat(QFile::encodeName(m_libraryPath + *it), &stbuf) == 0)
+            continue;
+        
+        kdDebug() << "Deleted Album: " << *it << endl;
+        m_sqlDB.execSql(QString("DELETE FROM Albums WHERE url='%1'")
+                    .arg(escapeString(*it)));    
+    }
+
+    m_sqlDB.execSql("COMMIT TRANSACTION");
 }
 
 /* KIO slave registration */

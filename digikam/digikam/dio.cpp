@@ -28,6 +28,8 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+#include <qcstring.h>
+#include <qdatastream.h>
 
 extern "C"
 {
@@ -187,8 +189,33 @@ bool renameFile(const KURL& src, const KURL& dest)
     return false;    
 }
 
+KIO::Job* scan(const KURL& albumURL)
+{
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << AlbumManager::instance()->getLibraryPath();
+    ds << albumURL;
+    ds << QString();
+    ds << 0;
+    ds << 1;
+
+    KIO::Job* job = new KIO::TransferJob(albumURL,
+                                         KIO::CMD_SPECIAL,
+                                         ba, QByteArray(),
+                                         false);
+    new Watch(job);
+
+    return job;
+}
+
+bool running()
+{
+    return (Watch::m_runCount != 0);
+}
+
 Watch::Watch(KIO::Job* job)
 {
+    m_runCount++;
     connect(job, SIGNAL(result(KIO::Job*)),
             SLOT(slotDone(KIO::Job*)));
 }
@@ -197,8 +224,12 @@ void Watch::slotDone(KIO::Job*)
 {
     AlbumManager::instance()->refresh();
     AlbumLister::instance()->refresh();
+    m_runCount--;
+
     delete this;
 }
+
+uint Watch::m_runCount = 0;
 
 }
 

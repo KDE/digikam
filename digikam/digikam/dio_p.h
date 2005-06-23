@@ -35,7 +35,9 @@ class Watch : public QObject
 public:
 
     Watch(KIO::Job* job);
- 
+
+    static uint m_runCount;
+    
 private slots:
 
    void slotDone(KIO::Job* job);

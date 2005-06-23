@@ -37,6 +37,10 @@ KIO::Job* del(const KURL::List& srcList);
 
 bool      renameFile(const KURL& src, const KURL& dest);
 
+KIO::Job* scan(const KURL& albumURL);
+
+bool      running();
+
 }
 
 #endif /* DIO_H */

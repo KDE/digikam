@@ -64,14 +64,13 @@ public:
     void chmod( const KURL& url, int permissions );
     void del( const KURL& url, bool isfile);         
     
-    
 private:
 
     bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
 
     void       buildAlbumList();
-    AlbumInfo  findAlbum(const QString& url, bool& ok);
+    AlbumInfo  findAlbum(const QString& url, bool addIfNotExists=true);
     void       delAlbum(int albumID);
     void       renameAlbum(const QString& oldURL, const QString& newURL);
     bool       findImage(int albumID, const QString& name) const;
@@ -82,6 +81,10 @@ private:
     void       copyImage(int srcAlbumID, const QString& srcName,
                          int dstAlbumID, const QString& dstName);
 
+    void       scanAlbum(const QString& url);
+    void       scanOneAlbum(const QString& url);
+    void       removeInvalidAlbums();
+    
 private:
 
     SqliteDB              m_sqlDB;

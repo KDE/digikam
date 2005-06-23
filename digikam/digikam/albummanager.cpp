@@ -40,7 +40,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albumitemhandler.h"
-#include "syncjob.h"
+#include "dio.h"
 #include "albumsettings.h"
 #include "albummanager.h"
 
@@ -82,6 +82,7 @@ public:
     KIO::TransferJob *dateListJob;
 
     KDirWatch        *dirWatch;
+    QStringList       dirtyAlbums;
 };
     
 
@@ -158,6 +159,7 @@ void AlbumManager::setLibraryPath(const QString& path)
 
     delete d->dirWatch;
     d->dirWatch = 0;
+    d->dirtyAlbums.clear();
     
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
@@ -262,6 +264,16 @@ void AlbumManager::refresh()
     scanTAlbums();
     scanSAlbums();
     scanDAlbums();
+
+    if (!d->dirtyAlbums.empty())
+    {
+        KURL u;
+        u.setProtocol("digikamalbums");
+        u.setPath(d->dirtyAlbums.first());
+        d->dirtyAlbums.pop_front();
+    
+        DIO::scan(u);
+    }
 }
 
 void AlbumManager::scanPAlbums()
@@ -322,8 +334,8 @@ void AlbumManager::scanPAlbums()
         removePAlbum(album);
         delete album;
     }
-    
-    
+
+    qHeapSort(newAlbumList);
     for (AlbumInfo::List::iterator it = newAlbumList.begin(); it != newAlbumList.end(); ++it)
     {
         AlbumInfo info = *it;
@@ -1061,6 +1073,9 @@ void AlbumManager::removePAlbum(PAlbum *album)
     d->pAlbumDict.remove(album->url());
     d->albumIntDict.remove(album->globalID());
 
+    d->dirtyAlbums.remove(album->url());
+    d->dirWatch->removeDir(album->folderPath());
+
     if (album == d->currentAlbum)
     {
         d->currentAlbum = 0;
@@ -1193,7 +1208,27 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
 
 void AlbumManager::slotDirty(const QString& path)
 {
-    kdDebug() << "Dirty: " << path << endl;
+    QString url = QDir::cleanDirPath(path);
+    url = QDir::cleanDirPath(url.remove(d->libraryPath));
+
+    if (url.isEmpty())
+        url = "/";
+
+    if (d->dirtyAlbums.contains(url))
+        return;
+
+    kdDebug() << "Dirty: " << url << endl;
+    d->dirtyAlbums.append(url);
+
+    if (DIO::running())
+        return;
+
+    KURL u;
+    u.setProtocol("digikamalbums");
+    u.setPath(d->dirtyAlbums.first());
+    d->dirtyAlbums.pop_front();
+    
+    DIO::scan(u);
 }
 
 
