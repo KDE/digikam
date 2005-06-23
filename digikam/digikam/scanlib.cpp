@@ -115,21 +115,21 @@ void ScanLib::findFoldersWhichDoNotExist()
     {
         int rc = KMessageBox::warningYesNoList(   0,
             i18n("There seem to be an album in the database which does not "
-                 "appear to be on disk. This album should be deleted from "
+                 "appear to be on disk. This album should be removed from "
                  "the database, but that means you might loose information, "
-                 "because all images related to this album will be deleted "
+                 "because all images related to this album will be removed "
                  "from the database as well. digiKam can not continue "
-                 "without deleting the items from the database because all "
+                 "without removing the items from the database because all "
                  "views depends on the information in the database. Do you "
-                 "want them to be removed?",
+                 "want them to be removed from the database?",
                  "There seem to be %n albums in the database which do not "
-                 "appear to be on disk. These albums should be deleted from "
+                 "appear to be on disk. These albums should be removed from "
                  "the database, but that means you might loose information, "
-                 "because all images related to this albums will be deleted "
+                 "because all images related to this albums will be removed "
                  "from the database as well. digiKam can not continue "
-                 "without deleting the items from the database because all "
+                 "without removing the items from the database because all "
                  "views depends on the information in the database. Do you "
-                 "want them to be removed?",
+                 "want them to be removed from the database?",
                  toBeDeleted.count()),
             toBeDeleted.keys(),
             i18n("Albums are Missing"));
@@ -416,18 +416,20 @@ void ScanLib::deleteStaleEntries()
         int rc = KMessageBox::warningYesNoList(   0,
           i18n("There seem to be an item in the database which does not "
                "appear to be on disk or is located in the root album of "
-               "the path. This file should be deleted from the "
+               "the path. This file should be removed from the "
                "database, but that means you might loose information. "
-               "digiKam can not continue without deleting the item from "
+               "digiKam can not continue without removing the item from "
                "the database because all views depends on the information "
-               "in the database. Do you want it to be removed?",
+               "in the database. Do you want it to be removed from the "
+               "database?",
                "There seem to be %n items in the database which do not "
                "appear to be on disk or are located in the root album of "
-               "the path. These files should be deleted from the "
+               "the path. These files should be removed from the "
                "database, but that means you might loose information. "
-               "digiKam can not continue without deleting these item from "
+               "digiKam can not continue without removing these item from "
                "the database because all views depends on the information "
-               "in the database. Do you want them to be removed?",
+               "in the database. Do you want them to be removed from the "
+               "database?",
                listToBeDeleted.count()),
           listToBeDeleted,
           i18n("Files are Missing"));
