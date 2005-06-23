@@ -21,6 +21,13 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
+
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -110,6 +117,11 @@ void SearchFolderView::quickSearchNew()
     if (dlg.exec() != KDialogBase::Accepted)
         return;
 
+    // Check if there is not already an album with that namespace
+    // and return if user aborts the dialog.
+    if ( ! checkName( url ) )
+        return;
+
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, true);
 
     if (album)
@@ -132,7 +144,12 @@ void SearchFolderView::extendedSearchNew()
 
     if (dlg.exec() != KDialogBase::Accepted)
         return;
-    
+
+    // Check if there is not already an album with that namespace
+    // and return if user aborts the dialog.
+    if ( ! checkName( url ) )
+        return;
+
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
 
     if (album)
@@ -146,6 +163,54 @@ void SearchFolderView::extendedSearchNew()
             slotSelectionChanged();
         }
     }
+}
+
+bool SearchFolderView::checkName( KURL& url )
+{
+    QString albumTitle = url.queryItem("name");
+
+    AlbumManager* aManager = AlbumManager::instance();
+    AlbumList aList = aManager->allSAlbums();
+
+    bool checked = checkAlbum( albumTitle );
+    while ( !checked) {
+        QString label = i18n( "Another search with same name exists."
+                                  "\nPlease enter a new name:" );
+        bool ok;
+#if KDE_IS_VERSION(3,2,0)
+        QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
+                                               albumTitle, &ok, this );
+#else
+        QString newTitle = KLineEditDlg::getText( i18n("Name exists"), label,
+                                               albumTitle, ok, this );
+#endif
+        if (!ok)
+            return( false );
+
+        albumTitle=newTitle;
+        checked = checkAlbum( albumTitle );
+        }
+    url.removeQueryItem( "name" );
+    url.addQueryItem( "name", albumTitle );
+    return( true );
+}
+
+bool SearchFolderView::checkAlbum( const QString& name ) const
+{
+
+    AlbumManager* aManager = AlbumManager::instance();
+    AlbumList aList = aManager->allSAlbums();
+
+    for ( AlbumList::Iterator it = aList.begin();
+          it != aList.end(); ++it )
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+        {
+            return( false );
+        }
+    }
+    return( true );
 }
 
 void SearchFolderView::quickSearchEdit(SAlbum* album)
@@ -346,6 +411,5 @@ void SearchFolderView::selectItem(int id)
         ensureItemVisible(item);
     }
 }
-
 
 #include "searchfolderview.moc"

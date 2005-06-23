@@ -54,6 +54,8 @@ protected:
     
 private:
 
+    bool checkName( KURL& url );
+    bool checkAlbum( const QString& name ) const;
     SearchFolderItem* m_lastAddedItem;
 };
     
