@@ -1492,9 +1492,6 @@ void kio_digikamalbums::removeInvalidAlbums()
     for (QStringList::iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        if (*it == "/a")
-            kdDebug() << "Checking Album: " << *it << endl;
-        
         if (::stat(QFile::encodeName(m_libraryPath + *it), &stbuf) == 0)
             continue;
 
