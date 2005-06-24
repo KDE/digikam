@@ -22,6 +22,8 @@
 
 * port cameraiconview to iconview and remove thumbview
 
+* fix kipiinterface to work with new framework
+
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
