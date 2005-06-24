@@ -47,10 +47,7 @@
 #include <kpopupmenu.h>
 #include <khelpmenu.h>
 
-#include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
-#endif
 
 extern "C"
 {
@@ -403,7 +400,7 @@ void CameraUI::slotDownload(bool onlySelected)
                         "Importing Camera Images"));
 
     QString newDirName;
-    ThumbItem* firstItem = m_view->firstItem();
+    IconItem* firstItem = m_view->firstItem();
     if (firstItem)
     {
         CameraIconViewItem* iconItem =
@@ -411,17 +408,10 @@ void CameraUI::slotDownload(bool onlySelected)
         
         QDateTime date;
         date.setTime_t(iconItem->itemInfo()->mtime);
-#if KDE_IS_VERSION(3,2,0)
         newDirName = QString("%1, %2, %3")
                      .arg(KGlobal::locale()->calendar()->year(date.date()))
                      .arg(KGlobal::locale()->calendar()->monthName(date.date()))
                      .arg(KGlobal::locale()->calendar()->day(date.date()));
-#else
-        newDirName = QString("%1, %2, %3")
-                     .arg(date.date().year())
-                     .arg(KGlobal::locale()->monthName(date.date().month()))
-                     .arg(date.date().day());
-#endif
     }
 
 
@@ -450,7 +440,7 @@ void CameraUI::slotDownload(bool onlySelected)
     autoAlbum  = m_autoAlbumCheck->isChecked();
 
     int total = 0;
-    for (ThumbItem* item = m_view->firstItem(); item;
+    for (IconItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         if (onlySelected && !(item->isSelected()))
@@ -502,7 +492,7 @@ void CameraUI::slotDeleteSelected()
     QStringList files;
     QStringList deleteList;
     
-    for (ThumbItem* item = m_view->firstItem(); item;
+    for (IconItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
@@ -547,7 +537,7 @@ void CameraUI::slotDeleteAll()
     QStringList files;
     QStringList deleteList;
     
-    for (ThumbItem* item = m_view->firstItem(); item;
+    for (IconItem* item = m_view->firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);

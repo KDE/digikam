@@ -22,6 +22,8 @@
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qfontmetrics.h>
+#include <qfont.h>
 
 #include <kmimetype.h>
 #include <klocale.h>
@@ -37,9 +39,11 @@ extern "C"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
 #include "renamecustomizer.h"
+#include "icongroupitem.h"
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
-    : ThumbView(parent), m_renamer(0), m_ui(ui)
+    : IconView(parent), m_renamer(0), m_ui(ui),
+      m_groupItem(new IconGroupItem(this))
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
 
@@ -47,10 +51,10 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     
     connect(this, SIGNAL(signalSelectionChanged()),
             SLOT(slotSelectionChanged()));
-    connect(this, SIGNAL(signalRightButtonClicked(ThumbItem*, const QPoint&)),
-            SLOT(slotContextMenu(ThumbItem*, const QPoint&)));
-    connect(this, SIGNAL(signalDoubleClicked(ThumbItem*)),
-            SLOT(slotDoubleClicked(ThumbItem*)));
+    connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
+            SLOT(slotContextMenu(IconItem*, const QPoint&)));
+    connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
+            SLOT(slotDoubleClicked(IconItem*)));
 }
 
 CameraIconView::~CameraIconView()
@@ -80,7 +84,8 @@ void CameraIconView::addItem(const GPItemInfo& info)
                                          m_itemDict.count() );
     }
 
-    CameraIconViewItem* item = new CameraIconViewItem(this, info, pix, downloadName);
+    CameraIconViewItem* item = new CameraIconViewItem(m_groupItem, info,
+                                                      pix, downloadName);
     m_itemDict.insert(info.folder+info.name, item);
 }
 
@@ -122,7 +127,7 @@ void CameraIconView::slotDownloadNameChanged()
     }
     
     viewport()->setUpdatesEnabled(false);
-    for (ThumbItem* item = firstItem(); item;
+    for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* viewItem =
@@ -130,7 +135,8 @@ void CameraIconView::slotDownloadNameChanged()
         viewItem->setDownloadName( useDefault ? QString::null :
                                    getTemplatedName( nameTemplate,
                                                      viewItem->itemInfo(),
-                                                     index(viewItem) ) );
+                                                     0 ) );
+//TODO:                                              index(viewItem) ) );
     }
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
@@ -171,7 +177,7 @@ void CameraIconView::slotSelectionChanged()
 {
     bool selected = false;
     
-    for (ThumbItem* item = firstItem(); item;
+    for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
         if (item->isSelected())
@@ -184,7 +190,7 @@ void CameraIconView::slotSelectionChanged()
     emit signalSelected(selected);
 }
 
-void CameraIconView::slotContextMenu(ThumbItem * item, const QPoint&)
+void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 {
     if (!item)
         return;
@@ -238,7 +244,7 @@ void CameraIconView::slotContextMenu(ThumbItem * item, const QPoint&)
     }
 }
 
-void CameraIconView::slotDoubleClicked(ThumbItem* item)
+void CameraIconView::slotDoubleClicked(IconItem* item)
 {
     if (!item)
         return;
@@ -268,7 +274,7 @@ void CameraIconView::slotSelectNew()
 {
     blockSignals(true);
     clearSelection();
-    for (ThumbItem* item = firstItem(); item;
+    for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* viewItem =
@@ -285,6 +291,57 @@ void CameraIconView::slotSelectNew()
 void CameraIconView::startDrag()
 {
     
+}
+
+QRect CameraIconView::itemRect() const
+{
+    if (!firstItem())
+        return QRect();
+
+    CameraIconViewItem* item = static_cast<CameraIconViewItem*>(firstItem());
+
+    const int thumbSize = 128;
+
+    QRect pixRect;
+    QRect textRect;
+    QRect extraRect;
+
+    pixRect.setWidth(thumbSize);
+    pixRect.setHeight(thumbSize);
+    
+    QFontMetrics fm(font());
+    QRect r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+                                    Qt::AlignHCenter | Qt::AlignTop |
+                                    Qt::WordBreak | Qt::BreakAnywhere,
+                                    item->itemInfo()->name));
+    textRect.setWidth(r.width());
+    textRect.setHeight(r.height());
+
+    if (!item->getDownloadName().isEmpty())
+    {
+        QFont fn(font());
+        if (fn.pointSize() > 0)
+        {
+            fn.setPointSize(QMAX(fn.pointSize()-2, 6));
+        }
+
+        fm = QFontMetrics(fn);
+        r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+                                  Qt::AlignHCenter | Qt::WordBreak |
+                                  Qt::BreakAnywhere | Qt::AlignTop,
+                                  item->getDownloadName()));
+        extraRect.setWidth(r.width());
+        extraRect.setHeight(r.height());
+    }
+
+    r = QRect();
+    r.setWidth(QMAX(QMAX(pixRect.width(), textRect.width()),
+                       extraRect.width()) + 4);
+    r.setHeight(pixRect.height() +
+                textRect.height() +
+                extraRect.height() + 4);
+
+    return r;
 }
 
 #include "cameraiconview.moc"

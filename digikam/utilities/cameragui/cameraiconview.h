@@ -21,7 +21,7 @@
 #ifndef CAMERAICONVIEW_H
 #define CAMERAICONVIEW_H
 
-#include <thumbview.h>
+#include <iconview.h>
 #include <qdict.h>
 
 class GPItemInfo;
@@ -29,7 +29,7 @@ class RenameCustomizer;
 class CameraUI;
 class CameraIconViewItem;
 
-class CameraIconView : public ThumbView
+class CameraIconView : public IconView
 {
     Q_OBJECT
     
@@ -47,6 +47,8 @@ public:
 
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 
+    virtual QRect itemRect() const;
+    
 protected:
 
     void startDrag();
@@ -60,6 +62,7 @@ private:
     QDict<CameraIconViewItem> m_itemDict;
     RenameCustomizer*         m_renamer;
     CameraUI*                 m_ui;
+    IconGroupItem*            m_groupItem;
 
 signals:
 
@@ -81,8 +84,8 @@ public slots:
 
 private slots:
 
-    void slotContextMenu(ThumbItem* item, const QPoint& pos);
-    void slotDoubleClicked(ThumbItem* item);
+    void slotContextMenu(IconItem* item, const QPoint& pos);
+    void slotDoubleClicked(IconItem* item);
 };    
 
 #endif /* CAMERAICONVIEW_H */

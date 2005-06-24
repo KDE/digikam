@@ -175,7 +175,7 @@ bool UMSCamera::downloadItem(const QString& folder,
     {
         sFile.close();
         kdWarning() << "Failed to open dest file for writing: "
-                    << src << endl;
+                    << dest << endl;
         return false;
     }
 

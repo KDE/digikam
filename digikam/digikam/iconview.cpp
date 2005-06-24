@@ -590,7 +590,7 @@ QRect IconView::itemRect() const
 
 QRect IconView::bannerRect() const
 {
-    return QRect(0, 0, visibleWidth(), 50);    
+    return QRect(0, 0, visibleWidth(), 0);    
 }
 
 void IconView::viewportPaintEvent(QPaintEvent* pe)
