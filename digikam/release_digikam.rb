@@ -146,7 +146,7 @@ Dir.chdir( ".." ) # name-version
 
 # Move some important files to the root folder
 Dir.chdir( "#{name}" )
-`/bin/mv -f digikam.lsm ..`
+`/bin/mv -f #{name}.lsm ..`
 `/bin/mv -f AUTHORS ..`
 `/bin/mv -f ChangeLog ..`
 `/bin/mv -f COPYING ..`
