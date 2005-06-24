@@ -21,13 +21,16 @@
 #include <qfile.h>
 #include <libkexif/kexifdata.h>
 
-#include "jpegreader.h"
+#include "jpegmetadata.h"
 
 #define XMD_H 1
 extern "C" {
 #include <stdio.h>
 #include <jpeglib.h>
 }         
+
+namespace Digikam
+{
 
 #define M_COM  0xFE
 #define M_EXIF 0xE1
@@ -104,3 +107,4 @@ void readJPEGMetaData(const QString& filePath,
     fclose(input_file);                 
 }
 
+}

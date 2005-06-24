@@ -12,6 +12,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/themeengine \
 	-I$(top_srcdir)/digikam/libs/widgets \
 	-I$(top_srcdir)/digikam/libs/thumbbar \
+	-I$(top_srcdir)/digikam/libs/jpegutils \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
@@ -46,7 +47,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchquickdialog.cpp searchadvanceddialog.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatepickerpopup.cpp \
 			folderview.cpp folderitem.cpp \
-			upgradedb_sqlite2tosqlite3.cpp jpegreader.cpp
+			upgradedb_sqlite2tosqlite3.cpp
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
@@ -59,6 +60,7 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \

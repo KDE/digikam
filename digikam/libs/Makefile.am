@@ -1,1 +1,1 @@
-SUBDIRS = histogram levels themeengine widgets curves filters thumbbar 
+SUBDIRS = histogram levels themeengine widgets curves filters thumbbar jpegutils

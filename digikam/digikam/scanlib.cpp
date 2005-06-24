@@ -41,9 +41,10 @@ extern "C" {
 #include <stdlib.h>
 }
 
+#include <jpegmetadata.h>
+
 #include "albumdb.h"
 #include "albummanager.h"
-#include "jpegreader.h"
 #include "scanlib.h"
 
 /** @file scanlib.cpp*/
@@ -368,7 +369,7 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    readJPEGMetaData(filePath, comment, datetime);
+    Digikam::readJPEGMetaData(filePath, comment, datetime);
     
     if ( !datetime.isValid() )
     {
@@ -390,7 +391,7 @@ void ScanLib::updateItemDate(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    readJPEGMetaData(filePath, comment, datetime);
+    Digikam::readJPEGMetaData(filePath, comment, datetime);
     
     if ( !datetime.isValid() )
     {

@@ -21,8 +21,11 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
-extern void readJPEGMetaData(const QString& filePath,
-                             QString& comments,
-                             QDateTime& datetime);
+namespace Digikam
+{
+void readJPEGMetaData(const QString& filePath,
+                      QString& comments,
+                      QDateTime& datetime);
+}
 
 #endif /* JPEGREADER_H */
