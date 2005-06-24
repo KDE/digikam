@@ -57,7 +57,7 @@ public:
     enum Orient  
     {
     Landscape = 0,
-    Paysage
+    Portrait
     };
 
     enum CenterType
