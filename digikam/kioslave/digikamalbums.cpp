@@ -1420,7 +1420,13 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
              it != newAlbumList.end(); ++it)
         {
             kdDebug() << "New Album: " << *it << endl;
-            findAlbum(*it);
+
+            QFileInfo fi(m_libraryPath + *it);
+            m_sqlDB.execSql(QString("INSERT INTO Albums (url, date) "
+                                    "VALUES('%1', '%2')")
+                            .arg(*it)
+                            .arg(fi.lastModified().date().toString(Qt::ISODate)));
+
             scanAlbum(*it);
         }
     }
@@ -1486,9 +1492,12 @@ void kio_digikamalbums::removeInvalidAlbums()
     for (QStringList::iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
+        if (*it == "/a")
+            kdDebug() << "Checking Album: " << *it << endl;
+        
         if (::stat(QFile::encodeName(m_libraryPath + *it), &stbuf) == 0)
             continue;
-        
+
         kdDebug() << "Deleted Album: " << *it << endl;
         m_sqlDB.execSql(QString("DELETE FROM Albums WHERE url='%1'")
                     .arg(escapeString(*it)));    
