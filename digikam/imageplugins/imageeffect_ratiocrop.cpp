@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-06
- * Description : Ratio crop tool for digiKam image editor
+ * Description : digiKam image editor Ratio Crop tool
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -307,6 +307,10 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 
 void ImageEffect_RatioCrop::readSettings(void)
 {
+    Digikam::ImageIface iface(0, 0);
+    int w = iface.originalWidth();
+    int h = iface.originalHeight();
+    
     QColor *defaultGuideColor = new QColor( 250, 250, 255 );
     KConfig *config = kapp->config();
     config->setGroup("Aspect Ratio Crop Tool Settings");
@@ -323,49 +327,101 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());          
-                                    
-    m_xInput->setValue( config->readNumEntry("Custom Aspect Ratio Xpos", 50) );
-    m_yInput->setValue( config->readNumEntry("Custom Aspect Ratio Ypos", 50) );
-    
-    // 3:4 per default.
-    m_ratioCB->setCurrentItem( config->readNumEntry("Aspect Ratio", 3) );                 
-    m_customRatioNInput->setValue( config->readNumEntry("Custom Aspect Ratio Num", 1) );
-    m_customRatioDInput->setValue( config->readNumEntry("Custom Aspect Ratio Den", 1) );
-    
-    applyRatioChanges(m_ratioCB->currentItem());
 
-    // Paysage per default.
-    m_orientCB->setCurrentItem( config->readNumEntry("Aspect Ratio Orientation", 0) );    
+    if (w > h)
+        {
+        m_xInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
+        m_yInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
+        
+        m_ratioCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio", 
+                                   Digikam::ImageSelectionWidget::RATIO03X04) );                 
+        m_customRatioNInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
+        m_customRatioDInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
+        
+        applyRatioChanges(m_ratioCB->currentItem());
     
-    if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
-       {
-       m_widthInput->setValue( config->readNumEntry("Custom Aspect Ratio Width", 800) );
-       m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
-       }
-    else       
-       {
-       m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
-       m_heightInput->setValue( config->readNumEntry("Custom Aspect Ratio Height", 600) );
-       }
+        m_orientCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio Orientation", 
+                                                         Digikam::ImageSelectionWidget::Landscape) );    
+        
+        if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
+            {
+            m_widthInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
+            m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
+            }
+        else       
+            {
+            m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
+            m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
+            }
+            
+        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());    
+        }
+    else
+        {
+        m_xInput->setValue( config->readNumEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
+        m_yInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
+        
+        m_ratioCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio",
+                                   Digikam::ImageSelectionWidget::RATIO03X04) );                 
+        m_customRatioNInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
+        m_customRatioDInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
+        
+        applyRatioChanges(m_ratioCB->currentItem());
     
-    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());    
+        m_orientCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio Orientation", 
+                                                         Digikam::ImageSelectionWidget::Portrait) );    
+        
+        if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
+            {
+            m_widthInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
+            m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
+            }
+        else       
+            {
+            m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
+            m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
+            }
+            
+        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());    
+        }
+            
     delete defaultGuideColor;   
 }
     
 void ImageEffect_RatioCrop::writeSettings(void)
 {
+    Digikam::ImageIface iface(0, 0);
+    int w = iface.originalWidth();
+    int h = iface.originalHeight();
+    
     KConfig *config = kapp->config();
     config->setGroup("Aspect Ratio Crop Tool Settings");
-    config->writeEntry( "Aspect Ratio", m_ratioCB->currentItem() );
-    config->writeEntry( "Aspect Ratio Orientation", m_orientCB->currentItem() );
-    config->writeEntry( "Custom Aspect Ratio Num", m_customRatioNInput->value() );
-    config->writeEntry( "Custom Aspect Ratio Den", m_customRatioDInput->value() );
     
-    config->writeEntry( "Custom Aspect Ratio Xpos", m_xInput->value() );
-    config->writeEntry( "Custom Aspect Ratio Ypos", m_yInput->value() );
-    config->writeEntry( "Custom Aspect Ratio Width", m_widthInput->value() );
-    config->writeEntry( "Custom Aspect Ratio Height", m_heightInput->value() );
-    
+    if (w > h)
+       {
+       config->writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentItem() );
+       config->writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+        
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
+       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+       }
+    else
+       {
+       config->writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentItem() );
+       config->writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+        
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
+       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+       }       
+               
     config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
     config->writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
     config->writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );

@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-06
- * Description : Ratio crop tool for digiKam image editor
+ * Description : digiKam image editor Ratio Crop tool
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
