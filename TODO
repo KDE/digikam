@@ -14,10 +14,6 @@
 
 * fix changing of album library path. [TA/RR]
 
-* search view and search table in database
-  - kio
-        - bug: tag ne tagX fails to show images without any tags.
-
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
   - splitter sizes
   - active view
