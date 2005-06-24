@@ -135,8 +135,7 @@ void CameraIconView::slotDownloadNameChanged()
         viewItem->setDownloadName( useDefault ? QString::null :
                                    getTemplatedName( nameTemplate,
                                                      viewItem->itemInfo(),
-                                                     0 ) );
-//TODO:                                              index(viewItem) ) );
+                                                     m_groupItem->index(viewItem) ) );
     }
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);

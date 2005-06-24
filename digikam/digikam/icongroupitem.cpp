@@ -193,6 +193,29 @@ int IconGroupItem::count() const
     return d->count;
 }
 
+int IconGroupItem::index(IconItem* item) const
+{
+    if ( !item )
+        return -1;
+
+    if ( item == d->firstItem )
+        return 0;
+    else if ( item == d->lastItem )
+        return d->count - 1;
+    else 
+    {
+        IconItem *i = d->firstItem;
+        int j = 0;
+        while ( i && i != item ) 
+        {
+            i = i->m_next;
+            ++j;
+        }
+
+        return i ? j : -1;
+    }
+}
+
 void IconGroupItem::clear(bool update)
 {
     d->clearing = true;
@@ -273,3 +296,4 @@ int IconGroupItem::compare(IconGroupItem*)
 {
     return 0;
 }
+

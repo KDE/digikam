@@ -20,8 +20,6 @@
   - closed/open state of left/right views
   - currently selected albums in each view
 
-* port cameraiconview to iconview and remove thumbview
-
 * fix kipiinterface to work with new framework
 
 * Fix PPC compatibility in image filters [GC]
