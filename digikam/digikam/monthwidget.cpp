@@ -232,8 +232,19 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
 
     QRect r1(0, m_currh*3, m_currw, m_currh*6);
     QRect r2(m_currw, m_currh*3, m_currw*7, m_currh*6);
+    QRect r3(m_currw, m_currh*2, m_currw*7, m_currh);
 
-    if (r1.contains(e->pos()))
+    // Click on a weekday
+    if( r3.contains(e->pos()))
+    {
+        int j = (e->pos().x() - m_currw)/m_currw;
+        for (int i=0; i<6; i++)
+        {
+            m_days[i*7+j].selected = !m_days[i*7+j].selected;
+        }
+    }
+    // Click on a week
+    else if (r1.contains(e->pos()))
     {
         int j = (e->pos().y() - 3*m_currh)/m_currh;
         for (int i=0; i<7; i++)
@@ -241,6 +252,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             m_days[j*7+i].selected = !m_days[j*7+i].selected;
         }
     }
+    // Click on a day.
     else if (r2.contains(e->pos()))
     {
         int i, j;
