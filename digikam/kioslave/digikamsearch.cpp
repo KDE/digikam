@@ -461,9 +461,18 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     }
     case(TAG):
     {
-        query = " (Images.id IN "
-                "   (SELECT imageid FROM ImageTags "
-                "    WHERE tagid $$##$$ $$@@$$)) ";
+        if (op == EQ)
+            query = " (Images.id IN "
+                    "   (SELECT imageid FROM ImageTags "
+                    "    WHERE tagid = $$@@$$)) ";
+        else 
+            query = " (Images.id NOT IN "
+                    "   (SELECT imageid FROM ImageTags "
+                    "    WHERE tagid = $$@@$$)) ";
+
+//         query = " (Images.id IN "
+//                 "   (SELECT imageid FROM ImageTags "
+//                 "    WHERE tagid $$##$$ $$@@$$)) ";
         break;
     }
     case(TAGNAME):
