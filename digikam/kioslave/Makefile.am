@@ -1,4 +1,5 @@
-INCLUDES    = $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
+INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
+		$(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
 METASOURCES = AUTO  
 KDE_CFLAGS =  -w
 
@@ -16,7 +17,8 @@ kio_digikamtags_la_LIBADD = $(LIB_KIO)  $(LIB_SQLITE3)
 kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
 kio_digikamalbums_la_SOURCES  = digikamalbums.cpp sqlitedb.cpp
-kio_digikamalbums_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3)
+kio_digikamalbums_la_LIBADD = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
+			      $(LIB_KIO) $(LIB_SQLITE3)
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
 kio_digikamdates_la_SOURCES  = digikamdates.cpp sqlitedb.cpp

@@ -56,6 +56,8 @@ extern "C"
 #include <utime.h>
 }
 
+#include <jpegmetadata.h>
+
 #include "sqlitedb.h"
 #include "digikamalbums.h"
 
@@ -1278,17 +1280,8 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 {
     QString   comment;
     QDateTime datetime;
-    
-    KFileMetaInfo itemMetaInfo(filePath);
 
-    if (itemMetaInfo.isValid() &&
-        itemMetaInfo.containsGroup("Jpeg EXIF Data"))
-    {
-        comment = itemMetaInfo.group("Jpeg EXIF Data").
-                  item("Comment").value().toString();
-        datetime = itemMetaInfo.group("Jpeg EXIF Data").
-                   item("Date/time").value().toDateTime();
-    }
+    Digikam::readJPEGMetaData(filePath, comment, datetime);
 
     if (!datetime.isValid())
     {
