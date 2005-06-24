@@ -24,6 +24,8 @@
   - closed/open state of left/right views
   - currently selected albums in each view
 
+* port cameraiconview to iconview and remove thumbview
+
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
