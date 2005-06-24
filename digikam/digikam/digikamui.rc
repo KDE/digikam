@@ -106,12 +106,12 @@
   <Action name="album_addImages" />
   <Action name="album_propsEdit" />
   <Separator/>
+  <Action name="search_quick" />
+  <Separator/>
   <Action name="image_view" />
   <Action name="image_comments" />
   <Action name="image_properties" />
   <Action name="image_rename" />
-  <Separator/>
-  <Action name="search_quick" />
   <Separator/>
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
