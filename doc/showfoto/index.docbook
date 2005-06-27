@@ -678,21 +678,21 @@
                     <anchor id="ratiocroptool.anchor"/>                                
                     
                     <para>
-                    Aspect Ratio Crop tool goes further. While you are editing digital images, it is often necessary to create a compatible format with, for example, your photo-album. If you print an image from your digital camera and then try to put it in your photo album, you may notice that the camera has a different width or height ratio than a normal photographic film format so you need to crop your digital images in a predefined ratio (for example 5:7 or 2:3 which is a standard photo ratio).
+                    The Aspect Ratio Crop tool goes further. While you are editing digital images, it is often necessary to create a compatible format with, for example, your photo-album or paper formats. If you print an image from your digital camera and then try to put it in your photo album, you may notice that the camera has a different width or height ratio than a normal photographic film format so you need to crop your digital images in a predefined ratio (for example 5:7 or 2:3 which is a standard photo ratio).
                     </para>
                 
                     <figure>
-                        <title>The Aspect Ratio Crop Tool in Action</title>
-                        <graphic srccredit="The Aspect Ratio Crop Tool in Action" 
+                        <title>The Aspect Ratio Crop Tool Image Selection Tab</title>
+                        <graphic srccredit="The Aspect Ratio Crop Tool Image Selection Tab" 
                         fileref="editorratiocroptool.png"/>
                     </figure>
                     
                     <para>
-                    The preview area lets you draw the cropping rectangle around the part you wish to use. It will keep the ratio value set in the bottom of dialog. You can always resize and move it with the mouse, it will keep the same ratio.
+                    In the preview area you can size the cropping rectangle by moving the corners with the mouse. It will keep the ratio value set in the bottom of dialog.
                     </para>
                     
                     <para>
-                    In Aspect Ratio Crop tool settings, you specify the <guilabel>Orientation</guilabel> as <guilabel>Portrait</guilabel> or <guilabel>Landscape</guilabel>. Portrait will always have the larger number assigned to the <guilabel>Height</guilabel> and Landscape to the <guilabel>Width</guilabel>.
+                    In the Aspect Ratio Crop tool settings, you specify the <guilabel>Orientation</guilabel> as <guilabel>Portrait</guilabel> or <guilabel>Landscape</guilabel>. Portrait will always have the larger size assigned to the <guilabel>Height</guilabel> and Landscape to the <guilabel>Width</guilabel>.
                     </para>
                     
                     <para>
@@ -766,31 +766,163 @@
                     </tgroup></informaltable>
                     
                     <para>
-                    <guilabel>Show Guide Lines</guilabel> option is a guiding element to better compose your images. This guide is a grid that divides the picture into thirds in every direction (that makes for 9 parts). These proportions are close to the golden rule and are derived from the field of view of the human eye. They are used, often with slight variations throughout a large number of commonly used objects. Within that frame there are precise areas where the important parts of the image should be placed. The same principle is used to determine the position of the horizon and the proportion of ground to sky.
+                    At the far right of the dialog two buttons are available to move the crop selection automatically to the horizontal or vertical center of the image.
                     </para>
                     
                     <para>
-                    Many photographers and artists are aware of the rule of thirds, where a picture is divided into three sections vertically and horizontally and lines and points of intersection represent places to position important visual elements. The golden ratio and its application are similar although the golden ratio is not as well known and its' points of intersection are closer together. Moving a horizon in a landscape to the position of one third is often more effective than placing it in the middle, but it could also be placed near the bottom one quarter or sixth. There is nothing obligatory about applying the rule of thirds. In placing visual elements for effective composition, one must assess many factors including color, dominance, size and balance together with proportion. Often a certain amount of imbalance or tension can make an image more effective. 
+                    At the very bottom line of the dialog, the <guilabel>Max. Ratio</guilabel> button lets you set the crop area size to the maximum size according with the current aspect ratio settings and orientation.
                     </para>
+                
+                    <note><para>
+                    Aspect Ratio Crop tool remember settings depending of image orientation (Horizontal or Vertical). For each tool session, the current image orientation is used to restore the better settings adapted to the image.
+                    </para></note>
+                    
+                </sect4>
+            
+                <sect4 id="using-kapp-compositionguides">
+                <title>Composition Guide</title>
+                                <para>
+                    When first looking at an image, the eye of the viewer rarely settles at the centre of the image, but moves instead from the top left to the right, and then from the lower left to the right again. This pattern is most unconscious but has been well-documented. It is probably associated with the western reading pattern. From the photographer's point of view, the goal then becomes to guide the gaze of the viewer to the subject, being aware of the way many people perceive an image.
+                    </para>                                                                                
                     
                     <figure>
-                        <title>Photograph Composition Example Using Rule Third Lines</title>
-                        <graphic srccredit="Photograph Composition Example Using Rule Third Lines Example" 
-                        fileref="rulethirdlinesexample.png"/>
+                        <title>The Aspect Ratio Crop Tool Composition Guide Tab</title>
+                        <graphic srccredit="The Aspect Ratio Crop Tool Composition Guide Tab" 
+                        fileref="editorratiocroptool2.png"/>
                     </figure>
                     
                     <para>
-                    When first looking at an image, the eye of the viewer rarely settles at the centre of the image, but instead from the top left to right, and then to the lower left and right again. This pattern is most unconscious but has been well-documented. It is probably associated with the western reading pattern. From the photographer's point of view, the goal then becomes to guide the gaze of the viewer to the subject, being aware of the way many people perceive an image.
+                    The <guilabel>Composition Guide</guilabel> tab provides guiding elements to better compose your images. These guides are:
+
+                    <itemizedlist>
+                
+                        <listitem>
+                            
+                            <para>
+                            <guilabel>Rule of Thirds</guilabel>: a grid that divides the picture into thirds in every direction (that makes for 9 parts). These proportions are close to the golden rule and are derived from the field of view of the human eye. They are often used with slight variations throughout a large number of commonly used objects. Within that frame there are precise areas where the important parts of the image should be placed. The same principle is used to determine the position of the horizon and the proportion of ground to sky.
+                            </para>
+                                                        
+                            <para>
+                            Many photographers and artists are aware of the Rule of Thirds, where a picture is divided into three sections vertically and horizontally and the points of intersection represent places to position important visual elements. Moving a horizon in a landscape to the position of one third is often more effective than placing it in the middle, but it could also be placed near the bottom one quarter or sixth. There is nothing obligatory about applying the Rule of Thirds. In placing visual elements for effective composition, one must assess many factors including color, dominance, size and balance together with proportion. Often a certain amount of image balance or tension can make a composition more effective.
+                            </para>
+                            
+                            <figure>
+                                <title>Photograph Composition Example Using Rules of Third</title>
+                                <graphic srccredit="Photograph Composition Example Using Rules of Third" 
+                                fileref="rulethirdlinesexample.png"/>
+                            </figure>
+                                                    
+                        </listitem>
+    
+                        <listitem>
+                        
+                            <para>
+                            <guilabel>Harmonious Triangles</guilabel>: Harmonious divisions rely on the principle of similarity. Like the Rule of Thirds guide, Harmonious Triangles are another division of the image using a rectangle into equiangular harmonious triangles aligned with the diagonal.
+                            </para>
+                            
+                            <figure>
+                                <title>Photograph Composition Example Using Harmonious Triangles</title>
+                                <graphic srccredit="Photograph Composition Example Using Harmonious Triangles" 
+                                fileref="harmonioustrianglesexample.png"/>
+                            </figure>
+                            
+                        </listitem>
+                
+                        <listitem>
+                        
+                            <para>
+                            <guilabel>Golden Mean</guilabel>: The Golden Mean is a ratio underlying numerous growth patterns throughout nature (from the spiral of a Nautilus shell to the petals of a sunflower), it has an uncanny way of showing up in all kinds of things we deem beautiful.
+                            </para>
+                        
+                            <para>
+                            The Golden Ratio is the irrational number 1.618033988..., and it's usage dates back to the ancient Egyptians and Greeks who used it in the construction of their temples and pyramids. Artists and architects throughout time have used the Golden Ratio when composing their paintings, buildings, and even photographs, in order to give their creations a sense of natural order and beauty.
+                            </para>
+                            
+                            <para>
+                            The ratio is inherent in the Fibonacci series: 1, 1, 2, 3, 5, 8, 13, 21, 34 etc., where each succeeding number after 1 is equal to the sum of the two preceding numbers. The ratio formed 1:1.618 is the Golden Mean. A composition following this rule is considered visually harmonious.
+                            </para>
+                            
+                            <para>
+                            The Golden Mean provide more fluid guidelines when used to compose an image. These guides are listed below:
+                            
+                            <itemizedlist>                            
+                        
+                                <listitem>                                                        
+                            
+                                    <para>
+                                    The <guilabel>Golden Spiral</guilabel> guide will increase your odds of getting captivating results in your photographs. As opposed to Rule of Thirds, the Golden Spiral forms a fluid line for the eye to trace through the picture. This style of composition will invite the viewer's gaze into the picture along the line of the spiral, creating a more symmetrical visual flow, and an overall compelling viewing experience.
+                                    </para>
+        
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Spiral</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Spiral" 
+                                        fileref="goldenspiralexample.png"/>
+                                    </figure>
+                                    
+                                </listitem>
+                                    
+                                <listitem>
+                                                    
+                                    <para>                                                        
+                                    One more rule is a <guilabel>Golden Spiral Sections</guilabel> (or Golden Rectangles). These rectangles are used to build the Golden Spiral. There should be something leading the eye to the center of the composition. It could be a line or several subjects. This "something" could just be there without leading the eyes, but it would make its job.
+                                    </para>
+                                                                
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Spiral Sections</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Spiral Sections" 
+                                        fileref="goldenspiralsectionsexample.png"/>
+                                    </figure>
+                                
+                                </listitem>
+                                
+                                <listitem>
+                                                            
+                                    <para>
+                                    The <guilabel>Golden Triangles</guilabel> is a derivative of the Golden Spiral discussed above. Its vertices are the midpoints of the sides of the Golden Rectangle. Note that unlike Harmonious Triangles, Golden Triangles aren't equiangular triangle. Placing diagonals along these lines can make an otherwise static subject appear more dynamic.
+                                    </para>
+                                    
+                                    <para>
+                                    When you use Golden Triangles to break up your frame, you're creating an effect dubbed by professional photographic experts named Dynamic Symmetry. Try to keep your focal subject on one of the intersecting points, and place other visual information into the triangles you've already divided out. The result will be a very attractive composition you may not have otherwise attained.
+                                    </para>
+                                    
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Triangle</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Triangles" 
+                                        fileref="goldentrianglesexample.png"/>
+                                    </figure>
+                                
+                                </listitem>
+                                
+                                <listitem>
+                                                            
+                                    <para>                                         
+                                    Like the Rule of Thirds the <guilabel>Golden Sections</guilabel> affects the ratio of a picture size as well as the placement of the main subjects on the photo. This ratio is close to the 35mm ratio, so you don't need to change the size of the photo in most cases. But you need to consider the composition: the main subject should lie on one of the four lines or four intersections (subject's eye for example). Truthfully speaking, these rules are not the same. Rule of Thirds is a simplified version of the Golden Mean.
+                                    </para>
+        
+                                    <figure>
+                                        <title>Photograph Composition Example Using Golden Sections</title>
+                                        <graphic srccredit="Photograph Composition Example Using Golden Sections" 
+                                        fileref="goldensectionsexample.png"/>
+                                    </figure>                                                                                                   
+                                </listitem>
+    
+                            </itemizedlist>
+                            </para>
+                            
+                       </listitem>
+     
+                    </itemizedlist>
+                    
                     </para>
                     
                     <para>
-                    On the right of the dialog, two buttons are available for move selection automaticly to the width or the height center of image.
+                    The <guilabel>Flip Horizontal</guilabel> and <guilabel>Flip Vertical</guilabel> options can be used to apply flip transformation to the harmonious divisions.
                     </para>
-                                                     
+                    
                     <para>
-                    On the bottom of the dialog, the <guilabel>Max. Ratio</guilabel> button lets you set the selection area size to the maximum, accordingly with the current aspect ratio settings an orientation.
+                    The <guilabel>Color</guilabel> button lets you set the guidelines color. If you have an high color contrast image, the guidelines may become invisible. By this way, you can adapt the color guide to the current image.
                     </para>
-                           
+                
                 </sect4>
             
             </sect3>
