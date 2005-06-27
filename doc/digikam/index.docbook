@@ -1513,6 +1513,10 @@
                     At the very bottom line of the dialog, the <guilabel>Max. Ratio</guilabel> button lets you set the crop area size to the maximum size according with the current aspect ratio settings and orientation.
                     </para>
                 
+                    <note><para>
+                    Aspect Ratio Crop tool remember settings depending of image orientation (Horizontal or Vertical). For each tool session, the current image orientation is used to restore the better settings adapted to the image.
+                    </para></note>
+                                
                 </sect4>
             
                 <sect4 id="using-kapp-compositionguides">
