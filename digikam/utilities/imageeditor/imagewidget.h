@@ -39,7 +39,8 @@ public:
     ~ImageWidget();
 
     ImageIface* imageIface();
-    
+    void updateImage(void);
+
 protected:
 
     void paintEvent(QPaintEvent *e);

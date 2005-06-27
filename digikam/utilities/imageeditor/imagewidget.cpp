@@ -71,13 +71,13 @@ void ImageWidget::paintEvent(QPaintEvent *)
     p.end();
 }
 
-void ImageWidget::resizeEvent(QResizeEvent *e)
+void ImageWidget::updateImage(void)
 {
     delete [] m_data;
     delete m_iface;
     
-    int w = e->size().width();
-    int h = e->size().height();
+    int w = width();
+    int h = height();
     m_iface = new ImageIface(w, h);
     
     m_data = m_iface->getPreviewData();
@@ -85,6 +85,11 @@ void ImageWidget::resizeEvent(QResizeEvent *e)
     m_h    = m_iface->previewHeight();
 
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);     
+}
+
+void ImageWidget::resizeEvent(QResizeEvent *)
+{
+    updateImage();
 }
 
 }
