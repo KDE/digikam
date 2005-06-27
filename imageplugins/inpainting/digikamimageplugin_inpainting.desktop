@@ -11,6 +11,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to inpaint a photograph
+Comment[de]=digiKam Plugin um Inpainting Operationen auf ein Bild auszuführen.
 Comment[et]=DigiKami foto objektide kaotamise plugin
 Comment[it]=Plugin di digiKam per reintegrare una fotografia
 Comment[nl]=digiKam-pluin voor het inkleuren van een foto
