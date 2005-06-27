@@ -57,14 +57,15 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of auto-color correction tool"));
 
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame);
+    
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Type:"), plainPage());
     m_typeCB = new QComboBox( false, plainPage() );
@@ -73,7 +74,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_typeCB->insertItem( previewEffectPic("equalize"),        i18n("Equalize") );
     m_typeCB->insertItem( previewEffectPic("stretchcontrast"), i18n("Stretch Contrast") );
     m_typeCB->setCurrentText( i18n("Auto Levels") );
-    QWhatsThis::add( m_typeCB, i18n("<p>Select here the auto color correction tool to use:<p>"
+    QWhatsThis::add( m_typeCB, i18n("<p>Select here the auto-color correction tool to use:<p>"
                                     "<b>Auto Levels</b>: this option enhances the contrast and brightness "
                                     "of the RGB values of an image by stretching the lowest "
                                     "and highest values to their fullest range, adjusting "
@@ -101,7 +102,6 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     hlay->addWidget(m_typeCB, 5);
 
     adjustSize();
-    disableResize();    
     
     QTimer::singleShot(0, this, SLOT(slotEffect()));
 
@@ -130,6 +130,7 @@ QPixmap ImageEffect_AutoCorrection::previewEffectPic(QString name)
 
 void ImageEffect_AutoCorrection::slotEffect()
 {
+    m_parent->setCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint * data = iface->getPreviewData();
@@ -145,6 +146,7 @@ void ImageEffect_AutoCorrection::slotEffect()
     delete [] data;
 
     m_previewWidget->update();
+    m_parent->setCursor( KCursor::arrowCursor() );
 }
 
 void ImageEffect_AutoCorrection::slotOk()
