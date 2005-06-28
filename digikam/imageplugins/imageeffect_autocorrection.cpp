@@ -63,7 +63,6 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the auto-color correction tool preview"));
-
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
     
