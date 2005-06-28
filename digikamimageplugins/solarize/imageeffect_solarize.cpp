@@ -195,7 +195,7 @@ void ImageEffect_Solarize::slotOk()
        delete [] data;
        }
 
-        kapp->restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
     accept();
 }
 
