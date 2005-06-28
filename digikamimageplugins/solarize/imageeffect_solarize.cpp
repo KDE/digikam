@@ -108,24 +108,23 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
-
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the solarize effect preview"));
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame, 10);
+        
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Intensity:"), plainPage());
     m_numInput = new KDoubleNumInput(plainPage());
     m_numInput->setPrecision(1);
     m_numInput->setRange(0.0, 100.0, 0.1, true);
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_numInput,5);
+    hlay->addWidget(label, 1);
+    hlay->addWidget(m_numInput, 5);
 
-    adjustSize();
-    disableResize();    
+    resize(configDialogSize("Solarize Image Tool Dialog"));      
     
     // -------------------------------------------------------------
 
@@ -135,7 +134,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
 {
-
+    saveDialogSize("Solarize Image Tool Dialog");
 }
 
 void ImageEffect_Solarize::slotHelp()
@@ -149,6 +148,12 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
     delete m_previewWidget;
 
     e->accept();
+}
+
+void ImageEffect_Solarize::resizeEvent(QResizeEvent *)
+{
+    m_previewWidget->updateImageIface();
+    slotEffect();
 }
 
 void ImageEffect_Solarize::slotEffect()
@@ -172,7 +177,7 @@ void ImageEffect_Solarize::slotEffect()
 
 void ImageEffect_Solarize::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
@@ -190,7 +195,7 @@ void ImageEffect_Solarize::slotOk()
        delete [] data;
        }
 
-    m_parent->setCursor( KCursor::arrowCursor() );
+        kapp->restoreOverrideCursor();
     accept();
 }
 
