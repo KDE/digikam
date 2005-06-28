@@ -248,8 +248,7 @@ void ImageSelectionWidget::maxAspectSelection(void)
           }
        }
 
-    updatePixmap();
-    repaint(false);
+    setCenterSelection(CenterImage);
 }
 
 void ImageSelectionWidget::setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
