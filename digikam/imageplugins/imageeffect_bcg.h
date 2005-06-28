@@ -1,9 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-05
- * Description : 
+ * Description : digiKam image editor Brightness/Contrast/Gamma 
+ *               correction tool
  * 
  * Copyright 2004 by Renchi Raju
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,11 +43,17 @@ public:
     ImageEffect_BCG(QWidget *parent);
     ~ImageEffect_BCG();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent * e);
+        
 private:
 
     KDoubleNumInput      *m_bInput;
     KDoubleNumInput      *m_cInput;
     KDoubleNumInput      *m_gInput;
+    
     Digikam::ImageWidget *m_previewWidget;
 
 private slots:

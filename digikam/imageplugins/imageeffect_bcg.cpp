@@ -1,9 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-05
- * Description : 
+ * Description : digiKam image editor Brightness/Contrast/Gamma 
+ *               correction tool
  * 
  * Copyright 2004 by Renchi Raju
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +32,8 @@
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <kapplication.h>
+#include <kcursor.h>
 
 // Digikam includes.
 
@@ -48,15 +52,14 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     setHelp("bcgadjusttool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480,320,frame);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image Brightness/Contrast/Gamma adjustments preview."));
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
-
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame);
+        
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -90,6 +93,8 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_bInput->setValue(0.0);
     m_cInput->setValue(0.0);
     m_gInput->setValue(0.0);
+    
+    // -------------------------------------------------------------
 
     connect(m_bInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
@@ -100,13 +105,27 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_gInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
 
+    // -------------------------------------------------------------
+                
     enableButtonOK( false );
-    adjustSize();
-    disableResize();      
+    resize(configDialogSize("BCG Correction Tool Dialog"));        
 }
 
 ImageEffect_BCG::~ImageEffect_BCG()
 {
+    saveDialogSize("BCG Correction Tool Dialog");
+}
+
+void ImageEffect_BCG::closeEvent(QCloseEvent *e)
+{
+    delete m_previewWidget;
+    e->accept();
+}
+
+void ImageEffect_BCG::resizeEvent(QResizeEvent *)
+{
+    m_previewWidget->updateImageIface();
+    slotEffect();
 }
 
 void ImageEffect_BCG::slotUser1()
@@ -127,8 +146,7 @@ void ImageEffect_BCG::slotEffect()
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     iface->setPreviewBCG(b, c, g);
     m_previewWidget->update();
@@ -136,15 +154,15 @@ void ImageEffect_BCG::slotEffect()
 
 void ImageEffect_BCG::slotOk()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     double b = m_bInput->value();
     double c = m_cInput->value() + (double)(1.00);    
     double g = m_gInput->value() + (double)(1.00);
 
     iface->setOriginalBCG(b, c, g);
-
+    kapp->restoreOverrideCursor();
     accept();
 }
 
