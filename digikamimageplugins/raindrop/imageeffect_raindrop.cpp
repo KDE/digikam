@@ -164,8 +164,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountInput = new KIntNumInput(plainPage());
     m_amountInput->setRange(1, 500, 1, true);
     m_amountInput->setValue(150);
-    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops."));                     
-    
+    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
     hlay3->addWidget(label2, 1);
     hlay3->addWidget(m_amountInput, 3);
     
@@ -177,7 +176,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffInput = new KIntNumInput(plainPage());
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
-    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical distortion coefficient."));     
+    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
+                                        "distortion coefficient."));     
     
     hlay4->addWidget(label3, 1);
     hlay4->addWidget(m_coeffInput, 3);
@@ -191,9 +191,11 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     hlay6->addWidget(m_progressBar, 1);
 
     // -------------------------------------------------------------
-        
+    // Prevent both computation (resize event and Reset to default settings).
+    blockSignals(true);
     resize(configDialogSize("Rain Drops Tool Dialog")); 
-    
+    blockSignals(false);
+     
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -283,8 +285,11 @@ void ImageEffect_RainDrop::closeEvent(QCloseEvent *e)
 
 void ImageEffect_RainDrop::resizeEvent(QResizeEvent *)
 {
+    if (m_currentRenderingMode != NoneRendering)
+       m_raindropFilter->stopComputation();
+    
     m_previewWidget->updateImageIface();
-    slotEffect();
+    QTimer::singleShot(0, this, SLOT(slotEffect())); 
 }
 
 void ImageEffect_RainDrop::slotTimer()
