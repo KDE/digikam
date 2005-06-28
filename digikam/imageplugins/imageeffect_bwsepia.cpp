@@ -34,6 +34,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -47,7 +48,7 @@
 
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Convert to Black & White"),
+                   : KDialogBase(Plain, i18n("Convert to Black and White"),
                                  Help|Ok|Cancel, Ok,
                                  parent, 0, true, true),
                      m_parent(parent)
@@ -58,13 +59,13 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the black and White conversion tool preview"));
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame);
 
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Type:"), plainPage());
@@ -91,11 +92,12 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                     "Using this one creates dramatic sky effects and simulates moonlight scenes in daytime.<p>"
                                     "<b>Yellow Filter</b>: simulate black and white film exposure using yellow filter. "
                                     "Most natural tonal correction and improves contrast. Ideal for landscapes.<p>"
-                                    "<b>Sepia Tone</b>: gives a warm highlight and mid-tone while adding a bit of coolness to the "
-                                    "shadows-very similar to the process of bleaching a print and re-developing in a sepia toner.<p>"
+                                    "<b>Sepia Tone</b>: gives a warm highlight and mid-tone while adding a bit of coolness to "
+                                    "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
+                                    "toner.<p>"
                                     "<b>Brown Tone</b>: more neutral than Sepia Tone filter.<p>"
-                                    "<b>Cold Tone</b>: start subtle and replicate printing on a cold tone black and white paper such "
-                                    "as a bromide enlarging paper.<p>"
+                                    "<b>Cold Tone</b>: start subtle and replicate printing on a cold tone black and white "
+                                    "paper such as a bromide enlarging paper.<p>"
                                     "<b>Selenium Tone</b>: effect that replicate traditional selenium chemical toning done "
                                     "in the darkroom.<p>"
                                     "<b>Platinum Tone</b>: effect that replicate traditional platinum chemical toning done "
@@ -105,8 +107,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     hlay->addWidget(label, 1);
     hlay->addWidget(m_typeCB, 5);
 
-    adjustSize();
-    disableResize();    
+    resize(configDialogSize("Black and White Conversion Dialog"));    
     
     QTimer::singleShot(0, this, SLOT(slotEffect()));
 
@@ -118,13 +119,19 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
 ImageEffect_BWSepia::~ImageEffect_BWSepia()
 {
+    saveDialogSize("Black and White Conversion Dialog");
 }
 
 void ImageEffect_BWSepia::closeEvent(QCloseEvent *e)
 {
     delete m_previewWidget;
-
     e->accept();
+}
+
+void ImageEffect_BWSepia::resizeEvent(QResizeEvent *)
+{
+    m_previewWidget->updateImageIface();
+    slotEffect();
 }
 
 QPixmap ImageEffect_BWSepia::previewEffectPic(QString name)
@@ -135,6 +142,7 @@ QPixmap ImageEffect_BWSepia::previewEffectPic(QString name)
 
 void ImageEffect_BWSepia::slotEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint * data = iface->getPreviewData();
@@ -150,11 +158,12 @@ void ImageEffect_BWSepia::slotEffect()
     delete [] data;
 
     m_previewWidget->update();
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_BWSepia::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
@@ -217,7 +226,7 @@ void ImageEffect_BWSepia::slotOk()
        delete [] data;
        }
 
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor();
     accept();
 }
 
