@@ -122,6 +122,12 @@ void ImageEffect_AutoCorrection::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
+void ImageEffect_AutoCorrection::resizeEvent(QResizeEvent *)
+{
+    m_previewWidget->updateImage();
+    slotEffect();
+}
+
 QPixmap ImageEffect_AutoCorrection::previewEffectPic(QString name)
 {
     KGlobal::dirs()->addResourceType(name.ascii(), KGlobal::dirs()->kde_default("data") + "digikam/data");
