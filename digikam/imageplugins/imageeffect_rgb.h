@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-11
- * Description : RGB adjustement plugin for ImageEditor
+ * Description : digiKam image editor Color Balance tool.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -42,6 +42,11 @@ public:
     ImageEffect_RGB(QWidget *parent);
     ~ImageEffect_RGB();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent * e);
+        
 private:
 
     QSpinBox             *m_rInput;
