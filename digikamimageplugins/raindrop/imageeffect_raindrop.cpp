@@ -285,11 +285,20 @@ void ImageEffect_RainDrop::closeEvent(QCloseEvent *e)
 
 void ImageEffect_RainDrop::resizeEvent(QResizeEvent *)
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (m_currentRenderingMode == FinalRendering)
+       {
        m_raindropFilter->stopComputation();
-    
+       m_previewWidget->updateImageIface();
+       QTimer::singleShot(0, this, SLOT(slotOk())); 
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_raindropFilter->stopComputation();
+       }
+       
     m_previewWidget->updateImageIface();
-    QTimer::singleShot(0, this, SLOT(slotEffect())); 
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
 void ImageEffect_RainDrop::slotTimer()
