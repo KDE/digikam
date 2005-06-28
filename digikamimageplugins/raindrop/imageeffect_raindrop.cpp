@@ -87,7 +87,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to add raindrops to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -130,22 +130,23 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    // -------------------------------------------------------------
+        
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an image part on editor, "
                                            "this part will be unused by the filter. You can use this way to "
                                            "disable the Raindrops effect on a human face for example.") );
-    topLayout->addWidget(gbox);
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame, 10);
     
     // -------------------------------------------------------------
                                                   
     QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Drop size:"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Drop Size:"), plainPage());
     
     m_dropInput = new KIntNumInput(plainPage());
     m_dropInput->setRange(0, 200, 1, true);
@@ -171,12 +172,12 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("Fish eyes:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Fish Eyes:"), plainPage());
     
     m_coeffInput = new KIntNumInput(plainPage());
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
-    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical distortion coefficient."));                     
+    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical distortion coefficient."));     
     
     hlay4->addWidget(label3, 1);
     hlay4->addWidget(m_coeffInput, 3);
@@ -189,11 +190,6 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     hlay6->addWidget(m_progressBar, 1);
 
-    adjustSize();
-    disableResize();  
-    
-    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
-        
     // -------------------------------------------------------------
     
     connect(m_dropInput, SIGNAL(valueChanged(int)),
@@ -204,6 +200,12 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     connect(m_coeffInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
+    
+    // -------------------------------------------------------------
+        
+    resize(configDialogSize("Rain Drops Tool Dialog")); 
+    
+    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.    
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -213,6 +215,8 @@ ImageEffect_RainDrop::~ImageEffect_RainDrop()
 
     if (m_timer)
        delete m_timer;
+    
+    saveDialogSize("Rain Drops Tool Dialog");       
 }
 
 void ImageEffect_RainDrop::abortPreview()
@@ -255,7 +259,7 @@ void ImageEffect_RainDrop::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_raindropFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -271,10 +275,16 @@ void ImageEffect_RainDrop::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_raindropFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
+}
+
+void ImageEffect_RainDrop::resizeEvent(QResizeEvent *)
+{
+    m_previewWidget->updateImageIface();
+    slotEffect();
 }
 
 void ImageEffect_RainDrop::slotTimer()
@@ -339,8 +349,8 @@ void ImageEffect_RainDrop::slotOk()
     enableButton(Ok, false);
     enableButton(User1, false);
     
-    m_parent->setCursor( KCursor::waitCursor() );
-
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
     int d       = m_dropInput->value();
     int a       = m_amountInput->value();
     int c       = m_coeffInput->value();
@@ -404,7 +414,7 @@ void ImageEffect_RainDrop::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("RainDrop"), 
                                        (uint*)m_raindropFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
