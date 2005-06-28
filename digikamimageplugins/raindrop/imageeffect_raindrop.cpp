@@ -191,6 +191,12 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     hlay6->addWidget(m_progressBar, 1);
 
     // -------------------------------------------------------------
+        
+    resize(configDialogSize("Rain Drops Tool Dialog")); 
+    
+    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
+        
+    // -------------------------------------------------------------
     
     connect(m_dropInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
@@ -200,12 +206,6 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     connect(m_coeffInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
-    
-    // -------------------------------------------------------------
-        
-    resize(configDialogSize("Rain Drops Tool Dialog")); 
-    
-    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.    
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
