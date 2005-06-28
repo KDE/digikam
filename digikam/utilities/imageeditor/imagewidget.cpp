@@ -71,7 +71,7 @@ void ImageWidget::paintEvent(QPaintEvent *)
     p.end();
 }
 
-void ImageWidget::updateImage(void)
+void ImageWidget::updateImageIface(void)
 {
     delete [] m_data;
     delete m_iface;
@@ -89,7 +89,7 @@ void ImageWidget::updateImage(void)
 
 void ImageWidget::resizeEvent(QResizeEvent *)
 {
-    updateImage();
+    updateImageIface();
 }
 
 }

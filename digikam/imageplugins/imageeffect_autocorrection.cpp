@@ -33,6 +33,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -61,7 +62,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of auto-color correction tool"));
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the auto-color correction tool preview"));
 
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
@@ -101,7 +102,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     hlay->addWidget(label, 1);
     hlay->addWidget(m_typeCB, 5);
 
-    adjustSize();
+    resize(configDialogSize("Auto-Color Correction Dialog"));
     
     QTimer::singleShot(0, this, SLOT(slotEffect()));
 
@@ -113,18 +114,18 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
 ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
 {
+    saveDialogSize("Auto-Color Correction Dialog");
 }
 
 void ImageEffect_AutoCorrection::closeEvent(QCloseEvent *e)
 {
     delete m_previewWidget;
-
     e->accept();
 }
 
 void ImageEffect_AutoCorrection::resizeEvent(QResizeEvent *)
 {
-    m_previewWidget->updateImage();
+    m_previewWidget->updateImageIface();
     slotEffect();
 }
 
@@ -136,7 +137,7 @@ QPixmap ImageEffect_AutoCorrection::previewEffectPic(QString name)
 
 void ImageEffect_AutoCorrection::slotEffect()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint * data = iface->getPreviewData();
@@ -152,12 +153,12 @@ void ImageEffect_AutoCorrection::slotEffect()
     delete [] data;
 
     m_previewWidget->update();
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_AutoCorrection::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
@@ -196,7 +197,7 @@ void ImageEffect_AutoCorrection::slotOk()
        delete [] data;
        }
 
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor();
     accept();
 }
 

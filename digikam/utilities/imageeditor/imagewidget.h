@@ -39,7 +39,7 @@ public:
     ~ImageWidget();
 
     ImageIface* imageIface();
-    void updateImage(void);
+    void updateImageIface(void);
 
 protected:
 
