@@ -5,6 +5,7 @@ X-KDE-ServiceType=Digikam/ImagePlugin
 X-KDE-DerivedName=Digikam ImagePlugin
 Comment=A digiKam Image Plugin
 Comment[br]=Ul lUgent skeudenn digiKam
+Comment[de]=Ein digiKam Bild Plugin
 Comment[et]=DigiKami pildiplugin
 Comment[it]=Un plugin per le immagini di digiKam
 Comment[nl]=Een plugin voor digiKam
