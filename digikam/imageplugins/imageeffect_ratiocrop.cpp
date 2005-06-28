@@ -72,17 +72,16 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
         
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
     QWhatsThis::add( m_imageSelectionWidget, i18n("<p>You can see here the aspect ratio selection preview "
                                                   "used for cropping. You can use the mouse for moving and "
-                                                  " resizing the crop area."));
-    l->addWidget(m_imageSelectionWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
- 
+                                                  "resizing the crop area."));
+    l->addWidget(m_imageSelectionWidget, 0);
+    topLayout->addWidget(frame, 10);
+        
     // -------------------------------------------------------------
     
     m_mainTab = new QTabWidget( plainPage() );
@@ -295,14 +294,14 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize(); 
+    resize(configDialogSize("Aspect Ratio Crop Tool Dialog"));    
     readSettings(); 
 }
 
 ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 {
     writeSettings();
+    saveDialogSize("Aspect Ratio Crop Tool Dialog");
 }
 
 void ImageEffect_RatioCrop::readSettings(void)
@@ -621,12 +620,12 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
 
 void ImageEffect_RatioCrop::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface* iface = m_imageSelectionWidget->imageIface();
     
-    uint* data       = iface.getOriginalData();
-    int w            = iface.originalWidth();
-    int h            = iface.originalHeight();
+    uint* data       = iface->getOriginalData();
+    int w            = iface->originalWidth();
+    int h            = iface->originalHeight();
     QRect currentPos = m_imageSelectionWidget->getRegionSelection();
 
     QImage* imOrg;
@@ -635,10 +634,10 @@ void ImageEffect_RatioCrop::slotOk()
     imDest = imOrg->copy(currentPos);
     delete imOrg;
 
-    iface.putOriginalData(i18n("Aspect Ratio Crop"), (uint*)imDest.bits(), imDest.width(), imDest.height());
+    iface->putOriginalData(i18n("Aspect Ratio Crop"), (uint*)imDest.bits(), imDest.width(), imDest.height());
     
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor();
     accept();
 }
 

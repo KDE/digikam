@@ -106,6 +106,9 @@ public:
     
     void  resetSelection(void);
     void  maxAspectSelection(void);
+    
+    ImageIface* imageIface();
+    void  updateImageIface(void);
 
 public slots:
 
@@ -123,7 +126,9 @@ protected:
     
     void paintEvent( QPaintEvent *e );
     void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );    void mouseMoveEvent ( QMouseEvent * e );
+    void mouseReleaseEvent ( QMouseEvent * e );   
+    void mouseMoveEvent ( QMouseEvent * e );
+    void resizeEvent(QResizeEvent * e);
 
 protected slots:
 
