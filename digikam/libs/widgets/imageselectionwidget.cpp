@@ -86,7 +86,15 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
     
-    updateImageIface();
+    m_iface  = new ImageIface(w, h);
+    m_data   = m_iface->getPreviewData();
+    m_w      = m_iface->previewWidth();
+    m_h      = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
+
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
+    realToLocalRegion();
+    updatePixmap();  
     setGoldenGuideTypes(true, false, false, false, false, false);
 }
 
@@ -108,29 +116,20 @@ ImageIface* ImageSelectionWidget::imageIface()
     return m_iface;
 }
 
-void ImageSelectionWidget::updateImageIface(void)
+void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
 {
-    delete [] m_data;
-    delete m_iface;
     delete m_pixmap;
     
-    int w = width();
-    int h = height();
-    m_iface  = new ImageIface(w, h);
-
-    m_data   = m_iface->getPreviewData();
+    int w    = e->size().width();
+    int h    = e->size().height();
+    m_data   = m_iface->setPreviewSize(w, h);
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
     realToLocalRegion();
-    updatePixmap();
-}
-
-void ImageSelectionWidget::resizeEvent(QResizeEvent *)
-{
-    updateImageIface();
+    updatePixmap();    
 }
 
 int ImageSelectionWidget::getOriginalImageWidth(void)

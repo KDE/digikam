@@ -108,7 +108,6 @@ public:
     void  maxAspectSelection(void);
     
     ImageIface* imageIface();
-    void  updateImageIface(void);
 
 public slots:
 

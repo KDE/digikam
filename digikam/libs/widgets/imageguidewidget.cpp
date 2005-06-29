@@ -52,7 +52,7 @@ namespace Digikam
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool spotVisible, int guideMode)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_iface = new Digikam::ImageIface(w,h);
+    m_iface = new Digikam::ImageIface(w, h);
 
     m_data = m_iface->getPreviewData();
     m_w    = m_iface->previewWidth();
