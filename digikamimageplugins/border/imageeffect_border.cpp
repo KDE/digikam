@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-01-20
  * Description : a Digikam image plugin for add a border  
- *               to an image.
+ *               around an image.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -84,9 +84,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Add Border"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to add a border to an image."),
+                                       I18N_NOOP("A digiKam image plugin to add a border around an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -128,15 +128,16 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the border added to the image.") );
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    
+    QWhatsThis::add( m_previewWidget, i18n("This is the preview of the border added to the image."));
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addMultiCellWidget(frame, 1, 1, 0, 0);
+    topLayout->setRowStretch(1, 10);
+    topLayout->setColStretch(0, 10);
+        
     // -------------------------------------------------------------
     
     QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
@@ -187,19 +188,18 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize();  
-    readSettings();
-    
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    int w = iface->originalWidth();
-    int h = iface->originalHeight();
+    Digikam::ImageIface iface(0, 0);
+    int w = iface.originalWidth();
+    int h = iface.originalHeight();
     
     if (w > h) 
        m_borderWidth->setRange(1, h/2, 1, true);       
     else 
        m_borderWidth->setRange(1, w/2, 1, true);
-        
+
+    readSettings();
+    resize(configDialogSize("Add Border Tool Dialog"));    
+            
     // -------------------------------------------------------------
     
     connect(m_borderType, SIGNAL(activated(int)),
@@ -212,11 +212,16 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
             this, SLOT(slotColorForegroundChanged(const QColor &)));            
 
     connect(m_secondColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotColorBackgroundChanged(const QColor &)));            
+            this, SLOT(slotColorBackgroundChanged(const QColor &))); 
+    
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));                                  
 }
 
 ImageEffect_Border::~ImageEffect_Border()
 {
+    saveDialogSize("Add Border Tool Dialog");
+        
     if (m_timer)
        delete m_timer;
 }
@@ -226,7 +231,7 @@ void ImageEffect_Border::readSettings(void)
     KConfig *config = kapp->config();
     config->setGroup("Add Border Tool Settings");
     
-    m_borderType->setCurrentItem( config->readNumEntry("Border Type", 0) );
+    m_borderType->setCurrentItem( config->readNumEntry("Border Type", SolidBorder) );
     m_borderWidth->setValue( config->readNumEntry("Border Width", 100) );
     
     QColor *black = new QColor( 0, 0, 0 );
@@ -271,8 +276,7 @@ void ImageEffect_Border::writeSettings(void)
 
 void ImageEffect_Border::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("border",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("border", "digikamimageplugins");
 }
 
 void ImageEffect_Border::closeEvent(QCloseEvent *e)
@@ -287,10 +291,10 @@ void ImageEffect_Border::slotUser1()
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
         
-    m_borderType->setCurrentItem(0);    // Solid.
+    m_borderType->setCurrentItem(SolidBorder); 
     m_borderWidth->setValue(100);
     m_solidColor = QColor::QColor( 0, 0, 0 );
-    slotBorderTypeChanged(0);
+    slotBorderTypeChanged(SolidBorder);
 
     m_borderType->blockSignals(false);
     m_borderWidth->blockSignals(false);
@@ -316,34 +320,34 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
        {
-       case 0: // Solid.
+       case SolidBorder:
           m_solidColor = color;
           break;
        
-       case 1: // Niepce.
+       case NiepceBorder:
           m_niepceBorderColor = color;
           break;
 
-       case 2: // Beveled.
+       case BeveledBorder:
           m_bevelUpperLeftColor = color;
           break;
-
-       case 3: // Decorative Pine.
-       case 4: // Decorative Wood.
-       case 5: // Decorative Paper.
-       case 6: // Decorative Parque.
-       case 7: // Decorative Ice.
-       case 8: // Decorative Leaf.
-       case 9: // Decorative Marble.
-       case 10:// Decorative Rain.
-       case 11:// Decorative Craters.
-       case 12:// Decorative Dried.
-       case 13:// Decorative Pink.
-       case 14:// Decorative Stone.
-       case 15:// Decorative Chalk.
-       case 16:// Decorative Granit.
-       case 17:// Decorative Rock.
-       case 18:// Decorative Wall.
+          
+       case PineBorder:
+       case WoodBorder: 
+       case PaperBorder: 
+       case ParqueBorder: 
+       case IceBorder:
+       case LeafBorder: 
+       case MarbleBorder:
+       case RainBorder:
+       case CratersBorder:
+       case DriedBorder:
+       case PinkBorder:
+       case StoneBorder:
+       case ChalkBorder:
+       case GraniteBorder:
+       case RockBorder:
+       case WallBorder:
           m_decorativeFirstColor = color;
           break;
        }
@@ -355,34 +359,34 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
        {
-       case 0: // Solid.
+       case SolidBorder:
           m_solidColor = color;
           break;
        
-       case 1: // Niepce.
+       case NiepceBorder:
           m_niepceLineColor = color;
           break;
 
-       case 2: // Beveled.
+       case BeveledBorder:
           m_bevelLowerRightColor = color;
           break;
 
-       case 3: // Decorative Pine.
-       case 4: // Decorative Wood.
-       case 5: // Decorative Paper.
-       case 6: // Decorative Parque.
-       case 7: // Decorative Ice.
-       case 8: // Decorative Leaf.
-       case 9: // Decorative Marble.
-       case 10:// Decorative Rain.
-       case 11:// Decorative Craters.
-       case 12:// Decorative Dried.
-       case 13:// Decorative Pink.
-       case 14:// Decorative Stone.
-       case 15:// Decorative Chalk.
-       case 16:// Decorative Granit.
-       case 17:// Decorative Rock.
-       case 18:// Decorative Wall.
+       case PineBorder:
+       case WoodBorder: 
+       case PaperBorder: 
+       case ParqueBorder: 
+       case IceBorder:
+       case LeafBorder: 
+       case MarbleBorder:
+       case RainBorder:
+       case CratersBorder:
+       case DriedBorder:
+       case PinkBorder:
+       case StoneBorder:
+       case ChalkBorder:
+       case GraniteBorder:
+       case RockBorder:
+       case WallBorder:
           m_decorativeSecondColor = color;
           break;          
        }
@@ -404,42 +408,42 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           
     switch (borderType)
        {
-       case 0: // Solid.
+       case SolidBorder:
           m_firstColorButton->setColor( m_solidColor );
           m_secondColorButton->setEnabled(false);
           m_labelBackground->setEnabled(false);
           break;
        
-       case 1: // Niepce.
+       case NiepceBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the main border."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the line."));
           m_firstColorButton->setColor( m_niepceBorderColor );
           m_secondColorButton->setColor( m_niepceLineColor );
           break;
 
-       case 2: // Beveled.
+       case BeveledBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the upper left area."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the lower right area."));
           m_firstColorButton->setColor( m_bevelUpperLeftColor );
           m_secondColorButton->setColor( m_bevelLowerRightColor );
           break;
 
-       case 3: // Decorative Pine.
-       case 4: // Decorative Wood.
-       case 5: // Decorative Paper.
-       case 6: // Decorative Parque.
-       case 7: // Decorative Ice.
-       case 8: // Decorative Leaf.
-       case 9: // Decorative Marble.
-       case 10:// Decorative Rain.
-       case 11:// Decorative Craters.
-       case 12:// Decorative Dried.
-       case 13:// Decorative Pink.
-       case 14:// Decorative Stone.
-       case 15:// Decorative Chalk.
-       case 16:// Decorative Granit.
-       case 17:// Decorative Rock.
-       case 18:// Decorative Wall.
+       case PineBorder:
+       case WoodBorder: 
+       case PaperBorder: 
+       case ParqueBorder: 
+       case IceBorder:
+       case LeafBorder: 
+       case MarbleBorder:
+       case RainBorder:
+       case CratersBorder:
+       case DriedBorder:
+       case PinkBorder:
+       case StoneBorder:
+       case ChalkBorder:
+       case GraniteBorder:
+       case RockBorder:
+       case WallBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the first line."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the second line."));
           m_firstColorButton->setColor( m_decorativeFirstColor );
@@ -452,6 +456,7 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 
 void ImageEffect_Border::slotEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data = iface->getPreviewData();
@@ -468,40 +473,38 @@ void ImageEffect_Border::slotEffect()
 
     switch (borderType)
        {
-       case 0: // Solid.
+       case SolidBorder:
           solid(src, tmp, m_solidColor, borderWidth);
           break;
        
-       case 1: // Niepce.
+       case NiepceBorder:
           niepce(src, tmp, m_niepceBorderColor, borderWidth, 
                  m_niepceLineColor, 3);
           break;
 
-       case 2: // Beveled.
+       case BeveledBorder:
           bevel(src, tmp, m_bevelUpperLeftColor,
                 m_bevelLowerRightColor, borderWidth);
           break;
 
-       case 3: // Decorative Pine.
-       case 4: // Decorative Wood.
-       case 5: // Decorative Paper.
-       case 6: // Decorative Parque.
-       case 7: // Decorative Ice.
-       case 8: // Decorative Leaf.
-       case 9: // Decorative Marble.
-       case 10:// Decorative Rain.
-       case 11:// Decorative Craters.
-       case 12:// Decorative Dried.
-       case 13:// Decorative Pink.
-       case 14:// Decorative Stone.
-       case 15:// Decorative Chalk.
-       case 16:// Decorative Granit.
-       case 17:// Decorative Rock.
-       case 18:// Decorative Wall.
-          setCursor( KCursor::waitCursor() );
+       case PineBorder:
+       case WoodBorder: 
+       case PaperBorder: 
+       case ParqueBorder: 
+       case IceBorder:
+       case LeafBorder: 
+       case MarbleBorder:
+       case RainBorder:
+       case CratersBorder:
+       case DriedBorder:
+       case PinkBorder:
+       case StoneBorder:
+       case ChalkBorder:
+       case GraniteBorder:
+       case RockBorder:
+       case WallBorder:
           pattern( src, tmp, borderWidth, m_decorativeFirstColor, m_decorativeSecondColor,
                  (int)(20.0*ratio), (int)(20.0*ratio) );
-          setCursor( KCursor::arrowCursor() );        
           break;
        }
     
@@ -512,13 +515,13 @@ void ImageEffect_Border::slotEffect()
     iface->putPreviewData((uint*)dest.bits());
     delete [] data;
     m_previewWidget->update();
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_Border::slotOk()
 {
     accept();
-    m_parent->setCursor( KCursor::waitCursor() );
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
@@ -533,36 +536,36 @@ void ImageEffect_Border::slotOk()
 
     switch (borderType)
        {
-       case 0: // Solid.
+       case SolidBorder:
           solid(src, dest, m_solidColor, m_borderWidth->value());
           break;
        
-       case 1: // Niepce.
+       case NiepceBorder:
           niepce(src, dest, m_niepceBorderColor, m_borderWidth->value(), 
                  m_niepceLineColor, 10);
           break;
 
-       case 2: // Beveled.
+       case BeveledBorder:
           bevel(src, dest, m_bevelUpperLeftColor,
                 m_bevelLowerRightColor, m_borderWidth->value());
           break;
 
-       case 3: // Decorative Pine.
-       case 4: // Decorative Wood.
-       case 5: // Decorative Paper.
-       case 6: // Decorative Parque.
-       case 7: // Decorative Ice.
-       case 8: // Decorative Leaf.
-       case 9: // Decorative Marble.
-       case 10:// Decorative Rain.
-       case 11:// Decorative Craters.
-       case 12:// Decorative Dried.
-       case 13:// Decorative Pink.
-       case 14:// Decorative Stone.
-       case 15:// Decorative Chalk.
-       case 16:// Decorative Granit.
-       case 17:// Decorative Rock.
-       case 18:// Decorative Wall.
+       case PineBorder:
+       case WoodBorder: 
+       case PaperBorder: 
+       case ParqueBorder: 
+       case IceBorder:
+       case LeafBorder: 
+       case MarbleBorder:
+       case RainBorder:
+       case CratersBorder:
+       case DriedBorder:
+       case PinkBorder:
+       case StoneBorder:
+       case ChalkBorder:
+       case GraniteBorder:
+       case RockBorder:
+       case WallBorder:
           pattern(src, dest, m_borderWidth->value(), m_decorativeFirstColor, m_decorativeSecondColor, 20, 20);
           break;
        }
@@ -572,8 +575,7 @@ void ImageEffect_Border::slotOk()
     delete [] data;    
     
     writeSettings();
-
-    m_parent->setCursor( KCursor::arrowCursor() );        
+    kapp->restoreOverrideCursor();    
 }
 
 void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth)
@@ -653,67 +655,68 @@ void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
     
     switch (m_borderType->currentItem())
        {
-       case 3: // Decorative Pine.
+       
+       case PineBorder:
           pattern = "pine-pattern";
           break;
           
-       case 4: // Decorative Wood.
+       case WoodBorder: 
           pattern = "wood-pattern";
           break;
        
-       case 5: // Decorative Paper.
+       case PaperBorder: 
           pattern = "paper-pattern";
           break;
        
-       case 6: // Decorative Parque.
+       case ParqueBorder: 
           pattern = "parque-pattern";
           break;
        
-       case 7: // Decorative Ice.
+       case IceBorder:
           pattern = "ice-pattern";
           break;
        
-       case 8: // Decorative Leaf.
+       case LeafBorder: 
           pattern = "leaf-pattern";
           break;
 
-       case 9: // Decorative Marble.
+       case MarbleBorder:
           pattern = "marble-pattern";
           break;
        
-       case 10:// Decorative Rain.
+       case RainBorder:
           pattern = "rain-pattern";
           break;
        
-       case 11:// Decorative Craters.
+       case CratersBorder:
           pattern = "craters-pattern";
           break;
        
-       case 12:// Decorative Dried.
+       case DriedBorder:
           pattern = "dried-pattern";
           break;
        
-       case 13:// Decorative Pink.
+       case PinkBorder:
           pattern = "pink-pattern";
           break;
        
-       case 14:// Decorative Stone.
+       case StoneBorder:
           pattern = "stone-pattern";
           break;
        
-       case 15:// Decorative Chalk.
+       case ChalkBorder:
           pattern = "chalk-pattern";
           break;
        
-       case 16:// Decorative Granit.
+       case GraniteBorder:
           pattern = "granit-pattern";
           break;
 
-       case 17:// Decorative Rock.
+       case RockBorder:
           pattern = "rock-pattern";
           break;
        
-       case 18:// Decorative Wall.
+       case WallBorder:
           pattern = "wall-pattern";
           break;
        }

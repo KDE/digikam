@@ -2,8 +2,8 @@
  * File  : imageeffect_border.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-01-20
- * Description : a Digikam image plugin for add a border  
- *               to an image.
+ * Description : a digiKam image plugin for add a border  
+ *               around an image.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -61,6 +61,29 @@ protected:
     void closeEvent(QCloseEvent *e);
     
 private:
+
+    enum BorderTypes 
+    {
+    SolidBorder=0,
+    NiepceBorder,
+    BeveledBorder,
+    PineBorder,
+    WoodBorder,
+    PaperBorder,
+    ParqueBorder,
+    IceBorder,
+    LeafBorder,
+    MarbleBorder,
+    RainBorder,
+    CratersBorder,
+    DriedBorder,
+    PinkBorder,
+    StoneBorder,
+    ChalkBorder,
+    GraniteBorder,
+    RockBorder,
+    WallBorder
+    };
     
     QLabel               *m_labelForeground;
     QLabel               *m_labelBackground;
@@ -87,6 +110,8 @@ private:
     KColorButton         *m_secondColorButton;
     
     Digikam::ImageWidget *m_previewWidget;
+    
+private:
 
     void readSettings(void);
     void writeSettings(void);
