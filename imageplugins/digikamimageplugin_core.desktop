@@ -5,6 +5,7 @@ Name[nl]=Afbeeldingsplugin_Kern
 Name[sr]=Сликовни прикључак — језгро
 Name[sr@Latn]=Slikovni priključak — jezgro
 Name[sv]=Insticksprogram med bildkärna
+Name[tr]=ResimEklentisi_Çekirdek
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -17,6 +18,7 @@ Comment[pt]='Plugin' de Imagem Básico do digiKam
 Comment[sr]=Језгро digiKam-ових сликовних прикључака
 Comment[sr@Latn]=Jezgro digiKam-ovih slikovnih priključaka
 Comment[sv]=Insticksprogram med bildkärna för Digikam
+Comment[tr]=digiKam Çekirdek Resim Eklentisi
 
 X-KDE-Library=digikamimageplugin_core
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
