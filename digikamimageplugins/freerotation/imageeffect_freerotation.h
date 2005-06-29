@@ -2,8 +2,8 @@
  * File  : imageeffect_freerotation.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-28
- * Description : a Digikam image editor plugin for process image 
- *               free rotatio
+ * Description : a digiKam image editor plugin to process image 
+ *               free rotation.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *

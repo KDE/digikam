@@ -62,10 +62,12 @@ public:
 signals:
 
     void spotPositionChanged( const QColor &color, bool release, const QPoint &position ); 
+    void signalResized(void);  
     
 protected:
     
     void paintEvent( QPaintEvent *e );
+    void resizeEvent(QResizeEvent * e);
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
