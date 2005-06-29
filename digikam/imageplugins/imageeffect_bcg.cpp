@@ -59,7 +59,9 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image Brightness/Contrast/Gamma adjustments preview."));
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
-        
+
+    // -------------------------------------------------------------
+                
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -104,7 +106,10 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
             
     connect(m_gInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
-
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));    
+            
     // -------------------------------------------------------------
                 
     enableButtonOK( false );
@@ -120,12 +125,6 @@ void ImageEffect_BCG::closeEvent(QCloseEvent *e)
 {
     delete m_previewWidget;
     e->accept();
-}
-
-void ImageEffect_BCG::resizeEvent(QResizeEvent *)
-{
-    m_previewWidget->updateImageIface();
-    slotEffect();
 }
 
 void ImageEffect_BCG::slotUser1()

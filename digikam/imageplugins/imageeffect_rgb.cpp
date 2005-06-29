@@ -64,6 +64,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
 
+    // -------------------------------------------------------------
+    
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -82,6 +84,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_rInput = new QSpinBox(-100, 100, 1, plainPage(), "m_rInput");
     hlay->addWidget(m_rInput, 1);
 
+    // -------------------------------------------------------------
+        
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Magenta"), plainPage());
     label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -97,6 +101,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_gInput = new QSpinBox(-100, 100, 1, plainPage(), "m_gInput");
     hlay->addWidget(m_gInput, 1);
 
+    // -------------------------------------------------------------
+        
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Yellow"), plainPage());
     label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -139,6 +145,9 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_bInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotEffect()));
 
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));     
+                        
     // -------------------------------------------------------------
                 
     enableButtonOK( false );
@@ -154,12 +163,6 @@ void ImageEffect_RGB::closeEvent(QCloseEvent *e)
 {
     delete m_previewWidget;
     e->accept();
-}
-
-void ImageEffect_RGB::resizeEvent(QResizeEvent *)
-{
-    m_previewWidget->updateImageIface();
-    slotEffect();
 }
 
 void ImageEffect_RGB::slotUser1()

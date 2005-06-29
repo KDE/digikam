@@ -33,14 +33,19 @@ class ImageIface;
 
 class ImageWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
 
     ImageWidget(int width, int height, QWidget *parent=0);
     ~ImageWidget();
 
     ImageIface* imageIface();
-    void updateImageIface(void);
 
+signals:
+
+    void signalResized(void);  
+        
 protected:
 
     void paintEvent(QPaintEvent *e);

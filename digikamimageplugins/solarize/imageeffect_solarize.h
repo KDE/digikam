@@ -53,7 +53,6 @@ protected:
     void solarize(double factor, uint *data, int w, int h);
     
     void closeEvent(QCloseEvent *e);
-    void resizeEvent(QResizeEvent *e);
     
 private:
     

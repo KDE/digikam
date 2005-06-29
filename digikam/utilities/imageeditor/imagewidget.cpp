@@ -39,10 +39,14 @@ namespace Digikam
 ImageWidget::ImageWidget(int w, int h, QWidget *parent)
            : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_data  = 0L;
-    m_iface = 0L;
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
+
+    m_iface = new ImageIface(w, h);
+    m_data = m_iface->getPreviewData();
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);    
 }
 
 ImageWidget::~ImageWidget()
@@ -71,25 +75,18 @@ void ImageWidget::paintEvent(QPaintEvent *)
     p.end();
 }
 
-void ImageWidget::updateImageIface(void)
+void ImageWidget::resizeEvent(QResizeEvent * e)
 {
-    delete [] m_data;
-    delete m_iface;
-    
-    int w = width();
-    int h = height();
-    m_iface = new ImageIface(w, h);
-    
-    m_data = m_iface->getPreviewData();
+    int w = e->size().width();
+    int h = e->size().height();
+    m_data = m_iface->setPreviewSize(w, h);
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
 
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);     
-}
-
-void ImageWidget::resizeEvent(QResizeEvent *)
-{
-    updateImageIface();
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    emit signalResized();
 }
 
 }
+
+#include "imagewidget.moc"

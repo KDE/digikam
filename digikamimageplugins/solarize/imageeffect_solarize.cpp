@@ -115,7 +115,9 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the solarize effect preview"));
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame, 10);
-        
+
+    // -------------------------------------------------------------
+                
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Intensity:"), plainPage());
     m_numInput = new KDoubleNumInput(plainPage());
@@ -130,6 +132,9 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
     connect(m_numInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));               
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
@@ -150,12 +155,6 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void ImageEffect_Solarize::resizeEvent(QResizeEvent *)
-{
-    m_previewWidget->updateImageIface();
-    slotEffect();
-}
-
 void ImageEffect_Solarize::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -167,22 +166,20 @@ void ImageEffect_Solarize::slotEffect()
     double factor = m_numInput->value();
 
     solarize(factor, data, w, h);
-
+    
     iface->putPreviewData(data);
-
     delete [] data;
-
     m_previewWidget->update();
 }
 
 void ImageEffect_Solarize::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    Digikam::ImageIface iface(0, 0);
 
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
+    uint* data  = iface.getOriginalData();
+    int w       = iface.originalWidth();
+    int h       = iface.originalHeight();
 
     if (data) 
        {
@@ -190,8 +187,7 @@ void ImageEffect_Solarize::slotOk()
 
        solarize(factor, data, w, h);
 
-       iface->putOriginalData(i18n("Solarize"), data);
-
+       iface.putOriginalData(i18n("Solarize"), data);
        delete [] data;
        }
 

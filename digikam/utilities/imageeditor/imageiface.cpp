@@ -126,6 +126,17 @@ ImageIface::~ImageIface()
     delete d;
 }
 
+uint* ImageIface::setPreviewSize(int w, int h)
+{
+    if (d->previewData) {
+        delete [] d->previewData;
+    }
+    d->previewData     = 0;
+    d->constrainWidth  = w;
+    d->constrainHeight = h;
+    return (getPreviewData());
+}
+
 uint* ImageIface::getPreviewData()
 {
     if (!d->previewData) {

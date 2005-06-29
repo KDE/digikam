@@ -66,6 +66,8 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
     
+    // -------------------------------------------------------------
+    
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Type:"), plainPage());
     m_typeCB = new QComboBox( false, plainPage() );
@@ -109,6 +111,9 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     connect(m_typeCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
+    
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));                
 }
 
 ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
@@ -120,12 +125,6 @@ void ImageEffect_AutoCorrection::closeEvent(QCloseEvent *e)
 {
     delete m_previewWidget;
     e->accept();
-}
-
-void ImageEffect_AutoCorrection::resizeEvent(QResizeEvent *)
-{
-    m_previewWidget->updateImageIface();
-    slotEffect();
 }
 
 QPixmap ImageEffect_AutoCorrection::previewEffectPic(QString name)

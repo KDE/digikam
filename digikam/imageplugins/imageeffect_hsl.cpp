@@ -53,7 +53,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_timer = 0L;
     setHelp("hsladjusttool.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
+    
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -62,6 +62,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
         
+    // -------------------------------------------------------------            
+    
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -106,6 +108,9 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
             
     connect(m_lInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
+    
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));              
             
     // -------------------------------------------------------------            
 
@@ -125,12 +130,6 @@ void ImageEffect_HSL::closeEvent(QCloseEvent *e)
            
     delete m_previewWidget;
     e->accept();
-}
-
-void ImageEffect_HSL::resizeEvent(QResizeEvent *)
-{
-    m_previewWidget->updateImageIface();
-    slotEffect();
 }
 
 void ImageEffect_HSL::slotTimer()

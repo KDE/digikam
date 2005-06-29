@@ -192,10 +192,10 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     // -------------------------------------------------------------
     // Prevent both computation (resize event and Reset to default settings).
-    blockSignals(true);
+    m_previewWidget->blockSignals(true);
     resize(configDialogSize("Rain Drops Tool Dialog")); 
-    blockSignals(false);
-     
+    m_previewWidget->blockSignals(false); 
+    
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -208,6 +208,9 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     connect(m_coeffInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));              
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -283,13 +286,11 @@ void ImageEffect_RainDrop::closeEvent(QCloseEvent *e)
     e->accept();    
 }
 
-void ImageEffect_RainDrop::resizeEvent(QResizeEvent *)
+void ImageEffect_RainDrop::slotResized(void)
 {
     if (m_currentRenderingMode == FinalRendering)
        {
-       m_raindropFilter->stopComputation();
-       m_previewWidget->updateImageIface();
-       QTimer::singleShot(0, this, SLOT(slotOk())); 
+       m_previewWidget->update();
        return;
        }
     else if (m_currentRenderingMode == PreviewRendering)
@@ -297,7 +298,6 @@ void ImageEffect_RainDrop::resizeEvent(QResizeEvent *)
        m_raindropFilter->stopComputation();
        }
        
-    m_previewWidget->updateImageIface();
     QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 

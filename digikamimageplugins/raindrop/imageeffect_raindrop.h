@@ -56,7 +56,7 @@ public:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void resizeEvent(QResizeEvent *e);
+    //void resizeEvent(QResizeEvent *e);
     
 private:
     
@@ -99,6 +99,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();
+    void slotResized(void);
 };
 
 }  // NameSpace DigikamRainDropImagesPlugin

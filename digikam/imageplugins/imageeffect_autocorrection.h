@@ -60,7 +60,6 @@ private:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void resizeEvent(QResizeEvent * e);
     
 private:
 
