@@ -49,7 +49,8 @@ public:
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0, bool spotVisible=true, int guideMode=HVGuideMode);
+    ImageGuideWidget(int w, int h, QWidget *parent=0, 
+                     bool spotVisible=true, int guideMode=HVGuideMode);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
@@ -67,15 +68,13 @@ signals:
 protected:
     
     void paintEvent( QPaintEvent *e );
-    void resizeEvent(QResizeEvent * e);
+    void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
         
 private:
 
-    Digikam::ImageIface *m_iface;
-    
     uint       *m_data;
     int         m_w;
     int         m_h;
@@ -85,14 +84,16 @@ private:
     
     int         m_guideMode;
 
-    QRect       m_rect;       
-    
     bool        m_focus;
     bool        m_freeze;
     bool        m_spotVisible;
     bool        m_mouseLeftButtonTracking;
     
+    QRect       m_rect;       
+    
     QPixmap    *m_pixmap;
+    
+    Digikam::ImageIface *m_iface;    
 };
 
 }  // NameSpace Digikam

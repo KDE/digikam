@@ -33,6 +33,7 @@
 
 // KDE include.
 
+#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kdebug.h>
@@ -49,7 +50,8 @@
 namespace Digikam
 {
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool spotVisible, int guideMode)
+ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
+                                   bool spotVisible, int guideMode)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_spotVisible             = spotVisible;
@@ -192,8 +194,8 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_rect.contains( m_xpos, m_ypos ) && m_focus ) 
        {    
-       m_freeze = !m_freeze;
-       m_focus = false;
+       m_freeze                  = !m_freeze;
+       m_focus                   = false;
        m_mouseLeftButtonTracking = false;
        
        if (m_freeze) 
@@ -212,7 +214,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( m_rect.contains( e->x(), e->y() ) && !m_freeze )
         {
-        setCursor( KCursor::crossCursor() );
+        kapp->setOverrideCursor( KCursor::crossCursor() );
         m_xpos = e->x();
         m_ypos = e->y();
         repaint(false);
@@ -221,7 +223,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
            emit spotPositionChanged( getSpotColor(), false, getSpotPosition() );
         }
     else
-        setCursor ( KCursor::arrowCursor() );
+        kapp->restoreOverrideCursor();
 }
 
 }  // NameSpace Digikam
