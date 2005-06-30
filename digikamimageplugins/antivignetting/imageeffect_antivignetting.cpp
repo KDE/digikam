@@ -2,7 +2,7 @@
  * File  : imageeffect_antivignetting.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-25
- * Description : a digiKam image plugin for to reduce 
+ * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -107,7 +107,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 1, 2 , marginHint(), spacingHint());
 
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -120,7 +120,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Anti Vignetting"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 2);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -134,117 +134,119 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the anti-vignetting filter preview.") );
-    topLayout->addWidget(gbox);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the anti-vignetting filter preview."));
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addMultiCellWidget(frame, 1, 1, 0, 1);
+    topLayout->setRowStretch(1, 10);
+    topLayout->setColStretch(0, 10);
+    topLayout->setColStretch(1, 10);
     
     // -------------------------------------------------------------
-    
-    m_mainTab = new QTabWidget( plainPage() );
-    
-    QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 3, 3, marginHint(), spacingHint());
-    m_mainTab->addTab( firstPage, i18n("Filter Settings") );
-    
-    m_maskPreviewLabel = new QLabel( firstPage );
+        
+    QVBoxLayout *vLayout2 = new QVBoxLayout(spacingHint());                                                  
+    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 7, 2, 20, spacingHint());
+
+    m_maskPreviewLabel = new QLabel( gbox2 );
+    m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
                                               "mask applied to the image.") );
-    grid->addMultiCellWidget(m_maskPreviewLabel, 0, 2, 0, 0);
-    
+    gridBox2->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
+        
     // -------------------------------------------------------------
-                      
-    QLabel *label1 = new QLabel(i18n("Density:"), firstPage);
 
-    m_densityInput = new KDoubleNumInput(firstPage);
+    QLabel *label1 = new QLabel(i18n("Density:"), gbox2);
+    
+    m_densityInput = new KDoubleNumInput(gbox2);
     m_densityInput->setPrecision(1);
     m_densityInput->setRange(1.0, 20.0, 0.1, true);
     QWhatsThis::add( m_densityInput, i18n("<p>This value controls the degree of intensity attenuation by the filter "
                                           "at its point of maximum density."));
-    
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_densityInput, 0, 0, 2, 3);
-    
+
+    gridBox2->addMultiCellWidget(label1, 1, 1, 0, 0);
+    gridBox2->addMultiCellWidget(m_densityInput, 1, 1, 1, 2);
+                          
     // -------------------------------------------------------------
     
-    QLabel *label2 = new QLabel(i18n("Power:"), firstPage);
+    QLabel *label2 = new QLabel(i18n("Power:"), gbox2);
     
-    m_powerInput = new KDoubleNumInput(firstPage);
+    m_powerInput = new KDoubleNumInput(gbox2);
     m_powerInput->setPrecision(1);
     m_powerInput->setRange(0.1, 2.0, 0.1, true);
     QWhatsThis::add( m_powerInput, i18n("<p>This value is used as the exponent controlling the fall-off in density "
                                         "from the center of the filter to the periphery."));
-    
-    grid->addMultiCellWidget(label2, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_powerInput, 1, 1, 2, 3);
+
+    gridBox2->addMultiCellWidget(label2, 2, 2, 0, 0);
+    gridBox2->addMultiCellWidget(m_powerInput, 2, 2, 1, 2);
     
     // -------------------------------------------------------------
     
-    QLabel *label3 = new QLabel(i18n("Radius:"), firstPage);
+    QLabel *label3 = new QLabel(i18n("Radius:"), gbox2);
     
-    m_radiusInput = new KDoubleNumInput(firstPage);
+    m_radiusInput = new KDoubleNumInput(gbox2);
     m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(0.1, 2.0, 0.1, true);
+    m_radiusInput->setRange(-100.0, 100.0, 0.1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p>This value is the radius of the center filter. It is a multiple of the "
-                                         "half-diagonal measure of the image, at which the density of the filter falls to zero."));
+                                          "half-diagonal measure of the image, at which the density of the filter falls "
+                                          "to zero."));
     
-    grid->addMultiCellWidget(label3, 2, 2, 1, 1);
-    grid->addMultiCellWidget(m_radiusInput, 2, 2, 2, 3);
+    gridBox2->addMultiCellWidget(label3, 3, 3, 0, 0);
+    gridBox2->addMultiCellWidget(m_radiusInput, 3, 3, 1, 2);    
     
     // -------------------------------------------------------------
 
-    QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 3, 3, marginHint(), spacingHint());
-    m_mainTab->addTab( secondPage, i18n("Exposure Re-Adjustment") );
+    QLabel *label4 = new QLabel(i18n("Brightness:"), gbox2);
     
-    QLabel *label4 = new QLabel(i18n("Brightness:"), secondPage);
-    
-    m_brightnessInput = new KIntNumInput(secondPage);
+    m_brightnessInput = new KIntNumInput(gbox2);
     m_brightnessInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of the target image."));
+    QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of target image."));
 
-    grid2->addMultiCellWidget(label4, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_brightnessInput, 0, 0, 1, 2);
-    
+    gridBox2->addMultiCellWidget(label4, 4, 4, 0, 0);
+    gridBox2->addMultiCellWidget(m_brightnessInput, 4, 4, 1, 2);
+        
     // -------------------------------------------------------------
     
-    QLabel *label5 = new QLabel(i18n("Contrast:"), secondPage);
+    QLabel *label5 = new QLabel(i18n("Contrast:"), gbox2);
     
-    m_contrastInput = new KIntNumInput(secondPage);
+    m_contrastInput = new KIntNumInput(gbox2);
     m_contrastInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of the target image."));
+    QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of target image."));
 
-    grid2->addMultiCellWidget(label5, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_contrastInput, 1, 1, 1, 2);
+    gridBox2->addMultiCellWidget(label5, 5, 5, 0, 0);
+    gridBox2->addMultiCellWidget(m_contrastInput, 5, 5, 1, 2);
     
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Gamma:"), secondPage);
+    QLabel *label6 = new QLabel(i18n("Gamma:"), gbox2);
     
-    m_gammaInput = new KIntNumInput(secondPage);
+    m_gammaInput = new KIntNumInput(gbox2);
     m_gammaInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
+    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of target image."));
 
-    grid2->addMultiCellWidget(label6, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 2, 2, 1, 2);
+    gridBox2->addMultiCellWidget(label6, 6, 6, 0, 0);
+    gridBox2->addMultiCellWidget(m_gammaInput, 6, 6, 1, 2);
 
-    topLayout->addWidget(m_mainTab);
-    
     // -------------------------------------------------------------
             
-    m_progressBar = new KProgress(100, plainPage(), "m_progressbar");
+    m_progressBar = new KProgress(100, gbox2, "m_progressbar");
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    topLayout->addWidget(m_progressBar);
-    
-    // -------------------------------------------------------------
+    gridBox2->addMultiCellWidget(m_progressBar, 7, 7, 0, 2);
 
-    adjustSize();
-    disableResize();  
+    vLayout2->addWidget(gbox2);
+    vLayout2->addStretch();
+    topLayout->addMultiCellLayout(vLayout2, 1, 1, 2, 2);
+
+    // -------------------------------------------------------------
+    
+    // Prevent both computation (resize event and Reset to default settings).
+    m_previewWidget->blockSignals(true);
+    resize(configDialogSize("Anti-Vignetting Tool Dialog")); 
+    m_previewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -265,11 +267,16 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
             this, SLOT(slotTimer()));            
 
     connect(m_gammaInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));            
+            this, SLOT(slotTimer()));      
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));                     
 }
 
 ImageEffect_AntiVignetting::~ImageEffect_AntiVignetting()
 {
+    saveDialogSize("Anti-Vignetting Tool Dialog"); 
+
     if (m_antivignettingFilter)
        delete m_antivignettingFilter;    
     
@@ -290,6 +297,34 @@ void ImageEffect_AntiVignetting::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    kapp->restoreOverrideCursor();
+}
+
+void ImageEffect_AntiVignetting::slotCancel()
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_antivignettingFilter->stopComputation();
+       kapp->restoreOverrideCursor();       
+       }
+       
+    done(Cancel);
+}
+
+void ImageEffect_AntiVignetting::slotHelp()
+{
+    KApplication::kApplication()->invokeHelp("antivignettings", "digikamimageplugins");
+}
+
+void ImageEffect_AntiVignetting::closeEvent(QCloseEvent *e)
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_antivignettingFilter->stopComputation();
+       kapp->restoreOverrideCursor();     
+       }
+    
+    e->accept();    
 }
 
 void ImageEffect_AntiVignetting::slotUser1()
@@ -325,31 +360,19 @@ void ImageEffect_AntiVignetting::slotUser1()
        }
 } 
 
-void ImageEffect_AntiVignetting::slotCancel()
+void ImageEffect_AntiVignetting::slotResized(void)
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_previewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
        {
        m_antivignettingFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
        }
        
-    done(Cancel);
-}
-
-void ImageEffect_AntiVignetting::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("antivignettings", "digikamimageplugins");
-}
-
-void ImageEffect_AntiVignetting::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_antivignettingFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
-       }
-    
-    e->accept();    
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
 void ImageEffect_AntiVignetting::slotTimer()
@@ -383,13 +406,14 @@ void ImageEffect_AntiVignetting::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     double d = m_densityInput->value();
     double p = m_powerInput->value();
     double r = m_radiusInput->value();
 
     // Calc mask preview.    
-    QImage preview(90, 90, 32);
+    QImage preview(120, 120, 32);
     memset(preview.bits(), 255, preview.numBytes());
     AntiVignetting maskPreview(&preview, 0L, d, p, r, 0, 0, false);
     QPixmap pix (maskPreview.getTargetImage());
@@ -427,8 +451,7 @@ void ImageEffect_AntiVignetting::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
 
     double d = m_densityInput->value();
     double p = m_powerInput->value();
@@ -504,7 +527,7 @@ void ImageEffect_AntiVignetting::customEvent(QCustomEvent *event)
                  // Adjust Image BCG.
                  iface.setPreviewBCG(b, c, g);
                                                            
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

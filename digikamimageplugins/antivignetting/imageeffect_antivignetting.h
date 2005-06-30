@@ -2,7 +2,7 @@
  * File  : imageeffect_antivignetting.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-25
- * Description : a digiKam image plugin for to reduce 
+ * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -75,8 +75,6 @@ private:
 
     QLabel               *m_maskPreviewLabel;
     
-    QTabWidget           *m_mainTab;
-    
     QTimer               *m_timer;
         
     KIntNumInput         *m_brightnessInput;
@@ -106,6 +104,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();   
+    void slotResized();    
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin

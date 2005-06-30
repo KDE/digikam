@@ -1,7 +1,7 @@
 v0.8.0-Beta1 - xx/xx/05
 ----------------------------------------------------------------------------
-    * Solarize Image, Raindrop, Border; FreeRotation, ShearTool, LensDistortion: 
-      Preview effect area and dialog resizable. 
+    * Solarize Image, Raindrop, Border; FreeRotation, ShearTool, LensDistortion,
+      AntiVignetting: preview effect area and dialog resizable. 
     * Fix PPC compatibility (big/little endian problem with color image data).
     * Refocus, UnsharpMask, NoiseReduction, OilPaint, Emboss, FilmGrain, 
       Infrared, Charcoal, AntiVignetting, LensDistortion : 
