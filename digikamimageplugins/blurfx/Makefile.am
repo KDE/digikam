@@ -7,7 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_blurfx.la 
 
 digikamimageplugin_blurfx_la_SOURCES = imageplugin_blurfx.cpp \
-	                                 imageeffect_blurfx.cpp 
+	                               imageeffect_blurfx.cpp blurfx.cpp 
 
 digikamimageplugin_blurfx_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
