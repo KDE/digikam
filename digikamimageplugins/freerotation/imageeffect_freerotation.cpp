@@ -77,7 +77,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Free Rotation"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to process free image"
+                                       I18N_NOOP("A digiKam image plugin to process free image "
                                        "rotation."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier", 
