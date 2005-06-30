@@ -136,23 +136,26 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
 
     // -------------------------------------------------------------
-        
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* l = new QHBoxLayout(frame, 5, 0);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the spherical aberration correction. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be draw "
                                            "to guide you in adjusting the lens distortion correction. "
                                            "Press the left mouse button to freeze the dashed "
                                            "line's position."));
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 1);
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addMultiCellWidget(frame, 1, 1, 0, 1);
+    topLayout->setRowStretch(1, 10);
+    topLayout->setColStretch(0, 10);
+    topLayout->setColStretch(1, 10);
     
     // -------------------------------------------------------------
-                                                  
+    
+    QVBoxLayout *vLayout2 = new QVBoxLayout( topLayout, spacingHint());                                                  
     QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 5, 2, 20, spacingHint());
 
@@ -218,13 +221,17 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     gridBox2->addMultiCellWidget(m_progressBar, 5, 5, 0, 2);
-
-    topLayout->addMultiCellWidget(gbox2, 1, 1, 2, 2);
+    
+    vLayout2->addWidget(gbox2);
+    vLayout2->addStretch();
+    topLayout->addMultiCellLayout(vLayout2, 1, 1, 2, 2);
     
     // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize();  
+    // Prevent both computation (resize event and Reset to default settings).
+    m_previewWidget->blockSignals(true);
+    resize(configDialogSize("Lens Distortion Tool Dialog")); 
+    m_previewWidget->blockSignals(false); 
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -239,11 +246,16 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
             this, SLOT(slotTimer()));            
 
     connect(m_brightenInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));            
+            this, SLOT(slotTimer()));           
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));                   
 }
 
 ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 {
+    saveDialogSize("Lens Distortion Tool Dialog");    
+        
     if (m_lensdistortionFilter)
        delete m_lensdistortionFilter;    
     
@@ -262,6 +274,7 @@ void ImageEffect_LensDistortion::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_LensDistortion::slotCancel()
@@ -269,7 +282,7 @@ void ImageEffect_LensDistortion::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_lensdistortionFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
     
     done(Cancel);
@@ -285,7 +298,7 @@ void ImageEffect_LensDistortion::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_lensdistortionFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
     
     e->accept();    
@@ -318,6 +331,21 @@ void ImageEffect_LensDistortion::slotUser1()
        }
 } 
 
+void ImageEffect_LensDistortion::slotResized(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_previewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_lensdistortionFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_LensDistortion::slotTimer()
 {
     if (m_timer)
@@ -347,6 +375,7 @@ void ImageEffect_LensDistortion::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
+    kapp->setOverrideCursor( KCursor::waitCursor() );
 
     double m = m_mainInput->value();
     double e = m_edgeInput->value();
@@ -394,9 +423,8 @@ void ImageEffect_LensDistortion::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    
-    m_parent->setCursor( KCursor::waitCursor() );
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+        
     double m = m_mainInput->value();
     double e = m_edgeInput->value();
     double r = m_rescaleInput->value();
@@ -458,7 +486,7 @@ void ImageEffect_LensDistortion::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Lens Distortion"), 
                                        (uint*)m_lensdistortionFilter->getTargetImage().bits());
                                                            
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

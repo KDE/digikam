@@ -104,6 +104,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();       
+    void slotResized(void);
 };
 
 }  // NameSpace DigikamLensDistortionImagesPlugin
