@@ -234,6 +234,7 @@ void ImageEffect_RainDrop::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_RainDrop::slotUser1()
@@ -325,10 +326,12 @@ void ImageEffect_RainDrop::slotEffect()
     m_dropInput->setEnabled(false);
     m_amountInput->setEnabled(false);
     m_coeffInput->setEnabled(false);
+    
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+        
     int d        = m_dropInput->value();
     int a        = m_amountInput->value();
     int c        = m_coeffInput->value();
@@ -362,7 +365,6 @@ void ImageEffect_RainDrop::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int d       = m_dropInput->value();
