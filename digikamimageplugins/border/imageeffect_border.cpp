@@ -140,8 +140,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
         
     // -------------------------------------------------------------
     
+    QVBoxLayout *vLayout2 = new QVBoxLayout( topLayout, spacingHint());                                                  
     QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, marginHint(), spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, 20, spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gbox2);
     m_borderType = new QComboBox( false, gbox2 );
@@ -183,8 +184,10 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     gridBox2->addMultiCellWidget(m_firstColorButton, 2, 2, 1, 1);
     gridBox2->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
     gridBox2->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
-    
-    topLayout->addMultiCellWidget(gbox2, 1, 1, 1, 1);
+
+    vLayout2->addWidget(gbox2);
+    vLayout2->addStretch();
+    topLayout->addMultiCellLayout(vLayout2, 1, 1, 1, 1);            
     
     // -------------------------------------------------------------
 
