@@ -140,7 +140,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    QVBoxLayout *vLayout2 = new QVBoxLayout( topLayout, spacingHint());                                                  
+    QVBoxLayout *vLayout2 = new QVBoxLayout( spacingHint());                                                  
     QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, 20, spacingHint());
                                                   
