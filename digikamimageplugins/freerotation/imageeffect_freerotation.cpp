@@ -147,7 +147,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridLayout->addMultiCellWidget(label2, 0, 0, 3, 3);
     gridLayout->addMultiCellWidget(m_newHeightLabel, 0, 0, 4, 4);
         
-    QLabel *label3 = new QLabel(i18n("Angle:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Angle (degrees):"), plainPage());
     m_angleInput = new KDoubleNumInput(plainPage());
     m_angleInput->setPrecision(1);
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);
