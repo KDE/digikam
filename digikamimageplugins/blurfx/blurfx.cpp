@@ -22,7 +22,8 @@
  * 
  * ============================================================ */
 
-#define ANGLE_RATIO        0.017453292519943295769236907685   // Represents 1º 
+// Represents 1º 
+#define ANGLE_RATIO  0.017453292519943295769236907685   
   
 // C++ includes. 
  
@@ -142,7 +143,6 @@ void BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Dista
        nStride = (Width - xMax + xMin)*4;
        }
        
-    int    BitCount = LineWidth * Height;
     uchar*    pBits = (uchar*)data;
     uchar* pResBits = (uchar*)m_destImage.bits(); 
 
@@ -249,7 +249,6 @@ void BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Dis
        nStride = (Width - xMax + xMin)*4;
        }
     
-    int    BitCount = LineWidth * Height;
     uchar*    pBits = (uchar*)data;
     uchar* pResBits = (uchar*)m_destImage.bits(); 
     
@@ -784,7 +783,6 @@ void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double 
     register int sumR, sumG, sumB, nCount, i, j;
     double nAngX, nAngY, nw, nh;
     
-    int    BitCount = LineWidth * Height;
     uchar*    pBits = (uchar*)data;
     uchar* pResBits = (uchar*)m_destImage.bits(); 
 
@@ -1046,7 +1044,6 @@ void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
-    int BitCount   = LineWidth * Height;
     uchar*    Bits = (uchar*)data;
     uchar* NewBits = (uchar*)m_destImage.bits(); 
 
@@ -1090,22 +1087,17 @@ void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
 void BlurFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
 {
     int progress;
-    // we need to check for valid values
     
+    // we need to check for valid values
     if (SizeW < 1) SizeW = 1;
     if (SizeH < 1) SizeH = 1;
-
-    // if sizew and sizeh we do nothing
-    
-    if ((SizeW == 1) && (SizeH == 1))
-        return;
+    if ((SizeW == 1) && (SizeH == 1)) return;
 
     int i, j, k;            
     
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
 
-    int BitCount    = LineWidth * Height;
     uchar*    pBits = (uchar*)data;
     uchar* pResBits = (uchar*)m_destImage.bits(); 
     

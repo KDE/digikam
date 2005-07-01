@@ -222,7 +222,6 @@ void ImageEffect_BlurFX::abortPreview()
 {
     m_currentRenderingMode = NoneRendering;
     m_previewWidget->setProgress(0);
-    m_previewWidget->setPreviewImageWaitCursor(false);
     m_effectTypeLabel->setEnabled(true);
     m_effectType->setEnabled(true);
     m_distanceInput->setEnabled(true);
@@ -255,6 +254,7 @@ void ImageEffect_BlurFX::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_BlurFX::slotUser1()
@@ -265,8 +265,8 @@ void ImageEffect_BlurFX::slotUser1()
        }
     else
        {
-       m_effectType->setCurrentItem(0); // Zoom blur
-       slotEffectTypeChanged(0);
+       m_effectType->setCurrentItem(BlurFX::ZoomBlur);
+       slotEffectTypeChanged(BlurFX::ZoomBlur);
        }
 } 
 
@@ -275,7 +275,7 @@ void ImageEffect_BlurFX::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_BlurFXFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -291,7 +291,7 @@ void ImageEffect_BlurFX::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_BlurFXFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -328,40 +328,40 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           
     switch (type)
        {
-       case 0: // Zoom Blur.
+       case BlurFX::ZoomBlur:
           break;
        
-       case 1: // Radial Blur.
-       case 8: // Frost Glass.
+       case BlurFX::RadialBlur:
+       case BlurFX::FrostGlass: 
           m_distanceInput->setRange(0, 10, 1, true);
           m_distanceInput->setValue(3);
           break;
           
-       case 2: // Far Blur.
+       case BlurFX::FarBlur:
           m_distanceInput->setRange(0, 20, 1, true);
           m_distanceInput->setMaxValue(20);
           m_distanceInput->setValue(10);
           break;
        
-       case 3: // Motion Blur.
-       case 6: // Focus Blur.
+       case BlurFX::MotionBlur:
+       case BlurFX::FocusBlur:
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
           break;
 
-       case 4: // Softener Blur.
+       case BlurFX::SoftenerBlur:
           m_distanceInput->setEnabled(false);
           m_distanceLabel->setEnabled(false);
           break;
           
-       case 5: // Skake Blur    
+       case BlurFX::ShakeBlur:   
           m_distanceInput->setRange(0, 100, 1, true);
           m_distanceInput->setValue(20);
           break;
        
-       case 7: // Smart Blur.
+       case BlurFX::SmartBlur:
           m_distanceInput->setRange(0, 20, 1, true);
           m_distanceInput->setValue(3);
           m_levelInput->setEnabled(true);
@@ -370,7 +370,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           m_levelInput->setValue(128);
           break;
        
-       case 9: // Mosaic.
+       case BlurFX::Mosaic: 
           m_distanceInput->setRange(0, 50, 1, true);
           m_distanceInput->setValue(3);
           break;
@@ -391,7 +391,7 @@ void ImageEffect_BlurFX::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
         
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
@@ -404,10 +404,10 @@ void ImageEffect_BlurFX::slotEffect()
     QImage *pImg;
     
     switch (m_effectType->currentItem())
-        {
-        case 0: // Zoom Blur.
-        case 1: // Radial Blur.
-        case 6: // Focus Blur.
+       {
+       case BlurFX::ZoomBlur:
+       case BlurFX::RadialBlur:
+       case BlurFX::FocusBlur:
             {
             Digikam::ImageIface iface(0, 0);
             pImg = new QImage(iface.originalWidth(), iface.originalHeight(), 32);
@@ -417,16 +417,16 @@ void ImageEffect_BlurFX::slotEffect()
             break;
             }
                     
-        case 2: // Far Blur.
-        case 3: // Motion Blur.
-        case 4: // Soft Blur
-        case 5: // Shake Blur.
-        case 7: // Smart BLur.
-        case 8: // Frost Glass.
-        case 9: // Mosaic.
+       case BlurFX::FarBlur:
+       case BlurFX::MotionBlur:
+       case BlurFX::SoftenerBlur:
+       case BlurFX::ShakeBlur: 
+       case BlurFX::SmartBlur:
+       case BlurFX::FrostGlass: 
+       case BlurFX::Mosaic: 
             pImg = new QImage(m_previewWidget->getOriginalClipImage());
             break;
-        }
+       }
     
     int t = m_effectType->currentItem();        
     int d = m_distanceInput->value();
@@ -454,7 +454,7 @@ void ImageEffect_BlurFX::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int t = m_effectType->currentItem();         
     int d = m_distanceInput->value();
@@ -500,9 +500,9 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
                  
                  switch (m_effectType->currentItem())
                     {
-                    case 0: // Zoom Blur.
-                    case 1: // Radial Blur.
-                    case 6: // Focus Blur.
+                    case BlurFX::ZoomBlur:
+                    case BlurFX::RadialBlur:
+                    case BlurFX::FocusBlur:
                         {
                         QRect pRect    = m_previewWidget->getOriginalImageRegion();
                         QImage destImg = imDest.copy(pRect);
@@ -510,13 +510,13 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
                         break;
                         }
                                 
-                    case 2: // Far Blur.
-                    case 3: // Motion Blur.
-                    case 4: // Soft Blur
-                    case 5: // Shake Blur.
-                    case 7: // Smart BLur.
-                    case 8: // Frost Glass.
-                    case 9: // Mosaic.
+                    case BlurFX::FarBlur:
+                    case BlurFX::MotionBlur:
+                    case BlurFX::SoftenerBlur:
+                    case BlurFX::ShakeBlur: 
+                    case BlurFX::SmartBlur:
+                    case BlurFX::FrostGlass: 
+                    case BlurFX::Mosaic: 
                         m_previewWidget->setPreviewImageData(imDest);
                         break;
                     }
@@ -534,7 +534,7 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Blur Effects"), 
                                        (uint*)m_BlurFXFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
