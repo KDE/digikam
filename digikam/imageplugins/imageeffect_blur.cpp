@@ -26,7 +26,7 @@
 
 #include <qlayout.h>
 #include <qframe.h>
-#include <qvgroupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
@@ -60,21 +60,27 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, i18n("Preview"), plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = m_imagePreviewWidget->settingsGroupBox();
-    QLabel *label = new QLabel(i18n("Smoothness:"), gbox);
+    QGroupBox *gboxSettings = new QGroupBox( i18n("Settings"), m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, 20, spacingHint());
+    QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
-    m_radiusInput = new KIntNumInput(gbox);
+    m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 20, 1, true);
     m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
                                          "1 and above determine the Gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
+
+    gridSettings->addWidget(label, 0, 0);
+    gridSettings->addWidget(m_radiusInput, 0, 1);
     
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
     // -------------------------------------------------------------
     
     resize(configDialogSize("Blur Tool Dialog"));         
