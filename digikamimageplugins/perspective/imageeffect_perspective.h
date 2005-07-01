@@ -2,7 +2,7 @@
  * File  : imageeffect_perspective.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-02-17
- * Description : a Digikam image editor plugin for process image 
+ * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
  * Copyright 2005 by Gilles Caulier
@@ -70,7 +70,6 @@ private slots:
     void slotUser1();
     void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
-
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

@@ -21,16 +21,12 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
- extern "C"
-{
-#include <math.h>
-}
 
 // C++ includes.
 
 #include <cstdio>
 #include <cstdlib>
+#include <cmath>
 
 // Qt includes.
 
@@ -41,7 +37,6 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpointarray.h>
-#include <qregion.h>
 
 // KDE include.
 
@@ -49,6 +44,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -56,45 +52,23 @@
 
 // Local includes.
 
+#include "triangle.h"
 #include "perspectivewidget.h"
 
 namespace DigikamPerspectiveImagesPlugin
 {
 
-Triangle::Triangle(QPoint A, QPoint B, QPoint C)
-{
-    m_a = distanceP2P(B, C);
-    m_b = distanceP2P(A, C);
-    m_c = distanceP2P(A, B);
-}
-
-float Triangle::angleABC(void)
-{
-    return( 57.295779513082 * acos( (m_b*m_b - m_a*m_a - m_c*m_c ) / (-2*m_a*m_c ) ) );
-}
-
-float Triangle::angleACB(void)
-{
-    return( 57.295779513082 * acos( (m_c*m_c - m_a*m_a - m_b*m_b ) / (-2*m_a*m_b ) ) );
-}
-
-float Triangle::angleBAC(void)
-{
-    return( 57.295779513082 * acos( (m_a*m_a - m_b*m_b - m_c*m_c ) / (-2*m_b*m_c ) ) );
-}
-
-float Triangle::distanceP2P(QPoint p1, QPoint p2)
-{
-    return(sqrt( abs( p2.x()-p1.x() ) * abs( p2.x()-p1.x() ) +
-                 abs( p2.y()-p1.y() ) * abs( p2.y()-p1.y() ) ));
-}
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Widget class to edit perspective.
 
 PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_iface  = new Digikam::ImageIface(w,h);
-
+    setBackgroundMode(Qt::NoBackground);
+    setMinimumSize(w, h);
+    setMouseTracking(true);
+    
+    m_iface  = new Digikam::ImageIface(w, h);
     m_data   = m_iface->getPreviewData();
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
@@ -102,11 +76,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_origH  = m_iface->originalHeight();
     m_pixmap = new QPixmap(w, h);
     
-    setBackgroundMode(Qt::NoBackground);
-    setFixedSize(m_w, m_h);
-    setMouseTracking(true);
-    
-    m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
     resetSelection();
 }
@@ -197,7 +167,7 @@ void PerspectiveWidget::resetSelection(void)
     
     m_bottomRightPoint.setX(m_w-1);
     m_bottomRightPoint.setY(m_h-1);
-
+    
     updatePixmap();
     repaint(false);
 }
@@ -232,10 +202,14 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
 
 void PerspectiveWidget::updatePixmap(void)
 {
-    m_topLeftCorner.setRect(m_topLeftPoint.x(), m_topLeftPoint.y(), 8, 8);
-    m_topRightCorner.setRect(m_topRightPoint.x() - 7, m_topRightPoint.y(), 8, 8);
-    m_bottomLeftCorner.setRect(m_bottomLeftPoint.x(), m_bottomLeftPoint.y() - 7, 8, 8);   
-    m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 7, m_bottomRightPoint.y() - 7, 8, 8);
+    m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),             
+                            m_topLeftPoint.y() + m_rect.topLeft().y(), 8, 8);
+    m_topRightCorner.setRect(m_topRightPoint.x() - 7 + m_rect.topLeft().x(),
+                             m_topRightPoint.y() + m_rect.topLeft().y(), 8, 8);
+    m_bottomLeftCorner.setRect(m_bottomLeftPoint.x() + m_rect.topLeft().x(),
+                               m_bottomLeftPoint.y() - 7 + m_rect.topLeft().y(), 8, 8);   
+    m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 7 + m_rect.topLeft().x(), 
+                                m_bottomRightPoint.y() - 7 + m_rect.topLeft().y(), 8, 8);
     
     // Drawing background and image transformation.
     
@@ -244,9 +218,9 @@ void PerspectiveWidget::updatePixmap(void)
     uint *newData = new uint[m_w * m_h];
     
     m_transformedCenter = buildPerspective(QPoint::QPoint(0, 0), QPoint::QPoint(m_w, m_h),
-                                                  m_topLeftPoint, m_topRightPoint, 
-                                                  m_bottomLeftPoint, m_bottomRightPoint, 
-                                                  m_data, newData);
+                                           m_topLeftPoint, m_topRightPoint, 
+                                           m_bottomLeftPoint, m_bottomRightPoint, 
+                                           m_data, newData);
                                                    
     m_iface->putPreviewData(newData);
 
@@ -259,23 +233,24 @@ void PerspectiveWidget::updatePixmap(void)
     
     QPainter p(m_pixmap);
     p.setPen(QPen(QColor(255, 64, 64), 1, Qt::SolidLine));
-    p.drawLine(m_topLeftPoint, m_topRightPoint);
-    p.drawLine(m_topRightPoint, m_bottomRightPoint);
-    p.drawLine(m_bottomRightPoint, m_bottomLeftPoint);
-    p.drawLine(m_bottomLeftPoint, m_topLeftPoint);
+    p.drawLine(m_topLeftPoint+m_rect.topLeft(),     m_topRightPoint+m_rect.topLeft());
+    p.drawLine(m_topRightPoint+m_rect.topLeft(),    m_bottomRightPoint+m_rect.topLeft());
+    p.drawLine(m_bottomRightPoint+m_rect.topLeft(), m_bottomLeftPoint+m_rect.topLeft());
+    p.drawLine(m_bottomLeftPoint+m_rect.topLeft(),  m_topLeftPoint+m_rect.topLeft());
     
     // Drawing selection corners.
     
     QBrush brush(QColor(255, 64, 64));
-    p.fillRect(m_topLeftCorner, brush);
-    p.fillRect(m_topRightCorner, brush);
-    p.fillRect(m_bottomLeftCorner, brush);
+    p.fillRect(m_topLeftCorner,     brush);
+    p.fillRect(m_topRightCorner,    brush);
+    p.fillRect(m_bottomLeftCorner,  brush);
     p.fillRect(m_bottomRightCorner, brush);
 
     // Drawing transformed center.
     
     p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
-    p.drawEllipse( m_transformedCenter.x(), m_transformedCenter.y(), 4, 4 ); 
+    p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x(), 
+                   m_transformedCenter.y()+m_rect.topLeft().y(), 4, 4 ); 
 
     p.end();
     
@@ -286,6 +261,36 @@ void PerspectiveWidget::updatePixmap(void)
 void PerspectiveWidget::paintEvent( QPaintEvent * )
 {
     bitBlt(this, 0, 0, m_pixmap);                   
+}
+
+void PerspectiveWidget::resizeEvent(QResizeEvent * e)
+{
+    delete m_pixmap;
+    int w  = e->size().width();
+    int h  = e->size().height();
+    m_data = m_iface->setPreviewSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    
+    m_pixmap      = new QPixmap(w, h);
+    QRect oldRect = m_rect;
+    m_rect        = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+
+    float xFactor = (float)m_rect.width()/(float)(oldRect.width());
+    float yFactor = (float)m_rect.height()/(float)(oldRect.height());
+    
+    m_topLeftPoint      = QPoint::QPoint(ROUND(m_topLeftPoint.x()*xFactor),      
+                                         ROUND(m_topLeftPoint.y()*yFactor));
+    m_topRightPoint     = QPoint::QPoint(ROUND(m_topRightPoint.x()*xFactor),     
+                                         ROUND(m_topRightPoint.y()*yFactor));
+    m_bottomLeftPoint   = QPoint::QPoint(ROUND(m_bottomLeftPoint.x()*xFactor),   
+                                         ROUND(m_bottomLeftPoint.y()*yFactor));
+    m_bottomRightPoint  = QPoint::QPoint(ROUND(m_bottomRightPoint.x()*xFactor),  
+                                         ROUND(m_bottomRightPoint.y()*yFactor));
+    m_transformedCenter = QPoint::QPoint(ROUND(m_transformedCenter.x()*xFactor), 
+                                         ROUND(m_transformedCenter.y()*yFactor));
+    
+    updatePixmap();
 }
 
 void PerspectiveWidget::mousePressEvent ( QMouseEvent * e )
@@ -337,7 +342,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
              if ( unsableArea.contains(pm) ) return;
              
-             m_topLeftPoint = pm;             
+             m_topLeftPoint = pm - m_rect.topLeft();             
              setCursor( KCursor::sizeFDiagCursor() );
              }
             
@@ -355,7 +360,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
              if ( unsableArea.contains(pm) ) return;
              
-             m_topRightPoint = pm;
+             m_topRightPoint = pm - m_rect.topLeft();
              setCursor( KCursor::sizeBDiagCursor() );
              }
           
@@ -373,7 +378,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
              if ( unsableArea.contains(pm) ) return;
              
-             m_bottomLeftPoint = pm;
+             m_bottomLeftPoint = pm - m_rect.topLeft();
              setCursor( KCursor::sizeBDiagCursor() );
              }
              
@@ -391,7 +396,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
              if ( unsableArea.contains(pm) ) return;
              
-             m_bottomRightPoint = pm;
+             m_bottomRightPoint = pm - m_rect.topLeft();
              setCursor( KCursor::sizeFDiagCursor() );
              }
           
@@ -665,7 +670,7 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Matrix 3x3 perspective transformation implementations.
+// Matrix 3x3 perspective transformation methods.
 
 /**
  * matrix3Identity:
