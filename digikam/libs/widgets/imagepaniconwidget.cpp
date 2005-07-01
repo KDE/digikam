@@ -36,6 +36,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -171,7 +172,7 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
        m_xpos = e->x();
        m_ypos = e->y();
        m_moveSelection = true;
-       setCursor ( KCursor::sizeAllCursor() );
+       kapp->setOverrideCursor( KCursor::sizeAllCursor() );       
        }
 }
 
@@ -179,7 +180,7 @@ void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_moveSelection && m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
-       setCursor ( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor(); 
        regionSelectionMoved(true);
        m_moveSelection = false;
        }
@@ -204,9 +205,9 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
     else 
        {
        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           setCursor( KCursor::handCursor() );
+           kapp->setOverrideCursor( KCursor::handCursor() );       
        else
-           setCursor( KCursor::arrowCursor() );
+           kapp->restoreOverrideCursor(); 
        }
 }
 

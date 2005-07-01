@@ -34,6 +34,7 @@
 #include <imagepaniconwidget.h>
 #include <imageplugin.h>
 #include <imagepreviewwidget.h>
+#include <imagepannelwidget.h>
 #include <imageregionwidget.h>
 #include <imageselectionwidget.h>
 #include <imageguidewidget.h>
@@ -54,6 +55,7 @@
 #include <digikam/imagepaniconwidget.h>
 #include <digikam/imageplugin.h>
 #include <digikam/imagepreviewwidget.h>
+#include <digikam/imagepannelwidget.h>
 #include <digikam/imageregionwidget.h>
 #include <digikam/imageselectionwidget.h>
 #include <digikam/imageguidewidget.h>

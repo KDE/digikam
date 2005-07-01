@@ -124,7 +124,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, i18n("Preview"), plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -132,53 +132,42 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
+    QVGroupBox *gbox = m_imagePreviewWidget->settingsGroupBox();
+    QLabel *label1 = new QLabel(i18n("Radius:"), gbox);
     
-    m_radiusInput = new KDoubleNumInput(plainPage(), "m_radiusInput");
+    m_radiusInput = new KDoubleNumInput(gbox, "m_radiusInput");
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.1, 120.0, 0.1, true);
             
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "10 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
-
-    hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_radiusInput, 4);
     
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Amount:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Amount:"), gbox);
     
-    m_amountInput = new KDoubleNumInput(plainPage(), "m_amountInput");
+    m_amountInput = new KDoubleNumInput(gbox, "m_amountInput");
     m_amountInput->setPrecision(2);
     m_amountInput->setRange(0.0, 5.0, 0.01, true);
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
-    
-    hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_amountInput, 4);
 
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay4 = new QHBoxLayout(topLayout);
-    QLabel *label3 = new QLabel(i18n("Threshold:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Threshold:"), gbox);
     
-    m_thresholdInput = new KIntNumInput(plainPage(), "m_thresholdInput");
+    m_thresholdInput = new KIntNumInput(gbox, "m_thresholdInput");
     m_thresholdInput->setRange(0, 255, 1, true);
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
-    
-    hlay4->addWidget(label3, 1);
-    hlay4->addWidget(m_thresholdInput, 4);
+
 
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize();  
+    resize(configDialogSize("UnSharpMask Tool Dialog"));         
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
             
     // -------------------------------------------------------------
@@ -198,6 +187,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
 
 ImageEffect_Unsharp::~ImageEffect_Unsharp()
 {
+    saveDialogSize("UnSharpMask Tool Dialog");    
+    
     if (m_unsharpFilter)
        delete m_unsharpFilter;    
     

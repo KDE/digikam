@@ -34,7 +34,7 @@ class KDoubleNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamUnsharpMaskImagesPlugin
@@ -78,7 +78,7 @@ private:
     
     UnsharpMask     *m_unsharpFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     

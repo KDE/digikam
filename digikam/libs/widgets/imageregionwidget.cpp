@@ -29,6 +29,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -50,9 +51,18 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
        setHScrollBarMode( QScrollView::AlwaysOff );
        }
     
-    setFixedSize(wp, hp);
+    setMinimumSize(wp, hp);
     viewport()->setMouseTracking(true);
-    setImage();
+
+    Digikam::ImageIface iface(0, 0);
+    int w = iface.originalWidth();
+    int h = iface.originalHeight();
+    uint *data = iface.getOriginalData();
+    m_img.create( w, h, 32 );
+    memcpy(m_img.bits(), data, m_img.numBytes());
+    delete [] data;
+            
+    updateOriginalImage();
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -60,17 +70,33 @@ ImageRegionWidget::~ImageRegionWidget()
     if(m_pix) delete m_pix;
 }
 
-void ImageRegionWidget::setImage(void)
+void ImageRegionWidget::viewportResizeEvent(QResizeEvent *e)
 {
-    Digikam::ImageIface iface(0, 0);
-    int w = iface.originalWidth();
-    int h = iface.originalHeight();
-    uint *data = iface.getOriginalData();
-    
-    m_img.create( w, h, 32 );
-    memcpy(m_img.bits(), data, m_img.numBytes());
+    updateOriginalImage();
+    resizeContents(e->size().width(), e->size().height());
+    emit contentsMovedEvent();
+}
+
+void ImageRegionWidget::updateOriginalImage()
+{
+    updatePixmap(&m_img);
+}
+
+void ImageRegionWidget::updatePreviewImage(QImage *img)
+{
+    QImage image = m_img.copy();
+    QRect region = getImageRegion();
+    bitBlt( &image, region.topLeft().x(), region.topLeft().y(), img, 0, 0,
+            img->width(), img->height());
+    updatePixmap(&image);
+}
+
+void ImageRegionWidget::updatePixmap(QImage *img)
+{
+    int w = img->width();
+    int h = img->height();
     m_pix = new QPixmap(w, h);
-    m_pix->convertFromImage(m_img);
+    m_pix->convertFromImage(*img);
 
     horizontalScrollBar()->setLineStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
@@ -78,7 +104,12 @@ void ImageRegionWidget::setImage(void)
     verticalScrollBar()->setPageStep( 1 );
     resizeContents(w, h);
     repaintContents(false);    
-    delete [] data;
+}
+
+void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
+{
+    if(!m_pix) return;
+    else p->drawPixmap(x, y, *m_pix, x, y, w, h);
 }
 
 void ImageRegionWidget::setCenterClipPosition(void)
@@ -106,25 +137,19 @@ QImage ImageRegionWidget::getImageRegionData(void)
     return ( m_img.copy(getImageRegion()) );
 }
 
-void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
-{
-    if(!m_pix) return;
-    else p->drawPixmap(x, y, *m_pix, x, y, w, h);
-}
-
 void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton )
        {
        m_xpos = e->x();
        m_ypos = e->y();
-       setCursor ( KCursor::sizeAllCursor() );
+       kapp->setOverrideCursor( KCursor::sizeAllCursor() );
        }
 }
 
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
-    setCursor ( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor(); 
     emit contentsMovedEvent();
 }
 
@@ -141,8 +166,8 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
        m_ypos = newypos - (newypos-m_ypos);
        return;
        }
-        
-    setCursor( KCursor::handCursor() );
+
+    kapp->setOverrideCursor( KCursor::handCursor() );               
 }
 
 }  // NameSpace Digikam

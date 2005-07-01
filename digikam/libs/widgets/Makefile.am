@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libwidgets.la
 
 libwidgets_la_SOURCES = imageregionwidget.cpp imagepreviewwidget.cpp imagepaniconwidget.cpp \
 			histogramwidget.cpp colorgradientwidget.cpp imageselectionwidget.cpp \
-			imageguidewidget.cpp curveswidget.cpp 
+			imageguidewidget.cpp curveswidget.cpp imagepannelwidget.cpp
 
 libwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
@@ -16,6 +16,6 @@ INCLUDES = \
 
 digikaminclude_HEADERS = imageregionwidget.h imagepreviewwidget.h imagepaniconwidget.h \
 			 histogramwidget.h colorgradientwidget.h imageselectionwidget.h \
-			 imageguidewidget.h curveswidget.h 
+			 imageguidewidget.h curveswidget.h imagepannelwidget.h 
 
 digikamincludedir = $(includedir)/digikam

@@ -45,7 +45,9 @@ public:
     void   setCenterClipPosition(void);
     QRect  getImageRegion(void);
     QImage getImageRegionData(void);
-    
+
+    void   updatePreviewImage(QImage *img);
+        
 signals:
     
     void contentsMovedEvent( void );
@@ -55,6 +57,7 @@ protected:
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );
+    void viewportResizeEvent(QResizeEvent *e);
 
 protected:
     
@@ -65,7 +68,8 @@ protected:
     int        m_ypos;
 
     void drawContents(QPainter *p, int x, int y, int w, int h);
-    void setImage(void);
+    void updatePixmap(QImage *img);
+    void updateOriginalImage();
    
 };
 
