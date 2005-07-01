@@ -20,7 +20,6 @@
 
 // Qt includes.
 
-#include <qlayout.h>
 #include <qframe.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
@@ -46,13 +45,10 @@
 namespace Digikam
 {
 
-ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString &title, 
-                                     QWidget *parent, bool progress)
+ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progress)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    QGridLayout* mainLayout = new QGridLayout( this, 2, 2 ,
-                                               KDialog::marginHint(), KDialog::spacingHint());
-    
+    m_mainLayout = new QGridLayout( this, 2, 2 , KDialog::marginHint(), KDialog::spacingHint());
     
     QFrame *frame1 = new QFrame(this);
     frame1->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -65,10 +61,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString &title,
                                                "<p>Click and drag the mouse cursor in the "
                                                "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0);
-    mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
-    mainLayout->setRowStretch(0, 10);
-    mainLayout->setRowStretch(1, 10);
-    mainLayout->setColStretch(0, 10);
+    m_mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
+    m_mainLayout->setRowStretch(0, 10);
+    m_mainLayout->setRowStretch(1, 10);
+    m_mainLayout->setColStretch(0, 10);
 
     // -------------------------------------------------------------
         
@@ -92,12 +88,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString &title,
     m_progressBar = new KProgress(100, gbox1);
     setProgressVisible(progress);
     
-    mainLayout->addMultiCellWidget(gbox1, 0, 0, 1, 1);
-    
-    // -------------------------------------------------------------
-    
-    m_gboxSettings = new QVGroupBox(i18n("Settings"), this);
-    mainLayout->addMultiCellWidget(m_gboxSettings, 1, 1, 1, 1);
+    m_mainLayout->addMultiCellWidget(gbox1, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
@@ -113,6 +104,14 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString &title,
 
 ImagePannelWidget::~ImagePannelWidget()
 {
+}
+
+void ImagePannelWidget::setUserAreaWidget(QWidget *w)
+{
+    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    vLayout->addWidget(w);
+    vLayout->addStretch();
+    m_mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
 }
 
 void ImagePannelWidget::setEnable(bool b)

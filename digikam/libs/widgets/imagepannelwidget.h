@@ -26,9 +26,9 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
+#include <qlayout.h>
 
 class QLabel;
-class QVGroupBox;
 
 class KProgress;
 
@@ -43,8 +43,7 @@ class ImagePannelWidget : public QWidget
 Q_OBJECT
 
 public:
-    ImagePannelWidget(uint w, uint h, const QString &title, 
-                      QWidget *parent=0, bool progress=false);
+    ImagePannelWidget(uint w, uint h, QWidget *parent=0, bool progress=false);
     ~ImagePannelWidget();
     
     QRect  getOriginalImageRegion(void);
@@ -59,9 +58,10 @@ public:
     void   setProgressVisible(bool b);
     void   setProgressWhatsThis(QString desc);
 
-    KProgress  *progressBar(void)      { return m_progressBar; };
-    QVGroupBox *settingsGroupBox(void) { return m_gboxSettings; };
-        
+    void   setUserAreaWidget(QWidget *w);
+    
+    KProgress *progressBar(void) { return m_progressBar; };
+    
 public slots:
 
     // Set the top/Left conner clip position.
@@ -79,12 +79,12 @@ protected:
     Digikam::ImageRegionWidget  *m_imageRegionWidget;
     Digikam::ImagePanIconWidget *m_imagePanIconWidget;
     
-    QLabel     *m_topLeftSelectionInfoLabel;
-    QLabel     *m_BottomRightSelectionInfoLabel;
+    QLabel      *m_topLeftSelectionInfoLabel;
+    QLabel      *m_BottomRightSelectionInfoLabel;
     
-    QVGroupBox *m_gboxSettings;
+    QGridLayout *m_mainLayout;
     
-    KProgress  *m_progressBar;
+    KProgress   *m_progressBar;
     
     void updateSelectionInfo(QRect rect);
     
