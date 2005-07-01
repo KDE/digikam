@@ -313,7 +313,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_currentResizing != ResizingNone )
        {
-       setCursor ( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        m_currentResizing = ResizingNone;
        } 
 }
@@ -342,8 +342,8 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              
              if ( unsableArea.contains(pm) ) return;
              
-             m_topLeftPoint = pm - m_rect.topLeft();             
-             setCursor( KCursor::sizeFDiagCursor() );
+             m_topLeftPoint = pm - m_rect.topLeft();   
+             kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
              }
             
           else if ( m_currentResizing == ResizingTopRight )
@@ -361,7 +361,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_topRightPoint = pm - m_rect.topLeft();
-             setCursor( KCursor::sizeBDiagCursor() );
+             kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
              }
           
           else if ( m_currentResizing == ResizingBottomLeft  )
@@ -379,7 +379,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_bottomLeftPoint = pm - m_rect.topLeft();
-             setCursor( KCursor::sizeBDiagCursor() );
+             kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
              }
              
           else if ( m_currentResizing == ResizingBottomRight )
@@ -397,7 +397,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_bottomRightPoint = pm - m_rect.topLeft();
-             setCursor( KCursor::sizeFDiagCursor() );
+             kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
              }
           
           updatePixmap();
@@ -408,12 +408,13 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_topLeftCorner.contains( e->x(), e->y() ) ||
             m_bottomRightCorner.contains( e->x(), e->y() ) )
-           setCursor( KCursor::sizeFDiagCursor() );
+           kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
+           
        else if ( m_topRightCorner.contains( e->x(), e->y() ) ||
                  m_bottomLeftCorner.contains( e->x(), e->y() ) )
-           setCursor( KCursor::sizeBDiagCursor() );
+           kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
        else
-           setCursor ( KCursor::arrowCursor() );
+           kapp->restoreOverrideCursor();
        }
 }
 
