@@ -54,6 +54,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
+#include <kapplication.h>
 
 // Digikam includes.
 
@@ -841,7 +842,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
           {
           m_xpos = e->x();
           m_ypos = e->y();
-          setCursor ( KCursor::sizeAllCursor() );
+          kapp->setOverrideCursor( KCursor::sizeAllCursor() );          
           }
        }
 }
@@ -850,13 +851,13 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_currentResizing != ResizingNone )
        {
-       setCursor ( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();       
        regionSelectionChanged(true);
        m_currentResizing = ResizingNone;
        } 
     else if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
-       setCursor ( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();       
        regionSelectionMoved(true);
        }      
 }
@@ -868,7 +869,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_currentResizing == ResizingNone )
           {
-          setCursor ( KCursor::sizeAllCursor() );
+          kapp->setOverrideCursor( KCursor::sizeAllCursor() );              
           int newxpos = e->x();
           int newypos = e->y();
                
@@ -918,14 +919,14 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_localTopLeftCorner.contains( e->x(), e->y() ) ||
             m_localBottomRightCorner.contains( e->x(), e->y() ) )
-           setCursor( KCursor::sizeFDiagCursor() );
+           kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );              
        else if ( m_localTopRightCorner.contains( e->x(), e->y() ) ||
                  m_localBottomLeftCorner.contains( e->x(), e->y() ) )
-           setCursor( KCursor::sizeBDiagCursor() );
+           kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );              
        else if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           setCursor( KCursor::handCursor() );
+           kapp->setOverrideCursor( KCursor::handCursor() );              
        else
-           setCursor ( KCursor::arrowCursor() );
+           kapp->restoreOverrideCursor();       
        }
 }
 
