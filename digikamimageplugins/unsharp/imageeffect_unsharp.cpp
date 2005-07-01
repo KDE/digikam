@@ -21,7 +21,7 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -124,7 +124,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -132,48 +132,59 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QVGroupBox *gbox = m_imagePreviewWidget->settingsGroupBox();
-    QLabel *label1 = new QLabel(i18n("Radius:"), gbox);
+    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, 20, spacingHint());
+    QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
-    m_radiusInput = new KDoubleNumInput(gbox, "m_radiusInput");
+    m_radiusInput = new KDoubleNumInput(gboxSettings, "m_radiusInput");
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.1, 120.0, 0.1, true);
             
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "10 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
+    gridSettings->addWidget(label1, 0, 0);
+    gridSettings->addWidget(m_radiusInput, 0, 1);
     
     // -------------------------------------------------------------
-
-    QLabel *label2 = new QLabel(i18n("Amount:"), gbox);
     
-    m_amountInput = new KDoubleNumInput(gbox, "m_amountInput");
+    QLabel *label2 = new QLabel(i18n("Amount:"), gboxSettings);
+    
+    m_amountInput = new KDoubleNumInput(gboxSettings, "m_amountInput");
     m_amountInput->setPrecision(2);
     m_amountInput->setRange(0.0, 5.0, 0.01, true);
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
-
+    gridSettings->addWidget(label2, 1, 0);
+    gridSettings->addWidget(m_amountInput, 1, 1);
+        
     // -------------------------------------------------------------
-
-    QLabel *label3 = new QLabel(i18n("Threshold:"), gbox);
     
-    m_thresholdInput = new KIntNumInput(gbox, "m_thresholdInput");
+    QLabel *label3 = new QLabel(i18n("Threshold:"), gboxSettings);
+    
+    m_thresholdInput = new KIntNumInput(gboxSettings, "m_thresholdInput");
     m_thresholdInput->setRange(0, 255, 1, true);
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
-
-
+    gridSettings->addWidget(label3, 3, 0);
+    gridSettings->addWidget(m_thresholdInput, 3, 1);
+    
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    
     // -------------------------------------------------------------
     
-    resize(configDialogSize("UnSharpMask Tool Dialog"));         
+    // To prevent both computation (resize event and Reset to default settings).
+    m_imagePreviewWidget->blockSignals(true);
+    resize(configDialogSize("UnSharpMask Tool Dialog"));     
+    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
             
     // -------------------------------------------------------------
         
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_radiusInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                                                
@@ -213,6 +224,21 @@ void ImageEffect_Unsharp::abortPreview()
 void ImageEffect_Unsharp::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("unsharp", "digikamimageplugins");
+}
+
+void ImageEffect_Unsharp::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_unsharpFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
 void ImageEffect_Unsharp::closeEvent(QCloseEvent *e)

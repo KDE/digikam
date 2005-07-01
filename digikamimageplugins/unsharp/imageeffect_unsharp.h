@@ -93,6 +93,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotTimer(); 
+    void slotFocusChanged(void);
     
 };
 
