@@ -28,8 +28,6 @@
 #include <qrect.h>
 #include <qlayout.h>
 
-class QLabel;
-
 class KProgress;
 
 namespace Digikam
@@ -83,9 +81,6 @@ protected:
     
     Digikam::ImageRegionWidget  *m_imageRegionWidget;
     Digikam::ImagePanIconWidget *m_imagePanIconWidget;
-    
-    QLabel      *m_topLeftSelectionInfoLabel;
-    QLabel      *m_BottomRightSelectionInfoLabel;
     
     QGridLayout *m_mainLayout;
     

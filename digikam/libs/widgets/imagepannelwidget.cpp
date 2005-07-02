@@ -80,11 +80,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                                 "red rectangle to change the clip focus."));
     l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
     
-    m_topLeftSelectionInfoLabel = new QLabel(gbox1);
-    m_topLeftSelectionInfoLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_BottomRightSelectionInfoLabel = new QLabel(gbox1);
-    m_BottomRightSelectionInfoLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    
     m_progressBar = new KProgress(100, gbox1);
     setProgressVisible(progress);
     
@@ -194,10 +189,9 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(void)
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
-    m_topLeftSelectionInfoLabel->setText(i18n("Top left: (%1, %2)")
-                                         .arg(rect.left()).arg(rect.top()));
-    m_BottomRightSelectionInfoLabel->setText(i18n("Bottom right: (%1, %2)")
-                                             .arg(rect.right()).arg(rect.bottom()));
+    QToolTip::add( this, i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
+                         .arg(rect.left()).arg(rect.top())
+                         .arg(rect.right()).arg(rect.bottom()));
 }
     
 }  // NameSpace Digikam
