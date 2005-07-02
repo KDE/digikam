@@ -68,8 +68,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
 
     // -------------------------------------------------------------
         
-    QVGroupBox *gbox1 = new QVGroupBox(i18n("Selection"), this);
-    QFrame *frame3 = new QFrame(gbox1);
+    QFrame *frame3 = new QFrame(this);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
@@ -78,12 +77,12 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                                 "which can help you to select the clip preview."
                                                 "<p>Click and drag the mouse cursor in the "
                                                 "red rectangle to change the clip focus."));
-    l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
-    
-    m_progressBar = new KProgress(100, gbox1);
+    m_progressBar = new KProgress(100, frame3);
     setProgressVisible(progress);
+    l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
+    l3->addWidget(m_progressBar, 0, Qt::AlignCenter);
     
-    m_mainLayout->addMultiCellWidget(gbox1, 0, 0, 1, 1);
+    m_mainLayout->addMultiCellWidget(frame3, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
