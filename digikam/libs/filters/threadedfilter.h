@@ -102,7 +102,8 @@ protected:
     // Clean up filter data if necessary. Call by stopComputation() method.
     virtual void cleanupFilter(void){};
     
-    // Post Event to parent about progress.
+    // Post Event to parent about progress. Warning: you need to delete 
+    // 'EventData' instance to 'customEvent' parent implementation.
     void postProgress(int progress=0, bool starting=true, bool success=false);
     
 };    

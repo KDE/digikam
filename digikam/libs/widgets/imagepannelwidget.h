@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-01
- * Description : 
+ * Description : a widget to draw a control pannel image tool.
  * 
  * Copyright 2005 Gilles Caulier
  *
@@ -69,7 +69,11 @@ public slots:
     
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(void);
-            
+
+protected slots:
+
+    void slotPanIconTakeFocus(void);    
+                
 signals:
 
     void signalOriginalClipFocusChanged( void );
@@ -85,7 +89,9 @@ protected:
     QGridLayout *m_mainLayout;
     
     KProgress   *m_progressBar;
-    
+
+private:
+        
     void updateSelectionInfo(QRect rect);
     
 };

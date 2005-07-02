@@ -3,7 +3,7 @@
  * Date  : 2004-08-22
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
-#include <kapplication.h>
 
 // Digikam includes.
 
@@ -172,7 +171,8 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
        m_xpos = e->x();
        m_ypos = e->y();
        m_moveSelection = true;
-       kapp->setOverrideCursor( KCursor::sizeAllCursor() );       
+       setCursor( KCursor::sizeAllCursor() );           
+       emit signalSelectionTakeFocus();
        }
 }
 
@@ -180,7 +180,7 @@ void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_moveSelection && m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
-       kapp->restoreOverrideCursor(); 
+       setCursor( KCursor::arrowCursor() );           
        regionSelectionMoved(true);
        m_moveSelection = false;
        }
@@ -205,9 +205,9 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
     else 
        {
        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           kapp->setOverrideCursor( KCursor::handCursor() );       
+           setCursor( KCursor::handCursor() );           
        else
-           kapp->restoreOverrideCursor(); 
+           setCursor( KCursor::arrowCursor() );           
        }
 }
 

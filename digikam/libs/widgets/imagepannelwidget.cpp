@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-01
- * Description : 
+ * Description : a widget to draw a control pannel image tool.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -95,15 +95,25 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     setCenterImageRegionPosition();
     slotOriginalImageRegionChanged();
     
+    // -------------------------------------------------------------
+    
     connect(m_imageRegionWidget, SIGNAL(contentsMovedEvent()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved (QRect, bool)),
+    connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotSetImageRegionPosition(QRect, bool)));
+
+    connect(m_imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
+            this, SLOT(slotPanIconTakeFocus()));
 }
 
 ImagePannelWidget::~ImagePannelWidget()
 {
+}
+
+void ImagePannelWidget::slotPanIconTakeFocus(void)
+{
+    m_imageRegionWidget->updateOriginalImage();
 }
 
 void ImagePannelWidget::setUserAreaWidget(QWidget *w)
@@ -179,8 +189,10 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(void)
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
-    m_topLeftSelectionInfoLabel->setText(i18n("Top left: (%1, %2)").arg(rect.left()).arg(rect.top()));
-    m_BottomRightSelectionInfoLabel->setText(i18n("Bottom right: (%1, %2)").arg(rect.right()).arg(rect.bottom()));
+    m_topLeftSelectionInfoLabel->setText(i18n("Top left: (%1, %2)")
+                                         .arg(rect.left()).arg(rect.top()));
+    m_BottomRightSelectionInfoLabel->setText(i18n("Bottom right: (%1, %2)")
+                                             .arg(rect.right()).arg(rect.bottom()));
 }
     
 }  // NameSpace Digikam

@@ -3,7 +3,7 @@
  * Date  : 2004-08-22
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +52,8 @@ signals:
     // Emit when selection have been moved with mouse. 'targetDone' booleen 
     // value is used for indicate if the mouse have been released.
     void signalSelectionMoved( QRect rect, bool targetDone );     
+    
+    void signalSelectionTakeFocus(void);
     
 protected:
     

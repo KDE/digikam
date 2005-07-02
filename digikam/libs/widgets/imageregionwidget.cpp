@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-17
- * Description : a widget for to draw a image clip region.
+ * Description : a widget to draw a image clip region.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +29,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobal.h> 
-#include <kapplication.h>
 
 // Digikam includes.
 
@@ -143,13 +142,14 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
        {
        m_xpos = e->x();
        m_ypos = e->y();
-       kapp->setOverrideCursor( KCursor::sizeAllCursor() );
+       setCursor( KCursor::sizeAllCursor() );    
+       updateOriginalImage();
        }
 }
 
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
-    kapp->restoreOverrideCursor(); 
+    setCursor( KCursor::arrowCursor() );    
     emit contentsMovedEvent();
 }
 
@@ -167,7 +167,7 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
        return;
        }
 
-    kapp->setOverrideCursor( KCursor::handCursor() );               
+    setCursor( KCursor::handCursor() );    
 }
 
 }  // NameSpace Digikam
