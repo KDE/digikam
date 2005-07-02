@@ -33,7 +33,6 @@
 
 // KDE include.
 
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kdebug.h>
@@ -214,7 +213,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( m_rect.contains( e->x(), e->y() ) && !m_freeze )
         {
-        kapp->setOverrideCursor( KCursor::crossCursor() );
+        setCursor( KCursor::crossCursor() );
         m_xpos = e->x();
         m_ypos = e->y();
         repaint(false);
@@ -223,7 +222,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
            emit spotPositionChanged( getSpotColor(), false, getSpotPosition() );
         }
     else
-        kapp->restoreOverrideCursor();
+        setCursor( KCursor::arrowCursor() );
 }
 
 }  // NameSpace Digikam

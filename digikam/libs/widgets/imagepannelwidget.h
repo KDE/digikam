@@ -73,6 +73,7 @@ public slots:
 protected slots:
 
     void slotPanIconTakeFocus(void);    
+    void slotInitGui(void);
                 
 signals:
 
