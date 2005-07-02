@@ -219,6 +219,7 @@ void ImageEffect_Unsharp::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
 }
 
 void ImageEffect_Unsharp::slotHelp()
@@ -246,7 +247,7 @@ void ImageEffect_Unsharp::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_unsharpFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();   
@@ -257,7 +258,7 @@ void ImageEffect_Unsharp::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_unsharpFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -340,8 +341,8 @@ void ImageEffect_Unsharp::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+        
     double r  = m_radiusInput->value();
     double a  = m_amountInput->value();
     int    th = m_thresholdInput->value();
@@ -399,7 +400,7 @@ void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Unsharp Mask"), 
                                        (uint*)m_unsharpFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

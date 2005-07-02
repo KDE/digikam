@@ -35,7 +35,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamNoiseReductionImagesPlugin
@@ -81,7 +81,7 @@ private:
     
     Despeckle    *m_despeckleFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -96,6 +96,7 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotTimer(); 
+    void slotFocusChanged(void);
         
 };
 

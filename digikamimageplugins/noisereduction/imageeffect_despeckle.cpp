@@ -126,7 +126,7 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -134,63 +134,68 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout( topLayout, 3 , 3, spacingHint());
+    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, 20, spacingHint());    
     
-    QLabel *label1 = new QLabel(i18n("Radius:"), plainPage());
+    QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
-    m_radiusInput = new KIntNumInput(plainPage(), "m_radiusInput");
+    m_radiusInput = new KIntNumInput(gboxSettings, "m_radiusInput");
     m_radiusInput->setRange(1, 20, 1, true);
     
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "1 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
     
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
+    gridSettings->addWidget(label1, 0, 0);
+    gridSettings->addWidget(m_radiusInput, 0, 1);
     
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Black level:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Black level:"), gboxSettings);
     
-    m_blackLevelInput = new KIntNumInput(plainPage(), "m_blackLevelInput");
+    m_blackLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
     m_blackLevelInput->setRange(0, 255, 1, true);
     
     QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls the black "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
-    
-    grid->addMultiCellWidget(label2, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_blackLevelInput, 1, 1, 1, 1);
+
+    gridSettings->addWidget(label2, 1, 0);
+    gridSettings->addWidget(m_blackLevelInput, 1, 1);                         
     
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("White level:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("White level:"), gboxSettings);
     
-    m_whiteLevelInput = new KIntNumInput(plainPage(), "m_blackLevelInput");
+    m_whiteLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
     m_whiteLevelInput->setRange(0, 255, 1, true);
     
     QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls the white "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
 
-    grid->addMultiCellWidget(label3, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_whiteLevelInput, 2, 2, 1, 1);
+    gridSettings->addWidget(label3, 3, 0);
+    gridSettings->addWidget(m_whiteLevelInput, 3, 1);
                                               
     // -------------------------------------------------------------
     
-    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), plainPage());
+    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), gboxSettings);
     QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
     
-    grid->addMultiCellWidget(m_useAdaptativeMethod, 0, 0, 3, 3);
+    m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), gboxSettings);
+    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type.")); 
     
-    m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), plainPage());
-    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type."));           
-    grid->addMultiCellWidget(m_useRecursiveMethod, 1, 1, 3, 3);
+    gridSettings->addMultiCellWidget(m_useAdaptativeMethod, 4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(m_useRecursiveMethod, 4, 4, 1, 1);    
+        
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
             
-    adjustSize();
-    disableResize(); 
+    // To prevent both computation (resize event and Reset to default settings).
+    m_imagePreviewWidget->blockSignals(true);
+    resize(configDialogSize("Noise Reduction Tool Dialog"));     
+    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
@@ -216,6 +221,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
 ImageEffect_Despeckle::~ImageEffect_Despeckle()
 {
+    saveDialogSize("Noise Reduction Tool Dialog");   
+
     if (m_despeckleFilter)
        delete m_despeckleFilter;    
     
@@ -237,6 +244,7 @@ void ImageEffect_Despeckle::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
 }
 
 void ImageEffect_Despeckle::slotHelp()
@@ -244,12 +252,27 @@ void ImageEffect_Despeckle::slotHelp()
     KApplication::kApplication()->invokeHelp("despeckle", "digikamimageplugins");
 }
 
+void ImageEffect_Despeckle::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_despeckleFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Despeckle::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_despeckleFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();   
@@ -260,7 +283,7 @@ void ImageEffect_Despeckle::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_despeckleFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -356,7 +379,7 @@ void ImageEffect_Despeckle::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int  r  = m_radiusInput->value();
     int  bl = m_blackLevelInput->value();
@@ -417,7 +440,7 @@ void ImageEffect_Despeckle::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Noise Reduction"), 
                                        (uint*)m_despeckleFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
