@@ -55,7 +55,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
-    QToolTip::add( m_imageRegionWidget, i18n( "Original image preview." ) );
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
                                                "which will be used for the preview computation."
                                                "<p>Click and drag the mouse cursor in the "
@@ -68,21 +67,25 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
 
     // -------------------------------------------------------------
         
+    QVBoxLayout *l2 = new QVBoxLayout( KDialog::spacingHint() ); 
+    
     QFrame *frame3 = new QFrame(this);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
-    QToolTip::add( m_imagePanIconWidget, i18n( "Original image panel." ) );
     QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
                                                 "which can help you to select the clip preview."
                                                 "<p>Click and drag the mouse cursor in the "
                                                 "red rectangle to change the clip focus."));
-    m_progressBar = new KProgress(100, frame3);
-    setProgressVisible(progress);
     l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
-    l3->addWidget(m_progressBar, 0, Qt::AlignCenter);
     
-    m_mainLayout->addMultiCellWidget(frame3, 0, 0, 1, 1);
+    m_progressBar = new KProgress(100, this);
+    setProgressVisible(progress);
+    
+    l2->addWidget(frame3, 0, Qt::AlignCenter);
+    l2->addWidget(m_progressBar);
+    
+    m_mainLayout->addMultiCellLayout(l2, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
@@ -188,9 +191,10 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(void)
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
-    QToolTip::add( this, i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
-                         .arg(rect.left()).arg(rect.top())
-                         .arg(rect.right()).arg(rect.bottom()));
+    QToolTip::add( m_imagePanIconWidget, 
+                   i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
+                        .arg(rect.left()).arg(rect.top())
+                        .arg(rect.right()).arg(rect.bottom()));
 }
     
 }  // NameSpace Digikam
