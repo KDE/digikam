@@ -147,7 +147,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     topLayout->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -155,10 +155,10 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_mainTab = new QTabWidget( plainPage() );
+    m_mainTab = new QTabWidget( m_imagePreviewWidget );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 1, 1, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -170,7 +170,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
-    typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
     m_restorationTypeCB->insertItem( i18n("None") );
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
@@ -183,18 +182,18 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                                                "<b>Reduce Texturing</b>: reduce image artefacts like paper texture or Moire patterns "
                                                "of a scanned image.<p>"));
 
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
-    grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_restorationTypeCB, 0, 0, 2, 2);
-        
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
+    grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_restorationTypeCB, 1, 1, 1, 1);
+    grid->setRowStretch(1, 10);
+    
     // -------------------------------------------------------------
     
     QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
+    QGridLayout* grid2 = new QGridLayout( secondPage, 5, 2, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
     
     m_detailLabel = new QLabel(i18n("Detail preservation:"), secondPage);
-    m_detailLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.1, true);
@@ -204,7 +203,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
 
     m_gradientLabel = new QLabel(i18n("Anisotropy:"), secondPage);
-    m_gradientLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
     m_gradientInput->setRange(0.0, 1.0, 0.1, true);
@@ -213,7 +211,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
 
     m_timeStepLabel = new QLabel(i18n("Smoothing:"), secondPage);
-    m_timeStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_timeStepInput = new KDoubleNumInput(secondPage);
     m_timeStepInput->setPrecision(2);
     m_timeStepInput->setRange(0.0, 500.0, 0.1, true);
@@ -223,33 +220,30 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid2->addMultiCellWidget(m_timeStepInput, 2, 2, 1, 1);
 
     m_blurLabel = new QLabel(i18n("Regularity:"), secondPage);
-    m_blurLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_blurInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.1, true);
     QWhatsThis::add( m_blurInput, i18n("<p>This value controls the smoothing regularity of the target image. "
                                        "Do not use an high value here, or the "
                                        "target image will be completely blurred."));
-    grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
-    grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
+    grid2->addMultiCellWidget(m_blurLabel, 3, 3, 0, 0);
+    grid2->addMultiCellWidget(m_blurInput, 3, 3, 1, 1);
     
     m_blurItLabel = new QLabel(i18n("Iterations:"), secondPage);
-    m_blurItLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_blurItInput = new KDoubleNumInput(secondPage);
     m_blurInput->setPrecision(1);
     m_blurItInput->setRange(1.0, 16.0, 1.0, true);
     QWhatsThis::add( m_blurItInput, i18n("<p>Sets the number of times the filter is applied on the target image."));
-    grid2->addMultiCellWidget(m_blurItLabel, 1, 1, 3, 3);
-    grid2->addMultiCellWidget(m_blurItInput, 1, 1, 4, 4);
+    grid2->addMultiCellWidget(m_blurItLabel, 4, 4, 0, 0);
+    grid2->addMultiCellWidget(m_blurItInput, 4, 4, 1, 1);
     
     // -------------------------------------------------------------
     
     QWidget* thirdPage = new QWidget( m_mainTab );
-    QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, marginHint(), spacingHint());
+    QGridLayout* grid3 = new QGridLayout( thirdPage, 4, 2, marginHint(), spacingHint());
     m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
     
     m_angularStepLabel = new QLabel(i18n("Angular step:"), thirdPage);
-    m_angularStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_angularStepInput = new KDoubleNumInput(thirdPage);
     m_angularStepInput->setPrecision(2);
     m_angularStepInput->setRange(5.0, 90.0, 5.0, true);
@@ -258,7 +252,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid3->addMultiCellWidget(m_angularStepInput, 0, 0, 1, 1);
 
     m_integralStepLabel = new QLabel(i18n("Integral step:"), thirdPage);
-    m_integralStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_integralStepInput = new KDoubleNumInput(thirdPage);
     m_integralStepInput->setPrecision(2);
     m_integralStepInput->setRange(0.1, 10.0, 0.1, true);
@@ -267,7 +260,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid3->addMultiCellWidget(m_integralStepInput, 1, 1, 1, 1);
 
     m_gaussianLabel = new QLabel(i18n("Gaussian:"), thirdPage);
-    m_gaussianLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_gaussianInput = new KDoubleNumInput(thirdPage);
     m_gaussianInput->setPrecision(2);
     m_gaussianInput->setRange(0.0, 500.0, 0.01, true);
@@ -277,18 +269,20 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     m_linearInterpolationBox = new QCheckBox(i18n("Use linear interpolation"), thirdPage);
     QWhatsThis::add( m_linearInterpolationBox, i18n("<p>Enable this option to quench the last bit of quality (slow)."));
-    grid3->addMultiCellWidget(m_linearInterpolationBox, 0, 0, 3, 3);
+    grid3->addMultiCellWidget(m_linearInterpolationBox, 3, 3, 0, 1);
     
     m_normalizeBox = new QCheckBox(i18n("Normalize photograph"), thirdPage);
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
-    grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
+    grid3->addMultiCellWidget(m_normalizeBox, 4, 4, 0, 1);
     
-    topLayout->addWidget(m_mainTab);
+    m_imagePreviewWidget->setUserAreaWidget(m_mainTab);
     
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize(); 
+    // To prevent both computation (resize event and Reset to default settings).
+    m_imagePreviewWidget->blockSignals(true);
+    resize(configDialogSize("Restoration Tool Dialog"));     
+    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -335,6 +329,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
 {
+    saveDialogSize("Restoration Tool Dialog");    
+    
     // No need to delete m_previewData because it's driving by QImage.
 
     if (m_cimgInterface)
@@ -459,7 +455,7 @@ void ImageEffect_Restoration::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -468,6 +464,21 @@ void ImageEffect_Restoration::slotCancel()
 void ImageEffect_Restoration::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("restoration", "digikamimageplugins");
+}
+
+void ImageEffect_Restoration::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_cimgInterface->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
 void ImageEffect_Restoration::processCImgURL(const QString& url)
@@ -480,7 +491,7 @@ void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();
@@ -488,7 +499,8 @@ void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
 
 void ImageEffect_Restoration::slotEffect()
 {
-    if (m_currentRenderingMode != NoneRendering) return;  // Computation already in procress.
+     // Computation already in progress.
+    if (m_currentRenderingMode != NoneRendering) return; 
     
     m_currentRenderingMode = PreviewRendering;
     
@@ -508,9 +520,9 @@ void ImageEffect_Restoration::slotEffect()
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
     enableButton(User2, false);
-    enableButton(User3, false);
-    
+    enableButton(User3, false);    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     QImage previewImage = m_imagePreviewWidget->getOriginalClipImage();
     
     m_imagePreviewWidget->setProgress(0);
@@ -551,7 +563,7 @@ void ImageEffect_Restoration::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
     m_mainTab->setCurrentPage(0);
     
@@ -611,7 +623,7 @@ void ImageEffect_Restoration::customEvent(QCustomEvent *event)
                  kdDebug() << "Final Restoration completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
                  iface.putOriginalData(i18n("Restoration"), (uint*)m_cimgInterface->getTargetImage().bits());
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();       
                  break;
                  }

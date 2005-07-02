@@ -136,7 +136,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -144,23 +144,24 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QGridLayout* grid = new QGridLayout( topLayout, 3 , 4, spacingHint());
+    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, 20, spacingHint());
     
-    QLabel *label2 = new QLabel(i18n("Circular Sharpness:"), plainPage());
-    m_radius = new KDoubleNumInput(plainPage());
+    QLabel *label2 = new QLabel(i18n("Circular Sharpness:"), gboxSettings);
+    m_radius = new KDoubleNumInput(gboxSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.001, true);
     QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the Circular convolution. It is the most important "
                                     "parameter for using the plugin. For most images the default value of 0.9 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
-    grid->addMultiCellWidget(label2, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_radius, 0, 0, 1, 1);
-    
+    gridSettings->addWidget(label2, 0, 0);
+    gridSettings->addWidget(m_radius, 0, 1);
         
+    // -------------------------------------------------------------
     
-    QLabel *label4 = new QLabel(i18n("Correlation:"), plainPage());
-    m_correlation = new KDoubleNumInput(plainPage());
+    QLabel *label4 = new QLabel(i18n("Correlation:"), gboxSettings);
+    m_correlation = new KDoubleNumInput(gboxSettings);
     m_correlation->setPrecision(3);
     m_correlation->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help reducing artifacts. The correlation can "
@@ -168,11 +169,13 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                          "Using a high value for the Correlation will reduce the sharpening effect of the "
                                          "plug-in."));
 
-    grid->addMultiCellWidget(label4, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_correlation, 1, 1, 1, 1);
+    gridSettings->addWidget(label4, 1, 0);
+    gridSettings->addWidget(m_correlation, 1, 1);
     
-    QLabel *label5 = new QLabel(i18n("Noise Filter:"), plainPage());
-    m_noise = new KDoubleNumInput(plainPage());
+    // -------------------------------------------------------------
+            
+    QLabel *label5 = new QLabel(i18n("Noise Filter:"), gboxSettings);
+    m_noise = new KDoubleNumInput(gboxSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise Filter parameter may help reducing artifacts. The Noise Filter "
@@ -181,11 +184,13 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                    "Using a high value for the Noise Filter will reduce the sharpening "
                                    "effect of the plug-in."));
 
-    grid->addMultiCellWidget(label5, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_noise, 2, 2, 1, 1);
+    gridSettings->addWidget(label5, 2, 0);
+    gridSettings->addWidget(m_noise, 2, 1);
+            
+    // -------------------------------------------------------------
     
-    QLabel *label3 = new QLabel(i18n("Gaussian Sharpness:"), plainPage());
-    m_gauss = new KDoubleNumInput(plainPage());
+    QLabel *label3 = new QLabel(i18n("Gaussian Sharpness:"), gboxSettings);
+    m_gauss = new KDoubleNumInput(gboxSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
     QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your "
@@ -193,24 +198,29 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
                                    "increase the Correlation and/or Noise Filter parameters, too."));
 
-    grid->addMultiCellWidget(label3, 0, 0, 3, 3);
-    grid->addMultiCellWidget(m_gauss, 0, 0, 4, 4);
-
+    gridSettings->addWidget(label3, 3, 0);
+    gridSettings->addWidget(m_gauss, 3, 1);
     
-    QLabel *label1 = new QLabel(i18n("Matrix Size:"), plainPage());
-    m_matrixSize = new KIntNumInput(plainPage());
+    // -------------------------------------------------------------
+    
+    QLabel *label1 = new QLabel(i18n("Matrix Size:"), gboxSettings);
+    m_matrixSize = new KIntNumInput(gboxSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the Matrix Width may give better results, especially when you have "
                                         "chosen large values for Circular or Gaussian Sharpness."));
 
-    grid->addMultiCellWidget(label1, 1, 1, 3, 3);
-    grid->addMultiCellWidget(m_matrixSize, 1, 1, 4, 4);
-    
+    gridSettings->addWidget(label1, 4, 0);
+    gridSettings->addWidget(m_matrixSize, 4, 1);
+        
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize(); 
+    // To prevent both computation (resize event and Reset to default settings).
+    m_imagePreviewWidget->blockSignals(true);
+    resize(configDialogSize("Refocus Tool Dialog"));     
+    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
@@ -288,6 +298,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
 
 ImageEffect_Refocus::~ImageEffect_Refocus()
 {
+    saveDialogSize("Refocus Tool Dialog");   
+
     if (m_refocusFilter)
        delete m_refocusFilter;    
     
@@ -311,6 +323,7 @@ void ImageEffect_Refocus::abortPreview()
     enableButton(User3, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
  }
 
 void ImageEffect_Refocus::slotUser1()
@@ -347,7 +360,7 @@ void ImageEffect_Refocus::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_refocusFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -358,12 +371,27 @@ void ImageEffect_Refocus::slotHelp()
     KApplication::kApplication()->invokeHelp("refocus", "digikamimageplugins");
 }
 
+void ImageEffect_Refocus::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_refocusFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Refocus::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_refocusFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -400,9 +428,9 @@ void ImageEffect_Refocus::slotEffect()
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok,    false);
     enableButton(User2, false);
-    enableButton(User3, false);
-    
+    enableButton(User3, false);    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     int    ms     = m_matrixSize->value();
     double r      = m_radius->value();
     double g      = m_gauss->value();
@@ -441,7 +469,7 @@ void ImageEffect_Refocus::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
         
     int    ms   = m_matrixSize->value();
     double r    = m_radius->value();
@@ -502,7 +530,7 @@ void ImageEffect_Refocus::customEvent(QCustomEvent *event)
                                            iface.originalWidth(), iface.originalHeight())
                                      .bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

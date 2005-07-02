@@ -44,7 +44,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamImagePlugins
@@ -124,7 +124,7 @@ private:
     
     DigikamImagePlugins::CimgIface *m_cimgInterface;
     
-    Digikam::ImagePreviewWidget    *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget     *m_imagePreviewWidget;
     
 private:
     
@@ -142,6 +142,7 @@ private slots:
     void slotUser3();
     void slotTimer();
     void processCImgURL(const QString&);
+    void slotFocusChanged(void);  
 };
     
 }  // NameSpace DigikamRestorationImagesPlugin

@@ -244,7 +244,6 @@ void ImageEffect_Despeckle::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
 }
 
 void ImageEffect_Despeckle::slotHelp()
@@ -347,9 +346,9 @@ void ImageEffect_Despeckle::slotEffect()
     m_imagePreviewWidget->setEnable(false);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-        
+    enableButton(Ok, false);        
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     int  r  = m_radiusInput->value();

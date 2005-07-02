@@ -124,7 +124,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(480, 320, plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -219,7 +219,6 @@ void ImageEffect_Unsharp::abortPreview()
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
 }
 
 void ImageEffect_Unsharp::slotHelp()

@@ -39,7 +39,7 @@ class KDoubleNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamRefocusImagesPlugin
@@ -87,7 +87,7 @@ private:
     
     Refocus         *m_refocusFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
     
 private:
     
@@ -104,6 +104,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotTimer();   
+    void slotFocusChanged(void);    
 };
 
 }  // NameSpace DigikamRefocusImagesPlugin
