@@ -72,6 +72,10 @@ private:
     
     void drawContents(QPainter *p, int x, int y, int w, int h);
     void updatePixmap(QImage *img);
+
+private slots:
+    
+    void slotTimerResizeEvent();
 };
 
 }  // NameSpace Digikam

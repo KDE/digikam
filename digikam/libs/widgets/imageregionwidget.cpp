@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -72,6 +73,11 @@ ImageRegionWidget::~ImageRegionWidget()
 void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
 {
     updateOriginalImage();
+    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+}
+
+void ImageRegionWidget::slotTimerResizeEvent()
+{
     emit contentsMovedEvent();
 }
 
