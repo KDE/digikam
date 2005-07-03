@@ -52,7 +52,7 @@ public:
 signals:
     
     void contentsMovedEvent( void );
-
+    
 protected:
     
     void contentsMousePressEvent ( QMouseEvent * e );

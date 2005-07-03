@@ -71,7 +71,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-        
+    resize(configDialogSize("Noise Reduction Tool Dialog"));   
+            
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -134,8 +135,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, 20, spacingHint());    
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());    
     
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
@@ -192,10 +193,6 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     
     // -------------------------------------------------------------
             
-    // To prevent both computation (resize event and Reset to default settings).
-    m_imagePreviewWidget->blockSignals(true);
-    resize(configDialogSize("Noise Reduction Tool Dialog"));     
-    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------

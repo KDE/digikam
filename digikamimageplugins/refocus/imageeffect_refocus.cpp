@@ -81,7 +81,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );    
-    
+    resize(configDialogSize("Refocus Tool Dialog"));  
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -144,8 +145,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, 20, spacingHint());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, marginHint(), spacingHint());
     
     QLabel *label2 = new QLabel(i18n("Circular Sharpness:"), gboxSettings);
     m_radius = new KDoubleNumInput(gboxSettings);
@@ -217,10 +218,6 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    // To prevent both computation (resize event and Reset to default settings).
-    m_imagePreviewWidget->blockSignals(true);
-    resize(configDialogSize("Refocus Tool Dialog"));     
-    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------

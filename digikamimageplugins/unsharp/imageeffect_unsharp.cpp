@@ -69,7 +69,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    
+    resize(configDialogSize("UnSharpMask Tool Dialog"));   
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -132,8 +133,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, 20, spacingHint());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
     m_radiusInput = new KDoubleNumInput(gboxSettings, "m_radiusInput");
@@ -175,10 +176,6 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    // To prevent both computation (resize event and Reset to default settings).
-    m_imagePreviewWidget->blockSignals(true);
-    resize(configDialogSize("UnSharpMask Tool Dialog"));     
-    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
             
     // -------------------------------------------------------------

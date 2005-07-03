@@ -69,10 +69,9 @@ ImageRegionWidget::~ImageRegionWidget()
     if(m_pix) delete m_pix;
 }
 
-void ImageRegionWidget::viewportResizeEvent(QResizeEvent *e)
+void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
 {
     updateOriginalImage();
-    resizeContents(e->size().width(), e->size().height());
     emit contentsMovedEvent();
 }
 

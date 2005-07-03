@@ -87,7 +87,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
-    
+    resize(configDialogSize("Restoration Tool Dialog"));  
+        
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_cimgInterface        = 0L;
@@ -279,10 +280,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    // To prevent both computation (resize event and Reset to default settings).
-    m_imagePreviewWidget->blockSignals(true);
-    resize(configDialogSize("Restoration Tool Dialog"));     
-    m_imagePreviewWidget->blockSignals(false);     
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------

@@ -56,6 +56,8 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 {
     m_timer = 0L;
     setHelp("blursharpentool.anchor", "digikam");
+    resize(configDialogSize("Blur Tool Dialog"));         
+    
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
@@ -65,8 +67,8 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QGroupBox *gboxSettings = new QGroupBox( i18n("Settings"), m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, 20, spacingHint());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
@@ -83,7 +85,6 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    resize(configDialogSize("Blur Tool Dialog"));         
     QTimer::singleShot(0, this, SLOT(slotEffect()));
                                              
     // -------------------------------------------------------------

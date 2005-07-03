@@ -56,6 +56,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 {
     m_timer = 0L;
     setHelp("blursharpentool.anchor", "digikam");
+    resize(configDialogSize("Sharpen Tool Dialog"));       
+    
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
@@ -65,7 +67,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // -------------------------------------------------------------
     
     QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, 20, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
     QLabel *label = new QLabel(i18n("Sharpness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
@@ -82,7 +84,6 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    resize(configDialogSize("Sharpen Tool Dialog"));         
     QTimer::singleShot(0, this, SLOT(slotEffect()));
 
     // -------------------------------------------------------------
