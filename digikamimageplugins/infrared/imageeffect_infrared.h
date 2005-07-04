@@ -34,7 +34,7 @@ class QCheckBox;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamInfraredImagesPlugin
@@ -77,7 +77,7 @@ private:
         
     Infrared    *m_infraredFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -92,6 +92,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotSensibilityChanged(int);
+    void slotFocusChanged(void);    
    
 };
 

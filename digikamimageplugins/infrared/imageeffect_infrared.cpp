@@ -78,6 +78,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    resize(configDialogSize("Infrared Tool Dialog")); 
     
     // About data and help button.
     
@@ -111,7 +112,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Simulate Infrared Film to Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Simulate Infrared Film to Photograph"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -130,7 +131,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
             
     m_imagePreviewWidget->setProgress(0);
@@ -138,40 +139,42 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), plainPage());
-    m_addFilmGrain->setChecked( true );
-    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to the image depending on ISO-sensitivity."));
-    hlay->addWidget(m_addFilmGrain, 1);
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
     
-    // -------------------------------------------------------------
-    
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Film sensibility (ISO):"), plainPage());
-    
-    m_sensibilitySlider = new QSlider(1, 7, 1, 1, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
+    m_sensibilitySlider = new QSlider(1, 7, 1, 1, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
     
-    m_sensibilityLCDValue = new QLCDNumber (3, plainPage(), "m_sensibilityLCDValue");
+    m_sensibilityLCDValue = new QLCDNumber (3, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(200) );
     whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                      "Increasing this value will increase the portion of green color in the mix. " 
-                     "It will also increase the halo effect on the hightlights, and the film graininess (if the box is checked).");
+                     "It will also increase the halo effect on the hightlights, and the film "
+                     "graininess (if the box is checked).");
         
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_sensibilitySlider, 3);
-    hlay2->addWidget(m_sensibilityLCDValue, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_sensibilitySlider, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 0, 0, 2, 2);
     
     // -------------------------------------------------------------
+
+    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), gboxSettings);
+    m_addFilmGrain->setChecked( true );
+    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to "
+                                          "the image depending on ISO-sensitivity."));
+    gridSettings->addMultiCellWidget(m_addFilmGrain, 1, 1, 0, 2);
     
-    adjustSize();
-    disableResize(); 
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
+    // -------------------------------------------------------------
+
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
@@ -188,6 +191,8 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
 ImageEffect_Infrared::~ImageEffect_Infrared()
 {
+    saveDialogSize("Infrared Tool Dialog");    
+    
     if (m_infraredFilter)
        delete m_infraredFilter;   
 }
@@ -225,7 +230,7 @@ void ImageEffect_Infrared::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_infraredFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -236,12 +241,27 @@ void ImageEffect_Infrared::slotHelp()
     KApplication::kApplication()->invokeHelp("infrared", "digikamimageplugins");
 }
 
+void ImageEffect_Infrared::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_infraredFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Infrared::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_infraredFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -262,11 +282,11 @@ void ImageEffect_Infrared::slotEffect()
     m_imagePreviewWidget->setEnable(false);
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-    
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+        
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     int   s      = 100 + 100 * m_sensibilitySlider->value();
     bool  g      = m_addFilmGrain->isChecked();
@@ -289,7 +309,7 @@ void ImageEffect_Infrared::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int  s    = 100 + 100 * m_sensibilitySlider->value();
     bool g    = m_addFilmGrain->isChecked();
@@ -345,7 +365,7 @@ void ImageEffect_Infrared::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Infrared"), 
                                        (uint*)m_infraredFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
