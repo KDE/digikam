@@ -180,7 +180,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     // -------------------------------------------------------------
     
     connect( m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-             this, SLOT(slotEffect()) );
+             this, SLOT(slotFocusChanged()) );
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
