@@ -87,6 +87,7 @@ void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int 
                             const double *const mat, int mat_size)
 {
     Refocus::EventData d;
+    int progress;
     
     double matrix[mat_size][mat_size];
     double valRed, valGreen, valBlue;
@@ -143,7 +144,9 @@ void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int 
             }
         
         // Update the progress bar in dialog.
-        postProgress( (int)(((double)y1 * 100.0) / height) );        
+        progress = (int)(((double)y1 * 100.0) / height);
+        if (progress%5 == 0)
+           postProgress( progress );        
         }
 }
 
