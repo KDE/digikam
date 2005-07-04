@@ -434,7 +434,7 @@ void ImageEffect_Refocus::slotEffect()
     double c      = m_correlation->value();
     double n      = m_noise->value();
 
-    QRect area    = m_imagePreviewWidget->getOriginalImageRegion();
+    QRect area    = m_imagePreviewWidget->getOriginalImageRegionToRender();
     QRect tmpRect;
     tmpRect.setLeft(area.left()-2*ms);
     tmpRect.setRight(area.right()+2*ms);
@@ -491,7 +491,7 @@ void ImageEffect_Refocus::customEvent(QCustomEvent *event)
     if (!d) return;
 
     int   ms   = m_matrixSize->value();
-    QRect area = m_imagePreviewWidget->getOriginalImageRegion();
+    QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
     
     if (d->starting)           // Computation in progress !
         {

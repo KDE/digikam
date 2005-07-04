@@ -42,7 +42,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamBlurFXImagesPlugin
@@ -71,26 +71,26 @@ private:
     FinalRendering
     };
     
-    int                          m_currentRenderingMode;
+    int                         m_currentRenderingMode;
 
-    QWidget                     *m_parent;
+    QWidget                    *m_parent;
     
-    QPushButton                 *m_helpButton;
+    QPushButton                *m_helpButton;
 
-    QComboBox                   *m_effectType;
+    QComboBox                  *m_effectType;
     
-    QTimer                      *m_timer;
+    QTimer                     *m_timer;
     
-    QLabel                      *m_effectTypeLabel;
-    QLabel                      *m_distanceLabel;
-    QLabel                      *m_levelLabel;
+    QLabel                     *m_effectTypeLabel;
+    QLabel                     *m_distanceLabel;
+    QLabel                     *m_levelLabel;
     
-    KIntNumInput                *m_distanceInput;
-    KIntNumInput                *m_levelInput;
+    KIntNumInput               *m_distanceInput;
+    KIntNumInput               *m_levelInput;
     
-    BlurFX                      *m_BlurFXFilter;
+    BlurFX                     *m_BlurFXFilter;
         
-    Digikam::ImagePreviewWidget *m_previewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -106,6 +106,7 @@ private slots:
     void slotUser1();
     void slotEffectTypeChanged(int type);
     void slotTimer();
+    void slotFocusChanged(void);        
 };
 
 }  // NameSpace DigikamBlurFXImagesPlugin

@@ -47,6 +47,7 @@ public:
     ~ImagePannelWidget();
     
     QRect  getOriginalImageRegion(void);
+    QRect  getOriginalImageRegionToRender(void);
     QImage getOriginalClipImage(void);
     void   setPreviewImageData(QImage img);
     void   setPreviewImageWaitCursor(bool enable);

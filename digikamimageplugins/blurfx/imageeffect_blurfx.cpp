@@ -74,7 +74,8 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-    
+    resize(configDialogSize("BlurFX Tool Dialog")); 
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -111,7 +112,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Apply Blurring Special Effect to Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Apply Blurring Special Effect to Photograph"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 5);
@@ -128,14 +129,17 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    m_previewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
-    topLayout->addMultiCellWidget(m_previewWidget, 1, 1, 0, 5);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
+    topLayout->addMultiCellWidget(m_imagePreviewWidget, 1, 1, 0, 5);
    
     // -------------------------------------------------------------
     
-    m_effectTypeLabel = new QLabel(i18n("Type:"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
     
-    m_effectType = new QComboBox( false, plainPage() );
+    m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
+    
+    m_effectType = new QComboBox( false, gboxSettings );
     m_effectType->insertItem( i18n("Zoom Blur") );
     m_effectType->insertItem( i18n("Radial Blur") );
     m_effectType->insertItem( i18n("Far Blur") );
@@ -169,35 +173,35 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                         "a frosted glass.<p>"
                                         "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
                                         "recreates it by filling those cells with average pixel value."));
-    topLayout->addMultiCellWidget(m_effectTypeLabel, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(m_effectType, 2, 2, 4, 5);
+    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_effectType, 0, 0, 1, 2);
                                                   
-    m_distanceLabel = new QLabel(i18n("Distance:"), plainPage());
-    m_distanceInput = new KIntNumInput(plainPage());
+    m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
+    m_distanceInput = new KIntNumInput(gboxSettings);
     m_distanceInput->setRange(0, 100, 1, true);    
     QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
     
-    topLayout->addMultiCellWidget(m_distanceLabel, 3, 3, 0, 0);
-    topLayout->addMultiCellWidget(m_distanceInput, 3, 3, 1, 5);
+    gridSettings->addMultiCellWidget(m_distanceLabel, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_distanceInput, 1, 1, 1, 2);
         
-    m_levelLabel = new QLabel(i18n("Level:"), plainPage());
-    m_levelInput = new KIntNumInput(plainPage());
+    m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
+    m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 360, 1, true);
     QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
     
-    topLayout->addMultiCellWidget(m_levelLabel, 4, 4, 0, 0);
-    topLayout->addMultiCellWidget(m_levelInput, 4, 4, 1, 5);
+    gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 0);
+    gridSettings->addMultiCellWidget(m_levelInput, 2, 2, 1, 2);
     
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize();  
     QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
     
-    connect(m_previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotFocusChanged()));
             
     connect(m_effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
@@ -211,6 +215,8 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
 ImageEffect_BlurFX::~ImageEffect_BlurFX()
 {
+    saveDialogSize("BlurFX Tool Dialog");    
+
     if (m_BlurFXFilter)
        delete m_BlurFXFilter;       
        
@@ -221,7 +227,7 @@ ImageEffect_BlurFX::~ImageEffect_BlurFX()
 void ImageEffect_BlurFX::abortPreview()
 {
     m_currentRenderingMode = NoneRendering;
-    m_previewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgress(0);
     m_effectTypeLabel->setEnabled(true);
     m_effectType->setEnabled(true);
     m_distanceInput->setEnabled(true);
@@ -250,11 +256,11 @@ void ImageEffect_BlurFX::abortPreview()
           break;
        }
     
-    m_previewWidget->setEnable(true);    
+    m_imagePreviewWidget->setEnable(true);    
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);    
     enableButton(Ok, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
-    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_BlurFX::slotUser1()
@@ -284,6 +290,21 @@ void ImageEffect_BlurFX::slotCancel()
 void ImageEffect_BlurFX::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("blurfx", "digikamimageplugins");
+}
+
+void ImageEffect_BlurFX::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_BlurFXFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
 void ImageEffect_BlurFX::closeEvent(QCloseEvent *e)
@@ -391,7 +412,7 @@ void ImageEffect_BlurFX::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
         
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
@@ -399,8 +420,7 @@ void ImageEffect_BlurFX::slotEffect()
     m_distanceLabel->setEnabled(false);
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
-
-    m_previewWidget->setPreviewImageWaitCursor(true);
+    
     QImage *pImg;
     
     switch (m_effectType->currentItem())
@@ -424,7 +444,7 @@ void ImageEffect_BlurFX::slotEffect()
        case BlurFX::SmartBlur:
        case BlurFX::FrostGlass: 
        case BlurFX::Mosaic: 
-            pImg = new QImage(m_previewWidget->getOriginalClipImage());
+            pImg = new QImage(m_imagePreviewWidget->getOriginalClipImage());
             break;
        }
     
@@ -432,7 +452,7 @@ void ImageEffect_BlurFX::slotEffect()
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    m_previewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgress(0);
 
     if (m_BlurFXFilter)
        delete m_BlurFXFilter;
@@ -460,7 +480,7 @@ void ImageEffect_BlurFX::slotOk()
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    m_previewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgress(0);
 
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
@@ -484,7 +504,7 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
     
     if (d->starting)           // Computation in progress !
         {
-        m_previewWidget->setProgress(d->progress);
+        m_imagePreviewWidget->setProgress(d->progress);
         }  
     else 
         {
@@ -504,9 +524,9 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
                     case BlurFX::RadialBlur:
                     case BlurFX::FocusBlur:
                         {
-                        QRect pRect    = m_previewWidget->getOriginalImageRegion();
+                        QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
                         QImage destImg = imDest.copy(pRect);
-                        m_previewWidget->setPreviewImageData(destImg);
+                        m_imagePreviewWidget->setPreviewImageData(destImg);
                         break;
                         }
                                 
@@ -517,7 +537,7 @@ void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
                     case BlurFX::SmartBlur:
                     case BlurFX::FrostGlass: 
                     case BlurFX::Mosaic: 
-                        m_previewWidget->setPreviewImageData(imDest);
+                        m_imagePreviewWidget->setPreviewImageData(imDest);
                         break;
                     }
                  

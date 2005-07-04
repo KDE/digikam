@@ -181,6 +181,11 @@ QRect ImagePannelWidget::getOriginalImageRegion(void)
     return ( m_imageRegionWidget->getImageRegion() );
 }
 
+QRect ImagePannelWidget::getOriginalImageRegionToRender(void)
+{
+    return ( m_imageRegionWidget->getImageRegionToRender() );
+}
+
 QImage ImagePannelWidget::getOriginalClipImage(void)
 {
     return ( m_imageRegionWidget->getImageRegionData() );
