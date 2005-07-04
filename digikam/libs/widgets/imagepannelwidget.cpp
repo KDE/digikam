@@ -61,7 +61,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                                "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0);
     m_mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
-    //m_mainLayout->setRowStretch(0, 10);
     m_mainLayout->setRowStretch(1, 10);
     m_mainLayout->setColStretch(0, 10);
 
