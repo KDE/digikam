@@ -61,7 +61,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                                "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0);
     m_mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
-    m_mainLayout->setRowStretch(0, 10);
+    //m_mainLayout->setRowStretch(0, 10);
     m_mainLayout->setRowStretch(1, 10);
     m_mainLayout->setColStretch(0, 10);
 
@@ -82,8 +82,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     m_progressBar = new KProgress(100, this);
     setProgressVisible(progress);
     
-    l2->addWidget(frame3, 0, Qt::AlignCenter);
+    l2->addWidget(frame3, 0, Qt::AlignHCenter);
     l2->addWidget(m_progressBar);
+    l2->addStretch();
     
     m_mainLayout->addMultiCellLayout(l2, 0, 0, 1, 1);
     
