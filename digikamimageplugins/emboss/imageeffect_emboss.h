@@ -38,7 +38,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamEmbossImagesPlugin
@@ -79,7 +79,7 @@ private:
     
     Emboss       *m_embossFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
     
 private:
     
@@ -94,6 +94,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer(); 
+    void slotFocusChanged(void);     
     
 };
 

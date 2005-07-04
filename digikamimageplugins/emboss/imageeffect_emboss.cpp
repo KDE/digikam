@@ -72,7 +72,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    
+    resize(configDialogSize("Emboss Tool Dialog")); 
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -127,7 +128,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
             
     m_imagePreviewWidget->setProgress(0);
@@ -135,26 +136,26 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Depth:"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
     
-    m_depthInput = new KIntNumInput(plainPage(), "m_depthInput");
+    m_depthInput = new KIntNumInput(gboxSettings);
     m_depthInput->setRange(10, 300, 1, true);
     QWhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
                                             
-    hlay->addWidget(label1, 1);
-    hlay->addWidget(m_depthInput, 4);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_depthInput, 0, 0, 1, 1);
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize(); 
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
               
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer())); 
@@ -162,6 +163,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
 ImageEffect_Emboss::~ImageEffect_Emboss()
 {
+    saveDialogSize("Emboss Tool Dialog");   
+
     if (m_embossFilter)
        delete m_embossFilter;    
     
@@ -186,12 +189,27 @@ void ImageEffect_Emboss::slotHelp()
     KApplication::kApplication()->invokeHelp("emboss", "digikamimageplugins");
 }
 
+void ImageEffect_Emboss::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_embossFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Emboss::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_embossFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
     
     done(Cancel);
@@ -202,7 +220,7 @@ void ImageEffect_Emboss::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
        {
        m_embossFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
     
     e->accept();    
@@ -250,9 +268,9 @@ void ImageEffect_Emboss::slotEffect()
     m_imagePreviewWidget->setEnable(false);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-    
+    enableButton(Ok, false);    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     
     int depth = m_depthInput->value();
@@ -274,7 +292,7 @@ void ImageEffect_Emboss::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
         
     int depth = m_depthInput->value();
     
@@ -331,7 +349,7 @@ void ImageEffect_Emboss::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Emboss"), 
                                        (uint*)m_embossFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
