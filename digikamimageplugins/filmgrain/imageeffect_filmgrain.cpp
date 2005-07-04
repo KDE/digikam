@@ -2,7 +2,7 @@
  * File  : imageeffect_filmgrain.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digiKam image editor plugin for to add film 
+ * Description : a digiKam image editor plugin for add film 
  *               grain on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -76,6 +76,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    resize(configDialogSize("Film Grain Tool Dialog")); 
     
     // About data and help button.
     
@@ -110,7 +111,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Film Grain to Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Add Film Grain to Photograph"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -129,7 +130,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
             
     m_imagePreviewWidget->setProgress(0);
@@ -138,15 +139,16 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Film sensibility (ISO):"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
     
-    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, plainPage(), "m_sensibilitySlider");
+    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
     
-    m_sensibilityLCDValue = new QLCDNumber (4, plainPage(), "m_sensibilityLCDValue");
+    m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(2400) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
@@ -154,20 +156,20 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    hlay->addWidget(label1, 1);
-    hlay->addWidget(m_sensibilitySlider, 3);
-    hlay->addWidget(m_sensibilityLCDValue, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_sensibilitySlider, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 0, 0, 2, 2);    
+    
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
-        
-    adjustSize();
-    disableResize(); 
+
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
     
     connect( m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-             this, SLOT(slotEffect()) );
+             this, SLOT(slotFocusChanged()) );
     
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotSensibilityChanged(int)) ); 
@@ -175,6 +177,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
 {
+    saveDialogSize("Film Grain Tool Dialog");    
+    
     if (m_filmgrainFilter)
        delete m_filmgrainFilter;   
 }
@@ -211,7 +215,7 @@ void ImageEffect_FilmGrain::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_filmgrainFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -222,12 +226,27 @@ void ImageEffect_FilmGrain::slotHelp()
     KApplication::kApplication()->invokeHelp("filmgrain", "digikamimageplugins");
 }
 
+void ImageEffect_FilmGrain::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_filmgrainFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_FilmGrain::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_filmgrainFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -247,11 +266,11 @@ void ImageEffect_FilmGrain::slotEffect()
     m_currentRenderingMode = PreviewRendering;
     m_sensibilitySlider->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);    
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);  
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     int s = 400 + 200 * m_sensibilitySlider->value();
     
@@ -272,7 +291,7 @@ void ImageEffect_FilmGrain::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
         
     int s = 400 + 200 * m_sensibilitySlider->value();
             
@@ -327,7 +346,7 @@ void ImageEffect_FilmGrain::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Film Grain"), 
                                        (uint*)m_filmgrainFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

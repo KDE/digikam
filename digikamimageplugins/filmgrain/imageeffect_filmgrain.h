@@ -2,7 +2,7 @@
  * File  : imageeffect_filmgrain.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digiKam image editor plugin for to add film 
+ * Description : a digiKam image editor plugin for add film 
  *               grain on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -33,7 +33,7 @@ class QLCDNumber;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamFilmGrainImagesPlugin
@@ -74,7 +74,7 @@ private:
     
     FilmGrain   *m_filmgrainFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -89,6 +89,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotSensibilityChanged(int);
+    void slotFocusChanged(void);    
    
 };
 
