@@ -73,6 +73,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    resize(configDialogSize("OilPaint Tool Dialog")); 
     
     // About data and help button.
     
@@ -128,7 +129,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
             
     m_imagePreviewWidget->setProgress(0);
@@ -136,40 +137,40 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Brush size:"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Brush size:"), gboxSettings);
     
-    m_brushSizeInput = new KIntNumInput(plainPage(), "m_brushSizeInput");
+    m_brushSizeInput = new KIntNumInput(gboxSettings);
     m_brushSizeInput->setRange(1, 5, 1, true);
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
     
-    hlay2->addWidget(label1, 1);
-    hlay2->addWidget(m_brushSizeInput, 4);
-    
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_brushSizeInput, 0, 0, 1, 1);
+        
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay3 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     
-    m_smoothInput = new KIntNumInput(plainPage(), "m_SmoothInput");
+    m_smoothInput = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(10, 255, 1, true);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 
-    hlay3->addWidget(label2, 1);
-    hlay3->addWidget(m_smoothInput, 4);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_smoothInput, 1, 1, 1, 1);
     
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+            
     // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize();
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
                 
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));            
@@ -180,6 +181,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
 {
+    saveDialogSize("OilPaint Tool Dialog");   
+    
     if (m_oilpaintFilter)
        delete m_oilpaintFilter;    
     
@@ -205,12 +208,27 @@ void ImageEffect_OilPaint::slotHelp()
     KApplication::kApplication()->invokeHelp("oilpaint", "digikamimageplugins");
 }
 
+void ImageEffect_OilPaint::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_oilpaintFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_OilPaint::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_oilpaintFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -221,7 +239,7 @@ void ImageEffect_OilPaint::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_oilpaintFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -274,8 +292,8 @@ void ImageEffect_OilPaint::slotEffect()
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     
     int b        = m_brushSizeInput->value();
@@ -299,7 +317,7 @@ void ImageEffect_OilPaint::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int b = m_brushSizeInput->value();
     int s = m_smoothInput->value();
@@ -357,7 +375,7 @@ void ImageEffect_OilPaint::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Oil Paint"), 
                                        (uint*)m_oilpaintFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

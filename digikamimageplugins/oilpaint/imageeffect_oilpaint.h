@@ -34,7 +34,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamOilPaintImagesPlugin
@@ -76,7 +76,7 @@ private:
 
     OilPaint     *m_oilpaintFilter;
                 
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -90,7 +90,8 @@ private slots:
     void slotOk();
     void slotCancel();
     void slotUser1();
-    void slotTimer(); 
+    void slotTimer();
+    void slotFocusChanged(void);     
     
 };
 
