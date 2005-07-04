@@ -2,7 +2,7 @@
  * File  : imageeffect_texture.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-03-10
- * Description : a digiKam image editor plugin for apply 
+ * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
@@ -39,7 +39,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamTextureImagesPlugin
@@ -102,7 +102,7 @@ private:
     
     Texture      *m_textureFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
     
 private:
     
@@ -118,6 +118,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();   
+    void slotFocusChanged(void);     
 };
 
 }  // NameSpace DigikamTextureImagesPlugin

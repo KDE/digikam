@@ -2,7 +2,7 @@
  * File  : imageeffect_texture.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-03-10
- * Description : a digiKam image editor plugin for apply 
+ * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
@@ -77,7 +77,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    
+    resize(configDialogSize("Texture Tool Dialog")); 
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -111,7 +112,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
     pixmapLabelLeft->setScaledContents( false );
     layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Apply Decorative Texture to Image"), headerFrame, "labelTitle" );
+    QLabel *labelTitle = new QLabel( i18n("Apply Decorative Texture on Photograph"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     topLayout->addWidget(headerFrame);
@@ -130,7 +131,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
         
     m_imagePreviewWidget->setProgress(0);
@@ -138,10 +139,11 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Type:"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
     
-    m_textureType = new QComboBox( false, plainPage() );
+    m_textureType = new QComboBox( false, gboxSettings );
     m_textureType->insertItem( i18n("Paper") );
     m_textureType->insertItem( i18n("Paper 2") );
     m_textureType->insertItem( i18n("Fabric") );
@@ -160,32 +162,31 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->insertItem( i18n("Stone") );
     QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply on image."));
     
-    hlay->addWidget(label1, 3);
-    hlay->addWidget(m_textureType, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Relief:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
     
-    m_blendGain = new KIntNumInput(plainPage());
+    m_blendGain = new KIntNumInput(gboxSettings);
     m_blendGain->setRange(1, 255, 1, true);  
     m_blendGain->setValue(200);
     QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
-    hlay2->addWidget(label2, 1);
-    hlay2->addWidget(m_blendGain, 4);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_blendGain, 1, 1, 1, 1);
+    
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
         
-    adjustSize();
-    disableResize(); 
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
         
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_textureType, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
@@ -196,6 +197,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
 ImageEffect_Texture::~ImageEffect_Texture()
 {
+    saveDialogSize("Texture Tool Dialog"); 
+
     if (m_textureFilter)
        delete m_textureFilter;       
     
@@ -238,7 +241,7 @@ void ImageEffect_Texture::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_textureFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -249,12 +252,27 @@ void ImageEffect_Texture::slotHelp()
     KApplication::kApplication()->invokeHelp("texture", "digikamimageplugins");
 }
 
+void ImageEffect_Texture::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_textureFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Texture::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_textureFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     e->accept();    
@@ -282,12 +300,12 @@ void ImageEffect_Texture::slotEffect()
     m_currentRenderingMode = PreviewRendering;
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setEnable(false);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-        
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+            
     QImage image   = m_imagePreviewWidget->getOriginalClipImage();
     QString texture = getTexturePath( m_textureType->currentItem() );
     
@@ -311,7 +329,7 @@ void ImageEffect_Texture::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int b = 255 - m_blendGain->value();
     
@@ -367,7 +385,7 @@ void ImageEffect_Texture::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Texture"), 
                                        (uint*)m_textureFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }
