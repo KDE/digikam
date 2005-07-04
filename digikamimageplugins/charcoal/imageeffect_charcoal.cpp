@@ -2,7 +2,7 @@
  * File  : imageeffect_charcoal.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digikam image editor plugin for to
+ * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -73,7 +73,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QString whatsThis;
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    
+    resize(configDialogSize("Charcoal Tool Dialog")); 
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -125,7 +126,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
         
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Preview"), plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
     
     m_imagePreviewWidget->setProgress(0);
@@ -133,41 +134,41 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label1 = new QLabel(i18n("Pencil size:"), plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
     
-    m_pencilInput = new KIntNumInput(plainPage());
+    m_pencilInput = new KIntNumInput(gboxSettings);
     m_pencilInput->setRange(1, 100, 1, true);  
     m_pencilInput->setValue(5);
     QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
-    hlay->addWidget(label1, 1);
-    hlay->addWidget(m_pencilInput, 4);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_pencilInput, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label2 = new QLabel(i18n("Smooth:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     
-    m_smoothInput = new KIntNumInput(plainPage());
+    m_smoothInput = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(1, 100, 1, true);  
     m_smoothInput->setValue(10);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));
 
-    hlay2->addWidget(label2, 1);
-    hlay2->addWidget(m_smoothInput, 4);
-
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_smoothInput, 1, 1, 1, 1);
+    
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    
     // -------------------------------------------------------------
     
-    adjustSize();
-    disableResize();        
     QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
         
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_pencilInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));      
@@ -178,6 +179,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
 {
+    saveDialogSize("Charcoal Tool Dialog"); 
+    
     if (m_charcoalFilter)
        delete m_charcoalFilter;       
     
@@ -223,7 +226,7 @@ void ImageEffect_Charcoal::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
        {
        m_charcoalFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
        
     done(Cancel);
@@ -234,12 +237,27 @@ void ImageEffect_Charcoal::slotHelp()
     KApplication::kApplication()->invokeHelp("charcoal", "digikamimageplugins");
 }
 
+void ImageEffect_Charcoal::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_charcoalFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Charcoal::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
        m_charcoalFilter->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       kapp->restoreOverrideCursor();
        }
            
     e->accept();    
@@ -268,11 +286,11 @@ void ImageEffect_Charcoal::slotEffect()
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
     m_imagePreviewWidget->setEnable(false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     setButtonText(User1, i18n("&Abort"));
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok, false);
-        
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+            
     double pencil = (double)m_pencilInput->value();
     double smooth = (double)m_smoothInput->value();
     m_imagePreviewWidget->setProgress(0);
@@ -295,7 +313,7 @@ void ImageEffect_Charcoal::slotOk()
     
     enableButton(Ok, false);
     enableButton(User1, false);
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     double pencil = (double)m_pencilInput->value();
     double smooth = (double)m_smoothInput->value();
@@ -353,7 +371,7 @@ void ImageEffect_Charcoal::customEvent(QCustomEvent *event)
                  iface.putOriginalData(i18n("Charcoal"), 
                                        (uint*)m_charcoalFilter->getTargetImage().bits());
                     
-                 m_parent->setCursor( KCursor::arrowCursor() );
+                 kapp->restoreOverrideCursor();
                  accept();
                  break;
                  }

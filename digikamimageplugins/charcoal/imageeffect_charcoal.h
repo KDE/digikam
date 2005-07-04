@@ -2,7 +2,7 @@
  * File  : imageeffect_charcoal.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digiKam image editor plugin for to
+ * Description : a digiKam image editor plugin for 
  *               simulate charcoal drawing.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -38,7 +38,7 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 namespace DigikamCharcoalImagesPlugin
@@ -80,7 +80,7 @@ private:
     
     Charcoal     *m_charcoalFilter;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
 private:
     
@@ -95,7 +95,7 @@ private slots:
     void slotCancel();
     void slotUser1();
     void slotTimer();   
-            
+    void slotFocusChanged(void);                 
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin
