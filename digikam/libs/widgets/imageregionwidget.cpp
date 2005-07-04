@@ -23,6 +23,8 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qtimer.h>
+#include <qpainter.h>
+#include <qpen.h>
 
 // KDE includes.
 
@@ -45,6 +47,8 @@ namespace Digikam
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
                  : QScrollView(parent)
 {
+    m_separateView = false;
+    
     if( !scrollBar ) 
        {
        setVScrollBarMode( QScrollView::AlwaysOff );
@@ -81,6 +85,12 @@ void ImageRegionWidget::slotTimerResizeEvent()
     emit contentsMovedEvent();
 }
 
+void ImageRegionWidget::slotSeparateViewToggled(bool t)
+{
+    m_separateView = t;
+    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+}
+
 void ImageRegionWidget::updateOriginalImage()
 {
     updatePixmap(&m_img);
@@ -89,7 +99,7 @@ void ImageRegionWidget::updateOriginalImage()
 void ImageRegionWidget::updatePreviewImage(QImage *img)
 {
     QImage image = m_img.copy();
-    QRect region = getImageRegion();
+    QRect region = getImageRegionToRender();
     bitBlt( &image, region.topLeft().x(), region.topLeft().y(), img, 0, 0,
             img->width(), img->height());
     updatePixmap(&image);
@@ -101,7 +111,17 @@ void ImageRegionWidget::updatePixmap(QImage *img)
     int h = img->height();
     m_pix = new QPixmap(w, h);
     m_pix->convertFromImage(*img);
+    
+    if (m_separateView)
+        {
+        QPainter p(m_pix);
+        p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+        p.drawLine(getImageRegionToRender().topLeft().x(),    getImageRegionToRender().topLeft().y(),
+                   getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
+        p.end();
+        }
 
+            
     horizontalScrollBar()->setLineStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
     verticalScrollBar()->setLineStep( 1 );
@@ -136,9 +156,18 @@ QRect ImageRegionWidget::getImageRegion(void)
                          visibleWidth(), visibleHeight()) );
 }
 
+QRect ImageRegionWidget::getImageRegionToRender(void)
+{
+    if (m_separateView)
+        return( QRect::QRect(horizontalScrollBar()->value()+visibleWidth()/2, verticalScrollBar()->value(), 
+                             visibleWidth()/2, visibleHeight()) );
+
+    return( QRect::QRect(horizontalScrollBar()->value(), verticalScrollBar()->value(), 
+                         visibleWidth(), visibleHeight()) );
+}
 QImage ImageRegionWidget::getImageRegionData(void)
 {
-    return ( m_img.copy(getImageRegion()) );
+    return ( m_img.copy(getImageRegionToRender()) );
 }
 
 void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )

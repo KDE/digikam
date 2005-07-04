@@ -44,6 +44,7 @@ public:
     void   setClipPosition(int x, int y, bool targetDone);    
     void   setCenterClipPosition(void);
     QRect  getImageRegion(void);
+    QRect  getImageRegionToRender(void);
     QImage getImageRegionData(void);
 
     void   updatePreviewImage(QImage *img);
@@ -62,16 +63,23 @@ protected:
 
 private:
     
-    QPixmap   *m_pix;
-    QImage     m_img;
-   
-    int        m_xpos;
-    int        m_ypos;
+    bool     m_separateView;
 
+    int      m_xpos;
+    int      m_ypos;
+
+    QPixmap *m_pix;
+    
+    QImage   m_img;
+    
 private:
     
     void drawContents(QPainter *p, int x, int y, int w, int h);
     void updatePixmap(QImage *img);
+    
+public slots:
+
+    void slotSeparateViewToggled(bool t);
 
 private slots:
     

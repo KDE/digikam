@@ -52,6 +52,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_moveSelection = false;
+    m_separateView  = false;
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -155,6 +156,15 @@ void ImagePanIconWidget::updatePixmap( void )
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
+    if (m_separateView)
+        {
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.topLeft().y(),
+                   m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.bottomLeft().y());
+        }
+
     p.end();
 }
 
@@ -209,6 +219,13 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        else
            setCursor( KCursor::arrowCursor() );           
        }
+}
+
+void ImagePanIconWidget::slotSeparateViewToggled(bool t)
+{
+    m_separateView = t;
+    updatePixmap();
+    repaint(false);
 }
 
 }  // NameSpace Digikam

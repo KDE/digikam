@@ -28,6 +28,8 @@
 #include <qrect.h>
 #include <qlayout.h>
 
+class QCheckBox;
+
 class KProgress;
 
 namespace Digikam
@@ -83,6 +85,8 @@ protected:
     Digikam::ImagePanIconWidget *m_imagePanIconWidget;
     
     QGridLayout *m_mainLayout;
+    
+    QCheckBox   *m_separateView;
     
     KProgress   *m_progressBar;
 

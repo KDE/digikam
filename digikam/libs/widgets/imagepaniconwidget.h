@@ -54,7 +54,11 @@ signals:
     void signalSelectionMoved( QRect rect, bool targetDone );     
     
     void signalSelectionTakeFocus(void);
-    
+
+public slots:
+
+    void slotSeparateViewToggled(bool t);
+            
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -64,7 +68,7 @@ protected:
         
 private:
 
-    ImageIface *m_iface;
+    bool        m_separateView;
     
     uint       *m_data;
     int         m_w;
@@ -80,6 +84,10 @@ private:
     QRect       m_localRegionSelection;    // Thumbnail size selection.
     
     QPixmap*    m_pixmap;
+
+    ImageIface *m_iface;
+        
+private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
