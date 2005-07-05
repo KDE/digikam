@@ -23,25 +23,16 @@
 #ifndef IMAGEEFFECT_OILPAINT_H
 #define IMAGEEFFECT_OILPAINT_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
-
-class QPushButton;
-class QTimer;
+#include "ctrlpaneldialog.h"
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamOilPaintImagesPlugin
 {
-class OilPaint;
 
-class ImageEffect_OilPaint : public KDialogBase
+class ImageEffect_OilPaint : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -50,49 +41,19 @@ public:
     ImageEffect_OilPaint(QWidget* parent);
     ~ImageEffect_OilPaint();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
-    
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-        
-    int           m_currentRenderingMode;
-    
-    QTimer       *m_timer;
-    
-    QWidget      *m_parent;
-    
-    QPushButton  *m_helpButton;
     
     KIntNumInput *m_brushSizeInput;
     KIntNumInput *m_smoothInput;
 
-    OilPaint     *m_oilpaintFilter;
-                
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-
-private:
+protected:
     
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-                    
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();
-    void slotFocusChanged(void);     
-    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamOilPaintImagesPlugin
