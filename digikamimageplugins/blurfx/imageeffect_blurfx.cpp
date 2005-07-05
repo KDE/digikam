@@ -21,30 +21,19 @@
 
 // Qt includes. 
  
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
 #include <qslider.h>
 #include <qimage.h>
-#include <qspinbox.h>
 #include <qcombobox.h>
 #include <qdatetime.h> 
-#include <qtimer.h>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
-#include <kstandarddirs.h>
-#include <kprogress.h>
 #include <knuminput.h>
 #include <kdebug.h>
 
@@ -63,20 +52,10 @@ namespace DigikamBlurFXImagesPlugin
 {
 
 ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
-                  : KDialogBase(Plain, i18n("Blur Effects"),
-                                Help|User1|Ok|Cancel, Ok,
-                                parent, 0, true, true, i18n("&Reset Values")),
-                    m_parent(parent)
+                  : CtrlPanelDialog(parent, i18n("Apply Blurring Special Effect to Photograph"), 
+                                    "blurfx")
 {
-    m_currentRenderingMode = NoneRendering;
-    m_BlurFXFilter         = 0L;
-    m_timer                = 0L;
     QString whatsThis;
-    
-    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-    resize(configDialogSize("BlurFX Tool Dialog")); 
-        
-    // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Blur Effects"), 
@@ -94,44 +73,9 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Blurring algorithms"), 
                      "pieter_voloshyn at ame.com.br"); 
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Blur Effects Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+                     
+    setAboutData(about);
     
-    // -------------------------------------------------------------
-        
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 5 , marginHint(), spacingHint());
-
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Apply Blurring Special Effect to Photograph"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 5);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-
-    // -------------------------------------------------------------
-    
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
-    topLayout->addMultiCellWidget(m_imagePreviewWidget, 1, 1, 0, 5);
-   
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
@@ -196,13 +140,6 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotUser1()));     // Reset all parameters to the default values.
-        
-    // -------------------------------------------------------------
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotFocusChanged()));
-            
     connect(m_effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
     
@@ -215,19 +152,11 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
 ImageEffect_BlurFX::~ImageEffect_BlurFX()
 {
-    saveDialogSize("BlurFX Tool Dialog");    
-
-    if (m_BlurFXFilter)
-       delete m_BlurFXFilter;       
-       
-    if (m_timer)
-       delete m_timer;
 }
 
-void ImageEffect_BlurFX::abortPreview()
+void ImageEffect_BlurFX::renderingFinished(void)
 {
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setProgress(0);
+
     m_effectTypeLabel->setEnabled(true);
     m_effectType->setEnabled(true);
     m_distanceInput->setEnabled(true);
@@ -255,82 +184,13 @@ void ImageEffect_BlurFX::abortPreview()
           m_distanceLabel->setEnabled(false);
           break;
        }
-    
-    m_imagePreviewWidget->setEnable(true);    
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);    
-    enableButton(Ok, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
-void ImageEffect_BlurFX::slotUser1()
+void ImageEffect_BlurFX::resetValues()
 {
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_BlurFXFilter->stopComputation();
-       }
-    else
-       {
        m_effectType->setCurrentItem(BlurFX::ZoomBlur);
        slotEffectTypeChanged(BlurFX::ZoomBlur);
-       }
 } 
-
-void ImageEffect_BlurFX::slotCancel()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_BlurFXFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_BlurFX::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("blurfx", "digikamimageplugins");
-}
-
-void ImageEffect_BlurFX::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_BlurFXFilter->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
-
-void ImageEffect_BlurFX::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_BlurFXFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();    
-}
-
-void ImageEffect_BlurFX::slotTimer()
-{
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
-    
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
 
 void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
 {
@@ -403,17 +263,8 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
     slotEffect();
 }
 
-void ImageEffect_BlurFX::slotEffect()
+void ImageEffect_BlurFX::prepareEffect()
 {
-    // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;     
-    
-    m_currentRenderingMode = PreviewRendering;
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-        
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
     m_distanceInput->setEnabled(false);
@@ -452,19 +303,12 @@ void ImageEffect_BlurFX::slotEffect()
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    m_imagePreviewWidget->setProgress(0);
-
-    if (m_BlurFXFilter)
-       delete m_BlurFXFilter;
-        
-    m_BlurFXFilter = new BlurFX(pImg, this, t, d, l);
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new BlurFX(pImg, this, t, d, l));
     delete pImg;
 }
 
-void ImageEffect_BlurFX::slotOk()
+void ImageEffect_BlurFX::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-    
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
     m_distanceInput->setEnabled(false);
@@ -472,113 +316,54 @@ void ImageEffect_BlurFX::slotOk()
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
     
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    
     int t = m_effectType->currentItem();         
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
-
-    m_imagePreviewWidget->setProgress(0);
 
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
 
-    if (m_BlurFXFilter)
-       delete m_BlurFXFilter;
-        
-    m_BlurFXFilter = new BlurFX(&orgImage, this, t, d, l);           
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new BlurFX(&orgImage, this, t, d, l));           
     delete [] data;
 }
 
-void ImageEffect_BlurFX::customEvent(QCustomEvent *event)
+void ImageEffect_BlurFX::putPreviewData(void)
 {
-    if (!event) return;
-
-    BlurFX::EventData *d = (BlurFX::EventData*) event->data();
-
-    if (!d) return;
+    QImage imDest = m_threadedFilter->getTargetImage();
     
-    if (d->starting)           // Computation in progress !
+    switch (m_effectType->currentItem())
         {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
+        case BlurFX::ZoomBlur:
+        case BlurFX::RadialBlur:
+        case BlurFX::FocusBlur:
             {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview BlurFX completed..." << endl;
-                 
-                 QImage imDest = m_BlurFXFilter->getTargetImage();
-                 
-                 switch (m_effectType->currentItem())
-                    {
-                    case BlurFX::ZoomBlur:
-                    case BlurFX::RadialBlur:
-                    case BlurFX::FocusBlur:
-                        {
-                        QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
-                        QImage destImg = imDest.copy(pRect);
-                        m_imagePreviewWidget->setPreviewImageData(destImg);
-                        break;
-                        }
-                                
-                    case BlurFX::FarBlur:
-                    case BlurFX::MotionBlur:
-                    case BlurFX::SoftenerBlur:
-                    case BlurFX::ShakeBlur: 
-                    case BlurFX::SmartBlur:
-                    case BlurFX::FrostGlass: 
-                    case BlurFX::Mosaic: 
-                        m_imagePreviewWidget->setPreviewImageData(imDest);
-                        break;
-                    }
-                 
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final BlurFX completed..." << endl;
-                 
-                 Digikam::ImageIface iface(0, 0);
-  
-                 iface.putOriginalData(i18n("Blur Effects"), 
-                                       (uint*)m_BlurFXFilter->getTargetImage().bits());
+            QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
+            QImage destImg = imDest.copy(pRect);
+            m_imagePreviewWidget->setPreviewImageData(destImg);
+            break;
+            }
                     
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview BlurFX failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
+        case BlurFX::FarBlur:
+        case BlurFX::MotionBlur:
+        case BlurFX::SoftenerBlur:
+        case BlurFX::ShakeBlur: 
+        case BlurFX::SmartBlur:
+        case BlurFX::FrostGlass: 
+        case BlurFX::Mosaic: 
+            m_imagePreviewWidget->setPreviewImageData(imDest);
+            break;
         }
-    
-    delete d;        
+}
+
+void ImageEffect_BlurFX::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
+  
+    iface.putOriginalData(i18n("Blur Effects"), 
+         (uint*)m_threadedFilter->getTargetImage().bits());
+                    
 }
 
 }  // NameSpace DigikamBlurFXImagesPlugin

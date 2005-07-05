@@ -22,34 +22,19 @@
 #ifndef IMAGEEFFECT_BLURFX_H
 #define IMAGEEFFECT_BLURFX_H
 
-// Qt includes.
+// Local includes.
 
-#include <qcolor.h>
-#include <qrect.h>
+#include "ctrlpaneldialog.h"
 
-// KDE includes.
-
-#include <kdialogbase.h>
-
-class QPushButton;
 class QComboBox;
 class QLabel;
-class QTimer;
-class QRect;
 
-class KProgress;
 class KIntNumInput;
-
-namespace Digikam
-{
-class ImagePannelWidget;
-}
 
 namespace DigikamBlurFXImagesPlugin
 {
-class BlurFX;
 
-class ImageEffect_BlurFX : public KDialogBase
+class ImageEffect_BlurFX : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
     
@@ -58,28 +43,9 @@ public:
     ImageEffect_BlurFX(QWidget *parent);
     ~ImageEffect_BlurFX();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int                         m_currentRenderingMode;
-
-    QWidget                    *m_parent;
-    
-    QPushButton                *m_helpButton;
-
     QComboBox                  *m_effectType;
-    
-    QTimer                     *m_timer;
     
     QLabel                     *m_effectTypeLabel;
     QLabel                     *m_distanceLabel;
@@ -88,25 +54,19 @@ private:
     KIntNumInput               *m_distanceInput;
     KIntNumInput               *m_levelInput;
     
-    BlurFX                     *m_BlurFXFilter;
-        
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-
-private:
+protected:
     
+    void prepareEffect(void);
+    void prepareFinal(void);
     void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-        
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
+            
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
     void slotEffectTypeChanged(int type);
-    void slotTimer();
-    void slotFocusChanged(void);        
 };
 
 }  // NameSpace DigikamBlurFXImagesPlugin
