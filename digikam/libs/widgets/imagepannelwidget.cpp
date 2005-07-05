@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kprogress.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -104,6 +105,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     
     // -------------------------------------------------------------
     
+    readSettings();
     QTimer::singleShot(0, this, SLOT(slotInitGui())); 
     
     // -------------------------------------------------------------
@@ -126,6 +128,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
 
 ImagePannelWidget::~ImagePannelWidget()
 {
+    writeSettings();
 }
 
 void ImagePannelWidget::slotInitGui(void)
@@ -222,6 +225,24 @@ void ImagePannelWidget::updateSelectionInfo(QRect rect)
                    i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
                         .arg(rect.left()).arg(rect.top())
                         .arg(rect.right()).arg(rect.bottom()));
+}
+
+void ImagePannelWidget::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Control Panel Settings");
+    
+    m_separateView->setChecked(config->readNumEntry("Separate View", true) );
+}
+    
+void ImagePannelWidget::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Control Panel Settings");
+    
+    config->writeEntry( "Separate View", m_separateView->isChecked() );
+    
+    config->sync();
 }
     
 }  // NameSpace Digikam

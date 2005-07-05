@@ -94,7 +94,8 @@ protected:
 private:
         
     void updateSelectionInfo(QRect rect);
-    
+    void readSettings(void);
+    void writeSettings(void);
 };
 
 }  // NameSpace Digikam

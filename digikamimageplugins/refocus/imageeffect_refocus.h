@@ -29,24 +29,15 @@
 
 // KDE include.
 
-#include <kdialogbase.h>
-
-class QPushButton;
-class QTimer;
+#include "ctrlpaneldialog.h"
 
 class KIntNumInput;
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamRefocusImagesPlugin
 {
-class Refocus;
 
-class ImageEffect_Refocus : public KDialogBase
+class ImageEffect_Refocus : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -55,28 +46,9 @@ public:
     ImageEffect_Refocus(QWidget* parent);
     ~ImageEffect_Refocus();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int              m_currentRenderingMode;
-
-    QWidget         *m_parent;
-    
     QImage           m_img;
-    
-    QTimer          *m_timer;
-    
-    QPushButton     *m_helpButton;
     
     KIntNumInput    *m_matrixSize;
     
@@ -85,26 +57,20 @@ private:
     KDoubleNumInput *m_correlation;
     KDoubleNumInput *m_noise;
     
-    Refocus         *m_refocusFilter;
-    
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-    
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
     void slotUser2();
     void slotUser3();
-    void slotTimer();   
-    void slotFocusChanged(void);    
+
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void abortPreview(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamRefocusImagesPlugin
