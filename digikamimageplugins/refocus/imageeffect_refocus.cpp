@@ -152,7 +152,9 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     gridSettings->addWidget(m_matrixSize, 4, 1);
         
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-        
+
+    // -------------------------------------------------------------
+                
     connect(m_matrixSize, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));                        
     
