@@ -223,7 +223,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFocusChanged()));
     
     connect(m_matrixSize, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));                        
@@ -320,8 +320,7 @@ void ImageEffect_Refocus::abortPreview()
     enableButton(User3, true);  
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
- }
+}
 
 void ImageEffect_Refocus::slotUser1()
 {
