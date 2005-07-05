@@ -110,8 +110,8 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     
     // -------------------------------------------------------------
     
-    connect(m_imageRegionWidget, SIGNAL(contentsMovedEvent()),
-            this, SLOT(slotOriginalImageRegionChanged()));
+    connect(m_imageRegionWidget, SIGNAL(contentsMovedEvent(bool)),
+            this, SLOT(slotOriginalImageRegionChanged(bool)));
 
     connect(m_imagePanIconWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotSetImageRegionPosition(QRect, bool)));
@@ -135,7 +135,7 @@ void ImagePannelWidget::slotInitGui(void)
 {
     readSettings();
     setCenterImageRegionPosition();
-    slotOriginalImageRegionChanged();
+    slotOriginalImageRegionChanged(true);
 }
 
 void ImagePannelWidget::slotPanIconTakeFocus(void)
@@ -212,12 +212,14 @@ void ImagePannelWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
     m_imageRegionWidget->setClipPosition(rect.x(), rect.y(), targetDone);
 }
 
-void ImagePannelWidget::slotOriginalImageRegionChanged(void)
+void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
 {
     QRect rect = getOriginalImageRegion();
     m_imagePanIconWidget->setRegionSelection( rect );
     updateSelectionInfo(rect);
-    emit signalOriginalClipFocusChanged();
+    
+    if (target)
+        emit signalOriginalClipFocusChanged();
 }
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)

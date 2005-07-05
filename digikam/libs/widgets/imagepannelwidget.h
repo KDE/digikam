@@ -69,7 +69,7 @@ public slots:
     void slotSetImageRegionPosition(QRect rect, bool targetDone);
     
     // Slot used when the original image clip focus is changed by the user.
-    void slotOriginalImageRegionChanged(void);
+    void slotOriginalImageRegionChanged(bool target);
 
 protected slots:
 

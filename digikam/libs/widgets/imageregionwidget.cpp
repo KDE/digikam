@@ -82,7 +82,7 @@ void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
 
 void ImageRegionWidget::slotTimerResizeEvent()
 {
-    emit contentsMovedEvent();
+    emit contentsMovedEvent(true);
 }
 
 void ImageRegionWidget::slotSeparateViewToggled(bool t)
@@ -139,7 +139,7 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 void ImageRegionWidget::setCenterClipPosition(void)
 {
     center(contentsWidth()/2, contentsHeight()/2);    
-    emit contentsMovedEvent();
+    emit contentsMovedEvent(true);
 }
 
 void ImageRegionWidget::setClipPosition(int x, int y, bool targetDone)
@@ -147,7 +147,7 @@ void ImageRegionWidget::setClipPosition(int x, int y, bool targetDone)
     setContentsPos(x, y);    
     
     if( targetDone )
-       emit contentsMovedEvent();
+       emit contentsMovedEvent(true);
 }
 
 QRect ImageRegionWidget::getImageRegion(void)
@@ -192,7 +192,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
     setCursor( KCursor::arrowCursor() );    
-    emit contentsMovedEvent();
+    emit contentsMovedEvent(true);
 }
 
 void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
@@ -206,6 +206,7 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
      
        m_xpos = newxpos - (newxpos-m_xpos);
        m_ypos = newypos - (newypos-m_ypos);
+       emit contentsMovedEvent(false);
        return;
        }
 

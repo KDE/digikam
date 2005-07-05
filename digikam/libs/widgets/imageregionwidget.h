@@ -52,7 +52,7 @@ public:
          
 signals:
     
-    void contentsMovedEvent( void );
+    void contentsMovedEvent( bool target );
     
 protected:
     
