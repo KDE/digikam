@@ -83,6 +83,8 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     l3->addWidget(m_imagePanIconWidget, 0, Qt::AlignCenter);
     
     m_progressBar = new KProgress(100, this);
+    QWhatsThis::add(m_progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    m_progressBar->setProgress(0);
     setProgressVisible(progress);
     
     m_separateView = new QCheckBox(i18n("Separate View"), this);
