@@ -23,24 +23,17 @@
 #ifndef IMAGEEFFECT_FILMGRAIN_H
 #define IMAGEEFFECT_FILMGRAIN_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldialog.h"
 
-class QPushButton;
 class QSlider;
 class QLCDNumber;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamFilmGrainImagesPlugin
 {
-class FilmGrain;
 
-class ImageEffect_FilmGrain : public KDialogBase
+class ImageEffect_FilmGrain : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -49,48 +42,25 @@ public:
     ImageEffect_FilmGrain(QWidget* parent);
     ~ImageEffect_FilmGrain();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
         
 private:
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int          m_currentRenderingMode;
-
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
     QSlider     *m_sensibilitySlider;
     
     QLCDNumber  *m_sensibilityLCDValue;
-    
-    FilmGrain   *m_filmgrainFilter;
-    
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
 
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-            
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
     void slotSensibilityChanged(int);
-    void slotFocusChanged(void);    
-   
+
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);    
 };
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
