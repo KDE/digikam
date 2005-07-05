@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
+#include <kurllabel.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -87,8 +88,11 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     QHBoxLayout* layout = new QHBoxLayout( headerFrame );
     layout->setMargin( 2 ); // to make sure the frame gets displayed
     layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame );
+    KURLLabel *pixmapLabelLeft = new KURLLabel( headerFrame );
+    pixmapLabelLeft->setText(QString::null);
+    pixmapLabelLeft->setURL("http://extragear.kde.org/apps/digikamimageplugins");
     pixmapLabelLeft->setScaledContents( false );
+    QToolTip::add(pixmapLabelLeft, i18n("Visit DigikamImagePlugins project website"));
     layout->addWidget( pixmapLabelLeft );
     QLabel *labelTitle = new QLabel( title, headerFrame );
     layout->addWidget( labelTitle );
@@ -119,6 +123,9 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
     
+    connect(pixmapLabelLeft, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processURL(const QString&)));
+                
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotFocusChanged()));
 }
@@ -143,6 +150,11 @@ void CtrlPanelDialog::slotInit()
     kapp->processEvents();
     // Reset values to defaults.
     QTimer::singleShot(0, this, SLOT(slotUser1())); 
+}
+
+void CtrlPanelDialog::processURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void CtrlPanelDialog::setAboutData(KAboutData *about)
