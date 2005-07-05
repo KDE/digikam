@@ -49,7 +49,8 @@ class CtrlPanelDialog : public KDialogBase
 
 public:
 
-    CtrlPanelDialog(QWidget* parent, QString title, QString name);
+    CtrlPanelDialog(QWidget* parent, QString title, QString name, 
+                    bool loadFileSettings=false);
     ~CtrlPanelDialog();
 
     void setAboutData(KAboutData *about);

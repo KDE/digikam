@@ -55,7 +55,8 @@
 namespace DigikamImagePlugins
 {
 
-CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name)
+CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name, 
+                                 bool loadFileSettings)
                : KDialogBase(Plain, title,
                              Help|User1|User2|User3|Ok|Cancel, Ok,
                              parent, 0, true, true,
@@ -71,7 +72,10 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name)
         
     setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );    
+    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );  
+    showButton(User2, loadFileSettings);
+    showButton(User3, loadFileSettings);
+        
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));  
         
     // -------------------------------------------------------------
