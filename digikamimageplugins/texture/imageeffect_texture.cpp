@@ -20,33 +20,20 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
-
 // Qt includes.
 
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 #include <qcombobox.h>
 #include <qimage.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kdebug.h>
@@ -65,22 +52,10 @@ namespace DigikamTextureImagesPlugin
 {
 
 ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Apply Texture"),
-                                 Help|User1|Ok|Cancel, Ok,
-                                 parent, 0, true, true,
-                                 i18n("&Reset Values")),
-                     m_parent(parent)
+                   : CtrlPanelDialog(parent, i18n("Apply Texture on Photograph"), "texture")
 {
-    m_currentRenderingMode = NoneRendering;
-    m_textureFilter        = 0L;
-    m_timer                = 0;
     QString whatsThis;
         
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    resize(configDialogSize("Texture Tool Dialog")); 
-        
-    // About data and help button.
-    
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Apply Texture"), 
                                        digikamimageplugins_version,
@@ -94,48 +69,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Apply Texture Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-    
-    // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Apply Decorative Texture on Photograph"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
-    hlay1->addWidget(m_imagePreviewWidget);
-        
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+    setAboutData(about);
     
     // -------------------------------------------------------------
     
@@ -181,13 +115,6 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-        
-    // -------------------------------------------------------------
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotFocusChanged()));
-    
     connect(m_textureType, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
             
@@ -197,219 +124,64 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
 ImageEffect_Texture::~ImageEffect_Texture()
 {
-    saveDialogSize("Texture Tool Dialog"); 
-
-    if (m_textureFilter)
-       delete m_textureFilter;       
-    
-    if (m_timer)
-       delete m_timer;
 }
 
-
-void ImageEffect_Texture::abortPreview()
+void ImageEffect_Texture::renderingFinished()
 {
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_textureType->setEnabled(true);
     m_blendGain->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);    
-    enableButton(Ok, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
-void ImageEffect_Texture::slotUser1()
+void ImageEffect_Texture::resetValues()
 {
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_textureFilter->stopComputation();
-       }
-    else
-       {
-       blockSignals(true);
-       m_textureType->setCurrentItem(PaperTexture);    
-       m_blendGain->setValue(200);
-       blockSignals(false);
-       slotEffect();    
-       }
+    blockSignals(true);
+    m_textureType->setCurrentItem(PaperTexture);    
+    m_blendGain->setValue(200);
+    blockSignals(false);
 } 
 
-void ImageEffect_Texture::slotCancel()
+void ImageEffect_Texture::prepareEffect()
 {
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_textureFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_Texture::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("texture", "digikamimageplugins");
-}
-
-void ImageEffect_Texture::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_textureFilter->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
-
-void ImageEffect_Texture::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_textureFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();    
-}
-
-void ImageEffect_Texture::slotTimer()
-{
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
-    
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
-
-void ImageEffect_Texture::slotEffect()
-{
-    // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;     
-    
-    m_currentRenderingMode = PreviewRendering;
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
             
     QImage image   = m_imagePreviewWidget->getOriginalClipImage();
     QString texture = getTexturePath( m_textureType->currentItem() );
     
     int b = 255 - m_blendGain->value();
     
-    m_imagePreviewWidget->setProgress(0);
-    
-    if (m_textureFilter)
-       delete m_textureFilter;
-        
-    m_textureFilter = new Texture(&image, this, b, texture);
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Texture(&image, this, b, texture));
 }
 
-void ImageEffect_Texture::slotOk()
+void ImageEffect_Texture::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-    
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int b = 255 - m_blendGain->value();
     
-    if (m_textureFilter)
-       delete m_textureFilter;
-       
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
     QString texture = getTexturePath( m_textureType->currentItem() );
     
-    m_textureFilter = new Texture(&orgImage, this, b, texture);
-           
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Texture(&orgImage, this, b, texture));
     delete [] data;
 }
 
-void ImageEffect_Texture::customEvent(QCustomEvent *event)
+void ImageEffect_Texture::putPreviewData(void)
 {
-    if (!event) return;
+    QImage imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImageData(imDest);
+}
 
-    Texture::EventData *d = (Texture::EventData*) event->data();
+void ImageEffect_Texture::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
 
-    if (!d) return;
-    
-    if (d->starting)           // Computation in progress !
-        {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
-            {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview Texture completed..." << endl;
-                 
-                 QImage imDest = m_textureFilter->getTargetImage();
-                 m_imagePreviewWidget->setPreviewImageData(imDest);
-    
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final Texture completed..." << endl;
-                 
-                 Digikam::ImageIface iface(0, 0);
-  
-                 iface.putOriginalData(i18n("Texture"), 
-                                       (uint*)m_textureFilter->getTargetImage().bits());
-                    
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview Texture failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
-        }
-    
-    delete d;        
+    iface.putOriginalData(i18n("Texture"), 
+                        (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
 QString ImageEffect_Texture::getTexturePath(int texture)

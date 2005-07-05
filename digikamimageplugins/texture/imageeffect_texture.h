@@ -23,30 +23,18 @@
 #ifndef IMAGEEFFECT_TEXTURE_H
 #define IMAGEEFFECT_TEXTURE_H
 
-// Qt include.
+// Local includes.
 
-#include <qimage.h>
+#include "ctrlpaneldialog.h"
 
-// KDE include.
-
-#include <kdialogbase.h>
-
-class QPushButton;
-class QTimer;
 class QComboBox;
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamTextureImagesPlugin
 {
-class Texture;
 
-class ImageEffect_Texture : public KDialogBase
+class ImageEffect_Texture : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -55,10 +43,6 @@ public:
     ImageEffect_Texture(QWidget* parent);
     ~ImageEffect_Texture();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
 
     enum TextureTypes 
@@ -81,44 +65,22 @@ private:
     StoneTexture
     };
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int           m_currentRenderingMode;
-
-    QWidget      *m_parent;
-    
-    QTimer       *m_timer;
-    
-    QPushButton  *m_helpButton;
-    
     QComboBox    *m_textureType;
 
-    KIntNumInput *m_blendGain;
-    
-    Texture      *m_textureFilter;
-    
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
+    KIntNumInput *m_blendGain;    
     
 private:
     
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
     QString getTexturePath(int texture);
         
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();   
-    void slotFocusChanged(void);     
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamTextureImagesPlugin
