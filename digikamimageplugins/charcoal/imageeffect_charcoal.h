@@ -50,7 +50,6 @@ protected:
     
     void prepareEffect(void);
     void prepareFinal(void);
-    void abortPreview(void);
     void putPreviewData(void);
     void putFinalData(void);
     void resetValues(void);   

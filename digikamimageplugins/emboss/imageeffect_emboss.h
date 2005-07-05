@@ -23,29 +23,16 @@
 #ifndef IMAGEEFFECT_EMBOSS_H
 #define IMAGEEFFECT_EMBOSS_H
 
-// Qt include.
+// Local includes.
 
-#include <qimage.h>
-
-// KDE include.
-
-#include <kdialogbase.h>
-
-class QPushButton;
-class QTimer;
+#include "ctrlpaneldialog.h"
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamEmbossImagesPlugin
 {
-class Emboss;
 
-class ImageEffect_Emboss : public KDialogBase
+class ImageEffect_Emboss : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -54,48 +41,18 @@ public:
     ImageEffect_Emboss(QWidget* parent);
     ~ImageEffect_Emboss();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-        
-    int           m_currentRenderingMode;
-    
-    QTimer       *m_timer;
-    
-    QWidget      *m_parent;
-    
-    QPushButton  *m_helpButton;
-    
     KIntNumInput *m_depthInput;
     
-    Emboss       *m_embossFilter;
-    
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-    
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-    
-private slots:
+protected:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer(); 
-    void slotFocusChanged(void);     
-    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin
