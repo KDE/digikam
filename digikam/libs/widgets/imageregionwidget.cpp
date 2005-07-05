@@ -158,12 +158,20 @@ QRect ImageRegionWidget::getImageRegion(void)
 
 QRect ImageRegionWidget::getImageRegionToRender(void)
 {
+    int normalizedW, normalizedH;
+    
+    // For large screen.
+    if (visibleWidth()  > m_img.width())  normalizedW = m_img.width();
+    else normalizedW = visibleWidth();
+    if (visibleHeight() > m_img.height()) normalizedW = m_img.height();
+    else normalizedH = visibleHeight();
+
     if (m_separateView)
-        return( QRect::QRect(horizontalScrollBar()->value()+visibleWidth()/2, verticalScrollBar()->value(), 
-                             visibleWidth()/2, visibleHeight()) );
+        return( QRect::QRect(horizontalScrollBar()->value()+normalizedW/2, verticalScrollBar()->value(), 
+                             normalizedW/2, normalizedH) );
 
     return( QRect::QRect(horizontalScrollBar()->value(), verticalScrollBar()->value(), 
-                         visibleWidth(), visibleHeight()) );
+                         normalizedW, normalizedH) );
 }
 QImage ImageRegionWidget::getImageRegionData(void)
 {
