@@ -37,6 +37,7 @@
 #include <kcursor.h>
 #include <kprogress.h>
 #include <kapplication.h>
+#include <kconfig.h>
 
 // Local includes.
 
