@@ -21,27 +21,20 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
-#include <qpushbutton.h>
 #include <qimage.h>
 #include <qstring.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <knuminput.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
@@ -59,19 +52,9 @@ namespace DigikamUnsharpMaskImagesPlugin
 {
 
 ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Unsharp Mask"), Help|User1|Ok|Cancel, Ok,
-                                 parent, 0, true, true, i18n("&Reset Values")),
-                     m_parent(parent)
+                   : CtrlPanelDialog(parent, i18n("Unsharp Mask"), "unsharp")
 {
-    m_currentRenderingMode = NoneRendering;
-    m_timer                = 0L;
-    m_unsharpFilter        = 0L;
     QString whatsThis;
-    
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    resize(configDialogSize("UnSharpMask Tool Dialog"));   
-        
-    // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Unsharp Mask"), 
@@ -87,49 +70,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
 
     about->addAuthor("Winston Chang", I18N_NOOP("Unsharp mask algorithm author from Gimp"),
                      "winstonc at cs.wisc.edu");
-                         
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Unsharp Mask Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-    
-    // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Unsharp Mask"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
-    // -------------------------------------------------------------
-    
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
-    hlay1->addWidget(m_imagePreviewWidget);
-    
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+                        
+    setAboutData(about);
     
     // -------------------------------------------------------------
 
@@ -176,13 +118,6 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-            
-    // -------------------------------------------------------------
-        
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotFocusChanged()));
-    
     connect(m_radiusInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                                                
 
@@ -195,232 +130,74 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
 
 ImageEffect_Unsharp::~ImageEffect_Unsharp()
 {
-    saveDialogSize("UnSharpMask Tool Dialog");    
-    
-    if (m_unsharpFilter)
-       delete m_unsharpFilter;    
-    
-    if (m_timer)
-       delete m_timer;
 }
 
-void ImageEffect_Unsharp::abortPreview()
+void ImageEffect_Unsharp::renderingFinished()
 {
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_radiusInput->setEnabled(true);
     m_amountInput->setEnabled(true);
     m_thresholdInput->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);   
-    enableButton(Ok, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
-void ImageEffect_Unsharp::slotHelp()
+void ImageEffect_Unsharp::resetValues()
 {
-    KApplication::kApplication()->invokeHelp("unsharp", "digikamimageplugins");
-}
-
-void ImageEffect_Unsharp::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_unsharpFilter->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
-
-void ImageEffect_Unsharp::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_unsharpFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();   
-}
-
-void ImageEffect_Unsharp::slotCancel()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_unsharpFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_Unsharp::slotTimer()
-{
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
-    
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
-
-void ImageEffect_Unsharp::slotUser1()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_unsharpFilter->stopComputation();
-       }
-    else
-       {
-       m_radiusInput->blockSignals(true);
-       m_amountInput->blockSignals(true);
-       m_thresholdInput->blockSignals(true);
-                
-       m_radiusInput->setValue(5.0);
-       m_amountInput->setValue(0.5);
-       m_thresholdInput->setValue(0);
-                                     
-       m_radiusInput->blockSignals(false);
-       m_amountInput->blockSignals(false);
-       m_thresholdInput->blockSignals(false);
-       slotEffect();
-       }
+    m_radiusInput->blockSignals(true);
+    m_amountInput->blockSignals(true);
+    m_thresholdInput->blockSignals(true);
+    m_radiusInput->setValue(5.0);
+    m_amountInput->setValue(0.5);
+    m_thresholdInput->setValue(0);
+    m_radiusInput->blockSignals(false);
+    m_amountInput->blockSignals(false);
+    m_thresholdInput->blockSignals(false);
 } 
 
-void ImageEffect_Unsharp::slotEffect()
+void ImageEffect_Unsharp::prepareEffect()
 {
-    if (m_currentRenderingMode == PreviewRendering) return;     // Computation already in process.
-    
-    m_currentRenderingMode = PreviewRendering;
-    
     m_radiusInput->setEnabled(false);
     m_amountInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-        
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
+    
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
     double r  = m_radiusInput->value();
     double a  = m_amountInput->value();
     int    th = m_thresholdInput->value();
     
-    m_imagePreviewWidget->setProgress(0);
-
-    if (m_unsharpFilter)
-       delete m_unsharpFilter;
-        
-    m_unsharpFilter = new UnsharpMask(&img, this, r, a, th);
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new UnsharpMask(&img, this, r, a, th));
 }
 
-void ImageEffect_Unsharp::slotOk()
+void ImageEffect_Unsharp::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-    
     m_radiusInput->setEnabled(false);
     m_amountInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
         
     double r  = m_radiusInput->value();
     double a  = m_amountInput->value();
     int    th = m_thresholdInput->value();
-    
-    m_imagePreviewWidget->setProgress(0);       
-
-    if (m_unsharpFilter)
-       delete m_unsharpFilter;
     
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    m_unsharpFilter = new UnsharpMask(&orgImage, this, r, a, th);
-           
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new UnsharpMask(&orgImage, this, r, a, th));
     delete [] data;
 }
 
-void ImageEffect_Unsharp::customEvent(QCustomEvent *event)
+void ImageEffect_Unsharp::putPreviewData(void)
 {
-    if (!event) return;
+    QImage imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImageData(imDest);
+}
 
-    UnsharpMask::EventData *d = (UnsharpMask::EventData*) event->data();
+void ImageEffect_Unsharp::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
 
-    if (!d) return;
-    
-    if (d->starting)           // Computation in progress !
-        {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
-            {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview Unsharp Mask completed..." << endl;
-                 
-                 QImage imDest = m_unsharpFilter->getTargetImage();
-                 m_imagePreviewWidget->setPreviewImageData(imDest);
-    
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final Unsharp Mask completed..." << endl;
-                 
-                 Digikam::ImageIface iface(0, 0);
-  
-                 iface.putOriginalData(i18n("Unsharp Mask"), 
-                                       (uint*)m_unsharpFilter->getTargetImage().bits());
-                    
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview Unsharp Mask failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
-        }
-
-    delete d;        
+    iface.putOriginalData(i18n("Unsharp Mask"), 
+                        (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin

@@ -22,26 +22,17 @@
 #ifndef IMAGEEFFECT_UNSHARP_H
 #define IMAGEEFFECT_UNSHARP_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
-
-class QPushButton;
-class QTimer;
+#include "ctrlpaneldialog.h"
 
 class KIntNumInput;
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamUnsharpMaskImagesPlugin
 {
-class UnsharpMask;
 
-class ImageEffect_Unsharp : public KDialogBase
+class ImageEffect_Unsharp : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -50,51 +41,21 @@ public:
     ImageEffect_Unsharp(QWidget* parent);
     ~ImageEffect_Unsharp();
 
-protected:
-    
-    void closeEvent(QCloseEvent *e);
-       
 private:
-    
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int              m_currentRenderingMode;
-
-    QWidget         *m_parent;
-        
-    QTimer          *m_timer;
-    
-    QPushButton     *m_helpButton;
     
     KDoubleNumInput *m_radiusInput;
     KDoubleNumInput *m_amountInput;
     
     KIntNumInput    *m_thresholdInput;
     
-    UnsharpMask     *m_unsharpFilter;
+protected:
     
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-        
-private slots:
-
-    void slotHelp();
-    void slotUser1();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotTimer(); 
-    void slotFocusChanged(void);
-    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin
