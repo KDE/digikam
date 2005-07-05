@@ -119,8 +119,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
             m_imageRegionWidget, SLOT(slotSeparateViewToggled(bool)));               
     
     connect(m_separateView, SIGNAL(toggled(bool)),
-            m_imagePanIconWidget, SLOT(slotSeparateViewToggled(bool)));               
-            
+            m_imagePanIconWidget, SLOT(slotSeparateViewToggled(bool)));
 }
 
 ImagePannelWidget::~ImagePannelWidget()
@@ -150,6 +149,7 @@ void ImagePannelWidget::setEnable(bool b)
 {
     m_imageRegionWidget->setEnabled(b);
     m_imagePanIconWidget->setEnabled(b);
+    m_separateView->setEnabled(b);    
 }
 
 void ImagePannelWidget::setProgress(int val)
