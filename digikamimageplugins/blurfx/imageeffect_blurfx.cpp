@@ -72,7 +72,6 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Blurring algorithms"), 
                      "pieter_voloshyn at ame.com.br"); 
-    
                      
     setAboutData(about);
     
