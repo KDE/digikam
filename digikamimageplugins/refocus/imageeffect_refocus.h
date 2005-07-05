@@ -27,7 +27,7 @@
 
 #include <qimage.h>
 
-// KDE include.
+// Local includes.
 
 #include "ctrlpaneldialog.h"
 

@@ -22,26 +22,18 @@
  
 // Qt includes.
 
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qrect.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kfiledialog.h>
