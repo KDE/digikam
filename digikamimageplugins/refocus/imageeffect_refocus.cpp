@@ -57,7 +57,7 @@ namespace DigikamRefocusImagesPlugin
 {
 
 ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Photograph Refocus"), "refocus")
+                   : CtrlPanelDialog(parent, i18n("Photograph Refocus"), "refocus", true)
 {
     QString whatsThis;
         
