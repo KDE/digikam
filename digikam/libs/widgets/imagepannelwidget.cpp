@@ -106,7 +106,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     
     // -------------------------------------------------------------
     
-    readSettings();
     QTimer::singleShot(0, this, SLOT(slotInitGui())); 
     
     // -------------------------------------------------------------
@@ -134,6 +133,7 @@ ImagePannelWidget::~ImagePannelWidget()
 
 void ImagePannelWidget::slotInitGui(void)
 {
+    readSettings();
     setCenterImageRegionPosition();
     slotOriginalImageRegionChanged();
 }
