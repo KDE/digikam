@@ -23,26 +23,18 @@
 #ifndef IMAGEEFFECT_DESPECKLE_H
 #define IMAGEEFFECT_DESPECKLE_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldialog.h"
 
-class QPushButton;
 class QCheckBox;
-class QTimer;
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
 namespace DigikamNoiseReductionImagesPlugin
 {
-class Despeckle;
 
-class ImageEffect_Despeckle : public KDialogBase
+class ImageEffect_Despeckle : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -50,28 +42,9 @@ public:
 
     ImageEffect_Despeckle(QWidget* parent);
     ~ImageEffect_Despeckle();
-
-protected:
-
-    void closeEvent(QCloseEvent *e);
        
 private:
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int           m_currentRenderingMode;
-    
-    QWidget      *m_parent;
-        
-    QTimer       *m_timer;
-        
-    QPushButton  *m_helpButton;
-    
     KIntNumInput *m_radiusInput;
     KIntNumInput *m_blackLevelInput;
     KIntNumInput *m_whiteLevelInput;
@@ -79,25 +52,14 @@ private:
     QCheckBox    *m_useAdaptativeMethod;
     QCheckBox    *m_useRecursiveMethod;
     
-    Despeckle    *m_despeckleFilter;
+protected:
     
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-            
-private slots:
-
-    void slotHelp();
-    void slotUser1();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotTimer(); 
-    void slotFocusChanged(void);
-        
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);        
 };
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

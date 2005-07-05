@@ -22,27 +22,20 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
-#include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
@@ -61,19 +54,9 @@ namespace DigikamNoiseReductionImagesPlugin
 {
 
 ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Noise Reduction"), Help|User1|Ok|Cancel, Ok,
-                                   parent, 0, true, true, i18n("&Reset Values")),
-                       m_parent(parent)
+                     : CtrlPanelDialog(parent, i18n("Noise Reduction"), "despeckle")
 {
-    m_currentRenderingMode = NoneRendering;
-    m_timer                = 0L;
-    m_despeckleFilter      = 0L;
     QString whatsThis;
-    
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
-    resize(configDialogSize("Noise Reduction Tool Dialog"));   
-            
-    // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Noise Reduction"), 
@@ -90,49 +73,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     about->addAuthor("Michael Sweet", I18N_NOOP("Despeckle algorithm author from Gimp"),
                      "mike at easysw.com");
                          
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Noise Reduction Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
     
-    // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-    
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Noise Reduction"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
-    hlay1->addWidget(m_imagePreviewWidget);
-    
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
-
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
@@ -192,13 +134,6 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
-            
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-    
-    // -------------------------------------------------------------
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
     
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));            
@@ -218,133 +153,45 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
 ImageEffect_Despeckle::~ImageEffect_Despeckle()
 {
-    saveDialogSize("Noise Reduction Tool Dialog");   
-
-    if (m_despeckleFilter)
-       delete m_despeckleFilter;    
-    
-    if (m_timer)
-       delete m_timer;
 }
 
-void ImageEffect_Despeckle::abortPreview()
+void ImageEffect_Despeckle::renderingFinished()
 {
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_radiusInput->setEnabled(true);
     m_blackLevelInput->setEnabled(true);
     m_whiteLevelInput->setEnabled(true);
     m_useAdaptativeMethod->setEnabled(true);
     m_useRecursiveMethod->setEnabled(true);
-    m_imagePreviewWidget->setEnable(true);   
-    enableButton(Ok, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
 }
 
-void ImageEffect_Despeckle::slotHelp()
+void ImageEffect_Despeckle::resetValues()
 {
-    KApplication::kApplication()->invokeHelp("despeckle", "digikamimageplugins");
-}
-
-void ImageEffect_Despeckle::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_despeckleFilter->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
-
-void ImageEffect_Despeckle::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_despeckleFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();   
-}
-
-void ImageEffect_Despeckle::slotCancel()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_despeckleFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_Despeckle::slotTimer()
-{
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
+    m_radiusInput->blockSignals(true);
+    m_blackLevelInput->blockSignals(true);
+    m_whiteLevelInput->blockSignals(true);
+    m_useAdaptativeMethod->blockSignals(true);
+    m_useRecursiveMethod->blockSignals(true);
+                    
+    m_radiusInput->setValue(3);
+    m_blackLevelInput->setValue(7);
+    m_whiteLevelInput->setValue(248);
+    m_useAdaptativeMethod->setChecked(true);
+    m_useRecursiveMethod->setChecked(false);
     
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
-
-void ImageEffect_Despeckle::slotUser1()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_despeckleFilter->stopComputation();
-       }
-    else
-       {
-       m_radiusInput->blockSignals(true);
-       m_blackLevelInput->blockSignals(true);
-       m_whiteLevelInput->blockSignals(true);
-       m_useAdaptativeMethod->blockSignals(true);
-       m_useRecursiveMethod->blockSignals(true);
-                       
-       m_radiusInput->setValue(3);
-       m_blackLevelInput->setValue(7);
-       m_whiteLevelInput->setValue(248);
-       m_useAdaptativeMethod->setChecked( true );
-       m_useRecursiveMethod->setChecked(false);
-        
-       m_radiusInput->blockSignals(false);
-       m_blackLevelInput->blockSignals(false);
-       m_whiteLevelInput->blockSignals(false);
-       m_useAdaptativeMethod->blockSignals(false);
-       m_useRecursiveMethod->blockSignals(false);
-       slotEffect();
-       }
+    m_radiusInput->blockSignals(false);
+    m_blackLevelInput->blockSignals(false);
+    m_whiteLevelInput->blockSignals(false);
+    m_useAdaptativeMethod->blockSignals(false);
+    m_useRecursiveMethod->blockSignals(false);
 } 
 
-void ImageEffect_Despeckle::slotEffect()
+void ImageEffect_Despeckle::prepareEffect()
 {
-    // Computation already in progress.
-    if (m_currentRenderingMode == PreviewRendering) return;     
-    
-    m_currentRenderingMode = PreviewRendering;
-    
     m_radiusInput->setEnabled(false);
     m_blackLevelInput->setEnabled(false);
     m_whiteLevelInput->setEnabled(false);
     m_useAdaptativeMethod->setEnabled(false);
     m_useRecursiveMethod->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);        
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
    
@@ -354,28 +201,16 @@ void ImageEffect_Despeckle::slotEffect()
     bool af = m_useAdaptativeMethod->isChecked();
     bool rf = m_useRecursiveMethod->isChecked();
     
-    m_imagePreviewWidget->setProgress(0);          
-
-    if (m_despeckleFilter)
-       delete m_despeckleFilter;
-        
-    m_despeckleFilter = new Despeckle(&img, this, r, bl, wl, af, rf);
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Despeckle(&img, this, r, bl, wl, af, rf));
 }
 
-void ImageEffect_Despeckle::slotOk()
+void ImageEffect_Despeckle::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-    
     m_radiusInput->setEnabled(false);
     m_blackLevelInput->setEnabled(false);
     m_whiteLevelInput->setEnabled(false);
     m_useAdaptativeMethod->setEnabled(false);
     m_useRecursiveMethod->setEnabled(false);
-    m_imagePreviewWidget->setEnable(false);
-    
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
     
     int  r  = m_radiusInput->value();
     int  bl = m_blackLevelInput->value();
@@ -383,84 +218,28 @@ void ImageEffect_Despeckle::slotOk()
     bool af = m_useAdaptativeMethod->isChecked();
     bool rf = m_useRecursiveMethod->isChecked();
 
-    m_imagePreviewWidget->setProgress(0);             
-    
-    if (m_despeckleFilter)
-       delete m_despeckleFilter;
-    
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    m_despeckleFilter = new Despeckle(&orgImage, this, r, bl, wl, af, rf);
-           
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Despeckle(&orgImage, 
+                                                               this, r, bl, wl, af, rf));
     delete [] data;
 }
 
-void ImageEffect_Despeckle::customEvent(QCustomEvent *event)
+void ImageEffect_Despeckle::putPreviewData(void)
 {
-    if (!event) return;
+    QImage imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImageData(imDest);
+}
 
-    Despeckle::EventData *d = (Despeckle::EventData*) event->data();
+void ImageEffect_Despeckle::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
 
-    if (!d) return;
-    
-    if (d->starting)           // Computation in progress !
-        {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
-            {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview Noise Reduction completed..." << endl;
-                 
-                 QImage imDest = m_despeckleFilter->getTargetImage();
-                 m_imagePreviewWidget->setPreviewImageData(imDest);
-    
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final Noise Reduction completed..." << endl;
-                 
-                 Digikam::ImageIface iface(0, 0);
-  
-                 iface.putOriginalData(i18n("Noise Reduction"), 
-                                       (uint*)m_despeckleFilter->getTargetImage().bits());
-                    
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview Noise Reduction failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
-        }
-    
-    delete d;        
+    iface.putOriginalData(i18n("Noise Reduction"), 
+                        (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
