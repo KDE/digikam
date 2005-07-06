@@ -23,29 +23,20 @@
 #ifndef IMAGEEFFECT_ANTIVIGNETTING_H
 #define IMAGEEFFECT_ANTIVIGNETTING_H
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagepreviewdialog.h"
 
-class QPushButton;
 class QLabel;
 class QTabWidget;
-class QTimer;
 
 class KIntNumInput;
 class KDoubleNumInput;
-class KProgress;
-
-namespace Digikam
-{
-class ImageWidget;
-}
 
 namespace DigikamAntiVignettingImagesPlugin
 {
-class AntiVignetting;
 
-class ImageEffect_AntiVignetting : public KDialogBase
+class ImageEffect_AntiVignetting : public DigikamImagePlugins::ImagePreviewDialog
 {
     Q_OBJECT
     
@@ -54,29 +45,10 @@ public:
     ImageEffect_AntiVignetting(QWidget *parent);
     ~ImageEffect_AntiVignetting();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
-
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int                   m_currentRenderingMode;
-    
-    QWidget              *m_parent;
-    
-    QPushButton          *m_helpButton;
 
     QLabel               *m_maskPreviewLabel;
     
-    QTimer               *m_timer;
-        
     KIntNumInput         *m_brightnessInput;
     KIntNumInput         *m_contrastInput;
     KIntNumInput         *m_gammaInput;
@@ -85,26 +57,14 @@ private:
     KDoubleNumInput      *m_powerInput;
     KDoubleNumInput      *m_radiusInput;
     
-    KProgress            *m_progressBar;
+protected:
     
-    AntiVignetting       *m_antivignettingFilter;
-    
-    Digikam::ImageWidget *m_previewWidget;
-
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-        
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();   
-    void slotResized();    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
