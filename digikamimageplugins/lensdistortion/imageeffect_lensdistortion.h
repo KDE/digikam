@@ -27,28 +27,18 @@
 
 #include <qimage.h>
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imageguidedialog.h"
 
-class QPushButton;
-class QGridLayout;
-class QGroupBox;
-class QTimer;
+class QLabel;
 
-class KProgress;
 class KDoubleNumInput;
-
-namespace Digikam
-{
-class ImageGuideWidget;
-}
 
 namespace DigikamLensDistortionImagesPlugin
 {
-class LensDistortion;
 
-class ImageEffect_LensDistortion : public KDialogBase
+class ImageEffect_LensDistortion : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
     
@@ -57,27 +47,8 @@ public:
     ImageEffect_LensDistortion(QWidget *parent);
     ~ImageEffect_LensDistortion();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-
 private:
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int                   m_currentRenderingMode;
-        
-    QWidget              *m_parent;
-    
-    QPushButton          *m_helpButton;
-
-    QTimer               *m_timer;
-    
     QLabel               *m_maskPreviewLabel;
         
     KDoubleNumInput      *m_mainInput;
@@ -85,26 +56,14 @@ private:
     KDoubleNumInput      *m_rescaleInput;
     KDoubleNumInput      *m_brightenInput;
 
-    KProgress            *m_progressBar;
-
-    LensDistortion       *m_lensdistortionFilter;
+protected:
     
-    Digikam::ImageGuideWidget *m_previewWidget;
-    
-private:
-        
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-    
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();       
-    void slotResized(void);
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamLensDistortionImagesPlugin

@@ -2,7 +2,7 @@
  * File  : imageeffect_raindrop.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-09-30
- * Description : a digiKam image plugin for to add
+ * Description : a digiKam image plugin to add
  *               raindrops on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -23,28 +23,16 @@
 #ifndef IMAGEEFFECT_RAINDROP_H
 #define IMAGEEFFECT_RAINDROP_H
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagepreviewdialog.h"
 
-class QPushButton;
-class QSpinBox;
-class QSlider;
-class QTimer;
-
-class KProgress;
 class KIntNumInput;
-
-namespace Digikam
-{
-class ImageWidget;
-}
 
 namespace DigikamRainDropImagesPlugin
 {
-class RainDrop;
 
-class ImageEffect_RainDrop : public KDialogBase
+class ImageEffect_RainDrop : public DigikamImagePlugins::ImagePreviewDialog
 {
     Q_OBJECT
     
@@ -53,53 +41,20 @@ public:
     ImageEffect_RainDrop(QWidget *parent);
     ~ImageEffect_RainDrop();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    //void resizeEvent(QResizeEvent *e);
-    
 private:
-    
-    
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int           m_currentRenderingMode;
-        
-    QWidget      *m_parent;
-    
-    QPushButton  *m_helpButton;
-
-    QTimer       *m_timer;
             
     KIntNumInput *m_dropInput;
     KIntNumInput *m_amountInput;
     KIntNumInput *m_coeffInput;    
     
-    KProgress    *m_progressBar;
+protected:
     
-    RainDrop     *m_raindropFilter;
-    
-    Digikam::ImageWidget *m_previewWidget;
-    
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-        
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();
-    void slotResized(void);
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamRainDropImagesPlugin

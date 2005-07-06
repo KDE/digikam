@@ -19,12 +19,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
  
 // Qt includes. 
  
