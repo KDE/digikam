@@ -20,42 +20,28 @@
  * 
  * ============================================================ */
  
-// C++ include.
-
-#include <cstdio>
-#include <cmath>
-#include <cstring>
-
 // Qt includes.
 
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
-#include <qtimer.h>
-#include <qevent.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qimage.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <kurllabel.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -75,23 +61,10 @@ namespace DigikamRestorationImagesPlugin
 {
 
 ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
-                       : KDialogBase(Plain, i18n("Restoration"),
-                                     Help|User1|User2|User3|Ok|Cancel, Ok,
-                                     parent, 0, true, true,
-                                     i18n("&Reset Values"),
-                                     i18n("&Load..."),
-                                     i18n("&Save As...")),
-                         m_parent(parent)
+                       : CtrlPanelDialog(parent, i18n("Photograph Restoration"), 
+                                         "restoration", true)
 {
     QString whatsThis;
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
-    resize(configDialogSize("Restoration Tool Dialog"));  
-        
-    m_currentRenderingMode = NoneRendering;
-    m_timer                = 0L;
-    m_cimgInterface        = 0L;
 
     // About data and help button.
     
@@ -113,49 +86,10 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"), 
                      "gerhard at kulzer.net");
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Photograph Restoration Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Photograph Restoration"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
-    // -------------------------------------------------------------
-
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
-    topLayout->addWidget(m_imagePreviewWidget);
-    
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressWhatsThis(i18n("<p>This is the current percentage of the task completed."));
-    
-    // -------------------------------------------------------------
-    
     m_mainTab = new QTabWidget( m_imagePreviewWidget );
     
     QWidget* firstPage = new QWidget( m_mainTab );
@@ -166,7 +100,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     cimgLogoLabel->setText(QString::null);
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
+    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
@@ -280,16 +214,9 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-        
-    // -------------------------------------------------------------
-    
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
-
     connect(m_restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotUser1()));
                         
@@ -326,27 +253,10 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
 {
-    saveDialogSize("Restoration Tool Dialog");    
-    
-    // No need to delete m_previewData because it's driving by QImage.
-
-    if (m_cimgInterface)
-       delete m_cimgInterface;
-       
-    if (m_timer)
-       delete m_timer;
 }
 
-void ImageEffect_Restoration::abortPreview()
+void ImageEffect_Restoration::renderingFinished()
 {
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_imagePreviewWidget->setProgress(0);
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-    enableButton(Ok, true);    
-    enableButton(User2, true);
-    enableButton(User3, true);                      
     m_imagePreviewWidget->setEnable(true);                 
     m_restorationTypeCB->setEnabled(true);
     m_detailInput->setEnabled(true);
@@ -361,59 +271,39 @@ void ImageEffect_Restoration::abortPreview()
     m_normalizeBox->setEnabled(true);
 }
 
-void ImageEffect_Restoration::slotTimer()
+void ImageEffect_Restoration::resetValues()
 {
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
+    m_detailInput->blockSignals(true);
+    m_gradientInput->blockSignals(true);
+    m_timeStepInput->blockSignals(true);
+    m_blurInput->blockSignals(true);
+    m_blurItInput->blockSignals(true);
+    m_angularStepInput->blockSignals(true);
+    m_integralStepInput->blockSignals(true);
+    m_gaussianInput->blockSignals(true);
+    m_linearInterpolationBox->blockSignals(true);
+    m_normalizeBox->blockSignals(true);
+
+    m_detailInput->setValue(0.1);
+    m_gradientInput->setValue(0.9);
+    m_timeStepInput->setValue(20.0);
+    m_blurInput->setValue(1.4);
+    m_blurItInput->setValue(1.0);
+    m_angularStepInput->setValue(45.0);
+    m_integralStepInput->setValue(0.8);
+    m_gaussianInput->setValue(3.0);
+    m_linearInterpolationBox->setChecked(false);
+    m_normalizeBox->setChecked(false);
     
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
-
-void ImageEffect_Restoration::slotUser1()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_cimgInterface->stopComputation();
-       }
-    else
-       {
-       m_detailInput->blockSignals(true);
-       m_gradientInput->blockSignals(true);
-       m_timeStepInput->blockSignals(true);
-       m_blurInput->blockSignals(true);
-       m_blurItInput->blockSignals(true);
-       m_angularStepInput->blockSignals(true);
-       m_integralStepInput->blockSignals(true);
-       m_gaussianInput->blockSignals(true);
-       m_linearInterpolationBox->blockSignals(true);
-       m_normalizeBox->blockSignals(true);
-
-       m_detailInput->setValue(0.1);
-       m_gradientInput->setValue(0.9);
-       m_timeStepInput->setValue(20.0);
-       m_blurInput->setValue(1.4);
-       m_blurItInput->setValue(1.0);
-       m_angularStepInput->setValue(45.0);
-       m_integralStepInput->setValue(0.8);
-       m_gaussianInput->setValue(3.0);
-       m_linearInterpolationBox->setChecked(false);
-       m_normalizeBox->setChecked(false);
-       
-       switch(m_restorationTypeCB->currentItem())
-          {
-          case ReduceUniformNoise:
+    switch(m_restorationTypeCB->currentItem())
+        {
+        case ReduceUniformNoise:
             {
             m_timeStepInput->setValue(40.0);
             break;
             }
-          
-          case ReduceJPEGArtefacts:
+        
+        case ReduceJPEGArtefacts:
             {
             m_detailInput->setValue(0.3);
             m_blurInput->setValue(1.0);
@@ -421,8 +311,8 @@ void ImageEffect_Restoration::slotUser1()
             m_blurItInput->setValue(2.0);
             break;
             }
-          
-          case ReduceTexturing:
+        
+        case ReduceTexturing:
             {
             m_detailInput->setValue(0.5);
             m_blurInput->setValue(1.5);
@@ -430,78 +320,27 @@ void ImageEffect_Restoration::slotUser1()
             m_blurItInput->setValue(2.0);
             break;
             }
-          }                       
-                      
-       m_detailInput->blockSignals(false);
-       m_gradientInput->blockSignals(false);
-       m_timeStepInput->blockSignals(false);
-       m_blurInput->blockSignals(false);
-       m_blurItInput->blockSignals(false);
-       m_angularStepInput->blockSignals(false);
-       m_integralStepInput->blockSignals(false);
-       m_gaussianInput->blockSignals(false);
-       m_linearInterpolationBox->blockSignals(false);
-       m_normalizeBox->blockSignals(false);
-        
-       slotEffect();    
-       }
+        }                       
+                    
+    m_detailInput->blockSignals(false);
+    m_gradientInput->blockSignals(false);
+    m_timeStepInput->blockSignals(false);
+    m_blurInput->blockSignals(false);
+    m_blurItInput->blockSignals(false);
+    m_angularStepInput->blockSignals(false);
+    m_integralStepInput->blockSignals(false);
+    m_gaussianInput->blockSignals(false);
+    m_linearInterpolationBox->blockSignals(false);
+    m_normalizeBox->blockSignals(false);
 } 
-
-void ImageEffect_Restoration::slotCancel()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_cimgInterface->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_Restoration::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("restoration", "digikamimageplugins");
-}
-
-void ImageEffect_Restoration::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_cimgInterface->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
 
 void ImageEffect_Restoration::processCImgURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }
 
-void ImageEffect_Restoration::closeEvent(QCloseEvent *e)
+void ImageEffect_Restoration::prepareEffect()
 {
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_cimgInterface->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();
-}
-
-void ImageEffect_Restoration::slotEffect()
-{
-     // Computation already in progress.
-    if (m_currentRenderingMode != NoneRendering) return; 
-    
-    m_currentRenderingMode = PreviewRendering;
-    
-    m_imagePreviewWidget->setEnable(false);
     m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
@@ -513,21 +352,11 @@ void ImageEffect_Restoration::slotEffect()
     m_gaussianInput->setEnabled(false);
     m_linearInterpolationBox->setEnabled(false);
     m_normalizeBox->setEnabled(false);
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-    enableButton(User2, false);
-    enableButton(User3, false);    
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     
     QImage previewImage = m_imagePreviewWidget->getOriginalClipImage();
     
-    m_imagePreviewWidget->setProgress(0);
-    
-    if (m_cimgInterface)
-       delete m_cimgInterface;
-        
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(&previewImage, 
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new DigikamImagePlugins::CimgIface(&previewImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -538,13 +367,11 @@ void ImageEffect_Restoration::slotEffect()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, 0, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, this));
 }
 
-void ImageEffect_Restoration::slotOk()
+void ImageEffect_Restoration::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-    m_imagePreviewWidget->setEnable(false);
     m_restorationTypeCB->setEnabled(false);
     m_detailInput->setEnabled(false);
     m_gradientInput->setEnabled(false);
@@ -556,23 +383,14 @@ void ImageEffect_Restoration::slotOk()
     m_gaussianInput->setEnabled(false);
     m_linearInterpolationBox->setEnabled(false);
     m_normalizeBox->setEnabled(false);
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    m_imagePreviewWidget->setProgress(0);
-    m_mainTab->setCurrentPage(0);
     
-    if (m_cimgInterface)
-       delete m_cimgInterface;
-       
     Digikam::ImageIface iface(0, 0);
     QImage originalImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( originalImage.bits(), data, originalImage.numBytes() );
     
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(&originalImage, 
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new DigikamImagePlugins::CimgIface(&originalImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -583,68 +401,22 @@ void ImageEffect_Restoration::slotOk()
                                     m_gaussianInput->value(),   
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    true, false, false, NULL, 0, 0, 0, this);
+                                    true, false, false, NULL, 0, 0, 0, this));
     delete [] data;                                    
 }
 
-void ImageEffect_Restoration::customEvent(QCustomEvent *event)
+void ImageEffect_Restoration::putPreviewData(void)
 {
-    if (!event) return;
+    QImage imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImageData(imDest);
+}
 
-    DigikamImagePlugins::CimgIface::EventData *d = (DigikamImagePlugins::CimgIface::EventData*) event->data();
+void ImageEffect_Restoration::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
 
-    if (!d) return;
-
-    if (d->starting)           // Computation in progress !
-        {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
-            {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview Restoration completed..." << endl;
-                 
-                 QImage imDest = m_cimgInterface->getTargetImage();
-                 m_imagePreviewWidget->setPreviewImageData(imDest);
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final Restoration completed..." << endl;
-                 Digikam::ImageIface iface(0, 0);
-                 iface.putOriginalData(i18n("Restoration"), (uint*)m_cimgInterface->getTargetImage().bits());
-                 kapp->restoreOverrideCursor();
-                 accept();       
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview Restoration failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
-        }
-    
-    delete d;        
+    iface.putOriginalData(i18n("Restoration"), 
+                        (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_Restoration::slotUser2()

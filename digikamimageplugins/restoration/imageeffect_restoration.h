@@ -27,35 +27,22 @@
 
 #include <qstring.h>
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldialog.h"
 
-class QPushButton;
 class QLabel;
 class QCheckBox;
-class QTimer;
 class QComboBox;
-class QCustomEvent;
 class QTabWidget;
 
 class KDoubleNumInput;
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-}
-
-namespace DigikamImagePlugins
-{
-class CimgIface;
-}
-
 namespace DigikamRestorationImagesPlugin
 {
 
-class ImageEffect_Restoration : public KDialogBase
+class ImageEffect_Restoration : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -63,10 +50,6 @@ public:
 
     ImageEffect_Restoration(QWidget* parent);
     ~ImageEffect_Restoration();
-       
-protected:
-
-    void closeEvent(QCloseEvent *e);
     
 private:
 
@@ -78,21 +61,6 @@ private:
     ReduceTexturing,
     };
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int              m_currentRenderingMode;
-    
-    QTimer          *m_timer;
-    
-    QWidget         *m_parent;
-    
-    QPushButton     *m_helpButton;
-    
     QLabel          *m_detailLabel;
     QLabel          *m_gradientLabel;
     QLabel          *m_timeStepLabel;
@@ -122,27 +90,20 @@ private:
     QCheckBox       *m_linearInterpolationBox;
     QCheckBox       *m_normalizeBox;
     
-    DigikamImagePlugins::CimgIface *m_cimgInterface;
-    
-    Digikam::ImagePannelWidget     *m_imagePreviewWidget;
-    
-private:
-    
-    void abortPreview(void);
-    void customEvent(QCustomEvent *event);
-    
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
     void slotUser2();
     void slotUser3();
-    void slotTimer();
     void processCImgURL(const QString&);
-    void slotFocusChanged(void);  
+
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
     
 }  // NameSpace DigikamRestorationImagesPlugin
