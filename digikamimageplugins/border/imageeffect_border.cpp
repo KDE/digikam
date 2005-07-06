@@ -20,36 +20,19 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
- 
 // Qt includes. 
  
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
 #include <qcombobox.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpen.h>
-#include <qtimer.h> 
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <knuminput.h>
@@ -62,24 +45,17 @@
 // Local includes.
 
 #include "version.h"
+#include "border.h"
 #include "imageeffect_border.h"
-
 
 namespace DigikamBorderImagesPlugin
 {
 
 ImageEffect_Border::ImageEffect_Border(QWidget* parent)
-                  : KDialogBase(Plain, i18n("Add Border"),
-                                Help|User1|Ok|Cancel, Ok,
-                                parent, 0, true, true, i18n("&Reset Values")),
-                    m_parent(parent)
+                  : ImagePreviewDialog(parent, i18n("Add Border Around a Photograph"), 
+                                       "border", false, false)
 {
-    m_timer = 0;
     QString whatsThis;
-    
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
-    
-    // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Add Border"), 
@@ -93,59 +69,16 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Add Border Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-    
-    // -------------------------------------------------------------
-        
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
-    
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Add Border to Image"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    setAboutData(about);
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("This is the preview of the border added to the image."));
-    l->addWidget(m_previewWidget, 0);
-    topLayout->addMultiCellWidget(frame, 1, 1, 0, 0);
-    topLayout->setRowStretch(1, 10);
-    topLayout->setColStretch(0, 10);
-        
-    // -------------------------------------------------------------
-    
-    QVBoxLayout *vLayout2 = new QVBoxLayout( spacingHint());                                                  
-    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 3, 2, 20, spacingHint());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
                                                   
-    QLabel *label1 = new QLabel(i18n("Type:"), gbox2);
-    m_borderType = new QComboBox( false, gbox2 );
+    QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
+    
+    m_borderType = new QComboBox( false, gboxSettings );
     m_borderType->insertItem( i18n("Solid") );
     // Niepce is Real name. This is the first guy in the world to have built a camera.
     m_borderType->insertItem( "Niepce" );     
@@ -167,27 +100,26 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
-    gridBox2->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridBox2->addMultiCellWidget(m_borderType, 0, 0, 1, 1);
     
-    QLabel *label2 = new QLabel(i18n("Width:"), gbox2);
-    m_borderWidth = new KIntNumInput(gbox2);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_borderType, 0, 0, 0, 1);
+    
+    QLabel *label2 = new QLabel(i18n("Width:"), gboxSettings);
+    m_borderWidth = new KIntNumInput(gboxSettings);
     QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
-    gridBox2->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridBox2->addMultiCellWidget(m_borderWidth, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_borderWidth, 1, 1, 1, 1);
             
-    m_labelForeground = new QLabel(gbox2);
-    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), gbox2 );
-    m_labelBackground = new QLabel(gbox2);
-    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gbox2 );
-    gridBox2->addMultiCellWidget(m_labelForeground, 2, 2, 0, 0);
-    gridBox2->addMultiCellWidget(m_firstColorButton, 2, 2, 1, 1);
-    gridBox2->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
-    gridBox2->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
+    m_labelForeground = new QLabel(gboxSettings);
+    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), gboxSettings );
+    m_labelBackground = new QLabel(gboxSettings);
+    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gboxSettings );
+    gridSettings->addMultiCellWidget(m_labelForeground, 2, 2, 0, 0);
+    gridSettings->addMultiCellWidget(m_firstColorButton, 2, 2, 1, 1);
+    gridSettings->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
+    gridSettings->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
 
-    vLayout2->addWidget(gbox2);
-    vLayout2->addStretch();
-    topLayout->addMultiCellLayout(vLayout2, 1, 1, 1, 1);            
+    setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
 
@@ -201,7 +133,6 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
        m_borderWidth->setRange(1, w/2, 1, true);
 
     readSettings();
-    resize(configDialogSize("Add Border Tool Dialog"));    
             
     // -------------------------------------------------------------
     
@@ -216,17 +147,11 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
 
     connect(m_secondColorButton, SIGNAL(changed(const QColor &)),
             this, SLOT(slotColorBackgroundChanged(const QColor &))); 
-    
-    connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));                                  
 }
 
 ImageEffect_Border::~ImageEffect_Border()
 {
-    saveDialogSize("Add Border Tool Dialog");
-        
-    if (m_timer)
-       delete m_timer;
+    writeSettings();
 }
 
 void ImageEffect_Border::readSettings(void)
@@ -234,7 +159,7 @@ void ImageEffect_Border::readSettings(void)
     KConfig *config = kapp->config();
     config->setGroup("Add Border Tool Settings");
     
-    m_borderType->setCurrentItem( config->readNumEntry("Border Type", SolidBorder) );
+    m_borderType->setCurrentItem( config->readNumEntry("Border Type", Border::SolidBorder) );
     m_borderWidth->setValue( config->readNumEntry("Border Width", 100) );
     
     QColor *black = new QColor( 0, 0, 0 );
@@ -277,80 +202,64 @@ void ImageEffect_Border::writeSettings(void)
     config->sync();
 }
 
-void ImageEffect_Border::slotHelp()
+void ImageEffect_Border::renderingFinished()
 {
-    KApplication::kApplication()->invokeHelp("border", "digikamimageplugins");
+    m_borderType->setEnabled(true);
+    m_borderWidth->setEnabled(true);
+    m_firstColorButton->setEnabled(true);
+    m_secondColorButton->setEnabled(true);
 }
 
-void ImageEffect_Border::closeEvent(QCloseEvent *e)
-{
-    e->accept();    
-}
-
-void ImageEffect_Border::slotUser1()
+void ImageEffect_Border::resetValues()
 {
     m_borderType->blockSignals(true);
     m_borderWidth->blockSignals(true);
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
         
-    m_borderType->setCurrentItem(SolidBorder); 
+    m_borderType->setCurrentItem(Border::SolidBorder); 
     m_borderWidth->setValue(100);
     m_solidColor = QColor::QColor( 0, 0, 0 );
-    slotBorderTypeChanged(SolidBorder);
 
     m_borderType->blockSignals(false);
     m_borderWidth->blockSignals(false);
     m_firstColorButton->blockSignals(false);
     m_secondColorButton->blockSignals(false);
+    slotBorderTypeChanged(Border::SolidBorder);
 } 
-
-void ImageEffect_Border::slotTimer()
-{
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
-    
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
 
 void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
        {
-       case SolidBorder:
+       case Border::SolidBorder:
           m_solidColor = color;
           break;
        
-       case NiepceBorder:
+       case Border::NiepceBorder:
           m_niepceBorderColor = color;
           break;
 
-       case BeveledBorder:
+       case Border::BeveledBorder:
           m_bevelUpperLeftColor = color;
           break;
           
-       case PineBorder:
-       case WoodBorder: 
-       case PaperBorder: 
-       case ParqueBorder: 
-       case IceBorder:
-       case LeafBorder: 
-       case MarbleBorder:
-       case RainBorder:
-       case CratersBorder:
-       case DriedBorder:
-       case PinkBorder:
-       case StoneBorder:
-       case ChalkBorder:
-       case GraniteBorder:
-       case RockBorder:
-       case WallBorder:
+       case Border::PineBorder:
+       case Border::WoodBorder: 
+       case Border::PaperBorder: 
+       case Border::ParqueBorder: 
+       case Border::IceBorder:
+       case Border::LeafBorder: 
+       case Border::MarbleBorder:
+       case Border::RainBorder:
+       case Border::CratersBorder:
+       case Border::DriedBorder:
+       case Border::PinkBorder:
+       case Border::StoneBorder:
+       case Border::ChalkBorder:
+       case Border::GraniteBorder:
+       case Border::RockBorder:
+       case Border::WallBorder:
           m_decorativeFirstColor = color;
           break;
        }
@@ -362,34 +271,34 @@ void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
        {
-       case SolidBorder:
+       case Border::SolidBorder:
           m_solidColor = color;
           break;
        
-       case NiepceBorder:
+       case Border::NiepceBorder:
           m_niepceLineColor = color;
           break;
 
-       case BeveledBorder:
+       case Border::BeveledBorder:
           m_bevelLowerRightColor = color;
           break;
 
-       case PineBorder:
-       case WoodBorder: 
-       case PaperBorder: 
-       case ParqueBorder: 
-       case IceBorder:
-       case LeafBorder: 
-       case MarbleBorder:
-       case RainBorder:
-       case CratersBorder:
-       case DriedBorder:
-       case PinkBorder:
-       case StoneBorder:
-       case ChalkBorder:
-       case GraniteBorder:
-       case RockBorder:
-       case WallBorder:
+       case Border::PineBorder:
+       case Border::WoodBorder: 
+       case Border::PaperBorder: 
+       case Border::ParqueBorder: 
+       case Border::IceBorder:
+       case Border::LeafBorder: 
+       case Border::MarbleBorder:
+       case Border::RainBorder:
+       case Border::CratersBorder:
+       case Border::DriedBorder:
+       case Border::PinkBorder:
+       case Border::StoneBorder:
+       case Border::ChalkBorder:
+       case Border::GraniteBorder:
+       case Border::RockBorder:
+       case Border::WallBorder:
           m_decorativeSecondColor = color;
           break;          
        }
@@ -411,42 +320,42 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           
     switch (borderType)
        {
-       case SolidBorder:
+       case Border::SolidBorder:
           m_firstColorButton->setColor( m_solidColor );
           m_secondColorButton->setEnabled(false);
           m_labelBackground->setEnabled(false);
           break;
        
-       case NiepceBorder:
+       case Border::NiepceBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the main border."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the line."));
           m_firstColorButton->setColor( m_niepceBorderColor );
           m_secondColorButton->setColor( m_niepceLineColor );
           break;
 
-       case BeveledBorder:
+       case Border::BeveledBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the upper left area."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the lower right area."));
           m_firstColorButton->setColor( m_bevelUpperLeftColor );
           m_secondColorButton->setColor( m_bevelLowerRightColor );
           break;
 
-       case PineBorder:
-       case WoodBorder: 
-       case PaperBorder: 
-       case ParqueBorder: 
-       case IceBorder:
-       case LeafBorder: 
-       case MarbleBorder:
-       case RainBorder:
-       case CratersBorder:
-       case DriedBorder:
-       case PinkBorder:
-       case StoneBorder:
-       case ChalkBorder:
-       case GraniteBorder:
-       case RockBorder:
-       case WallBorder:
+       case Border::PineBorder:
+       case Border::WoodBorder: 
+       case Border::PaperBorder: 
+       case Border::ParqueBorder: 
+       case Border::IceBorder:
+       case Border::LeafBorder: 
+       case Border::MarbleBorder:
+       case Border::RainBorder:
+       case Border::CratersBorder:
+       case Border::DriedBorder:
+       case Border::PinkBorder:
+       case Border::StoneBorder:
+       case Border::ChalkBorder:
+       case Border::GraniteBorder:
+       case Border::RockBorder:
+       case Border::WallBorder:
           QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the first line."));
           QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the second line."));
           m_firstColorButton->setColor( m_decorativeFirstColor );
@@ -457,300 +366,167 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
     slotEffect();
 }
 
-void ImageEffect_Border::slotEffect()
+void ImageEffect_Border::prepareEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    m_borderType->setEnabled(false);
+    m_borderWidth->setEnabled(false);
+    m_firstColorButton->setEnabled(false);
+    m_secondColorButton->setEnabled(false);
 
-    uint* data = iface->getPreviewData();
-    int w      = iface->previewWidth();
-    int h      = iface->previewHeight();
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    int orgWidth = iface->originalWidth();
+    int orgHeight = iface->originalHeight();
+    int w = iface->previewWidth();
+    int h = iface->previewHeight();
+    QImage orgImage(w, h, 32);
+    uint *data = iface->getPreviewData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+
+    int borderType  = m_borderType->currentItem();
+    float ratio     = (float)w/(float)iface->originalWidth();
+    int borderWidth = (int)((float)m_borderWidth->value()*ratio);        
+    QString border = getBorderPath( m_borderType->currentItem() );
     
-    int borderType = m_borderType->currentItem();
-    float ratio = (float)w/(float)iface->originalWidth();
-    int borderWidth = (int)((float)m_borderWidth->value()*ratio);
-    
-    QImage src, dest, tmp;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-
-    switch (borderType)
-       {
-       case SolidBorder:
-          solid(src, tmp, m_solidColor, borderWidth);
-          break;
-       
-       case NiepceBorder:
-          niepce(src, tmp, m_niepceBorderColor, borderWidth, 
-                 m_niepceLineColor, 3);
-          break;
-
-       case BeveledBorder:
-          bevel(src, tmp, m_bevelUpperLeftColor,
-                m_bevelLowerRightColor, borderWidth);
-          break;
-
-       case PineBorder:
-       case WoodBorder: 
-       case PaperBorder: 
-       case ParqueBorder: 
-       case IceBorder:
-       case LeafBorder: 
-       case MarbleBorder:
-       case RainBorder:
-       case CratersBorder:
-       case DriedBorder:
-       case PinkBorder:
-       case StoneBorder:
-       case ChalkBorder:
-       case GraniteBorder:
-       case RockBorder:
-       case WallBorder:
-          pattern( src, tmp, borderWidth, m_decorativeFirstColor, m_decorativeSecondColor,
-                 (int)(20.0*ratio), (int)(20.0*ratio) );
-          break;
-       }
-    
-    tmp = tmp.smoothScale(w, h, QImage::ScaleMin);
-    dest.create( w, h, 32 );
-    dest.fill(m_previewWidget->colorGroup().background().rgb());
-    bitBlt( &dest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());
-    iface->putPreviewData((uint*)dest.bits());
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new Border(&orgImage, this, orgWidth, orgHeight,
+                                  border, borderType, borderWidth, 
+                                  (int)(20.0*ratio), (int)(20.0*ratio), 3, 
+                                  m_solidColor, m_niepceBorderColor,
+                                  m_niepceLineColor, m_bevelUpperLeftColor,
+                                  m_bevelLowerRightColor, m_decorativeFirstColor,
+                                  m_decorativeSecondColor));
     delete [] data;
-    m_previewWidget->update();
-    kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_Border::slotOk()
+void ImageEffect_Border::prepareFinal()
 {
-    accept();
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
+    m_borderType->setEnabled(false);
+    m_borderWidth->setEnabled(false);
+    m_firstColorButton->setEnabled(false);
+    m_secondColorButton->setEnabled(false);
     
     int borderType = m_borderType->currentItem();
+    int borderWidth = m_borderWidth->value();  
+    QString border = getBorderPath( m_borderType->currentItem() );
     
-    QImage src, dest;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-
-    switch (borderType)
-       {
-       case SolidBorder:
-          solid(src, dest, m_solidColor, m_borderWidth->value());
-          break;
-       
-       case NiepceBorder:
-          niepce(src, dest, m_niepceBorderColor, m_borderWidth->value(), 
-                 m_niepceLineColor, 10);
-          break;
-
-       case BeveledBorder:
-          bevel(src, dest, m_bevelUpperLeftColor,
-                m_bevelLowerRightColor, m_borderWidth->value());
-          break;
-
-       case PineBorder:
-       case WoodBorder: 
-       case PaperBorder: 
-       case ParqueBorder: 
-       case IceBorder:
-       case LeafBorder: 
-       case MarbleBorder:
-       case RainBorder:
-       case CratersBorder:
-       case DriedBorder:
-       case PinkBorder:
-       case StoneBorder:
-       case ChalkBorder:
-       case GraniteBorder:
-       case RockBorder:
-       case WallBorder:
-          pattern(src, dest, m_borderWidth->value(), m_decorativeFirstColor, m_decorativeSecondColor, 20, 20);
-          break;
-       }
-
-    iface->putOriginalData(i18n("Add Border"), (uint*)dest.bits(), dest.width(), dest.height());
-       
-    delete [] data;    
+    Digikam::ImageIface iface(0, 0);
+    int orgWidth = iface.originalWidth();
+    int orgHeight = iface.originalHeight();
+    QImage orgImage(orgWidth, orgHeight, 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
-    writeSettings();
-    kapp->restoreOverrideCursor();    
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new Border(&orgImage, this, orgWidth, orgHeight,
+                                  border, borderType, borderWidth, 15, 15, 10,
+                                  m_solidColor, m_niepceBorderColor,
+                                  m_niepceLineColor, m_bevelUpperLeftColor,
+                                  m_bevelLowerRightColor, m_decorativeFirstColor,
+                                  m_decorativeSecondColor));
+    delete [] data;       
 }
 
-void ImageEffect_Border::solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth)
+void ImageEffect_Border::putPreviewData(void)
 {
-    dest.reset();
-    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    dest.fill(fg.rgb());
-       
-    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+
+    int w = iface->previewWidth();
+    int h = iface->previewHeight();
+    QImage tmp = m_threadedFilter->getTargetImage();
+    tmp = tmp.smoothScale(w, h, QImage::ScaleMin);
+    QImage imDest( w, h, 32 );
+    imDest.fill(m_imagePreviewWidget->colorGroup().background().rgb());
+    bitBlt( &imDest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());
+    iface->putPreviewData((uint*)(imDest.smoothScale(w, h)).bits());
+    
+    m_imagePreviewWidget->update();    
 }
 
-void ImageEffect_Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, 
-                                const QColor &bg, int lineWidth)
+void ImageEffect_Border::putFinalData(void)
 {
-    QImage tmp;
-    solid(src, tmp, bg, lineWidth);
-    solid(tmp, dest, fg, borderWidth);
+    Digikam::ImageIface iface(0, 0);    
+
+    iface.putOriginalData(i18n("Add Border"), 
+                         (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_Border::bevel(QImage &src, QImage &dest, const QColor &topColor, 
-                               const QColor &btmColor, int borderWidth)
-{
-    unsigned int *output;
-    int x, y;
-    int wc;
-    
-    dest.reset();
-    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    
-    // top
-    
-    for(y=0, wc = dest.width()-1; y < borderWidth; ++y, --wc)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x=0; x < wc; ++x)
-          output[x] = topColor.rgb();
-        
-       for(;x < dest.width(); ++x)
-          output[x] = btmColor.rgb();
-       }
-       
-    // left and right
-    
-    for(; y < dest.height()-borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x=0; x < borderWidth; ++x)
-          output[x] = topColor.rgb();
-       
-       for(x = dest.width()-1; x > dest.width()-borderWidth-1; --x)
-          output[x] = btmColor.rgb();
-       }
-       
-    // bottom
-    
-    for(wc = borderWidth; y < dest.height(); ++y, --wc)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x=0; x < wc; ++x)
-          output[x] = topColor.rgb();
-          
-       for(; x < dest.width(); ++x)
-          output[x] = btmColor.rgb();
-       }
-       
-    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
-}
-
-void ImageEffect_Border::pattern(QImage &src, QImage &dest, int borderWidth,
-                                 const QColor &firstColor, const QColor &secondColor, 
-                                 int firstWidth, int secondWidth)
+QString ImageEffect_Border::getBorderPath(int border)
 {
     QString pattern;
     
-    switch (m_borderType->currentItem())
+    switch (border)
        {
-       
-       case PineBorder:
+       case Border::PineBorder:
           pattern = "pine-pattern";
           break;
           
-       case WoodBorder: 
+       case Border::WoodBorder: 
           pattern = "wood-pattern";
           break;
        
-       case PaperBorder: 
+       case Border::PaperBorder: 
           pattern = "paper-pattern";
           break;
        
-       case ParqueBorder: 
+       case Border::ParqueBorder: 
           pattern = "parque-pattern";
           break;
        
-       case IceBorder:
+       case Border::IceBorder:
           pattern = "ice-pattern";
           break;
        
-       case LeafBorder: 
+       case Border::LeafBorder: 
           pattern = "leaf-pattern";
           break;
 
-       case MarbleBorder:
+       case Border::MarbleBorder:
           pattern = "marble-pattern";
           break;
        
-       case RainBorder:
+       case Border::RainBorder:
           pattern = "rain-pattern";
           break;
        
-       case CratersBorder:
+       case Border::CratersBorder:
           pattern = "craters-pattern";
           break;
        
-       case DriedBorder:
+       case Border::DriedBorder:
           pattern = "dried-pattern";
           break;
        
-       case PinkBorder:
+       case Border::PinkBorder:
           pattern = "pink-pattern";
           break;
        
-       case StoneBorder:
+       case Border::StoneBorder:
           pattern = "stone-pattern";
           break;
        
-       case ChalkBorder:
+       case Border::ChalkBorder:
           pattern = "chalk-pattern";
           break;
        
-       case GraniteBorder:
+       case Border::GraniteBorder:
           pattern = "granit-pattern";
           break;
 
-       case RockBorder:
+       case Border::RockBorder:
           pattern = "rock-pattern";
           break;
        
-       case WallBorder:
+       case Border::WallBorder:
           pattern = "wall-pattern";
           break;
+       
+       default:
+          return(QString::null);
        }
-    
-    QPixmap patternPixmap(m_previewWidget->imageIface()->originalWidth() + m_borderWidth->value()*2,
-                          m_previewWidget->imageIface()->originalHeight() + m_borderWidth->value()*2);
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
-    QString path = KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png");
-    
-    // Pattern tile.
-    QPainter p(&patternPixmap);
-    p.fillRect( 0, 0, patternPixmap.width(), patternPixmap.height(),
-                QBrush::QBrush(Qt::black,
-                QPixmap::QPixmap(path + pattern + ".png")) );
-    p.end();
-    
-    // First line around the pattern tile.
-    QImage tmp2 = patternPixmap.convertToImage().smoothScale( src.width() + borderWidth*2, 
-                                                              src.height() + borderWidth*2 );
-    
-    solid(tmp2, dest, firstColor, firstWidth);                                                 
-    
-    // Second line around original image.
-    QImage tmp;
-    solid(src, tmp, secondColor, secondWidth);                                                 
-    
-    // Copy original image.                                                 
-    bitBlt( &dest, borderWidth, borderWidth, 
-            &tmp, 0, 0, tmp.width(), tmp.height());
+    return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
 }
 
 }  // NameSpace DigikamBorderImagesPlugin

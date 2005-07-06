@@ -25,29 +25,22 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qimage.h>
+#include <qstring.h>
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagepreviewdialog.h"
 
 class QComboBox;
 class QLabel;
-class QTimer;
 
 class KIntNumInput;
 class KColorButton;
 
-namespace Digikam
-{
-class ImageWidget;
-}
-
 namespace DigikamBorderImagesPlugin
 {
 
-class ImageEffect_Border : public KDialogBase
+class ImageEffect_Border : public DigikamImagePlugins::ImagePreviewDialog
 {
     Q_OBJECT
     
@@ -56,41 +49,10 @@ public:
     ImageEffect_Border(QWidget *parent);
     ~ImageEffect_Border();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
 
-    enum BorderTypes 
-    {
-    SolidBorder=0,
-    NiepceBorder,
-    BeveledBorder,
-    PineBorder,
-    WoodBorder,
-    PaperBorder,
-    ParqueBorder,
-    IceBorder,
-    LeafBorder,
-    MarbleBorder,
-    RainBorder,
-    CratersBorder,
-    DriedBorder,
-    PinkBorder,
-    StoneBorder,
-    ChalkBorder,
-    GraniteBorder,
-    RockBorder,
-    WallBorder
-    };
-    
     QLabel               *m_labelForeground;
     QLabel               *m_labelBackground;
-    
-    QWidget              *m_parent;
-    
-    QPushButton          *m_helpButton;
 
     QComboBox            *m_borderType;
     
@@ -102,36 +64,31 @@ private:
     QColor                m_decorativeFirstColor; 
     QColor                m_decorativeSecondColor;
     
-    QTimer               *m_timer;
-
     KIntNumInput         *m_borderWidth;
     
     KColorButton         *m_firstColorButton;
     KColorButton         *m_secondColorButton;
     
-    Digikam::ImageWidget *m_previewWidget;
-    
 private:
 
     void readSettings(void);
     void writeSettings(void);
+    QString getBorderPath(int border);
     
-    void solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth);
-    void niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth);
-    void bevel(QImage &src, QImage &dest, const QColor &topColor, const QColor &btmColor, int borderWidth);
-    void pattern(QImage &src, QImage &dest, int borderWidth, const QColor &firstColor, 
-                 const QColor &secondColor, int firstWidth, int secondWidth);
-
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotUser1();
-    void slotTimer();
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
+    
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);    
 };
 
 }  // NameSpace DigikamBorderImagesPlugin

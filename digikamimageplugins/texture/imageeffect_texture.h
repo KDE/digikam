@@ -23,6 +23,10 @@
 #ifndef IMAGEEFFECT_TEXTURE_H
 #define IMAGEEFFECT_TEXTURE_H
 
+// Qt includes.
+
+#include <qstring.h>
+
 // Local includes.
 
 #include "ctrlpaneldialog.h"
