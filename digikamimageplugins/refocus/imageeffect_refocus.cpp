@@ -57,14 +57,14 @@ namespace DigikamRefocusImagesPlugin
 {
 
 ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Photograph Refocus"), "refocus", true)
+                   : CtrlPanelDialog(parent, i18n("Refocus a Photograph"), "refocus", true)
 {
     QString whatsThis;
         
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Photograph Refocus"), 
+                                       I18N_NOOP("Refocus a Photograph"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to refocus a photograph."),
                                        KAboutData::License_GPL,
