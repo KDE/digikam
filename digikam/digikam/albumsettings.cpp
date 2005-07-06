@@ -360,7 +360,7 @@ AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
     return d->albumSortOrder;
 }
 
-void AlbumSettings::setImageSortOder(const ImageSortOrder order)
+void AlbumSettings::setImageSortOrder(const ImageSortOrder order)
 {
     d->imageSortOrder = order;    
 }

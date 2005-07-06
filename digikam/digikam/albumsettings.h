@@ -74,7 +74,7 @@ public:
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
 
-    void setImageSortOder(const ImageSortOrder order);
+    void setImageSortOrder(const ImageSortOrder order);
     ImageSortOrder getImageSortOrder() const;
 
     void setImageFileFilter(const QString& filter);

@@ -639,7 +639,7 @@ void DigikamView::slotSortImages(int order)
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
-    settings->setImageSortOder((AlbumSettings::ImageSortOrder) order);
+    settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
     mIconView->slotUpdate();
 }
 
