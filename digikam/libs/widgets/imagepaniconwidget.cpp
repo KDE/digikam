@@ -112,27 +112,20 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
     if (targetDone)
        {
-       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
-       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
-       if (m_localRegionSelection.right() > m_rect.width())
-          m_localRegionSelection.moveRight(m_rect.width());
-       if (m_localRegionSelection.bottom() > m_rect.height()) 
-          m_localRegionSelection.moveBottom(m_rect.height());
-       
        updatePixmap();          
        repaint(false);
        }
     
-    int x = (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
+    int x = ROUND( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
                    ( (float)m_iface->originalWidth() / (float)m_w ));
                                             
-    int y = (int)( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
+    int y = ROUND( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
                    ( (float)m_iface->originalHeight() / (float)m_h ));
                                             
-    int w = (int)((float)m_localRegionSelection.width() *
+    int w = ROUND((float)m_localRegionSelection.width() *
                  ( (float)m_iface->originalWidth() / (float)m_w ));
                                      
-    int h = (int)((float)m_localRegionSelection.height() *
+    int h = ROUND((float)m_localRegionSelection.height() *
                  ( (float)m_iface->originalHeight() / (float)m_h ));
                      
     m_regionSelection.setX(x);
@@ -188,7 +181,7 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
 
 void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    if ( m_moveSelection && m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
+    if ( m_moveSelection ) 
        {    
        setCursor( KCursor::arrowCursor() );           
        regionSelectionMoved(true);
@@ -202,13 +195,21 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        int newxpos = e->x();
        int newypos = e->y();
-       
+
        m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
-       updatePixmap();
-       repaint(false);
      
        m_xpos = newxpos;
        m_ypos = newypos;
+              
+       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
+       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
+       if (m_localRegionSelection.right() > m_rect.width())
+          m_localRegionSelection.moveRight(m_rect.width());
+       if (m_localRegionSelection.bottom() > m_rect.height()) 
+          m_localRegionSelection.moveBottom(m_rect.height());
+       
+       updatePixmap();
+       repaint(false);
        regionSelectionMoved(false);
        return;
        }        
