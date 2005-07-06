@@ -708,7 +708,7 @@ QDateTime AlbumDB::getItemDate(Q_LLONG imageID)
              .arg(imageID),
              &values );
 
-    if (!values.isEmpty())
+    if (values.isEmpty())
         return QDateTime();
     else
         return QDateTime::fromString(values[0], Qt::ISODate);
