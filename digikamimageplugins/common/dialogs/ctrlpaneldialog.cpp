@@ -139,7 +139,6 @@ CtrlPanelDialog::~CtrlPanelDialog()
        
     if (m_threadedFilter)
        delete m_threadedFilter;    
-       
 }
 
 void CtrlPanelDialog::slotInit()
