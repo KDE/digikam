@@ -4,7 +4,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 	      -I$(top_srcdir)/digikamimageplugins/common/cimgiface \
-	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \           
+	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
 # Install this plugin in the KDE modules directory
