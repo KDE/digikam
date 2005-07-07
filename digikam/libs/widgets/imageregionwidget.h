@@ -3,7 +3,7 @@
  * Date  : 2004-08-17
  * Description : a widget to draw a image clip region.
  * 
- * Copyright 2004-2005 Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,8 +41,8 @@ public:
     ImageRegionWidget(int wp, int hp, QWidget *parent=0, bool scrollBar=true);
     ~ImageRegionWidget();
     
-    void   setClipPosition(int x, int y, bool targetDone);    
-    void   setCenterClipPosition(void);
+    void   setContentsPosition(int x, int y, bool targetDone);    
+    void   setCenterContentsPosition(void);
     QRect  getImageRegion(void);
     QRect  getImageRegionToRender(void);
     QImage getImageRegionData(void);
@@ -64,6 +64,7 @@ protected:
 private:
     
     bool     m_separateView;
+    bool     m_movingInProgress;
 
     int      m_xpos;
     int      m_ypos;
@@ -84,6 +85,7 @@ public slots:
 private slots:
     
     void slotTimerResizeEvent();
+
 };
 
 }  // NameSpace Digikam

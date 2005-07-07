@@ -45,9 +45,11 @@ namespace Digikam
 {
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
-                 : QScrollView(parent)
+                 : QScrollView(parent, 0, WRepaintNoErase)
 {
-    m_separateView = false;
+    m_separateView     = false;
+    m_movingInProgress = false;
+    m_pix              = 0L;
     
     if( !scrollBar ) 
        {
@@ -112,16 +114,6 @@ void ImageRegionWidget::updatePixmap(QImage *img)
     m_pix = new QPixmap(w, h);
     m_pix->convertFromImage(*img);
     
-    if (m_separateView)
-        {
-        QPainter p(m_pix);
-        p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-        p.drawLine(getImageRegionToRender().topLeft().x(),    getImageRegionToRender().topLeft().y(),
-                   getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
-        p.end();
-        }
-
-            
     horizontalScrollBar()->setLineStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
     verticalScrollBar()->setLineStep( 1 );
@@ -134,17 +126,39 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
     if(!m_pix) return;
     else p->drawPixmap(x, y, *m_pix, x, y, w, h);
+    
+    if (m_separateView & !m_movingInProgress)
+        {
+        p->setPen(QPen(Qt::red, 2, Qt::DotLine));
+        p->drawLine(getImageRegionToRender().topLeft().x(),    getImageRegionToRender().topLeft().y(),
+                    getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
+                    
+        p->setPen(QPen::QPen(Qt::red, 1)) ;                    
+        p->drawText(getImageRegionToRender().topLeft().x()+20, 
+                    getImageRegionToRender().topLeft().y()+20, 
+                    i18n("Target"));
+        p->drawText(contentsX()+20, 
+                    contentsY()+20, 
+                    i18n("Original"));
+        }
 }
 
-void ImageRegionWidget::setCenterClipPosition(void)
+void ImageRegionWidget::setCenterContentsPosition(void)
 {
     center(contentsWidth()/2, contentsHeight()/2);    
     emit contentsMovedEvent(true);
 }
 
-void ImageRegionWidget::setClipPosition(int x, int y, bool targetDone)
+void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
 {
     setContentsPos(x, y);    
+    
+    if( targetDone )
+       m_movingInProgress = false;
+    else
+       m_movingInProgress = true;
+    
+    repaintContents(false);    
     
     if( targetDone )
        emit contentsMovedEvent(true);
@@ -173,6 +187,7 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
     return( QRect::QRect(horizontalScrollBar()->value(), verticalScrollBar()->value(), 
                          normalizedW, normalizedH) );
 }
+
 QImage ImageRegionWidget::getImageRegionData(void)
 {
     return ( m_img.copy(getImageRegionToRender()) );
@@ -184,6 +199,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
        {
        m_xpos = e->x();
        m_ypos = e->y();
+       m_movingInProgress = true;
        setCursor( KCursor::sizeAllCursor() );    
        updateOriginalImage();
        }
@@ -191,6 +207,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
+    m_movingInProgress = false;
     setCursor( KCursor::arrowCursor() );    
     emit contentsMovedEvent(true);
 }
@@ -201,9 +218,10 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
        {
        uint newxpos = e->x();
        uint newypos = e->y();
-      
+       
        scrollBy (-(newxpos - m_xpos), -(newypos - m_ypos));
-     
+       repaintContents(false);    
+       
        m_xpos = newxpos - (newxpos-m_xpos);
        m_ypos = newypos - (newypos-m_ypos);
        emit contentsMovedEvent(false);
