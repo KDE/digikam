@@ -863,8 +863,7 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton && 
-         m_rect.contains(e->x(), e->y()) )
+    if ( e->state() == Qt::LeftButton )
        {
        if ( m_currentResizing == ResizingNone )
           {
@@ -874,15 +873,29 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
                
           m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
 
-          updatePixmap();
-          repaint(false);
-     
           m_xpos = newxpos;
           m_ypos = newypos;
+          
+          // Perform normalization of selection area.
+          
+          if (m_localRegionSelection.left() < m_rect.left()) 
+             m_localRegionSelection.moveLeft(m_rect.left());
+             
+          if (m_localRegionSelection.top() < m_rect.top()) 
+             m_localRegionSelection.moveTop(m_rect.top());
+             
+          if (m_localRegionSelection.right() > m_rect.right())
+             m_localRegionSelection.moveRight(m_rect.right());
+             
+          if (m_localRegionSelection.bottom() > m_rect.bottom()) 
+             m_localRegionSelection.moveBottom(m_rect.bottom());
+          
+          updatePixmap();
+          repaint(false);
           regionSelectionMoved(false);
           return;
           }    
-       else
+       else if ( m_rect.contains(e->x(), e->y()) )
           {
           QPoint pm(e->x(), e->y());
           
