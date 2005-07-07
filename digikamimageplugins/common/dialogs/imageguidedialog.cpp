@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
@@ -33,14 +34,12 @@
 // KDE includes.
 
 #include <kcursor.h>
-#include <kprogress.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kurllabel.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -52,6 +51,7 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "imageguidedialog.h"
 
 namespace DigikamImagePlugins
@@ -84,32 +84,9 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
 
     m_mainLayout = new QGridLayout( plainPage(), 3, 2 , KDialog::marginHint(), KDialog::spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    KURLLabel *pixmapLabelLeft = new KURLLabel( headerFrame );
-    pixmapLabelLeft->setText(QString::null);
-    pixmapLabelLeft->setURL("http://extragear.kde.org/apps/digikamimageplugins");
-    pixmapLabelLeft->setScaledContents( false );
-    QToolTip::add(pixmapLabelLeft, i18n("Visit DigikamImagePlugins project website"));
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( title, headerFrame );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title);
+
     m_mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", 
-                                     KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
     // -------------------------------------------------------------
 
@@ -148,9 +125,6 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
     
-    connect(pixmapLabelLeft, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processURL(const QString&)));
-
     connect(m_imagePreviewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));                   
 }
@@ -182,11 +156,6 @@ void ImageGuideDialog::setUserAreaWidget(QWidget *w)
     QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
     vLayout->addWidget(w);
     m_mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
-}
-
-void ImageGuideDialog::processURL(const QString& url)
-{
-    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void ImageGuideDialog::setAboutData(KAboutData *about)

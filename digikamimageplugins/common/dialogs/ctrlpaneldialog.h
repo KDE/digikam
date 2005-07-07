@@ -92,7 +92,6 @@ private slots:
     void slotHelp();
     void slotFocusChanged(void);    
     void slotInit();
-    void processURL(const QString& url);
     
 protected:
 
