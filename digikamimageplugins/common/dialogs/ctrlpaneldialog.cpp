@@ -2,8 +2,8 @@
  * File  : ctrlpaneldialog.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
- * Description : A control panel dialog for plugins
- *
+ * Description : A threaded filter control panel dialog for 
+ *               image editor plugins
  * 
  * Copyright 2005 by Gilles Caulier
  *

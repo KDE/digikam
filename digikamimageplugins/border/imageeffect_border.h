@@ -29,7 +29,7 @@
 
 // Local includes.
 
-#include "imagepreviewdialog.h"
+#include "imageguidedialog.h"
 
 class QComboBox;
 class QLabel;
@@ -40,7 +40,7 @@ class KColorButton;
 namespace DigikamBorderImagesPlugin
 {
 
-class ImageEffect_Border : public DigikamImagePlugins::ImagePreviewDialog
+class ImageEffect_Border : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
     

@@ -2,8 +2,8 @@
  * File  : imageguidedialog.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
- * Description : A simple plugin dialog with a preview image 
- *               guide widget and a settings user area
+ * Description : A threaded filter plugin dialog with a preview 
+ *               image guide widget and a settings user area
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -31,17 +31,15 @@
 
 #include <kdialogbase.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 class QTimer;
 class QGridLayout;
 
 class KAboutData;
 class KProgress;
-
-namespace Digikam
-{
-class ImageGuideWidget;
-class ThreadedFilter;
-}
 
 namespace DigikamImagePlugins
 {
@@ -53,7 +51,9 @@ class ImageGuideDialog : public KDialogBase
 public:
 
     ImageGuideDialog(QWidget* parent, QString title, QString name, 
-                       bool loadFileSettings=false, bool progress=true);
+                     bool loadFileSettings=false, bool progress=true, 
+                     bool guideVisible=true, 
+                     int guideMode=Digikam::ImageGuideWidget::HVGuideMode);
     ~ImageGuideDialog();
 
     void setAboutData(KAboutData *about);

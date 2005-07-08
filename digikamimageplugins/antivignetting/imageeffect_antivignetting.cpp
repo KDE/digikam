@@ -56,7 +56,8 @@ namespace DigikamAntiVignettingImagesPlugin
 {
 
 ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
-                          : ImagePreviewDialog(parent, i18n("Anti-Vignetting"), "antivignettings")
+                          : ImageGuideDialog(parent, i18n("Anti-Vignetting"), "antivignettings",
+                                             false, true, false)
 {
     QString whatsThis;
     

@@ -25,7 +25,7 @@
 
 // Local includes.
 
-#include "imagepreviewdialog.h"
+#include "imageguidedialog.h"
 
 class QLabel;
 class QTabWidget;
@@ -36,7 +36,7 @@ class KDoubleNumInput;
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-class ImageEffect_AntiVignetting : public DigikamImagePlugins::ImagePreviewDialog
+class ImageEffect_AntiVignetting : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
     

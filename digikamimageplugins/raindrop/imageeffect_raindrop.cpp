@@ -53,7 +53,8 @@ namespace DigikamRainDropImagesPlugin
 {
 
 ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
-                    : ImagePreviewDialog(parent, i18n("Add Raindrops to a Photograph"), "raindrops")
+                    : ImageGuideDialog(parent, i18n("Add Raindrops to a Photograph"), "raindrops",
+                                       false, true, false)
 {
     QString whatsThis;
     
@@ -75,8 +76,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     setAboutData(about);
     
     QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the Raindrop effect."
-                                           "<p>Note: if you have previously selected an image part on editor, "
-                                           "this part will be unused by the filter. You can use this way to "
+                                           "<p>Note: if you have previously selected an area on editor, "
+                                           "this one will be unused by the filter. You can use this way to "
                                            "disable the Raindrops effect on a human face for example.") );
     
     // -------------------------------------------------------------
