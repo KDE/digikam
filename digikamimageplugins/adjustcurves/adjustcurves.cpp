@@ -260,8 +260,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick a color on the image using the color "
-                                                   "picker tools to select shadow, middle, and highlight tones to adjust the curves' points in the Red, "
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
+                                                   "a color on the image using the color "
+                                                   "picker tools to select shadow, middle, and highlight "
+                                                   "tones to adjust the curves' points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
     l2->addWidget(m_previewOriginalWidget);
 
@@ -269,7 +271,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's curve-adjustments preview."));
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
+                                                 "curve-adjustments preview."));
     l3->addWidget(m_previewTargetWidget);
 
     vLayout->addWidget(frame2);
