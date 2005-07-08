@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Restoration
+Name[da]=Plugin for billedrestaurering
 Name[it]=PluginImmagini_Restauro
 Name[nl]=Afbeeldingsplugin_Restoratie
 Name[pt_BR]=Plug-in de restauração de fotos
@@ -12,6 +13,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to restore a photograph
+Comment[da]=Digikam plugin for restaurering af et fotografi
 Comment[de]=digiKam Plugin zur Restauration eines Photos.
 Comment[el]=Πρόσθετο του digiKam για αποκατάσταση μιας φωτογραφίας
 Comment[et]=DigiKami foto restaureerimimise plugin

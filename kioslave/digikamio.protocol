@@ -12,6 +12,7 @@ deleting=true
 moving=true
 maxInstances=4
 Description=Digikam IO kioslave
+Description[da]=Digikam kioslave
 Description[et]=DigiKami I/O-moodul
 Description[it]=Kioslave IO di Digikam
 Description[nl]=digiKam IO kioslave

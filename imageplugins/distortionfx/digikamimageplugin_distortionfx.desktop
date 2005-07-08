@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_DistortionFX
+Name[da]=Plugin for forvrængningseffekt
 Name[it]=PluginImmagini_EffettiDiDistorsione
 Name[nl]=Afbeeldingsplugin_vervormingseffect
 Name[pt_BR]=Plug-in de distorção
@@ -11,6 +12,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Distortion special effects plugin for digiKam
+Comment[da]=Digikam plugin for forvrængningsspecialeffekt
 Comment[de]=digiKam Plugin zum Verzerren von Bildern
 Comment[el]=Πρόσθετο ειδικών εφέ παραμόρφωσης για το digiKam
 Comment[es]=Complemento de efectos especiales de distorsión para digiKam

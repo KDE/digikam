@@ -10,6 +10,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam Core Image Plugin
+Comment[da]=Grundlæggende Digikam billed-plugin
 Comment[de]=digiKam Kernplugin
 Comment[et]=DigiKami peamine pildiplugin
 Comment[it]=Plugin delle immagini centrale di digiKam

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_InPainting
+Name[da]=Plugin for indfyldning
 Name[it]=PluginImmagini_Reintegrazione
 Name[nl]=Afbeeldingsplugin_Inkleuren
 Name[pt_BR]=Plug-in de coloração de imagens 
@@ -11,6 +12,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to inpaint a photograph
+Comment[da]=Digikam plugin for at indfylde i et fotografi
 Comment[de]=digiKam Plugin um Inpainting Operationen auf ein Bild auszuführen.
 Comment[et]=DigiKami foto objektide kaotamise plugin
 Comment[it]=Plugin di digiKam per reintegrare una fotografia
