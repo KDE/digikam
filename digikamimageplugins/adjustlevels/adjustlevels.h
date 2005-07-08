@@ -38,7 +38,6 @@ class KDoubleNumInput;
 
 namespace Digikam
 {
-class ColorGradientWidget;
 class HistogramWidget;
 class ImageLevels;
 class ImageWidget;
@@ -113,14 +112,12 @@ private:
     KGradientSelector         *m_hGradientMinOutput;
     KGradientSelector         *m_hGradientMaxOutput;
     
-    Digikam::ColorGradientWidget *m_vGradient;
+    Digikam::HistogramWidget  *m_histogramWidget;
     
-    Digikam::HistogramWidget     *m_histogramWidget;
+    Digikam::ImageGuideWidget *m_previewOriginalWidget;
+    Digikam::ImageWidget      *m_previewTargetWidget;
     
-    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageWidget         *m_previewTargetWidget;
-    
-    Digikam::ImageLevels         *m_levels;
+    Digikam::ImageLevels      *m_levels;
 
 private:
 
