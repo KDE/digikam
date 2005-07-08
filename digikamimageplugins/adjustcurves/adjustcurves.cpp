@@ -301,9 +301,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));              
 
-    connect(m_previewOriginalWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
-
     connect(m_previewTargetWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                                            
             
