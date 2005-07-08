@@ -25,6 +25,9 @@
 #include <qtimer.h>
 #include <qpainter.h>
 #include <qpen.h>
+#include <qbrush.h>
+#include <qfont.h> 
+#include <qfontmetrics.h> 
 
 // KDE includes.
 
@@ -134,12 +137,25 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                     getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
                     
         p->setPen(QPen::QPen(Qt::red, 1)) ;                    
-        p->drawText(getImageRegionToRender().topLeft().x()+20, 
-                    getImageRegionToRender().topLeft().y()+20, 
-                    i18n("Target"));
-        p->drawText(contentsX()+20, 
-                    contentsY()+20, 
-                    i18n("Original"));
+        QFontMetrics fontMt = p->fontMetrics();
+        
+        QString text(i18n("Target"));
+        QRect textRect;
+        QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+        textRect.setTopLeft(QPoint::QPoint(getImageRegionToRender().topLeft().x()+20, 
+                                           getImageRegionToRender().topLeft().y()+20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+        p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p->drawRect(textRect);
+        p->drawText(textRect, Qt::AlignCenter, text);
+                    
+        text = i18n("Original");                    
+        fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+        textRect.setTopLeft(QPoint::QPoint(contentsX()+20, contentsY()+20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+        p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p->drawRect(textRect);
+        p->drawText(textRect, Qt::AlignCenter, text);
         }
 }
 
