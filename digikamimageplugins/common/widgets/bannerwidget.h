@@ -38,7 +38,7 @@ public:
     BannerWidget(QWidget *parent=0, QString title=QString::null);
     ~BannerWidget();
 
-private:        
+private slots:        
 
     void processURL(const QString& url);
 };
