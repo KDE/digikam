@@ -148,8 +148,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
+    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
 
@@ -157,14 +157,10 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gbox );
-    m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 1, 1, 0, 0);
-    
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l->addWidget(m_histogramWidget, 0);
-    grid->addMultiCellWidget(frame, 1, 1, 1, 4);
+    grid->addMultiCellWidget(frame, 1, 1, 0, 4);
 
     m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMinInput->setFixedHeight( 20 );
@@ -173,7 +169,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradientMinInput, 2, 2, 1, 4);
+    grid->addMultiCellWidget(m_hGradientMinInput, 2, 2, 0, 4);
 
     m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMaxInput->setFixedHeight( 20 );
@@ -182,7 +178,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradientMaxInput, 3, 3, 1, 4);
+    grid->addMultiCellWidget(m_hGradientMaxInput, 3, 3, 0, 4);
 
     m_minInput = new QSpinBox(0, 255, 1, gbox);
     m_minInput->setValue(0);
@@ -200,7 +196,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     grid->addMultiCellWidget(m_minInput, 2, 2, 5, 5);
     grid->addMultiCellWidget(m_maxInput, 3, 3, 5, 5);
-    grid->addMultiCellWidget(m_gammaInput, 4, 4, 1, 5);
+    grid->addMultiCellWidget(m_gammaInput, 4, 4, 0, 5);
 
     m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -209,7 +205,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
     m_hGradientMinOutput->setMaxValue(255);
-    grid->addMultiCellWidget(m_hGradientMinOutput, 5, 5, 1, 4);
+    grid->addMultiCellWidget(m_hGradientMinOutput, 5, 5, 0, 4);
 
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gbox );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -218,7 +214,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
     m_hGradientMaxOutput->setMaxValue(255);
-    grid->addMultiCellWidget(m_hGradientMaxOutput, 6, 6, 1, 4);
+    grid->addMultiCellWidget(m_hGradientMaxOutput, 6, 6, 0, 4);
 
     m_minOutput = new QSpinBox(0, 255, 1, gbox);
     m_minOutput->setValue(0);
@@ -346,9 +342,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
+            
+    connect(m_previewOriginalWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));
 
     connect(m_previewTargetWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                                            
+                        
                         
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
