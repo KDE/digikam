@@ -70,9 +70,12 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
     
-    QLabel *pixmapLabelRight = new QLabel( this );
-    pixmapLabelLeft->setText(QString::null);
-    pixmapLabelLeft->setScaledContents( false );
+    KURLLabel *pixmapLabelRight = new KURLLabel( this );
+    pixmapLabelRight->setText(QString::null);
+    pixmapLabelRight->setURL("http://www.digikam.org");
+    pixmapLabelRight->setScaledContents( false );
+    pixmapLabelRight->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    QToolTip::add(pixmapLabelRight, i18n("Visit digiKam project website"));
     layout->addWidget( pixmapLabelRight );
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_right", 
                                      KGlobal::dirs()->kde_default("data") +
@@ -86,6 +89,9 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
     
     connect(pixmapLabelLeft, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processURL(const QString&)));
+
+    connect(pixmapLabelRight, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processURL(const QString&)));                        
 }      
 
 BannerWidget::~BannerWidget()
