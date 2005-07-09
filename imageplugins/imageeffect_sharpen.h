@@ -25,11 +25,13 @@
 
 #include <kdialogbase.h>
 
+class QTimer;
+
 class KIntNumInput;
 
 namespace Digikam
 {
-class ImagePreviewWidget;
+class ImagePannelWidget;
 }
 
 class ImageEffect_Sharpen : public KDialogBase
@@ -45,14 +47,17 @@ private:
 
     QWidget      *m_parent;
     
+    QTimer       *m_timer;
+    
     KIntNumInput *m_radiusInput;
     
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    Digikam::ImagePannelWidget *m_imagePreviewWidget;
     
 private slots:
 
     void slotEffect();
     void slotOk();
+    void slotTimer();
 };
 
 #endif /* IMAGEEFFECT_SHARPEN_H */

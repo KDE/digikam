@@ -26,7 +26,6 @@
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
-#include "albumlister.h"
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
@@ -68,8 +67,8 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (!album->isRoot())
     {
-        QPixmap pix = SyncJob::getTagThumbnail(album->getIcon(), KIcon::SizeSmall);
-        popup->insertItem(pix, album->getTitle(), m_addToID + album->getID());
+        QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+        popup->insertItem(pix, album->title(), m_addToID + album->id());
         popup->insertSeparator();
     }
 
@@ -79,19 +78,19 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
         {
             IntList::iterator it = qFind(m_assignedTags.begin(),
                                          m_assignedTags.end(),
-                                         a->getID());
+                                         a->id());
             if (it == m_assignedTags.end())
                 continue;
         }
 
-        QPixmap pix = SyncJob::getTagThumbnail(a->getIcon(), KIcon::SizeSmall);
+        QPixmap pix = SyncJob::getTagThumbnail(((TAlbum*)a)->icon(), KIcon::SizeSmall);
         if (a->firstChild())
         {
-            popup->insertItem(pix, a->getTitle(), buildSubMenu(a->getID()));
+            popup->insertItem(pix, a->title(), buildSubMenu(a->id()));
         }
         else
         {
-            popup->insertItem(pix, a->getTitle(), m_addToID + a->getID());
+            popup->insertItem(pix, a->title(), m_addToID + a->id());
         }
     }
 
@@ -101,34 +100,26 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 void TagsPopupMenu::slotAboutToShow()
 {
     clearPopup();
-    
+
     AlbumManager* man = AlbumManager::instance();
 
     if (m_onlyAssignedTags)
     {
-        AlbumLister* lister = m_view->albumLister();
-    
-        QStringList nameList;
-        IntList     dirIDList;
-        for (ThumbItem *it = m_view->firstItem(); it; it = it->nextItem())
+        LLongList  idList;
+        for (IconItem *it = m_view->firstItem(); it; it = it->nextItem())
         {
             if (it->isSelected())
             {
                 AlbumIconItem* item = static_cast<AlbumIconItem*>(it);
-                PAlbum *album = lister->findParentAlbum(item->fileItem());
-                if (album)
-                {
-                    nameList .append(item->fileItem()->name());
-                    dirIDList.append(album->getID());
-                }
+                idList.append(item->imageInfo()->id());
             }
         }
 
-        if (nameList.isEmpty())
+        if (idList.isEmpty())
             return;
 
-        m_assignedTags = man->albumDB()->getItemCommonTagIDs(dirIDList,
-                                                             nameList);
+        m_assignedTags = man->albumDB()->getItemCommonTagIDs(idList);
+
         if (m_assignedTags.isEmpty())
             return;
 
@@ -140,11 +131,11 @@ void TagsPopupMenu::slotAboutToShow()
             TAlbum* album = man->findTAlbum(*it);
             if (album)
             {
-                Album* a = album->getParent();
+                Album* a = album->parent();
                 while (a)
                 {
-                    tList.append(a->getID());
-                    a = a->getParent();
+                    tList.append(a->id());
+                    a = a->parent();
                 }
             }
         }
@@ -166,19 +157,19 @@ void TagsPopupMenu::slotAboutToShow()
         {
             IntList::iterator it = qFind(m_assignedTags.begin(),
                                          m_assignedTags.end(),
-                                         a->getID());
+                                         a->id());
             if (it == m_assignedTags.end())
                 continue;
         }
         
-        QPixmap pix = SyncJob::getTagThumbnail(a->getIcon(), KIcon::SizeSmall);
+        QPixmap pix = SyncJob::getTagThumbnail(((TAlbum*)a)->icon(), KIcon::SizeSmall);
         if (a->firstChild())
         {
-            insertItem(pix, a->getTitle(), buildSubMenu(a->getID()));
+            insertItem(pix, a->title(), buildSubMenu(a->id()));
         }
         else
         {
-            insertItem(pix, a->getTitle(), m_addToID + a->getID());
+            insertItem(pix, a->title(), m_addToID + a->id());
         }
     }
 }

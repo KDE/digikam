@@ -54,7 +54,6 @@ private:
 
     QComboBox    *thumbnailSize_;
 
-    QCheckBox    *recurseTagsBox_;
     QCheckBox    *showToolTipsBox_;
 
     QCheckBox    *iconShowNameBox_;
@@ -63,7 +62,6 @@ private:
     QCheckBox    *iconShowResolutionBox_;
     QCheckBox    *iconShowCommentsBox_;
     QCheckBox    *iconShowTagsBox_;
-    QCheckBox    *iconShowFileCommentsBox_;
 
     KDialogBase  *mainDialog_;
 

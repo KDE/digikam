@@ -68,6 +68,8 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    QWhatsThis::add( albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                         "library in your computer.\n"
                                         "Write access is required for this path."));
+   // TODO: disable this till changing album library path is fixed
+   albumPathEdit->setEnabled( false );
 
    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
                                                    albumPathBox);
@@ -87,19 +89,6 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    showToolTipsBox_->setText(i18n("Show toolti&ps for items"));
 
    layout->addWidget(tipSettingBox);
-
-   // --------------------------------------------------------
-
-   QVGroupBox *tagSettingBox = new QVGroupBox(parent);
-   tagSettingBox->setTitle(i18n("Tag Settings"));
-
-   recurseTagsBox_ = new QCheckBox(tagSettingBox);
-   recurseTagsBox_->setText(i18n("Show items in su&b-tags"));
-   QWhatsThis::add( recurseTagsBox_, i18n("<p>When showing items in a Tag, also "
-                                          "show items in sub-Tags."));
-
-   layout->addWidget(tagSettingBox);
-
 
    // --------------------------------------------------------
    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
@@ -140,10 +129,6 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    iconShowCommentsBox_ = new QCheckBox(iconTextGroup);
    iconShowCommentsBox_->setText(i18n("Show &digiKam comments"));
    tagSettingsLayout->addMultiCellWidget(iconShowCommentsBox_, 5, 5, 0, 2);
-
-   iconShowFileCommentsBox_ = new QCheckBox(iconTextGroup);
-   iconShowFileCommentsBox_->setText(i18n("Sho&w comments stored in file (warning: slow)"));
-   tagSettingsLayout->addMultiCellWidget(iconShowFileCommentsBox_, 6, 6, 0, 2);
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
    iconShowResolutionBox_->setText(i18n("Show ima&ge dimensions (warning: slow)"));
@@ -189,7 +174,6 @@ void SetupGeneral::applySettings()
     }
 
     settings->setDefaultIconSize(iconSize);
-    settings->setRecurseTags(recurseTagsBox_->isChecked());
     settings->setShowToolTips(showToolTipsBox_->isChecked());
 
     settings->setIconShowName(iconShowNameBox_->isChecked());
@@ -198,7 +182,6 @@ void SetupGeneral::applySettings()
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowResolution(iconShowResolutionBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
-    settings->setIconShowFileComments(iconShowFileCommentsBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -230,7 +213,6 @@ void SetupGeneral::readSettings()
             break;
     }
 
-    recurseTagsBox_->setChecked(settings->getRecurseTags());
     showToolTipsBox_->setChecked(settings->getShowToolTips());
 
     iconShowNameBox_->setChecked(settings->getIconShowName());
@@ -239,7 +221,6 @@ void SetupGeneral::readSettings()
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowResolutionBox_->setChecked(settings->getIconShowResolution());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
-    iconShowFileCommentsBox_->setChecked(settings->getIconShowFileComments());
 }
 
 void SetupGeneral::slotChangeAlbumPath()

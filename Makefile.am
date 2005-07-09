@@ -22,4 +22,3 @@ messages: rc.cpp
 	rm -f tips.cpp
 
 include ../admin/Doxyfile.am
-

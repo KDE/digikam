@@ -2,7 +2,7 @@
  * File  : imageeffect_texture.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-03-10
- * Description : a digiKam image editor plugin for apply 
+ * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
@@ -23,29 +23,22 @@
 #ifndef IMAGEEFFECT_TEXTURE_H
 #define IMAGEEFFECT_TEXTURE_H
 
-// Qt include.
+// Qt includes.
 
-#include <qimage.h>
+#include <qstring.h>
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldialog.h"
 
-class QPushButton;
-class QTimer;
 class QComboBox;
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
-
 namespace DigikamTextureImagesPlugin
 {
 
-class ImageEffect_Texture : public KDialogBase
+class ImageEffect_Texture : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -75,46 +68,23 @@ private:
     MossTexture,
     StoneTexture
     };
-        
-protected:
 
-    void closeEvent(QCloseEvent *e);
-    
-private:
-
-    bool          m_cancel;
-
-    QWidget      *m_parent;
-    
-    QTimer       *m_timer;
-    
-    QPushButton  *m_helpButton;
-    
     QComboBox    *m_textureType;
 
-    KIntNumInput *m_blendGain;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
+    KIntNumInput *m_blendGain;    
     
 private:
-
-    void texture(uint* data, int width, int height, int blendGain, int texture);
     
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-              
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    void slotTimer();   
+    QString getTexturePath(int texture);
+        
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamTextureImagesPlugin

@@ -136,9 +136,9 @@ private:
     
     KProgress       *m_progressBar;
     
-    DigikamImagePlugins::CimgIface       *m_cimgInterface;
+    DigikamImagePlugins::CimgIface *m_cimgInterface;
     
-    Digikam::ImageIface                  *m_iface;    
+    Digikam::ImageIface            *m_iface;    
     
     void customEvent(QCustomEvent *event);
     

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="1" name="showfoto" >
+<gui version="2" name="showfoto" >
 
 <MenuBar>
 
@@ -57,6 +57,8 @@
      <Separator />
      <Action name="show_thumbs" /> 
      <Action name="view_histogram" /> 
+     <Separator />
+     <Action name="slideshow" /> 
  </Menu>
 
  <Menu name="help" >
@@ -100,6 +102,7 @@
   <Action name="crop" />
   <Separator />
   <Action name="full_screen" /> 
+  <Action name="slideshow" /> 
   <Merge/>
 </ToolBar>
 

@@ -69,9 +69,6 @@ public:
                           QString& collection,
                           QStringList& albumCollections);
 
-    QDate averageDate( bool basedOnExif ) const;
-
-
 private:
 
     PAlbum         *album_;

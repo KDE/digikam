@@ -39,6 +39,7 @@
 
 // Local includes.
  
+#include "imagefilters.h"
 #include "imagehistogram.h"
 
 namespace Digikam
@@ -64,12 +65,7 @@ ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent
     else
        {
        if (m_parent)
-          {
-          ImageHistogram::EventData *d = new ImageHistogram::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }
+          postProgress(false, false);
        }
 }
 
@@ -79,6 +75,14 @@ ImageHistogram::~ImageHistogram()
     
     if (m_histogram)
        delete [] m_histogram;
+}
+
+void ImageHistogram::postProgress(bool starting, bool success)
+{
+    EventData *eventData = new EventData();
+    eventData->starting = starting;
+    eventData->success  = success;
+    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
 }
 
 void ImageHistogram::stopCalcHistogramValues(void)
@@ -100,18 +104,10 @@ void ImageHistogram::run()
 void ImageHistogram::calcHistogramValues()
 {
     register uint  i;                   
-    unsigned char  blue, green, red, alpha;
     int            max;
-    unsigned int  *p;
-    ImageHistogram::EventData *d;
     
     if (m_parent)
-       {
-       d = new ImageHistogram::EventData;
-       d->starting = true;
-       d->success = false;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       }
+       postProgress(true, false);
         
     m_histogram = new double_packet[256];
     
@@ -120,28 +116,26 @@ void ImageHistogram::calcHistogramValues()
        kdWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
     
        if (m_parent)
-          {
-          d = new ImageHistogram::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }
+          postProgress(false, false);
            
        return;
        }
     
     memset(m_histogram, 0, 256*sizeof(struct double_packet));
 
+    // Big/Little Endian color manipulation compatibility.
+    uchar blue, green, red, alpha;
+    ImageFilters::imageData imagedata;
+    
     // Form histogram (RAW DATA32 ARGB extraction method).
 
     for (i = 0 ; (i < m_imageHeight*m_imageWidth) && m_runningFlag ; i++)
       {
-      p = m_imageData + i;
-      
-      blue  = (unsigned char)(*p);
-      green = (unsigned char)(*p >> 8);
-      red   = (unsigned char)(*p >> 16);
-      alpha = (unsigned char)(*p >> 24);
+      imagedata.raw = m_imageData[i];
+      red           = imagedata.channel.red;
+      green         = imagedata.channel.green;
+      blue          = imagedata.channel.blue;      
+      alpha         = imagedata.channel.alpha;      
          
       m_histogram[blue].blue++;
       m_histogram[green].green++;
@@ -155,12 +149,7 @@ void ImageHistogram::calcHistogramValues()
       }
 
     if (m_parent && m_runningFlag)
-       {
-       d = new ImageHistogram::EventData;
-       d->starting = false;
-       d->success = true;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       }
+       postProgress(false, true);
 }
 
 double ImageHistogram::getCount(int channel, int start, int end)

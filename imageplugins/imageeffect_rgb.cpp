@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-11
- * Description : RGB adjustement plugin for ImageEditor
+ * Description : digiKam image editor Color Balance tool.
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,8 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kapplication.h>
+#include <kcursor.h>
 
 // Digikam includes.
 
@@ -52,19 +54,18 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
                              parent, 0, true, true, i18n("&Reset Values"))
 {
     setHelp("colorbalancetool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QVGroupBox *gbox = new QVGroupBox(i18n("Color Balance"),
-                                      plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image color-balance preview."));
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image color-balance adjustments preview."));
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame);
 
+    // -------------------------------------------------------------
+    
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -83,6 +84,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_rInput = new QSpinBox(-100, 100, 1, plainPage(), "m_rInput");
     hlay->addWidget(m_rInput, 1);
 
+    // -------------------------------------------------------------
+        
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Magenta"), plainPage());
     label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -98,6 +101,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_gInput = new QSpinBox(-100, 100, 1, plainPage(), "m_gInput");
     hlay->addWidget(m_gInput, 1);
 
+    // -------------------------------------------------------------
+        
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Yellow"), plainPage());
     label->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -117,34 +122,47 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_gInput->setValue(0);
     m_bInput->setValue(0);
 
+    // -------------------------------------------------------------
+        
     connect(m_rSlider, SIGNAL(valueChanged(int)),
             m_rInput, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             m_rSlider, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     connect(m_gSlider, SIGNAL(valueChanged(int)),
             m_gInput, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             m_gSlider, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
     connect(m_bSlider, SIGNAL(valueChanged(int)),
             m_bInput, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
             m_bSlider, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
-            SLOT(slotEffect()));
+            this, SLOT(slotEffect()));
 
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));     
+                        
+    // -------------------------------------------------------------
+                
     enableButtonOK( false );
-    adjustSize();
-    disableResize();
+    resize(configDialogSize("RGB Balance Tool Dialog"));     
 }
 
 ImageEffect_RGB::~ImageEffect_RGB()
 {
+    saveDialogSize("RGB Balance Tool Dialog");
+}
+
+void ImageEffect_RGB::closeEvent(QCloseEvent *e)
+{
+    delete m_previewWidget;
+    e->accept();
 }
 
 void ImageEffect_RGB::slotUser1()
@@ -159,8 +177,7 @@ void ImageEffect_RGB::slotEffect()
                    m_gInput->value() != 0 ||
                    m_bInput->value() != 0);
 
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getPreviewData();
     int   w     = iface->previewWidth();
@@ -180,8 +197,8 @@ void ImageEffect_RGB::slotEffect()
 
 void ImageEffect_RGB::slotOk()
 {
-    Digikam::ImageIface* iface =
-        m_previewWidget->imageIface();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data  = iface->getOriginalData();
     int   w     = iface->originalWidth();
@@ -194,8 +211,9 @@ void ImageEffect_RGB::slotOk()
 
     adjustRGB(r, g, b, a, data, w, h);
 
-    iface->putOriginalData(i18n("RGB"), data);
+    iface->putOriginalData(i18n("Color Balance"), data);
     delete [] data;
+    kapp->restoreOverrideCursor();
     accept();
 }
 
@@ -286,6 +304,5 @@ void ImageEffect_RGB::adjustRGB(double r, double g, double b, double a, uint *da
     imlib_context_free(context);
     delete [] newData;
 }
-
 
 #include "imageeffect_rgb.moc"

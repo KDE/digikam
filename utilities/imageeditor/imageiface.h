@@ -51,12 +51,13 @@ public:
     uint* getOriginalData();
     uint* getSelectedData();
 
-    void putPreviewData(uint* data);
-    void putOriginalData(const QString &caller, uint* data, int w=-1, int h=-1);
-    void putSelectedData(uint* data);
+    void  putPreviewData(uint* data);
+    void  putOriginalData(const QString &caller, uint* data, int w=-1, int h=-1);
+    void  putSelectedData(uint* data);
 
-    int  previewWidth();
-    int  previewHeight();
+    int   previewWidth();
+    int   previewHeight();
+    uint* setPreviewSize(int w, int h);
 
     int  originalWidth();
     int  originalHeight();

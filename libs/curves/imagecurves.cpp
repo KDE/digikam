@@ -39,6 +39,7 @@
 
 // Local includes.
 
+#include <imagefilters.h>
 #include "imagecurves.h"
 
 namespace Digikam
@@ -382,9 +383,13 @@ void ImageCurves::curvesLutSetup(int nchannels, bool overIndicator)
 // app/base/gimplut.c::gimp_lut_process
 void ImageCurves::curvesLutProcess(uint *srcPR, uint *destPR, int w, int h)
 {
-    uint   height, width, src_r_i, dest_r_i;
-    uchar *src, *dest;
+//    uint   height, width, src_r_i, dest_r_i;
+//    uchar *src, *dest;
     uchar *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
+    
+    int       i;
+    uchar     red, green, blue, alpha;
+    ImageFilters::imageData imagedata;
 
     if (m_lut->nchannels > 0)
        lut0 = m_lut->luts[0];
@@ -395,7 +400,7 @@ void ImageCurves::curvesLutProcess(uint *srcPR, uint *destPR, int w, int h)
     if (m_lut->nchannels > 3)
        lut3 = m_lut->luts[3];
 
-    height   = h;
+/*    height   = h;
     src      = (uchar*)srcPR;
     dest     = (uchar*)destPR;
     width    = w;
@@ -458,6 +463,30 @@ void ImageCurves::curvesLutProcess(uint *srcPR, uint *destPR, int w, int h)
     src  += src_r_i;
     dest += dest_r_i;
     }
+    */
+    
+    for(i = 0 ; i < w*h ; i++)
+       {
+       imagedata.raw = srcPR[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if ( m_lut->nchannels > 0 ) imagedata.channel.red   = lut0[red];
+       else imagedata.channel.red = red;
+       
+       if ( m_lut->nchannels > 1 ) imagedata.channel.green = lut1[green];
+       else imagedata.channel.green = green;
+       
+       if ( m_lut->nchannels > 2 ) imagedata.channel.blue  = lut2[blue];
+       else imagedata.channel.blue = blue;
+
+       if ( m_lut->nchannels > 3 ) imagedata.channel.alpha = lut3[alpha];
+       else imagedata.channel.alpha = alpha;
+                    
+       destPR[i] = imagedata.raw;
+       }
 }
 
 int ImageCurves::getCurveValue(int channel, int bin)

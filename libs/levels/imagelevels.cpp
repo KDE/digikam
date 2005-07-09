@@ -40,6 +40,7 @@
 // Local includes.
  
 #include <imagehistogram.h>
+#include <imagefilters.h>
 #include "imagelevels.h"
 
 namespace Digikam
@@ -365,10 +366,12 @@ void ImageLevels::levelsLutSetup(int nchannels, bool overIndicator)
 // app/base/gimplut.c::gimp_lut_process
 void ImageLevels::levelsLutProcess(uint *srcPR, uint *destPR, int w, int h)
 {
-    uint   height, width, src_r_i, dest_r_i;
-    uchar *src, *dest;
     uchar *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
 
+    int       i;
+    uchar     red, green, blue, alpha;
+    ImageFilters::imageData imagedata;
+    
     if (m_lut->nchannels > 0)
        lut0 = m_lut->luts[0];
     if (m_lut->nchannels > 1)
@@ -378,69 +381,28 @@ void ImageLevels::levelsLutProcess(uint *srcPR, uint *destPR, int w, int h)
     if (m_lut->nchannels > 3)
        lut3 = m_lut->luts[3];
 
-    height   = h;
-    src      = (uchar*)srcPR;
-    dest     = (uchar*)destPR;
-    width    = w;
-    src_r_i  = 0;
-    dest_r_i = 0;
-
-    if (src_r_i == 0 && dest_r_i == 0)
+    for(i = 0 ; i < w*h ; i++)
        {
-       width *= h;
-       h = 1;
+       imagedata.raw = srcPR[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if ( m_lut->nchannels > 0 ) imagedata.channel.red   = lut0[red];
+       else imagedata.channel.red = red;
+       
+       if ( m_lut->nchannels > 1 ) imagedata.channel.green = lut1[green];
+       else imagedata.channel.green = green;
+       
+       if ( m_lut->nchannels > 2 ) imagedata.channel.blue  = lut2[blue];
+       else imagedata.channel.blue = blue;
+
+       if ( m_lut->nchannels > 3 ) imagedata.channel.alpha = lut3[alpha];
+       else imagedata.channel.alpha = alpha;
+                    
+       destPR[i] = imagedata.raw;
        }
-
-  while (h--)
-    {
-    switch (m_lut->nchannels)
-    {
-    case 1:
-      while (width--)
-        {
-          *dest = lut0[*src];
-          src++;
-          dest++;
-        }
-      break;
-    case 2:
-      while (width--)
-        {
-          dest[0] = lut0[src[0]];
-          dest[1] = lut1[src[1]];
-          src  += 2;
-          dest += 2;
-        }
-      break;
-    case 3:
-      while (width--)
-        {
-          dest[0] = lut0[src[0]];
-          dest[1] = lut1[src[1]];
-          dest[2] = lut2[src[2]];
-          src  += 3;
-          dest += 3;
-        }
-      break;
-    case 4:
-      while (width--)
-        {
-          dest[0] = lut0[src[0]];
-          dest[1] = lut1[src[1]];
-          dest[2] = lut2[src[2]];
-          dest[3] = lut3[src[3]];
-          src  += 4;
-          dest += 4;
-        }
-      break;
-    default:
-      kdWarning() << k_funcinfo << "nchannels = " << m_lut->nchannels << endl;
-    }
-
-    width = w;
-    src  += src_r_i;
-    dest += dest_r_i;
-    }
 }
 
 void ImageLevels::setLevelGammaValue(int Channel, double val)

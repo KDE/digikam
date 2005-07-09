@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-26
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -10,22 +10,30 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <qstring.h>
+#include <qcstring.h>
+#include <qdatastream.h>
+#include <qfileinfo.h>
+#include <qdir.h>
+#include <qmap.h>
+#include <qpair.h>
+#include <qvaluelist.h>
+#include <qtimer.h>
 
-#include <kdirlister.h>
 #include <kdebug.h>
+#include <kio/job.h>
+#include <kurl.h>
 
 #include "album.h"
 #include "albummanager.h"
-#include "albumdb.h"
 #include "albumsettings.h"
 
 #include "albumlister.h"
@@ -41,185 +49,307 @@ class AlbumListerPriv
 {
 public:
 
-    KDirLister* dirLister;
+    KIO::TransferJob*          job;
+    QString                    filter;
 
-    Album*      currAlbum;
-    AlbumDB*    db;
+    Album*                     currAlbum;
+
+    QMap<int,bool>             dayFilter;
+    QValueList<int>            tagFilter;
+    bool                       untaggedFilter;
+    QTimer*                    filterTimer;
+
+    ImageInfoList              itemList;
+    QMap<Q_LLONG, ImageInfo*>  itemMap;
 };
-    
+
+AlbumLister* AlbumLister::m_instance = 0;
+
+AlbumLister* AlbumLister::instance()
+{
+    if (!m_instance)
+        new AlbumLister();
+
+    return m_instance;
+}
+
 AlbumLister::AlbumLister()
 {
+    m_instance = this;
+
     d = new AlbumListerPriv;
-    d->dirLister = new KDirLister;
+    d->job       = 0;
     d->currAlbum = 0;
+    d->filter    = "*";
+    d->itemList.setAutoDelete(true);
+    d->untaggedFilter = false;
+    d->filterTimer = new QTimer(this);
+
+    connect(d->filterTimer, SIGNAL(timeout()),
+            SLOT(slotFilterItems()));
 }
 
 AlbumLister::~AlbumLister()
 {
-    delete d->dirLister;
+    delete d->filterTimer;
     delete d;
+    m_instance = 0;
 }
 
 void AlbumLister::openAlbum(Album *album)
 {
-    d->dirLister->stop();
-
-    d->dirLister->disconnect(this);
-    
     d->currAlbum = album;
+    d->filterTimer->stop();
+    emit signalClear();
+    d->itemList.clear();
+    d->itemMap.clear();
+
+    if (d->job)
+    {
+        d->job->kill();
+        d->job = 0;
+    }
+
     if (!album)
         return;
 
-    if (album->type() == Album::PHYSICAL)
-    {
-        connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
-                SLOT(slotNewPhyItems(const KFileItemList&)));
-        connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
-                SLOT(slotDeleteItem(KFileItem*)) );
-        connect(d->dirLister, SIGNAL(clear()),
-                SLOT(slotClear()));
-        connect(d->dirLister, SIGNAL(completed()),
-                SIGNAL(signalCompleted()));
-        connect(d->dirLister, SIGNAL(refreshItems(const KFileItemList&)),
-                SIGNAL(signalRefreshItems(const KFileItemList&)));
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << AlbumManager::instance()->getLibraryPath();
+    ds << album->kurl();
+    ds << d->filter;
+    ds << AlbumSettings::instance()->getIconShowResolution();
 
-        PAlbum *a = static_cast<PAlbum*>(album);
-        d->dirLister->openURL(a->getKURL(), false, true);
-    }
-    else if (album->type() == Album::TAG)
-    {
-        //TODO: if the album library path has changed: kill the tags kioslave
-        // by pumping a metadata to it, causing it to reload.
-        
-        connect(d->dirLister, SIGNAL(newItems(const KFileItemList&)),
-                SLOT(slotNewTagItems(const KFileItemList&)));
-        connect(d->dirLister, SIGNAL(deleteItem(KFileItem*)),
-                SLOT(slotDeleteItem(KFileItem*)) );
-        connect(d->dirLister, SIGNAL(clear()),
-                SLOT(slotClear()));
-        connect(d->dirLister, SIGNAL(completed()),
-                SIGNAL(signalCompleted()));
-        connect(d->dirLister, SIGNAL(refreshItems(const KFileItemList&)),
-                SIGNAL(signalRefreshItems(const KFileItemList&)));
-
-        TAlbum *a = static_cast<TAlbum*>(album);
-        KURL url(a->getKURL());
-        if (AlbumSettings::instance()->getRecurseTags())
-            url.setQuery("?recurse=yes");
-        d->dirLister->openURL(url, false, true);
-    }
-    else
-    {
-        emit signalClear();
-    }
+    d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
+                                  ba, QByteArray(), false);
+    connect(d->job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotResult(KIO::Job*)));
+    connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
+            SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::updateDirectory()
+void AlbumLister::refresh()
 {
     if (!d->currAlbum)
         return;
 
-    if (d->currAlbum->type() == Album::PHYSICAL)
+    d->filterTimer->stop();
+
+    if (d->job)
     {
-        PAlbum *a = static_cast<PAlbum*>(d->currAlbum);
-        d->dirLister->updateDirectory(a->getKURL());
-    }
-    else if (d->currAlbum->type() == Album::TAG)
-    {
-        TAlbum *a = static_cast<TAlbum*>(d->currAlbum);
-        KURL url(a->getKURL());
-        if (AlbumSettings::instance()->getRecurseTags())
-            url.setQuery("?recurse=yes");
-        d->dirLister->updateDirectory(url);
-    }        
-}
-
-PAlbum* AlbumLister::findParentAlbum(const KFileItem *item) const
-{
-    if (!item)
-        return 0;
-    
-    return (PAlbum*)item->extraData(this);
-}
-
-void AlbumLister::stop()
-{
-    d->dirLister->stop();
-}
-
-void AlbumLister::setNameFilter(const QString& nameFilter)
-{
-    d->dirLister->setNameFilter(nameFilter);    
-}
-
-void AlbumLister::slotNewPhyItems(const KFileItemList& items)
-{
-    if (d->currAlbum && d->currAlbum->type() == Album::PHYSICAL)
-    {
-        PAlbum* album = dynamic_cast<PAlbum*>(d->currAlbum);
-        KFileItem* item;
-        for (KFileItemListIterator it(items); (item = it.current()); ++it)
-        {
-            item->setExtraData(this, album);
-        }
+        d->job->kill();
+        d->job = 0;
     }
 
-    emit signalNewItems(items);
+    d->itemMap.clear();
+    ImageInfo* item;
+    for (ImageInfoListIterator it(d->itemList); (item = it.current()); ++it)
+    {
+        d->itemMap.insert(item->id(), item);
+    }
+
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << AlbumManager::instance()->getLibraryPath();
+    ds << d->currAlbum->kurl();
+    ds << d->filter;
+    ds << AlbumSettings::instance()->getIconShowResolution();
+
+    d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
+                                  ba, QByteArray(), false);
+    connect(d->job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotResult(KIO::Job*)));
+    connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
+            SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::slotNewTagItems(const KFileItemList& items)
+void AlbumLister::setDayFilter(const QValueList<int>& days)
 {
-    KFileItemList filteredItems;
-    
-    KIO::UDSEntry entry;
-    PAlbum*       album;
-    int           id;
-    KFileItem*    item;
+    d->dayFilter.clear();
 
-    AlbumManager* man = AlbumManager::instance();
-    
-    for (KFileItemListIterator it(items); (item = it.current()); ++it)
+    for (QValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
+        d->dayFilter.insert(*it, true);
+
+    d->filterTimer->start(100, true);
+}
+
+void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
+{
+    d->tagFilter = tags;
+    d->untaggedFilter = showUnTagged;
+
+    d->filterTimer->start(100, true);
+}
+
+bool AlbumLister::matchesFilter(const ImageInfo* info) const
+{
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
+        !d->untaggedFilter)
+        return true;
+
+    bool match = false;
+
+    if (!d->tagFilter.isEmpty())
     {
-        if (item->isDir())
-            continue;
-        
-        album = 0;
-        
-        entry = item->entry();
-        for( KIO::UDSEntry::ConstIterator it = entry.begin();
-             it != entry.end(); it++ )
+        QValueList<int> tagIDs = info->tagIDs();
+        for (QValueList<int>::iterator it = d->tagFilter.begin();
+             it != d->tagFilter.end(); ++it)
         {
-            if ((*it).m_uds == KIO::UDS_XML_PROPERTIES)
+            if (tagIDs.contains(*it))
             {
-                id = (*it).m_str.toInt();
-                album = man->findPAlbum(id);
+                match = true;
                 break;
             }
         }
 
-        if (!album)
-        {
-            kdWarning() << k_funcinfo << "Failed to retrieve dirid from kioslave for "
-                        << item->url().prettyURL() << endl;
-            continue;
-        }
-
-        filteredItems.append(item);
-        item->setExtraData(this, album);
+        match |= (d->untaggedFilter && tagIDs.isEmpty());
+    }
+    else if (d->untaggedFilter)
+    {
+        match = info->tagIDs().isEmpty();
+    }
+    else
+    {
+        match = true;
     }
 
-    emit signalNewItems(filteredItems);
+    if (!d->dayFilter.isEmpty())
+    {
+        match &= d->dayFilter.contains(info->dateTime().date().day());
+    }
+
+    return match;
 }
 
-void AlbumLister::slotDeleteItem(KFileItem *item)
+void AlbumLister::stop()
 {
-    emit signalDeleteItem(item);
-    item->removeExtraData(this);
+    d->currAlbum = 0;
+    d->filterTimer->stop();
+    emit signalClear();
+    d->itemList.clear();
+    d->itemMap.clear();
+
+    if (d->job)
+    {
+        d->job->kill();
+        d->job = 0;
+    }
+}
+
+void AlbumLister::setNameFilter(const QString& nameFilter)
+{
+    d->filter = nameFilter;
 }
 
 void AlbumLister::slotClear()
 {
     emit signalClear();
+}
+
+void AlbumLister::slotFilterItems()
+{
+    if (d->job)
+    {
+        d->filterTimer->start(100, true);
+        return;
+    }
+
+    QPtrList<ImageInfo> newFilteredItemsList;
+
+    ImageInfo* item;
+    for (ImageInfoListIterator it(d->itemList);
+         (item = it.current()); ++it)
+    {
+        if (matchesFilter(item))
+        {
+            if (!item->getViewItem())
+                newFilteredItemsList.append(item);
+        }
+        else
+        {
+            if (item->getViewItem())
+                emit signalDeleteFilteredItem(item);
+        }
+    }
+
+    if (!newFilteredItemsList.isEmpty())
+        emit signalNewFilteredItems(newFilteredItemsList);
+}
+
+void AlbumLister::slotResult(KIO::Job* job)
+{
+    d->job = 0;
+
+    if (job->error())
+    {
+        kdWarning() << "Failed to list url" << endl;
+        d->itemMap.clear();
+        return;
+    }
+
+
+    typedef QMap<Q_LLONG, ImageInfo*> ImMap;
+
+    for (ImMap::iterator it = d->itemMap.begin();
+         it != d->itemMap.end(); ++it)
+    {
+        emit signalDeleteItem(it.data());
+        emit signalDeleteFilteredItem(it.data());
+        d->itemList.remove(it.data());
+    }
+
+    d->itemMap.clear();
+
+    emit signalCompleted();
+}
+
+void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
+{
+    if (data.isEmpty())
+        return;
+
+    Q_LLONG imageID;
+    int     albumID;
+    QString name;
+    QString date;
+    size_t  size;
+    QSize   dims;
+
+    ImageInfoList newItemsList;
+    ImageInfoList newFilteredItemsList;
+
+    QDataStream ds(data, IO_ReadOnly);
+    while (!ds.atEnd())
+    {
+        ds >> imageID;
+        ds >> albumID;
+        ds >> name;
+        ds >> date;
+        ds >> size;
+        ds >> dims;
+
+        if (d->itemMap.contains(imageID))
+        {
+            d->itemMap.remove(imageID);
+            continue;
+        }
+
+        ImageInfo* info = new ImageInfo(imageID, albumID, name,
+                                        QDateTime::fromString(date,
+                                                              Qt::ISODate),
+                                        size, dims);
+
+        if (matchesFilter(info))
+            newFilteredItemsList.append(info);
+        newItemsList.append(info);
+        d->itemList.append(info);
+    }
+
+    if (!newFilteredItemsList.isEmpty())
+        emit signalNewFilteredItems(newFilteredItemsList);
+
+    if (!newItemsList.isEmpty())
+        emit signalNewItems(newItemsList);
 }
 
 #include "albumlister.moc"

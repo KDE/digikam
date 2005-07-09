@@ -40,6 +40,7 @@ private:
 
     QCheckBox* m_showSplashCheck;
     QCheckBox* m_useTrashCheck;
+    QCheckBox* m_scanAtStart;
 };
 
 #endif /* SETUPMISC_H */

@@ -46,7 +46,6 @@
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
-#include "albumlister.h"
 #include "album.h"
 
 #include "albumfiletip.h"
@@ -291,45 +290,44 @@ void AlbumFileTip::updateText()
 
     tip = "<table cellspacing=0 cellpadding=0>";
 
-    const KFileItem* fi = m_iconItem->fileItem();
+    const ImageInfo* info = m_iconItem->imageInfo();
 
     // File properties ----------------------------------------------
 
     tip += headBeg + i18n("File Properties") + headEnd;
 
     tip += cellBeg + i18n("Name:") + cellMid;
-    tip += fi->url().fileName() + cellEnd;
+    tip += info->kurl().fileName() + cellEnd;
     
     tip += cellBeg + i18n("Type:") + cellMid;
-    tip += KMimeType::findByURL(fi->url())->comment() + cellEnd;
+    tip += KMimeType::findByURL(info->kurl())->comment() + cellEnd;
 
-    QDateTime date;
-    date.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
-    tip += cellBeg + i18n("Modification Date:") + cellMid +
+    QDateTime date = info->dateTime();
+    tip += cellBeg + i18n("Date:") + cellMid +
            KGlobal::locale()->formatDateTime(date, true, true)
            + cellEnd;
 
     tip += cellBeg + i18n("Size:") + cellMid;
     tip += i18n("%1 (%2)")
-           .arg(KIO::convertSize(fi->size()))
-           .arg(KGlobal::locale()->formatNumber(fi->size(), 0))
+           .arg(KIO::convertSize(info->fileSize()))
+           .arg(KGlobal::locale()->formatNumber(info->fileSize(), 0))
            + cellEnd;
 
     // Digikam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
 
-    PAlbum* album = m_view->albumLister()->findParentAlbum(fi);
+    PAlbum* album = info->album();
     if (album)
     {
         tip += cellBeg + i18n("Album:") + cellMid +
-               album->getURL().remove(0,1) + cellEnd;
+               album->url().remove(0,1) + cellEnd;
     }
 
     tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +
-           breakString( m_view->itemComments(m_iconItem) ) + cellSpecEnd;
+           breakString( info->caption() ) + cellSpecEnd;
 
-    QStringList tagPaths(m_view->itemTagPaths(m_iconItem));
+    QStringList tagPaths = info->tagPaths();
     for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
     {
         (*it).remove(0,1);
@@ -340,18 +338,18 @@ void AlbumFileTip::updateText()
     // Meta Info ----------------------------------------------------
 
     QString metaStr;
-    KFileMetaInfo info(fi->metaInfo());
+    KFileMetaInfo metainfo(info->kurl().path());
 
-    if (info.isValid() && !info.isEmpty() )
+    if (metainfo.isValid() && !metainfo.isEmpty() )
     {
-        QStringList keys = info.preferredKeys();
+        QStringList keys = metainfo.preferredKeys();
         int maxCount = 5;
         int count = 0;
 
         for (QStringList::iterator it = keys.begin();
              count < maxCount && it!=keys.end() ; ++it)
         {
-            KFileMetaInfoItem item = info.item( *it );
+            KFileMetaInfoItem item = metainfo.item( *it );
             if ( item.isValid() )
             {
                 QString s = item.string();

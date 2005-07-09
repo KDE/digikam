@@ -2,7 +2,7 @@
  * File  : imageeffect_filmgrain.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digiKam image editor plugin for to add film 
+ * Description : a digiKam image editor plugin for add film 
  *               grain on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -23,27 +23,17 @@
 #ifndef IMAGEEFFECT_FILMGRAIN_H
 #define IMAGEEFFECT_FILMGRAIN_H
 
-// Qt include.
+// Local includes.
 
-#include <qimage.h>
+#include "ctrlpaneldialog.h"
 
-// KDE include.
-
-#include <kdialogbase.h>
-
-class QPushButton;
 class QSlider;
 class QLCDNumber;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
 
 namespace DigikamFilmGrainImagesPlugin
 {
 
-class ImageEffect_FilmGrain : public KDialogBase
+class ImageEffect_FilmGrain : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -52,54 +42,25 @@ public:
     ImageEffect_FilmGrain(QWidget* parent);
     ~ImageEffect_FilmGrain();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
+        
 private:
 
-    bool         m_cancel;
-
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
     QSlider     *m_sensibilitySlider;
     
     QLCDNumber  *m_sensibilityLCDValue;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
 
-    void FilmGrain(uint* data, int Width, int Height, int Sensibility);
-    
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-    
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-              
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
     void slotSensibilityChanged(int);
-   
+
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);    
 };
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

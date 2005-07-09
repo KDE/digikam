@@ -1,10 +1,10 @@
 /* ============================================================
  * File  : unsharp.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-27
- * Description : Unsharped mask image filter for ImageEditor
+ * Date  : 2005-05-25
+ * Description : Unsharp Mask threaded image filter.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,62 +18,40 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+  
+#ifndef UNSHARPMASK_H
+#define UNSHARPMASK_H
 
-#ifndef DESPECKLE_H
-#define DESPECKLE_H
+// Digikam includes.
 
-// KDE include.
+#include <digikamheaders.h>
 
-#include <kdialogbase.h>
-
-class QPushButton;
-class QSpinBox;
-class QSlider;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
-
-namespace DigikamUnsharpFilterImagesPlugin
+namespace DigikamUnsharpMaskImagesPlugin
 {
 
-class UnsharpDialog : public KDialogBase
+class UnsharpMask : public Digikam::ThreadedFilter
 {
-    Q_OBJECT
 
 public:
+    
+    UnsharpMask(QImage *orgImage, QObject *parent=0, double radius=5.0, 
+                double amount=0.5, int threshold=0);
+    
+    ~UnsharpMask(){};
+    
+private:  // Unsharp Mask filter data.
 
-    UnsharpDialog(QWidget* parent);
-    ~UnsharpDialog();
+    double m_radius;
+    double m_amount;
+    int    m_threshold;
+    
+private:  // Unsharp Mask filter methods.
 
-protected:
 
-    void closeEvent(QCloseEvent *e);
-   
+    virtual void filterImage(void);
     
-private:
-
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
-    QSpinBox    *m_radiusInput;
-    QSpinBox    *m_amountInput;
-    QSpinBox    *m_thresholdInput;
-    
-    QSlider     *m_radiusSlider;
-    QSlider     *m_amountSlider;
-    QSlider     *m_thresholdSlider;
-    
-    bool         m_cancel;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-
-private:    
-    
-    void unsharp(uint* data, int w, int h, int r, 
-                 int a, int threshold);
+    void unsharpImage(uint* data, int w, int h, double radius, 
+                      double amount, int threshold);
                  
     inline void blur_line (double *ctable, double *cmatrix, int cmatrix_length,
                            uchar *cur_col, uchar *dest_col, int y, long bytes);  
@@ -81,17 +59,9 @@ private:
     int gen_convolve_matrix (double radius, double **cmatrix_p);    
     
     double* gen_lookup_table (double *cmatrix, int cmatrix_length);
-       
-private slots:
-
-    void slotHelp();
-    void slotUser1();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
     
-};
+};    
 
-}  // NameSpace DigikamUnsharpFilterImagesPlugin
+}  // NameSpace DigikamUnsharpMaskImagesPlugin
 
-#endif /* DESPECKLE_H */
+#endif /* UNSHARPMASK_H */

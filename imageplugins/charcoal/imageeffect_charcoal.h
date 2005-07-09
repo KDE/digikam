@@ -2,7 +2,7 @@
  * File  : imageeffect_charcoal.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a digikam image editor plugin for to
+ * Description : a digiKam image editor plugin for 
  *               simulate charcoal drawing.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -23,27 +23,16 @@
 #ifndef IMAGEEFFECT_CHARCOAL_H
 #define IMAGEEFFECT_CHARCOAL_H
 
-// Qt include.
+// Local includes.
 
-#include <qimage.h>
+#include "ctrlpaneldialog.h"
 
-// KDE include.
-
-#include <kdialogbase.h>
-
-class QPushButton;
-class QSlider;
-class QSpinBox;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
+class KIntNumInput;
 
 namespace DigikamCharcoalImagesPlugin
 {
 
-class ImageEffect_Charcoal : public KDialogBase
+class ImageEffect_Charcoal : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -52,38 +41,19 @@ public:
     ImageEffect_Charcoal(QWidget* parent);
     ~ImageEffect_Charcoal();
 
+private:
+
+    KIntNumInput *m_pencilInput;
+    KIntNumInput *m_smoothInput;
+
 protected:
-
-    void closeEvent(QCloseEvent *e);
     
-private:
-
-    bool         m_cancel;
-    
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
-    QSlider     *m_pencilSlider;
-    QSlider     *m_smoothSlider;
-    
-    QSpinBox    *m_pencilInput;
-    QSpinBox    *m_smoothInput;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
-
-    QImage charcoal(QImage &src, double pencil, double smooth);
-    
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-        
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin

@@ -54,16 +54,15 @@ public:
     AlbumSettings::AlbumSortOrder albumSortOrder;
     AlbumSettings::ImageSortOrder  imageSortOrder;
 
-    bool recurseTags;
     bool showToolTips;
     bool showSplash;
     bool useTrash;
+    bool scanAtStart;
     
     bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
     bool iconShowComments;
-    bool iconShowFileComments;
     bool iconShowResolution;
     bool iconShowTags;
     bool saveExifComments;
@@ -120,7 +119,6 @@ void AlbumSettings::init()
     d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf";
     d->thumbnailSize = ThumbnailSize::Medium;
 
-    d->recurseTags  = false;
     d->showToolTips = true;
     d->showSplash   = true;
     d->useTrash     = true;
@@ -129,7 +127,6 @@ void AlbumSettings::init()
     d->iconShowSize = false;
     d->iconShowDate = true;
     d->iconShowComments = true;
-    d->iconShowFileComments = false;
     d->iconShowResolution = false;
     d->iconShowTags = true;
     d->saveExifComments = false;
@@ -178,8 +175,6 @@ void AlbumSettings::readSettings()
     d->thumbnailSize = config->readNumEntry("Default Icon Size",
                              ThumbnailSize::Medium);
 
-    d->recurseTags   = config->readBoolEntry("Recurse Tags", false);
-
     d->showToolTips   = config->readBoolEntry("Show ToolTips", true);
     
     d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
@@ -195,9 +190,6 @@ void AlbumSettings::readSettings()
 
     d->iconShowComments = config->readBoolEntry("Icon Show Comments",
                                                 true);
-
-    d->iconShowFileComments = config->readBoolEntry("Icon Show File Comments",
-                                                    false);
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
 
@@ -221,6 +213,10 @@ void AlbumSettings::readSettings()
 
     d->useTrash =
         config->readBoolEntry("Use Trash", true);
+
+    d->scanAtStart =
+        config->readBoolEntry("Scan At Start", true);
+
 }
 
 void AlbumSettings::saveSettings()
@@ -255,8 +251,6 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Default Icon Size",
                        QString::number(d->thumbnailSize));
 
-    config->writeEntry("Recurse Tags", d->recurseTags);
-
     config->writeEntry("Show ToolTips", d->showToolTips);
     
     config->writeEntry("Icon Show Name",
@@ -273,9 +267,6 @@ void AlbumSettings::saveSettings()
                        
     config->writeEntry("Icon Show Comments",
                        d->iconShowComments);
-                       
-    config->writeEntry("Icon Show File Comments",
-                       d->iconShowFileComments);
                        
     config->writeEntry("Icon Show Tags",
                        d->iconShowTags);
@@ -298,6 +289,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Show Splash", d->showSplash);
 
     config->writeEntry("Use Trash", d->useTrash);
+
+    config->writeEntry("Scan At Start", d->scanAtStart);
     
     config->sync();
 }
@@ -320,6 +313,16 @@ void AlbumSettings::setShowSplashScreen(bool val)
 bool AlbumSettings::getShowSplashScreen() const
 {
     return d->showSplash;
+}
+
+void AlbumSettings::setScanAtStart(bool val)
+{
+    d->scanAtStart = val;
+}
+
+bool AlbumSettings::getScanAtStart() const
+{
+    return d->scanAtStart;
 }
 
 void AlbumSettings::setAlbumCollectionNames(const QStringList& list)
@@ -357,7 +360,7 @@ AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
     return d->albumSortOrder;
 }
 
-void AlbumSettings::setImageSortOder(const ImageSortOrder order)
+void AlbumSettings::setImageSortOrder(const ImageSortOrder order)
 {
     d->imageSortOrder = order;    
 }
@@ -407,6 +410,26 @@ QString AlbumSettings::getRawFileFilter() const
     return d->rawFilefilter;
 }
 
+bool AlbumSettings::addImageFileExtension(const QString& newExt)
+{
+    if ( QStringList::split(" ", d->imageFilefilter).contains(newExt) ||
+         QStringList::split(" ", d->movieFilefilter).contains(newExt) ||
+         QStringList::split(" ", d->audioFilefilter).contains(newExt) ||
+         QStringList::split(" ", d->rawFilefilter  ).contains(newExt) )
+         return false; 
+
+    d->imageFilefilter = d->imageFilefilter + " " + newExt;
+    return true;
+}
+
+QString AlbumSettings::getAllFileFilter() const
+{
+    return d->imageFilefilter + " "
+        +  d->movieFilefilter + " "
+        +  d->audioFilefilter + " "
+        +  d->rawFilefilter;
+}
+
 void AlbumSettings::setDefaultIconSize(int val)
 {
     d->thumbnailSize = val;
@@ -445,16 +468,6 @@ void AlbumSettings::setIconShowComments(bool val)
 bool AlbumSettings::getIconShowComments() const
 {
     return d->iconShowComments;
-}
-
-void AlbumSettings::setIconShowFileComments(bool val)
-{
-    d->iconShowFileComments = val;
-}
-
-bool AlbumSettings::getIconShowFileComments() const
-{
-    return d->iconShowFileComments;
 }
 
 void AlbumSettings::setIconShowResolution(bool val)
@@ -515,16 +528,6 @@ void AlbumSettings::setExifSetOrientation(bool val)
 bool AlbumSettings::getExifSetOrientation() const
 {
     return d->exifSetOrientation;
-}
-
-void AlbumSettings::setRecurseTags(bool val)
-{
-    d->recurseTags = val;
-}
-
-bool AlbumSettings::getRecurseTags() const
-{
-    return d->recurseTags;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

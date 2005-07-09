@@ -30,9 +30,7 @@
 #include <kfilemetainfo.h>
 #include <kglobal.h>
 
-#include "album.h"
-#include "albumdb.h"
-#include "albummanager.h"
+#include "imageinfo.h"
 #include "thumbnailjob.h"
 #include "imagepropertiesgeneral.h"
 
@@ -145,20 +143,21 @@ ImagePropertiesGeneral::~ImagePropertiesGeneral()
         m_thumbJob->kill();
 }
 
-void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
+void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 {
+    KURL url;
+    url.setPath(info->filePath());
+    
     // ------------------------------------------------------------------------------
 
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
     
     m_thumbJob = new ThumbnailJob(url, 128);
-    connect(m_thumbJob, SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                                       const QPixmap&,
-                                                       const KFileMetaInfo*)),
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,
-                                         const QPixmap&,
-                                         const KFileMetaInfo*)));
+                                  const QPixmap&)));
 
     connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedThumbnail(const KURL&)));       
@@ -176,11 +175,11 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
     m_filecomments->clear();
     m_filetags->clear();
 
-    // -- File system informations ---------------------------------------------------
+    // -- File system information ---------------------------------------------------
     
-    KFileItem* fi = new KFileItem(KFileItem::Unknown,
-                                  KFileItem::Unknown,
-                                  url);
+    KFileItem fi(KFileItem::Unknown,
+                 KFileItem::Unknown,
+                 url);
     m_filename->setText( url.fileName() );
     m_filetype->setText( KMimeType::findByURL(url)->comment() );
 
@@ -206,44 +205,21 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
     }
 
     QDateTime dateurl;
-    dateurl.setTime_t(fi->time(KIO::UDS_MODIFICATION_TIME));
+    dateurl.setTime_t(fi.time(KIO::UDS_MODIFICATION_TIME));
     m_filedate->setText( KGlobal::locale()->formatDateTime(dateurl, true, true) );
-    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
-                                        .arg(KGlobal::locale()->formatNumber(fi->size(), 0)) );
-    m_fileowner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
-    m_filepermissions->setText( fi->permissionsString() );
+    m_filesize->setText( i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
+                                        .arg(KGlobal::locale()->formatNumber(fi.size(), 0)) );
+    m_fileowner->setText( i18n("%1 - %2").arg(fi.user()).arg(fi.group()) );
+    m_filepermissions->setText( fi.permissionsString() );
 
     // -- digiKam metadata ---------------------------------------------------
 
-    AlbumManager* man = AlbumManager::instance();    
-    KURL u            = url.upURL();
-    PAlbum* album     = man->findPAlbum(u);
-    
-    if (album)
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-
-        QStringList tagPaths;
-
-        IntList tagIDs(db->getItemTagIDs(album, url.fileName()));
-        
-        for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
-        {
-            TAlbum* ta = man->findTAlbum(*it);
-            if (ta)
-            {
-                tagPaths.append(ta->getURL().remove(0,1));
-            }
-        }
-        
-        m_filealbum->setText( album->getURL().remove(0,1) );
-        m_filecomments->setText( db->getItemCaption( album, url.filename() ) );
-        m_filetags->setText( tagPaths.join(", "));        
-    }
+    m_filealbum->setText( info->name() );
+    m_filecomments->setText( info->caption() );
+    m_filetags->setText( info->tagPaths().join("\n") );        
 }
 
-void ImagePropertiesGeneral::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                              const KFileMetaInfo*)
+void ImagePropertiesGeneral::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     m_thumbLabel->setPixmap(pix);
 }

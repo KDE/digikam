@@ -40,6 +40,7 @@
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
 #include "imageeffect_ratiocrop.h"
+#include "imageeffect_autocorrection.h"
 #include "imageplugin_core.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
@@ -78,43 +79,9 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotRGB()),
                       actionCollection(), "implugcore_rgb");
 
-    m_stretchContrastAction = new KAction(i18n("Stretch Contrast"), "stretchcontrast", 0,
-                                  this, SLOT(slotNormalize()),
-                                  actionCollection(), "implugcore_stretch_contrast");
-    m_stretchContrastAction->setWhatsThis( i18n( "This option enhances the contrast and brightness "
-                                                 "of the RGB values of an image by stretching the lowest "
-                                                 "and highest values to their fullest range, adjusting "
-                                                 "everything in between." ));                
-
-    
-    m_normalizeAction = new KAction(i18n("Normalize"), "normalize", 0,
-                            this, SLOT(slotNormalize()),
-                            actionCollection(), "implugcore_normalize");
-    m_normalizeAction->setWhatsThis( i18n( "This option scales brightness values across the active "
-                                           "image so that the darkest point becomes black, and the "
-                                           "brightest point becomes as bright as possible without "
-                                           "altering its hue. This is often a \"magic fix\" for "
-                                           "images that are dim or washed out."));                
-
-    m_equalizeAction = new KAction(i18n("Equalize"), "equalize", 0,
-                           this, SLOT(slotEqualize()),
-                           actionCollection(), "implugcore_equalize");
-    m_equalizeAction->setWhatsThis( i18n( "This option adjusts the brightness of colors across the "
-                                          "active image so that the histogram for the Value channel "
-                                          "is as nearly as possible flat, that is, so that each possible "
-                                          "brightness value appears at about the same number of pixels "
-                                          "as each other value. Sometimes Equalize works wonderfully at "
-                                          "enhancing the contrasts in an image. Other times it gives "
-                                          "garbage. It is a very powerful operation, which can either work "
-                                          "miracles on an image or destroy it."));  
-                                         
-    m_autolevelseAction = new KAction(i18n("Auto Levels"), "autolevels", 0,
-                              this, SLOT(slotAutoLevels()),
-                              actionCollection(), "implugcore_autolevels");
-    m_autolevelseAction->setWhatsThis( i18n( "This option maximizes the tonal range in the Red, Green, "
-                                             "and Blue channels. It search the image shadow and highlight "
-                                             "limit values and adjust the Red, Green, and Blue channels "
-                                             "to a full histogram range."));  
+    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 0,
+                                 this, SLOT(slotAutoCorrection()),
+                                 actionCollection(), "implugcore_autocorrection");
 
     m_invertAction = new KAction(i18n("Invert"), "invertimage", 0,
                          this, SLOT(slotInvert()),
@@ -156,10 +123,7 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_BCGAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
     m_RGBAction->setEnabled(enable);
-    m_stretchContrastAction->setEnabled(enable);
-    m_normalizeAction->setEnabled(enable);
-    m_equalizeAction->setEnabled(enable);
-    m_autolevelseAction->setEnabled(enable);
+    m_autoCorrectionAction->setEnabled(enable);
     m_invertAction->setEnabled(enable);
     m_BWAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
@@ -197,76 +161,10 @@ void ImagePlugin_Core::slotHSL()
     dlg.exec();
 }
 
-void ImagePlugin_Core::slotStretchContrast()
+void ImagePlugin_Core::slotAutoCorrection()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-    
-    Digikam::ImageFilters::stretchContrastImage(data, w, h);
-    
-    iface.putOriginalData(i18n("Stretch Contrast"), data);
-    delete [] data;
-
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotNormalize()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-    
-    Digikam::ImageFilters::normalizeImage(data, w, h);
-    
-    iface.putOriginalData(i18n("Normalize"), data);
-    delete [] data;
-
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotEqualize()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-        
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-    
-    Digikam::ImageFilters::equalizeImage(data, w, h);
-    
-    iface.putOriginalData(i18n("Equalize"), data);
-    delete [] data;
-
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
-}
-
-void ImagePlugin_Core::slotAutoLevels()
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-        
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-    
-    Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h);
-    
-    iface.putOriginalData(i18n("Auto Levels"), data);
-    delete [] data;
-
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    ImageEffect_AutoCorrection dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotInvert()

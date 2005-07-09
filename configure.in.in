@@ -1,6 +1,6 @@
 #MIN_CONFIG(3)
 
-AM_INIT_AUTOMAKE(digikam,0.7.0)
+AM_INIT_AUTOMAKE(digikam,0.8.0)
 
 KDE_ENABLE_HIDDEN_VISIBILITY
 
@@ -38,9 +38,35 @@ AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
 AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 
 # -----------------------------------------------------------------
-# sqlite type check
+# sqlite2 type check
 # -----------------------------------------------------------------
 KDE_CHECK_TYPES
+
+# -------------------------------------------------------
+# Check endianness
+# -------------------------------------------------------
+AC_LANG_SAVE
+AC_LANG_C
+AC_C_BIGENDIAN
+AC_LANG_RESTORE
+
+# -----------------------------------------------------------------
+# sqlite3 check
+# -----------------------------------------------------------------
+
+LIB_SQLITE3=""
+
+if test x$PKGCONFIGFOUND = xyes; then
+   PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
+
+   if test x$have_sqlite3 = xyes; then
+      LIB_SQLITE3=`pkg-config --libs sqlite3`
+   else
+      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+   fi
+fi
+
+AC_SUBST(LIB_SQLITE3)
 
 # -------------------------------------------------------
 # Check endianness
@@ -191,20 +217,6 @@ AC_SUBST(LIBKEXIF_LIBS)
 
 if test "x$have_libkexif" != "xyes"; then
    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
-fi
-
-#------------------------------------------------------------------
-# Check for gdbm
-#------------------------------------------------------------------
-
-KDE_CHECK_HEADER(gdbm.h, have_gdbm=yes, have_gdbm=no)
-
-if test "$have_gdbm" = "no"; then
-  AC_WARN([Can't find gdbm headers, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
-else
-  LIB_GDBM="-lgdbm"
-  AC_SUBST(LIB_GDBM)
 fi
 
 #------------------------------------------------------------------

@@ -4,7 +4,8 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ * Copyright 2005 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,10 +19,16 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+  
 #include <cstdio>
+
+// Qt includes.
 
 #include <qregion.h>
 #include <qpainter.h>
+
+// Local includes.
 
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -30,25 +37,21 @@ namespace Digikam
 {
 
 ImageWidget::ImageWidget(int w, int h, QWidget *parent)
-    : QWidget(parent,0,Qt::WDestructiveClose)
+           : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w,h);
+    setMinimumSize(w, h);
 
-    m_iface = new ImageIface(w,h);
-    
+    m_iface = new ImageIface(w, h);
     m_data = m_iface->getPreviewData();
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
-
-    m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2,
-                   m_w, m_h);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);    
 }
 
 ImageWidget::~ImageWidget()
 {
     delete [] m_data;
-
     delete m_iface;
 }
 
@@ -62,7 +65,7 @@ void ImageWidget::paintEvent(QPaintEvent *)
     m_iface->paint(this, m_rect.x(), m_rect.y(),
                    m_rect.width(), m_rect.height());
 
-    QRect r(0,0,width(),height());
+    QRect r(0, 0, width(), height());
     QRegion reg(r);
     reg -= m_rect;
 
@@ -72,4 +75,18 @@ void ImageWidget::paintEvent(QPaintEvent *)
     p.end();
 }
 
+void ImageWidget::resizeEvent(QResizeEvent * e)
+{
+    int w = e->size().width();
+    int h = e->size().height();
+    m_data = m_iface->setPreviewSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    emit signalResized();
 }
+
+}
+
+#include "imagewidget.moc"

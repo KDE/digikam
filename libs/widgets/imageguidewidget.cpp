@@ -49,27 +49,27 @@
 namespace Digikam
 {
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, bool spotVisible, int guideMode)
+ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
+                                   bool spotVisible, int guideMode)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_iface = new Digikam::ImageIface(w,h);
+    m_spotVisible             = spotVisible;
+    m_guideMode               = guideMode;
+    m_freeze                  = true;
+    m_focus                   = false;
+    m_mouseLeftButtonTracking = false;
+    
+    setBackgroundMode(Qt::NoBackground);
+    setMinimumSize(w, h);
+    setMouseTracking(true);
 
+    m_iface = new Digikam::ImageIface(w, h);
     m_data = m_iface->getPreviewData();
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
-    
-    setBackgroundMode(Qt::NoBackground);
-    setFixedSize(m_w, m_h);
-    setMouseTracking(true);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
-    m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
-    
-    m_spotVisible = spotVisible;
-    m_guideMode = guideMode;
-    m_freeze = true;
-    m_focus = false;
-    m_mouseLeftButtonTracking = false;
     resetSpotPosition();
 }
 
@@ -161,6 +161,19 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
     bitBlt(this, 0, 0, m_pixmap);
 }
 
+void ImageGuideWidget::resizeEvent(QResizeEvent * e)
+{
+    delete m_pixmap;
+    int w = e->size().width();
+    int h = e->size().height();
+    m_data = m_iface->setPreviewSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    emit signalResized();
+}
+
 void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( !m_focus && e->button() == Qt::LeftButton &&
@@ -180,8 +193,8 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_rect.contains( m_xpos, m_ypos ) && m_focus ) 
        {    
-       m_freeze = !m_freeze;
-       m_focus = false;
+       m_freeze                  = !m_freeze;
+       m_focus                   = false;
        m_mouseLeftButtonTracking = false;
        
        if (m_freeze) 
@@ -209,7 +222,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
            emit spotPositionChanged( getSpotColor(), false, getSpotPosition() );
         }
     else
-        setCursor ( KCursor::arrowCursor() );
+        setCursor( KCursor::arrowCursor() );
 }
 
 }  // NameSpace Digikam

@@ -82,6 +82,7 @@
 #include "setup.h"
 #include "setupeditor.h"
 #include "setupplugins.h"
+#include "slideshow.h"
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
@@ -148,6 +149,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
        }
     
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));    
+    
+    m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
+
     applySettings();
 
     // -- setup connections ---------------------------
@@ -167,6 +171,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
 
+    connect(m_slideShow, SIGNAL(finished()),
+            m_slideShowAction, SLOT(activate()) );
+    
     //-------------------------------------------------------------
         
     for (KURL::List::const_iterator it = urlList.begin();
@@ -189,9 +196,11 @@ ShowFoto::~ShowFoto()
 {
     unLoadPlugins();
     saveSettings();
+    
     delete m_bar;
     delete m_canvas;
     delete m_imagePluginLoader;
+    delete m_slideShow;
 }
 
 void ShowFoto::setupActions()
@@ -309,6 +318,10 @@ void ShowFoto::setupActions()
     selectItems << i18n("Alpha");
     m_viewHistogramAction->setItems(selectItems);
 
+    m_slideShowAction = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, 
+                                          this, SLOT(slotToggleSlideShow()),
+                                          actionCollection(),"slideshow");
+    
     // -- rotate actions ---------------------------------------------
     
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
@@ -482,18 +495,24 @@ void ShowFoto::applySettings()
     // TIFF compression.
     m_TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
     
+    // Slideshow Settings.
+    m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);
+    m_slideShow->setStartWithCurrent(m_config->readBoolEntry("SlideShowStartCurrent", false));
+    m_slideShow->setLoop(m_config->readBoolEntry("SlideShowLoop", false));
+    m_slideShow->setDelay(m_config->readNumEntry("SlideShowDelay", 5));
+        
     bool showBar = false;
     bool autoFit = true;
     
     m_config->setGroup("MainWindow");
     showBar = m_config->readBoolEntry("Show Thumbnails", true);
     autoFit = m_config->readBoolEntry("Zoom Autofit", true);
-        
+
     if (!showBar && m_showBarAction->isChecked())
         m_showBarAction->activate();
 
     if (autoFit && !m_zoomFitAction->isChecked())
-        m_zoomFitAction->activate();        
+        m_zoomFitAction->activate();
 
     QRect histogramRect = m_config->readRectEntry("Histogram Rectangle");
     if (!histogramRect.isNull())
@@ -1090,6 +1109,7 @@ void ShowFoto::toggleActions(bool val)
     m_filePrintAction->setEnabled(val);
     m_resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
+    m_slideShowAction->setEnabled(val);
     
     if (!m_disableBCGActions)
        m_BCGAction->setEnabled(val);
@@ -1328,6 +1348,28 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 void ShowFoto::slotContextMenu()
 {
     m_contextMenu->exec(QCursor::pos());
+}
+
+void ShowFoto::slotToggleSlideShow() 
+{
+    if (m_slideShowAction->isChecked()) 
+    {
+        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen) 
+        {
+            m_fullScreenAction->activate();
+        }
+        
+        m_slideShow->start();
+    }
+    else 
+    {
+        m_slideShow->stop();
+        
+        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen) 
+        {
+            m_fullScreenAction->activate();
+        }
+    }
 }
 
 #include "showfoto.moc"

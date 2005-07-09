@@ -1,7 +1,8 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-	      $(all_includes) $(LIBDIGIKAM_CFLAGS)
+		      -I$(top_srcdir)/digikam/digikam \
+		$(all_includes) $(LIBDIGIKAM_CFLAGS)
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_despeckle.la

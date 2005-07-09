@@ -30,7 +30,6 @@
 // Kde includes.
 
 #include <kurl.h>
-#include <kio/job.h>
 
 class QPopupMenu;
 class QLabel;
@@ -77,7 +76,6 @@ private:
     
     KURL::List             m_urlList;
     KURL                   m_urlCurrent;
-    KURL                   m_newFile;
     
     // Allow to use Image properties and Comments/Tags dialogs from main window.
     AlbumIconView*         m_view;
@@ -174,7 +172,6 @@ private slots:
     
     void slotSave();
     void slotSaveAs();
-    void slotSaveAsResult(KIO::Job *job);
 
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();

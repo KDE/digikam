@@ -28,11 +28,12 @@
 #include <imagecurves.h>
 #include <imagehistogram.h>
 #include <imagefilters.h>
+#include <threadedfilter.h>
 #include <imageiface.h>
 #include <imagelevels.h>
 #include <imagepaniconwidget.h>
 #include <imageplugin.h>
-#include <imagepreviewwidget.h>
+#include <imagepannelwidget.h>
 #include <imageregionwidget.h>
 #include <imageselectionwidget.h>
 #include <imageguidewidget.h>
@@ -47,11 +48,12 @@
 #include <digikam/imagecurves.h>
 #include <digikam/imagehistogram.h>
 #include <digikam/imagefilters.h>
+#include <digikam/threadedfilter.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagelevels.h>
 #include <digikam/imagepaniconwidget.h>
 #include <digikam/imageplugin.h>
-#include <digikam/imagepreviewwidget.h>
+#include <digikam/imagepannelwidget.h>
 #include <digikam/imageregionwidget.h>
 #include <digikam/imageselectionwidget.h>
 #include <digikam/imageguidewidget.h>

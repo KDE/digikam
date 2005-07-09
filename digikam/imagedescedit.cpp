@@ -27,6 +27,8 @@
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kdeversion.h>
+#include <kconfig.h>
+#include <kfilemetainfo.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -46,29 +48,27 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
-#include "albumfolderview.h"
-#include "albumfolderitem.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
-#include "albumlister.h"
 #include "albummanager.h"
-#include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
 #include "imagedescedit.h"
 #include "tagcreatedlg.h"
+#include "syncjob.h"
+#include "thumbnailjob.h"
 
 class TAlbumCheckListItem : public QCheckListItem
 {
 public:
 
     TAlbumCheckListItem(QListView* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle()),
+        : QCheckListItem(parent, album->title()),
           m_album(album)
         {}
 
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-        : QCheckListItem(parent, album->getTitle(), QCheckListItem::CheckBox),
+        : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox),
           m_album(album)
         {}
 
@@ -78,7 +78,8 @@ public:
 ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
                              QWidget *parent, bool singleMode)
              : KDialogBase(Plain, i18n("Image Comments/Tags"),
-                           singleMode ? Help|Stretch|Ok|Apply|Cancel : Help|User1|User2|Stretch|Ok|Apply|Cancel,
+                           singleMode ? Help|Stretch|Ok|Apply|Cancel :
+                           Help|User1|User2|Stretch|Ok|Apply|Cancel,
                            Ok, parent, 0, true, true,
                            KStdGuiItem::guiItem(KStdGuiItem::Forward),
                            KStdGuiItem::guiItem(KStdGuiItem::Back))
@@ -86,7 +87,6 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     setHelp("tagscommentsedit.anchor", "digikam");
     m_view     = view;
     m_currItem = currItem;
-    m_lister   = view->albumLister();
 
     QGridLayout *topLayout = new QGridLayout(plainPage(), 3, 2, 5, spacingHint());
 
@@ -147,6 +147,21 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_tagsView->installEventFilter(this);
 
     m_commentsEdit->setFocus();
+
+    AlbumManager* man = AlbumManager::instance();
+    connect(man, SIGNAL(signalAlbumAdded(Album*)),
+            SLOT(slotAlbumAdded(Album*)));
+    connect(man, SIGNAL(signalAlbumDeleted(Album*)),
+            SLOT(slotAlbumDeleted(Album*)));
+    connect(man, SIGNAL(signalAlbumRenamed(Album*)),
+            SLOT(slotAlbumRenamed(Album*)));
+    connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
+            SLOT(slotAlbumIconChanged(Album*)));
+
+    connect(m_view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+            SLOT(slotItemDeleted(AlbumIconItem*)));
+    connect(m_view, SIGNAL(signalCleared()),
+            SLOT(slotCleared()));
 }
 
 ImageDescEdit::~ImageDescEdit()
@@ -154,6 +169,12 @@ ImageDescEdit::~ImageDescEdit()
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        (*it)->removeExtraData(this);
+    }
+    
     kapp->config()->setGroup("Image Description Dialog");
     kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
@@ -195,34 +216,41 @@ bool ImageDescEdit::eventFilter(QObject *, QEvent *e)
     return false;
 }
 
-
 void ImageDescEdit::populateTags()
 {
     m_tagsView->clear();
 
-    TAlbum* rootTag = AlbumManager::instance()->findTAlbum(0);
-    if (!rootTag)
-        return;
-
-    TAlbumCheckListItem* item = new TAlbumCheckListItem(m_tagsView, rootTag);
-    item->setPixmap(0, rootTag->getPixmap());
-    item->setOpen(true);
-    populateTags(item, rootTag);
-}
-
-void ImageDescEdit::populateTags(QCheckListItem* parItem, TAlbum* parAlbum)
-{
-    TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-    if (!child)
-        return;
-
-    while (child)
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TAlbumCheckListItem* item = new TAlbumCheckListItem(parItem, child);
-        item->setPixmap(0, child->getPixmap());
-        item->setOpen(true);
-        populateTags(item, child);
-        child = dynamic_cast<TAlbum*>(child->next());
+        TAlbum* tag  = (TAlbum*)(*it);
+
+        TAlbumCheckListItem* viewItem = 0;
+        
+        if (tag->isRoot())
+        {
+            viewItem = new TAlbumCheckListItem(m_tagsView, tag);
+        }
+        else
+        {
+            QCheckListItem* parentItem  =
+                (QCheckListItem*)(tag->parent()->extraData(this));
+            if (!parentItem)
+            {
+                kdWarning() << "Failed to find parent for Tag " << tag->title()
+                            << endl;
+                continue;
+            }
+
+            viewItem = new TAlbumCheckListItem(parentItem, tag);
+        }
+
+        if (viewItem)
+        {
+            viewItem->setOpen(true);
+            viewItem->setPixmap(0, tagThumbnail(tag));
+            tag->setExtraData(this, viewItem);
+        }
     }
 }
 
@@ -237,7 +265,7 @@ void ImageDescEdit::slotUser1()
         return;
 
     if (m_autoSaveBox->isChecked())
-       slotApply();
+        slotApply();
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currItem->setSelected(true);
@@ -266,63 +294,41 @@ void ImageDescEdit::slotApply()
     if (!m_currItem)
         return;
 
-    KURL fileURL(m_currItem->fileItem()->url());
-
-    PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
-    if (!album)
-    {
-        kdWarning() << "Failed to find parent album for"
-                    << m_currItem->fileItem()->url().prettyURL()
-                    << endl;
-        return;
-    }
-
-    AlbumDB* db  = AlbumManager::instance()->albumDB();
+    ImageInfo* info = m_currItem->imageInfo();
 
     if (m_modified)
     {
-        db->setItemCaption(album, fileURL.fileName(), m_commentsEdit->text());
+        info->setCaption(m_commentsEdit->text());
 
         if (AlbumSettings::instance() &&
             AlbumSettings::instance()->getSaveExifComments())
         {
             // store as JPEG Exif comment
-            KFileMetaInfo*  metaInfo =
-                new KFileMetaInfo(fileURL.path(), "image/jpeg", KFileMetaInfo::Fastest);
+            KFileMetaInfo  metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
 
             // set Jpeg comment
-             if (metaInfo->isValid () && metaInfo->mimeType() == "image/jpeg"
-                 && metaInfo->containsGroup("Jpeg EXIF Data"))
-             {
-                 kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                           << endl;
-                 (*metaInfo)["Jpeg EXIF Data"].item("Comment")
-                     .setValue(m_commentsEdit->text());
-                 metaInfo->applyChanges();
-                 m_currItem->setMetaInfo(metaInfo);
-             }
-             else
-             {
-                 delete metaInfo;
-                 metaInfo = 0;
-             }
-
-            // set EXIF UserComment
-            //KExifUtils::writeComment(fileURL.path(), m_commentsEdit->text());
+            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
+                && metaInfo.containsGroup("Jpeg EXIF Data"))
+            {
+                kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
+                          << endl;
+                metaInfo["Jpeg EXIF Data"].item("Comment")
+                    .setValue(m_commentsEdit->text());
+                metaInfo.applyChanges();
+            }
         }
 
         m_modified = false;
     }
 
-    db->removeItemAllTags(album, fileURL.fileName());
+    info->removeAllTags();
     QListViewItemIterator it(m_tagsView);
     while (it.current())
     {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
+        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem && tItem->isOn())
         {
-            db->setItemTag(album, fileURL.fileName(), tItem->m_album);
+            info->setTag(tItem->m_album->id());
         }
         ++it;
     }
@@ -351,38 +357,35 @@ void ImageDescEdit::slotItemChanged()
         delete m_thumbJob;
     }
 
-    KURL fileURL(m_currItem->fileItem()->url());
+    ImageInfo* info = m_currItem->imageInfo();
+    KURL fileURL;
+    fileURL.setPath(info->filePath());
 
     m_thumbJob = new ThumbnailJob(fileURL, 256);
 
     connect(m_thumbJob,
-            SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                           const QPixmap&,
-                                           const KFileMetaInfo*)),
+            SIGNAL(signalThumbnail(const KURL&,
+                                   const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+                                  const QPixmap&)));
 
     connect(m_thumbJob,
             SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedThumbnail(const KURL&)));
 
-    PAlbum *album = m_lister->findParentAlbum(m_currItem->fileItem());
+    PAlbum *album = m_currItem->imageInfo()->album();
     if (!album)
     {
         kdWarning() << "Failed to find parent album for"
-                    << m_currItem->fileItem()->url().prettyURL()
-                    << endl;
+                    << fileURL << endl;
         return;
     }
 
-    AlbumDB* db  = AlbumManager::instance()->albumDB();
-
-    m_nameLabel->setText(fileURL.fileName());
+    m_nameLabel->setText(info->name());
     m_thumbLabel->setPixmap(QPixmap());
-    m_commentsEdit->setText(db->getItemCaption(album, fileURL.fileName()));
+    m_commentsEdit->setText(info->caption());
 
-    IntList tagIDs = db->getItemTagIDs(album, fileURL.fileName());
+    QValueList<int> tagIDs = info->tagIDs();
 
     QListViewItemIterator it( m_tagsView);
     while (it.current())
@@ -392,7 +395,7 @@ void ImageDescEdit::slotItemChanged()
 
         if (tItem)
         {
-            if (tagIDs.contains(tItem->m_album->getID()))
+            if (tagIDs.contains(tItem->m_album->id()))
                 tItem->setOn(true);
             else
                 tItem->setOn(false);
@@ -404,8 +407,7 @@ void ImageDescEdit::slotItemChanged()
     enableButton(User2, m_currItem->prevItem() != 0);
 }
 
-void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                     const KFileMetaInfo*)
+void ImageDescEdit::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     m_thumbLabel->setPixmap(pix);
 }
@@ -420,21 +422,19 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
                                            const QPoint &, int )
 {
     TAlbum              *album;
-    TAlbumCheckListItem *albumItem = 0;
 
     if (!item)
     {
         album = AlbumManager::instance()->findTAlbum(0);
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(m_tagsView->firstChild());
     }
     else
     {
-        albumItem = dynamic_cast<TAlbumCheckListItem*>(item);
+        TAlbumCheckListItem* viewItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
-        if(!albumItem)
+        if(!viewItem)
             album = AlbumManager::instance()->findTAlbum(0);
         else
-            album = albumItem->m_album;
+            album = viewItem->m_album;
     }
 
     if(!album)
@@ -456,7 +456,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     {
     case 10:
     {
-        tagNew(album, albumItem);
+        tagNew(album);
         break;
     }
     case 11:
@@ -468,7 +468,7 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     case 12:
     {
         if (!album->isRoot())
-            tagDelete(album, albumItem);
+            tagDelete(album);
         break;
     }
     default:
@@ -476,9 +476,9 @@ void ImageDescEdit::slotRightButtonClicked(QListViewItem *item,
     }
 }
 
-void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
+void ImageDescEdit::tagNew(TAlbum* parAlbum)
 {
-    if(!parAlbum || !item)
+    if (!parAlbum)
         return;
 
     QString title, icon;
@@ -488,46 +488,50 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum, QCheckListItem *item)
         return;
 
     QString errMsg;
-    if (!albumMan_->createTAlbum(parAlbum, title, icon, errMsg))
+    TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);
+    
+    if (!album)
     {
         KMessageBox::error(this, errMsg);
     }
     else
     {
-        TAlbum* child = dynamic_cast<TAlbum*>(parAlbum->firstChild());
-        while (child)
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
+        if (viewItem)
         {
-            if (child->getTitle() == title)
-            {
-                new TAlbumCheckListItem(item, child);
-                return;
-            }
-            child = dynamic_cast<TAlbum*>(child->next());
+            m_tagsView->setSelected(viewItem, true);
+            m_tagsView->ensureItemVisible(viewItem);
         }
     }
 }
 
-void ImageDescEdit::tagDelete(TAlbum *album, QCheckListItem *item)
+void ImageDescEdit::tagDelete(TAlbum *album)
 {
     if (!album || album->isRoot())
         return;
 
-    AlbumManager *albumMan_ = AlbumManager::instance();
+    AlbumManager *albumMan = AlbumManager::instance();
+
+    if (album == albumMan->currentAlbum() ||
+        album->isAncestorOf(albumMan->currentAlbum()))
+    {
+        KMessageBox::error(this, i18n("You are currently viewing items in the "
+                                      "tag '%1' that you are about to delete? "
+                                      "You will need to close this dialog first "
+                                      "if you want to delete the tag" )
+                           .arg(album->title()));
+        return;
+    }
 
     int result =
         KMessageBox::questionYesNo(this, i18n("Delete '%1' tag?")
-                                   .arg(album->getTitle()));
+                                   .arg(album->title()));
 
     if (result == KMessageBox::Yes)
     {
         QString errMsg;
-        if (!albumMan_->deleteTAlbum(album, errMsg))
-            KMessageBox::error(0, errMsg);
-        else
-        {
-            if(item)
-                delete item;
-        }
+        if (!albumMan->deleteTAlbum(album, errMsg))
+            KMessageBox::error(this, errMsg);
     }
 }
 
@@ -537,28 +541,134 @@ void ImageDescEdit::tagEdit(TAlbum* album)
     if (!album || album->isRoot())
         return;
 
-    AlbumFolderItem *folderItem =
-        static_cast<AlbumFolderItem*>(album->getViewItem());
+    QString title;
+    QString icon;
+    
+    if (!TagEditDlg::tagEdit(album, title, icon))
+        return;
 
-    AlbumFolderView* folderView =
-        static_cast<AlbumFolderView*>(folderItem->listView());
-    folderView->tagEdit(album);
-
-    // Now update the icon/title of the corresponding checklistitem
-
-    QListViewItemIterator it(m_tagsView);
-    while (it.current())
+    
+    AlbumManager *albumMan = AlbumManager::instance();
+    if (album->title() != title)
     {
-        TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->m_album == album)
+        QString errMsg;
+        if (!albumMan->renameTAlbum(album, title, errMsg))
         {
-            tItem->setText(0, album->getTitle());
-            tItem->setPixmap(0, album->getPixmap());
+            KMessageBox::error(this, errMsg);
+            return;
         }
-        ++it;
     }
 
+    if (album->icon() != icon)
+    {
+        QString errMsg;
+        if (!albumMan->updateTAlbumIcon(album, icon, 0, errMsg));
+        {
+            KMessageBox::error(this, errMsg);
+        }
+    }
+}
+
+void ImageDescEdit::slotAlbumAdded(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+    
+    QCheckListItem* parentItem  =
+        (QCheckListItem*)(album->parent()->extraData(this));
+
+    if (!parentItem)
+    {
+        kdWarning() << "Failed to find parent for Tag " << album->title()
+                    << endl;
+        return;
+    }
+        
+    TAlbumCheckListItem* viewItem = new TAlbumCheckListItem(parentItem, album);
+    viewItem->setOpen(true);
+    viewItem->setPixmap(0, tagThumbnail(album));
+    album->setExtraData(this, viewItem);
+}
+
+void ImageDescEdit::slotAlbumDeleted(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    delete viewItem;
+    album->removeExtraData(this);
+}
+
+void ImageDescEdit::slotAlbumIconChanged(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    TAlbum* album = (TAlbum*)a;
+    
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    if (!viewItem)
+    {
+        kdWarning() << "Failed to find view item for Tag "
+                    << album->title() << endl;
+        return;
+    }
+
+    viewItem->setPixmap(0, tagThumbnail(album));
+}
+
+void ImageDescEdit::slotAlbumRenamed(Album* a)
+{
+    if (!a || a->isRoot() || a->type() != Album::TAG)
+        return;
+    
+    TAlbum* album = (TAlbum*)a;
+
+    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    if (!viewItem)
+    {
+        kdWarning() << "Failed to find view item for Tag "
+                    << album->title() << endl;
+        return;
+    }
+
+    viewItem->setText(0, album->title());
+}
+
+QPixmap ImageDescEdit::tagThumbnail(TAlbum* album) const
+{
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+    QPixmap pix;
+    
+    if (!album->isRoot())
+        pix = SyncJob::getTagThumbnail(album->icon(), 20);
+    else
+        pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
+                                   KIcon::DefaultState, 0, true);
+
+    return pix;
+}
+
+void ImageDescEdit::slotItemDeleted(AlbumIconItem* iconItem)
+{
+    if (m_currItem != iconItem)
+        return;
+
+    // uh oh. our current item got deleted. close
+    m_currItem = 0;
+    close();
+}
+
+void ImageDescEdit::slotCleared()
+{
+    // if the iconview has been cleared, bail out and close
+    close();
 }
 
 #include "imagedescedit.moc"

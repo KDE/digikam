@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="1" name="digikamimageplugin_core" >
+<kpartgui version="2" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -11,12 +11,9 @@
       <Action name="implugcore_hsl" /> 
       <Action name="implugcore_rgb" /> 
       <Separator />
-      <Action name="implugcore_normalize" /> 
-      <Action name="implugcore_equalize" /> 
-      <Action name="implugcore_autolevels" /> 
-      <Action name="implugcore_stretch_contrast" /> 
-      <Separator />
+      <Action name="implugcore_autocorrection" /> 
       <Action name="implugcore_invert" /> 
+      <Separator />
    </Menu>
     <Action name="implugcore_colors" /> 
     <Separator />

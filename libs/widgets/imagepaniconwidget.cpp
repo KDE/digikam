@@ -3,7 +3,7 @@
  * Date  : 2004-08-22
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +52,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_moveSelection = false;
+    m_separateView  = false;
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -111,27 +112,20 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
     if (targetDone)
        {
-       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
-       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
-       if (m_localRegionSelection.right() > m_rect.width())
-          m_localRegionSelection.moveRight(m_rect.width());
-       if (m_localRegionSelection.bottom() > m_rect.height()) 
-          m_localRegionSelection.moveBottom(m_rect.height());
-       
        updatePixmap();          
        repaint(false);
        }
     
-    int x = (int)( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
+    int x = ROUND( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
                    ( (float)m_iface->originalWidth() / (float)m_w ));
                                             
-    int y = (int)( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
+    int y = ROUND( ((float)m_localRegionSelection.y() - (float)m_rect.y() ) *
                    ( (float)m_iface->originalHeight() / (float)m_h ));
                                             
-    int w = (int)((float)m_localRegionSelection.width() *
+    int w = ROUND((float)m_localRegionSelection.width() *
                  ( (float)m_iface->originalWidth() / (float)m_w ));
                                      
-    int h = (int)((float)m_localRegionSelection.height() *
+    int h = ROUND((float)m_localRegionSelection.height() *
                  ( (float)m_iface->originalHeight() / (float)m_h ));
                      
     m_regionSelection.setX(x);
@@ -155,6 +149,15 @@ void ImagePanIconWidget::updatePixmap( void )
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
+    if (m_separateView)
+        {
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.topLeft().y(),
+                   m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.bottomLeft().y());
+        }
+
     p.end();
 }
 
@@ -171,15 +174,16 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
        m_xpos = e->x();
        m_ypos = e->y();
        m_moveSelection = true;
-       setCursor ( KCursor::sizeAllCursor() );
+       setCursor( KCursor::sizeAllCursor() );           
+       emit signalSelectionTakeFocus();
        }
 }
 
 void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    if ( m_moveSelection && m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
+    if ( m_moveSelection ) 
        {    
-       setCursor ( KCursor::arrowCursor() );
+       setCursor( KCursor::arrowCursor() );           
        regionSelectionMoved(true);
        m_moveSelection = false;
        }
@@ -191,23 +195,38 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        int newxpos = e->x();
        int newypos = e->y();
-       
+
        m_localRegionSelection.moveBy (newxpos - m_xpos, newypos - m_ypos);
-       updatePixmap();
-       repaint(false);
      
        m_xpos = newxpos;
        m_ypos = newypos;
+              
+       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
+       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
+       if (m_localRegionSelection.right() > m_rect.width())
+          m_localRegionSelection.moveRight(m_rect.width());
+       if (m_localRegionSelection.bottom() > m_rect.height()) 
+          m_localRegionSelection.moveBottom(m_rect.height());
+       
+       updatePixmap();
+       repaint(false);
        regionSelectionMoved(false);
        return;
        }        
     else 
        {
        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           setCursor( KCursor::handCursor() );
+           setCursor( KCursor::handCursor() );           
        else
-           setCursor( KCursor::arrowCursor() );
+           setCursor( KCursor::arrowCursor() );           
        }
+}
+
+void ImagePanIconWidget::slotSeparateViewToggled(bool t)
+{
+    m_separateView = t;
+    updatePixmap();
+    repaint(false);
 }
 
 }  // NameSpace Digikam

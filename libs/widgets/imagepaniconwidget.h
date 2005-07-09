@@ -3,7 +3,7 @@
  * Date  : 2004-08-22
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,12 @@ signals:
     // value is used for indicate if the mouse have been released.
     void signalSelectionMoved( QRect rect, bool targetDone );     
     
+    void signalSelectionTakeFocus(void);
+
+public slots:
+
+    void slotSeparateViewToggled(bool t);
+            
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -62,7 +68,7 @@ protected:
         
 private:
 
-    ImageIface *m_iface;
+    bool        m_separateView;
     
     uint       *m_data;
     int         m_w;
@@ -78,6 +84,10 @@ private:
     QRect       m_localRegionSelection;    // Thumbnail size selection.
     
     QPixmap*    m_pixmap;
+
+    ImageIface *m_iface;
+        
+private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     

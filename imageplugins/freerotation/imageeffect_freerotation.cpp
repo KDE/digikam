@@ -2,7 +2,7 @@
  * File  : imageeffect_freerotation.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-28
- * Description : a Digikam image editor plugin for process image 
+ * Description : a digiKam image editor plugin to process image 
  *               free rotation.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -77,10 +77,10 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Free Rotation"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to process image free "
+                                       I18N_NOOP("A digiKam image plugin to process free image "
                                        "rotation."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -95,8 +95,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 4, 4 , marginHint(), spacingHint());
-
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    
     QFrame *headerFrame = new QFrame( plainPage() );
     headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QHBoxLayout* layout = new QHBoxLayout( headerFrame );
@@ -108,7 +108,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QLabel *labelTitle = new QLabel( i18n("Free Rotation"), headerFrame, "labelTitle" );
     layout->addWidget( labelTitle );
     layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 4);
+    topLayout->addWidget(headerFrame);
 
     QString directory;
     KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
@@ -122,8 +122,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
@@ -133,22 +132,22 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                            "to guide you in adjusting the rotation angle. "
                                            "Press the left mouse button to freeze the dashed "
                                            "line's position."));
-                                           
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 4);
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame, 10);
     
     // -------------------------------------------------------------
     
-    QLabel *label1 = new QLabel(i18n("New width:"), plainPage());
+    QGridLayout* gridLayout = new QGridLayout( topLayout, 2, 4 , spacingHint());
+    QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New height:"), plainPage());
+    QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
-    topLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(m_newWidthLabel, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(label2, 2, 2, 3, 3);
-    topLayout->addMultiCellWidget(m_newHeightLabel, 2, 2, 4, 4);
+    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 1);
+    gridLayout->addMultiCellWidget(label2, 0, 0, 3, 3);
+    gridLayout->addMultiCellWidget(m_newHeightLabel, 0, 0, 4, 4);
         
-    QLabel *label3 = new QLabel(i18n("Angle:"), plainPage());
+    QLabel *label3 = new QLabel(i18n("Angle (degrees):"), plainPage());
     m_angleInput = new KDoubleNumInput(plainPage());
     m_angleInput->setPrecision(1);
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);
@@ -157,20 +156,23 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
         
-    topLayout->addMultiCellWidget(label3, 3, 3, 0, 0);
-    topLayout->addMultiCellWidget(m_angleInput, 3, 3, 1, 4);
+    gridLayout->addMultiCellWidget(label3, 1, 1, 0, 0);
+    gridLayout->addMultiCellWidget(m_angleInput, 1, 1, 1, 4);
         
-    adjustSize();
-    disableResize();
+    resize(configDialogSize("Free Rotation Tool Dialog"));    
 
     // -------------------------------------------------------------
     
     connect(m_angleInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
+            
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));              
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 {
+    saveDialogSize("Free Rotation Tool Dialog");
 }
 
 void ImageEffect_FreeRotation::slotUser1()
@@ -185,12 +187,12 @@ void ImageEffect_FreeRotation::slotUser1()
 
 void ImageEffect_FreeRotation::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("freerotation",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("freerotation", "digikamimageplugins");
 }
 
 void ImageEffect_FreeRotation::slotEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint*  data  = iface->getPreviewData();
@@ -217,11 +219,13 @@ void ImageEffect_FreeRotation::slotEffect()
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_FreeRotation::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    accept();    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
         
     uint*  data  = iface.getOriginalData();
@@ -235,12 +239,11 @@ void ImageEffect_FreeRotation::slotOk()
     memcpy(src.bits(), data, src.numBytes());
     matrix.rotate(angle);
     src = src.xForm(matrix);
-    Digikam::ImageFilters::smartBlurImage((uint*)src.bits(), src.width(), src.height());
+    Digikam::ImageFilters::gaussianBlurImage((uint*)src.bits(), src.width(), src.height(), 1);
     iface.putOriginalData(i18n("Free Rotation"), (uint*)src.bits(), src.width(), src.height());
         
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
-    accept();       
+    kapp->restoreOverrideCursor();
 }
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

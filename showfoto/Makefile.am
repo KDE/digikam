@@ -8,8 +8,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 
-showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp setupeditor.cpp \
-	           setupplugins.cpp imageproperties.cpp imagepropertiesgeneral.cpp \
+showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp slideshow.cpp \
+		   setupeditor.cpp setupplugins.cpp setupslideshow.cpp \
+		   imageproperties.cpp imagepropertiesgeneral.cpp \
 		   imagepropertiesexif.cpp imagepropertieshistogram.cpp 
 
 showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
@@ -35,5 +36,6 @@ xdg_apps_DATA = showfoto.desktop
 
 KDE_ICON = showfoto 
 
-
+showfotoicondir = $(kde_datadir)/showfoto/icons
+showfotoicon_ICON = AUTO
 

@@ -61,7 +61,10 @@ public:
 
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
-    
+
+    void setScanAtStart(bool val);
+    bool getScanAtStart() const;
+
     void setAlbumCollectionNames(const QStringList& list);
     QStringList getAlbumCollectionNames();
 
@@ -71,7 +74,7 @@ public:
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
 
-    void setImageSortOder(const ImageSortOrder order);
+    void setImageSortOrder(const ImageSortOrder order);
     ImageSortOrder getImageSortOrder() const;
 
     void setImageFileFilter(const QString& filter);
@@ -85,6 +88,9 @@ public:
             
     void setRawFileFilter(const QString& filter);
     QString getRawFileFilter() const;
+
+    bool    addImageFileExtension(const QString& ext);
+    QString getAllFileFilter() const;
     
     void setDefaultIconSize(int val);
     int  getDefaultIconSize() const;
@@ -97,9 +103,6 @@ public:
 
     void setIconShowComments(bool val);
     bool getIconShowComments() const;
-
-    void setIconShowFileComments(bool val);
-    bool getIconShowFileComments() const;
 
     void setIconShowResolution(bool val);
     bool getIconShowResolution() const;
@@ -118,9 +121,6 @@ public:
 
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
-
-    void setRecurseTags(bool val);
-    bool getRecurseTags() const;
 
     void setShowToolTips(bool val);
     bool getShowToolTips() const;

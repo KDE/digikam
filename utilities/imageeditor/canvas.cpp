@@ -209,7 +209,7 @@ void Canvas::customEvent(QCustomEvent *event)
         getHistogramRect(rc);
         viewport()->update(rc);
     }
-
+    
     delete ed;
 }
 

@@ -2,7 +2,7 @@
  * File  : imageeffect_sheartool.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
   * Date  : 2004-12-23
- * Description : a digiKam image editor plugin for process 
+ * Description : a digiKam image editor plugin to process 
  *               shearing image.
 * 
  * Copyright 2004-2005 by Gilles Caulier

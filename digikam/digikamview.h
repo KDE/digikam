@@ -23,19 +23,23 @@
 #define DIGIKAMVIEW_H
 
 // Qt includes.
-#include <qsplitter.h>
+#include <qhbox.h>
 #include <qstringlist.h>
 #include <qmap.h>
 
 // KDE includes.
 
-#include <kio/job.h>
+namespace KIO
+{
+class Job;
+}
 
 class QString;
 class QIconViewItem;
 class KURL;
 
 class DigikamApp;
+class AlbumFolderView_Deprecated;
 class AlbumFolderView;
 class AlbumIconView;
 class AlbumIconItem;
@@ -43,9 +47,14 @@ class AlbumSettings;
 class AlbumManager;
 class Album;
 class AlbumHistory;
+class Sidebar;
+class DateFolderView;
+class TagFolderView;
+class TagFilterView;
+class SearchFolderView;
 
-class DigikamView : public QSplitter {
-
+class DigikamView : public QHBox
+{
     Q_OBJECT
 
 public:
@@ -61,14 +70,25 @@ public:
 private:
 
     void setupConnections();
+    void loadViewState();
+    void saveViewState();
 
 private:
 
     DigikamApp               *mParent;
-    AlbumFolderView          *mFolderView;
+    AlbumFolderView_Deprecated          *mFolderView_Deprecated;
+    AlbumFolderView          *mFolderView;    
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
     AlbumHistory             *mAlbumHistory;
+    Sidebar                  *mMainSidebar;
+    DateFolderView           *mDateFolderView;
+    TagFolderView            *mTagFolderView;
+    SearchFolderView         *mSearchFolderView;
+    Sidebar                  *mRightSidebar;
+    TagFilterView            *mTagFilterView;
+    int                      mInitialAlbumID;
+    QSplitter                *mSplitter;
     
 public slots:
 
@@ -92,6 +112,9 @@ public slots:
     void slotNewTag();
     void slotDeleteTag();
     void slotEditTag();
+
+    // Search action slots
+    void slotNewQuickSearch();
     
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);
@@ -107,6 +130,8 @@ public slots:
 
 private slots:
 
+    void slotAllAlbumsLoaded();
+    
     void slot_imageSelected();
     void slot_albumSelected(Album* album);
 
@@ -115,8 +140,7 @@ private slots:
 
     void slot_imageCopyResult(KIO::Job* job);
 
-    void slotFolderViewInFocus();
-    void slotIconViewInFocus();
+    void slotLeftSidebarChangedTab(QWidget* w);
     
 signals:
 

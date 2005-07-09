@@ -22,9 +22,16 @@
 #define ALBUMLISTER_H
 
 #include <qobject.h>
-#include <kfileitem.h>
+#include <qcstring.h>
 
-class PAlbum;
+#include "imageinfo.h"
+
+namespace KIO
+{
+class Job;
+}
+
+class Album;
 class AlbumListerPriv;
 
 class AlbumLister : public QObject
@@ -33,35 +40,43 @@ class AlbumLister : public QObject
 
 public:
 
-    AlbumLister();
+    static AlbumLister* instance();
+    
     ~AlbumLister();
 
     void openAlbum(Album *album);
     void stop();
+    void refresh();
 
     void setNameFilter(const QString& nameFilter);
-    void updateDirectory();
 
-    PAlbum* findParentAlbum(const KFileItem *item) const;
+    void setDayFilter(const QValueList<int>& days);
+    void setTagFilter(const QValueList<int>& tags, bool showUnTagged=false);
     
 private:
 
-    AlbumListerPriv *d;
+    AlbumLister();
+    bool matchesFilter(const ImageInfo* info) const;
+    
+    AlbumListerPriv    *d;
+    static AlbumLister *m_instance; 
     
 signals:
 
-    void signalNewItems(const KFileItemList& items);
-    void signalDeleteItem(KFileItem *item);
+    void signalNewItems(const ImageInfoList& items);
+    void signalDeleteItem(ImageInfo* item);
+    void signalNewFilteredItems(const ImageInfoList& items);
+    void signalDeleteFilteredItem(ImageInfo* item);
     void signalClear();
     void signalCompleted();
-    void signalRefreshItems(const KFileItemList& items);
 
 private slots:
 
-    void slotNewPhyItems(const KFileItemList& items);
-    void slotNewTagItems(const KFileItemList& items);
-    void slotDeleteItem(KFileItem *item);
     void slotClear();
+    void slotFilterItems();
+
+    void slotResult(KIO::Job* job);
+    void slotData(KIO::Job* job, const QByteArray& data);
 };
 
 #endif /* ALBUMLISTER_H */

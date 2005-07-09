@@ -167,7 +167,7 @@ void CurvesWidget::customEvent(QCustomEvent *event)
             emit signalHistogramComputationFailed();
             }
         }
-
+    
     delete d;
 }
 

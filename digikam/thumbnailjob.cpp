@@ -28,11 +28,9 @@
 #include <qdatastream.h>
 
 #include <kglobal.h>
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 #include "albumsettings.h"
-#include "thumbdb.h"
 #include "thumbnailjob.h"
 
 extern "C"
@@ -40,7 +38,6 @@ extern "C"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 }
@@ -52,7 +49,6 @@ public:
     KURL::List    urlList;
     int           size;
     bool          highlight;
-    bool          metainfo;
 
     KURL          curr_url;
     KURL          next_url;
@@ -74,7 +70,6 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
     d->urlList.append(url);
     d->size      = size;
     d->highlight = highlight;
-    d->metainfo  = false;
 
     d->curr_url = d->urlList.first();
     d->next_url = d->curr_url;
@@ -87,7 +82,7 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
 }
 
 ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
-                           bool metainfo, bool highlight)
+                           bool highlight)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
@@ -95,7 +90,6 @@ ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
     d->urlList   = urlList;
     d->size      = size;
     d->highlight = highlight;
-    d->metainfo  = metainfo;
     d->running   = false;
 
     d->curr_url = d->urlList.first();
@@ -211,7 +205,7 @@ void ThumbnailJob::slotResult(KIO::Job *job)
         emit signalFailed(d->curr_url);
     }
 
-    d->running = false;
+    d->running  = false;
     processNext();
 }
 
@@ -274,9 +268,6 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
         return;
     }
 
-    if (!ThumbDB::instance()->hasThumb(d->curr_url.path()))
-        ThumbDB::instance()->putThumb(d->curr_url.path(), thumb);
-    
     QPixmap pix(thumb);
 
     int w = pix.width();
@@ -294,13 +285,8 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
         p.end();
     }
 
-    KFileMetaInfo *metaInfo = 0;
-    if (d->metainfo)
-    {
-        metaInfo = new KFileMetaInfo(d->curr_url.path());
-    }
-
-    emit signalThumbnailMetaInfo(d->curr_url, pix, metaInfo);
+    emit signalThumbnail(d->curr_url, pix);
 }
 
 #include "thumbnailjob.moc"
+

@@ -1,3 +1,15 @@
+v0.8.0-Beta1 - xx/xx/05
+----------------------------------------------------------------------------
+    * Solarize, Raindrop, Border; FreeRotation, ShearTool, LensDistortion,
+      AntiVignetting, UnsharpMask, NoiseReduction, Restoration, Refocus: 
+      preview effect area and dialog resizable. 
+    * Fix PPC compatibility (big/little endian problem with color image data).
+    * Refocus, UnsharpMask, NoiseReduction, OilPaint, Emboss, FilmGrain, 
+      Infrared, Charcoal, AntiVignetting, LensDistortion : 
+      using separate thread from GUI to compute image filters.
+    * CImg interface : fix memory leak and make a threadsafe implementation.    
+    * New plugin 'Refocus'.
+    
 v0.7.3-Beta2 - 25/04/05
 ----------------------------------------------------------------------------
     * Blowup : fixed restoration mode rendering instead a basic linear 

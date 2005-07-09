@@ -10,6 +10,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/histogram \
 	-I$(top_srcdir)/digikam/ \
 	-I$(top_srcdir)/digikam/digikam \
+	-I$(top_srcdir)/digikam/libs/filters \
 	$(all_includes) 
 
 digikaminclude_HEADERS = imagelevels.h 

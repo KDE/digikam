@@ -58,6 +58,7 @@
 // Local includes.
 
 #include "albummanager.h"
+#include "albumlister.h"
 #include "album.h"
 #include "themeengine.h"
 #include "cameralist.h"
@@ -73,7 +74,6 @@
 #include "digikamapp.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
-#include "digikamapp.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
           : KMainWindow( 0, "Digikam" )
@@ -94,7 +94,8 @@ DigikamApp::DigikamApp(bool detectCamera)
     mAlbumSettings = new AlbumSettings();
     mAlbumSettings->readSettings();
 
-    mAlbumManager = new AlbumManager();
+    mAlbumManager = AlbumManager::instance();
+    AlbumLister::instance();
 
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
@@ -111,6 +112,7 @@ DigikamApp::DigikamApp(bool detectCamera)
     applyMainWindowSettings(m_config);
 
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
+    mAlbumManager->startScan();
 
     // Load Cameras
     if(mSplash)
@@ -136,16 +138,18 @@ DigikamApp::DigikamApp(bool detectCamera)
 
 DigikamApp::~DigikamApp()
 {
+    mAlbumSettings->saveSettings();
+
     if (ImageWindow::imagewindow())
         delete ImageWindow::imagewindow();
-    
+
     if (mView)
         delete mView;
 
-    mAlbumSettings->saveSettings();
     delete mAlbumSettings;
 
     delete mAlbumManager;
+    delete AlbumLister::instance();
 
     m_instance = 0;
 }
@@ -549,6 +553,14 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "gamma_adjustment");
 
+    // -----------------------------------------------------------
+
+    KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
+                                           actionCollection(), "search_quick");
+    findAction->setText(i18n("Quick Search"));
+    
+    // -----------------------------------------------------------
+    
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 

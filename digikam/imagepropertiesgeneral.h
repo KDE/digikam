@@ -26,7 +26,9 @@
 class QWidget;
 class QLabel;
 class KSqueezedTextLabel;
+
 class ThumbnailJob;
+class ImageInfo;
 
 class ImagePropertiesGeneral : public QObject
 {
@@ -37,11 +39,11 @@ public:
     ImagePropertiesGeneral(QWidget* page);
     ~ImagePropertiesGeneral();
 
-    void setCurrentURL(const KURL& url);
+    void setCurrentItem(const ImageInfo* info);
 
 private slots:
 
-    void slotGotThumbnail(const KURL&, const QPixmap& pix, const KFileMetaInfo*);
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
     
 private:

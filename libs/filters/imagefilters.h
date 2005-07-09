@@ -32,6 +32,10 @@
 #include <kprogress.h>
 #include "digikam_export.h"
 
+// Big/little endian detection from .configure script.
+
+#include "config.h"
+
 namespace Digikam
 {
 
@@ -43,9 +47,9 @@ public: // Structures to use for color management filters depending of architect
     struct channels
     {
     uchar   alpha;
-    uchar   blue;
-    uchar   green;
     uchar   red;
+    uchar   green;
+    uchar   blue;
     };
 #else                   // Intel like.
     struct channels
@@ -97,15 +101,8 @@ private:    // Private structures used internally.
             
 private:    // Private methods used internally.
     
-    // Methods for Gaussian blur.   
+    // Methods for Gaussian Blur.   
     
-    static inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
-
     // function to allocate a 2d array   
     static inline int** Alloc2DArray (int Columns, int Rows)
        {
@@ -119,7 +116,7 @@ private:    // Private methods used internally.
            lpcArray[i] = new int[Rows];
 
        return (lpcArray);
-       }   
+       };   
     
     // Function to deallocates the 2d array previously created
     static inline void Free2DArray (int** lpcArray, int Columns)
@@ -130,7 +127,7 @@ private:    // Private methods used internally.
 
        // now, we delete the main pointer
        delete [] lpcArray;
-       }   
+       };   
        
     static inline bool IsInside (int Width, int Height, int X, int Y)
        {
@@ -139,7 +136,7 @@ private:    // Private methods used internally.
        return (bIsWOk && bIsHOk);
        };       
 
-    // Methods for Channel mixer.   
+    // Methods for Channel Mixer.   
        
     static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
        {
@@ -149,7 +146,7 @@ private:    // Private methods used internally.
            return (1.0);
 
        return( fabs (1.0 / lfSum) );
-       }
+       };
 
     static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, 
                                  uchar R, uchar G, uchar B, double Norm, 
@@ -160,7 +157,7 @@ private:    // Private methods used internally.
        
        if (overIndicator && lfMix > 255) lfMix = 0;        
        return( (uchar)CLAMP (lfMix, 0, 255) );
-       }       
+       };      
 
 public:   // Public methods.
 
@@ -169,7 +166,6 @@ public:   // Public methods.
     static void normalizeImage(uint *data, int w, int h);
     static void autoLevelsCorrectionImage(uint *data, int w, int h);
     static void invertImage(uint *data, int w, int h);
-    static void smartBlurImage(uint *data, int Width, int Height);
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,

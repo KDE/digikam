@@ -98,23 +98,24 @@ QString DigikamImageInfo::description()
     if (p)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        return db->getItemCaption(p, _url.fileName());
+        return db->getItemCaption(p->id(), _url.fileName());
     }
 
     return QString::null;
 }
 
-void DigikamImageInfo::setTitle( const QString& name )
+void DigikamImageInfo::setTitle( const QString&  )
 {
     // TODO: what is this supposed to do exactly?
+    return;
 
-    PAlbum* p = parentAlbum();
+//     PAlbum* p = parentAlbum();
 
-    if ( p && !name.isEmpty() )
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->moveItem(p, _url.fileName(), p, name);
-    }
+//     if ( p && !name.isEmpty() )
+//     {
+//         AlbumDB* db = AlbumManager::instance()->albumDB();
+//         db->moveItem(p, _url.fileName(), p, name);
+//     }
 }
 
 void DigikamImageInfo::setDescription( const QString& description )
@@ -124,7 +125,7 @@ void DigikamImageInfo::setDescription( const QString& description )
     if ( p  )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemCaption(p, _url.fileName(), description);
+        db->setItemCaption(p->id(), _url.fileName(), description);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveExifComments())
@@ -145,38 +146,20 @@ void DigikamImageInfo::setDescription( const QString& description )
 
 void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
-    // PENDING (Gilles) : This fonction must support KURL in the future !!!...
-    //                    Or the best way is a new AlbumDB method for to set the time of items.
-
     if ( !time.isValid() )
     {
         kdWarning() << k_funcinfo
-                    << "kipiinterface::DigikamImageInfo::setTime:Invalid datetime specified"
+                    << "Invalid datetime specified"
                     << endl;
+        return;
     }
 
-    QFileInfo fi(_url.path());
-    if ( !fi.exists() || !fi.isReadable() )
-    {
-        kdWarning() << k_funcinfo
-                    << "kipiinterface::DigikamImageInfo::setTime:Target does not exist "
-                       "or is unreadable"
-                    << endl;
-    }
+    PAlbum* p = parentAlbum();
 
-    struct utimbuf t;
-    t.actime  = time.toTime_t();
-    t.modtime = time.toTime_t();
-
-    if ( ::utime( QFile::encodeName(_url.path()), &t ) != 0 )
+    if ( p )
     {
-        kdWarning() << k_funcinfo
-                    << "kipiinterface::DigikamImageInfo::setTime:Failed to change "
-                       "image file date and time"
-                    << endl;
-    }
-    else
-    {
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        db->setItemDate(p->id(), _url.fileName(), time);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
 }
@@ -267,10 +250,10 @@ QString DigikamImageCollection::name()
 {
     if ( album_->type() == Album::TAG )
     {
-        return i18n("Tag: %1").arg(album_->getTitle());
+        return i18n("Tag: %1").arg(album_->title());
     }
     else
-        return album_->getTitle();
+        return album_->title();
 }
 
 QString DigikamImageCollection::category()
@@ -278,12 +261,12 @@ QString DigikamImageCollection::category()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getCollection();
+        return p->collection();
     }
     else if ( album_->type() == Album::TAG )
     {
         TAlbum *p = dynamic_cast<TAlbum*>(album_);
-        return i18n("Tag: %1").arg(p->getURL());
+        return i18n("Tag: %1").arg(p->url());
     }
     else
         return QString::null;
@@ -294,7 +277,7 @@ QDate DigikamImageCollection::date()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getDate();
+        return p->date();
     }
     else
         return QDate();
@@ -305,7 +288,7 @@ QString DigikamImageCollection::comment()
     if ( album_->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getCaption();
+        return p->caption();
     }
     else
         return QString::null;
@@ -384,13 +367,13 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     QString filter = imgFilter_.lower() + " " + imgFilter_.upper();
 
     QStringList items;
-    QDir dir(album->getKURL().path(), filter,
+    QDir dir(album->kurl().path(), filter,
              QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
 
     QStringList Files = dir.entryList();
 
     for ( QStringList::Iterator it = Files.begin() ; it != Files.end() ; ++it )
-        items.append(album->getKURL().path(1) + *it);
+        items.append(album->kurl().path(1) + *it);
 
     return KURL::List(items);
 }
@@ -414,25 +397,20 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
     AlbumDB* db = AlbumManager::instance()->albumDB();
 
     QStringList     urls;
-    QValueList<int> dirIDs;
 
     db->beginTransaction();
 
-    db->getItemsInTAlbum(album, urls, dirIDs);
+    urls = db->getItemURLsInTag(album->id());
 
     db->commitTransaction();
 
-    QString basePath(AlbumManager::instance()->getLibraryPath());
-    if (!basePath.endsWith("/"))
-        basePath += "/";
-
     KURL::List urlList;
 
-    QStringList::iterator     itU = urls.begin();
-    while (itU != urls.end())
+    QStringList::iterator     it = urls.begin();
+    while (it != urls.end())
     {
-        urlList.append(KURL(basePath + *itU));
-        itU++;
+        urlList.append(*it);
+        ++it;
     }
 
     return urlList;
@@ -444,7 +422,7 @@ KURL DigikamImageCollection::path()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getKURL();
+        return p->url();
     }
     else
     {
@@ -452,7 +430,7 @@ KURL DigikamImageCollection::path()
                     << "kipiinterface::DigikamImageCollection::path:Requesting kurl "
                        "from a virtual album"
                     << endl;
-        return KURL(album_->getURL());
+        return QString();
     }
 }
 
@@ -461,7 +439,7 @@ KURL DigikamImageCollection::uploadPath()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->getKURL();
+        return p->kurl();
     }
     else
     {
@@ -469,7 +447,7 @@ KURL DigikamImageCollection::uploadPath()
                     << "kipiinterface::DigikamImageCollection::uploadPath:Requesting kurl "
                        "from a virtual album"
                     << endl;
-        return KURL(album_->getURL());
+        return KURL();
     }
 }
 
@@ -553,8 +531,8 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 
     QString fileFilter(fileExtensions());
 
-    PAlbumList palbumList = albumManager_->pAlbums();
-    for ( QValueList<PAlbum*>::Iterator it = palbumList.begin();
+    AlbumList palbumList = albumManager_->allPAlbums();
+    for ( AlbumList::Iterator it = palbumList.begin();
           it != palbumList.end(); ++it )
     {
         // don't add the root album
@@ -571,8 +549,8 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
      * Disable this till the imagesgallery plugin is fixed
      */
 
-    TAlbumList talbumList = albumManager_->tAlbums();
-    for ( QValueList<TAlbum*>::Iterator it = talbumList.begin();
+    AlbumList talbumList = albumManager_->allTAlbums();
+    for ( AlbumList::Iterator it = talbumList.begin();
           it != talbumList.end(); ++it )
     {
         // don't add the root album
@@ -626,7 +604,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
         return false;
     }
 
-    // Renchi: No need to have an 'AlbumDB::addItem()' method ?
+    // TODO: scan in item
 
     albumManager_->refreshItemHandler( url );
 
@@ -650,7 +628,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     if ( palbum )
     {
         // delete the item from the database
-        albumDB_->deleteItem( palbum, url.fileName() );
+        albumDB_->deleteItem( palbum->id(), url.fileName() );
     }
     else
     {

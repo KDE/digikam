@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-16
- * Description : HSL adjustement plugin for ImageEditor
+ * Description : digiKam image editor Hue/Saturation/Lightness 
+ *               correction tool
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -25,11 +26,14 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 // KDE includes.
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <kapplication.h>
+#include <kcursor.h>
 
 // Digikam includes.
 
@@ -46,20 +50,20 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                              Help|User1|Ok|Cancel, Ok,
                              parent, 0, true, true, i18n("&Reset Values"))
 {
+    m_timer = 0L;
     setHelp("hsladjusttool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(),
-                                              0, spacingHint());
-
-    QVGroupBox *gbox = new QVGroupBox(i18n("Hue/Saturation/Lightness Adjustments"),
-                                      plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320,frame);
+    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
     QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image Hue/Saturation/Lightness adjustments preview."));
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-    topLayout->addWidget(gbox);
-
+    l->addWidget(m_previewWidget, 0);
+    topLayout->addWidget(frame);
+        
+    // -------------------------------------------------------------            
+    
     QHBoxLayout *hlay  = 0;
     QLabel      *label = 0;
 
@@ -93,23 +97,53 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_hInput->setValue(0.0);
     m_sInput->setValue(0.0);
     m_lInput->setValue(0.0);
+    
+    // -------------------------------------------------------------
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
             
     connect(m_sInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
             
     connect(m_lInput, SIGNAL(valueChanged (double)),
-            SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
+    
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));              
+            
+    // -------------------------------------------------------------            
 
     enableButtonOK( false );
-    adjustSize();
-    disableResize();                  
+    resize(configDialogSize("HSL Correction Tool Dialog"));                
 }
 
 ImageEffect_HSL::~ImageEffect_HSL()
 {
+    saveDialogSize("HSL Correction Tool Dialog");
+}
+
+void ImageEffect_HSL::closeEvent(QCloseEvent *e)
+{
+    if (m_timer)
+       delete m_timer;
+           
+    delete m_previewWidget;
+    e->accept();
+}
+
+void ImageEffect_HSL::slotTimer()
+{
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
 }
 
 void ImageEffect_HSL::slotUser1()
@@ -124,6 +158,7 @@ void ImageEffect_HSL::slotUser1()
 
 void ImageEffect_HSL::slotEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );    
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
@@ -141,10 +176,12 @@ void ImageEffect_HSL::slotEffect()
     iface->putPreviewData(data);
     delete [] data;
     m_previewWidget->update();
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_HSL::slotOk()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     uint* data = iface->getOriginalData();
@@ -157,10 +194,10 @@ void ImageEffect_HSL::slotOk()
 
     Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
 
-    iface->putOriginalData(i18n("HSL"), data);
+    iface->putOriginalData(i18n("HSL Adjustments"), data);
     delete [] data;
+    kapp->restoreOverrideCursor();
     accept();
 }
-
 
 #include "imageeffect_hsl.moc"

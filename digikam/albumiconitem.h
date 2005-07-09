@@ -30,14 +30,9 @@
 #include <qrect.h>
 #include <qpixmap.h>
 
-extern "C"
-{
-#include <time.h>
-}
-
 // Local includes.
 
-#include "thumbitem.h"
+#include "iconitem.h"
 
 
 class QPainter;
@@ -45,45 +40,36 @@ class QPixmap;
 class QImage;
 class QColorGroup;
 
-class KFileItem;
-class KFileMetaInfo;
+class ImageInfo;
 
 class AlbumIconView;
 
 
-class AlbumIconItem : public ThumbItem 
+class AlbumIconItem : public IconItem
 {
 
     friend class AlbumIconView;
 
 public:
 
-    AlbumIconItem(AlbumIconView* parent, const QString& text,
-                  const KFileItem* fileItem);
+    AlbumIconItem(IconGroupItem* parent, ImageInfo* info);
     ~AlbumIconItem();
 
-    const KFileItem* fileItem() {
-        return fileItem_;
-    }
+    ImageInfo* imageInfo() const;
 
-    void setPixmap(const QPixmap& thumb, const KFileMetaInfo* metaInfo);
-    void setMetaInfo(const KFileMetaInfo* metaInfo);
     QRect thumbnailRect() const;
 
-    virtual int compare(ThumbItem *item);
+    virtual int compare(IconItem *item);
     
 protected:
 
-    virtual void calcRect();
-    virtual void paintItem(QPainter* p, const QColorGroup& cg);
+    virtual void paintItem();
 
 private:
 
-    const KFileItem     *fileItem_;
-    const KFileMetaInfo *metaInfo_;
+    ImageInfo           *info_;
     AlbumIconView       *view_;
-    QPixmap              thumbnail_;
-    time_t               time_;
+    bool                 dirty_;
 };
 
 

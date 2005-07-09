@@ -30,23 +30,19 @@
 
 #include <kdialogbase.h>
 
-// Local includes.
-
-#include "thumbnailjob.h"
-
 class QLabel;
 class QListView;
 class QPixmap;
 class QCheckListItem;
 class QCheckBox;
 
-class KFileMetaInfo;
 class KTextEdit;
 
 class AlbumIconView;
 class AlbumIconItem;
-class AlbumLister;
 class TAlbum;
+class Album;
+class ThumbnailJob;
 
 class ImageDescEdit : public KDialogBase
 {
@@ -68,7 +64,6 @@ private:
 
     AlbumIconView *m_view;
     AlbumIconItem *m_currItem;
-    AlbumLister   *m_lister;
     QLabel        *m_thumbLabel;
     QLabel        *m_nameLabel;
     KTextEdit     *m_commentsEdit;
@@ -76,14 +71,14 @@ private:
     QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
-    void tagNew(TAlbum* parAlbum, QCheckListItem *item);
+    void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);
-    void tagDelete(TAlbum *album, QCheckListItem *item);
+    void tagDelete(TAlbum *album);
     
     QGuardedPtr<ThumbnailJob> m_thumbJob;
 
-    void populateTags();
-    void populateTags(QCheckListItem* parItem, TAlbum* parAlbum);
+    void     populateTags();
+    QPixmap  tagThumbnail(TAlbum* album) const;
     
 private slots:
 
@@ -93,11 +88,17 @@ private slots:
     void slotUser2();
     void slotApply();
     void slotOk();
-    void slotGotThumbnail(const KURL&, const QPixmap& pix,
-                          const KFileMetaInfo*);    
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
 
+    void slotAlbumAdded(Album* a);
+    void slotAlbumDeleted(Album* a);
+    void slotAlbumIconChanged(Album* a);
+    void slotAlbumRenamed(Album* a);
+
+    void slotItemDeleted(AlbumIconItem* iconItem);
+    void slotCleared();
 };
  
 #endif  // IMAGEDESCEDIT_H

@@ -29,12 +29,17 @@
 #include <qrect.h>
 #include <qfont.h>
 
-#include "thumbview.h"
-#include <kfileitem.h>
+#include "iconview.h"
 
 // Local includes.
 
+#include "imageinfo.h"
 #include "albumitemhandler.h"
+
+namespace KIO
+{
+class Job;
+}
 
 class QMouseEvent;
 class QResizeEvent;
@@ -50,9 +55,9 @@ class AlbumSettings;
 class AlbumIconViewPrivate;
 class ThumbnailSize;
 class Album;
-class AlbumLister;
+class PixmapManager;
 
-class AlbumIconView : public ThumbView,
+class AlbumIconView : public IconView,
                       public AlbumItemHandler
 {
     Q_OBJECT
@@ -64,19 +69,14 @@ public:
 
     void setAlbum(Album* album);
     void setThumbnailSize(const ThumbnailSize& thumbSize);
-    ThumbnailSize thumbnailSize();
+    ThumbnailSize thumbnailSize() const;
 
     void applySettings(const AlbumSettings* settings);
-    const AlbumSettings* settings();
-
-    QString     itemComments(AlbumIconItem *item);
-    QStringList itemTagNames(AlbumIconItem* item);
-    QStringList itemTagPaths(AlbumIconItem* item);
+    const AlbumSettings* settings() const;
 
     void    refreshIcon(AlbumIconItem* item);
 
-    AlbumIconItem* firstSelectedItem();
-    AlbumLister*   albumLister() const;
+    AlbumIconItem* firstSelectedItem() const;
 
     KURL::List allItems();
     KURL::List selectedItems();
@@ -89,78 +89,67 @@ public:
     QRect    itemPixmapRect() const;
     QRect    itemNameRect() const;
     QRect    itemCommentsRect() const;
-    QRect    itemFileCommentsRect() const;
     QRect    itemResolutionRect() const;
     QRect    itemSizeRect() const;
     QRect    itemTagRect() const;
+    QRect    bannerRect() const;
 
     QPixmap* itemBaseRegPixmap() const;
     QPixmap* itemBaseSelPixmap() const;
+    QPixmap  bannerPixmap() const;
 
     QFont    itemFontReg() const;
     QFont    itemFontCom() const;
     QFont    itemFontXtra() const;
 
-    void     setInFocus(bool val);
+     void    clear(bool update=true);
 
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
-
+    AlbumIconItem* nextItemToThumbnail() const;
+    PixmapManager* pixmapManager() const;
+    
 protected:
 
-    void calcBanner();
-    void paintBanner(QPainter *p);
-    void updateBanner();
     void resizeEvent(QResizeEvent* e);
 
-    void focusInEvent(QFocusEvent* e);
-    void drawFrame(QPainter* p);
-    
     // DnD
     void startDrag();
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDropEvent(QDropEvent *e);
 
-    bool acceptToolTip(ThumbItem *item, const QPoint &mousePos);
+    bool acceptToolTip(IconItem *item, const QPoint &mousePos);
     
 private:
 
     AlbumIconViewPrivate *d;
-    
-    void           updateItemRectsPixmap();
-    bool           showMetaInfo();
+
+    void    updateBannerRectPixmap();
+    void    updateItemRectsPixmap();
 
 private slots:
 
-    void slotImageListerNewItems(const KFileItemList& itemList);
-    void slotImageListerDeleteItem(KFileItem* item);
+    void slotImageListerNewItems(const ImageInfoList& itemList);
+    void slotImageListerDeleteItem(ImageInfo* item);
     void slotImageListerClear();
-    void slotImageListerCompleted();
-    void slotImageListerRefreshItems(const KFileItemList&);
 
-    void slotDoubleClicked(ThumbItem *item);
-    void slotRightButtonClicked(ThumbItem *item, const QPoint& pos);
+    void slotDoubleClicked(IconItem *item);
+    void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix,
-                          const KFileMetaInfo* metaInfo);
-    void slotFailedThumbnail(const KURL& url);
-    void slotGotThumbnailKDE(const KFileItem* item, const QPixmap& pix);
-    void slotFailedThumbnailKDE(const KFileItem* item);    
-    void slotFinishedThumbnail();
+    void slotGotThumbnail(const KURL& url);
     void slotSelectionChanged();
 
     void slotFilesModified();
     void slotFilesModified(const KURL& url);
 
-    void slotContentsMoving(int x, int y);
-    void slotShowToolTip(ThumbItem* item);
+    void slotShowToolTip(IconItem* item);
 
     void slotThemeChanged();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
-    void slotRearrange();
+    void slotDIOResult(KIO::Job* job);
     
 public slots:
 
@@ -176,8 +165,8 @@ public slots:
 signals:
 
     void signalItemsAdded();
-    void signalInFocus();
-
+    void signalItemDeleted(AlbumIconItem* iconItem);
+    void signalCleared();
 };
 
 #endif // ALBUMICONVIEW_H

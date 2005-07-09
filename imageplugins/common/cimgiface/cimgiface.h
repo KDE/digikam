@@ -22,11 +22,9 @@
 #ifndef CIMGIFACE_H
 #define CIMGIFACE_H
 
-// Qt includes.
+// Digikam includes.
 
-#include <qthread.h>
-#include <qimage.h>
-#include <qstring.h>
+#include <digikamheaders.h>
 
 // Local include.
 
@@ -37,70 +35,60 @@ class QObject;
 namespace DigikamImagePlugins
 {
 
-class CimgIface : public QThread
+class CimgIface : public Digikam::ThreadedFilter
 {
 
 public:
 
-class EventData
-    {
-    public:
-    
-    EventData() 
-       {
-       starting = false;
-       success = false; 
-       }
-    
-    bool starting;    
-    bool success;
-    int  progress;
-    };
-
-public:
-    
-    CimgIface(uint *data, uint width, uint height,
+    CimgIface(QImage *orgImage,
               uint blurIt, double timeStep, double integralStep,
               double angularStep, double blur, double detail,
               double gradient, double gaussian, bool normalize, bool linearInterpolation, 
               bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
-              char* visuflowMode=NULL, uint *newData=0, int newWidth=0, int newHeight=0,
+              char* visuflowMode=NULL, int newWidth=0, int newHeight=0,
               QImage *inPaintingMask=0, QObject *parent=0);
     
     ~CimgIface();
     
-    void startComputation(void);
-    void stopComputation(void);
-
 private:
 
-    // Image data.
-    uint     *m_imageData;
-    int       m_imageWidth;
-    int       m_imageHeight;
-
-    // Output image geometry in Resizing mode.
-    uint     *m_newData;
-    int       m_newWidth;
-    int       m_newHeight;  
-    
-    // Used to stop thread during calculations.
-    bool      m_cancel;   
-    
     // Inpainting temp mask file path.
-    QString   m_tmpMaskFile;
+    QString      m_tmpMaskFile;
     
     // Inpainting temp mask data.
-    QImage    m_inPaintingMask;
-    
-    QObject  *m_parent;
+    QImage       m_inPaintingMask;
 
-protected:
-
-    virtual void run();
+private:  // CImg filter data.
     
+    // CImg filter settings.
+    unsigned int m_nb_iter;    // Number of smoothing iterations
+    float        m_dt;         // Time step
+    float        m_dlength;    // Integration step
+    float        m_dtheta;     // Angular step (in degrees)
+    float        m_sigma;      // Structure tensor blurring
+    float        m_power1;     // Diffusion limiter along isophote
+    float        m_power2;     // Diffusion limiter along gradient
+    float        m_gauss_prec; // Precision of the gaussian function
+    bool         m_onormalize; // Output image normalization (in [0,255])
+    bool         m_linear;     // Use linear interpolation for integration
+
+    // CImg computation modes.
+    bool         m_restore;
+    bool         m_inpaint;
+    bool         m_resize;
+    const char*  m_visuflow;
+    
+    // Internal use.
+    cimg_library::CImg<> dest, sum, W;
+    cimg_library::CImg<> img, img0, flow,G;
+    cimg_library::CImgl<> eigen;
+    cimg_library::CImg<unsigned char> mask;
+
 private:  // CImg filter interface.
 
+    virtual void filterImage(void);
+    virtual void cleanupFilter(void);
+    
     bool process();
     
     // Compute smoothed structure tensor field G
@@ -129,32 +117,6 @@ private:  // CImg filter interface.
 
     // Clean up memory (CImg datas) to save memory
     void cleanup();
-
-private:  // CImg filter data.
-    
-    // CImg filter settings.
-    unsigned int m_nb_iter;    // Number of smoothing iterations
-    float        m_dt;         // Time step
-    float        m_dlength;    // Integration step
-    float        m_dtheta;     // Angular step (in degrees)
-    float        m_sigma;      // Structure tensor blurring
-    float        m_power1;     // Diffusion limiter along isophote
-    float        m_power2;     // Diffusion limiter along gradient
-    float        m_gauss_prec; // Precision of the gaussian function
-    bool         m_onormalize; // Output image normalization (in [0,255])
-    bool         m_linear;     // Use linear interpolation for integration
-
-    // CImg computation modes.
-    bool         m_restore;
-    bool         m_inpaint;
-    bool         m_resize;
-    const char*  m_visuflow;
-    
-    // Internal use.
-    cimg_library::CImg<> dest, sum, W;
-    cimg_library::CImg<> img, img0, flow,G;
-    cimg_library::CImgl<> eigen;
-    cimg_library::CImg<unsigned char> mask;
     
 };    
 

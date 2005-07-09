@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+#include <qfile.h>
 
 // KDE includes
  
@@ -46,14 +47,13 @@
 
 #include <libkipi/version.h>
 
-extern "C"
-{
-#include <locale.h>
-}
-
 // Local includes.
 
 #include "version.h"
+#include "scanlib.h"
+#include "upgradedb_sqlite2tosqlite3.h"
+#include "albumdb.h"
+#include "albummanager.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
@@ -65,13 +65,13 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Description = i18n("A Photo-Management Application for KDE") + "\n" + 
+    QString description = i18n("A Photo-Management Application for KDE") + "\n" + 
                           i18n("Using Kipi library version %1").arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("digiKam"),
-                          digikam_version,        // Release number available in version.h to the top source dir.
-                          Description.latin1(),
+                          digikam_version,        
+                          description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2005, Digikam developers team"),
                           0,
@@ -95,6 +95,11 @@ int main(int argc, char *argv[])
     aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
                           "kde at ralfhoelzer.com",
+                          0);
+    
+    aboutData.addAuthor ( "Tom Albers",
+                          I18N_NOOP("Developer"),
+                          "tomalbers at kde.nl",
                           0);
     
     aboutData.addCredit ( "Todd Shoemaker",
@@ -187,13 +192,8 @@ int main(int argc, char *argv[])
                           "yves dot chaufour at wanadoo.fr",
                           0);
 
-    aboutData.addCredit ( "Tom Albers",
-                          I18N_NOOP("digiKam bugs.kde.org frontman, patches and feedback"),
-                          "tomalbers at kde.nl",
-                          0);
-    
     KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+    KCmdLineArgs::addCmdLineOptions( options ); 
 
     KApplication app;
 
@@ -226,35 +226,27 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    // Check the locale setting and see if it has changed
+    // copy the db to a new temp file. we will use this copied db for testing
+    // purposes in 0.8 development. just a safety precautions for developers
+    // working on their main photo library
 
-    QString currLocale(setlocale(0,0));
-    
+    if (!upgradeDB_Sqlite2ToSqlite3(albumPath))
+    {
+        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
+        return 0;
+    }
+
+    AlbumManager* man = new AlbumManager();
+    man->setLibraryPath(albumPath);
+
     config->setGroup("General Settings");
-    if (!config->hasKey("Locale"))
+    if (config->readBoolEntry("Scan At Start", true) ||
+        man->albumDB()->getSetting("Scanned").isEmpty())
     {
-        config->writeEntry("Locale", currLocale);
+        ScanLib sLib;
+        sLib.startScan();
     }
-    else
-    {
-        QString savedLocale = config->readEntry("Locale");
-        if (savedLocale != currLocale)
-        {
-            int result = KMessageBox::warningYesNo(0,
-                                                   i18n("Your locale has changed from the previous time "
-                                                        "digiKam was run. This can cause unexpected "
-                                                        "problems. If you are sure that you want to "
-                                                        "continue, click on 'Yes' to start digiKam. "
-                                                        "Otherwise, click on 'No' and correct your "
-                                                        "locale setting before restarting digiKam"));
-            if (result != KMessageBox::Yes)
-                return 0;
 
-            config->writeEntry("Locale", currLocale);
-        }
-    }
-    
-    
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 

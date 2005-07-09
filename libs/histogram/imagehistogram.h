@@ -98,10 +98,15 @@ private:
     uint                  m_imageWidth;
     uint                  m_imageHeight;
 
+    // To post event from thread to parent.    
     QObject              *m_parent;
 
     bool m_runningFlag;                    // Used to stop thread during calculations.
+    
+private:
+    
     void calcHistogramValues();       
+    void postProgress(bool starting, bool success);
     
 protected:
 

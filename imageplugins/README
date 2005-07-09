@@ -1,8 +1,9 @@
 DIGIKAMIMAGEPLUGINS
 
-Visit the web project page available at this url:
+Visit the web project page available at these url:
 
-http://extragear.kde.org/apps/digikamimageplugins
+DIGIKAM             : http://www.digikam.org
+DIGIKAMIMAGEPLUGINS : http://extragear.kde.org/apps/digikamimageplugins
 
 Resume :
 ----------------------------------------------------------------------
@@ -11,11 +12,11 @@ Currently implemented plugins are:
 
  1) AdjustLevels     : A plugin for to adjust the image histogram levels manually.
  2) SolarizeImage    : A plugin for to solarize an image.
- 3) Despeckle        : A noise reduction filter (based on Gimp 2.x algorithm).
+ 3) NoiseReduction   : A noise reduction filter (based on Despeckle Gimp 2.x algorithm).
  4) OilPaint         : An oil painting effect filter.
  5) Emboss           : An embossed image effect filter.
  6) Charcoal         : A charcoal drawing image effect filter.
- 7) Unsharp          : An unsharped mask image filter (based on Gimp 2.x algorithm).
+ 7) Unsharp          : An unsharp mask image filter (based on Gimp 2.x algorithm).
  8) RainDrop         : Adding Raindrops randomly in an image.
  9) FilmGrain        : Adding film grain in an image.
 10) FreeRotation     : Perform an image rotation with a free angle in degrees.
@@ -36,6 +37,7 @@ Currently implemented plugins are:
 25) Restoration      : An advanced filter to restore photograph using CImg library.
 26) Inpainting       : An advanced filter to inpaint photograph area using CImg library.
 27) Blowup           : An advanced filter to blowup photograph using CImg library.
+28) Refocus          : An advanced deconvolution filter to refocus a photograph.
 
 Contact :
 -----------------------------------------------------------------------
@@ -61,7 +63,7 @@ Depencies :
 AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
-digiKam >= 0.7.3
+digiKam >= 0.8.0
 
 
 Installation :

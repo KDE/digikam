@@ -12,6 +12,7 @@ INCLUDES = \
 	-I$(top_srcdir)/digikam/libs/themeengine \
 	-I$(top_srcdir)/digikam/libs/widgets \
 	-I$(top_srcdir)/digikam/libs/thumbbar \
+	-I$(top_srcdir)/digikam/libs/jpegutils \
 	-I$(top_srcdir)/digikam/utilities/cameragui \
 	-I$(top_srcdir)/digikam/utilities/imageeditor \
 	-I$(top_srcdir)/digikam/utilities/splashscreen \
@@ -20,14 +21,14 @@ INCLUDES = \
 	$(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
-			albumitemhandler.cpp albumdb.cpp \
-			albumlister.cpp albumfilecopymove.cpp \
-			thumbnailjob.cpp dragobjects.cpp \
+			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
+			albumlister.cpp thumbnailjob.cpp dragobjects.cpp \
 			listview.cpp listitem.cpp \
-			thumbview.cpp thumbitem.cpp \
+			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
-		        albumfolderview.cpp albumfolderitem.cpp \
-		        albumiconview.cpp albumiconitem.cpp \
+		        albumfolderview.cpp albumfolderitem_deprecated.cpp \
+			albumfolderview_deprecated.cpp \
+		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
 		        albumpropsedit.cpp imagedescedit.cpp \
 		        albumsettings.cpp imageproperties.cpp \
 			imagepropertiesgeneral.cpp imagepropertiesexif.cpp \
@@ -35,12 +36,21 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamfirstrun.cpp firstrunUI.ui \
 			kipiinterface.cpp tagcreatedlg.cpp \
-			thumbdb.cpp albumfiletip.cpp digikamio.cpp \
-			busyprogressbar.cpp tagspopupmenu.cpp \
-			syncjob.cpp albumhistory.cpp
+			albumfiletip.cpp tagspopupmenu.cpp \
+			syncjob.cpp albumhistory.cpp scanlib.cpp \
+			imageinfo.cpp sidebar.cpp \
+			datefolderview.cpp pixmapmanager.cpp \
+			tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
+			searchfolderview.cpp dio.cpp \
+			searchresultsview.cpp searchresultsitem.cpp \
+			searchquickdialog.cpp searchadvanceddialog.cpp \
+			searchwidgets.cpp kdateedit.cpp kdatepickerpopup.cpp \
+			folderview.cpp folderitem.cpp \
+			upgradedb_sqlite2tosqlite3.cpp
 
-libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
-			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) \
+
+libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
+			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
 		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		        $(top_builddir)/digikam/libs/levels/liblevels.la \
@@ -49,6 +59,7 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_GDBM) \
 		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
@@ -61,10 +72,10 @@ libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS)  \
+		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
 		  libdigikam.la
 
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2)
+digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) $(LIB_KUTILS)
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp
@@ -86,4 +97,3 @@ include_HEADERS = digikam_export.h
 KDE_OPTIONS = nofinal
 
 include ../../admin/Doxyfile.am
-

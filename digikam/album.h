@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+/** @file album.h */
+
 #ifndef ALBUM_H
 #define ALBUM_H
 
@@ -25,112 +27,294 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qpixmap.h>
+#include <qmap.h>
 
-class KFileItem;
-
-/* Abstract base class for all albums */
+/**
+ * \class Album
+ * \brief Abstract base class for all album types
+ *
+ * A class which provides an abstraction for a type Album. This class is meant to
+ * be derived and everytime a new Album Type is defined add a enum corresponding
+ * to that to Album::Type
+ *
+ * This class provides a means of building a tree representation for
+ * Albums @see Album::setParent(). 
+ */
 
 class Album
 {
-    friend class AlbumManager;
-    
 public:
 
     enum Type 
     {
-        PHYSICAL=0,
-        TAG,
-        VIRTUAL,
+        PHYSICAL=0, /**<  PHYSICAL: A physical album type @see PAlbum */
+        TAG,        /**<  TAG:      A tag      album type @see TAlbum */
+        DATE,       /**<  DATE:     A date     album type @see DAlbum */
+        SEARCH      /**<  SEARCH:   A search   album type @see SAlbum */
     };
 
-    Album(Album::Type type, int id, const QString& title, bool root);
+    /**
+     * Destructor
+     *
+     * this will also recursively delete all child Albums
+     */
     virtual ~Album();
+
+    /**
+     * Delete all child albums and also remove any associated extra data
+     */
+    void    clear();
     
-    void    setViewItem(void *viewItem);
-    void*   getViewItem() const;
+    /**
+     * @return the parent album for this album
+     */
+    Album*  parent() const;
             
-    void    setParent(Album* parent);
-    Album*  getParent() const;
-            
-    void    insertChild(Album* child);
-    void    removeChild(Album* child);
+    /**
+     * @return the first child of this album or 0 if no children
+     */
     Album*  firstChild() const;
+    
+    /**
+     * @return the last child of this album or 0 if no children
+     */
     Album*  lastChild() const;
+    
+    /**
+     * @return the next sibling of this album of this album or 0
+     * if no next sibling
+     * @see AlbumIterator
+     */
     Album*  next() const;
+
+    /**
+     * @return the previous sibling of this album of this album or 0 if no
+     * previous sibling
+     * @see AlbumIterator
+     */
     Album*  prev() const;
 
-    void    clear();
-
-    void    setID(int id);
-    int     getID() const;
-
-    void    setTitle(const QString& title);
-    QString getTitle() const;
-    virtual QString getURL() const;
+    /**
+     * @return the type of album
+     * @see Type
+     */
     Type    type() const;
 
+    /**
+     * Each album has a @p ID uniquely identifying it in the set of Albums of
+     * a Type
+     *
+     * \note The @p ID for a root Album is always 0
+     *
+     * @return the @p ID of the album
+     * @see globalID()
+     */
+    int     id() const;
+
+    /**
+     * An album ID is only unique among the set of all Albums of its Type.
+     * This is a global Identifier which will uniquely identifying the Album
+     * among all Albums
+     *
+     * \note If you are adding a new Album Type make sure to update
+     * this implementation.
+     *
+     * You can always get the @p ID of the album using something like
+     *
+     * \code
+     * int albumID = rootAlbum->globalID() - album->globalID();
+     * \endcode
+     * 
+     * @return the @p globalID of the album
+     * @see id()
+     */
+    int     globalID() const;
+
+    /**
+     * @return the @p title aka name of the album
+     */
+    QString title() const;
+
+    /**
+     * @return the kde url of the album
+     */
+    virtual KURL kurl() const = 0;
+
+    /**
+     * @return true is the album is a Root Album
+     */
     bool    isRoot() const;
+    
+    /**
+     * @return true if the @p album is in the parent hierarchy
+     *
+     * @param album Album to check whether it belongs in the child
+     * hierarchy
+     */
     bool    isAncestorOf(Album* album) const;
     
-    void    setIcon(const QString& icon);
-    void    deleteIcon();
-    virtual QString getIcon() const;
+    /**
+     * This allows to associate some "extra" data to a Album. As one
+     * Album can be used by several objects (often views) which all need
+     * to add some data, you have to use a key to reference your extra data
+     * within the Album.
+     *
+     * That way a Album can hold and provide access to all those views
+     * separately.
+     *
+     * for eg,
+     *
+     * \code
+     * album->setExtraData( this, searchFolderItem );
+     * \endcode
+     *
+     * and can later access the searchFolderItem by doing
+     *
+     * \code
+     * SearchFolderItem *item = static_cast<SearchFolderItem*>(album->extraData(this));
+     * \endcode
+     *
+     * Note: you have to remove and destroy the data you associated yourself
+     * when you don't need it anymore!
+     *
+     * @param key the key of the extra data
+     * @param value the value of the extra data
+     * @see extraData
+     * @see removeExtraData                                   
+     */
+    void    setExtraData(const void* key, void *value);
+
+    /**
+     * Remove the associated extra data associated with @p key
+     *
+     * @param key the key of the extra data
+     * @see setExtraData
+     * @see extraData
+     */
+    void    removeExtraData(const void* key);
     
+    /**
+     * Retrieve the associated extra data associated with @p key
+     *
+     * @param key the key of the extra data
+     * @see setExtraData
+     * @see extraData
+     */
+    void*   extraData(const void* key) const;
+
 protected:
     
-    QString m_url;
-    int     m_id;
-    bool    m_root;
-    QString m_title;
-    QString m_icon;
+    /**
+     * Constructor
+     */
+    Album(Album::Type type, int id, bool root);
+
+    /**
+     * @internal use only
+     *
+     * Set a new title for the album
+     *
+     * @param title new title for the album
+     */
+    void setTitle(const QString& title);
+
+    /**
+     * @internal use only
+     *
+     * Set the parent of the album
+     *
+     * @param parent set the parent album of album to @p parent
+     */
+    void setParent(Album* parent);
+
+    /**
+     * @internal use only
+     *
+     * Insert an Album as a child for this album
+     *
+     * @param child the Album to add as child
+     */
+    void insertChild(Album* child);
+
+    /**
+     * @internal use only
+     *
+     * Remove a Album from the children list for this album
+     *
+     * @param child the Album to remove
+     */
+    void removeChild(Album* child);
 
 private:
     
-    Type    m_type;
+    /**
+     * Disable copy and default constructor
+     */
+    Album();
+    Album(const Album&);
+    Album& operator==(const Album&);
+    
+private:
+    
+    Type                       m_type;
+    int                        m_id;
+    bool                       m_root;
+    QString                    m_title;
+                               
+    Album*                     m_parent;
+    Album*                     m_firstChild;
+    Album*                     m_lastChild;
+    Album*                     m_next;
+    Album*                     m_prev;
+    bool                       m_clearing;
 
-    Album*  m_parent;
-    Album*  m_firstChild;
-    Album*  m_lastChild;
-    Album*  m_next;
-    Album*  m_prev;
-    bool    m_clearing;
+    QMap<const void*, void*>   m_extraMap;
 
-    void*   m_viewItem;
+    friend class AlbumManager;
 };
     
-/* A Physical Album representation */
+/**
+ * \class PAlbum
+ *
+ * A Physical Album representation 
+ */
 
 class PAlbum : public Album
 {
 public:
 
-    PAlbum(KFileItem* fileItem, const QString& title, int id,
-           bool root=false);
+    PAlbum(const QString& title, int id, bool root=false);
     ~PAlbum();
 
-    void setCaption(const QString& caption, bool addToDB=true);
-    void setCollection(const QString& collection, bool addToDB=true);
-    void setDate(const QDate& date, bool addToDB=true);
+    void setCaption(const QString& caption);
+    void setCollection(const QString& collection);
+    void setDate(const QDate& date);
 
-    QString    getCaption() const;
-    QString    getCollection() const;
-    QDate      getDate() const;
-    QString    getURL() const;
-    QString    getPrettyURL() const;
-    KURL       getKURL() const;
-    KFileItem* fileItem() const;
-    KURL       getIconKURL() const;
+    QString    caption() const;
+    QString    collection() const;
+    QDate      date() const;
+    QString    url() const;
+    QString    prettyURL() const;
+    QString    folderPath() const;
+    KURL       kurl() const;
+    QString    icon() const;
+    KURL       iconKURL() const;
     
 private:
 
     QString    m_collection;
     QString    m_caption;
     QDate      m_date;
-    KFileItem* m_fileItem;
+    QString    m_icon;
+
+    friend class AlbumManager;
 };
 
-/* A Tag Album representation */
+/**
+ * \class TAlbum
+ *
+ * A Tag Album representation 
+ */
 
 class TAlbum : public Album
 {
@@ -139,32 +323,84 @@ public:
     TAlbum(const QString& title, int id, bool root=false);
     ~TAlbum();
 
-    void    setPID(int id);
-    int     getPID() const;
-    QString getURL() const;
-    KURL    getKURL() const;
-    QString getPrettyURL() const;
-    QPixmap getPixmap() const;
-    
+    QString url() const;
+    KURL    kurl() const;
+    QString prettyURL() const;
+    QString icon() const;
+
 private:
 
-    bool m_pid;
+    QString m_icon;
+
+    friend class AlbumManager;
 };
 
-/* Iterate over all children of this Album.
-   Note: It doesn't include the specified album
+/**
+ * \class DAlbum
+ *
+ * A Date Album representation 
+ */
 
-   Example usage:
-   
-   AlbumIterator it(album);
-   while ( it.current() )
-   {
-      kdDebug() << "Album: " << it.current() ->getTitle() << endl;
-      ++it;
-   }
+class DAlbum : public Album
+{
+public:
 
-   Do not delete albums using this iterator.
-*/
+    DAlbum(const QDate& date, bool root=false);
+    ~DAlbum();
+
+    QDate date() const;
+    KURL  kurl() const;
+
+private:
+
+    QDate       m_date;
+    static int  m_uniqueID;
+
+    friend class AlbumManager;
+};
+
+/**
+ * \class SAlbum
+ *
+ * A Search Album representation 
+ */
+
+class SAlbum : public Album
+{
+public:
+
+    SAlbum(int id, const KURL& url, bool simple, bool root=false);
+    ~SAlbum();
+
+    KURL    kurl() const;
+    bool    isSimple() const;
+
+private:
+
+    KURL m_kurl;
+    bool m_simple;
+
+    friend class AlbumManager;
+};
+
+/**
+ *  \class AlbumIterator
+ *  
+ *  Iterate over all children of this Album.
+ *  \note It will not include the specified album
+ *
+ *  Example usage:
+ *  \code
+ *  AlbumIterator it(album);
+ *  while ( it.current() )
+ *  {
+ *     kdDebug() << "Album: " << it.current() ->getTitle() << endl;
+ *     ++it;
+ *  }
+ * \endcode
+ *
+ *  \warning Do not delete albums using this iterator.
+ */
 
 class AlbumIterator
 {

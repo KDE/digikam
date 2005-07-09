@@ -1,0 +1,42 @@
+
+* split albumfolderview into albumview and tagview
+  - dnd from external sources [JA]
+  - Copy/Paste [JA]
+  - doxygen comments... [JA]
+  - dnd image on folderitem [JA]
+
+* revise the history function, so it is able to work with the new views/sidebar [JA]
+
+* Sidebar / View saveing/loading the last state needs some more love [JA]
+  - doxygen comments... [JA]
+
+* allow user to edit dates (maybe through comments tag editor) [TA]
+
+* fix changing of album library path. [TA/RR]
+
+* fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
+  - splitter sizes
+  - active view
+  - closed/open state of left/right views
+  - currently selected albums in each view
+
+* fix kipiinterface to work with new framework
+
+* Fix PPC compatibility in image filters [GC]
+* Use threaded implementation in image filter when it's possible [GC]
+* Add doxygen comments in libs implementation [GC]
+* Update handbooks [GC/GK]
+* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
+* CD/DVD album folders+database backup/restore tool [GC]
+
+Post 0.8
+------------------------------------------------------------------------------------
+
+* post conversion to qlistview: allow selection of multiple 
+  albums/tags/dates
+   - instead of a "current album" there will a list of 
+     "current urls"
+   - will lead to widesweeping changes all over the core
+     and the kioslaves
+
+

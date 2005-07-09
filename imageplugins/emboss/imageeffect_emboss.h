@@ -2,7 +2,7 @@
  * File  : imageeffect_emboss.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-26
- * Description : a Digikam image editor plugin for to emboss 
+ * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -23,27 +23,16 @@
 #ifndef IMAGEEFFECT_EMBOSS_H
 #define IMAGEEFFECT_EMBOSS_H
 
-// Qt include.
+// Local includes.
 
-#include <qimage.h>
+#include "ctrlpaneldialog.h"
 
-// KDE include.
-
-#include <kdialogbase.h>
-
-class QPushButton;
-class QSlider;
-class QSpinBox;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
+class KIntNumInput;
 
 namespace DigikamEmbossImagesPlugin
 {
 
-class ImageEffect_Emboss : public KDialogBase
+class ImageEffect_Emboss : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -52,37 +41,18 @@ public:
     ImageEffect_Emboss(QWidget* parent);
     ~ImageEffect_Emboss();
 
+private:
+
+    KIntNumInput *m_depthInput;
+    
 protected:
 
-    void closeEvent(QCloseEvent *e);
-    
-private:
-
-    bool         m_cancel;
-
-    QWidget     *m_parent;
-    
-    QPushButton *m_helpButton;
-    
-    QSlider     *m_depthSlider;
-    
-    QSpinBox    *m_depthInput;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
-
-    void Emboss(uint* data, int Width, int Height, int d);
-    inline int Lim_Max (int Now, int Up, int Max);
-    
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-   
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin

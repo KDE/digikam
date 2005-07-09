@@ -26,7 +26,7 @@
 
 #include <qlayout.h>
 #include <qframe.h>
-#include <qvgroupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
@@ -36,11 +36,12 @@
 #include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Digikam includes.
 
 #include <imageiface.h>
-#include <imagepreviewwidget.h>
+#include <imagepannelwidget.h>
 #include <imagefilters.h>
 
 // Local includes.
@@ -53,45 +54,70 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                               parent, 0, true, true),
                   m_parent(parent)
 {
+    m_timer = 0L;
     setHelp("blursharpentool.anchor", "digikam");
+    resize(configDialogSize("Blur Tool Dialog"));         
+    
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePreviewWidget(240, 160, i18n("Blur Image Preview Effect"), plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage());
     hlay1->addWidget(m_imagePreviewWidget);
- 
-    QHBoxLayout *hlay2 = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Smoothness:"), plainPage());
+
+    // -------------------------------------------------------------
     
-    m_radiusInput = new KIntNumInput(plainPage());
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
+    
+    m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 20, 1, true);
+    m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
                                          "1 and above determine the Gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
-    
-    hlay2->addWidget(label, 1);
-    hlay2->addWidget(m_radiusInput, 5);
 
-    m_radiusInput->setValue(0);
+    gridSettings->addWidget(label, 0, 0);
+    gridSettings->addWidget(m_radiusInput, 0, 1);
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
+    // -------------------------------------------------------------
+    
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
+                                             
+    // -------------------------------------------------------------
     
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotEffect()));
-    
-    adjustSize();
-    disableResize();                  
-    QTimer::singleShot(0, this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
+     
+    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotEffect()));    
 }
 
 ImageEffect_Blur::~ImageEffect_Blur()
 {
+    saveDialogSize("Blur Tool Dialog");    
+}
+
+void ImageEffect_Blur::slotTimer()
+{
+    if (m_timer)
+       {
+       m_timer->stop();
+       delete m_timer;
+       }
+    
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
 }
 
 void ImageEffect_Blur::slotEffect()
 {
+    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     enableButtonOK(m_radiusInput->value() > 0);
     
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
@@ -104,11 +130,12 @@ void ImageEffect_Blur::slotEffect()
     Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
 
     m_imagePreviewWidget->setPreviewImageData(img);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
 }
 
 void ImageEffect_Blur::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );               
     Digikam::ImageIface iface(0, 0);
     
     uint* data = iface.getOriginalData();
@@ -120,7 +147,7 @@ void ImageEffect_Blur::slotOk()
            
     iface.putOriginalData(i18n("Blur"), data);
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor(); 
     accept();
 }
 

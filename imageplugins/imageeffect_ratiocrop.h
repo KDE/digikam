@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-06
- * Description : Ratio crop tool for ImageEditor
+ * Description : digiKam image editor Ratio Crop tool
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,10 +27,13 @@
 
 class QLabel;
 class QComboBox;
+class QPushButton;
+class QTabWidget;
 class QCheckBox;
 
 class KIntNumInput;
 class KIntSpinBox;
+class KColorButton;
 
 namespace Digikam
 {
@@ -55,8 +58,19 @@ private:
     
     QComboBox    *m_ratioCB;
     QComboBox    *m_orientCB;
+    QComboBox    *m_guideLinesCB;
     
-    QCheckBox    *m_useRuleThirdLines;
+    QPushButton  *m_centerWidth;
+    QPushButton  *m_centerHeight;
+    
+    QTabWidget   *m_mainTab;  
+    
+    QCheckBox    *m_goldenSectionBox;
+    QCheckBox    *m_goldenSpiralSectionBox;
+    QCheckBox    *m_goldenSpiralBox;
+    QCheckBox    *m_goldenTriangleBox;
+    QCheckBox    *m_flipHorBox;
+    QCheckBox    *m_flipVerBox;
     
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;
@@ -66,7 +80,11 @@ private:
     KIntSpinBox  *m_customRatioNInput;
     KIntSpinBox  *m_customRatioDInput;
     
+    KColorButton *m_guideColorBt;
+    
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
+
+private:
     
     void readSettings(void);
     void writeSettings(void);
@@ -78,7 +96,9 @@ private slots:
     void slotUser1();
     void slotUser2();
     void slotOk();
-    
+
+    void slotCenterWidth(void);
+    void slotCenterHeight(void);
     void slotXChanged(int x);
     void slotYChanged(int y);
     void slotWidthChanged(int w);
@@ -89,6 +109,8 @@ private slots:
     void slotSelectionChanged(QRect rect );
     void slotSelectionWidthChanged(int newWidth);
     void slotSelectionHeightChanged(int newHeight);
+    void slotGuideTypeChanged(int t);
+    void slotGoldenGuideTypeChanged(void);
 };
 
 #endif /* IMAGEEFFECT_RATIOCROP_H */

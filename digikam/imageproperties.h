@@ -24,7 +24,6 @@
 // KDE includes.
 
 #include <kdialogbase.h>
-#include <kurl.h>
 
 class AlbumIconView;
 class AlbumIconItem;
@@ -44,12 +43,11 @@ public:
         MULTI
     };
 
-    // Multiple file mode (to be called from albumiconview)
-    ImageProperties(AlbumIconView* view, AlbumIconItem* currItem);
+    ImageProperties(enum Mode mode, QWidget* parent,
+                    AlbumIconView* view, AlbumIconItem* currItem,
+                    QRect* selectionArea=0, uint* imageData=0,
+                    int imageWidth=0, int imageHeight=0);
 
-    // Single file mode (to be called from elsewhere)
-    ImageProperties(QWidget* parent, const KURL& url, QRect* selectionArea=0, 
-                    uint* imageData=0, int imageWidth=0, int imageHeight=0);
                     
     ~ImageProperties();
 
@@ -58,10 +56,9 @@ private:
     AlbumIconView                *m_view;
     AlbumIconItem                *m_currItem;
     Mode                          m_mode;
-    KURL                          m_currURL;
-    QRect*                        m_selectionArea;
     
-    // Image data when using from Image Editor.
+    // Image data when used from Image Editor.
+    QRect                        *m_selectionArea;
     uint                         *m_imageData;
     int                           m_imageWidth;
     int                           m_imageHeight;
@@ -77,6 +74,8 @@ private slots:
     void slotItemChanged();
     void slotUser1();
     void slotUser2();
+    void slotItemDeleted(AlbumIconItem* item);
+    void slotCleared();
 };
 
 #endif  // IMAGEPROPERTIES_H

@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-17
- * Description : a widget for to draw a image clip region.
+ * Description : a widget to draw a image clip region.
  * 
- * Copyright 2004 Gilles Caulier
+ * Copyright 2004-2005 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,29 +44,46 @@ public:
     void   setClipPosition(int x, int y, bool targetDone);    
     void   setCenterClipPosition(void);
     QRect  getImageRegion(void);
+    QRect  getImageRegionToRender(void);
     QImage getImageRegionData(void);
-    
+
+    void   updatePreviewImage(QImage *img);
+    void   updateOriginalImage(void);   
+         
 signals:
     
-    void contentsMovedEvent( void );
-
+    void contentsMovedEvent( bool target );
+    
 protected:
     
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );
+    void viewportResizeEvent(QResizeEvent *e);
 
-protected:
+private:
     
-    QPixmap   *m_pix;
-    QImage     m_img;
-   
-    int        m_xpos;
-    int        m_ypos;
+    bool     m_separateView;
 
+    int      m_xpos;
+    int      m_ypos;
+
+    QPixmap *m_pix;
+    
+    QImage   m_img;
+    
+private:
+    
     void drawContents(QPainter *p, int x, int y, int w, int h);
-    void setImage(void);
-   
+    void updatePixmap(QImage *img);
+    
+public slots:
+
+    void slotSeparateViewToggled(bool t);
+
+private slots:
+    
+    void slotTimerResizeEvent();
 };
 
 }  // NameSpace Digikam

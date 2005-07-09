@@ -40,7 +40,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(parent->getPrettyURL()) );
+    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(parent->prettyURL()) );
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -87,7 +87,7 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     // to this new tag
     if (!parent->isRoot())
     {
-        m_icon = parent->getIcon();
+        m_icon = parent->icon();
         m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
     }
 
@@ -113,7 +113,14 @@ QString TagCreateDlg::icon() const
 
 void TagCreateDlg::slotIconChange()
 {
-    m_icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
+    QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
+    if (icon.startsWith("/"))
+        return;
+
+    if (icon.isEmpty() || m_icon == icon)
+        return;
+
+    m_icon = icon;
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 }
 
@@ -146,7 +153,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
 
     QLabel *topLabel = new QLabel(plainPage());
     topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>")
-                       .arg(album->getPrettyURL()) );
+                       .arg(album->prettyURL()) );
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -166,7 +173,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     gl->addWidget(titleLabel, 0, 0);
 
     m_titleEdit = new QLineEdit(plainPage());
-    m_titleEdit->setText(album->getTitle());
+    m_titleEdit->setText(album->title());
     titleLabel->setBuddy(m_titleEdit);
     gl->addWidget(m_titleEdit, 0, 1);
 
@@ -190,7 +197,7 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     connect(m_titleEdit, SIGNAL(textChanged(const QString&)),
             SLOT(slotTitleChanged(const QString&)));
 
-    m_icon = album->getIcon();
+    m_icon = album->icon();
     m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
 
     enableButtonOK(!m_titleEdit->text().isEmpty());
@@ -215,6 +222,9 @@ QString TagEditDlg::icon() const
 void TagEditDlg::slotIconChange()
 {
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
+    if (icon.startsWith("/"))
+        return;
+    
     if (icon.isEmpty() || icon == m_icon)
         return;
 

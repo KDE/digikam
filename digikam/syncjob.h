@@ -32,7 +32,6 @@
 #include <kurl.h>
 
 class QString;
-class KFileMetaInfo;
 
 namespace KIO
 {
@@ -90,8 +89,7 @@ private:
 private slots:
 
     void slotResult( KIO::Job * job );
-    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix,
-                                  const KFileMetaInfo*);
+    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix);
     void slotLoadThumbnailFailed();
 };
 

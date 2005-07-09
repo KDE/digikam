@@ -78,10 +78,7 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     struct double_packet  high, low, intensity;
     struct double_packet *map;
     struct short_packet  *equalize_map;
-    int                   x, y;
-    unsigned int         *q;
     register long         i;               
-    unsigned char         r, g, b, a;
     
     // Create an histogram of the current image.     
     Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
@@ -111,27 +108,30 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     memset(&high,      0, sizeof(struct double_packet));            
     memset(&low,       0, sizeof(struct double_packet));
     
-    for(i = 0 ; i <= 255 ; ++i)
+    for(i = 0 ; i <= 255 ; i++)
        {
        intensity.red   += histogram->getValue(Digikam::ImageHistogram::RedChannel, i);
        intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);
        intensity.blue  += histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);
        intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i);
-       map[i] = intensity;
+       map[i]          = intensity;
        }
     
     low =  map[0];
     high = map[255];
     memset(equalize_map, 0, 256*sizeof(short_packet));
     
-    for(i = 0 ; i <= 255 ; ++i)
+    for(i = 0 ; i <= 255 ; i++)
        {
        if(high.red != low.red)
           equalize_map[i].red=(unsigned short)((65535*(map[i].red-low.red))/(high.red-low.red));
+       
        if(high.green != low.green)
           equalize_map[i].green=(unsigned short)((65535*(map[i].green-low.green))/(high.green-low.green));
+       
        if(high.blue != low.blue)
           equalize_map[i].blue=(unsigned short)((65535*(map[i].blue-low.blue))/(high.blue-low.blue));
+       
        if(high.alpha != low.alpha)
           equalize_map[i].alpha=(unsigned short)((65535*(map[i].alpha-low.alpha))/(high.alpha-low.alpha));
        }
@@ -140,33 +140,35 @@ void ImageFilters::equalizeImage(uint *data, int w, int h)
     delete [] map;
     
     // Stretch the histogram.
+
+    uchar     red, green, blue, alpha;
+    imageData imagedata;
     
-    for(y = 0 ; y < h ; ++y)
+    for(i = 0 ; i < w*h ; i++)
        {
-       q = data + (w * y);
+       imagedata.raw = data[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if(low.red != high.red)
+           red = (equalize_map[red].red)/257;
+                
+       if(low.green != high.green)
+           green = (equalize_map[green].green)/257;
             
-       for(x = 0 ; x < w ; ++x)
-          {
-          if(low.red != high.red)
-             r = (equalize_map[(unsigned char)(q[x] >> 16)].red)/257;
-          else
-             r = (unsigned char)(q[x] >> 16);      
-          if(low.green != high.green)
-             g = (equalize_map[(unsigned char)(q[x] >> 8)].green)/257;
-          else
-             g = (unsigned char)(q[x] >> 8);       
-          if(low.blue != high.blue)
-             b = (equalize_map[(unsigned char)(q[x])].blue)/257;
-          else
-             b = (unsigned char)(q[x]);            
-          if(low.alpha != high.alpha)
-             a = (equalize_map[(unsigned char)(q[x] >> 24)].alpha)/257;
-          else
-             a = (unsigned char)(q[x] >> 24);      
-          
-          q[x] = (unsigned int)(a << 24) + (unsigned int)(r << 16) + 
-                 (unsigned int)(g << 8)  + (unsigned int)(b);                
-          }
+       if(low.blue != high.blue)
+           blue = (equalize_map[blue].blue)/257;
+            
+       if(low.alpha != high.alpha)
+           alpha = (equalize_map[alpha].alpha)/257;
+                    
+       imagedata.channel.red   = red;
+       imagedata.channel.green = green;
+       imagedata.channel.blue  = blue;
+       imagedata.channel.alpha = alpha;
+       data[i] = imagedata.raw;
        }
     
     delete [] equalize_map;
@@ -188,11 +190,8 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     struct double_packet  high, low, intensity;
     struct short_packet  *normalize_map;
     long long             number_pixels;
-    int                   x, y;
-    unsigned int         *q;
     register long         i;
     unsigned long         threshold_intensity;
-    unsigned char         r, g, b, a;
         
     // Create an histogram of the current image.     
     Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h);
@@ -382,7 +381,7 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
     
     memset(normalize_map, 0, 256*sizeof(struct short_packet));
     
-    for(i = 0 ; i <= (long)255 ; ++i)
+    for(i = 0 ; i <= (long)255 ; i++)
        {
        if(i < (long) low.red)
           normalize_map[i].red = 0;
@@ -413,32 +412,34 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
           normalize_map[i].alpha = (unsigned short)((65535*(i-low.alpha))/(high.alpha-low.alpha));
        }
 
-    for(y = 0 ; y < h ; ++y)
+    uchar     red, green, blue, alpha;
+    imageData imagedata;
+    
+    for(i = 0 ; i < w*h ; i++)
        {
-       q = data + (w * y);
+       imagedata.raw = data[i];
+       red           = imagedata.channel.red;
+       green         = imagedata.channel.green;
+       blue          = imagedata.channel.blue;
+       alpha         = imagedata.channel.alpha;
+
+       if(low.red != high.red)
+           red = (normalize_map[red].red)/257;
+                
+       if(low.green != high.green)
+           green = (normalize_map[green].green)/257;
             
-       for(x = 0 ; x < w ; ++x)
-          {
-          if(low.red != high.red)
-             r = (normalize_map[(unsigned char)(q[x] >> 16)].red)/257;
-          else
-             r = (unsigned char)(q[x] >> 16);      
-          if(low.green != high.green)
-             g = (normalize_map[(unsigned char)(q[x] >> 8)].green)/257;
-          else
-             g = (unsigned char)(q[x] >> 8);       
-          if(low.blue != high.blue)
-             b = (normalize_map[(unsigned char)(q[x])].blue)/257;
-          else
-             b = (unsigned char)(q[x]);            
-          if(low.alpha != high.alpha)
-             a = (normalize_map[(unsigned char)(q[x] >> 24)].alpha)/257;
-          else
-             a = (unsigned char)(q[x] >> 24);      
-          
-          q[x] = (unsigned int)(a << 24) + (unsigned int)(r << 16) + 
-                 (unsigned int)(g << 8)  + (unsigned int)(b);                
-          }
+       if(low.blue != high.blue)
+           blue = (normalize_map[blue].blue)/257;
+            
+       if(low.alpha != high.alpha)
+           alpha = (normalize_map[alpha].alpha)/257;
+                    
+       imagedata.channel.red   = red;
+       imagedata.channel.green = green;
+       imagedata.channel.blue  = blue;
+       imagedata.channel.alpha = alpha;
+       data[i] = imagedata.raw;
        }
     
     delete [] normalize_map;
@@ -449,36 +450,44 @@ void ImageFilters::stretchContrastImage(uint *data, int w, int h)
 
 void ImageFilters::normalizeImage(uint *data, int w, int h)
 {
-    NormalizeParam param;
-    int    x, i, b;
-    uchar  range;
-    uchar *p;
+    NormalizeParam  param;
+    int             x, i;
+    uchar           range;
 
     // Find min. and max. values.
     
     param.min   = 255;
     param.max   = 0;
 
-    for (i = 0 ; i < h*w ; ++i)
-        {
-        p = (uchar *)(data + i);
-        
-        for (b = 0 ; b < 3 ; ++b)
-           {
-           if (p[b] < param.min)
-              param.min = p[b];
-           if (p[b] > param.max)
-              param.max = p[b];
-           }
-        }
+    uchar         red, green, blue;
+    imageData     imagedata;
     
+    for (i = 0; i < w*h; i++)
+        {
+        imagedata.raw = data[i];
+        red = imagedata.channel.red;
+        
+        if (red < param.min) param.min = red;
+        if (red > param.max) param.max = red;
+
+        green = imagedata.channel.green;
+        
+        if (green < param.min) param.min = green;
+        if (green > param.max) param.max = green;
+
+        blue = imagedata.channel.blue;
+    
+        if (blue < param.min) param.min = blue;
+        if (blue > param.max) param.max = blue;
+        }
+
     // Calculate LUT. 
 
     range = (uchar)(param.max - param.min);
 
     if (range != 0)
        {
-       for (x = (int)param.min ; x <= (int)param.max ; ++x)
+       for (x = (int)param.min ; x <= (int)param.max ; x++)
           param.lut[x] = (uchar)(255 * (x - param.min) / range);
        }
     else
@@ -486,14 +495,20 @@ void ImageFilters::normalizeImage(uint *data, int w, int h)
 
     // Apply LUT to image.
        
-    for (i = 0 ; i < h*w ; ++i)
+    for (i = 0; i < w*h; i++)
         {
-        p = (uchar *)(data + i);
+        imagedata.raw = data[i];
         
-        for (b = 0 ; b < 3 ; ++b)
-           p[b] = param.lut[p[b]];
-  
-        p[3] = p[3];
+        red = imagedata.channel.red;
+        imagedata.channel.red = param.lut[red];
+
+        green = imagedata.channel.green;
+        imagedata.channel.green = param.lut[green];
+        
+        blue = imagedata.channel.blue;
+        imagedata.channel.blue = param.lut[blue];
+        
+        data[i] = imagedata.raw;
         }
 }
 
@@ -547,74 +562,25 @@ void ImageFilters::invertImage(uint *data, int w, int h)
        return;
        }
        
-    // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
-
-    int LineWidth = w * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-      
-    uchar* bits    = (uchar*)data;
-    uchar* newBits = (uchar*)desData;
-
-    int i = 0;
+    int           i;
+    uchar         red, green, blue;
+    imageData     imagedata;
     
-    for (int y = 0 ; y < h ; ++y)
+    for (i = 0; i < w*h; i++)
         {
-        for (int x = 0 ; x < w ; ++x)
-            {
-            i = y * LineWidth + 4 * x;
-
-            newBits[i+3] = 255 - bits[i+3];
-            newBits[i+2] = 255 - bits[i+2];
-            newBits[i+1] = 255 - bits[i+1];
-            newBits[ i ] = 255 - bits[ i ];
-            }
+        imagedata.raw = data[i];
+        red           = imagedata.channel.red;
+        green         = imagedata.channel.green;
+        blue          = imagedata.channel.blue;
+    
+        imagedata.channel.red   = 255 - red;
+        imagedata.channel.green = 255 - green;
+        imagedata.channel.blue  = 255 - blue;
+        data[i] = imagedata.raw;
         }
-                        
-    memcpy (data, desData, w*h*4);
-    delete [] desData;
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// Performs blur image with less pixels.
-
-void ImageFilters::smartBlurImage(uint *data, int Width, int Height)
-{
-    if (!data || !Width || !Height)
-       {
-       kdWarning() << ("ImageFilters::smartBlurImage: no image data available!")
-                   << endl;
-       return;
-       }
-       
-    int LineWidth = Width * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    uchar* Bits = (uchar*)data;
-        
-    register int i = 0, j = 0, k = 0;
-    
-    for (int h = 1; h < Height - 1; h++)
-        {
-        for (int w = 1; w < Width - 1; w++)
-            {
-            i = h * LineWidth + 4 * w;
-            j = (h + 1) * LineWidth + 4 * w;
-            k = (h - 1) * LineWidth + 4 * w;
-
-            Bits[i+2] = (Bits[i-2] + Bits[j-2] + Bits[k-2] +
-                         Bits[i+2] + Bits[j+2] + Bits[k+2] +
-                         Bits[i+6] + Bits[j+6] + Bits[k+6]) / 9;
-            Bits[i+1] = (Bits[i-3] + Bits[j-3] + Bits[k-3] +
-                         Bits[i+1] + Bits[j+1] + Bits[k+1] +
-                         Bits[i+5] + Bits[j+5] + Bits[k+5]) / 9;
-            Bits[ i ] = (Bits[i-4] + Bits[j-4] + Bits[k-4] +
-                         Bits[ i ] + Bits[ j ] + Bits[ k ] +
-                         Bits[i+4] + Bits[j+4] + Bits[k+4]) / 9;
-            }
-        }
-}
-
 /* Function to apply the GaussianBlur on an image
  *
  * data             => The image data in RGBA mode.  
@@ -634,11 +600,12 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
        }
 
     if (Radius > 100) Radius = 100;
+    if (Radius <= 0) return;
     
     // Gaussian kernel computation using the Radius parameter.
       
-    int    nKSize, nCenter;
-    double x, sd, factor, lnsd, lnfactor;
+    int          nKSize, nCenter;
+    double       x, sd, factor, lnsd, lnfactor;
     register int i, j, n, h, w;
 
     nKSize = 2 * Radius + 1;
@@ -664,19 +631,14 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     
     int nSumR, nSumG, nSumB, nCount;
     int nKernelWidth = Radius * 2 + 1;
-    int nStride = GetStride(Width);
+    imageData imagedata;
     
-    int LineWidth = Width * 4;                     
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    int    BitCount = LineWidth * Height;
-    uchar* pInBits  = (uchar*)data;
-    uchar* pOutBits = new uchar[BitCount];
-    uchar* pBlur    = new uchar[BitCount];
+    uint* pOutBits = new uint[Width*Height];
+    uint* pBlur    = new uint[Width*Height];
     
     // We need to copy our bits to blur bits
     
-    memcpy (pBlur, pInBits, BitCount);     
+    memcpy (pBlur, data, Width*Height*4);       
 
     // We need to alloc a 2d array to help us to store the values
     
@@ -692,9 +654,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
     // Now, we enter in the main loop
     
-    for (h = 0; h < Height; h++, i += nStride)
+    for (h = 0; h < Height; h++)
         {
-        for (w = 0; w < Width; w++, i += 4)
+        for (w = 0; w < Width; w++, i++)
             {
             // first of all, we need to blur the horizontal lines
                 
@@ -704,12 +666,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                if (IsInside (Width, Height, w + n, h))
                     {
                     // we points to the pixel
-                    j = i + n * 4;
+                    j = i + n;
                     
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pInBits[j+2]];
-                    nSumG += arrMult[n + Radius][pInBits[j+1]];
-                    nSumB += arrMult[n + Radius][pInBits[ j ]];
+                    imagedata.raw = data[j];
+                    nSumR += arrMult[n + Radius][imagedata.channel.red];
+                    nSumG += arrMult[n + Radius][imagedata.channel.green];
+                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -719,9 +682,11 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
             if (nCount == 0) nCount = 1;                    
                 
             // now, we return to blur bits the horizontal blur values
-            pBlur[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            pBlur[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            pBlur[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            pBlur[i]                = imagedata.raw;
+            
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
@@ -731,9 +696,9 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; w < Width; w++, i = w * 4)
+    for (w = 0; w < Width; w++, i = w)
         {
-        for (h = 0; h < Height; h++, i += LineWidth)
+        for (h = 0; h < Height; h++, i += Width)
             {
             // first of all, we need to blur the vertical lines
             for (n = -Radius; n <= Radius; n++)
@@ -742,12 +707,13 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                 if (IsInside(Width, Height, w, h + n))
                     {
                     // we points to the pixel
-                    j = i + n * LineWidth;
+                    j = i + n * Width;
                       
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pBlur[j+2]];
-                    nSumG += arrMult[n + Radius][pBlur[j+1]];
-                    nSumB += arrMult[n + Radius][pBlur[ j ]];
+                    imagedata.raw = pBlur[j];
+                    nSumR += arrMult[n + Radius][imagedata.channel.red];
+                    nSumG += arrMult[n + Radius][imagedata.channel.green];
+                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
@@ -756,17 +722,21 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
                 
             if (nCount == 0) nCount = 1;                    
                 
+            // To preserve Alpha channel.
+            imagedata.raw = data[i];
+                
             // now, we return to bits the vertical blur values
-            pOutBits[i+2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            pOutBits[i+1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            pOutBits[ i ] = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
+            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
+            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
+            pOutBits[i]             = imagedata.raw;
                 
             // ok, now we reinitialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
             }
         }
 
-    memcpy (data, pOutBits, BitCount);   
+    memcpy (data, pOutBits, Width*Height*4);   
        
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);
@@ -788,7 +758,7 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
        return;
        }
         
-    register int h, w, i = 0;
+    register int i;
     uchar        nGray, red, green , blue;
     imageData    imagedata;
     
@@ -796,29 +766,26 @@ void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPr
     double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
     double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
         
-    for (h = 0; h < Height; h++)
+    for (i = 0; i < Width*Height; i++)
         {
-        for (w = 0; w < Width; w++, i++)
+        imagedata.raw = data[i];
+        red           = imagedata.channel.red;
+        green         = imagedata.channel.green;
+        blue          = imagedata.channel.blue;
+            
+        if (bMonochrome)
             {
-            imagedata.raw = data[i];
-            red           = imagedata.channel.red;
-            green         = imagedata.channel.green;
-            blue          = imagedata.channel.blue;
-            
-            if (bMonochrome)
-                {
-                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
-                }
-            else
-                {
-                imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-                imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
-                imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
-                }
-            
-            data[i] = imagedata.raw;
+            nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+            imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
             }
+        else
+            {
+            imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
+            imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
+            imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
+            }
+        
+        data[i] = imagedata.raw;
         }
 }
 
@@ -833,9 +800,10 @@ void ImageFilters::changeTonality(uint *data, int width, int height, int redMask
        return;
        }
 
-    int       red, green , blue;
     int       hue, sat, lig;
     float     gray;
+    
+    int       red, green, blue;
     imageData imagedata;
     
     hue = redMask;
@@ -954,6 +922,7 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
             // Grab the next row...
 
             memcpy(src_rows[row], data + y*w, width); 
+            
             for (i = width, src_ptr = src_rows[row], neg_ptr = neg_rows[row];
                  i > 0;
                  i--, src_ptr++, neg_ptr++)
@@ -1024,7 +993,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
             *dst++ = *src++;
             *dst++ = *src++;
             
-            
             // Set the row...
             memcpy(dstData + y*w, dst_row, width); 
         }
@@ -1041,7 +1009,6 @@ void ImageFilters::sharpenImage(uint* data, int w, int h, int r)
                 memcpy(dstData + y*w, src_rows[(h-1) & 3], width);
             }
         }
-
     }
 
     memcpy(data, dstData, w*h*sizeof(uint));
@@ -1059,9 +1026,9 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
     
     // Calculate HSL Transfers.
 
-    int value;
+    int          value;
     register int i;
-    HSLParam hsl;
+    HSLParam     hsl;
     
     for (i = 0; i < 256; i++)
        {
@@ -1099,32 +1066,29 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
        }
         
     // Apply HSL.
-    uchar* c;
-    int r, g, b;
-
-    unsigned int* ptr = data;
-
-    for (i = 0 ; i < w*h ; i++) 
+    
+    int       red, green, blue;
+    imageData imagedata;
+    
+    for (int i = 0; i < w*h; i++) 
        {
-       c = (unsigned char*) ptr;
-
-       b = c[0];
-       g = c[1];
-       r = c[2];
-
-       Digikam::rgb_to_hsl(r, g, b);
+       imagedata.raw = data[i];
+       red           = (int)imagedata.channel.red;
+       green         = (int)imagedata.channel.green;
+       blue          = (int)imagedata.channel.blue;
+        
+       Digikam::rgb_to_hsl(red, green, blue);
          
-       r = hsl.htransfer[r];
-       g = hsl.stransfer[g];
-       b = hsl.ltransfer[b];
+       red   = hsl.htransfer[red];
+       green = hsl.stransfer[green];
+       blue  = hsl.ltransfer[blue];
 
-       Digikam::hsl_to_rgb (r, g, b);
-
-       c[0] = b;
-       c[1] = g;
-       c[2] = r;
-
-       ptr++;
+       Digikam::hsl_to_rgb(red, green, blue);
+        
+       imagedata.channel.red   = (uchar)red;
+       imagedata.channel.green = (uchar)green;
+       imagedata.channel.blue  = (uchar)blue;
+       data[i] = imagedata.raw;
        }
 }
        

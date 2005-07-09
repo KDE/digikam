@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-06-15
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Renchi Raju
 
  * This program is free software; you can redistribute it
@@ -10,27 +10,22 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <kdebug.h>
-#include <kapplication.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kfileitem.h>
 #include <klocale.h>
 
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
-#include "syncjob.h"
 
-Album::Album(Album::Type type, int id, const QString& title, bool root)
+Album::Album(Album::Type type, int id, bool root)
 {
     m_parent = 0;
     m_next   = 0;
@@ -38,15 +33,10 @@ Album::Album(Album::Type type, int id, const QString& title, bool root)
     m_firstChild = 0;
     m_lastChild  = 0;
     m_clearing   = false;
-    m_icon = QString::null;
 
     m_type  = type;
     m_id    = id;
-    m_title = title;
     m_root  = root;
-    m_url   = root ? "/" : ""; 
-
-    m_viewItem = 0;
 }
 
 Album::~Album()
@@ -62,25 +52,17 @@ void Album::setParent(Album* parent)
     {
         m_parent = parent;
         parent->insertChild(this);
-        if (!parent->isRoot())
-            m_url = parent->m_url + "/" + m_title;
-        else
-            m_url = parent->m_url + m_title;
-    }
-    else
-    {
-        m_url = "";
     }
 }
 
-Album* Album::getParent() const
+Album* Album::parent() const
 {
     return m_parent;
 }
 
 Album* Album::firstChild() const
 {
-    return m_firstChild;    
+    return m_firstChild;
 }
 
 Album* Album::lastChild() const
@@ -90,7 +72,7 @@ Album* Album::lastChild() const
 
 Album* Album::next() const
 {
-    return m_next;    
+    return m_next;
 }
 
 Album* Album::prev() const
@@ -153,7 +135,7 @@ void Album::removeChild(Album* child)
 void Album::clear()
 {
     m_clearing = true;
-        
+
     Album* child = m_firstChild;
     Album* nextChild;
     while (child)
@@ -169,12 +151,25 @@ void Album::clear()
     m_clearing = false;
 }
 
-void Album::setID(int id)
+int Album::globalID() const
 {
-    m_id = id;
+    switch (m_type)
+    {
+    case (PHYSICAL):
+        return 10000 + m_id;
+    case(TAG):
+        return 20000 + m_id;
+    case(DATE):
+        return 30000 + m_id;
+    case(SEARCH):
+        return 40000 + m_id;
+    default:
+        kdError() << "Unknown album type" << endl;
+        return -1;
+    }
 }
 
-int Album::getID() const
+int Album::id() const
 {
     return m_id;
 }
@@ -184,14 +179,9 @@ void Album::setTitle(const QString& title)
     m_title = title;
 }
 
-QString Album::getTitle() const
+QString Album::title() const
 {
     return m_title;
-}
-
-QString Album::getURL() const
-{
-    return m_url;    
 }
 
 Album::Type Album::type() const
@@ -199,14 +189,24 @@ Album::Type Album::type() const
     return m_type;
 }
 
-void Album::setViewItem(void *viewItem)
+void Album::setExtraData(const void* key, void* value)
 {
-    m_viewItem = viewItem;    
+    m_extraMap.replace(key, value);
 }
 
-void* Album::getViewItem() const
+void Album::removeExtraData(const void* key)
 {
-    return m_viewItem;
+    m_extraMap.remove(key);
+}
+
+void* Album::extraData(const void* key) const
+{
+    typedef QMap<const void*, void*> Map;
+    Map::const_iterator it = m_extraMap.find(key);
+    if (it == m_extraMap.end())
+        return 0;
+
+    return it.data();
 }
 
 bool Album::isRoot() const
@@ -225,32 +225,17 @@ bool Album::isAncestorOf(Album* album) const
             val = true;
             break;
         }
-        a = a->getParent();
+        a = a->parent();
     }
     return val;
 }
 
-void Album::setIcon(const QString& icon)
-{
-    m_icon = icon;    
-}
-
-QString Album::getIcon() const
-{
-    return m_icon;    
-}
-
-void Album::deleteIcon()
-{
-    m_icon = QString::null;
-}
-
 // ------------------------------------------------------------------------------
 
-PAlbum::PAlbum(KFileItem* fileItem, const QString& title, int id,  bool root)
-    : Album(Album::PHYSICAL, id, title, root)
+PAlbum::PAlbum(const QString& title, int id,  bool root)
+    : Album(Album::PHYSICAL, id, root)
 {
-    m_fileItem   = fileItem;
+    setTitle(title);
     m_caption    = "";
     m_collection = "";
     m_date = QDate::currentDate();
@@ -258,149 +243,152 @@ PAlbum::PAlbum(KFileItem* fileItem, const QString& title, int id,  bool root)
 
 PAlbum::~PAlbum()
 {
-    
+
 }
 
-void PAlbum::setCaption(const QString& caption, bool addToDB)
+void PAlbum::setCaption(const QString& caption)
 {
-    m_caption = caption;    
-    if (addToDB)
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setCaption(this);
-    }
+    m_caption = caption;
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    db->setAlbumCaption(id(), m_caption);
 }
 
-void PAlbum::setCollection(const QString& collection, bool addToDB)
+void PAlbum::setCollection(const QString& collection)
 {
     m_collection = collection;
-    if (addToDB)
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setCollection(this);
-    }
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    db->setAlbumCollection(id(), m_collection);
 }
 
-void PAlbum::setDate(const QDate& date, bool addToDB)
+void PAlbum::setDate(const QDate& date)
 {
     m_date = date;
-    if (addToDB)
-    {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setDate(this);
-    }
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    db->setAlbumDate(id(), m_date);
 }
 
-QString PAlbum::getCaption() const
+QString PAlbum::caption() const
 {
     return m_caption;
 }
 
-QString PAlbum::getCollection() const
+QString PAlbum::collection() const
 {
     return m_collection;
 }
 
-QDate PAlbum::getDate() const
+QDate PAlbum::date() const
 {
     return m_date;
 }
 
-QString PAlbum::getURL() const
+QString PAlbum::url() const
 {
-    QString url("");
+    QString u("");
     if (isRoot())
     {
         return "/";
     }
-    else if (getParent())
+    else if (parent())
     {
-        url = getParent()->getURL();
-        if (!url.endsWith("/"))
-            url += "/";
+        u = ((PAlbum*)parent())->url();
+        if (!u.endsWith("/"))
+            u += "/";
     }
-    url += m_title;
-    return url;
-}
-
-KURL PAlbum::getKURL() const
-{
-    return m_fileItem->url();
-}
-
-QString PAlbum::getPrettyURL() const
-{
-    QString url = i18n("My Albums") + getURL();
-    return url;
-}
-
-KFileItem* PAlbum::fileItem() const
-{
-    return m_fileItem;    
-}
-
-KURL PAlbum::getIconKURL() const
-{
-    KURL u(getKURL());
-    u.addPath(m_icon);
-    u.cleanPath();
-    
+    u += title();
     return u;
+}
+
+KURL PAlbum::kurl() const
+{
+    KURL u;
+    u.setProtocol("digikamalbums");
+    u.setUser(AlbumManager::instance()->getLibraryPath());
+    // add an empty host. KURLDrag will eat away the user
+    // attribute if a host is not present. probably a URL
+    // specification
+    u.setHost(" ");
+    u.setPath(url());
+    return u;
+}
+
+QString PAlbum::prettyURL() const
+{
+    QString u = i18n("My Albums") + url();
+    return u;
+}
+
+QString PAlbum::icon() const
+{
+    return m_icon;
+}
+
+KURL PAlbum::iconKURL() const
+{
+    KURL u;
+    u.setPath( m_icon );
+    return u;
+}
+
+QString PAlbum::folderPath() const
+{
+    KURL u(AlbumManager::instance()->getLibraryPath());
+    u.addPath(url());
+    return u.path();
 }
 
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)
-    : Album(Album::TAG, id, title, root),
-      m_pid(-1)
+    : Album(Album::TAG, id, root)
 {
+    setTitle(title);
 }
 
 TAlbum::~TAlbum()
 {
 }
 
-void TAlbum::setPID(int id)
+QString TAlbum::url() const
 {
-    m_pid = id;    
-}
-
-int TAlbum::getPID() const
-{
-    return m_pid;
-}
-
-QString TAlbum::getURL() const
-{
-    QString url("");
     if (isRoot())
     {
         return "/";
     }
-    if (getParent())
+
+    QString u;
+    if (parent())
     {
-        url = getParent()->getURL();
-        if (!url.endsWith("/"))
-            url += "/";
+        u = ((TAlbum*)parent())->url();
+        if (!u.endsWith("/"))
+            u += "/";
     }
-    url += m_title;
-    return url;
+    u += title();
+    return u;
 }
 
-KURL TAlbum::getKURL() const
+QString TAlbum::prettyURL() const
+{
+    QString u = i18n("My Tags") + url();
+    return u;
+}
+
+KURL TAlbum::kurl() const
 {
     KURL url;
     url.setProtocol("digikamtags");
-    
+
     if (isRoot())
     {
         url.setPath("/");
     }
-    else if (getParent())
+    else if (parent())
     {
-        TAlbum *parent = dynamic_cast<TAlbum*>(getParent());
-        url.setPath(parent->getKURL().path(1));
-        url.addPath(QString::number(m_id));
+        TAlbum *p = static_cast<TAlbum*>(parent());
+        url.setPath(p->kurl().path(1));
+        url.addPath(QString::number(id()));
     }
     else
     {
@@ -409,25 +397,64 @@ KURL TAlbum::getKURL() const
     return url;
 }
 
-QString TAlbum::getPrettyURL() const
+
+QString TAlbum::icon() const
 {
-    QString url = i18n("My Tags") + getURL();
-    return url;
+    return m_icon;
 }
 
-QPixmap TAlbum::getPixmap() const
+// --------------------------------------------------------------------------
+
+int DAlbum::m_uniqueID = 0;
+
+DAlbum::DAlbum(const QDate& date, bool root)
+    : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
+      m_date(date)
 {
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+}
 
-    QPixmap pix;
-    
-    if (!isRoot())
-        pix = SyncJob::getTagThumbnail(m_icon, 20);
-    else
-        pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
-                                   KIcon::DefaultState, 0, true);
+DAlbum::~DAlbum()
+{
+}
 
-    return pix;
+QDate DAlbum::date() const
+{
+    return m_date;
+}
+
+KURL DAlbum::kurl() const
+{
+    KURL u;
+    u.setProtocol("digikamdates");
+    u.setPath(QString("/%1/%2")
+              .arg(m_date.year())
+              .arg(m_date.month()));
+
+    return u;
+}
+
+// --------------------------------------------------------------------------
+
+SAlbum::SAlbum(int id, const KURL& url, bool simple, bool root)
+    : Album(Album::SEARCH, id, root),
+      m_kurl(url), m_simple(simple)
+{
+    setTitle(url.queryItem("name"));
+}
+
+SAlbum::~SAlbum()
+{
+
+}
+
+KURL SAlbum::kurl() const
+{
+    return m_kurl;
+}
+
+bool SAlbum::isSimple() const
+{
+    return m_simple;
 }
 
 // --------------------------------------------------------------------------
@@ -452,7 +479,7 @@ AlbumIterator& AlbumIterator::operator++()
     {
         while ( (album = m_current->next()) == 0  )
         {
-            m_current = m_current->getParent();
+            m_current = m_current->parent();
 
             if ( m_current == m_root )
             {
@@ -461,7 +488,7 @@ AlbumIterator& AlbumIterator::operator++()
                 m_current = 0;
                 break;
             }
-            
+
             if ( m_current == 0 )
                 break;
         }

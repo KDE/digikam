@@ -29,6 +29,7 @@ class QFrame;
 
 class SetupEditor;
 class SetupPlugins;
+class SetupSlideShow;
 
 class Setup : public KDialogBase 
 {
@@ -38,11 +39,12 @@ public:
 
     enum Page 
     {
-        Editor=0,
-        Plugins
+        EditorPage=0,
+        PluginsPage,
+        SlideshowPage
     };
     
-    Setup(QWidget* parent=0, const char* name=0, Page page=Editor);
+    Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
     ~Setup();
     
     SetupPlugins     *pluginsPage_;
@@ -51,8 +53,10 @@ private:
 
     QFrame           *page_editor;
     QFrame           *page_plugins;
+    QFrame           *page_slideshow;
     
     SetupEditor      *editorPage_;
+    SetupSlideShow   *slideshowPage_;
 
 private slots:
 

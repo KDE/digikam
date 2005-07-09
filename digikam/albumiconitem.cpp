@@ -23,8 +23,6 @@
 
 // Qt includes.
 
-#include <qapplication.h>
-#include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
@@ -36,36 +34,28 @@
 
 // KDE includes.
 
-#include <kfileitem.h>
-#include <kmimetype.h>
-#include <kfilemetainfo.h>
 #include <kurl.h>
-#include <kio/global.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <libkexif/kexifdata.h>
-
-// X11 includes.
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <Imlib2.h>
+#include <kio/global.h>
 
 // Local includes.
 
 #include "themeengine.h"
-#include "thumbdb.h"
 #include "thumbnailsize.h"
+#include "imageinfo.h"
 #include "albumsettings.h"
+#include "icongroupitem.h"
+#include "pixmapmanager.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 
-void dateToString(const QDateTime& datetime, QString& str)
+static void dateToString(const QDateTime& datetime, QString& str)
 {
-	str = KGlobal::locale()->formatDateTime(datetime, true, false);
+    str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
-QString squeezedText(QPainter* p, int width, const QString& text)
+static QString squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
     fullText.replace("\n"," ");
@@ -111,63 +101,25 @@ QString squeezedText(QPainter* p, int width, const QString& text)
     return fullText;   
 }
 
-AlbumIconItem::AlbumIconItem(AlbumIconView* parent,
-                             const QString& text,
-                             const KFileItem* fileItem)
-             : ThumbItem(parent, text, *parent->itemBaseRegPixmap())
+AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
+             : IconItem(parent)
 {
-    view_        = parent;
-    fileItem_    = fileItem;
-    metaInfo_    = 0;
-    time_        = fileItem_->time(KIO::UDS_MODIFICATION_TIME);
-
-    setRect(view_->itemRect());
+    view_        = (AlbumIconView*) parent->iconView();
+    info_        = info;
+    dirty_       = true;
 }
 
 
 AlbumIconItem::~AlbumIconItem()
 {
-    if (metaInfo_)
-        delete metaInfo_;
 }
 
-void AlbumIconItem::setPixmap(const QPixmap& thumbnail,
-                              const KFileMetaInfo* metaInfo)
+ImageInfo* AlbumIconItem::imageInfo() const
 {
-    thumbnail_ = thumbnail;
-    if (metaInfo_)
-    {
-        delete metaInfo_;
-        metaInfo_ = 0;
-    }
-    metaInfo_  = metaInfo;
-
-    QRect r(view_->contentsX(), view_->contentsY(),
-            view_->visibleWidth(), view_->visibleHeight());
-    if (r.intersects(rect()))
-    {
-        repaint();
-    }
+    return info_;
 }
 
-void AlbumIconItem::setMetaInfo(const KFileMetaInfo* metaInfo)
-{
-    if (metaInfo_)
-    {
-        delete metaInfo_;
-        metaInfo_ = 0;
-    }
-    metaInfo_  = metaInfo;
-
-    QRect r(view_->contentsX(), view_->contentsY(),
-            view_->visibleWidth(), view_->visibleHeight());
-    if (r.intersects(rect()))
-    {
-        repaint();
-    }
-}
-
-int AlbumIconItem::compare(ThumbItem *item)
+int AlbumIconItem::compare(IconItem *item)
 {
     const AlbumSettings *settings = view_->settings();
     AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(item);
@@ -176,25 +128,25 @@ int AlbumIconItem::compare(ThumbItem *item)
     {
     case(AlbumSettings::ByIName):
     {
-        return ThumbItem::compare(item);
+        return info_->name().localeAwareCompare(iconItem->info_->name());
     }
     case(AlbumSettings::ByIPath):
     {
-        return fileItem_->url().path().compare(iconItem->fileItem_->url().path());
+        return info_->kurl().path().compare(iconItem->info_->kurl().path());
     }
     case(AlbumSettings::ByIDate):
     {
-        if (time_ < iconItem->time_)
+        if (info_->dateTime() < iconItem->info_->dateTime())
             return -1;
-        else if (time_ > iconItem->time_)
+        else if (info_->dateTime() > iconItem->info_->dateTime())
             return 1;
         else
             return 0;
     }
     case(AlbumSettings::ByISize):
     {
-        int mysize(fileItem_->size());
-        int hissize(iconItem->fileItem_->size());
+        int mysize(info_->fileSize());
+        int hissize(iconItem->info_->fileSize());
         if (mysize < hissize)
             return -1;
         else if (mysize > hissize)
@@ -207,12 +159,7 @@ int AlbumIconItem::compare(ThumbItem *item)
     return 0;
 }
 
-void AlbumIconItem::calcRect()
-{
-
-}
-
-void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
+void AlbumIconItem::paintItem()
 {
     QPixmap pix;
     QRect   r;
@@ -228,55 +175,42 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    if (thumbnail_.isNull())
-    {
-        int w = view_->thumbnailSize().size();
-        ThumbDB::instance()->getThumb(fileItem_->url().path(1),  thumbnail_,
-                                      w, w);
-    }
-            
-    r = view_->itemPixmapRect();
-    p.drawPixmap(r.x() + (r.width()-thumbnail_.width())/2,
-                 r.y() + (r.height()-thumbnail_.height())/2,
-                 thumbnail_);
+
+    dirty_ = true;
     
+    QPixmap *thumbnail = view_->pixmapManager()->find(info_->kurl());
+    if (thumbnail)
+    {
+        r = view_->itemPixmapRect();
+        p.drawPixmap(r.x() + (r.width()-thumbnail->width())/2,
+                     r.y() + (r.height()-thumbnail->height())/2,
+                     *thumbnail);
+        dirty_ = false;
+    }
+
     if (settings->getIconShowName())
     {
         r = view_->itemNameRect();
         p.setFont(view_->itemFontReg());
-        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), text()));
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
+                                                    info_->name()));
     }
 
     p.setFont(view_->itemFontCom());
     
     if (settings->getIconShowComments())
     {
-        QString comments(view_->itemComments(this));
+        QString comments = info_->caption();
         
         r = view_->itemCommentsRect();
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
     }
 
-    if (settings->getIconShowFileComments())
-    {
-        if (metaInfo_ && metaInfo_->isValid() &&
-            metaInfo_->containsGroup("Jpeg EXIF Data"))
-        {
-            QString jpegComments = metaInfo_->group("Jpeg EXIF Data").
-                                   item("Comment").value().toString();
-        
-            r = view_->itemFileCommentsRect();
-            p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                        jpegComments));
-        }
-    }
-    
     p.setFont(view_->itemFontXtra());
 
     if (settings->getIconShowDate())
     {
-        QDateTime date;
-        date.setTime_t(time_);
+        QDateTime date(info_->dateTime());
 
         r = view_->itemDateRect();    
         p.setFont(view_->itemFontXtra());
@@ -287,24 +221,9 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
     
     if (settings->getIconShowResolution())
     {
-        if (metaInfo_ && metaInfo_->isValid())
+        QSize dims = info_->dimensions();
+        if (dims.isValid())
         {
-            QSize dims;
-            if (metaInfo_->containsGroup("Jpeg EXIF Data"))
-            {
-                dims = metaInfo_->group("Jpeg EXIF Data").
-                       item("Dimensions").value().toSize();
-            }
-            else if (metaInfo_->containsGroup("General"))
-            {
-                dims = metaInfo_->group("General").
-                       item("Dimensions").value().toSize();
-            }
-            else if (metaInfo_->containsGroup("Technical"))
-            {
-                dims = metaInfo_->group("Technical").
-                       item("Dimensions").value().toSize();
-            }
             QString resolution = QString("%1x%2 %3")
                                  .arg(dims.width())
                                  .arg(dims.height())
@@ -318,7 +237,8 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
     {
         r = view_->itemSizeRect();    
         p.drawText(r, Qt::AlignCenter,
-                   squeezedText(&p, r.width(), KIO::convertSize(fileItem_->size())));
+                   squeezedText(&p, r.width(),
+                                KIO::convertSize(info_->fileSize())));
     }
 
     p.setFont(view_->itemFontCom());
@@ -326,11 +246,18 @@ void AlbumIconItem::paintItem(QPainter *, const QColorGroup&)
 
     if (settings->getIconShowTags())
     {
-        QString tags(view_->itemTagNames(this).join(", "));
+        QString tags = info_->tagNames().join(", ");
         
         r = view_->itemTagRect();    
         p.drawText(r, Qt::AlignCenter, 
                    squeezedText(&p, r.width(), tags));
+    }
+
+    if (this == view_->currentItem())
+    {
+        p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(),
+                      0, Qt::DotLine));
+        p.drawRect(1, 1, pix.width()-2, pix.height()-2);
     }
     
     p.end();
@@ -347,9 +274,8 @@ QRect AlbumIconItem::thumbnailRect() const
 {
     QRect pixmapRect = view_->itemPixmapRect();
     QRect r          = rect();
-    
-    return QRect(r.x()+pixmapRect.x() + (pixmapRect.width()-thumbnail_.width())/2,
-                 r.y()+pixmapRect.y() + (pixmapRect.height()-thumbnail_.height())/2,
-                 thumbnail_.width(), thumbnail_.height());
+
+    pixmapRect.moveBy(r.x(), r.y());
+    return pixmapRect;
 }
 

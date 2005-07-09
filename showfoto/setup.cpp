@@ -33,6 +33,7 @@
 
 #include "setupeditor.h"
 #include "setupplugins.h"
+#include "setupslideshow.h"
 #include "setup.h"
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -49,6 +50,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
         
+    page_slideshow = addPage(i18n("SlideShow"), i18n("SlideShow Settings"),
+                             BarIcon("slideshow", KIcon::SizeMedium));
+    slideshowPage_ = new SetupSlideShow(page_slideshow);
+    
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
@@ -64,6 +69,7 @@ void Setup::slotOkClicked()
 {
     editorPage_->applySettings();
     pluginsPage_->applySettings();
+    slideshowPage_->applySettings();
     close();
 }
 

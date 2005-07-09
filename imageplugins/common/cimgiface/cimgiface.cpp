@@ -37,20 +37,12 @@ extern "C"
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qevent.h>
 #include <qfile.h>
-#include <qdatetime.h> 
 
 // KDE includes.
 
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-
-// Digikam includes.
-
-#include <digikamheaders.h>
 
 // Local includes.
  
@@ -61,43 +53,38 @@ using namespace cimg_library;
 namespace DigikamImagePlugins
 {
 
-CimgIface::CimgIface(uint *data, uint width, uint height, 
+CimgIface::CimgIface(QImage *orgImage, 
                      uint blurIt, double timeStep, double integralStep,
                      double angularStep, double blur, double detail,
                      double gradient, double gaussian, 
                      bool normalize, bool linearInterpolation, 
                      bool restoreMode, bool inpaintMode, bool resizeMode, 
-                     char* visuflowMode, uint *newData, int newWidth, int newHeight,
+                     char* visuflowMode, int newWidth, int newHeight,
                      QImage *inPaintingMask, QObject *parent)
-         : QThread()
+         : Digikam::ThreadedFilter(orgImage, parent)
 { 
-    m_imageData   = data;
-    m_imageWidth  = width;
-    m_imageHeight = height;    
-    m_parent      = parent;
-    m_cancel      = false;
-        
-    m_restore     = restoreMode;
-    m_inpaint     = inpaintMode;
-    m_resize      = resizeMode;
-    m_visuflow    = visuflowMode;
+    m_restore    = restoreMode;
+    m_inpaint    = inpaintMode;
+    m_resize     = resizeMode;
+    m_visuflow   = visuflowMode;
     
     // Get the config data
 
-    m_nb_iter     = blurIt;
-    m_dt          = timeStep;
-    m_dlength     = integralStep;
-    m_dtheta      = angularStep;
-    m_sigma       = blur;
-    m_power1      = detail;
-    m_power2      = gradient;
-    m_gauss_prec  = gaussian;
-    m_onormalize  = normalize;
-    m_linear      = linearInterpolation;
+    m_nb_iter    = blurIt;
+    m_dt         = timeStep;
+    m_dlength    = integralStep;
+    m_dtheta     = angularStep;
+    m_sigma      = blur;
+    m_power1     = detail;
+    m_power2     = gradient;
+    m_gauss_prec = gaussian;
+    m_onormalize = normalize;
+    m_linear     = linearInterpolation;
 
-    m_newData     = newData;
-    m_newWidth    = newWidth;
-    m_newHeight   = newHeight;
+    if (m_resize)
+        m_destImage.create(newWidth, newHeight, 32);
+    else 
+        m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
     
     m_tmpMaskFile = QString::null;
     
@@ -111,30 +98,12 @@ CimgIface::CimgIface(uint *data, uint width, uint height,
        m_inPaintingMask.save(m_tmpMaskFile, "PNG");
        kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
        }
-        
-    if (m_imageData && m_imageWidth && m_imageHeight)
-       {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
-       }
-    else  // No image data 
-       {
-       if (m_parent)           // If parent then send event about a problem.
-          {
-          CimgIface::EventData *d = new CimgIface::EventData;
-          d->starting = false;
-          d->success = false;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }
-       }
+    
+    initFilter();       
 }
 
 CimgIface::~CimgIface()
 { 
-    stopComputation();
-    
     if (m_tmpMaskFile != QString::null)
        {
        // Remove temporary inpainting mask.
@@ -143,54 +112,35 @@ CimgIface::~CimgIface()
        }
 }
 
-void CimgIface::stopComputation(void)
+void CimgIface::cleanupFilter(void)
 {
-    m_cancel = true;
-    wait();
     cleanup();
     img   = CImg<>();    
     eigen = CImgl<>(CImg<>(), CImg<>());
 }
 
-// List of threaded operations.
-
-void CimgIface::run()
+void CimgIface::filterImage()
 {
-    startComputation();
-}
-
-void CimgIface::startComputation()
-{
-    CimgIface::EventData *d;
-    
-    QDateTime startDate = QDateTime::currentDateTime();
     kdDebug() << "CimgIface::Initialization..." << endl;
-    
-    if (m_parent)
-       {
-       d = new CimgIface::EventData;
-       d->starting = true;
-       d->success  = false;
-       d->progress = 0;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-       }
-
     // Big/Little Endian color manipulation compatibility.
-    int red, green, blue;
     Digikam::ImageFilters::imageData imagedata;
                    
     // Copy the src data into a CImg type image with three channels and no alpha. 
     // This means that a CImg is always RGBA.
 
-    img = CImg<>(m_imageWidth, m_imageHeight, 1, 3);
+    uint* imageData = (uint*)m_orgImage.bits();
+    int imageWidth  = m_orgImage.width();
+    int imageHeight = m_orgImage.height();
+    
+    img   = CImg<>(imageWidth, imageHeight, 1, 3);
     eigen = CImgl<>(CImg<>(2,1), CImg<>(2,2));    
     register int x, y, i=0;
 
-    for (y = 0; y < m_imageHeight; y++) 
+    for (y = 0; y < imageHeight; y++) 
        {
-       for (x = 0; x < m_imageWidth; x++, i++) 
+       for (x = 0; x < imageWidth; x++, i++) 
           {
-          imagedata.raw = m_imageData[i];
+          imagedata.raw = imageData[i];
           img(x, y, 0) = (int)imagedata.channel.blue;
           img(x, y, 1) = (int)imagedata.channel.green;
           img(x, y, 2) = (int)imagedata.channel.red;
@@ -205,13 +155,7 @@ void CimgIface::startComputation()
        // Everything went wrong.
        
        if (m_parent)
-          {
-          CimgIface::EventData *d = new CimgIface::EventData;
-          d->starting = false;
-          d->success  = false;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }    
+          postProgress( 0, false, false );   
           
        return;
        }
@@ -221,25 +165,13 @@ void CimgIface::startComputation()
     kdDebug() << "CimgIface::Finalization..." << endl;
 
     i = 0;
-    int width, height;
-    uint* newData;
-    
-    if (m_resize)
-       {
-       width   = m_newWidth;
-       height  = m_newHeight;
-       newData = m_newData;
-       }
-    else
-       {
-       width   = m_imageWidth;
-       height  = m_imageHeight;
-       newData = m_imageData;
-       }   
+    uint* newData = (uint*)m_destImage.bits();
+    int newWidth  = m_destImage.width();
+    int newHeight = m_destImage.height();
        
-    for (y = 0; y < height; y++) 
+    for (y = 0; y < newHeight; y++) 
        {
-       for (x = 0; x < width; x++, i++) 
+       for (x = 0; x < newWidth; x++, i++) 
           {
           // To get Alpha channel value from original (unchanged)
           imagedata.raw = newData[i];  
@@ -250,35 +182,6 @@ void CimgIface::startComputation()
           imagedata.channel.red   = (uchar) img(x, y, 2);
           newData[i]              = imagedata.raw;
           }
-       }
-    
-    QDateTime endDate = QDateTime::currentDateTime();
-    
-    if (!m_cancel)
-       {
-       if (m_parent)
-          {
-          d = new CimgIface::EventData;
-          d->starting = false;
-          d->success  = true;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }
-          
-       kdDebug() << "CimgIface::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
-       }
-    else
-       {
-       if (m_parent)
-          {
-          d = new CimgIface::EventData;
-          d->starting = false;
-          d->success  = false;
-          d->progress = 0;
-          QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
-          }
-          
-       kdDebug() << "CimgIface::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
        }
 }
 
@@ -378,16 +281,17 @@ bool CimgIface::prepare_restore()
 
 bool CimgIface::prepare_resize()
 {
-    if (!m_newWidth && !m_newHeight) 
+    if (!m_destImage.width() && !m_destImage.height())
        {
-       kdDebug() << "Unspecified output geometry !" << endl;
+       kdDebug() << "Invalid output geometry (" << m_destImage.width() 
+                 << "x" << m_destImage.height() << ")!" << endl;
        return false;
        }
 
     mask = CImg<uchar>(img.dimx(), img.dimy(), 1, 1, 255);
-    mask.resize(m_newWidth, m_newHeight, 1, 1, 1);
-    img0 = img.get_resize(m_newWidth, m_newHeight, 1, -100, 1);
-    img.resize(m_newWidth, m_newHeight, 1, -100, 3);
+    mask.resize(m_destImage.width(), m_destImage.height(), 1, 1, 1);
+    img0 = img.get_resize(m_destImage.width(), m_destImage.height(), 1, -100, 1);
+    img.resize(m_destImage.width(), m_destImage.height(), 1, -100, 3);
     G = CImg<>(img.width, img.height, 1, 3);
     
     return true;
@@ -482,16 +386,6 @@ bool CimgIface::prepare_inpaint()
     }
     return true;
 }
-
-/*
-void CimgIface::get_geom(const char *geom, int &geom_w, int &geom_h) 
-{
-    char tmp[16];
-    std::sscanf(geom,"%d%7[^0-9]%d%7[^0-9]",&geom_w,tmp,&geom_h,tmp+1);
-    if (tmp[0]=='%') geom_w=-geom_w;
-    if (tmp[1]=='%') geom_h=-geom_h;
-}
-*/
 
 bool CimgIface::prepare_visuflow()
 {
@@ -683,11 +577,7 @@ inline void CimgIface::compute_LIC(int &counter)
               
               double progress = counter;
               progress /= (double)dest.width * dest.height * m_nb_iter * (180 / m_dtheta);
-              CimgIface::EventData *d = new CimgIface::EventData;
-              d->starting = true;
-              d->success = false;
-              d->progress = (int)(100*progress);
-              QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, d));
+              postProgress( (int)(100*progress) );   
               }
         
            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);

@@ -90,12 +90,10 @@ void ImagePropertiesEXIF::setCurrentURL(const KURL& url)
 
     m_thumbJob = new ThumbnailJob(url, 48);
     
-    connect(m_thumbJob, SIGNAL(signalThumbnailMetaInfo(const KURL&,
-                                                       const QPixmap&,
-                                                       const KFileMetaInfo*)),
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,
-                                  const QPixmap&,
-                                  const KFileMetaInfo*)));
+                                  const QPixmap&)));
    
     connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
             SLOT(slotFailedThumbnail(const KURL&)));     
@@ -118,8 +116,7 @@ void ImagePropertiesEXIF::slotLevelChanged(int)
         m_exifWidget->setMode(KExifWidget::FULL);
 }
 
-void ImagePropertiesEXIF::slotGotThumbnail(const KURL&, const QPixmap& pix,
-                                           const KFileMetaInfo*)
+void ImagePropertiesEXIF::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     if (!pix.isNull())
         m_labelThumb->setPixmap(pix);

@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-16
- * Description : HSL adjustement plugin for ImageEditor
+ * Description : digiKam image editor Hue/Saturation/Lightness 
+ *               correction tool
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -25,6 +26,8 @@
 
 #include <kdialogbase.h>
 
+class QTimer;
+
 class KDoubleNumInput;
 
 namespace Digikam
@@ -41,7 +44,13 @@ public:
     ImageEffect_HSL(QWidget *parent);
     ~ImageEffect_HSL();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+        
 private:
+    
+    QTimer               *m_timer;
 
     KDoubleNumInput      *m_hInput;
     KDoubleNumInput      *m_sInput;
@@ -54,6 +63,7 @@ private slots:
     void slotUser1();
     void slotEffect();
     void slotOk();
+    void slotTimer(); 
 };
 
 #endif /* IMAGEEFFECT_HSL_H */

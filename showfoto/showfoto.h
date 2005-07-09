@@ -40,6 +40,7 @@ class KToolBarPopupAction;
 class Canvas;
 class ImagePluginLoader;
 class SplashScreen;
+class SlideShow;
 
 namespace KIO
 {
@@ -82,6 +83,7 @@ private slots:
     void slotFileProperties();
     
     void slotToggleFullScreen();
+    void slotToggleSlideShow();
     void slotAutoFit();
     void slotZoomChanged(float zoom);
     void slotResize();
@@ -127,6 +129,8 @@ private:
     
     SplashScreen          *m_splash;
     
+    SlideShow             *m_slideShow;
+                          
     QLabel                *m_nameLabel;
     QLabel                *m_zoomLabel;
     QLabel                *m_resLabel;
@@ -140,6 +144,7 @@ private:
     KToggleAction         *m_zoomFitAction;
     KToggleAction         *m_fullScreenAction;
     KToggleAction         *m_showBarAction;
+    KToggleAction         *m_slideShowAction;
     
     KAction               *m_cropAction;
     KAction               *m_imagePluginsHelpAction;
@@ -183,6 +188,7 @@ private:
     bool                   m_fullScreenHideThumbBar;
     bool                   m_deleteItem2Trash;
     bool                   m_disableBCGActions;
+    bool                   m_slideShowInFullScreen;
 };
 
 #endif /* SHOWFOTO_H */

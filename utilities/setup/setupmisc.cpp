@@ -46,6 +46,11 @@ SetupMisc::SetupMisc(QWidget* parent)
    layout->addWidget(m_showSplashCheck);
 
    // --------------------------------------------------------
+   m_scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"),
+                                     this);
+   layout->addWidget(m_scanAtStart);
+
+   // --------------------------------------------------------
 
    layout->addStretch();
    readSettings();
@@ -64,6 +69,7 @@ void SetupMisc::applySettings()
 
     settings->setShowSplashScreen(m_showSplashCheck->isChecked());
     settings->setUseTrash(m_useTrashCheck->isChecked());
+    settings->setScanAtStart(m_scanAtStart->isChecked());
     settings->saveSettings();
 }
 
@@ -73,4 +79,5 @@ void SetupMisc::readSettings()
 
     m_showSplashCheck->setChecked(settings->getShowSplashScreen());
     m_useTrashCheck->setChecked(settings->getUseTrash());
+    m_scanAtStart->setChecked(settings->getScanAtStart());
 }

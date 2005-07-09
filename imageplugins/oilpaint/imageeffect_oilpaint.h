@@ -2,7 +2,7 @@
  * File  : imageeffect_oilpaint.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-25
- * Description : a Digikam image editor plugin for to simulate 
+ * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier
@@ -23,23 +23,16 @@
 #ifndef IMAGEEFFECT_OILPAINT_H
 #define IMAGEEFFECT_OILPAINT_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldialog.h"
 
-class QPushButton;
-class QSpinBox;
-class QSlider;
-
-namespace Digikam
-{
-class ImagePreviewWidget;
-}
+class KIntNumInput;
 
 namespace DigikamOilPaintImagesPlugin
 {
 
-class ImageEffect_OilPaint : public KDialogBase
+class ImageEffect_OilPaint : public DigikamImagePlugins::CtrlPanelDialog
 {
     Q_OBJECT
 
@@ -48,46 +41,19 @@ public:
     ImageEffect_OilPaint(QWidget* parent);
     ~ImageEffect_OilPaint();
 
+private:
+    
+    KIntNumInput *m_brushSizeInput;
+    KIntNumInput *m_smoothInput;
+
 protected:
-
-    void closeEvent(QCloseEvent *e);
     
-private:
-
-    bool          m_cancel;
-    
-    QWidget      *m_parent;
-    
-    QPushButton  *m_helpButton;
-    
-    QSpinBox     *m_brushSizeInput;
-    QSpinBox     *m_smoothInput;
-        
-    QSlider      *m_brushSizeSlider;
-    QSlider      *m_smoothSlider;
-    
-    Digikam::ImagePreviewWidget *m_imagePreviewWidget;
-    
-private:
-
-    void OilPaint(uint* data, int w, int h, int BrushSize, int Smoothness);
-    
-    inline uint MostFrequentColor(uchar* Bits, int Width, int Height, int X, 
-                                  int Y, int Radius, int Intensity); 
-                                  
-    // Function to calcule the color intensity and return the luminance (Y)
-    // component of YIQ color model.
-    inline uint GetIntensity(uint Red, uint Green, uint Blue)
-           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); } 
-    
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotCancel();
-    void slotUser1();
-    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamOilPaintImagesPlugin

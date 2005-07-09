@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-12-09
- * Description : 
+ * Description : image selection widget used by ratio crop tool.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,16 +18,22 @@
  * 
  * ============================================================ */
  
-#define OPACITY  0.7
-#define RCOL     0xAA
-#define GCOL     0xAA
-#define BCOL     0xAA
+#define OPACITY   0.7
+#define RCOL      0xAA
+#define GCOL      0xAA
+#define BCOL      0xAA
 
-#define MINRANGE 50
- 
+#define MINRANGE  50
+
+// Fibanocci irrationel Golden Number.
+#define PHI       1.618033988 
+// 1/PHI
+#define INVPHI    0.61803398903633
+
 // C++ includes.
 
 #include <cstdio>
+#include <cmath>
 
 // Qt includes.
 
@@ -40,6 +46,7 @@
 #include <qpen.h>
 #include <qpoint.h> 
 #include <qtimer.h> 
+#include <qsizepolicy.h>
 
 // KDE include.
 
@@ -61,30 +68,34 @@ namespace Digikam
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent, 
                       float aspectRatioValue, int aspectRatioType, int orient,
-                      bool ruleThirdLines)
+                      int guideLinesType)
                     : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_currentAspectRatioType  = aspectRatioType; 
     m_currentAspectRatioValue = aspectRatioValue;
     m_currentOrientation      = orient; 
     m_currentResizing         = ResizingNone;
-    m_ruleThirdLines          = ruleThirdLines;
-    m_timerW = 0;
-    m_timerH = 0;
-
-    m_iface  = new ImageIface(w,h);
-
+    m_guideLinesType          = guideLinesType;
+    m_timerW                  = 0L;
+    m_timerH                  = 0L;
+    m_data                    = 0L;
+    m_iface                   = 0L;
+    m_pixmap                  = 0L;
+    
+    setBackgroundMode(Qt::NoBackground);
+    setMinimumSize(w, h);
+    setMouseTracking(true);
+    
+    m_iface  = new ImageIface(w, h);
     m_data   = m_iface->getPreviewData();
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
-    
-    setBackgroundMode(Qt::NoBackground);
-    setFixedSize(m_w, m_h);
-    setMouseTracking(true);
-    
-    m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
-    updatePixmap();
+
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
+    realToLocalRegion();
+    updatePixmap();  
+    setGoldenGuideTypes(true, false, false, false, false, false);
 }
 
 ImageSelectionWidget::~ImageSelectionWidget()
@@ -98,6 +109,27 @@ ImageSelectionWidget::~ImageSelectionWidget()
     delete [] m_data;
     delete m_iface;
     delete m_pixmap;
+}
+
+ImageIface* ImageSelectionWidget::imageIface()
+{
+    return m_iface;
+}
+
+void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
+{
+    delete m_pixmap;
+    
+    int w    = e->size().width();
+    int h    = e->size().height();
+    m_data   = m_iface->setPreviewSize(w, h);
+    m_w      = m_iface->previewWidth();
+    m_h      = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
+
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
+    realToLocalRegion();
+    updatePixmap();    
 }
 
 int ImageSelectionWidget::getOriginalImageWidth(void)
@@ -129,50 +161,117 @@ int ImageSelectionWidget::getMinHeightRange(void)
 
 void ImageSelectionWidget::resetSelection(void)
 {
-    m_regionSelection.setX(0);
-    m_regionSelection.setY(0);
+    m_regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
     m_regionSelection.setWidth((int)(m_iface->originalWidth()/2.0));
     m_regionSelection.setHeight((int)(m_iface->originalHeight()/2.0));
     realToLocalRegion();
     applyAspectRatio(false, false);
-    setCenterSelection();
+    
+    m_localRegionSelection.moveBy(
+      m_rect.width()/2 - m_localRegionSelection.width()/2,
+      m_rect.height()/2 - m_localRegionSelection.height()/2);
+      
+    applyAspectRatio(false, true, false);
+    regionSelectionChanged(true);
+}
+
+void ImageSelectionWidget::setCenterSelection(int centerType)
+{
+    switch (centerType)
+       {
+       case CenterWidth:
+          m_regionSelection.moveLeft(0);
+          break;
+       
+       case CenterHeight:
+          m_regionSelection.moveTop(0);
+          break;
+       
+       case CenterImage:
+          m_regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
+          break;
+       }
+    
+    realToLocalRegion();
+    applyAspectRatio(false, false);
+    
+    switch (centerType)
+       {
+       case CenterWidth:
+          m_localRegionSelection.moveBy(
+            m_rect.width()/2 - m_localRegionSelection.width()/2, 
+            0);
+          break;
+       
+       case CenterHeight:
+          m_localRegionSelection.moveBy(
+            0, 
+            m_rect.height()/2 - m_localRegionSelection.height()/2);
+          break;
+       
+       case CenterImage:
+          m_localRegionSelection.moveBy(
+            m_rect.width()/2 - m_localRegionSelection.width()/2,
+            m_rect.height()/2 - m_localRegionSelection.height()/2);
+          break;
+       }
+       
+    applyAspectRatio(false, true, false);
+    regionSelectionChanged(true);
 }
 
 void ImageSelectionWidget::maxAspectSelection(void)
 {
-    m_localRegionSelection.setX(0);
-    m_localRegionSelection.setY(0);
+    m_localRegionSelection.setTopLeft( m_rect.topLeft() );
     
     if ( !m_currentOrientation )   // Landscape
        {
-       m_localRegionSelection.setWidth(m_w);
+       m_localRegionSelection.setWidth(m_rect.width());
        applyAspectRatio(false, false);
        
-       if ( m_localRegionSelection.height() > m_h )
+       if ( m_localRegionSelection.height() > m_rect.height() )
           {
-          m_localRegionSelection.setHeight(m_h);
+          m_localRegionSelection.setHeight(m_rect.height());
           applyAspectRatio(true, false);
           }
        }
     else                          // Portrait
        {
-       m_localRegionSelection.setHeight(m_h);
+       m_localRegionSelection.setHeight(m_rect.height());
        applyAspectRatio(true, false);
        
-       if ( m_localRegionSelection.width() > m_w )
+       if ( m_localRegionSelection.width() > m_rect.width() )
           {
-          m_localRegionSelection.setWidth(m_w);
+          m_localRegionSelection.setWidth(m_rect.width());
           applyAspectRatio(false, false);
           }
        }
 
+    setCenterSelection(CenterImage);
+}
+
+void ImageSelectionWidget::setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
+                                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
+                                               bool flipHorGoldenGuide, bool flipVerGoldenGuide)
+{
+    m_drawGoldenSection       = drawGoldenSection;
+    m_drawGoldenSpiralSection = drawGoldenSpiralSection;
+    m_drawGoldenSpiral        = drawGoldenSpiral;
+    m_drawGoldenTriangle      = drawGoldenTriangle;
+    m_flipHorGoldenGuide      = flipHorGoldenGuide;
+    m_flipVerGoldenGuide      = flipVerGoldenGuide;
+}
+
+void ImageSelectionWidget::slotGuideLines(int guideLinesType)
+{
+    m_guideLinesType = guideLinesType;
     updatePixmap();
     repaint(false);
 }
 
-void ImageSelectionWidget::slotRuleThirdLines(bool ruleThirdLines)
+void ImageSelectionWidget::slotChangeGuideColor(const QColor &color)
 {
-    m_ruleThirdLines = ruleThirdLines;
+    m_guideColor = color;
     updatePixmap();
     repaint(false);
 }
@@ -211,7 +310,11 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
 
        case RATIO04X05:          
           m_currentAspectRatioValue = 0.8; 
-          break;                                         
+          break;  
+          
+       case RATIOGOLDEN:          
+          m_currentAspectRatioValue = INVPHI; 
+          break;                                                   
        }
     
     applyAspectRatio(false);
@@ -299,25 +402,18 @@ void ImageSelectionWidget::slotTimerDone(void)
     regionSelectionChanged(true);
 }
 
-void ImageSelectionWidget::setCenterSelection(void)
-{
-    m_localRegionSelection.moveBy(
-      (int)((m_w / 2.0)  - (m_localRegionSelection.width() / 2.0)), 
-      (int)((m_h / 2.0) -  (m_localRegionSelection.height() / 2.0)));
-    applyAspectRatio(false, true, false);
-    regionSelectionChanged(true);
-}
-
 void ImageSelectionWidget::realToLocalRegion(bool updateSizeOnly)
 {
     if (!updateSizeOnly)
        {
-       if (m_regionSelection.x() == 0 ) m_localRegionSelection.setX(0);
+       if (m_regionSelection.x() == 0 )
+          m_localRegionSelection.setX(m_rect.x());
        else
           m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)m_regionSelection.x() * 
                                       ( (float)m_w / (float)m_iface->originalWidth() )) );
                                             
-       if (m_regionSelection.y() == 0 ) m_localRegionSelection.setY(0);
+       if (m_regionSelection.y() == 0 ) 
+          m_localRegionSelection.setY(m_rect.y());
        else
           m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)m_regionSelection.y() * 
                                       ( (float)m_h / (float)m_iface->originalHeight() )) );
@@ -422,12 +518,14 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
 {
     if (targetDone)
        {
-       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
-       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
-       if (m_localRegionSelection.right() > m_rect.width())
-          m_localRegionSelection.moveRight(m_rect.width());
-       if (m_localRegionSelection.bottom() > m_rect.height()) 
-          m_localRegionSelection.moveBottom(m_rect.height());
+       if (m_localRegionSelection.left() < m_rect.left())    
+           m_localRegionSelection.moveLeft(m_rect.left());
+       if (m_localRegionSelection.top() < m_rect.top()) 
+           m_localRegionSelection.moveTop(m_rect.top());
+       if (m_localRegionSelection.right() > m_rect.right())
+          m_localRegionSelection.moveRight(m_rect.right());
+       if (m_localRegionSelection.bottom() > m_rect.bottom()) 
+          m_localRegionSelection.moveBottom(m_rect.bottom());
        
        updatePixmap();
        repaint(false);
@@ -443,24 +541,24 @@ void ImageSelectionWidget::regionSelectionChanged(bool targetDone)
 {
     if (targetDone)
        {
-       if (m_localRegionSelection.left() < 0) 
+       if (m_localRegionSelection.left() < m_rect.left()) 
           {
-          m_localRegionSelection.setLeft(0);
+          m_localRegionSelection.setLeft(m_rect.left());
           applyAspectRatio(false);
           }
-       if (m_localRegionSelection.top() < 0) 
+       if (m_localRegionSelection.top() < m_rect.top()) 
           {
-          m_localRegionSelection.setTop(0);
+          m_localRegionSelection.setTop(m_rect.top());
           applyAspectRatio(true);
           }
-       if (m_localRegionSelection.right() > m_rect.width())
+       if (m_localRegionSelection.right() > m_rect.right())
           {
-          m_localRegionSelection.setRight(m_rect.width());
+          m_localRegionSelection.setRight(m_rect.right());
           applyAspectRatio(false);
           }
-       if (m_localRegionSelection.bottom() > m_rect.height()) 
+       if (m_localRegionSelection.bottom() > m_rect.bottom()) 
           {
-          m_localRegionSelection.setBottom(m_rect.height());
+          m_localRegionSelection.setBottom(m_rect.bottom());
           applyAspectRatio(true);
           }
        }
@@ -499,14 +597,14 @@ void ImageSelectionWidget::updatePixmap(void)
     uint* ptr = (uint*)image.bits();
     uchar r, g, b, a;
 
-    int lx = m_localRegionSelection.x();
-    int rx = m_localRegionSelection.x() + m_localRegionSelection.width();
-    int ty = m_localRegionSelection.y();
-    int by = m_localRegionSelection.y() + m_localRegionSelection.height();
+    int lx = m_localRegionSelection.left()   - m_rect.left();
+    int rx = m_localRegionSelection.right()  - m_rect.left();
+    int ty = m_localRegionSelection.top()    - m_rect.top();
+    int by = m_localRegionSelection.bottom() - m_rect.top();
     
-    for (int j=0 ; j<m_h ; ++j)
+    for (int j=0 ; j < m_h ; j++)
     {
-        for (int i=0 ; i<m_w ; ++i)
+        for (int i=0 ; i < m_w ; i++)
         {
             if (i < lx || i >= rx || j < ty || j >= by)
             {
@@ -529,27 +627,7 @@ void ImageSelectionWidget::updatePixmap(void)
     QPixmap pix(image);
     bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
     QPainter p(m_pixmap);
-    
-    // Drawing 'rule of thirds' lines.
-    
-    if (m_ruleThirdLines)
-       {
-       p.setPen(QPen(QColor(250, 250, 255), 0, Qt::DotLine));
-    
-       int xThird = m_localRegionSelection.width() / 3;
-       int yThird = m_localRegionSelection.height() / 3;
-    
-       p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
-                   m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
-       p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
-                   m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
-    
-       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
-                   m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
-       p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
-                   m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
-       }
-           
+
     // Drawing selection borders.
     
     p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));
@@ -560,8 +638,185 @@ void ImageSelectionWidget::updatePixmap(void)
     p.drawRect(m_localTopLeftCorner);
     p.drawRect(m_localBottomLeftCorner);
     p.drawRect(m_localTopRightCorner);
-    p.drawRect(m_localBottomRightCorner);
+    p.drawRect(m_localBottomRightCorner);        
+    
+    // Drawing guide lines.
+    
+    // Constraint drawing only on local selection region.
+    // This is needed because arcs and incurved lines can draw
+    // outside a little of local selection region.
+    p.setClipping(true);
+    p.setClipRect(m_localRegionSelection);
+    
+    switch (m_guideLinesType)
+       {
+       case RulesOfThirds:
+            {
+            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+            
+            int xThird = m_localRegionSelection.width()  / 3;
+            int yThird = m_localRegionSelection.height() / 3;
+            
+            p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
+            p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
+            
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
+            break;
+            }
+            
+       case HarmoniousTriangles:
+            {
+            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+            
+            // Move coordinates to local center selection.            
+            p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
+            
+            // Flip horizontal.
+            if (m_flipHorGoldenGuide)
+                p.scale(-1, 1);                                    
 
+            // Flip verical.
+            if (m_flipVerGoldenGuide)
+                p.scale(1, -1);         
+            
+            p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
+                         m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2);
+            
+            float w = (float)m_localRegionSelection.width();
+            float h = (float)m_localRegionSelection.height();
+            int   d = (int)((h*cos(atan(w/h)) / (cos(atan(h/w)))));
+                         
+            p.drawLine( -m_localRegionSelection.width()/2 + d, -m_localRegionSelection.height()/2,
+                        -m_localRegionSelection.width()/2,      m_localRegionSelection.height()/2);
+            
+            p.drawLine( m_localRegionSelection.width()/2,     -m_localRegionSelection.height()/2,
+                        m_localRegionSelection.width()/2 - d,  m_localRegionSelection.height()/2);
+            break;
+            }
+       
+       case GoldenMean:
+            {
+            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+                        
+            // Move coordinates to local center selection.            
+            p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
+            
+            // Flip horizontal.
+            if (m_flipHorGoldenGuide)
+                p.scale(-1, 1);                                    
+
+            // Flip verical.
+            if (m_flipVerGoldenGuide)
+                p.scale(1, -1);         
+
+            int w = m_localRegionSelection.width();
+            int h = m_localRegionSelection.height();                
+            
+            QRect R1(-w/2, -h/2, 
+                     (int)(w/PHI), h);
+            QRect R2((int)(w*(INVPHI - 0.5)), (int)(h*(0.5 - INVPHI)), 
+                     (int)(w*(1 - INVPHI)), (int)(h/PHI)); 
+            QRect R3((int)(w/2 - R2.width()/PHI), -h/2, 
+                     (int)(R2.width()/PHI), h - R2.height());
+            QRect R4(R2.x(), R1.y(), R3.x() - R2.x(), 
+                     (int)(R3.height()/PHI));
+            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()/PHI), 
+                     R3.height() - R4.height());
+            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()/PHI), 
+                     R3.x() - R5.right(), (int)(R5.height()/PHI));
+            QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), 
+                     (int)(R6.width()/PHI), R5.height() - R6.height());
+                                            
+            // Drawing Golden sections.
+            if (m_drawGoldenSection)
+               {            
+               p.drawLine( R1.left(), R2.top(),
+                           R2.right(), R2.top());
+                
+               p.drawLine( R1.left(), R1.top() + R2.height(),
+                           R2.right(), R1.top() + R2.height());
+                
+               p.drawLine( R2.right() - R1.width(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom() );
+                
+               p.drawLine( R1.topRight(), R1.bottomRight() );
+               }
+                            
+            // Drawing Golden triangle guides.
+            if (m_drawGoldenTriangle)
+               {            
+               p.drawLine( R1.left(),  R1.bottom(),
+                           R2.right(), R1.top() );
+                
+               p.drawLine( R1.left(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom());
+
+               p.drawLine( R1.left() + R1.width(), R1.top(),
+                           R2.right(), R1.bottom() );
+               }
+                
+            // Drawing Golden spiral sections.
+            if (m_drawGoldenSpiralSection)
+               {            
+               p.drawLine( R1.topRight(),   R1.bottomRight() );
+               p.drawLine( R2.topLeft(),    R2.topRight() );
+               p.drawLine( R3.topLeft(),    R3.bottomLeft() );
+               p.drawLine( R4.bottomLeft(), R4.bottomRight() );
+               p.drawLine( R5.topRight(),   R5.bottomRight() );
+               p.drawLine( R6.topLeft(),    R6.topRight() );
+               p.drawLine( R7.topLeft(),    R7.bottomLeft() );
+               }
+                                        
+            // Drawing Golden Spiral.
+            if (m_drawGoldenSpiral)
+               {
+               p.drawArc ( R1.left(), 
+                           R1.top() - R1.height(),
+                           2*R1.width(), 2*R1.height(), 
+                           180*16, 90*16);                       
+               
+               p.drawArc ( R2.right() - 2*R2.width(),
+                           R1.bottom() - 2*R2.height(),
+                           2*R2.width(), 2*R2.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( R2.right() - 2*R3.width(),
+                           R3.top(),
+                           2*R3.width(), 2*R3.height(),
+                           0, 90*16);                       
+                
+               p.drawArc ( R4.left(),
+                           R4.top(),
+                           2*R4.width(), 2*R4.height(),
+                           90*16, 90*16);                       
+                
+               p.drawArc ( R5.left(),
+                           R5.top()-R5.height(),
+                           2*R5.width(), 2*R5.height(),
+                           180*16, 90*16);                       
+                
+               p.drawArc ( R6.left()-R6.width(),
+                           R6.top()-R6.height(),
+                           2*R6.width(), 2*R6.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( R7.left()-R7.width(),
+                           R7.top(),
+                           2*R7.width(), 2*R7.height(),
+                           0, 90*16);                       
+               }
+                
+            break;
+            }
+       }    
+    
+    p.setClipping(false);
+              
     p.end();
 }
 
@@ -586,7 +841,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
           {
           m_xpos = e->x();
           m_ypos = e->y();
-          setCursor ( KCursor::sizeAllCursor() );
+          setCursor( KCursor::sizeAllCursor() );
           }
        }
 }
@@ -595,13 +850,13 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_currentResizing != ResizingNone )
        {
-       setCursor ( KCursor::arrowCursor() );
+       setCursor( KCursor::arrowCursor() );
        regionSelectionChanged(true);
        m_currentResizing = ResizingNone;
        } 
     else if ( m_localRegionSelection.contains( m_xpos, m_ypos ) ) 
        {    
-       setCursor ( KCursor::arrowCursor() );
+       setCursor( KCursor::arrowCursor() );
        regionSelectionMoved(true);
        }      
 }
@@ -613,7 +868,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_currentResizing == ResizingNone )
           {
-          setCursor ( KCursor::sizeAllCursor() );
+          setCursor( KCursor::sizeAllCursor() );
           int newxpos = e->x();
           int newypos = e->y();
                
@@ -670,7 +925,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
        else if ( m_localRegionSelection.contains( e->x(), e->y() ) )
            setCursor( KCursor::handCursor() );
        else
-           setCursor ( KCursor::arrowCursor() );
+           setCursor( KCursor::arrowCursor() );
        }
 }
 

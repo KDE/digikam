@@ -1,0 +1,9 @@
+[Protocol]
+exec=kio_digikamsearch
+protocol=digikamsearch
+input=none
+output=filesystem,stream
+maxInstances=1
+Description=digiKam Search kioslave
+Description[xx]=xxdigiKam Search kioslavexx
+Class=:local

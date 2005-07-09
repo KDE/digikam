@@ -4,7 +4,7 @@
  * Date  : 2005-01-18
  * Description : 
  * 
- * Copyright 2004 Gilles Caulier
+ * Copyright 2005 Gilles Caulier
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -41,26 +41,6 @@ class ImageIface;
 namespace DigikamPerspectiveImagesPlugin
 {
 
-class Triangle
-{
-public:
-
-    Triangle(QPoint A, QPoint B, QPoint C);
-    ~Triangle(){};
-    
-    float angleABC(void);
-    float angleACB(void);
-    float angleBAC(void);
-    
-private:  
-    
-    float  m_a;
-    float  m_b;
-    float  m_c;
-        
-    float distanceP2P(QPoint p1, QPoint p2);
-};
-
 class PerspectiveWidget : public QWidget
 {
 Q_OBJECT
@@ -94,6 +74,7 @@ signals:
 protected:
     
     void paintEvent( QPaintEvent *e );
+    void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
@@ -115,7 +96,7 @@ private:  // Matrix 3x3 perspective transformation implementations.
     void   matrix3Invert(Matrix3 *matrix);
     double matrix3Determinant(const Matrix3 *matrix);
     
-private:  // Widget methods.
+private:
 
     enum ResizingMode
     {
@@ -158,7 +139,9 @@ private:  // Widget methods.
     QPoint      m_bottomRightPoint;
     
     QPixmap*    m_pixmap;
-    
+
+private:  // Widget methods.
+        
     void   updatePixmap(void);
     void   transformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h);
     QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
