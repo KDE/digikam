@@ -28,7 +28,6 @@
 class QLabel;
 class QComboBox;
 class QPushButton;
-class QTabWidget;
 class QCheckBox;
 
 class KIntNumInput;
@@ -62,8 +61,6 @@ private:
     
     QPushButton  *m_centerWidth;
     QPushButton  *m_centerHeight;
-    
-    QTabWidget   *m_mainTab;  
     
     QCheckBox    *m_goldenSectionBox;
     QCheckBox    *m_goldenSpiralSectionBox;
