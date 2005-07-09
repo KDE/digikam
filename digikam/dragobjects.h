@@ -75,8 +75,6 @@ class TagDrag : public QDragObject
 {
 public:
 
-    /** Constructor. The source @param albumid is important.
-    */
     TagDrag(int albumid, QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
     
