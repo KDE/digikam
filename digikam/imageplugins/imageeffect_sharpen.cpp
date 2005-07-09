@@ -18,10 +18,6 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-
 // Qt includes.
 
 #include <qlayout.h>
@@ -66,7 +62,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QGroupBox *gboxSettings = new QGroupBox(i18n("Settings"), m_imagePreviewWidget);
+    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
     QLabel *label = new QLabel(i18n("Sharpness:"), gboxSettings);
     
