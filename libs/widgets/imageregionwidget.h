@@ -27,6 +27,10 @@
 #include <qimage.h>
 #include <qrect.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QPixmap;
 
 namespace Digikam

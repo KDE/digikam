@@ -29,6 +29,7 @@
 #include <qlayout.h>
 
 // Local includes
+
 #include "digikam_export.h"
 
 class QCheckBox;
