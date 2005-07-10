@@ -49,7 +49,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
    QWhatsThis::add( m_delayInput, i18n("<p>The delay in seconds between image."));
    
    m_startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
-   QWhatsThis::add( m_startWithCurrent, i18n("<p>If this option is enable, Slideshow will be started "
+   QWhatsThis::add( m_startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
                                              "with current image selected from images list."));
    
    m_loopMode = new QCheckBox(i18n("Display in loop"), parent);
