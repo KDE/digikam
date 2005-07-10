@@ -18,10 +18,6 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-
 // Qt includes.
 
 #include <qlayout.h>
@@ -34,7 +30,6 @@
 #include <qimage.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
-#include <qtabwidget.h>
 #include <qcheckbox.h>
 
 // KDE includes.
@@ -57,7 +52,7 @@
 #include "imageeffect_ratiocrop.h"
 
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Aspect Ratio Crop"),
+                     : KDialogBase(Plain, i18n("Aspect Ratio Crop and Composition Guide"),
                                    Help|User1|User2|Ok|Cancel, Ok,
                                    parent, 0, true, true, 
                                    i18n("&Reset Values"), i18n("&Max. Aspect")),
@@ -69,9 +64,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                      "to the current ratio.") );     
     
     // -------------------------------------------------------------
-        
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
+    QGridLayout *mainLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
+    
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
@@ -80,18 +75,18 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                                   "used for cropping. You can use the mouse for moving and "
                                                   "resizing the crop area."));
     l->addWidget(m_imageSelectionWidget, 0);
-    topLayout->addWidget(frame, 10);
+    mainLayout->addMultiCellWidget(frame, 0, 1, 0, 0);
+    mainLayout->setColStretch(0, 10);
+    mainLayout->setRowStretch(1, 10);
         
     // -------------------------------------------------------------
     
-    m_mainTab = new QTabWidget( plainPage() );
+    QFrame *cropSelection = new QFrame( plainPage() );
+    cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QGridLayout* grid = new QGridLayout( cropSelection, 3, 6, marginHint(), spacingHint());
     
-    QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 3, 8, marginHint(), spacingHint());
-    m_mainTab->addTab( firstPage, i18n("Crop Selection") );
-    
-    QLabel *label = new QLabel(i18n("Aspect ratio:"), firstPage);
-    m_ratioCB = new QComboBox( false, firstPage );
+    QLabel *label = new QLabel(i18n("Aspect Ratio:"), cropSelection);
+    m_ratioCB = new QComboBox( false, cropSelection );
     m_ratioCB->insertItem( i18n("Custom") );
     m_ratioCB->insertItem( "1:1" );
     m_ratioCB->insertItem( "2:3" );
@@ -106,26 +101,26 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                      "The Golden Ratio 1:1.618. A composition following this rule "
                                      "is considered visually harmonious"));
     
-    QLabel *label2 = new QLabel(i18n("Orientation:"), firstPage);
-    m_orientCB = new QComboBox( false, firstPage );
+    QLabel *label2 = new QLabel(i18n("Orientation:"), cropSelection);
+    m_orientCB = new QComboBox( false, cropSelection );
     m_orientCB->insertItem( i18n("Landscape") );
     m_orientCB->insertItem( i18n("Portrait") );
     QWhatsThis::add( m_orientCB, i18n("<p>Select here constrained aspect ratio orientation."));
     
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
-    grid->addMultiCellWidget(label2, 0, 0, 6, 6);
-    grid->addMultiCellWidget(m_orientCB, 0, 0, 7, 8);
+    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
     
     // -------------------------------------------------------------
     
-    m_customLabel1 = new QLabel(i18n("Custom ratio:"), firstPage);
+    m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
-    m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, firstPage);
+    m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
     QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
-    m_customLabel2 = new QLabel(" : ", firstPage);
+    m_customLabel2 = new QLabel(" : ", cropSelection);
     m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
-    m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, firstPage);
+    m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
     grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
@@ -135,52 +130,55 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_xInput = new KIntNumInput(firstPage);
+    m_xInput = new KIntNumInput(cropSelection);
     QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    m_widthInput = new KIntNumInput(firstPage);
+    m_widthInput = new KIntNumInput(cropSelection);
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    m_centerWidth = new QPushButton(firstPage);
+    m_centerWidth = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
     m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
     QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
     
-    grid->addMultiCellWidget(m_xInput, 2, 2, 0, 2);
-    grid->addMultiCellWidget(m_widthInput, 2, 2, 5, 7);
-    grid->addMultiCellWidget(m_centerWidth, 2, 2, 8, 8);
+    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 2);
+    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 2);
+    grid->addMultiCellWidget(m_centerWidth, 4, 4, 3, 3);
     
     // -------------------------------------------------------------
     
-    m_yInput = new KIntNumInput(firstPage);
+    m_yInput = new KIntNumInput(cropSelection);
     m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
-    m_heightInput = new KIntNumInput(firstPage);
+    m_heightInput = new KIntNumInput(cropSelection);
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
-    m_centerHeight = new QPushButton(firstPage);
+    m_centerHeight = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
     m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
     QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
     
-    grid->addMultiCellWidget(m_yInput, 3, 3, 0, 2);
-    grid->addMultiCellWidget(m_heightInput, 3, 3, 5, 7);
-    grid->addMultiCellWidget(m_centerHeight, 3, 3, 8, 8);
+    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 2);
+    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 2);
+    grid->addMultiCellWidget(m_centerHeight, 6, 6, 3, 3);
+    
+    mainLayout->addMultiCellWidget(cropSelection, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
-    QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 4, 4, marginHint(), spacingHint());
-    m_mainTab->addTab( secondPage, i18n("Composition Guide") );
+    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() ); 
+    QFrame* compositionGuide = new QFrame( plainPage() );
+    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 1, marginHint(), spacingHint());
     
-    QLabel *labelGuideLines = new QLabel(i18n("Guide Type:"), secondPage);
-    m_guideLinesCB = new QComboBox( false, secondPage );
+    QLabel *labelGuideLines = new QLabel(i18n("Composition Guide:"), compositionGuide);
+    m_guideLinesCB = new QComboBox( false, compositionGuide );
     m_guideLinesCB->insertItem( i18n("Rules Of Thirds") );
     m_guideLinesCB->insertItem( i18n("Harmonious Triangles") );
     m_guideLinesCB->insertItem( i18n("Golden Mean") );
@@ -189,26 +187,26 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWhatsThis::add( m_guideLinesCB, i18n("<p>With this option, you can display guide lines "
                                           "which help you to compose your photograph."));    
     
-    m_goldenSectionBox = new QCheckBox(i18n("Golden Sections"), secondPage);
+    m_goldenSectionBox = new QCheckBox(i18n("Golden Sections"), compositionGuide);
     QWhatsThis::add( m_goldenSectionBox, i18n("<p>Enable this option to show golden sections."));
     
-    m_goldenSpiralSectionBox = new QCheckBox(i18n("Golden Spiral Sections"), secondPage);
+    m_goldenSpiralSectionBox = new QCheckBox(i18n("Golden Spiral Sections"), compositionGuide);
     QWhatsThis::add( m_goldenSpiralSectionBox, i18n("<p>Enable this option to show golden spiral sections."));
     
-    m_goldenSpiralBox = new QCheckBox(i18n("Golden Spiral"), secondPage);
+    m_goldenSpiralBox = new QCheckBox(i18n("Golden Spiral"), compositionGuide);
     QWhatsThis::add( m_goldenSpiralBox, i18n("<p>Enable this option to show golden spiral guide."));
                      
-    m_goldenTriangleBox = new QCheckBox(i18n("Golden Triangles"), secondPage);
+    m_goldenTriangleBox = new QCheckBox(i18n("Golden Triangles"), compositionGuide);
     QWhatsThis::add( m_goldenTriangleBox, i18n("<p>Enable this option to show golden triangles."));
 
-    m_flipHorBox = new QCheckBox(i18n("Flip Horizontally"), secondPage);
+    m_flipHorBox = new QCheckBox(i18n("Flip Horizontally"), compositionGuide);
     QWhatsThis::add( m_flipHorBox, i18n("<p>Enable this option to flip horizontally guidelines."));
 
-    m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), secondPage);
+    m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    QLabel *labelColorGuide = new QLabel(i18n("Color:"), secondPage);
-    m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), secondPage );
+    QLabel *labelColorGuide = new QLabel(i18n("Color:"), compositionGuide);
+    m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
     
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
@@ -216,13 +214,15 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid2->addMultiCellWidget(m_goldenSectionBox, 1, 1, 0, 1);
     grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 1);
     grid2->addMultiCellWidget(m_goldenSpiralBox, 3, 3, 0, 1);
-    grid2->addMultiCellWidget(m_goldenTriangleBox, 1, 1, 2, 2);
-    grid2->addMultiCellWidget(m_flipHorBox, 2, 2, 2, 2);
-    grid2->addMultiCellWidget(m_flipVerBox, 3, 3, 2, 2);
-    grid2->addMultiCellWidget(labelColorGuide, 1, 1, 4, 4);
-    grid2->addMultiCellWidget(m_guideColorBt, 1, 1, 5, 5);
+    grid2->addMultiCellWidget(m_goldenTriangleBox, 4, 4, 0, 1);
+    grid2->addMultiCellWidget(m_flipHorBox, 5, 5, 0, 1);
+    grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 1);
+    grid2->addMultiCellWidget(labelColorGuide, 7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
     
-    topLayout->addWidget(m_mainTab);
+    vLayout->addWidget(compositionGuide);
+    vLayout->addStretch(10);
+    mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1); 
     
     // -------------------------------------------------------------
     
