@@ -32,7 +32,7 @@ class QPixmap;
 namespace Digikam
 {
 
-class ImageRegionWidget : public QScrollView
+class DIGIKAM_EXPORT ImageRegionWidget : public QScrollView
 {
 Q_OBJECT
 

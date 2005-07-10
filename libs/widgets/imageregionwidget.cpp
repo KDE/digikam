@@ -194,7 +194,7 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
     // For large screen.
     if (visibleWidth()  > m_img.width())  normalizedW = m_img.width();
     else normalizedW = visibleWidth();
-    if (visibleHeight() > m_img.height()) normalizedW = m_img.height();
+    if (visibleHeight() > m_img.height()) normalizedH = m_img.height();
     else normalizedH = visibleHeight();
 
     QRect region;

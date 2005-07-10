@@ -19,10 +19,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdio>
-
 // Qt includes.
 
 #include <qregion.h>
@@ -163,6 +159,7 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
 
 void ImageGuideWidget::resizeEvent(QResizeEvent * e)
 {
+    blockSignals(true);
     delete m_pixmap;
     int w = e->size().width();
     int h = e->size().height();
@@ -171,6 +168,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     m_h    = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    blockSignals(false);
     emit signalResized();
 }
 
@@ -197,7 +195,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
        m_focus                   = false;
        m_mouseLeftButtonTracking = false;
        
-       if (m_freeze) 
+       if ( m_freeze ) 
           {
           QColor color = getSpotColor();
           QPoint point = getSpotPosition();
