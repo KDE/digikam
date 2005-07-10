@@ -11,10 +11,10 @@ digikamimageplugin_perspective_la_SOURCES = imageplugin_perspective.cpp \
 	                                    imageeffect_perspective.cpp \
 					    perspectivewidget.cpp triangle.cpp 
 
-digikamimageplugin_perspective_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
-
-digikamimageplugin_perspective_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) \
-	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
+digikamimageplugin_perspective_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
+		$(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
+	
+digikamimageplugin_perspective_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
 kde_services_DATA = digikamimageplugin_perspective.desktop
 
