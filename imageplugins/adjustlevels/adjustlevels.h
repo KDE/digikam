@@ -103,7 +103,7 @@ private:
     QPushButton               *m_pickGray;
     QPushButton               *m_pickWhite;
     
-    QCheckBox                    *m_overExposureIndicatorBox;
+    QCheckBox                 *m_overExposureIndicatorBox;
     
     QHButtonGroup             *m_pickerColorButtonGroup;
     

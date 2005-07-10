@@ -69,6 +69,7 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "adjustlevels.h"
 
 namespace DigikamAdjustLevelsImagesPlugin
@@ -88,7 +89,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // About data and help button.
 
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Adjust Levels"),
+                                       I18N_NOOP("Adjust Color Levels"),
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-levels adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
@@ -102,42 +103,21 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Adjust Levels Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
 
     // -------------------------------------------------------------
 
     QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Adjust Color Levels"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Adjust Color Levels")); 
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
 
     // -------------------------------------------------------------
 
-    QGroupBox *gbox = new QGroupBox(plainPage());
-    gbox->setFlat(false);
-    gbox->setTitle(i18n("Settings"));
-    QGridLayout* grid = new QGridLayout( gbox, 6, 5, 20, spacingHint());
+    QFrame *gbox = new QFrame(plainPage());
+    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QGridLayout* grid = new QGridLayout( gbox, 8, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -247,26 +227,24 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_minOutput, 5, 5, 5, 5);
     grid->addMultiCellWidget(m_maxOutput, 6, 6, 5, 5);
 
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-
     // -------------------------------------------------------------
 
-    QHGroupBox *gbox3 = new QHGroupBox(i18n("All Channels' Levels"), plainPage());
-    m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
-    QWhatsThis::add( m_loadButton, i18n("<p>Load levels settings from a Gimp levels text file."));
-    m_saveButton = new QPushButton(i18n("&Save As..."), gbox3);
-    QWhatsThis::add( m_saveButton, i18n("<p>Save levels settings to a Gimp levels text file."));
-    m_autoButton = new QPushButton(i18n("&Auto"), gbox3);
-    QWhatsThis::add( m_autoButton, i18n("<p>Adjust levels automatically."));
-    m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
+    QHBoxLayout *hlayout = new QHBoxLayout(spacingHint());
+    m_loadButton = new QPushButton(i18n("&Load..."), gbox);
+    QWhatsThis::add( m_loadButton, i18n("<p>Load all levels settings from a Gimp levels text file."));
+    m_saveButton = new QPushButton(i18n("&Save As..."), gbox);
+    QWhatsThis::add( m_saveButton, i18n("<p>Save all levels settings to a Gimp levels text file."));
+    m_autoButton = new QPushButton(i18n("&Auto"), gbox);
+    QWhatsThis::add( m_autoButton, i18n("<p>Adjust all levels automatically."));
+    m_resetButton = new QPushButton(i18n("&Reset All"), gbox);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
 
-    m_pickerColorButtonGroup = new QHButtonGroup(gbox3);
+    m_pickerColorButtonGroup = new QHButtonGroup(gbox);
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
+    QString directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "All Channels shadow tone color picker" ) );
@@ -295,39 +273,59 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
     
-    topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
+    hlayout->addWidget(m_loadButton);
+    hlayout->addWidget(m_saveButton);
+    hlayout->addWidget(m_autoButton);
+    hlayout->addWidget(m_resetButton);
+    hlayout->addWidget(m_pickerColorButtonGroup);
+    grid->addMultiCellLayout(hlayout, 7, 7, 0, 5);    
 
     // -------------------------------------------------------------
+    
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+                                                      "from the target image preview will be over-colored. "
+                                                      "This will not have an effect on the final rendering."));
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 8, 8, 0, 5);
 
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
+    topLayout->setColStretch(1, 10);
+    topLayout->setRowStretch(1, 10);
+    
+    // -------------------------------------------------------------
 
-    QFrame *frame2 = new QFrame(gbox4);
+    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
+    
+    QFrame *frame2 = new QFrame(plainPage());
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick a color on the image using the color "
-                                                   "picker tools to select shadow, middle, and highlight tones to adjust the level points in the Red, "
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
+                                                   "a color on the image using the color "
+                                                   "picker tools to select shadow, middle, and highlight "
+                                                   "tones to adjust the curves' points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
-    l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+    l2->addWidget(m_previewOriginalWidget);
 
-    QFrame *frame3 = new QFrame(gbox4);
+    QFrame *frame3 = new QFrame(plainPage());
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's level-adjustments preview."));
-    l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
+                                                 "levels-adjustments preview."));
+    l3->addWidget(m_previewTargetWidget);
+
+    vLayout->addWidget(frame2);
+    vLayout->addWidget(frame3);
+    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
+
+    // -------------------------------------------------------------
     
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
-                                                      "will be over-colored. This will not have an effect on the final rendering."));
-                                                      
-    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
-
-    adjustSize();
-    disableResize();
-
-    QTimer::singleShot(0, this, SLOT(slotResetAllChannels())); // Reset all parameters to the default values.
+    resize(configDialogSize("Levels Tool Dialog"));  
+    
+    // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));
     parentWidget()->setCursor( KCursor::arrowCursor()  );
                     
     // -------------------------------------------------------------
@@ -344,6 +342,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
+            
+    connect(m_previewOriginalWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));
+
+    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));                                                            
+                        
                         
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
@@ -393,6 +398,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
 AdjustLevelDialog::~AdjustLevelDialog()
 {
+    saveDialogSize("Levels Tool Dialog");
 }
 
 void AdjustLevelDialog::slotHelp()

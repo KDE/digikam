@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-			  -I$(top_srcdir)/digikam/digikam \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)
 
 # Install this plugin in the KDE modules directory
@@ -12,7 +12,8 @@ digikamimageplugin_adjustcurves_la_SOURCES = imageplugin_adjustcurves.cpp \
 
 digikamimageplugin_adjustcurves_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)
 
-digikamimageplugin_adjustcurves_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
+digikamimageplugin_adjustcurves_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) \
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
 
 kde_services_DATA = digikamimageplugin_adjustcurves.desktop
 

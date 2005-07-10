@@ -77,13 +77,14 @@
 
 #include "version.h"
 #include "imageeffect_whitebalance.h"
+#include "bannerwidget.h"
 #include "blackbody.h"
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
-                        : KDialogBase(Plain, i18n("White Balance"),
+                        : KDialogBase(Plain, i18n("White Color Balance"),
                                       Help|User1|User2|User3|Ok|Cancel, Ok,
                                       parent, 0, true, true,
                                       i18n("&Reset Values"),
@@ -115,7 +116,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("White Balance"), 
+                                       I18N_NOOP("White Color Balance"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
@@ -132,40 +133,21 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("White Balance Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
 
     QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("White Color Balance Correction"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("White Color Balance")); 
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
 
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
     // -------------------------------------------------------------
     
-    QGroupBox *gbox = new QGroupBox(i18n("Settings"), plainPage());
-    gbox->setFlat(false);
+    QFrame *gbox = new QFrame(plainPage());
+    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* layout2 = new QVBoxLayout( gbox, 20 );
 
     QGridLayout *grid = new QGridLayout( layout2, 2, 4, spacingHint());
@@ -204,10 +186,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, m_originalWidth, m_originalHeight, frame, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any filter "
-                                             "settings changes."));
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, 
+                                                     m_originalWidth, m_originalHeight, 
+                                                     frame, false, true, true);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+                                             "drawing of the selected image channel. This one is "
+                                             "re-computed at any filter settings changes."));
     l->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
     
@@ -217,7 +201,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 6, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout( layout2, 7, 5, spacingHint());
     KIconLoader icon;
     
     m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
@@ -267,7 +251,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_temperaturePresetCB->insertItem( i18n("Flash") );
     m_temperaturePresetCB->insertItem( i18n("Sky") );
     m_temperaturePresetCB->insertItem( i18n("None") );
-    QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature preset to use:<p>"
+    QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature "
+                                                 "preset to use:<p>"
                                                  "<b>40W</b>: 40 Watt incandescent lamp (2680K).<p>"
                                                  "<b>200W</b>: 200 Watt incandescent lamp (3000K).<p>"
                                                  "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
@@ -280,7 +265,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gbox);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
+    QString directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickTemperature->setToggleButton(true);
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
@@ -296,7 +281,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
-        
+
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+                                                      "from the target image preview will be over-colored. "
+                                                      "This will not have an effect on the final rendering."));
+                                                                  
     grid2->addMultiCellWidget(m_exposureLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_autoAdjustExposure, 0, 0, 1, 1);
     grid2->addMultiCellWidget(m_exposureInput, 0, 0, 2, 5);
@@ -314,44 +304,46 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid2->addMultiCellWidget(m_temperatureInput, 5, 5, 4, 5);
     grid2->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
     grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 5);
-        
+    grid2->addMultiCellWidget(m_overExposureIndicatorBox, 7, 7, 0, 5);
+            
     topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-        
+    topLayout->setColStretch(1, 10);
+    topLayout->setRowStretch(1, 10);
+            
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
+        QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
     
-    QFrame *frame2 = new QFrame(gbox4);
+    QFrame *frame2 = new QFrame(plainPage());
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
                                                             Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick color on image "
-                                                   "to select the tone to adjust image's white-balance with "
-                                                   "<b>Color Picker</b> method."));
-    l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
+                                                   "color on image to select the tone to adjust image's "
+                                                   "white-balance with <b>Color Picker</b> method."));
+    l2->addWidget(m_previewOriginalWidget);
 
-    QFrame *frame3 = new QFrame(gbox4);
+    QFrame *frame3 = new QFrame(plainPage());
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
                                                           Digikam::ImageGuideWidget::PickColorMode);
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance adjustments preview. "
-                                                 "You can pick color on image to see the color level corresponding on "
-                                                 "histogram."));
-    l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
-    
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
-                                                      "will be over-colored. This will not have an effect on the final rendering."));
+    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance "
+                                                 "adjustments preview. You can pick color on image to "
+                                                 "see the color level corresponding on histogram."));
+    l3->addWidget(m_previewTargetWidget);
 
-    topLayout->addMultiCellWidget(gbox4, 1, 1, 1, 1);
+    vLayout->addWidget(frame2);
+    vLayout->addWidget(frame3);
+    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
-    adjustSize();
-    disableResize();
+    resize(configDialogSize("White Balance Tool Dialog"));  
+    
+    // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 
     // -------------------------------------------------------------
@@ -372,8 +364,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
             this, SLOT(slotAutoAdjustExposure()));
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                        
-    
+            this, SLOT(slotEffect()));         
+
+    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));                                        
+
+    // -------------------------------------------------------------                
     // Correction Filter Slider controls.
                         
     connect(m_temperaturePresetCB, SIGNAL(activated(int)),
@@ -403,6 +399,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 {
+    saveDialogSize("White Balance Tool Dialog");
 }
 
 void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
@@ -451,7 +448,8 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
 
     // Create an histogram of original image.     
     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(m_originalImageData, m_originalWidth, m_originalHeight);
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(m_originalImageData, 
+                                             m_originalWidth, m_originalHeight);
        
     // Calculate optimal exposition and black level 
     

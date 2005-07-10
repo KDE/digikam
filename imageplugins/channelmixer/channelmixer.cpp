@@ -73,6 +73,7 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "channelmixer.h"
 
 namespace DigikamChannelMixerImagesPlugin
@@ -90,7 +91,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     // About data and help button.
 
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Channel Mixer"),
+                                       I18N_NOOP("Color Channel Mixer"),
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image color channel mixer plugin for digiKam."),
                                        KAboutData::License_GPL,
@@ -104,42 +105,21 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Channel Mixer Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
 
     // -------------------------------------------------------------
 
     QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Image Color Channel Mixer"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Color Channel Mixer")); 
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
 
     // -------------------------------------------------------------
 
-    QGroupBox *gbox = new QGroupBox(plainPage());
-    gbox->setFlat(false);
-    gbox->setTitle(i18n("Settings"));
-    QGridLayout* grid = new QGridLayout( gbox, 6, 5, 20, spacingHint());
+    QFrame *gbox = new QFrame(plainPage());
+    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QGridLayout* grid = new QGridLayout( gbox, 7, 0, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -219,32 +199,44 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(m_monochrome, 6, 6, 0, 1);
     grid->addMultiCellWidget(m_preserveLuminosity, 6, 6, 3, 4);
     
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-
     // -------------------------------------------------------------
 
-    QHGroupBox *gbox3 = new QHGroupBox(i18n("All Channels' Gains"), plainPage());
-    m_loadButton = new QPushButton(i18n("&Load..."), gbox3);
+    QHBoxLayout *hlayout = new QHBoxLayout(spacingHint());
+    m_loadButton = new QPushButton(i18n("&Load..."), gbox);
     QWhatsThis::add( m_loadButton, i18n("<p>Load gains settings from a Gimp gains text file."));
-    m_saveButton = new QPushButton(i18n("&Save As..."), gbox3);
+    m_saveButton = new QPushButton(i18n("&Save As..."), gbox);
     QWhatsThis::add( m_saveButton, i18n("<p>Save gains settings to a Gimp gains text file."));
-    m_resetButton = new QPushButton(i18n("&Reset All"), gbox3);
+    m_resetButton = new QPushButton(i18n("&Reset All"), gbox);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset all color channels' gains settings."));
-
-    topLayout->addMultiCellWidget(gbox3, 3, 3, 0, 0);
+    hlayout->addWidget(m_loadButton);
+    hlayout->addWidget(m_saveButton);
+    hlayout->addWidget(m_resetButton);
+    grid->addMultiCellLayout(hlayout, 7, 7, 0, 4);
 
     // -------------------------------------------------------------
+    
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+                                                      "from the target image preview will be over-colored. "
+                                                      "This will not have an effect on the final rendering."));
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 8, 8, 0, 4);
 
-    QVGroupBox *gbox4 = new QVGroupBox(i18n("Preview"), plainPage());
+    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
+    topLayout->setColStretch(1, 10);
+    topLayout->setRowStretch(1, 10);
+    
+    // -------------------------------------------------------------
 
-    QFrame *frame2 = new QFrame(gbox4);
+    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
+    
+    QFrame *frame2 = new QFrame(plainPage());
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
     m_previewOriginalWidget = new Digikam::ImageWidget(300, 200, frame2);
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
-    l2->addWidget(m_previewOriginalWidget, 0, Qt::AlignCenter);
+    l2->addWidget(m_previewOriginalWidget);
 
-    QFrame *frame3 = new QFrame(gbox4);
+    QFrame *frame3 = new QFrame(plainPage());
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
     m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
@@ -252,20 +244,19 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
                                                  "gains adjustments preview. You can pick color on image "
                                                  "to see the color level corresponding on histogram."));
-    l3->addWidget(m_previewTargetWidget, 0, Qt::AlignCenter);
+    l3->addWidget(m_previewTargetWidget);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox4);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels from the target image preview "
-                                                      "will be over-colored. This will not have an effect on the final rendering."));
+    vLayout->addWidget(frame2);
+    vLayout->addWidget(frame3);
+    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
     
-    topLayout->addMultiCellWidget(gbox4, 1, 3, 1, 1);
+    // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize();
-
+    resize(configDialogSize("Channel Mixer Tool Dialog"));  
+ 
+    // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotResetAllGains()));
     parentWidget()->setCursor( KCursor::arrowCursor()  );
-
-    QTimer::singleShot(0, this, SLOT(slotResetAllGains())); // Reset all parameters to the default values.
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -280,7 +271,10 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
             this, SLOT(slotColorSelectedFromTarget( const QColor & ))); 
                         
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));              
+            this, SLOT(slotEffect()));
+    
+    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));                             
     
     // -------------------------------------------------------------
     // Gains settings slots.
@@ -315,6 +309,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
 
 ChannelMixerDialog::~ChannelMixerDialog()
 {
+    saveDialogSize("Channel Mixer Tool Dialog");
 }
 
 void ChannelMixerDialog::slotHelp()

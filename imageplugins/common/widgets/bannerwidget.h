@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_despeckle.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-24
- * Description : 
+ * Date  : 2005-07-07
+ * Description : a nice banner widget.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,36 +18,31 @@
  * 
  * ============================================================ */
 
+#ifndef BANNERWIDGET_H
+#define BANNERWIDGET_H
 
-#ifndef IMAGEPLUGIN_DESPECKLE_H
-#define IMAGEPLUGIN_DESPECKLE_H
+// Qt includes.
 
-// Digikam includes.
+#include <qframe.h>
+#include <qstring.h>
 
-#include <digikamheaders.h>
-
-class KAction;
-
-class ImagePlugin_Despeckle : public Digikam::ImagePlugin
+namespace DigikamImagePlugins
 {
-    Q_OBJECT
-    
+
+class BannerWidget : public QFrame
+{
+Q_OBJECT
+
 public:
 
-    ImagePlugin_Despeckle(QObject *parent, const char* name,
-                             const QStringList &args);
-    ~ImagePlugin_Despeckle();
+    BannerWidget(QWidget *parent=0, QString title=QString::null);
+    ~BannerWidget();
 
-    void setEnabledActions(bool enable);
+private slots:        
 
-private:
-
-    KAction *m_despeckleAction;
-    
-private slots:
-
-    void slotDespeckle();
-
+    void processURL(const QString& url);
 };
-    
-#endif /* IMAGEPLUGIN_DESPECKLE_H */
+
+}  // namespace DigikamImagePlugins
+
+#endif /* BANNERWIDGET_H */
