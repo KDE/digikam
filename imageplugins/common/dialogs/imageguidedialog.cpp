@@ -2,8 +2,8 @@
  * File  : imageguidedialog.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
- * Description : A simple plugin dialog with a preview image 
- *               guide widget and a settings user area
+ * Description : A threaded filter plugin dialog with a preview 
+ *               image guide widget and a settings user area
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
@@ -33,32 +34,28 @@
 // KDE includes.
 
 #include <kcursor.h>
-#include <kprogress.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kurllabel.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "imageguidedialog.h"
 
 namespace DigikamImagePlugins
 {
 
 ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name, 
-                                       bool loadFileSettings, bool progress)
+                                   bool loadFileSettings, bool progress, 
+                                   bool guideVisible, int guideMode)
                   : KDialogBase(Plain, title,
                                 Help|User1|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
@@ -82,47 +79,28 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
 
-    m_mainLayout = new QGridLayout( plainPage(), 3, 2 , KDialog::marginHint(), KDialog::spacingHint());
+    m_mainLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    KURLLabel *pixmapLabelLeft = new KURLLabel( headerFrame );
-    pixmapLabelLeft->setText(QString::null);
-    pixmapLabelLeft->setURL("http://extragear.kde.org/apps/digikamimageplugins");
-    pixmapLabelLeft->setScaledContents( false );
-    QToolTip::add(pixmapLabelLeft, i18n("Visit DigikamImagePlugins project website"));
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( title, headerFrame );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title);
     m_mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", 
-                                     KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
     // -------------------------------------------------------------
 
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_imagePreviewWidget = new Digikam::ImageGuideWidget(240, 160, frame);
-    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the the image filter effect preview. "
-                                                "If you move the mouse cursor on this area, "
-                                                "a vertical and horizontal dashed line will be draw "
-                                                "to guide you in adjusting the filter settings. "
-                                                "Press the left mouse button to freeze the dashed "
-                                                "line's position."));
+    m_imagePreviewWidget = new Digikam::ImageGuideWidget(240, 160, frame, guideVisible, guideMode);
+    
+    if (guideVisible)
+        QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the the image filter effect preview. "
+                                                    "If you move the mouse cursor on this area, "
+                                                    "a vertical and horizontal dashed line will be draw "
+                                                    "to guide you in adjusting the filter settings. "
+                                                    "Press the left mouse button to freeze the dashed "
+                                                    "line's position."));
+    else
+        QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the image filter effect preview."));
+    
     l->addWidget(m_imagePreviewWidget, 0);
     m_mainLayout->addMultiCellWidget(frame, 1, 2, 0, 0);
     m_mainLayout->setColStretch(0, 10);
@@ -130,7 +108,7 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() ); 
     m_progressBar = new KProgress(100, plainPage());
     QWhatsThis::add(m_progressBar ,i18n("<p>This is the current percentage of the task completed."));
     m_progressBar->setValue(0);
@@ -148,9 +126,6 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
     
-    connect(pixmapLabelLeft, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processURL(const QString&)));
-
     connect(m_imagePreviewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));                   
 }
@@ -179,14 +154,9 @@ void ImageGuideDialog::slotInit()
 
 void ImageGuideDialog::setUserAreaWidget(QWidget *w)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() ); 
     vLayout->addWidget(w);
     m_mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
-}
-
-void ImageGuideDialog::processURL(const QString& url)
-{
-    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void ImageGuideDialog::setAboutData(KAboutData *about)

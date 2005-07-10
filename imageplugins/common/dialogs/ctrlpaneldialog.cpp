@@ -2,8 +2,8 @@
  * File  : ctrlpaneldialog.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
- * Description : A control panel dialog for plugins
- *
+ * Description : A threaded filter control panel dialog for 
+ *               image editor plugins
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
@@ -39,7 +40,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-#include <kurllabel.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -51,6 +51,7 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "ctrlpaneldialog.h"
 
 namespace DigikamImagePlugins
@@ -83,33 +84,10 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    KURLLabel *pixmapLabelLeft = new KURLLabel( headerFrame );
-    pixmapLabelLeft->setText(QString::null);
-    pixmapLabelLeft->setURL("http://extragear.kde.org/apps/digikamimageplugins");
-    pixmapLabelLeft->setScaledContents( false );
-    QToolTip::add(pixmapLabelLeft, i18n("Visit DigikamImagePlugins project website"));
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( title, headerFrame );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title);
+    
     topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", 
-                                     KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    
+        
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
@@ -123,9 +101,6 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
     
-    connect(pixmapLabelLeft, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processURL(const QString&)));
-                
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotFocusChanged()));
 }
@@ -139,7 +114,6 @@ CtrlPanelDialog::~CtrlPanelDialog()
        
     if (m_threadedFilter)
        delete m_threadedFilter;    
-       
 }
 
 void CtrlPanelDialog::slotInit()
@@ -150,11 +124,6 @@ void CtrlPanelDialog::slotInit()
     kapp->processEvents();
     // Reset values to defaults.
     QTimer::singleShot(0, this, SLOT(slotUser1())); 
-}
-
-void CtrlPanelDialog::processURL(const QString& url)
-{
-    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void CtrlPanelDialog::setAboutData(KAboutData *about)

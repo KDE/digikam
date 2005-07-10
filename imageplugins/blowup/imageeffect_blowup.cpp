@@ -73,13 +73,14 @@
 
 #include "version.h"
 #include "cimgiface.h"
+#include "bannerwidget.h"
 #include "imageeffect_blowup.h"
 
 namespace DigikamBlowUpImagesPlugin
 {
 
 ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
-                  : KDialogBase(Plain, i18n("Blowup"),
+                  : KDialogBase(Plain, i18n("Blowup a Photograph"),
                                 Help|User1|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
                                 i18n("&Reset Values"),
@@ -98,7 +99,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Blowup Photograph "), 
+                                       I18N_NOOP("Blowup a Photograph"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to blowup a photograph."),
                                        KAboutData::License_GPL,
@@ -118,35 +119,15 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Blowup Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
     
     // -------------------------------------------------------------
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Blowup Photograph"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+   
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Blowup a Photograph"));  
     topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
     // -------------------------------------------------------------
     
@@ -161,7 +142,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     cimgLogoLabel->setText(QString::null);
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
+    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
