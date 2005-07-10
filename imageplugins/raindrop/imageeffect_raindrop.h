@@ -25,14 +25,14 @@
 
 // Local includes.
 
-#include "imagepreviewdialog.h"
+#include "imageguidedialog.h"
 
 class KIntNumInput;
 
 namespace DigikamRainDropImagesPlugin
 {
 
-class ImageEffect_RainDrop : public DigikamImagePlugins::ImagePreviewDialog
+class ImageEffect_RainDrop : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
     

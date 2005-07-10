@@ -52,8 +52,8 @@ namespace DigikamBorderImagesPlugin
 {
 
 ImageEffect_Border::ImageEffect_Border(QWidget* parent)
-                  : ImagePreviewDialog(parent, i18n("Add Border Around a Photograph"), 
-                                       "border", false, false)
+                  : ImageGuideDialog(parent, i18n("Add Border Around a Photograph"), "border", 
+                                     false, false, false)
 {
     QString whatsThis;
     
