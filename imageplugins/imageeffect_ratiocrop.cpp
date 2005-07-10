@@ -83,7 +83,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     QFrame *cropSelection = new QFrame( plainPage() );
     cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( cropSelection, 3, 6, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, marginHint(), spacingHint());
     
     QLabel *label = new QLabel(i18n("Aspect Ratio:"), cropSelection);
     m_ratioCB = new QComboBox( false, cropSelection );
@@ -175,7 +175,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() ); 
     QFrame* compositionGuide = new QFrame( plainPage() );
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 1, marginHint(), spacingHint());
+    QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 2, marginHint(), spacingHint());
     
     QLabel *labelGuideLines = new QLabel(i18n("Composition Guide:"), compositionGuide);
     m_guideLinesCB = new QComboBox( false, compositionGuide );
@@ -205,18 +205,18 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    QLabel *labelColorGuide = new QLabel(i18n("Color:"), compositionGuide);
+    QLabel *labelColorGuide = new QLabel(i18n("Color Guide:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
     
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(m_goldenSectionBox, 1, 1, 0, 1);
-    grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 1);
-    grid2->addMultiCellWidget(m_goldenSpiralBox, 3, 3, 0, 1);
-    grid2->addMultiCellWidget(m_goldenTriangleBox, 4, 4, 0, 1);
-    grid2->addMultiCellWidget(m_flipHorBox, 5, 5, 0, 1);
-    grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 1);
+    grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 2);
+    grid2->addMultiCellWidget(m_goldenSectionBox, 1, 1, 0, 2);
+    grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 2);
+    grid2->addMultiCellWidget(m_goldenSpiralBox, 3, 3, 0, 2);
+    grid2->addMultiCellWidget(m_goldenTriangleBox, 4, 4, 0, 2);
+    grid2->addMultiCellWidget(m_flipHorBox, 5, 5, 0, 2);
+    grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 2);
     grid2->addMultiCellWidget(labelColorGuide, 7, 7, 0, 0);
     grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
     
