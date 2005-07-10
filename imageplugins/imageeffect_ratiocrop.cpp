@@ -144,9 +144,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
     QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
     
-    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 2);
-    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 2);
-    grid->addMultiCellWidget(m_centerWidth, 4, 4, 3, 3);
+    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 3);
+    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 3);
+    grid->addMultiCellWidget(m_centerWidth, 4, 4, 4, 4);
     
     // -------------------------------------------------------------
     
@@ -164,9 +164,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
     QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
     
-    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 2);
-    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 2);
-    grid->addMultiCellWidget(m_centerHeight, 6, 6, 3, 3);
+    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 3);
+    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
+    grid->addMultiCellWidget(m_centerHeight, 6, 6, 4, 4);
     
     mainLayout->addMultiCellWidget(cropSelection, 0, 0, 1, 1);
     
