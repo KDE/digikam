@@ -18,10 +18,6 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-
 // Qt includes.
 
 #include <qlayout.h>
