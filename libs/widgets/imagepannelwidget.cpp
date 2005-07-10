@@ -62,7 +62,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                                "which will be used for the preview computation."
                                                "<p>Click and drag the mouse cursor in the "
                                                "image to change the clip focus. "
-                                               "<p>If <b>Separate View</b> option is enable, the original "
+                                               "<p>If <b>Separate View</b> option is enabled, the original "
                                                "image is on the left of the red dashed line, and "
                                                "target image on the right."));
     l1->addWidget(m_imageRegionWidget, 0);
