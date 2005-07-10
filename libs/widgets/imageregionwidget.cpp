@@ -114,7 +114,9 @@ void ImageRegionWidget::updatePixmap(QImage *img)
 {
     int w = img->width();
     int h = img->height();
-    m_pix = new QPixmap(w, h);
+
+    if (!m_pix)
+        m_pix = new QPixmap(w, h);
     m_pix->convertFromImage(*img);
     
     horizontalScrollBar()->setLineStep( 1 );
