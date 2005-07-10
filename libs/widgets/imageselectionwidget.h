@@ -27,6 +27,10 @@
 #include <qrect.h>
 #include <qcolor.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QPixmap;
 class QTimer;
 
@@ -35,7 +39,7 @@ namespace Digikam
 
 class ImageIface;
 
-class ImageSelectionWidget : public QWidget
+class DIGIKAM_EXPORT ImageSelectionWidget : public QWidget
 {
 Q_OBJECT
 

@@ -21,6 +21,9 @@
 #include <qrect.h>
 #include <qstring.h>
 
+class IconGroupItem;
+class IconView;
+
 class IconItem
 {
     friend class IconView;

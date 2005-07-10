@@ -18,9 +18,11 @@
 #ifndef UPGRADEDB_SQLITE2TOSQLITE3_H
 #define UPGRADEDB_SQLITE2TOSQLITE3_H
 
+#include "digikam_export.h"
+
 class QString;
 
-extern bool upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath);
+extern bool DIGIKAM_EXPORT upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath);
 
 
 #endif /* UPGRADEDB_SQLITE2TOSQLITE3_H */

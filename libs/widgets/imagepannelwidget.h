@@ -28,6 +28,9 @@
 #include <qrect.h>
 #include <qlayout.h>
 
+// Local includes
+#include "digikam_export.h"
+
 class QCheckBox;
 
 class KProgress;
@@ -38,7 +41,7 @@ namespace Digikam
 class ImageRegionWidget;
 class ImagePanIconWidget;
 
-class ImagePannelWidget : public QWidget
+class DIGIKAM_EXPORT ImagePannelWidget : public QWidget
 {
 Q_OBJECT
 

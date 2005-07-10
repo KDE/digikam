@@ -29,6 +29,7 @@
 #include <qdatetime.h>
 #include <kurl.h>
 #include "albuminfo.h"
+#include "digikam_export.h"
 
 typedef struct sqlite3 sqleet3; // hehe.
 
@@ -39,7 +40,7 @@ typedef QValueList<Q_LLONG> LLongList;
  * This class is responsible for the communication
  * with the sqlite database.
  */
-class AlbumDB
+class DIGIKAM_EXPORT AlbumDB
 {
 public:
 

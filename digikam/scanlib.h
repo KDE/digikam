@@ -28,6 +28,8 @@
 #include <qstring.h>
 #include <qmap.h>
 
+#include "digikam_export.h"
+
 /** @file scanlib.h */
 
 /** 
@@ -40,7 +42,7 @@
  * make sure to add the file to the database and insert the date and
  * comments.
  */
-class ScanLib
+class DIGIKAM_EXPORT ScanLib
 {
 public:
     /** 

@@ -29,6 +29,8 @@
 
 #include <kurl.h>
 
+#include "digikam_export.h"
+
 class Album;
 class PAlbum;
 class TAlbum;
@@ -64,7 +66,7 @@ typedef QValueList<Album*> AlbumList;
  * updating icons and moving Albums.
  *
  */
-class AlbumManager : public QObject
+class DIGIKAM_EXPORT AlbumManager : public QObject
 {
     Q_OBJECT
 
