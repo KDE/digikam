@@ -1,19 +1,31 @@
 [Desktop Entry]
 Name=ImagePlugin_DistortionFX
+Name[da]=Plugin for forvrængningseffekt
 Name[it]=PluginImmagini_EffettiDiDistorsione
 Name[nl]=Afbeeldingsplugin_vervormingseffect
+Name[pt_BR]=Plug-in de distorção
+Name[sr]=Сликовни прикључак — Ефекти изобличења
+Name[sr@Latn]=Slikovni priključak — Efekti izobličenja
 Name[sv]=Insticksprogram för förvrängningseffekt
+Name[tr]=ResimEklentisi_Bozma
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Distortion special effects plugin for digiKam
+Comment[da]=Digikam plugin for forvrængningsspecialeffekt
+Comment[de]=digiKam Plugin zum Verzerren von Bildern
+Comment[el]=Πρόσθετο ειδικών εφέ παραμόρφωσης για το digiKam
 Comment[es]=Complemento de efectos especiales de distorsión para digiKam
+Comment[et]=DigiKami spetsiaalsete moonutusefektide plugin
 Comment[fr]=Module externe de digiKam pour créer des effets spéciaux de distorsion
 Comment[it]=Plugin degli effetti speciali di distorsione per digiKam
 Comment[nl]=digiKam-plugin voor vervormingseffect
 Comment[pt]='Plugin' de efeitos especiais de distorção para o digiKam
-Comment[pt_BR]='Plugin' de efeitos especiais de distorção para o digiKam
+Comment[pt_BR]=Plug-in para efeito de distorção em imagens do digikam
+Comment[sr]=digiKam-ов прикључак за ефекте изобличења
+Comment[sr@Latn]=digiKam-ov priključak za efekte izobličenja
 Comment[sv]=Digikam insticksprogram för förvrängningsspecialeffekt
+Comment[tr]=Bozma etkileri uygulamak için bir digiKam eklentisi
 
 X-KDE-Library=digikamimageplugin_distortionfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

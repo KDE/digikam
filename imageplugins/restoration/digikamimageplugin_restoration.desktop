@@ -1,18 +1,30 @@
 [Desktop Entry]
 Name=ImagePlugin_Restoration
+Name[da]=Plugin for billedrestaurering
 Name[it]=PluginImmagini_Restauro
 Name[nl]=Afbeeldingsplugin_Restoratie
+Name[pt_BR]=Plug-in de restauração de fotos
+Name[sr]=Сликовни прикључак — Рестаурација
+Name[sr@Latn]=Slikovni priključak — Restauracija
 Name[sv]=Insticksprogram för bildrestaurering
+Name[tr]=ResimEklentisi_Onarım
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to restore a photograph
+Comment[da]=Digikam plugin for restaurering af et fotografi
+Comment[de]=digiKam Plugin zur Restauration eines Photos.
+Comment[el]=Πρόσθετο του digiKam για αποκατάσταση μιας φωτογραφίας
+Comment[et]=DigiKami foto restaureerimimise plugin
 Comment[it]=Plugin di digiKam per restaurare una fotografia
 Comment[nl]=digiKam-pluin voor het herstellen van een foto
 Comment[pt]=Um 'plugin' do digiKam para restaurar uma fotografia
-Comment[pt_BR]=Um 'plugin' do digiKam para restaurar uma fotografia
+Comment[pt_BR]=Plug-in de restauração de fotos para o digiKam
+Comment[sr]=digiKam-ов прикључак за поправку фотографија
+Comment[sr@Latn]=digiKam-ov priključak za popravku fotografija
 Comment[sv]=Digikam insticksprogram för restaurering av ett fotografi
+Comment[tr]=Fotoğraf onarmak için digiKam eklentisi
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at free dot fr

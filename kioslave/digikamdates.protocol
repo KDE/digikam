@@ -12,5 +12,4 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam Dates kioslave
-Description[xx]=xxdigiKam Dates kioslavexx
 Class=:local

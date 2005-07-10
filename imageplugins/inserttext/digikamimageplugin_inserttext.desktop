@@ -1,19 +1,31 @@
 [Desktop Entry]
 Name=ImagePlugin_InsertText
+Name[da]=Plugin for at indsætte tekst
 Name[it]=PluginImmagini_InserisciTesto
 Name[nl]=Afbeeldingsplugin_TekstInvoegen
+Name[pt_BR]=Plug-in de inserção de texto
+Name[sr]=Сликовни прикључак — Убаци текст
+Name[sr@Latn]=Slikovni priključak — Ubaci tekst
 Name[sv]=Insticksprogram för infoga text
+Name[tr]=ResimEklentisi_MetinEkle
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Insert text to image plugin for digiKam
+Comment[da]=Digikam plugin for at indsætte tekst i billeder
+Comment[de]=digiKam Plugin zum Hinzufügen von Text zu einem Bild
+Comment[el]=Πρόσθετο εισαγωγής κειμένου σε εικόνα για το digiKam
 Comment[es]=Complemento para insertar texto en una imagen para digiKam
+Comment[et]=DigiKami pildile teksti lisamise plugin
 Comment[fr]=Module externe de digiKam pour ajouter du texte à l'image
 Comment[it]=Plugin per l'aggiunta di testo nell'immagire per digiKam
 Comment[nl]=digiKam-plugin voor het invoegen van tekst
 Comment[pt]='Plugin' para inserir texto numa imagem para o digiKam
-Comment[pt_BR]='Plugin' para inserir texto numa imagem para o digiKam
+Comment[pt_BR]=Plug-in para inserção de texto em Imagens do digikam
+Comment[sr]=digiKam-ов прикључак за убацивање текста у слику
+Comment[sr@Latn]=digiKam-ov priključak za ubacivanje teksta u sliku
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
+Comment[tr]=digiKam için resme metin ekleme eklentisi
 
 X-KDE-Library=digikamimageplugin_inserttext
 author=Gilles Caulier, caulier dot gilles at free dot fr

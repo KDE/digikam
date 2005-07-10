@@ -12,5 +12,4 @@ deleting=true
 moving=true
 maxInstances=1
 Description=digiKam Albums kioslave
-Description[xx]=xxdigiKam Albums kioslavexx
 Class=:local

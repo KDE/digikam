@@ -2,20 +2,31 @@
 Name=ImagePlugin_ChannelMixer
 Name[it]=PluginImmagini_MixerDeiCanali
 Name[nl]=Afbeeldingsplugin_KanaalMixer
+Name[pt_BR]=Plug-in de mixer de canais
+Name[sr]=Сликовни прикључак — Миксета канала
+Name[sr@Latn]=Slikovni priključak — Mikseta kanala
 Name[sv]=Insticksprogram för kanalblandning
+Name[tr]=ResimEklentisi_KanalKarıştırıcı
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image color channels mixer plugin for digiKam
+Comment[da]=Digikam plugin for at blande billedfarvekanaler
+Comment[de]=digiKam Plugin zum Mischen von Farbkanälen
+Comment[el]=Μείκτης καναλιών χρώματος εικόνας για το digiKam
 Comment[en_GB]=Image colour channels mixer plugin for digiKam
 Comment[es]=Complemento de mezcla de los canales de color de las imágenes para digiKam
+Comment[et]=DigiKami pildi värvikanalite mikseri plugin
 Comment[fr]=Module externe de digiKam pour mixer les canaux de couleur
 Comment[it]=Plugin di mixer dei canali dei colori per digiKam
 Comment[nl]=digiKam-plugin voor kanaalmixer
 Comment[pt]='Plugin' dos canais de cores para o digiKam
-Comment[pt_BR]='Plugin' dos canais de cores para o digiKam
+Comment[pt_BR]=Plug-in mixer de canais de cores da imagem do digiKam
+Comment[sr]=Прикључак миксете канала боја за digiKam
+Comment[sr@Latn]=Priključak miksete kanala boja za digiKam
 Comment[sv]=Digikam insticksprogram för att blanda bildfärgkanaler
+Comment[tr]=digiKam için resim kanalları karıştıcı eklentisi
 
 X-KDE-Library=digikamimageplugin_channelmixer
 author=Caulier Gilles, caulier dot gilles at free dot fr
