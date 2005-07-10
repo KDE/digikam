@@ -201,12 +201,19 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        m_xpos = newxpos;
        m_ypos = newypos;
               
-       if (m_localRegionSelection.left() < 0) m_localRegionSelection.moveLeft(0);
-       if (m_localRegionSelection.top() < 0) m_localRegionSelection.moveTop(0);
-       if (m_localRegionSelection.right() > m_rect.width())
-          m_localRegionSelection.moveRight(m_rect.width());
-       if (m_localRegionSelection.bottom() > m_rect.height()) 
-          m_localRegionSelection.moveBottom(m_rect.height());
+       // Perform normalization of selection area.
+          
+       if (m_localRegionSelection.left() < m_rect.left()) 
+          m_localRegionSelection.moveLeft(m_rect.left());
+            
+       if (m_localRegionSelection.top() < m_rect.top()) 
+          m_localRegionSelection.moveTop(m_rect.top());
+            
+       if (m_localRegionSelection.right() > m_rect.right())
+          m_localRegionSelection.moveRight(m_rect.right());
+            
+       if (m_localRegionSelection.bottom() > m_rect.bottom()) 
+          m_localRegionSelection.moveBottom(m_rect.bottom());
        
        updatePixmap();
        repaint(false);

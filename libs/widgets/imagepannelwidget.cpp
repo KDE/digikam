@@ -204,12 +204,12 @@ void ImagePannelWidget::setPreviewImageData(QImage img)
 
 void ImagePannelWidget::setCenterImageRegionPosition(void)
 {
-    m_imageRegionWidget->setCenterClipPosition();
+    m_imageRegionWidget->setCenterContentsPosition();
 }
 
 void ImagePannelWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
 {
-    m_imageRegionWidget->setClipPosition(rect.x(), rect.y(), targetDone);
+    m_imageRegionWidget->setContentsPosition(rect.x(), rect.y(), targetDone);
 }
 
 void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)

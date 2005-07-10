@@ -28,7 +28,6 @@
 #include <qrect.h>
 #include <qpoint.h>
 #include <qcolor.h>
-#include "digikam_export.h"
 
 class QPixmap;
 
@@ -36,7 +35,7 @@ namespace Digikam
 {
 class ImageIface;
 
-class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
+class ImageGuideWidget : public QWidget
 {
 Q_OBJECT
 

@@ -386,7 +386,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
          if (curvePoint.x() >= 0)
              {
              p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 2, 
-                             wHeight - 2 - ((curvePoint.y() * 256) / wHeight),
+                             wHeight - 2 - ((curvePoint.y() * wHeight) / 256),
                              4, 4 ); 
              }
          }
