@@ -33,12 +33,16 @@
 
 #include <kapplication.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QObject;
 
 namespace Digikam
 {
 
-class ThreadedFilter : public QThread
+class DIGIKAM_EXPORT ThreadedFilter : public QThread
 {
 
 public:

@@ -25,10 +25,14 @@
 
 #include <kselect.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ColorGradientWidget : public KGradientSelector
+class DIGIKAM_EXPORT ColorGradientWidget : public KGradientSelector
 {
 Q_OBJECT
 

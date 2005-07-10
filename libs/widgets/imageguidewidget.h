@@ -29,13 +29,16 @@
 #include <qpoint.h>
 #include <qcolor.h>
 
+// Local includes
+#include "digikam_export.h"
+
 class QPixmap;
 
 namespace Digikam
 {
 class ImageIface;
 
-class ImageGuideWidget : public QWidget
+class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
 Q_OBJECT
 

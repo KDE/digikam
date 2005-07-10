@@ -26,6 +26,9 @@
 #include <qcolor.h>
 #include <qwidget.h>
 
+// Local includes
+#include "digikam_export.h"
+
 class QCustomEvent;
 
 namespace Digikam
@@ -33,7 +36,7 @@ namespace Digikam
 
 class ImageHistogram;
 
-class HistogramWidget : public QWidget
+class DIGIKAM_EXPORT HistogramWidget : public QWidget
 {
 Q_OBJECT
 
