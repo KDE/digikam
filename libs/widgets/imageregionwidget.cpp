@@ -205,11 +205,6 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
         region = QRect::QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
     else 
         region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH);
-    
-    kdDebug() << "Region: (" << region.x() << ", " 
-                             << region.y() << ", "
-                             << region.width() << ", "
-                             << region.height() << ")" << endl;    
             
     return (region);
 }
