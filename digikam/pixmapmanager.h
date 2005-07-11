@@ -61,6 +61,7 @@ private:
     AlbumIconView*            m_view;
     QTimer*                   m_timer;
     KURL                      m_url;
+    QString                   m_thumbCacheDir;
     
 signals:
 

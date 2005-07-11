@@ -21,12 +21,19 @@
 
 #include <qpixmap.h>
 #include <qdir.h>
+#include <qfile.h>
 #include <qtimer.h>
 #include <qimage.h>
 
 #include <kurl.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kmdcodec.h>
+
+extern "C"
+{
+#include <unistd.h>
+}
 
 #include "thumbnailjob.h"
 #include "albumiconview.h"
@@ -42,6 +49,7 @@ PixmapManager::PixmapManager(AlbumIconView* view)
     m_cache = new QCache<QPixmap>(101, 211);
     m_cache->setAutoDelete(true);
     m_size  = 0;
+    m_thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
     
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()),
@@ -107,6 +115,17 @@ void PixmapManager::remove(const KURL& url)
 
     if (!m_thumbJob.isNull())
         m_thumbJob->removeItem(url);
+
+    // remove the items from the thumbnail cache directory as well.
+    QString uri = "file://" + QDir::cleanDirPath(url.path());
+    KMD5 md5(QFile::encodeName(uri));
+    uri = md5.hexDigest();
+
+    QString smallThumbPath = m_thumbCacheDir + "normal/" + uri + ".png";
+    QString bigThumbPath   = m_thumbCacheDir + "large/"  + uri + ".png";
+
+    ::unlink(QFile::encodeName(smallThumbPath));
+    ::unlink(QFile::encodeName(bigThumbPath));
 }
 
 void PixmapManager::clear()
