@@ -79,8 +79,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                  : KDialogBase(Plain, i18n("Adjust Color Levels"), Help|User1|Ok|Cancel, Ok,
                                parent, 0, true, true, i18n("&Reset Values"))
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+        
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();
 
@@ -326,7 +326,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    kapp->restoreOverrideCursor();
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -558,13 +558,11 @@ void AdjustLevelDialog::slotAutoLevels()
 
 void AdjustLevelDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
-
     Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
-    uint* orgData = ifaceOrg->getPreviewData();
-    int   w       = ifaceOrg->previewWidth();
-    int   h       = ifaceOrg->previewHeight();
+    uint* orgData = ifaceDest->getPreviewData();
+    int   w       = ifaceDest->previewWidth();
+    int   h       = ifaceDest->previewHeight();
 
     // Create the new empty destination image data space.
     uint* desData = new uint[w*h];
@@ -584,13 +582,12 @@ void AdjustLevelDialog::slotEffect()
 
 void AdjustLevelDialog::slotOk()
 {
-    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface ifaceDest(0, 0);
 
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
-
-    uint* orgData = ifaceOrg->getOriginalData();
-    int   w       = ifaceOrg->originalWidth();
-    int   h       = ifaceOrg->originalHeight();
+    uint* orgData = ifaceDest.getOriginalData();
+    int   w       = ifaceDest.originalWidth();
+    int   h       = ifaceDest.originalHeight();
 
     // Create the new empty destination image data space.
     uint* desData = new uint[w*h];
@@ -601,7 +598,8 @@ void AdjustLevelDialog::slotOk()
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    ifaceDest->putOriginalData(i18n("Adjust Level"), desData);
+    ifaceDest.putOriginalData(i18n("Adjust Level"), desData);
+    kapp->restoreOverrideCursor();
 
     delete [] orgData;
     delete [] desData;

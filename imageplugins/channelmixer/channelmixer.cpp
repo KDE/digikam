@@ -84,8 +84,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                                 parent, 0, true, true, i18n("&Reset Values"))
 {
     m_destinationPreviewData = 0L;
-    parentWidget()->setCursor( KCursor::waitCursor() );
-    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+        
     setButtonWhatsThis ( User1, i18n("<p>Reset color channels' gains settings from the current selected channel.") );
 
     // About data and help button.
@@ -256,7 +256,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
  
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotResetAllGains()));
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    kapp->restoreOverrideCursor();
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -489,13 +489,11 @@ void ChannelMixerDialog::slotMonochromeActived(bool mono)
 
 void ChannelMixerDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
-
     Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
-    uint* orgData = ifaceOrg->getPreviewData();
-    int   w       = ifaceOrg->previewWidth();
-    int   h       = ifaceOrg->previewHeight();
+    uint* orgData = ifaceDest->getPreviewData();
+    int   w       = ifaceDest->previewWidth();
+    int   h       = ifaceDest->previewHeight();
     bool  l       = m_preserveLuminosity->isChecked();
     bool  m       = m_monochrome->isChecked();
 
@@ -541,13 +539,12 @@ void ChannelMixerDialog::slotEffect()
 
 void ChannelMixerDialog::slotOk()
 {
-    Digikam::ImageIface* ifaceOrg = m_previewOriginalWidget->imageIface();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface ifaceDest(0, 0);
 
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
-
-    uint* orgData = ifaceOrg->getOriginalData();
-    int   w       = ifaceOrg->originalWidth();
-    int   h       = ifaceOrg->originalHeight();
+    uint* orgData = ifaceDest.getOriginalData();
+    int   w       = ifaceDest.originalWidth();
+    int   h       = ifaceDest.originalHeight();
     bool  l       = m_preserveLuminosity->isChecked();
     bool  m       = m_monochrome->isChecked();
 
@@ -575,7 +572,8 @@ void ChannelMixerDialog::slotOk()
                 m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);  // Blue channel gains.
        }
     
-    ifaceDest->putOriginalData(i18n("Channel Mixer"), desData);
+    ifaceDest.putOriginalData(i18n("Channel Mixer"), desData);
+    kapp->restoreOverrideCursor();
 
     delete [] orgData;
     delete [] desData;

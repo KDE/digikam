@@ -92,8 +92,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                       i18n("&Save As...")),
                           m_parent(parent)
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
     QString whatsThis;
+    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all parameters to settings text file.") );    
@@ -312,8 +313,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
             
     // -------------------------------------------------------------
     
-        QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
-    
+    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
+   
     QFrame *frame2 = new QFrame(plainPage());
     frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
@@ -344,7 +345,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotUser1()));
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    kapp->restoreOverrideCursor();
 
     // -------------------------------------------------------------
  
@@ -685,11 +686,11 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 
 void ImageEffect_WhiteBalance::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
 
-    uint*  data   = iface->getPreviewData();
-    int    w      = iface->previewWidth();
-    int    h      = iface->previewHeight();
+    uint*  data   = ifaceDest->getPreviewData();
+    int    w      = ifaceDest->previewWidth();
+    int    h      = ifaceDest->previewHeight();
     
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -720,7 +721,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     // Apply White balance adjustments.
     whiteBalance(m_destinationPreviewData, w, h);
            
-    iface->putPreviewData(m_destinationPreviewData);       
+    ifaceDest->putPreviewData(m_destinationPreviewData);       
     m_previewTargetWidget->update();
     
     // Update histogram.
@@ -731,12 +732,12 @@ void ImageEffect_WhiteBalance::slotEffect()
 
 void ImageEffect_WhiteBalance::slotOk()
 {
-    m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface ifaceDest(0, 0);
         
-    uint*  data   = iface.getOriginalData();
-    int    w      = iface.originalWidth();
-    int    h      = iface.originalHeight();
+    uint*  data   = ifaceDest.getOriginalData();
+    int    w      = ifaceDest.originalWidth();
+    int    h      = ifaceDest.originalHeight();
         
     // Update settings
     m_temperature = m_temperatureInput->value()/1000.0;
@@ -759,9 +760,9 @@ void ImageEffect_WhiteBalance::slotOk()
     // Apply White balance adjustments.
     whiteBalance(data, w, h);
 
-    iface.putOriginalData(i18n("White Balance"), data);                   
+    ifaceDest.putOriginalData(i18n("White Balance"), data);                   
     delete [] data;
-    m_parent->setCursor( KCursor::arrowCursor() );
+    kapp->restoreOverrideCursor();
     accept();       
 }
 
