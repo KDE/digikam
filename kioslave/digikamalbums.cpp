@@ -25,6 +25,8 @@
  * 
  * ============================================================ */
 
+#include <digikam_export.h>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kinstance.h>
@@ -39,8 +41,6 @@
 #include <qdatastream.h>
 #include <qregexp.h>
 #include <qdir.h>
-
-#include <config.h>
 
 extern "C" 
 {
@@ -1500,7 +1500,7 @@ void kio_digikamalbums::removeInvalidAlbums()
 
 extern "C"
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamalbums" );

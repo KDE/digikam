@@ -18,6 +18,8 @@
  *
  * ============================================================ */
 
+#include <digikam_export.h>
+
 #include <kinstance.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -33,8 +35,6 @@
 #include <qdir.h>
 #include <qregexp.h>
 
-#include <config.h>
-
 extern "C"
 {
 #include <stdlib.h>
@@ -47,7 +47,7 @@ extern "C"
 }
 
 #include "digikamtags.h"
-#include "digikam_export.h"
+
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
                                                  const QCString &app_socket)
     : SlaveBase("kio_digikamtags", pool_socket, app_socket)
@@ -222,7 +222,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
 extern "C"
 {
-    DIGIKAMIMAGEPLUGINS_EXPORT int kdemain(int argc, char **argv)
+    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamtags" );

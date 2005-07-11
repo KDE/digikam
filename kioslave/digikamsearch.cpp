@@ -17,6 +17,8 @@
  *
  * ============================================================ */
 
+#include <digikam_export.h>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
@@ -35,8 +37,6 @@
 #include <qdir.h>
 #include <qvariant.h>
 #include <qmap.h>
-
-#include <config.h>
 
 extern "C"
 {
@@ -571,7 +571,7 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
 
 extern "C"
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamsearch" );

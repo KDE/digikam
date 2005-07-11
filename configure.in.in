@@ -5,32 +5,6 @@ AM_INIT_AUTOMAKE(digikam,0.8.0)
 KDE_ENABLE_HIDDEN_VISIBILITY
 
 # -----------------------------------------------------------------
-# check if kdemacros.h is usable. kde < 3.3.2 had a bug in it
-# -----------------------------------------------------------------
-
-AC_LANG_PUSH(C++)
-libkexif_kdemacros_cppflags=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $all_includes"  
-AC_MSG_CHECKING([if kdemacros.h is usable])
-AC_COMPILE_IFELSE(
- [
-   #include <kdemacros.h>
-   #include <string>
-   int other_func( void ) KDE_EXPORT;
-   int other_func( void )
-   { 
-      std::string s("KDE_EXPORT");
-      return 0;
-   }
- ], 
- [ AC_MSG_RESULT([yes])
-   AC_DEFINE(KDEMACROS_USABLE, 1, [kdemacros.h usable]) ], 
- [ AC_MSG_RESULT([no]) ] 
-)
-CPPFLAGS=$libkexif_kdemacros_cppflags
-AC_LANG_POP(C++)
-
-# -----------------------------------------------------------------
 # pkg config check
 # -----------------------------------------------------------------
 

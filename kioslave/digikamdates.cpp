@@ -19,6 +19,8 @@
  *
  * ============================================================ */
 
+#include <digikam_export.h>
+
 #include <kio/global.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -30,8 +32,6 @@
 #include <qdatastream.h>
 #include <qregexp.h>
 #include <qbuffer.h>
-
-#include <config.h>
 
 extern "C"
 {
@@ -277,9 +277,9 @@ void kio_digikamdates::special(const QByteArray& data)
 
 /* KIO slave registration */
 
-extern "C"
+extern "C"  
 {
-    int kdemain(int argc, char **argv)
+    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamdates" );

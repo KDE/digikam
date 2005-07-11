@@ -24,6 +24,8 @@
 
 // Qt includes.
 
+#include <digikam_export.h>
+
 #include <qobject.h>
 #include <klocale.h>
 
@@ -36,7 +38,7 @@ namespace Digikam
 
 class ImlibInterfacePrivate;
 
-class ImlibInterface : public QObject
+class DIGIKAM_EXPORT ImlibInterface : public QObject
 {
 
     Q_OBJECT

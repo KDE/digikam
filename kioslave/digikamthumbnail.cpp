@@ -23,6 +23,8 @@
 
 #define XMD_H
 
+#include <digikam_export.h>
+
 // Qt Includes.
 
 #include <qcstring.h>
@@ -76,8 +78,6 @@ extern "C"
 
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
-
-#include "digikam_export.h"
 
 using namespace KIO;
 
@@ -750,7 +750,7 @@ void kio_digikamthumbnailProtocol::createThumbnailDirs()
 
 extern "C"
 {
-    DIGIKAMIMAGEPLUGINS_EXPORT int kdemain(int argc, char **argv)
+    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamthumbnail" );
