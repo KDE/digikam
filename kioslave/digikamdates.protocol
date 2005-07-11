@@ -12,4 +12,6 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam Dates kioslave
+Description[et]=DigiKami kuupäevade KIO-moodul
+Description[pt]='kioslave' de datas do digiKam
 Class=:local

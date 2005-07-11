@@ -5,4 +5,6 @@ input=none
 output=filesystem,stream
 maxInstances=1
 Description=digiKam Search kioslave
+Description[et]=DigiKami otsimise KIO-moodul
+Description[pt]='kioslave' de procura do digiKam
 Class=:local

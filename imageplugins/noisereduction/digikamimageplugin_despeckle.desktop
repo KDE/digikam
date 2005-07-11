@@ -13,6 +13,9 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
+Comment[et]=DigiKami müra vähendamise plugin
+Comment[pt]='Plugin' de redução de ruído para o digiKam
+Comment[pt_BR]='Plugin' de redução de ruído para o digiKam
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr
