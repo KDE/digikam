@@ -73,6 +73,7 @@ protected:
     
     void paintEvent( QPaintEvent *e );
     void resizeEvent( QResizeEvent * e );
+    void timerEvent(QTimerEvent * e);
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
@@ -83,7 +84,9 @@ private:
     int                  m_w;
     int                  m_h;
     
+    int                  m_timerID;
     int                  m_guideMode;
+    int                  m_flicker;
 
     bool                 m_focus;
     bool                 m_spotVisible;

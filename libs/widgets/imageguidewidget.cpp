@@ -26,6 +26,7 @@
 #include <qpen.h>
 #include <qpixmap.h>
 #include <qtooltip.h>
+#include <qtimer.h>
 
 // KDE include.
 
@@ -49,9 +50,12 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_spotVisible             = spotVisible;
-    m_guideMode               = guideMode;
-    m_focus                   = false;
+    m_spotVisible = spotVisible;
+    m_guideMode   = guideMode;
+    m_focus       = false;
+    m_flicker     = false;
+    
+    m_timerID = startTimer(800);
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -137,8 +141,8 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
              {
              QPainter p(m_pixmap);
              p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-             p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
-             p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
+             p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
+             p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
              p.end();
              break;
              }
@@ -149,6 +153,8 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
              p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
+             if (m_flicker%2 != 0)
+                p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              p.end();
              break;
@@ -157,6 +163,18 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
        }
     
     bitBlt(this, 0, 0, m_pixmap);
+}
+
+void ImageGuideWidget::timerEvent(QTimerEvent * e)
+{
+    if (e->timerId() == m_timerID)
+        {
+        if (m_flicker == 5) m_flicker=0;
+        else m_flicker++;
+        repaint(false);
+        }
+    else
+        QWidget::timerEvent(e);
 }
 
 void ImageGuideWidget::resizeEvent(QResizeEvent * e)
