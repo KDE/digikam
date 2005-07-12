@@ -29,6 +29,7 @@
 
 #include <kconfig.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -83,7 +84,7 @@ AlbumSettings * AlbumSettings::instance()
 AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
-    d->config = new KConfig("digikamrc");
+    d->config = kapp->config();
 
     instance_ = this;
     
@@ -92,7 +93,6 @@ AlbumSettings::AlbumSettings()
 
 AlbumSettings::~AlbumSettings()
 {
-    delete d->config;
     delete d;
     instance_ = 0;
 }

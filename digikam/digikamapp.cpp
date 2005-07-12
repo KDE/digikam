@@ -138,14 +138,13 @@ DigikamApp::DigikamApp(bool detectCamera)
 
 DigikamApp::~DigikamApp()
 {
-    mAlbumSettings->saveSettings();
-
     if (ImageWindow::imagewindow())
         delete ImageWindow::imagewindow();
 
     if (mView)
         delete mView;
 
+    mAlbumSettings->saveSettings();
     delete mAlbumSettings;
 
     delete mAlbumManager;
