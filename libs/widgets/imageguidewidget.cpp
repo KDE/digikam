@@ -53,7 +53,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     m_spotVisible = spotVisible;
     m_guideMode   = guideMode;
     m_focus       = false;
-    m_flicker     = false;
+    m_flicker     = 0;
     
     m_timerID = startTimer(800);
     
