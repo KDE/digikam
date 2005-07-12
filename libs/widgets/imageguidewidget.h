@@ -79,23 +79,21 @@ protected:
         
 private:
 
-    uint       *m_data;
-    int         m_w;
-    int         m_h;
+    uint                *m_data;
+    int                  m_w;
+    int                  m_h;
     
-    int         m_xpos;
-    int         m_ypos;
-    
-    int         m_guideMode;
+    int                  m_guideMode;
 
-    bool        m_focus;
-    bool        m_freeze;
-    bool        m_spotVisible;
-    bool        m_mouseLeftButtonTracking;
+    bool                 m_focus;
+    bool                 m_spotVisible;
     
-    QRect       m_rect;       
+    // Current spot position in preview coordinates.
+    QPoint               m_spot;
     
-    QPixmap    *m_pixmap;
+    QRect                m_rect;       
+    
+    QPixmap             *m_pixmap;
     
     Digikam::ImageIface *m_iface;    
 };

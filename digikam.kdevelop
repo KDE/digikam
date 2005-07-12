@@ -117,7 +117,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
     </make>
     <run>
@@ -130,7 +130,7 @@
       <envvars/>
     </run>
     <general>
-      <useconfiguration>final</useconfiguration>
+      <useconfiguration>default</useconfiguration>
     </general>
     <configurations>
       <default>

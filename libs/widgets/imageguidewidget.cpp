@@ -51,9 +51,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
 {
     m_spotVisible             = spotVisible;
     m_guideMode               = guideMode;
-    m_freeze                  = true;
     m_focus                   = false;
-    m_mouseLeftButtonTracking = false;
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -85,15 +83,15 @@ Digikam::ImageIface* ImageGuideWidget::imageIface()
 
 void ImageGuideWidget::resetSpotPosition(void)
 {
-    m_xpos = m_w / 2;
-    m_ypos = m_h / 2;
+    m_spot.setX( m_w / 2 );
+    m_spot.setY( m_h / 2 );
     repaint(false);
 }
 
 QPoint ImageGuideWidget::getSpotPosition(void)
 {
-    return (QPoint::QPoint( (int)((float)m_xpos * (float)m_iface->originalWidth() / (float)m_w), 
-                            (int)((float)m_ypos * (float)m_iface->originalHeight() / (float)m_h)));
+    return (QPoint::QPoint( (int)((float)m_spot.x() * (float)m_iface->originalWidth() / (float)m_w), 
+                            (int)((float)m_spot.y() * (float)m_iface->originalHeight() / (float)m_h)));
 }
 
 QColor ImageGuideWidget::getSpotColor(void)
@@ -129,14 +127,18 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
 
     if (m_spotVisible)
        {
+       // Adapt spot from image coordinate to widget coordinate.
+       int xspot = m_spot.x() + m_rect.x();
+       int yspot = m_spot.y() + m_rect.y();
+       
        switch (m_guideMode)
           {
           case HVGuideMode:
              {
              QPainter p(m_pixmap);
              p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-             p.drawLine(m_xpos, m_rect.top(), m_xpos, m_rect.bottom());
-             p.drawLine(m_rect.left(), m_ypos, m_rect.right(), m_ypos);
+             p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
+             p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
              p.end();
              break;
              }
@@ -145,9 +147,9 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
              {
              QPainter p(m_pixmap);
              p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-             p.drawLine(m_xpos-10, m_ypos-10, m_xpos+10, m_ypos+10);
-             p.drawLine(m_xpos+10, m_ypos-10, m_xpos-10, m_ypos+10);
-             p.drawEllipse( m_xpos-5, m_ypos-5, 11, 11 );
+             p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
+             p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
+             p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              p.end();
              break;
              }
@@ -163,11 +165,15 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     delete m_pixmap;
     int w = e->size().width();
     int h = e->size().height();
+    int old_w = m_w;
+    int old_h = m_h;
     m_data = m_iface->setPreviewSize(w, h);
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    m_spot.setX((int)((float)m_spot.x() * ( (float)m_w / (float)old_w)));
+    m_spot.setY((int)((float)m_spot.y() * ( (float)m_h / (float)old_h)));
     blockSignals(false);
     emit signalResized();
 }
@@ -178,52 +184,45 @@ void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
          m_rect.contains( e->x(), e->y() ) )
        {
        m_focus = true;
-       }
-    
-    if (!m_freeze && e->button() == Qt::LeftButton &&
-         m_rect.contains( e->x(), e->y() ))
-       {
-       m_mouseLeftButtonTracking = true;
+       m_spot.setX(e->x()-m_rect.x());
+       m_spot.setY(e->y()-m_rect.y());;
+       repaint(false);
        }
 }
 
-void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent * )
+void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 {
-    if ( m_rect.contains( m_xpos, m_ypos ) && m_focus ) 
+    if ( m_rect.contains( e->x(), e->y() ) && m_focus ) 
        {    
-       m_freeze                  = !m_freeze;
-       m_focus                   = false;
-       m_mouseLeftButtonTracking = false;
+       m_focus = false;
+       m_spot.setX(e->x()-m_rect.x());
+       m_spot.setY(e->y()-m_rect.y());
        
-       if ( m_freeze ) 
-          {
-          QColor color = getSpotColor();
-          QPoint point = getSpotPosition();
-          emit spotPositionChanged( color, true, point );
-          QToolTip::add( this, i18n("(%1,%2)<br>RGB:%3,%4,%5")
-                                    .arg(point.x()).arg(point.y())
-                                    .arg(color.red()).arg(color.green()).arg(color.blue()) );
-          }
+       QColor color = getSpotColor();
+       QPoint point = getSpotPosition();
+       emit spotPositionChanged( color, true, m_spot );
+       QToolTip::add( this, i18n("(%1,%2)<br>RGB:%3,%4,%5")
+                                 .arg(point.x()).arg(point.y())
+                                 .arg(color.red()).arg(color.green()).arg(color.blue()) );
        }
 }
 
 void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) && !m_freeze )
+    if ( m_rect.contains( e->x(), e->y() ) && !m_focus )
         {
         setCursor( KCursor::crossCursor() );
-        m_xpos = e->x();
-        m_ypos = e->y();
+        }
+    else if ( m_rect.contains( e->x(), e->y() ) && m_focus )
+        {
+        m_spot.setX(e->x()-m_rect.x());
+        m_spot.setY(e->y()-m_rect.y());
         repaint(false);
-        
-        if (m_mouseLeftButtonTracking)
-           emit spotPositionChanged( getSpotColor(), false, getSpotPosition() );
         }
     else
         setCursor( KCursor::arrowCursor() );
 }
 
 }  // NameSpace Digikam
-
 
 #include "imageguidewidget.moc"
