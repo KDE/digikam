@@ -34,6 +34,7 @@
 #include <qdict.h>
 #include <qintdict.h>
 #include <qcstring.h>
+#include <qtextcodec.h>
 
 #include <config.h>
 
@@ -187,8 +188,14 @@ void AlbumManager::setLibraryPath(const QString& path)
 
     d->db->setDBPath(dbPath);
 
-    QString currLocale(setlocale(0,0));
+    // -- Locale Checking ---------------------------------------------------------
+    
+    QString currLocale(QTextCodec::codecForLocale()->name());
     QString dbLocale = d->db->getSetting("Locale");
+
+    // guilty until proven innocent
+    bool localeChanged = true;
+    
     if (dbLocale.isNull())
     {
         kdDebug() << "No locale found in database" << endl;
@@ -201,24 +208,49 @@ void AlbumManager::setLibraryPath(const QString& path)
         {
             kdDebug() << "Locale found in configfile" << endl;
             dbLocale = config->readEntry("Locale");
+
+            // this hack is necessary, as we used to store the entire
+            // locale info LC_ALL (for eg: en_US.UTF-8) earlier, 
+            // we now save only the encoding (UTF-8)
+
+            QString oldConfigLocale = ::setlocale(0, 0);
+
+            if (oldConfigLocale == dbLocale)
+            {
+                dbLocale = currLocale;
+                localeChanged = false;
+                d->db->setSetting("Locale", dbLocale);
+            }
         }
         else
         {
             kdDebug() << "No locale found in config file"  << endl;
             dbLocale = currLocale;
+
+            localeChanged = false;
+            d->db->setSetting("Locale",dbLocale);
         }
-        d->db->setSetting("Locale",dbLocale);
+    }
+    else
+    {
+        if (dbLocale == currLocale)
+            localeChanged = false;
     }
 
-    if (dbLocale != currLocale)
+    if (localeChanged)
     {
-        int result = KMessageBox::warningYesNo(0,
-                    i18n("Your locale has changed from the previous time "
-                         "this album was opened. This can cause unexpected "
-                         "problems. If you are sure that you want to "
-                         "continue, click on 'Yes' to work with this album. "
-                         "Otherwise, click on 'No' and correct your "
-                         "locale setting before restarting digiKam"));
+        int result =
+            KMessageBox::warningYesNo(0,
+                                      i18n("Your locale has changed from the previous time "
+                                           "this album was opened.\n"
+                                           "Old Locale : %1, New Locale : %2\n"
+                                           "This can cause unexpected problems. "
+                                           "If you are sure that you want to "
+                                           "continue, click on 'Yes' to work with this album. "
+                                           "Otherwise, click on 'No' and correct your "
+                                           "locale setting before restarting digiKam")
+                                      .arg(dbLocale)
+                                      .arg(currLocale));
         if (result != KMessageBox::Yes)
             exit(0);
 
