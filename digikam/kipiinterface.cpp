@@ -39,6 +39,7 @@ extern "C"
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qregexp.h>
 
 // KDE includes.
 
@@ -300,9 +301,6 @@ KURL::List DigikamImageCollection::images()
     {
     case AllItems:
     {
-        // PENDING (Gilles) : Support KURL !...
-        // Or a new method on PAlbum for to get all KURL items from an Album.
-
         if (album_->type() == Album::PHYSICAL)
         {
             return imagesFromPAlbum(dynamic_cast<PAlbum*>(album_));
@@ -345,54 +343,33 @@ KURL::List DigikamImageCollection::images()
 
 KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 {
-    // if this album is the current album, then its already open
-    // just return whatevers visible in the albumitemhandler
-    if ( album == AlbumManager::instance()->currentAlbum() )
+    // get the images from the database and return the items found
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+
+    QStringList     urls;
+
+    db->beginTransaction();
+
+    urls = db->getItemURLsInAlbum(album->id());
+
+    db->commitTransaction();
+
+    KURL::List urlList;
+
+    QStringList::iterator     it = urls.begin();
+    while (it != urls.end())
     {
-        AlbumItemHandler* handler =
-            AlbumManager::instance()->getItemHandler();
-        if (handler)
-        {
-            return handler->allItems();
-        }
-        else
-        {
-            return KURL::List();
-        }
+        urlList.append(*it);
+        ++it;
     }
 
-    // else load the directory and return the items found
-
-    // TODO: use a regexp to catch mix of upper-lower cases
-    QString filter = imgFilter_.lower() + " " + imgFilter_.upper();
-
-    QStringList items;
-    QDir dir(album->kurl().path(), filter,
-             QDir::Name|QDir::IgnoreCase, QDir::Files|QDir::Readable);
-
-    QStringList Files = dir.entryList();
-
-    for ( QStringList::Iterator it = Files.begin() ; it != Files.end() ; ++it )
-        items.append(album->kurl().path(1) + *it);
-
-    return KURL::List(items);
+    return urlList;
 }
 
 KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 {
-    // if this album is the current album, then its already open
-    // just return whatevers visible in the albumitemhandler
-    if ( album == AlbumManager::instance()->currentAlbum() )
-    {
-        AlbumItemHandler* handler =
-            AlbumManager::instance()->getItemHandler();
-        if (handler)
-            return handler->allItems();
-        else
-            return KURL::List();
-    }
-
-    // else get the images from the database and return the items found
+    // get the images from the database and return the items found
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
 
@@ -422,7 +399,9 @@ KURL DigikamImageCollection::path()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->url();
+        KURL url;
+        url.setPath(p->folderPath());
+        return url;
     }
     else
     {
@@ -439,7 +418,9 @@ KURL DigikamImageCollection::uploadPath()
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        return p->kurl();
+        KURL url;
+        url.setPath(p->folderPath());
+        return url;
     }
     else
     {
@@ -545,10 +526,6 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
         result.append( KIPI::ImageCollection( col ) );
     }
 
-    /*
-     * Disable this till the imagesgallery plugin is fixed
-     */
-
     AlbumList talbumList = albumManager_->allTAlbums();
     for ( AlbumList::Iterator it = talbumList.begin();
           it != talbumList.end(); ++it )
@@ -562,7 +539,6 @@ QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
                                         *it, fileFilter );
         result.append( KIPI::ImageCollection( col ) );
     }
-
 
     return result;
 }
@@ -603,8 +579,6 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
         errmsg = i18n("Target album is not in the albums library.");
         return false;
     }
-
-    // TODO: scan in item
 
     albumManager_->refreshItemHandler( url );
 

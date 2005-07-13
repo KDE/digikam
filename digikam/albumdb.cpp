@@ -929,6 +929,24 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
     return true;
 }
 
+QStringList AlbumDB::getItemURLsInAlbum(int albumID)
+{
+    QStringList values;
+
+    QString basePath(AlbumManager::instance()->getLibraryPath());
+
+    execSql( QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+                     "WHERE Albums.id=%1 AND Albums.id=Images.dirid;")
+             .arg(albumID), &values );
+
+    for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        *it = basePath + *it;
+    }
+
+    return values;
+}
+
 QStringList AlbumDB::getItemURLsInTag(int tagID)
 {
     QStringList values;
