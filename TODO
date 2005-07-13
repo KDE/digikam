@@ -20,8 +20,6 @@
   - closed/open state of left/right views
   - currently selected albums in each view
 
-* fix kipiinterface to work with new framework
-
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
