@@ -220,6 +220,9 @@ void AlbumManager::setLibraryPath(const QString& path)
                 dbLocale = currLocale;
                 localeChanged = false;
                 d->db->setSetting("Locale", dbLocale);
+
+                // also delete the stale entry from config file
+                config->deleteEntry("Locale");
             }
         }
         else
