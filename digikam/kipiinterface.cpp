@@ -295,6 +295,38 @@ QString DigikamImageCollection::comment()
         return QString::null;
 }
 
+static QValueList<QRegExp> makeFilterList( const QString &filter )
+{
+    QValueList<QRegExp> regExps;
+    if ( filter.isEmpty() )
+        return regExps;
+
+    QChar sep( ';' );
+    int i = filter.find( sep, 0 );
+    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
+        sep = QChar( ' ' );
+
+    QStringList list = QStringList::split( sep, filter );
+    QStringList::Iterator it = list.begin();
+    while ( it != list.end() ) {
+        regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
+        ++it;
+    }
+    return regExps;
+}
+
+static bool matchFilterList( const QValueList<QRegExp>& filters,
+                             const QString &fileName )
+{
+    QValueList<QRegExp>::ConstIterator rit = filters.begin();
+    while ( rit != filters.end() ) {
+        if ( (*rit).exactMatch(fileName) )
+            return true;
+        ++rit;
+    }
+    return false;
+}
+
 KURL::List DigikamImageCollection::images()
 {
     switch ( tp_ )
@@ -357,11 +389,12 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     KURL::List urlList;
 
-    QStringList::iterator     it = urls.begin();
-    while (it != urls.end())
+    QValueList<QRegExp> regex = makeFilterList(imgFilter_);
+    
+    for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        urlList.append(*it);
-        ++it;
+        if (matchFilterList(regex, *it))
+            urlList.append(*it);
     }
 
     return urlList;
@@ -383,11 +416,12 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     KURL::List urlList;
 
-    QStringList::iterator     it = urls.begin();
-    while (it != urls.end())
+    QValueList<QRegExp> regex = makeFilterList(imgFilter_);
+    
+    for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        urlList.append(*it);
-        ++it;
+        if (matchFilterList(regex, *it))
+            urlList.append(*it);
     }
 
     return urlList;
