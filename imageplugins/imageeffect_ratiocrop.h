@@ -29,6 +29,7 @@ class QLabel;
 class QComboBox;
 class QPushButton;
 class QCheckBox;
+class QSpinBox;
 
 class KIntNumInput;
 class KIntSpinBox;
@@ -68,6 +69,8 @@ private:
     QCheckBox    *m_goldenTriangleBox;
     QCheckBox    *m_flipHorBox;
     QCheckBox    *m_flipVerBox;
+    
+    QSpinBox     *m_guideSize;
     
     KIntNumInput *m_widthInput;
     KIntNumInput *m_heightInput;

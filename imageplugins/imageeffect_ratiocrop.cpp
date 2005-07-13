@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qcombobox.h>
+#include <qspinbox.h>
 #include <qimage.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
@@ -205,8 +206,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    QLabel *labelColorGuide = new QLabel(i18n("Color Guide:"), compositionGuide);
+    QLabel *labelColorGuide = new QLabel(i18n("Color and Size:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
+    m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
     
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
@@ -219,7 +221,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 2);
     grid2->addMultiCellWidget(labelColorGuide, 7, 7, 0, 0);
     grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
-    
+    grid2->addMultiCellWidget(m_guideSize, 7, 7, 2, 2);
+        
     vLayout->addWidget(compositionGuide);
     vLayout->addStretch(10);
     mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1); 
@@ -266,7 +269,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
             this, SLOT(slotGoldenGuideTypeChanged()));   
     
     connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
-            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor &)));         
+            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor &)));    
+            
+    connect(m_guideSize, SIGNAL(valueChanged(int)),
+            m_imageSelectionWidget, SLOT(slotChangeGuideSize(int)));    
             
     connect(m_widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
@@ -324,7 +330,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
-    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
+    m_guideSize->setValue(config->readNumEntry("Guide size", 1));    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());          
 
     if (w > h)
@@ -429,6 +435,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
     config->writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
     config->writeEntry( "Guide Color", m_guideColorBt->color() );
+    config->writeEntry( "Guide Size", m_guideSize->value() );
     config->sync();
 }
 

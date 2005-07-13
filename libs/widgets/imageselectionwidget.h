@@ -117,7 +117,8 @@ public slots:
 
     void slotGuideLines(int guideLinesType);
     void slotChangeGuideColor(const QColor &color);
-    
+    void slotChangeGuideSize(int size);
+        
 signals:
 
     void signalSelectionMoved( QRect rect );     
@@ -161,6 +162,7 @@ private:
     bool        m_flipVerGoldenGuide;
     
     int         m_guideLinesType;
+    int         m_guideSize;
         
     uint       *m_data;
     int         m_w;
@@ -168,7 +170,14 @@ private:
     
     int         m_xpos;
     int         m_ypos;
-
+    
+    int         m_currentAspectRatioType;
+    int         m_currentAspectRatio;
+    int         m_currentResizing;
+    int         m_currentOrientation;
+    
+    float       m_currentAspectRatioValue;
+    
     QRect       m_rect;                    
     QRect       m_regionSelection;         // Real size image selection.
     QRect       m_localRegionSelection;    // Local size selection.
@@ -186,13 +195,6 @@ private:
 
     QColor      m_guideColor;
         
-    int         m_currentAspectRatioType;
-    int         m_currentAspectRatio;
-    int         m_currentResizing;
-    int         m_currentOrientation;
-    
-    float       m_currentAspectRatioValue;
-                
 private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.

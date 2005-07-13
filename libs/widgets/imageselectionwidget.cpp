@@ -81,7 +81,8 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     m_data                    = 0L;
     m_iface                   = 0L;
     m_pixmap                  = 0L;
-    
+    m_guideSize               = 1;
+
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
@@ -272,6 +273,13 @@ void ImageSelectionWidget::slotGuideLines(int guideLinesType)
 void ImageSelectionWidget::slotChangeGuideColor(const QColor &color)
 {
     m_guideColor = color;
+    updatePixmap();
+    repaint(false);
+}
+
+void ImageSelectionWidget::slotChangeGuideSize(int size)
+{
+    m_guideSize = size;
     updatePixmap();
     repaint(false);
 }
@@ -652,7 +660,7 @@ void ImageSelectionWidget::updatePixmap(void)
        {
        case RulesOfThirds:
             {
-            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
             
             int xThird = m_localRegionSelection.width()  / 3;
             int yThird = m_localRegionSelection.height() / 3;
@@ -671,7 +679,7 @@ void ImageSelectionWidget::updatePixmap(void)
             
        case HarmoniousTriangles:
             {
-            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
             
             // Move coordinates to local center selection.            
             p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
@@ -701,7 +709,7 @@ void ImageSelectionWidget::updatePixmap(void)
        
        case GoldenMean:
             {
-            p.setPen(QPen(m_guideColor, 0, Qt::DotLine));
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
                         
             // Move coordinates to local center selection.            
             p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
