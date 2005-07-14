@@ -80,6 +80,9 @@
 #include <libkexif/kexifutils.h>
 #include <libkexif/kexifdata.h>
 
+#include <libkipi/pluginloader.h>
+#include <libkipi/plugin.h>
+
 extern "C"
 {
 #include <sys/types.h>
@@ -109,7 +112,6 @@ extern "C"
 
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
-#include "digikamapp.h"
 #include "albumiconview.h"
 
 class AlbumIconViewPrivate
@@ -448,45 +450,30 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Merge in the KIPI plugins actions ----------------------------
 
-    const QPtrList<KAction>& ImageActions = DigikamApp::getinstance()->menuImageActions();
-
-    QPtrListIterator<KAction> it1(ImageActions);
-    KAction *action;
-    bool count =0;
-
-    while ( (action = it1.current()) != 0 )
+    KIPI::PluginLoader* kipiPluginLoader = KIPI::PluginLoader::instance();
+    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
+    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
+         it != pluginList.end(); ++it)
     {
-        action->plug(&popmenu);
-        ++it1;
-        count = 1;
-    }
+        KIPI::Plugin* plugin = (*it)->plugin();
 
-    // Don't insert a separator if we didn't plug in any actions
+        if (plugin && (*it)->name() == "JPEGLossless")
+        {
+            kdDebug() << "Found JPEGLossless plugin" << endl;
 
-    if (count != 0)
-        popmenu.insertSeparator();
-
-    KActionMenu* batchMenu = new KActionMenu(i18n("Batch Processes"));
-
-    const QPtrList<KAction>& BatchActions =
-        DigikamApp::getinstance()->menuBatchActions();
-
-    QPtrListIterator<KAction> it2(BatchActions);
-    count = 0;
-
-    while ( (action = it2.current()) != 0 )
-    {
-        batchMenu->insert(action);
-        ++it2;
-        count = 1;
-    }
-
-    // Don't insert a separator if we didn't plug in any actions
-
-    if (count != 0)
-    {
-        batchMenu->plug(&popmenu);
-        popmenu.insertSeparator();
+            KActionPtrList actionList = plugin->actions();
+            for (KActionPtrList::const_iterator iter = actionList.begin();
+                 iter != actionList.end(); ++iter)
+            {
+                KAction* action = *iter;
+                if (QString::fromLatin1(action->name())
+                    == QString::fromLatin1("jpeglossless_rotate"))
+                {
+                    action->plug(&popmenu);
+                }
+            }
+            
+        }
     }
 
     // --------------------------------------------------------
@@ -559,7 +546,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     serviceVector.clear();
     delete assignTagsPopup;
     delete removeTagsPopup;
-    delete batchMenu;
 }
 
 void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
