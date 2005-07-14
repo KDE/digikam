@@ -2,7 +2,36 @@
 
 AM_INIT_AUTOMAKE(digikam,0.8.0)
 
-KDE_ENABLE_HIDDEN_VISIBILITY
+# -----------------------------------------------------------------
+# enable hidden visibility only if kde >= 3.3.2
+# -----------------------------------------------------------------
+
+AC_LANG_PUSH(C++)
+digikam_save_cppflags=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $all_includes"  
+AC_MSG_CHECKING([if hidden visibility should be enabled])
+AC_COMPILE_IFELSE(
+ [
+   #include <kdeversion.h>
+   int other_func( void )
+   { 
+      #if KDE_IS_VERSION(3,3,2)
+      #else
+        iam dying;
+      #endif
+      return 0;
+   }
+ ], 
+ [ AC_MSG_RESULT([yes])
+   digikam_enable_hidden_visibility="yes" ],
+ [ AC_MSG_RESULT([no]) ] 
+)
+CPPFLAGS=$digikam_save_cppflags
+AC_LANG_POP(C++)
+
+if test "x$digikam_enable_hidden_visibility" = "xyes"; then
+   KDE_ENABLE_HIDDEN_VISIBILITY 
+fi
 
 # -----------------------------------------------------------------
 # pkg config check
