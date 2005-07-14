@@ -12,8 +12,6 @@
 
 * allow user to edit dates (maybe through comments tag editor) [TA]
 
-* fix changing of album library path. [TA/RR]
-
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
   - splitter sizes
   - active view
