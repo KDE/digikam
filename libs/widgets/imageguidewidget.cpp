@@ -154,7 +154,7 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
              if (m_flicker%2 != 0)
-                p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
+                p.setPen(QPen(Qt::red, 3, Qt::SolidLine));
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              p.end();
              break;
