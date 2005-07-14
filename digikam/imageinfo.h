@@ -30,7 +30,18 @@ class PAlbum;
 class AlbumManager;
 
 /**
- * Class ImageInfo
+ * This is an abstraction of a file entity on the disk.
+ *
+ * This is an abstraction of a file entity on the disk and is uniquely 
+ * identified by an Album identifier (PAlbum in which its located) and its
+ * name. Additional methods are provided for accessing/modifying:
+ * - datetime
+ * - caption
+ * - filesize
+ * - tags
+ * - url (ImageInfo::kurl()) -> Note: accessing this will give you the 
+ *   standard KDE file representation. 
+ * (for eg: file:///home/johndoe/Pictures/ItalyPictures/Rome-2004/file001.jpeg)
  */
 class ImageInfo
 {

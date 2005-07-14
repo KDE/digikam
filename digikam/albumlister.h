@@ -21,6 +21,8 @@
 #ifndef ALBUMLISTER_H
 #define ALBUMLISTER_H
 
+/** @file albumlister.h */
+
 #include <qobject.h>
 #include <qcstring.h>
 
@@ -34,6 +36,15 @@ class Job;
 class Album;
 class AlbumListerPriv;
 
+/**
+ * Manages imageinfo
+ *
+ * does listing of imageinfo for the current album and controls the lifetime 
+ * of the imageinfo. kioslaves are used for listing the imageinfo
+ * corresponding to an album. Similar to the albummanager, frontend entities need
+ * to connect to the AlbumLister for notifications of new Images, deletion of
+ * Images or refreshing of currently listed Image.
+ */
 class AlbumLister : public QObject
 {
     Q_OBJECT
@@ -44,8 +55,15 @@ public:
     
     ~AlbumLister();
 
+    /**
+     * Opens an album to lists its items
+     */
     void openAlbum(Album *album);
     void stop();
+    
+    /**
+     * Reread an albums item list
+     */    
     void refresh();
 
     void setNameFilter(const QString& nameFilter);
