@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikam" >
+<kpartgui version="6" name="digikam" >
 
  <MenuBar>
 
@@ -66,6 +66,7 @@
 
   <Menu name="Tools"><text>&amp;Tools</text>
       <Action name="search_quick" />
+      <Action name="search_advanced" />
       <ActionList name="album_actions"/>
       <Separator/>
       <Action name="gamma_adjustment" />

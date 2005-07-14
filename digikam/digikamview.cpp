@@ -283,6 +283,13 @@ void DigikamView::slotNewQuickSearch()
     mSearchFolderView->quickSearchNew();
 }
 
+void DigikamView::slotNewAdvancedSearch()
+{
+    if (mMainSidebar->getActiveTab() != mSearchFolderView)
+        mMainSidebar->setActiveTab(mSearchFolderView);
+    mSearchFolderView->extendedSearchNew();
+}
+
 // ----------------------------------------------------------------
 
 void DigikamView::slotAlbumDeleted(Album *)

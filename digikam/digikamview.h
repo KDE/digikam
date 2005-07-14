@@ -115,6 +115,7 @@ public slots:
 
     // Search action slots
     void slotNewQuickSearch();
+    void slotNewAdvancedSearch();
     
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);
