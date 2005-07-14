@@ -50,8 +50,6 @@
 // Local includes.
 
 #include "version.h"
-#include "scanlib.h"
-#include "upgradedb_sqlite2tosqlite3.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "digikamapp.h"
@@ -226,26 +224,8 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    // copy the db to a new temp file. we will use this copied db for testing
-    // purposes in 0.8 development. just a safety precautions for developers
-    // working on their main photo library
-
-    if (!upgradeDB_Sqlite2ToSqlite3(albumPath))
-    {
-        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
-        return 0;
-    }
-
     AlbumManager* man = new AlbumManager();
     man->setLibraryPath(albumPath);
-
-    config->setGroup("General Settings");
-    if (config->readBoolEntry("Scan At Start", true) ||
-        man->albumDB()->getSetting("Scanned").isEmpty())
-    {
-        ScanLib sLib;
-        sLib.startScan();
-    }
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();

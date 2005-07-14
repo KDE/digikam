@@ -43,6 +43,8 @@
 #include "albumitemhandler.h"
 #include "dio.h"
 #include "albumsettings.h"
+#include "scanlib.h"
+#include "upgradedb_sqlite2tosqlite3.h"
 #include "albummanager.h"
 
 extern "C"
@@ -255,6 +257,25 @@ void AlbumManager::setLibraryPath(const QString& path)
             exit(0);
 
         d->db->setSetting("Locale",currLocale);
+    }
+
+    // -- Check if we need to upgrade 0.7.x db to 0.8 db ---------------------
+
+    if (!upgradeDB_Sqlite2ToSqlite3(d->libraryPath))
+    {
+        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
+        exit(0);
+    }
+    
+    // -- Check if we need to do scanning -------------------------------------
+
+    KConfig* config = KGlobal::config();
+    config->setGroup("General Settings");
+    if (config->readBoolEntry("Scan At Start", true) ||
+        d->db->getSetting("Scanned").isEmpty())
+    {
+        ScanLib sLib;
+        sLib.startScan();
     }
 }
 

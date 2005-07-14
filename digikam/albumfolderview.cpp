@@ -122,6 +122,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));    
+    connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
+            SLOT(slotAlbumsCleared()));
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
@@ -208,6 +210,11 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
           //TODO    clearEmptyGroupItems();
         }
     }
+}
+
+void AlbumFolderView::slotAlbumsCleared()
+{
+    clear();
 }
 
 void AlbumFolderView::setAlbumThumbnail(PAlbum *album)

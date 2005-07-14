@@ -797,6 +797,8 @@ void DigikamApp::slotSetupCamera()
 void DigikamApp::slotSetupChanged()
 {
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
+    mAlbumManager->startScan();
+
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();
     if (ImageWindow::imagewindow())
