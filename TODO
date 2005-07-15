@@ -4,7 +4,6 @@
 * split albumfolderview into albumview and tagview
   - Copy/Paste [JA]
   - doxygen comments... [JA]
-  - highlight the dropitem item under the mouse cursor when you drag over it [JA]
   - the resorting of items based on dates/collections [RR]
 
 * revise the history function, so it is able to work with the new views/sidebar [JA]
