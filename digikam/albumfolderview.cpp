@@ -787,7 +787,6 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            kdDebug() << "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL" << endl;
             QPopupMenu popMenu(this);
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
