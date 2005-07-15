@@ -657,6 +657,11 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
     
+    if(QUriDrag::canDecode(e))
+    {
+        return true;
+    }
+    
     return false;
 }
 
@@ -782,6 +787,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
+            kdDebug() << "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL" << endl;
             QPopupMenu popMenu(this);
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
@@ -804,6 +810,69 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 11:
             {
                 KIO::Job* job = DIO::copy(urls, destAlbum->kurl());
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
+    if(QUriDrag::canDecode(e))
+    {
+        // DnD from an external source
+
+        PAlbum *destAlbum = itemDrop->getAlbum();
+        KURL destURL(destAlbum->kurl());
+
+        KURL::List srcURLs;
+        KURLDrag::decode(e, srcURLs);
+
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+        int id = 0;
+
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+        // If shift key is pressed while dropping, move the drag object without
+        // displaying popup menu -> move
+        if(((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
+           ((keys_return[key_4 / 8]) && (1 << (key_4 % 8))))
+        {
+            id = 10;
+        }
+        // If ctrl key is pressed while dropping, copy the drag object without
+        // displaying popup menu -> copy
+        else if(((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
+                ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        {
+            id = 11;
+        }
+        else
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+            popMenu.setMouseTracking(true);
+            id = popMenu.exec(QCursor::pos());
+        }
+
+        switch(id) 
+        {
+            case 10: {
+                KIO::Job* job = DIO::move(srcURLs, destAlbum->kurl());
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            case 11: {
+                KIO::Job* job = DIO::copy(srcURLs, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
                         SLOT(slotDIOResult(KIO::Job*)));
                 break;
