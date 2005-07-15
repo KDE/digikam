@@ -192,29 +192,26 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
     if(!album)
         return;
 
-    if(album->type() == Album::PHYSICAL)
-    {
-        PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-        if(!palbum)
-            return;
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    if(!palbum)
+        return;
         
-        if(!palbum->icon().isEmpty() && !d->iconThumbJob)
-            d->iconThumbJob->removeItem(palbum->icon());
+    if(!palbum->icon().isEmpty() && !d->iconThumbJob)
+        d->iconThumbJob->removeItem(palbum->icon());
 
-        AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
-        if(item)
-        {
-            AlbumFolderViewItem *itemParent = 
-                    dynamic_cast<AlbumFolderViewItem*>(item->parent());
+    AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
+    if(item)
+    {
+        AlbumFolderViewItem *itemParent = 
+                dynamic_cast<AlbumFolderViewItem*>(item->parent());
             
-            if(itemParent)
-                itemParent->takeItem(item);
-            else
-                takeItem(item);
+        if(itemParent)
+            itemParent->takeItem(item);
+        else
+            takeItem(item);
 
-            delete item;
-          //TODO    clearEmptyGroupItems();
-        }
+        delete item;
+        //TODO    clearEmptyGroupItems();
     }
 }
 
@@ -707,6 +704,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             connect(job, SIGNAL(result(KIO::Job*)),
                     SLOT(slotDIOResult(KIO::Job*)));
         }
+        
+        return;
     }
     
     if (ItemDrag::canDecode(e))
@@ -816,6 +815,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             default:
                 break;
         }
+        
+        return;
     }
     
     if(QUriDrag::canDecode(e))
@@ -879,6 +880,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             default:
                 break;
         }
+        
+        return;
     }
 }
 

@@ -195,25 +195,22 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!album)
         return;
 
-    if(album->type() == Album::TAG)
-    {
-        TAlbum *tag = dynamic_cast<TAlbum*>(album);
-        if(!tag)
-            return;
+    TAlbum *tag = dynamic_cast<TAlbum*>(album);
+    if(!tag)
+        return;
 
-        TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this); 
-        if(item) 
-        {
-            TagFolderViewItem *itemParent = 
-                    dynamic_cast<TagFolderViewItem*>(item->parent());
+    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this); 
+    if(item) 
+    {
+        TagFolderViewItem *itemParent = 
+                dynamic_cast<TagFolderViewItem*>(item->parent());
+        
+        if(itemParent)
+            itemParent->takeItem(item);
+        else
+            takeItem(item);
             
-            if(itemParent)
-                itemParent->takeItem(item);
-            else
-                takeItem(item);
-            
-            delete item;
-        }
+        delete item;
     }
 }
 
