@@ -28,12 +28,12 @@
 #include "folderitem.h"
 
 FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
-    : QListViewItem(parent, text), m_special(special)
+    : QListViewItem(parent, text), m_special(special), m_focus(false)
 {
 }
 
 FolderItem::FolderItem(QListViewItem* parent, const QString& text, bool special)
-    : QListViewItem(parent, text), m_special(special)
+    : QListViewItem(parent, text), m_special(special), m_focus(false)
 {
 }
 
@@ -41,8 +41,18 @@ FolderItem::~FolderItem()
 {
 }
 
+void FolderItem::setFocus(bool b)
+{
+    m_focus = b;
+}
+
+bool FolderItem::focus() const
+{
+    return m_focus;
+}
+
 void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
-                           int width, int)
+                           int width, int i)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
@@ -94,6 +104,13 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
     if (m_special)
     {
         p->drawLine(br.right() + 2, height()/2, fv->width(), height()/2);
+    }
+    
+    if (m_focus)
+    {
+        p->setPen(cg.link());
+        p->drawLine(0, 0, fv->width(), 0);
+        p->drawLine(0, fv->itemHeight()-1, fv->width(), fv->itemHeight()-1);
     }
 }
 

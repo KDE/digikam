@@ -65,6 +65,9 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent *e);
     void contentsDragEnterEvent(QDragEnterEvent *e);
     void contentsDragMoveEvent(QDragMoveEvent *e);
+    void contentsDragLeaveEvent(QDragLeaveEvent * e);
+    void contentsDropEvent(QDropEvent *e);
+            
     virtual bool acceptDrop(const QDropEvent *e) const;
         
     void startDrag();

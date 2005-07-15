@@ -31,6 +31,9 @@ public:
     
     virtual int id() const;
     
+    void setFocus(bool b);
+    bool focus() const;
+    
 protected:
 
     void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
@@ -38,7 +41,9 @@ protected:
 
 private:
 
+    bool m_focus;
     bool m_special;
+
 };
 
 class FolderCheckListItem : public QCheckListItem

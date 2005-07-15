@@ -65,6 +65,10 @@ public:
     PAlbum* getAlbum() const;
     int id() const;
     
+protected:
+        
+    bool acceptDrop(const QMimeSource * mime) const {return true;}
+    
 private:
     PAlbum      *m_album;
 };
@@ -92,6 +96,8 @@ int AlbumFolderViewItem::id() const
 {
     return m_album ? m_album->id() : 0;
 }
+
+
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewPriv
@@ -665,7 +671,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
 void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 {
     FolderView::contentsDropEvent(e);
-
+    
     if(!acceptDrop(e))
         return;
 

@@ -45,6 +45,8 @@ public:
     
     QPoint      dragStartPos;    
     FolderItem  *dragItem;
+    
+    FolderItem  *oldHighlightItem;
 };
 
 //-----------------------------------------------------------------------------
@@ -58,6 +60,7 @@ FolderView::FolderView(QWidget *parent)
     
     d->active = false;
     d->dragItem = 0;
+    d->oldHighlightItem = 0;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
@@ -187,11 +190,48 @@ void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
     e->accept(acceptDrop(e));
 }
 
+void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
+{
+    QListView::contentsDragLeaveEvent(e);
+    
+    if(d->oldHighlightItem)
+    {
+        d->oldHighlightItem->setFocus(false);
+        d->oldHighlightItem->repaint();
+        d->oldHighlightItem = 0;        
+    }
+}
+
 void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     QListView::contentsDragMoveEvent(e);
     
+    QPoint vp = contentsToViewport(e->pos());
+    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
+    if(item)
+    {
+        if(d->oldHighlightItem)
+        {
+            d->oldHighlightItem->setFocus(false);
+            d->oldHighlightItem->repaint();
+        }
+        item->setFocus(true);
+        d->oldHighlightItem = item;
+        item->repaint();
+    }
     e->accept(acceptDrop(e));
+}
+
+void FolderView::contentsDropEvent(QDropEvent *e)
+{
+    QListView::contentsDropEvent(e);
+    
+    if(d->oldHighlightItem)
+    {
+        d->oldHighlightItem->setFocus(false);
+        d->oldHighlightItem->repaint();
+        d->oldHighlightItem = 0;
+    }
 }
 
 bool FolderView::acceptDrop(const QDropEvent *) const
