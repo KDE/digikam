@@ -15,8 +15,6 @@
 
 * remove thumbnail size from the settings [TA]
 
-* discuss adding custom order, preliminary patch ready, but could be post 0.8 material [TA]
-
 * add posibility to change case while downloading images from camera [TA]
 
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
@@ -41,5 +39,7 @@ Post 0.8
      "current urls"
    - will lead to widesweeping changes all over the core
      and the kioslaves
+
+* Custom ordering of images [TA]
 
 
