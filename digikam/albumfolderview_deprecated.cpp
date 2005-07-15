@@ -1411,7 +1411,7 @@ void AlbumFolderView_Deprecated::contentsDragMoveEvent(QDragMoveEvent* event)
             validDrag = true;
         }
     }
-    else if( TagItemsDrag::canDecode(event) )
+/*    else if( TagItemsDrag::canDecode(event) )
     {
         // An tag item can be dropped on
         //   - tags, to asign the tag
@@ -1441,7 +1441,7 @@ void AlbumFolderView_Deprecated::contentsDragMoveEvent(QDragMoveEvent* event)
         {
             validDrag = true;
         }
-    }
+}*/
     else if( TagDrag::canDecode(event) )
     {
         // Tags can be dropped on
@@ -1543,7 +1543,7 @@ void AlbumFolderView_Deprecated::contentsDropEvent(QDropEvent* event)
 
 void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *album)
 {
-    if (TagItemsDrag::canDecode(event))
+/*    if (TagItemsDrag::canDecode(event))
         return;
 
     if (AlbumItemsDrag::canDecode(event))
@@ -1658,8 +1658,8 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
         default:
             break;
         }
-    }
-    else if (QUriDrag::canDecode(event))
+}*/
+    if (QUriDrag::canDecode(event))
     {
         // DnD from an external source
 
@@ -1724,7 +1724,7 @@ void AlbumFolderView_Deprecated::phyAlbumDropEvent(QDropEvent* event, PAlbum *al
 
 void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *album)
 {
-    if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
+/*    if( TagItemsDrag::canDecode(event) || AlbumItemsDrag::canDecode(event) )
     {
         KURL::List      urls;
         QValueList<int> dirIDs;
@@ -1762,11 +1762,11 @@ void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *al
             if(id == 12)
             {
                 // No point fixing this.
-                /*
-                QString errMsg;
-                AlbumManager::instance()->updateTAlbumIcon(album,
-                    urls.first().path(), true, errMsg);
-                */
+                
+                //QString errMsg;
+                //AlbumManager::instance()->updateTAlbumIcon(album,
+                //    urls.first().path(), true, errMsg);
+                
             }
             return;
         }
@@ -1800,8 +1800,8 @@ void AlbumFolderView_Deprecated::tagAlbumDropEvent(QDropEvent* event, TAlbum *al
         db->commitTransaction();
 
         emit signalTagsAssigned();
-    }
-    else if(TagDrag::canDecode(event))
+}*/
+    if(TagDrag::canDecode(event))
     {
         QPopupMenu popMenu(this);
         popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );

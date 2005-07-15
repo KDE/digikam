@@ -1,9 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2004-06-26
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004 by Renchi Raju, Joern Ahrens
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,16 +31,26 @@
 
 class QWidget;
 
-class AlbumItemsDrag : public KURLDrag
+/**
+ * Provides a drag object for a list of KURLs with its related database IDs.
+ *
+ * Images can be moved through ItemDrag. It is possible to move them on
+ * another application which understands KURLDrag, like konqueror, to
+ * copy the images. Digikam can use the IDs, if ItemDrag is dropped
+ * on digikam itself.
+ */
+class ItemDrag : public KURLDrag
 {
 public:
 
-    AlbumItemsDrag(const KURL::List& urls, const QValueList<int>& dirIDs,
-                   QWidget* dragSource=0, const char* name=0);
+    ItemDrag(const KURL::List& urls, const QValueList<int>& albumIDs,
+             const QValueList<int>& albumIDs,
+             QWidget* dragSource=0, const char* name=0);
 
     static bool canDecode(const QMimeSource* e);
     static bool decode(const QMimeSource* e, KURL::List &urls, 
-		       QValueList<int>& dirIDs);
+                       QValueList<int>& albumIDs,
+                       QValueList<int>& imageIDs);
 
 protected:
 
@@ -47,23 +58,11 @@ protected:
     virtual QByteArray encodedData(const char* mime) const;
 
 private:
-
-    QValueList<int> m_dirIDs;
+    
+    QValueList<int> m_albumIDs;    
+    QValueList<int> m_imageIDs;
 };
 
-class TagItemsDrag : public AlbumItemsDrag
-{
-public:
-
-    TagItemsDrag(const KURL::List& urls, const QValueList<int>& dirIDs,
-                 QWidget* dragSource=0, const char* name=0);
-
-    static bool canDecode(const QMimeSource* e);
-
-protected:
-
-    virtual const char* format(int i) const;
-};
 
 /**
  * Provides a drag object for a tag

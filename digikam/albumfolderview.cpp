@@ -46,6 +46,12 @@
 #include "dio.h"
 #include "dragobjects.h"
 
+extern "C"
+{
+#include <X11/Xlib.h>
+}
+
+
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
 //-----------------------------------------------------------------------------
@@ -646,6 +652,11 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
+    if(ItemDrag::canDecode(e))
+    {
+        return true;
+    }
+    
     return false;
 }
 
@@ -658,12 +669,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     QPoint vp = contentsToViewport(e->pos());
     AlbumFolderViewItem *itemDrop = dynamic_cast<AlbumFolderViewItem*>(itemAt(vp));
-    AlbumFolderViewItem *itemDrag = dynamic_cast<AlbumFolderViewItem*>(dragItem());
-    if(!itemDrag)
-        return;
 
     if(AlbumDrag::canDecode(e))
     {
+        AlbumFolderViewItem *itemDrag = dynamic_cast<AlbumFolderViewItem*>(dragItem());
+        if(!itemDrag)
+            return;
+                
         // TODO: Copy?
         QPopupMenu popMenu(this);
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
@@ -689,6 +701,115 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
             connect(job, SIGNAL(result(KIO::Job*)),
                     SLOT(slotDIOResult(KIO::Job*)));
+        }
+    }
+    
+    if (ItemDrag::canDecode(e))
+    {
+        PAlbum *destAlbum = itemDrop->getAlbum();
+        PAlbum *srcAlbum;
+        
+        KURL::List      urls;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+
+        if (!ItemDrag::decode(e, urls, albumIDs, imageIDs))
+            return;
+
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+            return;
+
+        // all the albumids will be the same
+        int albumID = albumIDs.first();
+        srcAlbum = d->albumMan->findPAlbum(albumID);
+        if (!srcAlbum)
+        {
+            kdWarning() << "Could not find source album of drag"
+                    << endl;
+            return;
+        }
+
+        int id = 0;
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+
+        if(srcAlbum == destAlbum)
+        {
+            // Setting the dropped image as the album thumbnail
+            // If the ctrl key is pressed, when dropping the image, the
+            // thumbnail is set without a popup menu
+            if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
+                ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+            {
+                id = 12;
+            }
+            else
+            {
+                QPopupMenu popMenu(this);
+                popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
+                popMenu.insertSeparator(-1);
+                popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+                popMenu.setMouseTracking(true);
+                id = popMenu.exec(QCursor::pos());
+            }
+
+            if(id == 12)
+            {
+                QString errMsg;
+                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+            }
+            return;
+        }
+
+        // If shift key is pressed while dragging, move the drag object without
+        // displaying popup menu -> move
+        if (((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
+            ((keys_return[key_4 / 8]) && (1 << (key_4 % 8))))
+        {
+            id = 10;
+        }
+        // If ctrl key is pressed while dragging, copy the drag object without
+        // displaying popup menu -> copy
+        else if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
+                 ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        {
+            id = 11;
+        }
+        else
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+            popMenu.setMouseTracking(true);
+            id = popMenu.exec(QCursor::pos());
+        }
+
+        switch(id)
+        {
+            case 10:
+            {
+                KIO::Job* job = DIO::move(urls, destAlbum->kurl());
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            case 11:
+            {
+                KIO::Job* job = DIO::copy(urls, destAlbum->kurl());
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            default:
+                break;
         }
     }
 }

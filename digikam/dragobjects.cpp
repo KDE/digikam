@@ -1,10 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2004-06-26
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004 by Renchi Raju, Joern Ahrens
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,41 +19,57 @@
  * 
  * ============================================================ */
 
+#include <kdebug.h>
+
 #include "album.h"
 #include "albummanager.h"
 
 #include "dragobjects.h"
 
-AlbumItemsDrag::AlbumItemsDrag(const KURL::List &urls, const QValueList<int>& dirIDs,
-                               QWidget* dragSource, const char* name )
+ItemDrag::ItemDrag(const KURL::List &urls, 
+                   const QValueList<int>& albumIDs,
+                   const QValueList<int>& imageIDs,
+                   QWidget* dragSource, const char* name)
     : KURLDrag(urls, dragSource, name),
-      m_dirIDs(dirIDs)
+      m_albumIDs(albumIDs), m_imageIDs(imageIDs)
 {
 }
 
-bool AlbumItemsDrag::canDecode(const QMimeSource* e)
+bool ItemDrag::canDecode(const QMimeSource* e)
 {
-    return e->provides("digikam/album-ids");
+    return e->provides("digikam/item-ids")  || 
+           e->provides("digikam/album-ids") ||
+           e->provides("digikam/image-ids");
 }
 
-bool AlbumItemsDrag::decode(const QMimeSource* e, KURL::List &urls, 
-                            QValueList<int>& dirIDs)
+bool ItemDrag::decode(const QMimeSource* e, KURL::List &urls, 
+                      QValueList<int>& albumIDs, QValueList<int>& imageIDs)
 {
     urls.clear();
-    dirIDs.clear();
+    albumIDs.clear();
+    imageIDs.clear();
     
     if (KURLDrag::decode(e, urls))
     {
-        QByteArray ba = e->encodedData("digikam/album-ids");
-        if (ba.size())
+        QByteArray albumarray = e->encodedData("digikam/album-ids");
+        QByteArray imagearray = e->encodedData("digikam/image-ids");
+        
+        if (albumarray.size() && imagearray.size())
         {
-
-            QDataStream ds(ba, IO_ReadOnly);
             int id;
-            while (!ds.atEnd())
+            
+            QDataStream dsAlbums(albumarray, IO_ReadOnly);
+            while (!dsAlbums.atEnd())
             {
-                ds >> id;
-                dirIDs.append(id);
+                dsAlbums >> id;
+                albumIDs.append(id);
+            }
+            
+            QDataStream dsImages(imagearray, IO_ReadOnly);
+            while (!dsImages.atEnd())
+            {
+                dsImages >> id;
+                imageIDs.append(id);
             }
 
             return true;
@@ -62,16 +79,30 @@ bool AlbumItemsDrag::decode(const QMimeSource* e, KURL::List &urls,
     return false;
 }
 
-QByteArray AlbumItemsDrag::encodedData(const char* mime) const
+QByteArray ItemDrag::encodedData(const char* mime) const
 {
-    QCString mimetype( mime );
+    QCString mimetype(mime);
+    
     if (mimetype == "digikam/album-ids")
     {
         QByteArray byteArray;
         QDataStream ds(byteArray, IO_WriteOnly);
 
         QValueList<int>::const_iterator it;
-        for (it = m_dirIDs.begin(); it != m_dirIDs.end(); ++it)
+        for (it = m_albumIDs.begin(); it != m_albumIDs.end(); ++it)
+        {
+            ds << (*it);
+        }
+        
+        return byteArray;
+    }
+    else if (mimetype == "digikam/image-ids")
+    {
+        QByteArray byteArray;
+        QDataStream ds(byteArray, IO_WriteOnly);
+
+        QValueList<int>::const_iterator it;
+        for (it = m_imageIDs.begin(); it != m_imageIDs.end(); ++it)
         {
             ds << (*it);
         }
@@ -84,37 +115,16 @@ QByteArray AlbumItemsDrag::encodedData(const char* mime) const
     }
 }
 
-const char* AlbumItemsDrag::format(int i) const
+const char* ItemDrag::format(int i) const
 {
     if (i == 0)
         return "text/uri-list";
     else if (i == 1)
-        return "digikam/album-ids";
-    else
-        return 0;
-}
-
-TagItemsDrag::TagItemsDrag(const KURL::List& urls, const QValueList<int>& dirIDs,
-                           QWidget* dragSource, const char* name )
-    : AlbumItemsDrag(urls, dirIDs, dragSource, name)
-{
-    
-}
-
-bool TagItemsDrag::canDecode(const QMimeSource* e)
-{
-    return e->provides("digikam/tag-ids");
-}
-
-const char* TagItemsDrag::format(int i) const
-{
-    if (i == 0)
-        return "text/uri-list";
-    else if (i == 1)
-        return "digikam/album-ids";
+        return "digikam/item-ids";    
     else if (i == 2)
-        // not really true. but hey... whatever floats the boat
-        return "digikam/tag-ids";
+        return "digikam/album-ids";
+    else if (i == 3)
+        return "digikam/image-ids";    
     else
         return 0;
 }
