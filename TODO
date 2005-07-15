@@ -1,4 +1,6 @@
 
+* Album history doesn't work with the new gui [JA]
+
 * split albumfolderview into albumview and tagview
   - dnd from external sources [JA]
   - Copy/Paste [JA]
