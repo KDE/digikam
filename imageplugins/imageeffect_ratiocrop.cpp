@@ -206,10 +206,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    QLabel *labelColorGuide = new QLabel(i18n("Color and Size:"), compositionGuide);
+    QLabel *labelColorGuide = new QLabel(i18n("Color and Width:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
+    QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw composition guides."));
     
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 2);
@@ -330,7 +331,8 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
-    m_guideSize->setValue(config->readNumEntry("Guide size", 1));    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
+    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());  
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());          
 
     if (w > h)
@@ -435,7 +437,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
     config->writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
     config->writeEntry( "Guide Color", m_guideColorBt->color() );
-    config->writeEntry( "Guide Size", m_guideSize->value() );
+    config->writeEntry( "Guide Width", m_guideSize->value() );
     config->sync();
 }
 
