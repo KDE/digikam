@@ -138,7 +138,6 @@ void Sidebar::setActiveTab(QWidget *w)
     if(tab < 0)
         return;
     
-//    clicked(tab);
     if(m_activeTab >= 0)
         setTab(m_activeTab, false);
     

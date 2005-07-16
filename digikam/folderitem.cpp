@@ -113,8 +113,8 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
     if (m_focus)
     {
         p->setPen(cg.link());
-        p->drawLine(0, 0, fv->width(), 0);
-        p->drawLine(0, fv->itemHeight()-1, fv->width(), fv->itemHeight()-1);
+        QRect r = fv->itemRect(this);
+        p->drawRect(0, 0, r.width(), r.height());
     }
 }
 

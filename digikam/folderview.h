@@ -45,6 +45,7 @@ public:
     bool active() const;
 
     int      itemHeight() const;
+    QRect    itemRect(QListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
     

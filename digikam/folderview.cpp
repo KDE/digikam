@@ -92,6 +92,16 @@ int FolderView::itemHeight() const
     return d->itemHeight;
 }
 
+QRect FolderView::itemRect(QListViewItem *item) const
+{
+    if(!item)
+        return QRect();
+    
+    QRect r = QListView::itemRect(item);
+    r.setLeft(r.left()+(item->depth()+(rootIsDecorated() ? 1 : 0))*treeStepSize());
+    return r;    
+}
+
 QPixmap FolderView::itemBasePixmapRegular() const
 {
     return d->itemRegPix;    
