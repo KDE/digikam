@@ -277,7 +277,7 @@ void AlbumHistory::forward(unsigned int steps)
     m_moving = true;
 }
 
-HistoryItem* AlbumHistory::getCurrentAlbum()
+HistoryItem* AlbumHistory::getCurrentAlbum() const
 {
     if(m_backwardStack->isEmpty())
         return 0;
@@ -285,7 +285,7 @@ HistoryItem* AlbumHistory::getCurrentAlbum()
     return m_backwardStack->last();
 }  
 
-void AlbumHistory::getCurrentAlbum(Album **album, QWidget **widget)
+void AlbumHistory::getCurrentAlbum(Album **album, QWidget **widget) const
 {
     *album = 0;
     *widget = 0;
@@ -301,12 +301,12 @@ void AlbumHistory::getCurrentAlbum(Album **album, QWidget **widget)
     }
 }
 
-bool AlbumHistory::isForwardEmpty()
+bool AlbumHistory::isForwardEmpty() const
 {
     return m_forwardStack->isEmpty();
 }
 
-bool AlbumHistory::isBackwardEmpty()
+bool AlbumHistory::isBackwardEmpty() const
 {
     // the last album of the backwardStack is the currently shown
     // album, and therfore not really a previous album

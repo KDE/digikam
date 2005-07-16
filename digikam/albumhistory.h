@@ -49,17 +49,17 @@ public:
     void            deleteAlbum(Album *album);
     void            back(Album **album, QWidget **widget, unsigned int steps=1);
     void            forward(Album **album, QWidget **widget, unsigned int steps=1);
-    void            getCurrentAlbum(Album **album, QWidget **widget);
+    void            getCurrentAlbum(Album **album, QWidget **widget) const;
     
     void            getBackwardHistory(QStringList &list) const;
     void            getForwardHistory(QStringList &list) const;
 
-    bool            isForwardEmpty();
-    bool            isBackwardEmpty();
+    bool            isForwardEmpty() const;
+    bool            isBackwardEmpty() const;
     
 private:
     
-    HistoryItem*    getCurrentAlbum();
+    HistoryItem*    getCurrentAlbum() const;
     void            forward(unsigned int steps=1);
     
     typedef QValueList<HistoryItem*> AlbumStack;
