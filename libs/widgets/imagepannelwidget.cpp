@@ -28,6 +28,8 @@
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qcheckbox.h>
+#include <qhbuttongroup.h> 
+#include <qpushbutton.h>
 
 // KDE includes.
 
@@ -38,6 +40,7 @@
 #include <kprogress.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -89,12 +92,31 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     m_progressBar->setProgress(0);
     setProgressVisible(progress);
     
-    m_separateView = new QCheckBox(i18n("Separate View"), this);
-    QWhatsThis::add( m_separateView, i18n("<p>If you enable this option, you will separe the "
-                                          "preview area to display original and target image "
-                                          "at the same time. The original is on the left of the "
-                                          "red dashed line, target on the right"));
-        
+    m_separateView = new QHButtonGroup(this);
+    QPushButton *separateHorButton = new QPushButton( m_separateView );
+    m_separateView->insert(separateHorButton, Digikam::ImageRegionWidget::SeparateViewHorizontal);
+    KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
+    separateHorButton->setPixmap( QPixmap( directory + "centerheight.png" ) );
+    separateHorButton->setToggleButton(true);
+    QToolTip::add( separateHorButton, i18n( "<p>If you enable this option, you will separe horizontally the "
+                                            "preview area to display original and target image "
+                                            "at the same time. The original is on the top of the "
+                                            "red dashed line, target on the bottom" ) );
+    
+    QPushButton *separateVerButton = new QPushButton( m_separateView );
+    m_separateView->insert(separateVerButton, Digikam::ImageRegionWidget::SeparateViewVertical);
+    KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
+    separateVerButton->setPixmap( QPixmap( directory + "centerwidth.png" ) );
+    separateVerButton->setToggleButton(true);
+    QToolTip::add( separateVerButton, i18n( "<p>If you enable this option, you will separe vertically the "
+                                            "preview area to display original and target image "
+                                            "at the same time. The original is on the left of the "
+                                            "red dashed line, target on the right" ) );
+    m_separateView->setExclusive(true);
+    m_separateView->setFrameShape(QFrame::NoFrame);
+    
     l2->addWidget(frame3, 0, Qt::AlignHCenter);
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
     h1->addWidget(m_separateView);
@@ -119,11 +141,11 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     connect(m_imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
             this, SLOT(slotPanIconTakeFocus()));
             
-    connect(m_separateView, SIGNAL(toggled(bool)),
-            m_imageRegionWidget, SLOT(slotSeparateViewToggled(bool)));               
+    connect(m_separateView, SIGNAL(released(int)),
+            m_imageRegionWidget, SLOT(slotSeparateViewToggled(int)));                     
     
-    connect(m_separateView, SIGNAL(toggled(bool)),
-            m_imagePanIconWidget, SLOT(slotSeparateViewToggled(bool)));
+    connect(m_separateView, SIGNAL(released(int)),
+            m_imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
 }
 
 ImagePannelWidget::~ImagePannelWidget()
@@ -234,17 +256,15 @@ void ImagePannelWidget::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Control Panel Settings");
-    
-    m_separateView->setChecked(config->readNumEntry("Separate View", true) );
+    m_separateView->setButton(config->readNumEntry("Separate View",
+                              Digikam::ImageRegionWidget::SeparateViewVertical) );
 }
     
 void ImagePannelWidget::writeSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Control Panel Settings");
-    
-    config->writeEntry( "Separate View", m_separateView->isChecked() );
-    
+    config->writeEntry( "Separate View", m_separateView->selectedId() );
     config->sync();
 }
     

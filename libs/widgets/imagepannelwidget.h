@@ -32,7 +32,7 @@
 
 #include "digikam_export.h"
 
-class QCheckBox;
+class QHButtonGroup;
 
 class KProgress;
 
@@ -89,11 +89,11 @@ protected:
     Digikam::ImageRegionWidget  *m_imageRegionWidget;
     Digikam::ImagePanIconWidget *m_imagePanIconWidget;
     
-    QGridLayout *m_mainLayout;
+    QGridLayout   *m_mainLayout;
     
-    QCheckBox   *m_separateView;
+    QHButtonGroup *m_separateView;
     
-    KProgress   *m_progressBar;
+    KProgress     *m_progressBar;
 
 private:
         

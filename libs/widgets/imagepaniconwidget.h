@@ -57,7 +57,7 @@ signals:
 
 public slots:
 
-    void slotSeparateViewToggled(bool t);
+    void slotSeparateViewToggled(int t);
             
 protected:
     
@@ -68,7 +68,7 @@ protected:
         
 private:
 
-    bool        m_separateView;
+    int         m_separateView;
     
     uint       *m_data;
     int         m_w;

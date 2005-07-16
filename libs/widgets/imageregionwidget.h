@@ -42,6 +42,15 @@ Q_OBJECT
 
 public:
     
+    enum SeparateViewMode 
+    {
+    SeparateViewHorizontal=0,
+    SeparateViewVertical,
+    SeparateViewNone
+    };
+    
+public:
+    
     ImageRegionWidget(int wp, int hp, QWidget *parent=0, bool scrollBar=true);
     ~ImageRegionWidget();
     
@@ -67,9 +76,9 @@ protected:
 
 private:
     
-    bool     m_separateView;
     bool     m_movingInProgress;
 
+    int      m_separateView;
     int      m_xpos;
     int      m_ypos;
 
@@ -84,7 +93,7 @@ private:
     
 public slots:
 
-    void slotSeparateViewToggled(bool t);
+    void slotSeparateViewToggled(int mode);
 
 private slots:
     

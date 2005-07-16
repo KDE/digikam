@@ -50,7 +50,7 @@ namespace Digikam
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
                  : QScrollView(parent, 0, WRepaintNoErase)
 {
-    m_separateView     = false;
+    m_separateView     = SeparateViewVertical;
     m_movingInProgress = false;
     m_pix              = 0L;
     
@@ -90,9 +90,10 @@ void ImageRegionWidget::slotTimerResizeEvent()
     emit contentsMovedEvent(true);
 }
 
-void ImageRegionWidget::slotSeparateViewToggled(bool t)
+void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
-    m_separateView = t;
+    m_separateView = mode;
+    updateOriginalImage();
     QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
 }
 
@@ -132,32 +133,62 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
     if(!m_pix) return;
     else p->drawPixmap(x, y, *m_pix, x, y, w, h);
     
-    if (m_separateView & !m_movingInProgress)
+    if (!m_movingInProgress)
         {
-        p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-        p->drawLine(getImageRegionToRender().topLeft().x(),    getImageRegionToRender().topLeft().y(),
-                    getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
-                    
-        p->setPen(QPen::QPen(Qt::red, 1)) ;                    
-        QFontMetrics fontMt = p->fontMetrics();
-        
-        QString text(i18n("Target"));
-        QRect textRect;
-        QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-        textRect.setTopLeft(QPoint::QPoint(getImageRegionToRender().topLeft().x()+20, 
-                                           getImageRegionToRender().topLeft().y()+20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
-        p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p->drawRect(textRect);
-        p->drawText(textRect, Qt::AlignCenter, text);
-                    
-        text = i18n("Original");                    
-        fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-        textRect.setTopLeft(QPoint::QPoint(contentsX()+20, contentsY()+20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
-        p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p->drawRect(textRect);
-        p->drawText(textRect, Qt::AlignCenter, text);
+        if (m_separateView == SeparateViewVertical)
+            {
+            p->setPen(QPen(Qt::red, 2, Qt::DotLine));
+            p->drawLine(getImageRegionToRender().topLeft().x(),    getImageRegionToRender().topLeft().y(),
+                        getImageRegionToRender().bottomLeft().x(), getImageRegionToRender().bottomLeft().y());
+                        
+            p->setPen(QPen::QPen(Qt::red, 1)) ;                    
+            QFontMetrics fontMt = p->fontMetrics();
+            
+            QString text(i18n("Target"));
+            QRect textRect;
+            QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+            textRect.setTopLeft(QPoint::QPoint(getImageRegionToRender().topLeft().x()+20, 
+                                            getImageRegionToRender().topLeft().y()+20));
+            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+            p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+            p->drawRect(textRect);
+            p->drawText(textRect, Qt::AlignCenter, text);
+                        
+            text = i18n("Original");                    
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+            textRect.setTopLeft(QPoint::QPoint(contentsX()+20, contentsY()+20));
+            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+            p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+            p->drawRect(textRect);
+            p->drawText(textRect, Qt::AlignCenter, text);
+            }
+        else if (m_separateView == SeparateViewHorizontal)
+            {
+            p->setPen(QPen(Qt::red, 2, Qt::DotLine));
+            p->drawLine(getImageRegionToRender().topLeft().x(),  getImageRegionToRender().topLeft().y(),
+                        getImageRegionToRender().topRight().x(), getImageRegionToRender().topRight().y());
+                        
+            p->setPen(QPen::QPen(Qt::red, 1)) ;                    
+            QFontMetrics fontMt = p->fontMetrics();
+            
+            QString text(i18n("Target"));
+            QRect textRect;
+            QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+            textRect.setTopLeft(QPoint::QPoint(getImageRegionToRender().topLeft().x()+20, 
+                                            getImageRegionToRender().topLeft().y()+20));
+            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+            p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+            p->drawRect(textRect);
+            p->drawText(textRect, Qt::AlignCenter, text);
+                        
+            text = i18n("Original");                    
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
+            textRect.setTopLeft(QPoint::QPoint(contentsX()+20, contentsY()+20));
+            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+            p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+            p->drawRect(textRect);
+            p->drawText(textRect, Qt::AlignCenter, text);
+            }
         }
 }
 
@@ -201,8 +232,10 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
 
     QRect region;
     
-    if (m_separateView)
+    if (m_separateView == SeparateViewVertical)
         region = QRect::QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
+    else if (m_separateView == SeparateViewHorizontal)        
+        region = QRect::QRect(contentsX(), contentsY()+normalizedH/2, normalizedW, normalizedH/2);
     else 
         region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH);
             

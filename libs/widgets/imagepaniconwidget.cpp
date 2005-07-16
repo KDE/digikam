@@ -44,6 +44,7 @@
 // Local includes.
 
 #include "imagepaniconwidget.h"
+#include "imageregionwidget.h"
 
 namespace Digikam
 {
@@ -52,7 +53,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_moveSelection = false;
-    m_separateView  = false;
+    m_separateView  = Digikam::ImageRegionWidget::SeparateViewVertical;
     m_iface  = new ImageIface(w,h);
 
     m_data   = m_iface->getPreviewData();
@@ -149,13 +150,21 @@ void ImagePanIconWidget::updatePixmap( void )
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
     
-    if (m_separateView)
+    if (m_separateView == Digikam::ImageRegionWidget::SeparateViewVertical)
         {
         p.setPen(QPen(Qt::red, 1, Qt::DotLine));
         p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.topLeft().y(),
-                   m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.bottomLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.bottomLeft().y());
+        }
+    else if (m_separateView == Digikam::ImageRegionWidget::SeparateViewHorizontal)
+        {
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawLine(m_localRegionSelection.topLeft().x(),
+                   m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
+                   m_localRegionSelection.topRight().x(),
+                   m_localRegionSelection.topRight().y() + m_localRegionSelection.height()/2);
         }
 
     p.end();
@@ -229,7 +238,7 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        }
 }
 
-void ImagePanIconWidget::slotSeparateViewToggled(bool t)
+void ImagePanIconWidget::slotSeparateViewToggled(int t)
 {
     m_separateView = t;
     updatePixmap();
