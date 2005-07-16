@@ -20,7 +20,6 @@
 
 #include <qvbox.h>
 
-
 class DateFolderViewPriv;
 class DAlbum;
 
@@ -45,6 +44,7 @@ public:
      */
     void saveViewState(QDataStream &stream);
     
+    void setSelected(QListViewItem *item);
     
 private slots:
 

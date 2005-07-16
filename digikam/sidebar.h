@@ -135,4 +135,5 @@ signals:
     void            signalChangedTab(QWidget *w);
 };
 
+
 #endif // _SIDEBAR_H_

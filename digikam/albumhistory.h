@@ -1,10 +1,10 @@
 /* ============================================================
  * File  : albumhistory.h
- * Author: Jörn Ahrens <joern.ahrens@kdemail.net>
+ * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2004-11-17
  * Description : 
  * 
- * Copyright 2004 by Jörn Ahrens
+ * Copyright 2004 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,12 +22,21 @@
 #ifndef ALBUMHISTORY_H
 #define ALBUMHISTORY_H
 
+/** @file albumhistory.h */
+
 #include <qobject.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
 
 class Album;
+class HistoryItem;
 
+/**
+ * Manages the history of the last visited albums.
+ *
+ * The user is able to navigate through the albums, he has
+ * opened during a session.
+ */
 class AlbumHistory : public QObject
 {
     Q_OBJECT
@@ -36,11 +45,11 @@ public:
     AlbumHistory();
     ~AlbumHistory();
 
-    void            addAlbum(Album *album);
-    Album*          deleteAlbum(Album *album);
-    Album*          back(unsigned int steps=1);
-    Album*          forward(unsigned int steps=1);
-    Album*          getCurrentAlbum();
+    void            addAlbum(Album *album, QWidget *widget = 0);
+    void            deleteAlbum(Album *album);
+    void            back(Album **album, QWidget **widget, unsigned int steps=1);
+    void            forward(Album **album, QWidget **widget, unsigned int steps=1);
+    void            getCurrentAlbum(Album **album, QWidget **widget);
     
     void            getBackwardHistory(QStringList &list) const;
     void            getForwardHistory(QStringList &list) const;
@@ -49,13 +58,16 @@ public:
     bool            isBackwardEmpty();
     
 private:
-    typedef QValueList<Album*> AlbumStack;
+    
+    HistoryItem*    getCurrentAlbum();
+    void            forward(unsigned int steps=1);
+    
+    typedef QValueList<HistoryItem*> AlbumStack;
     
     AlbumStack      *m_backwardStack;
     AlbumStack      *m_forwardStack;
-    bool            m_moving;
+    bool             m_moving;
 };
-
 
 
 #endif /* ALBUMHISTORY_H */

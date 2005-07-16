@@ -281,6 +281,13 @@ void DateFolderView::saveViewState(QDataStream &stream)
     stream << openFolders;
 }
 
-
+void DateFolderView::setSelected(QListViewItem *item)
+{
+    if(!item)
+        return;
+    
+    d->listview->setSelected(item, true);
+    d->listview->ensureItemVisible(item);
+}
 
 #include "datefolderview.moc"

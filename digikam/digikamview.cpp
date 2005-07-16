@@ -292,54 +292,98 @@ void DigikamView::slotNewAdvancedSearch()
 
 // ----------------------------------------------------------------
 
-void DigikamView::slotAlbumDeleted(Album *)
+void DigikamView::slotAlbumDeleted(Album *delalbum)
 {
-    /* TODO
-    Album *nextAlbum = mAlbumHistory->deleteAlbum(album);
-
-    if (nextAlbum && nextAlbum->getViewItem())
+    mAlbumHistory->deleteAlbum(delalbum);
+    
+    Album *album;
+    QWidget *widget;
+    mAlbumHistory->getCurrentAlbum(&album, &widget);
+    
+    if (album && widget)
     {
-        AlbumFolderItem_Deprecated *item;    
-        item = static_cast<AlbumFolderItem_Deprecated*>(nextAlbum->getViewItem());
-        mFolderView_Deprecated->setSelected(item);
+        QListViewItem *item;
+        item = (QListViewItem*)album->extraData(widget);
+        if(!item)
+            return;
+
+        if (FolderView *v = dynamic_cast<FolderView*>(widget))
+        {
+            v->setSelected(item, true);
+            v->ensureItemVisible(item);
+        } 
+        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
+        {
+            v->setSelected(item);
+        }
+    
+        mMainSidebar->setActiveTab(widget);
+        
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
     }
-    */
 }
 
-void DigikamView::slotAlbumHistoryBack(int )
+void DigikamView::slotAlbumHistoryBack(int steps)
 {
-    /* TODO
-    Album *album = mAlbumHistory->back(steps);
+    Album *album;
+    QWidget *widget;
+    
+    mAlbumHistory->back(&album, &widget, steps);
 
-    if (album && album->getViewItem())
+    if (album && widget)
     {
-        AlbumFolderItem_Deprecated *item;    
-        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
-        mFolderView_Deprecated->setSelected(item);
+        QListViewItem *item;
+        item = (QListViewItem*)album->extraData(widget);
+        if(!item)
+            return;
+ 
+        if (FolderView *v = dynamic_cast<FolderView*>(widget))
+        {
+            v->setSelected(item, true);
+            v->ensureItemVisible(item);            
+        } 
+        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
+        {
+            v->setSelected(item);
+        }
+        
+        mMainSidebar->setActiveTab(widget);
+        
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
-    }
-    return;
-    */
+     }
 }
 
-void DigikamView::slotAlbumHistoryForward(int )
+void DigikamView::slotAlbumHistoryForward(int steps)
 {
-    /* TODO
-    Album *album = mAlbumHistory->forward(steps);
+    Album *album;
+    QWidget *widget;
+    
+    mAlbumHistory->forward(&album, &widget, steps);
 
-    if (album && album->getViewItem())
+    if (album && widget)
     {
-        AlbumFolderItem_Deprecated *item;
-        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
-        mFolderView_Deprecated->setSelected(item);
+        QListViewItem *item;
+        item = (QListViewItem*)album->extraData(widget);
+        if(!item)
+            return;
+ 
+        if (FolderView *v = dynamic_cast<FolderView*>(widget))
+        {
+            v->setSelected(item, true);
+            v->ensureItemVisible(item);
+        } 
+        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
+        {
+            v->setSelected(item);
+        }
+        
+        mMainSidebar->setActiveTab(widget);
+        
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
     }
-    return;
-    */
 }
 
 void DigikamView::getBackwardHistory(QStringList &titles)
@@ -392,7 +436,7 @@ void DigikamView::slot_albumSelected(Album* album)
         emit signal_tagSelected(true);
     }
     
-    mAlbumHistory->addAlbum(album);
+    mAlbumHistory->addAlbum(album, mMainSidebar->getActiveTab());
     mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
     mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());    
     
