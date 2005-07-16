@@ -1,6 +1,4 @@
 
-* Album history doesn't work with the new gui [JA]
-
 * split albumfolderview into albumview and tagview
   - Copy/Paste [JA]
   - doxygen comments... [JA]
