@@ -16,9 +16,6 @@
  * Original channel mixer algorithm copyrighted 2002 by 
  * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2 
  * 
- * Original sharpening filter from from gimp 2.2
- * copyright 1997-1998 Michael Sweet (mike@easysw.com)
- *
  * Original HSL algorithm from from gimp 2.2
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  * 

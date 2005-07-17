@@ -6,7 +6,7 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Original Emboss algorithm copyrighted 2004 by 
+ * Original Gaussian Blur algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
  * This program is free software; you can redistribute it
