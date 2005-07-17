@@ -84,7 +84,7 @@ namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
-                        : KDialogBase(Plain, i18n("White Color Balance"),
+                        : KDialogBase(Plain, i18n("White Color Balance Correction"),
                                       Help|User1|User2|User3|Ok|Cancel, Ok,
                                       parent, 0, true, true,
                                       i18n("&Reset Values"),
@@ -117,7 +117,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("White Color Balance"), 
+                                       I18N_NOOP("White Color Balance Correction"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
@@ -128,7 +128,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     
-    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance algorithm"),
+    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
                      "jochym at ifj edu pl");
     
     m_helpButton = actionButton( Help );
@@ -142,7 +142,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
     
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("White Color Balance")); 
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
+                              i18n("White Color Balance Correction")); 
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
 
     // -------------------------------------------------------------
