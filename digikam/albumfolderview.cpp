@@ -74,7 +74,7 @@ public:
     int id() const;
     bool isGroupItem() const;
 
-    // TODO: compare items for date based sorting of groups
+    int compare(QListViewItem *i, int col, bool ascending) const;
     
 private:
     PAlbum      *m_album;
@@ -121,6 +121,26 @@ int AlbumFolderViewItem::id() const
 bool AlbumFolderViewItem::isGroupItem() const
 {
     return m_groupItem;
+}
+
+int AlbumFolderViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    if (!m_groupItem || m_year == 0 || m_month == 0)
+        return QListViewItem::compare(i, col, ascending);
+
+    AlbumFolderViewItem* thatItem = dynamic_cast<AlbumFolderViewItem*>(i);
+    if (!thatItem)
+        return 0;
+
+    int myWeight  = m_year*100 + m_month;
+    int hisWeight = thatItem->m_year*100 + thatItem->m_month;
+
+    if (myWeight == hisWeight)
+        return 0;
+    else if (myWeight > hisWeight)
+        return 1;
+    else
+        return -1;
 }
 
 
