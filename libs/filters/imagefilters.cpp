@@ -13,9 +13,6 @@
  * Original Normalize Image algorithm copyrighted 1997 by 
  * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
  *
- * Original Gaussian Blur algorithm copyrighted 2005 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
- *
  * Original channel mixer algorithm copyrighted 2002 by 
  * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2 
  * 
