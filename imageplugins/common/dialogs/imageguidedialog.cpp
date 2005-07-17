@@ -42,6 +42,7 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
+#include <kprogress.h>
 #include <kdebug.h>
 
 // Local includes.
