@@ -813,6 +813,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     
     if (ItemDrag::canDecode(e))
     {
+        if (!itemDrop)
+            return;
+        
         PAlbum *destAlbum = itemDrop->getAlbum();
         PAlbum *srcAlbum;
         
@@ -926,7 +929,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     {
         // DnD from an external source
 
-        PAlbum *destAlbum = itemDrop->getAlbum();
+        PAlbum* destAlbum = 0;
+        
+        if (itemDrop)
+            destAlbum = itemDrop->getAlbum();
+        else
+            destAlbum = d->albumMan->findPAlbum(0);
+                
         KURL destURL(destAlbum->kurl());
 
         KURL::List srcURLs;
