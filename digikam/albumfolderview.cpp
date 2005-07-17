@@ -22,8 +22,12 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qdatastream.h>
+#include <qvaluelist.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
+#include <kglobal.h>
+#include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -60,13 +64,23 @@ class AlbumFolderViewItem : public FolderItem
 {
 public:
     AlbumFolderViewItem(QListView *parent, PAlbum *album);
-    AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);    
+    AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);
+
+    // special group item (collection/dates)
+    AlbumFolderViewItem(QListView* parent, const QString& name,
+                        int year, int month);
     
     PAlbum* getAlbum() const;
     int id() const;
+    bool isGroupItem() const;
+
+    // TODO: compare items for date based sorting of groups
     
 private:
     PAlbum      *m_album;
+    int          m_year;
+    int          m_month;
+    bool         m_groupItem;
 };
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
@@ -74,6 +88,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
 {
     setDragEnabled(true);
     m_album = album;
+    m_groupItem = false;
 }
 
 AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
@@ -81,6 +96,16 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
 {
     setDragEnabled(true);
     m_album = album;
+    m_groupItem = false;
+}
+
+// special group item (collection/dates)
+AlbumFolderViewItem::AlbumFolderViewItem(QListView* parent, const QString& name,
+                                         int year, int month)
+    : FolderItem(parent, name, true),
+      m_album(0), m_year(year), m_month(month), m_groupItem(true)
+{
+    setDragEnabled(false);
 }
 
 PAlbum* AlbumFolderViewItem::getAlbum() const
@@ -93,6 +118,10 @@ int AlbumFolderViewItem::id() const
     return m_album ? m_album->id() : 0;
 }
 
+bool AlbumFolderViewItem::isGroupItem() const
+{
+    return m_groupItem;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -102,8 +131,10 @@ int AlbumFolderViewItem::id() const
 class AlbumFolderViewPriv
 {
 public:
+    
     AlbumManager                     *albumMan;
     ThumbnailJob                     *iconThumbJob;
+    QValueList<AlbumFolderViewItem*>  groupItems;
 };
 
 //-----------------------------------------------------------------------------
@@ -160,28 +191,30 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     PAlbum *palbum = dynamic_cast<PAlbum*>(album);
     if(!palbum)
         return;
-    
-    AlbumFolderViewItem *item;
-    if(palbum->parent()->isRoot())
+
+    bool failed;
+    AlbumFolderViewItem* parent = findParent(palbum, failed);
+    if (failed)
     {
+        kdWarning() << k_funcinfo << " Failed to find parent for Album "
+                    << palbum->url() << endl;
+        return;
+    }
+
+    AlbumFolderViewItem *item;
+    if (!parent)
+    {
+        // child of root
+
         item = new AlbumFolderViewItem(this, palbum);
         palbum->setExtraData(this, item);
     }
     else
     {
-        AlbumFolderViewItem* parent =
-            (AlbumFolderViewItem*) palbum->parent()->extraData(this);
-        
-        if(!parent)
-        {
-            kdWarning() << k_funcinfo << " Failed to find parent for Album "
-                        << palbum->url() << endl;
-            return;
-        }
         item = new AlbumFolderViewItem(parent, palbum);
         palbum->setExtraData(this, item);
     }
-    
+
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
     item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
                     32, KIcon::DefaultState, 0, true));
@@ -213,12 +246,13 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
             takeItem(item);
 
         delete item;
-        //TODO    clearEmptyGroupItems();
+        clearEmptyGroupItems();
     }
 }
 
 void AlbumFolderView::slotAlbumsCleared()
 {
+    d->groupItems.clear();
     clear();
 }
 
@@ -475,7 +509,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     if(albumCollections != oldAlbumCollections)
     {
         AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
-// TODO:       resort();
+        resort();
     }
 
     QString errMsg;
@@ -596,10 +630,10 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
             album->setCollection(collection);
 
         AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
-//TODO        resort();
+        resort();
 
-    // Do this last : so that if anything else changed we can
-    // successfully save to the db with the old name
+        // Do this last : so that if anything else changed we can
+        // successfully save to the db with the old name
 
         if(title != oldTitle)
         {
@@ -636,21 +670,48 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
  
     if(AlbumDrag::canDecode(e))
     {
-        // Allow dragging at the root, to move the album at the root
-        if(!itemDrop)
-            return true;
-        
-        // Dragging an item on itself makes no sense
-        if(itemDrag == itemDrop)
-            return false;
+        switch(AlbumSettings::instance()->getAlbumSortOrder())
+        {
+        case(AlbumSettings::ByFolder):
+        {
+            // Allow dragging at the root, to move the album at the root
+            if(!itemDrop)
+                return true;
+            
+            // Dragging an item on itself makes no sense
+            if(itemDrag == itemDrop)
+                return false;
+            
+            // Dragging a parent on its child makes no sense
+            if(itemDrag && itemDrag->getAlbum()->isAncestorOf(itemDrop->getAlbum()))
+                return false;
 
-        // Dragging a parent on its child makes no sense
-        if(itemDrag && itemDrag->getAlbum()->isAncestorOf(itemDrop->getAlbum()))
+            return true;
+        }
+        case (AlbumSettings::ByCollection):
+        {
+            if (!itemDrop)
+                return false;
+            
+            // Only allow dragging onto Collection
+            if (itemDrop->isGroupItem())
+                return true;
+
             return false;
-        
-        return true;
+        }
+        default:
+        {
+            return false;
+        }
+        };
     }
 
+    if (itemDrop && itemDrop->isGroupItem())
+    {
+        // do not allow drop on a group item
+        return false;
+    }
+    
     if(ItemDrag::canDecode(e))
     {
         return true;
@@ -679,32 +740,52 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         AlbumFolderViewItem *itemDrag = dynamic_cast<AlbumFolderViewItem*>(dragItem());
         if(!itemDrag)
             return;
-                
-        // TODO: Copy?
-        QPopupMenu popMenu(this);
-        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
-        popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
 
-        if(id == 10)
+        if (AlbumSettings::instance()->getAlbumSortOrder()
+            == AlbumSettings::ByFolder)
         {
-            PAlbum *album = itemDrag->getAlbum();
-            PAlbum *destAlbum;
-            if(!itemDrop)
+            // TODO: Copy?
+            QPopupMenu popMenu(this);
+            popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+            popMenu.setMouseTracking(true);
+            int id = popMenu.exec(QCursor::pos());
+
+            if(id == 10)
             {
-                // move dragItem to the root
-                destAlbum = d->albumMan->findPAlbum(0);
+                PAlbum *album = itemDrag->getAlbum();
+                PAlbum *destAlbum;
+                if(!itemDrop)
+                {
+                    // move dragItem to the root
+                    destAlbum = d->albumMan->findPAlbum(0);
+                }
+                else
+                {
+                    // move dragItem below dropItem
+                    destAlbum = itemDrop->getAlbum();
+                }
+                KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
             }
-            else
+        }
+        else if (AlbumSettings::instance()->getAlbumSortOrder()
+                 == AlbumSettings::ByCollection)
+        {
+            if (!itemDrop)
+                return;
+
+            if (itemDrop->isGroupItem())
             {
-                // move dragItem below dropItem
-                destAlbum = itemDrop->getAlbum();
+                PAlbum *album = itemDrag->getAlbum();
+                if (!album)
+                    return;
+
+                album->setCollection(itemDrop->text(0));
+                resort();
             }
-            KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
-            connect(job, SIGNAL(result(KIO::Job*)),
-                    SLOT(slotDIOResult(KIO::Job*)));
         }
         
         return;
@@ -946,6 +1027,194 @@ void AlbumFolderView::selectItem(int id)
     }    
 }
 
+AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
+{
+    switch(AlbumSettings::instance()->getAlbumSortOrder())
+    {
+    case(AlbumSettings::ByFolder):
+    {
+        return findParentByFolder(album, failed);
+    }
+    case(AlbumSettings::ByCollection):
+    {
+        return findParentByCollection(album, failed);
+    }
+    case(AlbumSettings::ByDate):
+    {
+        return findParentByDate(album, failed);
+    }
+    };
+
+    failed = true;
+    return 0;
+}
+
+AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& failed)
+{
+    if (album->parent()->isRoot())
+    {
+        failed = false;
+        return 0;
+    }
+    
+    AlbumFolderViewItem* parent =
+        (AlbumFolderViewItem*) album->parent()->extraData(this);
+    if (!parent)
+    {
+        failed = true;
+        return 0;
+    }
+
+    failed = false;
+    return parent;
+}
+
+AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool& failed)
+{
+    QStringList collectionList =
+        AlbumSettings::instance()->getAlbumCollectionNames();
+    QString collection = album->collection();
+
+    if (collection.isEmpty() || !collectionList.contains(collection))
+        collection = i18n("Uncategorized Albums");
+
+    AlbumFolderViewItem* parent = 0;
+
+    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+         it != d->groupItems.end(); ++it)
+    {
+        AlbumFolderViewItem* groupItem = *it;
+        if (groupItem->text(0) == collection)
+        {
+            parent = groupItem;
+            break;
+        }
+    }
+
+    // Need to create a new parent item
+    if (!parent)
+    {
+        parent = new AlbumFolderViewItem(this, collection, 0, 0);
+        d->groupItems.append(parent);
+    }
+
+    failed = false;
+    return parent;
+}
+
+AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& failed)
+{
+    QDate date = album->date();
+
+    QString timeString = QString::number(date.year()) + ", " +
+                         KGlobal::locale()->calendar()->monthName(date, false);
+
+    AlbumFolderViewItem* parent = 0;
+
+    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+         it != d->groupItems.end(); ++it)
+    {
+        AlbumFolderViewItem* groupItem = *it;
+        if (groupItem->text(0) == timeString)
+        {
+            parent = groupItem;
+            break;
+        }
+    }
+
+    // Need to create a new parent item
+    if (!parent)
+    {
+        parent = new AlbumFolderViewItem(this, timeString,
+                                         date.year(), date.month());
+        d->groupItems.append(parent);
+    }
+
+    failed = false;
+    return parent;
+}
+
+void AlbumFolderView::resort()
+{
+    AlbumFolderViewItem* prevSelectedItem =
+        dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+    if (prevSelectedItem && prevSelectedItem->isGroupItem())
+        prevSelectedItem = 0;
+
+
+    AlbumList pList(AlbumManager::instance()->allPAlbums());
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum *album = (PAlbum*)(*it);
+        if (!album->isRoot() && album->extraData(this))
+        {
+            reparentItem(static_cast<AlbumFolderViewItem*>(album->extraData(this)));
+        }
+    }
+
+    // Clear any groupitems which have been left empty
+    clearEmptyGroupItems();
+
+    if (prevSelectedItem)
+    {
+        ensureItemVisible(prevSelectedItem);
+        setSelected(prevSelectedItem, true);
+    }
+}
+
+void AlbumFolderView::reparentItem(AlbumFolderViewItem* folderItem)
+{
+    if (!folderItem)
+        return;
+
+    PAlbum* album = folderItem->getAlbum();
+    if (!album || album->isRoot())
+        return;
+
+    AlbumFolderViewItem* oldParent =
+        dynamic_cast<AlbumFolderViewItem*>(folderItem->parent());
+
+    bool failed;
+    AlbumFolderViewItem* newParent = findParent(album, failed);
+    if (failed)
+        return;
+
+    if (oldParent == newParent)
+        return;
+    
+    if (oldParent)
+        oldParent->removeItem(folderItem);
+    else
+        removeItem(folderItem);
+
+    // insert into new parent
+    if (newParent)
+        newParent->insertItem(folderItem);
+    else
+        insertItem(folderItem);
+}
+
+void AlbumFolderView::clearEmptyGroupItems()
+{
+    QValueList<AlbumFolderViewItem*> deleteItems;
+
+    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+         it != d->groupItems.end(); ++it)
+    {
+        AlbumFolderViewItem* groupItem = *it;
+
+        if (!groupItem->firstChild())
+        {
+            deleteItems.append(groupItem);
+        }
+    }
+
+    for (QValueList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
+         it != deleteItems.end(); ++it)
+    {
+        d->groupItems.remove(*it);
+        delete *it;
+    }
+}
+
 #include "albumfolderview.moc"
-
-

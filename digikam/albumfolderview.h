@@ -44,6 +44,7 @@ public:
     ~AlbumFolderView();
 
     void albumImportFolder();
+    void resort();
     
 private slots:
 
@@ -76,7 +77,15 @@ private:
     void albumEdit(AlbumFolderViewItem *item);    
     void albumDelete(AlbumFolderViewItem *item);
 
+    AlbumFolderViewItem* findParent(PAlbum* album, bool& failed);
+    AlbumFolderViewItem* findParentByFolder(PAlbum* album, bool& failed);
+    AlbumFolderViewItem* findParentByCollection(PAlbum* album, bool& failed);
+    AlbumFolderViewItem* findParentByDate(PAlbum* album, bool& failed);
 
+    void reparentItem(AlbumFolderViewItem* folderItem);
+    void clearEmptyGroupItems();
+
+    
     AlbumFolderViewPriv   *d;
     
 signals:

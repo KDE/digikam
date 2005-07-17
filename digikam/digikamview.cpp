@@ -249,6 +249,7 @@ void DigikamView::slot_sortAlbums(int order)
     settings->setAlbumSortOrder(
         (AlbumSettings::AlbumSortOrder) order);
     mFolderView_Deprecated->applySettings();
+    mFolderView->resort();
 }
 
 void DigikamView::slot_newAlbum()
