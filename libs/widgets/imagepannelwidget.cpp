@@ -114,6 +114,16 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
                                             "preview area to display original and target image "
                                             "at the same time. The original is on the left of the "
                                             "red dashed line, target on the right" ) );
+    
+    QPushButton *noSeparateButton = new QPushButton( m_separateView );
+    m_separateView->insert(noSeparateButton, Digikam::ImageRegionWidget::SeparateViewNone);
+    KGlobal::dirs()->addResourceType("nocenter", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("nocenter", "nocenter.png");
+    noSeparateButton->setPixmap( QPixmap( directory + "nocenter.png" ) );
+    noSeparateButton->setToggleButton(true);
+    QToolTip::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
+                                           "be separed" ) );
+    
     m_separateView->setExclusive(true);
     m_separateView->setFrameShape(QFrame::NoFrame);
     
@@ -256,8 +266,16 @@ void ImagePannelWidget::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Control Panel Settings");
-    m_separateView->setButton(config->readNumEntry("Separate View",
-                              Digikam::ImageRegionWidget::SeparateViewVertical) );
+    int mode = config->readNumEntry("Separate View", Digikam::ImageRegionWidget::SeparateViewVertical);
+    m_imageRegionWidget->blockSignals(true);
+    m_imagePanIconWidget->blockSignals(true);
+    m_separateView->blockSignals(true);
+    m_imageRegionWidget->slotSeparateViewToggled( mode );                     
+    m_imagePanIconWidget->slotSeparateViewToggled( mode );
+    m_separateView->setButton( mode );
+    m_imageRegionWidget->blockSignals(false);
+    m_imagePanIconWidget->blockSignals(false);
+    m_separateView->blockSignals(false);
 }
     
 void ImagePannelWidget::writeSettings(void)
