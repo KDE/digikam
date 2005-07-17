@@ -2,7 +2,6 @@
 * split albumfolderview into albumview and tagview
   - Copy/Paste [JA]
   - doxygen comments... [JA]
-  - the resorting of items based on dates/collections [RR]
 
 * revise the history function, so it is able to work with the new views/sidebar [JA]
 
@@ -20,6 +19,7 @@
   - active view
   - closed/open state of left/right views
   - currently selected albums in each view
+  - save open/closed state of Collection/Date-based items in AlbumFolderView [RR]
 
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
