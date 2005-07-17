@@ -88,7 +88,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotInit()));
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
                                              
     // -------------------------------------------------------------
     
@@ -108,16 +108,6 @@ ImageEffect_Blur::~ImageEffect_Blur()
     
     if (m_threadedFilter)
        delete m_threadedFilter;    
-}
-
-void ImageEffect_Blur::slotInit()
-{
-    // Abort current computation.
-    slotUser1();
-    // Waiting filter thread finished.
-    kapp->processEvents();
-    // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotUser1())); 
 }
 
 void ImageEffect_Blur::slotTimer()

@@ -87,7 +87,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotInit()));
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
 
     // -------------------------------------------------------------
                                                              
@@ -107,16 +107,6 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
     
     if (m_threadedFilter)
        delete m_threadedFilter;    
-}
-
-void ImageEffect_Sharpen::slotInit()
-{
-    // Abort current computation.
-    slotUser1();
-    // Waiting filter thread finished.
-    kapp->processEvents();
-    // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotUser1())); 
 }
 
 void ImageEffect_Sharpen::slotTimer()
