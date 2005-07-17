@@ -21,11 +21,6 @@
 #ifndef IMAGECURVES_H
 #define IMAGECURVES_H
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
-// Clamp a >>int32<<-range int between 0 and 255 inclusive 
-#define CLAMP0255(a)  CLAMP(a,0,255) 
-
 #define ROUND(x) ((int) ((x) + 0.5))
 
 //  Map RGB to intensity  
@@ -44,6 +39,9 @@
 // KDE includes.
 
 #include <kurl.h>
+
+// Digikam includes.
+
 #include "digikam_export.h"
                                                                       
 namespace Digikam

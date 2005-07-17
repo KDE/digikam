@@ -80,7 +80,6 @@ protected:
     void closeEvent(QCloseEvent *e);
     void customEvent(QCustomEvent *event);
     void abortPreview(void);
-    
 };
 
 #endif /* IMAGEEFFECT_BLUR_H */

@@ -18,7 +18,9 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
+#define CLAMP0255(a)  QMIN(QMAX(a,0), 255) 
+  
 // C++ includes.
 
 #include <cmath>

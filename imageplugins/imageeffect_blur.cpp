@@ -88,7 +88,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotEffect()));
+    QTimer::singleShot(0, this, SLOT(slotInit()));
                                              
     // -------------------------------------------------------------
     

@@ -22,6 +22,7 @@
 #define IMAGE_FILTERS_H
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+#define CLAMP0255(a)  QMIN(QMAX(a,0), 255) 
 
 // C++ includes.
 

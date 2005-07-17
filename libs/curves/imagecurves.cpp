@@ -39,7 +39,7 @@
 
 // Local includes.
 
-#include <imagefilters.h>
+#include "imagefilters.h"
 #include "imagecurves.h"
 
 namespace Digikam
