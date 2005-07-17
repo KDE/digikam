@@ -27,9 +27,8 @@
 
 #include <cmath>
 
-//KDE includes.
+// Digikam Includes.
 
-#include <kprogress.h>
 #include "digikam_export.h"
 
 // Big/little endian detection from .configure script.
@@ -100,41 +99,6 @@ private:    // Private structures used internally.
     };
             
 private:    // Private methods used internally.
-    
-    // Methods for Gaussian Blur.   
-    
-    // function to allocate a 2d array   
-    static inline int** Alloc2DArray (int Columns, int Rows)
-       {
-       // First, we declare our future 2d array to be returned
-       int** lpcArray = 0L;
-
-       // Now, we alloc the main pointer with Columns
-       lpcArray = new int*[Columns];
-        
-       for (int i = 0; i < Columns; i++)
-           lpcArray[i] = new int[Rows];
-
-       return (lpcArray);
-       };   
-    
-    // Function to deallocates the 2d array previously created
-    static inline void Free2DArray (int** lpcArray, int Columns)
-       {
-       // loop to dealocate the columns
-       for (int i = 0; i < Columns; i++)
-           delete [] lpcArray[i];
-
-       // now, we delete the main pointer
-       delete [] lpcArray;
-       };   
-       
-    static inline bool IsInside (int Width, int Height, int X, int Y)
-       {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-       };       
 
     // Methods for Channel Mixer.   
        

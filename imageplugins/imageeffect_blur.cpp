@@ -33,24 +33,31 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
 #include <imageiface.h>
 #include <imagepannelwidget.h>
 #include <imagefilters.h>
+#include <gaussianblur.h>
 
 // Local includes.
 
 #include "imageeffect_blur.h"
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
-                : KDialogBase(Plain, i18n("Blur Image"),
-                              Help|Ok|Cancel, Ok,
-                              parent, 0, true, true),
+                : KDialogBase(Plain, i18n("Apply Gaussian Blur on Photograph"),
+                              Help|User1|Ok|Cancel, Ok,
+                              parent, 0, true, true,
+                              i18n("&Reset Values")),
                   m_parent(parent)
 {
-    m_timer = 0L;
+    m_currentRenderingMode = NoneRendering;
+    m_timer                = 0L;
+    m_threadedFilter       = 0L;
+    
+    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
     setHelp("blursharpentool.anchor", "digikam");
     resize(configDialogSize("Blur Tool Dialog"));         
     
@@ -58,7 +65,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage());
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------
@@ -89,12 +96,28 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
             this, SLOT(slotTimer()));
      
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));    
+            this, SLOT(slotFocusChanged()));
 }
 
 ImageEffect_Blur::~ImageEffect_Blur()
 {
     saveDialogSize("Blur Tool Dialog");    
+
+    if (m_timer)
+       delete m_timer;
+    
+    if (m_threadedFilter)
+       delete m_threadedFilter;    
+}
+
+void ImageEffect_Blur::slotInit()
+{
+    // Abort current computation.
+    slotUser1();
+    // Waiting filter thread finished.
+    kapp->processEvents();
+    // Reset values to defaults.
+    QTimer::singleShot(0, this, SLOT(slotUser1())); 
 }
 
 void ImageEffect_Blur::slotTimer()
@@ -111,40 +134,182 @@ void ImageEffect_Blur::slotTimer()
     m_timer->start(500, true);
 }
 
+void ImageEffect_Blur::abortPreview()
+{
+    m_currentRenderingMode = NoneRendering;
+    m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    m_imagePreviewWidget->setEnable(true);    
+    enableButton(Ok, true);  
+    setButtonText(User1, i18n("&Reset Values"));
+    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    m_radiusInput->setEnabled(true);
+}
+
+void ImageEffect_Blur::slotUser1()
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_threadedFilter->stopComputation();
+       }
+    else
+       {
+       m_radiusInput->blockSignals(true);
+       m_radiusInput->setValue(0);
+       m_radiusInput->blockSignals(false);
+       slotEffect();    
+       }
+} 
+
+void ImageEffect_Blur::slotCancel()
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_threadedFilter->stopComputation();
+       kapp->restoreOverrideCursor();
+       }
+       
+    done(Cancel);
+}
+
+void ImageEffect_Blur::closeEvent(QCloseEvent *e)
+{
+    if (m_currentRenderingMode != NoneRendering)
+       {
+       m_threadedFilter->stopComputation();
+       kapp->restoreOverrideCursor();
+       }
+       
+    e->accept();    
+}
+
+void ImageEffect_Blur::slotFocusChanged(void)
+{
+    if (m_currentRenderingMode == FinalRendering)
+       {
+       m_imagePreviewWidget->update();
+       return;
+       }
+    else if (m_currentRenderingMode == PreviewRendering)
+       {
+       m_threadedFilter->stopComputation();
+       }
+       
+    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+}
+
 void ImageEffect_Blur::slotEffect()
 {
+    // Computation already in process.
+    if (m_currentRenderingMode == PreviewRendering) return;     
+    
+    m_currentRenderingMode = PreviewRendering;
+
+    m_imagePreviewWidget->setEnable(false);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Ok,    false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    enableButtonOK(m_radiusInput->value() > 0);
+    m_imagePreviewWidget->setProgress(0);
+    
+    if (m_threadedFilter)
+       delete m_threadedFilter;
+
+    m_radiusInput->setEnabled(false);
     
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
-   
-    uint* data = (uint *)img.bits();
-    int   w    = img.width();
-    int   h    = img.height();
-    int   r    = m_radiusInput->value();
-        
-    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
-
-    m_imagePreviewWidget->setPreviewImageData(img);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
+    
+    int r = m_radiusInput->value();
+            
+    m_threadedFilter = new Digikam::GaussianBlur(&img, this, r);    
 }
 
 void ImageEffect_Blur::slotOk()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );               
-    Digikam::ImageIface iface(0, 0);
+    m_currentRenderingMode = FinalRendering;
+
+    m_imagePreviewWidget->setEnable(false);
+    enableButton(Ok,    false);
+    enableButton(User1, false);
+    enableButton(User2, false);
+    enableButton(User3, false);
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    m_imagePreviewWidget->setProgress(0);
     
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    int r      = m_radiusInput->value();
+    if (m_threadedFilter)
+       delete m_threadedFilter;
+    
+    m_radiusInput->setEnabled(false);
+    
+    int r = m_radiusInput->value();
+    
+    Digikam::ImageIface iface(0, 0);
+    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    Digikam::ImageFilters::gaussianBlurImage(data, w, h, r);
-           
-    iface.putOriginalData(i18n("Blur"), data);
+    m_threadedFilter = new Digikam::GaussianBlur(&orgImage, this, r);    
     delete [] data;
-    kapp->restoreOverrideCursor(); 
-    accept();
+}
+
+void ImageEffect_Blur::customEvent(QCustomEvent *event)
+{
+    if (!event) return;
+
+    Digikam::ThreadedFilter::EventData *d = (Digikam::ThreadedFilter::EventData*) event->data();
+
+    if (!d) return;
+    
+    if (d->starting)           // Computation in progress !
+        {
+        m_imagePreviewWidget->setProgress(d->progress);
+        }  
+    else 
+        {
+        if (d->success)        // Computation Completed !
+            {
+            switch (m_currentRenderingMode)
+              {
+              case PreviewRendering:
+                 {
+                 kdDebug() << "Preview Gaussian Blur completed..." << endl;
+                 QImage imDest = m_threadedFilter->getTargetImage();
+                 m_imagePreviewWidget->setPreviewImageData(imDest);
+                 abortPreview();
+                 break;
+                 }
+              
+              case FinalRendering:
+                 {
+                 kdDebug() << "Final Gaussian Blur completed..." << endl;
+                 Digikam::ImageIface iface(0, 0);
+                 iface.putOriginalData(i18n("Gaussian Blur"), 
+                                       (uint*)m_threadedFilter->getTargetImage().bits());
+                 kapp->restoreOverrideCursor();
+                 accept();
+                 break;
+                 }
+              }
+            }
+        else                   // Computation Failed !
+            {
+            switch (m_currentRenderingMode)
+                {
+                case PreviewRendering:
+                    {
+                    kdDebug() << "Preview Gaussian Blur failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                    }
+                
+                case FinalRendering:
+                    break;
+                }
+            }
+        }
+    
+    delete d;        
 }
 
 #include "imageeffect_blur.moc"

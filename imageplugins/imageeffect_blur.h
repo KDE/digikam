@@ -32,6 +32,7 @@ class KIntNumInput;
 namespace Digikam
 {
 class ImagePannelWidget;
+class GaussianBlur;
 }
 
 class ImageEffect_Blur : public KDialogBase
@@ -45,11 +46,22 @@ public:
 
 private:
 
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+    
+    int           m_currentRenderingMode;
+    
     QWidget      *m_parent;
     
     QTimer       *m_timer;
             
     KIntNumInput *m_radiusInput;
+    
+    Digikam::GaussianBlur      *m_threadedFilter;
     
     Digikam::ImagePannelWidget *m_imagePreviewWidget;
     
@@ -58,6 +70,17 @@ private slots:
     void slotEffect();
     void slotOk();
     void slotTimer();
+    void slotCancel();
+    void slotUser1();
+    void slotFocusChanged(void);    
+    void slotInit();
+    
+protected:
+
+    void closeEvent(QCloseEvent *e);
+    void customEvent(QCustomEvent *event);
+    void abortPreview(void);
+    
 };
 
 #endif /* IMAGEEFFECT_BLUR_H */

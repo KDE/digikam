@@ -49,7 +49,6 @@
 // KDE includes.
 
 #include <kdebug.h>
-#include <kapplication.h>
 
 // Digikam includes.
  
@@ -59,6 +58,7 @@
 
 // Local includes.
 
+#include "gaussianblur.h"
 #include "imagefilters.h"
 
 namespace Digikam
@@ -601,148 +601,14 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
 
     if (Radius > 100) Radius = 100;
     if (Radius <= 0) return;
-    
-    // Gaussian kernel computation using the Radius parameter.
-      
-    int          nKSize, nCenter;
-    double       x, sd, factor, lnsd, lnfactor;
-    register int i, j, n, h, w;
 
-    nKSize = 2 * Radius + 1;
-    nCenter = nKSize / 2;
-    int *Kernel = new int[nKSize];
+    QImage orgImage(Width, Height, 32);
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
 
-    lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
-    lnsd = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
-    factor = exp (lnfactor);
-    sd = exp (lnsd);
-
-    for (i = 0; i < nKSize; i++)
-        {
-        x = sqrt ((i - nCenter) * (i - nCenter));
-        Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
-        }
-    
-    // Now, we need to convolve the image descriptor.
-    // I've worked hard here, but I think this is a very smart       
-    // way to convolve an array, its very hard to explain how I reach    
-    // this, but the trick here its to store the sum used by the       
-    // previous pixel, so we sum with the other pixels that wasn't get.
-    
-    int nSumR, nSumG, nSumB, nCount;
-    int nKernelWidth = Radius * 2 + 1;
-    imageData imagedata;
-    
-    uint* pOutBits = new uint[Width*Height];
-    uint* pBlur    = new uint[Width*Height];
-    
-    // We need to copy our bits to blur bits
-    
-    memcpy (pBlur, data, Width*Height*4);       
-
-    // We need to alloc a 2d array to help us to store the values
-    
-    int** arrMult = Alloc2DArray (nKernelWidth, 256);
-    
-    for (i = 0; i < nKernelWidth; i++)
-        for (j = 0; j < 256; j++)
-            arrMult[i][j] = j * Kernel[i];
-
-    // We need to initialize all the loop and iterator variables
-    
-    nSumR = nSumG = nSumB = nCount = i = j = 0;
-
-    // Now, we enter in the main loop
-    
-    for (h = 0; h < Height; h++)
-        {
-        for (w = 0; w < Width; w++, i++)
-            {
-            // first of all, we need to blur the horizontal lines
-                
-            for (n = -Radius; n <= Radius; n++)
-               {
-               // if is inside...
-               if (IsInside (Width, Height, w + n, h))
-                    {
-                    // we points to the pixel
-                    j = i + n;
-                    
-                    // finally, we sum the pixels using a method similar to assigntables
-                    imagedata.raw = data[j];
-                    nSumR += arrMult[n + Radius][imagedata.channel.red];
-                    nSumG += arrMult[n + Radius][imagedata.channel.green];
-                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
-                    
-                    // we need to add to the counter, the kernel value
-                    nCount += Kernel[n + Radius];
-                    }
-                }
-                
-            if (nCount == 0) nCount = 1;                    
-                
-            // now, we return to blur bits the horizontal blur values
-            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
-            pBlur[i]                = imagedata.raw;
-            
-            // ok, now we reinitialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
-            }
-        }
-
-    // getting the blur bits, we initialize position variables
-    i = j = 0;
-
-    // We enter in the second main loop
-    for (w = 0; w < Width; w++, i = w)
-        {
-        for (h = 0; h < Height; h++, i += Width)
-            {
-            // first of all, we need to blur the vertical lines
-            for (n = -Radius; n <= Radius; n++)
-                {
-                // if is inside...
-                if (IsInside(Width, Height, w, h + n))
-                    {
-                    // we points to the pixel
-                    j = i + n * Width;
-                      
-                    // finally, we sum the pixels using a method similar to assigntables
-                    imagedata.raw = pBlur[j];
-                    nSumR += arrMult[n + Radius][imagedata.channel.red];
-                    nSumG += arrMult[n + Radius][imagedata.channel.green];
-                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
-                    
-                    // we need to add to the counter, the kernel value
-                    nCount += Kernel[n + Radius];
-                    }
-                }
-                
-            if (nCount == 0) nCount = 1;                    
-                
-            // To preserve Alpha channel.
-            imagedata.raw = data[i];
-                
-            // now, we return to bits the vertical blur values
-            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
-            pOutBits[i]             = imagedata.raw;
-                
-            // ok, now we reinitialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
-            }
-        }
-
-    memcpy (data, pOutBits, Width*Height*4);   
-       
-    // now, we must free memory
-    Free2DArray (arrMult, nKernelWidth);
-    delete [] pBlur;
-    delete [] pOutBits;
-    delete [] Kernel;
+    Digikam::GaussianBlur *threadedFilter = new Digikam::GaussianBlur(&orgImage, 0L, Radius);
+    QImage imDest = threadedFilter->getTargetImage();
+    memcpy( data, imDest.bits(), imDest.numBytes() );
+    delete threadedFilter;
 }
 
 void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,

@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libfilters.la
 
-libfilters_la_SOURCES = imagefilters.cpp threadedfilter.cpp 
+libfilters_la_SOURCES = imagefilters.cpp threadedfilter.cpp gaussianblur.cpp 
 
 libfilters_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
