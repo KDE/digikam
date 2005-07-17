@@ -67,7 +67,7 @@ public:
     
 protected:
         
-    bool acceptDrop(const QMimeSource * mime) const {return true;}
+    bool acceptDrop(const QMimeSource *) const {return true;}
     
 private:
     PAlbum      *m_album;
