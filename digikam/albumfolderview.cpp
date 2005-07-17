@@ -65,10 +65,6 @@ public:
     PAlbum* getAlbum() const;
     int id() const;
     
-protected:
-        
-    bool acceptDrop(const QMimeSource *) const {return true;}
-    
 private:
     PAlbum      *m_album;
 };
