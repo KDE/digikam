@@ -445,8 +445,66 @@ void AlbumManager::scanTAlbums()
     // sort the list. needed because we want the tags can be read in any order,
     // but we want to make sure that we are ensure to find the parent TAlbum
     // for a new TAlbum
-    qHeapSort(tList);
-        
+
+    {
+        QIntDict<TAlbum> tagDict;
+        tagDict.setAutoDelete(false);
+
+        // insert items into a dict for quick lookup
+        for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
+        {
+            TagInfo info = *it;
+            TAlbum* album = new TAlbum(info.name, info.id);
+            album->m_icon = info.icon;
+            album->m_pid  = info.pid;
+            tagDict.insert(info.id, album);
+        }
+        tList.clear();
+
+        // also add root tag
+        TAlbum* rootTag = new TAlbum("root", 0, true);
+        tagDict.insert(0, rootTag);
+
+        // build tree
+        QIntDictIterator<TAlbum> iter(tagDict);
+        for ( ; iter.current(); ++iter )
+        {
+            TAlbum* album = iter.current();
+            if (album->m_id == 0)
+                continue;
+            
+            TAlbum* parent = tagDict.find(album->m_pid);
+            if (parent)
+            {
+                album->setParent(parent);
+            }
+            else
+            {
+                kdWarning() << "Failed to find parent tag for tag "
+                            << iter.current()->m_title
+                            << " with pid "
+                            << iter.current()->m_pid << endl;
+            }
+        }
+
+        // now insert the items into the list. becomes sorted
+        AlbumIterator it(rootTag);
+        while (it.current())
+        {
+            TAlbum* album = (TAlbum*)it.current();
+            TagInfo info;
+            info.id   = album->m_id;
+            info.pid  = album->m_pid;
+            info.name = album->m_title;
+            info.icon = album->m_icon;
+            tList.append(info);
+            ++it;
+        }
+
+        // this will also delete all child albums
+        delete rootTag;
+    }
+    
     for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TagInfo info = *it;

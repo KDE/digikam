@@ -67,15 +67,6 @@ public:
     int      pid;
     QString  name;
     QString  icon;
-
-    /**
-     * needed for sorting
-     */
-    bool operator<(const TagInfo& info)
-    {
-        //TODO: would this cause failure?
-        return pid < info.pid;
-    }
 };
 
 /**

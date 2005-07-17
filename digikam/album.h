@@ -331,6 +331,7 @@ public:
 private:
 
     QString m_icon;
+    int     m_pid;
 
     friend class AlbumManager;
 };
