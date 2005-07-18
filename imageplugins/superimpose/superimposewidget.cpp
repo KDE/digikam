@@ -51,14 +51,15 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     m_pixmap   = new QPixmap(w, h);
     m_editMode = MOVE;
     
-    m_iface  = new Digikam::ImageIface(0, 0);
-    m_data   = m_iface->getOriginalData();
-    m_w      = m_iface->originalWidth();
-    m_h      = m_iface->originalHeight();
+    Digikam::ImageIface iface(0, 0);
+    uint *data   = iface.getOriginalData();
+    m_w          = iface.originalWidth();
+    m_h          = iface.originalHeight();
     
     m_img.create( m_w, m_h, 32 );
-    memcpy(m_img.bits(), m_data, m_img.numBytes());
-        
+    memcpy(m_img.bits(), data, m_img.numBytes());
+    delete [] data;    
+    
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
@@ -68,9 +69,6 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
 
 SuperImposeWidget::~SuperImposeWidget()
 {
-    delete [] m_data;
-    delete m_iface;
-    
     if(m_pixmap) 
        delete m_pixmap;    
 }
@@ -127,11 +125,6 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
     delete m_pixmap;
     int w = e->size().width();
     int h = e->size().height();
-    int old_w = m_w;
-    int old_h = m_h;
-    m_data = m_iface->setPreviewSize(w, h);
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
     QSize size = m_template.size();
     
@@ -147,14 +140,7 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
        }
     
     m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
-    /*m_currentSelection = QRect((int)((float)m_currentSelection.x() * ( (float)m_w / (float)old_w)),
-                               (int)((float)m_currentSelection.y() * ( (float)m_h / (float)old_h)), 
-                               m_rect.width(), m_rect.height());*/
-    m_currentSelection.setWidth(m_rect.width());
-    m_currentSelection.setHeight(m_rect.height());
-    /*int z = m_zoomFactor;
-    m_zoomFactor = 100;
-    zoomSelection(z-100);*/
+
     makePixmap();
     blockSignals(false);
 }

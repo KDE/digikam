@@ -246,8 +246,7 @@ void ImageEffect_SuperImpose::slotUser1()
 
 void ImageEffect_SuperImpose::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("superimpose",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("superimpose", "digikamimageplugins");
 }
 
 void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
@@ -278,10 +277,9 @@ void ImageEffect_SuperImpose::slotOk()
     m_parent->setCursor( KCursor::waitCursor() );
     
     Digikam::ImageIface iface(0, 0);
-    QImage img = m_previewWidget->makeSuperImpose();
+    QImage img = m_previewWidget->makeSuperImpose().copy();
     iface.putOriginalData(i18n("Super Impose"), (uint*)img.bits(),
-                           m_previewWidget->getTemplateSize().width(),
-                           m_previewWidget->getTemplateSize().height() );   
+                          img.width(), img.height() );   
     
     m_parent->setCursor( KCursor::arrowCursor() );
     accept();       

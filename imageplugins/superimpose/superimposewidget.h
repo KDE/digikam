@@ -61,8 +61,6 @@ public:
     SuperImposeWidget(int w, int h, QWidget *parent=0);
     ~SuperImposeWidget();
 
-    Digikam::ImageIface* imageIface();
-    
     void   setEditMode(int mode);
     void   resetEdit(void);
     QRect  getCurrentSelection(void);
@@ -75,10 +73,7 @@ public slots:
     void slotSetCurrentTemplate(const KURL& url);
     
 private:
-
-    Digikam::ImageIface *m_iface;
     
-    uint       *m_data;
     int         m_w;
     int         m_h;
 
