@@ -23,56 +23,45 @@
 #ifndef IMAGEEFFECT_FREEROTATION_H
 #define IMAGEEFFECT_FREEROTATION_H
 
-// Qt include.
+// Qt includes.
 
 #include <qimage.h>
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imageguidedialog.h"
 
-class QPushButton;
 class QLabel;
 
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ImageGuideWidget;
-}
-
 namespace DigikamFreeRotationImagesPlugin
 {
 
-class ImageEffect_FreeRotation : public KDialogBase
+class ImageEffect_FreeRotation : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
-
+    
 public:
 
-    ImageEffect_FreeRotation(QWidget* parent);
+    ImageEffect_FreeRotation(QWidget *parent);
     ~ImageEffect_FreeRotation();
 
 private:
-    
+
     QLabel                    *m_newWidthLabel;
     QLabel                    *m_newHeightLabel;
 
-    QWidget                   *m_parent;
-    
-    QPushButton               *m_helpButton;
-    
     KDoubleNumInput           *m_angleInput;
 
-    Digikam::ImageGuideWidget *m_previewWidget;
+protected:
     
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotUser1();
-   
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

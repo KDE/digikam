@@ -20,34 +20,31 @@
  * 
  * ============================================================ */
 
-// C++ includes.
+// C++ include.
 
+#include <cstring>
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
  
 // Qt includes. 
  
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qwmatrix.h> 
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qbrush.h>
+#include <qpen.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -56,24 +53,17 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
+#include "freerotation.h"
 #include "imageeffect_freerotation.h"
 
 namespace DigikamFreeRotationImagesPlugin
 {
 
 ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
-                        : KDialogBase(Plain, i18n("Free Rotation"),
-                                      Help|User1|Ok|Cancel, Ok,
-                                      parent, 0, true, true,
-                                      i18n("&Reset Values")),
-                          m_parent(parent)
+                        : ImageGuideDialog(parent, i18n("Free Rotation"), 
+                                           "freerotation", false, false, true)
 {
     QString whatsThis;
-        
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
-    
-    // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Free Rotation"), 
@@ -87,49 +77,26 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
-    
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+            
+    setAboutData(about);
     
     // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-    
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Free Rotation"));    
-    topLayout->addWidget(headerFrame);
-
-    // -------------------------------------------------------------
-    
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the free rotation operation preview."
-                                           "If you move the mouse cursor on this preview, "
-                                           "a vertical and horizontal dashed line will be drawn "
-                                           "to guide you in adjusting the rotation angle. "
-                                           "Press the left mouse button to freeze the dashed "
-                                           "line's position."));
-    l->addWidget(m_previewWidget, 0);
-    topLayout->addWidget(frame, 10);
-    
-    // -------------------------------------------------------------
-    
-    QGridLayout* gridLayout = new QGridLayout( topLayout, 2, 4 , spacingHint());
-    QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
-    m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
-    m_newHeightLabel = new QLabel(plainPage());
-    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 1);
-    gridLayout->addMultiCellWidget(label2, 0, 0, 3, 3);
-    gridLayout->addMultiCellWidget(m_newHeightLabel, 0, 0, 4, 4);
         
-    QLabel *label3 = new QLabel(i18n("Angle (degrees):"), plainPage());
-    m_angleInput = new KDoubleNumInput(plainPage());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    
+    QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
+    m_newWidthLabel = new QLabel(gboxSettings);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 1);
+    
+    QLabel *label2 = new QLabel(i18n("New Height:"), gboxSettings);
+    m_newHeightLabel = new QLabel(gboxSettings);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 1);
+    
+    QLabel *label3 = new QLabel(i18n("Angle (in Degrees):"), gboxSettings);
+    m_angleInput = new KDoubleNumInput(gboxSettings);
     m_angleInput->setPrecision(1);
     m_angleInput->setRange(-180.0, 180.0, 0.1, true);
     m_angleInput->setValue(0.0);
@@ -137,92 +104,97 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
         
-    gridLayout->addMultiCellWidget(label3, 1, 1, 0, 0);
-    gridLayout->addMultiCellWidget(m_angleInput, 1, 1, 1, 4);
-        
-    resize(configDialogSize("Free Rotation Tool Dialog"));    
-
+    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 0);
+    gridSettings->addMultiCellWidget(m_angleInput, 3, 3, 0, 1);
+    
+    setUserAreaWidget(gboxSettings);
+    
     // -------------------------------------------------------------
     
     connect(m_angleInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
-            
-    connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));              
+            this, SLOT(slotTimer()));        
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 {
-    saveDialogSize("Free Rotation Tool Dialog");
 }
 
-void ImageEffect_FreeRotation::slotUser1()
+void ImageEffect_FreeRotation::renderingFinished()
 {
-    blockSignals(true);
-                   
+    m_angleInput->setEnabled(true);
+}
+
+void ImageEffect_FreeRotation::resetValues()
+{
+    m_angleInput->blockSignals(true);
     m_angleInput->setValue(0.0);
-    
-    blockSignals(false);
-    slotEffect();  
+    m_angleInput->blockSignals(false);
 } 
 
-void ImageEffect_FreeRotation::slotHelp()
+void ImageEffect_FreeRotation::prepareEffect()
 {
-    KApplication::kApplication()->invokeHelp("freerotation", "digikamimageplugins");
+    m_angleInput->setEnabled(false);
+
+    double angle = m_angleInput->value();
+
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    int orgW = iface->originalWidth();
+    int orgH = iface->originalHeight();
+    QImage image(iface->previewWidth(), iface->previewHeight(), 32);
+    uint *data = iface->getPreviewData();
+    memcpy( image.bits(), data, image.numBytes() );
+    
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new FreeRotation(&image, this, angle, orgW, orgH));    
+    delete [] data;
 }
 
-void ImageEffect_FreeRotation::slotEffect()
+void ImageEffect_FreeRotation::prepareFinal()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint*  data  = iface->getPreviewData();
-    int    w     = iface->previewWidth();
-    int    h     = iface->previewHeight();
+    m_angleInput->setEnabled(false);
+        
     double angle = m_angleInput->value();
-    
-    QImage src, dest;
-    QWMatrix matrix;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-    matrix.rotate(angle);
-    src = src.xForm(matrix);
-    QSize newSize = matrix.mapRect(QRect::QRect(0, 0, iface->originalWidth(), iface->originalHeight())).size();
-    src = src.smoothScale(w, h, QImage::ScaleMin);
-    dest.create( w, h, 32 );
-    dest.fill(m_previewWidget->colorGroup().background().rgb());
-    bitBlt( &dest, (w-src.width())/2, (h-src.height())/2, &src, 0, 0, src.width(), src.height());
-    iface->putPreviewData((uint*)dest.bits());
 
-    delete [] data;
-    m_previewWidget->update();
+    Digikam::ImageIface iface(0, 0);
+    int orgW = iface.originalWidth();
+    int orgH = iface.originalHeight();
+    QImage orgImage(orgW, orgH, 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new FreeRotation(&orgImage, this, angle, orgW, orgH));
+    delete [] data;       
+}
+
+void ImageEffect_FreeRotation::putPreviewData(void)
+{
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    int w = iface->previewWidth();
+    int h = iface->previewHeight();
+        
+    QImage imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QImage::ScaleMin);
+    QImage imDest( w, h, 32 );
+    bitBlt( &imDest, (w-imTemp.width())/2, (h-imTemp.height())/2, 
+            &imTemp, 0, 0, imTemp.width(), imTemp.height());
+            
+    iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
+                                                     iface->previewHeight())).bits());
+                 
+    m_imagePreviewWidget->update();    
+    QSize newSize = dynamic_cast<FreeRotation *>(m_threadedFilter)->getNewSize();
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
-void ImageEffect_FreeRotation::slotOk()
+void ImageEffect_FreeRotation::putFinalData(void)
 {
-    accept();    
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-        
-    uint*  data  = iface.getOriginalData();
-    int    w     = iface.originalWidth();
-    int    h     = iface.originalHeight();
-    double angle = m_angleInput->value();
-
-    QImage src;
-    QWMatrix matrix;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-    matrix.rotate(angle);
-    src = src.xForm(matrix);
-    Digikam::ImageFilters::gaussianBlurImage((uint*)src.bits(), src.width(), src.height(), 1);
-    iface.putOriginalData(i18n("Free Rotation"), (uint*)src.bits(), src.width(), src.height());
-        
-    delete [] data;
-    kapp->restoreOverrideCursor();
+    Digikam::ImageIface iface(0, 0);    
+    QImage targetImage = m_threadedFilter->getTargetImage();
+    iface.putOriginalData(i18n("Free Rotation"), 
+                          (uint*)targetImage.bits(), 
+                          targetImage.width(), targetImage.height());
 }
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
