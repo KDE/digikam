@@ -131,7 +131,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );         
     QFrame *gbox2 = new QFrame(plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 8, 2, 20, spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());
     
     m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
