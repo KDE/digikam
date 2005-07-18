@@ -409,6 +409,18 @@ public:
      */
     QStringList getItemURLsInTag(int tagID);
 
+    /**
+     * Given an albumid, this returns the url for that albumdb
+     * @param albumID the id of the albumdb
+     * @return the url of the albumdb
+     */
+    QString AlbumDB::getAlbumURL(int albumID);
+
+    /**
+     * Returns the average date of all images for that album.
+     * @param albumID the id of the album to calculate the average in
+     * @return the average date.
+     */
     QDate getAlbumAverageDate(int albumID);
 
     /**

@@ -409,7 +409,10 @@ void ScanLib::deleteStaleEntries()
     QValueList< QPair<QString,int> >::iterator it;
     for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end(); ++it)
     {
-        listToBeDeleted.append((*it).first);
+        AlbumDB* dbstore = AlbumManager::instance()->albumDB();
+        QString location = " (" + dbstore->getAlbumURL((*it).second) + ")";
+
+        listToBeDeleted.append((*it).first + location);
     }
 
     if ( !m_filesToBeDeleted.isEmpty() )

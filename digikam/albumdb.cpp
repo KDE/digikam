@@ -966,6 +966,14 @@ QStringList AlbumDB::getItemURLsInTag(int tagID)
     return values;
 }
 
+QString AlbumDB::getAlbumURL(int albumID)
+{
+    QStringList values;
+    execSql( QString("SELECT url from Albums where id=%1")
+             .arg( albumID), &values);
+    return values[0];
+}
+
 QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QStringList values;
