@@ -64,10 +64,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
                                                "which will be used for the preview computation."
                                                "<p>Click and drag the mouse cursor in the "
-                                               "image to change the clip focus. "
-                                               "<p>If <b>Separate View</b> option is enabled, the original "
-                                               "image is on the left of the red dashed line, and "
-                                               "target image on the right."));
+                                               "image to change the clip focus."));
     l1->addWidget(m_imageRegionWidget, 0);
     m_mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
     m_mainLayout->setRowStretch(1, 10);
