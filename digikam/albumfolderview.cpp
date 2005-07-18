@@ -115,7 +115,22 @@ PAlbum* AlbumFolderViewItem::getAlbum() const
 
 int AlbumFolderViewItem::id() const
 {
-    return m_album ? m_album->id() : 0;
+    if (m_groupItem)
+    {
+        if (m_year != 0 && m_month != 0)
+        {
+            return (m_year*(-100) + m_month*(-1));
+        }
+        else
+        {
+            return ( - (AlbumSettings::instance()->getAlbumCollectionNames()
+                        .findIndex(text(0)) ) );
+        }
+    }
+    else
+    {
+        return m_album ? m_album->id() : 0;
+    }
 }
 
 bool AlbumFolderViewItem::isGroupItem() const
