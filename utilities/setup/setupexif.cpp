@@ -62,7 +62,7 @@ SetupExif::SetupExif(QWidget* parent )
    layout->addWidget(explanation);
 
    iconSaveExifBox_ = new QCheckBox(this);
-   iconSaveExifBox_->setText(i18n("&Save image comments as EXIF comments in JPEG images"));
+   iconSaveExifBox_->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
    layout->addWidget(iconSaveExifBox_);
 
    iconExifRotateBox_ = new QCheckBox(this);
