@@ -74,7 +74,7 @@ public slots:
     void slotEditModeChanged(int mode);
     void slotSetCurrentTemplate(const KURL& url);
     
-protected:
+private:
 
     Digikam::ImageIface *m_iface;
     
@@ -96,8 +96,11 @@ protected:
         
     QRect       m_rect;                // For mouse drag position.
     QRect       m_currentSelection;    // Region selection in image displayed in the widget.
-    
+
+protected:
+        
     void paintEvent( QPaintEvent *e );
+    void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );    

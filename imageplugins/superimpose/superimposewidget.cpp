@@ -60,7 +60,7 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     memcpy(m_img.bits(), m_data, m_img.numBytes());
         
     setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w, h);
+    setMinimumSize(w, h);
     setMouseTracking(true);
     
     resetEdit();
@@ -102,7 +102,8 @@ QImage SuperImposeWidget::makeSuperImpose(void)
 void SuperImposeWidget::resetEdit(void)
 {
     m_zoomFactor = 100;
-    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, m_rect.width(), m_rect.height());
+    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, 
+                               m_rect.width(), m_rect.height());
     makePixmap();
     repaint(false);
 }
@@ -118,6 +119,25 @@ void SuperImposeWidget::makePixmap(void)
     p.drawPixmap(m_rect.x(), m_rect.y(), pix, 0, 0, m_rect.width(), m_rect.height());
     p.drawPixmap(m_rect.x(), m_rect.y(), m_templatePix, 0, 0, m_rect.width(), m_rect.height());
     p.end();
+}
+
+void SuperImposeWidget::resizeEvent(QResizeEvent * e)
+{
+    blockSignals(true);
+    delete m_pixmap;
+    int w = e->size().width();
+    int h = e->size().height();
+    int old_w = m_w;
+    int old_h = m_h;
+    m_data = m_iface->setPreviewSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    /*m_textRect.setX((int)((float)m_textRect.x() * ( (float)m_w / (float)old_w)));
+    m_textRect.setY((int)((float)m_textRect.y() * ( (float)m_h / (float)old_h)));*/
+    makePixmap();
+    blockSignals(false);
 }
 
 void SuperImposeWidget::paintEvent( QPaintEvent * )

@@ -65,6 +65,7 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "superimposewidget.h"
 #include "dirselectwidget.h"
 #include "imageeffect_superimpose.h"
@@ -73,7 +74,7 @@ namespace DigikamSuperImposeImagesPlugin
 {
 
 ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
-                       : KDialogBase(Plain, i18n("Template Superimpose"),
+                       : KDialogBase(Plain, i18n("Template Superimpose to Photograph"),
                                      Help|User1|Ok|Cancel, Ok,
                                      parent, 0, true, true,
                                      i18n("&Reset Values")),
@@ -85,6 +86,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // Read settings.
     
+    resize(configDialogSize("Template Superimpose Tool Dialog"));
     KConfig *config = kapp->config();
     config->setGroup("Album Settings");
     KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
@@ -97,7 +99,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Template Superimpose"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to superimpose a template onto an image."),
+                                       I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
@@ -114,45 +116,29 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Template Superimpose"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
-    topLayout->addWidget(headerFrame);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
+                          i18n("Template Superimpose to Photograph")); 
+    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
     
     // -------------------------------------------------------------
     
-    QHBoxLayout *hlayout = new QHBoxLayout( topLayout );
-
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new SuperImposeWidget(400, 300, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template superimposed onto the image.") );
-
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
-                                                                                      
-    QHButtonGroup *bGroup = new QHButtonGroup(gbox);
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
+                                           "superimposed onto the image.") );
+    l->addWidget(m_previewWidget);
+    
+    topLayout->addMultiCellWidget(frame, 1, 1, 0, 0);
+    topLayout->setColStretch(0, 10);
+    topLayout->setRowStretch(1, 10);
+    
+    // -------------------------------------------------------------
+       
+    QHButtonGroup *bGroup = new QHButtonGroup(plainPage());
     KIconLoader icon;
     bGroup->addSpace(0);
     QPushButton *zoomInButton = new QPushButton( bGroup );
@@ -177,12 +163,12 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     bGroup->setExclusive(true);
     bGroup->setFrameShape(QFrame::NoFrame);
     
-    hlayout->addWidget(gbox);
+    topLayout->addMultiCellWidget(bGroup, 2, 2, 0, 0);
     
     // -------------------------------------------------------------
     
-    QGroupBox *gbox2 = new QGroupBox(i18n("Templates"), plainPage());
-    QGridLayout* grid = new QGridLayout( gbox2, 2, 3, 20, spacingHint());
+    QFrame *gbox2 = new QFrame(plainPage());
+    QGridLayout* grid = new QGridLayout( gbox2, 2, 3, marginHint(), spacingHint());
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
@@ -193,13 +179,8 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 2);    
     grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
     
-    hlayout->addWidget(gbox2);
+    topLayout->addMultiCellWidget(gbox2, 1, 2, 1, 1);
     
-    // -------------------------------------------------------------
-    
-    adjustSize();
-    disableResize();
-
     // -------------------------------------------------------------
     
     connect(bGroup, SIGNAL(released(int)),
@@ -221,6 +202,8 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
 ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 {
+    saveDialogSize("Template Superimpose Tool Dialog");
+    
     KConfig *config = kapp->config();
     config->setGroup("Template Superimpose Tool Settings");
     config->writePathEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
