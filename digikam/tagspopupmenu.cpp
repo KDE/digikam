@@ -20,6 +20,9 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qpixmap.h>
 #include <qstring.h>
@@ -30,8 +33,11 @@
 #include "albumdb.h"
 #include "album.h"
 #include "syncjob.h"
+#include "tagcreatedlg.h"
 
 #include "tagspopupmenu.h"
+
+#define ADDTAGID 10000
 
 TagsPopupMenu::TagsPopupMenu(AlbumIconView* view, int addToID,
                              bool onlyAssignedTags)
@@ -39,6 +45,17 @@ TagsPopupMenu::TagsPopupMenu(AlbumIconView* view, int addToID,
       m_view(view), m_addToID(addToID),
       m_onlyAssignedTags(onlyAssignedTags)
 {
+    if (!m_onlyAssignedTags)
+    {
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+        m_addTagPix =  iconLoader->loadIcon("tag",
+                                            KIcon::NoGroup,
+                                            KIcon::SizeSmall,
+                                            KIcon::DefaultState,
+                                            0, true);
+    }
+    
     connect(this, SIGNAL(aboutToShow()),
             SLOT(slotAboutToShow()));
     connect(this, SIGNAL(activated(int)),
@@ -65,13 +82,25 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     QPopupMenu*  popup      = new QPopupMenu(this);
     connect(popup, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 
-    if (!album->isRoot())
+    if (!m_onlyAssignedTags)
     {
-        QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
-        popup->insertItem(pix, album->title(), m_addToID + album->id());
-        popup->insertSeparator();
+        popup->insertItem(m_addTagPix, i18n("Add new Tag..."),
+                          ADDTAGID + album->id());
+        if (album->firstChild())
+        {
+            popup->insertSeparator();
+        }
     }
-
+    else
+    {
+        if (!album->isRoot())
+        {
+            QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+            popup->insertItem(pix, album->title(), m_addToID + album->id());
+            popup->insertSeparator();
+        }
+    }
+    
     for (Album* a = album->firstChild(); a; a = a->next())
     {
         if (m_onlyAssignedTags)
@@ -151,6 +180,15 @@ void TagsPopupMenu::slotAboutToShow()
     if (!album)
         return;
 
+    if (!m_onlyAssignedTags)
+    {
+        insertItem(m_addTagPix, i18n("Add new Tag..."), ADDTAGID);
+        if (album->firstChild())
+        {
+            insertSeparator();
+        }
+    }
+    
     for (Album* a = album->firstChild(); a; a = a->next())
     {
         if (m_onlyAssignedTags)
@@ -176,8 +214,39 @@ void TagsPopupMenu::slotAboutToShow()
 
 void TagsPopupMenu::slotActivated(int id)
 {
-    int tagID = id - m_addToID;
-    emit signalTagActivated(tagID);
+    if (id >= ADDTAGID)
+    {
+        int tagID = id - ADDTAGID;
+
+        AlbumManager* man = AlbumManager::instance();
+        TAlbum* parent = man->findTAlbum(tagID);
+        if (!parent)
+        {
+            kdWarning() << "Failed to find album with id "
+                        << tagID << endl;
+            return;
+        }
+
+        QString title, icon;
+        if (!TagCreateDlg::tagCreate(parent, title, icon))
+            return;
+
+        QString errMsg;
+        TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
+
+        if( !newAlbum )
+        {
+            KMessageBox::error(this, errMsg);
+            return;
+        }
+
+        emit signalTagActivated(newAlbum->id());
+    }
+    else
+    {
+        int tagID = id - m_addToID;
+        emit signalTagActivated(tagID);
+    }
 }
 
 #include "tagspopupmenu.moc"

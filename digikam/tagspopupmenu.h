@@ -23,6 +23,7 @@
 
 #include <qpopupmenu.h>
 #include <qvaluelist.h>
+#include <qpixmap.h>
 
 class AlbumIconView;
 
@@ -46,6 +47,7 @@ private:
     int              m_addToID;
     bool             m_onlyAssignedTags;
     QValueList<int>  m_assignedTags;
+    QPixmap          m_addTagPix;
         
 private slots:
 
