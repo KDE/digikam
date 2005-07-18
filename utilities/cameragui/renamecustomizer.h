@@ -26,7 +26,9 @@
 class QLineEdit;
 class QCheckBox;
 class QRadioButton;
+class QComboBox;
 class QTimer;
+class QHBox;
 
 class RenameCustomizer : public QButtonGroup
 {
@@ -34,12 +36,22 @@ class RenameCustomizer : public QButtonGroup
 
 public:
 
+    enum Case
+    {
+        NONE = 0,
+        UPPER,
+        LOWER
+    };
+
     RenameCustomizer(QWidget* parent);
     ~RenameCustomizer();
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
     QString nameTemplate() const;
+    Case    changeCase() const;
+
+
 
 signals:
 
@@ -52,6 +64,10 @@ private:
     
     QRadioButton*  m_renameDefault;
     QRadioButton*  m_renameCustom;
+
+    QGroupBox*     m_renameDefaultBox;
+    QLabel*        m_renameDefaultCase;
+    QComboBox*     m_renameDefaultCaseType;
 
     QGroupBox*     m_renameCustomBox;
     QLineEdit*     m_renameCustomPrefix;
@@ -66,6 +82,7 @@ private slots:
     void slotPrefixChanged(const QString&);
     void slotExifChanged(bool);
     void slotSeqChanged(bool);
+    void slotCaseTypeChanged(const QString&);
 };
 
 #endif /* RENAMECUSTOMIZER_H */

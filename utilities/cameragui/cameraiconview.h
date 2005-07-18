@@ -23,6 +23,7 @@
 
 #include <iconview.h>
 #include <qdict.h>
+#include <renamecustomizer.h>
 
 class GPItemInfo;
 class RenameCustomizer;
@@ -58,7 +59,10 @@ private:
     QString getTemplatedName(const QString& templ, 
                              const GPItemInfo* itemInfo,
                              int position);
-    
+
+    QString getCasedName(const RenameCustomizer::Case ccase,
+                         const GPItemInfo* itemInfo);
+
     QDict<CameraIconViewItem> m_itemDict;
     RenameCustomizer*         m_renamer;
     CameraUI*                 m_ui;

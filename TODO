@@ -12,8 +12,6 @@
 
 * remove thumbnail size from the settings [TA]
 
-* add posibility to change case while downloading images from camera [TA]
-
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
   - splitter sizes
   - active view

@@ -78,10 +78,18 @@ void CameraIconView::addItem(const GPItemInfo& info)
     QPixmap pix = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
 
     QString downloadName;
-    if (m_renamer && !m_renamer->useDefault())
+
+    if (m_renamer)
     {
-        downloadName = getTemplatedName( m_renamer->nameTemplate(), &info,
-                                         m_itemDict.count() );
+        if (!m_renamer->useDefault())
+        {
+            downloadName = getTemplatedName( m_renamer->nameTemplate(), &info,
+                                             m_itemDict.count() );
+        }
+        else
+        {
+            downloadName = getCasedName( m_renamer->changeCase(), &info);
+        }
     }
 
     CameraIconViewItem* item = new CameraIconViewItem(m_groupItem, info,
@@ -132,10 +140,17 @@ void CameraIconView::slotDownloadNameChanged()
     {
         CameraIconViewItem* viewItem =
             static_cast<CameraIconViewItem*>(item);
-        viewItem->setDownloadName( useDefault ? QString::null :
-                                   getTemplatedName( nameTemplate,
-                                                     viewItem->itemInfo(),
-                                                     m_groupItem->index(viewItem) ) );
+
+        QString downloadName;
+        if (!useDefault)
+            downloadName = getTemplatedName( nameTemplate,
+                                             viewItem->itemInfo(),
+                                             m_groupItem->index(viewItem) );
+        else
+            downloadName = getCasedName( m_renamer->changeCase(),
+                                         viewItem->itemInfo() );
+
+        viewItem->setDownloadName( downloadName );
     }
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
@@ -171,6 +186,30 @@ QString CameraIconView::getTemplatedName(const QString& templ,
     dname += '.';
     dname += ext;
     
+    return dname;
+}
+
+QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
+                                     const GPItemInfo* itemInfo)
+{
+    QString dname;
+
+    switch (ccase)
+    {
+    case(RenameCustomizer::UPPER):
+    {
+        dname = itemInfo->name.upper();
+        break;
+    }
+    case(RenameCustomizer::LOWER):
+    {
+        dname = itemInfo->name.lower();
+        break;
+    }
+    default:
+        break;
+    };
+
     return dname;
 }
 
