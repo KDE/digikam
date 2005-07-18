@@ -133,9 +133,28 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
-    /*m_textRect.setX((int)((float)m_textRect.x() * ( (float)m_w / (float)old_w)));
-    m_textRect.setY((int)((float)m_textRect.y() * ( (float)m_h / (float)old_h)));*/
+    QSize size = m_template.size();
+    
+    if (size.width() < size.height())
+       {
+       int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
+       m_rect = QRect(width()/2-neww/2, 0, neww, height());
+       }
+    else
+       {
+       int newh = (int) ((float)width() / (float)size.width() * (float)size.height());
+       m_rect = QRect(0, height()/2-newh/2, width(), newh);
+       }
+    
+    m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
+    /*m_currentSelection = QRect((int)((float)m_currentSelection.x() * ( (float)m_w / (float)old_w)),
+                               (int)((float)m_currentSelection.y() * ( (float)m_h / (float)old_h)), 
+                               m_rect.width(), m_rect.height());*/
+    m_currentSelection.setWidth(m_rect.width());
+    m_currentSelection.setHeight(m_rect.height());
+    /*int z = m_zoomFactor;
+    m_zoomFactor = 100;
+    zoomSelection(z-100);*/
     makePixmap();
     blockSignals(false);
 }
