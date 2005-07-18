@@ -489,6 +489,13 @@ bool DigikamImageCollection::isDirectory()
     }
 }
 
+bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
+{
+    DigikamImageCollection* thatCollection =
+        static_cast<DigikamImageCollection*>(&imgCollection);
+
+    return (album_ == thatCollection->album_);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// KIPI INTERFACE IMPLEMENTATION CLASS //////////////////////////////////////////

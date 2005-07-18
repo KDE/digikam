@@ -120,7 +120,8 @@ public:
     virtual KURL uploadPath();
     virtual KURL uploadRoot();
     virtual QString uploadRootName();
-    virtual bool    isDirectory();
+    virtual bool isDirectory();
+    virtual bool operator==(ImageCollectionShared&);
     
 private:
 
