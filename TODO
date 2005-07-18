@@ -20,6 +20,17 @@
   - closed/open state of left/right views
   - currently selected albums in each view
 
+* Tina's Tag Usability Recommendations:
+(http://www.uni-koblenz.de/~trilliti/digikam_tagging/main.html). 
+Following items have been agreed on (rest are in dispute):
+1.1 Create new tags while assigning tags
+1.2 Show which tags are already assigned
+3.2 Remove Checkbox for "saving automatically"
+3.3.2 Select new tags automatically
+3.3.3 Checking checkboxes for assigning tags
+4. Editing tags when in image editor
+
+
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
