@@ -68,6 +68,7 @@
 
 #include "version.h"
 #include "inserttextwidget.h"
+#include "bannerwidget.h"
 #include "imageeffect_inserttext.h"
 
 
@@ -75,7 +76,7 @@ namespace DigikamInsertTextImagesPlugin
 {
 
 ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
-                      : KDialogBase(Plain, i18n("Insert Text"),
+                      : KDialogBase(Plain, i18n("Insert Text to Photograph"),
                                     Help|User1|Ok|Cancel, Ok,
                                     parent, 0, true, true, i18n("&Reset Values")),
                         m_parent(parent)
@@ -83,13 +84,14 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
+    resize(configDialogSize("Insert Text Tool Dialog"));    
     
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Insert Text"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin for insert text to an image."),
+                                       I18N_NOOP("A digiKam image plugin for insert text to phtograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
@@ -108,44 +110,27 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
         
     QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
     
-    QFrame *headerFrame = new QFrame( plainPage() );
-    headerFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( headerFrame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
-    QLabel *pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-    pixmapLabelLeft->setScaledContents( false );
-    layout->addWidget( pixmapLabelLeft );
-    QLabel *labelTitle = new QLabel( i18n("Insert Text to Image"), headerFrame, "labelTitle" );
-    layout->addWidget( labelTitle );
-    layout->setStretchFactor( labelTitle, 1 );
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
+                          i18n("Insert Text to Photograph")); 
     topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-    
-    QString directory;
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_left", KGlobal::dirs()->kde_default("data") +
-                                                                        "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_left",
-                                                 "digikamimageplugins_banner_left.png");
-    
-    pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLabelLeft->setPixmap( QPixmap( directory + "digikamimageplugins_banner_left.png" ) );
-    labelTitle->setPaletteBackgroundColor( QColor(201, 208, 255) );
     
     // -------------------------------------------------------------
     
-    QVGroupBox *gbox = new QVGroupBox(i18n("Preview"), plainPage());
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
-    l->addWidget(m_previewWidget, 0, Qt::AlignCenter);
+    l->addWidget(m_previewWidget);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
                                            "You can use the mouse for moving the text at the right location.") );
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
+    topLayout->addMultiCellWidget(frame, 1, 1, 0, 0);
+    topLayout->setColStretch(0, 10);
+    topLayout->setRowStretch(1, 10);
     
     // -------------------------------------------------------------
-        
-    QGroupBox *gbox2 = new QGroupBox(i18n("Settings"), plainPage());
+
+    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );         
+    QFrame *gbox2 = new QFrame(plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 8, 2, 20, spacingHint());
     
     m_textEdit = new KTextEdit(gbox2);
@@ -213,7 +198,9 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
     gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
     
-    topLayout->addMultiCellWidget(gbox2, 1, 1, 1, 1);
+    vLayout->addWidget(gbox2);
+    vLayout->addStretch(10);
+    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
     
     // -------------------------------------------------------------
     
@@ -240,13 +227,12 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
                         
     // -------------------------------------------------------------
 
-    adjustSize();
-    disableResize();  
     QTimer::singleShot(0, this, SLOT(readSettings())); 
 }
 
 ImageEffect_InsertText::~ImageEffect_InsertText()
 {
+    saveDialogSize("Insert Text Tool Dialog");
 }
 
 void ImageEffect_InsertText::readSettings(void)
@@ -298,8 +284,7 @@ void ImageEffect_InsertText::writeSettings(void)
 
 void ImageEffect_InsertText::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp("inserttext",
-                                             "digikamimageplugins");
+    KApplication::kApplication()->invokeHelp("inserttext", "digikamimageplugins");
 }
 
 void ImageEffect_InsertText::closeEvent(QCloseEvent *e)

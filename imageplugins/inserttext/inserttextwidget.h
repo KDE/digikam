@@ -81,7 +81,7 @@ public:
     void   resetEdit(void);
     QImage makeInsertText(void);
     
-protected:
+private:
 
     Digikam::ImageIface *m_iface;
     
@@ -96,8 +96,6 @@ protected:
     int         m_w;
     int         m_h;
     
-    int         m_xTextPos;            
-    int         m_yTextPos;
     int         m_xpos;            
     int         m_ypos;
     
@@ -111,8 +109,11 @@ protected:
     QFont       m_textFont;
     
     QColor      m_textColor;
+        
+protected:
     
     void paintEvent( QPaintEvent *e );
+    void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );    

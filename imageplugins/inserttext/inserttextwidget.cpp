@@ -64,7 +64,7 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
     m_pixmap = new QPixmap(w, h);
     
     setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w, h);
+    setMinimumSize(w, h);
     setMouseTracking(true);
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
@@ -263,6 +263,11 @@ void InsertTextWidget::makePixmap(void)
     
     m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
 
+    // Adapt text rectangle from image coordinate to widget coordinate for rendering.
+    QRect textRect = m_textRect;
+    textRect.setX( m_textRect.x() + m_rect.x() );
+    textRect.setY( m_textRect.y() + m_rect.y() );
+       
     // Get Regions informations.
     
     QRect r(0, 0, width(), height());
@@ -282,12 +287,12 @@ void InsertTextWidget::makePixmap(void)
         {
         case ROTATION_NONE:
         case ROTATION_180:
-           m_textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
+           textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
            break;
         
         case ROTATION_90:
         case ROTATION_270:
-           m_textRect.setSize( QSize::QSize(fontRect.height(), fontRect.width() ) );
+           textRect.setSize( QSize::QSize(fontRect.height(), fontRect.width() ) );
            break;
         }
     
@@ -297,8 +302,8 @@ void InsertTextWidget::makePixmap(void)
        {
        QImage image((uchar*)m_data, m_w, m_h, 32, 0, 0, QImage::IgnoreEndian);
        
-       image = image.copy( m_textRect.x()-m_rect.x(), m_textRect.y()-m_rect.y(),
-                           m_textRect.width(), m_textRect.height() );
+       image = image.copy( textRect.x()-m_rect.x(), textRect.y()-m_rect.y(),
+                           textRect.width(), textRect.height() );
           
        uint* ptr = (uint*)image.bits();
        uchar red, green, blue, alpha;
@@ -320,7 +325,7 @@ void InsertTextWidget::makePixmap(void)
     
        QPixmap pix(image);
        
-       bitBlt(m_pixmap, m_textRect.x(), m_textRect.y(), &pix);
+       bitBlt(m_pixmap, textRect.x(), textRect.y(), &pix);
        }
             
     // Drawing text with rotation.
@@ -333,29 +338,29 @@ void InsertTextWidget::makePixmap(void)
     switch(m_textRotation)
         {
         case ROTATION_NONE:
-           p.drawText( m_textRect.x(), m_textRect.y(), m_textRect.width(), 
-                       m_textRect.height(), m_alignMode, m_textString );
+           p.drawText( textRect.x(), textRect.y(), textRect.width(), 
+                       textRect.height(), m_alignMode, m_textString );
            break;
         
         case ROTATION_90:
-           p.translate(m_textRect.x()+m_textRect.width(), m_textRect.y());
+           p.translate(textRect.x()+textRect.width(), textRect.y());
            p.rotate(90.0);
-           p.drawText( 0, 0, m_textRect.height(), m_textRect.width(), 
+           p.drawText( 0, 0, textRect.height(), textRect.width(), 
                        m_alignMode, m_textString );
            break;
         
         case ROTATION_180:
-           p.translate(m_textRect.x() + m_textRect.width(), 
-                       m_textRect.y() + m_textRect.height());
+           p.translate(textRect.x() + textRect.width(), 
+                       textRect.y() + textRect.height());
            p.rotate(180.0);
-           p.drawText( 0, 0, m_textRect.width(), m_textRect.height(), 
+           p.drawText( 0, 0, textRect.width(), textRect.height(), 
                        m_alignMode, m_textString );
            break;
         
         case ROTATION_270:
-           p.translate(m_textRect.x(), m_textRect.y() + m_textRect.height());
+           p.translate(textRect.x(), textRect.y() + textRect.height());
            p.rotate(270.0);
-           p.drawText( 0, 0, m_textRect.height(), m_textRect.width(), 
+           p.drawText( 0, 0, textRect.height(), textRect.width(), 
                        m_alignMode, m_textString );
            break;
         }
@@ -368,13 +373,13 @@ void InsertTextWidget::makePixmap(void)
        {
        p.setPen( QPen::QPen(m_textColor, 2, Qt::SolidLine, 
                  Qt::SquareCap, Qt::RoundJoin) ) ;
-       p.drawRect(m_textRect.x() - 1, m_textRect.y() - 1, 
-                  m_textRect.width() + 2, m_textRect.height() + 2);
+       p.drawRect(textRect.x() - 1, textRect.y() - 1, 
+                  textRect.width() + 2, textRect.height() + 2);
        }
     else   // Make simple dot line border to help user.
        {
        p.setPen(QPen(QColor(255, 64, 64), 1, Qt::DotLine));
-       p.drawRect(m_textRect);
+       p.drawRect(textRect);
        }
     
     // Drawing widget background.
@@ -382,11 +387,35 @@ void InsertTextWidget::makePixmap(void)
     p.setClipRegion(reg);
     p.fillRect(r, colorGroup().background());
     p.end();
+    
+    // Save all text rectangle transformations from widget coordinate to image coordinate.
+    m_textRect = textRect;
+    m_textRect.setX( textRect.x() - m_rect.x() );
+    m_textRect.setY( textRect.y() - m_rect.y() );    
 }
 
 void InsertTextWidget::paintEvent( QPaintEvent * )
 {
     bitBlt(this, 0, 0, m_pixmap);
+}
+
+void InsertTextWidget::resizeEvent(QResizeEvent * e)
+{
+    blockSignals(true);
+    delete m_pixmap;
+    int w = e->size().width();
+    int h = e->size().height();
+    int old_w = m_w;
+    int old_h = m_h;
+    m_data = m_iface->setPreviewSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    m_pixmap = new QPixmap(w, h);
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    m_textRect.setX((int)((float)m_textRect.x() * ( (float)m_w / (float)old_w)));
+    m_textRect.setY((int)((float)m_textRect.y() * ( (float)m_h / (float)old_h)));
+    makePixmap();
+    blockSignals(false);
 }
 
 void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
