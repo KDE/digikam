@@ -102,7 +102,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                      "The Golden Ratio 1:1.618. A composition following this rule "
                                      "is considered visually harmonious"));
     
-    QLabel *label2 = new QLabel(i18n("Orientation:"), cropSelection);
+    m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
     m_orientCB = new QComboBox( false, cropSelection );
     m_orientCB->insertItem( i18n("Landscape") );
     m_orientCB->insertItem( i18n("Portrait") );
@@ -110,7 +110,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
-    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
     grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
     
     // -------------------------------------------------------------
@@ -206,7 +206,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip Vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    QLabel *labelColorGuide = new QLabel(i18n("Color and Width:"), compositionGuide);
+    m_colorGuideLabel = new QLabel(i18n("Color and Width:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
@@ -220,7 +220,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid2->addMultiCellWidget(m_goldenTriangleBox, 4, 4, 0, 2);
     grid2->addMultiCellWidget(m_flipHorBox, 5, 5, 0, 2);
     grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 2);
-    grid2->addMultiCellWidget(labelColorGuide, 7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_colorGuideLabel, 7, 7, 0, 0);
     grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
     grid2->addMultiCellWidget(m_guideSize, 7, 7, 2, 2);
         
@@ -552,11 +552,13 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
        m_customLabel2->setEnabled(true);
        m_customRatioNInput->setEnabled(true);
        m_customRatioDInput->setEnabled(true);
+       m_orientLabel->setEnabled(true);
        m_orientCB->setEnabled(true);
        slotCustomRatioChanged();
        }
     else if ( a == Digikam::ImageSelectionWidget::RATIONONE )
        {
+       m_orientLabel->setEnabled(false);
        m_orientCB->setEnabled(false);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
@@ -565,6 +567,7 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
        }
     else        // Pre-config ratio selected.
        {
+       m_orientLabel->setEnabled(true);
        m_orientCB->setEnabled(true);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
@@ -575,8 +578,7 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
 
 void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
 {
-    if ( t == Digikam::ImageSelectionWidget::RulesOfThirds || 
-         t == Digikam::ImageSelectionWidget::GuideNone ) 
+    if ( t == Digikam::ImageSelectionWidget::GuideNone ) 
        {
        m_goldenSectionBox->setEnabled(false);
        m_goldenSpiralSectionBox->setEnabled(false);
@@ -584,6 +586,21 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_goldenTriangleBox->setEnabled(false);
        m_flipHorBox->setEnabled(false);
        m_flipVerBox->setEnabled(false);
+       m_colorGuideLabel->setEnabled(false);
+       m_guideColorBt->setEnabled(false);
+       m_guideSize->setEnabled(false);
+       }
+    else if ( t == Digikam::ImageSelectionWidget::RulesOfThirds )
+       {
+       m_goldenSectionBox->setEnabled(false);
+       m_goldenSpiralSectionBox->setEnabled(false);
+       m_goldenSpiralBox->setEnabled(false);
+       m_goldenTriangleBox->setEnabled(false);
+       m_flipHorBox->setEnabled(false);
+       m_flipVerBox->setEnabled(false);
+       m_colorGuideLabel->setEnabled(true);
+       m_guideColorBt->setEnabled(true);
+       m_guideSize->setEnabled(true);
        }
     else if ( t == Digikam::ImageSelectionWidget::HarmoniousTriangles ) 
        {
@@ -593,6 +610,9 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_goldenTriangleBox->setEnabled(false);
        m_flipHorBox->setEnabled(true);
        m_flipVerBox->setEnabled(true);
+       m_colorGuideLabel->setEnabled(true);
+       m_guideColorBt->setEnabled(true);
+       m_guideSize->setEnabled(true);
        }
     else        
        {
@@ -602,6 +622,9 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_goldenTriangleBox->setEnabled(true);
        m_flipHorBox->setEnabled(true);
        m_flipVerBox->setEnabled(true);
+       m_colorGuideLabel->setEnabled(true);
+       m_guideColorBt->setEnabled(true);
+       m_guideSize->setEnabled(true);
        }
     
     m_imageSelectionWidget->setGoldenGuideTypes(m_goldenSectionBox->isChecked(),

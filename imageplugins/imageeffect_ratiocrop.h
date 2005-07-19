@@ -55,6 +55,8 @@ private:
     
     QLabel       *m_customLabel1;
     QLabel       *m_customLabel2;
+    QLabel       *m_orientLabel;
+    QLabel       *m_colorGuideLabel;
     
     QComboBox    *m_ratioCB;
     QComboBox    *m_orientCB;
