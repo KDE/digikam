@@ -1,10 +1,8 @@
 
 * split albumfolderview into albumview and tagview
   - Copy/Paste [JA]
-  - doxygen comments... [JA]
 
 * Sidebar / View saveing/loading the last state needs some more love [JA]
-  - doxygen comments... [JA]
 
 * allow user to edit dates (maybe through comments tag editor) [TA]
 * resizable thumbnail in comments tag editor?
@@ -48,5 +46,3 @@ Post 0.8
      and the kioslaves
 
 * Custom ordering of images [TA]
-
-
