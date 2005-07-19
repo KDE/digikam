@@ -69,7 +69,10 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
-            
+
+    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Free Rotation algorithm"), 
+                     "pieter_voloshyn at ame.com.br"); 
+                                                      
     setAboutData(about);
     
     QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the free image operation preview. "
