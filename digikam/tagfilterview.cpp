@@ -25,12 +25,15 @@
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kcursor.h>
+#include <kmessagebox.h>
 
 #include <qheader.h>
 #include <qintdict.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include "albummanager.h"
 #include "albumlister.h"
@@ -38,6 +41,7 @@
 #include "syncjob.h"
 #include "dragobjects.h"
 #include "folderitem.h"
+#include "tagcreatedlg.h"
 #include "tagfilterview.h"
 
 static QPixmap getBlendedIcon(TAlbum* album)
@@ -162,6 +166,9 @@ TagFilterView::TagFilterView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             SLOT(slotClear()));
 
+    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    
     connect(d->timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
 }
@@ -307,6 +314,166 @@ void TagFilterView::slotTimeOut()
     }
 
     AlbumLister::instance()->setTagFilter(filterTags, showUnTagged);
+}
+
+void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
+{
+    QPopupMenu popmenu(this);
+
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(it);
+    if (item && item->m_untagged)
+        return;
+    
+    popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
+
+    if (item)
+    {
+        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
+    }
+
+    int choice = popmenu.exec((QCursor::pos()));
+    switch( choice )
+    {
+        case 10:
+        {
+            tagNew(item);
+            break;
+        }
+        case 11:
+        {
+            tagEdit(item);
+            break;
+        }
+        case 12:
+        {
+            tagDelete(item);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void TagFilterView::tagNew(TagFilterViewItem* item)
+{
+    TAlbum *parent;
+    AlbumManager* man = AlbumManager::instance();
+    
+    if (!item)
+        parent = man->findTAlbum(0);
+    else
+        parent = item->m_tag;
+
+    QString title;
+    QString icon;
+    if (!TagCreateDlg::tagCreate(parent, title, icon))
+        return;
+
+    QString errMsg;
+    TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
+
+    if( !newAlbum )
+    {
+        KMessageBox::error(0, errMsg);
+    }
+    else
+    {
+        TagFilterViewItem *item = (TagFilterViewItem*)newAlbum->extraData(this);
+        if ( item )
+        {
+            setSelected(item, true);
+            ensureItemVisible( item );
+        }
+    }
+}
+
+void TagFilterView::tagEdit(TagFilterViewItem* item)
+{
+    if (!item)
+        return;
+    
+    TAlbum *tag = item->m_tag;
+    if (!tag)
+        return;
+
+    QString title, icon;
+    if (!TagEditDlg::tagEdit(tag, title, icon))
+    {
+        return;
+    }
+
+    AlbumManager* man = AlbumManager::instance();
+    
+    if (tag->title() != title)
+    {
+        QString errMsg;
+        if(!man->renameTAlbum(tag, title, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            item->setText(0, title);
+    }
+
+    if (tag->icon() != icon)
+    {
+        QString errMsg;
+        if (!man->updateTAlbumIcon(tag, icon, 0, errMsg))
+            KMessageBox::error(0, errMsg);
+        else
+            item->setPixmap(0, getBlendedIcon(tag));
+    }
+}
+
+void TagFilterView::tagDelete(TagFilterViewItem* item)
+{
+    if (!item)
+        return;
+
+    TAlbum *tag = item->m_tag;
+    if (!tag || tag->isRoot())
+        return;
+
+    // find number of subtags
+    int children = 0;
+    AlbumIterator iter(tag);
+    while(iter.current())
+    {
+        children++;
+        ++iter;
+    }
+
+    AlbumManager* man = AlbumManager::instance();
+    
+    if (children)
+    {
+        int result =
+            KMessageBox::warningYesNo(this, i18n("Tag '%1' has %2 subtag(s). "
+                                                 "Deleting this will also delete "
+                                                 "the subtag(s). "
+                                                 "Are you sure you want to continue?")
+                                      .arg(tag->title())
+                                      .arg(children));
+
+        if(result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!man->deleteTAlbum(tag, errMsg))
+                KMessageBox::error(0, errMsg);
+        }
+    }
+    else
+    {
+        int result =
+            KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
+                                       .arg(tag->title()));
+
+        if (result == KMessageBox::Yes)
+        {
+            QString errMsg;
+            if (!man->deleteTAlbum(tag, errMsg))
+                KMessageBox::error(0, errMsg);
+        }
+    }
 }
 
 #include "tagfilterview.moc"

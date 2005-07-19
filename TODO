@@ -5,8 +5,6 @@
 * Sidebar / View saveing/loading the last state needs some more love [JA]
 
 * allow user to edit dates (maybe through comments tag editor) [TA]
-* resizable thumbnail in comments tag editor?
-
 
 * fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
   - splitter sizes
@@ -14,8 +12,6 @@
   - closed/open state of left/right views
   - currently selected albums in each view
  
-* add context menu to right tagfilterview [RR]
-
 * Tina's Tag Usability Recommendations:
 (http://www.uni-koblenz.de/~trilliti/digikam_tagging/main.html). 
 Following items have been agreed on (rest are in dispute):
@@ -44,3 +40,5 @@ Post 0.8
 * Custom ordering of images [TA]
 
 * remove thumbnail size from the settings [TA]
+
+* resizable thumbnail in comments tag editor?

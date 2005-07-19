@@ -21,6 +21,7 @@
 #include "folderview.h"
 
 class Album;
+class TagFilterViewItem;
 class TagFilterViewPriv;
 
 class TagFilterView : public FolderView
@@ -45,9 +46,14 @@ private slots:
     void slotTagDeleted(Album* album);
     void slotClear();
     void slotTimeOut();
+    void slotContextMenu(QListViewItem*, const QPoint&, int);
 
 private:
 
+    void tagNew(TagFilterViewItem* item);
+    void tagEdit(TagFilterViewItem* item);    
+    void tagDelete(TagFilterViewItem* item);
+    
     TagFilterViewPriv *d;
 };
 
