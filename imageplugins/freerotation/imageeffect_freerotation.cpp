@@ -29,6 +29,7 @@
 // Qt includes. 
  
 #include <qlabel.h>
+#include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qpixmap.h>
@@ -83,17 +84,19 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, marginHint(), spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
     m_newWidthLabel = new QLabel(gboxSettings);
+    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
     
     QLabel *label2 = new QLabel(i18n("New Height:"), gboxSettings);
     m_newHeightLabel = new QLabel(gboxSettings);
+    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     
     QLabel *label3 = new QLabel(i18n("Angle (in Degrees):"), gboxSettings);
     m_angleInput = new KDoubleNumInput(gboxSettings);
@@ -104,8 +107,13 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
         
-    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_angleInput, 3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_angleInput, 3, 3, 0, 2);
+    
+    m_antialiasInput = new QCheckBox(i18n("Antialiasing"), gboxSettings);
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process antialiasing filter to the rotated image. "
+                                            "To smooth the target image, it will be blured a little."));
+    gridSettings->addMultiCellWidget(m_antialiasInput, 4, 4, 0, 2);
     
     setUserAreaWidget(gboxSettings);
     
@@ -113,6 +121,9 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     connect(m_angleInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));        
+    
+    connect(m_antialiasInput, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));             
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
@@ -122,20 +133,26 @@ ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 void ImageEffect_FreeRotation::renderingFinished()
 {
     m_angleInput->setEnabled(true);
+    m_antialiasInput->setEnabled(true);
 }
 
 void ImageEffect_FreeRotation::resetValues()
 {
     m_angleInput->blockSignals(true);
+    m_antialiasInput->blockSignals(true);
     m_angleInput->setValue(0.0);
+    m_antialiasInput->setChecked(true);
     m_angleInput->blockSignals(false);
+    m_antialiasInput->blockSignals(false);
 } 
 
 void ImageEffect_FreeRotation::prepareEffect()
 {
     m_angleInput->setEnabled(false);
+    m_antialiasInput->setEnabled(false);
 
-    double angle = m_angleInput->value();
+    double angle      = m_angleInput->value();
+    bool antialiasing = m_antialiasInput->isChecked();
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgW = iface->originalWidth();
@@ -145,16 +162,18 @@ void ImageEffect_FreeRotation::prepareEffect()
     memcpy( image.bits(), data, image.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new FreeRotation(&image, this, angle, orgW, orgH));    
+                       new FreeRotation(&image, this, angle, antialiasing, orgW, orgH));    
     delete [] data;
 }
 
 void ImageEffect_FreeRotation::prepareFinal()
 {
     m_angleInput->setEnabled(false);
+    m_antialiasInput->setEnabled(false);
         
-    double angle = m_angleInput->value();
-
+    double angle      = m_angleInput->value();
+    bool antialiasing = m_antialiasInput->isChecked();
+    
     Digikam::ImageIface iface(0, 0);
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
@@ -163,7 +182,7 @@ void ImageEffect_FreeRotation::prepareFinal()
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new FreeRotation(&orgImage, this, angle, orgW, orgH));
+                       new FreeRotation(&orgImage, this, angle, antialiasing, orgW, orgH));
     delete [] data;       
 }
 

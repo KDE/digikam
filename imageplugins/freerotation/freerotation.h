@@ -38,7 +38,8 @@ class FreeRotation : public Digikam::ThreadedFilter
 
 public:
     
-    FreeRotation(QImage *orgImage, QObject *parent=0, double angle=0.0, int orgW=0, int orgH=0);
+    FreeRotation(QImage *orgImage, QObject *parent=0, double angle=0.0, 
+                 bool antialiasing=true, int orgW=0, int orgH=0);
     
     ~FreeRotation(){};
     
@@ -46,8 +47,10 @@ public:
             
 private:  
 
-    int m_orgW;
-    int m_orgH;
+    bool   m_antiAlias;
+
+    int    m_orgW;
+    int    m_orgH;
     
     double m_angle;
     
@@ -56,7 +59,29 @@ private:
 private:  
 
     virtual void filterImage(void);
-
+    
+       
+    inline int setPosition (int Width, int X, int Y)
+       {
+       return (Y *Width*4 + 4*X); 
+       };
+    
+    inline bool isInside (int Width, int Height, int X, int Y)
+       {
+       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+       return (bIsWOk && bIsHOk);
+       };
+       
+    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
+       {
+       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
+       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
+       return (Y*Width*4 + 4*X);
+       };
+                     
+    inline void antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
+                              uchar *A, uchar *R, uchar *G, uchar *B);       
 };    
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
