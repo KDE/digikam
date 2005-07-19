@@ -68,7 +68,6 @@ private:
     QLabel        *m_nameLabel;
     KTextEdit     *m_commentsEdit;
     QListView     *m_tagsView;
-    QCheckBox     *m_autoSaveBox;
     bool           m_modified;
 
     void tagNew(TAlbum* parAlbum);

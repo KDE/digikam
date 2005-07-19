@@ -114,17 +114,6 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_tagsView = new QListView(tagsBox);
     topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
 
-    m_autoSaveBox = new QCheckBox(i18n("Automatically save comments and tags "
-                                       "when navigating between items"),
-                                  plainPage());
-    topLayout->addMultiCellWidget(m_autoSaveBox, 2, 2, 0, 1);
-
-    if (singleMode)
-       m_autoSaveBox->hide();
-
-    kapp->config()->setGroup("Image Description Dialog");
-    m_autoSaveBox->setChecked(kapp->config()->readBoolEntry("Auto Save", true));
-
     m_tagsView->addColumn(i18n( "Tags" ));
     m_tagsView->header()->hide();
     m_tagsView->setSelectionMode(QListView::Single);
@@ -174,9 +163,6 @@ ImageDescEdit::~ImageDescEdit()
     {
         (*it)->removeExtraData(this);
     }
-    
-    kapp->config()->setGroup("Image Description Dialog");
-    kapp->config()->writeEntry("Auto Save", m_autoSaveBox->isChecked());
 
     saveDialogSize("Image Description Dialog");
 }
@@ -264,8 +250,8 @@ void ImageDescEdit::slotUser1()
     if (!m_currItem)
         return;
 
-    if (m_autoSaveBox->isChecked())
-        slotApply();
+    // Save the data
+    slotApply();
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->nextItem());
     m_currItem->setSelected(true);
@@ -279,8 +265,8 @@ void ImageDescEdit::slotUser2()
     if (!m_currItem)
         return;
 
-    if (m_autoSaveBox->isChecked())
-        slotApply();
+    // Save the data
+    slotApply();
 
     m_currItem = dynamic_cast<AlbumIconItem*>(m_currItem->prevItem());
     m_currItem->setSelected(true);
