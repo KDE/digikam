@@ -19,37 +19,24 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-#define DEGREES_TO_RADIANS(deg) ((deg) * 3.141592653589793238462 / 180.0)
- 
-// C++ includes.
-
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
  
 // Qt includes. 
  
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qwmatrix.h> 
+#include <qimage.h>
 
 // KDE includes.
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -58,22 +45,17 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
+#include "sheartool.h"
 #include "imageeffect_sheartool.h"
 
 namespace DigikamShearToolImagesPlugin
 {
 
 ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Shear Tool"),
-                                   Help|User1|Ok|Cancel, Ok,
-                                   parent, 0, true, true,
-                                   i18n("&Reset Values")),
-                        m_parent(parent)
+                     : ImageGuideDialog(parent, i18n("Shear Tool"), 
+                                        "sheartool", false, false, true)
 {
     QString whatsThis;
-        
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
     
     // About data and help button.
     
@@ -89,99 +71,152 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
     
-    // -------------------------------------------------------------
-
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-    
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Shear Tool"));    
-    topLayout->addWidget(headerFrame);
-    
-    // -------------------------------------------------------------
-    
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the shearing image operation preview. "
+    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the shearing image operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the shearing correction. "
-                                           "Press the left mouse button to freeze the dashed "
+                                           "Release the left mouse button to freeze the dashed "
                                            "line's position."));
-    l->addWidget(m_previewWidget, 0);
-    topLayout->addWidget(frame, 10);
-    
+                                           
     // -------------------------------------------------------------
     
-    QGridLayout* gridLayout = new QGridLayout( topLayout, 2, 4 , spacingHint());
-    QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
-    m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
-    m_newHeightLabel = new QLabel(plainPage());
-    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 1);
-    gridLayout->addMultiCellWidget(label2, 0, 0, 3, 3);
-    gridLayout->addMultiCellWidget(m_newHeightLabel, 0, 0, 4, 4);
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
     
-    QLabel *label3 = new QLabel(i18n("Horizontal Angle:"), plainPage());
-    m_magnitudeX = new KDoubleNumInput(plainPage());
+    QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
+    m_newWidthLabel = new QLabel(gboxSettings);
+    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
+    
+    QLabel *label2 = new QLabel(i18n("New Height:"), gboxSettings);
+    m_newHeightLabel = new QLabel(gboxSettings);
+    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
+    
+    QLabel *label3 = new QLabel(i18n("Horizontal Angle:"), gboxSettings);
+    m_magnitudeX = new KDoubleNumInput(gboxSettings);
     m_magnitudeX->setPrecision(1);
     m_magnitudeX->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeX->setValue(0.0);
     QWhatsThis::add( m_magnitudeX, i18n("<p>The horizontal shearing angle, in degrees."));
-    gridLayout->addMultiCellWidget(label3, 1, 1, 0, 0);
-    gridLayout->addMultiCellWidget(m_magnitudeX, 1, 1, 1, 4);
+    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_magnitudeX, 3, 3, 0, 2);
             
-    QLabel *label4 = new QLabel(i18n("Vertical Angle:"), plainPage());
-    m_magnitudeY = new KDoubleNumInput(plainPage());
+    QLabel *label4 = new QLabel(i18n("Vertical Angle:"), gboxSettings);
+    m_magnitudeY = new KDoubleNumInput(gboxSettings);
     m_magnitudeY->setPrecision(1);
     m_magnitudeY->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeY->setValue(0.0);
     QWhatsThis::add( m_magnitudeY, i18n("<p>The vertical shearing angle, in degrees."));
-    gridLayout->addMultiCellWidget(label4, 2, 2, 0, 0);
-    gridLayout->addMultiCellWidget(m_magnitudeY, 2, 2, 1, 4);
+    gridSettings->addMultiCellWidget(label4, 4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_magnitudeY, 5, 5, 0, 2);
             
-    resize(configDialogSize("Shear Tool Dialog"));    
+    setUserAreaWidget(gboxSettings); 
 
     // -------------------------------------------------------------
     
     connect(m_magnitudeX, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
     
     connect(m_magnitudeY, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
-            
-    connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));               
+            this, SLOT(slotTimer()));
 }
 
 ImageEffect_ShearTool::~ImageEffect_ShearTool()
 {
-    saveDialogSize("Shear Tool Dialog");
 }
 
-void ImageEffect_ShearTool::slotUser1()
+void ImageEffect_ShearTool::renderingFinished()
 {
-    blockSignals(true);
-                   
+    m_magnitudeX->setEnabled(true);
+    m_magnitudeY->setEnabled(true);
+}
+
+void ImageEffect_ShearTool::resetValues()
+{
+    m_magnitudeX->blockSignals(true);
+    m_magnitudeY->blockSignals(true);
     m_magnitudeX->setValue(0.0);
     m_magnitudeY->setValue(0.0);
-    
-    blockSignals(false);
-    slotEffect();  
+    m_magnitudeX->blockSignals(false);
+    m_magnitudeY->blockSignals(false);
 } 
 
-void ImageEffect_ShearTool::slotHelp()
+void ImageEffect_ShearTool::prepareEffect()
 {
-    KApplication::kApplication()->invokeHelp("sheartool", "digikamimageplugins");
+    m_magnitudeX->setEnabled(false);
+    m_magnitudeY->setEnabled(false);
+
+    float hAngle = m_magnitudeX->value();
+    float vAngle = m_magnitudeY->value();
+
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    int orgW = iface->originalWidth();
+    int orgH = iface->originalHeight();
+    QImage image(iface->previewWidth(), iface->previewHeight(), 32);
+    uint *data = iface->getPreviewData();
+    memcpy( image.bits(), data, image.numBytes() );
+    
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new ShearTool(&image, this, hAngle, vAngle, false, orgW, orgH));    
+    delete [] data;
 }
 
+void ImageEffect_ShearTool::prepareFinal()
+{
+    m_magnitudeX->setEnabled(false);
+    m_magnitudeY->setEnabled(false);
+
+    float hAngle = m_magnitudeX->value();
+    float vAngle = m_magnitudeY->value();
+        
+    Digikam::ImageIface iface(0, 0);
+    int orgW = iface.originalWidth();
+    int orgH = iface.originalHeight();
+    QImage orgImage(orgW, orgH, 32);
+    uint *data = iface.getOriginalData();
+    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    
+    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+                       new ShearTool(&orgImage, this, hAngle, vAngle, false, orgW, orgH));    
+    delete [] data;       
+}
+
+void ImageEffect_ShearTool::putPreviewData(void)
+{
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    int w = iface->previewWidth();
+    int h = iface->previewHeight();
+        
+    QImage imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QImage::ScaleMin);
+    QImage imDest( w, h, 32 );
+    bitBlt( &imDest, (w-imTemp.width())/2, (h-imTemp.height())/2, 
+            &imTemp, 0, 0, imTemp.width(), imTemp.height());
+            
+    iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
+                                                     iface->previewHeight())).bits());
+                 
+    m_imagePreviewWidget->update();    
+    QSize newSize = dynamic_cast<ShearTool *>(m_threadedFilter)->getNewSize();
+    QString temp;
+    m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
+    m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
+}
+
+void ImageEffect_ShearTool::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);    
+    QImage targetImage = m_threadedFilter->getTargetImage();
+    iface.putOriginalData(i18n("Shear Tool"), 
+                          (uint*)targetImage.bits(), 
+                          targetImage.width(), targetImage.height());
+}
+
+/*
 void ImageEffect_ShearTool::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -237,7 +272,7 @@ void ImageEffect_ShearTool::slotOk()
     delete [] data;
     kapp->restoreOverrideCursor();
 }
-
+*/
 }  // NameSpace DigikamShearToolImagesPlugin
 
 #include "imageeffect_sheartool.moc"

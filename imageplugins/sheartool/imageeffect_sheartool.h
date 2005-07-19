@@ -23,9 +23,9 @@
 #ifndef IMAGEEFFECT_SHEARTOOL_H
 #define IMAGEEFFECT_SHEARTOOL_H
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imageguidedialog.h"
 
 class QPushButton;
 class QLabel;
@@ -40,7 +40,7 @@ class ImageGuideWidget;
 namespace DigikamShearToolImagesPlugin
 {
 
-class ImageEffect_ShearTool : public KDialogBase
+class ImageEffect_ShearTool : public DigikamImagePlugins::ImageGuideDialog
 {
     Q_OBJECT
 
@@ -53,22 +53,18 @@ private:
 
     QLabel                    *m_newWidthLabel;
     QLabel                    *m_newHeightLabel;
-    
-    QWidget                   *m_parent;
-    
-    QPushButton               *m_helpButton;
    
     KDoubleNumInput           *m_magnitudeX;
     KDoubleNumInput           *m_magnitudeY;
-
-    Digikam::ImageGuideWidget *m_previewWidget;
     
-private slots:
-
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
-    void slotUser1();
+protected:
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
    
 };
 
