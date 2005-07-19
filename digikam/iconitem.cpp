@@ -112,9 +112,12 @@ bool IconItem::isSelected() const
     return m_selected;
 }
 
-void IconItem::repaint()
+void IconItem::repaint(bool force)
 {
-    m_group->iconView()->updateContents(rect());
+    if (force)
+        m_group->iconView()->repaintContents(rect());
+    else
+        m_group->iconView()->updateContents(rect());
 }
 
 IconView* IconItem::iconView() const
