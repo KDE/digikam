@@ -485,6 +485,7 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum)
         TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
         if (viewItem)
         {
+            viewItem->setOn(true);
             m_tagsView->setSelected(viewItem, true);
             m_tagsView->ensureItemVisible(viewItem);
         }
