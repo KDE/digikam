@@ -83,7 +83,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Drop Size:"), gboxSettings);
     
@@ -92,8 +92,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_dropInput->setValue(80);
     QWhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
     
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_dropInput, 0, 0, 1, 2);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
     
     // -------------------------------------------------------------
 
@@ -104,8 +104,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountInput->setValue(150);
     QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
     
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_amountInput, 1, 1, 1, 2);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
     
     // -------------------------------------------------------------
 
@@ -117,8 +117,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
                                         "distortion coefficient."));     
     
-    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_coeffInput, 2, 2, 1, 2);
+    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(m_coeffInput, 5, 5, 0, 2);
     
     setUserAreaWidget(gboxSettings);
 
