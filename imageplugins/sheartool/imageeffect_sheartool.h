@@ -32,11 +32,6 @@ class QLabel;
 
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ImageGuideWidget;
-}
-
 namespace DigikamShearToolImagesPlugin
 {
 
