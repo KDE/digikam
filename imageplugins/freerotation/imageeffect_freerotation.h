@@ -23,10 +23,6 @@
 #ifndef IMAGEEFFECT_FREEROTATION_H
 #define IMAGEEFFECT_FREEROTATION_H
 
-// Qt includes.
-
-#include <qimage.h>
-
 // Local includes.
 
 #include "imageguidedialog.h"

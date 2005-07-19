@@ -20,22 +20,13 @@
  * 
  * ============================================================ */
 
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
- 
 // Qt includes. 
  
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpen.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -81,6 +72,13 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
             
     setAboutData(about);
     
+    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the free image operation preview. "
+                                           "If you move the mouse cursor on this preview, "
+                                           "a vertical and horizontal dashed line will be drawn "
+                                           "to guide you in adjusting the free rotation correction. "
+                                           "Release the left mouse button to freeze the dashed "
+                                           "line's position."));
+                                           
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
