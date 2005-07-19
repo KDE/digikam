@@ -74,7 +74,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
     
@@ -101,23 +101,23 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Wall") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
     
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_borderType, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(m_borderType, 1, 1, 0, 2);
     
     QLabel *label2 = new QLabel(i18n("Width:"), gboxSettings);
     m_borderWidth = new KIntNumInput(gboxSettings);
     QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_borderWidth, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_borderWidth, 3, 3, 0, 2);
             
     m_labelForeground = new QLabel(gboxSettings);
     m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), gboxSettings );
     m_labelBackground = new QLabel(gboxSettings);
     m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gboxSettings );
-    gridSettings->addMultiCellWidget(m_labelForeground, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_firstColorButton, 2, 2, 1, 1);
-    gridSettings->addMultiCellWidget(m_labelBackground, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_secondColorButton, 3, 3, 1, 1);    
+    gridSettings->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_firstColorButton, 4, 4, 1, 2);
+    gridSettings->addMultiCellWidget(m_labelBackground, 5, 5, 0, 0);
+    gridSettings->addMultiCellWidget(m_secondColorButton, 5, 5, 1, 2);    
 
     setUserAreaWidget(gboxSettings);
     
