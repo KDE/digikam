@@ -22,6 +22,9 @@
  * 
  * ============================================================ */
  
+// Degrees to radian convertion coeff. to optimize computation.
+#define DEG2RAD -0.017453292519943
+
 // C++ includes. 
  
 #include <cmath>
@@ -67,8 +70,8 @@ void FreeRotation::filterImage(void)
     
     // first of all, we need to calcule the sin and cos of the given angle
     
-    lfSin = sin (m_angle * M_PI / 180.0 * -1.0);
-    lfCos = cos (m_angle * M_PI / 180.0 * -1.0);
+    lfSin = sin (m_angle * DEG2RAD);
+    lfCos = cos (m_angle * DEG2RAD);
 
     // now, we have to calc the new size for the destination image
     
