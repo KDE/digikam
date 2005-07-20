@@ -686,7 +686,10 @@ void ImageDescEdit::slotRecentTags()
             {
                 QPixmap pix = SyncJob::getTagThumbnail(album->icon(),
                                                        KIcon::SizeSmall);
-                menu.insertItem(pix, album->url().remove(0,1), album->id());
+                QString text = album->title() + " (" +
+                               ((TAlbum*)album->parent())->prettyURL() +
+                               ")";
+                menu.insertItem(pix, text, album->id());
             }
         }
     }
