@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
-                 : QScrollView(parent, 0, WRepaintNoErase)
+                 : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
     m_separateView     = SeparateViewVertical;
     m_movingInProgress = false;
