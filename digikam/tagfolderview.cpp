@@ -150,6 +150,8 @@ TagFolderView::TagFolderView(QWidget *parent)
             SLOT(slotAlbumsCleared()));
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+            SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
     
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));    
@@ -218,6 +220,38 @@ void TagFolderView::slotAlbumDeleted(Album *album)
 void TagFolderView::slotAlbumsCleared()
 {
     clear();
+}
+
+void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
+{
+    if (!tag || !newParent)
+        return;
+
+    TagFolderViewItem* item = (TagFolderViewItem*)tag->extraData(this);
+    if (!item)
+        return;
+
+    if (item->parent())
+    {
+        QListViewItem* oldPItem = item->parent();
+        oldPItem->takeItem(item);
+        
+        TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
+        if (newPItem)
+            newPItem->insertItem(item);
+        else
+            insertItem(item);
+    }
+    else
+    {
+        takeItem(item);
+
+        TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
+        if (newPItem)
+            newPItem->insertItem(item);
+        else
+            insertItem(item);
+    }
 }
 
 void TagFolderView::slotSelectionChanged()
@@ -537,45 +571,27 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if(id == 10)
         {
-            TagFolderViewItem *itemDragParent = 
-                    dynamic_cast<TagFolderViewItem*>(dragItem()->parent());
-            
-            if(itemDragParent)
-                itemDragParent->takeItem(itemDrag);
-            else
-                takeItem(itemDrag);
-            
-            QString errMsg;
-            if(!itemDrop)
+            TAlbum *tag = itemDrag->getTag();
+            TAlbum *newParentTag = 0;
+
+            if (!itemDrop)
             {
                 // move dragItem to the root
-                TAlbum *rootAlbum = d->albumMan->findTAlbum(0);
-                TAlbum *tag = itemDrag->getTag();
-
-                d->albumMan->moveTAlbum(tag, rootAlbum, errMsg);
-                TagFolderViewItem *item = new TagFolderViewItem(this, tag);
-                item->setPixmap(0, *itemDrag->pixmap(0));
-                
-                while(QListViewItem *child = itemDrag->firstChild())
-                {
-                    itemDrag->takeItem(child);
-                    item->insertItem(child);
-                }
-                if(itemDrag->isOpen())
-                    item->setOpen(true);
-                delete itemDrag;                
-                setSelected(item, true);
+                newParentTag = d->albumMan->findTAlbum(0);
             }
             else
             {
-                // move dragItem below dropItem
-                d->albumMan->moveTAlbum(itemDrag->getTag(), itemDrop->getTag(), errMsg);
-                itemDrop->insertItem(itemDrag);
-                if(!itemDrop->isOpen())
-                    itemDrop->setOpen(true);
-                setSelected(itemDrag, true);                
+                newParentTag = itemDrop->getTag();
+            }
+
+            QString errMsg;            
+            if (!d->albumMan->moveTAlbum(tag, newParentTag, errMsg))
+            {
+                KMessageBox::error(this, errMsg);
             }
         }
+
+        return;
     }
     
     if (ItemDrag::canDecode(e))
@@ -608,8 +624,6 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         XQueryKeymap(x11Display(), keys_return);
         int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
         int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
-        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
-        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
 
         if(srcAlbum == destAlbum)
         {

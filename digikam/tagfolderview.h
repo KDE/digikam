@@ -24,6 +24,7 @@
 #include "folderview.h"
 
 class Album;
+class TAlbum;
 class TagFolderViewPriv;
 class TagFolderViewItem;
 class QDropEvent;
@@ -59,7 +60,8 @@ private slots:
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
     void slotAlbumsCleared();
-    void slotAlbumIconChanged(Album* album);    
+    void slotAlbumIconChanged(Album* album);
+    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     void slotABCContextMenu();
 
