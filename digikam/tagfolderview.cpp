@@ -581,6 +581,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
+                // move dragItem as child of dropItem
                 newParentTag = itemDrop->getTag();
             }
 
