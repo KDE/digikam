@@ -55,17 +55,21 @@ public:
     QPoint getTopRightCorner(void);
     QPoint getBottomLeftCorner(void);
     QPoint getBottomRightCorner(void);
-    void   resetSelection(void);
+    void   reset(void);
     
     float getAngleTopLeft(void);
     float getAngleTopRight(void);
     float getAngleBottomLeft(void);
     float getAngleBottomRight(void);
     
-    void applyPerspectiveAdjusment(void);
+    void  applyPerspectiveAdjusment(void);
     
     Digikam::ImageIface* imageIface();
+
+public slots:
     
+    void toggleAntiAliasing(bool a);
+        
 signals:
 
     void signalPerspectiveChanged( QRect newSize, float topLeftAngle, float topRightAngle,
@@ -92,7 +96,8 @@ private:  // Matrix 3x3 perspective transformation implementations.
     void   matrix3Translate(Matrix3 *matrix, double x, double y);
     void   matrix3Scale(Matrix3 *matrix, double x, double y);
     void   matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2);
-    void   matrix3TransformPoint(const Matrix3 *matrix, double x, double y, double *newx, double *newy);
+    void   matrix3TransformPoint(const Matrix3 *matrix, double x, double y, 
+                                 double *newx, double *newy);
     void   matrix3Invert(Matrix3 *matrix);
     double matrix3Determinant(const Matrix3 *matrix);
     
@@ -108,6 +113,8 @@ private:
     };
     
     Digikam::ImageIface *m_iface;
+    
+    bool        m_antiAlias;
     
     uint       *m_data;
     int         m_w;
@@ -148,6 +155,16 @@ private:  // Widget methods.
                             QPoint transTopLeft, QPoint transTopRight,
                             QPoint transBottomLeft, QPoint transBottomRight,
                             uint* data, uint* newData);
+    
+    inline void antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
+                              uchar *A, uchar *R, uchar *G, uchar *B);        
+
+    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
+       {
+       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
+       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
+       return (Y*Width*4 + 4*X);
+       };                                                                                  
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

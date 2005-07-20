@@ -78,7 +78,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
-    resetSelection();
+    reset();
 }
 
 PerspectiveWidget::~PerspectiveWidget()
@@ -154,7 +154,7 @@ float PerspectiveWidget::getAngleBottomRight(void)
     return topLeft.angleBAC();
 }
 
-void PerspectiveWidget::resetSelection(void)
+void PerspectiveWidget::reset(void)
 {
     m_topLeftPoint.setX(0);
     m_topLeftPoint.setY(0);
@@ -168,6 +168,7 @@ void PerspectiveWidget::resetSelection(void)
     m_bottomRightPoint.setX(m_w-1);
     m_bottomRightPoint.setY(m_h-1);
     
+    m_antiAlias = true;  
     updatePixmap();
     repaint(false);
 }
@@ -192,12 +193,18 @@ void PerspectiveWidget::applyPerspectiveAdjusment(void)
     targetImg = newImage.copy(getTargetSize());
     
     // Update target image.
-    Digikam::ImageFilters::gaussianBlurImage((uint*)targetImg.bits(), targetImg.width(), targetImg.height(), 1);
     m_iface->putOriginalData(i18n("Perspective Adjustment"),
                              (uint*)targetImg.bits(), targetImg.width(), targetImg.height());
 
     delete [] data;
     delete [] newData;
+}
+
+void PerspectiveWidget::toggleAntiAliasing(bool a)
+{
+    m_antiAlias = a; 
+    updatePixmap();
+    repaint(false);
 }
 
 void PerspectiveWidget::updatePixmap(void)
@@ -313,7 +320,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_currentResizing != ResizingNone )
        {
-       kapp->restoreOverrideCursor();
+       setCursor( KCursor::arrowCursor() );    
        m_currentResizing = ResizingNone;
        } 
 }
@@ -343,7 +350,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_topLeftPoint = pm - m_rect.topLeft();   
-             kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
+             setCursor( KCursor::sizeFDiagCursor() );          
              }
             
           else if ( m_currentResizing == ResizingTopRight )
@@ -361,7 +368,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_topRightPoint = pm - m_rect.topLeft();
-             kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
+             setCursor( KCursor::sizeBDiagCursor() );          
              }
           
           else if ( m_currentResizing == ResizingBottomLeft  )
@@ -379,7 +386,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_bottomLeftPoint = pm - m_rect.topLeft();
-             kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
+             setCursor( KCursor::sizeBDiagCursor() );          
              }
              
           else if ( m_currentResizing == ResizingBottomRight )
@@ -397,7 +404,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
              if ( unsableArea.contains(pm) ) return;
              
              m_bottomRightPoint = pm - m_rect.topLeft();
-             kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
+             setCursor( KCursor::sizeFDiagCursor() );          
              }
           
           updatePixmap();
@@ -408,13 +415,13 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
        {
        if ( m_topLeftCorner.contains( e->x(), e->y() ) ||
             m_bottomRightCorner.contains( e->x(), e->y() ) )
-           kapp->setOverrideCursor( KCursor::sizeFDiagCursor() );          
+           setCursor( KCursor::sizeFDiagCursor() );          
            
        else if ( m_topRightCorner.contains( e->x(), e->y() ) ||
                  m_bottomLeftCorner.contains( e->x(), e->y() ) )
-           kapp->setOverrideCursor( KCursor::sizeBDiagCursor() );          
+           setCursor( KCursor::sizeBDiagCursor() );          
        else
-           kapp->restoreOverrideCursor();
+           setCursor( KCursor::arrowCursor() );      
        }
 }
 
@@ -635,12 +642,18 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
 
           if (iu >= u1 && iu < u2 && iv >= v1 && iv < v2)
              {
-             //  u, v coordinates into source  
+             // u, v coordinates into source  
            
              int u = iu - u1;
              int v = iv - v1;
-
-             memcpy(color, (uchar*)(data + (u + v*w)), 4);
+             
+             if (m_antiAlias)
+                {
+                antiAliasing((uchar*)data, w, h, u, v, 
+                             &color[3], &color[2], &color[1], &color[0]);
+                }
+             else   
+                memcpy(color, (uchar*)(data + (u + v*w)), 4);
 
              for (b = 0; b < bytes; b++)
                 *d++ = color[b];
@@ -669,6 +682,45 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
     delete [] dest;
 }
 
+inline void PerspectiveWidget::antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
+                                             uchar *A, uchar *R, uchar *G, uchar *B)
+{
+    int nX, nY, j;
+    double lfWeightX[2], lfWeightY[2], lfWeight;
+    double lfTotalR = 0.0, lfTotalG = 0.0, lfTotalB = 0.0, lfTotalA = 0.0;
+
+    nX = (int)X;
+    nY = (int)Y;
+
+    if (Y >= 0.0)
+        lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
+    else
+        lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
+
+    if (X >= 0.0)
+        lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
+    else
+        lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
+
+    for (int loopx = 0; loopx <= 1; loopx++)
+        {
+        for (int loopy = 0; loopy <= 1; loopy++)
+            {
+            lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
+            j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
+
+            lfTotalB += ((double)data[j++] * lfWeight);
+            lfTotalG += ((double)data[j++] * lfWeight);
+            lfTotalR += ((double)data[j++] * lfWeight);
+            lfTotalA += ((double)data[j++] * lfWeight);
+            }
+        }
+         
+    *B = CLAMP0255 ((int)lfTotalB);
+    *G = CLAMP0255 ((int)lfTotalG);
+    *R = CLAMP0255 ((int)lfTotalR);
+    *A = CLAMP0255 ((int)lfTotalA);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Matrix 3x3 perspective transformation methods.

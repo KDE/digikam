@@ -28,6 +28,7 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -40,6 +41,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <kseparator.h>
 
 // Digikam includes.
 
@@ -110,39 +112,48 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QGridLayout* gridLayout = new QGridLayout( 6, 2 , spacingHint() );
+    QGridLayout* gridLayout = new QGridLayout( 7, 2 , spacingHint() );
     QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
     QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
     m_newHeightLabel = new QLabel(plainPage());
-    QLabel *label3 = new QLabel(i18n("Top Left Angle:"), plainPage());
-    m_topLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label4 = new QLabel(i18n("Top Right Angle:"), plainPage());
-    m_topRightAngleLabel = new QLabel(plainPage());
-    QLabel *label5 = new QLabel(i18n("Bottom Left Angle:"), plainPage());
-    m_bottomLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label6 = new QLabel(i18n("Bottom Right Angle:"), plainPage());
-    m_bottomRightAngleLabel = new QLabel(plainPage());
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
     gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
-    gridLayout->addMultiCellWidget(label3, 2, 2, 0, 0);
-    gridLayout->addMultiCellWidget(m_topLeftAngleLabel, 2, 2, 1, 2);
-    gridLayout->addMultiCellWidget(label4, 3, 3, 0, 0);
-    gridLayout->addMultiCellWidget(m_topRightAngleLabel, 3, 3, 1, 2);
-    gridLayout->addMultiCellWidget(label5, 4, 4, 0, 0);
-    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 4, 4, 1, 2);
-    gridLayout->addMultiCellWidget(label6, 5, 5, 0, 0);
-    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 5, 5, 1, 2);
     
+    // -------------------------------------------------------------
+    
+    KSeparator *line = new KSeparator (Horizontal, plainPage());
+    
+    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), plainPage());
+    QLabel *label3 = new QLabel(i18n("  Top Left:"), plainPage());
+    m_topLeftAngleLabel = new QLabel(plainPage());
+    QLabel *label4 = new QLabel(i18n("  Top Right:"), plainPage());
+    m_topRightAngleLabel = new QLabel(plainPage());
+    QLabel *label5 = new QLabel(i18n("  Bottom Left:"), plainPage());
+    m_bottomLeftAngleLabel = new QLabel(plainPage());
+    QLabel *label6 = new QLabel(i18n("  Bottom Right:"), plainPage());
+    m_bottomRightAngleLabel = new QLabel(plainPage());
+    
+    gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);
+    gridLayout->addMultiCellWidget(angleLabel, 3, 3, 0, 2);
+    gridLayout->addMultiCellWidget(label3, 4, 4, 0, 0);
+    gridLayout->addMultiCellWidget(m_topLeftAngleLabel, 4, 4, 1, 2);
+    gridLayout->addMultiCellWidget(label4, 5, 5, 0, 0);
+    gridLayout->addMultiCellWidget(m_topRightAngleLabel, 5, 5, 1, 2);
+    gridLayout->addMultiCellWidget(label5, 6, 6, 0, 0);
+    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
+    gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
+    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
+        
     mainLayout->addMultiCellLayout(gridLayout, 1, 1, 1, 1);    
     
     // -------------------------------------------------------------
     
     connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
-            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));   
+            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));  
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
@@ -157,7 +168,7 @@ void ImageEffect_Perspective::slotHelp()
 
 void ImageEffect_Perspective::slotUser1()
 {
-    m_previewWidget->resetSelection();
+    m_previewWidget->reset();
 } 
 
 void ImageEffect_Perspective::slotOk()
@@ -175,10 +186,10 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
     m_newWidthLabel->setText(temp.setNum( newSize.width())   + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
     
-    m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 )         + i18n(" degrees") );
-    m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 )       + i18n(" degrees") );
-    m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 )   + i18n(" degrees") );
-    m_bottomRightAngleLabel->setText(temp.setNum( bottomRightAngle, 'f', 1 ) + i18n(" degrees") );
+    m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ));
+    m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ));
+    m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 ));
+    m_bottomRightAngleLabel->setText(temp.setNum( bottomRightAngle, 'f', 1 ));
 }
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
