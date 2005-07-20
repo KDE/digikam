@@ -237,23 +237,17 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     {
         QListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
-        
-        TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
-        if (newPItem)
-            newPItem->insertItem(item);
-        else
-            insertItem(item);
     }
     else
     {
         takeItem(item);
-
-        TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
-        if (newPItem)
-            newPItem->insertItem(item);
-        else
-            insertItem(item);
     }
+        
+    TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
+    if (newPItem)
+        newPItem->insertItem(item);
+    else
+        insertItem(item);
 }
 
 void TagFolderView::slotSelectionChanged()
