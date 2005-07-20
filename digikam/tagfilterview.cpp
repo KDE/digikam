@@ -174,6 +174,8 @@ TagFilterView::TagFilterView(QWidget* parent)
             SLOT(slotTagAdded(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotTagDeleted(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            SLOT(slotTagRenamed(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             SLOT(slotTagMoved(TAlbum*, TAlbum*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
@@ -341,6 +343,23 @@ void TagFilterView::slotTagAdded(Album* album)
 
         TagFilterViewItem* item = new TagFilterViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
+    }
+}
+
+void TagFilterView::slotTagRenamed(Album* album)
+{
+    if (!album)
+        return;
+
+    TAlbum* tag = dynamic_cast<TAlbum*>(album);
+    if (!tag)
+        return;
+
+    TagFilterViewItem* item =
+            (TagFilterViewItem*)(tag->extraData(this));
+    if (item)
+    {
+        item->setText(0, tag->title());
     }
 }
 

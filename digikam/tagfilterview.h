@@ -49,6 +49,7 @@ private slots:
 
     void slotTagAdded(Album* album);
     void slotTagMoved(TAlbum* tag, TAlbum* newParent);
+    void slotTagRenamed(Album* album);
     void slotTagDeleted(Album* album);
     void slotClear();
     void slotTimeOut();
