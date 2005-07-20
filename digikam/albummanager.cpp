@@ -956,8 +956,6 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         child = child->m_next;
     }
 
-    errMsg = i18n("TODO: Adding new tags has to be implemented");
-
     int id = d->db->addTag(parent->id(), name, iconkde, 0);
     if (id == -1)
     {
