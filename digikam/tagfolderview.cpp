@@ -586,6 +586,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             {
                 KMessageBox::error(this, errMsg);
             }
+            
+            if(itemDrop && !itemDrop->isOpen())
+                itemDrop->setOpen(true);
         }
 
         return;
