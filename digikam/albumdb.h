@@ -300,6 +300,12 @@ public:
      * @param tagID   the tagID for the tag
      */
     void addItemTag(int albumID, const QString& name, int tagID);
+
+    /**
+     * Get a list of recently assigned tags (only last 6 tags are listed)
+     * @return the list of recently assigned tags
+     */
+    IntList getRecentlyAssignedTags() const;
     
     /**
      * Get the caption for the item
@@ -482,6 +488,7 @@ private:
 
     sqleet3* m_db;
     bool     m_valid;
+    IntList  m_recentlyAssignedTags;
 };
 
 #endif /* ALBUMDB_H */

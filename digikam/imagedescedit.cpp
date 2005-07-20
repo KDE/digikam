@@ -43,6 +43,7 @@
 #include <qheader.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qpushbutton.h>
 
 #include <libkexif/kexifwidget.h>
 #include <libkexif/kexifutils.h>
@@ -51,6 +52,7 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
+#include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
 #include "imagedescedit.h"
@@ -112,6 +114,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     QVGroupBox* tagsBox = new QVGroupBox(i18n("Tags"), plainPage());
     m_tagsView = new QListView(tagsBox);
+    m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
 
     m_tagsView->addColumn(i18n( "Tags" ));
@@ -127,6 +130,9 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
             const QPoint &, int)), this,
             SLOT(slotRightButtonClicked(QListViewItem*,
             const QPoint&, int)));
+
+    connect(m_recentTagsBtn, SIGNAL(clicked()),
+            SLOT(slotRecentTags()));
 
     slotItemChanged();
 
@@ -658,6 +664,50 @@ void ImageDescEdit::slotCleared()
     close();
 }
 
+void ImageDescEdit::slotRecentTags()
+{
+    QPopupMenu menu(this);
+
+    AlbumManager* albumMan = AlbumManager::instance();
+    IntList recentTags = albumMan->albumDB()->getRecentlyAssignedTags();
+
+    if (recentTags.isEmpty())
+    {
+        menu.insertItem(i18n("No recently assigned tags"), 0);
+        menu.setItemEnabled(0, false);
+    }
+    else
+    {
+        for (IntList::const_iterator it = recentTags.begin();
+             it != recentTags.end(); ++it)
+        {
+            TAlbum* album = albumMan->findTAlbum(*it);
+            if (album)
+            {
+                QPixmap pix = SyncJob::getTagThumbnail(album->icon(),
+                                                       KIcon::SizeSmall);
+                menu.insertItem(pix, album->url().remove(0,1), album->id());
+            }
+        }
+    }
+
+    int id = menu.exec(QCursor::pos());
+
+    if (id > 0)
+    {
+        TAlbum* album = albumMan->findTAlbum(id);
+        if (album)
+        {
+            TAlbumCheckListItem* viewItem =
+                (TAlbumCheckListItem*)album->extraData(this);
+            if (viewItem)
+            {
+                viewItem->setOn(true);
+                m_tagsView->setSelected(viewItem, true);
+                m_tagsView->ensureItemVisible(viewItem);
+            }
+        }
+    }
+}
+
 #include "imagedescedit.moc"
-
-

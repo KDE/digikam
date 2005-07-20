@@ -812,6 +812,13 @@ void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
                      "VALUES(%1, %2);")
                  .arg(imageID)
                  .arg(tagID) );
+
+    if (!m_recentlyAssignedTags.contains(tagID))
+    {
+        m_recentlyAssignedTags.push_front(tagID);
+        if (m_recentlyAssignedTags.size() > 10)
+            m_recentlyAssignedTags.pop_back();
+    }
 }
 
 void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
@@ -822,6 +829,11 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
              .arg(tagID)
              .arg(albumID)
              .arg(escapeString(name)) );
+}
+
+IntList AlbumDB::getRecentlyAssignedTags() const
+{
+    return m_recentlyAssignedTags;    
 }
 
 void AlbumDB::removeItemTag(Q_LLONG imageID, int tagID)

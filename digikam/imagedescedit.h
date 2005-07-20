@@ -35,6 +35,7 @@ class QListView;
 class QPixmap;
 class QCheckListItem;
 class QCheckBox;
+class QPushButton;
 
 class KTextEdit;
 
@@ -68,6 +69,7 @@ private:
     QLabel        *m_nameLabel;
     KTextEdit     *m_commentsEdit;
     QListView     *m_tagsView;
+    QPushButton   *m_recentTagsBtn;
     bool           m_modified;
 
     void tagNew(TAlbum* parAlbum);
@@ -90,6 +92,7 @@ private slots:
     void slotGotThumbnail(const KURL&, const QPixmap& pix);
     void slotFailedThumbnail(const KURL&);
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
+    void slotRecentTags();
 
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);
