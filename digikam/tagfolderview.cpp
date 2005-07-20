@@ -641,10 +641,11 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             return;
         }
 
-        // If shift key is pressed while dragging, move the drag object without
-        // displaying popup menu -> move
-        if (((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
-            ((keys_return[key_4 / 8]) && (1 << (key_4 % 8))))
+        // If a ctrl key is pressed while dropping the drag object,
+        // the tag is assigned to the images without showing a
+        // popup menu.        
+        if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
+            ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
         {
             id = 10;
         }
