@@ -20,11 +20,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdio>
-#include <cstdlib>
- 
 // Qt includes. 
  
 #include <qvgroupbox.h>
@@ -57,7 +52,6 @@
 #include "perspectivewidget.h"
 #include "imageeffect_perspective.h"
 
-
 namespace DigikamPerspectiveImagesPlugin
 {
 
@@ -70,7 +64,8 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QString whatsThis;
     
     setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );        
-    
+    resize(configDialogSize("Perspective Tool Dialog"));  
+        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -93,10 +88,11 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    QGridLayout *mainLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Perspective Adjustement"));    
-    topLayout->addWidget(headerFrame);
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
+                          i18n("Perspective Adjustement"));    
+    mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -108,11 +104,13 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
                                            "You can use the mouse for dragging the corner to adjust the "
                                            "perspective transformation area."));
     l->addWidget(m_previewWidget, 0);
-    topLayout->addWidget(frame, 10);
+    mainLayout->addMultiCellWidget(frame, 1, 2, 0, 0);
+    mainLayout->setColStretch(0, 10);
+    mainLayout->setRowStretch(2, 10);
     
     // -------------------------------------------------------------
     
-    QGridLayout* gridLayout = new QGridLayout( topLayout, 3, 4 , spacingHint());
+    QGridLayout* gridLayout = new QGridLayout( 6, 2 , spacingHint() );
     QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
     m_newWidthLabel = new QLabel(plainPage());
     QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
@@ -126,25 +124,25 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *label6 = new QLabel(i18n("Bottom Right Angle:"), plainPage());
     m_bottomRightAngleLabel = new QLabel(plainPage());
     
-    gridLayout->addMultiCellWidget(label1, 2, 2, 0, 0);
-    gridLayout->addMultiCellWidget(m_newWidthLabel, 2, 2, 1, 1);
-    gridLayout->addMultiCellWidget(label2, 2, 2, 3, 3);
-    gridLayout->addMultiCellWidget(m_newHeightLabel, 2, 2, 4, 4);
-    gridLayout->addMultiCellWidget(label3, 3, 3, 0, 0);
-    gridLayout->addMultiCellWidget(m_topLeftAngleLabel, 3, 3, 1, 1);
-    gridLayout->addMultiCellWidget(label4, 3, 3, 3, 3);
-    gridLayout->addMultiCellWidget(m_topRightAngleLabel, 3, 3, 4, 4);
+    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
+    gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
+    gridLayout->addMultiCellWidget(label3, 2, 2, 0, 0);
+    gridLayout->addMultiCellWidget(m_topLeftAngleLabel, 2, 2, 1, 2);
+    gridLayout->addMultiCellWidget(label4, 3, 3, 0, 0);
+    gridLayout->addMultiCellWidget(m_topRightAngleLabel, 3, 3, 1, 2);
     gridLayout->addMultiCellWidget(label5, 4, 4, 0, 0);
-    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 4, 4, 1, 1);
-    gridLayout->addMultiCellWidget(label6, 4, 4, 3, 3);
-    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 4, 4, 4, 4);
+    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 4, 4, 1, 2);
+    gridLayout->addMultiCellWidget(label6, 5, 5, 0, 0);
+    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 5, 5, 1, 2);
+    
+    mainLayout->addMultiCellLayout(gridLayout, 1, 1, 1, 1);    
     
     // -------------------------------------------------------------
     
     connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
             this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));   
-            
-    resize(configDialogSize("Perspective Tool Dialog"));  
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
