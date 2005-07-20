@@ -187,30 +187,30 @@ void ImageEffect_DistortionFX::renderingFinished()
 
     switch (m_effectType->currentItem())
        {
-       case 0:  // Fish Eye.
-       case 1:  // Twirl.
-       case 2:  // Cilindrical Hor.
-       case 3:  // Cilindrical Vert.
-       case 4:  // Cilindrical H/V.
-       case 5:  // Caricature.
-       case 6:  // Multiple Corners.          
+       case DistortionFX::FishEye:
+       case DistortionFX::Twirl: 
+       case DistortionFX::CilindricalHor:  
+       case DistortionFX::CilindricalVert:  
+       case DistortionFX::CilindricalHV:  
+       case DistortionFX::Caricature: 
+       case DistortionFX::MultipleCorners:           
           break;
        
-       case 13: // Polar Coordinates.
-       case 14: // Unpolar Coordinates.
+       case DistortionFX::PolarCoordinates: 
+       case DistortionFX::UnpolarCoordinates: 
           m_levelInput->setEnabled(false);
           m_levelLabel->setEnabled(false);
           break;
 
-       case 7:  // Waves Horizontal.
-       case 8:  // Waves Vertical.
-       case 9:  // Block Waves 1.
-       case 10: // Block Waves 2.
-       case 11: // Circular Waves 1.
-       case 12: // Circular Waves 2.
-       case 15: // Tile.
-       case 16: // Neon.
-       case 17: // Find Edges.
+       case DistortionFX::WavesHorizontal: 
+       case DistortionFX::WavesVertical:  
+       case DistortionFX::BlockWaves1:  
+       case DistortionFX::BlockWaves2: 
+       case DistortionFX::CircularWaves1: 
+       case DistortionFX::CircularWaves2: 
+       case DistortionFX::Tile: 
+       case DistortionFX::Neon: 
+       case DistortionFX::FindEdges: 
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           break;
@@ -237,46 +237,46 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
           
     switch (type)
        {
-       case 1:  // Twirl.
+       case DistortionFX::Twirl: 
           m_levelInput->setRange(-50, 50, 1, true);
           m_levelInput->setValue(10);
           break;
 
-       case 0:  // Fish Eye.
-       case 2:  // Cilindrical Hor.
-       case 3:  // Cilindrical Vert.
-       case 4:  // Cilindrical H/V.
-       case 5:  // Caricature.
+       case DistortionFX::FishEye: 
+       case DistortionFX::CilindricalHor:  
+       case DistortionFX::CilindricalVert:  
+       case DistortionFX::CilindricalHV:  
+       case DistortionFX::Caricature:  
           m_levelInput->setRange(0, 200, 1, true);
           m_levelInput->setValue(50);
           break;
 
-       case 6:  // Multiple Corners.
+       case DistortionFX::MultipleCorners: 
           m_levelInput->setRange(1, 10, 1, true);
           m_levelInput->setValue(4);
           break;
                                                   
-       case 7:  // Waves Horizontal.
-       case 8:  // Waves Vertical.
-       case 9: // Block Waves 1.
-       case 10: // Block Waves 2.
-       case 11: // Circular Waves 1.
-       case 12: // Circular Waves 2.
-       case 15: // Tile.
+       case DistortionFX::WavesHorizontal: 
+       case DistortionFX::WavesVertical:  
+       case DistortionFX::BlockWaves1: 
+       case DistortionFX::BlockWaves2: 
+       case DistortionFX::CircularWaves1: 
+       case DistortionFX::CircularWaves2: 
+       case DistortionFX::Tile: 
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           m_iterationInput->setRange(0, 200, 1, true);
           m_iterationInput->setValue(10);
           break;
 
-       case 13: // Polar Coordinates.
-       case 14: // Unpolar Coordinates.
+       case DistortionFX::PolarCoordinates:
+       case DistortionFX::UnpolarCoordinates: 
           m_levelInput->setEnabled(false);
           m_levelLabel->setEnabled(false);
           break;
                  
-       case 16: // Neon.
-       case 17: // Find Edges.
+       case DistortionFX::Neon: 
+       case DistortionFX::FindEdges: 
           m_levelInput->setRange(0, 5, 1, true);
           m_levelInput->setValue(3);
           m_iterationInput->setEnabled(true);
@@ -357,280 +357,6 @@ void ImageEffect_DistortionFX::putFinalData(void)
     iface.putOriginalData(i18n("Distortion Effects"), 
          (uint*)m_threadedFilter->getTargetImage().bits());
 }
-
-
-/*
-void ImageEffect_DistortionFX::slotEffect()
-{
-    m_dirty = true;
-    m_parent->setCursor( KCursor::waitCursor() );
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    enableButton(Ok, false);
-        
-    m_effectTypeLabel->setEnabled(false);
-    m_effectType->setEnabled(false);
-    m_levelInput->setEnabled(false);
-    m_levelLabel->setEnabled(false);
-    m_iterationInput->setEnabled(false);
-    m_iterationLabel->setEnabled(false);
-
-    
-    
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    // Preview image size.
-    int wp      = iface->previewWidth();
-    int hp      = iface->previewHeight();
-    
-    // All data from the image
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-    
-    int l       = m_levelInput->value();
-    int f       = m_iterationInput->value();
-
-    m_progressBar->setValue(0); 
-
-    switch (m_effectType->currentItem())
-       {
-       case 0: // Fish Eye.
-          fisheye(data, w, h, (double)(l/5.0), false);
-          break;
-       
-       case 1: // Twirl.
-          twirl(data, w, h, l, false);
-          break;
-
-       case 2: // Cilindrical Hor.
-          cilindrical(data, w, h, (double)l, true, false, false);
-          break;
-
-       case 3: // Cilindrical Vert.
-          cilindrical(data, w, h, (double)l, false, true, false);
-          break;
-                    
-       case 4: // Cilindrical H/V.
-          cilindrical(data, w, h, (double)l, true, true, false);
-          break;
-       
-       case 5: // Caricature.
-          fisheye(data, w, h, (double)(-l/5.0), false);
-          break;
-          
-       case 6: // Multiple Corners.          
-          multipleCorners(data, w, h, l, false);
-          break;
-       
-       case 7: // Waves Horizontal.
-          waves(data, w, h, l, f, true, false);
-          break;
-       
-       case 8: // Waves Vertical.
-          waves(data, w, h, l, f, true, true);
-          break;
-       
-       case 9: // Block Waves 1.
-          blockWaves(data, w, h, l, f, false);
-          break;
-       
-       case 10: // Block Waves 2.
-          blockWaves(data, w, h, l, f, true);
-          break;
-       
-       case 11: // Circular Waves 1.
-          circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 0.0, false, false);
-          break;
-       
-       case 12: // Circular Waves 2.
-          circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 25.0, true, false);
-          break;
-       
-       case 13: // Polar Coordinates.
-          polarCoordinates(data, w, h, true, false);
-          break;
-
-       case 14: // Unpolar Coordinates.
-          polarCoordinates(data, w, h, false, false);
-          break;
-                    
-       case 15:  // Tile.
-          tile(data, w, h, 200-f, 200-f, l);
-          break;
-
-       case 16: // Neon.
-          neon(data, w, h, l, f);
-          break;
-          
-       case 17: // Find Edges.
-          findEdges(data, w, h, l, f);
-          break;
-       }
-    
-    if ( !m_cancel ) 
-       {
-       QImage newImg((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
-       QImage destImg = newImg.smoothScale(wp, hp);
-       iface->putPreviewData((uint*)destImg.bits());
-       }
-                  
-    delete [] data;
-    m_progressBar->setValue(0); 
-    m_previewWidget->update();
-
-    m_effectTypeLabel->setEnabled(true);
-    m_effectType->setEnabled(true);
-    m_levelInput->setEnabled(true);
-    m_levelLabel->setEnabled(true);
-    
-    switch (m_effectType->currentItem())
-       {
-       case 0:  // Fish Eye.
-       case 1:  // Twirl.
-       case 2:  // Cilindrical Hor.
-       case 3:  // Cilindrical Vert.
-       case 4:  // Cilindrical H/V.
-       case 5:  // Caricature.
-       case 6:  // Multiple Corners.          
-          break;
-       
-       case 13: // Polar Coordinates.
-       case 14: // Unpolar Coordinates.
-          m_levelInput->setEnabled(false);
-          m_levelLabel->setEnabled(false);
-          break;
-
-       case 7:  // Waves Horizontal.
-       case 8:  // Waves Vertical.
-       case 9:  // Block Waves 1.
-       case 10: // Block Waves 2.
-       case 11: // Circular Waves 1.
-       case 12: // Circular Waves 2.
-       case 15: // Tile.
-       case 16: // Neon.
-       case 17: // Find Edges.
-          m_iterationInput->setEnabled(true);
-          m_iterationLabel->setEnabled(true);
-          break;
-       }
-    
-    m_cancel = false;
-    m_dirty = false;
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all parameters to the default values.") );
-    enableButton(Ok, true);
-    m_parent->setCursor( KCursor::arrowCursor() );
-}
-
-void ImageEffect_DistortionFX::slotOk()
-{
-    m_effectTypeLabel->setEnabled(false);
-    m_effectType->setEnabled(false);
-    m_levelInput->setEnabled(false);
-    m_levelLabel->setEnabled(false);
-    m_iterationInput->setEnabled(false);
-    m_iterationLabel->setEnabled(false);
-    
-    enableButton(Ok, false);
-    enableButton(User1, false);
-    
-    m_parent->setCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-    int l       = m_levelInput->value();
-    int f       = m_iterationInput->value();
-
-    m_progressBar->setValue(0); 
-        
-    if (data) 
-       {
-       switch (m_effectType->currentItem())
-          {
-          case 0: // Fish Eye.
-             fisheye(data, w, h, (double)(l/5.0));
-             break;
-       
-          case 1: // Twirl.
-             twirl(data, w, h, l);
-             break;
-
-          case 2: // Cilindrical Hor.
-             cilindrical(data, w, h, (double)l, true, false);
-             break;
-          
-          case 3: // Cilindrical Vert.
-             cilindrical(data, w, h, (double)l, false, true);
-             break;
-          
-          case 4: // Cilindrical H/V.
-             cilindrical(data, w, h, (double)l, false, true);
-             break;
-          
-          case 5: // Caricature.
-             fisheye(data, w, h, (double)(-l/5.0));
-             break;
-          
-          case 6: // Multiple Corners.          
-             multipleCorners(data, w, h, l);
-             break;
-          
-          case 7: // Waves Horizontal.
-             waves(data, w, h, l, f, true, false);
-             break;
-       
-          case 8: // Waves Vertical.
-             waves(data, w, h, l, f, true, true);
-             break;
-
-          case 9: // Block Waves 1.
-             blockWaves(data, w, h, l, f, false);
-             break;
-          
-          case 10: // Block Waves 2.
-             blockWaves(data, w, h, l, f, true);
-             break;
-       
-          case 11: // Circular Waves 1.
-             circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 0.0, false);
-             break;
-          
-          case 12: // Circular Waves 2.
-             circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 25.0, true);
-             break;
-          
-          case 13: // Polar Coordinates.
-             polarCoordinates(data, w, h, true);
-             break;
-
-          case 14: // Unpolar Coordinates.
-             polarCoordinates(data, w, h, false);
-             break;
-                          
-          case 15:  // Tile.
-             tile(data, w, h, 200-f, 200-f, l);
-             break;
-
-          case 16: // Neon.
-             neon(data, w, h, l, f);
-             break;
-          
-          case 17: // Find Edges.
-             findEdges(data, w, h, l, f);
-             break;
-          }
-       
-       if ( !m_cancel ) iface->putOriginalData(i18n("Distortion Effects"), data);
-       }
-    
-    delete [] data;    
-    m_parent->setCursor( KCursor::arrowCursor() );        
-    accept();
-}
-*/
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
 

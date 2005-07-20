@@ -42,7 +42,31 @@ public:
                  int level=0, int iteration=0, bool antialiasing=true);
     
     ~DistortionFX(){};
+
+public:
     
+    enum DistortionFXTypes 
+    {
+    FishEye=0,
+    Twirl,
+    CilindricalHor,
+    CilindricalVert,
+    CilindricalHV,
+    Caricature,
+    MultipleCorners,
+    WavesHorizontal,
+    WavesVertical,
+    BlockWaves1,
+    BlockWaves2,
+    CircularWaves1,
+    CircularWaves2,
+    PolarCoordinates,
+    UnpolarCoordinates,
+    Tile,
+    Neon,
+    FindEdges
+    };
+        
 private:  
 
     bool   m_antiAlias;
@@ -75,11 +99,6 @@ private:
                
     inline double maximumRadius(int Height, int Width, double Angle);
     
-    inline int GetLineWidth (int Width)
-       {
-       return ((Width * 4) + GetStride (Width)); 
-       };
-    
     // This function does the same thing that ShadeColors function but using double variables.
     inline double proportionalValue (double DestValue, double SrcValue, double Shade)
        {
@@ -88,16 +107,6 @@ private:
        return ((DestValue * (255.0 - Shade) + SrcValue * Shade) / 256.0);       
        };
     
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max) 
        {

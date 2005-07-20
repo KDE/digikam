@@ -62,75 +62,75 @@ void DistortionFX::filterImage(void)
     
     switch (m_effectType)
        {
-       case 0: // Fish Eye.
+       case FishEye: 
           fisheye(data, w, h, (double)(l/5.0), m_antiAlias);
           break;
        
-       case 1: // Twirl.
+       case Twirl: 
           twirl(data, w, h, l, m_antiAlias);
           break;
 
-       case 2: // Cilindrical Hor.
+       case CilindricalHor: 
           cilindrical(data, w, h, (double)l, true, false, m_antiAlias);
           break;
 
-       case 3: // Cilindrical Vert.
+       case CilindricalVert: 
           cilindrical(data, w, h, (double)l, false, true, m_antiAlias);
           break;
                     
-       case 4: // Cilindrical H/V.
+       case CilindricalHV: 
           cilindrical(data, w, h, (double)l, true, true, m_antiAlias);
           break;
        
-       case 5: // Caricature.
+       case Caricature: 
           fisheye(data, w, h, (double)(-l/5.0), m_antiAlias);
           break;
           
-       case 6: // Multiple Corners.          
+       case MultipleCorners:          
           multipleCorners(data, w, h, l, m_antiAlias);
           break;
        
-       case 7: // Waves Horizontal.
+       case WavesHorizontal: 
           waves(data, w, h, l, f, true, false);
           break;
        
-       case 8: // Waves Vertical.
+       case WavesVertical: 
           waves(data, w, h, l, f, true, true);
           break;
        
-       case 9: // Block Waves 1.
+       case BlockWaves1: 
           blockWaves(data, w, h, l, f, false);
           break;
        
-       case 10: // Block Waves 2.
+       case BlockWaves2: 
           blockWaves(data, w, h, l, f, true);
           break;
        
-       case 11: // Circular Waves 1.
+       case CircularWaves1:
           circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 0.0, false, m_antiAlias);
           break;
        
-       case 12: // Circular Waves 2.
+       case CircularWaves2: 
           circularWaves(data, w, h, w/2, h/2, (double)l, (double)f, 25.0, true, m_antiAlias);
           break;
        
-       case 13: // Polar Coordinates.
+       case PolarCoordinates: 
           polarCoordinates(data, w, h, true, m_antiAlias);
           break;
 
-       case 14: // Unpolar Coordinates.
+       case UnpolarCoordinates: 
           polarCoordinates(data, w, h, false, m_antiAlias);
           break;
                     
-       case 15:  // Tile.
+       case Tile: 
           tile(data, w, h, 200-f, 200-f, l);
           break;
 
-       case 16: // Neon.
+       case Neon: 
           neon(data, w, h, l, f);
           break;
           
-       case 17: // Find Edges.
+       case FindEdges:
           findEdges(data, w, h, l, f);
           break;
        }
@@ -912,7 +912,7 @@ void DistortionFX::neon(uchar *data, int Width, int Height, int Intensity, int B
                 color_1 = (int)((Bits[i+k] - Bits[j+k]) * (Bits[i+k] - Bits[j+k]));
                 j = (h + Lim_Max (h, BW, Height)) * LineWidth + 4 * w;
                 color_2 = (int)((Bits[i+k] - Bits[j+k]) * (Bits[i+k] - Bits[j+k]));
-                Bits[i+k] = LimitValues ((int)(sqrt ((color_1 + color_2) << Intensity)));
+                Bits[i+k] = CLAMP0255 ((int)(sqrt ((color_1 + color_2) << Intensity)));
                 }
             }
             
@@ -960,7 +960,7 @@ void DistortionFX::findEdges(uchar *data, int Width, int Height, int Intensity, 
                 color_1 = (int)((Bits[i+k] - Bits[j+k]) * (Bits[i+k] - Bits[j+k]));
                 j = (h + Lim_Max (h, BW, Height)) * LineWidth + 4 * w;
                 color_2 = (int)((Bits[i+k] - Bits[j+k]) * (Bits[i+k] - Bits[j+k]));
-                Bits[i+k] = 255 - LimitValues ((int)(sqrt ((color_1 + color_2) << Intensity)));
+                Bits[i+k] = 255 - CLAMP0255 ((int)(sqrt ((color_1 + color_2) << Intensity)));
                 }
             }
                 
