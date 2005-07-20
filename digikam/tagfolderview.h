@@ -48,6 +48,10 @@ protected:
     bool acceptDrop(const QDropEvent *e) const;
     
     void selectItem(int id);    
+
+signals:
+
+    void signalTagsAssigned();
     
 private slots:
 

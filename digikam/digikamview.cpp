@@ -145,6 +145,9 @@ void DigikamView::setupConnections()
     connect(mIconView,  SIGNAL(signalItemsAdded()),
             this, SLOT(slot_albumHighlight()));
 
+    connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
+            mIconView->viewport(), SLOT(update()));
+    
     connect(mFolderView_Deprecated, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
 

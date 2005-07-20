@@ -31,6 +31,7 @@
 
 #include "tagfolderview.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "syncjob.h"
 #include "tagcreatedlg.h"
@@ -647,18 +648,12 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         {
             id = 10;
         }
-        // If ctrl key is pressed while dragging, copy the drag object without
-        // displaying popup menu -> copy
-        else if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-                 ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
-        {
-            id = 11;
-        }
         else
         {
             QPopupMenu popMenu(this);
-            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertItem( SmallIcon("tag"),
+                                i18n("Assign Tag '%1' to Dropped Items")
+                                .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
@@ -666,24 +661,19 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             id = popMenu.exec(QCursor::pos());
         }
 
-        switch(id)
+        if (id == 10)
         {
-            case 10:
+            AlbumDB* db = AlbumManager::instance()->albumDB();
+            
+            db->beginTransaction();
+            for (QValueList<int>::const_iterator it = imageIDs.begin();
+                 it != imageIDs.end(); ++it)
             {
-                KIO::Job* job = DIO::move(urls, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
-                break;
+                db->addItemTag(*it, destAlbum->id());
             }
-            case 11:
-            {
-                KIO::Job* job = DIO::copy(urls, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
-                break;
-            }
-            default:
-                break;
+            db->commitTransaction();
+
+            emit signalTagsAssigned();
         }
     }
 }
