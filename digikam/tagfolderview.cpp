@@ -141,6 +141,8 @@ TagFolderView::TagFolderView(QWidget *parent)
     
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+
+    // TODO: connect to signalAlbumRenamed
     
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
@@ -445,7 +447,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
             item->setPixmap(0, getBlendedIcon(tag));
     }
 
-//    emit signalTagsAssigned();
+    emit signalTagsAssigned();
 }
 
 void TagFolderView::tagDelete()
