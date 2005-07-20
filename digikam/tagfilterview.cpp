@@ -28,7 +28,6 @@
 #include <kmessagebox.h>
 
 #include <qheader.h>
-#include <qintdict.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qtimer.h>
@@ -37,12 +36,18 @@
 
 #include "albummanager.h"
 #include "albumlister.h"
+#include "albumdb.h"
 #include "album.h"
 #include "syncjob.h"
 #include "dragobjects.h"
 #include "folderitem.h"
 #include "tagcreatedlg.h"
 #include "tagfilterview.h"
+
+extern "C"
+{
+#include <X11/Xlib.h>
+}
 
 static QPixmap getBlendedIcon(TAlbum* album)
 {
@@ -80,6 +85,9 @@ public:
         m_tag = tag;
         m_untagged = untagged;
         setDragEnabled(!untagged);
+
+        if (tag)
+            tag->setExtraData(listView(), this);
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
@@ -88,6 +96,9 @@ public:
         m_tag = tag;
         m_untagged = false;
         setDragEnabled(true);
+
+        if (tag)
+            tag->setExtraData(listView(), this);
     }
 
     virtual void stateChange(bool val)
@@ -139,7 +150,6 @@ class TagFilterViewPriv
 {
 public:
 
-    QIntDict<TagFilterViewItem> dict;
     QTimer*                     timer;
 };
 
@@ -154,6 +164,9 @@ TagFilterView::TagFilterView(QWidget* parent)
     setRootIsDecorated(true);
     setSelectionMode(QListView::Extended);
 
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
+    
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
     notTaggedItem->setPixmap(0, getBlendedIcon(0));
     
@@ -210,6 +223,97 @@ QDragObject* TagFilterView::dragObject()
     return drag;
 }
 
+bool TagFilterView::acceptDrop(const QDropEvent *e) const
+{
+    QPoint vp = contentsToViewport(e->pos());
+    TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
+
+    if (!itemDrop || itemDrop->m_untagged)
+    {
+        return false;
+    }
+    
+    if (ItemDrag::canDecode(e))
+    {
+        return true;
+    }
+    
+    return false;    
+}
+
+void TagFilterView::contentsDropEvent(QDropEvent *e)
+{
+    FolderView::contentsDropEvent(e);
+
+    if (!acceptDrop(e))
+        return;
+
+    QPoint vp = contentsToViewport(e->pos());
+    TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
+    
+    if (!itemDrop || itemDrop->m_untagged)
+    {
+        return;
+    }
+
+    if (ItemDrag::canDecode(e))
+    {
+        TAlbum *destAlbum = itemDrop->m_tag;
+        
+        KURL::List      urls;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+
+        if (!ItemDrag::decode(e, urls, albumIDs, imageIDs))
+            return;
+
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+            return;
+
+        int id = 0;
+        char keys_return[32];
+        XQueryKeymap(x11Display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+
+        // If a ctrl key is pressed while dropping the drag object,
+        // the tag is assigned to the images without showing a
+        // popup menu.        
+        if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
+            ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        {
+            id = 10;
+        }
+        else
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("tag"),
+                                i18n("Assign Tag '%1' to Dropped Items")
+                                .arg(destAlbum->prettyURL()), 10) ;
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+            popMenu.setMouseTracking(true);
+            id = popMenu.exec(QCursor::pos());
+        }
+
+        if (id == 10)
+        {
+            AlbumDB* db = AlbumManager::instance()->albumDB();
+            
+            db->beginTransaction();
+            for (QValueList<int>::const_iterator it = imageIDs.begin();
+                 it != imageIDs.end(); ++it)
+            {
+                db->addItemTag(*it, destAlbum->id());
+            }
+            db->commitTransaction();
+
+            emit signalTagsAssigned();
+        }
+    }
+}
+
 void TagFilterView::slotTagAdded(Album* album)
 {
     if (!album || album->isRoot())
@@ -223,11 +327,11 @@ void TagFilterView::slotTagAdded(Album* album)
     {
         TagFilterViewItem* item = new TagFilterViewItem(this, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->id(), item);
     }
     else
     {
-        TagFilterViewItem* parent = d->dict.find(tag->parent()->id());
+        TagFilterViewItem* parent =
+            (TagFilterViewItem*)(tag->parent()->extraData(this));
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
@@ -237,7 +341,6 @@ void TagFilterView::slotTagAdded(Album* album)
 
         TagFilterViewItem* item = new TagFilterViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        d->dict.insert(tag->id(), item);
     }
 }
 
@@ -246,7 +349,8 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    TagFilterViewItem* item = d->dict.find(tag->id());
+    TagFilterViewItem* item =
+        (TagFilterViewItem*)(tag->extraData(this));
     if (!item)
         return;
 
@@ -255,7 +359,8 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
         QListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
         
-        QListViewItem* newPItem = d->dict.find(newParent->id());
+        TagFilterViewItem* newPItem =
+            (TagFilterViewItem*)(newParent->extraData(this));
         if (newPItem)
             newPItem->insertItem(item);
         else
@@ -265,7 +370,9 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     {
         takeItem(item);
 
-        QListViewItem* newPItem = d->dict.find(newParent->id());
+        TagFilterViewItem* newPItem =
+            (TagFilterViewItem*)(newParent->extraData(this));
+        
         if (newPItem)
             newPItem->insertItem(item);
         else
@@ -282,18 +389,18 @@ void TagFilterView::slotTagDeleted(Album* album)
     if (!tag)
         return;
 
-    TagFilterViewItem* item = d->dict.find(tag->id());
+    TagFilterViewItem* item =
+        (TagFilterViewItem*)(album->extraData(this));
     if (!item)
         return;
 
-    d->dict.remove(tag->id());
+    album->removeExtraData(this);
     delete item;
 }
 
 void TagFilterView::slotClear()
 {
     clear();
-    d->dict.clear();
 }
 
 void TagFilterView::slotTimeOut()

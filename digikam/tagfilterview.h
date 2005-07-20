@@ -38,6 +38,12 @@ public:
 protected:
 
     QDragObject* dragObject();
+    bool acceptDrop(const QDropEvent *e) const;
+    void contentsDropEvent(QDropEvent *e);
+
+signals:
+
+    void signalTagsAssigned();
     
 private slots:
 

@@ -147,6 +147,9 @@ void DigikamView::setupConnections()
 
     connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
+
+    connect(mTagFilterView, SIGNAL(signalTagsAssigned()),
+            mIconView->viewport(), SLOT(update()));
     
     connect(mFolderView_Deprecated, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
