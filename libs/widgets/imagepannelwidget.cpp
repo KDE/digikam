@@ -161,6 +161,11 @@ ImagePannelWidget::~ImagePannelWidget()
     writeSettings();
 }
 
+void ImagePannelWidget::resizeEvent(QResizeEvent *)
+{
+    emit signalResized();
+}
+
 void ImagePannelWidget::slotInitGui(void)
 {
     readSettings();

@@ -47,6 +47,7 @@ class DIGIKAM_EXPORT ImagePannelWidget : public QWidget
 Q_OBJECT
 
 public:
+
     ImagePannelWidget(uint w, uint h, QWidget *parent=0, bool progress=false);
     ~ImagePannelWidget();
     
@@ -83,6 +84,7 @@ protected slots:
 signals:
 
     void signalOriginalClipFocusChanged( void );
+    void signalResized( void );
     
 protected:
     
@@ -94,6 +96,10 @@ protected:
     QHButtonGroup *m_separateView;
     
     KProgress     *m_progressBar;
+    
+protected:
+    
+    void resizeEvent(QResizeEvent *e);
 
 private:
         
