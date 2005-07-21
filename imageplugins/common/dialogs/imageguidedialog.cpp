@@ -58,7 +58,7 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
                                    bool loadFileSettings, bool progress, 
                                    bool guideVisible, int guideMode)
                   : KDialogBase(Plain, title,
-                                Help|User1|User2|User3|Try|Ok|Cancel, Ok,
+                                Help|User1|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
                                 i18n("&Reset Values"),
                                 i18n("&Load..."),
