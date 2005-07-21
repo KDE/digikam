@@ -63,7 +63,7 @@ public:
     void   setProgressVisible(bool b);
     void   setProgressWhatsThis(QString desc);
 
-    void   setUserAreaWidget(QWidget *w);
+    void   setUserAreaWidget(QWidget *w, bool separator=true);
     
     KProgress *progressBar(void) { return m_progressBar; };
     

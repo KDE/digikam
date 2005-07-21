@@ -41,6 +41,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kseparator.h>
 
 // Local includes.
 
@@ -172,9 +173,16 @@ void ImagePannelWidget::slotPanIconTakeFocus(void)
     m_imageRegionWidget->updateOriginalImage();
 }
 
-void ImagePannelWidget::setUserAreaWidget(QWidget *w)
+void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
 {
     QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    
+    if (separator)
+       {
+       KSeparator *line = new KSeparator (Horizontal, this);
+       vLayout->addWidget(line);
+       }
+       
     vLayout->addWidget(w);
     vLayout->addStretch();
     m_mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
