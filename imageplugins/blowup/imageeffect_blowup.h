@@ -122,6 +122,7 @@ private:
     
 private slots:
 
+    void slotCheckSettings(void);    
     void slotHelp();
     void slotOk();
     void slotCancel();

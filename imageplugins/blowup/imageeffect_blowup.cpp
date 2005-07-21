@@ -286,13 +286,26 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
             this, SLOT(slotAdjustRatioFromWidth(int)));  
 
     connect(m_newHeight, SIGNAL(valueChanged (int)),
-            this, SLOT(slotAdjustRatioFromHeight(int)));                                      
+            this, SLOT(slotAdjustRatioFromHeight(int)));       
+    
+    // details must be < gradient !
+    connect(m_detailInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotCheckSettings()));                 
+
+    connect(m_gradientInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotCheckSettings()));                                             
 }
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
 {
     if (m_cimgInterface)
        delete m_cimgInterface;
+}
+
+void ImageEffect_BlowUp::slotCheckSettings(void)
+{
+    m_gradientInput->setMinValue(m_detailInput->value());
+    m_detailInput->setMaxValue(m_gradientInput->value());
 }
 
 void ImageEffect_BlowUp::slotUser1()

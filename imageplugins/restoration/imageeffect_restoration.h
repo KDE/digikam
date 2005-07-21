@@ -92,6 +92,7 @@ private:
     
 private slots:
 
+    void slotCheckSettings(void);
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);

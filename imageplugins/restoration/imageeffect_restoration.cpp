@@ -62,7 +62,7 @@ namespace DigikamRestorationImagesPlugin
 
 ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                        : CtrlPanelDialog(parent, i18n("Photograph Restoration"), 
-                                         "restoration", true)
+                                         "restoration", true, true)
 {
     QString whatsThis;
 
@@ -128,11 +128,12 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QGridLayout* grid2 = new QGridLayout( secondPage, 5, 2, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
     
-    m_detailLabel = new QLabel(i18n("Detail preservation:"), secondPage);
+    m_detailLabel = new QLabel(i18n("Detail Preservation:"), secondPage);
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.1, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image. "
+    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level "
+                                         "of the small features in the target image. "
                                          "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
@@ -140,7 +141,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_gradientLabel = new QLabel(i18n("Anisotropy:"), secondPage);
     m_gradientInput = new KDoubleNumInput(secondPage);
     m_gradientInput->setPrecision(2);
-    m_gradientInput->setRange(0.0, 1.0, 0.1, true);
+    m_gradientInput->setRange(0.0, 100.0, 0.1, true);
     QWhatsThis::add( m_gradientInput, i18n("<p>Anisotropic (directional) modifier of the details. Keep it small for Gaussian noise."));
     grid2->addMultiCellWidget(m_gradientLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_gradientInput, 1, 1, 1, 1);
@@ -178,7 +179,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QGridLayout* grid3 = new QGridLayout( thirdPage, 4, 2, marginHint(), spacingHint());
     m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
     
-    m_angularStepLabel = new QLabel(i18n("Angular step:"), thirdPage);
+    m_angularStepLabel = new QLabel(i18n("Angular Step:"), thirdPage);
     m_angularStepInput = new KDoubleNumInput(thirdPage);
     m_angularStepInput->setPrecision(2);
     m_angularStepInput->setRange(5.0, 90.0, 5.0, true);
@@ -186,7 +187,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid3->addMultiCellWidget(m_angularStepLabel, 0, 0, 0, 0);
     grid3->addMultiCellWidget(m_angularStepInput, 0, 0, 1, 1);
 
-    m_integralStepLabel = new QLabel(i18n("Integral step:"), thirdPage);
+    m_integralStepLabel = new QLabel(i18n("Integral Step:"), thirdPage);
     m_integralStepInput = new KDoubleNumInput(thirdPage);
     m_integralStepInput->setPrecision(2);
     m_integralStepInput->setRange(0.1, 10.0, 0.1, true);
@@ -202,11 +203,11 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     grid3->addMultiCellWidget(m_gaussianLabel, 2, 2, 0, 0);
     grid3->addMultiCellWidget(m_gaussianInput, 2, 2, 1, 1);
     
-    m_linearInterpolationBox = new QCheckBox(i18n("Use linear interpolation"), thirdPage);
+    m_linearInterpolationBox = new QCheckBox(i18n("Use Linear Interpolation"), thirdPage);
     QWhatsThis::add( m_linearInterpolationBox, i18n("<p>Enable this option to quench the last bit of quality (slow)."));
     grid3->addMultiCellWidget(m_linearInterpolationBox, 3, 3, 0, 1);
     
-    m_normalizeBox = new QCheckBox(i18n("Normalize photograph"), thirdPage);
+    m_normalizeBox = new QCheckBox(i18n("Normalize Photograph"), thirdPage);
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 4, 4, 0, 1);
     
@@ -216,43 +217,23 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
-    
-    connect(m_restorationTypeCB, SIGNAL(activated(int)),
-            this, SLOT(slotUser1()));
-                        
+            
+    // details must be < gradient !
     connect(m_detailInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
+            this, SLOT(slotCheckSettings()));                 
 
     connect(m_gradientInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-
-    connect(m_timeStepInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-
-    connect(m_blurInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-
-    connect(m_angularStepInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-
-    connect(m_integralStepInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-                                                
-    connect(m_gaussianInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                 
-
-    connect(m_blurItInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));  
-
-    connect(m_linearInterpolationBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                        
-
-    connect(m_normalizeBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                        
+            this, SLOT(slotCheckSettings()));                 
 }
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
 {
+}
+
+void ImageEffect_Restoration::slotCheckSettings(void)
+{
+    m_gradientInput->setMinValue(m_detailInput->value());
+    m_detailInput->setMaxValue(m_gradientInput->value());
 }
 
 void ImageEffect_Restoration::renderingFinished()

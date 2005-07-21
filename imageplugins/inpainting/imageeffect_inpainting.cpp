@@ -328,6 +328,13 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotUser1()));
+    
+    // details must be < gradient !
+    connect(m_detailInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotCheckSettings()));                 
+
+    connect(m_gradientInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotCheckSettings()));   
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
@@ -336,6 +343,12 @@ ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
         
     if (m_cimgInterface)
        delete m_cimgInterface;
+}
+
+void ImageEffect_InPainting_Dialog::slotCheckSettings(void)
+{
+    m_gradientInput->setMinValue(m_detailInput->value());
+    m_detailInput->setMaxValue(m_gradientInput->value());
 }
 
 void ImageEffect_InPainting_Dialog::slotUser1()

@@ -51,7 +51,7 @@ class CtrlPanelDialog : public KDialogBase
 public:
 
     CtrlPanelDialog(QWidget* parent, QString title, QString name, 
-                    bool loadFileSettings=false);
+                    bool loadFileSettings=false, bool tryAction=false);
     ~CtrlPanelDialog();
 
     void setAboutData(KAboutData *about);
@@ -67,6 +67,7 @@ public slots:
     void slotTimer();       
     void slotEffect();
     void slotOk();
+    void slotTry();
 
 private:
     

@@ -58,9 +58,9 @@ namespace DigikamImagePlugins
 {
 
 CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name, 
-                                 bool loadFileSettings)
+                                 bool loadFileSettings, bool tryAction)
                : KDialogBase(Plain, title,
-                             Help|User1|User2|User3|Ok|Cancel, Ok,
+                             Help|User1|User2|User3|Try|Ok|Cancel, Ok,
                              parent, 0, true, true,
                              i18n("&Reset Values"),
                              i18n("&Load..."),
@@ -77,7 +77,8 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );  
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
-        
+    showButton(Try, tryAction);
+            
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));  
         
     // -------------------------------------------------------------
@@ -101,8 +102,16 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
         
     // -------------------------------------------------------------
     
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotFocusChanged()));
+    if (!tryAction)
+       {
+       connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotFocusChanged()));
+       }
+    else
+       {
+       connect(m_imagePreviewWidget, SIGNAL(signalResized()),
+               this, SLOT(slotFocusChanged()));
+       }
 }
 
 CtrlPanelDialog::~CtrlPanelDialog()
@@ -144,9 +153,15 @@ void CtrlPanelDialog::abortPreview()
     enableButton(Ok, true);  
     enableButton(User2, true);
     enableButton(User3, true);  
+    enableButton(Try,   true);    
     setButtonText(User1, i18n("&Reset Values"));
     setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
     renderingFinished();
+}
+
+void CtrlPanelDialog::slotTry()
+{
+    slotEffect();
 }
 
 void CtrlPanelDialog::slotUser1()
@@ -231,6 +246,7 @@ void CtrlPanelDialog::slotEffect()
     enableButton(Ok,    false);
     enableButton(User2, false);
     enableButton(User3, false);    
+    enableButton(Try,   false);    
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
     
@@ -249,6 +265,7 @@ void CtrlPanelDialog::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
+    enableButton(Try,   false);    
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
     
