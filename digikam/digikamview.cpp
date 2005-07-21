@@ -121,7 +121,6 @@ DigikamView::~DigikamView()
 void DigikamView::applySettings(const AlbumSettings* settings)
 {
     mIconView->applySettings(settings);
-    mFolderView_Deprecated->applySettings();
 }
 
 void DigikamView::setupConnections()
@@ -151,10 +150,7 @@ void DigikamView::setupConnections()
     connect(mTagFilterView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
     
-    connect(mFolderView_Deprecated, SIGNAL(signalTagsAssigned()),
-            mIconView->viewport(), SLOT(update()));
-
-    connect(mFolderView_Deprecated, SIGNAL(signalAlbumModified()),
+    connect(mFolderView, SIGNAL(signalAlbumModified()),
 	    mIconView, SLOT(slotAlbumModified()));
 
     // -- Sidebar Connections -------------------------------------
@@ -180,7 +176,6 @@ void DigikamView::loadViewState()
     }
     else 
     {
-        mFolderView_Deprecated->setSizePolicy(leftSzPolicy);
         mIconView->setSizePolicy(rightSzPolicy);
     }    
     
@@ -254,7 +249,6 @@ void DigikamView::slot_sortAlbums(int order)
     if (!settings) return;
     settings->setAlbumSortOrder(
         (AlbumSettings::AlbumSortOrder) order);
-    mFolderView_Deprecated->applySettings();
     mFolderView->resort();
 }
 
