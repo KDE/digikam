@@ -210,7 +210,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 4, 4, 0, 1);
     
-    m_imagePreviewWidget->setUserAreaWidget(m_mainTab);
+    m_imagePreviewWidget->setUserAreaWidget(m_mainTab, false);
     
     // -------------------------------------------------------------
     
