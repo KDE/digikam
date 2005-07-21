@@ -26,9 +26,9 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
-#include <kdeversion.h>
 #include <kconfig.h>
 #include <kfilemetainfo.h>
+#include <klineedit.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -43,6 +43,7 @@
 #include <qheader.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qtoolbutton.h>
 #include <qpushbutton.h>
 
 #include <libkexif/kexifwidget.h>
@@ -67,12 +68,14 @@ public:
     TAlbumCheckListItem(QListView* parent, TAlbum* album)
         : QCheckListItem(parent, album->title()),
           m_album(album)
-        {}
+    {
+    }
 
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
         : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox),
           m_album(album)
-        {}
+    {
+    }
 
     TAlbum* m_album;
 };
@@ -82,7 +85,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
              : KDialogBase(Plain, i18n("Image Comments/Tags"),
                            singleMode ? Help|Stretch|Ok|Apply|Cancel :
                            Help|User1|User2|Stretch|Ok|Apply|Cancel,
-                           Ok, parent, 0, true, true,
+                           Ok, parent, 0, true, false,
                            KStdGuiItem::guiItem(KStdGuiItem::Forward),
                            KStdGuiItem::guiItem(KStdGuiItem::Back))
 {
@@ -92,7 +95,10 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     QGridLayout *topLayout = new QGridLayout(plainPage(), 3, 2, 5, spacingHint());
 
+    // thumbnail -----------------------------------------------------------
+    
     QGroupBox  *thumbBox = new QGroupBox(plainPage());
+    thumbBox->setFrameStyle(QFrame::NoFrame);
     QVBoxLayout *thumbBoxLayout = new QVBoxLayout(thumbBox, marginHint(),
                                                   spacingHint());
     m_thumbLabel = new QLabel(thumbBox);
@@ -107,14 +113,40 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
     m_commentsEdit = new KTextEdit(commentsBox);
     m_commentsEdit->setTextFormat(QTextEdit::PlainText);
-#if KDE_IS_VERSION(3,2,0)
     m_commentsEdit->setCheckSpellingEnabled(true);
-#endif
     topLayout->addWidget(commentsBox, 1, 0);
 
-    QVGroupBox* tagsBox = new QVGroupBox(i18n("Tags"), plainPage());
+    connect(m_commentsEdit, SIGNAL(textChanged()),
+            SLOT(slotModified()));
+
+    
+    // Tags view ---------------------------------------------------
+    
+    QGroupBox* tagsBox = new QGroupBox(i18n("Tags"), plainPage());
+    QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, marginHint(),
+                                                 spacingHint());
+
+    m_tagsSearchClearBtn = new QToolButton(tagsBox);
+    m_tagsSearchClearBtn->setAutoRaise(true);
+    m_tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
+                                                                  KIcon::Toolbar,
+                                                                  KIcon::SizeSmall)); 
+    
+    QLabel* tagsSearchTextBtn = new QLabel(i18n("Search:"), tagsBox);
+    m_tagsSearchEdit = new KLineEdit(tagsBox);
+
+    QHBoxLayout* tagsSearchLayout = new QHBoxLayout(0, 5, 5);
+    tagsSearchLayout->addWidget(m_tagsSearchClearBtn);
+    tagsSearchLayout->addWidget(tagsSearchTextBtn);
+    tagsSearchLayout->addWidget(m_tagsSearchEdit);
+    tagsBoxLayout->addLayout(tagsSearchLayout);
+    
     m_tagsView = new QListView(tagsBox);
+    tagsBoxLayout->addWidget(m_tagsView);
+    
     m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
+    tagsBoxLayout->addWidget(m_recentTagsBtn);
+
     topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
 
     m_tagsView->addColumn(i18n( "Tags" ));
@@ -123,17 +155,20 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_tagsView->setResizeMode(QListView::LastColumn);
     populateTags();
 
-    connect(m_commentsEdit, SIGNAL(textChanged()),
-            SLOT(slotModified()));
-
-    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*,
-            const QPoint &, int)), this,
+    connect(m_tagsView,
+            SIGNAL(rightButtonClicked(QListViewItem*,
+                                      const QPoint &, int)), 
             SLOT(slotRightButtonClicked(QListViewItem*,
-            const QPoint&, int)));
-
+                                        const QPoint&, int)));
+    connect(m_tagsSearchClearBtn, SIGNAL(clicked()),
+            m_tagsSearchEdit, SLOT(clear()));
+    connect(m_tagsSearchEdit, SIGNAL(textChanged(const QString&)),
+            SLOT(slotTagsSearchChanged()));
     connect(m_recentTagsBtn, SIGNAL(clicked()),
             SLOT(slotRecentTags()));
 
+    // Initalize ---------------------------------------------
+    
     slotItemChanged();
 
     resize(configDialogSize("Image Description Dialog"));
@@ -143,6 +178,8 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     m_commentsEdit->setFocus();
 
+    // Connect to album manager -----------------------------
+    
     AlbumManager* man = AlbumManager::instance();
     connect(man, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
@@ -164,12 +201,14 @@ ImageDescEdit::~ImageDescEdit()
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
+    /*
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         (*it)->removeExtraData(this);
     }
-
+    */
+    
     saveDialogSize("Image Description Dialog");
 }
 
@@ -488,7 +527,8 @@ void ImageDescEdit::tagNew(TAlbum* parAlbum)
     }
     else
     {
-        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
+        TAlbumCheckListItem* viewItem =
+            (TAlbumCheckListItem*)album->extraData(this);
         if (viewItem)
         {
             viewItem->setOn(true);
@@ -710,6 +750,85 @@ void ImageDescEdit::slotRecentTags()
                 m_tagsView->ensureItemVisible(viewItem);
             }
         }
+    }
+}
+
+void ImageDescEdit::slotTagsSearchChanged()
+{
+    m_tagsSearchEdit->unsetPalette();
+    
+    QString search(m_tagsSearchEdit->text());
+    search = search.lower();
+
+    bool atleastOneMatch = false;
+    
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* tag  = (TAlbum*)(*it);
+
+        // don't touch the root Tag
+        if (tag->isRoot())
+            continue;
+
+        bool match = tag->title().lower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = tag->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(tag);
+            while (it.current())
+            {
+                if ((*it)->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+        
+        TAlbumCheckListItem* viewItem
+            = (TAlbumCheckListItem*)(tag->extraData(this));
+        
+        if (match)
+        {
+            atleastOneMatch = true;
+            
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    if (!search.isEmpty())
+    {
+        QPalette pal = m_tagsSearchEdit->palette();
+        pal.setColor(QPalette::Active, QColorGroup::Base,
+                     atleastOneMatch ?  QColor(200,255,200) :
+                     QColor(255,200,200));
+        m_tagsSearchEdit->setPalette(pal);
     }
 }
 
