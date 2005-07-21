@@ -36,6 +36,8 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kcursor.h>
+#include <kseparator.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -85,7 +87,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
     m_newWidthLabel = new QLabel(gboxSettings);
@@ -99,6 +101,9 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     
+    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
+        
     QLabel *label3 = new QLabel(i18n("Angle (in Degrees):"), gboxSettings);
     m_angleInput = new KDoubleNumInput(gboxSettings);
     m_angleInput->setPrecision(1);
@@ -108,14 +113,19 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
         
-    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_angleInput, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
     
-    m_antialiasInput = new QCheckBox(i18n("Anti-aliasing"), gboxSettings);
+    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the rotated image. "
                                             "To smooth the target image, it will be blured a little."));
-    gridSettings->addMultiCellWidget(m_antialiasInput, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(m_antialiasInput, 5, 5, 0, 2);
+    
+    m_autoCropInput = new QCheckBox(i18n("Auto-Crop"), gboxSettings);
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process an image auto-croping to remove black "
+                                            "holes around. This option must be used only with small angle values."));
+    gridSettings->addMultiCellWidget(m_autoCropInput, 6, 6, 0, 2);
     
     setUserAreaWidget(gboxSettings);
     
@@ -126,6 +136,9 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     
     connect(m_antialiasInput, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));             
+
+    connect(m_autoCropInput, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));                                  
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
@@ -136,26 +149,35 @@ void ImageEffect_FreeRotation::renderingFinished()
 {
     m_angleInput->setEnabled(true);
     m_antialiasInput->setEnabled(true);
+    m_autoCropInput->setEnabled(true);
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_FreeRotation::resetValues()
 {
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
+    m_autoCropInput->blockSignals(true);
     m_angleInput->setValue(0.0);
     m_antialiasInput->setChecked(true);
+    m_autoCropInput->setChecked(false);
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
+    m_autoCropInput->blockSignals(false);
 } 
 
 void ImageEffect_FreeRotation::prepareEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     m_angleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
+    m_autoCropInput->setEnabled(false);
 
     double angle      = m_angleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-
+    bool autocrop     = m_autoCropInput->isChecked();
+    QColor background = paletteBackgroundColor().rgb();
+    
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgW = iface->originalWidth();
     int orgH = iface->originalHeight();
@@ -164,7 +186,8 @@ void ImageEffect_FreeRotation::prepareEffect()
     memcpy( image.bits(), data, image.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new FreeRotation(&image, this, angle, antialiasing, orgW, orgH));    
+                       new FreeRotation(&image, this, angle, antialiasing, autocrop, 
+                                        background, orgW, orgH));    
     delete [] data;
 }
 
@@ -172,10 +195,13 @@ void ImageEffect_FreeRotation::prepareFinal()
 {
     m_angleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
+    m_autoCropInput->setEnabled(false);
         
     double angle      = m_angleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-    
+    bool autocrop     = m_autoCropInput->isChecked();
+    QColor background = Qt::black;
+        
     Digikam::ImageIface iface(0, 0);
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
@@ -184,7 +210,8 @@ void ImageEffect_FreeRotation::prepareFinal()
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new FreeRotation(&orgImage, this, angle, antialiasing, orgW, orgH));
+                       new FreeRotation(&orgImage, this, angle, antialiasing, autocrop, 
+                                        background, orgW, orgH));
     delete [] data;       
 }
 
@@ -196,6 +223,7 @@ void ImageEffect_FreeRotation::putPreviewData(void)
         
     QImage imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QImage::ScaleMin);
     QImage imDest( w, h, 32 );
+    imDest.fill( paletteBackgroundColor().rgb() );
     bitBlt( &imDest, (w-imTemp.width())/2, (h-imTemp.height())/2, 
             &imTemp, 0, 0, imTemp.width(), imTemp.height());
             

@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qsize.h>
+#include <qcolor.h>
 
 // Digikam includes.
 
@@ -39,7 +40,7 @@ class FreeRotation : public Digikam::ThreadedFilter
 public:
     
     FreeRotation(QImage *orgImage, QObject *parent=0, double angle=0.0, 
-                 bool antialiasing=true, int orgW=0, int orgH=0);
+                 bool antialiasing=true, bool autoCrop=false, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
     
     ~FreeRotation(){};
     
@@ -48,6 +49,7 @@ public:
 private:  
 
     bool   m_antiAlias;
+    bool   m_autoCrop;
 
     int    m_orgW;
     int    m_orgH;
@@ -55,7 +57,9 @@ private:
     double m_angle;
     
     QSize  m_newSize;
-    
+ 
+    QColor m_backgroundColor;
+        
 private:  
 
     virtual void filterImage(void);

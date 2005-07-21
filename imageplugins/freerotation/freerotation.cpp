@@ -22,17 +22,13 @@
  * 
  * ============================================================ */
  
-// Degrees to radian convertion coeff. to optimize computation.
-#define DEG2RAD -0.017453292519943
+// Degrees to radian convertion coeff (PI/180). To optimize computation.
+#define DEG2RAD 0.017453292519943
 
 // C++ includes. 
  
 #include <cmath>
 #include <cstdlib>
-
-// Qt includes.
-
-#include <qwmatrix.h> 
 
 // KDE includes.
 
@@ -45,13 +41,16 @@
 namespace DigikamFreeRotationImagesPlugin
 {
 
-FreeRotation::FreeRotation(QImage *orgImage, QObject *parent, double angle, bool antialiasing, int orgW, int orgH)
+FreeRotation::FreeRotation(QImage *orgImage, QObject *parent, double angle, bool antialiasing, 
+                           bool autoCrop, QColor backgroundColor, int orgW, int orgH)
             : Digikam::ThreadedFilter(orgImage, parent, "FreeRotation")
 { 
-    m_angle     = angle;
-    m_orgW      = orgW;
-    m_orgH      = orgH;
-    m_antiAlias = antialiasing;
+    m_angle           = angle;
+    m_orgW            = orgW;
+    m_orgH            = orgH;
+    m_antiAlias       = antialiasing;
+    m_autoCrop        = autoCrop;
+    m_backgroundColor = backgroundColor;
         
     initFilter();
 }
@@ -70,8 +69,8 @@ void FreeRotation::filterImage(void)
     
     // first of all, we need to calcule the sin and cos of the given angle
     
-    lfSin = sin (m_angle * DEG2RAD);
-    lfCos = cos (m_angle * DEG2RAD);
+    lfSin = sin (m_angle * -DEG2RAD);
+    lfCos = cos (m_angle * -DEG2RAD);
 
     // now, we have to calc the new size for the destination image
     
@@ -99,7 +98,7 @@ void FreeRotation::filterImage(void)
     // now, we have to alloc a new image
     
     m_destImage.create(nNewWidth, nNewHeight, 32);
-    m_newSize = m_destImage.size();
+    m_destImage.fill( m_backgroundColor.rgb() );
     uchar *pResBits = m_destImage.bits();
     
     // main loop
@@ -120,7 +119,8 @@ void FreeRotation::filterImage(void)
             if (isInside (nWidth, nHeight, (int)lfx, (int)lfy))
                 {
                 if (m_antiAlias)
-                    antiAliasing (pBits, nWidth, nHeight, lfx, lfy, &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                    antiAliasing (pBits, nWidth, nHeight, lfx, lfy, 
+                                  &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 else
                     {
                     j = setPosition (nWidth, (int)lfx, (int)lfy);
@@ -135,9 +135,28 @@ void FreeRotation::filterImage(void)
         }
 
     // To compute the destination image size using original image dimensions.        
-    QWMatrix matrix;
-    matrix.rotate(m_angle);
-    m_newSize = matrix.mapRect(QRect::QRect(0, 0, m_orgW, m_orgH)).size();
+    int W = (int)(m_orgW * cos(m_angle * DEG2RAD) + m_orgH * sin(fabs(m_angle) * DEG2RAD));
+    int H = (int)(m_orgH * cos(m_angle * DEG2RAD) + m_orgW * sin(fabs(m_angle) * DEG2RAD));
+    
+    if (m_autoCrop)
+       {
+       // Auto-cropping destination image without black holes around.
+
+       QRect autoCrop;
+       autoCrop.setX( (int)(nHeight * sin(fabs(m_angle) * DEG2RAD)) );
+       autoCrop.setY( (int)(nWidth  * sin(fabs(m_angle) * DEG2RAD)) );
+       autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(fabs(m_angle) * DEG2RAD)) );
+       autoCrop.setHeight( (int)(nNewHeight - 2*nWidth  * sin(fabs(m_angle) * DEG2RAD)) );        
+       m_destImage = m_destImage.copy(autoCrop);
+
+       m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
+       m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
+       }
+    else
+       {
+       m_newSize.setWidth(  W );
+       m_newSize.setHeight( H );
+       }
 }
 
 inline void FreeRotation::antiAliasing (uchar *data, int Width, int Height, double X, double Y, 

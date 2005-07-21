@@ -50,6 +50,7 @@ private:
     QLabel           *m_newHeightLabel;
 
     QCheckBox        *m_antialiasInput;
+    QCheckBox        *m_autoCropInput;
     
     KDoubleNumInput  *m_angleInput;
 
