@@ -755,8 +755,6 @@ void ImageDescEdit::slotRecentTags()
 
 void ImageDescEdit::slotTagsSearchChanged()
 {
-    m_tagsSearchEdit->unsetPalette();
-    
     QString search(m_tagsSearchEdit->text());
     search = search.lower();
 
@@ -822,8 +820,23 @@ void ImageDescEdit::slotTagsSearchChanged()
         }
     }
 
-    if (!search.isEmpty())
+    if (search.isEmpty())
     {
+        m_tagsSearchEdit->unsetPalette();
+        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
+        TAlbumCheckListItem* rootItem =
+            (TAlbumCheckListItem*)(root->extraData(this));
+        if (rootItem)
+            rootItem->setText(0, root->title());
+    }
+    else
+    {
+        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
+        TAlbumCheckListItem* rootItem =
+            (TAlbumCheckListItem*)(root->extraData(this));
+        if (rootItem)
+            rootItem->setText(0, i18n("Found Tags"));
+
         QPalette pal = m_tagsSearchEdit->palette();
         pal.setColor(QPalette::Active, QColorGroup::Base,
                      atleastOneMatch ?  QColor(200,255,200) :
