@@ -223,12 +223,13 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
     
-    m_detailLabel = new QLabel(i18n("Detail preservation:"), secondPage);
+    m_detailLabel = new QLabel(i18n("Detail Preservation:"), secondPage);
     m_detailLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_detailInput = new KDoubleNumInput(secondPage);
     m_detailInput->setPrecision(2);
     m_detailInput->setRange(0.0, 100.0, 0.01, true);
-    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level of the small features in the target image. "
+    QWhatsThis::add( m_detailInput, i18n("<p>Preservation of details to set the sharpening level "
+                                         "of the small features in the target image. "
                                          "Higher values leave details sharp."));
     grid2->addMultiCellWidget(m_detailLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_detailInput, 0, 0, 1, 1);
@@ -278,7 +279,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, marginHint(), spacingHint());
     m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
     
-    m_angularStepLabel = new QLabel(i18n("Angular step:"), thirdPage);
+    m_angularStepLabel = new QLabel(i18n("Angular Step:"), thirdPage);
     m_angularStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_angularStepInput = new KDoubleNumInput(thirdPage);
     m_angularStepInput->setPrecision(2);
@@ -287,7 +288,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     grid3->addMultiCellWidget(m_angularStepLabel, 0, 0, 0, 0);
     grid3->addMultiCellWidget(m_angularStepInput, 0, 0, 1, 1);
 
-    m_integralStepLabel = new QLabel(i18n("Integral step:"), thirdPage);
+    m_integralStepLabel = new QLabel(i18n("Integral Step:"), thirdPage);
     m_integralStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_integralStepInput = new KDoubleNumInput(thirdPage);
     m_integralStepInput->setPrecision(2);
@@ -305,11 +306,11 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     grid3->addMultiCellWidget(m_gaussianLabel, 2, 2, 0, 0);
     grid3->addMultiCellWidget(m_gaussianInput, 2, 2, 1, 1);
     
-    m_linearInterpolationBox = new QCheckBox(i18n("Use linear interpolation"), thirdPage);
+    m_linearInterpolationBox = new QCheckBox(i18n("Use Linear Interpolation"), thirdPage);
     QWhatsThis::add( m_linearInterpolationBox, i18n("<p>Enable this option to quench the last bit of quality (slow)."));
     grid3->addMultiCellWidget(m_linearInterpolationBox, 0, 0, 3, 3);
     
-    m_normalizeBox = new QCheckBox(i18n("Normalize photograph"), thirdPage);
+    m_normalizeBox = new QCheckBox(i18n("Normalize Photograph"), thirdPage);
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
     
