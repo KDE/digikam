@@ -36,6 +36,8 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kseparator.h>
+#include <kcursor.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -83,7 +85,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
     m_newWidthLabel = new QLabel(gboxSettings);
@@ -97,14 +99,17 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     
+    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
+    
     QLabel *label3 = new QLabel(i18n("Horizontal Angle:"), gboxSettings);
     m_magnitudeX = new KDoubleNumInput(gboxSettings);
     m_magnitudeX->setPrecision(1);
     m_magnitudeX->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeX->setValue(0.0);
     QWhatsThis::add( m_magnitudeX, i18n("<p>The horizontal shearing angle, in degrees."));
-    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_magnitudeX, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(m_magnitudeX, 4, 4, 0, 2);
             
     QLabel *label4 = new QLabel(i18n("Vertical Angle:"), gboxSettings);
     m_magnitudeY = new KDoubleNumInput(gboxSettings);
@@ -112,8 +117,8 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_magnitudeY->setRange(-45.0, 45.0, 0.1, true);
     m_magnitudeY->setValue(0.0);
     QWhatsThis::add( m_magnitudeY, i18n("<p>The vertical shearing angle, in degrees."));
-    gridSettings->addMultiCellWidget(label4, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_magnitudeY, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 0);
+    gridSettings->addMultiCellWidget(m_magnitudeY, 6, 6, 0, 2);
             
     setUserAreaWidget(gboxSettings); 
 
@@ -134,6 +139,7 @@ void ImageEffect_ShearTool::renderingFinished()
 {
     m_magnitudeX->setEnabled(true);
     m_magnitudeY->setEnabled(true);
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_ShearTool::resetValues()
@@ -148,6 +154,7 @@ void ImageEffect_ShearTool::resetValues()
 
 void ImageEffect_ShearTool::prepareEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     m_magnitudeX->setEnabled(false);
     m_magnitudeY->setEnabled(false);
 
