@@ -69,23 +69,23 @@ private:  // BlurFX filter methods.
     virtual void filterImage(void);
     
     // Backported from ImageProcessing version 1
-    void softenerBlur(uint *data, int Width, int Height);
-    void shakeBlur(uint *data, int Width, int Height, int Distance);
-    void frostGlass(uint *data, int Width, int Height, int Frost);
+    void softenerBlur(uchar *data, int Width, int Height);
+    void shakeBlur(uchar *data, int Width, int Height, int Distance);
+    void frostGlass(uchar *data, int Width, int Height, int Frost);
     
     // Backported from ImageProcessing version 2
-    void zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
-    void radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
-    void focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
+    void zoomBlur(uchar *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
+    void radialBlur(uchar *data, int Width, int Height, int X, int Y, int Distance, QRect pArea=QRect::QRect());
+    void focusBlur(uchar *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
                    bool bInversed=false, QRect pArea=QRect::QRect());
-    void farBlur(uint *data, int Width, int Height, int Distance);
-    void motionBlur(uint *data, int Width, int Height, int Distance, double Angle=0.0);
-    void smartBlur(uint *data, int Width, int Height, int Radius, int Strenght);
-    void mosaic(uint *data, int Width, int Height, int SizeW, int SizeH);
+    void farBlur(uchar *data, int Width, int Height, int Distance);
+    void motionBlur(uchar *data, int Width, int Height, int Distance, double Angle=0.0);
+    void smartBlur(uchar *data, int Width, int Height, int Radius, int Strenght);
+    void mosaic(uchar *data, int Width, int Height, int SizeW, int SizeH);
 
 private:  // Internal filter methods.
 
-    void MakeConvolution(uint *data, int Width, int Height, int Radius, int Kernel[]);
+    void MakeConvolution(uchar *data, int Width, int Height, int Radius, int Kernel[]);
     
     inline QRgb RandomColor(uchar *Bits, int Width, int Height, int X, int Y, int Radius);
     

@@ -54,9 +54,9 @@ BlurFX::BlurFX(QImage *orgImage, QObject *parent, int blurFXType, int distance, 
 
 void BlurFX::filterImage(void)
 {
-    int   w    = m_orgImage.width();
-    int   h    = m_orgImage.height();
-    uint* data = (uint*)m_orgImage.bits();
+    int   w     = m_orgImage.width();
+    int   h     = m_orgImage.height();
+    uchar* data = m_orgImage.bits();
 
     switch (m_blurFXType)
         {
@@ -118,7 +118,7 @@ void BlurFX::filterImage(void)
  *                     This radius is always from the center to out of the image, we   
  *                     calc a proportional radius from the center.
  */
-void BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
+void BlurFX::zoomBlur(uchar *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
 {
     if (Distance <= 1) return;
     int progress;
@@ -143,8 +143,7 @@ void BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Dista
        nStride = (Width - xMax + xMin)*4;
        }
        
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+    uchar* pResBits = m_destImage.bits(); 
 
     register int h, w, nh, nw, i, j, r;
     int sumR, sumG, sumB, nCount;
@@ -183,9 +182,9 @@ void BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Dista
                     // we adjust the positions
                     j = SetPosition(Width, nw, nh);
                     // finally we sum the bits
-                    sumR += pBits[ j ];
-                    sumG += pBits[j+1];
-                    sumB += pBits[j+2];
+                    sumR += data[ j ];
+                    sumG += data[j+1];
+                    sumB += data[j+2];
                     nCount++;
                     }
                 }
@@ -224,7 +223,7 @@ void BlurFX::zoomBlur(uint *data, int Width, int Height, int X, int Y, int Dista
  *                     angle. After this, we sum this pixel with others with the same  
  *                     radius, but different angles. Here I'm using degrees angles.
  */
-void BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
+void BlurFX::radialBlur(uchar *data, int Width, int Height, int X, int Y, int Distance, QRect pArea)
 {
     if (Distance <= 1) return;
     int progress;
@@ -248,9 +247,8 @@ void BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Dis
        yMax = pArea.y() + pArea.height();
        nStride = (Width - xMax + xMin)*4;
        }
-    
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+
+    uchar* pResBits = m_destImage.bits(); 
     
     register int sumR, sumG, sumB, i, j, nw, nh;
     double Radius, Angle, AngleRad;
@@ -292,9 +290,9 @@ void BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Dis
                     // we adjust the positions
                     j = SetPosition (Width, nw, nh);
                     // finally we sum the bits
-                    sumR += pBits[ j ];
-                    sumG += pBits[j+1];
-                    sumB += pBits[j+2];
+                    sumR += data[ j ];
+                    sumG += data[j+1];
+                    sumB += data[j+2];
                     nCount++;
                     }
                 }
@@ -330,8 +328,8 @@ void BlurFX::radialBlur(uint *data, int Width, int Height, int X, int Y, int Dis
  * pArea            => Preview area.
  *                                                                                 
  */
-void BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
-                                   bool bInversed, QRect pArea)
+void BlurFX::focusBlur(uchar *data, int Width, int Height, int X, int Y, int BlurRadius, int BlendRadius, 
+                       bool bInversed, QRect pArea)
 {
     int progress;
     int LineWidth = Width * 4;                     
@@ -355,8 +353,7 @@ void BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int Blur
        }
     
     int    BitCount = LineWidth * Height;
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+    uchar* pResBits = m_destImage.bits(); 
                 
     // Gaussian blur using the BlurRadius parameter.
     
@@ -529,18 +526,18 @@ void BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int Blur
 
             if (bInversed)
                 {
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + pBits[i] * nBlendFactor) >> 8;    // Red.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Red.
                 }
             else
                 {
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (pBits[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
+                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
+                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
+                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
                 }
                 
-            pResBits[i++] = pBits[i];       // Alpha channel.
+            pResBits[i++] = data[i];       // Alpha channel.
             }
         
         // Update the progress bar in dialog.
@@ -569,7 +566,7 @@ void BlurFX::focusBlur(uint *data, int Width, int Height, int X, int Y, int Blur
  *                     We sum all the pixels with value = 1 and apply at the pixel with*
  *                     the position "C".
  */
-void BlurFX::farBlur(uint *data, int Width, int Height, int Distance)
+void BlurFX::farBlur(uchar *data, int Width, int Height, int Distance)
 {
     if (Distance < 1) return;
     
@@ -616,7 +613,7 @@ void BlurFX::farBlur(uint *data, int Width, int Height, int Distance)
  *                     with correction between pixels.      
  */
 
-void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Strenght)
+void BlurFX::smartBlur(uchar *data, int Width, int Height, int Radius, int Strenght)
 {
     if (Radius <= 0) return;
     
@@ -628,13 +625,12 @@ void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Streng
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
     int    BitCount = LineWidth * Height;
-    uchar* pBits    = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+    uchar* pResBits = m_destImage.bits(); 
     uchar* pBlur    = new uchar[BitCount];
     
     // We need to copy our bits to blur bits
     
-    memcpy (pBlur, pBits, BitCount);     
+    memcpy (pBlur, data, BitCount);     
     
     // we have to initialize all loop and positions valiables
     i = j = sumR = sumG = sumB = nCount = 0;
@@ -655,21 +651,21 @@ void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Streng
                     j = i + a * 4;
                                                 
                     // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange (pBits[i+2], pBits[i+1], pBits[i],
-                                               pBits[j+2], pBits[j+1], pBits[j],
+                    if (IsColorInsideTheRange (data[i+2], data[i+1], data[i],
+                                               data[j+2], data[j+1], data[j],
                                                Strenght))
                         {
                         // finally we sum the bits
-                        sumR += pBits[j+2];
-                        sumG += pBits[j+1];
-                        sumB += pBits[ j ];
+                        sumR += data[j+2];
+                        sumG += data[j+1];
+                        sumB += data[ j ];
                         }
                     else
                         {
                         // finally we sum the bits
-                        sumR += pBits[i+2];
-                        sumG += pBits[i+1];
-                        sumB += pBits[ i ];
+                        sumR += data[i+2];
+                        sumG += data[i+1];
+                        sumB += data[ i ];
                         }
 
                     // increment counter
@@ -712,8 +708,8 @@ void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Streng
                     j = i + a * LineWidth;
                         
                     // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange (pBits[i+2], pBits[i+1], pBits[i],
-                                               pBits[j+2], pBits[j+1], pBits[j],
+                    if (IsColorInsideTheRange (data[i+2], data[i+1], data[i],
+                                               data[j+2], data[j+1], data[j],
                                                Strenght))
                         {
                         // finally we sum the bits
@@ -724,9 +720,9 @@ void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Streng
                     else
                         {
                         // finally we sum the bits
-                        sumR += pBits[i+2];
-                        sumG += pBits[i+1];
-                        sumB += pBits[ i ];
+                        sumR += data[i+2];
+                        sumG += data[i+1];
+                        sumB += data[ i ];
                         }
 
                     // increment counter
@@ -768,7 +764,7 @@ void BlurFX::smartBlur(uint *data, int Width, int Height, int Radius, int Streng
  *                     will taking near pixels. After this we blur (add and do a       
  *                     division).
  */
-void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double Angle)
+void BlurFX::motionBlur(uchar *data, int Width, int Height, int Distance, double Angle)
 {
     if (Distance == 0) return;
     int progress;
@@ -782,9 +778,8 @@ void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double 
     int nStride = GetStride(Width);
     register int sumR, sumG, sumB, nCount, i, j;
     double nAngX, nAngY, nw, nh;
-    
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+
+    uchar* pResBits = m_destImage.bits(); 
 
     // we initialize cos and sin for a best performance
     nAngX = cos ((2.0 * M_PI) / (360.0 / Angle));
@@ -822,9 +817,9 @@ void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double 
                 // we adjust the positions
                 j = SetPositionAdjusted(Width, Height, (int)nw, (int)nh);
                 // finally we sum the bits
-                sumR += pBits[ j ];
-                sumG += pBits[j+1];
-                sumB += pBits[j+2];
+                sumR += data[ j ];
+                sumG += data[j+1];
+                sumB += data[j+2];
                 }
             
             if (nCount == 0) nCount = 1;                    
@@ -836,7 +831,7 @@ void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double 
             // we initialize the variables
             sumR = sumG = sumB = 0;
             
-            pResBits[i+3] = pBits[i+3];         // Alpha channel.
+            pResBits[i+3] = data[i+3];         // Alpha channel.
             }
         
         // Update the progress bar in dialog.
@@ -860,13 +855,11 @@ void BlurFX::motionBlur(uint *data, int Width, int Height, int Distance, double 
  *                     blur with 3x3 dimentions, in light tones, we apply a blur with   
  *                     5x5 dimentions. Easy, hun?
  */
-void BlurFX::softenerBlur(uint *data, int Width, int Height)
+void BlurFX::softenerBlur(uchar *data, int Width, int Height)
 {
     int progress;
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-    
-    uchar* Bits = (uchar*)data;
 
     int SomaR = 0, SomaG = 0, SomaB = 0;
     int i, j, Gray;
@@ -876,7 +869,7 @@ void BlurFX::softenerBlur(uint *data, int Width, int Height)
         for (int w = 0; !m_cancel && (w < Width); w++)
             {
             i = h * LineWidth + 4 * w;
-            Gray = (Bits[i+2] + Bits[i+1] + Bits[i]) / 3;
+            Gray = (data[i+2] + data[i+1] + data[i]) / 3;
             
             if (Gray > 127)
                 {
@@ -889,15 +882,15 @@ void BlurFX::softenerBlur(uint *data, int Width, int Height)
                         if ((h + a < 0) || (w + b < 0))
                            j = i;
                         
-                        SomaR += Bits[j+2];
-                        SomaG += Bits[j+1];
-                        SomaB += Bits[ j ];
+                        SomaR += data[j+2];
+                        SomaG += data[j+1];
+                        SomaB += data[ j ];
                         }
                     } 
                    
-                Bits[i+2] = SomaR / 49;
-                Bits[i+1] = SomaG / 49;
-                Bits[ i ] = SomaB / 49;
+                data[i+2] = SomaR / 49;
+                data[i+1] = SomaG / 49;
+                data[ i ] = SomaB / 49;
                 SomaR = SomaG = SomaB = 0;
                 }
             else
@@ -911,15 +904,15 @@ void BlurFX::softenerBlur(uint *data, int Width, int Height)
                         if ((h + a < 0) || (w + b < 0))
                            j = i;
                         
-                        SomaR += Bits[j+2];
-                        SomaG += Bits[j+1];
-                        SomaB += Bits[ j ];
+                        SomaR += data[j+2];
+                        SomaG += data[j+1];
+                        SomaB += data[ j ];
                         }
                     }
                                 
-                Bits[i+2] = SomaR / 9;
-                Bits[i+1] = SomaG / 9;
-                Bits[ i ] = SomaB / 9;
+                data[i+2] = SomaR / 9;
+                data[i+1] = SomaG / 9;
+                data[ i ] = SomaB / 9;
                 SomaR = SomaG = SomaB = 0;
                 }
             }
@@ -932,7 +925,7 @@ void BlurFX::softenerBlur(uint *data, int Width, int Height)
         }
     
     if (!m_cancel) 
-       memcpy ((uint*)m_destImage.bits(), data, Width*Height*sizeof(int));        
+       memcpy (m_destImage.bits(), data, Width*Height*sizeof(int));        
 }
 
 /* Function to apply the shake blur effect                                            
@@ -947,14 +940,13 @@ void BlurFX::softenerBlur(uint *data, int Width, int Height)
  *                    different positions (top, botton, left and right), with these 4 
  *                    layers, we join all the pixels.                 
  */
-void BlurFX::shakeBlur(uint *data, int Width, int Height, int Distance)
+void BlurFX::shakeBlur(uchar *data, int Width, int Height, int Distance)
 {
     int progress;
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
     int BitCount = LineWidth * Height;
-    uchar*   Bits = (uchar*)data;
     uchar* Layer1 = new uchar[BitCount];
     uchar* Layer2 = new uchar[BitCount];
     uchar* Layer3 = new uchar[BitCount];
@@ -970,27 +962,27 @@ void BlurFX::shakeBlur(uint *data, int Width, int Height, int Distance)
 
             nh = (h + Distance >= Height) ? Height - 1 : h + Distance;
             j = nh * LineWidth + 4 * w;
-            Layer1[i+2] = Bits[j+2];
-            Layer1[i+1] = Bits[j+1];
-            Layer1[ i ] = Bits[ j ];
+            Layer1[i+2] = data[j+2];
+            Layer1[i+1] = data[j+1];
+            Layer1[ i ] = data[ j ];
 
             nh = (h - Distance < 0) ? 0 : h - Distance;
             j = nh * LineWidth + 4 * w;
-            Layer2[i+2] = Bits[j+2];
-            Layer2[i+1] = Bits[j+1];
-            Layer2[ i ] = Bits[ j ];
+            Layer2[i+2] = data[j+2];
+            Layer2[i+1] = data[j+1];
+            Layer2[ i ] = data[ j ];
 
             nw = (w + Distance >= Width) ? Width - 1 : w + Distance;
             j = h * LineWidth + 4 * nw;
-            Layer3[i+2] = Bits[j+2];
-            Layer3[i+1] = Bits[j+1];
-            Layer3[ i ] = Bits[ j ];
+            Layer3[i+2] = data[j+2];
+            Layer3[i+1] = data[j+1];
+            Layer3[ i ] = data[ j ];
 
             nw = (w - Distance < 0) ? 0 : w - Distance;
             j = h * LineWidth + 4 * nw;
-            Layer4[i+2] = Bits[j+2];
-            Layer4[i+1] = Bits[j+1];
-            Layer4[ i ] = Bits[ j ];
+            Layer4[i+2] = data[j+2];
+            Layer4[i+1] = data[j+1];
+            Layer4[ i ] = data[ j ];
             }
         
         // Update the progress bar in dialog.
@@ -1005,9 +997,9 @@ void BlurFX::shakeBlur(uint *data, int Width, int Height, int Distance)
         for (int w = 0; !m_cancel && (w < Width); w++)
             {
             i = h * LineWidth + 4 * w;
-            Bits[i+2] = (Layer1[i+2] + Layer2[i+2] + Layer3[i+2] + Layer4[i+2]) / 4;
-            Bits[i+1] = (Layer1[i+1] + Layer2[i+1] + Layer3[i+1] + Layer4[i+1]) / 4;
-            Bits[ i ] = (Layer1[ i ] + Layer2[ i ] + Layer3[ i ] + Layer4[ i ]) / 4;
+            data[i+2] = (Layer1[i+2] + Layer2[i+2] + Layer3[i+2] + Layer4[i+2]) / 4;
+            data[i+1] = (Layer1[i+1] + Layer2[i+1] + Layer3[i+1] + Layer4[i+1]) / 4;
+            data[ i ] = (Layer1[ i ] + Layer2[ i ] + Layer3[ i ] + Layer4[ i ]) / 4;
             }
         
         // Update the progress bar in dialog.
@@ -1018,7 +1010,7 @@ void BlurFX::shakeBlur(uint *data, int Width, int Height, int Distance)
         }
 
     if (!m_cancel) 
-       memcpy ((uint*)m_destImage.bits(), data, BitCount);        
+       memcpy (m_destImage.bits(), data, BitCount);        
             
     delete [] Layer1;
     delete [] Layer2;
@@ -1036,7 +1028,7 @@ void BlurFX::shakeBlur(uint *data, int Width, int Height, int Distance)
  * Theory           => Similar to Diffuse effect, but the random byte is defined   
  *                     in a matrix. Diffuse uses a random diagonal byte.
  */
-void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
+void BlurFX::frostGlass(uchar *data, int Width, int Height, int Frost)
 {
     int progress;
     Frost = (Frost < 1) ? 1 : (Frost > 10) ? 10 : Frost;
@@ -1044,8 +1036,7 @@ void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
-    uchar*    Bits = (uchar*)data;
-    uchar* NewBits = (uchar*)m_destImage.bits(); 
+    uchar* NewBits = m_destImage.bits(); 
 
     register int i = 0, h, w; 
     QRgb color;
@@ -1055,7 +1046,7 @@ void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
         for (w = 0; !m_cancel && (w < Width); w++)
             {
             i = h * LineWidth + 4 * w;
-            color = RandomColor (Bits, Width, Height, w, h, Frost);
+            color = RandomColor (data, Width, Height, w, h, Frost);
             NewBits[ i ] = qRed(color);
             NewBits[i+1] = qGreen(color);
             NewBits[i+2] = qBlue(color);
@@ -1084,7 +1075,7 @@ void BlurFX::frostGlass(uint *data, int Width, int Height, int Frost)
  *                     center pixel. 
  *                     Now the function scan the rows from the top (like photoshop).
  */
-void BlurFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
+void BlurFX::mosaic(uchar *data, int Width, int Height, int SizeW, int SizeH)
 {
     int progress;
     
@@ -1098,8 +1089,7 @@ void BlurFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
     int LineWidth = Width * 4;                     
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
 
-    uchar*    pBits = (uchar*)data;
-    uchar* pResBits = (uchar*)m_destImage.bits(); 
+    uchar* pResBits = m_destImage.bits(); 
     
     // this loop will never look for transparent colors
     
@@ -1125,9 +1115,9 @@ void BlurFX::mosaic(uint *data, int Width, int Height, int SizeW, int SizeH)
                     if (IsInside(Width, Height, subw, subh))
                         {
                         // ...we attrib the colors
-                        pResBits[i+2] = pBits[j+2];
-                        pResBits[i+1] = pBits[j+1];
-                        pResBits[ i ] = pBits[ j ];
+                        pResBits[i+2] = data[j+2];
+                        pResBits[i+1] = data[j+1];
+                        pResBits[ i ] = data[ j ];
                         }
                     }
                 }
@@ -1251,7 +1241,7 @@ QRgb BlurFX::RandomColor(uchar *Bits, int Width, int Height, int X, int Y, int R
  *                     this, but the trick here its to store the sum used by the       
  *                     previous pixel, so we sum with the other pixels that wasn't get 
  */
-void BlurFX::MakeConvolution (uint *data, int Width, int Height, int Radius, int Kernel[])
+void BlurFX::MakeConvolution (uchar *data, int Width, int Height, int Radius, int Kernel[])
 {
     if (Radius <= 0) return;
     
@@ -1266,13 +1256,12 @@ void BlurFX::MakeConvolution (uint *data, int Width, int Height, int Radius, int
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
     
     int    BitCount = LineWidth * Height;
-    uchar*  pInBits = (uchar*)data;
-    uchar* pOutBits = (uchar*)m_destImage.bits(); 
+    uchar* pOutBits = m_destImage.bits(); 
     uchar* pBlur    = new uchar[BitCount];
     
     // We need to copy our bits to blur bits
     
-    memcpy (pBlur, pInBits, BitCount);     
+    memcpy (pBlur, data, BitCount);     
 
     // We need to alloc a 2d array to help us to store the values
     
@@ -1303,9 +1292,9 @@ void BlurFX::MakeConvolution (uint *data, int Width, int Height, int Radius, int
                     j = i + n * 4;
                     
                     // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][pInBits[ j ]];
-                    nSumG += arrMult[n + Radius][pInBits[j+1]];
-                    nSumB += arrMult[n + Radius][pInBits[j+2]];
+                    nSumR += arrMult[n + Radius][data[ j ]];
+                    nSumG += arrMult[n + Radius][data[j+1]];
+                    nSumB += arrMult[n + Radius][data[j+2]];
                     
                     // we need to add to the counter, the kernel value
                     nCount += Kernel[n + Radius];
