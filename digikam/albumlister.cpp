@@ -330,6 +330,12 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
         if (d->itemMap.contains(imageID))
         {
+            ImageInfo* info = d->itemMap[imageID];
+            if (!matchesFilter(info))
+            {
+                emit signalDeleteFilteredItem(info);
+            }
+            
             d->itemMap.remove(imageID);
             continue;
         }
