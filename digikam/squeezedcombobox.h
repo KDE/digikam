@@ -57,8 +57,8 @@ public:
     virtual ~SqueezedComboBox();
 
     /**
-     * This inserts a item to the list. See @ref QComboBox::insertItem
-     * for detaills. Please do not use @ref QComboBox::insertItem to this
+     * This inserts a item to the list. See QComboBox::insertItem()
+     * for detaills. Please do not use QComboBox::insertItem() to this
      * widget, as that will fail.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
