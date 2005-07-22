@@ -586,6 +586,23 @@ void DigikamApp::setupActions()
 
     mAlbumSortAction->setCurrentItem((int)mAlbumSettings->getAlbumSortOrder());
     mImageSortAction->setCurrentItem((int)mAlbumSettings->getImageSortOrder());
+
+    int size = mAlbumSettings->getDefaultIconSize();
+    if (size == ThumbnailSize::Huge)
+    {
+        enableThumbSizePlusAction(false);
+        enableThumbSizeMinusAction(true);
+    }
+    else if (size == ThumbnailSize::Small)
+    {
+        enableThumbSizePlusAction(true);
+        enableThumbSizeMinusAction(false);
+    }
+    else
+    {
+        enableThumbSizePlusAction(true);
+        enableThumbSizeMinusAction(true);
+    }
 }
 
 void DigikamApp::enableThumbSizePlusAction(bool val)
@@ -803,23 +820,6 @@ void DigikamApp::slotSetupChanged()
     updateDeleteTrashMenu();
     if (ImageWindow::imagewindow())
         ImageWindow::imagewindow()->applySettings();
-
-    int size = mAlbumSettings->getDefaultIconSize();
-    if (size == ThumbnailSize::Huge)
-    {
-        enableThumbSizePlusAction(false);
-        enableThumbSizeMinusAction(true);
-    }
-    else if (size == ThumbnailSize::Small)
-    {
-        enableThumbSizePlusAction(true);
-        enableThumbSizeMinusAction(false);
-    }
-    else
-    { 
-        enableThumbSizePlusAction(true);
-        enableThumbSizeMinusAction(true);
-    }
 
     m_config->sync();
 }

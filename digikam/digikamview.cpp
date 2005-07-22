@@ -509,6 +509,11 @@ void DigikamView::slot_thumbSizePlus()
     mParent->enableThumbSizeMinusAction(true);
 
     mIconView->setThumbnailSize(thumbSize);
+
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+    settings->setDefaultIconSize( (int)thumbSize.size() );
 }
 
 void DigikamView::slot_thumbSizeMinus()
@@ -543,6 +548,11 @@ void DigikamView::slot_thumbSizeMinus()
     mParent->enableThumbSizePlusAction(true);
 
     mIconView->setThumbnailSize(thumbSize);
+
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+    settings->setDefaultIconSize( (int)thumbSize.size() );
 }
 
 void DigikamView::slot_albumPropsEdit()

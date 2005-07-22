@@ -48,7 +48,6 @@
 
 // // Local includes.
 
-#include "thumbnailsize.h"
 #include "albumsettings.h"
 #include "setupgeneral.h"
 
@@ -95,42 +94,29 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 3, 8,
                                                     KDialog::spacingHint());
 
-   QLabel* thumbnailSizeLabel = new QLabel(i18n("Default &size:"), iconTextGroup);
-   tagSettingsLayout->addWidget(thumbnailSizeLabel , 0, 0);
-   thumbnailSize_ = new QComboBox(iconTextGroup);
-   //thumbnailSize_->insertItem(i18n("Tiny (32x32)"));
-   thumbnailSize_->insertItem(i18n("Small (64x64)"));
-   thumbnailSize_->insertItem(i18n("Medium (100x100)"));
-   thumbnailSize_->insertItem(i18n("Large (160x160)"));
-   thumbnailSize_->insertItem(i18n("Huge (256x256)"));
-   thumbnailSizeLabel->setBuddy(thumbnailSize_);
-   tagSettingsLayout->addWidget(thumbnailSize_, 0, 1);
-   QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
-   tagSettingsLayout->addItem(spacer, 0, 2);
-
    iconShowNameBox_ = new QCheckBox(iconTextGroup);
    iconShowNameBox_->setText(i18n("Show file &name"));
-   tagSettingsLayout->addMultiCellWidget(iconShowNameBox_, 1, 1, 0, 2);
+   tagSettingsLayout->addWidget(iconShowNameBox_, 0, 0);
 
    iconShowTagsBox_ = new QCheckBox(iconTextGroup);
    iconShowTagsBox_->setText(i18n("Show file &tags"));
-   tagSettingsLayout->addMultiCellWidget(iconShowTagsBox_, 2, 2, 0, 2);
+   tagSettingsLayout->addWidget(iconShowTagsBox_, 1, 0);
 
    iconShowSizeBox_ = new QCheckBox(iconTextGroup);
    iconShowSizeBox_->setText(i18n("Show file si&ze"));
-   tagSettingsLayout->addMultiCellWidget(iconShowSizeBox_, 3, 3, 0, 2);
+   tagSettingsLayout->addWidget(iconShowSizeBox_, 2, 0);
 
    iconShowDateBox_ = new QCheckBox(iconTextGroup);
    iconShowDateBox_->setText(i18n("Show file &modification date"));
-   tagSettingsLayout->addMultiCellWidget(iconShowDateBox_, 4, 4, 0, 2);
+   tagSettingsLayout->addWidget(iconShowDateBox_, 3, 0);
 
    iconShowCommentsBox_ = new QCheckBox(iconTextGroup);
    iconShowCommentsBox_->setText(i18n("Show &digiKam comments"));
-   tagSettingsLayout->addMultiCellWidget(iconShowCommentsBox_, 5, 5, 0, 2);
+   tagSettingsLayout->addWidget(iconShowCommentsBox_, 4, 0);
 
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
    iconShowResolutionBox_->setText(i18n("Show ima&ge dimensions (warning: slow)"));
-   tagSettingsLayout->addMultiCellWidget(iconShowResolutionBox_, 7, 7, 0, 2);
+   tagSettingsLayout->addWidget(iconShowResolutionBox_, 5, 0);
 
    layout->addWidget(iconTextGroup);
 
@@ -154,24 +140,6 @@ void SetupGeneral::applySettings()
 
     settings->setAlbumLibraryPath(albumPathEdit->text());
 
-    int iconSize = ThumbnailSize::Medium;
-    switch(thumbnailSize_->currentItem())
-    {
-//         case(TinyThumb):
-//             iconSize = ThumbnailSize::Tiny;
-//             break;
-        case(SmallThumb):
-            iconSize = ThumbnailSize::Small;
-            break;
-        case(LargeThumb):
-            iconSize = ThumbnailSize::Large;
-            break;
-        case(HugeThumb):
-            iconSize = ThumbnailSize::Huge;
-            break;
-    }
-
-    settings->setDefaultIconSize(iconSize);
     settings->setShowToolTips(showToolTipsBox_->isChecked());
 
     settings->setIconShowName(iconShowNameBox_->isChecked());
@@ -191,25 +159,6 @@ void SetupGeneral::readSettings()
     if (!settings) return;
 
     albumPathEdit->setText(settings->getAlbumLibraryPath());
-
-    switch(settings->getDefaultIconSize())
-    {
-//         case(ThumbnailSize::Tiny):
-//             thumbnailSize_->setCurrentItem(TinyThumb);
-//             break;
-        case(ThumbnailSize::Small):
-            thumbnailSize_->setCurrentItem(SmallThumb);
-            break;
-        case(ThumbnailSize::Large):
-            thumbnailSize_->setCurrentItem(LargeThumb);
-            break;
-        case(ThumbnailSize::Huge):
-            thumbnailSize_->setCurrentItem(HugeThumb);
-            break;
-        default: // Medium
-            thumbnailSize_->setCurrentItem(MediumThumb);
-            break;
-    }
 
     showToolTipsBox_->setChecked(settings->getShowToolTips());
 

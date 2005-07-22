@@ -31,7 +31,7 @@ class QTimer;
 
 /** @class SqueezedComboBox
  *
- * This widget is a @ref QComboBox, but then a little bit
+ * This widget is a QComboBox, but then a little bit
  * different. It only shows the right part of the items
  * depending on de size of the widget. When it is not
  * possible to show the complete item, it will be shortened
