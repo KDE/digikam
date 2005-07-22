@@ -39,22 +39,20 @@
 
 #define ADDTAGID 10000
 
-TagsPopupMenu::TagsPopupMenu(AlbumIconView* view, int addToID,
-                             bool onlyAssignedTags)
+TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
+                             int addToID,
+                             Mode mode)
     : QPopupMenu(0),
-      m_view(view), m_addToID(addToID),
-      m_onlyAssignedTags(onlyAssignedTags)
+      m_selectedImageIDs(selectedImageIDs),
+      m_addToID(addToID),
+      m_mode(mode)
 {
-    if (!m_onlyAssignedTags)
-    {
-        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-
-        m_addTagPix =  iconLoader->loadIcon("tag",
-                                            KIcon::NoGroup,
-                                            KIcon::SizeSmall,
-                                            KIcon::DefaultState,
-                                            0, true);
-    }
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    m_addTagPix =  iconLoader->loadIcon("tag",
+                                        KIcon::NoGroup,
+                                        KIcon::SizeSmall,
+                                        KIcon::DefaultState,
+                                        0, true);
     
     connect(this, SIGNAL(aboutToShow()),
             SLOT(slotAboutToShow()));
@@ -82,7 +80,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     QPopupMenu*  popup      = new QPopupMenu(this);
     connect(popup, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 
-    if (!m_onlyAssignedTags)
+    if (m_mode == ASSIGN)
     {
         popup->insertItem(m_addTagPix, i18n("Add new Tag..."),
                           ADDTAGID + album->id());
@@ -103,7 +101,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     
     for (Album* a = album->firstChild(); a; a = a->next())
     {
-        if (m_onlyAssignedTags)
+        if (m_mode == REMOVE)
         {
             IntList::iterator it = qFind(m_assignedTags.begin(),
                                          m_assignedTags.end(),
@@ -132,22 +130,12 @@ void TagsPopupMenu::slotAboutToShow()
 
     AlbumManager* man = AlbumManager::instance();
 
-    if (m_onlyAssignedTags)
+    if (m_mode == REMOVE)
     {
-        LLongList  idList;
-        for (IconItem *it = m_view->firstItem(); it; it = it->nextItem())
-        {
-            if (it->isSelected())
-            {
-                AlbumIconItem* item = static_cast<AlbumIconItem*>(it);
-                idList.append(item->imageInfo()->id());
-            }
-        }
-
-        if (idList.isEmpty())
+        if (m_selectedImageIDs.isEmpty())
             return;
 
-        m_assignedTags = man->albumDB()->getItemCommonTagIDs(idList);
+        m_assignedTags = man->albumDB()->getItemCommonTagIDs(m_selectedImageIDs);
 
         if (m_assignedTags.isEmpty())
             return;
@@ -180,7 +168,7 @@ void TagsPopupMenu::slotAboutToShow()
     if (!album)
         return;
 
-    if (!m_onlyAssignedTags)
+    if (m_mode == ASSIGN)
     {
         insertItem(m_addTagPix, i18n("Add new Tag..."), ADDTAGID);
         if (album->firstChild())
@@ -191,7 +179,7 @@ void TagsPopupMenu::slotAboutToShow()
     
     for (Album* a = album->firstChild(); a; a = a->next())
     {
-        if (m_onlyAssignedTags)
+        if (m_mode == REMOVE)
         {
             IntList::iterator it = qFind(m_assignedTags.begin(),
                                          m_assignedTags.end(),

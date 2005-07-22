@@ -25,16 +25,20 @@
 #include <qvaluelist.h>
 #include <qpixmap.h>
 
-class AlbumIconView;
-
 class TagsPopupMenu : public QPopupMenu
 {
     Q_OBJECT
 
 public:
 
-    TagsPopupMenu(AlbumIconView* view, int addToID,
-                  bool onlyAssignedTags=false);
+    enum Mode
+    {
+        ASSIGN = 0,
+        REMOVE
+    };
+    
+    TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
+                  int addToID, Mode mode);
     ~TagsPopupMenu();
 
 private:
@@ -43,9 +47,9 @@ private:
     QPopupMenu* buildSubMenu(int tagid);
     bool        showThisTag(int tagid);
 
-    AlbumIconView*   m_view;
+    QValueList<Q_LLONG>  m_selectedImageIDs;
     int              m_addToID;
-    bool             m_onlyAssignedTags;
+    Mode             m_mode;
     QValueList<int>  m_assignedTags;
     QPixmap          m_addTagPix;
         

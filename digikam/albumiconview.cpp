@@ -437,8 +437,20 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Bulk assignment/removal of tags --------------------------
 
-    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(this, 1000);
-    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(this, 2000, true);
+    QValueList<Q_LLONG> selectedImageIDs;
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+            selectedImageIDs.append(selItem->imageInfo()->id());
+        }
+    }
+    
+    TagsPopupMenu* assignTagsPopup =
+        new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
+    TagsPopupMenu* removeTagsPopup =
+        new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
             SLOT(slotAssignTag(int)));
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
