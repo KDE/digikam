@@ -75,8 +75,10 @@
 #include "imagewindow.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
+#include "imageinfo.h"
 #include "imageproperties.h"
 #include "imagedescedit.h"
+#include "tagspopupmenu.h"
 
 
 ImageWindow* ImageWindow::imagewindow()
@@ -722,7 +724,46 @@ void ImageWindow::slotResize()
 void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
+    {
+        TagsPopupMenu* assignTagsMenu = 0;
+        TagsPopupMenu* removeTagsMenu = 0;
+        int separatorID = -1;
+
+        if (m_view)
+        {
+            IconItem* item = m_view->findItem(m_urlCurrent.url());
+            if (item)
+            {
+                Q_LLONG id = ((AlbumIconItem*)item)->imageInfo()->id();
+                QValueList<Q_LLONG> idList;
+                idList.append(id);
+
+                assignTagsMenu = new TagsPopupMenu(idList, 1000,
+                                                   TagsPopupMenu::ASSIGN);
+                removeTagsMenu = new TagsPopupMenu(idList, 2000,
+                                                   TagsPopupMenu::REMOVE);
+
+                separatorID = m_contextMenu->insertSeparator();
+                m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
+                m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+
+                connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
+                        SLOT(slotAssignTag(int)));
+                connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
+                        SLOT(slotRemoveTag(int)));
+            }
+        }
+        
         m_contextMenu->exec(QCursor::pos());
+
+        if (separatorID != -1)
+        {
+            m_contextMenu->removeItem(separatorID);
+        }
+        
+        delete assignTagsMenu;
+        delete removeTagsMenu;
+    }
 }
 
 void ImageWindow::slotZoomChanged(float zoom)
@@ -1308,6 +1349,26 @@ void ImageWindow::slotConfToolbars()
 void ImageWindow::slotNewToolbarConfig()
 {
     applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+}
+
+void ImageWindow::slotAssignTag(int tagID)
+{
+    IconItem* item = m_view->findItem(m_urlCurrent.url());
+    if (item)
+    {
+        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);
+                
+    }
+}
+
+void ImageWindow::slotRemoveTag(int tagID)
+{
+    IconItem* item = m_view->findItem(m_urlCurrent.url());
+    if (item)
+    {
+        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);
+                
+    }
 }
 
 #include "imagewindow.moc"

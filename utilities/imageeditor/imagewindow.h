@@ -187,6 +187,9 @@ private slots:
     void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
+
+    void slotAssignTag(int tagID);
+    void slotRemoveTag(int tagID);
     
 protected:
 
