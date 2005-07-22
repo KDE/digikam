@@ -517,7 +517,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kdWarning() << "AlbumFolderView_Deprecated: Couldn't get Album Settings" << endl;
+        kdWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
         return;
     }
 

@@ -50,6 +50,8 @@ public:
     void albumDelete();
     void albumEdit();
     
+    void setAlbumThumbnail(PAlbum *album);    
+    
 private slots:
 
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
@@ -74,8 +76,6 @@ protected:
     void selectItem(int id);
    
 private:
-
-    void setAlbumThumbnail(PAlbum *album);
 
     void albumNew(AlbumFolderViewItem *item);
     void albumEdit(AlbumFolderViewItem *item);    

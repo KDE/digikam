@@ -49,9 +49,7 @@
 #include "albummanager.h"
 #include "album.h"
 
-#include "albumfolderview_deprecated.h"
 #include "albumfolderview.h"
-#include "albumfolderitem_deprecated.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albumsettings.h"
@@ -85,14 +83,12 @@ DigikamView::DigikamView(QWidget *parent)
     mRightSidebar = new Sidebar(this, Sidebar::Right);    
     mRightSidebar->setSplitter(mSplitter);    
     
-    mFolderView_Deprecated = new AlbumFolderView_Deprecated(this);
     mFolderView = new AlbumFolderView(this);
     mDateFolderView = new DateFolderView(this);
     mTagFolderView = new TagFolderView(this);
     mSearchFolderView = new SearchFolderView(this);
     mTagFilterView = new TagFilterView(this);    
     
-    mMainSidebar->appendTab(mFolderView_Deprecated, SmallIcon("folder"), i18n("Albums (Old)"));
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
     mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
@@ -592,7 +588,7 @@ void DigikamView::slot_albumHighlight()
     if (!album || !album->type() == Album::PHYSICAL)
         return;
 
-    mFolderView_Deprecated->albumHighlight(dynamic_cast<PAlbum*>(album));
+    mFolderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
 }
 
 void DigikamView::slot_imageCopyResult(KIO::Job* job)
