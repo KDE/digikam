@@ -52,6 +52,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QVBoxLayout* leftSide = new QVBoxLayout( hbox );
     m_resultsView   = new SearchResultsView( page );
     m_resultsView->setMinimumSize( QSize(200, 200) );
+    m_resultsView->setMaximumWidth(  130*2 + m_resultsView->spacing()*3 + 20 );
     hbox->addWidget( m_resultsView );
 
     // Box for all the rules

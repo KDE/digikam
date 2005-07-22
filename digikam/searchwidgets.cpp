@@ -42,6 +42,7 @@
 #include <albuminfo.h>
 #include <albummanager.h>
 #include <searchwidgets.h>
+#include <squeezedcombobox.h>
 
 static struct
 {
@@ -285,8 +286,8 @@ void SearchAdvancedRule::setValueWidget(
     }
     else if (newType == ALBUMS)
     {
-        m_valueCombo = new QComboBox( m_valueBox, "albumscombo" );
-        m_valueCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+        m_valueCombo = new SqueezedComboBox( m_valueBox, "albumscombo" );
+        m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::instance();
         AlbumList aList = aManager->allPAlbums();
@@ -299,7 +300,7 @@ void SearchAdvancedRule::setValueWidget(
             PAlbum *album = (PAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertItem( album->url().remove(0,1), index );
+                m_valueCombo->insertSqueezedItem( album->url().remove(0,1), index );
                 m_itemsIndexIDMap.insert(index, album->id());
                 index++;
             }
@@ -312,8 +313,8 @@ void SearchAdvancedRule::setValueWidget(
     }
     else if (newType == TAGS)
     {
-        m_valueCombo = new QComboBox( m_valueBox, "tagscombo" );
-        m_valueCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+        m_valueCombo = new SqueezedComboBox( m_valueBox, "tagscombo" );
+        m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::instance();
         AlbumList tList = aManager->allTAlbums();
@@ -326,7 +327,7 @@ void SearchAdvancedRule::setValueWidget(
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertItem( album->url().remove(0,1), index );
+                m_valueCombo->insertSqueezedItem( album->url().remove(0,1), index );
                 m_itemsIndexIDMap.insert( index, album->id() );
                 ++index;
             }

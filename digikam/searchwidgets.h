@@ -34,6 +34,7 @@ class QVGroupBox;
 class QLabel;
 class KDateEdit;
 class KURL;
+class SqueezedComboBox;
 
 /** @class SearchRuleLabel
  *
@@ -279,7 +280,7 @@ private:
 
     QLineEdit* m_lineEdit;
     KDateEdit* m_dateEdit;
-    QComboBox* m_valueCombo;
+    SqueezedComboBox* m_valueCombo;
 
     QMap<int, int> m_itemsIndexIDMap;
 
