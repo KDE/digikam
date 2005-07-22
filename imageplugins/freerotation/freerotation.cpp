@@ -161,8 +161,8 @@ void FreeRotation::filterImage(void)
            {
            // 'Largest Area' method (by Gerhard).       
            float gamma = atan((float)nHeight / (float)nWidth);
-           autoCrop.setWidth( (int)((float)nHeight / cos(m_angle*DEG2RAD) / 
-                              ( tan(gamma) + tan(m_angle*DEG2RAD) )) );
+           autoCrop.setWidth( (int)((float)nHeight / cos(fabs(m_angle)*DEG2RAD) / 
+                              ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
            autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) ); 
            autoCrop.moveCenter( QPoint::QPoint(nNewWidth/2, nNewHeight/2));
            m_destImage = m_destImage.copy(autoCrop);
