@@ -86,6 +86,7 @@ private:  // CImg filter data.
 
 private:  // CImg filter interface.
 
+    virtual void initFilter(void);
     virtual void filterImage(void);
     virtual void cleanupFilter(void);
     

@@ -82,9 +82,14 @@ CimgIface::CimgIface(QImage *orgImage,
     m_linear     = linearInterpolation;
 
     if (m_resize)
+        {
         m_destImage.create(newWidth, newHeight, 32);
+        kdDebug() << "CimgIface::m_resize is on, new size: (" << newWidth << ", " << newHeight << ")" << endl;
+        }
     else 
+        {
         m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
+        }
     
     m_tmpMaskFile = QString::null;
     
@@ -109,6 +114,28 @@ CimgIface::~CimgIface()
        // Remove temporary inpainting mask.
        QFile maskFile(m_tmpMaskFile);
        maskFile.remove();
+       }
+}
+
+// We re-implemente this method from ThreadedFilter class because
+// target image size can be different from original if m_resize is enable.
+
+void CimgIface::initFilter(void)
+{
+    if (m_orgImage.width() && m_orgImage.height())
+       {
+       if (m_parent)
+          start();             // m_parent is valide, start thread ==> run()
+       else
+          startComputation();  // no parent : no using thread.
+       }
+    else  // No image data 
+       {
+       if (m_parent)           // If parent then send event about a problem.
+          {
+          postProgress(0, false, false);
+          kdDebug() << m_name << "::No valid image data !!! ..." << endl;
+          }
        }
 }
 
@@ -287,7 +314,12 @@ bool CimgIface::prepare_resize()
                  << "x" << m_destImage.height() << ")!" << endl;
        return false;
        }
-
+    else 
+       {
+       kdDebug() << "Output geometry (" << m_destImage.width() 
+                 << "x" << m_destImage.height() << ")" << endl;
+       }
+              
     mask = CImg<uchar>(img.dimx(), img.dimy(), 1, 1, 255);
     mask.resize(m_destImage.width(), m_destImage.height(), 1, 1, 1);
     img0 = img.get_resize(m_destImage.width(), m_destImage.height(), 1, -100, 1);
