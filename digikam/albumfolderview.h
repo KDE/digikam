@@ -45,6 +45,10 @@ public:
 
     void albumImportFolder();
     void resort();
+
+    void albumNew();
+    void albumDelete();
+    void albumEdit();
     
 private slots:
 

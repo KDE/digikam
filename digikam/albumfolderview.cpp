@@ -503,6 +503,15 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     }
 }
 
+void AlbumFolderView::albumNew()
+{
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+    if(!item)
+        return;
+    
+    albumNew(item);
+}
+
 void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
 {
     AlbumSettings* settings = AlbumSettings::instance();
@@ -566,6 +575,15 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
         ensureItemVisible(newItem);
         setSelected(newItem, true);
     }
+}
+
+void AlbumFolderView::albumDelete()
+{
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+    if(!item)
+        return;
+    
+    albumDelete(item);
 }
 
 void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
@@ -633,6 +651,15 @@ void AlbumFolderView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
+}
+
+void AlbumFolderView::albumEdit()
+{
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+    if(!item)
+        return;
+    
+    albumEdit(item);
 }
 
 void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)

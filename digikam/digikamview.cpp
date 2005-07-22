@@ -254,12 +254,12 @@ void DigikamView::slot_sortAlbums(int order)
 
 void DigikamView::slot_newAlbum()
 {
-    mFolderView_Deprecated->albumNew();
+    mFolderView->albumNew();
 }
 
 void DigikamView::slot_deleteAlbum()
 {
-    mFolderView_Deprecated->albumDelete();
+    mFolderView->albumDelete();
 }
 
 void DigikamView::slotNewTag()
@@ -551,11 +551,7 @@ void DigikamView::slot_thumbSizeMinus()
 
 void DigikamView::slot_albumPropsEdit()
 {
-    Album *album = mAlbumMan->currentAlbum();
-    if (!album || album->type() != Album::PHYSICAL)
-        return;
-
-    mFolderView_Deprecated->albumEdit(dynamic_cast<PAlbum*>(album));
+    mFolderView->albumEdit();
 }
 
 void DigikamView::slot_albumAddImages()
