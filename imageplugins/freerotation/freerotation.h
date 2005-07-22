@@ -73,8 +73,7 @@ private:
 private:  
 
     virtual void filterImage(void);
-    
-       
+           
     inline int setPosition (int Width, int X, int Y)
        {
        return (Y *Width*4 + 4*X); 
@@ -86,16 +85,6 @@ private:
        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
        return (bIsWOk && bIsHOk);
        };
-       
-    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
-       {
-       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
-       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
-       return (Y*Width*4 + 4*X);
-       };
-                     
-    inline void antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                              uchar *A, uchar *R, uchar *G, uchar *B);       
 };    
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

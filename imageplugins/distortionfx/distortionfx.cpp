@@ -202,8 +202,8 @@ void DistortionFX::fisheye(uchar *data, int Width, int Height, double Coeff, boo
 
                 if (AntiAlias)
                     {
-                    antiAliasing(data, Width, Height, nw, nh, 
-                                 &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                    Digikam::ImageFilters::pixelAntiAliasing(data, Width, Height, nw, nh, 
+                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                     i += 4;
                     }
                 else
@@ -306,8 +306,8 @@ void DistortionFX::twirl(uchar *data, int Width, int Height, int Twirl, bool Ant
 
                 if (AntiAlias)
                     {
-                    antiAliasing(data, Width, Height, nw, nh, 
-                                 &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                    Digikam::ImageFilters::pixelAntiAliasing(data, Width, Height, nw, nh, 
+                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                     i += 4;
                     }
                 else
@@ -414,8 +414,8 @@ void DistortionFX::cilindrical(uchar *data, int Width, int Height, double Coeff,
 
             if (AntiAlias)
                 {
-                antiAliasing(data, Width, Height, nw, nh, 
-                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                Digikam::ImageFilters::pixelAntiAliasing(data, Width, Height, nw, nh, 
+                         &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 i += 4;
                 }
             else
@@ -495,8 +495,8 @@ void DistortionFX::multipleCorners(uchar *data, int Width, int Height, int Facto
 
             if (AntiAlias)
                {
-                antiAliasing(data, Width, Height, nw, nh, 
-                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                Digikam::ImageFilters::pixelAntiAliasing(data, Width, Height, nw, nh, 
+                         &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 i += 4;
                 }
             else
@@ -588,8 +588,8 @@ void DistortionFX::polarCoordinates(uchar *data, int Width, int Height, bool Typ
 
             if (AntiAlias)
                 {
-                antiAliasing(data, Width, Height, nw, nh, 
-                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                Digikam::ImageFilters::pixelAntiAliasing(data, Width, Height, nw, nh, 
+                         &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 } 
             else
                 {
@@ -666,8 +666,8 @@ void DistortionFX::circularWaves(uchar *data, int Width, int Height, int X, int 
 
             if (AntiAlias)
                 {
-                antiAliasing( data, Width, Height, nw, nh, 
-                              &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                Digikam::ImageFilters::pixelAntiAliasing( data, Width, Height, nw, nh, 
+                         &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 i += 4;
                 }
             else
@@ -997,46 +997,6 @@ double DistortionFX::maximumRadius(int Height, int Width, double Angle)
     else
         Radius = proportionalValue (MaxRad, MinRad, ((DegAngle - 90.0) * (255.0 / 90.0)));
     return (Radius);
-}
-
-inline void DistortionFX::antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                                        uchar *A, uchar *R, uchar *G, uchar *B)
-{
-    int nX, nY, j;
-    double lfWeightX[2], lfWeightY[2], lfWeight;
-    double lfTotalR = 0.0, lfTotalG = 0.0, lfTotalB = 0.0, lfTotalA = 0.0;
-
-    nX = (int)X;
-    nY = (int)Y;
-
-    if (Y >= 0.0)
-        lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
-    else
-        lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
-
-    if (X >= 0.0)
-        lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
-    else
-        lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
-
-    for (int loopx = 0; loopx <= 1; loopx++)
-        {
-        for (int loopy = 0; loopy <= 1; loopy++)
-            {
-            lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
-            j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
-
-            lfTotalB += ((double)data[j++] * lfWeight);
-            lfTotalG += ((double)data[j++] * lfWeight);
-            lfTotalR += ((double)data[j++] * lfWeight);
-            lfTotalA += ((double)data[j++] * lfWeight);
-            }
-        }
-         
-    *B = CLAMP0255 ((int)lfTotalB);
-    *G = CLAMP0255 ((int)lfTotalG);
-    *R = CLAMP0255 ((int)lfTotalR);
-    *A = CLAMP0255 ((int)lfTotalA);
 }
 
 }  // NameSpace DigikamDistortionFXImagesPlugin

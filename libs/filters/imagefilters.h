@@ -123,6 +123,13 @@ private:    // Private methods used internally.
        if (overIndicator && lfMix > 255) lfMix = 0;        
        return( (uchar)CLAMP (lfMix, 0, 255) );
        };      
+       
+    static inline int setPositionAdjusted (int Width, int Height, int X, int Y)
+       {
+       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
+       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
+       return (Y*Width*4 + 4*X);
+       };       
 
 public:   // Public methods.
 
@@ -137,10 +144,12 @@ public:   // Public methods.
                                   float grGain, float ggGain, float gbGain,
                                   float brGain, float bgGain, float bbGain,
                                   bool overIndicator=false);
-    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);     
+    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);
     static void sharpenImage(uint* data, int w, int h, int r);
     static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);
-
+    
+    static void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y, 
+                                  uchar *A, uchar *R, uchar *G, uchar *B);       
 };
 
 }  // NameSpace Digikam

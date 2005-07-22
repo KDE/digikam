@@ -155,16 +155,6 @@ private:  // Widget methods.
                             QPoint transTopLeft, QPoint transTopRight,
                             QPoint transBottomLeft, QPoint transBottomRight,
                             uint* data, uint* newData);
-    
-    inline void antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                              uchar *A, uchar *R, uchar *G, uchar *B);        
-
-    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
-       {
-       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
-       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
-       return (Y*Width*4 + 4*X);
-       };                                                                                  
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

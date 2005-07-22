@@ -140,9 +140,6 @@ private:
        Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
        return (Y*Width*4 + 4*X);
        };
-                     
-    inline void antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                              uchar *A, uchar *R, uchar *G, uchar *B);       
 };    
 
 }  // NameSpace DigikamDistortionFXImagesPlugin

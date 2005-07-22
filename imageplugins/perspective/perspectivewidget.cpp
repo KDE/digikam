@@ -649,8 +649,8 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
              
              if (m_antiAlias)
                 {
-                antiAliasing((uchar*)data, w, h, u, v, 
-                             &color[3], &color[2], &color[1], &color[0]);
+                Digikam::ImageFilters::pixelAntiAliasing((uchar*)data, w, h, u, v, 
+                                       &color[3], &color[2], &color[1], &color[0]);
                 }
              else   
                 memcpy(color, (uchar*)(data + (u + v*w)), 4);
@@ -680,46 +680,6 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
        }
 
     delete [] dest;
-}
-
-inline void PerspectiveWidget::antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                                             uchar *A, uchar *R, uchar *G, uchar *B)
-{
-    int nX, nY, j;
-    double lfWeightX[2], lfWeightY[2], lfWeight;
-    double lfTotalR = 0.0, lfTotalG = 0.0, lfTotalB = 0.0, lfTotalA = 0.0;
-
-    nX = (int)X;
-    nY = (int)Y;
-
-    if (Y >= 0.0)
-        lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
-    else
-        lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
-
-    if (X >= 0.0)
-        lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
-    else
-        lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
-
-    for (int loopx = 0; loopx <= 1; loopx++)
-        {
-        for (int loopy = 0; loopy <= 1; loopy++)
-            {
-            lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
-            j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
-
-            lfTotalB += ((double)data[j++] * lfWeight);
-            lfTotalG += ((double)data[j++] * lfWeight);
-            lfTotalR += ((double)data[j++] * lfWeight);
-            lfTotalA += ((double)data[j++] * lfWeight);
-            }
-        }
-         
-    *B = CLAMP0255 ((int)lfTotalB);
-    *G = CLAMP0255 ((int)lfTotalG);
-    *R = CLAMP0255 ((int)lfTotalR);
-    *A = CLAMP0255 ((int)lfTotalA);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

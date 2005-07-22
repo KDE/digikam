@@ -119,8 +119,8 @@ void FreeRotation::filterImage(void)
             if (isInside (nWidth, nHeight, (int)lfx, (int)lfy))
                 {
                 if (m_antiAlias)
-                    antiAliasing (pBits, nWidth, nHeight, lfx, lfy, 
-                                  &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                    Digikam::ImageFilters::pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy, 
+                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
                 else
                     {
                     j = setPosition (nWidth, (int)lfx, (int)lfy);
@@ -182,44 +182,5 @@ void FreeRotation::filterImage(void)
        }
 }
 
-inline void FreeRotation::antiAliasing (uchar *data, int Width, int Height, double X, double Y, 
-                                        uchar *A, uchar *R, uchar *G, uchar *B)
-{
-    int nX, nY, j;
-    double lfWeightX[2], lfWeightY[2], lfWeight;
-    double lfTotalR = 0.0, lfTotalG = 0.0, lfTotalB = 0.0, lfTotalA = 0.0;
-
-    nX = (int)X;
-    nY = (int)Y;
-
-    if (Y >= 0.0)
-        lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
-    else
-        lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
-
-    if (X >= 0.0)
-        lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
-    else
-        lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
-
-    for (int loopx = 0; loopx <= 1; loopx++)
-        {
-        for (int loopy = 0; loopy <= 1; loopy++)
-            {
-            lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
-            j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
-
-            lfTotalB += ((double)data[j++] * lfWeight);
-            lfTotalG += ((double)data[j++] * lfWeight);
-            lfTotalR += ((double)data[j++] * lfWeight);
-            lfTotalA += ((double)data[j++] * lfWeight);
-            }
-        }
-         
-    *B = CLAMP0255 ((int)lfTotalB);
-    *G = CLAMP0255 ((int)lfTotalG);
-    *R = CLAMP0255 ((int)lfTotalR);
-    *A = CLAMP0255 ((int)lfTotalA);
-}
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
