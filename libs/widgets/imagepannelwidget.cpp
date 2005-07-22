@@ -175,7 +175,7 @@ void ImagePannelWidget::slotInitGui(void)
 
 void ImagePannelWidget::slotPanIconTakeFocus(void)
 {
-    m_imageRegionWidget->updateOriginalImage();
+    m_imageRegionWidget->restorePixmapRegion();
 }
 
 void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
@@ -261,7 +261,10 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
     updateSelectionInfo(rect);
     
     if (target)
+        {
+        m_imageRegionWidget->backupPixmapRegion();
         emit signalOriginalClipFocusChanged();
+        }
 }
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)

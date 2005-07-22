@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-17
- * Description : a widget to draw a image clip region.
+ * Description : a widget to draw an image clip region.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -62,14 +62,17 @@ public:
 
     void   updatePreviewImage(QImage *img);
     void   updateOriginalImage(void);   
-         
+
+    void   backupPixmapRegion(void);
+    void   restorePixmapRegion(void);
+             
 signals:
     
     void contentsMovedEvent( bool target );
     
 protected:
     
-    void viewportResizeEvent(QResizeEvent *e);
+    void viewportResizeEvent( QResizeEvent *e );
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );
@@ -83,9 +86,10 @@ private:
     int      m_xpos;
     int      m_ypos;
 
-    QPixmap *m_pix;
+    QPixmap *m_pix;                // Entire content widget pixmap.
+    QPixmap *m_pixRegion;          // Pixmap of current region to render.
     
-    QImage   m_img;
+    QImage   m_img;                // Entire content image.
     
 private:
     

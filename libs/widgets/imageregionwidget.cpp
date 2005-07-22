@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-17
- * Description : a widget to draw a image clip region.
+ * Description : a widget to draw an image clip region.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -53,6 +53,7 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     m_separateView     = SeparateViewVertical;
     m_movingInProgress = false;
     m_pix              = 0L;
+    m_pixRegion        = 0L;
     
     if( !scrollBar ) 
        {
@@ -77,6 +78,7 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
 ImageRegionWidget::~ImageRegionWidget()
 {
     if(m_pix) delete m_pix;
+    if (m_pixRegion) delete m_pixRegion;
 }
 
 void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
@@ -126,6 +128,21 @@ void ImageRegionWidget::updatePixmap(QImage *img)
     verticalScrollBar()->setPageStep( 1 );
     resizeContents(w, h);
     repaintContents(false);    
+}
+
+void ImageRegionWidget::backupPixmapRegion(void)
+{
+    if (m_pixRegion) delete m_pixRegion;
+    QRect area = getImageRegionToRender();
+    m_pixRegion = new QPixmap(area.size());
+    copyBlt( m_pixRegion, 0, 0, m_pix, area.x(), area.y(), area.width(), area.height() );
+}
+
+void ImageRegionWidget::restorePixmapRegion(void)
+{
+    if (!m_pixRegion) return;
+    QRect area = getImageRegionToRender();
+    copyBlt( m_pix, area.x(), area.y(), m_pixRegion, 0, 0, m_pix->width(), m_pix->height() );
 }
 
 void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
@@ -255,14 +272,15 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
        m_ypos = e->y();
        m_movingInProgress = true;
        setCursor( KCursor::sizeAllCursor() );    
-       updateOriginalImage();
+       restorePixmapRegion();
        }
 }
 
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
     m_movingInProgress = false;
-    setCursor( KCursor::arrowCursor() );    
+    setCursor( KCursor::arrowCursor() ); 
+    backupPixmapRegion();
     emit contentsMovedEvent(true);
 }
 
