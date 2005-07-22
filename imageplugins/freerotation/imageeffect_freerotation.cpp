@@ -27,6 +27,7 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qimage.h>
+#include <qcombobox.h>
 
 // KDE includes.
 
@@ -122,10 +123,15 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                             "To smooth the target image, it will be blured a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 5, 5, 0, 2);
     
-    m_autoCropInput = new QCheckBox(i18n("Auto-Crop"), gboxSettings);
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process an image auto-croping to remove black "
-                                            "holes around. This option must be used only with small angle values."));
-    gridSettings->addMultiCellWidget(m_autoCropInput, 6, 6, 0, 2);
+    QLabel *label4 = new QLabel(i18n("Auto-Crop:"), gboxSettings);
+    m_autoCropCB = new QComboBox(false, gboxSettings);
+    m_autoCropCB->insertItem( i18n("None") );
+    m_autoCropCB->insertItem( i18n("Widest Area") );
+    m_autoCropCB->insertItem( i18n("Largest Area") );
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process an image auto-croping to remove black "
+                                            "holes around rotated image."));
+    gridSettings->addMultiCellWidget(label4, 6, 6, 0, 0);
+    gridSettings->addMultiCellWidget(m_autoCropCB, 6, 6, 1, 2);
     
     setUserAreaWidget(gboxSettings);
     
@@ -137,7 +143,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     connect(m_antialiasInput, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));             
 
-    connect(m_autoCropInput, SIGNAL(toggled (bool)),
+    connect(m_autoCropCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));                                  
 }
 
@@ -149,7 +155,7 @@ void ImageEffect_FreeRotation::renderingFinished()
 {
     m_angleInput->setEnabled(true);
     m_antialiasInput->setEnabled(true);
-    m_autoCropInput->setEnabled(true);
+    m_autoCropCB->setEnabled(true);
     kapp->restoreOverrideCursor();
 }
 
@@ -157,13 +163,13 @@ void ImageEffect_FreeRotation::resetValues()
 {
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
-    m_autoCropInput->blockSignals(true);
+    m_autoCropCB->blockSignals(true);
     m_angleInput->setValue(0.0);
     m_antialiasInput->setChecked(true);
-    m_autoCropInput->setChecked(false);
+    m_autoCropCB->setCurrentItem(FreeRotation::NoAutoCrop);
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
-    m_autoCropInput->blockSignals(false);
+    m_autoCropCB->blockSignals(false);
 } 
 
 void ImageEffect_FreeRotation::prepareEffect()
@@ -171,11 +177,11 @@ void ImageEffect_FreeRotation::prepareEffect()
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_angleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
-    m_autoCropInput->setEnabled(false);
+    m_autoCropCB->setEnabled(false);
 
     double angle      = m_angleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-    bool autocrop     = m_autoCropInput->isChecked();
+    int autocrop      = m_autoCropCB->currentItem();
     QColor background = paletteBackgroundColor().rgb();
     
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
@@ -195,11 +201,11 @@ void ImageEffect_FreeRotation::prepareFinal()
 {
     m_angleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
-    m_autoCropInput->setEnabled(false);
+    m_autoCropCB->setEnabled(false);
         
     double angle      = m_angleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-    bool autocrop     = m_autoCropInput->isChecked();
+    int autocrop      = m_autoCropCB->currentItem();
     QColor background = Qt::black;
         
     Digikam::ImageIface iface(0, 0);

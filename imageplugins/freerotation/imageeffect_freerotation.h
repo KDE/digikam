@@ -29,6 +29,7 @@
 
 class QLabel;
 class QCheckBox;
+class QComboBox;
 
 class KDoubleNumInput;
 
@@ -50,8 +51,9 @@ private:
     QLabel           *m_newHeightLabel;
 
     QCheckBox        *m_antialiasInput;
-    QCheckBox        *m_autoCropInput;
     
+    QComboBox        *m_autoCropCB;
+
     KDoubleNumInput  *m_angleInput;
 
 protected:

@@ -40,17 +40,27 @@ class FreeRotation : public Digikam::ThreadedFilter
 public:
     
     FreeRotation(QImage *orgImage, QObject *parent=0, double angle=0.0, 
-                 bool antialiasing=true, bool autoCrop=false, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
+                 bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black, 
+                 int orgW=0, int orgH=0);
     
     ~FreeRotation(){};
     
     QSize getNewSize(void){ return m_newSize; };
-            
+
+public:
+    
+    enum AutoCropTypes 
+    {
+    NoAutoCrop=0,
+    WidestArea,
+    LargestArea
+    };
+        
 private:  
 
     bool   m_antiAlias;
-    bool   m_autoCrop;
-
+    
+    int    m_autoCrop;
     int    m_orgW;
     int    m_orgH;
     

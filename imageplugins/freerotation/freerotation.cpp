@@ -42,7 +42,7 @@ namespace DigikamFreeRotationImagesPlugin
 {
 
 FreeRotation::FreeRotation(QImage *orgImage, QObject *parent, double angle, bool antialiasing, 
-                           bool autoCrop, QColor backgroundColor, int orgW, int orgH)
+                           int autoCrop, QColor backgroundColor, int orgW, int orgH)
             : Digikam::ThreadedFilter(orgImage, parent, "FreeRotation")
 { 
     m_angle           = angle;
@@ -134,28 +134,51 @@ void FreeRotation::filterImage(void)
             }
         }
 
-    // To compute the destination image size using original image dimensions.        
+    // To compute the rotated destination image size using original image dimensions.        
     int W = (int)(m_orgW * cos(m_angle * DEG2RAD) + m_orgH * sin(fabs(m_angle) * DEG2RAD));
     int H = (int)(m_orgH * cos(m_angle * DEG2RAD) + m_orgW * sin(fabs(m_angle) * DEG2RAD));
     
-    if (m_autoCrop)
+    // Auto-cropping destination image without black holes around.
+    QRect autoCrop;
+       
+    switch(m_autoCrop)
        {
-       // Auto-cropping destination image without black holes around.
-
-       QRect autoCrop;
-       autoCrop.setX( (int)(nHeight * sin(fabs(m_angle) * DEG2RAD)) );
-       autoCrop.setY( (int)(nWidth  * sin(fabs(m_angle) * DEG2RAD)) );
-       autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(fabs(m_angle) * DEG2RAD)) );
-       autoCrop.setHeight( (int)(nNewHeight - 2*nWidth  * sin(fabs(m_angle) * DEG2RAD)) );        
-       m_destImage = m_destImage.copy(autoCrop);
-
-       m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
-       m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
-       }
-    else
-       {
-       m_newSize.setWidth(  W );
-       m_newSize.setHeight( H );
+       case WidestArea:
+           {
+           // 'Widest Area' method (by Renchi).
+           autoCrop.setX( (int)(nHeight * sin(fabs(m_angle) * DEG2RAD)) );
+           autoCrop.setY( (int)(nWidth  * sin(fabs(m_angle) * DEG2RAD)) );
+           autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(fabs(m_angle) * DEG2RAD)) );
+           autoCrop.setHeight( (int)(nNewHeight - 2*nWidth  * sin(fabs(m_angle) * DEG2RAD)) );        
+           m_destImage = m_destImage.copy(autoCrop);
+        
+           m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
+           m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
+           break;
+           }
+       
+       case LargestArea:
+           {
+           // 'Largest Area' method (by Gerhard).       
+           float gamma = atan((float)nHeight / (float)nWidth);
+           autoCrop.setWidth( (int)((float)nHeight / cos(m_angle*DEG2RAD) / 
+                              ( tan(gamma) + tan(m_angle*DEG2RAD) )) );
+           autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) ); 
+           autoCrop.moveCenter( QPoint::QPoint(nNewWidth/2, nNewHeight/2));
+           m_destImage = m_destImage.copy(autoCrop);
+           
+           gamma = atan((float)m_orgH / (float)m_orgW);
+           m_newSize.setWidth( (int)((float)m_orgH / cos(fabs(m_angle)*DEG2RAD) / 
+                               ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
+           m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );        
+           break;
+           }
+       default:   // No auto croping.
+           {
+           m_newSize.setWidth(  W );
+           m_newSize.setHeight( H );
+           break;
+           }
        }
 }
 
