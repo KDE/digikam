@@ -38,7 +38,7 @@ namespace DigikamInfraredImagesPlugin
 {
 
 Infrared::Infrared(QImage *orgImage, QObject *parent, int sensibility, bool grain)
-         : Digikam::ThreadedFilter(orgImage, parent, "Infrared")
+        : Digikam::ThreadedFilter(orgImage, parent, "Infrared")
 { 
     m_sensibility = sensibility;
     m_grain       = grain;
@@ -145,7 +145,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     // Smooth grain mask using gaussian blur.    
    
     if (Grain)
-       Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 3);
+       Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 1);
     
     Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
     postProgress( 50 );   
@@ -176,7 +176,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
        
     // Merge gray scale image with grain using shade coefficient.
 
-    int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
+    int Shade = 52; // This value control the shading pixel effect between original image and grain mask.
     
     for (i = 0; !m_cancel && (i < Width*Height); i++)
         {        

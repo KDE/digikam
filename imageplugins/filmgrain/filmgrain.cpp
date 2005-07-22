@@ -91,7 +91,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
 
     // Smooth grain mask using gaussian blur.    
     
-    Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 3);
+    Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 1);
     
     // Update de progress bar in dialog.
     postProgress( 30 );   
@@ -117,7 +117,7 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     
     // Merge src image with grain using shade coefficient.
 
-    int Shade = 32; // This value control the shading pixel effect between original image and grain mask.
+    int Shade = 52; // This value control the shading pixel effect between original image and grain mask.
         
     for (i = 0; !m_cancel && (i < Width*Height); i++)
         {        
