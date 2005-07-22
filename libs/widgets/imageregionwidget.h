@@ -69,10 +69,11 @@ signals:
     
 protected:
     
+    void viewportResizeEvent(QResizeEvent *e);
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );
-    void viewportResizeEvent(QResizeEvent *e);
+    void contentsWheelEvent( QWheelEvent * e ){ e->accept(); };
 
 private:
     
