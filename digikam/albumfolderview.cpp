@@ -567,11 +567,11 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
 
     // by this time the signalAlbumAdded has been fired and the appropriate
     // AlbumFolderViewItem has been created. Now make this folderviewitem visible
-
     AlbumFolderViewItem* newItem = (AlbumFolderViewItem*)album->extraData(this);
     if (newItem)
     {
-        item->setOpen(true);
+        if(item)
+            item->setOpen(true);
         ensureItemVisible(newItem);
         setSelected(newItem, true);
     }
