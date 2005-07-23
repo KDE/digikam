@@ -32,11 +32,31 @@
 
 #include "squeezedcombobox.h"
 
+UnSqueezedTip::UnSqueezedTip( QWidget * parent, SqueezedComboBox* name )
+    : QToolTip( parent )
+{
+    originalWidget = name;
+}
+
+void UnSqueezedTip::maybeTip( const QPoint &pos )
+{
+    QListBox* listBox = ((SqueezedComboBox*)originalWidget)->listBox();
+    QListBoxItem* selectedItem = listBox->itemAt( pos );
+    QRect positionToolTip = listBox->itemRect( selectedItem );
+
+    QString toolTipText =
+            ((SqueezedComboBox*)originalWidget)->itemHighlighted();
+
+    tip(positionToolTip, toolTipText);
+}
+
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
     : QComboBox( parent, name )
 {
     setMinimumWidth(100);
     m_timer = new QTimer(this);
+    t = new UnSqueezedTip( this->listBox()->viewport(), this );
+
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
     connect(this, SIGNAL(activated( int )),
@@ -45,6 +65,7 @@ SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
 
 SqueezedComboBox::~SqueezedComboBox()
 {
+    delete t;
     delete m_timer;
 }
 
@@ -63,7 +84,7 @@ QSize SqueezedComboBox::sizeHint() const
 
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
 {
-    m_OriginalItems.append( qMakePair(index, newItem) );
+    m_OriginalItems[index] = newItem;
     insertItem( squeezeText(newItem), index );
 
     // if this is the first item, set the tooltip.
@@ -78,11 +99,11 @@ void SqueezedComboBox::resizeEvent ( QResizeEvent * )
 
 void SqueezedComboBox::slotTimeOut()
 {
-    QValueList< QPair<int, QString> >::iterator it;
+    QMapIterator<int,QString> it;
     for (it = m_OriginalItems.begin() ; it != m_OriginalItems.end();
          ++it)
     {
-        changeItem( squeezeText((*it).second), (*it).first );
+        changeItem( squeezeText( it.data() ), it.key() );
     }
 }
 
@@ -114,18 +135,13 @@ QString SqueezedComboBox::squeezeText( const QString& original)
 void SqueezedComboBox::slotUpdateToolTip( int index )
 {
     QToolTip::remove(this);
+    QToolTip::add(this, m_OriginalItems[index]);
+}
 
-    QValueList< QPair<int, QString> >::iterator it;
-    for (it = m_OriginalItems.begin() ; it != m_OriginalItems.end();
-         ++it)
-    {
-        if ((*it).first == index)
-        {
-            QToolTip::add(this, (*it).second);
-            break;
-        }
-    }
-
+QString SqueezedComboBox::itemHighlighted()
+{
+    int curItem = this->listBox()->currentItem();
+    return m_OriginalItems[curItem];
 }
 
 #include "squeezedcombobox.moc"

@@ -23,11 +23,47 @@
 #ifndef SQUEEZEDCOMBOBOX_H
 #define SQUEEZEDCOMBOBOX_H
 
-class QListBox;
 class QTimer;
+class SqueezedComboBox;
 
 #include <qcombobox.h>
-#include <qstring.h>
+#include <qtooltip.h>
+
+/** @class UnSqueezedTip
+ * This class shows a tooltip for a SqueezedComboBox
+ * the tooltip will contain the full text and helps
+ * the user find the correct entry. It is automatically
+ * activated when starting a SqueezedComboBox. This is
+ * inherited from QToolTip
+ * 
+ * @author Tom Albers
+ */
+class UnSqueezedTip : public QToolTip
+{
+public:
+    /**
+     * Constructor. An example call (as done in
+     * SqueezedComboBox::SqueezedComboBox):
+     * @code
+     * t = new UnSqueezedTip( this->listBox()->viewport(), this );
+     * @endcode
+     * 
+     * @param parent parent widget (viewport)
+     * @param name parent widget
+     */
+    UnSqueezedTip( QWidget *parent, SqueezedComboBox *name );
+
+protected:
+    /**
+     * Reimplemented version from QToolTip which shows the
+     * tooltip when needed.
+     * @param  pos the point where the mouse currently is
+     */
+    void maybeTip( const QPoint& pos );
+
+private:
+    QWidget*        originalWidget;
+};
 
 /** @class SqueezedComboBox
  *
@@ -66,7 +102,13 @@ public:
      */
     void insertSqueezedItem(const QString& newItem, int index);
 
-    
+    /**
+     * This method returns the full text (not squeezed) of the currently
+     * highlighted item.
+     * @return full text of the highlighted item
+     */
+    QString itemHighlighted( );
+
     /**
      * Sets the sizeHint() of this widget.
      */
@@ -80,8 +122,10 @@ private:
     void resizeEvent ( QResizeEvent * );
     QString squeezeText( const QString& original);
 
-    QValueList< QPair<int,QString> >  m_OriginalItems;
-    QTimer*                           m_timer;
+    QMap<int,QString>   m_OriginalItems;
+    QTimer*             m_timer;
+    UnSqueezedTip*      t;
 };
+
 
 #endif
