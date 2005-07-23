@@ -177,7 +177,7 @@ public:
 //-----------------------------------------------------------------------------
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-    : FolderView(parent)
+    : FolderView(parent, "AlbumFolderView")
 {
     d = new AlbumFolderViewPriv();
     

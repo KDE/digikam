@@ -19,26 +19,33 @@
 /** @file sidebar.cpp */
 
 #include "sidebar.h"
+#include "albummanager.h"
 
 #include <qsplitter.h>
 #include <qwidgetstack.h>
 #include <qdatastream.h>
 
+#include <kapplication.h>
+#include <kconfig.h>
 #include <kdeversion.h>
 #include <kmultitabbar.h>
 #include <kiconloader.h>
 
 Sidebar::Sidebar(QWidget *parent, Side side)
-    : KMultiTabBar(KMultiTabBar::Vertical, parent, "sidebar")
+    : KMultiTabBar(KMultiTabBar::Vertical, parent, "Sidebar")
 {
     m_tabs = 0;
     m_activeTab = -1;
     m_minimized = false;
-    m_side = side;    
+    m_side = side;
+    
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            SLOT(slotAllAlbumsLoaded()));
 }
 
 Sidebar::~Sidebar()
 {
+    saveViewState();
 }
 
 void Sidebar::setSplitter(QSplitter *sp)
@@ -57,29 +64,39 @@ void Sidebar::setSplitter(QSplitter *sp)
         setPosition(KMultiTabBar::Right);
 }
 
-void Sidebar::loadViewState(QDataStream &stream)
+void Sidebar::slotAllAlbumsLoaded()
 {
-    if(!stream.atEnd())
-    {
-        int tab;
-        int minimized;
-        
-        stream >> tab;
-        stream >> minimized;
-        
-        if(minimized)
-            m_activeTab = tab;
-        else
-            m_activeTab = -1;
-        
-        clicked(tab);
-    }
+    disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+               this, SLOT(slotAllAlbumsLoaded()));    
+    loadViewState();
 }
 
-void Sidebar::saveViewState(QDataStream &stream)
+void Sidebar::loadViewState()
 {
-    stream << m_activeTab;
-    stream << (int)m_minimized;
+    int tab;
+    int minimized;
+    
+    KConfig *config = kapp->config();
+    config->setGroup(QString("%1-%2").arg(name()).arg(m_side));
+   
+    tab = config->readNumEntry("ActiveTab", 0);
+    minimized = config->readNumEntry("Minimized", 0);
+        
+    if(minimized)
+        m_activeTab = tab;
+    else
+        m_activeTab = -1;
+    
+    clicked(tab);
+}
+
+void Sidebar::saveViewState()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(QString("%1-%2").arg(name()).arg(m_side));
+    
+    config->writeEntry("ActiveTab", m_activeTab);
+    config->writeEntry("Minimized", (int)m_minimized);
 }
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)

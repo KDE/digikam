@@ -79,7 +79,7 @@ public:
 };
 
 SearchFolderView::SearchFolderView(QWidget* parent)
-    : FolderView(parent)
+    : FolderView(parent, "SearchFolderView")
 {
     addColumn(i18n("My Searches"));
     setResizeMode(QListView::LastColumn);

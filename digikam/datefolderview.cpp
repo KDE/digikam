@@ -19,10 +19,12 @@
  * 
  * ============================================================ */
 
+#include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kconfig.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
@@ -50,7 +52,6 @@ public:
     MonthWidget*            monthview;
     bool                    active;
     
-    QMap<QString, int>      *openFolders;
     QString                 selected;
 };
 
@@ -99,13 +100,12 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : QVBox(parent)
+    : QVBox(parent, "DateFolderView")
 {
     d = new DateFolderViewPriv;
     d->active    = false;
     d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
-    d->openFolders = 0;
 
     d->listview->addColumn(i18n("My Dates"));
     d->listview->setResizeMode(QListView::LastColumn);
@@ -126,7 +126,7 @@ DateFolderView::DateFolderView(QWidget* parent)
 
 DateFolderView::~DateFolderView()
 {
-    delete d->openFolders;
+    saveViewState();
     delete d;
 }
 
@@ -141,24 +141,9 @@ void DateFolderView::setActive(bool val)
 
 void DateFolderView::slotAllDAlbumsLoaded()
 {
-    if(d->openFolders)
-    {
-        DateFolderItem *item;
-        QString id;
-        QListViewItemIterator it(d->listview);
-        for( ; it.current(); ++it)
-        {
-            item = dynamic_cast<DateFolderItem*>(it.current());
-            id = item->date();
-            if(d->openFolders->contains(id))
-                d->listview->setOpen(item, (*d->openFolders)[id]);
-            if(id == d->selected)
-                d->listview->setSelected(item, true);
-        }
-        
-        delete d->openFolders;
-        d->openFolders = 0;
-    }
+    disconnect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+               this, SLOT(slotAllDAlbumsLoaded()));
+    loadViewState();
 }
 
 void DateFolderView::slotAlbumAdded(Album* a)
@@ -249,36 +234,60 @@ void DateFolderView::slotSelectionChanged()
     }
 }
 
-void DateFolderView::loadViewState(QDataStream &stream)
+void DateFolderView::loadViewState()
 {
-    if(!stream.atEnd())
+    KConfig *config = kapp->config();
+    config->setGroup(name());
+    
+    QString selected;
+    if(config->hasKey("LastSelectedItem"))
     {
-        stream >> d->selected;
-
-        d->openFolders = new QMap<QString, int>;
-        stream >> *d->openFolders;
+        selected = config->readEntry("LastSelectedItem");
     }
+
+    QStringList openFolders;
+    if(config->hasKey("OpenFolders"))
+    {
+        openFolders = config->readListEntry("OpenFolders");
+    }
+    
+    DateFolderItem *item;
+    QString id;
+    QListViewItemIterator it(d->listview);
+    for( ; it.current(); ++it)
+    {        
+        item = dynamic_cast<DateFolderItem*>(it.current());
+        id = item->date();
+        if(openFolders.contains(id))
+            d->listview->setOpen(item, true);
+        else
+            d->listview->setOpen(item, false);
+        
+        if(id == selected)
+            d->listview->setSelected(item, true);
+    }    
 }
 
-void DateFolderView::saveViewState(QDataStream &stream)
+void DateFolderView::saveViewState()
 {
+    KConfig *config = kapp->config();
+    config->setGroup(name());
+   
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
-    
     if(item)
-        stream << item->date();
-    else
-        stream << 0;
-
+        config->writeEntry("LastSelectedItem", item->date());
+    
+    QStringList openFolders;
     QListViewItemIterator it(d->listview);
-    QMap<QString, int> openFolders;
     item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
     while(item)
     {
         // Storing the years only, a month cannot be open
-        openFolders.insert(item->date(), d->listview->isOpen(item));
+        if(item && d->listview->isOpen(item))
+            openFolders.push_back(item->date());
         item = dynamic_cast<DateFolderItem*>(item->nextSibling());
     }
-    stream << openFolders;
+    config->writeEntry("OpenFolders", openFolders);
 }
 
 void DateFolderView::setSelected(QListViewItem *item)

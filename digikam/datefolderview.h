@@ -34,16 +34,6 @@ public:
 
     void setActive(bool val);
 
-    /**
-     * load the last view state from disk
-     */
-    void loadViewState(QDataStream &stream);
-    
-    /**
-     * writes the view state to disk
-     */
-    void saveViewState(QDataStream &stream);
-    
     void setSelected(QListViewItem *item);
     
 private slots:
@@ -55,6 +45,17 @@ private slots:
     
 private:
 
+    /**
+     * load the last view state from disk
+     */
+    void loadViewState();
+    
+    /**
+     * writes the view state to disk
+     */
+    void saveViewState();
+    
+    
     DateFolderViewPriv* d;
 };
 

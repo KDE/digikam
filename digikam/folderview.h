@@ -38,7 +38,7 @@ class FolderView : public QListView
 
 public:
 
-    FolderView(QWidget *parent);
+    FolderView(QWidget *parent, const char *name = "FolderView");
     virtual ~FolderView();
 
     void setActive(bool val);
@@ -48,16 +48,6 @@ public:
     QRect    itemRect(QListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
-    
-    /**
-     * load the last state from the view from disk
-     */
-    virtual void loadViewState(QDataStream &stream);
-    
-    /**
-     * writes the views state to disk
-     */
-    virtual void saveViewState(QDataStream &stream);
     
 protected:
 
@@ -79,9 +69,21 @@ protected:
     
     virtual void selectItem(int id);
  
+    /**
+     * load the last state from the view from disk
+     */
+    virtual void loadViewState();
+    
+    /**
+     * writes the views state to disk
+     */
+    virtual void saveViewState();
+    
+    
 protected slots:
     
     virtual void slotSelectionChanged();
+    virtual void slotAllAlbumsLoaded();
 
 private slots:
 

@@ -98,17 +98,17 @@ public:
      */
     void expand();
                 
+private:
+    
     /**
      * load the last view state from disk
      */
-    void loadViewState(QDataStream &stream);
+    void loadViewState();
     
     /**
      * save the view state to disk
      */
-    void saveViewState(QDataStream &stream);
-    
-private:
+    void saveViewState();
     
     Side             m_side;
     QWidgetStack    *m_stack;
@@ -126,6 +126,8 @@ private slots:
      * Activates a tab
      */
     void clicked(int tab);
+    
+    void slotAllAlbumsLoaded();
     
 signals:
     

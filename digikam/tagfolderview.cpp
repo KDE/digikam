@@ -127,7 +127,7 @@ public:
 //-----------------------------------------------------------------------------
 
 TagFolderView::TagFolderView(QWidget *parent)
-    : FolderView(parent)
+    : FolderView(parent, "TagFolderView")
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();

@@ -20,10 +20,12 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kconfig.h>
 
 #include <qpixmap.h>
-#include <qmap.h>
+#include <qvaluelist.h>
 
+#include "albummanager.h"
 #include "themeengine.h"
 #include "folderview.h"
 #include "folderitem.h"
@@ -53,8 +55,8 @@ public:
 // FolderViewPriv
 //-----------------------------------------------------------------------------
 
-FolderView::FolderView(QWidget *parent)
-    : QListView(parent)
+FolderView::FolderView(QWidget *parent, const char *name)
+    : QListView(parent, name)
 {
     d = new FolderViewPriv;
     
@@ -65,12 +67,16 @@ FolderView::FolderView(QWidget *parent)
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            SLOT(slotAllAlbumsLoaded()));
+    
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     fontChange(font());
 }
 
 FolderView::~FolderView()
 {
+    saveViewState();
     delete d;
 }
 
@@ -285,47 +291,58 @@ void FolderView::slotThemeChanged()
     viewport()->update();
 }
 
-void FolderView::loadViewState(QDataStream &stream)
+void FolderView::slotAllAlbumsLoaded()
 {
-    if(!stream.atEnd())
-    {
-        int selected;
-        stream >> selected;
-
-        QMap<int, int> openFolders;
-        stream >> openFolders;
-        
-        FolderItem *item;
-        int id;
-        QListViewItemIterator it(this);
-        for( ; it.current(); ++it)
-        {
-            item = dynamic_cast<FolderItem*>(it.current());
-            id = item->id();
-            if(openFolders.contains(id))
-                setOpen(item, openFolders[id]);
-        }
-        selectItem(selected);
-    }
+    disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+               this, SLOT(slotAllAlbumsLoaded()));    
+    loadViewState();
 }
 
-void FolderView::saveViewState(QDataStream &stream)
+void FolderView::loadViewState()
 {
-    FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
+    KConfig *config = kapp->config();
+    config->setGroup(name());
     
-    if(item)
-        stream << item->id();
-    else
-        stream << 0;
-
+    selectItem(config->readNumEntry("LastSelectedItem", 0));
+    
+    QValueList<int> openFolders;
+    if(config->hasKey("OpenFolders"))
+    {
+        openFolders = config->readIntListEntry("OpenFolders");
+    }
+    
+    FolderItem *item;    
     QListViewItemIterator it(this);
-    QMap<int, int> openFolders;
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
-        openFolders.insert(item->id(), isOpen(item));
+        if(item && openFolders.contains(item->id()))
+            setOpen(item, true);
+        else
+            setOpen(item, false);
     }
-    stream << openFolders;
+}
+
+void FolderView::saveViewState()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(name());
+   
+    FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
+    if(item)
+        config->writeEntry("LastSelectedItem", item->id());
+    else
+        config->writeEntry("LastSelectedItem", 0);
+    
+    QValueList<int> openFolders;
+    QListViewItemIterator it(this);
+    for( ; it.current(); ++it)
+    {
+        item = dynamic_cast<FolderItem*>(it.current());
+        if(item && isOpen(item))
+            openFolders.push_back(item->id());
+    }
+    config->writeEntry("OpenFolders", openFolders);
 }
 
 void FolderView::slotSelectionChanged()

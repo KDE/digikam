@@ -175,24 +175,7 @@ void DigikamView::loadViewState()
         mIconView->setSizePolicy(rightSzPolicy);
     }    
     
-    QFile file(locateLocal("appdata", "viewstate.bin"));
-    if(!file.open(IO_ReadOnly))
-    {
-        kdWarning() << k_funcinfo << "Failed to open viewtreestate.bin"
-                << endl;
-        return;
-    }
-    QDataStream stream(&file);
-    
-    stream >> mInitialAlbumID;
-                
-    mMainSidebar->loadViewState(stream);
-    mRightSidebar->loadViewState(stream);    
-
-    mFolderView->loadViewState(stream);
-    mTagFolderView->loadViewState(stream);
-    mSearchFolderView->loadViewState(stream);
-    mDateFolderView->loadViewState(stream);
+    mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
 }
 
 void DigikamView::saveViewState()
@@ -200,33 +183,16 @@ void DigikamView::saveViewState()
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
     config->writeEntry("SplitterSizes", mSplitter->sizes());
-    
-    QFile file(locateLocal("appdata", "viewstate.bin"));
-    if(!file.open(IO_WriteOnly))
-    {
-        kdWarning() << k_funcinfo << "Failed to open viewtreestate.bin"
-                    << endl;
-        return;
-    }
-    QDataStream stream(&file);
-    
+
     Album *album = AlbumManager::instance()->currentAlbum();
     if(album)
     {
-        stream << album->globalID();
+        config->writeEntry("InitialAlbumID", album->globalID());
     }
     else
     {
-        stream << 0;
+        config->writeEntry("InitialAlbumID", 0);
     }
-    
-    mMainSidebar->saveViewState(stream);
-    mRightSidebar->saveViewState(stream);
-    
-    mFolderView->saveViewState(stream);
-    mTagFolderView->saveViewState(stream); 
-    mSearchFolderView->saveViewState(stream);
-    mDateFolderView->saveViewState(stream);
 }
 
 void DigikamView::slotAllAlbumsLoaded()
