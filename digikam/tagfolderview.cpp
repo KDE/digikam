@@ -134,7 +134,7 @@ TagFolderView::TagFolderView(QWidget *parent)
         
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
-    setRootIsDecorated(true);
+    setRootIsDecorated(false);
     
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -166,17 +166,19 @@ TagFolderView::~TagFolderView()
 
 void TagFolderView::slotAlbumAdded(Album *album)
 {
-    if(!album || album->isRoot())
+    if(!album)
         return;
     
     TAlbum *tag = dynamic_cast<TAlbum*>(album);
     if(!tag)
         return;
     
-    if(tag->parent()->isRoot())
+    if(tag->isRoot())
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
-        item->setPixmap(0, getBlendedIcon(tag));
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();                
+        item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
+                        32, KIcon::DefaultState, 0, true));                
         tag->setExtraData(this, item);
     }
     else
@@ -305,7 +307,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
     popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag from AddressBook"),
                        d->ABCMenu);
 
-    if(tag)
+    if(tag && tag->parent())
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
@@ -505,6 +507,9 @@ QDragObject* TagFolderView::dragObject()
     if(!item)
         return 0;
     
+    if(!item->parent())
+        return 0;
+    
     TagDrag *t = new TagDrag(item->getTag()->globalID(), this);
     t->setPixmap(*item->pixmap(0));
 
@@ -519,7 +524,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
  
     if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
     {
-        // Allow dragging at the root, to move the tag at the root
+        // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
             return true;
         
@@ -534,6 +539,12 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
+    if(itemDrop && !itemDrop->parent())
+    {
+        // Allow only tags dragging at the root
+        return false;
+    }
+    
     if(ItemDrag::canDecode(e))
     {
         return true;

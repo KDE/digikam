@@ -186,7 +186,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     
     addColumn(i18n("My Albums"));
     setResizeMode(QListView::LastColumn);
-    setRootIsDecorated(true);
+    setRootIsDecorated(false);
     setAllColumnsShowFocus(true);
 
     setAcceptDrops(true);
@@ -220,7 +220,7 @@ AlbumFolderView::~AlbumFolderView()
 
 void AlbumFolderView::slotAlbumAdded(Album *album)
 {
-    if(!album || album->isRoot())
+    if(!album)
         return;
     
     PAlbum *palbum = dynamic_cast<PAlbum*>(album);
@@ -236,24 +236,25 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
         return;
     }
 
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();        
     AlbumFolderViewItem *item;
     if (!parent)
     {
-        // child of root
-
+        // root album
         item = new AlbumFolderViewItem(this, palbum);
         palbum->setExtraData(this, item);
+        item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
+                        32, KIcon::DefaultState, 0, true));        
     }
     else
     {
         item = new AlbumFolderViewItem(parent, palbum);
         palbum->setExtraData(this, item);
+        
+        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
+                        32, KIcon::DefaultState, 0, true));
     }
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
-    item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                    32, KIcon::DefaultState, 0, true));
-    
     setAlbumThumbnail(palbum);
 }
 
@@ -324,9 +325,18 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     else
     {
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                                32, KIcon::DefaultState,
-                                                0, true));
+        if(album->isRoot())
+        {
+            item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
+                                                    32, KIcon::DefaultState,
+                                                    0, true));
+        }
+        else
+        {
+            item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
+                            32, KIcon::DefaultState,
+                            0, true));            
+        }
     }
 }
 
@@ -415,7 +425,8 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
     
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
-    if(item)
+    // Root folder only shows "New Album..."
+    if(item && item->parent())
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Album Properties..."), 11);
         
@@ -705,8 +716,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         }
 
         emit signalAlbumModified();
-    }
-    
+    }    
 }
 
 QDragObject* AlbumFolderView::dragObject()
@@ -716,6 +726,9 @@ QDragObject* AlbumFolderView::dragObject()
         return 0;
     
     PAlbum *album = item->getAlbum();
+    if(album->isRoot())
+        return 0;
+    
     AlbumDrag *a = new AlbumDrag(album->kurl(), album->id(), this);
     if(!a)
         return 0;
@@ -766,6 +779,12 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
             return false;
         }
         };
+    }
+    
+    if(itemDrop  && !itemDrop->parent())
+    {
+        // Do not allow drop images on album root
+        return false;
     }
 
     if (itemDrop && itemDrop->isGroupItem())
@@ -1122,7 +1141,7 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
 
 AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& failed)
 {
-    if (album->parent()->isRoot())
+    if (album->isRoot())
     {
         failed = false;
         return 0;
