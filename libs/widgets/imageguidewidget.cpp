@@ -47,11 +47,14 @@ namespace Digikam
 {
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
-                                   bool spotVisible, int guideMode)
+                                   bool spotVisible, int guideMode, 
+                                   QColor guideColor, int guideSize)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_spotVisible = spotVisible;
     m_guideMode   = guideMode;
+    m_guideColor  = guideColor;
+    m_guideSize   = guideSize;
     m_focus       = false;
     m_flicker     = 0;
     
@@ -123,6 +126,18 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible)
     repaint(false);
 }
 
+void ImageGuideWidget::slotChangeGuideColor(const QColor &color)
+{
+    m_guideColor = color;
+    repaint(false);
+}
+
+void ImageGuideWidget::slotChangeGuideSize(int size)
+{
+    m_guideSize = size;
+    repaint(false);
+}
+
 void ImageGuideWidget::paintEvent( QPaintEvent * )
 {
     m_pixmap->fill(colorGroup().background());
@@ -140,7 +155,7 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
           case HVGuideMode:
              {
              QPainter p(m_pixmap);
-             p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+             p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
              p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
              p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
              p.end();
@@ -150,11 +165,11 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
           case PickColorMode:
              {
              QPainter p(m_pixmap);
-             p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+             p.setPen(QPen(m_guideColor, m_guideSize, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
              if (m_flicker%2 != 0)
-                p.setPen(QPen(Qt::red, 3, Qt::SolidLine));
+                p.setPen(QPen(m_guideColor, m_guideSize+2, Qt::SolidLine));
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              p.end();
              break;

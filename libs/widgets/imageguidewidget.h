@@ -54,7 +54,8 @@ public:
 public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
-                     bool spotVisible=true, int guideMode=HVGuideMode);
+                     bool spotVisible=true, int guideMode=HVGuideMode,
+                     QColor guideColor=Qt::red, int guideSize=1);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
@@ -63,6 +64,11 @@ public:
     QColor getSpotColor(void);
     void   setSpotVisible(bool v);
     void   resetSpotPosition(void);
+
+public slots:
+        
+    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideSize(int size);    
 
 signals:
 
@@ -86,6 +92,7 @@ private:
     
     int                  m_timerID;
     int                  m_guideMode;
+    int                  m_guideSize;
     int                  m_flicker;
 
     bool                 m_focus;
@@ -96,6 +103,8 @@ private:
     
     QRect                m_rect;       
     
+    QColor               m_guideColor;
+        
     QPixmap             *m_pixmap;
     
     Digikam::ImageIface *m_iface;    

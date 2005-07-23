@@ -53,11 +53,17 @@ private:
     QCheckBox        *m_antialiasInput;
     
     QComboBox        *m_autoCropCB;
-
+    
     KDoubleNumInput  *m_angleInput;
 
-protected:
+private slots:
     
+    void slotInit();    
+    
+protected:
+
+    void readSettings(void);
+    void writeSettings(void);
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);

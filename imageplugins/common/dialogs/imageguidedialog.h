@@ -37,9 +37,11 @@
 
 class QTimer;
 class QGridLayout;
+class QSpinBox;
 
 class KAboutData;
 class KProgress;
+class KColorButton;
 
 namespace DigikamImagePlugins
 {
@@ -81,33 +83,39 @@ private:
     FinalRendering
     };
     
-    int                   m_currentRenderingMode;
+    int           m_currentRenderingMode;
 
-    QWidget              *m_parent;
+    QWidget      *m_parent;
     
-    QTimer               *m_timer;
+    QTimer       *m_timer;
     
-    QString               m_name;
+    QString       m_name;
 
-    QGridLayout          *m_mainLayout;
+    QGridLayout  *m_mainLayout;
+    
+    QSpinBox     *m_guideSize;
 
-    KProgress            *m_progressBar;
+    KProgress    *m_progressBar;
+        
+    KColorButton *m_guideColorBt;
     
 private slots:
     
     virtual void slotCancel();
     virtual void slotUser1();
-
+    virtual void slotInit();
+    
     void slotResized();           
     void slotHelp();
-    void slotInit();
     
 protected:
 
     void closeEvent(QCloseEvent *e);
     void customEvent(QCustomEvent *event);
     void abortPreview(void);
-        
+    void readSettings(void);
+    void writeSettings(void);
+            
     virtual void resetValues(void){};
     virtual void prepareEffect(void){};
     virtual void prepareFinal(void){};

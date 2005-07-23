@@ -30,6 +30,7 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
+#include <qspinbox.h>
 
 // KDE includes.
 
@@ -44,6 +45,9 @@
 #include <kglobalsettings.h>
 #include <kprogress.h>
 #include <kdebug.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kseparator.h>
 
 // Local includes.
 
@@ -118,6 +122,30 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     else m_progressBar->hide();
 
     vLayout->addWidget(m_progressBar);
+    
+    // -------------------------------------------------------------
+        
+    QWidget *gboxGuideSettings = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
+    KSeparator *line = new KSeparator (Horizontal, gboxGuideSettings);
+    grid->addMultiCellWidget(line, 0, 0, 0, 2);
+    
+    QLabel *label5 = new QLabel(i18n("Guide Color:"), gboxGuideSettings);
+    m_guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
+    QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    grid->addMultiCellWidget(label5, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_guideColorBt, 1, 1, 1, 2);
+    
+    QLabel *label6 = new QLabel(i18n("Guide Width:"), gboxGuideSettings);
+    m_guideSize = new QSpinBox( 1, 5, 1, gboxGuideSettings);
+    QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    grid->addMultiCellWidget(label6, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_guideSize, 2, 2, 1, 2);
+    
+    if (guideVisible) gboxGuideSettings->show();
+    else gboxGuideSettings->hide();
+    
+    vLayout->addWidget(gboxGuideSettings);
     vLayout->addStretch(10);
     m_mainLayout->addMultiCellLayout(vLayout, 2, 2, 1, 1);    
     
@@ -128,23 +156,51 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
     
     connect(m_imagePreviewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotResized()));                   
+            this, SLOT(slotResized()));           
+            
+    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
+            m_imagePreviewWidget, SLOT(slotChangeGuideColor(const QColor &)));    
+            
+    connect(m_guideSize, SIGNAL(valueChanged(int)),
+            m_imagePreviewWidget, SLOT(slotChangeGuideSize(int)));                       
 }
 
 ImageGuideDialog::~ImageGuideDialog()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));   
-
+    writeSettings();
+    
     if (m_timer)
        delete m_timer;
        
     if (m_threadedFilter)
        delete m_threadedFilter;    
-       
+}
+
+void ImageGuideDialog::readSettings(void)
+{
+    QColor *defaultGuideColor = new QColor( Qt::red );
+    KConfig *config = kapp->config();
+    config->setGroup("Image Guide Dialog Settings");
+    m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
+    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_imagePreviewWidget->slotChangeGuideSize(m_guideSize->value());  
+    m_imagePreviewWidget->slotChangeGuideColor(m_guideColorBt->color());          
+    delete defaultGuideColor;       
+}    
+
+void ImageGuideDialog::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Image Guide Dialog Settings");
+    config->writeEntry( "Guide Color", m_guideColorBt->color() );
+    config->writeEntry( "Guide Width", m_guideSize->value() );
+    config->sync();
 }
 
 void ImageGuideDialog::slotInit()
 {
+    readSettings();
     // Abort current computation.
     slotUser1();
     // Waiting filter thread finished.

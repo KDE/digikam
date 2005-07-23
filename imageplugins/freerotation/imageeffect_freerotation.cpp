@@ -39,6 +39,7 @@
 #include <knuminput.h>
 #include <kcursor.h>
 #include <kseparator.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -88,7 +89,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 2, marginHint(), spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
     m_newWidthLabel = new QLabel(gboxSettings);
@@ -128,8 +129,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process an image auto-croping to remove black "
-                                            "holes around rotated image."));
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process an image auto-croping "
+                                            "to remove black frames around rotated image."));
     gridSettings->addMultiCellWidget(label4, 6, 6, 0, 0);
     gridSettings->addMultiCellWidget(m_autoCropCB, 6, 6, 1, 2);
     
@@ -144,11 +145,36 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
             this, SLOT(slotEffect()));             
 
     connect(m_autoCropCB, SIGNAL(activated(int)),
-            this, SLOT(slotEffect()));                                  
+            this, SLOT(slotEffect()));      
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 {
+    writeSettings();
+}
+
+void ImageEffect_FreeRotation::slotInit()
+{
+    readSettings(); 
+}
+
+void ImageEffect_FreeRotation::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Free Rotation Tool Settings");
+    
+    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );   
+    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
+}
+    
+void ImageEffect_FreeRotation::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Free Rotation Tool Settings");
+               
+    config->writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
+    config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
+    config->sync();
 }
 
 void ImageEffect_FreeRotation::renderingFinished()
