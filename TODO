@@ -1,16 +1,8 @@
 
 * Copy/Paste [JA]
 
-* Sidebar / View saveing/loading the last state needs some more love [JA]
-
 * allow user to edit dates (maybe through comments tag editor) [TA]
 
-* fix saving of curent state of digikam [JA, most of it is done, but needs some work for default values]
-  - splitter sizes
-  - active view
-  - closed/open state of left/right views
-  - currently selected albums in each view
- 
 * Tina's Tag Usability Recommendations:
 (http://www.uni-koblenz.de/~trilliti/digikam_tagging/main.html). 
 Following items have been agreed on (rest are in dispute):
