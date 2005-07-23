@@ -62,7 +62,7 @@ protected:
     void maybeTip( const QPoint& pos );
 
 private:
-    QWidget*        originalWidget;
+    SqueezedComboBox*        m_originalWidget;
 };
 
 /** @class SqueezedComboBox
@@ -124,7 +124,7 @@ private:
 
     QMap<int,QString>   m_OriginalItems;
     QTimer*             m_timer;
-    UnSqueezedTip*      t;
+    UnSqueezedTip*      m_tooltip;
 };
 
 

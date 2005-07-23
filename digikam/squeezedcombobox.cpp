@@ -35,19 +35,23 @@
 UnSqueezedTip::UnSqueezedTip( QWidget * parent, SqueezedComboBox* name )
     : QToolTip( parent )
 {
-    originalWidget = name;
+    m_originalWidget = name;
 }
 
 void UnSqueezedTip::maybeTip( const QPoint &pos )
 {
-    QListBox* listBox = ((SqueezedComboBox*)originalWidget)->listBox();
+    QListBox* listBox = m_originalWidget->listBox();
+    if (!listBox)
+        return;
+
     QListBoxItem* selectedItem = listBox->itemAt( pos );
-    QRect positionToolTip = listBox->itemRect( selectedItem );
-
-    QString toolTipText =
-            ((SqueezedComboBox*)originalWidget)->itemHighlighted();
-
-    tip(positionToolTip, toolTipText);
+    if (selectedItem)
+    {
+        QRect positionToolTip = listBox->itemRect( selectedItem );
+        QString toolTipText = m_originalWidget->itemHighlighted();
+        if (!toolTipText.isNull())
+            tip(positionToolTip, toolTipText);
+    }
 }
 
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
@@ -55,7 +59,7 @@ SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
 {
     setMinimumWidth(100);
     m_timer = new QTimer(this);
-    t = new UnSqueezedTip( this->listBox()->viewport(), this );
+    m_tooltip = new UnSqueezedTip( listBox()->viewport(), this );
 
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
@@ -65,7 +69,7 @@ SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
 
 SqueezedComboBox::~SqueezedComboBox()
 {
-    delete t;
+    delete m_tooltip;
     delete m_timer;
 }
 
