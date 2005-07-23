@@ -191,7 +191,9 @@ void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void FolderView::startDrag()
 {
-    dragObject()->drag();        
+    QDragObject *o = dragObject();
+    if(o)
+        o->drag();        
 }
 
 FolderItem* FolderView::dragItem() const
