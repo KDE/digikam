@@ -305,7 +305,7 @@ void FolderView::loadViewState()
     KConfig *config = kapp->config();
     config->setGroup(name());
     
-    selectItem(config->readNumEntry("LastSelectedItem", 0));
+    int selectedItem = config->readNumEntry("LastSelectedItem", 0);
     
     QValueList<int> openFolders;
     if(config->hasKey("OpenFolders"))
@@ -318,11 +318,18 @@ void FolderView::loadViewState()
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
+        if(!item)
+            continue;
         // Start the album root always open
-        if(item && (openFolders.contains(item->id()) || item->id() == 0))
+        if(openFolders.contains(item->id()) || item->id() == 0)
             setOpen(item, true);
         else
             setOpen(item, false);
+        if(item->id() == selectedItem)
+        {
+            setSelected(item, true);
+            ensureItemVisible(item);
+        }
     }
 }
 
