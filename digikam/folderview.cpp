@@ -318,7 +318,8 @@ void FolderView::loadViewState()
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
-        if(item && openFolders.contains(item->id()))
+        // Start the album root always open
+        if(item && (openFolders.contains(item->id()) || item->id() == 0))
             setOpen(item, true);
         else
             setOpen(item, false);
