@@ -266,25 +266,26 @@ public:
 
 private:
     void setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType);
-    QLabel*    m_label;
+    QLabel*                 m_label;
 
-    QVBox*     m_box;
-    QWidget*   m_hbox;
+    QVBox*                  m_box;
+    QWidget*                m_hbox;
+    QHBoxLayout*            m_hboxLayout;
 
-    QHBox*     m_valueBox;
+    QHBox*                  m_valueBox;
 
-    QCheckBox* m_check;
+    QCheckBox*              m_check;
 
-    QComboBox* m_key;
-    QComboBox* m_operator;
+    QComboBox*              m_key;
+    QComboBox*              m_operator;
 
-    QLineEdit* m_lineEdit;
-    KDateEdit* m_dateEdit;
-    SqueezedComboBox* m_valueCombo;
+    QLineEdit*              m_lineEdit;
+    KDateEdit*              m_dateEdit;
+    SqueezedComboBox*       m_valueCombo;
 
-    QMap<int, int> m_itemsIndexIDMap;
+    QMap<int, int>          m_itemsIndexIDMap;
 
-    QHBox*     m_optionsBox;
+    QHBox*                  m_optionsBox;
 
     enum valueWidgetTypes   m_widgetType;
 

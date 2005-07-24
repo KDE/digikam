@@ -171,7 +171,6 @@ void SearchAdvancedDialog::slotAddRule()
              SLOT(slotPropertyChanged()));
 
     slotChangeButtonStates();
-    adjustSize();
     slotPropertyChanged();
 }
 
@@ -206,7 +205,6 @@ void SearchAdvancedDialog::slotDelRules()
     if (it != m_baseList.end())
         (*it)->removeOption();
 
-    adjustSize();
     slotChangeButtonStates();
     slotPropertyChanged();
     if (m_baseList.isEmpty()) {
@@ -214,7 +212,6 @@ void SearchAdvancedDialog::slotDelRules()
         m_addButton->setEnabled(true);
         enableButtonOK( false );
     }
-    adjustSize();
 }
 
 void SearchAdvancedDialog::slotGroupRules()
@@ -289,7 +286,6 @@ void SearchAdvancedDialog::slotGroupRules()
     connect( group, SIGNAL( signalBaseItemToggled() ) ,
              this, SLOT( slotChangeButtonStates() ) );
  
-    adjustSize();
     slotChangeButtonStates();
     slotPropertyChanged();
 }
@@ -343,7 +339,6 @@ void SearchAdvancedDialog::slotUnGroupRules()
         m_rulesBox->layout()->add((*it)->widget());
     }
 
-    adjustSize();
     slotChangeButtonStates();
     slotPropertyChanged();
 }
@@ -484,7 +479,8 @@ void SearchAdvancedDialog::slotChangeButtonStates()
         m_groupButton->setEnabled(false);
     } else if ( counter == 1)
     {
-        m_delButton->setEnabled(true);
+        if (m_baseList.count() > 1)
+            m_delButton->setEnabled(true);
         m_groupButton->setEnabled(false);
     } else if ( counter > 1 )
     {
@@ -571,7 +567,6 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
     }
 
     enableButtonOK( true );
-    adjustSize();
 }
 
 #include "searchadvanceddialog.moc"

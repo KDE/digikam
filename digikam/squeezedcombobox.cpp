@@ -88,7 +88,7 @@ QSize SqueezedComboBox::sizeHint() const
 
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
 {
-    m_OriginalItems[index] = newItem;
+    m_originalItems[index] = newItem;
     insertItem( squeezeText(newItem), index );
 
     // if this is the first item, set the tooltip.
@@ -104,7 +104,7 @@ void SqueezedComboBox::resizeEvent ( QResizeEvent * )
 void SqueezedComboBox::slotTimeOut()
 {
     QMapIterator<int,QString> it;
-    for (it = m_OriginalItems.begin() ; it != m_OriginalItems.end();
+    for (it = m_originalItems.begin() ; it != m_originalItems.end();
          ++it)
     {
         changeItem( squeezeText( it.data() ), it.key() );
@@ -114,7 +114,7 @@ void SqueezedComboBox::slotTimeOut()
 QString SqueezedComboBox::squeezeText( const QString& original)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
-    int widgetSize = width()-20;
+    int widgetSize = width()-30;
     QFontMetrics fm( fontMetrics() );
 
     // If we can fit the full text, return that.
@@ -128,8 +128,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
     {
         if ( (int)fm.width(original.right(i)) > widgetSize)
         {
-            i=i-3; // one to many and compensate for ...
-            sqItem = QString("..." + original.right(i));
+            sqItem = QString("..." + original.right(--i));
             break;
         }
     }
@@ -139,13 +138,13 @@ QString SqueezedComboBox::squeezeText( const QString& original)
 void SqueezedComboBox::slotUpdateToolTip( int index )
 {
     QToolTip::remove(this);
-    QToolTip::add(this, m_OriginalItems[index]);
+    QToolTip::add(this, m_originalItems[index]);
 }
 
 QString SqueezedComboBox::itemHighlighted()
 {
     int curItem = this->listBox()->currentItem();
-    return m_OriginalItems[curItem];
+    return m_originalItems[curItem];
 }
 
 #include "squeezedcombobox.moc"

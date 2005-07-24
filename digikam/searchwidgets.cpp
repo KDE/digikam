@@ -144,7 +144,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     slotKeyChanged( 0 );
     m_check = new QCheckBox( m_hbox );
 
-    QHBoxLayout* m_hboxLayout = new QHBoxLayout( m_hbox );
+    m_hboxLayout = new QHBoxLayout( m_hbox );
     m_hboxLayout->setSpacing( KDialog::spacingHint() );
     m_hboxLayout->addWidget( m_key );
     m_hboxLayout->addWidget( m_operator );
@@ -406,7 +406,6 @@ void SearchAdvancedRule::addOption(Option option)
     m_optionsBox->show();
 
     m_box->layout()->add(m_hbox);
-
     m_option =  option;
 }
 
@@ -421,6 +420,7 @@ void SearchAdvancedRule::addCheck()
 {
     m_check = new QCheckBox(m_hbox);
     m_check->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_hboxLayout->addWidget( m_check, 0, Qt::AlignRight );
     m_check->show();
 
     connect( m_check, SIGNAL( toggled( bool ) ),
@@ -468,13 +468,13 @@ void SearchAdvancedGroup::addRule(SearchAdvancedRule* rule)
         rule->option() != SearchAdvancedRule::NONE)
     {
         // this is the first rule being inserted in this group.
-        // get its option and remove ite option
+        // get its option and remove its option
         addOption(rule->option());
         rule->removeOption();
     }
 
     rule->removeCheck();
-    
+
     m_childRules.append(rule);
     rule->widget()->reparent(m_groupbox, QPoint(0,0));
     rule->widget()->show();

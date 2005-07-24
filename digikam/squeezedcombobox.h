@@ -122,7 +122,7 @@ private:
     void resizeEvent ( QResizeEvent * );
     QString squeezeText( const QString& original);
 
-    QMap<int,QString>   m_OriginalItems;
+    QMap<int,QString>   m_originalItems;
     QTimer*             m_timer;
     UnSqueezedTip*      m_tooltip;
 };
