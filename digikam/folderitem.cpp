@@ -26,6 +26,7 @@
 
 #include "folderview.h"
 #include "folderitem.h"
+#include "thumbnailsize.h"
 
 FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
     : QListViewItem(parent, text)
@@ -88,7 +89,7 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
 
         p->drawPixmap( xo, yo, *icon );
 
-        r += icon->width() + fv->itemMargin();
+        r += ThumbnailSize::Tiny  + 5 + fv->itemMargin();
     }
 
     if (m_special)

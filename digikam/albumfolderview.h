@@ -88,7 +88,6 @@ private:
 
     void reparentItem(AlbumFolderViewItem* folderItem);
     void clearEmptyGroupItems();
-
     
     AlbumFolderViewPriv   *d;
     
