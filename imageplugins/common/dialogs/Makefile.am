@@ -2,11 +2,10 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdigikamimagepluginsdialog.la
 
-libdigikamimagepluginsdialog_la_SOURCES = ctrlpaneldialog.cpp imageguidedialog.cpp 
+libdigikamimagepluginsdialog_la_SOURCES = ctrlpaneldialog.cpp imageguidedialog.cpp imagedialog.cpp
 
 libdigikamimagepluginsdialog_la_LIBADD = \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
-
                       
 libdigikamimagepluginsdialog_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

@@ -22,9 +22,9 @@
 #ifndef CHANNELMIXER_H
 #define CHANNELMIXER_H
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialog.h"
 
 class QComboBox;
 class QPushButton;
@@ -34,16 +34,15 @@ class KDoubleNumInput;
 
 namespace Digikam
 {
-class ImageGuideWidget;
 class HistogramWidget;
-class ImageWidget;
 class ColorGradientWidget;
+class ImageGuideWidget;
 }
 
 namespace DigikamChannelMixerImagesPlugin
 {
 
-class ChannelMixerDialog : public KDialogBase
+class ChannelMixerDialog : public DigikamImagePlugins::ImageDialog
 {
     Q_OBJECT
 
@@ -93,10 +92,7 @@ private:
     KDoubleNumInput              *m_greenGain;
     KDoubleNumInput              *m_blueGain;
     
-    QPushButton                  *m_loadButton;
-    QPushButton                  *m_saveButton;
     QPushButton                  *m_resetButton;
-    QPushButton                  *m_helpButton;
     
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
@@ -106,7 +102,7 @@ private:
     
     Digikam::HistogramWidget     *m_histogramWidget;
     
-    Digikam::ImageWidget         *m_previewOriginalWidget;
+    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
     uint                         *m_destinationPreviewData;
@@ -116,12 +112,11 @@ private:
 private slots:
 
     void slotUser1();
+    void slotUser2();
+    void slotUser3();
+    void slotResetCurrentChannel();
     void slotEffect();
     void slotOk();
-    void slotHelp();
-    void slotResetAllGains();
-    void slotLoadGains();
-    void slotSaveGains();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotGainsChanged();

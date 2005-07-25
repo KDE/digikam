@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdigikamimagepluginswidget.la
 
-libdigikamimagepluginswidget_la_SOURCES = bannerwidget.cpp  
+libdigikamimagepluginswidget_la_SOURCES = bannerwidget.cpp imagetabwidget.cpp 
 
 libdigikamimagepluginswidget_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

@@ -73,21 +73,16 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
 #include "channelmixer.h"
 
 namespace DigikamChannelMixerImagesPlugin
 {
 
 ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                  : KDialogBase(Plain, i18n("Color Channel Mixer"), Help|User1|Ok|Cancel, Ok,
-                                parent, 0, true, true, i18n("&Reset Values"))
+                  : ImageDialog(parent, i18n("Color Channel Mixer"), "channelmixer", true, false, true)
 {
     m_destinationPreviewData = 0L;
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-        
-    setButtonWhatsThis ( User1, i18n("<p>Reset color channels' gains settings from the current selected channel.") );
-
+    
     // About data and help button.
 
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -102,28 +97,16 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-
+    setAboutData(about);
+    
     // -------------------------------------------------------------
 
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Color Channel Mixer")); 
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    // -------------------------------------------------------------
-
-    QFrame *gbox = new QFrame(plainPage());
-    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( gbox, 7, 0, marginHint(), spacingHint());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gbox );
+    m_channelCB = new QComboBox( false, gboxSettings );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
@@ -133,9 +116,9 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
+    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gbox );
+    m_scaleCB = new QComboBox( false, gboxSettings );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
@@ -149,7 +132,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
 
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
@@ -160,26 +143,31 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     l->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
 
-    QLabel *redLabel = new QLabel(i18n("Red:"), gbox);
-    m_redGain = new KDoubleNumInput(gbox);
+    // -------------------------------------------------------------
+        
+    QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
+    m_redGain = new KDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
     QWhatsThis::add( m_redGain, i18n("<p>Select here the red color gain in percent for the current channel."));
     
-    QLabel *blueLabel = new QLabel(i18n("Blue:"), gbox);
-    m_greenGain = new KDoubleNumInput(gbox);
+    QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
+    m_greenGain = new KDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
     QWhatsThis::add( m_greenGain, i18n("<p>Select here the green color gain in percent for the current channel."));
     
-    QLabel *greenLabel = new QLabel(i18n("Green:"), gbox);
-    m_blueGain = new KDoubleNumInput(gbox);
+    QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
+    m_blueGain = new KDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
     m_blueGain->setRange(-200.0, 200.0, 1, true);
     QWhatsThis::add( m_blueGain, i18n("<p>Select here the blue color gain in percent for the current channel."));
+
+    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    QWhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the current selected channel."));
 
     grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
     grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
@@ -188,75 +176,40 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(m_redGain, 3, 3, 1, 4);
     grid->addMultiCellWidget(m_greenGain, 4, 4, 1, 4);
     grid->addMultiCellWidget(m_blueGain, 5, 5, 1, 4);
+    grid->addMultiCellWidget(m_resetButton, 6, 6, 0, 2);
 
-    m_monochrome = new QCheckBox( i18n("Monochrome"), gbox);
+    // -------------------------------------------------------------
+    
+    m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
     QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want rendering the image in monochrome mode. "
                                         "In this mode, histogram will display only luminosity values."));
     
-    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gbox);
+    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
     QWhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));
     
-    grid->addMultiCellWidget(m_monochrome, 6, 6, 0, 1);
-    grid->addMultiCellWidget(m_preserveLuminosity, 6, 6, 3, 4);
-    
-    // -------------------------------------------------------------
-
-    QHBoxLayout *hlayout = new QHBoxLayout(spacingHint());
-    m_loadButton = new QPushButton(i18n("&Load..."), gbox);
-    QWhatsThis::add( m_loadButton, i18n("<p>Load gains settings from a Gimp gains text file."));
-    m_saveButton = new QPushButton(i18n("&Save As..."), gbox);
-    QWhatsThis::add( m_saveButton, i18n("<p>Save gains settings to a Gimp gains text file."));
-    m_resetButton = new QPushButton(i18n("&Reset All"), gbox);
-    QWhatsThis::add( m_resetButton, i18n("<p>Reset all color channels' gains settings."));
-    hlayout->addWidget(m_loadButton);
-    hlayout->addWidget(m_saveButton);
-    hlayout->addWidget(m_resetButton);
-    grid->addMultiCellLayout(hlayout, 7, 7, 0, 4);
-
-    // -------------------------------------------------------------
-    
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 8, 8, 0, 4);
+    
+    grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
+    grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
 
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    topLayout->setColStretch(1, 10);
-    topLayout->setRowStretch(1, 10);
+    setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
-    
-    QFrame *frame2 = new QFrame(plainPage());
-    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageWidget(300, 200, frame2);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
-    l2->addWidget(m_previewOriginalWidget);
-
-    QFrame *frame3 = new QFrame(plainPage());
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
-                                                          Digikam::ImageGuideWidget::PickColorMode);
+    m_previewOriginalWidget = previewOriginalWidget();
+    m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
                                                  "gains adjustments preview. You can pick color on image "
                                                  "to see the color level corresponding on histogram."));
-    l3->addWidget(m_previewTargetWidget);
-
-    vLayout->addWidget(frame2);
-    vLayout->addWidget(frame3);
-    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
 
-    resize(configDialogSize("Channel Mixer Tool Dialog"));  
- 
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotResetAllGains()));
-    kapp->restoreOverrideCursor();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -298,23 +251,11 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     // Bouttons slots.
 
     connect(m_resetButton, SIGNAL(clicked()),
-            this, SLOT(slotResetAllGains()));
-
-    connect(m_loadButton, SIGNAL(clicked()),
-            this, SLOT(slotLoadGains()));
-
-    connect(m_saveButton, SIGNAL(clicked()),
-            this, SLOT(slotSaveGains()));
+            this, SLOT(slotResetCurrentChannel()));
 }
 
 ChannelMixerDialog::~ChannelMixerDialog()
 {
-    saveDialogSize("Channel Mixer Tool Dialog");
-}
-
-void ChannelMixerDialog::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("channelmixer", "digikamimageplugins");
 }
 
 void ChannelMixerDialog::closeEvent(QCloseEvent *e)
@@ -328,41 +269,7 @@ void ChannelMixerDialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void ChannelMixerDialog::slotResetAllGains()
-{
-    m_redRedGain = 1.0; 
-    m_redGreenGain = 0.0; 
-    m_redBlueGain = 0.0; 
-    
-    m_greenRedGain = 0.0;
-    m_greenGreenGain = 1.0; 
-    m_greenBlueGain = 0.0;
-    
-    m_blueRedGain = 0.0;
-    m_blueGreenGain = 0.0;
-    m_blueBlueGain = 1.0;
-
-    m_blackRedGain = 1.0; 
-    m_blackGreenGain = 0.0; 
-    m_blackBlueGain = 0.0; 
-    
-    m_monochrome->blockSignals(true);
-    m_preserveLuminosity->blockSignals(true);
-    
-    m_monochrome->setChecked( false );
-    m_preserveLuminosity->setChecked( false );
-    adjustSliders();
-    
-    m_monochrome->blockSignals(false);
-    m_preserveLuminosity->blockSignals(false);
-    m_channelCB->setEnabled(true);
-    
-    m_histogramWidget->reset();
-
-    slotEffect();
-}
-
-void ChannelMixerDialog::slotUser1()
+void ChannelMixerDialog::slotResetCurrentChannel()
 {
     switch( m_channelCB->currentItem() )
        {
@@ -629,7 +536,43 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void ChannelMixerDialog::slotLoadGains()
+// Reset all gains.
+void ChannelMixerDialog::slotUser1()
+{
+    m_redRedGain = 1.0; 
+    m_redGreenGain = 0.0; 
+    m_redBlueGain = 0.0; 
+    
+    m_greenRedGain = 0.0;
+    m_greenGreenGain = 1.0; 
+    m_greenBlueGain = 0.0;
+    
+    m_blueRedGain = 0.0;
+    m_blueGreenGain = 0.0;
+    m_blueBlueGain = 1.0;
+
+    m_blackRedGain = 1.0; 
+    m_blackGreenGain = 0.0; 
+    m_blackBlueGain = 0.0; 
+    
+    m_monochrome->blockSignals(true);
+    m_preserveLuminosity->blockSignals(true);
+    
+    m_monochrome->setChecked( false );
+    m_preserveLuminosity->setChecked( false );
+    adjustSliders();
+    
+    m_monochrome->blockSignals(false);
+    m_preserveLuminosity->blockSignals(false);
+    m_channelCB->setEnabled(true);
+    
+    m_histogramWidget->reset();
+
+    slotEffect();
+}
+
+// Load all gains.
+void ChannelMixerDialog::slotUser2()
 {
     KURL loadGainsFileUrl;
     FILE *fp = 0L;
@@ -715,7 +658,8 @@ void ChannelMixerDialog::slotLoadGains()
         }
 }
 
-void ChannelMixerDialog::slotSaveGains()
+// Save all gains.
+void ChannelMixerDialog::slotUser3()
 {
     KURL saveGainsFileUrl;
     FILE *fp = 0L;
