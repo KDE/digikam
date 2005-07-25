@@ -32,13 +32,13 @@
 
 #include "squeezedcombobox.h"
 
-UnSqueezedTip::UnSqueezedTip( QWidget * parent, SqueezedComboBox* name )
+SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* name )
     : QToolTip( parent )
 {
     m_originalWidget = name;
 }
 
-void UnSqueezedTip::maybeTip( const QPoint &pos )
+void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
 {
     QListBox* listBox = m_originalWidget->listBox();
     if (!listBox)
@@ -59,7 +59,7 @@ SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
 {
     setMinimumWidth(100);
     m_timer = new QTimer(this);
-    m_tooltip = new UnSqueezedTip( listBox()->viewport(), this );
+    m_tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this );
 
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));

@@ -29,7 +29,7 @@ class SqueezedComboBox;
 #include <qcombobox.h>
 #include <qtooltip.h>
 
-/** @class UnSqueezedTip
+/** @class SqueezedComboBoxTip
  * This class shows a tooltip for a SqueezedComboBox
  * the tooltip will contain the full text and helps
  * the user find the correct entry. It is automatically
@@ -38,20 +38,20 @@ class SqueezedComboBox;
  * 
  * @author Tom Albers
  */
-class UnSqueezedTip : public QToolTip
+class SqueezedComboBoxTip : public QToolTip
 {
 public:
     /**
      * Constructor. An example call (as done in
      * SqueezedComboBox::SqueezedComboBox):
      * @code
-     * t = new UnSqueezedTip( this->listBox()->viewport(), this );
+     * t = new SqueezedComboBoxTip( this->listBox()->viewport(), this );
      * @endcode
      * 
      * @param parent parent widget (viewport)
      * @param name parent widget
      */
-    UnSqueezedTip( QWidget *parent, SqueezedComboBox *name );
+    SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
 
 protected:
     /**
@@ -124,7 +124,7 @@ private:
 
     QMap<int,QString>   m_originalItems;
     QTimer*             m_timer;
-    UnSqueezedTip*      m_tooltip;
+    SqueezedComboBoxTip*      m_tooltip;
 };
 
 
