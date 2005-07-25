@@ -22,9 +22,9 @@
 #ifndef ADJUSTLEVELS_H
 #define ADJUSTLEVELS_H
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialog.h"
 
 class QComboBox;
 class QSpinBox;
@@ -40,14 +40,13 @@ namespace Digikam
 {
 class HistogramWidget;
 class ImageLevels;
-class ImageWidget;
 class ImageGuideWidget;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelDialog : public KDialogBase
+class AdjustLevelDialog : public DigikamImagePlugins::ImageDialog
 {
     Q_OBJECT
 
@@ -94,11 +93,8 @@ private:
     
     KDoubleNumInput           *m_gammaInput;
     
-    QPushButton               *m_loadButton;
-    QPushButton               *m_saveButton;
     QPushButton               *m_autoButton;
     QPushButton               *m_resetButton;
-    QPushButton               *m_helpButton;
     QPushButton               *m_pickBlack;
     QPushButton               *m_pickGray;
     QPushButton               *m_pickWhite;
@@ -115,26 +111,23 @@ private:
     Digikam::HistogramWidget  *m_histogramWidget;
     
     Digikam::ImageGuideWidget *m_previewOriginalWidget;
-    Digikam::ImageWidget      *m_previewTargetWidget;
+    Digikam::ImageGuideWidget *m_previewTargetWidget;
     
     Digikam::ImageLevels      *m_levels;
 
 private:
 
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    bool loadLevelsFromFile(KURL fileUrl);
-    bool saveLevelsToFile(KURL fileUrl);
     
 private slots:
 
     void slotUser1();
+    void slotUser2();
+    void slotUser3();
     void slotEffect();
     void slotOk();
-    void slotHelp();
-    void slotResetAllChannels();
+    void slotResetCurrentChannel();
     void slotAutoLevels();
-    void slotLoadLevels();
-    void slotSaveLevels();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotAdjustSliders();

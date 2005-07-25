@@ -69,22 +69,16 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
 #include "adjustlevels.h"
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
 AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                 : KDialogBase(Plain, i18n("Adjust Color Levels"), Help|User1|Ok|Cancel, Ok,
-                               parent, 0, true, true, i18n("&Reset Values"))
+                 : ImageDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", true, true, false)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-        
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();
-
-    setButtonWhatsThis ( User1, i18n("<p>Reset levels values from the current selected channel.") );
 
     // About data and help button.
 
@@ -100,28 +94,16 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-
+    setAboutData(about);
+    
     // -------------------------------------------------------------
 
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 8, 5, marginHint(), spacingHint());
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Adjust Color Levels")); 
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    // -------------------------------------------------------------
-
-    QFrame *gbox = new QFrame(plainPage());
-    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( gbox, 8, 5, marginHint(), spacingHint());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gbox );
+    m_channelCB = new QComboBox( false, gboxSettings );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -137,9 +119,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or GIF."));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
+    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gbox );
+    m_scaleCB = new QComboBox( false, gboxSettings );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
@@ -153,7 +135,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
 
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
@@ -162,7 +144,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     l->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
 
-    m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gbox );
+    m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
     m_hGradientMinInput->setMaxValue(255);
@@ -171,7 +153,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradientMinInput, 2, 2, 0, 4);
 
-    m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gbox );
+    m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
     m_hGradientMaxInput->setMaxValue(255);
@@ -180,17 +162,17 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradientMaxInput, 3, 3, 0, 4);
 
-    m_minInput = new QSpinBox(0, 255, 1, gbox);
+    m_minInput = new QSpinBox(0, 255, 1, gboxSettings);
     m_minInput->setValue(0);
     QWhatsThis::add( m_minInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
-    m_gammaInput = new KDoubleNumInput(gbox);
+    m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 10.0, 0.1);
     m_gammaInput->setValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
-    m_maxInput = new QSpinBox(0, 255, 1, gbox);
+    m_maxInput = new QSpinBox(0, 255, 1, gboxSettings);
     m_maxInput->setValue(255);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
     QWhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
@@ -198,7 +180,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_maxInput, 3, 3, 5, 5);
     grid->addMultiCellWidget(m_gammaInput, 4, 4, 0, 5);
 
-    m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gbox );
+    m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
     QWhatsThis::add( m_hGradientMinOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));    
     QToolTip::add( m_hGradientMinOutput, i18n( "Minimal intensity output." ) );
@@ -207,7 +189,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMinOutput->setMaxValue(255);
     grid->addMultiCellWidget(m_hGradientMinOutput, 5, 5, 0, 4);
 
-    m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gbox );
+    m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
     QWhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
     QToolTip::add( m_hGradientMaxOutput, i18n( "Maximal intensity output." ) );
@@ -216,11 +198,11 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMaxOutput->setMaxValue(255);
     grid->addMultiCellWidget(m_hGradientMaxOutput, 6, 6, 0, 4);
 
-    m_minOutput = new QSpinBox(0, 255, 1, gbox);
+    m_minOutput = new QSpinBox(0, 255, 1, gboxSettings);
     m_minOutput->setValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
     QWhatsThis::add( m_minOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));
-    m_maxOutput = new QSpinBox(0, 255, 1, gbox);
+    m_maxOutput = new QSpinBox(0, 255, 1, gboxSettings);
     m_maxOutput->setValue(255);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
     QWhatsThis::add( m_maxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
@@ -229,17 +211,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlayout = new QHBoxLayout(spacingHint());
-    m_loadButton = new QPushButton(i18n("&Load..."), gbox);
-    QWhatsThis::add( m_loadButton, i18n("<p>Load all levels settings from a Gimp levels text file."));
-    m_saveButton = new QPushButton(i18n("&Save As..."), gbox);
-    QWhatsThis::add( m_saveButton, i18n("<p>Save all levels settings to a Gimp levels text file."));
-    m_autoButton = new QPushButton(i18n("&Auto"), gbox);
-    QWhatsThis::add( m_autoButton, i18n("<p>Adjust all levels automatically."));
-    m_resetButton = new QPushButton(i18n("&Reset All"), gbox);
-    QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' level values."));
-
-    m_pickerColorButtonGroup = new QHButtonGroup(gbox);
+    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings);
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -273,60 +245,41 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
     
-    hlayout->addWidget(m_loadButton);
-    hlayout->addWidget(m_saveButton);
-    hlayout->addWidget(m_autoButton);
-    hlayout->addWidget(m_resetButton);
-    hlayout->addWidget(m_pickerColorButtonGroup);
-    grid->addMultiCellLayout(hlayout, 7, 7, 0, 5);    
+    m_autoButton = new QPushButton(i18n("&Auto"), gboxSettings);
+    QWhatsThis::add( m_autoButton, i18n("<p>Adjust all levels automatically."));
+    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    QWhatsThis::add( m_resetButton, i18n("<p>Reset levels values from the current selected channel."));
+    
+    grid->addMultiCellWidget(m_pickerColorButtonGroup, 7, 7, 0, 2);
+    grid->addMultiCellWidget(m_autoButton, 7, 7, 3, 3);
+    grid->addMultiCellWidget(m_resetButton, 7, 7, 4, 4);
 
     // -------------------------------------------------------------
     
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
     grid->addMultiCellWidget(m_overExposureIndicatorBox, 8, 8, 0, 5);
 
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    topLayout->setColStretch(1, 10);
-    topLayout->setRowStretch(1, 10);
+    setUserAreaWidget(gboxSettings);    
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
-    
-    QFrame *frame2 = new QFrame(plainPage());
-    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
-                                                            Digikam::ImageGuideWidget::PickColorMode);
+    m_previewOriginalWidget = previewOriginalWidget();
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
                                                    "a color on the image using the color "
                                                    "picker tools to select shadow, middle, and highlight "
                                                    "tones to adjust the curves' points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
-    l2->addWidget(m_previewOriginalWidget);
-
-    QFrame *frame3 = new QFrame(plainPage());
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
+    m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
                                                  "levels-adjustments preview."));
-    l3->addWidget(m_previewTargetWidget);
-
-    vLayout->addWidget(frame2);
-    vLayout->addWidget(frame3);
-    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
-
+    
     // -------------------------------------------------------------
     
-    resize(configDialogSize("Levels Tool Dialog"));  
-    
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotResetAllChannels()));
-    kapp->restoreOverrideCursor();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -387,23 +340,11 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
             this, SLOT(slotAutoLevels()));
 
     connect(m_resetButton, SIGNAL(clicked()),
-            this, SLOT(slotResetAllChannels()));
-
-    connect(m_loadButton, SIGNAL(clicked()),
-            this, SLOT(slotLoadLevels()));
-
-    connect(m_saveButton, SIGNAL(clicked()),
-            this, SLOT(slotSaveLevels()));
+            this, SLOT(slotResetCurrentChannel()));
 }
 
 AdjustLevelDialog::~AdjustLevelDialog()
 {
-    saveDialogSize("Levels Tool Dialog");
-}
-
-void AdjustLevelDialog::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("adjustlevels", "digikamimageplugins");
 }
 
 void AdjustLevelDialog::closeEvent(QCloseEvent *e)
@@ -522,19 +463,7 @@ void AdjustLevelDialog::adjustSliders(int minIn, double gamIn, int maxIn, int mi
     m_hGradientMaxOutput->setValue(255 - maxOut);
 }
 
-void AdjustLevelDialog::slotResetAllChannels()
-{
-    for (int channel = 0 ; channel < 5 ; ++channel)
-       m_levels->levelsChannelReset(channel);
-
-    // Refresh the current levels config.
-    slotChannelChanged(m_channelCB->currentItem());
-    m_histogramWidget->reset();
-    
-    slotEffect();
-}
-
-void AdjustLevelDialog::slotUser1()
+void AdjustLevelDialog::slotResetCurrentChannel()
 {
     m_levels->levelsChannelReset(m_channelCB->currentItem());
 
@@ -676,7 +605,21 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void AdjustLevelDialog::slotLoadLevels()
+// Reset all settings.
+void AdjustLevelDialog::slotUser1()
+{
+    for (int channel = 0 ; channel < 5 ; ++channel)
+       m_levels->levelsChannelReset(channel);
+
+    // Refresh the current levels config.
+    slotChannelChanged(m_channelCB->currentItem());
+    m_histogramWidget->reset();
+    
+    slotEffect();
+}
+
+// Load all settings.
+void AdjustLevelDialog::slotUser2()
 {
     KURL loadLevelsFile;
 
@@ -696,7 +639,8 @@ void AdjustLevelDialog::slotLoadLevels()
     slotChannelChanged(m_channelCB->currentItem());
 }
 
-void AdjustLevelDialog::slotSaveLevels()
+// Save all settings.
+void AdjustLevelDialog::slotUser3()
 {
     KURL saveLevelsFile;
 
