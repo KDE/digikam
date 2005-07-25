@@ -516,7 +516,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
                               escapeString(srcAlbum.caption),
                               escapeString(srcAlbum.collection),
                               QString::number(srcAlbum.icon)) +
-                         QString( " WHERE id=%5" )
+                         QString( " WHERE id=%1" )
                          .arg(dstAlbum.id) );
         finished();
         return;
