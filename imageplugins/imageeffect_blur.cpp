@@ -48,16 +48,17 @@
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : KDialogBase(Plain, i18n("Apply Gaussian Blur on Photograph"),
-                              Help|User1|Ok|Cancel, Ok,
+                              Help|Default|User1|Ok|Cancel, Ok,
                               parent, 0, true, true,
-                              i18n("&Reset Values")),
+                              i18n("&Abort")),
                   m_parent(parent)
 {
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_threadedFilter       = 0L;
     
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     setHelp("blursharpentool.anchor", "digikam");
     resize(configDialogSize("Blur Tool Dialog"));         
     
@@ -88,7 +89,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
         
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotUser1()));
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
                                              
     // -------------------------------------------------------------
     
@@ -131,24 +132,23 @@ void ImageEffect_Blur::abortPreview()
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);    
     enableButton(Ok, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    enableButton(Default, true);  
+    enableButton(User1, false);  
     m_radiusInput->setEnabled(true);
 }
 
 void ImageEffect_Blur::slotUser1()
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
        m_threadedFilter->stopComputation();
-       }
-    else
-       {
-       m_radiusInput->blockSignals(true);
-       m_radiusInput->setValue(0);
-       m_radiusInput->blockSignals(false);
-       slotEffect();    
-       }
+}
+
+void ImageEffect_Blur::slotDefault()
+{
+    m_radiusInput->blockSignals(true);
+    m_radiusInput->setValue(0);
+    m_radiusInput->blockSignals(false);
+    slotEffect();    
 } 
 
 void ImageEffect_Blur::slotCancel()
@@ -196,8 +196,8 @@ void ImageEffect_Blur::slotEffect()
     m_currentRenderingMode = PreviewRendering;
 
     m_imagePreviewWidget->setEnable(false);
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    enableButton(Default, false);  
+    enableButton(User1, true);  
     enableButton(Ok,    false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
@@ -221,8 +221,7 @@ void ImageEffect_Blur::slotOk()
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,    false);
     enableButton(User1, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
+    enableButton(Default, false);  
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
     
