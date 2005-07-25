@@ -91,7 +91,7 @@ ImageDialog::ImageDialog(QWidget* parent, QString title, QString name, bool load
  
     // -------------------------------------------------------------
 
-    m_mainLayout = new QGridLayout( plainPage(), 3, 2 , marginHint(), spacingHint());
+    m_mainLayout = new QGridLayout( plainPage(), 2, 1 , marginHint(), spacingHint());
 
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title); 
     m_mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
