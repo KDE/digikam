@@ -177,7 +177,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();                
-        item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
+        item->setPixmap(0, iconLoader->loadIcon("tag-folder", KIcon::NoGroup,
                         32, KIcon::DefaultState, 0, true));                
         tag->setExtraData(this, item);
     }

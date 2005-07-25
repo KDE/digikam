@@ -327,7 +327,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
         if(album->isRoot())
         {
-            item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
+            item->setPixmap(0, iconLoader->loadIcon("folder_image", KIcon::NoGroup,
                                                     32, KIcon::DefaultState,
                                                     0, true));
         }
