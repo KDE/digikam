@@ -69,22 +69,16 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
 #include "adjustcurves.h"
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
 AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                 : KDialogBase(Plain, i18n("Adjust Color Curves"), Help|User1|Ok|Cancel, Ok,
-                               parent, 0, true, true, i18n("&Reset Values"))
+                 : ImageDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", true, true, false)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-        
     // Create an empty instance of curves to use.
     m_curves = new Digikam::ImageCurves();
-
-    setButtonWhatsThis ( User1, i18n("<p>Reset curves' values from the current selected channel.") );
 
     // About data and help button.
 
@@ -100,28 +94,16 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-
+    setAboutData(about);
+    
     // -------------------------------------------------------------
 
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 5, 5, marginHint(), spacingHint());
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Adjust Color Curves")); 
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    // -------------------------------------------------------------
-
-    QFrame *gbox = new QFrame(plainPage());
-    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( gbox, 5, 5, marginHint(), spacingHint());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gbox );
+    m_channelCB = new QComboBox( false, gboxSettings );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -137,9 +119,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or GIF."));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
+    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gbox );
+    m_scaleCB = new QComboBox( false, gboxSettings );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
@@ -154,9 +136,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(label2, 0, 0, 4, 4);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
     
-    QLabel *label5 = new QLabel(i18n("Type:"), gbox);
+    QLabel *label5 = new QLabel(i18n("Type:"), gboxSettings);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_typeCB = new QComboBox( false, gbox );
+    m_typeCB = new QComboBox( false, gboxSettings );
     m_typeCB->insertItem( i18n("Smooth") );
     m_typeCB->insertItem( i18n("Free") );
     m_typeCB->setCurrentText( i18n("Smooth") );
@@ -164,18 +146,18 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                     "<b>Smooth</b>: this mode constrains the curve type to a smooth line with tension.<p>"
                                     "<b>Free</b>: with this mode, you can draw your curve free-hand with the mouse."));
 
-    m_labelPos = new QLabel(gbox);
+    m_labelPos = new QLabel(gboxSettings);
     m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
                                      
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
     grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
     
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
-    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gbox );
+    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
@@ -185,21 +167,13 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     l->addWidget(m_curvesWidget, 0);
     grid->addMultiCellWidget(frame, 2, 2, 1, 5);
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
     
     // -------------------------------------------------------------
-
-    QHBoxLayout *hlayout = new QHBoxLayout(spacingHint());
-    m_loadButton = new QPushButton(i18n("&Load..."), gbox);
-    QWhatsThis::add( m_loadButton, i18n("<p>Load all curve settings from a Gimp curves text file."));
-    m_saveButton = new QPushButton(i18n("&Save As..."), gbox);
-    QWhatsThis::add( m_saveButton, i18n("<p>Save all curve settings to a Gimp curves text file."));
-    m_resetButton = new QPushButton(i18n("&Reset All"), gbox);
-    QWhatsThis::add( m_resetButton, i18n("<p>Reset all channels' curve values."));
     
-    m_pickerColorButtonGroup = new QHButtonGroup(gbox);
+    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings);
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -233,59 +207,38 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
 
-    hlayout->addWidget(m_loadButton);
-    hlayout->addWidget(m_saveButton);
-    hlayout->addWidget(m_resetButton);
-    hlayout->addWidget(m_pickerColorButtonGroup);
-    grid->addMultiCellLayout(hlayout, 4, 4, 1, 5);
+    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    QWhatsThis::add( m_resetButton, i18n("<p>Reset curves' values from the current selected channel."));
+
+    grid->addMultiCellWidget(m_pickerColorButtonGroup, 4, 4, 1, 3);
+    grid->addMultiCellWidget(m_resetButton, 4, 4, 4, 5);
     
     // -------------------------------------------------------------
-    
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+            
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
     grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
-
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    topLayout->setColStretch(1, 10);
-    topLayout->setRowStretch(1, 10);
     
+    setUserAreaWidget(gboxSettings);
+
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
-    
-    QFrame *frame2 = new QFrame(plainPage());
-    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
-                                                            Digikam::ImageGuideWidget::PickColorMode);
+    m_previewOriginalWidget = previewOriginalWidget();
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
                                                    "a color on the image using the color "
                                                    "picker tools to select shadow, middle, and highlight "
                                                    "tones to adjust the curves' points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
-    l2->addWidget(m_previewOriginalWidget);
-
-    QFrame *frame3 = new QFrame(plainPage());
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageWidget(300, 200, frame3);
+    m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
                                                  "curve-adjustments preview."));
-    l3->addWidget(m_previewTargetWidget);
-
-    vLayout->addWidget(frame2);
-    vLayout->addWidget(frame3);
-    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
 
     // -------------------------------------------------------------
     
-    resize(configDialogSize("Curves Tool Dialog"));  
-    
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotResetAllChannels())); 
-    kapp->restoreOverrideCursor();
+    QTimer::singleShot(0, this, SLOT(slotUser1()));
 
     // -------------------------------------------------------------
     
@@ -320,23 +273,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     // Bouttons slots.
 
     connect(m_resetButton, SIGNAL(clicked()),
-            this, SLOT(slotResetAllChannels()));
-
-    connect(m_loadButton, SIGNAL(clicked()),
-            this, SLOT(slotLoadCurves()));
-
-    connect(m_saveButton, SIGNAL(clicked()),
-            this, SLOT(slotSaveCurves()));
+            this, SLOT(slotResetCurrentChannel()));
 }
 
 AdjustCurveDialog::~AdjustCurveDialog()
 {
-    saveDialogSize("Curves Tool Dialog");
-}
-
-void AdjustCurveDialog::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("adjustcurves", "digikamimageplugins");
 }
 
 void AdjustCurveDialog::closeEvent(QCloseEvent *e)
@@ -391,16 +332,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const QColor &color, bool release)
     slotEffect();  
 }
 
-void AdjustCurveDialog::slotResetAllChannels()
-{
-    for (int channel = 0 ; channel < 5 ; channel++)
-       m_curves->curvesChannelReset(channel);
-
-    m_curvesWidget->reset();
-    slotEffect();
-}
-
-void AdjustCurveDialog::slotUser1()
+void AdjustCurveDialog::slotResetCurrentChannel()
 {
     m_curves->curvesChannelReset(m_channelCB->currentItem());
 
@@ -539,7 +471,18 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
     m_curvesWidget->curveTypeChanged();
 }
 
-void AdjustCurveDialog::slotLoadCurves()
+// Reset all settings.
+void AdjustCurveDialog::slotUser1()
+{
+    for (int channel = 0 ; channel < 5 ; channel++)
+       m_curves->curvesChannelReset(channel);
+
+    m_curvesWidget->reset();
+    slotEffect();
+}
+
+// Load all settings.
+void AdjustCurveDialog::slotUser2()
 {
     KURL loadCurvesFile;
 
@@ -560,7 +503,8 @@ void AdjustCurveDialog::slotLoadCurves()
     slotEffect();
 }
 
-void AdjustCurveDialog::slotSaveCurves()
+// Save all settings.
+void AdjustCurveDialog::slotUser3()
 {
     KURL saveCurvesFile;
 

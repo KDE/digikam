@@ -26,9 +26,9 @@
 
 #include <qcolor.h>
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialog.h"
 
 class QComboBox;
 class QPushButton;
@@ -39,7 +39,6 @@ class QCheckBox;
 namespace Digikam
 {
 class ImageCurves;
-class ImageWidget;
 class ImageGuideWidget;
 class ColorGradientWidget;
 class CurvesWidget;
@@ -48,7 +47,7 @@ class CurvesWidget;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public KDialogBase
+class AdjustCurveDialog : public DigikamImagePlugins::ImageDialog
 {
     Q_OBJECT
 
@@ -97,9 +96,6 @@ private:
     
     QLabel                       *m_labelPos;
     
-    QPushButton                  *m_loadButton;
-    QPushButton                  *m_saveButton;
-    QPushButton                  *m_helpButton;
     QPushButton                  *m_resetButton;
     QPushButton                  *m_pickBlack;
     QPushButton                  *m_pickGray;
@@ -115,24 +111,18 @@ private:
     Digikam::ColorGradientWidget *m_vGradient;
             
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageWidget         *m_previewTargetWidget;
+    Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
     Digikam::ImageCurves         *m_curves;
 
-private:
-
-    bool loadCurvesFromFile(KURL fileUrl);
-    bool saveCurvesToFile(KURL fileUrl);
-    
 private slots:
 
     void slotUser1();
+    void slotUser2();
+    void slotUser3();
     void slotEffect();
     void slotOk();
-    void slotHelp();
-    void slotResetAllChannels();
-    void slotLoadCurves();
-    void slotSaveCurves();
+    void slotResetCurrentChannel();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
