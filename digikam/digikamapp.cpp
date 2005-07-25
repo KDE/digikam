@@ -561,6 +561,7 @@ void DigikamApp::setupActions()
     findAction = KStdAction::find(mView, SLOT(slotNewAdvancedSearch()),
                                   actionCollection(), "search_advanced");
     findAction->setText(i18n("Advanced Search"));
+    findAction->setShortcut("Ctrl+Alt+F");
     
     // -----------------------------------------------------------
     
