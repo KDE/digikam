@@ -510,13 +510,14 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     if (src.fileName() == ".digikam_properties")
     {
         // copy metadata of album to destination album
-        m_sqlDB.execSql(QString("UPDATE Albums SET date='%1', caption='%2', "
-                                "collection='%3', icon=%4 WHERE id=%5")
-                        .arg(srcAlbum.date.toString(Qt::ISODate))
-                        .arg(escapeString(srcAlbum.caption))
-                        .arg(escapeString(srcAlbum.collection))
-                        .arg(srcAlbum.icon)
-                        .arg(dstAlbum.id));
+        m_sqlDB.execSql( QString("UPDATE Albums SET date='%1', caption='%2', "
+                                 "collection='%3', icon=%4 ")
+                         .arg(srcAlbum.date.toString(Qt::ISODate),
+                              escapeString(srcAlbum.caption),
+                              escapeString(srcAlbum.collection),
+                              QString::number(srcAlbum.icon)) +
+                         QString( " WHERE id=%5" )
+                         .arg(dstAlbum.id) );
         finished();
         return;
     }
@@ -956,8 +957,8 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
         {
             m_sqlDB.execSql( QString("REPLACE INTO Albums (url, date) "
                                      "VALUES('%1','%2')")
-                             .arg(escapeString(url.path()))
-                             .arg(QDate::currentDate().toString(Qt::ISODate)));
+                             .arg(escapeString(url.path()),
+                                  QDate::currentDate().toString(Qt::ISODate)) );
             
             if ( permissions != -1 )
             {
@@ -1218,8 +1219,8 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
 
         m_sqlDB.execSql(QString("INSERT INTO Albums (url, date) "
                                 "VALUES('%1', '%2')")
-                        .arg(url)
-                        .arg(fi.lastModified().date().toString(Qt::ISODate)));
+                        .arg(escapeString(url),
+                             fi.lastModified().date().toString(Qt::ISODate)));
 
         album.id   = m_sqlDB.lastInsertedRow();
         album.url  = url;
@@ -1243,8 +1244,8 @@ void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL
     // first update the url of the album which was renamed
 
     m_sqlDB.execSql( QString("UPDATE Albums SET url='%1' WHERE url='%2'")
-                     .arg(escapeString(newURL))
-                     .arg(escapeString(oldURL)));
+                     .arg(escapeString(newURL),
+                          escapeString(oldURL)));
 
     // now find the list of all subalbums which need to be updated
     QStringList values;
@@ -1258,8 +1259,8 @@ void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL
         newChildURL = *it;
         newChildURL.replace(oldURL, newURL);
         m_sqlDB.execSql(QString("UPDATE Albums SET url='%1' WHERE url='%2'")
-                        .arg(escapeString(newChildURL))
-                        .arg(escapeString(*it)));
+                        .arg(escapeString(newChildURL),
+                             escapeString(*it)));
     }
 }
 
@@ -1292,10 +1293,10 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
     m_sqlDB.execSql(QString("REPLACE INTO Images "
                             "(dirid, name, datetime, caption) "
                             "VALUES(%1, '%2', '%3', '%4')")
-                    .arg(albumID)
-                    .arg(escapeString(QFileInfo(filePath).fileName()))
-                    .arg(datetime.toString(Qt::ISODate))
-                    .arg(escapeString(comment)));
+                    .arg(QString::number(albumID),
+                         escapeString(QFileInfo(filePath).fileName()),
+                         datetime.toString(Qt::ISODate),
+                         escapeString(comment)));
 }
 
 void kio_digikamalbums::delImage(int albumID, const QString& name)
@@ -1318,10 +1319,10 @@ void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
     // now update the dirid and/or name of the file
     m_sqlDB.execSql( QString("UPDATE Images SET dirid=%1, name='%2' "
                              "WHERE dirid=%3 AND name='%4';")
-                     .arg(newAlbumID)
-                     .arg(escapeString(newName))
-                     .arg(oldAlbumID)
-                     .arg(escapeString(oldName)) );
+                     .arg(QString::number(newAlbumID),
+                          escapeString(newName),
+                          QString::number(oldAlbumID),
+                          escapeString(oldName)) );
 }
 
 void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
@@ -1337,20 +1338,20 @@ void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
     m_sqlDB.execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
                              "SELECT %1, '%2', caption, datetime FROM Images "
                              "WHERE dirid=%3 AND name='%4';")
-                     .arg(dstAlbumID)
-                     .arg(escapeString(dstName))
-                     .arg(srcAlbumID)
-                     .arg(escapeString(srcName)) );
+                     .arg(QString::number(dstAlbumID),
+                          escapeString(dstName),
+                          QString::number(srcAlbumID),
+                          escapeString(srcName)) );
 
     m_sqlDB.execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
                              "SELECT A.id, B.tagid FROM Images AS A, ImageTags AS B "
                              "WHERE A.dirid = %1 AND A.name = '%2' AND"
                              "      B.imageid = (SELECT id FROM Images "
                              "                   WHERE dirid=%3 AND name='%4')")
-                     .arg(dstAlbumID)
-                     .arg(escapeString(dstName))
-                     .arg(srcAlbumID)
-                     .arg(escapeString(srcName)));
+                     .arg(QString::number(dstAlbumID),
+                          escapeString(dstName),
+                          QString::number(srcAlbumID),
+                          escapeString(srcName)) );
 }
 
 void kio_digikamalbums::scanAlbum(const QString& url)
@@ -1417,8 +1418,8 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
             QFileInfo fi(m_libraryPath + *it);
             m_sqlDB.execSql(QString("INSERT INTO Albums (url, date) "
                                     "VALUES('%1', '%2')")
-                            .arg(*it)
-                            .arg(fi.lastModified().date().toString(Qt::ISODate)));
+                            .arg(escapeString(*it),
+                                 fi.lastModified().date().toString(Qt::ISODate)));
 
             scanAlbum(*it);
         }
@@ -1431,7 +1432,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         QStringList values;
 
         m_sqlDB.execSql( QString("SELECT id FROM Albums WHERE url='%1'")
-                         .arg(url), &values );
+                         .arg(escapeString(url)), &values );
         if (values.isEmpty())
             return;
 
