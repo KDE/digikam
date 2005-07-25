@@ -27,9 +27,9 @@
 
 #include <qcolor.h>
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialog.h"
 
 class QPushButton;
 class QLabel;
@@ -49,7 +49,7 @@ class HistogramWidget;
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-class ImageEffect_WhiteBalance : public KDialogBase
+class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageDialog
 {
     Q_OBJECT
 
@@ -119,9 +119,6 @@ private:
     
     uint                         *m_destinationPreviewData;
     
-    QWidget                      *m_parent;
-    
-    QPushButton                  *m_helpButton;
     QPushButton                  *m_pickTemperature;
     QPushButton                  *m_autoAdjustExposure;
     
@@ -163,12 +160,11 @@ private:
     
 private slots:
 
-    void slotHelp();
-    void slotEffect();
-    void slotOk();
     void slotUser1();
     void slotUser2();
     void slotUser3();
+    void slotEffect();
+    void slotOk();
     void slotColorSelectedFromOriginal(const QColor &color, bool release);
     void slotColorSelectedFromTarget(const QColor &color);
     void slotScaleChanged(int scale);

@@ -77,28 +77,17 @@
 
 #include "version.h"
 #include "imageeffect_whitebalance.h"
-#include "bannerwidget.h"
 #include "blackbody.h"
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
-                        : KDialogBase(Plain, i18n("White Color Balance Correction"),
-                                      Help|User1|User2|User3|Ok|Cancel, Ok,
-                                      parent, 0, true, true,
-                                      i18n("&Reset Values"),
-                                      i18n("&Load..."),
-                                      i18n("&Save As...")),
-                          m_parent(parent)
+                        : ImageDialog(parent, i18n("White Color Balance Correction"), "whitebalance",
+                                      true, true, true)
 {
     QString whatsThis;
     
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
-    setButtonWhatsThis ( User2, i18n("<p>Load all parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all parameters to settings text file.") );    
-
     m_originalImageData = imageData;
     m_originalWidth     = width;
     m_originalHeight    = height;
@@ -131,32 +120,18 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
                      "jochym at ifj edu pl");
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
     
     // -------------------------------------------------------------
-
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
-
     
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
-                              i18n("White Color Balance Correction")); 
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
-
-    // -------------------------------------------------------------
-    
-    QFrame *gbox = new QFrame(plainPage());
-    gbox->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* layout2 = new QVBoxLayout( gbox, 20 );
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QVBoxLayout* layout2 = new QVBoxLayout( gboxSettings, marginHint(), spacingHint() );
 
     QGridLayout *grid = new QGridLayout( layout2, 2, 4, spacingHint());
     
-    QLabel *label1 = new QLabel(i18n("Channel:"), gbox);
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gbox );
+    m_channelCB = new QComboBox( false, gboxSettings );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -167,9 +142,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gbox);
+    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gbox );
+    m_scaleCB = new QComboBox( false, gboxSettings );
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     m_scaleCB->setCurrentText( i18n("Logarithmic") );
@@ -184,7 +159,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
         
-    QFrame *frame = new QFrame(gbox);
+    QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
 
@@ -197,7 +172,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     l->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gbox );
+    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
     
@@ -206,43 +181,43 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QGridLayout *grid2 = new QGridLayout( layout2, 7, 5, spacingHint());
     KIconLoader icon;
     
-    m_exposureLabel = new QLabel(i18n("Exposure:"), gbox);
-    m_autoAdjustExposure = new QPushButton(gbox);
+    m_exposureLabel = new QLabel(i18n("Exposure:"), gboxSettings);
+    m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto Exposure adjustments." ) );
     QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
-    m_exposureInput = new KDoubleNumInput(gbox);
+    m_exposureInput = new KDoubleNumInput(gboxSettings);
     m_exposureInput->setPrecision(2);
     m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
     QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
     
-    m_blackLabel = new QLabel(i18n("Black point:"), gbox);
-    m_blackInput = new KDoubleNumInput(gbox);
+    m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
+    m_blackInput = new KDoubleNumInput(gboxSettings);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
     QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
-    m_darkLabel = new QLabel(i18n("Shadows:"), gbox);
-    m_darkInput = new KDoubleNumInput(gbox);
+    m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
+    m_darkInput = new KDoubleNumInput(gboxSettings);
     m_darkInput->setPrecision(2);
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
 
-    m_saturationLabel = new QLabel(i18n("Saturation:"), gbox);
-    m_saturationInput = new KDoubleNumInput(gbox);
+    m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
+    m_saturationInput = new KDoubleNumInput(gboxSettings);
     m_saturationInput->setPrecision(2);
     m_saturationInput->setRange(0.0, 2.0, 0.01, true);
     QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
         
-    m_gammaLabel = new QLabel(i18n("Gamma:"), gbox);
-    m_gammaInput = new KDoubleNumInput(gbox);
+    m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
+    m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.01, 1.5, 0.01, true);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
         
-    m_temperatureLabel = new QLabel(i18n("Temperature:"), gbox);
-    m_temperaturePresetCB = new QComboBox( false, gbox );
+    m_temperatureLabel = new QLabel(i18n("Temperature:"), gboxSettings);
+    m_temperaturePresetCB = new QComboBox( false, gboxSettings );
     m_temperaturePresetCB->insertItem( i18n("40W") );
     m_temperaturePresetCB->insertItem( i18n("200W") );
     m_temperaturePresetCB->insertItem( i18n("Sunrise") );
@@ -258,14 +233,15 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "<b>40W</b>: 40 Watt incandescent lamp (2680K).<p>"
                                                  "<b>200W</b>: 200 Watt incandescent lamp (3000K).<p>"
                                                  "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
-                                                 "<b>Tungsten</b>: tungsten lamp or light at 1 hour from dusk/dawn (3400K).<p>"
+                                                 "<b>Tungsten</b>: tungsten lamp or light at 1 hour from "
+                                                 "dusk/dawn (3400K).<p>"
                                                  "<b>Neutral</b>: neutral color temperature (4750K).<p>"
                                                  "<b>Xenon</b>: xenon lamp or light arc (5000K).<p>"
                                                  "<b>Sun</b>: sunny daylight around noon (5500K).<p>"
                                                  "<b>Flash</b>: electronic photo flash (5600K).<p>"
                                                  "<b>Sky</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
-    m_pickTemperature = new QPushButton(gbox);
+    m_pickTemperature = new QPushButton(gboxSettings);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
     QString directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
@@ -273,18 +249,18 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
     QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original image used to set "
                                              "white color balance temperature and green component."));
-    m_temperatureInput = new KDoubleNumInput(gbox);
+    m_temperatureInput = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
         
-    m_greenLabel = new QLabel(i18n("Green:"), gbox);
-    m_greenInput = new KDoubleNumInput(gbox);
+    m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
+    m_greenInput = new KDoubleNumInput(gboxSettings);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gbox);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
@@ -308,45 +284,23 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 5);
     grid2->addMultiCellWidget(m_overExposureIndicatorBox, 7, 7, 0, 5);
             
-    topLayout->addMultiCellWidget(gbox, 1, 1, 0, 0);
-    topLayout->setColStretch(1, 10);
-    topLayout->setRowStretch(1, 10);
+    setUserAreaWidget(gboxSettings);
             
     // -------------------------------------------------------------
     
-    QVBoxLayout *vLayout = new QVBoxLayout(spacingHint()); 
-   
-    QFrame *frame2 = new QFrame(plainPage());
-    frame2->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l2  = new QVBoxLayout(frame2, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(300, 200, frame2, true, 
-                                                            Digikam::ImageGuideWidget::PickColorMode);
+    m_previewOriginalWidget = previewOriginalWidget();
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
                                                    "color on image to select the tone to adjust image's "
                                                    "white-balance with <b>Color Picker</b> method."));
-    l2->addWidget(m_previewOriginalWidget);
-
-    QFrame *frame3 = new QFrame(plainPage());
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3  = new QVBoxLayout(frame3, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageGuideWidget(300, 200, frame3, true, 
-                                                          Digikam::ImageGuideWidget::PickColorMode);
+    m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance "
                                                  "adjustments preview. You can pick color on image to "
                                                  "see the color level corresponding on histogram."));
-    l3->addWidget(m_previewTargetWidget);
-
-    vLayout->addWidget(frame2);
-    vLayout->addWidget(frame3);
-    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
     
-    resize(configDialogSize("White Balance Tool Dialog"));  
-    
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotUser1()));
-    kapp->restoreOverrideCursor();
 
     // -------------------------------------------------------------
  
@@ -401,7 +355,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 {
-    saveDialogSize("White Balance Tool Dialog");
 }
 
 void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
@@ -413,35 +366,6 @@ void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
        
     delete m_histogramWidget;
     e->accept();
-}
-
-void ImageEffect_WhiteBalance::slotUser1()
-{
-    blockSignals(true);
-
-    // Neutral color temperature settings.
-    m_darkInput->setValue(0.5);
-    m_blackInput->setValue(0.0);
-    m_exposureInput->setValue(0.0);
-    m_gammaInput->setValue(1.0);  
-    m_saturationInput->setValue(1.0);  
-    m_greenInput->setValue(1.2);  
-    m_temperaturePresetCB->setCurrentItem(Neutral);
-    slotTemperaturePresetChanged(Neutral);
-    
-    m_previewOriginalWidget->resetSpotPosition();    
-    m_channelCB->setCurrentItem(LuminosityChannel);
-    slotChannelChanged(LuminosityChannel);
-    
-    m_histogramWidget->reset();
-    
-    blockSignals(false);
-    slotEffect();  
-} 
-
-void ImageEffect_WhiteBalance::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("whitebalance", "digikamimageplugins");
 }
 
 void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
@@ -863,6 +787,44 @@ uchar ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, int value)
     return( (uchar)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 0, MAXOUT) );
 }               
 
+// Reset all settings.
+void ImageEffect_WhiteBalance::slotUser1()
+{
+    m_darkInput->blockSignals(true);
+    m_blackInput->blockSignals(true);
+    m_exposureInput->blockSignals(true);
+    m_gammaInput->blockSignals(true);
+    m_saturationInput->blockSignals(true);  
+    m_greenInput->blockSignals(true);
+    m_temperaturePresetCB->blockSignals(true);
+    
+    // Neutral color temperature settings.
+    m_darkInput->setValue(0.5);
+    m_blackInput->setValue(0.0);
+    m_exposureInput->setValue(0.0);
+    m_gammaInput->setValue(1.0);  
+    m_saturationInput->setValue(1.0);  
+    m_greenInput->setValue(1.2);  
+    m_temperaturePresetCB->setCurrentItem(Neutral);
+    slotTemperaturePresetChanged(Neutral);
+    
+    m_previewOriginalWidget->resetSpotPosition();    
+    m_channelCB->setCurrentItem(LuminosityChannel);
+    slotChannelChanged(LuminosityChannel);
+    
+    m_histogramWidget->reset();
+    
+    m_darkInput->blockSignals(false);
+    m_blackInput->blockSignals(false);
+    m_exposureInput->blockSignals(false);
+    m_gammaInput->blockSignals(false);
+    m_saturationInput->blockSignals(false);  
+    m_greenInput->blockSignals(false);
+    m_temperaturePresetCB->blockSignals(false);
+    slotEffect();  
+} 
+
+// Load all settings.
 void ImageEffect_WhiteBalance::slotUser2()
 {
     KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
@@ -903,6 +865,7 @@ void ImageEffect_WhiteBalance::slotUser2()
     file.close();            
 }
 
+// Save all settings.
 void ImageEffect_WhiteBalance::slotUser3()
 {
     KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
