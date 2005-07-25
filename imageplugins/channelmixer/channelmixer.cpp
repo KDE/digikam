@@ -537,8 +537,11 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
 }
 
 // Reset all gains.
-void ChannelMixerDialog::slotUser1()
+void ChannelMixerDialog::slotDefault()
 {
+    m_monochrome->blockSignals(true);
+    m_preserveLuminosity->blockSignals(true);
+    
     m_redRedGain = 1.0; 
     m_redGreenGain = 0.0; 
     m_redBlueGain = 0.0; 
@@ -554,12 +557,7 @@ void ChannelMixerDialog::slotUser1()
     m_blackRedGain = 1.0; 
     m_blackGreenGain = 0.0; 
     m_blackBlueGain = 0.0; 
-    
-    m_monochrome->blockSignals(true);
-    m_preserveLuminosity->blockSignals(true);
-    
-    m_monochrome->setChecked( false );
-    m_preserveLuminosity->setChecked( false );
+
     adjustSliders();
     
     m_monochrome->blockSignals(false);

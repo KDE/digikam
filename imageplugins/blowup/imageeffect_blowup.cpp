@@ -81,15 +81,15 @@ namespace DigikamBlowUpImagesPlugin
 
 ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                   : KDialogBase(Plain, i18n("Blowup a Photograph"),
-                                Help|User1|User2|User3|Ok|Cancel, Ok,
+                                Help|Default|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
-                                i18n("&Reset Values"),
+                                QString::null,
                                 i18n("&Load..."),
                                 i18n("&Save As...")),
                     m_parent(parent)
 {
     QString whatsThis;
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
     
@@ -276,7 +276,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     
     adjustSize();
     disableResize(); 
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotDefault())); // Reset all parameters to the default values.
     
     // -------------------------------------------------------------
     
@@ -309,7 +309,7 @@ void ImageEffect_BlowUp::slotCheckSettings(void)
     m_detailInput->setMaxValue(m_gradientInput->value());
 }
 
-void ImageEffect_BlowUp::slotUser1()
+void ImageEffect_BlowUp::slotDefault()
 {
     Digikam::ImageIface iface(0, 0);
     m_aspectRatio = (double)iface.originalWidth() / (double)iface.originalHeight();
@@ -403,7 +403,7 @@ void ImageEffect_BlowUp::slotOk()
     m_newHeight->setEnabled(false);
     m_preserveRatioBox->setEnabled(false);
     enableButton(Ok, false);
-    enableButton(User1, false);
+    enableButton(Default, false);
     enableButton(User2, false);
     enableButton(User3, false);
     m_mainTab->setCurrentPage(0);

@@ -72,16 +72,16 @@ namespace DigikamImagePlugins
 
 ImageDialog::ImageDialog(QWidget* parent, QString title, QString name, bool loadFileSettings,
                          bool orgGuideVisible, bool targGuideVisible)
-           : KDialogBase(Plain, title, Help|User1|User2|User3|Ok|Cancel, Ok,
+           : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
                          parent, 0, true, true,
-                         i18n("&Reset Values"),
+                         QString::null,
                          i18n("&Load..."),
                          i18n("&Save As...")),
              m_parent(parent), m_name(name)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );  
     showButton(User2, loadFileSettings);

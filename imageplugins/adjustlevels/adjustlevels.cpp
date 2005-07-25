@@ -606,7 +606,7 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
 }
 
 // Reset all settings.
-void AdjustLevelDialog::slotUser1()
+void AdjustLevelDialog::slotDefault()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
        m_levels->levelsChannelReset(channel);

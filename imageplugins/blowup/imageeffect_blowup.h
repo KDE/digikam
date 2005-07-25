@@ -126,7 +126,7 @@ private slots:
     void slotHelp();
     void slotOk();
     void slotCancel();
-    void slotUser1();
+    void slotDefault();
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);

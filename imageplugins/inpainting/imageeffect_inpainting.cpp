@@ -129,15 +129,15 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
 
 ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                              : KDialogBase(Plain, i18n("Photograph Inpainting"),
-                                           Help|User1|User2|User3|Ok|Cancel, Ok,
+                                           Help|Default|User2|User3|Ok|Cancel, Ok,
                                            parent, 0, true, true,
-                                           i18n("&Reset Values"),
+                                           QString::null,
                                            i18n("&Load..."),
                                            i18n("&Save As...")),
                                m_parent(parent)
 {
     QString whatsThis;
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to the default values.") );
+    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
     
@@ -320,7 +320,8 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     
     adjustSize();
     disableResize(); 
-    QTimer::singleShot(0, this, SLOT(slotUser1())); // Reset all parameters to the default values.
+    // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotDefault())); 
     
     // -------------------------------------------------------------
     
@@ -328,7 +329,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
             this, SLOT(processCImgURL(const QString&)));
     
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
-            this, SLOT(slotUser1()));
+            this, SLOT(slotDefault()));
     
     // details must be < gradient !
     connect(m_detailInput, SIGNAL(valueChanged (double)),
@@ -352,7 +353,7 @@ void ImageEffect_InPainting_Dialog::slotCheckSettings(void)
     m_detailInput->setMaxValue(m_gradientInput->value());
 }
 
-void ImageEffect_InPainting_Dialog::slotUser1()
+void ImageEffect_InPainting_Dialog::slotDefault()
 {
     m_detailInput->blockSignals(true);
     m_gradientInput->blockSignals(true);
@@ -458,7 +459,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_linearInterpolationBox->setEnabled(false);
     m_normalizeBox->setEnabled(false);
     enableButton(Ok, false);
-    enableButton(User1, false);
+    enableButton(Default, false);
     enableButton(User2, false);
     enableButton(User3, false);
     m_mainTab->setCurrentPage(0);

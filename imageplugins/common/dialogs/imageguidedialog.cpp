@@ -62,9 +62,9 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
                                    bool loadFileSettings, bool progress, 
                                    bool guideVisible, int guideMode)
                   : KDialogBase(Plain, title,
-                                Help|User1|User2|User3|Ok|Cancel, Ok,
+                                Help|Default|User1|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
-                                i18n("&Reset Values"),
+                                i18n("&Abort"),
                                 i18n("&Load..."),
                                 i18n("&Save As...")),
                     m_parent(parent), m_name(name)
@@ -74,7 +74,8 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     m_threadedFilter       = 0L;
     QString whatsThis;
         
-    setButtonWhatsThis ( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis ( User1, i18n("<p>Abort the current image rendering.") );
     setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );  
     showButton(User2, loadFileSettings);
@@ -201,12 +202,8 @@ void ImageGuideDialog::writeSettings(void)
 void ImageGuideDialog::slotInit()
 {
     readSettings();
-    // Abort current computation.
-    slotUser1();
-    // Waiting filter thread finished.
-    kapp->processEvents();
     // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotUser1())); 
+    QTimer::singleShot(0, this, SLOT(slotDefault())); 
 }
 
 void ImageGuideDialog::setUserAreaWidget(QWidget *w)
@@ -230,10 +227,10 @@ void ImageGuideDialog::abortPreview()
     m_currentRenderingMode = NoneRendering;
     m_progressBar->setValue(0);
     enableButton(Ok, true);  
+    enableButton(User1, false);
     enableButton(User2, true);
     enableButton(User3, true);  
-    setButtonText(User1, i18n("&Reset Values"));
-    setButtonWhatsThis( User1, i18n("<p>Reset all filter parameters to their default values.") );
+    enableButton(Default, true);  
     renderingFinished();
 }
 
@@ -255,14 +252,13 @@ void ImageGuideDialog::slotResized(void)
 void ImageGuideDialog::slotUser1()
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
        m_threadedFilter->stopComputation();
-       }
-    else
-       {
-       resetValues();
-       slotEffect();    
-       }
+} 
+
+void ImageGuideDialog::slotDefault()
+{
+    resetValues();
+    slotEffect();    
 } 
 
 void ImageGuideDialog::slotCancel()
@@ -313,11 +309,11 @@ void ImageGuideDialog::slotEffect()
     
     m_currentRenderingMode = PreviewRendering;
 
-    setButtonText(User1, i18n("&Abort"));
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     enableButton(Ok,    false);
+    enableButton(User1, true);
     enableButton(User2, false);
     enableButton(User3, false);    
+    enableButton(Default, false);  
     m_progressBar->setValue(0);
     
     if (m_threadedFilter)
@@ -334,6 +330,7 @@ void ImageGuideDialog::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
+    enableButton(Default, false);  
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_progressBar->setValue(0);
     

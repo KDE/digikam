@@ -88,12 +88,13 @@ private:
     
 private slots:
     
+    virtual void slotDefault();
     virtual void slotCancel();
     virtual void slotUser1();
+    virtual void slotInit();
      
     void slotHelp();
     void slotFocusChanged(void);    
-    void slotInit();
     
 protected:
 

@@ -788,7 +788,7 @@ uchar ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, int value)
 }               
 
 // Reset all settings.
-void ImageEffect_WhiteBalance::slotUser1()
+void ImageEffect_WhiteBalance::slotDefault()
 {
     m_darkInput->blockSignals(true);
     m_blackInput->blockSignals(true);

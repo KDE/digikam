@@ -103,6 +103,7 @@ private slots:
     
     virtual void slotCancel();
     virtual void slotUser1();
+    virtual void slotDefault();
     virtual void slotInit();
     
     void slotResized();           

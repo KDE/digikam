@@ -111,7 +111,7 @@ private:
     
 private slots:
 
-    void slotUser1();
+    void slotDefault();
     void slotUser2();
     void slotUser3();
     void slotResetCurrentChannel();

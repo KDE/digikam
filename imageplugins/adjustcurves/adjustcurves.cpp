@@ -472,7 +472,7 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 }
 
 // Reset all settings.
-void AdjustCurveDialog::slotUser1()
+void AdjustCurveDialog::slotDefault()
 {
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curves->curvesChannelReset(channel);
