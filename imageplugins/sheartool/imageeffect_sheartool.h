@@ -28,6 +28,7 @@
 #include "imageguidedialog.h"
 
 class QPushButton;
+class QCheckBox;
 class QLabel;
 
 class KDoubleNumInput;
@@ -46,11 +47,13 @@ public:
 
 private:
 
-    QLabel                    *m_newWidthLabel;
-    QLabel                    *m_newHeightLabel;
+    QLabel          *m_newWidthLabel;
+    QLabel          *m_newHeightLabel;
    
-    KDoubleNumInput           *m_magnitudeX;
-    KDoubleNumInput           *m_magnitudeY;
+    QCheckBox       *m_antialiasInput;
+    
+    KDoubleNumInput *m_magnitudeX;
+    KDoubleNumInput *m_magnitudeY;
     
 protected:
     

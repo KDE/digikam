@@ -85,7 +85,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 7, 2, marginHint(), spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New Width:"), gboxSettings);
     m_newWidthLabel = new QLabel(gboxSettings);
@@ -119,6 +119,12 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     QWhatsThis::add( m_magnitudeY, i18n("<p>The vertical shearing angle, in degrees."));
     gridSettings->addMultiCellWidget(label4, 5, 5, 0, 0);
     gridSettings->addMultiCellWidget(m_magnitudeY, 6, 6, 0, 2);
+    
+    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
+                                            "to the sheared image. "
+                                            "To smooth the target image, it will be blured a little."));
+    gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
             
     setUserAreaWidget(gboxSettings); 
 
@@ -127,6 +133,9 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     connect(m_magnitudeX, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
     
+    connect(m_antialiasInput, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));  
+                        
     connect(m_magnitudeY, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 }
@@ -139,6 +148,7 @@ void ImageEffect_ShearTool::renderingFinished()
 {
     m_magnitudeX->setEnabled(true);
     m_magnitudeY->setEnabled(true);
+    m_antialiasInput->setEnabled(true);    
     kapp->restoreOverrideCursor();
 }
 
@@ -146,10 +156,13 @@ void ImageEffect_ShearTool::resetValues()
 {
     m_magnitudeX->blockSignals(true);
     m_magnitudeY->blockSignals(true);
+    m_antialiasInput->blockSignals(true);
     m_magnitudeX->setValue(0.0);
     m_magnitudeY->setValue(0.0);
+    m_antialiasInput->setChecked(true);
     m_magnitudeX->blockSignals(false);
     m_magnitudeY->blockSignals(false);
+    m_antialiasInput->blockSignals(false);    
 } 
 
 void ImageEffect_ShearTool::prepareEffect()
@@ -157,9 +170,12 @@ void ImageEffect_ShearTool::prepareEffect()
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_magnitudeX->setEnabled(false);
     m_magnitudeY->setEnabled(false);
+    m_antialiasInput->setEnabled(false);
 
-    float hAngle = m_magnitudeX->value();
-    float vAngle = m_magnitudeY->value();
+    float hAngle      = m_magnitudeX->value();
+    float vAngle      = m_magnitudeY->value();
+    bool antialiasing = m_antialiasInput->isChecked();    
+    QColor background = paletteBackgroundColor().rgb();
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgW = iface->originalWidth();
@@ -169,7 +185,7 @@ void ImageEffect_ShearTool::prepareEffect()
     memcpy( image.bits(), data, image.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new ShearTool(&image, this, hAngle, vAngle, false, orgW, orgH));    
+                       new ShearTool(&image, this, hAngle, vAngle, antialiasing, background, orgW, orgH));    
     delete [] data;
 }
 
@@ -177,10 +193,13 @@ void ImageEffect_ShearTool::prepareFinal()
 {
     m_magnitudeX->setEnabled(false);
     m_magnitudeY->setEnabled(false);
+    m_antialiasInput->setEnabled(false);
 
-    float hAngle = m_magnitudeX->value();
-    float vAngle = m_magnitudeY->value();
-        
+    float hAngle      = m_magnitudeX->value();
+    float vAngle      = m_magnitudeY->value();
+    bool antialiasing = m_antialiasInput->isChecked();    
+    QColor background = Qt::black;
+            
     Digikam::ImageIface iface(0, 0);
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
@@ -189,7 +208,7 @@ void ImageEffect_ShearTool::prepareFinal()
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new ShearTool(&orgImage, this, hAngle, vAngle, false, orgW, orgH));    
+                       new ShearTool(&orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
     delete [] data;       
 }
 
@@ -201,6 +220,7 @@ void ImageEffect_ShearTool::putPreviewData(void)
         
     QImage imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QImage::ScaleMin);
     QImage imDest( w, h, 32 );
+    imDest.fill( paletteBackgroundColor().rgb() );
     bitBlt( &imDest, (w-imTemp.width())/2, (h-imTemp.height())/2, 
             &imTemp, 0, 0, imTemp.width(), imTemp.height());
             
@@ -223,63 +243,6 @@ void ImageEffect_ShearTool::putFinalData(void)
                           targetImage.width(), targetImage.height());
 }
 
-/*
-void ImageEffect_ShearTool::slotEffect()
-{
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data   = iface->getPreviewData();
-    int   w      = iface->previewWidth();
-    int   h      = iface->previewHeight();
-    float hAngle = m_magnitudeX->value();
-    float vAngle = m_magnitudeY->value();
-   
-    QImage src, dest;
-    QWMatrix matrix;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-    matrix.shear( tan(DEGREES_TO_RADIANS(hAngle) ), tan(DEGREES_TO_RADIANS(vAngle) ));
-    src = src.xForm(matrix);
-    QSize newSize = matrix.mapRect(QRect::QRect(0, 0, iface->originalWidth(), iface->originalHeight())).size();
-    src = src.smoothScale(w, h, QImage::ScaleMin);
-    dest.create( w, h, 32 );
-    dest.fill(m_previewWidget->colorGroup().background().rgb());
-    bitBlt( &dest, (w-src.width())/2, (h-src.height())/2, &src, 0, 0, src.width(), src.height());
-    iface->putPreviewData((uint*)dest.bits());
-
-    delete [] data;
-    m_previewWidget->update();
-    
-    QString temp;
-    m_newWidthLabel->setText(temp.setNum( newSize.width() ) + i18n(" px") );
-    m_newHeightLabel->setText(temp.setNum( newSize.height() ) + i18n(" px") );
-}
-
-void ImageEffect_ShearTool::slotOk()
-{
-    accept(); 
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-        
-    uint* data   = iface.getOriginalData();
-    int   w      = iface.originalWidth();
-    int   h      = iface.originalHeight();
-    float hAngle = m_magnitudeX->value();
-    float vAngle = m_magnitudeY->value();
-
-    QImage src;
-    QWMatrix matrix;
-    src.create( w, h, 32 );
-    memcpy(src.bits(), data, src.numBytes());
-    matrix.shear( tan(DEGREES_TO_RADIANS(hAngle) ), tan(DEGREES_TO_RADIANS(vAngle) ));
-    src = src.xForm(matrix);
-    Digikam::ImageFilters::gaussianBlurImage((uint*)src.bits(), src.width(), src.height(), 1);
-    iface.putOriginalData(i18n("Shear Tool"), (uint*)src.bits(), src.width(), src.height());
-        
-    delete [] data;
-    kapp->restoreOverrideCursor();
-}
-*/
 }  // NameSpace DigikamShearToolImagesPlugin
 
 #include "imageeffect_sheartool.moc"
