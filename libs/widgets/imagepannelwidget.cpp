@@ -91,10 +91,33 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, bool progr
     setProgressVisible(progress);
     
     m_separateView = new QHButtonGroup(this);
+    
+    QPushButton *duplicateHorButton = new QPushButton( m_separateView );
+    m_separateView->insert(duplicateHorButton, Digikam::ImageRegionWidget::SeparateViewDuplicateHorz);
+    KGlobal::dirs()->addResourceType("duplicateheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("duplicateheight", "duplicateheight.png");
+    duplicateHorButton->setPixmap( QPixmap( directory + "duplicateheight.png" ) );
+    duplicateHorButton->setToggleButton(true);
+    QToolTip::add( duplicateHorButton, i18n( "<p>If you enable this option, you will separe horizontally the "
+                                             "preview area to display original and target image "
+                                             "at the same time. The target is duplicated from the original on "
+                                             "the bottom of the red dashed line." ) );
+    
+    QPushButton *duplicateVerButton = new QPushButton( m_separateView );
+    m_separateView->insert(duplicateVerButton, Digikam::ImageRegionWidget::SeparateViewDuplicateVert);
+    KGlobal::dirs()->addResourceType("duplicatewidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("duplicatewidth", "duplicatewidth.png");
+    duplicateVerButton->setPixmap( QPixmap( directory + "duplicatewidth.png" ) );
+    duplicateVerButton->setToggleButton(true);
+    QToolTip::add( duplicateVerButton, i18n( "<p>If you enable this option, you will separe vertically the "
+                                             "preview area to display original and target image "
+                                             "at the same time. The target is duplicated from the original on "
+                                             "the right of the red dashed line." ) );
+    
     QPushButton *separateHorButton = new QPushButton( m_separateView );
     m_separateView->insert(separateHorButton, Digikam::ImageRegionWidget::SeparateViewHorizontal);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
+    directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
     separateHorButton->setPixmap( QPixmap( directory + "centerheight.png" ) );
     separateHorButton->setToggleButton(true);
     QToolTip::add( separateHorButton, i18n( "<p>If you enable this option, you will separe horizontally the "

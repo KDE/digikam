@@ -46,7 +46,9 @@ public:
     {
     SeparateViewHorizontal=0,
     SeparateViewVertical,
-    SeparateViewNone
+    SeparateViewNone,
+    SeparateViewDuplicateVert,
+    SeparateViewDuplicateHorz
     };
     
 public:
@@ -93,8 +95,9 @@ private:
     
 private:
     
-    void drawContents(QPainter *p, int x, int y, int w, int h);
-    void updatePixmap(QImage *img);
+    void  drawContents(QPainter *p, int x, int y, int w, int h);
+    void  updatePixmap(QImage *img);
+    QRect getTargetImageRegion(void);
     
 public slots:
 
