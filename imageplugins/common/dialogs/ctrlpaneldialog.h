@@ -31,15 +31,13 @@
 
 #include <kdialogbase.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 class QTimer;
 
 class KAboutData;
-
-namespace Digikam
-{
-class ImagePannelWidget;
-class ThreadedFilter;
-}
 
 namespace DigikamImagePlugins
 {
@@ -51,7 +49,8 @@ class CtrlPanelDialog : public KDialogBase
 public:
 
     CtrlPanelDialog(QWidget* parent, QString title, QString name, 
-                    bool loadFileSettings=false, bool tryAction=false);
+                    bool loadFileSettings=false, bool tryAction=false, bool progressBar=true,
+                    int separateViewMode=Digikam::ImagePannelWidget::SeparateViewAll);
     ~CtrlPanelDialog();
 
     void setAboutData(KAboutData *about);

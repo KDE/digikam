@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_HotPixels
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Hot pixel correction plugin for Digikam
+
+X-KDE-Library=digikamimageplugin_hotpixels
+author=Unai Garro, ugarro at sourceforge dot net

@@ -44,10 +44,6 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -58,7 +54,8 @@ namespace DigikamImagePlugins
 {
 
 CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name, 
-                                 bool loadFileSettings, bool tryAction)
+                                 bool loadFileSettings, bool tryAction, bool progressBar,
+                                 int separateViewMode)
                : KDialogBase(Plain, title,
                              Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                              parent, 0, true, true,
@@ -94,7 +91,8 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), true);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), 
+                                        progressBar, separateViewMode);
     hlay1->addWidget(m_imagePreviewWidget);
     
     // -------------------------------------------------------------

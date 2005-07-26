@@ -48,7 +48,17 @@ Q_OBJECT
 
 public:
 
-    ImagePannelWidget(uint w, uint h, QWidget *parent=0, bool progress=false);
+    enum SeparateViewOptions 
+    {
+    SeparateViewNormal=0,
+    SeparateViewDuplicate,
+    SeparateViewAll
+    };
+    
+public:
+
+    ImagePannelWidget(uint w, uint h, QWidget *parent=0, bool progress=false, 
+                      int separateViewMode=SeparateViewAll);
     ~ImagePannelWidget();
     
     QRect  getOriginalImageRegion(void);
