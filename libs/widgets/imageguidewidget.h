@@ -80,9 +80,9 @@ protected:
     void paintEvent( QPaintEvent *e );
     void resizeEvent( QResizeEvent * e );
     void timerEvent(QTimerEvent * e);
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void mousePressEvent( QMouseEvent * e );
+    void mouseReleaseEvent( QMouseEvent * e );
+    void mouseMoveEvent( QMouseEvent * e );
         
 private:
 
@@ -108,6 +108,10 @@ private:
     QPixmap             *m_pixmap;
     
     Digikam::ImageIface *m_iface;    
+
+private:
+
+    void updatePixmap( void );
 };
 
 }  // NameSpace Digikam

@@ -92,6 +92,7 @@ void ImageGuideWidget::resetSpotPosition(void)
 {
     m_spot.setX( m_w / 2 );
     m_spot.setY( m_h / 2 );
+    updatePixmap();
     repaint(false);
 }
 
@@ -123,22 +124,25 @@ QColor ImageGuideWidget::getSpotColor(void)
 void ImageGuideWidget::setSpotVisible(bool spotVisible)
 {
     m_spotVisible = spotVisible;
+    updatePixmap();
     repaint(false);
 }
 
 void ImageGuideWidget::slotChangeGuideColor(const QColor &color)
 {
     m_guideColor = color;
+    updatePixmap();
     repaint(false);
 }
 
 void ImageGuideWidget::slotChangeGuideSize(int size)
 {
     m_guideSize = size;
+    updatePixmap();
     repaint(false);
 }
 
-void ImageGuideWidget::paintEvent( QPaintEvent * )
+void ImageGuideWidget::updatePixmap( void )
 {
     m_pixmap->fill(colorGroup().background());
     m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
@@ -176,7 +180,10 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
              }
           }
        }
-    
+}    
+
+void ImageGuideWidget::paintEvent( QPaintEvent * )
+{
     bitBlt(this, 0, 0, m_pixmap);
 }
 
@@ -186,6 +193,7 @@ void ImageGuideWidget::timerEvent(QTimerEvent * e)
         {
         if (m_flicker == 5) m_flicker=0;
         else m_flicker++;
+        updatePixmap();
         repaint(false);
         }
     else
@@ -214,18 +222,19 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
 void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( !m_focus && e->button() == Qt::LeftButton &&
-         m_rect.contains( e->x(), e->y() ) )
+         m_rect.contains( e->x(), e->y() ) && m_spotVisible )
        {
        m_focus = true;
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());;
+       updatePixmap();
        repaint(false);
        }
 }
 
 void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) && m_focus ) 
+    if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible) 
        {    
        m_focus = false;
        m_spot.setX(e->x()-m_rect.x());
@@ -242,14 +251,15 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 
 void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) && !m_focus )
+    if ( m_rect.contains( e->x(), e->y() ) && !m_focus && m_spotVisible )
         {
         setCursor( KCursor::crossCursor() );
         }
-    else if ( m_rect.contains( e->x(), e->y() ) && m_focus )
+    else if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible )
         {
         m_spot.setX(e->x()-m_rect.x());
         m_spot.setY(e->y()-m_rect.y());
+        updatePixmap();
         repaint(false);
         }
     else
