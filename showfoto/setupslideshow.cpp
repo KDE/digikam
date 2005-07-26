@@ -45,8 +45,8 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
 
    m_delayInput = new KIntNumInput(5, parent);
    m_delayInput->setRange(1, 3600, 1, true );
-   m_delayInput->setLabel( i18n("&Delay between image:"), AlignLeft|AlignVCenter );
-   QWhatsThis::add( m_delayInput, i18n("<p>The delay in seconds between image."));
+   m_delayInput->setLabel( i18n("&Delay between images:"), AlignLeft|AlignVCenter );
+   QWhatsThis::add( m_delayInput, i18n("<p>The delay in seconds between images."));
    
    m_startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
    QWhatsThis::add( m_startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
