@@ -163,7 +163,8 @@ void CtrlPanelDialog::slotTry()
 void CtrlPanelDialog::slotUser1()
 {
     if (m_currentRenderingMode != NoneRendering)
-       m_threadedFilter->stopComputation();
+        if (m_threadedFilter)
+           m_threadedFilter->stopComputation();
 } 
 
 void CtrlPanelDialog::slotDefault()
@@ -176,7 +177,9 @@ void CtrlPanelDialog::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
+          
        kapp->restoreOverrideCursor();
        }
        
@@ -187,7 +190,9 @@ void CtrlPanelDialog::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
+       
        kapp->restoreOverrideCursor();
        }
        
@@ -203,7 +208,8 @@ void CtrlPanelDialog::slotFocusChanged(void)
        }
     else if (m_currentRenderingMode == PreviewRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
        }
        
     QTimer::singleShot(0, this, SLOT(slotEffect()));        

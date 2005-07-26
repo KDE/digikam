@@ -243,7 +243,8 @@ void ImageGuideDialog::slotResized(void)
        }
     else if (m_currentRenderingMode == PreviewRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
        }
        
     QTimer::singleShot(0, this, SLOT(slotEffect()));        
@@ -252,7 +253,8 @@ void ImageGuideDialog::slotResized(void)
 void ImageGuideDialog::slotUser1()
 {
     if (m_currentRenderingMode != NoneRendering)
-       m_threadedFilter->stopComputation();
+        if (m_threadedFilter)
+            m_threadedFilter->stopComputation();
 } 
 
 void ImageGuideDialog::slotDefault()
@@ -265,7 +267,9 @@ void ImageGuideDialog::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
+       
        kapp->restoreOverrideCursor();
        }
        
@@ -276,7 +280,9 @@ void ImageGuideDialog::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
-       m_threadedFilter->stopComputation();
+       if (m_threadedFilter)
+          m_threadedFilter->stopComputation();
+       
        kapp->restoreOverrideCursor();
        }
        
