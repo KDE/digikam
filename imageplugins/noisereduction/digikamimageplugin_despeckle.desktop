@@ -14,6 +14,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
 Comment[et]=DigiKami müra vähendamise plugin
+Comment[nl]=digiKam-plugin voor ruisreductie
 Comment[pt]='Plugin' de redução de ruído para o digiKam
 Comment[pt_BR]='Plugin' de redução de ruído para o digiKam
 
