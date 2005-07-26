@@ -57,7 +57,7 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
                                  bool loadFileSettings, bool tryAction, bool progressBar,
                                  int separateViewMode)
                : KDialogBase(Plain, title,
-                             Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
+                             Help|Default|Apply|User1|User2|User3|Try|Ok|Cancel, Ok,
                              parent, 0, true, true,
                              i18n("&Abort"),
                              i18n("&Load..."),
@@ -76,6 +76,7 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
+    showButton(Apply, false);
             
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));  
         

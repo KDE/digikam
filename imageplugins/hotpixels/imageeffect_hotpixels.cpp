@@ -26,16 +26,17 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kimageio.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kfiledialog.h>
 
 // Digikam includes.
 
@@ -46,7 +47,7 @@
 #include "version.h"
 #include "imageeffect_hotpixels.h"
 #include "hotpixelviewwidget.h"
-#include "blackframesetupdialog.h"
+#include "blackframelistview.h"
 #include "blackframeparser.h"
 
 //Temporally added includes. Please remove
@@ -60,13 +61,20 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                      false, false, false, 
                                      Digikam::ImagePannelWidget::SeparateViewDuplicate)
 {
+    // No need Abort button action.
+    showButton(User1, false); 
+    
+    showButton(Apply, true);
+    setButtonText( Apply, i18n("Add Black Frame..."));
+    setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file witch will "
+                                    "be used by the hot pixels removal filter.") );  
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Hot Pixels Correction"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
-                                                 " hot/stuck/dead pixels from a CCD."),
+                                                 "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Unai Garro", 
                                        0,
@@ -95,14 +103,15 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     m_filterMethodCombo->insertItem(i18n("Cubic"));
     
     gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 2);
         
     //TODO: load the default setting from kconfig
     
-    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);
-    QWhatsThis::add( m_blackFrameButton, i18n("<p>Setup the black frame to use with hot "
-                                              "pixels removal filter."));    
-    gridSettings->addMultiCellWidget(m_blackFrameButton, 1, 1, 0, 0);
+    m_blackFrameListView = new BlackFrameListView(gboxSettings);
+    m_blackFrameListView->addColumn(i18n("Preview"));
+    m_blackFrameListView->addColumn(i18n("Size"));
+    m_blackFrameListView->addColumn(i18n("Enabled"));
+    gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
@@ -114,14 +123,11 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     // -------------------------------------------------------------
     // Main window's signal & slots
     
-    connect(m_blackFrameButton, SIGNAL(clicked()), 
-            this, SLOT(setupBlackFrames()));
-    
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
                           
     connect(m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
-            this, SLOT(blackFrameParsed(QValueList<HotPixel>)));             
+            this, SLOT(blackFrameParsed(QValueList<HotPixel>))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -129,16 +135,27 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
     delete m_parser;
 }
 
-void ImageEffect_HotPixels::setupBlackFrames(void)
+// Select Black frame file.
+void ImageEffect_HotPixels::slotApply()
 {
-    BlackFrameSetupDialog* dialog = new BlackFrameSetupDialog(this);
-    dialog->exec();    
+    //Does one need to do this if digikam did so already?
+    KImageIO::registerFormats(); 
+    
+    KFileDialog *fileSelectDialog = new KFileDialog(QString::null, KImageIO::pattern(), this, "", true);
+    fileSelectDialog->setCaption(i18n("Select a black frame image"));
+    fileSelectDialog->exec();
+    
+    //Load the selected file and insert into the list
+    
+    KURL url = fileSelectDialog->selectedURL();
+    new BlackFrameListViewItem(m_blackFrameListView, url);
+    delete fileSelectDialog;
 }
 
 void ImageEffect_HotPixels::renderingFinished(void)
 {
     m_filterMethodCombo->setEnabled(true);
-    m_blackFrameButton->setEnabled(true);
+    enableButton(Apply, true);     
 }
 
 void ImageEffect_HotPixels::resetValues(void)
@@ -151,7 +168,7 @@ void ImageEffect_HotPixels::resetValues(void)
 void ImageEffect_HotPixels::prepareEffect()
 {
     m_filterMethodCombo->setEnabled(false);
-    m_blackFrameButton->setEnabled(false);
+    enableButton(Apply, false);     
 
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     
@@ -190,7 +207,7 @@ void ImageEffect_HotPixels::prepareEffect()
 void ImageEffect_HotPixels::prepareFinal()
 {
     m_filterMethodCombo->setEnabled(false);
-    m_blackFrameButton->setEnabled(false);
+    enableButton(Apply, false);     
     
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);

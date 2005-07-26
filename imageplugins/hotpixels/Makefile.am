@@ -8,8 +8,8 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_hotpixels.la 
 
 digikamimageplugin_hotpixels_la_SOURCES = multiviewwidget.cpp hotpixelviewwidget.cpp blackframeparser.cpp \
-					  weights.cpp hotpixelfixer.cpp imageplugin_hotpixels.cpp imageeffect_hotpixels.cpp \
-					  blackframesetupdialog.cpp blackframelistview.h blackframelistview.cpp
+					  weights.cpp hotpixelfixer.cpp imageplugin_hotpixels.cpp \
+					  blackframelistview.h blackframelistview.cpp imageeffect_hotpixels.cpp 
 
 digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
