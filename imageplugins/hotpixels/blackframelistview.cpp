@@ -33,6 +33,16 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
+BlackFrameListView::BlackFrameListView(QWidget* parent)
+                  : KListView(parent)
+{
+    addColumn(i18n("Preview"));
+    addColumn(i18n("Size"));
+    addColumn(i18n("Enabled"));
+};
+
+///////////////////////////////////////////////////////////////
+
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
                       : QObject(parent), KListViewItem(parent)
 {
@@ -80,10 +90,6 @@ void BlackFrameListViewItem::paintCell(QPainter* p,const QColorGroup& cg,int col
 {
     //Let the normal listview item draw it all for now
     QListViewItem::paintCell(p, cg, column, width, align);
-}
-
-BlackFrameListView::BlackFrameListView(QWidget* parent):KListView(parent)
-{
 }
 
 void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)

@@ -34,6 +34,7 @@
 
 #include <klistview.h>
 #include <kurl.h>
+#include <klocale.h>
 
 // Local includes.
 

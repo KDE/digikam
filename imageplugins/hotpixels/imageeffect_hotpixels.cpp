@@ -104,9 +104,6 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     //TODO: load the default setting from kconfig
     
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
-    m_blackFrameListView->addColumn(i18n("Preview"));
-    m_blackFrameListView->addColumn(i18n("Size"));
-    m_blackFrameListView->addColumn(i18n("Enabled"));
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
