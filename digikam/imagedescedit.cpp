@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <kfilemetainfo.h>
 #include <klineedit.h>
+#include <kdatetimewidget.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -110,13 +111,19 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     thumbBoxLayout->addWidget(m_nameLabel, 0, Qt::AlignCenter);
     topLayout->addWidget(thumbBox, 0, 0);
 
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date and Time"), plainPage());
+    m_dateTimeEdit = new KDateTimeWidget( dateTimeBox,"datepicker");
+    topLayout->addWidget(dateTimeBox, 1, 0);
+    
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
     m_commentsEdit = new KTextEdit(commentsBox);
     m_commentsEdit->setTextFormat(QTextEdit::PlainText);
     m_commentsEdit->setCheckSpellingEnabled(true);
-    topLayout->addWidget(commentsBox, 1, 0);
+    topLayout->addWidget(commentsBox, 2, 0);
 
     connect(m_commentsEdit, SIGNAL(textChanged()),
+            SLOT(slotModified()));
+    connect(m_dateTimeEdit, SIGNAL(valueChanged()),
             SLOT(slotModified()));
 
     
@@ -147,7 +154,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     tagsBoxLayout->addWidget(m_recentTagsBtn);
 
-    topLayout->addMultiCellWidget(tagsBox, 0, 1, 1, 1);
+    topLayout->addMultiCellWidget(tagsBox, 0, 2, 1, 1);
 
     m_tagsView->addColumn(i18n( "Tags" ));
     m_tagsView->header()->hide();
@@ -174,6 +181,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     resize(configDialogSize("Image Description Dialog"));
 
     m_commentsEdit->installEventFilter(this);
+    m_dateTimeEdit->installEventFilter(this);
     m_tagsView->installEventFilter(this);
 
     m_commentsEdit->setFocus();
@@ -330,6 +338,7 @@ void ImageDescEdit::slotApply()
     if (m_modified)
     {
         info->setCaption(m_commentsEdit->text());
+        info->setDateTime(m_dateTimeEdit->dateTime());
 
         if (AlbumSettings::instance() &&
             AlbumSettings::instance()->getSaveExifComments())
@@ -415,6 +424,7 @@ void ImageDescEdit::slotItemChanged()
     m_nameLabel->setText(info->name());
     m_thumbLabel->setPixmap(QPixmap());
     m_commentsEdit->setText(info->caption());
+    m_dateTimeEdit->setDateTime(info->dateTime());
 
     QValueList<int> tagIDs = info->tagIDs();
 

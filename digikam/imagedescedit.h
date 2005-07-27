@@ -40,6 +40,7 @@ class QToolButton;
 
 class KTextEdit;
 class KLineEdit;
+class KDateTimeWidget;
 
 class AlbumIconView;
 class AlbumIconItem;
@@ -74,6 +75,7 @@ private:
     QPushButton   *m_recentTagsBtn;
     KLineEdit     *m_tagsSearchEdit;
     QToolButton   *m_tagsSearchClearBtn;
+    KDateTimeWidget *m_dateTimeEdit;
     bool           m_modified;
 
     void tagNew(TAlbum* parAlbum);
