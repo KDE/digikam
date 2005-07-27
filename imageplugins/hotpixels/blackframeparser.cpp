@@ -220,5 +220,4 @@ void BlackFrameParser::validateAndConsolidate (HotPixel *a, HotPixel *b)
     a->luminosity = MAX (a->luminosity, b->luminosity);
 }
 
-
 #include "blackframeparser.moc"

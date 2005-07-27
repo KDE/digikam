@@ -1,11 +1,12 @@
 /* ============================================================
 * File  : imageeffect_hotpixels.h
 * Author: Unai Garro <ugarro at users dot sourceforge dot net>
+*         Gilles Caulier <caulier dot gilles at free dot fr>
 * Date  : 2005-03-27
 * Description : a digiKam image plugin for fixing dots produced by
 *               hot/stuck/dead pixels from a CCD
 * 
-* Copyright 2005 by Unai Garro
+* Copyright 2005 by Unai Garro and Gilles Caulier
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -36,7 +37,6 @@
 
 class QComboBox;
 
-class BlackFrameParser;
 class BlackFrameListView;
 
 namespace DigikamHotPixelsImagesPlugin
@@ -59,8 +59,6 @@ private:
     
     BlackFrameListView   *m_blackFrameListView;
     
-    BlackFrameParser     *m_parser;
-
 protected:
     
     void prepareEffect(void);
@@ -73,7 +71,7 @@ protected:
     
 private slots:
         
-    void blackFrameParsed(QValueList<HotPixel> hpList);
+    void slotBlackFrame(QValueList<HotPixel> hpList);
     void slotApply();
 };
 

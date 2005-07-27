@@ -7,8 +7,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_hotpixels.la 
 
-digikamimageplugin_hotpixels_la_SOURCES = multiviewwidget.cpp hotpixelviewwidget.cpp blackframeparser.cpp \
-					  weights.cpp hotpixelfixer.cpp imageplugin_hotpixels.cpp \
+digikamimageplugin_hotpixels_la_SOURCES = blackframeparser.cpp weights.cpp hotpixelfixer.cpp imageplugin_hotpixels.cpp \
 					  blackframelistview.h blackframelistview.cpp imageeffect_hotpixels.cpp 
 
 digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \

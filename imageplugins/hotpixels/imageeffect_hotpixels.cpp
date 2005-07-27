@@ -1,12 +1,12 @@
 /* ============================================================
 * File  : imageeffect_hotpixels.cpp
 * Author: Unai Garro <ugarro at users dot sourceforge dot net>
+*         Gilles Caulier <caulier dot gilles at free dot fr>
 * Date  : 2005-03-27
-* Description :  a digiKam image plugin for fixing dots produced by
-*           hot/stuck/dead pixels from a CCD
+* Description : a digiKam image plugin for fixing dots produced by
+*               hot/stuck/dead pixels from a CCD.
 *
-* Copyright 2005 by Unai Garro
-*
+* Copyright 2005 by Unai Garro and Gilles Caulier
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -48,10 +48,6 @@
 #include "imageeffect_hotpixels.h"
 #include "hotpixelviewwidget.h"
 #include "blackframelistview.h"
-#include "blackframeparser.h"
-
-//Temporally added includes. Please remove
-#include <iostream>
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -116,23 +112,17 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
     // -------------------------------------------------------------
-    // Black frames parser instance.
-
-    m_parser = new BlackFrameParser;
-    
-    // -------------------------------------------------------------
     // Main window's signal & slots
     
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
                           
-    connect(m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
-            this, SLOT(blackFrameParsed(QValueList<HotPixel>))); 
+    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>)),
+            this, SLOT(slotBlackFrame(QValueList<HotPixel>))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
 {
-    delete m_parser;
 }
 
 // Select Black frame file.
@@ -247,7 +237,7 @@ void ImageEffect_HotPixels::putFinalData(void)
                         (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_HotPixels::blackFrameParsed(QValueList<HotPixel> hpList)
+void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList)
 {
     m_hotPixelsList = hpList;
     slotEffect();
