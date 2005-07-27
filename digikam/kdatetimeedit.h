@@ -39,43 +39,47 @@ class KDateTimeEdit : public QHBox
 {
     Q_OBJECT
 
-    public:
-     /**
-      * constructor
-      * @param parent the parent widget
-      * @param name the name of the widget
-      */
-      KDateTimeEdit(QWidget *parent, const char *name);
-
-      /**
-       * destructor
-       */
-      ~KDateTimeEdit();
-
-      /**
-       * returns the date and time
-       * @return a QDateTime with the currently choosen date and time
-       */
-      QDateTime dateTime();
-
-      /**
-       * Sets the date and the time of this widget.
-       */
-      void setDateTime(const QDateTime dateTime);
-
-    signals:
+public:
+ 
     /**
-        This signal is emitted whenever the user modifies the date or time.
-        The passed date and time can be invalid.
+     * constructor
+     * @param parent the parent widget
+     * @param name the name of the widget
      */
-      void dateTimeChanged( const QDateTime &dateTime );
+    KDateTimeEdit(QWidget *parent, const char *name);
 
-    private:
-      KDateEdit* m_datePopUp;
-      QTimeEdit* m_timePopUp;
+     /**
+      * destructor
+      */
+     ~KDateTimeEdit();
 
-    private slots:
-      void slotDateTimeChanged();
+     /**
+      * returns the date and time
+      * @return a QDateTime with the currently choosen date and time
+      */
+     QDateTime dateTime();
+
+     /**
+      * Sets the date and the time of this widget.
+      */
+     void setDateTime(const QDateTime dateTime);
+
+signals:
+
+    /**
+     *  This signal is emitted whenever the user modifies the date or time.
+     *  The passed date and time can be invalid.
+     */
+    void dateTimeChanged( const QDateTime &dateTime );
+
+private:
+
+    KDateEdit* m_datePopUp;
+    QTimeEdit* m_timePopUp;
+
+private slots:
+
+    void slotDateTimeChanged();
 };
 
 #endif
