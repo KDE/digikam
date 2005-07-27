@@ -147,13 +147,13 @@ void ImagePanIconWidget::updatePixmap( void )
    
     // Drawing HighLighted points.
     
-    if (!hightlightPoints.isEmpty())
+    if (!m_hightlightPoints.isEmpty())
        {
        QPoint pt;
        
-       for (uint i = 0 ; i < hightlightPoints.count() ; i++)
+       for (uint i = 0 ; i < m_hightlightPoints.count() ; i++)
           {
-          pt = hightlightPoints.point(i);
+          pt = m_hightlightPoints.point(i);
           pt.setX((int)(pt.x() * (float)(m_w)/(float)m_iface->originalWidth()));
           pt.setY((int)(pt.y() * (float)(m_h)/(float)m_iface->originalHeight()));
           p.setPen(QPen(Qt::black, 1, Qt::SolidLine));

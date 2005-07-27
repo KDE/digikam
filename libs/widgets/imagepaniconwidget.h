@@ -49,7 +49,7 @@ public:
         
     void  setHighLightPoints(QPointArray pointsList)
        {
-       hightlightPoints = pointsList;
+       m_hightlightPoints = pointsList;
        updatePixmap();
        repaint(false);
        };
@@ -93,7 +93,7 @@ private:
     
     QPixmap     *m_pixmap;
     
-    QPointArray  hightlightPoints;
+    QPointArray  m_hightlightPoints;
     
     ImageIface  *m_iface;
         

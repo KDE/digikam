@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
 #include "digikam_export.h"
 
@@ -78,9 +79,13 @@ public:
 
     void   setUserAreaWidget(QWidget *w, bool separator=true);
     
-    void   setPanIconHighLightPoints(QPointArray pt) { m_imagePanIconWidget->setHighLightPoints(pt); };
+    void   setPanIconHighLightPoints(QPointArray pt) 
+       {
+       m_imageRegionWidget->setHighLightPoints(pt); 
+       m_imagePanIconWidget->setHighLightPoints(pt); 
+       };
     
-    KProgress *progressBar(void)                     { return m_progressBar; };
+    KProgress *progressBar(void) { return m_progressBar; };
            
 public slots:
 

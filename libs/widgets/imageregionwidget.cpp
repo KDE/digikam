@@ -180,6 +180,8 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
     
     if (!m_movingInProgress)
         {
+        // Drawing separate view.
+        
         switch (m_separateView)
             {
             case SeparateViewVertical:
@@ -217,8 +219,10 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewDuplicateHorz:
                 {
                 p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                p->drawLine(getTargetImageRegion().topLeft().x(),  getTargetImageRegion().topLeft().y(),
-                            getTargetImageRegion().topRight().x(), getTargetImageRegion().topRight().y());
+                p->drawLine(getTargetImageRegion().topLeft().x(),
+                            getTargetImageRegion().topLeft().y(),
+                            getTargetImageRegion().topRight().x(),
+                            getTargetImageRegion().topRight().y());
                             
                 p->setPen(QPen::QPen(Qt::red, 1)) ;                    
                 QFontMetrics fontMt = p->fontMetrics();
@@ -241,6 +245,37 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                 p->drawRect(textRect);
                 p->drawText(textRect, Qt::AlignCenter, text);
                 break;
+                }
+            }   
+        
+        // Drawing HighLighted points.
+        
+        if (!m_hightlightPoints.isEmpty())
+            {
+            QPoint pt;
+            QRect  ptArea;
+            
+            for (uint i = 0 ; i < m_hightlightPoints.count() ; i++)
+                {
+                pt = m_hightlightPoints.point(i);
+                
+                if ( getImageRegionToRender().contains(pt) )
+                    {
+                    p->setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                    ptArea.setSize(QSize::QSize(12, 12));
+                    ptArea.moveCenter(pt);
+                    p->drawEllipse(ptArea);
+                    ptArea.setSize(QSize::QSize(8, 8));
+                    ptArea.moveCenter(pt);
+                    p->drawEllipse(ptArea);
+                    p->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    ptArea.setSize(QSize::QSize(10, 10));
+                    ptArea.moveCenter(pt);
+                    p->drawEllipse(ptArea);
+                    ptArea.setSize(QSize::QSize(6, 6));
+                    ptArea.moveCenter(pt);
+                    p->drawEllipse(ptArea);
+                    }
                 }
             }
         }

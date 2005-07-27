@@ -26,6 +26,7 @@
 #include <qscrollview.h>
 #include <qimage.h>
 #include <qrect.h>
+#include <qpointarray.h>
 
 // Local includes
 
@@ -67,6 +68,12 @@ public:
 
     void   backupPixmapRegion(void);
     void   restorePixmapRegion(void);
+    
+    void   setHighLightPoints(QPointArray pointsList)
+       {
+       m_hightlightPoints = pointsList;
+       repaintContents(false);    
+       };
              
 signals:
     
@@ -82,16 +89,18 @@ protected:
 
 private:
     
-    bool     m_movingInProgress;
+    bool         m_movingInProgress;
 
-    int      m_separateView;
-    int      m_xpos;
-    int      m_ypos;
+    int          m_separateView;
+    int          m_xpos;
+    int          m_ypos;
 
-    QPixmap *m_pix;                // Entire content widget pixmap.
-    QPixmap *m_pixRegion;          // Pixmap of current region to render.
+    QPixmap     *m_pix;                // Entire content widget pixmap.
+    QPixmap     *m_pixRegion;          // Pixmap of current region to render.
     
-    QImage   m_img;                // Entire content image.
+    QPointArray  m_hightlightPoints;    
+    
+    QImage       m_img;                // Entire content image.
     
 private:
     
