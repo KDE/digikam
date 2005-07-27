@@ -33,13 +33,18 @@
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
                       : QObject(parent), KListViewItem(parent)
 {
-    mParser.parseBlackFrame(url);
+    m_parser.parseBlackFrame(url);
     
-    connect(&mParser, SIGNAL(parsed(QValueList<HotPixel>)),
+    connect(&m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
             this, SLOT(slotParsed(QValueList<HotPixel>)));
     
     connect(this, SIGNAL(parsed(QValueList<HotPixel>)),
             parent, SLOT(slotParsed(QValueList<HotPixel>)));
+}
+
+void BlackFrameListViewItem::activate()
+{
+    emit parsed(m_hotPixels);
 }
 
 QString BlackFrameListViewItem::text(int column)const
@@ -54,7 +59,7 @@ QString BlackFrameListViewItem::text(int column)const
             }
         case 1:
             {
-            return (QString("%1x%2").arg(mImageSize.width()).arg(mImageSize.height())); 
+            return (QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height())); 
             break;
             }
         case 2:
@@ -80,12 +85,12 @@ BlackFrameListView::BlackFrameListView(QWidget* parent):KListView(parent)
 
 void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
 {
-    mHotPixels = hotPixels;
-    mImage     = mParser.image();
-    mImageSize = mImage.size();
-    mThumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2));
-    setPixmap(0, mThumb);
-    emit parsed(mHotPixels);
+    m_hotPixels = hotPixels;
+    m_image     = m_parser.image();
+    m_imageSize = m_image.size();
+    m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2));
+    setPixmap(0, m_thumb);
+    emit parsed(m_hotPixels);
 }
 
 QPixmap BlackFrameListViewItem::thumb(QSize size)
@@ -93,7 +98,7 @@ QPixmap BlackFrameListViewItem::thumb(QSize size)
     QPixmap thumb;
     
     //First scale it down to the size
-    thumb= mImage.smoothScale(size,QImage::ScaleMin);
+    thumb= m_image.smoothScale(size,QImage::ScaleMin);
     
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);
@@ -103,13 +108,13 @@ QPixmap BlackFrameListViewItem::thumb(QSize size)
     float hpThumbX,hpThumbY;
     QRect hpRect;
     
-    xRatio=(float)size.width()/(float)mImage.width();
-    yRatio=(float)size.height()/(float)mImage.height();
+    xRatio=(float)size.width()/(float)m_image.width();
+    yRatio=(float)size.height()/(float)m_image.height();
     
         //Draw hot pixels one by one
     QValueList <HotPixel>::Iterator it;    
     
-    for (it=mHotPixels.begin() ; it!=mHotPixels.end() ; ++it)
+    for (it=m_hotPixels.begin() ; it!=m_hotPixels.end() ; ++it)
         {
         hpRect=(*it).rect;
         hpThumbX=(hpRect.x()+hpRect.width()/2)*xRatio;

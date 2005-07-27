@@ -62,11 +62,11 @@ signals:
 private:
 
     // Data contained within each listview item
-    QImage                mThumb;
-    QImage                mImage;
-    QSize                 mImageSize;
-    QValueList <HotPixel> mHotPixels;
-    BlackFrameParser      mParser;
+    QImage                m_thumb;
+    QImage                m_image;
+    QSize                 m_imageSize;
+    QValueList <HotPixel> m_hotPixels;
+    BlackFrameParser      m_parser;
 
 private:    
         
@@ -76,6 +76,10 @@ private:
 private slots:
 
     void slotParsed(QValueList<HotPixel>);        
+
+protected:
+
+    void activate();
 };
 
 /////////////////////////////////////////////////////////////////
