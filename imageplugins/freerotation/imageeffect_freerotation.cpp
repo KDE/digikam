@@ -59,6 +59,9 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                         : ImageGuideDialog(parent, i18n("Free Rotation"), 
                                            "freerotation", false, false, true)
 {
+    // No need Abort button action.
+    showButton(User1, false); 
+    
     QString whatsThis;
     
     KAboutData* about = new KAboutData("digikamimageplugins",

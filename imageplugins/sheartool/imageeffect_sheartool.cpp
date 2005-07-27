@@ -57,6 +57,9 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
                      : ImageGuideDialog(parent, i18n("Shear Tool"), 
                                         "sheartool", false, false, true)
 {
+    // No need Abort button action.
+    showButton(User1, false); 
+    
     QString whatsThis;
     
     // About data and help button.
