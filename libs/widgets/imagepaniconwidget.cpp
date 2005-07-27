@@ -168,8 +168,11 @@ void ImagePanIconWidget::updatePixmap( void )
        }   
     
     // Drawing selection border
-    p.setPen(QPen(Qt::red, 2, Qt::SolidLine));
+    p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
     p.drawRect(m_localRegionSelection);
+    p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+    p.drawRect(m_localRegionSelection.x()+1, m_localRegionSelection.y()+1,
+               m_localRegionSelection.width()-2, m_localRegionSelection.height()-2);
     
     if (m_separateView == Digikam::ImageRegionWidget::SeparateViewVertical)
         {
