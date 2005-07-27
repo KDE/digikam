@@ -47,7 +47,6 @@ public:
     QRect getRegionSelection(void);
     void  setCenterSelection(void);
         
-    QSize getPreviewSize(void){ return QSize::QSize(m_w, m_h); };
     void  setHighLightPoints(QPointArray pointsList)
        {
        hightlightPoints = pointsList;

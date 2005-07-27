@@ -154,6 +154,8 @@ void ImagePanIconWidget::updatePixmap( void )
        for (uint i = 0 ; i < hightlightPoints.count() ; i++)
           {
           pt = hightlightPoints.point(i);
+          pt.setX((int)(pt.x() * (float)(m_w)/(float)m_iface->originalWidth()));
+          pt.setY((int)(pt.y() * (float)(m_h)/(float)m_iface->originalHeight()));
           p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
           p.drawLine(pt.x(), pt.y()-1, pt.x(), pt.y()+1);
           p.drawLine(pt.x()-1, pt.y(), pt.x()+1, pt.y());

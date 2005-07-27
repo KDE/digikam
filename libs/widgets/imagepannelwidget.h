@@ -78,10 +78,9 @@ public:
 
     void   setUserAreaWidget(QWidget *w, bool separator=true);
     
-    KProgress *progressBar(void)                    { return m_progressBar; };
+    void   setPanIconHighLightPoints(QPointArray pt) { m_imagePanIconWidget->setHighLightPoints(pt); };
     
-    QSize getPanIconPreviewSize(void)               { return m_imagePanIconWidget->getPreviewSize(); };
-    void  setPanIconHighLightPoints(QPointArray pt) { m_imagePanIconWidget->setHighLightPoints(pt); };
+    KProgress *progressBar(void)                     { return m_progressBar; };
            
 public slots:
 
