@@ -67,7 +67,7 @@ public:
     AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);
 
     // special group item (collection/dates)
-    AlbumFolderViewItem(QListView* parent, const QString& name,
+    AlbumFolderViewItem(QListViewItem* parent, const QString& name,
                         int year, int month);
     
     PAlbum* getAlbum() const;
@@ -100,7 +100,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
 }
 
 // special group item (collection/dates)
-AlbumFolderViewItem::AlbumFolderViewItem(QListView* parent, const QString& name,
+AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem* parent, const QString& name,
                                          int year, int month)
     : FolderItem(parent, name, true),
       m_album(0), m_year(year), m_month(month), m_groupItem(true)
@@ -1125,6 +1125,12 @@ void AlbumFolderView::selectItem(int id)
 
 AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
 {
+    if (album->isRoot())
+    {
+        failed = false;
+        return 0;
+    }
+    
     switch(AlbumSettings::instance()->getAlbumSortOrder())
     {
     case(AlbumSettings::ByFolder):
@@ -1147,12 +1153,6 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
 
 AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& failed)
 {
-    if (album->isRoot())
-    {
-        failed = false;
-        return 0;
-    }
-    
     AlbumFolderViewItem* parent =
         (AlbumFolderViewItem*) album->parent()->extraData(this);
     if (!parent)
@@ -1190,7 +1190,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool
     // Need to create a new parent item
     if (!parent)
     {
-        parent = new AlbumFolderViewItem(this, collection, 0, 0);
+        parent = new AlbumFolderViewItem(firstChild(), collection, 0, 0);
         d->groupItems.append(parent);
     }
 
@@ -1221,7 +1221,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& fail
     // Need to create a new parent item
     if (!parent)
     {
-        parent = new AlbumFolderViewItem(this, timeString,
+        parent = new AlbumFolderViewItem(firstChild(), timeString,
                                          date.year(), date.month());
         d->groupItems.append(parent);
     }
