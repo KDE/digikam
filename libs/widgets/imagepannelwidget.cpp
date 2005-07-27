@@ -46,7 +46,6 @@
 // Local includes.
 
 #include "imageregionwidget.h"
-#include "imagepaniconwidget.h"
 #include "imagepannelwidget.h"
 
 namespace Digikam

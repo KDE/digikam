@@ -26,10 +26,13 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
+#include <qsize.h>
 #include <qlayout.h>
+#include <qpixmap.h>
 
 // Local includes
 
+#include "imagepaniconwidget.h"
 #include "digikam_export.h"
 
 class QHButtonGroup;
@@ -40,7 +43,6 @@ namespace Digikam
 {
 
 class ImageRegionWidget;
-class ImagePanIconWidget;
 
 class DIGIKAM_EXPORT ImagePannelWidget : public QWidget
 {
@@ -76,8 +78,11 @@ public:
 
     void   setUserAreaWidget(QWidget *w, bool separator=true);
     
-    KProgress *progressBar(void) { return m_progressBar; };
+    KProgress *progressBar(void)                    { return m_progressBar; };
     
+    QSize getPanIconPreviewSize(void)               { return m_imagePanIconWidget->getPreviewSize(); };
+    void  setPanIconHighLightPoints(QPointArray pt) { m_imagePanIconWidget->setHighLightPoints(pt); };
+           
 public slots:
 
     // Set the top/Left conner clip position.

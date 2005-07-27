@@ -141,10 +141,29 @@ void ImagePanIconWidget::updatePixmap( void )
 {
     // Drawing background and image.
     m_pixmap->fill(colorGroup().background());
-    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
-                   m_rect.width(), m_rect.height());
+    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
     
     QPainter p(m_pixmap);
+   
+    // Drawing HighLighted points.
+    
+    if (!hightlightPoints.isEmpty())
+       {
+       QPoint pt;
+       
+       for (uint i = 0 ; i < hightlightPoints.count() ; i++)
+          {
+          pt = hightlightPoints.point(i);
+          p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+          p.drawLine(pt.x(), pt.y()-1, pt.x(), pt.y()+1);
+          p.drawLine(pt.x()-1, pt.y(), pt.x()+1, pt.y());
+          p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+          p.drawPoint(pt.x()-1, pt.y()-1);
+          p.drawPoint(pt.x()+1, pt.y()+1);
+          p.drawPoint(pt.x()-1, pt.y()+1);
+          p.drawPoint(pt.x()+1, pt.y()-1);
+          }
+       }   
     
     // Drawing selection border
     p.setPen(QPen(Qt::red, 2, Qt::SolidLine));

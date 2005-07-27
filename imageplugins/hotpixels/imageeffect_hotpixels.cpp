@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qpointarray.h>
 
 // KDE includes.
 
@@ -239,6 +240,24 @@ void ImageEffect_HotPixels::putFinalData(void)
 void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList)
 {
     m_hotPixelsList = hpList;
+    
+    Digikam::ImageIface iface(0, 0);
+    int orgW = iface.originalWidth();
+    int orgH = iface.originalHeight();
+    QSize panIconSize = m_imagePreviewWidget->getPanIconPreviewSize();
+    QPointArray pointList(m_hotPixelsList.size());
+    QValueList <HotPixel>::Iterator it;
+    int i = 0;
+    
+    for (it = m_hotPixelsList.begin() ; it != m_hotPixelsList.end() ; ++it, i++)
+       {
+       pointList.setPoint(i, (*it).rect.center());
+       pointList.setPoint(i, (int)(pointList.point(i).x() * (float)(panIconSize.width())/(float)orgW),
+                             (int)(pointList.point(i).y() * (float)(panIconSize.height())/(float)orgH) );
+       }
+        
+    m_imagePreviewWidget->setPanIconHighLightPoints(pointList);
+    
     slotEffect();
 }
 

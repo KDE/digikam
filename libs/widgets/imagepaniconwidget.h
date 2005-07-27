@@ -25,8 +25,9 @@
 
 #include <qwidget.h>
 #include <qrect.h>
-
-class QPixmap;
+#include <qsize.h>
+#include <qpixmap.h>
+#include <qpointarray.h>
 
 namespace Digikam
 {
@@ -46,6 +47,14 @@ public:
     QRect getRegionSelection(void);
     void  setCenterSelection(void);
         
+    QSize getPreviewSize(void){ return QSize::QSize(m_w, m_h); };
+    void  setHighLightPoints(QPointArray pointsList)
+       {
+       hightlightPoints = pointsList;
+       updatePixmap();
+       repaint(false);
+       };
+       
 signals:
 
     // Used with ImagePreview widget. 
@@ -68,24 +77,26 @@ protected:
         
 private:
 
-    int         m_separateView;
+    int          m_separateView;
     
-    uint       *m_data;
-    int         m_w;
-    int         m_h;
+    uint        *m_data;
+    int          m_w;
+    int          m_h;
     
-    int         m_xpos;
-    int         m_ypos;
+    int          m_xpos;
+    int          m_ypos;
 
-    bool        m_moveSelection;
+    bool         m_moveSelection;
     
-    QRect       m_rect;                    
-    QRect       m_regionSelection;         // Original size image selection.
-    QRect       m_localRegionSelection;    // Thumbnail size selection.
+    QRect        m_rect;                    
+    QRect        m_regionSelection;         // Original size image selection.
+    QRect        m_localRegionSelection;    // Thumbnail size selection.
     
-    QPixmap*    m_pixmap;
-
-    ImageIface *m_iface;
+    QPixmap     *m_pixmap;
+    
+    QPointArray  hightlightPoints;
+    
+    ImageIface  *m_iface;
         
 private:
     
