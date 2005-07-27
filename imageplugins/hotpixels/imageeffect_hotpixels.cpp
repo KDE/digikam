@@ -100,8 +100,6 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     
     gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 2);
-        
-    //TODO: load the default setting from kconfig
     
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
