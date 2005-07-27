@@ -40,7 +40,31 @@
 #include "blackframeparser.h"
 #include "hotpixel.h"
 
-class BlackFrameListView;
+namespace DigikamHotPixelsImagesPlugin
+{
+
+class BlackFrameListView : public KListView
+{
+    Q_OBJECT
+
+public:
+    
+    BlackFrameListView(QWidget* parent=0);
+    ~BlackFrameListView(){};
+
+signals:
+
+    void blackFrameSelected(QValueList<HotPixel>);
+
+private slots:
+
+    void slotParsed(QValueList<HotPixel> hotPixels)
+       {
+       emit blackFrameSelected(hotPixels);
+       };           
+};
+
+///////////////////////////////////////////////////////////////
 
 class BlackFrameListViewItem : public QObject, KListViewItem
 {
@@ -82,27 +106,6 @@ protected:
     void activate();
 };
 
-/////////////////////////////////////////////////////////////////
-
-class BlackFrameListView:public KListView
-{
-    Q_OBJECT
-
-public:
-    
-    BlackFrameListView(QWidget* parent=0);
-    ~BlackFrameListView(){};
-
-signals:
-
-    void blackFrameSelected(QValueList<HotPixel>);
-
-private slots:
-
-    void slotParsed(QValueList<HotPixel> hotPixels)
-       {
-       emit blackFrameSelected(hotPixels);
-       };           
-};
+}  // NameSpace DigikamHotPixelsImagesPlugin
 
 #endif  // BLACKFRAMELISTVIEW_H

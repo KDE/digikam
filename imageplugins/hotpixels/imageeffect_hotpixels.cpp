@@ -46,7 +46,6 @@
 
 #include "version.h"
 #include "imageeffect_hotpixels.h"
-#include "hotpixelviewwidget.h"
 #include "blackframelistview.h"
 
 namespace DigikamHotPixelsImagesPlugin

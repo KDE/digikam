@@ -37,10 +37,10 @@
 
 class QComboBox;
 
-class BlackFrameListView;
-
 namespace DigikamHotPixelsImagesPlugin
 {
+
+class BlackFrameListView;
 
 class ImageEffect_HotPixels : public DigikamImagePlugins::CtrlPanelDialog
 {

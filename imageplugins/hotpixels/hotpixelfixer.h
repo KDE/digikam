@@ -43,6 +43,9 @@
 #include "hotpixel.h"
 #include "weights.h"
 
+namespace DigikamHotPixelsImagesPlugin
+{
+
 enum InterpolationMethod 
 {
     average   = 0,
@@ -57,6 +60,8 @@ enum Direction
     vertical   = 1,
     horizontal = 2    
 };
+
+
 
 class HotPixelFixer : public Digikam::ThreadedFilter
 {
@@ -89,4 +94,6 @@ private: // Hot Pixels Removal filter methods.
        
 };
 
-#endif
+}  // NameSpace DigikamHotPixelsImagesPlugin
+
+#endif  // HOTPIXELFIXER_H

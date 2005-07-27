@@ -21,7 +21,12 @@
 #ifndef HOTPIXEL_H
 #define HOTPIXEL_H
 
+// Qt includes.
+
 #include <qrect.h>
+
+namespace DigikamHotPixelsImagesPlugin
+{
 
 class HotPixel
 {
@@ -59,4 +64,6 @@ private:
         }
 };
 
-#endif
+}  // NameSpace DigikamHotPixelsImagesPlugin
+
+#endif  // HOTPIXEL_H

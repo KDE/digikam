@@ -27,54 +27,66 @@
 #ifndef BLACKFRAMEPARSER_H
 #define BLACKFRAMEPARSER_H
 
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
+// Qt includes.
+
 #include <qimage.h>
 #include <qobject.h>
 #include <qvaluelist.h>
 #include <qstring.h>
 #include <qrect.h>
 
-#include <kio/scheduler.h> //KIO::get
+// KDE includes.
+
+#include <kio/scheduler.h>  //KIO::get
 #include <kio/jobclasses.h> //KIO::TransferJob
 #include <kurl.h>
+
+// Local includes.
 
 #include "hotpixel.h"
 #include "blackframeparser.h"
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-
-
-class KProcess;
-
-
-
+namespace DigikamHotPixelsImagesPlugin
+{
 
 class BlackFrameParser: public QObject
 {
-	Q_OBJECT
-	public:
-		BlackFrameParser();
-		~BlackFrameParser();
-		void parseHotPixels(QString file);
-		void parseBlackFrame(KURL url);
-		void parseBlackFrame(QImage& img);
-		QImage image(){return mImage;}
+    Q_OBJECT
+    
+public:
+    
+    BlackFrameParser();
+    ~BlackFrameParser();
+        
+    void parseHotPixels(QString file);
+    void parseBlackFrame(KURL url);
+    void parseBlackFrame(QImage& img);
+    QImage image(){return mImage;}
+    
+private:
 
-		
-	private:
-		QString mOutputString;
-		void blackFrameParsing(bool useData=false);
-		void consolidatePixels (QValueList<HotPixel>& list);
-		void validateAndConsolidate(HotPixel *a, HotPixel *b);
-		
-		QByteArray mData;
-		QImage mImage;
-		
-	private slots:
-		void blackFrameDataArrived(KIO::Job*,const QByteArray& data);
-		void slotResult(KIO::Job*);
-	signals:
-		void parsed(QValueList<HotPixel>);
+    QString mOutputString;
+    void blackFrameParsing(bool useData=false);
+    void consolidatePixels (QValueList<HotPixel>& list);
+    void validateAndConsolidate(HotPixel *a, HotPixel *b);
+        
+private:
+    
+    QByteArray mData;
+    QImage     mImage;
+        
+private slots:
+        
+    void blackFrameDataArrived(KIO::Job*, const QByteArray& data);
+    void slotResult(KIO::Job*);
+
+signals:
+    void parsed(QValueList<HotPixel>);
 };
 
-#endif
+}  // NameSpace DigikamHotPixelsImagesPlugin
+
+#endif // BLACKFRAMEPARSER_H

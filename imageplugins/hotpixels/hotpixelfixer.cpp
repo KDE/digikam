@@ -48,6 +48,9 @@
 # define DBL_MAX 1e37
 #endif
 
+namespace DigikamHotPixelsImagesPlugin
+{
+
 HotPixelFixer::HotPixelFixer(QImage *orgImage, QObject *parent, const QValueList<HotPixel>& hpList, 
                              InterpolationMethod method)
              : Digikam::ThreadedFilter(orgImage, parent, "HotPixels")
@@ -289,3 +292,5 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
             } //for y,x
         }// for iComp
 }
+
+}  // NameSpace DigikamHotPixelsImagesPlugin

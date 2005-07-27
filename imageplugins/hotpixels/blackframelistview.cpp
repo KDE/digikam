@@ -20,6 +20,8 @@
 * 
 * ============================================================ */
 
+#define THUMB_WIDTH 150
+
 // Qt includes.
 
 #include <qpainter.h>
@@ -28,7 +30,8 @@
 
 #include "blackframelistview.h"
 
-#define THUMB_WIDTH 150
+namespace DigikamHotPixelsImagesPlugin
+{
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
                       : QObject(parent), KListViewItem(parent)
@@ -138,5 +141,7 @@ int BlackFrameListViewItem::width(const QFontMetrics& fm,const QListView* lv,int
     if (c==0) return THUMB_WIDTH;
     else return QListViewItem::width(fm,lv,c);
 }
+
+}  // NameSpace DigikamHotPixelsImagesPlugin
 
 #include "blackframelistview.moc"
