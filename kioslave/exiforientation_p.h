@@ -71,7 +71,7 @@ static KExifData::ImageOrientation getExifOrientation(const QString& path)
       stream >> byte;
 
       // consume 0xff's used for padding
-      while(byte == 0xff)
+      while(byte == 0xff && !stream.atEnd())
         stream >> byte;
 
       // stop when we reach APP0 marker or start of image data
