@@ -425,6 +425,12 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
     
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
+    if (item && !item->getAlbum())
+    {
+        // if collection/date return
+        return;
+    }
+    
     // Root folder only shows "New Album..."
     if(item && item->parent())
     {
