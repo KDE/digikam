@@ -42,8 +42,8 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchfolderview.cpp dio.cpp \
 			searchresultsview.cpp searchresultsitem.cpp \
 			searchquickdialog.cpp searchadvanceddialog.cpp \
-			searchwidgets.cpp kdateedit.cpp kdatepickerpopup.cpp \
-			folderview.cpp folderitem.cpp \
+			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
+			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
 			upgradedb_sqlite2tosqlite3.cpp squeezedcombobox.cpp
 
 

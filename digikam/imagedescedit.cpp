@@ -29,7 +29,7 @@
 #include <kconfig.h>
 #include <kfilemetainfo.h>
 #include <klineedit.h>
-#include <kdatetimewidget.h>
+#include <kdatetimeedit.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -112,7 +112,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     topLayout->addWidget(thumbBox, 0, 0);
 
     QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date and Time"), plainPage());
-    m_dateTimeEdit = new KDateTimeWidget( dateTimeBox,"datepicker");
+    m_dateTimeEdit = new KDateTimeEdit( dateTimeBox,"datepicker");
     topLayout->addWidget(dateTimeBox, 1, 0);
     
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
@@ -123,7 +123,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     connect(m_commentsEdit, SIGNAL(textChanged()),
             SLOT(slotModified()));
-    connect(m_dateTimeEdit, SIGNAL(valueChanged()),
+    connect(m_dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
             SLOT(slotModified()));
 
     
