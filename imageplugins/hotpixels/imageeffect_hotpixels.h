@@ -30,6 +30,10 @@
 
 #include <qimage.h>
 
+// KDE includes.
+
+#include <kurl.h>
+
 // Local includes.
 
 #include "ctrlpaneldialog.h"
@@ -57,6 +61,8 @@ private:
     
     QValueList<HotPixel>  m_hotPixelsList;
     
+    KURL                  m_blackFrameURL;
+    
     BlackFrameListView   *m_blackFrameListView;
     
 protected:
@@ -73,6 +79,11 @@ private slots:
         
     void slotBlackFrame(QValueList<HotPixel> hpList);
     void slotApply();
+    
+private:
+
+    void readSettings(void);
+    void writeSettings(void);
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

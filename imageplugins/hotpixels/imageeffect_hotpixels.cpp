@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include <kimageio.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -85,7 +86,6 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     setAboutData(about);
     
     // -------------------------------------------------------------
-    // Settings area.
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
@@ -107,9 +107,10 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-        
+
+    readSettings();
+            
     // -------------------------------------------------------------
-    // Main window's signal & slots
     
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
@@ -120,6 +121,29 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
 {
+    writeSettings();
+}
+
+void ImageEffect_HotPixels::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Album Settings");
+    KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
+    config->setGroup("Hot Pixels Tool Settings");
+    m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", albumDBUrl.url()) );
+    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method", 2) );           // FIXME : default value.
+    
+    if (m_blackFrameURL.isValid())
+        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+}
+
+void ImageEffect_HotPixels::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Hot Pixels Tool Settings");
+    config->writeEntry( "Last Black Frame File", m_blackFrameURL.url() );
+    config->writeEntry( "Filter Method", m_filterMethodCombo->currentItem() );
+    config->sync();
 }
 
 // Select Black frame file.
@@ -130,12 +154,13 @@ void ImageEffect_HotPixels::slotApply()
     
     KFileDialog *fileSelectDialog = new KFileDialog(QString::null, KImageIO::pattern(), this, "", true);
     fileSelectDialog->setCaption(i18n("Select a black frame image"));
+    fileSelectDialog->setURL(m_blackFrameURL.path());
     fileSelectDialog->exec();
     
     //Load the selected file and insert into the list
     
-    KURL url = fileSelectDialog->selectedURL();
-    new BlackFrameListViewItem(m_blackFrameListView, url);
+    m_blackFrameURL = fileSelectDialog->selectedURL();
+    new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
     delete fileSelectDialog;
 }
 
