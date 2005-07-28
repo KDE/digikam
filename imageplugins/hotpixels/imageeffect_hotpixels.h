@@ -40,6 +40,7 @@
 #include "hotpixelfixer.h"
 
 class QComboBox;
+class QPushButton;
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -58,6 +59,8 @@ public:
 private:
 
     QComboBox            *m_filterMethodCombo;
+    
+    QPushButton          *m_blackFrameButton;
     
     QValueList<HotPixel>  m_hotPixelsList;
     
@@ -78,7 +81,7 @@ protected:
 private slots:
         
     void slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL);
-    void slotApply();
+    void slotAddBlackFrame(void);
     
 private:
 

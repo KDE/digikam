@@ -153,17 +153,6 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
     
     QTimer::singleShot(0, this, SLOT(slotInit())); 
-        
-    // -------------------------------------------------------------
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotResized()));           
-            
-    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
-            m_imagePreviewWidget, SLOT(slotChangeGuideColor(const QColor &)));    
-            
-    connect(m_guideSize, SIGNAL(valueChanged(int)),
-            m_imagePreviewWidget, SLOT(slotChangeGuideSize(int)));                       
 }
 
 ImageGuideDialog::~ImageGuideDialog()
@@ -204,6 +193,15 @@ void ImageGuideDialog::slotInit()
     readSettings();
     // Reset values to defaults.
     QTimer::singleShot(0, this, SLOT(slotDefault())); 
+    
+    connect(m_imagePreviewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));           
+            
+    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
+            m_imagePreviewWidget, SLOT(slotChangeGuideColor(const QColor &)));    
+            
+    connect(m_guideSize, SIGNAL(valueChanged(int)),
+            m_imagePreviewWidget, SLOT(slotChangeGuideSize(int))); 
 }
 
 void ImageGuideDialog::setUserAreaWidget(QWidget *w)

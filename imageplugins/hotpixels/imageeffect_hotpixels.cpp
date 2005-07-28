@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qpushbutton.h>
 #include <qpointarray.h>
 
 // KDE includes.
@@ -54,17 +55,13 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Hot Pixels Correction"), "hotpixels", 
-                                     false, false, false, 
-                                     Digikam::ImagePannelWidget::SeparateViewDuplicate)
+                     : CtrlPanelDialog(parent, i18n("Hot Pixels Correction"), "hotpixels", 
+                                       false, false, false, 
+                                       Digikam::ImagePannelWidget::SeparateViewDuplicate)
 {
     // No need Abort button action.
     showButton(User1, false); 
     
-    showButton(Apply, true);
-    setButtonText( Apply, i18n("Add Black Frame..."));
-    setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file witch will "
-                                    "be used by the hot pixels removal filter.") );  
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -90,16 +87,20 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
     
-    QLabel *filterMethodLabel = new QLabel(i18n("Filter method:"), gboxSettings);
+    QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo = new QComboBox(gboxSettings);
-    
     m_filterMethodCombo->insertItem(i18n("Average"));
     m_filterMethodCombo->insertItem(i18n("Linear"));
     m_filterMethodCombo->insertItem(i18n("Quadratic"));
     m_filterMethodCombo->insertItem(i18n("Cubic"));
-    
+
+    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);    
+    setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file witch will "
+                                    "be used by the hot pixels removal filter.") );  
+
     gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 2);
+    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_blackFrameButton, 0, 0, 2, 2);    
     
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
@@ -112,7 +113,10 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
-                          
+
+    connect(m_blackFrameButton, SIGNAL(clicked()),
+            this, SLOT(slotAddBlackFrame()));
+                                                  
     connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>, const KURL&)),
             this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&))); 
 }
@@ -129,7 +133,8 @@ void ImageEffect_HotPixels::readSettings(void)
     KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
     config->setGroup("Hot Pixels Tool Settings");
     m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", albumDBUrl.url()) );
-    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method", HotPixelFixer::QUADRATIC_INTERPOLATION) );
+    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method",
+                                         HotPixelFixer::QUADRATIC_INTERPOLATION) );
     
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
@@ -144,8 +149,7 @@ void ImageEffect_HotPixels::writeSettings(void)
     config->sync();
 }
 
-// Select Black frame file.
-void ImageEffect_HotPixels::slotApply()
+void ImageEffect_HotPixels::slotAddBlackFrame()
 {
     //Does one need to do this if digikam did so already?
     KImageIO::registerFormats(); 

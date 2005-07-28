@@ -57,12 +57,12 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
                                  bool loadFileSettings, bool tryAction, bool progressBar,
                                  int separateViewMode)
                : KDialogBase(Plain, title,
-                             Help|Default|Apply|User1|User2|User3|Try|Ok|Cancel, Ok,
+                             Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                              parent, 0, true, true,
                              i18n("&Abort"),
                              i18n("&Load..."),
                              i18n("&Save As...")),
-                     m_parent(parent), m_name(name)
+                     m_parent(parent), m_name(name), m_tryAction(tryAction)
 {
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
@@ -76,7 +76,6 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
-    showButton(Apply, false);
             
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));  
         
@@ -100,19 +99,6 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
     
     QTimer::singleShot(0, this, SLOT(slotInit())); 
-        
-    // -------------------------------------------------------------
-    
-    if (!tryAction)
-       {
-       connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-               this, SLOT(slotFocusChanged()));
-       }
-    else
-       {
-       connect(m_imagePreviewWidget, SIGNAL(signalResized()),
-               this, SLOT(slotFocusChanged()));
-       }
 }
 
 CtrlPanelDialog::~CtrlPanelDialog()
@@ -128,7 +114,19 @@ CtrlPanelDialog::~CtrlPanelDialog()
 
 void CtrlPanelDialog::slotInit()
 {
-    QTimer::singleShot(0, this, SLOT(slotUser1())); 
+    // Reset values to defaults.
+    QTimer::singleShot(0, this, SLOT(slotDefault())); 
+    
+    if (!m_tryAction)
+       {
+       connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+               this, SLOT(slotFocusChanged()));
+       }
+    else
+       {
+       connect(m_imagePreviewWidget, SIGNAL(signalResized()),
+               this, SLOT(slotFocusChanged()));
+       }
 }
 
 void CtrlPanelDialog::setAboutData(KAboutData *about)

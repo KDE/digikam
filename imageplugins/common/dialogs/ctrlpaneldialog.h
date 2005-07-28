@@ -85,6 +85,8 @@ private:
     
     QString          m_name;
     
+    bool             m_tryAction;
+    
 private slots:
     
     virtual void slotDefault();
