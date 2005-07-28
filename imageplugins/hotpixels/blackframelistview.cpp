@@ -38,7 +38,9 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 {
     addColumn(i18n("Preview"));
     addColumn(i18n("Size"));
-    addColumn(i18n("Enabled"));
+    addColumn(i18n("HP"));      // Hot Pixels found.
+    addColumn(i18n("File"));
+    setAllColumnsShowFocus(true);
 };
 
 ///////////////////////////////////////////////////////////////
@@ -68,23 +70,30 @@ QString BlackFrameListViewItem::text(int column)const
         case 0:
             {
             // First column includes the pixmap
-            return (""); 
             break;
             }
         case 1:
             {
-            return (QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height())); 
+            // The image size.
+            if (!m_imageSize.isEmpty())
+                return (QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height())); 
             break;
             }
         case 2:
             {
-            // Temporarily
-            return ("yes"); 
+            // The number of hot pixels found in the black frame.
+            return (QString::number(m_hotPixels.count())); 
+            break;
+            }
+        case 3:
+            {
+            // The file name.
+            return (m_blackFrameURL.fileName()); 
             break;
             }
         }
     
-    return("foo");
+    return(QString::null);
 }
 
 void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)
@@ -108,14 +117,14 @@ QPixmap BlackFrameListViewItem::thumb(QSize size)
     QPixmap thumb;
     
     //First scale it down to the size
-    thumb = m_image.smoothScale(size,QImage::ScaleMin);
+    thumb = m_image.smoothScale(size, QImage::ScaleMin);
     
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);
 
     //Take scaling into account
     float xRatio, yRatio;
-    float hpThumbX,hpThumbY;
+    float hpThumbX, hpThumbY;
     QRect hpRect;
     
     xRatio = (float)size.width()/(float)m_image.width();

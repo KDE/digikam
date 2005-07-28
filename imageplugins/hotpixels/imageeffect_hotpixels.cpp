@@ -153,12 +153,15 @@ void ImageEffect_HotPixels::slotApply()
     KFileDialog *fileSelectDialog = new KFileDialog(QString::null, KImageIO::pattern(), this, "", true);
     fileSelectDialog->setCaption(i18n("Select a black frame image"));
     fileSelectDialog->setURL(m_blackFrameURL.path());
-    fileSelectDialog->exec();
     
-    //Load the selected file and insert into the list
-    
-    m_blackFrameURL = fileSelectDialog->selectedURL();
-    new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+    if (fileSelectDialog->exec() != QDialog::Rejected)
+       {
+       //Load the selected file and insert into the list
+        
+       m_blackFrameURL = fileSelectDialog->selectedURL();
+       new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+       }
+        
     delete fileSelectDialog;
 }
 
