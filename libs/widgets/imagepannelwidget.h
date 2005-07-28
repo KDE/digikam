@@ -29,6 +29,7 @@
 #include <qsize.h>
 #include <qlayout.h>
 #include <qpixmap.h>
+#include <qstring.h>
 
 // Local includes
 
@@ -60,7 +61,7 @@ public:
     
 public:
 
-    ImagePannelWidget(uint w, uint h, QWidget *parent=0, bool progress=false, 
+    ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent=0, bool progress=false, 
                       int separateViewMode=SeparateViewAll);
     ~ImagePannelWidget();
     
@@ -107,18 +108,20 @@ signals:
     
 protected:
     
+    void resizeEvent(QResizeEvent *e);
+
+private:
+    
     Digikam::ImageRegionWidget  *m_imageRegionWidget;
     Digikam::ImagePanIconWidget *m_imagePanIconWidget;
     
-    QGridLayout   *m_mainLayout;
+    QGridLayout                 *m_mainLayout;
     
-    QHButtonGroup *m_separateView;
+    QHButtonGroup               *m_separateView;
     
-    KProgress     *m_progressBar;
+    KProgress                   *m_progressBar;
     
-protected:
-    
-    void resizeEvent(QResizeEvent *e);
+    QString                      m_settingsSection;
 
 private:
         

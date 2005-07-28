@@ -50,10 +50,12 @@
 namespace Digikam
 {
 
-ImagePannelWidget::ImagePannelWidget(uint w, uint h, QWidget *parent, 
+ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent,
                                      bool progress, int separateViewMode)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_settingsSection = settingsSection;
+    
     m_mainLayout = new QGridLayout( this, 2, 2 , KDialog::marginHint(), KDialog::spacingHint());
     
     QFrame *frame1 = new QFrame(this);
@@ -308,8 +310,9 @@ void ImagePannelWidget::updateSelectionInfo(QRect rect)
 void ImagePannelWidget::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Control Panel Settings");
+    config->setGroup(m_settingsSection);
     int mode = config->readNumEntry("Separate View", Digikam::ImageRegionWidget::SeparateViewVertical);
+    
     m_imageRegionWidget->blockSignals(true);
     m_imagePanIconWidget->blockSignals(true);
     m_separateView->blockSignals(true);
@@ -324,7 +327,7 @@ void ImagePannelWidget::readSettings(void)
 void ImagePannelWidget::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Control Panel Settings");
+    config->setGroup(m_settingsSection);
     config->writeEntry( "Separate View", m_separateView->selectedId() );
     config->sync();
 }

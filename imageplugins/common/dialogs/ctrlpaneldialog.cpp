@@ -92,8 +92,9 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
     
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, plainPage(), 
-                                        progressBar, separateViewMode);
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, 
+                                        name + QString::QString(" Tool Dialog"),
+                                        plainPage(),  progressBar, separateViewMode);
     hlay1->addWidget(m_imagePreviewWidget);
     
     // -------------------------------------------------------------
