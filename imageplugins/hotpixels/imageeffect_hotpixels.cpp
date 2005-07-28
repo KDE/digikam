@@ -168,6 +168,7 @@ void ImageEffect_HotPixels::slotApply()
 void ImageEffect_HotPixels::renderingFinished(void)
 {
     m_filterMethodCombo->setEnabled(true);
+    m_blackFrameListView->setEnabled(true);
     enableButton(Apply, true);     
 }
 
@@ -181,6 +182,7 @@ void ImageEffect_HotPixels::resetValues(void)
 void ImageEffect_HotPixels::prepareEffect()
 {
     m_filterMethodCombo->setEnabled(false);
+    m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
 
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
@@ -208,6 +210,7 @@ void ImageEffect_HotPixels::prepareEffect()
 void ImageEffect_HotPixels::prepareFinal()
 {
     m_filterMethodCombo->setEnabled(false);
+    m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
     
     Digikam::ImageIface iface(0, 0);

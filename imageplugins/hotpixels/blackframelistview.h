@@ -26,6 +26,7 @@
 // Qt includes.
 
 #include <qimage.h>
+#include <qstring.h>
 #include <qsize.h>
 #include <qpoint.h>
 #include <qvaluelist.h>
@@ -78,7 +79,7 @@ public:
     
     virtual QString text(int column)const;
     virtual void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align);
-    virtual int width (const QFontMetrics& fm, const QListView* lv, int c)const;
+    virtual int width(const QFontMetrics& fm, const QListView* lv, int c)const;
 
 signals:
 
@@ -89,10 +90,18 @@ private:
     // Data contained within each listview item
     QImage                m_thumb;
     QImage                m_image;
+    
     QSize                 m_imageSize;
+    
     QValueList <HotPixel> m_hotPixels;
-    BlackFrameParser      m_parser;
+    
+    QString               m_blackFrameDesc;
+    
     KURL                  m_blackFrameURL;
+    
+    BlackFrameParser      m_parser;
+    
+    BlackFrameListView   *m_parent;
     
 private:    
         

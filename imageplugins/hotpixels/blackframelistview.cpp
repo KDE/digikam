@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <qpainter.h>
+#include <qtooltip.h>
 
 // Local includes.
 
@@ -40,15 +41,17 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     addColumn(i18n("Size"));
     addColumn(i18n("This is a column which will contain the amount of HotPixels "
                    "found in the black frame file", "HP"));
-    addColumn(i18n("File"));
     setAllColumnsShowFocus(true);
+    setResizeMode(QListView::LastColumn);
+    setSelectionMode(QListView::Single);
 };
 
 ///////////////////////////////////////////////////////////////
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
-                      : QObject(parent), KListViewItem(parent)
+                      : QObject(parent), KListViewItem(parent)                        
 {
+    m_parent        = parent;
     m_blackFrameURL = url;
     m_parser.parseBlackFrame(url);
     
@@ -61,6 +64,7 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL 
 
 void BlackFrameListViewItem::activate()
 {
+    QToolTip::add( m_parent, m_blackFrameDesc);
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
@@ -82,14 +86,8 @@ QString BlackFrameListViewItem::text(int column)const
             }
         case 2:
             {
-            // The number of hot pixels found in the black frame.
+            // The amount of hot pixels found in the black frame.
             return (QString::number(m_hotPixels.count())); 
-            break;
-            }
-        case 3:
-            {
-            // The file name.
-            return (m_blackFrameURL.fileName()); 
             break;
             }
         }
@@ -110,6 +108,11 @@ void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
     m_imageSize = m_image.size();
     m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2));
     setPixmap(0, m_thumb);
+        
+    m_blackFrameDesc = QString::QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
+    for (QValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != m_hotPixels.end() ; ++it)
+        m_blackFrameDesc.append( QString::QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
+    
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
@@ -131,7 +134,7 @@ QPixmap BlackFrameListViewItem::thumb(QSize size)
     xRatio = (float)size.width()/(float)m_image.width();
     yRatio = (float)size.height()/(float)m_image.height();
     
-        //Draw hot pixels one by one
+    //Draw hot pixels one by one
     QValueList <HotPixel>::Iterator it;    
     
     for (it=m_hotPixels.begin() ; it!=m_hotPixels.end() ; ++it)
