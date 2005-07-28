@@ -187,11 +187,16 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewVertical:
             case SeparateViewDuplicateVert:
                 {
-                p->setPen(QPen(Qt::red, 2, Qt::DotLine));
+                p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
                 p->drawLine(getTargetImageRegion().topLeft().x(),    
                             getTargetImageRegion().topLeft().y(),
                             getTargetImageRegion().bottomLeft().x(),
                             getTargetImageRegion().bottomLeft().y());
+                p->setPen(QPen(Qt::red, 2, Qt::DotLine));
+                p->drawLine(getTargetImageRegion().topLeft().x(),    
+                            getTargetImageRegion().topLeft().y()+1,
+                            getTargetImageRegion().bottomLeft().x(),
+                            getTargetImageRegion().bottomLeft().y()-1);
                             
                 p->setPen(QPen::QPen(Qt::red, 1)) ;                    
                 QFontMetrics fontMt = p->fontMetrics();
@@ -218,6 +223,11 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewHorizontal:
             case SeparateViewDuplicateHorz:
                 {
+                p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
+                p->drawLine(getTargetImageRegion().topLeft().x()+1,
+                            getTargetImageRegion().topLeft().y(),
+                            getTargetImageRegion().topRight().x()-1,
+                            getTargetImageRegion().topRight().y());
                 p->setPen(QPen(Qt::red, 2, Qt::DotLine));
                 p->drawLine(getTargetImageRegion().topLeft().x(),
                             getTargetImageRegion().topLeft().y(),

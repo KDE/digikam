@@ -176,18 +176,28 @@ void ImagePanIconWidget::updatePixmap( void )
     
     if (m_separateView == Digikam::ImageRegionWidget::SeparateViewVertical)
         {
-        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.topLeft().y(),
                    m_localRegionSelection.bottomLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.bottomLeft().y());
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.topLeft().y()+1,
+                   m_localRegionSelection.bottomLeft().x() + m_localRegionSelection.width()/2,
+                   m_localRegionSelection.bottomLeft().y()-1);
         }
     else if (m_separateView == Digikam::ImageRegionWidget::SeparateViewHorizontal)
         {
-        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(m_localRegionSelection.topLeft().x(),
                    m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
                    m_localRegionSelection.topRight().x(),
+                   m_localRegionSelection.topRight().y() + m_localRegionSelection.height()/2);
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawLine(m_localRegionSelection.topLeft().x()+1,
+                   m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
+                   m_localRegionSelection.topRight().x()-1,
                    m_localRegionSelection.topRight().y() + m_localRegionSelection.height()/2);
         }
 
