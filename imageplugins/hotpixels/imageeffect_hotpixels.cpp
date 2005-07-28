@@ -129,7 +129,7 @@ void ImageEffect_HotPixels::readSettings(void)
     KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
     config->setGroup("Hot Pixels Tool Settings");
     m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", albumDBUrl.url()) );
-    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method", 2) );           // FIXME : default value.
+    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method", HotPixelFixer::QUADRATIC_INTERPOLATION) );
     
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
@@ -171,7 +171,7 @@ void ImageEffect_HotPixels::renderingFinished(void)
 void ImageEffect_HotPixels::resetValues(void)
 {
     m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->setCurrentItem(2);       //FIXME
+    m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
     m_filterMethodCombo->blockSignals(false);
 }  
 
@@ -182,19 +182,7 @@ void ImageEffect_HotPixels::prepareEffect()
 
     QImage image = m_imagePreviewWidget->getOriginalClipImage();
     
-    //FIXME
-    int index = m_filterMethodCombo->currentItem();
-    InterpolationMethod method;
-    
-    if (index==0)
-        method=average;
-    else if (index==1)
-        method=linear;
-    else if (index==2)
-        method=quadratic;
-    else if (index==3)
-        method=cubic;
-    else method=quadratic; //Default, it shouldn't happen
+    int interpolationMethod = m_filterMethodCombo->currentItem();
 
     QValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
@@ -211,7 +199,7 @@ void ImageEffect_HotPixels::prepareEffect()
         }
 
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new HotPixelFixer(
-                       &image, this, hotPixelsRegion, method));
+                       &image, this, hotPixelsRegion, interpolationMethod));
 }
 
 void ImageEffect_HotPixels::prepareFinal()
@@ -224,22 +212,10 @@ void ImageEffect_HotPixels::prepareFinal()
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
-    //FIXME
-    int index = m_filterMethodCombo->currentItem();
-    InterpolationMethod method;
-    
-    if (index==0)
-        method=average;
-    else if (index==1)
-        method=linear;
-    else if (index==2)
-        method=quadratic;
-    else if (index==3)
-        method=cubic;
-    else method=quadratic; //Default, it shouldn't happen
+    int interpolationMethod = m_filterMethodCombo->currentItem();
 
     m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new HotPixelFixer(
-                       &orgImage, this, m_hotPixelsList, method));
+                       &orgImage, this, m_hotPixelsList, interpolationMethod));
     delete [] data;
 }
 

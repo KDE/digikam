@@ -1,10 +1,11 @@
 /* ============================================================
  * File  : hotpixelfixer.cpp
  * Author: Unai Garro <ugarro at users dot sourceforge dot net>
+ *         Gilles Caulier <caulier dot gilles at free dot fr> 
  * Date  : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005 by Unai Garro and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,11 +53,11 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 HotPixelFixer::HotPixelFixer(QImage *orgImage, QObject *parent, const QValueList<HotPixel>& hpList, 
-                             InterpolationMethod method)
+                             int interpolationMethod)
              : Digikam::ThreadedFilter(orgImage, parent, "HotPixels")
 {
-    m_hpList = hpList;
-    m_method = method;
+    m_hpList              = hpList;
+    m_interpolationMethod = interpolationMethod;
     mWeightList.clear();
     
     initFilter();
@@ -73,27 +74,25 @@ void HotPixelFixer::filterImage(void)
     for (it = m_hpList.begin() ; it != m_hpList.end() ; ++it)
         {
         HotPixel hp = *it;
-        interpolate(m_orgImage, hp, m_method);
+        interpolate(m_orgImage, hp, m_interpolationMethod);
         }
         
     m_destImage = m_orgImage;
 }
 
 // Interpolates a pixel block
-void HotPixelFixer::interpolate (QImage &img,HotPixel &hp,InterpolationMethod method)
+void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
 {
     int icomp;
     int component;
-    
         
     const int xPos = hp.x();
     const int yPos = hp.y();
     
-    
         // Interpolate pixel.
         switch (method)
         {
-        case average:
+        case AVERAGE_INTERPOLATION:
         {
             // We implement the bidimendional one first.
             // TODO: implement the rest of directions (V & H) here
@@ -162,27 +161,26 @@ void HotPixelFixer::interpolate (QImage &img,HotPixel &hp,InterpolationMethod me
             break;
                 } //Case average
 
-
-          case linear:
+          case LINEAR_INTERPOLATION:
              //(Bi)linear interpolation.
-            weightPixels (img,hp,linear,twodim);
+            weightPixels (img,hp,LINEAR_INTERPOLATION,TWODIM_DIRECTION);
             break;
 
-          case quadratic:
+          case QUADRATIC_INTERPOLATION:
             // (Bi)quadratic interpolation.
-             weightPixels (img,hp,quadratic,twodim);
+             weightPixels (img,hp,QUADRATIC_INTERPOLATION,TWODIM_DIRECTION);
             break;
 
-          case cubic:
+          case CUBIC_INTERPOLATION:
             // (Bi)cubic interpolation. 
-             weightPixels (img,hp,cubic,twodim);
+             weightPixels (img,hp,CUBIC_INTERPOLATION,TWODIM_DIRECTION);
         } //switch
     
 }
 
-void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod method, Direction dir)
+void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, int method, Direction dir)
 {
-//TODO: implement direction here too
+    //TODO: implement direction here too
         
     for (int iComp = 0; iComp < 3; ++iComp)
     {
@@ -190,15 +188,18 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
     
         Weights w;
         int polynomeOrder=-1;
+        
         switch (method)
         {
-            case linear:
+            case AVERAGE_INTERPOLATION:  // Gilles: to prevent warnings from compiler.
+                break;
+            case LINEAR_INTERPOLATION:
                 polynomeOrder=1;
                 break;
-            case quadratic:
+            case QUADRATIC_INTERPOLATION:
                 polynomeOrder=2;
                 break;
-            case cubic:
+            case CUBIC_INTERPOLATION:
                 polynomeOrder=3;
                 break;        
         }
@@ -207,10 +208,10 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
         // In the one-dimensional case, the width must be 1,
         // and the size must be stored in height 
         
-        w.setWidth(dir == twodim ? px.width() : 1);
-        w.setHeight(dir == horizontal ? px.width() : px.height());
+        w.setWidth(dir == TWODIM_DIRECTION ? px.width() : 1);
+        w.setHeight(dir == HORIZONTAL_DIRECTION ? px.width() : px.height());
         w.setPolynomeOrder(polynomeOrder);
-        w.setTwoDim(dir == twodim);
+        w.setTwoDim(dir == TWODIM_DIRECTION);
     
         //TODO: check this, it must not recalculate existing calculated weights
         //for now I don't think it's finding the duplicates fine, so it uses
@@ -237,18 +238,20 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
                 for (i = 0; i < w.positions().count(); ++i)
                 {
                     // In the one-dimensional case, only the y coordinate is used.  
-                    const int xx = px.x()+(dir == vertical ? x : dir== horizontal ? w.positions()[i].y() : w.positions()[i].x());
-                    const int yy = px.y()+(dir == horizontal ? y : w.positions()[i].y());
+                    const int xx = px.x()+(dir == VERTICAL_DIRECTION ? x : 
+                                   dir== HORIZONTAL_DIRECTION ? w.positions()[i].y() : w.positions()[i].x());
+                    const int yy = px.y()+(dir == HORIZONTAL_DIRECTION ? y : 
+                                   w.positions()[i].y());
         
                     if (validPoint (img,QPoint(xx, yy)))
                     {
                         //TODO: check this. I think it's broken
                         double weight;
-                        if (dir==vertical)
+                        if (dir==VERTICAL_DIRECTION)
                         {
                             weight = w[i][y][0];
                         }
-                        else if (dir==horizontal)
+                        else if (dir==HORIZONTAL_DIRECTION)
                         {
                             weight=w[i][0][x];
                         }
@@ -256,8 +259,7 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
                         {
                             weight=w[i][y][x];
                         }
-                    
-            
+                                
                         if (iComp==0) v += weight * qRed(img.pixel(xx, yy));
                         else if (iComp==1) v += weight * qGreen(img.pixel(xx, yy));
                         else v += weight * qBlue(img.pixel(xx, yy));
@@ -284,8 +286,6 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, InterpolationMethod
                     else b=component;
                     color.setRgb(r,g,b);
                     img.setPixel(px.x()+x,px.y()+y,color.rgb());
-                    
-                    
                     
                 } //if validPoint()
             
