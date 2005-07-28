@@ -1,10 +1,3 @@
-
-
-* Tina's Tag Usability Recommendations:
-(http://www.uni-koblenz.de/~trilliti/digikam_tagging/main.html). 
-Following items have been agreed on (rest are in dispute):
-1.2 Show which tags are already assigned
-
 * Fix PPC compatibility in image filters [GC]
 * Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]

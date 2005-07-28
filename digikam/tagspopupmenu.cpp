@@ -26,6 +26,8 @@
 
 #include <qpixmap.h>
 #include <qstring.h>
+#include <qpainter.h>
+#include <qstyle.h>
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -38,6 +40,61 @@
 #include "tagspopupmenu.h"
 
 #define ADDTAGID 10000
+
+class TagsPopupCheckedMenuItem : public QCustomMenuItem
+{
+public:
+
+    TagsPopupCheckedMenuItem(QPopupMenu* popup, const QString& txt, const QPixmap& pix)
+        : QCustomMenuItem(), m_popup(popup), m_txt(txt), m_pix(pix)
+    {
+    }
+
+    virtual QSize sizeHint()
+    {
+        QFont fn = m_popup->font();
+        QFontMetrics fm(fn);
+        int w = fm.width(m_txt) + 5 + kapp->style().pixelMetric(QStyle::PM_IndicatorWidth, 0);
+        int h = QMAX(fm.height(), m_pix.height());
+        return QSize( w, h );
+    }
+
+    virtual void paint(QPainter* p, const QColorGroup& cg, bool act, bool enabled,
+                       int x, int y, int w, int h )
+    {
+        p->save();
+        p->setPen(act ? cg.highlightedText() : cg.highlight());
+        p->drawText(x, y, w, h, Qt::AlignLeft|Qt::AlignVCenter, m_txt);
+        p->restore();
+
+        if (!m_pix.isNull())
+        {
+            QRect pixRect(x/2 - m_pix.width()/2, y, m_pix.width(), m_pix.height());
+            p->drawPixmap( pixRect.topLeft(), m_pix );
+        }
+
+        int checkWidth  = kapp->style().pixelMetric(QStyle::PM_IndicatorWidth,  0);
+        int checkHeight = kapp->style().pixelMetric(QStyle::PM_IndicatorHeight, 0);
+
+        QStyle::SFlags flags = QStyle::Style_Default;
+        flags |= QStyle::Style_On;
+        if (enabled)
+            flags |= QStyle::Style_Enabled;
+        if (act)
+            flags |= QStyle::Style_Active;
+        
+        QFont fn = m_popup->font();
+        QFontMetrics fm(fn);
+        QRect r(x + 5 + fm.width(m_txt), y, checkWidth, checkHeight);
+        kapp->style().drawPrimitive(QStyle::PE_Indicator, p, r, cg, flags);
+    }
+
+private:
+
+    QPopupMenu* m_popup;
+    QString     m_txt;
+    QPixmap     m_pix;
+};
 
 TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
                              int addToID,
@@ -117,7 +174,17 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
         }
         else
         {
-            popup->insertItem(pix, a->title(), m_addToID + a->id());
+            //popup->insertItem(pix, a->title(), m_addToID + a->id());
+            if ((m_mode == ASSIGN) && (m_assignedTags.contains(a->id())))
+            {
+                popup->insertItem(new TagsPopupCheckedMenuItem(popup, a->title(), pix),
+                                  m_addToID + a->id());
+            }
+            else
+            {
+
+                popup->insertItem(pix, a->title(), m_addToID + a->id());
+            }
         }
     }
 
@@ -163,6 +230,13 @@ void TagsPopupMenu::slotAboutToShow()
             m_assignedTags.append(*it);
         }
     }
+    else if (m_mode == ASSIGN)
+    {
+        if (m_selectedImageIDs.count() == 1)
+        {
+            m_assignedTags = man->albumDB()->getItemCommonTagIDs(m_selectedImageIDs);
+        }
+    }
         
     TAlbum* album = man->findTAlbum(0);
     if (!album)
@@ -195,7 +269,15 @@ void TagsPopupMenu::slotAboutToShow()
         }
         else
         {
-            insertItem(pix, a->title(), m_addToID + a->id());
+            if ((m_mode == ASSIGN) && (m_assignedTags.contains(a->id())))
+            {
+                insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
+                           m_addToID + a->id());
+            }
+            else
+            {
+                insertItem(pix, a->title(), m_addToID + a->id());
+            }
         }
     }
 }
