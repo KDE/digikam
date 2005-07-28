@@ -132,10 +132,17 @@ DateFolderView::~DateFolderView()
 
 void DateFolderView::setActive(bool val)
 {
+    if (d->active == val)
+        return;
+    
     d->active = val;
     if (d->active)
     {
         slotSelectionChanged();
+    }
+    else
+    {
+        d->monthview->setActive(false);
     }
 }
 
