@@ -40,6 +40,7 @@ class QComboBox;
 class QCheckBox;
 
 class KTextEdit;
+class KFontChooser;
 class KColorButton;
 
 namespace DigikamInsertTextImagesPlugin
@@ -62,12 +63,14 @@ protected:
     
 private:
     
+    int               m_alignTextMode;
+    int               m_defaultSizeFont;
+        
     QWidget          *m_parent;
     
     QComboBox        *m_textRotation;
     
     QPushButton      *m_helpButton;
-    QPushButton      *m_fontPropertiesButton;
     
     QCheckBox        *m_borderText;    
     QCheckBox        *m_transparentText;
@@ -78,13 +81,14 @@ private:
     
     KColorButton     *m_fontColorButton;
     
+    KFontChooser     *m_fontChooserWidget;
+    
     KTextEdit        *m_textEdit;
     
-    int               m_alignTextMode;
-    int               m_defaultSizeFont;
-    
     InsertTextWidget *m_previewWidget;
-    
+
+private:
+        
     void writeSettings(void);
     
 private slots:
@@ -94,7 +98,7 @@ private slots:
     void slotHelp();
     void slotOk();
     void slotUser1();
-    void slotFontPropertiesClicked();
+    void slotFontPropertiesChanged(const QFont &font);
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);
 };

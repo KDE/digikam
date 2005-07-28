@@ -86,7 +86,7 @@ Digikam::ImageIface* InsertTextWidget::imageIface()
 
 void InsertTextWidget::resetEdit()
 {
-    m_textRect.moveCenter( QPoint::QPoint(m_rect.x() + m_w/2, m_rect.y() + m_h/2) );
+    m_textRect.moveCenter( QPoint::QPoint(width()/2, height()/2) );
     makePixmap();
     repaint(false);
 }
@@ -151,10 +151,10 @@ QImage InsertTextWidget::makeInsertText(void)
     QRect fontRect = fontMt.boundingRect(0, 0, targetRect.width(), 
                                          targetRect.height(), 0, m_textString); 
     
-    // Calculate text area accordinly with rotation.
+    targetRect.setX( (int)(m_textRect.x()*ratioW) );
+    targetRect.setY( (int)(m_textRect.y()*ratioH) );
     
-    targetRect.setX( (int)((m_textRect.x() - m_rect.x())*ratioW) );
-    targetRect.setY( (int)((m_textRect.y() - m_rect.y())*ratioH) );
+    // Calculate text area accordinly with rotation.
        
     switch(m_textRotation)
        {
@@ -378,7 +378,9 @@ void InsertTextWidget::makePixmap(void)
        }
     else   // Make simple dot line border to help user.
        {
-       p.setPen(QPen(QColor(255, 64, 64), 1, Qt::DotLine));
+       p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+       p.drawRect(textRect);
+       p.setPen(QPen(Qt::red, 1, Qt::DotLine));
        p.drawRect(textRect);
        }
     
