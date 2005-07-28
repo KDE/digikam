@@ -77,7 +77,7 @@ protected:
     
 private slots:
         
-    void slotBlackFrame(QValueList<HotPixel> hpList);
+    void slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL);
     void slotApply();
     
 private:

@@ -113,8 +113,8 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
                           
-    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>)),
-            this, SLOT(slotBlackFrame(QValueList<HotPixel>))); 
+    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>, const KURL&)),
+            this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -232,8 +232,9 @@ void ImageEffect_HotPixels::putFinalData(void)
                           (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList)
+void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL)
 {
+    m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
     
     QPointArray pointList(m_hotPixelsList.size());

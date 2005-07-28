@@ -55,13 +55,13 @@ public:
 
 signals:
 
-    void blackFrameSelected(QValueList<HotPixel>);
+    void blackFrameSelected(QValueList<HotPixel>, const KURL&);
 
 private slots:
 
-    void slotParsed(QValueList<HotPixel> hotPixels)
+    void slotParsed(QValueList<HotPixel> hotPixels, const KURL& blackFrameURL)
        {
-       emit blackFrameSelected(hotPixels);
+       emit blackFrameSelected(hotPixels, blackFrameURL);
        };           
 };
 
@@ -82,7 +82,7 @@ public:
 
 signals:
 
-    void parsed(QValueList<HotPixel>);
+    void parsed(QValueList<HotPixel>, const KURL&);
             
 private:
 
@@ -92,7 +92,8 @@ private:
     QSize                 m_imageSize;
     QValueList <HotPixel> m_hotPixels;
     BlackFrameParser      m_parser;
-
+    KURL                  m_blackFrameURL;
+    
 private:    
         
     // Private methods
