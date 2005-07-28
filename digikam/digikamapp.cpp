@@ -426,17 +426,26 @@ void DigikamApp::setupActions()
     mImageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
                                                       actionCollection(),
                                                       "image_set_exif_orientation");
+    mImageExifOrientationActionMenu->setDelayed(false);
 
-    mImageSetExifOrientation1Action = new KAction(i18n("Normal"),0,actionCollection());
-    mImageSetExifOrientation2Action = new KAction(i18n("Flipped Horizontally"),0,actionCollection());
-    mImageSetExifOrientation3Action = new KAction(i18n("Rotated 180 Degrees"),0,actionCollection());
-    mImageSetExifOrientation4Action = new KAction(i18n("Flipped Vertically"),0,actionCollection());
-    mImageSetExifOrientation5Action = new KAction(i18n("Rotated 90 Degrees / Horiz. Flipped"),
-                                                       0, actionCollection());
-    mImageSetExifOrientation6Action = new KAction(i18n("Rotated 90 Degrees"),0,actionCollection());
-    mImageSetExifOrientation7Action = new KAction(i18n("Rotated 90 Degrees / Vert. Flipped"),
-                                                       0, actionCollection());
-    mImageSetExifOrientation8Action = new KAction(i18n("Rotated 270 Degrees"),0,actionCollection());
+    mImageSetExifOrientation1Action =
+        new KAction(i18n("Normal"),0,mImageExifOrientationActionMenu);
+    mImageSetExifOrientation2Action =
+        new KAction(i18n("Flipped Horizontally"),0,mImageExifOrientationActionMenu);
+    mImageSetExifOrientation3Action =
+        new KAction(i18n("Rotated 180 Degrees"),0,mImageExifOrientationActionMenu);
+    mImageSetExifOrientation4Action =
+        new KAction(i18n("Flipped Vertically"),0,mImageExifOrientationActionMenu);
+    mImageSetExifOrientation5Action =
+        new KAction(i18n("Rotated 90 Degrees / Horiz. Flipped"),
+                    0, mImageExifOrientationActionMenu);
+    mImageSetExifOrientation6Action =
+        new KAction(i18n("Rotated 90 Degrees"),0,mImageExifOrientationActionMenu);
+    mImageSetExifOrientation7Action =
+        new KAction(i18n("Rotated 90 Degrees / Vert. Flipped"),
+                    0, mImageExifOrientationActionMenu);
+    mImageSetExifOrientation8Action =
+        new KAction(i18n("Rotated 270 Degrees"),0,mImageExifOrientationActionMenu);
 
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation1Action);
     mImageExifOrientationActionMenu->insert(mImageSetExifOrientation2Action);
