@@ -49,6 +49,7 @@ private:
 private slots:
 
     void slotAddItems(const ImageInfoList& items);
+    void slotDeleteItem(ImageInfo* item);
     
 private:
     
@@ -57,6 +58,7 @@ private:
         bool active;
         bool selected;
         int  day;
+        int  numImages;
     };
 
     bool         m_active;

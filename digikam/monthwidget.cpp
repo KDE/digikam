@@ -77,6 +77,7 @@ void MonthWidget::setYearMonth(int year, int month)
         m_days[i].active   = false;
         m_days[i].selected = false;
         m_days[i].day      = -1;
+        m_days[i].numImages = 0;
     }
 
     QDate d(year, month, 1);
@@ -296,6 +297,9 @@ void MonthWidget::setActive(bool val)
         connect(AlbumLister::instance(),
                 SIGNAL(signalNewItems(const ImageInfoList&)),
                 SLOT(slotAddItems(const ImageInfoList&)));
+        connect(AlbumLister::instance(),
+                SIGNAL(signalDeleteItem(ImageInfo*)),
+                SLOT(slotDeleteItem(ImageInfo*)));
     }
     else
     {
@@ -322,11 +326,37 @@ void MonthWidget::slotAddItems(const ImageInfoList& items)
             if (m_days[i].day == dt.date().day())
             {
                 m_days[i].active = true;
+                m_days[i].numImages++;
                 break;
             }
         }
     }
 
+    update();
+}
+
+void MonthWidget::slotDeleteItem(ImageInfo* item)
+{
+    if (!m_active || !item)
+        return;
+
+    QDateTime dt = item->dateTime();
+
+    for (int i=0; i<42; i++)
+    {
+        if (m_days[i].day == dt.date().day())
+        {
+            m_days[i].numImages--;
+            if (m_days[i].numImages <= 0)
+            {
+                m_days[i].active = false;
+                m_days[i].numImages = 0;
+            }
+            
+            break;
+        }
+    }
+    
     update();
 }
 
