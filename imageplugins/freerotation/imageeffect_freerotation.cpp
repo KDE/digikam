@@ -124,7 +124,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the rotated image. "
-                                            "To smooth the target image, it will be blured a little."));
+                                            "To smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 5, 5, 0, 2);
     
     QLabel *label4 = new QLabel(i18n("Auto-Crop:"), gboxSettings);

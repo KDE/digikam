@@ -126,7 +126,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the sheared image. "
-                                            "To smooth the target image, it will be blured a little."));
+                                            "To smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
             
     setUserAreaWidget(gboxSettings); 
