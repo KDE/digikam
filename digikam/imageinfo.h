@@ -147,7 +147,7 @@ public:
      * Set the date and time (write it to database)
      * @param dateTime the new date and time.
      */
-    void setDateTime(const QDateTime dateTime);
+    void setDateTime(const QDateTime& dateTime);
 
     /**
      * @return a list of names of all tags assigned to this item

@@ -163,7 +163,7 @@ void* ImageInfo::getViewItem() const
     return m_viewitem;
 }
 
-void ImageInfo::setDateTime(const QDateTime dateTime)
+void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
     AlbumDB* db  = m_man->albumDB();
     db->setItemDate(m_ID, dateTime);
