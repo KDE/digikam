@@ -38,7 +38,8 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 {
     addColumn(i18n("Preview"));
     addColumn(i18n("Size"));
-    addColumn(i18n("HP"));      // Hot Pixels found.
+    addColumn(i18n("This is a column which will contain the amount of HotPixels "
+                   "found in the black frame file", "HP"));
     addColumn(i18n("File"));
     setAllColumnsShowFocus(true);
 };
