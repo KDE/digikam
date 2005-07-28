@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=ImagePlugin_HotPixels
+Name[nl]=Afbeeldingsplugin_HotPixels
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Hot pixel correction plugin for Digikam
+Comment[et]=DigiKami kuumade pikslite korrigeerimise plugin
+Comment[nl]=digiKam-plugin voor het corrigeren van de hotpixels
+Comment[pt]=Um 'plugin' do digiKam para corrigir os 'pixels quentes' da imagem
+Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os 'pixels quentes' da imagem
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net

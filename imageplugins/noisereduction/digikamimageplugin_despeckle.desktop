@@ -15,8 +15,8 @@ Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
 Comment[et]=DigiKami müra vähendamise plugin
 Comment[nl]=digiKam-plugin voor ruisreductie
-Comment[pt]='Plugin' de redução de ruído para o digiKam
-Comment[pt_BR]='Plugin' de redução de ruído para o digiKam
+Comment[pt]=Um 'plugin' do digiKam para a redução de ruído
+Comment[pt_BR]=Um 'plugin' do digiKam para a redução de ruído
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr
