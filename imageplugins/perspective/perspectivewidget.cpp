@@ -555,6 +555,8 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
     int         alpha;
     int         bytes;
     uchar      *dest, *d;
+    
+    uint        backgroundColor = colorGroup().background().rgb();
     uchar       bg_color[4];
 
     m   = *matrix;
@@ -562,16 +564,11 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
 
     // Background color  
   
-    memset(bg_color, 0, sizeof(bg_color));
+    memcpy(bg_color, &backgroundColor, sizeof(bg_color));
   
     // RGBA image !
   
-    bg_color[4] = 0;
     alpha = 4;
-
-    // "Outside" a channel is transparency, not the bg color  
-  
-    bg_color[0] = 0; 
 
     // Find the inverse of the transformation matrix  
   
