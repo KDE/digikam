@@ -27,9 +27,9 @@
 
 #include <qrect.h>
 
-// KDE include.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialogbase.h"
 
 class QPushButton;
 class QLabel;
@@ -39,7 +39,7 @@ namespace DigikamPerspectiveImagesPlugin
 
 class PerspectiveWidget;
 
-class ImageEffect_Perspective : public KDialogBase
+class ImageEffect_Perspective : public DigikamImagePlugins::ImageDialogBase
 {
     Q_OBJECT
 
@@ -57,17 +57,12 @@ private:
     QLabel            *m_bottomLeftAngleLabel;
     QLabel            *m_bottomRightAngleLabel;
     
-    QWidget           *m_parent;
-    
-    QPushButton       *m_helpButton;
-    
     PerspectiveWidget *m_previewWidget;
                                                                     
 private slots:
 
-    void slotHelp();
     void slotOk();
-    void slotUser1();
+    void slotDefault();
     void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
 };

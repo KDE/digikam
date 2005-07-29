@@ -29,9 +29,11 @@
 
 // KDE include.
 
-#include <kdialogbase.h>
 #include <kurl.h>
 
+// Local includes.
+
+#include "imagedialogbase.h"
 
 class QPushButton;
 
@@ -47,7 +49,7 @@ namespace DigikamSuperImposeImagesPlugin
 
 class SuperImposeWidget;
 
-class ImageEffect_SuperImpose : public KDialogBase
+class ImageEffect_SuperImpose : public DigikamImagePlugins::ImageDialogBase
 {
     Q_OBJECT
 
@@ -57,27 +59,24 @@ public:
     ~ImageEffect_SuperImpose();
 
 private:
-
-    QWidget               *m_parent;
     
-    QPushButton           *m_helpButton;
+    KURL                   m_templatesUrl;
+    KURL                   m_templatesRootUrl;
     
     SuperImposeWidget     *m_previewWidget;
     
     Digikam::ThumbBarView *m_thumbnailsBar;
 
-    KURL                   m_templatesUrl;
-    KURL                   m_templatesRootUrl;
-    
     DirSelectWidget       *m_dirSelect;
+    
+private:
     
     void populateTemplates(void);
     
 private slots:
 
-    void slotHelp();
     void slotOk();
-    void slotUser1();
+    void slotDefault();
     void slotTemplateDirChanged(const KURL& url);
     void slotRootTemplateDirChanged(void);
 

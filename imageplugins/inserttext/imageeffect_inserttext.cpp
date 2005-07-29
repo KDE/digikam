@@ -19,12 +19,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// C++ include.
-
-#include <cstring>
-#include <cmath>
-#include <cstdlib>
  
 // Qt includes. 
  
@@ -68,23 +62,16 @@
 
 #include "version.h"
 #include "inserttextwidget.h"
-#include "bannerwidget.h"
 #include "imageeffect_inserttext.h"
-
 
 namespace DigikamInsertTextImagesPlugin
 {
 
 ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
-                      : KDialogBase(Plain, i18n("Insert Text on Photograph"),
-                                    Help|User1|Ok|Cancel, Ok,
-                                    parent, 0, true, true, i18n("&Reset Values")),
-                        m_parent(parent)
+                      : DigikamImagePlugins::ImageDialogBase(parent, i18n("Insert Text on Photograph"),
+                                                             "inserttext", false)
 {
     QString whatsThis;
-    
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );
-    resize(configDialogSize("Insert Text Tool Dialog"));    
     
     // About data and help button.
     
@@ -100,19 +87,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Insert Text Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-    
-    // -------------------------------------------------------------
-        
-    QGridLayout* topLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
-    
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
-                          i18n("Insert Text to Photograph")); 
-    topLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    setAboutData(about);
     
     // -------------------------------------------------------------
     
@@ -122,15 +97,12 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
-                                           "You can use the mouse for moving the text at the right location.") );
-    topLayout->addMultiCellWidget(frame, 1, 1, 0, 0);
-    topLayout->setColStretch(0, 10);
-    topLayout->setRowStretch(1, 10);
+                                           "You can use the mouse for moving the text at the right location."));
+    setPreviewAreaWidget(frame);                                           
     
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );         
-    QFrame *gbox2 = new QFrame(plainPage());
+    QWidget *gbox2 = new QWidget(plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());
     
     m_textEdit = new KTextEdit(gbox2);
@@ -138,7 +110,6 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textEdit->setWordWrap(QTextEdit::NoWrap);
     QWhatsThis::add( m_textEdit, i18n("<p>Enter here your text to insert on your image."));
     gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
-    
     
     // -------------------------------------------------------------
     
@@ -209,9 +180,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
     gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
     
-    vLayout->addWidget(gbox2);
-    vLayout->addStretch(10);
-    topLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
+    setUserAreaWidget(gbox2);
     
     // -------------------------------------------------------------
     
@@ -243,7 +212,6 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
 ImageEffect_InsertText::~ImageEffect_InsertText()
 {
-    saveDialogSize("Insert Text Tool Dialog");
     writeSettings();
 }
 
@@ -295,17 +263,7 @@ void ImageEffect_InsertText::writeSettings(void)
     config->sync();
 }
 
-void ImageEffect_InsertText::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("inserttext", "digikamimageplugins");
-}
-
-void ImageEffect_InsertText::closeEvent(QCloseEvent *e)
-{
-    e->accept();    
-}
-
-void ImageEffect_InsertText::slotUser1()
+void ImageEffect_InsertText::slotDefault()
 {
     m_fontColorButton->blockSignals(true);
     m_alignButtonGroup->blockSignals(true);

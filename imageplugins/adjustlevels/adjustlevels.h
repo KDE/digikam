@@ -24,7 +24,7 @@
 
 // Local includes.
 
-#include "imagedialog.h"
+#include "imagetabdialog.h"
 
 class QComboBox;
 class QSpinBox;
@@ -46,7 +46,7 @@ class ImageGuideWidget;
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelDialog : public DigikamImagePlugins::ImageDialog
+class AdjustLevelDialog : public DigikamImagePlugins::ImageTabDialog
 {
     Q_OBJECT
 

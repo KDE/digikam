@@ -75,7 +75,8 @@ namespace DigikamAdjustCurvesImagesPlugin
 {
 
 AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                 : ImageDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", true, true, false)
+                 : ImageTabDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", 
+                                  true, true, false)
 {
     // Create an empty instance of curves to use.
     m_curves = new Digikam::ImageCurves();
@@ -99,7 +100,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 5, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 6, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -220,6 +221,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
     grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
+    grid->setRowStretch(6, 10);
     
     setUserAreaWidget(gboxSettings);
 

@@ -28,7 +28,7 @@
 
 // Local includes.
 
-#include "imagedialog.h"
+#include "imagetabdialog.h"
 
 class QComboBox;
 class QPushButton;
@@ -47,7 +47,7 @@ class CurvesWidget;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public DigikamImagePlugins::ImageDialog
+class AdjustCurveDialog : public DigikamImagePlugins::ImageTabDialog
 {
     Q_OBJECT
 

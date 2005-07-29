@@ -79,7 +79,8 @@ namespace DigikamChannelMixerImagesPlugin
 {
 
 ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                  : ImageDialog(parent, i18n("Color Channel Mixer"), "channelmixer", true, false, true)
+                  : ImageTabDialog(parent, i18n("Color Channel Mixer"), "channelmixer", 
+                                   true, false, true)
 {
     m_destinationPreviewData = 0L;
     
@@ -102,7 +103,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -195,7 +196,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
     grid->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
-
+    grid->setRowStretch(10, 10);
+    
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------

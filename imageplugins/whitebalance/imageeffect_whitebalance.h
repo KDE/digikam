@@ -29,7 +29,7 @@
 
 // Local includes.
 
-#include "imagedialog.h"
+#include "imagetabdialog.h"
 
 class QPushButton;
 class QLabel;
@@ -49,7 +49,7 @@ class HistogramWidget;
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageDialog
+class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageTabDialog
 {
     Q_OBJECT
 

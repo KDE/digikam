@@ -28,11 +28,10 @@
 #include <qcolor.h>
 #include <qimage.h>
 
-// KDE includes.
+// Local includes.
 
-#include <kdialogbase.h>
+#include "imagedialogbase.h"
 
-class QPushButton;
 class QLabel;
 class QFont;
 class QHButtonGroup;
@@ -48,7 +47,7 @@ namespace DigikamInsertTextImagesPlugin
 
 class InsertTextWidget;
 
-class ImageEffect_InsertText : public KDialogBase
+class ImageEffect_InsertText : public DigikamImagePlugins::ImageDialogBase
 {
     Q_OBJECT
     
@@ -57,20 +56,12 @@ public:
     ImageEffect_InsertText(QWidget *parent);
     ~ImageEffect_InsertText();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
     int               m_alignTextMode;
     int               m_defaultSizeFont;
         
-    QWidget          *m_parent;
-    
     QComboBox        *m_textRotation;
-    
-    QPushButton      *m_helpButton;
     
     QCheckBox        *m_borderText;    
     QCheckBox        *m_transparentText;
@@ -95,9 +86,8 @@ private slots:
 
     void readSettings(void);
     
-    void slotHelp();
     void slotOk();
-    void slotUser1();
+    void slotDefault();
     void slotFontPropertiesChanged(const QFont &font);
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);

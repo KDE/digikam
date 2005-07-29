@@ -50,7 +50,6 @@
 // Local includes.
 
 #include "version.h"
-#include "bannerwidget.h"
 #include "perspectivewidget.h"
 #include "imageeffect_perspective.h"
 
@@ -58,16 +57,11 @@ namespace DigikamPerspectiveImagesPlugin
 {
 
 ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
-                       : KDialogBase(Plain, i18n("Perspective Adjustement"),
-                                     Help|User1|Ok|Cancel, Ok,
-                                     parent, 0, true, true, i18n("&Reset Values")),
-                         m_parent(parent)
+                      : DigikamImagePlugins::ImageDialogBase(parent, i18n("Perspective Adjustement"),
+                                                             "perspective", false)
 {
     QString whatsThis;
     
-    setButtonWhatsThis ( User1, i18n("<p>Reset all parameters to the default values.") );        
-    resize(configDialogSize("Perspective Tool Dialog"));  
-        
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -82,19 +76,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
     
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
-    
-    // -------------------------------------------------------------
-
-    QGridLayout *mainLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
-
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), 
-                          i18n("Perspective Adjustement"));    
-    mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    setAboutData(about);    
     
     // -------------------------------------------------------------
     
@@ -102,21 +84,20 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
+    l->addWidget(m_previewWidget);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
                                            "You can use the mouse for dragging the corner to adjust the "
                                            "perspective transformation area."));
-    l->addWidget(m_previewWidget, 0);
-    mainLayout->addMultiCellWidget(frame, 1, 2, 0, 0);
-    mainLayout->setColStretch(0, 10);
-    mainLayout->setRowStretch(2, 10);
+    setPreviewAreaWidget(frame); 
     
     // -------------------------------------------------------------
     
-    QGridLayout* gridLayout = new QGridLayout( 7, 2 , spacingHint() );
-    QLabel *label1 = new QLabel(i18n("New Width:"), plainPage());
-    m_newWidthLabel = new QLabel(plainPage());
-    QLabel *label2 = new QLabel(i18n("New Height:"), plainPage());
-    m_newHeightLabel = new QLabel(plainPage());
+    QWidget *gbox2 = new QWidget(plainPage());
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());    
+    QLabel *label1 = new QLabel(i18n("New Width:"), gbox2);
+    m_newWidthLabel = new QLabel(gbox2);
+    QLabel *label2 = new QLabel(i18n("New Height:"), gbox2);
+    m_newHeightLabel = new QLabel(gbox2);
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
@@ -125,17 +106,17 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    KSeparator *line = new KSeparator (Horizontal, plainPage());
+    KSeparator *line = new KSeparator (Horizontal, gbox2);
     
-    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), plainPage());
-    QLabel *label3 = new QLabel(i18n("  Top Left:"), plainPage());
-    m_topLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label4 = new QLabel(i18n("  Top Right:"), plainPage());
-    m_topRightAngleLabel = new QLabel(plainPage());
-    QLabel *label5 = new QLabel(i18n("  Bottom Left:"), plainPage());
-    m_bottomLeftAngleLabel = new QLabel(plainPage());
-    QLabel *label6 = new QLabel(i18n("  Bottom Right:"), plainPage());
-    m_bottomRightAngleLabel = new QLabel(plainPage());
+    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
+    QLabel *label3 = new QLabel(i18n("  Top Left:"), gbox2);
+    m_topLeftAngleLabel = new QLabel(gbox2);
+    QLabel *label4 = new QLabel(i18n("  Top Right:"), gbox2);
+    m_topRightAngleLabel = new QLabel(gbox2);
+    QLabel *label5 = new QLabel(i18n("  Bottom Left:"), gbox2);
+    m_bottomLeftAngleLabel = new QLabel(gbox2);
+    QLabel *label6 = new QLabel(i18n("  Bottom Right:"), gbox2);
+    m_bottomRightAngleLabel = new QLabel(gbox2);
     
     gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);
     gridLayout->addMultiCellWidget(angleLabel, 3, 3, 0, 2);
@@ -147,8 +128,8 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
     gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
     gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
-        
-    mainLayout->addMultiCellLayout(gridLayout, 1, 1, 1, 1);    
+    gridLayout->setRowStretch(8, 10);        
+    setUserAreaWidget(gbox2);
     
     // -------------------------------------------------------------
     
@@ -158,15 +139,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
 {
-    saveDialogSize("Perspective Tool Dialog");
 }
 
-void ImageEffect_Perspective::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("perspective", "digikamimageplugins");
-}
-
-void ImageEffect_Perspective::slotUser1()
+void ImageEffect_Perspective::slotDefault()
 {
     m_previewWidget->reset();
 } 

@@ -83,8 +83,8 @@ namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height)
-                        : ImageDialog(parent, i18n("White Color Balance Correction"), "whitebalance",
-                                      true, true, true)
+                        : ImageTabDialog(parent, i18n("White Color Balance Correction"), "whitebalance",
+                                         true, true, true)
 {
     QString whatsThis;
     
@@ -178,7 +178,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 7, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout( layout2, 8, 5, spacingHint());
     KIconLoader icon;
     
     m_exposureLabel = new QLabel(i18n("Exposure:"), gboxSettings);
@@ -283,6 +283,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid2->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
     grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 5);
     grid2->addMultiCellWidget(m_overExposureIndicatorBox, 7, 7, 0, 5);
+    grid2->setRowStretch(8, 10);
             
     setUserAreaWidget(gboxSettings);
             

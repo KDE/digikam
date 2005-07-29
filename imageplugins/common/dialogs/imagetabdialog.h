@@ -1,9 +1,10 @@
 /* ============================================================
- * File  : imagedialog.h
+ * File  : imagetabdialog.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
- * Description : simple plugins dialog without threadable 
- *               filter interface.
+ * Description : simple plugins dialog based on 
+ *               ImageDialogBase using ImageTabWidget 
+ *               for preview.
  * 
  * Copyright 2005 by Gilles Caulier
  *
@@ -20,20 +21,12 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEDIALOG_H
-#define IMAGEDIALOG_H
+#ifndef IMAGETABDIALOG_H
+#define IMAGETABDIALOG_H
 
-// Qt includes
+// Local includes.
 
-#include <qstring.h>
-
-// KDE includes.
-
-#include <kdialogbase.h>
-
-class QGridLayout;
-
-class KAboutData;
+#include "imagedialogbase.h"
 
 namespace Digikam
 {
@@ -45,35 +38,22 @@ namespace DigikamImagePlugins
 
 class ImageTabWidget;
 
-class ImageDialog : public KDialogBase
+class ImageTabDialog : public ImageDialogBase
 {
     Q_OBJECT
 
 public:
 
-    ImageDialog(QWidget *parent, QString title, QString name, bool loadFileSettings=true,
-                bool orgGuideVisible=false, bool targGuideVisible=false);
-    ~ImageDialog();
+    ImageTabDialog(QWidget *parent, QString title, QString name, bool loadFileSettings=true,
+                   bool orgGuideVisible=false, bool targGuideVisible=false);
+    ~ImageTabDialog();
 
     Digikam::ImageGuideWidget *previewOriginalWidget(void);
     Digikam::ImageGuideWidget *previewTargetWidget(void);
     
-    void setAboutData(KAboutData *about);
-    void setUserAreaWidget(QWidget *w);
-    
 private:
 
-    QGridLayout    *m_mainLayout;
-    
-    QWidget        *m_parent;
-    
-    QString         m_name;
-    
     ImageTabWidget *m_imageTabPreviewWidget;
-    
-private slots:
-
-    void slotHelp();
 };
 
 }  // NameSpace DigikamImagePlugins

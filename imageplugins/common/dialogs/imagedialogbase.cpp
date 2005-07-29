@@ -1,9 +1,11 @@
 /* ============================================================
- * File  : imagedialog.cpp
+ * File  : imagedialogbase.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
  * Description : simple plugins dialog without threadable 
- *               filter interface.
+ *               filter interface. The dialog laytou is 
+ *               designed to accept custom widgets in 
+ *               preview and settings area.
  *
  * Copyright 2005 by Gilles Caulier
  *
@@ -22,32 +24,19 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qcolor.h>
 #include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
 #include <qlabel.h>
-#include <qpainter.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
 #include <qwhatsthis.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
-#include <qcheckbox.h>
-#include <qfile.h>
 
 // KDE includes.
 
 #include <kcursor.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <knuminput.h>
-#include <kmessagebox.h>
-#include <kselect.h>
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
@@ -64,20 +53,18 @@
 
 #include "version.h"
 #include "bannerwidget.h"
-#include "imagetabwidget.h"
-#include "imagedialog.h"
+#include "imagedialogbase.h"
 
 namespace DigikamImagePlugins
 {
 
-ImageDialog::ImageDialog(QWidget* parent, QString title, QString name, bool loadFileSettings,
-                         bool orgGuideVisible, bool targGuideVisible)
-           : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
-                         parent, 0, true, true,
-                         QString::null,
-                         i18n("&Load..."),
-                         i18n("&Save As...")),
-             m_parent(parent), m_name(name)
+ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, bool loadFileSettings)
+               : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
+                             parent, 0, true, true,
+                             QString::null,
+                             i18n("&Load..."),
+                             i18n("&Save As...")),
+                 m_parent(parent), m_name(name)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -98,27 +85,23 @@ ImageDialog::ImageDialog(QWidget* parent, QString title, QString name, bool load
 
     // -------------------------------------------------------------
 
-    m_imageTabPreviewWidget = new DigikamImagePlugins::ImageTabWidget(plainPage(), orgGuideVisible, targGuideVisible);
-    m_mainLayout->addMultiCellWidget(m_imageTabPreviewWidget, 1, 2, 0, 0);
     m_mainLayout->setColStretch(0, 10);
     m_mainLayout->setRowStretch(2, 10);
     
     kapp->restoreOverrideCursor();
-    
-    // -------------------------------------------------------------
 }
 
-ImageDialog::~ImageDialog()
+ImageDialogBase::~ImageDialogBase()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));   
 }
 
-void ImageDialog::slotHelp()
+void ImageDialogBase::slotHelp()
 {
     KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
 }
 
-void ImageDialog::setAboutData(KAboutData *about)
+void ImageDialogBase::setAboutData(KAboutData *about)
 {
     QPushButton *helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
@@ -127,23 +110,16 @@ void ImageDialog::setAboutData(KAboutData *about)
     helpButton->setPopup( helpMenu->menu() );
 }
 
-Digikam::ImageGuideWidget *ImageDialog::previewOriginalWidget(void)
+void ImageDialogBase::setPreviewAreaWidget(QWidget *w)
 {
-    return m_imageTabPreviewWidget->previewOriginal(); 
+    m_mainLayout->addMultiCellWidget(w, 1, 2, 0, 0);
 }
 
-Digikam::ImageGuideWidget *ImageDialog::previewTargetWidget(void) 
-{ 
-    return m_imageTabPreviewWidget->previewTarget();   
-}
-
-void ImageDialog::setUserAreaWidget(QWidget *w)
+void ImageDialogBase::setUserAreaWidget(QWidget *w)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() ); 
-    vLayout->addWidget(w);
-    m_mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);    
+    m_mainLayout->addMultiCellWidget(w, 1, 2, 1, 1);
 }
 
 }  // NameSpace DigikamImagePlugins
 
-#include "imagedialog.moc"
+#include "imagedialogbase.moc"

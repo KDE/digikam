@@ -24,7 +24,7 @@
 
 // Local includes.
 
-#include "imagedialog.h"
+#include "imagetabdialog.h"
 
 class QComboBox;
 class QPushButton;
@@ -42,7 +42,7 @@ class ImageGuideWidget;
 namespace DigikamChannelMixerImagesPlugin
 {
 
-class ChannelMixerDialog : public DigikamImagePlugins::ImageDialog
+class ChannelMixerDialog : public DigikamImagePlugins::ImageTabDialog
 {
     Q_OBJECT
 

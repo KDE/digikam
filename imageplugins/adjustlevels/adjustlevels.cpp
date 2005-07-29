@@ -75,7 +75,8 @@ namespace DigikamAdjustLevelsImagesPlugin
 {
 
 AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint width, uint height)
-                 : ImageDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", true, true, false)
+                 : ImageTabDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", 
+                                  true, true, false)
 {
     // Create an empty instance of levels to use.
     m_levels = new Digikam::ImageLevels();
@@ -99,7 +100,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 8, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -261,7 +262,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
     grid->addMultiCellWidget(m_overExposureIndicatorBox, 8, 8, 0, 5);
-
+    grid->setRowStretch(9, 10);
+    
     setUserAreaWidget(gboxSettings);    
     
     // -------------------------------------------------------------
