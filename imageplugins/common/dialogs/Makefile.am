@@ -3,7 +3,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdigikamimagepluginsdialog.la
 
 libdigikamimagepluginsdialog_la_SOURCES = ctrlpaneldialog.cpp imageguidedialog.cpp \
-                                          imagedialogbase.cpp imagetabdialog.cpp 
+                                          imagedialogbase.cpp imagetabdialog.cpp \
+                                          threadedfilterdialog.cpp 
 
 libdigikamimagepluginsdialog_la_LIBADD = \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
