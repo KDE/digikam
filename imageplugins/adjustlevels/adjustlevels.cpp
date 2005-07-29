@@ -281,7 +281,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
     
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotUser1()));
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
