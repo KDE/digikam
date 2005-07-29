@@ -301,7 +301,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     // -------------------------------------------------------------
     
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotUser1()));
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
 
     // -------------------------------------------------------------
  
