@@ -87,8 +87,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     setAboutData(about);
     
     // -------------------------------------------------------------
-    
-    
+        
     QWidget *gboxSettings = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
     

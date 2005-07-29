@@ -57,8 +57,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     m_guideSize   = guideSize;
     m_focus       = false;
     m_flicker     = 0;
-    
-    m_timerID = startTimer(800);
+    m_timerID     = 0;
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -72,6 +71,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
     resetSpotPosition();
+    setSpotVisible(m_spotVisible);
 }
 
 ImageGuideWidget::~ImageGuideWidget()
@@ -79,8 +79,9 @@ ImageGuideWidget::~ImageGuideWidget()
     delete [] m_data;
     delete m_iface;
     
-    if (m_pixmap)
-       delete m_pixmap;
+    if (m_timerID) killTimer(m_timerID);
+           
+    if (m_pixmap) delete m_pixmap;
 }
 
 Digikam::ImageIface* ImageGuideWidget::imageIface()
@@ -124,6 +125,15 @@ QColor ImageGuideWidget::getSpotColor(void)
 void ImageGuideWidget::setSpotVisible(bool spotVisible)
 {
     m_spotVisible = spotVisible;
+    
+    if (m_spotVisible)
+       m_timerID = startTimer(800);
+    else
+       {
+       killTimer(m_timerID);
+       m_timerID = 0;
+       }
+       
     updatePixmap();
     repaint(false);
 }
@@ -159,6 +169,9 @@ void ImageGuideWidget::updatePixmap( void )
           case HVGuideMode:
              {
              QPainter p(m_pixmap);
+             p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+             p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
+             p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
              p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
              p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
              p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
@@ -169,12 +182,18 @@ void ImageGuideWidget::updatePixmap( void )
           case PickColorMode:
              {
              QPainter p(m_pixmap);
-             p.setPen(QPen(m_guideColor, m_guideSize, Qt::SolidLine));
+             p.setPen(QPen(m_guideColor, 1, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
-             if (m_flicker%2 != 0)
-                p.setPen(QPen(m_guideColor, m_guideSize+2, Qt::SolidLine));
+             p.setPen(QPen(m_guideColor, 3, Qt::SolidLine));
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
+
+             if (m_flicker%2 != 0)
+                {
+                p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                p.drawEllipse( xspot-5, yspot-5, 11, 11 );
+                }
+                
              p.end();
              break;
              }
@@ -215,6 +234,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
     m_spot.setX((int)((float)m_spot.x() * ( (float)m_w / (float)old_w)));
     m_spot.setY((int)((float)m_spot.y() * ( (float)m_h / (float)old_h)));
+    updatePixmap();
     blockSignals(false);
     emit signalResized();
 }

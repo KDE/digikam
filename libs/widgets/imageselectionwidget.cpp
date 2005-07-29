@@ -660,11 +660,21 @@ void ImageSelectionWidget::updatePixmap(void)
        {
        case RulesOfThirds:
             {
-            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
-            
             int xThird = m_localRegionSelection.width()  / 3;
             int yThird = m_localRegionSelection.height() / 3;
             
+            p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+            p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
+            p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
+                        m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.bottom() );
+            
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + yThird );
+            p.drawLine( m_localRegionSelection.left(),  m_localRegionSelection.top() + 2*yThird,
+                        m_localRegionSelection.right(), m_localRegionSelection.top() + 2*yThird );
+            
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
             p.drawLine( m_localRegionSelection.left() + xThird,   m_localRegionSelection.top(),
                         m_localRegionSelection.left() + xThird,   m_localRegionSelection.bottom() );
             p.drawLine( m_localRegionSelection.left() + 2*xThird, m_localRegionSelection.top(),
@@ -679,8 +689,6 @@ void ImageSelectionWidget::updatePixmap(void)
             
        case HarmoniousTriangles:
             {
-            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
-            
             // Move coordinates to local center selection.            
             p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
             
@@ -692,13 +700,24 @@ void ImageSelectionWidget::updatePixmap(void)
             if (m_flipVerGoldenGuide)
                 p.scale(1, -1);         
             
-            p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
-                         m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2);
-            
             float w = (float)m_localRegionSelection.width();
             float h = (float)m_localRegionSelection.height();
             int   d = (int)((h*cos(atan(w/h)) / (cos(atan(h/w)))));
-                         
+            
+            p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+            p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
+                         m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2);
+            
+            p.drawLine( -m_localRegionSelection.width()/2 + d, -m_localRegionSelection.height()/2,
+                        -m_localRegionSelection.width()/2,      m_localRegionSelection.height()/2);
+            
+            p.drawLine( m_localRegionSelection.width()/2,     -m_localRegionSelection.height()/2,
+                        m_localRegionSelection.width()/2 - d,  m_localRegionSelection.height()/2);
+            
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
+            p.drawLine( -m_localRegionSelection.width()/2, -m_localRegionSelection.height()/2,
+                         m_localRegionSelection.width()/2,  m_localRegionSelection.height()/2);
+            
             p.drawLine( -m_localRegionSelection.width()/2 + d, -m_localRegionSelection.height()/2,
                         -m_localRegionSelection.width()/2,      m_localRegionSelection.height()/2);
             
@@ -709,8 +728,6 @@ void ImageSelectionWidget::updatePixmap(void)
        
        case GoldenMean:
             {
-            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
-                        
             // Move coordinates to local center selection.            
             p.translate(m_localRegionSelection.center().x(), m_localRegionSelection.center().y());
             
@@ -740,6 +757,89 @@ void ImageSelectionWidget::updatePixmap(void)
             QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), 
                      (int)(R6.width()/PHI), R5.height() - R6.height());
                                             
+            p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+            
+            // Drawing Golden sections.
+            if (m_drawGoldenSection)
+               {            
+               p.drawLine( R1.left(), R2.top(),
+                           R2.right(), R2.top());
+                
+               p.drawLine( R1.left(), R1.top() + R2.height(),
+                           R2.right(), R1.top() + R2.height());
+                
+               p.drawLine( R2.right() - R1.width(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom() );
+                
+               p.drawLine( R1.topRight(), R1.bottomRight() );
+               }
+                            
+            // Drawing Golden triangle guides.
+            if (m_drawGoldenTriangle)
+               {            
+               p.drawLine( R1.left(),  R1.bottom(),
+                           R2.right(), R1.top() );
+                
+               p.drawLine( R1.left(), R1.top(),
+                           R2.right() - R1.width(), R1.bottom());
+
+               p.drawLine( R1.left() + R1.width(), R1.top(),
+                           R2.right(), R1.bottom() );
+               }
+                
+            // Drawing Golden spiral sections.
+            if (m_drawGoldenSpiralSection)
+               {            
+               p.drawLine( R1.topRight(),   R1.bottomRight() );
+               p.drawLine( R2.topLeft(),    R2.topRight() );
+               p.drawLine( R3.topLeft(),    R3.bottomLeft() );
+               p.drawLine( R4.bottomLeft(), R4.bottomRight() );
+               p.drawLine( R5.topRight(),   R5.bottomRight() );
+               p.drawLine( R6.topLeft(),    R6.topRight() );
+               p.drawLine( R7.topLeft(),    R7.bottomLeft() );
+               }
+                                        
+            // Drawing Golden Spiral.
+            if (m_drawGoldenSpiral)
+               {
+               p.drawArc ( R1.left(), 
+                           R1.top() - R1.height(),
+                           2*R1.width(), 2*R1.height(), 
+                           180*16, 90*16);                       
+               
+               p.drawArc ( R2.right() - 2*R2.width(),
+                           R1.bottom() - 2*R2.height(),
+                           2*R2.width(), 2*R2.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( R2.right() - 2*R3.width(),
+                           R3.top(),
+                           2*R3.width(), 2*R3.height(),
+                           0, 90*16);                       
+                
+               p.drawArc ( R4.left(),
+                           R4.top(),
+                           2*R4.width(), 2*R4.height(),
+                           90*16, 90*16);                       
+                
+               p.drawArc ( R5.left(),
+                           R5.top()-R5.height(),
+                           2*R5.width(), 2*R5.height(),
+                           180*16, 90*16);                       
+                
+               p.drawArc ( R6.left()-R6.width(),
+                           R6.top()-R6.height(),
+                           2*R6.width(), 2*R6.height(),
+                           270*16, 90*16);                       
+                
+               p.drawArc ( R7.left()-R7.width(),
+                           R7.top(),
+                           2*R7.width(), 2*R7.height(),
+                           0, 90*16);
+               }                       
+            
+            p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
+            
             // Drawing Golden sections.
             if (m_drawGoldenSection)
                {            

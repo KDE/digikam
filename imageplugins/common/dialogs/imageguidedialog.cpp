@@ -171,7 +171,7 @@ void ImageGuideDialog::readSettings(void)
 {
     QColor *defaultGuideColor = new QColor( Qt::red );
     KConfig *config = kapp->config();
-    config->setGroup("Image Guide Dialog Settings");
+    config->setGroup(m_name + QString::QString(" Tool Dialog"));
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
     m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
     m_imagePreviewWidget->slotChangeGuideSize(m_guideSize->value());  
@@ -182,7 +182,7 @@ void ImageGuideDialog::readSettings(void)
 void ImageGuideDialog::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Image Guide Dialog Settings");
+    config->setGroup(m_name + QString::QString(" Tool Dialog"));
     config->writeEntry( "Guide Color", m_guideColorBt->color() );
     config->writeEntry( "Guide Width", m_guideSize->value() );
     config->sync();

@@ -56,14 +56,8 @@ private:
     
     KDoubleNumInput  *m_angleInput;
 
-private slots:
-    
-    void slotInit();    
-    
 protected:
 
-    void readSettings(void);
-    void writeSettings(void);
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);

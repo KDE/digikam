@@ -140,6 +140,14 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
+        
+    KConfig *config = kapp->config();
+    config->setGroup("Free Rotation Tool Settings");
+    
+    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );   
+    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
+        
+    // -------------------------------------------------------------
     
     connect(m_angleInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));        
@@ -152,25 +160,6 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 }
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
-{
-    writeSettings();
-}
-
-void ImageEffect_FreeRotation::slotInit()
-{
-    readSettings(); 
-}
-
-void ImageEffect_FreeRotation::readSettings(void)
-{
-    KConfig *config = kapp->config();
-    config->setGroup("Free Rotation Tool Settings");
-    
-    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );   
-    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-}
-    
-void ImageEffect_FreeRotation::writeSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Free Rotation Tool Settings");
