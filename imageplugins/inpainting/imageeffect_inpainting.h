@@ -64,6 +64,7 @@ public:
     static void inPainting(QWidget *parent);
 };
 
+////////////////////////////////////////////////////////////
 
 class ImageEffect_InPainting_Dialog : public KDialogBase
 {
