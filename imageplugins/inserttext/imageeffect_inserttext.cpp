@@ -103,7 +103,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gbox2 = new QWidget(plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 9, 1, marginHint(), spacingHint());
     
     m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
@@ -179,6 +179,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
     gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
     gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
+    gridBox2->setRowStretch(9, 10);    
     
     setUserAreaWidget(gbox2);
     
