@@ -259,7 +259,7 @@ void ImageEffect_LensDistortion::putPreviewData(void)
     iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
                                                      iface->previewHeight())).bits());
                  
-    m_imagePreviewWidget->update();    
+    m_imagePreviewWidget->updatePreview();    
 }
 
 void ImageEffect_LensDistortion::putFinalData(void)

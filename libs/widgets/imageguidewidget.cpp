@@ -93,8 +93,7 @@ void ImageGuideWidget::resetSpotPosition(void)
 {
     m_spot.setX( m_w / 2 );
     m_spot.setY( m_h / 2 );
-    updatePixmap();
-    repaint(false);
+    updatePreview();
 }
 
 QPoint ImageGuideWidget::getSpotPosition(void)
@@ -134,22 +133,19 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible)
        m_timerID = 0;
        }
        
-    updatePixmap();
-    repaint(false);
+    updatePreview();
 }
 
 void ImageGuideWidget::slotChangeGuideColor(const QColor &color)
 {
     m_guideColor = color;
-    updatePixmap();
-    repaint(false);
+    updatePreview();
 }
 
 void ImageGuideWidget::slotChangeGuideSize(int size)
 {
     m_guideSize = size;
-    updatePixmap();
-    repaint(false);
+    updatePreview();
 }
 
 void ImageGuideWidget::updatePixmap( void )
@@ -206,14 +202,19 @@ void ImageGuideWidget::paintEvent( QPaintEvent * )
     bitBlt(this, 0, 0, m_pixmap);
 }
 
+void ImageGuideWidget::updatePreview( void )
+{
+    updatePixmap();
+    repaint(false);
+}
+
 void ImageGuideWidget::timerEvent(QTimerEvent * e)
 {
     if (e->timerId() == m_timerID)
         {
         if (m_flicker == 5) m_flicker=0;
         else m_flicker++;
-        updatePixmap();
-        repaint(false);
+        updatePreview();
         }
     else
         QWidget::timerEvent(e);
@@ -247,8 +248,7 @@ void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
        m_focus = true;
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());;
-       updatePixmap();
-       repaint(false);
+       updatePreview();
        }
 }
 
@@ -279,8 +279,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
         {
         m_spot.setX(e->x()-m_rect.x());
         m_spot.setY(e->y()-m_rect.y());
-        updatePixmap();
-        repaint(false);
+        updatePreview();
         }
     else
         setCursor( KCursor::arrowCursor() );

@@ -64,6 +64,7 @@ public:
     QColor getSpotColor(void);
     void   setSpotVisible(bool v);
     void   resetSpotPosition(void);
+    void   updatePreview( void );
 
 public slots:
         

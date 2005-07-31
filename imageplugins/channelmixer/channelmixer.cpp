@@ -438,7 +438,7 @@ void ChannelMixerDialog::slotEffect()
        }
     
     ifaceDest->putPreviewData(m_destinationPreviewData);
-    m_previewTargetWidget->update();
+    m_previewTargetWidget->updatePreview();
     
     // Update histogram.
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, 0, 0, 0, false); 

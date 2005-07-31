@@ -230,7 +230,7 @@ void ImageEffect_ShearTool::putPreviewData(void)
     iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
                                                      iface->previewHeight())).bits());
                  
-    m_imagePreviewWidget->update();    
+    m_imagePreviewWidget->updatePreview();    
     QSize newSize = dynamic_cast<ShearTool *>(m_threadedFilter)->getNewSize();
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );

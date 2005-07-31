@@ -296,7 +296,7 @@ void ImageEffect_AntiVignetting::putPreviewData(void)
     // Adjust Image BCG.
     iface->setPreviewBCG(b, c, g);
     
-    m_imagePreviewWidget->update();    
+    m_imagePreviewWidget->updatePreview();    
 }
 
 void ImageEffect_AntiVignetting::putFinalData(void)

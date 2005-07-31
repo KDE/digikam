@@ -439,7 +439,7 @@ void ImageEffect_Border::putPreviewData(void)
     bitBlt( &imDest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());
     iface->putPreviewData((uint*)(imDest.smoothScale(w, h)).bits());
     
-    m_imagePreviewWidget->update();    
+    m_imagePreviewWidget->updatePreview();    
 }
 
 void ImageEffect_Border::putFinalData(void)

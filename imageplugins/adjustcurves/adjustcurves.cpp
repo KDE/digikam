@@ -368,7 +368,7 @@ void AdjustCurveDialog::slotEffect()
     m_curves->curvesLutProcess(orgData, desData, w, h);
 
     ifaceDest->putPreviewData(desData);
-    m_previewTargetWidget->update();
+    m_previewTargetWidget->updatePreview();
 
     delete [] orgData;
     delete [] desData;

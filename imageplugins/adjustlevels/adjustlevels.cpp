@@ -505,7 +505,7 @@ void AdjustLevelDialog::slotEffect()
     m_levels->levelsLutProcess(orgData, desData, w, h);
 
     ifaceDest->putPreviewData(desData);
-    m_previewTargetWidget->update();
+    m_previewTargetWidget->updatePreview();
 
     delete [] orgData;
     delete [] desData;

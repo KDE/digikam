@@ -14,6 +14,7 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
     <ignoreparts>
+      <part>CvsService</part>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
     </ignoreparts>
@@ -114,7 +115,7 @@
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
-      <abortonerror>false</abortonerror>
+      <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
       <makebin/>
@@ -126,7 +127,7 @@
       <mainprogram>digikam/digikam/digikam</mainprogram>
       <programargs/>
       <terminal>false</terminal>
-      <autocompile>true</autocompile>
+      <autocompile>false</autocompile>
       <envvars/>
     </run>
     <general>
