@@ -205,6 +205,12 @@ void ImagePannelWidget::slotInitGui(void)
     slotOriginalImageRegionChanged(true);
 }
 
+void ImagePannelWidget::setPanIconHighLightPoints(QPointArray pt) 
+{
+    m_imageRegionWidget->setHighLightPoints(pt); 
+    m_imagePanIconWidget->setHighLightPoints(pt); 
+}
+
 void ImagePannelWidget::slotPanIconTakeFocus(void)
 {
     m_imageRegionWidget->restorePixmapRegion();

@@ -80,11 +80,7 @@ public:
 
     void   setUserAreaWidget(QWidget *w, bool separator=true);
     
-    void   setPanIconHighLightPoints(QPointArray pt) 
-       {
-       m_imageRegionWidget->setHighLightPoints(pt); 
-       m_imagePanIconWidget->setHighLightPoints(pt); 
-       };
+    void   setPanIconHighLightPoints(QPointArray pt);
     
     KProgress *progressBar(void) { return m_progressBar; };
            
