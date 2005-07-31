@@ -69,11 +69,7 @@ public:
     void   backupPixmapRegion(void);
     void   restorePixmapRegion(void);
     
-    void   setHighLightPoints(QPointArray pointsList)
-       {
-       m_hightlightPoints = pointsList;
-       repaintContents(false);    
-       };
+    void   setHighLightPoints(QPointArray pointsList);
              
 signals:
     

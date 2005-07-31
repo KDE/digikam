@@ -47,12 +47,7 @@ public:
     QRect getRegionSelection(void);
     void  setCenterSelection(void);
         
-    void  setHighLightPoints(QPointArray pointsList)
-       {
-       m_hightlightPoints = pointsList;
-       updatePixmap();
-       repaint(false);
-       };
+    void  setHighLightPoints(QPointArray pointsList);
        
 signals:
 

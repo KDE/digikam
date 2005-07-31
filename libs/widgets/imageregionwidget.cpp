@@ -92,6 +92,12 @@ void ImageRegionWidget::slotTimerResizeEvent()
     emit contentsMovedEvent(true);
 }
 
+void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
+{
+    m_hightlightPoints = pointsList;
+    repaintContents(false);   
+}
+
 void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     m_separateView = mode;

@@ -109,6 +109,13 @@ void ImagePanIconWidget::setCenterSelection(void)
              m_regionSelection.height()));
 }
 
+void ImagePanIconWidget::setHighLightPoints(QPointArray pointsList)
+{
+    m_hightlightPoints = pointsList;
+    updatePixmap();
+    repaint(false);
+}
+       
 void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
     if (targetDone)
