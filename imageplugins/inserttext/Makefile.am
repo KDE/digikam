@@ -10,7 +10,7 @@ kde_module_LTLIBRARIES = digikamimageplugin_inserttext.la
 
 digikamimageplugin_inserttext_la_SOURCES = imageplugin_inserttext.cpp \
 	                                   imageeffect_inserttext.cpp \
-					   inserttextwidget.cpp 
+	                                   inserttextwidget.cpp fontchooserwidget.cpp 
 
 digikamimageplugin_inserttext_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 

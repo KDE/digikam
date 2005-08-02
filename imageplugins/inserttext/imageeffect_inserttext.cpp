@@ -51,7 +51,6 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
-#include <kfontdialog.h>
 #include <ktextedit.h> 
 
 // Digikam includes.
@@ -62,6 +61,7 @@
 
 #include "version.h"
 #include "inserttextwidget.h"
+#include "fontchooserwidget.h"
 #include "imageeffect_inserttext.h"
 
 namespace DigikamInsertTextImagesPlugin
@@ -113,7 +113,8 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_fontChooserWidget = new KFontChooser(gbox2, 0L, false, QStringList(), false);
+    m_fontChooserWidget = new FontChooserWidget(gbox2, 0L, false, QStringList(), false);
+    QWhatsThis::add( m_textEdit, i18n("<p>Here you can choose the font to be used."));
     gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
     
     // -------------------------------------------------------------

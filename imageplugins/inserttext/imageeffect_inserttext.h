@@ -39,13 +39,13 @@ class QComboBox;
 class QCheckBox;
 
 class KTextEdit;
-class KFontChooser;
 class KColorButton;
 
 namespace DigikamInsertTextImagesPlugin
 {
 
 class InsertTextWidget;
+class FontChooserWidget;
 
 class ImageEffect_InsertText : public DigikamImagePlugins::ImageDialogBase
 {
@@ -58,25 +58,25 @@ public:
 
 private:
     
-    int               m_alignTextMode;
-    int               m_defaultSizeFont;
+    int                m_alignTextMode;
+    int                m_defaultSizeFont;
         
-    QComboBox        *m_textRotation;
+    QComboBox         *m_textRotation;
     
-    QCheckBox        *m_borderText;    
-    QCheckBox        *m_transparentText;
+    QCheckBox         *m_borderText;    
+    QCheckBox         *m_transparentText;
     
-    QHButtonGroup    *m_alignButtonGroup;
+    QHButtonGroup     *m_alignButtonGroup;
         
-    QFont             m_textFont;
+    QFont              m_textFont;
     
-    KColorButton     *m_fontColorButton;
+    KColorButton      *m_fontColorButton;
     
-    KFontChooser     *m_fontChooserWidget;
+    FontChooserWidget *m_fontChooserWidget;
     
-    KTextEdit        *m_textEdit;
+    KTextEdit         *m_textEdit;
     
-    InsertTextWidget *m_previewWidget;
+    InsertTextWidget  *m_previewWidget;
 
 private:
         
