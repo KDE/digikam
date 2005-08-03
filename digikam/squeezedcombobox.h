@@ -35,7 +35,7 @@ class SqueezedComboBox;
  * the user find the correct entry. It is automatically
  * activated when starting a SqueezedComboBox. This is
  * inherited from QToolTip
- * @image html squeezedcombobox.png "This is how it looks"
+ * 
  * @author Tom Albers
  */
 class SqueezedComboBoxTip : public QToolTip
@@ -73,6 +73,7 @@ private:
  * possible to show the complete item, it will be shortened
  * and "..." will be prepended.
  *
+ * @image html squeezedcombobox.png "This is how it looks"
  * @author Tom Albers
  */
 class SqueezedComboBox : public QComboBox
