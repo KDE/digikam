@@ -33,6 +33,7 @@ class QTimeEdit;
  * with the exception that a QTimeEdit is placed directly
  * besides it.
  *
+ * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
 class KDateTimeEdit : public QHBox
