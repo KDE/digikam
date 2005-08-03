@@ -141,6 +141,19 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         popup->insertItem(m_addTagPix, i18n("Add new Tag..."),
                           ADDTAGID + album->id());
+        popup->insertSeparator();
+                
+        QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+        if ((m_mode == ASSIGN) && (m_assignedTags.contains(album->id())))
+        {
+            popup->insertItem(new TagsPopupCheckedMenuItem(popup, album->title(), pix),
+                              m_addToID + album->id());
+        }
+        else
+        {
+            popup->insertItem(pix, album->title(), m_addToID + album->id());
+        }                
+        
         if (album->firstChild())
         {
             popup->insertSeparator();
@@ -182,7 +195,6 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
             }
             else
             {
-
                 popup->insertItem(pix, a->title(), m_addToID + a->id());
             }
         }
