@@ -41,6 +41,8 @@ class QEvent;
   are supported (in the native language): tomorrow, yesturday, today,
   monday, tuesday, wednesday, thursday, friday, saturday, sunday.
 
+  @image html kdateedit.png "This is how it looks"
+
   @author Cornelius Schumacher <schumacher@kde.org>
   @author Mike Pilone <mpilone@slac.com>
   @author David Jarvie <software@astrojar.org.uk>
