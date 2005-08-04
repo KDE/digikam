@@ -37,7 +37,8 @@ Currently implemented plugins are:
 25) Restoration      : An advanced filter to restore photograph using CImg library.
 26) Inpainting       : An advanced filter to inpaint photograph area using CImg library.
 27) Blowup           : An advanced filter to blowup photograph using CImg library.
-28) Refocus          : An advanced deconvolution filter to refocus a photograph.
+28) Refocus          : An advanced sharpness editor based on deconvolution filter to refocus a photograph.
+29) HotPixels        : A tool to remove Stuff/Hot Pixels on pictures taken with deficient camera CCD.
 
 Contact :
 -----------------------------------------------------------------------
