@@ -79,7 +79,7 @@ void BlackFrameParser::parseBlackFrame(KURL url)
 
     //And open the file
     
-    KIO::TransferJob *job = KIO::get(url);
+    KIO::TransferJob *job = KIO::get(url, false, false);
     connect(job, SIGNAL(data( KIO::Job*, const QByteArray&)),
             SLOT( blackFrameDataArrived( KIO::Job *, const QByteArray& )));
     
