@@ -84,7 +84,10 @@ void readJPEGMetaData(const QString& filePath,
         if (marker->marker == M_COM)
         {
             if (!marker->data || !marker->data_length)
+            {
+                marker=marker->next;
                 continue;
+            }
 
             comments = QString::fromAscii((const char*)marker->data,
                                           marker->data_length);
@@ -94,17 +97,20 @@ void readJPEGMetaData(const QString& filePath,
             KExifData exifData;
             if (!exifData.readFromData((char*)marker->data,
                                        marker->data_length))
+            {
+                marker=marker->next;
                 continue;
+            }
 
             datetime = exifData.getExifDateTime();
         }
 
         marker = marker->next;
     }
-        
+
     jpeg_destroy_decompress(&srcinfo);
 
-    fclose(input_file);                 
+    fclose(input_file);
 }
 
 }
