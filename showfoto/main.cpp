@@ -33,6 +33,8 @@
 #include <kglobal.h>
 #include <kimageio.h>
 
+// Local includes.
+
 #include "showfoto.h"
 
 static KCmdLineOptions options[] =
@@ -64,16 +66,21 @@ int main(int argc, char *argv[])
                           "caulier dot gilles at free.fr",
                           "http://caulier.gilles.free.fr");
 
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer.com",
-                          0);
-
     aboutData.addAuthor ( "Joern Ahrens",
                           I18N_NOOP("Developer"),
                           "joern dot ahrens at kdemail dot net",
                           0);
-
+    
+    aboutData.addAuthor ( "Tom Albers",
+                          I18N_NOOP("Developer"),
+                          "tomalbers at kde.nl",
+                          0);
+    
+    aboutData.addCredit ( "Ralf Holzer",
+                          I18N_NOOP("Developer"),
+                          "kde at ralfhoelzer.com",
+                          0);
+                          
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
 

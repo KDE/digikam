@@ -19,7 +19,6 @@
  * 
  * ============================================================ */
 
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -90,14 +89,14 @@ int main(int argc, char *argv[])
                           "kde at jokele.de",
                           0);
 
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer.com",
-                          0);
-    
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
                           "tomalbers at kde.nl",
+                          0);
+    
+    aboutData.addCredit ( "Ralf Holzer",
+                          I18N_NOOP("Developer"),
+                          "kde at ralfhoelzer.com",
                           0);
     
     aboutData.addCredit ( "Todd Shoemaker",
