@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                           digikam_version,        
                           description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2005, Digikam developers team"),
+                          I18N_NOOP("(c) 2002-2005, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
