@@ -446,8 +446,9 @@ void ImageEffect_Border::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);    
 
+    QImage img = m_threadedFilter->getTargetImage();
     iface.putOriginalData(i18n("Add Border"), 
-                         (uint*)m_threadedFilter->getTargetImage().bits());
+                         (uint*)img.bits(), img.width(), img.height());
 }
 
 QString ImageEffect_Border::getBorderPath(int border)
