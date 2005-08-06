@@ -76,7 +76,7 @@ public:
     FontChooserWidget(QWidget *parent = 0L, const char *name = 0L,
                       bool onlyFixed = false,
                       const QStringList &fontList = QStringList(),
-                      bool makeFrame = true, int visibleListSize=8,
+                      int visibleListSize=8,
                       bool diff = false, 
                       QButton::ToggleState *sizeIsRelativeState = 0L );
     

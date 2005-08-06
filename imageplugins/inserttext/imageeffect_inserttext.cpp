@@ -113,7 +113,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_fontChooserWidget = new FontChooserWidget(gbox2, 0L, false, QStringList(), false);
+    m_fontChooserWidget = new FontChooserWidget(gbox2);
     QWhatsThis::add( m_textEdit, i18n("<p>Here you can choose the font to be used."));
     gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
     
