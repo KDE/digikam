@@ -55,6 +55,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                   : ImageGuideDialog(parent, i18n("Add Border Around a Photograph"), "border", 
                                      false, false, false)
 {
+    // No need Abort button action.
+    showButton(User1, false); 
+    
     QString whatsThis;
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -188,8 +191,8 @@ void ImageEffect_Border::writeSettings(void)
     KConfig *config = kapp->config();
     config->setGroup("Add Border Tool Settings");
     
-    config->writeEntry( "Border Width", m_borderWidth->value() );
     config->writeEntry( "Border Type", m_borderType->currentItem() );
+    config->writeEntry( "Border Width", m_borderWidth->value() );
     
     config->writeEntry( "Solid Color", m_solidColor );
     config->writeEntry( "Niepce Border Color", m_niepceBorderColor );
