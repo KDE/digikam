@@ -626,22 +626,30 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
         if(settings->getUseTrash())
         {
             result = KMessageBox::warningYesNo(this,
-                        i18n("Album '%1' has %2 subalbums. "
+                        i18n("Album '%1' has one subalbum. "
+                             "Moving this to trash will also move the "
+                             "subalbum to trash. "
+                             "Are you sure you want to continue?",
+                             "Album '%1' has %n subalbums. "
                              "Moving this to trash will also move the "
                              "subalbums to trash. "
-                             "Are you sure you want to continue?")
-                             .arg(album->title())
-                             .arg(children));
+                             "Are you sure you want to continue?",
+                             children)
+                             .arg(album->title()));
         }
         else
         {
             result = KMessageBox::warningYesNo(this,
-                        i18n("Album '%1' has %2 subalbums. "
+                        i18n("Album '%1' has one subalbum. "
+                             "Deleting this will also delete "
+                             "the subalbum. "
+                             "Are you sure you want to continue?",
+                             "Album '%1' has %n subalbums. "
                              "Deleting this will also delete "
                              "the subalbums. "
-                             "Are you sure you want to continue?")
-                             .arg(album->title())
-                             .arg(children));
+                             "Are you sure you want to continue?",
+                             children)
+                             .arg(album->title()));
         }
     }
     else
