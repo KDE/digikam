@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
                           "tomalbers at kde.nl",
                           0);
     
-    aboutData.addCredit ( "Ralf Holzer",
+    aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
                           "kde at ralfhoelzer.com",
                           0);
