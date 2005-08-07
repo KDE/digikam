@@ -20,7 +20,9 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
 		   $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		   $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		   $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		   $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la 
+           $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
+           $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
+           $(top_builddir)/digikam/libs/curves/libcurves.la
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
