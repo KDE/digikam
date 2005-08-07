@@ -185,8 +185,14 @@ void MonthWidget::drawContents(QPainter *)
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
+#if KDE_IS_VERSION(3,2,0)
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                   QString(QDate::shortDayName(i)).remove(2,1));
+                          KGlobal::locale()->calendar()->weekDayName(i, true)
+                          .remove(2,1));
+#else
+        p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
+                          KGlobal::locale()->weekDayName(i, true).remove(2,1));
+#endif
         index++;                                             
     }
     
