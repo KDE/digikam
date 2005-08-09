@@ -200,16 +200,14 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
             SLOT(slotAlbumsCleared()));
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
-
-    //TODO: connect to albumMan signalAlbumRenamed signal
-    //      and rename folderviewitem
+    connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
     
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));    
     
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
-    
 }
 
 AlbumFolderView::~AlbumFolderView()
@@ -283,6 +281,19 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
 
         delete item;
         clearEmptyGroupItems();
+    }
+}
+
+void AlbumFolderView::slotAlbumRenamed(Album *album)
+{
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    if(!palbum)
+        return;
+
+    AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
+    if(item)
+    {
+        item->setText(0, palbum->title());
     }
 }
 
@@ -1244,7 +1255,6 @@ void AlbumFolderView::resort()
         dynamic_cast<AlbumFolderViewItem*>(selectedItem());
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
-
 
     AlbumList pList(AlbumManager::instance()->allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)

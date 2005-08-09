@@ -62,6 +62,7 @@ private slots:
     void slotAlbumDeleted(Album *album);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
+    void slotAlbumRenamed(Album *album);
                             
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     

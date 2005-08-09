@@ -1441,7 +1441,13 @@ PixmapManager* AlbumIconView::pixmapManager() const
 
 void AlbumIconView::slotAlbumModified()
 {
-    updateContents();
+    d->imageLister->stop();
+    clear();
+
+    d->imageLister->openAlbum(d->currentAlbum);
+
+    updateBannerRectPixmap();
+    updateItemRectsPixmap();    
 }
 
 void AlbumIconView::slotAssignTag(int tagID)
