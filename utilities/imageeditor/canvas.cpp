@@ -346,6 +346,12 @@ void Canvas::load(const QString& filename)
         emit signalSelected(false);
     }
 
+    if (d->imageHistogram)
+    {
+        delete d->imageHistogram;
+        d->imageHistogram = 0;
+    }    
+    
     viewport()->setUpdatesEnabled(false);
 
     d->tileCache.clear();
@@ -362,7 +368,7 @@ void Canvas::load(const QString& filename)
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
     if (d->showHistogram)
-	    updateHistogram(true);
+       updateHistogram(true);
    
     emit signalChanged(false, false);
     emit signalZoomChanged(d->zoom);
@@ -453,11 +459,12 @@ void Canvas::updateAutoZoom()
  */
 bool Canvas::updateHistogram(bool invalidate)
 {
-    if (invalidate && d->imageHistogram) {
-	    delete d->imageHistogram;
-	    d->imageHistogram = 0;
+    if (invalidate && d->imageHistogram) 
+    {
+        delete d->imageHistogram;
+        d->imageHistogram = 0;
     }
-	
+
     if (d->imageHistogram == 0) {
         d->histogramReady = false;
         d->imageHistogram = new ImageHistogram(d->im->getData(),
@@ -710,9 +717,9 @@ void Canvas::getHistogramRect(QRect &hrect)
 void Canvas::paintHistogram(const QRect& cr)
 {
     if (!d->showHistogram) 
-	    return;
+       return;
     if (!d->histogramPixmap)
-	    return;
+       return;
 
     QRect rcexposed, rc, rctmp;
 
