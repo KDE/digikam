@@ -17,6 +17,8 @@ Comment[et]=DigiKami müra vähendamise plugin
 Comment[nl]=digiKam-plugin voor ruisreductie
 Comment[pt]=Um 'plugin' do digiKam para a redução de ruído
 Comment[pt_BR]=Um 'plugin' do digiKam para a redução de ruído
+Comment[sr]=digiKam-ов прикључак за смањење шума
+Comment[sr@Latn]=digiKam-ов прикључак за смањење шума
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr

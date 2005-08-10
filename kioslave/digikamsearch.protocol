@@ -9,4 +9,6 @@ Description[br]=kioslave klask evit Digikam
 Description[et]=DigiKami otsimise KIO-moodul
 Description[nl]=digiKam Zoeken kioslave
 Description[pt]='kioslave' de procura do digiKam
+Description[sr]=kioslave digiKam-ових тражења
+Description[sr@Latn]=kioslave digiKam-ових тражења
 Class=:local
