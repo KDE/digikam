@@ -2,9 +2,9 @@
  * File  : ctrlpaneldialog.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
- * Description : A threaded filter control panel dialog for 
+ * Description : A threaded filter control panel dialog for
  *               image editor plugins
- * 
+ *
  * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -12,14 +12,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // Qt includes.
 
 #include <qvgroupbox.h>
@@ -53,70 +53,70 @@
 namespace DigikamImagePlugins
 {
 
-CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name, 
+CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
                                  bool loadFileSettings, bool tryAction, bool progressBar,
                                  int separateViewMode)
                : KDialogBase(Plain, title,
                              Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                              parent, 0, true, true,
                              i18n("&Abort"),
-                             i18n("&Load..."),
-                             i18n("&Save As...")),
+                             i18n("&Save As..."),
+                             i18n("&Load...")),
                      m_parent(parent), m_name(name), m_tryAction(tryAction)
 {
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_threadedFilter       = 0L;
     QString whatsThis;
-        
+
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User1, i18n("<p>Abort the current image rendering.") );
-    setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );  
+    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
-            
-    resize(configDialogSize(name + QString::QString(" Tool Dialog")));  
-        
+
+    resize(configDialogSize(name + QString::QString(" Tool Dialog")));
+
     // -------------------------------------------------------------
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title);
-    
+
     topLayout->addWidget(headerFrame);
-        
+
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, 
+
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160,
                                         name + QString::QString(" Tool Dialog"),
                                         plainPage(),  progressBar, separateViewMode);
     hlay1->addWidget(m_imagePreviewWidget);
-    
+
     // -------------------------------------------------------------
-    
-    QTimer::singleShot(0, this, SLOT(slotInit())); 
+
+    QTimer::singleShot(0, this, SLOT(slotInit()));
 }
 
 CtrlPanelDialog::~CtrlPanelDialog()
 {
-    saveDialogSize(m_name + QString::QString(" Tool Dialog"));   
+    saveDialogSize(m_name + QString::QString(" Tool Dialog"));
 
     if (m_timer)
        delete m_timer;
-       
+
     if (m_threadedFilter)
-       delete m_threadedFilter;    
+       delete m_threadedFilter;
 }
 
 void CtrlPanelDialog::slotInit()
 {
     // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotDefault())); 
-    
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
+
     if (!m_tryAction)
        {
        connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
@@ -143,13 +143,13 @@ void CtrlPanelDialog::abortPreview()
     m_currentRenderingMode = NoneRendering;
     m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_imagePreviewWidget->setEnable(true);    
-    enableButton(Ok, true);  
+    m_imagePreviewWidget->setEnable(true);
+    enableButton(Ok, true);
     enableButton(User1, false);
     enableButton(User2, true);
-    enableButton(User3, true);  
-    enableButton(Try,   true);    
-    enableButton(Default, true);  
+    enableButton(User3, true);
+    enableButton(Try,   true);
+    enableButton(Default, true);
     renderingFinished();
 }
 
@@ -163,12 +163,12 @@ void CtrlPanelDialog::slotUser1()
     if (m_currentRenderingMode != NoneRendering)
         if (m_threadedFilter)
            m_threadedFilter->stopComputation();
-} 
+}
 
 void CtrlPanelDialog::slotDefault()
 {
    resetValues();
-   slotEffect();  
+   slotEffect();
 }
 
 void CtrlPanelDialog::slotCancel()
@@ -177,10 +177,10 @@ void CtrlPanelDialog::slotCancel()
        {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
-          
+
        kapp->restoreOverrideCursor();
        }
-       
+
     done(Cancel);
 }
 
@@ -190,11 +190,11 @@ void CtrlPanelDialog::closeEvent(QCloseEvent *e)
        {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
-       
+
        kapp->restoreOverrideCursor();
        }
-       
-    e->accept();    
+
+    e->accept();
 }
 
 void CtrlPanelDialog::slotFocusChanged(void)
@@ -209,8 +209,8 @@ void CtrlPanelDialog::slotFocusChanged(void)
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
        }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
+
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
 }
 
 void CtrlPanelDialog::slotHelp()
@@ -225,7 +225,7 @@ void CtrlPanelDialog::slotTimer()
        m_timer->stop();
        delete m_timer;
        }
-    
+
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
@@ -235,23 +235,23 @@ void CtrlPanelDialog::slotTimer()
 void CtrlPanelDialog::slotEffect()
 {
     // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;     
-    
+    if (m_currentRenderingMode == PreviewRendering) return;
+
     m_currentRenderingMode = PreviewRendering;
 
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,    false);
     enableButton(User1, true);
     enableButton(User2, false);
-    enableButton(User3, false);    
-    enableButton(Try,   false);    
-    enableButton(Default, false);      
+    enableButton(User3, false);
+    enableButton(Try,   false);
+    enableButton(Default, false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
-    
+
     if (m_threadedFilter)
        delete m_threadedFilter;
-       
+
     prepareEffect();
 }
 
@@ -264,14 +264,14 @@ void CtrlPanelDialog::slotOk()
     enableButton(User1, false);
     enableButton(User2, false);
     enableButton(User3, false);
-    enableButton(Try,   false);    
-    enableButton(Default, false);      
+    enableButton(Try,   false);
+    enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
-    
+
     if (m_threadedFilter)
        delete m_threadedFilter;
-    
+
     prepareFinal();
 }
 
@@ -282,12 +282,12 @@ void CtrlPanelDialog::customEvent(QCustomEvent *event)
     Digikam::ThreadedFilter::EventData *d = (Digikam::ThreadedFilter::EventData*) event->data();
 
     if (!d) return;
-    
+
     if (d->starting)           // Computation in progress !
         {
         m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
+        }
+    else
         {
         if (d->success)        // Computation Completed !
             {
@@ -300,7 +300,7 @@ void CtrlPanelDialog::customEvent(QCustomEvent *event)
                  abortPreview();
                  break;
                  }
-              
+
               case FinalRendering:
                  {
                  kdDebug() << "Final" << m_name << " completed..." << endl;
@@ -322,14 +322,14 @@ void CtrlPanelDialog::customEvent(QCustomEvent *event)
                     abortPreview();
                     break;
                     }
-                
+
                 case FinalRendering:
                     break;
                 }
             }
         }
-    
-    delete d;        
+
+    delete d;
 }
 
 }  // NameSpace DigikamImagePlugins

@@ -572,7 +572,7 @@ void ChannelMixerDialog::slotDefault()
 }
 
 // Load all gains.
-void ChannelMixerDialog::slotUser2()
+void ChannelMixerDialog::slotUser3()
 {
     KURL loadGainsFileUrl;
     FILE *fp = 0L;
@@ -659,7 +659,7 @@ void ChannelMixerDialog::slotUser2()
 }
 
 // Save all gains.
-void ChannelMixerDialog::slotUser3()
+void ChannelMixerDialog::slotUser2()
 {
     KURL saveGainsFileUrl;
     FILE *fp = 0L;

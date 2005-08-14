@@ -84,14 +84,14 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                                 Help|Default|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
                                 QString::null,
-                                i18n("&Load..."),
-                                i18n("&Save As...")),
+                                i18n("&Save As..."),
+                                i18n("&Load...")),
                     m_parent(parent)
 {
     QString whatsThis;
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
+    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
 
     m_currentRenderingMode = NoneRendering;
     m_cimgInterface        = 0L;
@@ -480,7 +480,7 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
     delete d;
 }
 
-void ImageEffect_BlowUp::slotUser2()
+void ImageEffect_BlowUp::slotUser3()
 {
     KURL loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
@@ -522,7 +522,7 @@ void ImageEffect_BlowUp::slotUser2()
     file.close();
 }
 
-void ImageEffect_BlowUp::slotUser3()
+void ImageEffect_BlowUp::slotUser2()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,

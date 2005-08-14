@@ -4,7 +4,7 @@
  * Date  : 2005-03-30
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
- * 
+ *
  * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -12,14 +12,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // C++ include.
 
 #include <cstdio>
@@ -132,56 +132,56 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                            Help|Default|User2|User3|Ok|Cancel, Ok,
                                            parent, 0, true, true,
                                            QString::null,
-                                           i18n("&Load..."),
-                                           i18n("&Save As...")),
+                                           i18n("&Save As..."),
+                                           i18n("&Load...")),
                                m_parent(parent)
 {
     QString whatsThis;
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User2, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User3, i18n("<p>Save all filter parameters to settings text file.") );
-    
+    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+
     m_currentRenderingMode = NoneRendering;
     m_cimgInterface        = 0L;
-        
+
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Photograph Inpainting"), 
+                                       I18N_NOOP("Photograph Inpainting"),
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at free.fr");
 
     about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
                      "http://cimg.sourceforge.net");
 
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"), 
+    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
                      "gerhard at kulzer.net");
-                                             
+
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
-    
+
     // -------------------------------------------------------------
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-    
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Photograph Inpainting"));   
+
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Photograph Inpainting"));
     topLayout->addWidget(headerFrame);
-    
+
     // -------------------------------------------------------------
-    
+
     QVBoxLayout *vlay = new QVBoxLayout(topLayout);
     m_mainTab = new QTabWidget( plainPage() );
-    
+
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
@@ -193,10 +193,10 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
-    
+
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new QComboBox( false, firstPage ); 
+    m_inpaintingTypeCB = new QComboBox( false, firstPage );
     m_inpaintingTypeCB->insertItem( i18n("None") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Small Artefact") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Medium Artefact") );
@@ -210,19 +210,19 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
     grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
     grid->addMultiCellWidget(m_inpaintingTypeCB, 0, 0, 2, 2);
-    
+
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
-        
+
     // -------------------------------------------------------------
-    
-    
+
+
     QWidget* secondPage = new QWidget( m_mainTab );
     QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
-    
+
     m_detailLabel = new QLabel(i18n("Detail preservation:"), secondPage);
     m_detailLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_detailInput = new KDoubleNumInput(secondPage);
@@ -263,7 +263,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                        "target image will be completely blurred."));
     grid2->addMultiCellWidget(m_blurLabel, 0, 0, 3, 3);
     grid2->addMultiCellWidget(m_blurInput, 0, 0, 4, 4);
-    
+
     m_blurItLabel = new QLabel(i18n("Iterations:"), secondPage);
     m_blurItLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_blurItInput = new KDoubleNumInput(secondPage);
@@ -274,11 +274,11 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     grid2->addMultiCellWidget(m_blurItInput, 1, 1, 4, 4);
 
     // -------------------------------------------------------------
-    
+
     QWidget* thirdPage = new QWidget( m_mainTab );
     QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, marginHint(), spacingHint());
     m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
-    
+
     m_angularStepLabel = new QLabel(i18n("Angular step:"), thirdPage);
     m_angularStepLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_angularStepInput = new KDoubleNumInput(thirdPage);
@@ -305,44 +305,44 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     QWhatsThis::add( m_gaussianInput, i18n("<p>Set here the precision of the Gaussian function."));
     grid3->addMultiCellWidget(m_gaussianLabel, 2, 2, 0, 0);
     grid3->addMultiCellWidget(m_gaussianInput, 2, 2, 1, 1);
-    
+
     m_linearInterpolationBox = new QCheckBox(i18n("Use linear interpolation"), thirdPage);
     QWhatsThis::add( m_linearInterpolationBox, i18n("<p>Enable this option to quench the last bit of quality (slow)."));
     grid3->addMultiCellWidget(m_linearInterpolationBox, 0, 0, 3, 3);
-    
+
     m_normalizeBox = new QCheckBox(i18n("Normalize photograph"), thirdPage);
     QWhatsThis::add( m_normalizeBox, i18n("<p>Enable this option to process an output image normalization."));
     grid3->addMultiCellWidget(m_normalizeBox, 1, 1, 3, 3);
-    
+
     vlay->addWidget(m_mainTab);
-    
+
     // -------------------------------------------------------------
-    
+
     adjustSize();
-    disableResize(); 
+    disableResize();
     // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault())); 
-    
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
+
     // -------------------------------------------------------------
-    
+
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
-    
+
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotDefault()));
-    
+
     // details must be < gradient !
     connect(m_detailInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotCheckSettings()));                 
+            this, SLOT(slotCheckSettings()));
 
     connect(m_gradientInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotCheckSettings()));   
+            this, SLOT(slotCheckSettings()));
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
 {
     // No need to delete m_previewData because it's driving by QImage.
-        
+
     if (m_cimgInterface)
        delete m_cimgInterface;
 }
@@ -385,22 +385,22 @@ void ImageEffect_InPainting_Dialog::slotDefault()
             m_blurItInput->setValue(30.0);
             break;
             }
-            
+
         case RemoveMediumArtefact:
             {
             m_timeStepInput->setValue(50.0);
             m_blurItInput->setValue(50.0);
             break;
             }
-            
+
         case RemoveLargeArtefact:
             {
             m_timeStepInput->setValue(100.0);
             m_blurItInput->setValue(100.0);
             break;
             }
-        }                       
-                    
+        }
+
     m_detailInput->blockSignals(false);
     m_gradientInput->blockSignals(false);
     m_timeStepInput->blockSignals(false);
@@ -411,7 +411,7 @@ void ImageEffect_InPainting_Dialog::slotDefault()
     m_gaussianInput->blockSignals(false);
     m_linearInterpolationBox->blockSignals(false);
     m_normalizeBox->blockSignals(false);
-} 
+}
 
 void ImageEffect_InPainting_Dialog::slotCancel()
 {
@@ -420,7 +420,7 @@ void ImageEffect_InPainting_Dialog::slotCancel()
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
        }
-       
+
     done(Cancel);
 }
 
@@ -441,7 +441,7 @@ void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
        }
-       
+
     e->accept();
 }
 
@@ -463,7 +463,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
     enableButton(User2, false);
     enableButton(User3, false);
     m_mainTab->setCurrentPage(0);
-    
+
     m_parent->setCursor( KCursor::waitCursor() );
     m_progressBar->setValue(0);
 
@@ -471,50 +471,50 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( m_originalImage.bits(), data, m_originalImage.numBytes() );
-    
+
     // Selected area from the image and mask creation:
     //
     // We optimize the computation time to use the current selected area in image editor
-    // and to create an inpainting mask with it. Because inpainting is done by interpolation 
-    // neighboor pixels which can be located far from the selected area, we need to ajust the 
+    // and to create an inpainting mask with it. Because inpainting is done by interpolation
+    // neighboor pixels which can be located far from the selected area, we need to ajust the
     // mask size in according with the parameter algorithms, especially 'dt' (m_timeStepInput).
     // Mask size is computed like this :
     //
     // (mask_radius_x + 2*dt , mask_radius_y + 2*dt)
     //
     // Where mask_radius_x is the 'width' of the mask, and mask_radius_y is the 'height' of the mask.
-    
-    
+
+
     QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
                                 iface.selectedWidth(), iface.selectedHeight());
-    
+
     QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
     inPaintingMask.fill(Qt::black);
     QPainter p(&inPaintingMask);
     p.fillRect( selectionRect, QBrush::QBrush(Qt::white) );
     p.end();
-    
+
     int x1 = (int)(selectionRect.left()   - 2*m_timeStepInput->value());
     int y1 = (int)(selectionRect.top()    - 2*m_timeStepInput->value());
     int x2 = (int)(selectionRect.right()  + 2*m_timeStepInput->value());
     int y2 = (int)(selectionRect.bottom() + 2*m_timeStepInput->value());
     m_maskRect = QRect(x1, y1, x2-x1, y2-y1);
-    
-    // Mask area normalization. 
+
+    // Mask area normalization.
     // We need to check if mask area is out of image size else inpainting give strange results.
-    
+
     if (m_maskRect.left()   < 0) m_maskRect.setLeft(0);
     if (m_maskRect.top()    < 0) m_maskRect.setTop(0);
     if (m_maskRect.right()  > iface.originalWidth())  m_maskRect.setRight(iface.originalWidth());
     if (m_maskRect.bottom() > iface.originalHeight()) m_maskRect.setBottom(iface.originalHeight());
-    
+
     m_maskImage = inPaintingMask.convertToImage().copy(m_maskRect);
     m_cropImage = m_originalImage.copy(m_maskRect);
-    
+
     if (m_cimgInterface)
        delete m_cimgInterface;
-       
-    m_cimgInterface = new DigikamImagePlugins::CimgIface(&m_cropImage, 
+
+    m_cimgInterface = new DigikamImagePlugins::CimgIface(&m_cropImage,
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
                                     m_integralStepInput->value(),
@@ -522,12 +522,12 @@ void ImageEffect_InPainting_Dialog::slotOk()
                                     m_blurInput->value(),
                                     m_detailInput->value(),
                                     m_gradientInput->value(),
-                                    m_gaussianInput->value(),   
+                                    m_gaussianInput->value(),
                                     m_normalizeBox->isChecked(),
                                     m_linearInterpolationBox->isChecked(),
-                                    false, true, false, NULL, 0, 0, 
+                                    false, true, false, NULL, 0, 0,
                                     &m_maskImage, this);
-    delete [] data;                                           
+    delete [] data;
 }
 
 void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
@@ -540,9 +540,9 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
 
     if (d->starting)           // Computation in progress !
         {
-        m_progressBar->setValue(d->progress);  
-        }  
-    else 
+        m_progressBar->setValue(d->progress);
+        }
+    else
         {
         if (d->success)        // Computation Completed !
             {
@@ -553,13 +553,13 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
                  kdDebug() << "Final InPainting completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
                  QImage target = m_cimgInterface->getTargetImage();
-                 bitBlt(&m_originalImage, m_maskRect.left(), m_maskRect.top(), 
+                 bitBlt(&m_originalImage, m_maskRect.left(), m_maskRect.top(),
                         &target, 0, 0, target.width(), target.height());
-                    
+
                  iface.putOriginalData(i18n("InPainting"), (uint*)m_originalImage.bits());
-       
+
                  m_parent->setCursor( KCursor::arrowCursor() );
-                 accept();       
+                 accept();
                  break;
                  }
               }
@@ -573,11 +573,11 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
                 }
             }
         }
-    
-    delete d;        
+
+    delete d;
 }
 
-void ImageEffect_InPainting_Dialog::slotUser2()
+void ImageEffect_InPainting_Dialog::slotUser3()
 {
     KURL loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
@@ -586,23 +586,23 @@ void ImageEffect_InPainting_Dialog::slotUser2()
        return;
 
     QFile file(loadInpaintingFile.path());
-    
-    if ( file.open(IO_ReadOnly) )   
+
+    if ( file.open(IO_ReadOnly) )
         {
         QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Inpainting Configuration File" )
            {
-           KMessageBox::error(this, 
+           KMessageBox::error(this,
                         i18n("\"%1\" is not a Photograph Inpainting settings text file.")
                         .arg(loadInpaintingFile.fileName()));
-           file.close();            
+           file.close();
            return;
            }
-        
+
         blockSignals(true);
         m_normalizeBox->setChecked( stream.readLine().toInt() );
         m_linearInterpolationBox->setChecked( stream.readLine().toInt() );
-        
+
         m_detailInput->setValue( stream.readLine().toDouble() );
         m_gradientInput->setValue( stream.readLine().toDouble() );
         m_timeStepInput->setValue( stream.readLine().toDouble() );
@@ -616,10 +616,10 @@ void ImageEffect_InPainting_Dialog::slotUser2()
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Inpainting text file."));
 
-    file.close();             
+    file.close();
 }
 
-void ImageEffect_InPainting_Dialog::slotUser3()
+void ImageEffect_InPainting_Dialog::slotUser2()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
@@ -628,26 +628,26 @@ void ImageEffect_InPainting_Dialog::slotUser3()
        return;
 
     QFile file(saveRestorationFile.path());
-    
-    if ( file.open(IO_WriteOnly) )   
+
+    if ( file.open(IO_WriteOnly) )
         {
-        QTextStream stream( &file );        
-        stream << "# Photograph Inpainting Configuration File\n";    
-        stream << m_normalizeBox->isChecked() << "\n";    
-        stream << m_linearInterpolationBox->isChecked() << "\n";    
-        stream << m_detailInput->value() << "\n";    
-        stream << m_gradientInput->value() << "\n";    
-        stream << m_timeStepInput->value() << "\n";    
-        stream << m_blurInput->value() << "\n";    
-        stream << m_blurItInput->value() << "\n";    
-        stream << m_angularStepInput->value() << "\n";    
-        stream << m_integralStepInput->value() << "\n";    
-        stream << m_gaussianInput->value() << "\n";    
+        QTextStream stream( &file );
+        stream << "# Photograph Inpainting Configuration File\n";
+        stream << m_normalizeBox->isChecked() << "\n";
+        stream << m_linearInterpolationBox->isChecked() << "\n";
+        stream << m_detailInput->value() << "\n";
+        stream << m_gradientInput->value() << "\n";
+        stream << m_timeStepInput->value() << "\n";
+        stream << m_blurInput->value() << "\n";
+        stream << m_blurItInput->value() << "\n";
+        stream << m_angularStepInput->value() << "\n";
+        stream << m_integralStepInput->value() << "\n";
+        stream << m_gaussianInput->value() << "\n";
         }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Inpainting text file."));
-    
-    file.close();        
+
+    file.close();
 }
 
 }  // NameSpace DigikamInPaintingImagesPlugin

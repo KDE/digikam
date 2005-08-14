@@ -484,7 +484,7 @@ void AdjustCurveDialog::slotDefault()
 }
 
 // Load all settings.
-void AdjustCurveDialog::slotUser2()
+void AdjustCurveDialog::slotUser3()
 {
     KURL loadCurvesFile;
 
@@ -506,7 +506,7 @@ void AdjustCurveDialog::slotUser2()
 }
 
 // Save all settings.
-void AdjustCurveDialog::slotUser3()
+void AdjustCurveDialog::slotUser2()
 {
     KURL saveCurvesFile;
 

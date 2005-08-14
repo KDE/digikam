@@ -321,7 +321,7 @@ void ImageEffect_Refocus::putFinalData(void)
                         .bits());
 }
 
-void ImageEffect_Refocus::slotUser2()
+void ImageEffect_Refocus::slotUser3()
 {
     KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
@@ -358,7 +358,7 @@ void ImageEffect_Refocus::slotUser2()
     file.close();             
 }
 
-void ImageEffect_Refocus::slotUser3()
+void ImageEffect_Refocus::slotUser2()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,

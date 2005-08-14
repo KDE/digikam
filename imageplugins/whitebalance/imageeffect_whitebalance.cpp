@@ -826,7 +826,7 @@ void ImageEffect_WhiteBalance::slotDefault()
 } 
 
 // Load all settings.
-void ImageEffect_WhiteBalance::slotUser2()
+void ImageEffect_WhiteBalance::slotUser3()
 {
     KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
@@ -867,7 +867,7 @@ void ImageEffect_WhiteBalance::slotUser2()
 }
 
 // Save all settings.
-void ImageEffect_WhiteBalance::slotUser3()
+void ImageEffect_WhiteBalance::slotUser2()
 {
     KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,

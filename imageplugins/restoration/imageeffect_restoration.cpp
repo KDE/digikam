@@ -400,7 +400,7 @@ void ImageEffect_Restoration::putFinalData(void)
                         (uint*)m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_Restoration::slotUser2()
+void ImageEffect_Restoration::slotUser3()
 {
     KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
@@ -443,7 +443,7 @@ void ImageEffect_Restoration::slotUser2()
     file.close();             
 }
 
-void ImageEffect_Restoration::slotUser3()
+void ImageEffect_Restoration::slotUser2()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
