@@ -9,7 +9,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qlistview.h>
-//#include 
+//#include
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -78,7 +78,7 @@ class TagFolderViewItem : public FolderItem
 {
 public:
     TagFolderViewItem(QListView *parent, TAlbum *tag);
-    TagFolderViewItem(QListViewItem *parent, TAlbum *tag);    
+    TagFolderViewItem(QListViewItem *parent, TAlbum *tag);
 
     TAlbum* getTag() const;
     int id() const;
@@ -131,19 +131,19 @@ TagFolderView::TagFolderView(QWidget *parent)
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
-        
+
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(false);
-    
+
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
-    
+
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
     // TODO: connect to signalAlbumRenamed
-    
+
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
@@ -154,36 +154,36 @@ TagFolderView::TagFolderView(QWidget *parent)
             this, SLOT(slotAlbumIconChanged(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
-    
+
     connect(this, SIGNAL(selectionChanged()),
-            this, SLOT(slotSelectionChanged()));    
+            this, SLOT(slotSelectionChanged()));
 }
 
 TagFolderView::~TagFolderView()
 {
-    delete d;    
+    delete d;
 }
 
 void TagFolderView::slotAlbumAdded(Album *album)
 {
     if(!album)
         return;
-    
+
     TAlbum *tag = dynamic_cast<TAlbum*>(album);
     if(!tag)
         return;
-    
+
     if(tag->isRoot())
     {
         TagFolderViewItem *item = new TagFolderViewItem(this, tag);
-        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();                
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
         item->setPixmap(0, iconLoader->loadIcon("tag-folder", KIcon::NoGroup,
-                        32, KIcon::DefaultState, 0, true));                
+                        32, KIcon::DefaultState, 0, true));
         tag->setExtraData(this, item);
     }
     else
     {
-        TagFolderViewItem *parent = 
+        TagFolderViewItem *parent =
                 (TagFolderViewItem*)tag->parent()->extraData(this);
         if (!parent)
         {
@@ -193,7 +193,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
         }
         TagFolderViewItem *item = new TagFolderViewItem(parent, tag);
         item->setPixmap(0, getBlendedIcon(tag));
-        tag->setExtraData(this, item);        
+        tag->setExtraData(this, item);
     }
 }
 
@@ -206,17 +206,17 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!tag)
         return;
 
-    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this); 
-    if(item) 
+    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this);
+    if(item)
     {
-        TagFolderViewItem *itemParent = 
+        TagFolderViewItem *itemParent =
                 dynamic_cast<TagFolderViewItem*>(item->parent());
-        
+
         if(itemParent)
             itemParent->takeItem(item);
         else
             takeItem(item);
-            
+
         delete item;
     }
 }
@@ -244,7 +244,7 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     {
         takeItem(item);
     }
-        
+
     TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
     if (newPItem)
         newPItem->insertItem(item);
@@ -274,12 +274,12 @@ void TagFolderView::slotSelectionChanged()
         d->albumMan->setCurrentAlbum(0);
         return;
     }
-    
+
     TagFolderViewItem *tagitem = dynamic_cast<TagFolderViewItem*>(selItem);
     if(!tagitem)
     {
         d->albumMan->setCurrentAlbum(0);
-        return;        
+        return;
     }
 
     d->albumMan->setCurrentAlbum(tagitem->getTag());
@@ -407,14 +407,14 @@ void TagFolderView::tagNew( TagFolderViewItem *item,
 void TagFolderView::tagEdit()
 {
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
-    tagEdit(item);    
+    tagEdit(item);
 }
 
 void TagFolderView::tagEdit(TagFolderViewItem *item)
 {
     if(!item)
         return;
-    
+
     TAlbum *tag = item->getTag();
     if(!tag)
         return;
@@ -472,14 +472,14 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     if(children)
     {
         int result =
-            KMessageBox::warningYesNo(this, i18n("Tag '%1' has %2 subtag(s). "
+            KMessageBox::warningContinueCancel(this, i18n("Tag '%1' has %2 subtag(s). "
                                                  "Deleting this will also delete "
                                                  "the subtag(s). "
                                                  "Are you sure you want to continue?")
                                       .arg(tag->title())
-                                      .arg(children));
+                                      .arg(children),i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
 
-        if(result == KMessageBox::Yes)
+        if(result == KMessageBox::Continue)
         {
             QString errMsg;
             if (!d->albumMan->deleteTAlbum(tag, errMsg))
@@ -489,10 +489,10 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     else
     {
         int result =
-            KMessageBox::questionYesNo(0, i18n("Delete '%1' tag?")
-                                       .arg(tag->title()));
+            KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?")
+                                       .arg(tag->title()),i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
 
-        if(result == KMessageBox::Yes)
+        if(result == KMessageBox::Continue)
         {
             QString errMsg;
             if (!d->albumMan->deleteTAlbum(tag, errMsg))
@@ -506,10 +506,10 @@ QDragObject* TagFolderView::dragObject()
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
     if(!item)
         return 0;
-    
+
     if(!item->parent())
         return 0;
-    
+
     TagDrag *t = new TagDrag(item->getTag()->globalID(), this);
     t->setPixmap(*item->pixmap(0));
 
@@ -521,13 +521,13 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
- 
+
     if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
     {
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
             return true;
-        
+
         // Dragging an item on itself makes no sense
         if(itemDrag == itemDrop)
             return false;
@@ -535,7 +535,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
         // Dragging a parent on its child makes no sense
         if(itemDrag && itemDrag->getTag()->isAncestorOf(itemDrop->getTag()))
             return false;
-        
+
         return true;
     }
 
@@ -544,12 +544,12 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
         // Allow only tags dragging at the root
         return false;
     }
-    
+
     if(ItemDrag::canDecode(e))
     {
         return true;
     }
-    
+
     return false;
 }
 
@@ -568,7 +568,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
         if(!itemDrag)
             return;
-        
+
         QPopupMenu popMenu(this);
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -592,24 +592,24 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
                 newParentTag = itemDrop->getTag();
             }
 
-            QString errMsg;            
+            QString errMsg;
             if (!d->albumMan->moveTAlbum(tag, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
-            
+
             if(itemDrop && !itemDrop->isOpen())
                 itemDrop->setOpen(true);
         }
 
         return;
     }
-    
+
     if (ItemDrag::canDecode(e))
     {
         TAlbum *destAlbum = itemDrop->getTag();
         TAlbum *srcAlbum;
-        
+
         KURL::List      urls;
         QValueList<int> albumIDs;
         QValueList<int> imageIDs;
@@ -660,7 +660,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(), 
+                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
                                                            imageIDs.first(), errMsg);
             }
             return;
@@ -668,7 +668,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
-        // popup menu.        
+        // popup menu.
         if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
             ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
         {
@@ -690,7 +690,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         if (id == 10)
         {
             AlbumDB* db = AlbumManager::instance()->albumDB();
-            
+
             db->beginTransaction();
             for (QValueList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
@@ -709,14 +709,14 @@ void TagFolderView::selectItem(int id)
     TAlbum* tag = d->albumMan->findTAlbum(id);
     if(!tag)
         return;
-    
-    TagFolderViewItem *item = 
+
+    TagFolderViewItem *item =
             (TagFolderViewItem*)tag->extraData(this);
     if(item)
     {
         setSelected(item, true);
         ensureItemVisible(item);
-    }    
+    }
 }
 
 

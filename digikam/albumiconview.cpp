@@ -128,7 +128,7 @@ public:
     Album                        *currentAlbum;
     const AlbumSettings          *albumSettings;
     QIntDict<AlbumIconGroupItem>  albumDict;
-    PixmapManager                *pixMan;           
+    PixmapManager                *pixMan;
 
     ThumbnailSize thumbSize;
 
@@ -206,7 +206,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
             SLOT(slotThemeChanged()));
 
     // -- Pixmap manager connections ------------------------------------
-    
+
     connect(d->pixMan, SIGNAL(signalPixmap(const KURL&)),
             SLOT(slotGotThumbnail(const KURL&)));
 }
@@ -301,7 +301,7 @@ void AlbumIconView::clear(bool update)
     d->pixMan->clear();
     d->itemDict.clear();
     d->albumDict.clear();
-    
+
     IconView::clear(update);
 
     emit signalSelectionChanged();
@@ -328,7 +328,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
                         << ", albumID: " << item->albumID() << endl;
             continue;
         }
-        
+
         AlbumIconItem* iconItem = new AlbumIconItem(group, item);
         item->setViewItem(iconItem);
 
@@ -344,13 +344,13 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 {
     if (!item->getViewItem())
         return;
-    
+
     AlbumIconItem* iconItem = static_cast<AlbumIconItem*>(item->getViewItem());
 
     d->pixMan->remove(item->kurl());
 
     emit signalItemDeleted(iconItem);
-    
+
     delete iconItem;
     item->setViewItem(0);
 
@@ -396,7 +396,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->kurl(),
                                                   0, true, true);
-    
+
     QValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers =
         KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
@@ -420,12 +420,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("editimage"),
                        i18n("View/Edit..."), 10);
-    popmenu.insertItem(i18n("Open With"), 
+    popmenu.insertItem(i18n("Open With"),
                        &openWithMenu, 11);
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("imagecomment"),
                        i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(SmallIcon("exifinfo"), 
+    popmenu.insertItem(SmallIcon("exifinfo"),
                        i18n("Properties"), 14);
 
     if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
@@ -446,7 +446,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             selectedImageIDs.append(selItem->imageInfo()->id());
         }
     }
-    
+
     TagsPopupMenu* assignTagsPopup =
         new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
     TagsPopupMenu* removeTagsPopup =
@@ -484,7 +484,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
                     action->plug(&popmenu);
                 }
             }
-            
+
         }
     }
 
@@ -570,7 +570,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon( album, 
+        AlbumManager::instance()->updatePAlbumIcon( album,
                                                     iconItem->imageInfo()->id(),
                                                     err );
     }
@@ -620,13 +620,13 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
         return;
 
     QString oldURL = item->imageInfo()->kurl().url();
-    
+
     if (!item->imageInfo()->setName(newName))
         return;
 
     d->itemDict.remove(oldURL);
     d->itemDict.insert(item->imageInfo()->kurl().url(), item);
-    
+
     item->repaint();
 
     // if user has inadvertently renamed a file to one with an extension
@@ -663,7 +663,7 @@ void AlbumIconView::slotDeleteSelectedItems()
         return;
 
     QString warnMsg;
-    
+
     if (d->albumSettings->getUseTrash())
     {
         warnMsg = i18n("About to move this image to trash. Are you sure?",
@@ -680,8 +680,8 @@ void AlbumIconView::slotDeleteSelectedItems()
     if (KMessageBox::warningContinueCancelList(this,
                                                warnMsg,
                                                nameList,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
+                                               d->albumSettings->getUseTrash() ? i18n("Trash Image") : i18n("Delete Image"),
+                                               d->albumSettings->getUseTrash() ? KGuiItem(i18n("Trash"),"edittrash") : KGuiItem(i18n("Delete"),"editdelete"))
         !=  KMessageBox::Continue)
     {
         return;
@@ -705,13 +705,13 @@ void AlbumIconView::slotFilesModified(const KURL& url)
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
     if (!item) return;
-    
+
     AlbumSettings *settings = AlbumSettings::instance();
 
     if (!settings) return;
 
     KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
-        
+
     QString currentFileExtension =
         item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
@@ -750,7 +750,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     ImageWindow *imview = ImageWindow::imagewindow();
 
     imview->disconnect(this);
-    
+
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
             SLOT(slotFilesModified()));
     connect(imview, SIGNAL(signalFileModified(const KURL&)),
@@ -758,15 +758,15 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             SLOT(slotFilesModified()));
 
-    imview->loadURL(urlList, 
+    imview->loadURL(urlList,
                     item->imageInfo()->kurl(),
                     d->currentAlbum ? d->currentAlbum->title():QString(),
                     true,
                     this);  // Allow to use image properties and comments/tags dialogs
-    
+
     if (imview->isHidden())
         imview->show();
-        
+
     imview->raise();
     imview->setFocus();
 }
@@ -823,7 +823,7 @@ void AlbumIconView::startDrag()
 
     KURL::List      urls;
     QValueList<int> albumIDs;
-    QValueList<int> imageIDs;    
+    QValueList<int> imageIDs;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -831,11 +831,11 @@ void AlbumIconView::startDrag()
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
             urls.append(albumItem->imageInfo()->kurlForKIO());
-            imageIDs.append(albumItem->imageInfo()->id());            
+            imageIDs.append(albumItem->imageInfo()->id());
         }
     }
     albumIDs.append(d->currentAlbum->id());
-    
+
     if (urls.isEmpty())
         return;
 
@@ -890,7 +890,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
     // TODO: need to rework this with specific to in which
     // groupitem items are dropped
-    
+
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
@@ -1009,7 +1009,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     albumItem->imageInfo()->setTag(*it);
                 }
             }
-            
+
             for (IconItem *it = firstItem(); it; it = it->nextItem())
             {
                 if (it->isSelected())
@@ -1039,13 +1039,13 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
 {
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
-    
+
     if (iconItem && iconItem->thumbnailRect().contains(mousePos))
     {
         return true;
     }
     else
-    {    
+    {
         return false;
     }
 }
@@ -1100,7 +1100,7 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
     // we do two things here:
     // 1. refresh the imageinfo for the file
     // 2. refresh the thumbnails
-    
+
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
@@ -1418,7 +1418,7 @@ AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
     IconItem *lItem = findLastVisibleItem(r);
     if (!fItem || !lItem)
         return 0;
-    
+
     AlbumIconItem* firstItem = static_cast<AlbumIconItem*>(fItem);
     AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
     AlbumIconItem* item = firstItem;
@@ -1436,7 +1436,7 @@ AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
 
 PixmapManager* AlbumIconView::pixmapManager() const
 {
-    return d->pixMan;    
+    return d->pixMan;
 }
 
 void AlbumIconView::slotAlbumModified()
@@ -1447,7 +1447,7 @@ void AlbumIconView::slotAlbumModified()
     d->imageLister->openAlbum(d->currentAlbum);
 
     updateBannerRectPixmap();
-    updateItemRectsPixmap();    
+    updateItemRectsPixmap();
 }
 
 void AlbumIconView::slotAssignTag(int tagID)
