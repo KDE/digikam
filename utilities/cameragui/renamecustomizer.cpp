@@ -59,7 +59,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     m_renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 
     m_renameDefaultCaseType = new QComboBox( m_renameDefaultBox );
-    m_renameDefaultCaseType->insertItem(i18n("Leave as is"), 0);
+    m_renameDefaultCaseType->insertItem(i18n("Leave as Is"), 0);
     m_renameDefaultCaseType->insertItem(i18n("Upper"), 1);
     m_renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     m_renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);

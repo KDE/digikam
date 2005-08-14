@@ -139,7 +139,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (m_mode == ASSIGN)
     {
-        popup->insertItem(m_addTagPix, i18n("Add new Tag..."),
+        popup->insertItem(m_addTagPix, i18n("Add New Tag..."),
                           ADDTAGID + album->id());
         popup->insertSeparator();
                 
@@ -256,7 +256,7 @@ void TagsPopupMenu::slotAboutToShow()
 
     if (m_mode == ASSIGN)
     {
-        insertItem(m_addTagPix, i18n("Add new Tag..."), ADDTAGID);
+        insertItem(m_addTagPix, i18n("Add New Tag..."), ADDTAGID);
         if (album->firstChild())
         {
             insertSeparator();

@@ -74,17 +74,17 @@ static struct
 
 RuleOpTable[] =
 {
-    { i18n("contains"),           "LIKE",         SearchAdvancedRule::LINEEDIT },
-    { i18n("does not contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
-    { i18n("equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
-    { i18n("does not equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
-    { i18n("equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
-    { i18n("does not equal"),     "NE",           SearchAdvancedRule::ALBUMS },
-    { i18n("equals"),             "EQ",           SearchAdvancedRule::TAGS },
-    { i18n("does not equal"),     "NE",           SearchAdvancedRule::TAGS },
-    { i18n("after"),              "GT",           SearchAdvancedRule::DATE },
-    { i18n("before"),             "LT",           SearchAdvancedRule::DATE },
-    { i18n("equals"),             "EQ",           SearchAdvancedRule::DATE },
+    { i18n("Contains"),           "LIKE",         SearchAdvancedRule::LINEEDIT },
+    { i18n("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
+    { i18n("Equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
+    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
+    { i18n("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
+    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS },
+    { i18n("Equals"),             "EQ",           SearchAdvancedRule::TAGS },
+    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS },
+    { i18n("After"),              "GT",           SearchAdvancedRule::DATE },
+    { i18n("Before"),             "LT",           SearchAdvancedRule::DATE },
+    { i18n("Equals"),             "EQ",           SearchAdvancedRule::DATE },
 };
 static const int RuleOpTableCount = 11;
 

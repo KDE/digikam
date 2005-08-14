@@ -131,13 +131,13 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     KSeparator *line = new KSeparator (Horizontal, gboxGuideSettings);
     grid->addMultiCellWidget(line, 0, 0, 0, 2);
     
-    QLabel *label5 = new QLabel(i18n("Guide Color:"), gboxGuideSettings);
+    QLabel *label5 = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     m_guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label5, 1, 1, 0, 0);
     grid->addMultiCellWidget(m_guideColorBt, 1, 1, 1, 2);
     
-    QLabel *label6 = new QLabel(i18n("Guide Width:"), gboxGuideSettings);
+    QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     m_guideSize = new QSpinBox( 1, 5, 1, gboxGuideSettings);
     QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);

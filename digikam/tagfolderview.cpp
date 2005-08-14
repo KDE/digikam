@@ -304,7 +304,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag from AddressBook"),
+    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag From AddressBook"),
                        d->ABCMenu);
 
     if(tag && tag->parent())

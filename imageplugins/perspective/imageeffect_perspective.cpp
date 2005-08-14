@@ -94,9 +94,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     QWidget *gbox2 = new QWidget(plainPage());
     QGridLayout *gridLayout = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());    
-    QLabel *label1 = new QLabel(i18n("New Width:"), gbox2);
+    QLabel *label1 = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(gbox2);
-    QLabel *label2 = new QLabel(i18n("New Height:"), gbox2);
+    QLabel *label2 = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(gbox2);
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
@@ -109,13 +109,13 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     KSeparator *line = new KSeparator (Horizontal, gbox2);
     
     QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
-    QLabel *label3 = new QLabel(i18n("  Top Left:"), gbox2);
+    QLabel *label3 = new QLabel(i18n("  Top left:"), gbox2);
     m_topLeftAngleLabel = new QLabel(gbox2);
-    QLabel *label4 = new QLabel(i18n("  Top Right:"), gbox2);
+    QLabel *label4 = new QLabel(i18n("  Top right:"), gbox2);
     m_topRightAngleLabel = new QLabel(gbox2);
-    QLabel *label5 = new QLabel(i18n("  Bottom Left:"), gbox2);
+    QLabel *label5 = new QLabel(i18n("  Bottom left:"), gbox2);
     m_bottomLeftAngleLabel = new QLabel(gbox2);
-    QLabel *label6 = new QLabel(i18n("  Bottom Right:"), gbox2);
+    QLabel *label6 = new QLabel(i18n("  Bottom right:"), gbox2);
     m_bottomRightAngleLabel = new QLabel(gbox2);
     
     gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);

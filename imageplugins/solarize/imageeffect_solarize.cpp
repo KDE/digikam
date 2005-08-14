@@ -55,7 +55,7 @@ namespace DigikamSolarizeImagesPlugin
 {
 
 ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
-                    : KDialogBase(Plain, i18n("Solarize a Photograph"),
+                    : KDialogBase(Plain, i18n("Solarize Photograph"),
                                   Help|Ok|Cancel, Ok,
                                   parent, 0, true, true),
                       m_parent(parent)
@@ -84,7 +84,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Solarize a Photograph"));    
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Solarize Photograph"));    
     topLayout->addWidget(headerFrame);
 
     // -------------------------------------------------------------

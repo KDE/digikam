@@ -57,7 +57,7 @@ namespace DigikamRefocusImagesPlugin
 {
 
 ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Refocus a Photograph"), "refocus", true)
+                   : CtrlPanelDialog(parent, i18n("Refocus Photograph"), "refocus", true)
 {
     QString whatsThis;
         
@@ -85,7 +85,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, marginHint(), spacingHint());
     
-    QLabel *label2 = new QLabel(i18n("Circular Sharpness:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Circular sharpness:"), gboxSettings);
     m_radius = new KDoubleNumInput(gboxSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.001, true);
@@ -112,7 +112,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     // -------------------------------------------------------------
             
-    QLabel *label5 = new QLabel(i18n("Noise Filter:"), gboxSettings);
+    QLabel *label5 = new QLabel(i18n("Noise filter:"), gboxSettings);
     m_noise = new KDoubleNumInput(gboxSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
@@ -127,7 +127,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
             
     // -------------------------------------------------------------
     
-    QLabel *label3 = new QLabel(i18n("Gaussian Sharpness:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Gaussian sharpness:"), gboxSettings);
     m_gauss = new KDoubleNumInput(gboxSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.001, true);
@@ -141,7 +141,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QLabel *label1 = new QLabel(i18n("Matrix Size:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Matrix size:"), gboxSettings);
     m_matrixSize = new KIntNumInput(gboxSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "

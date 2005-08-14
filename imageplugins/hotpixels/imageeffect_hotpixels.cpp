@@ -155,7 +155,7 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
     KImageIO::registerFormats(); 
     
     KFileDialog *fileSelectDialog = new KFileDialog(QString::null, KImageIO::pattern(), this, "", true);
-    fileSelectDialog->setCaption(i18n("Select a black frame image"));
+    fileSelectDialog->setCaption(i18n("Select Black Frame Image"));
     fileSelectDialog->setURL(m_blackFrameURL.path());
     
     if (fileSelectDialog->exec() != QDialog::Rejected)

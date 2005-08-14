@@ -53,7 +53,7 @@ namespace DigikamRainDropImagesPlugin
 {
 
 ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
-                    : ImageGuideDialog(parent, i18n("Add Raindrops to a Photograph"), "raindrops",
+                    : ImageGuideDialog(parent, i18n("Add Raindrops to Photograph"), "raindrops",
                                        false, true, false)
 {
     QString whatsThis;
@@ -85,7 +85,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QWidget *gboxSettings = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
                                                   
-    QLabel *label1 = new QLabel(i18n("Drop Size:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
     
     m_dropInput = new KIntNumInput(gboxSettings);
     m_dropInput->setRange(0, 200, 1, true);
@@ -109,7 +109,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Fish Eyes:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Fish eyes:"), gboxSettings);
     
     m_coeffInput = new KIntNumInput(gboxSettings);
     m_coeffInput->setRange(1, 100, 1, true);

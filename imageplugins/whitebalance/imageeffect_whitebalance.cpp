@@ -184,7 +184,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_exposureLabel = new QLabel(i18n("Exposure:"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_autoAdjustExposure, i18n( "Auto Exposure adjustments." ) );
+    QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
     QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
     m_exposureInput = new KDoubleNumInput(gboxSettings);

@@ -2,8 +2,8 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,22 +11,22 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
 
 #include <cstdio>
-#include <unistd.h> 
- 
-// Qt includes. 
+#include <unistd.h>
 
-#include <qlabel.h> 
+// Qt includes.
+
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -97,15 +97,15 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_config                 = kapp->config();
     m_config->setGroup("ImageViewer Settings");
     m_currentItem = 0;
-    
+
     if(m_config->readBoolEntry("ShowSplash", true) &&
        !kapp->isRestored())
     {
        m_splash = new SplashScreen("showfoto-splash.png");
     }
-    
+
     // -- construct the view ---------------------------------
-    
+
     QWidget* widget  = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -115,7 +115,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     lay->addWidget(m_bar);
 
     setCentralWidget(widget);
-    
+
     m_nameLabel = new QLabel(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);
@@ -125,9 +125,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel,1);
-    
+
     // -- build the gui -------------------------------------
-    
+
     setupActions();
 
     KGlobal::dirs()->addResourceType("data",
@@ -137,45 +137,45 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     KGlobal::iconLoader()->addAppDir("digikam");
 
     // Load image plugins.
-    
+
     m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
     loadPlugins();
-    
+
     // If plugin core is available, unplug BCG actions.
-    if ( m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )   
+    if ( m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
        {
        actionCollection()->remove(m_BCGAction);
        m_disableBCGActions = true;
        }
-    
-    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));    
-    
+
+    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+
     m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
 
     applySettings();
 
     // -- setup connections ---------------------------
-    
+
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
-    
+
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
-                
+
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
             this, SLOT(slotZoomChanged(float)));
-            
+
     connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
             this, SLOT(slotChanged(bool, bool)));
-            
+
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
 
     connect(m_slideShow, SIGNAL(finished()),
             m_slideShowAction, SLOT(activate()) );
-    
+
     //-------------------------------------------------------------
-        
+
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
@@ -184,11 +184,11 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     resize(640,480);
     setAutoSaveSettings();
-    
+
     if ( urlList.isEmpty() )
     {
        toggleActions(false);
-       QTimer::singleShot(0, this, SLOT(slotOpenFile())); 
+       QTimer::singleShot(0, this, SLOT(slotOpenFile()));
     }
 }
 
@@ -196,7 +196,7 @@ ShowFoto::~ShowFoto()
 {
     unLoadPlugins();
     saveSettings();
-    
+
     delete m_bar;
     delete m_canvas;
     delete m_imagePluginLoader;
@@ -209,7 +209,7 @@ void ShowFoto::setupActions()
                      actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
-    
+
     m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
                                   actionCollection(), "file_fwd");
     m_backAction = KStdAction::back(this, SLOT(slotPrev()),
@@ -224,20 +224,20 @@ void ShowFoto::setupActions()
                                KStdAccel::shortcut( KStdAccel::End),
                                this, SLOT(slotLast()),
                                actionCollection(), "file_last");
-                                  
+
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "save");
-    
+
     m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
                                          actionCollection(), "saveas");
-    
+
     m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "revert");
 
     m_revertAction->setEnabled(false);
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
-    
+
     m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
                               CTRL+Key_P,
                               this, SLOT(slotFilePrint()),
@@ -247,19 +247,19 @@ void ShowFoto::setupActions()
                                      ALT+Key_Return,
                                      this, SLOT(slotFileProperties()),
                                      actionCollection(), "file_properties");
-    
+
     m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
                                SHIFT+Key_Delete,
                                this, SLOT(slotDeleteCurrentItem()),
                                actionCollection(), "delete");
-                                  
-    // -- Edit actions ----------------------------------------------------------------                     
+
+    // -- Edit actions ----------------------------------------------------------------
 
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                     actionCollection(), "copy");
     m_copyAction->setEnabled(false);
-    
-    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
+
+    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
                                            KStdAccel::shortcut(KStdAccel::Undo),
                                            m_canvas, SLOT(slotUndo()),
                                            actionCollection(), "undo");
@@ -269,7 +269,7 @@ void ShowFoto::setupActions()
             m_canvas, SLOT(slotUndo(int)));
     m_undoAction->setEnabled(false);
 
-    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo", 
+    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo",
                                            KStdAccel::shortcut(KStdAccel::Redo),
                                            m_canvas, SLOT(slotRedo()),
                                            actionCollection(), "redo");
@@ -278,9 +278,9 @@ void ShowFoto::setupActions()
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
-                     
+
     // -- View Actions -----------------------------------------------
-    
+
     m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "zoom_plus");
     m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
@@ -293,7 +293,7 @@ void ShowFoto::setupActions()
     m_fullScreenAction =
         KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                actionCollection(), this, "full_screen");
-#else 
+#else
     m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
                                            CTRL+SHIFT+Key_F, this,
                                            SLOT(slotToggleFullScreen()),
@@ -308,7 +308,7 @@ void ShowFoto::setupActions()
                                               this, SLOT(slotViewHistogram()),
                                               actionCollection(), "view_histogram");
     m_viewHistogramAction->setEditable(false);
-    
+
     QStringList selectItems;
     selectItems << i18n("Hide");
     selectItems << i18n("Luminosity");
@@ -318,12 +318,12 @@ void ShowFoto::setupActions()
     selectItems << i18n("Alpha");
     m_viewHistogramAction->setItems(selectItems);
 
-    m_slideShowAction = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, 
+    m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
                                           this, SLOT(slotToggleSlideShow()),
                                           actionCollection(),"slideshow");
-    
+
     // -- rotate actions ---------------------------------------------
-    
+
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
                                      actionCollection(),
                                      "rotate");
@@ -344,9 +344,9 @@ void ShowFoto::setupActions()
     m_rotateAction->insert(m_rotate90Action);
     m_rotateAction->insert(m_rotate180Action);
     m_rotateAction->insert(m_rotate270Action);
-    
+
     // -- flip actions ---------------------------------------------------------------
-    
+
     m_flipAction = new KActionMenu(i18n("Flip"),
                                    "flip_image",
                                    actionCollection(),
@@ -356,7 +356,7 @@ void ShowFoto::setupActions()
     m_flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(),
-                                   "flip_horizontal"); 
+                                   "flip_horizontal");
 
     m_flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
@@ -364,9 +364,9 @@ void ShowFoto::setupActions()
                                    "flip_vertical");
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
-    
+
     // -- Transform actions ----------------------------------------------------------
-    
+
     m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
                                  this, SLOT(slotResize()),
                                  actionCollection(), "resize");
@@ -408,22 +408,22 @@ void ShowFoto::setupActions()
     m_BCGAction->insert(decContrastAction);
     m_BCGAction->insert(incGammaAction);
     m_BCGAction->insert(decGammaAction);
-                
+
     // -- help actions -----------------------------------------------
-    
-    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"), 
-                                     "digikamimageplugins", 0, 
+
+    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
+                                     "digikamimageplugins", 0,
                                      this, SLOT(slotImagePluginsHelp()),
                                      actionCollection(), "imagepluginshelp");
-    
+
     // -- Configure toolbar and shortcuts ---------------------------------------------
-    
+
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
-    
+
     // ---------------------------------------------------------------
-    
+
     createGUI("showfotoui.rc", false);
 
     KAccel *accel = new KAccel(this);
@@ -473,12 +473,12 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setIcon("editdelete");
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
-    
+
     // Background color.
     QColor bgColor(Qt::black);
     m_canvas->setBackgroundColor(m_config->readColorEntry("BackgroundColor", &bgColor));
     m_canvas->update();
-    
+
     m_fullScreenHideToolBar = m_config->readBoolEntry("FullScreenHideToolBar", false);
     m_fullScreenHideThumbBar = m_config->readBoolEntry("FullScreenHideThumbBar", true);
 
@@ -494,16 +494,16 @@ void ShowFoto::applySettings()
 
     // TIFF compression.
     m_TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
-    
+
     // Slideshow Settings.
     m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);
     m_slideShow->setStartWithCurrent(m_config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(m_config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(m_config->readNumEntry("SlideShowDelay", 5));
-        
+
     bool showBar = false;
     bool autoFit = true;
-    
+
     m_config->setGroup("MainWindow");
     showBar = m_config->readBoolEntry("Show Thumbnails", true);
     autoFit = m_config->readBoolEntry("Zoom Autofit", true);
@@ -517,7 +517,7 @@ void ShowFoto::applySettings()
     QRect histogramRect = m_config->readRectEntry("Histogram Rectangle");
     if (!histogramRect.isNull())
         m_canvas->setHistogramPosition(histogramRect.topLeft());
-    
+
     int histogramType = m_config->readNumEntry("HistogramType", 0);
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
     m_viewHistogramAction->setCurrentItem(histogramType);
@@ -529,14 +529,14 @@ void ShowFoto::saveSettings()
     m_config->setGroup("MainWindow");
     m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
     m_config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
-    
+
     int histogramType = m_viewHistogramAction->currentItem();
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
     m_config->writeEntry("HistogramType", histogramType);
 
     QPoint pt;
     QRect rc(0, 0, 0, 0);
-    if (m_canvas->getHistogramPosition(pt)) 
+    if (m_canvas->getHistogramPosition(pt))
         rc = QRect(pt.x(), pt.y(), 1, 1);
     m_config->writeEntry("Histogram Rectangle", rc);
 }
@@ -548,7 +548,7 @@ void ShowFoto::closeEvent(QCloseEvent* e)
 
     if (!promptUserSave())
         return;
-    
+
     e->accept();
 }
 
@@ -556,13 +556,13 @@ void ShowFoto::slotOpenFile()
 {
     if (!promptUserSave())
         return;
-    
+
     QString mimes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
     KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
                                                 mimes,
                                                 this,
                                                 i18n("Open Images"));
-        
+
     if (!urls.isEmpty())
     {
         m_bar->clear();
@@ -571,7 +571,7 @@ void ShowFoto::slotOpenFile()
         {
             new Digikam::ThumbBarItem(m_bar, *it);
         }
-           
+
         toggleActions(true);
     }
 }
@@ -586,8 +586,8 @@ void ShowFoto::slotFileProperties()
             uint* data   = Digikam::ImlibInterface::instance()->getData();
             int   width  = Digikam::ImlibInterface::instance()->origWidth();
             int   height = Digikam::ImlibInterface::instance()->origHeight();
-                
-            ImageProperties properties(this, m_currentItem->url(), 
+
+            ImageProperties properties(this, m_currentItem->url(),
                                        sel.isNull() ? 0 : &sel,
                                        data, width, height);
             properties.exec();
@@ -649,9 +649,9 @@ void ShowFoto::slotSaveAs()
         kdWarning() << k_funcinfo << "This should not happen" << endl;
         return;
     }
-    
+
     KURL url(m_currentItem->url());
-    
+
     // The typemines listed is the base imagefiles supported by imlib2.
     QStringList mimetypes;
     mimetypes << "image/jpeg" << "image/png" << "image/tiff" << "image/gif"
@@ -705,7 +705,7 @@ void ShowFoto::slotSaveAs()
 
     QString tmpFile = saveAsURL.directory() + QString("/.showfoto-tmp-")
                       + saveAsURL.filename();
-    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression, 
+    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
                                  m_TIFFCompression, format.lower()))
     {
         KMessageBox::error(this, i18n("Failed to save file '%1'")
@@ -766,7 +766,7 @@ bool ShowFoto::promptUserSave()
 {
     if (!m_currentItem)
         return true;
-    
+
     if (m_saveAction->isEnabled())
     {
         int result =
@@ -805,7 +805,7 @@ bool ShowFoto::save()
         KMessageBox::sorry(this, i18n("No support for saving non-local files"));
         return false;
     }
-    
+
     QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
                       + url.filename();
     if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
@@ -844,7 +844,7 @@ bool ShowFoto::save()
     m_canvas->setModified( false );
     slotOpenURL(m_currentItem->url());
     m_bar->invalidateThumb(m_currentItem);
-    
+
     return true;
 }
 
@@ -856,7 +856,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
     m_currentItem = m_bar->currentItem();
     if(!m_currentItem)
         return;
-    
+
     QString localFile;
 #if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
@@ -864,7 +864,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
     KIO::NetAccess::download(url, localFile);
 #endif
     m_canvas->load(localFile);
-    
+
     int index = 1;
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
     {
@@ -874,13 +874,13 @@ void ShowFoto::slotOpenURL(const KURL& url)
         }
         index++;
     }
-    
+
     QString text = m_currentItem->url().filename() +
                    i18n(" (%2 of %3)")
                    .arg(QString::number(index))
                    .arg(QString::number(m_bar->countItems()));
     m_nameLabel->setText(text);
-    
+
     setCaption(i18n("Showfoto - %1").arg(m_currentItem->url().directory()));
 
     if (m_bar->countItems() == 1) {
@@ -930,7 +930,7 @@ void ShowFoto::slotToggleFullScreen()
         menuBar()->show();
         statusBar()->show();
 
-        
+
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
            m_bar->show();
@@ -941,7 +941,7 @@ void ShowFoto::slotToggleFullScreen()
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
             toolBar->show();
         }
-    
+
         m_fullScreen = false;
     }
     else
@@ -1044,7 +1044,7 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
                         QString::number(m_canvas->imageHeight()) +
                         QString(" ") +
                         i18n("pixels"));
-    
+
     m_revertAction->setEnabled(moreUndo);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
@@ -1059,11 +1059,11 @@ void ShowFoto::slotAboutToShowUndoMenu()
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();        
+        QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
             m_undoAction->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -1075,11 +1075,11 @@ void ShowFoto::slotAboutToShowRedoMenu()
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();        
+        QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
             m_redoAction->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -1110,14 +1110,14 @@ void ShowFoto::toggleActions(bool val)
     m_resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_slideShowAction->setEnabled(val);
-    
+
     if (!m_disableBCGActions)
        m_BCGAction->setEnabled(val);
-    
+
     QPtrList<Digikam::ImagePlugin> pluginList
         = m_imagePluginLoader->pluginList();
     for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) 
+         plugin; plugin = pluginList.next())
     {
         if (plugin) {
             plugin->setEnabledActions(val);
@@ -1133,14 +1133,14 @@ void ShowFoto::slotEditKeys()
     QPtrList<Digikam::ImagePlugin> pluginList
         = m_imagePluginLoader->pluginList();
     for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) 
+         plugin; plugin = pluginList.next())
     {
         if (plugin)
         {
             dialog.insert( plugin->actionCollection(), plugin->name() );
         }
     }
-    
+
     dialog.configure();
 }
 
@@ -1180,7 +1180,7 @@ void ShowFoto::slotFilePrint()
     {
         QImage image((uchar*)data, width, height, 32, 0, 0, QImage::IgnoreEndian);
         image = image.copy();
-    
+
         ImagePrint printOperations(image, printer, m_currentItem->url().filename());
         if (!printOperations.printImageWithQt())
         {
@@ -1238,7 +1238,7 @@ void ShowFoto::slotSetup()
     loadPlugins();
     applySettings();
 
-    if ( m_bar->countItems() == 0 )    
+    if ( m_bar->countItems() == 0 )
        toggleActions(false);
 }
 
@@ -1247,7 +1247,7 @@ void ShowFoto::loadPlugins()
     QPtrList<Digikam::ImagePlugin> pluginList
         = m_imagePluginLoader->pluginList();
     for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) 
+         plugin; plugin = pluginList.next())
     {
         if (plugin)
         {
@@ -1323,9 +1323,9 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     }
 
     // No error, remove item in thumbbar.
-    
+
     Digikam::ThumbBarItem *item2remove = m_currentItem;
-    
+
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
      {
         if (item->url().equals(item2remove->url()))
@@ -1334,14 +1334,14 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
             break;
         }
     }
-  
+
     // Disable menu actions if no current image.
-    if ( m_bar->countItems() == 0 )    
+    if ( m_bar->countItems() == 0 )
        {
        toggleActions(false);
        m_canvas->load(QString::null);
        }
-    else 
+    else
         slotOpenURL(m_currentItem->url());
 }
 
@@ -1350,22 +1350,22 @@ void ShowFoto::slotContextMenu()
     m_contextMenu->exec(QCursor::pos());
 }
 
-void ShowFoto::slotToggleSlideShow() 
+void ShowFoto::slotToggleSlideShow()
 {
-    if (m_slideShowAction->isChecked()) 
+    if (m_slideShowAction->isChecked())
     {
-        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen) 
+        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
         {
             m_fullScreenAction->activate();
         }
-        
+
         m_slideShow->start();
     }
-    else 
+    else
     {
         m_slideShow->stop();
-        
-        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen) 
+
+        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
         {
             m_fullScreenAction->activate();
         }

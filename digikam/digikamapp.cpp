@@ -565,15 +565,15 @@ void DigikamApp::setupActions()
 
     KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
-    findAction->setText(i18n("Quick Search"));
+    findAction->setText(i18n("Quick Search..."));
 
     findAction = KStdAction::find(mView, SLOT(slotNewAdvancedSearch()),
                                   actionCollection(), "search_advanced");
-    findAction->setText(i18n("Advanced Search"));
+    findAction->setText(i18n("Advanced Search..."));
     findAction->setShortcut("Ctrl+Alt+F");
-    
+
     // -----------------------------------------------------------
-    
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 

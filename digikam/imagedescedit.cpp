@@ -111,7 +111,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     thumbBoxLayout->addWidget(m_nameLabel, 0, Qt::AlignCenter);
     topLayout->addWidget(thumbBox, 0, 0);
 
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date and Time"), plainPage());
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), plainPage());
     m_dateTimeEdit = new KDateTimeEdit( dateTimeBox,"datepicker");
     topLayout->addWidget(dateTimeBox, 1, 0);
     
@@ -723,7 +723,7 @@ void ImageDescEdit::slotRecentTags()
 
     if (recentTags.isEmpty())
     {
-        menu.insertItem(i18n("No recently assigned tags"), 0);
+        menu.insertItem(i18n("No Recently Assigned Tags"), 0);
         menu.setItemEnabled(0, false);
     }
     else

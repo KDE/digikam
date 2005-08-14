@@ -108,7 +108,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     groupbox = new QGroupBox( page, "groupbox");
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
-    QLabel* label = new QLabel(i18n("&Save Search As"), groupbox);
+    QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
     m_title = new QLineEdit(groupbox, "searchTitle");
     groupbox->setFrameStyle( QFrame::NoFrame );
 
@@ -262,7 +262,7 @@ void SearchAdvancedDialog::slotGroupRules()
 
     SearchAdvancedGroup* group = new SearchAdvancedGroup(m_rulesBox);
     BaseList::iterator itPos = m_baseList.find(rule);
-    m_baseList.insert(itPos, group);    
+    m_baseList.insert(itPos, group);
 
     for (BaseList::iterator it = itemsToGroup.begin();
          it != itemsToGroup.end(); ++it)
@@ -273,7 +273,7 @@ void SearchAdvancedDialog::slotGroupRules()
             SearchAdvancedRule* rule = (SearchAdvancedRule*)base;
             group->addRule(rule);
             m_baseList.remove(rule);
-        } 
+        }
     }
 
     for (BaseList::iterator it = m_baseList.begin();
@@ -285,7 +285,7 @@ void SearchAdvancedDialog::slotGroupRules()
 
     connect( group, SIGNAL( signalBaseItemToggled() ) ,
              this, SLOT( slotChangeButtonStates() ) );
- 
+
     slotChangeButtonStates();
     slotPropertyChanged();
 }
@@ -305,13 +305,13 @@ void SearchAdvancedDialog::slotUnGroupRules()
             base->isChecked())
         {
             itemsToUnGroup.append((SearchAdvancedGroup*)base);
-        } 
+        }
     }
 
     if (itemsToUnGroup.isEmpty())
         return;
 
-    
+
     for (GroupList::iterator it = itemsToUnGroup.begin();
          it != itemsToUnGroup.end(); ++it)
     {
@@ -334,7 +334,7 @@ void SearchAdvancedDialog::slotUnGroupRules()
 
     for (BaseList::iterator it = m_baseList.begin();
          it != m_baseList.end(); ++it)
-    { 
+    {
         m_rulesBox->layout()->remove((*it)->widget());
         m_rulesBox->layout()->add((*it)->widget());
     }
@@ -439,7 +439,7 @@ void SearchAdvancedDialog::slotTimeOut()
     url.addQueryItem("name", m_title->text());
     url.addQueryItem("count", QString::number(count));
     m_url = url;
-    if (!count == 0) 
+    if (!count == 0)
         m_resultsView->openURL( url );
     kdDebug() << url << endl;
 
@@ -511,7 +511,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         newRule.addQueryItem("1.key",key);
         newRule.addQueryItem("1.op",op);
         newRule.addQueryItem("1.val",val);
-        
+
         rulesMap.insert(i, newRule);
     }
 

@@ -54,7 +54,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     hbox = new QHBox(vbox);
     hbox->setSpacing(spacingHint());
 
-    new QLabel(i18n("Save Search as:"), hbox);
+    new QLabel(i18n("Save search as:"), hbox);
     m_nameEdit = new QLineEdit(hbox);
     m_nameEdit->setText(i18n("Last Search"));
     

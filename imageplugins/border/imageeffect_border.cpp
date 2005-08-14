@@ -52,7 +52,7 @@ namespace DigikamBorderImagesPlugin
 {
 
 ImageEffect_Border::ImageEffect_Border(QWidget* parent)
-                  : ImageGuideDialog(parent, i18n("Add Border Around a Photograph"), "border", 
+                  : ImageGuideDialog(parent, i18n("Add Border Around Photograph"), "border", 
                                      false, false, false)
 {
     // No need Abort button action.

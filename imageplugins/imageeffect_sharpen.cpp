@@ -47,7 +47,7 @@
 #include "imageeffect_sharpen.h"
 
 ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Sharpening a Photograph"),
+                   : KDialogBase(Plain, i18n("Sharpening Photograph"),
                                  Help|Default|User1|Ok|Cancel, Ok,
                                  parent, 0, true, true,
                                  i18n("&Abort")),                                 

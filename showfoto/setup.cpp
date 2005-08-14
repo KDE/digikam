@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at free.fr>
  * Date   : 2005-04-02
  * Description : showfoto setup dialog.
- * 
+ *
  * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -10,14 +10,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // Qt includes.
 
 #include <qtabwidget.h>
@@ -49,11 +49,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
-        
-    page_slideshow = addPage(i18n("SlideShow"), i18n("SlideShow Settings"),
+
+    page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                              BarIcon("slideshow", KIcon::SizeMedium));
     slideshowPage_ = new SetupSlideShow(page_slideshow);
-    
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
