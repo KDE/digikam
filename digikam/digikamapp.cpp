@@ -925,6 +925,8 @@ void DigikamApp::loadPlugins()
 
     KipiPluginLoader_->loadPlugins();
 
+    KipiInterface_->slotCurrentAlbumChanged(mAlbumManager->currentAlbum());
+
     m_ImagePluginsLoader = new ImagePluginLoader(this, mSplash);
 }
 

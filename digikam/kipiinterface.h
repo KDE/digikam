@@ -81,6 +81,7 @@ public:
 
     virtual void cloneData( ImageInfoShared* other );
 
+    virtual QDateTime time( KIPI::TimeSpec spec );
     virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
     
     virtual QMap<QString,QVariant> attributes();                    

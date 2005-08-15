@@ -330,6 +330,14 @@ public:
     QDateTime getItemDate(Q_LLONG imageID);
 
     /**
+     * Get the datetime for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the datetime for the item
+     */
+    QDateTime getItemDate(int albumID, const QString& name);
+
+    /**
      * Get a list of names of all the tags for the item
      * @param imageID the ID of the item
      * @return the list of names of all tags for the item

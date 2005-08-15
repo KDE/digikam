@@ -713,6 +713,22 @@ QDateTime AlbumDB::getItemDate(Q_LLONG imageID)
         return QDateTime::fromString(values[0], Qt::ISODate);
 }
 
+QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
+{
+    QStringList values;
+
+    execSql( QString("SELECT datetime FROM Images "
+                     "WHERE dirid=%1 AND name='%2';")
+             .arg(albumID)
+             .arg(escapeString(name)),
+             &values );
+
+    if (values.isEmpty())
+        return QDateTime();
+    else
+        return QDateTime::fromString(values[0], Qt::ISODate);
+}
+
 QStringList AlbumDB::getItemTagNames(Q_LLONG imageID)
 {
     QStringList values;

@@ -105,18 +105,19 @@ QString DigikamImageInfo::description()
     return QString::null;
 }
 
-void DigikamImageInfo::setTitle( const QString&  )
+void DigikamImageInfo::setTitle( const QString& newName )
 {
-    // TODO: what is this supposed to do exactly?
-    return;
+    //  here we get informed that a plugin has renamed the file 
+    
+    PAlbum* p = parentAlbum();
 
-//     PAlbum* p = parentAlbum();
-
-//     if ( p && !name.isEmpty() )
-//     {
-//         AlbumDB* db = AlbumManager::instance()->albumDB();
-//         db->moveItem(p, _url.fileName(), p, name);
-//     }
+    if ( p && !newName.isEmpty() )
+    {
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        db->moveItem(p->id(), _url.fileName(), p->id(), newName);
+        _url = _url.upURL();
+        _url.addPath(newName);
+    }
 }
 
 void DigikamImageInfo::setDescription( const QString& description )
@@ -143,6 +144,19 @@ void DigikamImageInfo::setDescription( const QString& description )
             }
         }
     }
+}
+
+QDateTime DigikamImageInfo::time( KIPI::TimeSpec /*spec*/ )
+{
+    PAlbum* p = parentAlbum();
+
+    if (p)
+    {
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        return db->getItemDate(p->id(), _url.fileName());
+    }
+
+    return QDateTime();
 }
 
 void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
