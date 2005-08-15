@@ -34,6 +34,11 @@ namespace KIO
 class Job;
 }
 
+namespace Digikam
+{
+class Sidebar;
+};
+
 class QString;
 class QIconViewItem;
 class KURL;
@@ -46,7 +51,6 @@ class AlbumSettings;
 class AlbumManager;
 class Album;
 class AlbumHistory;
-class Sidebar;
 class DateFolderView;
 class TagFolderView;
 class TagFilterView;
@@ -79,11 +83,11 @@ private:
     AlbumIconView            *mIconView;
     AlbumManager             *mAlbumMan;
     AlbumHistory             *mAlbumHistory;
-    Sidebar                  *mMainSidebar;
+    Digikam::Sidebar         *mMainSidebar;
     DateFolderView           *mDateFolderView;
     TagFolderView            *mTagFolderView;
     SearchFolderView         *mSearchFolderView;
-    Sidebar                  *mRightSidebar;
+    Digikam::Sidebar         *mRightSidebar;
     TagFilterView            *mTagFilterView;
     int                      mInitialAlbumID;
     QSplitter                *mSplitter;

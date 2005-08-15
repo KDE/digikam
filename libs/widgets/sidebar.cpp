@@ -19,7 +19,6 @@
 /** @file sidebar.cpp */
 
 #include "sidebar.h"
-#include "albummanager.h"
 
 #include <qsplitter.h>
 #include <qwidgetstack.h>
@@ -31,6 +30,8 @@
 #include <kmultitabbar.h>
 #include <kiconloader.h>
 
+using namespace Digikam;
+
 Sidebar::Sidebar(QWidget *parent, Side side)
     : KMultiTabBar(KMultiTabBar::Vertical, parent, "Sidebar")
 {
@@ -38,9 +39,6 @@ Sidebar::Sidebar(QWidget *parent, Side side)
     m_activeTab = -1;
     m_minimized = false;
     m_side = side;
-    
-    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            SLOT(slotAllAlbumsLoaded()));
 }
 
 Sidebar::~Sidebar()
@@ -62,13 +60,6 @@ void Sidebar::setSplitter(QSplitter *sp)
         setPosition(KMultiTabBar::Left);
     else
         setPosition(KMultiTabBar::Right);
-}
-
-void Sidebar::slotAllAlbumsLoaded()
-{
-    disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-               this, SLOT(slotAllAlbumsLoaded()));    
-    loadViewState();
 }
 
 void Sidebar::loadViewState()

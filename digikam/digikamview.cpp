@@ -72,7 +72,7 @@ DigikamView::DigikamView(QWidget *parent)
 
     mAlbumMan = AlbumManager::instance();
 
-    mMainSidebar = new Sidebar(this, Sidebar::Left);
+    mMainSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Left);
     
     mSplitter = new QSplitter(this);
     
@@ -80,7 +80,7 @@ DigikamView::DigikamView(QWidget *parent)
     
     mIconView = new AlbumIconView(mSplitter);
     
-    mRightSidebar = new Sidebar(this, Sidebar::Right);    
+    mRightSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Right);    
     mRightSidebar->setSplitter(mSplitter);    
     
     mFolderView = new AlbumFolderView(this);
@@ -203,6 +203,9 @@ void DigikamView::slotAllAlbumsLoaded()
     loadViewState();
     Album *album = mAlbumMan->findAlbum(mInitialAlbumID);
     mAlbumMan->setCurrentAlbum(album);
+    
+    mMainSidebar->loadViewState();
+    mRightSidebar->loadViewState();
 }
 
 void DigikamView::slot_sortAlbums(int order)

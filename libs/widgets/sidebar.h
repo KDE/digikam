@@ -25,6 +25,8 @@
 #include <config.h>
 #endif
 
+#include "digikam_export.h"
+
 #include <kmultitabbar.h>
 
 class KMultiTabBar;
@@ -32,10 +34,13 @@ class QWidgetStack;
 class QDataStream;
 class QSplitter;
 
+namespace Digikam
+{
+
 /**
  * This class handles a sidebar view
  */
-class Sidebar : public KMultiTabBar
+class DIGIKAM_EXPORT Sidebar : public KMultiTabBar
 {
     Q_OBJECT
 
@@ -98,12 +103,13 @@ public:
      */
     void expand();
                 
-private:
-    
     /**
      * load the last view state from disk
      */
     void loadViewState();
+    
+private:
+    
     
     /**
      * save the view state to disk
@@ -127,8 +133,6 @@ private slots:
      */
     void clicked(int tab);
     
-    void slotAllAlbumsLoaded();
-    
 signals:
     
     /**
@@ -136,6 +140,6 @@ signals:
      */
     void            signalChangedTab(QWidget *w);
 };
-
+};
 
 #endif // _SIDEBAR_H_
