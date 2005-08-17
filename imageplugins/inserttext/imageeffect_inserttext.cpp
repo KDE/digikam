@@ -236,7 +236,7 @@ void ImageEffect_InsertText::readSettings(void)
     m_textEdit->setText(config->readEntry("Text String", i18n("Enter your text here!")));
     m_textFont = config->readFontEntry("Font Properties", defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
-    m_alignTextMode = config->readNumEntry("Text Alignement", ALIGN_LEFT);
+    m_alignTextMode = config->readNumEntry("Text Alignment", ALIGN_LEFT);
     m_borderText->setChecked( config->readBoolEntry("Border Text", false) );
     m_transparentText->setChecked( config->readBoolEntry("Transparent Text", false) );
     
@@ -258,7 +258,7 @@ void ImageEffect_InsertText::writeSettings(void)
     config->writeEntry( "Font Color", m_fontColorButton->color() );
     config->writeEntry( "Text String", m_textEdit->text() );
     config->writeEntry( "Font Properties", m_textFont );
-    config->writeEntry( "Text Alignement", m_alignTextMode );
+    config->writeEntry( "Text Alignment", m_alignTextMode );
     config->writeEntry( "Border Text", m_borderText->isChecked() );
     config->writeEntry( "Transparent Text", m_transparentText->isChecked() );
     
