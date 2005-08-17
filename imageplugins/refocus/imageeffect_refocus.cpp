@@ -248,7 +248,7 @@ void ImageEffect_Refocus::resetValues(void)
     m_radius->setValue(0.9);
     m_gauss->setValue(0.0);
     m_correlation->setValue(0.5);
-    m_noise->setValue(0.01);
+    m_noise->setValue(0.02);
     
     m_matrixSize->blockSignals(false);
     m_radius->blockSignals(false);
