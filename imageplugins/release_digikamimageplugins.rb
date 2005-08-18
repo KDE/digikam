@@ -9,11 +9,11 @@
 
 name       = "digikamimageplugins"
 egmodule   = "graphics"
-version    = "0.7.3.1"
+version    = "0.8.0-beta1"
 svnroot    = "https://toma@svn.kde.org/home/kde/trunk"
 
 addDocs    = []
-addPo      = ["digikamimageplugin_adjustcurves","digikamimageplugin_charcoal","digikamimageplugin_inpainting","digikamimageplugin_sheartool","digikamimageplugin_adjustlevels","digikamimageplugin_despeckle","digikamimageplugin_inserttext","digikamimageplugin_antivignetting","digikamimageplugin_distortionfx","digikamimageplugin_lensdistortion","digikamimageplugin_solarize","digikamimageplugin_blowup","digikamimageplugin_emboss","digikamimageplugin_oilpaint","digikamimageplugin_superimpose","digikamimageplugin_blurfx","digikamimageplugin_filmgrain","digikamimageplugin_perspective","digikamimageplugin_texture","digikamimageplugin_border","digikamimageplugin_freerotation","digikamimageplugin_raindrop","digikamimageplugin_unsharp","digikamimageplugin_channelmixer","digikamimageplugin_infrared","digikamimageplugin_restoration","digikamimageplugin_whitebalance"]
+addPo      = ["digikamimageplugin_adjustcurves","digikamimageplugin_charcoal","digikamimageplugin_inpainting","digikamimageplugin_sheartool","digikamimageplugin_adjustlevels","digikamimageplugin_despeckle","digikamimageplugin_inserttext","digikamimageplugin_antivignetting","digikamimageplugin_distortionfx","digikamimageplugin_lensdistortion","digikamimageplugin_solarize","digikamimageplugin_blowup","digikamimageplugin_emboss","digikamimageplugin_oilpaint","digikamimageplugin_superimpose","digikamimageplugin_blurfx","digikamimageplugin_filmgrain","digikamimageplugin_perspective","digikamimageplugin_texture","digikamimageplugin_border","digikamimageplugin_freerotation","digikamimageplugin_raindrop","digikamimageplugin_unsharp","digikamimageplugin_channelmixer","digikamimageplugin_infrared","digikamimageplugin_restoration","digikamimageplugin_whitebalance","digikam_refocus"]
 
 #----------------------------------------------------------------
 
