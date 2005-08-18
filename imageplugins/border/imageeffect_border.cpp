@@ -157,8 +157,13 @@ ImageEffect_Border::~ImageEffect_Border()
     writeSettings();
 }
 
-void ImageEffect_Border::readSettings(void)
+void ImageEffect_Border::readUserSettings(void)
 {
+    m_borderType->blockSignals(true);
+    m_borderWidth->blockSignals(true);
+    m_firstColorButton->blockSignals(true);
+    m_secondColorButton->blockSignals(true);
+    
     KConfig *config = kapp->config();
     config->setGroup("Add Border Tool Settings");
     
@@ -182,11 +187,16 @@ void ImageEffect_Border::readSettings(void)
     delete white;
     delete gray1;
     delete gray2;
+    
+    m_borderType->blockSignals(false);
+    m_borderWidth->blockSignals(false);
+    m_firstColorButton->blockSignals(false);
+    m_secondColorButton->blockSignals(false);
               
     slotBorderTypeChanged(m_borderType->currentItem());
 }
     
-void ImageEffect_Border::writeSettings(void)
+void ImageEffect_Border::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Add Border Tool Settings");

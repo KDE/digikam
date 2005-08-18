@@ -71,8 +71,6 @@ private:
     
 private:
 
-    void readSettings(void);
-    void writeSettings(void);
     QString getBorderPath(int border);
     
 private slots:
@@ -80,9 +78,11 @@ private slots:
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
+    void readUserSettings(void);
     
 protected:
     
+    void writeUserSettings(void);
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);

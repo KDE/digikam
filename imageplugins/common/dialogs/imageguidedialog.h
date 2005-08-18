@@ -105,6 +105,7 @@ private slots:
     virtual void slotUser1();
     virtual void slotDefault();
     virtual void slotInit();
+    virtual void readUserSettings(void){ slotDefault(); };
     
     void slotResized();           
     void slotHelp();
@@ -117,6 +118,7 @@ protected:
     void readSettings(void);
     void writeSettings(void);
             
+    virtual void writeUserSettings(void){};
     virtual void resetValues(void){};
     virtual void prepareEffect(void){};
     virtual void prepareFinal(void){};

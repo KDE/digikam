@@ -55,9 +55,14 @@ private:
     KDoubleNumInput      *m_edgeInput;
     KDoubleNumInput      *m_rescaleInput;
     KDoubleNumInput      *m_brightenInput;
-
-protected:
     
+private slots:
+    
+    void readUserSettings(void);
+        
+protected:
+
+    void writeUserSettings(void);    
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);

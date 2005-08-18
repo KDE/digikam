@@ -93,6 +93,7 @@ private slots:
     virtual void slotCancel();
     virtual void slotUser1();
     virtual void slotInit();
+    virtual void readUserSettings(void){ slotDefault(); };
      
     void slotHelp();
     void slotFocusChanged(void);    
@@ -102,7 +103,8 @@ protected:
     void closeEvent(QCloseEvent *e);
     void customEvent(QCustomEvent *event);
     void abortPreview(void);
-        
+
+    virtual void writeUserSettings(void){};            
     virtual void resetValues(void){};
     virtual void prepareEffect(void){};
     virtual void prepareFinal(void){};

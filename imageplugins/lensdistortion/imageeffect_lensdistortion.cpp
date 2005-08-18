@@ -42,6 +42,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kconfig.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -166,6 +167,38 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
 ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 {
+}
+
+void ImageEffect_LensDistortion::readUserSettings(void)
+{
+    m_mainInput->blockSignals(true);
+    m_edgeInput->blockSignals(true);
+    m_rescaleInput->blockSignals(true);
+    
+    KConfig *config = kapp->config();
+    config->setGroup("Lens Distortion Tool Settings");
+
+    m_mainInput->setValue( config->readDoubleNumEntry( "2nd order distortion", 0.0 ) );
+    m_edgeInput->setValue( config->readDoubleNumEntry("4th order distortion",0.0) );
+    m_rescaleInput->setValue( config->readDoubleNumEntry( "Zoom factor", 0.0 ) );
+    kdDebug() << "Reading LensDistortion settings" << endl;
+    
+    m_mainInput->blockSignals(false);
+    m_edgeInput->blockSignals(false);
+    m_rescaleInput->blockSignals(false);
+    
+    slotEffect();
+}
+
+void ImageEffect_LensDistortion::writeUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Lens Distortion Tool Settings");
+    config->writeEntry( "2nd order distortion", m_mainInput->value() );
+    config->writeEntry( "4th order distortion", m_edgeInput->value() );
+    config->writeEntry( "Zoom factor", m_rescaleInput->value() );
+    config->sync();
+    kdDebug() << "Writing LensDistortion settings" << endl;
 }
 
 void ImageEffect_LensDistortion::renderingFinished()

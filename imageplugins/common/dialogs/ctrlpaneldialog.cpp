@@ -115,7 +115,7 @@ CtrlPanelDialog::~CtrlPanelDialog()
 void CtrlPanelDialog::slotInit()
 {
     // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
+    QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
     if (!m_tryAction)
        {
@@ -181,6 +181,7 @@ void CtrlPanelDialog::slotCancel()
        kapp->restoreOverrideCursor();
        }
 
+    writeUserSettings();
     done(Cancel);
 }
 
@@ -194,6 +195,7 @@ void CtrlPanelDialog::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
        }
 
+    writeUserSettings();
     e->accept();
 }
 

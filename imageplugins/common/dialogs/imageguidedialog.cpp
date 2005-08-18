@@ -158,7 +158,6 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
 ImageGuideDialog::~ImageGuideDialog()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));
-    writeSettings();
 
     if (m_timer)
        delete m_timer;
@@ -186,13 +185,15 @@ void ImageGuideDialog::writeSettings(void)
     config->writeEntry( "Guide Color", m_guideColorBt->color() );
     config->writeEntry( "Guide Width", m_guideSize->value() );
     config->sync();
+    
+    writeUserSettings();
 }
 
 void ImageGuideDialog::slotInit()
 {
     readSettings();
     // Reset values to defaults.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
+    QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
     connect(m_imagePreviewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));
@@ -270,7 +271,8 @@ void ImageGuideDialog::slotCancel()
 
        kapp->restoreOverrideCursor();
        }
-
+    
+    writeSettings();
     done(Cancel);
 }
 
@@ -284,6 +286,7 @@ void ImageGuideDialog::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
        }
 
+    writeSettings();
     e->accept();
 }
 
