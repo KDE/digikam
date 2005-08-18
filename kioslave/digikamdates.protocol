@@ -17,4 +17,5 @@ Description[nl]=digiKam Datums kioslave
 Description[pt]='kioslave' de datas do digiKam
 Description[sr]=kioslave digiKam-ових датума
 Description[sr@Latn]=kioslave digiKam-ових датума
+Description[tr]=digiKam Tarihler kioslave
 Class=:local

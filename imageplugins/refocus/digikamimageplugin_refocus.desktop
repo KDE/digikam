@@ -3,6 +3,7 @@ Name=ImagePlugin_Refocus
 Name[nl]=Afbeeldingsplugin_OpnieuwFocussen
 Name[sr]=Сликовни прикључак — Префокусирање
 Name[sr@Latn]=Сликовни прикључак — Префокусирање
+Name[tr]=ResimEklentisi_Odakla
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -14,6 +15,7 @@ Comment[pt]=Um 'plugin' do digiKam para voltar a focar uma imagem
 Comment[pt_BR]=Um 'plugin' do digiKam para voltar a focar uma imagem
 Comment[sr]=digiKam-ов прикључак за префокусирање слике
 Comment[sr@Latn]=digiKam-ов прикључак за префокусирање слике
+Comment[tr]=Bir resmi yeniden odaklamak için digiKam eklentisi
 
 X-KDE-Library=digikamimageplugin_refocus
 author=Gilles Caulier, caulier dot gilles at free dot fr
