@@ -1,3 +1,1683 @@
+v0.8.0-beta1		08/19/05
+----------------------------------------------------------------------------
+
+2005-08-15 13:13  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/widgets/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/sidebar.h: Moved
+	  the sidebar stuff into libs/widgets and removed the albummanager
+	  dependency, so we can use the sidebar in image editor and
+	  showfoto too. CCMAIL: digikam-devel@kde.org
+
+2005-08-14 08:33  binner
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  KMessageBox::warningContinueCancel() for delete/trash
+	  confirmations
+
+
+2005-08-09 14:36  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: When
+	  an album is renamed in albumfolderview, update the views.
+	  CCMAIL: tomalbers@kde.nl
+
+2005-08-07 15:55  toma
+
+	* trunk/extragear/graphics/digikam/digikam/monthwidget.cpp:
+	  localize the days of the month.
+
+2005-08-05 16:40  toma
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.cpp:
+	  This fixes an endless loop in the scanning of images. Continue
+	  was called without updating a first, so it arrives again at the
+	  same continue. BUG: 110214
+
+2005-08-05 16:26  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/main.cpp: update
+	  _active_ dev. : Tom (:=))). Ralf is an old contributor.
+
+2005-08-03 21:11  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp:
+	  CCBUG: 110115
+
+2005-07-31 18:10  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  Bugfix : since imageguidewidget isn't updated periodicly by
+	  timerEvent when no guide is diplayed, the preview effect of any
+	  plugins isn't rendered. This commit resolve this problem CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-31 11:00  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h:
+	  Fix possible compilation problems
+
+2005-07-31 09:31  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  Fix possible compilation problems
+
+2005-07-29 15:51  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.h,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp:
+	  digiKam plugins fix : - ImageGuideWidet : no need to redraw
+	  pixmap if no guide visible. - ImageGuideWidet : missing to
+	  redraw pixmap at resizeEvent(). - ImageGuideWidet and Image
+	  SelectionWidget : improve guide visibility. - FreeRotation :
+	  setting properly guide size and color. - ImageGuideDialog :
+	  saving properly guide size and color settings for each plugins.
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-28 16:50  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp: tag
+	  usability 1.2: show tags which are already assigned as checked.
+	  not a 100% perfect solution. make use of a custommenuitem and
+	  draw the checkbox on the right. instead of doing custommenuitem
+	  for each item (which will prevent having submenus), do it only
+	  for needed ones. some of the code is copied from Sebastien
+	  Laout's custom popupmenu code. screenshot:
+	  http://img41.imageshack.us/my.php?image=popupmenu9cv.png CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-28 15:06  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: the
+	  submenu actions of correct exif orientation tag are now children
+	  of the menu and not of the actioncollection. this prevents the
+	  ugly and confusing actions from appearing in the configure
+	  toolbar dialog
+
+2005-07-28 13:51  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/monthwidget.cpp,
+	  trunk/extragear/graphics/digikam/digikam/monthwidget.h: when an
+	  item is deleted, update the date-filter view BUGS: 109703
+
+2005-07-28 13:36  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/datefolderview.cpp: if
+	  the dateview becomes inactive, set the month filter view to
+	  inactive as well. this will remove any date filtering BUGS:
+	  109705
+
+2005-07-28 12:50  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.h: pass by
+	  reference
+
+2005-07-28 06:40  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp:
+	  digiKam image control pannel widget : increase visibility line
+	  of guide line and border selection to use contrasted color (red
+	  and white). Thanks to Unai Garro for this tip. CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-28 06:30  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp:
+	  BugFix: Image pannel widget settings must be writting in
+	  dedicaced dialog plugin section on host config file, not on a
+	  common section. CCMAIL: digikam-devel@kde.org
+
+2005-07-27 20:11  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp:
+	  improve image selection visibility
+
+2005-07-27 17:27  toma
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h,
+	  trunk/extragear/graphics/digikam/digikam/kdatetimeedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kdatetimeedit.h:
+	  Changed the widget to a new widget. This widget is identical to
+	  kDateEdit (as used in the advanced search, which came from
+	  libkdepim), but then I have placed a QTimeEdit next to it. Much
+	  better in this use case then the KDateTimeWidget from kdelibs.
+
+2005-07-27 14:35  toma
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.h: Adds the
+	  possibility to change the database date and time in the
+	  commentseditor. Couple of things left: - the view should be
+	  refresh, because the date can be changed the order can shift.
+	  Howto do that? - The widget used is not the perfect widget imho,
+	  but there is no other one available. - The place of the widget
+	  can move. I think this is the best place though. - Should the
+	  date be written back in the exif-headers?
+	  CCMAIL:digikam-devel@kde.org
+
+2005-07-27 12:47  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelviewwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelviewwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/multiviewwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/multiviewwidget.h:
+	  digiKam Hot Pixels Tool - third stage : - display the hot pixels
+	  on image region widget !!! - Remove unecessary source files. -
+	  Finalize for beta. A screenshot :
+	  http://digikam3rdparty.free.fr/HotPixelRemovalTool-Alpha.png
+	  CCMAIL: digikam-devel@kde.org, ugarro@telefonica.net
+
+2005-07-27 11:47  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp:
+	  digiKam Hot Pixels Tool : - Pan Icon Widget must compute itself
+	  the point positions on the preview. - remove unecessary methods.
+
+2005-07-27 11:15  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp:
+	  digiKam Hot Pixels Tool : Second stage : display the hot pixels
+	  on pan icon widget. A screenshot :
+	  http://digikam3rdparty.free.fr/HotPixelRemovalTool-Alpha.png
+	  CCMAIL: digikam-devel@kde.org, ugarro@telefonica.net
+
+2005-07-27 10:08  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  correct the reparenting of items in collection/date mode since
+	  there is a root album now
+
+2005-07-27 10:03  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  don't popup a context menu on groupitems
+
+2005-07-27 09:58  pahlibar
+
+	* trunk/extragear/graphics/digikam/kioslave/exiforientation_p.h:
+	  there was an infinite loop in the exif orientation scanning code
+	  which prevented the thumbnail from being generated for some
+	  images. the design of the load-on-demand thumbnail-generator
+	  prevents the next thumbnails from being loaded before the
+	  current one is finished. BUGS: 107742
+
+2005-07-26 14:51  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/TODO,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframesetupdialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframesetupdialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hi32-action-hotpixels.png,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixel.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelviewwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelviewwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/multiviewwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/multiviewwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/weights.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/weights.h:
+	  New digiKam image editor plugin to remove Hot Pixels' on
+	  Photograph by Unai Garro. This plugin is in Alpha stage. Need to
+	  plolish source code. Auto detection of hot pixels work fine
+	  using a 'black frame' image taken with the deficient camera.
+	  TODO : - Need to implement manual hot pixels settings (Unai) -
+	  Later 0.8.0 issue. - Need to display a preview of hot pixels in
+	  panel widget (me). - Need to save default settings in konfig
+	  file (me). - Need to polish Black Frame settings interface (me).
+	  - Need to write handbook (me, gerhard, and Unai). There is a
+	  screenshot of current implementation here :
+	  http://digikam3rdparty.free.fr/HotPixelRemovalTool-Alpha.png
+	  CCMAIL: digikam-devel@kde.org, ugarro@telefonica.net,
+	  gerhard@kulzer.net
+
+2005-07-26 09:30  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/duplicateheight.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/duplicatewidth.png,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  digiKam image plugin and control pannel widget : - Performs
+	  update preview optimizations with QPixmap. - 2 new options to
+	  seperate view in duplicate mode (vertically or horizontally)
+	  like with PowerRetouche photoshop plugins. These modes will be
+	  used especially with future Hot Pixel Removal plugin from Unai
+	  Garro. In some words, the target image region is duplicated from
+	  original to compare exactly the same pixels. There is a
+	  screnshoot of Gaussian Blur image editor plugin here:
+	  http://digikam3rdparty.free.fr/SeparateView-DuplicateMode.png
+	  CCMAIL: digikam-devel@kde.org, ugarro@telefonica.net
+
+2005-07-26 06:16  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h:
+	  performs optimizations
+
+2005-07-25 21:14  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  these root folders looks better
+
+2005-07-25 18:46  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/listitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/listitem.h,
+	  trunk/extragear/graphics/digikam/digikam/listview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/listview.h,
+	  trunk/extragear/graphics/digikam/digikam/listview_p.h: remove
+	  listview/listitem. no longer used
+
+2005-07-25 18:44  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	  changing accel of advanced search dialog to Ctrl+Alt+F since it
+	  conflicts with the quick search dialog one
+
+2005-07-25 18:19  pahlibar
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp:
+	  .arg argument number should start from %1
+
+2005-07-25 17:56  pahlibar
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp:
+	  more fixes for the QString.arg() problem. please review
+
+2005-07-25 17:09  toma
+
+	* trunk/extragear/graphics/digikam/digikam/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h:
+	  rename after someone complained
+
+2005-07-25 13:51  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h:
+	  Using Default button from KDialogBase to reset filter settings
+	  values
+
+2005-07-24 15:10  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/folderview.cpp: fix
+
+2005-07-24 14:49  toma
+
+	* trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.h,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h:
+	  Several small changes: - advancedsearch: when grouping the
+	  checkbox was not correctly added to the layout - removed all
+	  adjustSize() calls, not necessary and gives funny resuls when
+	  the dialog is maximized - prevented the deletion of the first
+	  rule if it is the only one there. - Squuezedcombo: improved
+	  logic for amount of characters shown, gives better results -
+	  renamed m_OriginalItems to m_originalItems to comply to HACKING
+
+2005-07-24 10:00  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.cpp: i
+	  think, the folderview looks better now
+
+2005-07-24 09:59  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/folderview.cpp: always
+	  open the root album, if digikam is restarted
+
+2005-07-23 23:09  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  After I've played some time with the new AlbumFolderView /
+	  TagFolderView I realized, that it is sometimes impossible to add
+	  a new album to the root album or dragging an album to the root.
+	  I've added a new root folder to the two views, which are
+	  displayed red, to show their different meaning. Additionally
+	  they are displayed without rootDecorations. You can rmb click to
+	  that root album to add a new child to the root or drag another
+	  album on it. Digikam doesn't allow images to be stored in the
+	  root folder. Todo: disable the some parts of the import menu,
+	  when the root album is selected. CCMAIL: digikam-devel@kde.org
+
+2005-07-23 22:03  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/folderview.cpp: oups,
+	  that can cause a crash
+
+2005-07-23 19:15  toma
+
+	* trunk/extragear/graphics/digikam/digikam/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h:
+	  Added a new class which adds a unsqueezed tooltip to the
+	  squeezed combobox items, example at
+	  http://www.digikam.org/users/tom/t.png CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-23 16:21  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.h,
+	  trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  Digikam 0.8 is now able to reconstruct its view state after
+	  starting a new session. When digikam is closed, it stores - the
+	  last visited albums - the open folders of every view - the
+	  selected folder of every view - the last selected view in the
+	  sidebar - if the sidebar is hidden/shown
+
+2005-07-23 10:29  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  fixed crash, if an new album was created under the root
+
+2005-07-23 10:14  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.h:
+	  Common digiKam Image Guide Dialog provide guide settings (color
+	  and width). CCMAIL: digikam-devel@kde.org
+
+2005-07-22 23:48  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumlister.cpp: if an
+	  item has been filtered out, emit a filtered delete when the item
+	  is relisted. this fixes the problem when an item tags are
+	  modified when the filters are active and the view doesn't update
+	  to reflect that
+
+2005-07-22 23:18  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.h:
+	  tag usability 4.0: allow user to assign/remove tags from context
+	  menu in the image window
+
+2005-07-22 22:44  toma
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  Removal of the thumbnailsize settings from the settings page.
+	  The size can be controlled in the menu View and is simply saved
+	  when you close digiKam.
+
+2005-07-22 22:13  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h:
+	  prepare tagspopupmenu for usage in imageeditor
+
+2005-07-22 22:07  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem_deprecated.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem_deprecated.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview_deprecated.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview_deprecated.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: Deleted
+	  AlbumFolderView_Deprecated and AlbumFolderItem_Deprecated. This
+	  is done by the new AlbumFolderView and AlbumFolderViewItem now.
+	  Therefor the tab "Album (old)" isn't shown in the left sidebar
+	  anymore. CCMAIL: digikam-devel@kde.org
+
+2005-07-22 21:21  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp: added
+	  album[edit|new|delete] to albumfolderview
+
+2005-07-22 20:18  toma
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.h,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h: Now
+	  we have a squeezedcombox. This shows the right part of each item
+	  in the combobox, prepended with "...", whenever the widget is
+	  not big enough to show the complete contents. Activated it for
+	  the tag list and the album list in advanced search, because the
+	  current combobox in combination with long named albums, we
+	  violate the kde hig. That is solved now.
+
+2005-07-22 12:00  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  ImageRegionWidget : optimizations using Pixmap cache of current
+	  selected region.
+
+2005-07-22 10:17  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  ImageRegionWidget : ignore wheel events
+
+2005-07-22 07:05  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/distortionfx.h,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/freerotation.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.h:
+	  Include common pixel anti-aliasing method to ImageFiler class.
+
+2005-07-21 13:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h:
+	  Add resized signal
+
+2005-07-21 11:23  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h:
+	  Add separator option
+
+2005-07-21 10:09  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp:
+	  further steps to delete albumfolderview_deprecated soon
+
+2005-07-21 00:51  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp:
+	  rename root item to "found tags" when search is active
+
+2005-07-21 00:18  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h: tag
+	  usability 3.3.2: * allow searching for tags in the comments-tags
+	  editor * this is live search with background color feedback
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-20 20:59  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: open
+	  the parent after the item was moved to it
+
+2005-07-20 20:34  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h: if
+	  album is renamed, update viewitem text
+
+2005-07-20 20:24  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h:
+	  mornfall, here you go. * allow users to assign tags by dnd
+	  photos onto right tagsfilterview. * remove use of dict. use
+	  extradata instead
+
+2005-07-20 18:04  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: add
+	  one more reminder for joern. emit signaltagsassigned so that
+	  albumiconview can refresh itself
+
+2005-07-20 17:50  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.h:
+	  connect to TAlbum moved signal and use it to reparent Tag view
+	  item. There are other views which show tags and they can also
+	  possibly reparent tags. Modify the dnd part to shift the work to
+	  the slot
+
+2005-07-20 16:46  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: ctrl
+	  key was used to add tags without popup
+
+2005-07-20 16:03  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.h:
+	  tagfolderview Drag and drop corrections. dropping items on tag
+	  should be assigning tags to them and not copy/move
+
+2005-07-20 14:17  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp: move
+	  album title to left in the tags popupmenu, as the user focus
+	  will be on that
+
+2005-07-20 11:30  toma
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp: This is a
+	  nasty bug. The problem is that QString("%1,
+	  %2").arg("ab%2").arg("cd"); results in "abcd, %2", so this patch
+	  changes it in QString("%1, %2").arg("ab%2", "cd") which should
+	  fix this problem. Please check your konsole for errors and
+	  better save then sorry: backup your digikam3.db. CCMAIL:
+	  digikam-devel@kde.org BUG: 109355
+
+2005-07-20 00:41  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h: a
+	  short list of recently assigned tags is accessible from a
+	  popupmenu in the comments tag editor
+
+2005-07-19 22:06  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h: quick
+	  cut and paste and one less todo. context menu in right tag
+	  filter view
+
+2005-07-19 20:10  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp:
+	  simplest usability change. automatically select newly created tag
+
+2005-07-19 16:57  toma
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h: OU
+	  Item: 3.2 Remove Checkbox for "saving automatically"
+	  CCMAIL:digikam-devel@kde.org
+
+2005-07-19 10:45  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.h:
+	  Fix enable/disable widgets rules
+
+2005-07-19 00:16  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/iconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.h: subtle bug.
+	  iconitem used update instead of repaint, this would cause the
+	  repaints to be not immediate and as a result an iconitem might
+	  still be marked as dirty even though a thumbnail has been
+	  generated for it. so when pixmapmanager asked for next item for
+	  thumbnailing, the same item was returned again. but there is
+	  already a pixmap for it in the cache and so the thumbnailing
+	  process stopped. thanks to tom for reporting this.
+
+2005-07-18 23:38  toma
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+	  Make it possible to download images from the camera and change
+	  the filenames to uppercase or lowercase at the same time.
+	  FEATURE: 108824
+
+2005-07-18 23:25  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.h: base
+	  operator== for kipiinterface was comparing list of images for
+	  albums. this resulted in kipi dialogs for image/imagecollection
+	  selection very slow to start up. by overloading and using album
+	  pointer for comparison, these dialogs have become miraculously
+	  fast.
+
+2005-07-18 19:50  pahlibar
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupexif.cpp:
+	  be correct about where exactly in the JPEG file, the image
+	  comment is stored CCBUGS: 109253
+
+2005-07-18 17:25  toma
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.cpp: Show url
+	  of the image which needs to be deleted
+
+2005-07-18 06:59  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h: tag
+	  usability 1.1: Allow creating new tags while assigning tags in
+	  the context menu. also auto-assign these new tags to selected
+	  items
+
+2005-07-18 05:24  pahlibar
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp: i
+	  feel dirty doing this. Assign a unique id to the Dates and
+	  Collection using a negative integer. for Dates use the
+	  year-month combo and for collection use the index of the item in
+	  the collection name list
+
+2005-07-18 04:21  pahlibar
+
+	* trunk/extragear/graphics/digikam/themes/Dark,
+	  trunk/extragear/graphics/digikam/themes/Makefile.am: the time
+	  spent in creating the theme editor is paying off. new Dark theme
+	  from Gerhard Kulzer
+
+2005-07-17 22:33  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h:
+	  digiKam Sharpen and Gaussian blur tools : init properly Gui with
+	  default values
+
+2005-07-17 20:01  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/album.h,
+	  trunk/extragear/graphics/digikam/digikam/albuminfo.h,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.cpp:
+	  apparently just sorting of taglist won't work for building
+	  tagtree; if the tags have been moved around a lot the tree build
+	  fails. manually build the tree using a dict for quick lookups
+	  and then use the tree to build a sorted list of items. this will
+	  ensure that the tree is built correctly everytime.
+
+2005-07-17 18:42  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h,
+	  trunk/extragear/graphics/digikam/libs/curves/imagecurves.cpp,
+	  trunk/extragear/graphics/digikam/libs/curves/imagecurves.h,
+	  trunk/extragear/graphics/digikam/libs/filters/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  trunk/extragear/graphics/digikam/libs/filters/sharpen.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/sharpen.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/curveswidget.cpp:
+	  digiKam Sharpen tool : using threaded interface to compute
+	  sharpen filter on image. Add progress bar and Abort button on
+	  dialog. CCMAIL: digikam-devel@kde.org
+
+2005-07-17 16:44  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/libs/filters/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/filters/gaussianblur.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/gaussianblur.h,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  trunk/extragear/graphics/digikam/libs/filters/threadedfilter.cpp:
+	  digiKam Gaussian Blur tool : using threaded interface to compute
+	  blur filter on image. Ad progress bar and Abort button on
+	  dialog. CCMAIL: digikam-devel@kde.org
+
+2005-07-17 08:42  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  fix crashes if there is no itemDrop
+
+2005-07-17 08:28  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  sort items correctly for datebased view
+
+2005-07-17 08:06  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp: * sort
+	  albums into collections/dates in albumfolderview * dnd assign
+	  collection (hopefully all dnd edge cases are handled) still some
+	  todo items: * sort date based view correctly * check all edge
+	  cases
+
+2005-07-17 07:31  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/centerheight.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/centerwidth.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/nocenter.png,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp:
+	  digiKam image Control Pannel widget : add missing No Split
+	  preview mode and fix icon buttons. CCMAIL: digikam-devel@kde.org
+
+2005-07-16 21:37  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  digiKam image Control Pannel widget : Split preview can be
+	  separate horizontally or vertically. CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-16 21:04  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.h,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.cpp: this
+	  highlighted drop element looks better
+
+2005-07-16 18:03  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumhistory.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumhistory.h,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.h: * Added a
+	  browser-like navigation history to digikam, which is usable with
+	  the sidebar. A back/forward history button was added to the
+	  toolbar and the album menu. With these buttons the user can
+	  browse through the previous opened albums. If the album is
+	  changed, the view in the sidebar is changed too. Pressing and
+	  holding down the history button... in the toolbar, drops down a
+	  menu, with the names of the previous opened albums. CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-15 23:02  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.h,
+	  trunk/extragear/graphics/digikam/digikam/folderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.h: highlight
+	  the dropitem item under the mouse cursor when dragging over it
+
+2005-07-15 16:28  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  Added drag 'n drop from external programs to albumfolderview -
+	  Dropping an image(s) on a folder, opens a popup menu, which lets
+	  the user decide, if he wants to move/copy the image(s) to that
+	  folder. Pressing CTRL (copy) / SHIFT (move) avoids the popup
+	  menu. CCMAIL: digikam-devel@kde.org
+
+2005-07-15 11:40  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview_deprecated.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  Added drag 'n drop to albumfolderview and tagfolderview -
+	  Dropping an image on its album in folderview assigns that image
+	  as the folder thumbnail. To avoid the popup menu, press CTRL
+	  when dropping the image. - Dropping an image(s) on another
+	  folder, opens a popup menu, which lets the user decide, if he
+	  wants to move/copy the image(s) to that folder. Pressing CTRL
+	  (copy) / SHIFT (move) avoids the popup menu. - An image(s) can
+	  also be dropped on an external application, which understands
+	  KURLDrag, to move/copy the image to that application. CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-14 22:11  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  reenable switching album library path. * move scanning/upgrading
+	  to new db into AlbumManager::setLibraryPath() testing requested
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-14 21:37  pahlibar
+
+	* trunk/extragear/graphics/digikam/configure.in.in: add configure
+	  test to only enable visibility support if kde version is >=
+	  3.3.2. this allows compilation on all kde versions. hopefully
+	  this is the last of the visibility problems we will have
+
+2005-07-14 21:03  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: rmb
+	  menu cleanup: remove kipi-plugins actions from context menu and
+	  add only "Rotate" from jpeglossless plugin CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-14 16:17  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albummanager.cpp:
+	  revert deleting of config entry for locale, as user could have
+	  multiple album paths (thanks to tom for pointing this one out)
+
+2005-07-14 16:03  pahlibar
+
+	* trunk/extragear/graphics/digikam/themes/Makefile.am,
+	  trunk/extragear/graphics/digikam/themes/Sandy: sandy theme (from
+	  Laurent) added
+
+2005-07-14 00:18  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamui.rc,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: add
+	  extended search to the menubar
+
+2005-07-13 23:46  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+	  filter the items using filename extensions before they are sent
+	  to the kipi-plugins
+
+2005-07-13 23:21  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albummanager.cpp:
+	  remove stale entry from config file as well
+
+2005-07-13 23:17  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+	  fixing kipiinterface. get list of items in an album from the db,
+	  instead of trying to read from the disk (which used to fail with
+	  the transition to 0.8)
+
+2005-07-13 23:16  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albummanager.cpp: save
+	  only the encoding part of the locale instead of the entire
+	  locale name. this allows users to switch languages without
+	  change of locale. current svn users: if you see a warning
+	  message about locale being changed, since you are already
+	  running the svn version, you can safely ignore the warning and
+	  say yes (provided you haven't changed your locale recently)
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-13 19:49  pahlibar
+
+	* trunk/extragear/graphics/digikam/themes/Makefile.am,
+	  trunk/extragear/graphics/digikam/themes/OrangeCrush: simple
+	  orange theme
+
+2005-07-13 12:20  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.h:
+	  digiKam Ratio Crop tool : add an option to choise Composition
+	  Guide width. If another one had a best soltion to make
+	  composition guide more visible. Using animate guide is more
+	  complex to do. I had to try to use without success
+	  QPainter::setPen(Qt::MPenStyle) to define a personal pen mask
+	  and change it at QObject::timerEvent(). Any suggestions ?
+	  CCMAIL: digikam-devel@kde.org, renchi@pooh.tam.uiuc.edu
+
+2005-07-12 21:17  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	  creating a separate instance of KConfig can cause race
+	  condition, resulting in some of the settings not being saved
+	  correctly. use the global config.
+
+2005-07-12 13:37  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h:
+	  digiKam Image guide widget : animated guide is more visible!
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-12 08:32  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h:
+	  digiKam Image guide widget: - fix spot coordinates computation
+	  from real image. - fix mouse draging rules. Now you must to
+	  press mouse button without release to drag guide in preview. -
+	  Limit spot color draging events. - Polish source code. CCMAIL:
+	  digikam-devel@kde.org
+
+2005-07-11 11:13  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto-splash.png:
+	  unoficial ShowFoto 0.3.0 splash. We need to start a contest
+	  later summer about digiKam 0.8.0 and ShowFoto 0.3.0
+	  splashscreens. Any help welcome to start this constest on
+	  Kde-look.org. Please contact me if you want more informations
+	  about. CCMAIL: digikam-devel@kde.org,
+
+2005-07-11 09:37  pahlibar
+
+	* trunk/extragear/graphics/digikam/configure.in.in,
+	  trunk/extragear/graphics/digikam/digikam/digikam_export.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageplugin_core.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.h:
+	  fix visibility problems (now it works with compilers supporting
+	  hidden visibility: gcc 4.0.1 and gcc 3.4.3 patched on mandriva)
+	  CCMAIL: digikam-devel@kde.org
+
+2005-07-11 06:03  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.h: when a
+	  thumbnail _needs_ to be regenerated, remove it from the
+	  thumbnail cache directory. this allows regeneration if the
+	  timestamp is being preserved due to some action
+
+2005-07-10 22:39  pahlibar
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp:
+	  fix memory leak which caused plugins to swap out
+
+2005-07-10 12:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h:
+	  make compile
+
+2005-07-10 11:00  cartman
+
+	* trunk/extragear/graphics/digikam/libs/filters/threadedfilter.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/colorgradientwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/curveswidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/Makefile.am:
+	  Image plugins compile too \o/
+
+2005-07-10 10:30  cartman
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.h,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.h,
+	  trunk/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.h:
+	  Make it compile. Mostly visibility fixes
+
+2005-07-10 09:53  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.h:
+	  Backport from experimental
+
+2005-07-10 09:41  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp:
+	  Backport from 0.8.0 exp
+
+2005-07-10 09:39  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/colorgradientwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/curveswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/curveswidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.h:
+	  backport last change from 0.8.0 exp
+
+2005-07-09 18:08  toma
+
+	* trunk/extragear/graphics/digikam,
+	  trunk/extragear/graphics/digikam/DESIGN,
+	  trunk/extragear/graphics/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/README,
+	  trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/configure.in.bot,
+	  trunk/extragear/graphics/digikam/configure.in.in,
+	  trunk/extragear/graphics/digikam/digikam,
+	  trunk/extragear/graphics/digikam/digikam.lsm,
+	  trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/album.cpp,
+	  trunk/extragear/graphics/digikam/digikam/album.h,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/albumdb_sqlite2.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb_sqlite2.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfilecopymove.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfilecopymove.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem_deprecated.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderitem_deprecated.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview_deprecated.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview_deprecated.h,
+	  trunk/extragear/graphics/digikam/digikam/albumhistory.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumicongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumicongroupitem.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+	  trunk/extragear/graphics/digikam/digikam/albuminfo.h,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.h,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.h,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.h,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+	  trunk/extragear/graphics/digikam/digikam/busyprogressbar.cpp,
+	  trunk/extragear/graphics/digikam/digikam/busyprogressbar.h,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamio.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamio.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamui.rc,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h,
+	  trunk/extragear/graphics/digikam/digikam/dio.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dio.h,
+	  trunk/extragear/graphics/digikam/digikam/dio_p.h,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.h,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.h,
+	  trunk/extragear/graphics/digikam/digikam/folderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.h,
+	  trunk/extragear/graphics/digikam/digikam/icongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/icongroupitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.h,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.h,
+	  trunk/extragear/graphics/digikam/digikam/imageproperties.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageproperties.h,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesexif.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesexif.h,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesgeneral.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesgeneral.h,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.h,
+	  trunk/extragear/graphics/digikam/digikam/kdateedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kdateedit.h,
+	  trunk/extragear/graphics/digikam/digikam/kdatepickerpopup.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kdatepickerpopup.h,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/digikam/monthwidget.cpp,
+	  trunk/extragear/graphics/digikam/digikam/monthwidget.h,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.h,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.cpp,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.h,
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.h,
+	  trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchquickdialog.h,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsitem.h,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsview.h,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.h,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/digikam/sidebar.h,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.h,
+	  trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbdb.h,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.h,
+	  trunk/extragear/graphics/digikam/digikam/thumbview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbview.h,
+	  trunk/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.cpp,
+	  trunk/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.h,
+	  trunk/extragear/graphics/digikam/imageplugins/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core_ui.rc,
+	  trunk/extragear/graphics/digikam/imageplugins/hi32-action-autocorrection.png,
+	  trunk/extragear/graphics/digikam/imageplugins/hi32-action-autolevels.png,
+	  trunk/extragear/graphics/digikam/imageplugins/hi32-action-equalize.png,
+	  trunk/extragear/graphics/digikam/imageplugins/hi32-action-normalize.png,
+	  trunk/extragear/graphics/digikam/imageplugins/hi32-action-stretchcontrast.png,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bcg.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bcg.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_hsl.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_hsl.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_rgb.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_rgb.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageplugin_core.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageplugin_core.h,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/autolevels.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/centerheight.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/centerwidth.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/equalize.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/normalize.png,
+	  trunk/extragear/graphics/digikam/imageplugins/pics/stretchcontrast.png,
+	  trunk/extragear/graphics/digikam/kioslave,
+	  trunk/extragear/graphics/digikam/kioslave/Makefile.am,
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamio.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamio.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamio.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.h,
+	  trunk/extragear/graphics/digikam/kioslave/sqlitedb.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/sqlitedb.h,
+	  trunk/extragear/graphics/digikam/libs/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/curves/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/curves/imagecurves.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/imagefilters.h,
+	  trunk/extragear/graphics/digikam/libs/filters/threadedfilter.cpp,
+	  trunk/extragear/graphics/digikam/libs/filters/threadedfilter.h,
+	  trunk/extragear/graphics/digikam/libs/histogram/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/histogram/imagehistogram.cpp,
+	  trunk/extragear/graphics/digikam/libs/histogram/imagehistogram.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/exifrotate.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/exifrotate.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jinclude.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegint.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/libjpeg62.README,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/transupp.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/transupp.h,
+	  trunk/extragear/graphics/digikam/libs/levels/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/levels/imagelevels.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/widgets/curveswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageguidewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepreviewwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imagepreviewwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageselectionwidget.h,
+	  trunk/extragear/graphics/digikam/release_digikam.rb,
+	  trunk/extragear/graphics/digikam/showfoto,
+	  trunk/extragear/graphics/digikam/showfoto/Makefile.am,
+	  trunk/extragear/graphics/digikam/showfoto/TODO,
+	  trunk/extragear/graphics/digikam/showfoto/hi32-action-slideshow.png,
+	  trunk/extragear/graphics/digikam/showfoto/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup.h,
+	  trunk/extragear/graphics/digikam/showfoto/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setupslideshow.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfotoui.rc,
+	  trunk/extragear/graphics/digikam/showfoto/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/slideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/dirselectdialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/dirselectdialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/exifrotate.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/exifrotate.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/jinclude.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/jpegint.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/libjpeg62.README,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/transupp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/transupp.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imageiface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imageiface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewidget.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewidget.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmisc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmisc.h,
+	  trunk/extragear/graphics/digikam/utilities/splashscreen/digikam-splash.png,
+	  trunk/extragear/graphics/digikam/version.h,
+	  trunk/extragear/graphics/digikamimageplugins/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/README,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/antivignetting.h,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.h,
+	  trunk/extragear/graphics/digikamimageplugins/blowup/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/blowup/imageeffect_blowup.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blowup/imageeffect_blowup.h,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/blurfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/blurfx.h,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/imageeffect_blurfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/imageeffect_blurfx.h,
+	  trunk/extragear/graphics/digikamimageplugins/border/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/border/border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/border.h,
+	  trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.h,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/charcoal.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/charcoal.h,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/imageeffect_charcoal.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/imageeffect_charcoal.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/LICENSE.txt,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/cimgiface.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/cimgiface.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imagepreviewdialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imagepreviewdialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/include/digikamheaders.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/include/version.h,
+	  trunk/extragear/graphics/digikamimageplugins/configure.in.in,
+	  trunk/extragear/graphics/digikamimageplugins/despeckle/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/emboss.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/emboss.h,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/imageeffect_emboss.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/imageeffect_emboss.h,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/filmgrain.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/filmgrain.h,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.h,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.h,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.h,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/infrared.h,
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/imageeffect_inpainting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/imageeffect_inpainting.h,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/lensdistortion.h,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/pixelaccess.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/pixelaccess.h,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/despeckle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/despeckle.h,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/hi32-action-despeckle.png,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_despeckle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_despeckle.h,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageplugin_despeckle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageplugin_despeckle.h,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/imageeffect_oilpaint.h,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/oilpaint.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/oilpaint.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.h,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.h,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/raindrop.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/LICENCE,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/README,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/abort_.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/blaswrap.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/clapack.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/close.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dgemm.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dger.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dgesv.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dgetf2.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dgetrf.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dgetrs.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dlaswp.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dscal.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dswap.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/dtrsm.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/endfile.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/err.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/f2c.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/fio.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/fmt.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/fmt.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/fmtlib.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/fp.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/idamax.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/ieeeck.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/ilaenv.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/lsame.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/open.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/s_cmp.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/s_copy.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/s_stop.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/sfe.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/sig_die.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/util.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/wref.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/wrtfmt.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/wsfe.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/clapack/xerbla.c,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/hi32-action-refocus.png,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageplugin_refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageplugin_refocus.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/matrix.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/matrix.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/refocus.h,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/imageeffect_restoration.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/imageeffect_restoration.h,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.h,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/texture/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/texture/imageeffect_texture.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/texture/imageeffect_texture.h,
+	  trunk/extragear/graphics/digikamimageplugins/texture/texture.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/texture/texture.h,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.h,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageplugin_unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/unsharp.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h,
+	  trunk/extragear/graphics/doc/digikam/editorratiocroptool2.png,
+	  trunk/extragear/graphics/doc/digikam/goldensectionsexample.png,
+	  trunk/extragear/graphics/doc/digikam/goldenspiralexample.png,
+	  trunk/extragear/graphics/doc/digikam/goldenspiralsectionsexample.png,
+	  trunk/extragear/graphics/doc/digikam/goldentrianglesexample.png,
+	  trunk/extragear/graphics/doc/digikam/harmonioustrianglesexample.png,
+	  trunk/extragear/graphics/doc/digikam/index.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/adjustcurves.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/adjustlevels.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/blowup.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/channelmixer.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/despeckle.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/index.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/inpainting.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocus-notsharpened.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocus-refocus.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocus-sharped.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocus-unsharpmask.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocus.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocusdialog.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/refocuspreview.png,
+	  trunk/extragear/graphics/doc/digikamimageplugins/restoration.docbook,
+	  trunk/extragear/graphics/doc/digikamimageplugins/whitebalance.docbook,
+	  trunk/extragear/graphics/doc/showfoto/editorratiocroptool2.png,
+	  trunk/extragear/graphics/doc/showfoto/goldensectionsexample.png,
+	  trunk/extragear/graphics/doc/showfoto/goldenspiralexample.png,
+	  trunk/extragear/graphics/doc/showfoto/goldenspiralsectionsexample.png,
+	  trunk/extragear/graphics/doc/showfoto/goldentrianglesexample.png,
+	  trunk/extragear/graphics/doc/showfoto/harmonioustrianglesexample.png,
+	  trunk/extragear/graphics/doc/showfoto/index.docbook: Merge the
+	  experimental branch back to trunk. CCMAIL: digikam-devel@kde.org
+
+2005-06-19 20:05  pahlibar
+
+	* trunk/extragear/graphics/digikam/utilities/setup/gpiface.cpp:
+	  fix crash due to invalid pointer reference
+
+2005-06-17 10:40  pahlibar
+
+	* trunk/extragear/graphics/digikam/configure.in.in,
+	  trunk/extragear/graphics/digikam/digikam/digikam_export.h: fix
+	  for kdemacros.h not being usable in kde < 3.3.2 and kde version
+	  specific check not usable, because of mandriva's version change.
+	  Gilles, can you check if this works on your system CCMAIL:
+	  digikam-devel@kde.org
+
+v0.7.4			08/18/05
+----------------------------------------------------------------------------
+
+2005-08-09 18:26  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas.cpp:
+	  Patch from Owen Hirst to fix crash when histogram is visible.
+	  The histogram thread holds a pointer to the image data. Under
+	  certain conditions, for eg, saving of image and reloading of
+	  image data, this image data pointer is invalidated. Since the
+	  thread still holds a pointer to the invalid pointer and tries to
+	  do calculations on it, the application crashes. Attached patch
+	  deletes the histogram thread before reloading the image CCMAIL:
+	  digikam-devel@kde.org CCBUGS: 109946
+
+
 v0.7.3			06/15/05
 ----------------------------------------------------------------------------
 
