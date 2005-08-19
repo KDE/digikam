@@ -192,6 +192,7 @@ void SetupCamera::slotAutoDetectCamera()
     }
 
     // NOTE: See note in digikam/digikam/cameralist.cpp
+    if (port.startsWith("usb:"))
     port = "usb:";
     
     if (listView_->findItem(model,1))

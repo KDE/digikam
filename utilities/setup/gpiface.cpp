@@ -166,6 +166,8 @@ void GPIface::getCameraSupportedPorts(const QString& model,
         plist.append("serial");
     if (abilities.port & GP_PORT_USB)
         plist.append("usb");
+    if (abilities.port & GP_PORT_DISK)
+        plist.append("disk");
 
     gp_context_unref( context );
 

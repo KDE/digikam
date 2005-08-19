@@ -217,7 +217,10 @@ CameraType* CameraList::autoDetect(bool& retry)
     // also allow regexp match, so the safe bet is to just pass in
     // "usb:" and cross your fingers that user doesn't have multiple cameras
     // connected at the same time (whack them if they do).
-    port = "usb:";
+
+    if (port.startsWith("usb:"))
+    	port = "usb:";
+
     CameraType* ctype = new CameraType(model, model, port, "/");
     insert(ctype);
 
