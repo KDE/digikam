@@ -9,10 +9,12 @@ CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
 
 AC_MSG_CHECKING([for digiKam in our sources])
 
+have_digikamheader=no
 if test -d $srcdir/digikam; then
    AC_MSG_RESULT([found])
    have_digikam_toplevel=yes
    have_digikam=yes
+   have_digikamheader=yes
    LIBDIGIKAM_CFLAGS='-I$(top_srcdir)/digikam/digikam -I$(top_srcdir)/digikam/utilities/imageeditor -I$(top_srcdir)/digikam/libs/guibuilder -I$(top_srcdir)/digikam/libs/curves -I$(top_srcdir)/digikam/libs/histogram -I$(top_srcdir)/digikam/libs/levels -I$(top_srcdir)/digikam/libs/filters -I$(top_srcdir)/digikam/libs/widgets -I$(top_srcdir)/digikam/libs/thumbbar'
    LIBDIGIKAM_LIBS='$(top_builddir)/digikam/digikam/libdigikam.la'
    LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
@@ -25,10 +27,10 @@ else
    AC_MSG_CHECKING(if digiKam is installed)
    KDE_CHECK_HEADER(digikam/imageplugin.h,  have_digikam=yes,  have_digikam=no)
    if test "x$have_digikam" = "xno"; then
-      AC_MSG_WARN([Can't find digiKam headers. 
-      Please install digiKam from kdeextragear-3 to be able to compile DigikamImagePlugins]);
+      AC_MSG_WARN([Can't find digiKam headers.]) 
       DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
    else
+      have_digikamheader=yes
       LIBDIGIKAM_CFLAGS=''
       LIBDIGIKAM_LIBS='-ldigikam'
       LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
