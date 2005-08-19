@@ -10,7 +10,11 @@
 name       = "digikamimageplugins"
 egmodule   = "graphics"
 version    = "0.8.0-beta1"
-svnroot    = "https://toma@svn.kde.org/home/kde/trunk"
+docs       = "no"
+
+svnbase    = "https://toma@svn.kde.org/home/kde"
+svnroot    = "#{svnbase}/trunk"
+adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
 addPo      = ["digikamimageplugin_adjustcurves","digikamimageplugin_charcoal","digikamimageplugin_inpainting","digikamimageplugin_sheartool","digikamimageplugin_adjustlevels","digikamimageplugin_despeckle","digikamimageplugin_inserttext","digikamimageplugin_antivignetting","digikamimageplugin_distortionfx","digikamimageplugin_lensdistortion","digikamimageplugin_solarize","digikamimageplugin_blowup","digikamimageplugin_emboss","digikamimageplugin_oilpaint","digikamimageplugin_superimpose","digikamimageplugin_blurfx","digikamimageplugin_filmgrain","digikamimageplugin_perspective","digikamimageplugin_texture","digikamimageplugin_border","digikamimageplugin_freerotation","digikamimageplugin_raindrop","digikamimageplugin_unsharp","digikamimageplugin_channelmixer","digikamimageplugin_infrared","digikamimageplugin_restoration","digikamimageplugin_whitebalance","digikam_refocus"]
@@ -38,12 +42,14 @@ Dir.chdir( egmodule )
 `svn up #{name}`
 `svn up -N doc`
 
-for dg in addDocs
-  dg.chomp!
-  `svn up doc/#{dg}`
+if (docs != "no")
+    for dg in addDocs
+        dg.chomp!
+        `svn up doc/#{dg}`
+    end
 end
 
-`svn co #{svnroot}/KDE/kde-common/admin`
+`svn co #{adminroot}/kde-common/admin`
 puts "done\n"
 
 puts "\n"
@@ -71,7 +77,9 @@ for lang in i18nlangs
     dg.chomp!
     `rm -rf #{dg}`
     docdirname = "l10n/#{lang}/docs/extragear-#{egmodule}/#{dg}"
-    `svn co -q #{svnroot}/#{docdirname} > /dev/null 2>&1`
+    if (docs != "no")
+        `svn co -q #{svnroot}/#{docdirname} > /dev/null 2>&1`
+    end
     next unless FileTest.exists?( dg )
     print "Copying #{lang}'s #{dg} documentation over...  "
     `cp -R #{dg}/ ../doc/#{lang}_#{dg}`
@@ -153,7 +161,6 @@ Dir.chdir( "#{name}" )
 `/bin/mv -f INSTALL ..`
 `/bin/mv -f README ..`
 `/bin/mv -f TODO ..`
-`/bin/mv -f HACKING ..`
 Dir.chdir( ".." )
 
 
