@@ -62,8 +62,10 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString description = i18n("A Photo-Management Application for KDE") + "\n" + 
-                          i18n("Using Kipi library version %1").arg(kipi_version);
+    QString description = QString(I18N_NOOP("A Photo-Management Application for KDE")) +
+                          QString("\n") + 
+                          QString(I18N_NOOP("Using Kipi library version %1"))
+                          .arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("digiKam"),
