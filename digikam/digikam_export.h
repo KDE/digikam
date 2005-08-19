@@ -21,7 +21,9 @@
 #ifndef _DIGIKAM_EXPORT_H
 #define _DIGIKAM_EXPORT_H
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 #ifdef __KDE_HAVE_GCC_VISIBILITY
 #define DIGIKAM_EXPORT __attribute__ ((visibility("default")))
