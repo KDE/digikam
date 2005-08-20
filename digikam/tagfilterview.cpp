@@ -508,7 +508,9 @@ void TagFilterView::tagNew(TagFilterViewItem* item)
         TagFilterViewItem *item = (TagFilterViewItem*)newAlbum->extraData(this);
         if ( item )
         {
+            clearSelection();
             setSelected(item, true);
+            setCurrentItem(item);
             ensureItemVisible( item );
         }
     }
