@@ -166,6 +166,8 @@ ImageWindow::ImageWindow()
     
     readSettings();
     applySettings();
+    
+    setAutoSaveSettings("ImageViewer Settings");    
 }
 
 ImageWindow::~ImageWindow()
@@ -475,8 +477,7 @@ void ImageWindow::readSettings()
     bool autoZoom = false;
 
     KConfig* config = kapp->config();
-    applyMainWindowSettings(config, "ImageViewer Settings");
-    config->setGroup("ImageViewer Settings");
+    config->setGroup("ImageViewer Settings");    
 
     // GUI options.
     autoZoom = config->readBoolEntry("AutoZoom", true);
@@ -510,7 +511,6 @@ void ImageWindow::readSettings()
 void ImageWindow::saveSettings()
 {
     KConfig* config = kapp->config();
-    saveMainWindowSettings(config, "ImageViewer Settings");
     
     config->setGroup("ImageViewer Settings");
     config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
@@ -542,7 +542,7 @@ void ImageWindow::slotLoadCurrent()
             m_view->ensureItemVisible(item);
         }
     }
-    
+
     uint index = m_urlList.findIndex(m_urlCurrent);
 
     if (it != m_urlList.end()) {

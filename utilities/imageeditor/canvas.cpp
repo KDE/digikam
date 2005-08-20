@@ -488,7 +488,7 @@ void Canvas::updateContentsSize()
     d->rbActive      = false;
     viewport()->unsetCursor();
     viewport()->setMouseTracking(false);
-    
+
     if (d->rubber) {
         delete d->rubber;
         d->rubber = 0;
