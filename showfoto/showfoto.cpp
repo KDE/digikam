@@ -789,6 +789,7 @@ bool ShowFoto::promptUserSave()
         }
         else if (result == KMessageBox::No)
         {
+            m_saveAction->setEnabled(false);
             return true;
         }
         else
