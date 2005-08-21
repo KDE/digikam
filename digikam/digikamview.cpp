@@ -95,7 +95,6 @@ DigikamView::DigikamView(QWidget *parent)
     mMainSidebar->appendTab(mSearchFolderView, SmallIcon("find"), i18n("Searches"));    
 
     mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
-    mRightSidebar->setActiveTab(mTagFilterView);
     
     mSplitter->setOpaqueResize(false);
 
