@@ -188,7 +188,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     if ( urlList.isEmpty() )
     {
        toggleActions(false);
+       toggleNavigation(0);
        QTimer::singleShot(0, this, SLOT(slotOpenFile()));
+    }
+    else
+    {
+       toggleNavigation(1);
+       toggleActions(true);
     }
 }
 
@@ -883,19 +889,26 @@ void ShowFoto::slotOpenURL(const KURL& url)
 
     setCaption(i18n("Showfoto - %1").arg(m_currentItem->url().directory()));
 
-    if (m_bar->countItems() == 1) {
+    toggleNavigation( index );
+}
+
+
+void ShowFoto::toggleNavigation(const int index)
+{
+    if ( m_bar->countItems() == 0 || m_bar->countItems() == 1 ) {
         m_backAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-    else {
+    else 
+    {
         m_backAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
         m_firstAction->setEnabled(true);
         m_lastAction->setEnabled(true);
     }
-
+    
     if (index == 1) {
         m_backAction->setEnabled(false);
         m_firstAction->setEnabled(false);
@@ -906,6 +919,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
         m_lastAction->setEnabled(false);
     }
 }
+
 
 void ShowFoto::slotAutoFit()
 {
