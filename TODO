@@ -13,7 +13,12 @@ Post 0.8
 
 * Custom ordering of images [TA]
 
-* resizable thumbnail in comments tag editor?
+* Image Properties SideBar integration in Showfoto, Image Editor, and Main Interface [GC] :
+   - New common image properties tab widgets in digikam/libs
+   - Add General tab.
+   - Add Exif tab.
+   - Add Histogram tab.
+   - Add Comments & tags tab (digikam only).
 
 * New CD/DVD album folders+database backup/restore tool [GC]
 
