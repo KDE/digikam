@@ -539,14 +539,11 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if(itemDrop && !itemDrop->parent())
+    if (ItemDrag::canDecode(e) && itemDrop && itemDrop->parent())
     {
-        // Allow only tags dragging at the root
-        return false;
-    }
-
-    if(ItemDrag::canDecode(e))
-    {
+        // Only other possibility is image items being dropped
+        // And allow this only if there is a Tag to be dropped
+        // on and also the Tag is not root.
         return true;
     }
 
