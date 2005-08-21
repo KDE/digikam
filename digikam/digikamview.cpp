@@ -80,7 +80,7 @@ DigikamView::DigikamView(QWidget *parent)
     
     mIconView = new AlbumIconView(mSplitter);
     
-    mRightSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Right);    
+    mRightSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Right, true);
     mRightSidebar->setSplitter(mSplitter);    
     
     mFolderView = new AlbumFolderView(this);

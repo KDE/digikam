@@ -32,12 +32,13 @@
 
 using namespace Digikam;
 
-Sidebar::Sidebar(QWidget *parent, Side side)
+Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
     : KMultiTabBar(KMultiTabBar::Vertical, parent, "Sidebar")
 {
     m_tabs = 0;
     m_activeTab = -1;
     m_minimized = false;
+    m_minimizedDefault = minimizedDefault;
     m_side = side;
 }
 
@@ -71,7 +72,7 @@ void Sidebar::loadViewState()
     config->setGroup(QString("%1-%2").arg(name()).arg(m_side));
    
     tab = config->readNumEntry("ActiveTab", 0);
-    minimized = config->readNumEntry("Minimized", 0);
+    minimized = config->readNumEntry("Minimized", m_minimizedDefault);
         
     if(minimized)
         m_activeTab = tab;

@@ -58,8 +58,9 @@ public:
      * Creates a new sidebar
      * @param parent sidebar's parent
      * @param side where the sidebar should be displayed. At the left or right border.
+     * @param minimizedDefault hide the sidebar when the program is started the first time?
      */
-    Sidebar(QWidget *parent, Side side=Left);
+    Sidebar(QWidget *parent, Side side=Left, bool mimimizedDefault=false);
     virtual ~Sidebar();
 
     /**
@@ -125,6 +126,7 @@ private:
     bool             m_minimized;
     int              m_tabs;
     int              m_activeTab;
+    bool             m_minimizedDefault;
     
 private slots:
     
