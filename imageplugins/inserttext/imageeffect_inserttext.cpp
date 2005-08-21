@@ -78,7 +78,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Insert Text"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin for insert text on phtograph."),
+                                       I18N_NOOP("A digiKam image plugin for insert text on photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
                                        0,
