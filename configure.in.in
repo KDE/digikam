@@ -3,7 +3,8 @@
 AM_INIT_AUTOMAKE(digikam,0.8.0)
 
 # -----------------------------------------------------------------
-# enable hidden visibility only if kde >= 3.3.2
+# enable hidden visibility only if kde >= 3.3.2 and kdelibs has
+# been compiled with visibility enabled
 # -----------------------------------------------------------------
 
 AC_LANG_PUSH(C++)
@@ -13,12 +14,17 @@ AC_MSG_CHECKING([if hidden visibility should be enabled])
 AC_COMPILE_IFELSE(
  [
    #include <kdeversion.h>
+   #include <kdemacros.h>
    int other_func( void )
    { 
       #if KDE_IS_VERSION(3,3,2)
       #else
         iam dying;
       #endif
+      #ifdef __KDE_HAVE_GCC_VISIBILITY
+      #else
+        no, iam really dead;
+      #endif      
       return 0;
    }
  ], 
