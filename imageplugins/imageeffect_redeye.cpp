@@ -240,7 +240,7 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
 
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    mild = config->readBoolEntry("Red-Eye Correction Plugin (Mild)", true);
+    mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
 
     if (mild)
     {
