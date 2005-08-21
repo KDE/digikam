@@ -1,8 +1,5 @@
-* Fix PPC compatibility in image filters [GC]
-* Use threaded implementation in image filter when it's possible [GC]
 * Add doxygen comments in libs implementation [GC]
 * Update handbooks [GC/GK]
-* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
 
 Post 0.8
 ------------------------------------------------------------------------------------
@@ -18,4 +15,9 @@ Post 0.8
 
 * resizable thumbnail in comments tag editor?
 
-* CD/DVD album folders+database backup/restore tool [GC]
+* New CD/DVD album folders+database backup/restore tool [GC]
+
+* Using new image Framework DImage (16 bits/color/pixels) instead QImage/imlib2 [RR - GC]
+
+* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
+
