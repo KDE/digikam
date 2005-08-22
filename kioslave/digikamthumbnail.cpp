@@ -486,7 +486,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, inputFile);
-    jpeg_read_header(&cinfo, TRUE);
+    jpeg_read_header(&cinfo, true);
 
     int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 

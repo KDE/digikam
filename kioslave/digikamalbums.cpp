@@ -569,7 +569,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
             return;
         }
 
-        // If the destination is a symlink and overwrite is TRUE,
+        // If the destination is a symlink and overwrite is true,
         // remove the symlink first to prevent the scenario where
         // the symlink actually points to current source!
         if (overwrite && S_ISLNK(buff_dest.st_mode))

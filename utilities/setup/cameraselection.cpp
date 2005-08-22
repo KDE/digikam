@@ -103,7 +103,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     portPathBoxLayout->addWidget( portPathLabel_ );
 
     portPathComboBox_ = new QComboBox( false, portPathBox );
-    portPathComboBox_->setDuplicatesEnabled( FALSE );
+    portPathComboBox_->setDuplicatesEnabled( false );
     portPathBoxLayout->addWidget( portPathComboBox_ );
 
     mainBoxLayout->addWidget( portPathBox, 2, 1 );
@@ -120,11 +120,11 @@ CameraSelection::CameraSelection( QWidget* parent )
                                   "cameras" ) );
     umsMountBoxLayout->addWidget( umsMountLabel );
 
-    umsMountComboBox_ = new QComboBox( FALSE, umsMountBox );
+    umsMountComboBox_ = new QComboBox( false, umsMountBox );
     umsMountBox->setTitle( i18n( "Camera Mount Path" ) );
-    umsMountComboBox_->setEditable( TRUE );
+    umsMountComboBox_->setEditable( true );
     umsMountComboBox_->setInsertionPolicy( QComboBox::AtTop );
-    umsMountComboBox_->setDuplicatesEnabled( FALSE );
+    umsMountComboBox_->setDuplicatesEnabled( false );
     umsMountBoxLayout->addWidget( umsMountComboBox_ );
 
     mainBoxLayout->addWidget( umsMountBox, 3, 1 );
