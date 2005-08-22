@@ -44,7 +44,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     setAllColumnsShowFocus(true);
     setResizeMode(QListView::LastColumn);
     setSelectionMode(QListView::Single);
-};
+}
 
 ///////////////////////////////////////////////////////////////
 
