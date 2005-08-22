@@ -46,6 +46,8 @@ public:
     IconItem* lastItem() const;
     IconItem* currentItem() const;
     IconItem* findItem(const QPoint& pos);
+    
+    void setCurrentItem(IconItem* item);
 
     int  count() const;
     int  groupCount() const;

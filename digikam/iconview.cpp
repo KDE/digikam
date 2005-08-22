@@ -187,6 +187,14 @@ IconItem* IconView::currentItem() const
     return d->currItem;
 }
 
+void IconView::setCurrentItem(IconItem* item)
+{
+    d->currItem = item;
+    d->anchorItem = d->currItem;
+    d->currItem->setSelected(true, true);
+    ensureItemVisible(d->currItem);
+}
+
 IconItem* IconView::findItem(const QPoint& pos)
 {
     IconViewPriv::ItemContainer *c = d->firstContainer;
