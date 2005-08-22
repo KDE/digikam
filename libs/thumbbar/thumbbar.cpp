@@ -178,7 +178,11 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     d->currItem = item;
     if (d->currItem)
     {
-        ensureVisible(0,item->m_pos);
+        // We want the complete thumb visible and the next one.
+        // find the middle of the image and give a margin of 1,5 image
+        // When changed, watch regression for bug 104031
+        ensureVisible(0, (int)(item->m_pos+d->margin+d->tileSize*.5),
+                      0, (int)(d->tileSize*1.5+3*d->margin));
         item->repaint();
         emit signalURLSelected(item->url());
     }
