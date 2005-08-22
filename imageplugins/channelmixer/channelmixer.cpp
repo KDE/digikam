@@ -612,14 +612,14 @@ void ChannelMixerDialog::slotUser3()
 
         fscanf (fp, "%*s %s", buf1);
           
-        if (strcmp (buf1, "TRUE") == 0)
+        if (strcmp (buf1, "true") == 0)
             monochrome = true;
         else
             monochrome = false;
 
         fscanf (fp, "%*s %s", buf1);
         
-        if (strcmp (buf1, "TRUE") == 0)
+        if (strcmp (buf1, "true") == 0)
             m_preserveLuminosity->setChecked(true);
         else
             m_preserveLuminosity->setChecked(false);
@@ -698,11 +698,11 @@ void ChannelMixerDialog::slotUser2()
         fprintf (fp, "# Channel Mixer Configuration File\n");
 
         fprintf (fp, "CHANNEL: %s\n", str);
-        fprintf (fp, "PREVIEW: %s\n", "TRUE"); // preserved for compatibility 
+        fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility 
         fprintf (fp, "MONOCHROME: %s\n",
-                 m_monochrome->isChecked() ? "TRUE" : "FALSE");
+                 m_monochrome->isChecked() ? "true" : "false");
         fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
-                 m_preserveLuminosity->isChecked() ? "TRUE" : "FALSE");
+                 m_preserveLuminosity->isChecked() ? "true" : "false");
 
         sprintf (buf1, "%5.3f", m_redRedGain);                 
         sprintf (buf2, "%5.3f", m_redGreenGain);

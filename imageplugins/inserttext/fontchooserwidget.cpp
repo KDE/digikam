@@ -468,7 +468,8 @@ void FontChooserWidget::family_chosen_slot(const QString& family)
     QStringList styles = QStringList(dbase.styles(family));
     styleListBox->clear();
     currentStyles.clear();
-    for ( QStringList::Iterator it = styles.begin(); it != styles.end(); ++it ) {
+    QStringList::Iterator end(styles.end());
+    for ( QStringList::Iterator it = styles.begin(); it != end; ++it ) {
         QString style = *it;
         int pos = style.find("Plain");
         if(pos >=0) style = style.replace(pos,5,i18n("Regular"));
@@ -532,7 +533,8 @@ void FontChooserWidget::style_chosen_slot(const QString& style)
         if(sizes.count() > 0) {
             QValueList<int>::iterator it;
             diff=1000;
-            for ( it = sizes.begin(); it != sizes.end(); ++it ) {
+	    QValueList<int>::iterator end(sizes.end());
+            for ( it = sizes.begin(); it != end; ++it ) {
                 if(*it <= selectedSize || diff > *it - selectedSize) diff = selectedSize - *it;
                 sizeListBox->insertItem(QString::number(*it));
             }
@@ -641,7 +643,8 @@ void FontChooserWidget::getFontList( QStringList &list, uint fontListCriteria)
     if (fontListCriteria)
     {
         QStringList lstFonts;
-        for (QStringList::Iterator it = lstSys.begin(); it != lstSys.end(); ++it)
+	QStringList::Iterator end(lstSys.end());
+        for (QStringList::Iterator it = lstSys.begin(); it != end; ++it)
         {
             if ((fontListCriteria & FixedWidthFonts) > 0 && !dbase.isFixedPitch(*it)) continue;
             if (((fontListCriteria & (SmoothScalableFonts | ScalableFonts)) == ScalableFonts) &&
@@ -685,8 +688,8 @@ void FontChooserWidget::addFont( QStringList &list, const char *xfont )
         return;
     
         QStringList::Iterator it = list.begin();
-    
-        for ( ; it != list.end(); ++it )
+   	QStringList::Iterator end(list.end()); 
+        for ( ; it != end; ++it )
         if ( *it == font )
         return;
         list.append( font );

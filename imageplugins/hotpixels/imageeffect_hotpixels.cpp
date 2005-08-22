@@ -195,8 +195,8 @@ void ImageEffect_HotPixels::prepareEffect()
 
     QValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    
-    for (QValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != m_hotPixelsList.end() ; ++it )
+    QValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
+    for (QValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
         {
         HotPixel hp = (*it);
         
@@ -250,8 +250,8 @@ void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KU
     QPointArray pointList(m_hotPixelsList.size());
     QValueList <HotPixel>::Iterator it;
     int i = 0;
-    
-    for (it = m_hotPixelsList.begin() ; it != m_hotPixelsList.end() ; ++it, i++)
+    QValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
+    for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());
         
     m_imagePreviewWidget->setPanIconHighLightPoints(pointList);

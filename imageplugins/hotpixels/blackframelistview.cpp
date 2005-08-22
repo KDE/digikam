@@ -110,7 +110,8 @@ void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
     setPixmap(0, m_thumb);
         
     m_blackFrameDesc = QString::QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
-    for (QValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != m_hotPixels.end() ; ++it)
+    QValueList <HotPixel>::Iterator end(m_hotPixels.end());
+    for (QValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
         m_blackFrameDesc.append( QString::QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
     
     emit parsed(m_hotPixels, m_blackFrameURL);
@@ -136,8 +137,8 @@ QPixmap BlackFrameListViewItem::thumb(QSize size)
     
     //Draw hot pixels one by one
     QValueList <HotPixel>::Iterator it;    
-    
-    for (it=m_hotPixels.begin() ; it!=m_hotPixels.end() ; ++it)
+    QValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
+    for (it=m_hotPixels.begin() ; it!=end ; ++it)
         {
         hpRect   = (*it).rect;
         hpThumbX = (hpRect.x()+hpRect.width()/2)*xRatio;
