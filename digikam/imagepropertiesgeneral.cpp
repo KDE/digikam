@@ -214,7 +214,7 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 
     // -- digiKam metadata ---------------------------------------------------
 
-    m_filealbum->setText( info->name() );
+    m_filealbum->setText( item->imageInfo()->filePath().section( '/', -2, -2 ) );    
     m_filecomments->setText( info->caption() );
     m_filetags->setText( info->tagPaths().join("\n") );        
 }
