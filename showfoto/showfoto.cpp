@@ -894,7 +894,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
 }
 
 
-void ShowFoto::toggleNavigation(const int index)
+void ShowFoto::toggleNavigation(int index)
 {
     if ( m_bar->countItems() == 0 || m_bar->countItems() == 1 ) {
         m_backAction->setEnabled(false);
