@@ -106,7 +106,7 @@ private:
 private:    
         
     // Private methods
-    QPixmap thumb(QSize size);
+    QPixmap thumb(const QSize& size);
     
 private slots:
 

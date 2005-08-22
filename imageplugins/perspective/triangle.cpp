@@ -54,7 +54,7 @@ float Triangle::angleBAC(void)
     return( 57.295779513082 * acos( (m_a*m_a - m_b*m_b - m_c*m_c ) / (-2*m_b*m_c ) ) );
 }
 
-float Triangle::distanceP2P(QPoint p1, QPoint p2)
+float Triangle::distanceP2P(const QPoint& p1, const QPoint& p2)
 {
     return(sqrt( abs( p2.x()-p1.x() ) * abs( p2.x()-p1.x() ) +
                  abs( p2.y()-p1.y() ) * abs( p2.y()-p1.y() ) ));

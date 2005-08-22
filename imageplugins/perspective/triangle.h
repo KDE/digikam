@@ -46,7 +46,7 @@ private:
     float  m_b;
     float  m_c;
         
-    float distanceP2P(QPoint p1, QPoint p2);
+    float distanceP2P(const QPoint& p1, const QPoint& p2);
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

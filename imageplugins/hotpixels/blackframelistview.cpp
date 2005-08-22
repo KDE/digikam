@@ -117,7 +117,7 @@ void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
-QPixmap BlackFrameListViewItem::thumb(QSize size)
+QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 {
     QPixmap thumb;
     
