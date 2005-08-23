@@ -34,7 +34,8 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kdebug.h>
-#include <kglobal.h> 
+#include <kglobal.h>
+#include <kdebug.h>
 
 // Digikam includes.
 
@@ -128,7 +129,11 @@ void ImageRegionWidget::updatePixmap(QImage *img)
     int w = img->width();
     int h = img->height();
     
-    if (m_pix) delete m_pix;
+    if (m_pix)
+    {
+        delete m_pix;
+        m_pix = 0;
+    }
     
     switch (m_separateView)
         {
@@ -159,6 +164,9 @@ void ImageRegionWidget::updatePixmap(QImage *img)
             resizeContents(w, h+visibleHeight()/2);
             break;
             }
+        default:
+            kdWarning() << "Unknown separation view specified"
+                        << endl;
         }
 
     repaintContents(false);    

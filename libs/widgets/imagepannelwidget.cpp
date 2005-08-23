@@ -92,6 +92,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     setProgressVisible(progress);
     
     m_separateView = new QHButtonGroup(this);
+    m_separateView->setExclusive(true);
     
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
@@ -318,6 +319,8 @@ void ImagePannelWidget::readSettings(void)
     KConfig *config = kapp->config();
     config->setGroup(m_settingsSection);
     int mode = config->readNumEntry("Separate View", Digikam::ImageRegionWidget::SeparateViewVertical);
+    mode = QMAX(Digikam::ImageRegionWidget::SeparateViewVertical, mode);
+    mode = QMIN(Digikam::ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     m_imageRegionWidget->blockSignals(true);
     m_imagePanIconWidget->blockSignals(true);
