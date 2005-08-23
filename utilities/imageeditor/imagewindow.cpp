@@ -166,7 +166,7 @@ ImageWindow::ImageWindow()
     
     readSettings();
     applySettings();
-    
+    resize(640,480);
     setAutoSaveSettings("ImageViewer Settings");    
 }
 
