@@ -537,10 +537,7 @@ void ImageWindow::slotLoadCurrent()
     {
         IconItem* item = m_view->findItem((*it).url());
         if (item)
-        {
-            item->setSelected(true);
-            m_view->ensureItemVisible(item);
-        }
+           m_view->setCurrentItem(item);
     }
 
     uint index = m_urlList.findIndex(m_urlCurrent);
