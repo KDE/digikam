@@ -672,17 +672,83 @@ void DigikamApp::slot_albumSelected(bool val)
     Album *album = mAlbumManager->currentAlbum();
     if(album && !album->isRoot())
     {
+        // Normal Album selected
         mDeleteAction->setEnabled(val);
         mAddImagesAction->setEnabled(val);
         mPropsEditAction->setEnabled(val);
         mOpenInKonquiAction->setEnabled(val);
+        mNewAction->setEnabled(val);
+        mAlbumImportAction->setEnabled(val);        
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action; 
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(val);
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action; 
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(val);    
+        }        
+    }
+    else if(album && album->isRoot())
+    {
+        // Root Album selected
+        mDeleteAction->setEnabled(false);
+        mAddImagesAction->setEnabled(false);
+        mPropsEditAction->setEnabled(false);
+       
+
+        if(album->type() == Album::PHYSICAL)
+        {
+            mNewAction->setEnabled(true);
+            mOpenInKonquiAction->setEnabled(true);
+            mAlbumImportAction->setEnabled(true);
+        }
+        else
+        {
+            mNewAction->setEnabled(false);
+            mOpenInKonquiAction->setEnabled(false);
+            mAlbumImportAction->setEnabled(false);            
+        }
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action; 
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(false);
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action; 
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(true);
+        }        
     }
     else
     {
+        // Groupitem selected (Collection/date)
         mDeleteAction->setEnabled(false);
         mAddImagesAction->setEnabled(false);
         mPropsEditAction->setEnabled(false);
         mOpenInKonquiAction->setEnabled(false);
+        mNewAction->setEnabled(false);
+        mAlbumImportAction->setEnabled(false);
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action; 
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(false);    
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action; 
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(false);    
+        }
     }
 }
 
