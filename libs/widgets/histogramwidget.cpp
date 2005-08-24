@@ -692,7 +692,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
          }
       }
       
-   // Drawing color guide.
+    // Drawing color guide.
 
     p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::DotLine));      
     int guidePos;
@@ -745,6 +745,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           }
        }
 
+    // Drawing frame.
+
+    p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));      
+    p1.drawRect(0, 0, width(), height());
+           
     if (m_statisticsVisible)   
        {
        QString tipText, value;
