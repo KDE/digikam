@@ -93,6 +93,8 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     
     m_separateView = new QHButtonGroup(this);
     m_separateView->setExclusive(true);
+    m_separateView->setInsideMargin( 0 );
+    m_separateView->setFrameShape(QFrame::NoFrame);
     
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
@@ -154,9 +156,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     noSeparateButton->setToggleButton(true);
     QToolTip::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                            "be separed" ) );
-    
-    m_separateView->setExclusive(true);
-    m_separateView->setFrameShape(QFrame::NoFrame);
     
     l2->addWidget(frame3, 0, Qt::AlignHCenter);
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
