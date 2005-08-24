@@ -453,6 +453,11 @@ void CurvesWidget::paintEvent( QPaintEvent * )
              }
           }
       }
+      
+   // Drawing frame.
+
+   p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));      
+   p1.drawRect(0, 0, width(), height());
 
    p1.end();
    bitBlt(this, 0, 0, &pm);
