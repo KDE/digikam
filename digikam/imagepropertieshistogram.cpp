@@ -123,18 +123,14 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page,
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame( page );
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, frame);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, page);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the "
                                              "selected image channel"));
-    l->addWidget(m_histogramWidget, 0);
-        
+    
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    topLayout->addWidget(frame, 4);
+    
+    topLayout->addWidget(m_histogramWidget, 4);
     topLayout->addWidget(m_hGradient, 0);
 
     // -------------------------------------------------------------
