@@ -534,7 +534,12 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
 void AlbumFolderView::albumNew()
 {
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
-    if(!item)
+    if (!item)
+    {
+        item = dynamic_cast<AlbumFolderViewItem*>(firstChild());
+    }
+
+    if (!item)
         return;
 
     albumNew(item);
@@ -566,6 +571,9 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
         parent = d->albumMan->findPAlbum(0);
     else
         parent = item->getAlbum();
+
+    if (!parent)
+        return;
 
     QString     title;
     QString     comments;
