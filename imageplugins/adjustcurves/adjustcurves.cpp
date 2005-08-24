@@ -154,19 +154,14 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
     grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
     
-    QFrame *frame = new QFrame(gboxSettings);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-
     m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
-    m_curvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_curves, frame);
+    m_curvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
-    l->addWidget(m_curvesWidget, 0);
-    grid->addMultiCellWidget(frame, 2, 2, 1, 5);
+    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
