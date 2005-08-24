@@ -673,14 +673,14 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
     }
     else
     {
-        result = KMessageBox::warningContinueCancel(this, settings->getUseTrash() ?
+        result = KMessageBox::warningYesNo(this, settings->getUseTrash() ?
                 i18n("Move album '%1' to trash?").arg(album->title()) :
                 i18n("Delete album '%1' from disk?").arg(album->title()),
                 settings->getUseTrash() ? i18n("Trash Album") : i18n("Delete Album"),
                 settings->getUseTrash() ? KGuiItem(i18n("Trash"),"edittrash") : KGuiItem(i18n("Delete"),"editdelete") );
     }
 
-    if(result == KMessageBox::Continue)
+    if(result == KMessageBox::Yes)
     {
         // TODO: currently trash kioslave can handle only full paths.
         // pass full folder path to the trashing job
