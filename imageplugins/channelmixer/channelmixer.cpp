@@ -133,20 +133,17 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
 
-    QFrame *frame = new QFrame(gboxSettings);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false, true, true);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any mixer "
                                              "settings changes."));
-    l->addWidget(m_histogramWidget, 0);
-    grid->addMultiCellWidget(frame, 1, 1, 0, 4);
     
     m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-
+    
+    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
+    grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
+    
     // -------------------------------------------------------------
         
     QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
@@ -170,7 +167,6 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     QWhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the current selected channel."));
 
-    grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
     grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
     grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
     grid->addMultiCellWidget(blueLabel, 5, 5, 0, 0);

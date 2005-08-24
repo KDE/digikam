@@ -136,14 +136,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(label2, 0, 0, 3, 3);
     grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
 
-    QFrame *frame = new QFrame(gboxSettings);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, gboxSettings, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
-    l->addWidget(m_histogramWidget, 0);
-    grid->addMultiCellWidget(frame, 1, 1, 0, 4);
+    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
 
     m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
