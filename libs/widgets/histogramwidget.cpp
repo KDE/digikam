@@ -76,7 +76,6 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_statisticsVisible = statisticsVisible;
         
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
 
     m_blinkTimer = new QTimer( this );
@@ -111,7 +110,6 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_statisticsVisible = statisticsVisible;
     
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
     
     m_blinkTimer = new QTimer( this );
@@ -147,7 +145,6 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_statisticsVisible = statisticsVisible;
     
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
         
     m_blinkTimer = new QTimer( this );
@@ -274,9 +271,6 @@ void HistogramWidget::slotBlinkTimerDone( void )
     m_blinkTimer->start( 200 ); 
 }
 
-// This method is inspired of Gimp2.0 
-// app/widgets/gimphistogramview.c::gimp_histogram_view_expose 
-
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
     if (m_clearFlag == HistogramStarted && m_blinkComputation)
@@ -379,6 +373,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     QPainter p1;
     p1.begin(&pm, this);
     
+    if ( isEnabled() )
+    {
     // Drawing selection or all histogram values.
            
     for (x = 0 ; x < wWidth ; x++)
@@ -745,11 +741,6 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           }
        }
 
-    // Drawing frame.
-
-    p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));      
-    p1.drawRect(0, 0, width(), height());
-           
     if (m_statisticsVisible)   
        {
        QString tipText, value;
@@ -786,7 +777,21 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     
        QToolTip::add( this, tipText);
        }      
-       
+    
+    // Drawing frame.
+
+    p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));      
+    p1.drawRect(0, 0, width(), height());
+    }
+    else
+    {
+    // Widget is disable : drawing grayed frame.
+
+    p1.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
+    p1.setPen(QPen::QPen(palette().disabled().foreground(), 1, Qt::SolidLine));      
+    p1.drawRect(0, 0, width(), height());
+    }
+              
     p1.end();
     bitBlt(this, 0, 0, &pm);
 }

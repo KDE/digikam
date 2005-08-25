@@ -107,7 +107,9 @@ public:
     
     void setHistogramGuide(QColor color);                    
     void reset(void);
-    
+
+public:
+        
     int   m_channelType;     // Channel type to draw.
     int   m_scaleType;       // Scale to use for drawing.
     int   m_colorType;       // Color to use for drawing in All Colors Channel mode.
