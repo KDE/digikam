@@ -42,32 +42,44 @@ Q_OBJECT
 
 public:
 
-enum HistogramType
-{
+    enum HistogramType
+    {
     ValueHistogram = 0,       // Luminosity.
     RedChannelHistogram,      // Red channel.
     GreenChannelHistogram,    // Green channel.
     BlueChannelHistogram,     // Blue channel.
     AlphaChannelHistogram,    // Alpha channel.
-    ColorChannelsHistogram,   // All color channels.
-    LinScaleHistogram,        // Linear scale.
-    LogScaleHistogram,        // Logarithmic scale.
-    RedColor,                 // Red color to foreground in All Colors Channel mode.
+    ColorChannelsHistogram    // All color channels.
+    };
+    
+    enum HistogramScale
+    {
+    LinScaleHistogram=0,      // Linear scale.
+    LogScaleHistogram         // Logarithmic scale.
+    };
+
+    enum HistogramAllColorMode
+    {
+    RedColor=0,               // Red color to foreground in All Colors Channel mode.
     GreenColor,               // Green color to foreground in All Colors Channel mode.
-    BlueColor,                // Blue color to foreground in All Colors Channel mode.
-    FullImageHistogram,       // Full image histogram rendering.
+    BlueColor                 // Blue color to foreground in All Colors Channel mode.
+    };
+
+    enum HistogramRenderingType
+    {
+    FullImageHistogram=0,     // Full image histogram rendering.
     ImageSelectionHistogram   // Image selection histogram rendering.
-};
+    };
     
 private:
 
-enum RepaintType
-{
+    enum RepaintType
+    {
     HistogramNone = 0,        // No current histogram values calculation.
     HistogramStarted,         // Histogram values calculation started.
     HistogramCompleted,       // Histogram values calculation completed.
     HistogramFailed           // Histogram values calculation failed.
-};    
+    };    
 
 public:
 

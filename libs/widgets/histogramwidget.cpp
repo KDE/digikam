@@ -273,6 +273,20 @@ void HistogramWidget::slotBlinkTimerDone( void )
 
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
+    // Widget is disable : drawing grayed frame.
+    if ( !isEnabled() )
+       {
+       QPixmap pm(size());
+       QPainter p1;
+       p1.begin(&pm, this);
+       p1.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
+       p1.setPen(QPen::QPen(palette().disabled().foreground(), 1, Qt::SolidLine));      
+       p1.drawRect(0, 0, width(), height());
+       p1.end();
+       bitBlt(this, 0, 0, &pm);
+       return;
+       } 
+    
     if (m_clearFlag == HistogramStarted && m_blinkComputation)
        {
        QPixmap pm(size());
@@ -373,8 +387,6 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     QPainter p1;
     p1.begin(&pm, this);
     
-    if ( isEnabled() )
-    {
     // Drawing selection or all histogram values.
            
     for (x = 0 ; x < wWidth ; x++)
@@ -782,16 +794,6 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
     p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));      
     p1.drawRect(0, 0, width(), height());
-    }
-    else
-    {
-    // Widget is disable : drawing grayed frame.
-
-    p1.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
-    p1.setPen(QPen::QPen(palette().disabled().foreground(), 1, Qt::SolidLine));      
-    p1.drawRect(0, 0, width(), height());
-    }
-              
     p1.end();
     bitBlt(this, 0, 0, &pm);
 }
