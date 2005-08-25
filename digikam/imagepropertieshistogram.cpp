@@ -127,7 +127,7 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page,
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the "
                                              "selected image channel"));
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, page );
+    m_hGradient = new Digikam::ColorGradientWidget( ColorGradientWidget::Horizontal, 10, page );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
     topLayout->addWidget(m_histogramWidget, 4);
