@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-28
- * Description : a color gradient widget without arrow.
+ * Description : a color gradient widget
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +23,8 @@
 
 // KDE includes.
 
-#include <kselect.h>
+#include <qwidget.h>
+#include <qcolor.h>
 
 // Local includes
 
@@ -32,19 +33,37 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ColorGradientWidget : public KGradientSelector
+class DIGIKAM_EXPORT ColorGradientWidget : public QWidget
 {
 Q_OBJECT
 
 public:
-
-    ColorGradientWidget(Orientation o, int size, QWidget *parent=0);
+    
+    enum Orientation
+    {
+    Horizontal=0,      
+    Vertical         
+    };
+      
+public:
+    
+    ColorGradientWidget( int o, int size, QWidget *parent=0 );
+  
     ~ColorGradientWidget();
-    
+  
+    void setColors( const QColor &col1, const QColor &col2 );
+
 protected:
+
+    void paintEvent( QPaintEvent * );
     
-    virtual void drawArrow( QPainter *, bool, const QPoint &);
+private:
+
+    int    m_orientation;
     
+    QColor m_color1;
+    QColor m_color2;
+  
 };
 
 }
