@@ -77,10 +77,10 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_typeCB->insertItem( previewEffectPic("stretchcontrast"), i18n("Stretch Contrast") );
     m_typeCB->setCurrentText( i18n("Auto Levels") );
     QWhatsThis::add( m_typeCB, i18n("<p>Select here the auto-color correction tool to use:<p>"
-                                    "<b>Auto Levels</b>: this option enhances the contrast and brightness "
-                                    "of the RGB values of an image by stretching the lowest "
-                                    "and highest values to their fullest range, adjusting "
-                                    "everything in between.<p>"
+                                    "<b>Auto Levels</b>: This option maximizes the tonal range in the Red, "
+                                    "Green, and Blue channels. It search the image shadow and highlight "
+                                    "limit values and adjust the Red, Green, and Blue channels "
+                                    "to a full histogram range.<p>"
                                     "<b>Normalize</b>: this option scales brightness values across the active "
                                     "image so that the darkest point becomes black, and the "
                                     "brightest point becomes as bright as possible without "
