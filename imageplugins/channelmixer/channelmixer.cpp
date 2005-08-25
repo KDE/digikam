@@ -138,7 +138,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
                                              "selected image channel. This one is re-computed at any mixer "
                                              "settings changes."));
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
     
     grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);

@@ -154,7 +154,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
     grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
     
-    m_vGradient = new Digikam::ColorGradientWidget( KSelector::Vertical, 20, gboxSettings );
+    m_vGradient = new Digikam::ColorGradientWidget( ColorGradientWidget::Vertical, 10, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
@@ -163,7 +163,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                           "histogram channel"));
     grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
     

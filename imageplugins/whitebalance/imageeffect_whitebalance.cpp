@@ -167,7 +167,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                              "re-computed at any filter settings changes."));
     grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
     
-    m_hGradient = new Digikam::ColorGradientWidget( KSelector::Horizontal, 20, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
     
