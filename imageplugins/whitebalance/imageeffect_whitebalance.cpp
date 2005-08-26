@@ -41,6 +41,7 @@
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qhbuttongroup.h> 
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -142,22 +143,38 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
-    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gboxSettings );
-    m_scaleCB->insertItem( i18n("Linear") );
-    m_scaleCB->insertItem( i18n("Logarithmic") );
-    m_scaleCB->setCurrentText( i18n("Logarithmic") );
-    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+                                     "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+    
+    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);       
 
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
-    grid->addMultiCellWidget(label2, 0, 0, 3, 3);
-    grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
+    QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(label1);
+    l1->addWidget(m_channelCB);
+    l1->addWidget(m_scaleBG);
+    l1->addStretch(10);
+    
+    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
         
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImageData, 
                                                      m_originalWidth, m_originalHeight, 
@@ -238,7 +255,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gboxSettings);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickTemperature->setToggleButton(true);
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
@@ -303,7 +320,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
     
-    connect(m_scaleCB, SIGNAL(activated(int)),
+    connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
@@ -563,17 +580,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromTarget( const QColor &color 
 
 void ImageEffect_WhiteBalance::slotScaleChanged(int scale)
 {
-    switch(scale)
-       {
-       case Linear:
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
-          break;
-       
-       case Logarithmic:
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
-          break;
-       }
-
+    m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
