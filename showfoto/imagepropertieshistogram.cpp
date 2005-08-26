@@ -87,9 +87,9 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
     m_scaleCB->insertItem( i18n("Linear") );
     m_scaleCB->insertItem( i18n("Logarithmic") );
     QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image maximal counts is small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts is big. "
-                                     "Like this all values (small and big) will be visible on the graph."));
+                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "if it is used, all values (small and large) will be visible on the graph."));
     
     QLabel *label10 = new QLabel(i18n("Colors:"), page);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
