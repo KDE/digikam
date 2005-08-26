@@ -29,6 +29,7 @@ class QComboBox;
 class QSpinBox;
 class QPixmap;
 class QLabel;
+class QHButtonGroup;
 
 class KURL;
 class KFileItem;
@@ -71,10 +72,11 @@ private slots:
 private:
 
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_scaleCB;    
     QComboBox                    *m_colorsCB;    
-    QComboBox                    *m_renderingCB;    
         
+    QHButtonGroup                *m_scaleBG;
+    QHButtonGroup                *m_regionBG;
+    
     QSpinBox                     *m_minInterv;
     QSpinBox                     *m_maxInterv;
     
@@ -85,7 +87,6 @@ private:
     QLabel                       *m_labelCountValue;
     QLabel                       *m_labelMedianValue;
     QLabel                       *m_labelPercentileValue;
-    QLabel                       *m_labelRendering;
     
     QImage                        m_image;
     QImage                        m_imageSelection;

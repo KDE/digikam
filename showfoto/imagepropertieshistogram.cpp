@@ -32,9 +32,13 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qgroupbox.h>
+#include <qhbuttongroup.h> 
+#include <qpushbutton.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
+#include <kstandarddirs.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -81,16 +85,31 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
                                        "is supported by some image formats such as PNG or GIF.<p>"
                                        "<b>Colors</b>: drawing all color channels values at the same time."));
     
-    QLabel *label2 = new QLabel(i18n("Scale:"), page);
-    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, page );
-    m_scaleCB->insertItem( i18n("Linear") );
-    m_scaleCB->insertItem( i18n("Logarithmic") );
-    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG = new QHButtonGroup(page);
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
     
+    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+    
+    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);       
+        
     QLabel *label10 = new QLabel(i18n("Colors:"), page);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_colorsCB = new QComboBox( false, page );
@@ -103,24 +122,37 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
                                        "<b>Green</b>: drawing the green image channel on the foreground.<p>"
                                        "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
                                        
-    m_labelRendering = new QLabel(i18n("Rendering:"), page);
-    m_labelRendering->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_renderingCB = new QComboBox( false, page );
-    m_renderingCB->insertItem( i18n("Full Image") );
-    m_renderingCB->insertItem( i18n("Selection") );
+    m_regionBG = new QHButtonGroup(page);
+    m_regionBG->setExclusive(true);
+    m_regionBG->setFrameShape(QFrame::NoFrame);
+    m_regionBG->setInsideMargin( 0 );
+    m_regionBG->hide();
+    QWhatsThis::add( m_regionBG, i18n("<p>Select here the histogram region computation:<p>"
+                                      "<b>Full Image</b>: drawing histogram using the full image.<p>"
+                                      "<b>Selection</b>: drawing histogram using the current image selection."));
     
-    QWhatsThis::add( m_renderingCB, i18n("<p>Select here the histogram rendering method:<p>"
-                     "<b>Full Image</b>: drawing histogram using the full image.<p>"
-                     "<b>Selection</b>: drawing histogram using the current image selection."));  
-                                                                            
+    QPushButton *fullImageButton = new QPushButton( m_regionBG );
+    QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
+    m_regionBG->insert(fullImageButton, Digikam::HistogramWidget::FullImageHistogram);
+    KGlobal::dirs()->addResourceType("image-full", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
+    fullImageButton->setPixmap( QPixmap( directory + "image-full.png" ) );
+    fullImageButton->setToggleButton(true);
+    
+    QPushButton *SelectionImageButton = new QPushButton( m_regionBG );
+    QToolTip::add( SelectionImageButton, i18n( "<p>Selection" ) );
+    m_regionBG->insert(SelectionImageButton, Digikam::HistogramWidget::ImageSelectionHistogram);
+    KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
+    SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
+    SelectionImageButton->setToggleButton(true);       
+                                                                                
     grid->addWidget(label1, 0, 0);
     grid->addWidget(m_channelCB, 0, 1);
-    grid->addWidget(label2, 0, 2);
-    grid->addWidget(m_scaleCB, 0, 3);
+    grid->addWidget(m_scaleBG, 0, 2);
     grid->addWidget(label10, 1, 0);
     grid->addWidget(m_colorsCB, 1, 1);
-    grid->addWidget(m_labelRendering, 1, 2);
-    grid->addWidget(m_renderingCB, 1, 3);
+    grid->addWidget(m_regionBG, 1, 2);
     
     // -------------------------------------------------------------
     
@@ -196,14 +228,14 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
     
-    connect(m_scaleCB, SIGNAL(activated(int)),
+    connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
     
     connect(m_colorsCB, SIGNAL(activated(int)),
             this, SLOT(slotColorsChanged(int)));     
                    
-    connect(m_renderingCB, SIGNAL(activated(int)),
-            this, SLOT(slotRenderingChanged(int)));       
+    connect(m_regionBG, SIGNAL(released(int)),
+            this, SLOT(slotRenderingChanged(int))); ;       
              
     connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
             this, SLOT(slotUpdateMinInterv(int)));
@@ -231,9 +263,9 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
     KConfig* config = kapp->config();
     config->setGroup("Image Properties Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleCB->setCurrentItem(config->readNumEntry("Histogram Scale", 0));        // Linear.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LinScaleHistogram)); 
     m_colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
-    m_renderingCB->setCurrentItem(config->readNumEntry("Histogram Rendering", 0));// Full image.
+    m_regionBG->setButton(config->readNumEntry("Histogram Rendering", Digikam::HistogramWidget::FullImageHistogram));
 }
 
 ImagePropertiesHistogram::~ImagePropertiesHistogram()
@@ -245,9 +277,9 @@ ImagePropertiesHistogram::~ImagePropertiesHistogram()
     KConfig* config = kapp->config();
     config->setGroup("Image Properties Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("Histogram Color", m_colorsCB->currentItem());
-    config->writeEntry("Histogram Rendering", m_renderingCB->currentItem());
+    config->writeEntry("Histogram Rendering", m_regionBG->selectedId());
     
     if ( m_histogramWidget )
        delete m_histogramWidget;
@@ -288,14 +320,12 @@ void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int ima
                 m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
                                               (uint *)m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
-                m_labelRendering->show();                                         
-                m_renderingCB->show();                                         
+                m_regionBG->show();                                         
             }
             else 
             {
                 m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
-                m_labelRendering->hide();                                         
-                m_renderingCB->hide();
+                m_regionBG->hide();
             }
         }
         else 
@@ -320,14 +350,12 @@ void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int ima
                 m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
                                               (uint *)m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
-                m_labelRendering->show();                                         
-                m_renderingCB->show();                                         
+                m_regionBG->show();                                         
             }
             else 
             {
                 m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
-                m_labelRendering->hide();                                         
-                m_renderingCB->hide();
+                m_regionBG->hide();
             }
         }
         else 
@@ -341,11 +369,11 @@ void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int ima
 void ImagePropertiesHistogram::slotRefreshOptions()
 {
     slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
     slotColorsChanged(m_colorsCB->currentItem());
     
     if (m_selectionArea)
-       slotRenderingChanged(m_renderingCB->currentItem());
+       slotRenderingChanged(m_regionBG->selectedId());
 }
 
 void ImagePropertiesHistogram::slotChannelChanged(int channel)
@@ -395,17 +423,7 @@ void ImagePropertiesHistogram::slotChannelChanged(int channel)
 
 void ImagePropertiesHistogram::slotScaleChanged(int scale)
 {
-    switch(scale)
-    {
-    case 1:           // Log.
-        m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
-        break;
-          
-    default:          // Lin.
-        m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
-        break;
-    }
-   
+    m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
@@ -432,17 +450,7 @@ void ImagePropertiesHistogram::slotColorsChanged(int color)
 
 void ImagePropertiesHistogram::slotRenderingChanged(int rendering)
 {
-    switch(rendering)
-    {
-    case 1:           // Image Selection.
-        m_histogramWidget->m_renderingType = Digikam::HistogramWidget::ImageSelectionHistogram;
-        break;
-       
-    default:          // Full Image.
-        m_histogramWidget->m_renderingType = Digikam::HistogramWidget::FullImageHistogram;
-        break;
-    }
-
+    m_histogramWidget->m_renderingType = rendering;
     m_histogramWidget->repaint(false);
     updateInformation();
 }
