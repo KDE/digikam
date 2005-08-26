@@ -29,6 +29,7 @@
 class QComboBox;
 class QPushButton;
 class QCheckBox;
+class QHButtonGroup;
 
 class KDoubleNumInput;
 
@@ -86,8 +87,9 @@ private:
     double                        m_blackBlueGain;
     
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_scaleCB;    
     
+    QHButtonGroup                *m_scaleBG;  
+
     KDoubleNumInput              *m_redGain;
     KDoubleNumInput              *m_greenGain;
     KDoubleNumInput              *m_blueGain;
