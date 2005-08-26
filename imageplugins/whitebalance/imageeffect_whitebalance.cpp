@@ -69,6 +69,7 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <kseparator.h>
 
 // Digikam includes.
 
@@ -190,7 +191,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 8, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout( layout2, 10, 5, spacingHint());
     KIconLoader icon;
     
     m_exposureLabel = new QLabel(i18n("Exposure:"), gboxSettings);
@@ -227,8 +228,16 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.01, 1.5, 0.01, true);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
-        
+
+    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+            
     m_temperatureLabel = new QLabel(i18n("Temperature:"), gboxSettings);
+    m_temperatureInput = new KDoubleNumInput(gboxSettings);
+    m_temperatureInput->setPrecision(1);
+    m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
+    QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
+    
+    m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
     m_temperaturePresetCB = new QComboBox( false, gboxSettings );
     m_temperaturePresetCB->insertItem( i18n("40W") );
     m_temperaturePresetCB->insertItem( i18n("200W") );
@@ -261,10 +270,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
     QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original image used to set "
                                              "white color balance temperature and green component."));
-    m_temperatureInput = new KDoubleNumInput(gboxSettings);
-    m_temperatureInput->setPrecision(1);
-    m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
-    QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
         
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_greenInput = new KDoubleNumInput(gboxSettings);
@@ -288,14 +293,18 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     grid2->addMultiCellWidget(m_saturationInput, 3, 3, 1, 5);
     grid2->addMultiCellWidget(m_gammaLabel, 4, 4, 0, 0);
     grid2->addMultiCellWidget(m_gammaInput, 4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_temperatureLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 5, 5, 1, 2);
-    grid2->addMultiCellWidget(m_pickTemperature, 5, 5, 3, 3);
-    grid2->addMultiCellWidget(m_temperatureInput, 5, 5, 4, 5);
-    grid2->addMultiCellWidget(m_greenLabel, 6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 6, 6, 1, 5);
-    grid2->addMultiCellWidget(m_overExposureIndicatorBox, 7, 7, 0, 5);
-    grid2->setRowStretch(8, 10);
+    grid2->addMultiCellWidget(m_greenLabel, 5, 5, 0, 0);
+    grid2->addMultiCellWidget(m_greenInput, 5, 5, 1, 5);
+    
+    grid2->addMultiCellWidget(line, 6, 6, 0, 5);
+
+    grid2->addMultiCellWidget(m_temperatureLabel, 7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_pickTemperature, 7, 7, 1, 1);
+    grid2->addMultiCellWidget(m_temperatureInput, 7, 7, 2, 5);
+    grid2->addMultiCellWidget(m_temperaturePresetLabel, 8, 8, 0, 0);
+    grid2->addMultiCellWidget(m_temperaturePresetCB, 8, 8, 1, 5);
+    grid2->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 5);
+    grid2->setRowStretch(10, 10);
             
     setUserAreaWidget(gboxSettings);
             
