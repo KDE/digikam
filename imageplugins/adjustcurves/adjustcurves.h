@@ -91,7 +91,6 @@ private:
     };
     
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_scaleCB;  
     QComboBox                    *m_typeCB;  
     
     QLabel                       *m_labelPos;
@@ -104,6 +103,7 @@ private:
     QCheckBox                    *m_overExposureIndicatorBox;
 
     QHButtonGroup                *m_pickerColorButtonGroup;
+    QHButtonGroup                *m_scaleBG;  
     
     Digikam::CurvesWidget        *m_curvesWidget;
     

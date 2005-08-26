@@ -100,7 +100,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 6, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 7, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -120,22 +120,38 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or GIF."));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
-    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gboxSettings );
-    m_scaleCB->insertItem( i18n("Linear") );
-    m_scaleCB->insertItem( i18n("Logarithmic") );
-    m_scaleCB->setCurrentText( i18n("Logarithmic") );
-    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+                                     "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+    
+    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);       
 
+    QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(m_scaleBG);
+    l1->addStretch(10);
+    
     grid->addMultiCellWidget(label1, 0, 0, 1, 1);
     grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
-    grid->addMultiCellWidget(label2, 0, 0, 4, 4);
-    grid->addMultiCellWidget(m_scaleCB, 0, 0, 5, 5);
+    grid->addMultiCellLayout(l1, 0, 0, 4, 5);
     
     QLabel *label5 = new QLabel(i18n("Type:"), gboxSettings);
     label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -148,24 +164,23 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
                                     "<b>Free</b>: with this mode, you can draw your curve free-hand with the mouse."));
 
     m_labelPos = new QLabel(gboxSettings);
-    m_labelPos->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
                                      
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
-    grid->addMultiCellWidget(m_labelPos, 1, 1, 5, 5);
+    grid->addMultiCellWidget(m_labelPos, 2, 2, 1, 5);
     
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
-    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
+    grid->addMultiCellWidget(m_curvesWidget, 3, 3, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 4, 4, 1, 5);
     
     // -------------------------------------------------------------
     
@@ -174,7 +189,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
@@ -206,8 +221,12 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset curves' values from the current selected channel."));
 
-    grid->addMultiCellWidget(m_pickerColorButtonGroup, 4, 4, 1, 3);
-    grid->addMultiCellWidget(m_resetButton, 4, 4, 4, 5);
+    QHBoxLayout* l3 = new QHBoxLayout();
+    l3->addWidget(m_pickerColorButtonGroup);
+    l3->addWidget(m_resetButton);
+    l3->addStretch(10);
+    
+    grid->addMultiCellLayout(l3, 5, 5, 1, 5);
     
     // -------------------------------------------------------------
             
@@ -215,8 +234,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
-    grid->setRowStretch(6, 10);
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 6, 6, 1, 5);
+    grid->setRowStretch(7, 10);
     
     setUserAreaWidget(gboxSettings);
 
@@ -260,7 +279,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleCB, SIGNAL(activated(int)),
+    connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
             
     connect(m_typeCB, SIGNAL(activated(int)),
@@ -342,7 +361,7 @@ void AdjustCurveDialog::slotPositionChanged(int x, int y)
     if ( x == -1 && y == -1)
        m_labelPos->clear();
     else
-       m_labelPos->setText(i18n("x:%1   y:%2").arg(x).arg(y));
+       m_labelPos->setText(i18n("Position: x:%1  y:%2").arg(x).arg(y));
 }
 
 void AdjustCurveDialog::slotEffect()
@@ -432,17 +451,7 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
 
 void AdjustCurveDialog::slotScaleChanged(int scale)
 {
-    switch(scale)
-       {
-       case Linear:
-          m_curvesWidget->m_scaleType = Digikam::CurvesWidget::LinScaleHistogram;
-          break;
-       
-       case Logarithmic:
-          m_curvesWidget->m_scaleType = Digikam::CurvesWidget::LogScaleHistogram;
-          break;
-       }
-
+    m_curvesWidget->m_scaleType = scale;
     m_curvesWidget->repaint(false);
 }
 
