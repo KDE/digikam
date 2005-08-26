@@ -131,12 +131,13 @@ public slots:
     void slotSelectInvert();
     void slotSortImages(int order);
 
+    void slot_albumSelected(Album* album);
+    
 private slots:
 
     void slotAllAlbumsLoaded();
     
     void slot_imageSelected();
-    void slot_albumSelected(Album* album);
 
     void slot_albumsCleared();
     void slot_albumHighlight();

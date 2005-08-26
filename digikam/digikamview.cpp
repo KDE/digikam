@@ -175,6 +175,7 @@ void DigikamView::loadViewState()
     }    
     
     mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
+    
 }
 
 void DigikamView::saveViewState()
@@ -205,6 +206,7 @@ void DigikamView::slotAllAlbumsLoaded()
     
     mMainSidebar->loadViewState();
     mRightSidebar->loadViewState();
+    slot_albumSelected(album);
 }
 
 void DigikamView::slot_sortAlbums(int order)

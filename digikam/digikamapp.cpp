@@ -670,30 +670,65 @@ void DigikamApp::slotAboutToShowForwardMenu()
 void DigikamApp::slot_albumSelected(bool val)
 {
     Album *album = mAlbumManager->currentAlbum();
-    if(album && !album->isRoot())
+    
+    if(album && !val)
+    {
+        // No PAlbum is selected
+        mDeleteAction->setEnabled(false);
+        mAddImagesAction->setEnabled(false);
+        mPropsEditAction->setEnabled(false);
+        mOpenInKonquiAction->setEnabled(false);
+        mNewAction->setEnabled(false);
+        mAlbumImportAction->setEnabled(false);
+
+    }
+    else if(!album && !val)
+    {
+        // Groupitem selected (Collection/date)
+        mDeleteAction->setEnabled(false);
+        mAddImagesAction->setEnabled(false);
+        mPropsEditAction->setEnabled(false);
+        mOpenInKonquiAction->setEnabled(false);
+        mNewAction->setEnabled(false);
+        mAlbumImportAction->setEnabled(false);
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action;
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(false);
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action;
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(false);
+        }
+    }
+    else if(album && !album->isRoot() && album->type() == Album::PHYSICAL)
     {
         // Normal Album selected
-        mDeleteAction->setEnabled(val);
-        mAddImagesAction->setEnabled(val);
-        mPropsEditAction->setEnabled(val);
-        mOpenInKonquiAction->setEnabled(val);
-        mNewAction->setEnabled(val);
-        mAlbumImportAction->setEnabled(val);        
+        mDeleteAction->setEnabled(true);
+        mAddImagesAction->setEnabled(true);
+        mPropsEditAction->setEnabled(true);
+        mOpenInKonquiAction->setEnabled(true);
+        mNewAction->setEnabled(true);
+        mAlbumImportAction->setEnabled(true);
         
         KAction *action;
         for (action = m_kipiFileActionsImport.first(); action; 
              action = m_kipiFileActionsImport.next())
         {
-            action->setEnabled(val);
+            action->setEnabled(true);
         }
 
         for (action = m_kipiFileActionsExport.first(); action; 
              action = m_kipiFileActionsExport.next())
         {
-            action->setEnabled(val);    
+            action->setEnabled(true);    
         }        
     }
-    else if(album && album->isRoot())
+    else if(album && album->isRoot() && album->type() == Album::PHYSICAL)
     {
         // Root Album selected
         mDeleteAction->setEnabled(false);
@@ -725,29 +760,6 @@ void DigikamApp::slot_albumSelected(bool val)
              action = m_kipiFileActionsExport.next())
         {
             action->setEnabled(true);
-        }        
-    }
-    else
-    {
-        // Groupitem selected (Collection/date)
-        mDeleteAction->setEnabled(false);
-        mAddImagesAction->setEnabled(false);
-        mPropsEditAction->setEnabled(false);
-        mOpenInKonquiAction->setEnabled(false);
-        mNewAction->setEnabled(false);
-        mAlbumImportAction->setEnabled(false);
-        
-        KAction *action;
-        for (action = m_kipiFileActionsImport.first(); action; 
-             action = m_kipiFileActionsImport.next())
-        {
-            action->setEnabled(false);    
-        }
-
-        for (action = m_kipiFileActionsExport.first(); action; 
-             action = m_kipiFileActionsExport.next())
-        {
-            action->setEnabled(false);    
         }
     }
 }
@@ -755,15 +767,47 @@ void DigikamApp::slot_albumSelected(bool val)
 void DigikamApp::slot_tagSelected(bool val)
 {
     Album *album = mAlbumManager->currentAlbum();
-    if(album && !album->isRoot())
+    
+    if(!val)
     {
-        mDeleteTagAction->setEnabled(val);
-        mEditTagAction->setEnabled(val);
+        mDeleteTagAction->setEnabled(false);
+        mEditTagAction->setEnabled(false);
+    }
+    else if(!album->isRoot())
+    {
+        mDeleteTagAction->setEnabled(true);
+        mEditTagAction->setEnabled(true);
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action;
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(false);
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action;
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(true);
+        }
     }
     else
     {
         mDeleteTagAction->setEnabled(false);
         mEditTagAction->setEnabled(false);
+        
+        KAction *action;
+        for (action = m_kipiFileActionsImport.first(); action; 
+             action = m_kipiFileActionsImport.next())
+        {
+            action->setEnabled(false);
+        }
+
+        for (action = m_kipiFileActionsExport.first(); action; 
+             action = m_kipiFileActionsExport.next())
+        {
+            action->setEnabled(true);
+        }
     }
 }
 
@@ -992,6 +1036,9 @@ void DigikamApp::loadPlugins()
     KipiPluginLoader_->loadPlugins();
 
     KipiInterface_->slotCurrentAlbumChanged(mAlbumManager->currentAlbum());
+
+    // Setting the initial menu options after all plugins have been loaded
+    mView->slot_albumSelected(mAlbumManager->currentAlbum());
 
     m_ImagePluginsLoader = new ImagePluginLoader(this, mSplash);
 }
