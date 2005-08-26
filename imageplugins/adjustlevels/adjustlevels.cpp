@@ -120,26 +120,51 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or GIF."));
 
-    QLabel *label2 = new QLabel(i18n("Scale:"), gboxSettings);
-    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_scaleCB = new QComboBox( false, gboxSettings );
-    m_scaleCB->insertItem( i18n("Linear") );
-    m_scaleCB->insertItem( i18n("Logarithmic") );
-    m_scaleCB->setCurrentText( i18n("Logarithmic") );
-    QWhatsThis::add( m_scaleCB, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+    
+    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);       
 
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 1, 1);
-    grid->addMultiCellWidget(label2, 0, 0, 3, 3);
-    grid->addMultiCellWidget(m_scaleCB, 0, 0, 4, 4);
+    QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(label1);
+    l1->addWidget(m_channelCB);
+    l1->addWidget(m_scaleBG);
+    l1->addStretch(10);
+    
+    grid->addMultiCellLayout(l1, 0, 0, 0, 3);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, gboxSettings, false);
+    // -------------------------------------------------------------
+
+    QFrame *frame = new QFrame(gboxSettings);
+    frame->setFrameStyle(QFrame::NoFrame);
+    QVBoxLayout* l2 = new QVBoxLayout(frame, 2, 0);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
-    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
+    l2->addWidget(m_histogramWidget, 0);
+    grid->addMultiCellWidget(frame, 1, 1, 0, 4);
 
+    // -------------------------------------------------------------
+    
     m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
@@ -212,7 +237,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
@@ -246,9 +271,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset levels values from the current selected channel."));
     
-    grid->addMultiCellWidget(m_pickerColorButtonGroup, 7, 7, 0, 2);
-    grid->addMultiCellWidget(m_autoButton, 7, 7, 3, 3);
-    grid->addMultiCellWidget(m_resetButton, 7, 7, 4, 4);
+    QHBoxLayout* l3 = new QHBoxLayout();
+    l3->addWidget(m_pickerColorButtonGroup);
+    l3->addWidget(m_autoButton);
+    l3->addWidget(m_resetButton);
+    l3->addStretch(10);
+    
+    grid->addMultiCellLayout(l3, 7, 7, 0, 4);
 
     // -------------------------------------------------------------
     
@@ -284,7 +313,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleCB, SIGNAL(activated(int)),
+    connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
             
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
@@ -588,17 +617,7 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
 
 void AdjustLevelDialog::slotScaleChanged(int scale)
 {
-    switch(scale)
-       {
-       case Linear: 
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LinScaleHistogram;
-          break;
-       
-       case Logarithmic:
-          m_histogramWidget->m_scaleType = Digikam::HistogramWidget::LogScaleHistogram;
-          break;
-       }
-
+    m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 

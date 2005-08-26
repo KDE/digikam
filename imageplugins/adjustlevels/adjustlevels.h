@@ -84,7 +84,6 @@ private:
     };
 
     QComboBox                 *m_channelCB;    
-    QComboBox                 *m_scaleCB;    
     
     QSpinBox                  *m_minInput;
     QSpinBox                  *m_maxInput;
@@ -102,6 +101,7 @@ private:
     QCheckBox                 *m_overExposureIndicatorBox;
     
     QHButtonGroup             *m_pickerColorButtonGroup;
+    QHButtonGroup             *m_scaleBG;
     
     KGradientSelector         *m_hGradientMinInput;
     KGradientSelector         *m_hGradientMaxInput;
