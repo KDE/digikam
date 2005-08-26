@@ -33,7 +33,6 @@
 
 class QCustomEvent;
 
-
 namespace Digikam
 {
 class ImageHistogram;
@@ -45,26 +44,30 @@ Q_OBJECT
 
 public:
 
-enum HistogramType
-{
+    enum HistogramType
+    {
     ValueHistogram = 0,       // Luminosity.
     RedChannelHistogram,      // Red channel.
     GreenChannelHistogram,    // Green channel.
     BlueChannelHistogram,     // Blue channel.
     AlphaChannelHistogram,    // Alpha channel.
-    LinScaleHistogram,        // Linear scale.
+    };
+
+    enum HistogramScale
+    {
+    LinScaleHistogram=0,      // Linear scale.
     LogScaleHistogram         // Logarithmic scale.
-};
+    };
     
 private:
 
-enum RepaintType
-{
+    enum RepaintType
+    {
     HistogramNone = 0,        // No current histogram values calculation.
     HistogramStarted,         // Histogram values calculation started.
     HistogramCompleted,       // Histogram values calculation completed.
     HistogramFailed           // Histogram values calculation failed.
-};    
+    };    
 
 public:
 
@@ -126,6 +129,8 @@ private:
     
     Digikam::ImageCurves *m_curves;             // Curves data instance.
     
+private:
+        
     void customEvent(QCustomEvent *event);
 };
 
