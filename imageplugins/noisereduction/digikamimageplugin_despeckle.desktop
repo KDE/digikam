@@ -13,6 +13,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
+Comment[de]=Ein digiKam-Modul zum Verringern von Bildrauschen.
 Comment[et]=DigiKami müra vähendamise plugin
 Comment[nl]=digiKam-plugin voor ruisreductie
 Comment[pt]=Um 'plugin' do digiKam para a redução de ruído

@@ -6,6 +6,7 @@ output=filesystem,stream
 maxInstances=1
 Description=digiKam Search kioslave
 Description[br]=kioslave klask evit Digikam
+Description[de]=digiKam Ein/Ausgabe-Modul für Suchen
 Description[et]=DigiKami otsimise KIO-moodul
 Description[nl]=digiKam Zoeken kioslave
 Description[pt]='kioslave' de procura do digiKam

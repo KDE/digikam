@@ -13,6 +13,7 @@ moving=false
 maxInstances=1
 Description=Digikam tags kioslave
 Description[da]=Digikam tag-kioslave
+Description[de]=digiKam Ein/Ausgabe-Modul für Stichworte
 Description[et]=DigiKami siltide I/O-moodul
 Description[it]=Kioslave dei tag di Digikam
 Description[nl]=digiKam tags kioslave

@@ -15,7 +15,7 @@ Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
 Comment[da]=Plugin til niveaujustering i Digikam
-Comment[de]=digiKam Plugin zur Justierung der Bildhistogrammwerte
+Comment[de]=Ein digiKam-Modul zur Justierung der Bildhistogrammwerte.
 Comment[es]=Plugin para ajustar los niveles del histograma de la imagen para digiKam
 Comment[et]=DigiKami pildi histogrammi tasemete kohendamise plugin
 Comment[fr]=Module externe de digiKam pour l'ajustement des niveaux d'une image
