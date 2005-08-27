@@ -282,7 +282,7 @@ void AlbumLister::slotResult(KIO::Job* job)
 
     if (job->error())
     {
-        kdWarning() << "Failed to list url" << endl;
+        kdWarning() << "Failed to list url: " << job->errorString() << endl;
         d->itemMap.clear();
         return;
     }
