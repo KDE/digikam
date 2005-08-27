@@ -239,27 +239,27 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
     
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
     m_temperaturePresetCB = new QComboBox( false, gboxSettings );
-    m_temperaturePresetCB->insertItem( i18n("40W") );
-    m_temperaturePresetCB->insertItem( i18n("200W") );
+    m_temperaturePresetCB->insertItem( i18n("40W Lamp") );
+    m_temperaturePresetCB->insertItem( i18n("200W Lamp") );
     m_temperaturePresetCB->insertItem( i18n("Sunrise") );
-    m_temperaturePresetCB->insertItem( i18n("Tungsten") );
+    m_temperaturePresetCB->insertItem( i18n("Tungsten Lamp") );
     m_temperaturePresetCB->insertItem( i18n("Neutral") );
-    m_temperaturePresetCB->insertItem( i18n("Xenon") );
+    m_temperaturePresetCB->insertItem( i18n("Xenon Lamp") );
     m_temperaturePresetCB->insertItem( i18n("Sun") );
-    m_temperaturePresetCB->insertItem( i18n("Flash") );
+    m_temperaturePresetCB->insertItem( i18n("Photo Flash") );
     m_temperaturePresetCB->insertItem( i18n("Sky") );
     m_temperaturePresetCB->insertItem( i18n("None") );
     QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature "
                                                  "preset to use:<p>"
-                                                 "<b>40W</b>: 40 Watt incandescent lamp (2680K).<p>"
-                                                 "<b>200W</b>: 200 Watt incandescent lamp (3000K).<p>"
+                                                 "<b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).<p>"
+                                                 "<b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).<p>"
                                                  "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
-                                                 "<b>Tungsten</b>: tungsten lamp or light at 1 hour from "
+                                                 "<b>Tungsten Lamp</b>: tungsten lamp or light at 1 hour from "
                                                  "dusk/dawn (3400K).<p>"
                                                  "<b>Neutral</b>: neutral color temperature (4750K).<p>"
-                                                 "<b>Xenon</b>: xenon lamp or light arc (5000K).<p>"
+                                                 "<b>Xenon Lamp</b>: xenon lamp or light arc (5000K).<p>"
                                                  "<b>Sun</b>: sunny daylight around noon (5500K).<p>"
-                                                 "<b>Flash</b>: electronic photo flash (5600K).<p>"
+                                                 "<b>Photo Flash</b>: electronic photo flash (5600K).<p>"
                                                  "<b>Sky</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gboxSettings);
@@ -282,28 +282,29 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
                                                                   
-    grid2->addMultiCellWidget(m_exposureLabel, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(m_exposureInput, 0, 0, 2, 5);
-    grid2->addMultiCellWidget(m_blackLabel, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput, 1, 1, 1, 5);
-    grid2->addMultiCellWidget(m_darkLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput, 2, 2, 1, 5);
-    grid2->addMultiCellWidget(m_saturationLabel, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput, 3, 3, 1, 5);
-    grid2->addMultiCellWidget(m_gammaLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_greenLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 5, 5, 1, 5);
+    grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 0);
+    grid2->addMultiCellWidget(m_pickTemperature, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(m_temperatureInput, 0, 0, 2, 5);
+    grid2->addMultiCellWidget(m_temperaturePresetLabel, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_temperaturePresetCB, 1, 1, 2, 5);
     
-    grid2->addMultiCellWidget(line, 6, 6, 0, 5);
-
-    grid2->addMultiCellWidget(m_temperatureLabel, 7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_pickTemperature, 7, 7, 1, 1);
-    grid2->addMultiCellWidget(m_temperatureInput, 7, 7, 2, 5);
-    grid2->addMultiCellWidget(m_temperaturePresetLabel, 8, 8, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 8, 8, 1, 5);
+    grid2->addMultiCellWidget(line, 2, 2, 0, 5);
+    
+    grid2->addMultiCellWidget(m_blackLabel, 3, 3, 0, 0);
+    grid2->addMultiCellWidget(m_blackInput, 3, 3, 1, 5);
+    grid2->addMultiCellWidget(m_darkLabel, 4, 4, 0, 0);
+    grid2->addMultiCellWidget(m_darkInput, 4, 4, 1, 5);
+    grid2->addMultiCellWidget(m_saturationLabel, 5, 5, 0, 0);
+    grid2->addMultiCellWidget(m_saturationInput, 5, 5, 1, 5);
+    grid2->addMultiCellWidget(m_gammaLabel, 6, 6, 0, 0);
+    grid2->addMultiCellWidget(m_gammaInput, 6, 6, 1, 5);
+    grid2->addMultiCellWidget(m_greenLabel, 7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_greenInput, 7, 7, 1, 5);
+    grid2->addMultiCellWidget(m_exposureLabel, 8, 8, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure, 8, 8, 1, 1);
+    grid2->addMultiCellWidget(m_exposureInput, 8, 8, 2, 5);
     grid2->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 5);
+
     grid2->setRowStretch(10, 10);
             
     setUserAreaWidget(gboxSettings);
