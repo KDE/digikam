@@ -79,6 +79,15 @@ public:
     }
 
     TAlbum* m_album;
+
+protected:
+    
+    virtual void stateChange(bool val)
+    {
+        QCheckListItem::stateChange(val);
+        TAlbumListView* view = dynamic_cast<TAlbumListView*>(listView());
+        view->emitSignalItemStateChanged();
+    }
 };
 
 ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
@@ -148,7 +157,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     tagsSearchLayout->addWidget(m_tagsSearchEdit);
     tagsBoxLayout->addLayout(tagsSearchLayout);
 
-    m_tagsView = new QListView(tagsBox);
+    m_tagsView = new TAlbumListView(tagsBox);
     tagsBoxLayout->addWidget(m_tagsView);
 
     m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
@@ -167,6 +176,8 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
                                       const QPoint &, int)),
             SLOT(slotRightButtonClicked(QListViewItem*,
                                         const QPoint&, int)));
+    connect(m_tagsView, SIGNAL(signalItemStateChanged()),
+            SLOT(slotModified()));
     connect(m_tagsSearchClearBtn, SIGNAL(clicked()),
             m_tagsSearchEdit, SLOT(clear()));
     connect(m_tagsSearchEdit, SIGNAL(textChanged(const QString&)),
@@ -333,30 +344,28 @@ void ImageDescEdit::slotApply()
 
     ImageInfo* info = m_currItem->imageInfo();
 
-    if (m_modified)
+    if (!m_modified)
+        return;
+
+    info->setCaption(m_commentsEdit->text());
+    info->setDateTime(m_dateTimeEdit->dateTime());
+
+    if (AlbumSettings::instance() &&
+        AlbumSettings::instance()->getSaveExifComments())
     {
-        info->setCaption(m_commentsEdit->text());
-        info->setDateTime(m_dateTimeEdit->dateTime());
+        // store as JPEG Exif comment
+        KFileMetaInfo  metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
 
-        if (AlbumSettings::instance() &&
-            AlbumSettings::instance()->getSaveExifComments())
+        // set Jpeg comment
+        if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
+            && metaInfo.containsGroup("Jpeg EXIF Data"))
         {
-            // store as JPEG Exif comment
-            KFileMetaInfo  metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
-
-            // set Jpeg comment
-            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
-                && metaInfo.containsGroup("Jpeg EXIF Data"))
-            {
-                kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                          << endl;
-                metaInfo["Jpeg EXIF Data"].item("Comment")
-                    .setValue(m_commentsEdit->text());
-                metaInfo.applyChanges();
-            }
+            kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
+                      << endl;
+            metaInfo["Jpeg EXIF Data"].item("Comment")
+                .setValue(m_commentsEdit->text());
+            metaInfo.applyChanges();
         }
-
-        m_modified = false;
     }
 
     info->removeAllTags();
@@ -370,6 +379,8 @@ void ImageDescEdit::slotApply()
         }
         ++it;
     }
+
+    m_modified = false;
 }
 
 void ImageDescEdit::slotOk()
@@ -418,7 +429,11 @@ void ImageDescEdit::slotItemChanged()
                     << fileURL << endl;
         return;
     }
-
+ 
+    m_commentsEdit->blockSignals(true);
+    m_dateTimeEdit->blockSignals(true);
+    m_tagsView->blockSignals(true);
+   
     m_nameLabel->setText(info->name());
     m_thumbLabel->setPixmap(QPixmap());
     m_commentsEdit->setText(info->caption());
@@ -441,6 +456,10 @@ void ImageDescEdit::slotItemChanged()
         }
         ++it;
     }
+
+    m_commentsEdit->blockSignals(false);
+    m_dateTimeEdit->blockSignals(false);
+    m_tagsView->blockSignals(false);
 
     enableButton(User1, m_currItem->nextItem() != 0);
     enableButton(User2, m_currItem->prevItem() != 0);
@@ -851,6 +870,19 @@ void ImageDescEdit::slotTagsSearchChanged()
                      QColor(255,200,200));
         m_tagsSearchEdit->setPalette(pal);
     }
+}
+
+// ------------------------------------------------------------------------
+
+TAlbumListView::TAlbumListView(QWidget* parent)
+    : QListView(parent)
+{
+    
+}
+
+void TAlbumListView::emitSignalItemStateChanged()
+{
+    emit signalItemStateChanged();
 }
 
 #include "imagedescedit.moc"

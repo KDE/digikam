@@ -25,13 +25,13 @@
 
 #include <qguardedptr.h>
 #include <qpixmap.h>
+#include <qlistview.h>
 
 // KDE includes.
 
 #include <kdialogbase.h>
 
 class QLabel;
-class QListView;
 class QPixmap;
 class QCheckListItem;
 class QCheckBox;
@@ -47,6 +47,7 @@ class AlbumIconItem;
 class TAlbum;
 class Album;
 class ThumbnailJob;
+class TAlbumListView;
 
 class ImageDescEdit : public KDialogBase
 {
@@ -66,17 +67,17 @@ protected:
 
 private:
 
-    AlbumIconView *m_view;
-    AlbumIconItem *m_currItem;
-    QLabel        *m_thumbLabel;
-    QLabel        *m_nameLabel;
-    KTextEdit     *m_commentsEdit;
-    QListView     *m_tagsView;
-    QPushButton   *m_recentTagsBtn;
-    KLineEdit     *m_tagsSearchEdit;
-    QToolButton   *m_tagsSearchClearBtn;
-    KDateTimeEdit *m_dateTimeEdit;
-    bool           m_modified;
+    AlbumIconView   *m_view;
+    AlbumIconItem   *m_currItem;
+    QLabel          *m_thumbLabel;
+    QLabel          *m_nameLabel;
+    KTextEdit       *m_commentsEdit;
+    TAlbumListView  *m_tagsView;
+    QPushButton     *m_recentTagsBtn;
+    KLineEdit       *m_tagsSearchEdit;
+    QToolButton     *m_tagsSearchClearBtn;
+    KDateTimeEdit   *m_dateTimeEdit;
+    bool             m_modified;
 
     void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);
@@ -109,5 +110,22 @@ private slots:
     void slotItemDeleted(AlbumIconItem* iconItem);
     void slotCleared();
 };
- 
+
+// ------------------------------------------------------------------------
+
+class TAlbumListView : public QListView
+{
+    Q_OBJECT
+    
+public:
+
+    TAlbumListView(QWidget* parent);
+
+    void emitSignalItemStateChanged();
+    
+signals:
+
+    void signalItemStateChanged();
+};
+
 #endif  // IMAGEDESCEDIT_H
