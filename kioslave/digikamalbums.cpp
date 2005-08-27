@@ -809,7 +809,11 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
     {
         if (( errno == EACCES ) || (errno == EPERM))
         {
-            error( KIO::ERR_ACCESS_DENIED, dst.url() );
+            QFileInfo toCheck(libraryPath + src.path());
+            if (!toCheck.isWritable())
+                error( KIO::ERR_CANNOT_RENAME_ORIGINAL, src.path() );
+            else
+                error( KIO::ERR_ACCESS_DENIED, dst.path() );
         }
         else if (errno == EXDEV)
         {
