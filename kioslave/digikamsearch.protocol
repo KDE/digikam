@@ -12,5 +12,6 @@ Description[nl]=digiKam Zoeken kioslave
 Description[pt]='kioslave' de procura do digiKam
 Description[sr]=kioslave digiKam-ових тражења
 Description[sr@Latn]=kioslave digiKam-ових тражења
+Description[sv]=I/O-slav för Digikams sökning
 Description[tr]=digiKam Arama kioslave
 Class=:local
