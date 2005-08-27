@@ -51,11 +51,16 @@ ScanLib::ScanLib()
 {
     m_progressBar = new KProgressDialog(0);
     m_progressBar->setInitialSize(QSize(300,100), true);
-    m_progressBar->hide();
     QWhatsThis::add( m_progressBar, i18n("This shows the progress of the "
         "scanning. During the scanning all files on disk are put in a "
         "database. This is needed for sorting on exif-date and speeds up "
         "overall performance of digiKam.") );
+
+    // these two lines prevent the dialog to be shown in
+    // findFoldersWhichDoNotExist();
+    m_progressBar->progressBar()->setTotalSteps(1);
+    m_progressBar->progressBar()->setProgress(1);
+    
 }
 
 ScanLib::~ScanLib()
