@@ -129,10 +129,8 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 void ImageEffect_HotPixels::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Album Settings");
-    KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
     config->setGroup("Hot Pixels Tool Settings");
-    m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", albumDBUrl.url()) );
+    m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", QString::null) );
     m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method",
                                          HotPixelFixer::QUADRATIC_INTERPOLATION) );
     
@@ -163,6 +161,7 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
        //Load the selected file and insert into the list
         
        m_blackFrameURL = fileSelectDialog->selectedURL();
+       m_blackFrameListView->clear();
        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
        }
         
