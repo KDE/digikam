@@ -30,8 +30,6 @@
 #include <qlabel.h>
 #include <qtimer.h>
 
-#include <kconfig.h>
-#include <kapplication.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
