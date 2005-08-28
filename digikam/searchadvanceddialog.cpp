@@ -48,11 +48,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    KConfig* config=kapp->config();
-    config->setGroup("AdvancedSearch Settings");
-    int w = config->readNumEntry("Width", 500);
-    int h = config->readNumEntry("Height", 500);
-    resize(w,h);
+    resize(configDialogSize("AdvancedSearch Dialog"));
 
     // two columns, one for the rules, one for the preview.
     QHBoxLayout* hbox = new QHBoxLayout( page );
@@ -158,12 +154,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
 SearchAdvancedDialog::~SearchAdvancedDialog()
 {
-    KConfig* config=kapp->config();
-    config->setGroup("AdvancedSearch Settings");
-    config->writeEntry("Width", width());
-    config->writeEntry("Height", height());
-    config->sync();
-
+    saveDialogSize("AdvancedSearch Dialog");
     delete m_timer;
 }
 
