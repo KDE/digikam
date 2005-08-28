@@ -30,6 +30,8 @@
 #include <qlabel.h>
 #include <qtimer.h>
 
+#include <kconfig.h>
+#include <kapplication.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,6 +47,12 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
+
+    KConfig* config=kapp->config();
+    config->setGroup("AdvancedSearch Settings");
+    int w = config->readNumEntry("Width", 500);
+    int h = config->readNumEntry("Height", 500);
+    resize(w,h);
 
     // two columns, one for the rules, one for the preview.
     QHBoxLayout* hbox = new QHBoxLayout( page );
@@ -150,6 +158,12 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
 SearchAdvancedDialog::~SearchAdvancedDialog()
 {
+    KConfig* config=kapp->config();
+    config->setGroup("AdvancedSearch Settings");
+    config->writeEntry("Width", width());
+    config->writeEntry("Height", height());
+    config->sync();
+
     delete m_timer;
 }
 
