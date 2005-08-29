@@ -86,7 +86,7 @@
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
-        : KMainWindow( 0, "Showfoto" )
+    : KMainWindow( 0, "Showfoto" )
 {
     m_splash                 = 0;
     m_disableBCGActions      = false;
@@ -101,7 +101,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     if(m_config->readBoolEntry("ShowSplash", true) &&
        !kapp->isRestored())
     {
-       m_splash = new SplashScreen("showfoto-splash.png");
+        m_splash = new SplashScreen("showfoto-splash.png");
     }
 
     // -- construct the view ---------------------------------
@@ -143,10 +143,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // If plugin core is available, unplug BCG actions.
     if ( m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
-       {
-       actionCollection()->remove(m_BCGAction);
-       m_disableBCGActions = true;
-       }
+    {
+        actionCollection()->remove(m_BCGAction);
+        m_disableBCGActions = true;
+    }
 
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
@@ -187,14 +187,14 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     if ( urlList.isEmpty() )
     {
-       toggleActions(false);
-       toggleNavigation(0);
-       QTimer::singleShot(0, this, SLOT(slotOpenFile()));
+        toggleActions(false);
+        toggleNavigation(0);
+        QTimer::singleShot(0, this, SLOT(slotOpenFile()));
     }
     else
     {
-       toggleNavigation(1);
-       toggleActions(true);
+        toggleNavigation(1);
+        toggleActions(true);
     }
 }
 
@@ -217,9 +217,9 @@ void ShowFoto::setupActions()
                      actionCollection());
 
     m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
-                                  actionCollection(), "file_fwd");
+                                          actionCollection(), "file_fwd");
     m_backAction = KStdAction::back(this, SLOT(slotPrev()),
-                               actionCollection(), "file_bwd");
+                                    actionCollection(), "file_bwd");
 
     m_firstAction = new KAction(i18n("&First"), "start",
                                 KStdAccel::shortcut( KStdAccel::Home),
@@ -245,9 +245,9 @@ void ShowFoto::setupActions()
     m_saveAsAction->setEnabled(false);
 
     m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
-                              CTRL+Key_P,
-                              this, SLOT(slotFilePrint()),
-                              actionCollection(), "print");
+                                    CTRL+Key_P,
+                                    this, SLOT(slotFilePrint()),
+                                    actionCollection(), "print");
 
     m_propertiesAction = new KAction(i18n("Properties"), "exifinfo",
                                      ALT+Key_Return,
@@ -255,9 +255,9 @@ void ShowFoto::setupActions()
                                      actionCollection(), "file_properties");
 
     m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
-                               SHIFT+Key_Delete,
-                               this, SLOT(slotDeleteCurrentItem()),
-                               actionCollection(), "delete");
+                                     SHIFT+Key_Delete,
+                                     this, SLOT(slotDeleteCurrentItem()),
+                                     actionCollection(), "delete");
 
     // -- Edit actions ----------------------------------------------------------------
 
@@ -390,23 +390,23 @@ void ShowFoto::setupActions()
     m_BCGAction->setDelayed(false);
 
     KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
-                                  this, SLOT(slotChangeBCG()),
-                                  actionCollection(), "gamma_plus");
+                                          this, SLOT(slotChangeBCG()),
+                                          actionCollection(), "gamma_plus");
     KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
-                                  this, SLOT(slotChangeBCG()),
-                                  actionCollection(), "gamma_minus");
+                                          this, SLOT(slotChangeBCG()),
+                                          actionCollection(), "gamma_minus");
     KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
-                                   this, SLOT(slotChangeBCG()),
-                                   actionCollection(), "brightness_plus");
+                                           this, SLOT(slotChangeBCG()),
+                                           actionCollection(), "brightness_plus");
     KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
-                                   this, SLOT(slotChangeBCG()),
-                                   actionCollection(), "brightness_minus");
+                                           this, SLOT(slotChangeBCG()),
+                                           actionCollection(), "brightness_minus");
     KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
-                                     this, SLOT(slotChangeBCG()),
-                                     actionCollection(), "contrast_plus");
+                                             this, SLOT(slotChangeBCG()),
+                                             actionCollection(), "contrast_plus");
     KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
-                                     this, SLOT(slotChangeBCG()),
-                                     actionCollection(), "contrast_minus");
+                                             this, SLOT(slotChangeBCG()),
+                                             actionCollection(), "contrast_minus");
 
     m_BCGAction->insert(incBrightAction);
     m_BCGAction->insert(decBrightAction);
@@ -418,9 +418,9 @@ void ShowFoto::setupActions()
     // -- help actions -----------------------------------------------
 
     m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
-                                     "digikamimageplugins", 0,
-                                     this, SLOT(slotImagePluginsHelp()),
-                                     actionCollection(), "imagepluginshelp");
+                                           "digikamimageplugins", 0,
+                                           this, SLOT(slotImagePluginsHelp()),
+                                           actionCollection(), "imagepluginshelp");
 
     // -- Configure toolbar and shortcuts ---------------------------------------------
 
@@ -676,7 +676,7 @@ void ShowFoto::slotSaveAs()
 
     if ( saveDialog.exec() != KFileDialog::Accepted )
     {
-       return;
+        return;
     }
 
     KURL saveAsURL = saveDialog.selectedURL();
@@ -779,7 +779,7 @@ bool ShowFoto::promptUserSave()
             KMessageBox::warningYesNoCancel(this,
                                             i18n("The image '%1\' has been modified.\n"
                                                  "Do you want to save it?")
-                                                 .arg(m_currentItem->url().filename()),
+                                            .arg(m_currentItem->url().filename()),
                                             QString::null,
                                             KStdGuiItem::save(),
                                             KStdGuiItem::discard());
@@ -948,7 +948,7 @@ void ShowFoto::slotToggleFullScreen()
 
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
-           m_bar->show();
+            m_bar->show();
 
         QObject* obj = child("mainToolBar","KToolBar");
         if (obj)
@@ -969,9 +969,9 @@ void ShowFoto::slotToggleFullScreen()
         if (!m_showBarAction->isChecked())
         {
             if (m_fullScreenHideThumbBar)
-               m_bar->hide();
+                m_bar->hide();
             else
-               m_fullScreenAction->plug(m_bar);
+                m_fullScreenAction->plug(m_bar);
         }
 
         QObject* obj = child("mainToolBar","KToolBar");
@@ -1127,7 +1127,7 @@ void ShowFoto::toggleActions(bool val)
     m_slideShowAction->setEnabled(val);
 
     if (!m_disableBCGActions)
-       m_BCGAction->setEnabled(val);
+        m_BCGAction->setEnabled(val);
 
     QPtrList<Digikam::ImagePlugin> pluginList
         = m_imagePluginLoader->pluginList();
@@ -1213,7 +1213,7 @@ void ShowFoto::slotResize()
     ImageResizeDlg dlg(this, &width, &height);
     if (dlg.exec() == QDialog::Accepted &&
         (width != m_canvas->imageWidth() ||
-        height != m_canvas->imageHeight()))
+         height != m_canvas->imageHeight()))
         m_canvas->resizeImage(width, height);
 }
 
@@ -1254,7 +1254,7 @@ void ShowFoto::slotSetup()
     applySettings();
 
     if ( m_bar->countItems() == 0 )
-       toggleActions(false);
+        toggleActions(false);
 }
 
 void ShowFoto::loadPlugins()
@@ -1308,23 +1308,23 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-        KIO::Job* job = KIO::del( urlCurrent );
-        connect( job, SIGNAL(result( KIO::Job* )),
-                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+            KIO::Job* job = KIO::del( urlCurrent );
+            connect( job, SIGNAL(result( KIO::Job* )),
+                     this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
         }
     }
     else
     {
-    KURL dest("trash:/");
+        KURL dest("trash:/");
 
-    if (!KProtocolInfo::isKnownProtocol(dest))
-    {
-        dest = KGlobalSettings::trashPath();
-    }
+        if (!KProtocolInfo::isKnownProtocol(dest))
+        {
+            dest = KGlobalSettings::trashPath();
+        }
 
-    KIO::Job* job = KIO::move( urlCurrent, dest );
-    connect( job, SIGNAL(result( KIO::Job* )),
-             this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+        KIO::Job* job = KIO::move( urlCurrent, dest );
+        connect( job, SIGNAL(result( KIO::Job* )),
+                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
     }
 }
 
@@ -1342,7 +1342,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     Digikam::ThumbBarItem *item2remove = m_currentItem;
 
     for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
-     {
+    {
         if (item->url().equals(item2remove->url()))
         {
             m_bar->removeItem(item);
@@ -1352,16 +1352,16 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
     // Disable menu actions if no current image.
     if ( m_bar->countItems() == 0 )
-       {
-       toggleActions(false);
-       m_canvas->load(QString::null);
-       m_currentItem = 0;
-       }
+    {
+        toggleActions(false);
+        m_canvas->load(QString::null);
+        m_currentItem = 0;
+    }
     else
-       {
-       m_currentItem = m_bar->currentItem();
-       slotOpenURL(m_currentItem->url());
-       }
+    {
+        m_currentItem = m_bar->currentItem();
+        slotOpenURL(m_currentItem->url());
+    }
 
 }
 
