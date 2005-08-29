@@ -1358,7 +1358,11 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
        m_currentItem = 0;
        }
     else
-        slotOpenURL(m_currentItem->url());
+       {
+       m_currentItem = m_bar->currentItem();
+       slotOpenURL(m_currentItem->url());
+       }
+
 }
 
 void ShowFoto::slotContextMenu()
