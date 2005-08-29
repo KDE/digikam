@@ -564,7 +564,7 @@ void ShowFoto::slotOpenFile()
         return;
 
     QString mimes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
-    KURL::List urls =  KFileDialog::getOpenURLs(QString::null,
+    KURL::List urls =  KFileDialog::getOpenURLs(KGlobalSettings::documentPath(),
                                                 mimes,
                                                 this,
                                                 i18n("Open Images"));
