@@ -1355,6 +1355,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
        {
        toggleActions(false);
        m_canvas->load(QString::null);
+       m_currentItem = 0;
        }
     else
         slotOpenURL(m_currentItem->url());
