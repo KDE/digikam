@@ -1381,7 +1381,7 @@ void ShowFoto::slotUpdateItemInfo(void)
                    .arg(QString::number(index))
                    .arg(QString::number(m_itemsNb));
     
-        setCaption(i18n("%1").arg(m_currentItem->url().directory()));
+        setCaption(m_currentItem->url().directory());
     }
     else 
     {
