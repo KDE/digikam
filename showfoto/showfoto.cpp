@@ -545,6 +545,7 @@ void ShowFoto::saveSettings()
     if (m_canvas->getHistogramPosition(pt))
         rc = QRect(pt.x(), pt.y(), 1, 1);
     m_config->writeEntry("Histogram Rectangle", rc);
+    m_config->sync();
 }
 
 void ShowFoto::closeEvent(QCloseEvent* e)
