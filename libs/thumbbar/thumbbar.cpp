@@ -309,6 +309,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     
     d->count++;
     triggerUpdate();
+    emit signalItemAdded();
 }
 
 void ThumbBarView::removeItem(ThumbBarItem* item)

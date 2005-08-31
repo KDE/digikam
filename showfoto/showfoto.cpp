@@ -88,6 +88,7 @@
 ShowFoto::ShowFoto(const KURL::List& urlList)
     : KMainWindow( 0, "Showfoto" )
 {
+    m_itemsNb                = 0;
     m_splash                 = 0;
     m_disableBCGActions      = false;
     m_deleteItem2Trash       = true;
@@ -159,6 +160,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
 
+    connect(m_bar, SIGNAL(signalItemAdded()),
+            this, SLOT(slotUpdateItemInfo()));
+    
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
@@ -873,31 +877,12 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #endif
     m_canvas->load(localFile);
 
-    int index = 1;
-    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
-    {
-        if (item->url().equals(m_currentItem->url()))
-        {
-            break;
-        }
-        index++;
-    }
-
-    QString text = m_currentItem->url().filename() +
-                   i18n(" (%2 of %3)")
-                   .arg(QString::number(index))
-                   .arg(QString::number(m_bar->countItems()));
-    m_nameLabel->setText(text);
-
-    setCaption(i18n("Showfoto - %1").arg(m_currentItem->url().directory()));
-
-    toggleNavigation( index );
+    slotUpdateItemInfo();
 }
-
 
 void ShowFoto::toggleNavigation(int index)
 {
-    if ( m_bar->countItems() == 0 || m_bar->countItems() == 1 ) {
+    if ( m_itemsNb == 0 || m_itemsNb == 1 ) {
         m_backAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
@@ -916,7 +901,7 @@ void ShowFoto::toggleNavigation(int index)
         m_firstAction->setEnabled(false);
     }
 
-    if (index == m_bar->countItems()) {
+    if (index == m_itemsNb) {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
@@ -1254,8 +1239,11 @@ void ShowFoto::slotSetup()
     loadPlugins();
     applySettings();
 
-    if ( m_bar->countItems() == 0 )
+    if ( m_itemsNb == 0 )
+    {
+        slotUpdateItemInfo();
         toggleActions(false);
+    }
 }
 
 void ShowFoto::loadPlugins()
@@ -1350,10 +1338,13 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
             break;
         }
     }
+    
+    m_itemsNb = m_bar->countItems();
 
     // Disable menu actions if no current image.
-    if ( m_bar->countItems() == 0 )
+    if ( m_itemsNb == 0 )
     {
+        slotUpdateItemInfo();
         toggleActions(false);
         m_canvas->load(QString::null);
         m_currentItem = 0;
@@ -1366,6 +1357,43 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
 }
 
+void ShowFoto::slotUpdateItemInfo(void)
+{
+    m_itemsNb = m_bar->countItems();
+    int index = 0;
+    QString text;
+    
+    if (m_itemsNb > 0)
+    {
+        index = 1;
+        
+        for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+        {
+            if (item->url().equals(m_currentItem->url()))
+            {
+                break;
+            }
+            index++;
+        }
+
+        text = m_currentItem->url().filename() +
+                   i18n(" (%2 of %3)")
+                   .arg(QString::number(index))
+                   .arg(QString::number(m_itemsNb));
+    
+        setCaption(i18n("%1").arg(m_currentItem->url().directory()));
+    }
+    else 
+    {
+        text = "";
+        setCaption(i18n(""));
+    }
+    
+    m_nameLabel->setText(text);
+    
+    toggleNavigation( index );
+}
+    
 void ShowFoto::slotContextMenu()
 {
     m_contextMenu->exec(QCursor::pos());

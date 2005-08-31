@@ -79,6 +79,7 @@ private:
 signals:
 
     void signalURLSelected(const KURL& url);
+    void signalItemAdded(void);
     
 private slots:
 

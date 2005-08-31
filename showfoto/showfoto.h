@@ -95,6 +95,7 @@ private slots:
     
     void slotChanged(bool, bool);
     void slotSelected(bool);
+    void slotUpdateItemInfo(void);
     
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
@@ -182,6 +183,7 @@ private:
     
     int                    m_JPEGCompression;
     int                    m_PNGCompression;
+    int                    m_itemsNb;
     
     bool                   m_fullScreen;
     bool                   m_TIFFCompression;
