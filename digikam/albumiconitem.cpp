@@ -159,6 +159,18 @@ int AlbumIconItem::compare(IconItem *item)
     return 0;
 }
 
+QRect AlbumIconItem::clickToOpenRect()
+{
+    if (tightPixmapRect_.isNull())
+        return rect();
+    
+    QRect pixmapRect = tightPixmapRect_;
+    QRect r          = rect();
+
+    pixmapRect.moveBy(r.x(), r.y());
+    return pixmapRect;
+}
+
 void AlbumIconItem::paintItem()
 {
     QPixmap pix;
@@ -185,6 +197,9 @@ void AlbumIconItem::paintItem()
         p.drawPixmap(r.x() + (r.width()-thumbnail->width())/2,
                      r.y() + (r.height()-thumbnail->height())/2,
                      *thumbnail);
+        tightPixmapRect_.setRect(r.x() + (r.width()-thumbnail->width())/2,
+                                 r.y() + (r.height()-thumbnail->height())/2,
+                                 thumbnail->width(), thumbnail->height());
         dirty_ = false;
     }
 

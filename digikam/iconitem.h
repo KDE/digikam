@@ -51,6 +51,7 @@ public:
     IconView* iconView() const;
 
     virtual int compare(IconItem *item);
+    virtual QRect clickToOpenRect();
 
 protected:
 

@@ -280,8 +280,6 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
         QPainter p(&pix);
         p.setPen(QPen(QColor(0,0,0),1));
         p.drawRect(0,0,w,h);
-        p.setPen(QPen(QColor(255,255,255),1));
-        p.drawRect(1,1,w-2,h-2);
         p.end();
     }
 

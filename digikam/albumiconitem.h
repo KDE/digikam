@@ -60,6 +60,7 @@ public:
     QRect thumbnailRect() const;
 
     virtual int compare(IconItem *item);
+    virtual QRect clickToOpenRect();
     
 protected:
 
@@ -70,6 +71,7 @@ private:
     ImageInfo           *info_;
     AlbumIconView       *view_;
     bool                 dirty_;
+    QRect                tightPixmapRect_;
 };
 
 

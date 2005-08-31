@@ -53,7 +53,7 @@ public:
         currItem   = 0;
         anchorItem = 0;
         clearing   = false;
-        spacing    = 5;
+        spacing    = 10;
 
         rubber       = 0;
         dragging     = false;
@@ -982,7 +982,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
         if (KGlobalSettings::changeCursorOverIcon())
         {
-            if (item)
+            if (item && item->clickToOpenRect().contains(e->pos()))
                 setCursor(KCursor::handCursor());
             else
                 unsetCursor();
@@ -1127,7 +1127,12 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
             if (prevCurrItem)
                 prevCurrItem->repaint();
             if (KGlobalSettings::singleClick())
-                itemClickedToOpen(item);
+            {
+                if (item->clickToOpenRect().contains(e->pos()))
+                {
+                    itemClickedToOpen(item);
+                }
+            }
         }
     }
 }

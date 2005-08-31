@@ -83,6 +83,11 @@ QRect IconItem::rect() const
     return r;
 }
 
+QRect IconItem::clickToOpenRect()
+{
+    return rect();
+}
+
 bool IconItem::move(int x, int y)
 {
     if (m_x == x && m_y == y)
