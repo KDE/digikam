@@ -19,7 +19,6 @@
  *
  * ============================================================ */
 
-
 #ifndef DIRSELECTWIDGET_H
 #define DIRSELECTWIDGET_H
 
@@ -33,23 +32,23 @@
 #include <kfiletreeview.h>
 #include <kurl.h>
 
-class QListViewItem;
-
 namespace DigikamSuperImposeImagesPlugin
 {
 
-class DirSelectWidget : public QWidget 
+class DirSelectWidget : public KFileTreeView 
 {
 Q_OBJECT
 
 public:
      
-    DirSelectWidget( KURL rootUrl, KURL currentUrl, QWidget* parent, const char* name=0);
+    DirSelectWidget( KURL rootUrl=KURL::KURL("/"), KURL currentUrl=KURL::KURL(), 
+                 QWidget* parent=0, const char* name=0, QString headerLabel=QString::null);
     ~DirSelectWidget();
      
     KURL path() const;
-    void setRootPath(KURL rootUrl, KURL currentUrl=KURL::KURL(QString::QString::null));
     KURL rootPath(void);
+    void setRootPath(KURL rootUrl, KURL currentUrl=KURL::KURL(QString::QString::null));
+    void setCurrentPath(KURL currentUrl);
 
 signals :
     
@@ -69,4 +68,3 @@ private:
 }  // NameSpace DigikamSuperImposeImagesPlugin
 
 #endif /* DIRSELECTWIDGET_H */
-

@@ -51,6 +51,7 @@
 #include <kfiledialog.h> 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 
 // Digikam includes.
 
@@ -77,10 +78,10 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     KConfig *config = kapp->config();
     config->setGroup("Album Settings");
-    KURL albumDBUrl( config->readPathEntry("Album Path", QString::null) );
+    KURL albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
     config->setGroup("Template Superimpose Tool Settings");
-    m_templatesRootUrl.setPath( config->readPathEntry("Templates Root URL", albumDBUrl.path()) );
-    m_templatesUrl.setPath( config->readPathEntry("Templates URL", albumDBUrl.path()) );
+    m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
+    m_templatesUrl.setPath( config->readEntry("Templates URL", albumDBUrl.path()) );
     
     // About data and help button.
     
@@ -146,7 +147,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
-    QWhatsThis::add( templateDirButton, i18n("<p>Change here the current templates' root directory.") );
+    QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 2);    
@@ -177,8 +178,8 @@ ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 {
     KConfig *config = kapp->config();
     config->setGroup("Template Superimpose Tool Settings");
-    config->writePathEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
-    config->writePathEntry( "Templates URL", m_templatesUrl.path() );
+    config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
+    config->writeEntry( "Templates URL", m_templatesUrl.path() );
     config->sync();
 }
 
