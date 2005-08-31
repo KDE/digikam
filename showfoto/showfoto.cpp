@@ -1386,7 +1386,7 @@ void ShowFoto::slotUpdateItemInfo(void)
     else 
     {
         text = "";
-        setCaption(i18n(""));
+        setCaption("");
     }
     
     m_nameLabel->setText(text);
