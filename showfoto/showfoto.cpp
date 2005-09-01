@@ -941,11 +941,14 @@ void ShowFoto::slotToggleFullScreen()
         if (!m_showBarAction->isChecked())
             m_bar->show();
 
-        QObject* obj = child("mainToolBar","KToolBar");
+        QObject* obj = child("ToolBar","KToolBar");
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            toolBar->show();
+            if (m_fullScreenAction->isPlugged(toolBar))
+                m_fullScreenAction->unplug(toolBar);
+            if (toolBar->isHidden())
+                toolBar->show();
         }
 
         m_fullScreen = false;
@@ -965,7 +968,7 @@ void ShowFoto::slotToggleFullScreen()
                 m_fullScreenAction->plug(m_bar);
         }
 
-        QObject* obj = child("mainToolBar","KToolBar");
+        QObject* obj = child("ToolBar","KToolBar");
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
