@@ -863,7 +863,12 @@ bool ShowFoto::save()
 void ShowFoto::slotOpenURL(const KURL& url)
 {
     if(!promptUserSave())
+    {
+        m_bar->blockSignals(true);
+        m_bar->setSelected(m_currentItem);
+        m_bar->blockSignals(false);
         return;
+    }
 
     m_currentItem = m_bar->currentItem();
     if(!m_currentItem)
