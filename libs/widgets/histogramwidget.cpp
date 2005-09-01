@@ -264,6 +264,20 @@ void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
         m_selectionHistogram = 0L;
 }
 
+void HistogramWidget::updateSelectionData(uint *s_data, uint s_w, uint s_h,
+                                          bool blinkComputation)
+{
+    m_blinkComputation = blinkComputation;
+    
+    // Remove old histogram data from memory.
+    
+    if (m_selectionHistogram)
+       delete m_selectionHistogram;
+           
+    // Calc new histogram data   
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, this);
+}
+
 void HistogramWidget::slotBlinkTimerDone( void )
 {
     m_blinkFlag = !m_blinkFlag;

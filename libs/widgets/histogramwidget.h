@@ -112,9 +112,12 @@ public:
     // Stop current histogram computations.
     void stopHistogramComputation(void);
     
-    // Update histogram data method.
+    // Update histogram data methods.
     void updateData(uint *i_data, uint i_w, uint i_h, 
                     uint *s_data=0, uint s_w=0, uint s_h=0, 
+                    bool blinkComputation=true);
+    
+    void updateSelectionData(uint *s_data, uint s_w, uint s_h, 
                     bool blinkComputation=true);
     
     void setHistogramGuide(QColor color);                    
