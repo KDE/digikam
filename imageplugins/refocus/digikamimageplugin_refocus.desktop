@@ -5,6 +5,7 @@ Name[sr]=Префокусирање
 Name[sr@Latn]=Префокусирање
 Name[sv]=Insticksprogram för omfokusering
 Name[tr]=ResimEklentisi_Odakla
+Name[xx]=xxImagePlugin_Refocusxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -19,6 +20,7 @@ Comment[sr]=digiKam-ов прикључак за префокусирање сл
 Comment[sr@Latn]=digiKam-ов прикључак за префокусирање слике
 Comment[sv]=Digikam insticksprogram för att fokusera om en bild
 Comment[tr]=Bir resmi yeniden odaklamak için digiKam eklentisi
+Comment[xx]=xxdigiKam plugin to refocus an imagexx
 
 X-KDE-Library=digikamimageplugin_refocus
 author=Gilles Caulier, caulier dot gilles at free dot fr

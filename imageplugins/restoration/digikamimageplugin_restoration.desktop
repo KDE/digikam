@@ -8,6 +8,7 @@ Name[sr]=Рестаурација
 Name[sr@Latn]=Slikovni priključak — Restauracija
 Name[sv]=Insticksprogram för bildrestaurering
 Name[tr]=ResimEklentisi_Onarım
+Name[xx]=xxImagePlugin_Restorationxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -27,6 +28,7 @@ Comment[sr]=digiKam-ов прикључак за поправку фотогра
 Comment[sr@Latn]=digiKam-ov priključak za popravku fotografija
 Comment[sv]=Digikam insticksprogram för restaurering av ett fotografi
 Comment[tr]=Fotoğraf onarmak için digiKam eklentisi
+Comment[xx]=xxdigiKam plugin to restore a photographxx
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at free dot fr

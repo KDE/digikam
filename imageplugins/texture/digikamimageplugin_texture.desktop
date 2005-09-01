@@ -7,6 +7,7 @@ Name[sr]=Текстуре
 Name[sr@Latn]=Slikovni priključak — Teksture
 Name[sv]=Insticksprogram för struktur
 Name[tr]=ResimEklentisi_Doku
+Name[xx]=xxImagePlugin_Texturexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -27,6 +28,7 @@ Comment[sr]=digiKam-ов прикључак за додавање текстур
 Comment[sr@Latn]=digiKam-ov priključak za dodavanje tekstura u sliku
 Comment[sv]=Digikam insticksprogram för att lägga till struktur på en bild
 Comment[tr]=Bir resme doku eklemek için digiKam eklentisi
+Comment[xx]=xxdigiKam plugin to apply texture on imagexx
 
 X-KDE-Library=digikamimageplugin_texture
 author=Gilles Caulier, caulier dot gilles at free dot fr

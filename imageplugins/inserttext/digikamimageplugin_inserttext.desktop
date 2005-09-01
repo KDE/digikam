@@ -8,6 +8,7 @@ Name[sr]=Убаци текст
 Name[sr@Latn]=Slikovni priključak — Ubaci tekst
 Name[sv]=Insticksprogram för infoga text
 Name[tr]=ResimEklentisi_MetinEkle
+Name[xx]=xxImagePlugin_InsertTextxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -27,6 +28,7 @@ Comment[sr]=digiKam-ов прикључак за убацивање текста
 Comment[sr@Latn]=digiKam-ov priključak za ubacivanje teksta u sliku
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
 Comment[tr]=digiKam için resme metin ekleme eklentisi
+Comment[xx]=xxInsert text to image plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_inserttext
 author=Gilles Caulier, caulier dot gilles at free dot fr

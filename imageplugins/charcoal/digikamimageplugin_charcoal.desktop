@@ -9,6 +9,7 @@ Name[sr@Latn]=Slikovni priključak — Ugljen
 Name[sv]=Insticksprogram för kolteckning
 Name[ta]=பிம்பசொருகுப்பொருள்_கார்கோல்
 Name[tr]=ResimEklentisi_Karakalem
+Name[xx]=xxImagePlugin_Charcoalxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -27,6 +28,7 @@ Comment[sr@Latn]=Priključak efekta crteža ugljenom za digiKam
 Comment[sv]=Digikam insticksprogram för kolteckningsbildeffekt
 Comment[ta]=டிஜிகாமிற்கான சார்க்கோல் வரையும் படிம விளைவு சொருகுப்பொருள்
 Comment[tr]=digiKam için karakalem resim etkisi eklentisi
+Comment[xx]=xxCharcoal drawing image effect plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_charcoal
 author=Gilles Caulier, caulier dot gilles at free dot fr

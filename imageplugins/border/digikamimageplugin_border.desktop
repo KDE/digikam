@@ -8,6 +8,7 @@ Name[sr]=Оквир
 Name[sr@Latn]=Slikovni priključak — Okvir
 Name[sv]=Insticksprogram för bildkanter
 Name[tr]=ResimEklentisi_Çerçeve
+Name[xx]=xxImagePlugin_Borderxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -27,6 +28,7 @@ Comment[sr]=Прикључак за digiKam који додаје оквир н�
 Comment[sr@Latn]=Priključak za digiKam koji dodaje okvir na sliku
 Comment[sv]=Digikam insticksprogram för tillägg av kanter
 Comment[tr]=digiKam için resme çerçeve eklenme eklentisi
+Comment[xx]=xxAdd border to image plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at free dot fr

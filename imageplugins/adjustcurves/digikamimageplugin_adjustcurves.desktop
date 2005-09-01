@@ -8,6 +8,7 @@ Name[sr]=Подешавање кривих
 Name[sr@Latn]=Slikovni priključak — podešavanje krivih
 Name[sv]=Insticksprogram för justering av kurvor
 Name[tr]=ResimEklentisi_EğriAyarla
+Name[xx]=xxImagePlugin_AdjustCurvesxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -28,6 +29,7 @@ Comment[sr@Latn]=digiKam-ov priključak za podešavanje krivih histograma slike
 Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
 Comment[ta]=டிஜிகாமிர்க்கான படிவ வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
 Comment[tr]=digiKam için resim histogram eğrileri ayarlama eklentisi
+Comment[xx]=xxImage histogram adjust curves plugin for digiKamxx
 Comment[zh_CN]=digiKam 的直方图调整曲线插件
 
 X-KDE-Library=digikamimageplugin_adjustcurves

@@ -9,6 +9,7 @@ Name[sr@Latn]=Slikovni priključak — otklanjanje fleka
 Name[sv]=Insticksprogram för ytutjämning
 Name[ta]=பிம்பசொருகுப்பொருள்_ 
 Name[tr]=ResimEklentisi_NoktacıkGider
+Name[xx]=xxImagePlugin_Despecklexx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -22,6 +23,7 @@ Comment[sr]=digiKam-ов прикључак за смањење шума
 Comment[sr@Latn]=digiKam-ов прикључак за смањење шума
 Comment[sv]=Digikam insticksprogram för brusreducering
 Comment[tr]=digiKam için Parazit Azaltma eklentisi
+Comment[xx]=xxNoise Reduction plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr

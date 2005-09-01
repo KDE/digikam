@@ -8,6 +8,7 @@ Name[sr]=Слободно окретање
 Name[sr@Latn]=Slikovni priključak — Slobodno okretanje
 Name[sv]=Insticksprogram för bildrotation
 Name[tr]=ResimEklentisi_SerbestDöndürme
+Name[xx]=xxImagePlugin_FreeRotationxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -28,6 +29,7 @@ Comment[sr@Latn]=digiKam-ov priključak za slobodno okretanje
 Comment[sv]=Digikam insticksprogram för bildrotation
 Comment[ta]=டிஜிகாமிற்கான எளிதாக சுழலும் செருகு பொருள்
 Comment[tr]=digiKam için serbest döndürme eklentisi
+Comment[xx]=xxFree rotation plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_freerotation
 author=Gilles Caulier, caulier dot gilles at free dot fr

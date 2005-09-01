@@ -9,6 +9,7 @@ Name[sr@Latn]=Slikovni priključak — Zrnast film
 Name[sv]=Insticksprogram för filmkorn
 Name[ta]=பிம்பசொருகுப்பொருள்_ ஃபிலிம்க்ரைன்
 Name[tr]=ResimEklentisi_FilmTanecikleri
+Name[xx]=xxImagePlugin_FilmGrainxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -28,6 +29,7 @@ Comment[sr@Latn]=digiKam-ov priključak za efekat zrnastosti filma
 Comment[sv]=Digikam insticksprogram för filmkornsbildeffekt
 Comment[ta]=டிஜிகாமிற்கான ஃபிலிம் சிறுபுள்ளிகள் உள்ள பிம்ப விளைவு பொருள்
 Comment[tr]=digiKam için film tanecikleri etkisi eklentisi
+Comment[xx]=xxFilm grain image effect plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_filmgrain
 author=Gilles Caulier, caulier dot gilles at free dot fr

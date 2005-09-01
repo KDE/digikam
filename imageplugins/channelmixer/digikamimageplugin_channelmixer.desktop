@@ -7,6 +7,7 @@ Name[sr]=Миксета канала
 Name[sr@Latn]=Slikovni priključak — Mikseta kanala
 Name[sv]=Insticksprogram för kanalblandning
 Name[tr]=ResimEklentisi_KanalKarıştırıcı
+Name[xx]=xxImagePlugin_ChannelMixerxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -27,6 +28,7 @@ Comment[sr]=Прикључак миксете канала боја за digiKam
 Comment[sr@Latn]=Priključak miksete kanala boja za digiKam
 Comment[sv]=Digikam insticksprogram för att blanda bildfärgkanaler
 Comment[tr]=digiKam için resim kanalları karıştıcı eklentisi
+Comment[xx]=xxImage color channels mixer plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_channelmixer
 author=Caulier Gilles, caulier dot gilles at free dot fr

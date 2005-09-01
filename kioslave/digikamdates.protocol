@@ -20,4 +20,5 @@ Description[sr]=kioslave digiKam-ових датума
 Description[sr@Latn]=kioslave digiKam-ових датума
 Description[sv]=I/O-slav för Digikams datum
 Description[tr]=digiKam Tarihler kioslave
+Description[xx]=xxdigiKam Dates kioslavexx
 Class=:local

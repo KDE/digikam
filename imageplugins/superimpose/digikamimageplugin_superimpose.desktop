@@ -8,6 +8,7 @@ Name[sr]=Надоградња
 Name[sr@Latn]=Slikovni priključak — Nadogradnja
 Name[sv]=Insticksprogram för överlagring
 Name[tr]=ResimEklentisi_Büyüt
+Name[xx]=xxImagePlugin_SuperImposexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -26,6 +27,7 @@ Comment[sr]=digiKam-ов прикључак надоградњу шаблони�
 Comment[sr@Latn]=digiKam-ov priključak nadogradnju šablonima
 Comment[sv]=Digikam insticksprogram för överlagringsmall
 Comment[tr]=digiKam için şablon büyütme eklentisi
+Comment[xx]=xxTemplate superimpose plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at free dot fr

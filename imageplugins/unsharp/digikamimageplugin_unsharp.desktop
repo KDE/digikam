@@ -8,6 +8,7 @@ Name[sr]=Ублажавање
 Name[sr@Latn]=Slikovni priključak — Ublažavanje
 Name[sv]=Insticksprogram för oskarp mask
 Name[tr]=ResimEklentisi_Yumuşat
+Name[xx]=xxImagePlugin_Unsharpxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -24,6 +25,7 @@ Comment[sr]=digiKam-ов прикључак за ублажавање маске
 Comment[sr@Latn]=digiKam-ov priključak za ublažavanje maske slike
 Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
 Comment[tr]=digiKam için resim bulanıklaştırma filtresi eklentisi
+Comment[xx]=xxUnsharp mask image filter plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_unsharp
 author=Caulier Gilles, caulier dot gilles at free dot fr

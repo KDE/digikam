@@ -8,6 +8,7 @@ Name[sr]=Перспектива
 Name[sr@Latn]=Slikovni priključak — Perspektiva
 Name[sv]=Insticksprogram för perspektiv
 Name[tr]=ResimEklentisi_Perspektif
+Name[xx]=xxImagePlugin_Perspectivexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -27,6 +28,7 @@ Comment[sr]=digiKam-ов прикључак за перспективу
 Comment[sr@Latn]=digiKam-ov priključak za perspektivu
 Comment[sv]=Digikam insticksprogram med perspektivverktyg
 Comment[tr]=digiKam için perspektif aracı eklentisi
+Comment[xx]=xxPerspective tool plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_perspective
 author=Gilles Caulier, caulier dot gilles at free dot fr

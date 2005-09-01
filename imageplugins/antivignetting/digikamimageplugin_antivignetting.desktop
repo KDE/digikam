@@ -8,6 +8,7 @@ Name[sr]=Девињетизација
 Name[sr@Latn]=Slikovni priključak — Devinjetizacija
 Name[sv]=Insticksprogram för antivinjettering
 Name[tr]=ResimEklentisi_KenarKararmalarınıDüzelt
+Name[xx]=xxImagePlugin_AntiVignettingxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -25,6 +26,7 @@ Comment[sr]=Digikam-ов прикључак за ефекат девињетиз
 Comment[sr@Latn]=Digikam-ov priključak za efekat devinjetizacije
 Comment[sv]=Digikam insticksprogram för antivinjetteringsbildeffekt
 Comment[tr]=digiKam için kenar kararmalarını düzeltme eklentisi
+Comment[xx]=xxAnti Vignetting image effect plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_antivignetting
 author=Gilles Caulier, caulier dot gilles at free dot fr
