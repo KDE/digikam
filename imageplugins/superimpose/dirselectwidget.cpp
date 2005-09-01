@@ -117,10 +117,9 @@ void DirSelectWidget::setCurrentPath(KURL currentUrl)
     if ( !d->m_pendingPath[0].isEmpty() )
         d->m_pendingPath.prepend( "" ); // ensure we open the root first.        
         
-    load();
-
     connect( d->m_item, SIGNAL( populateFinished(KFileTreeViewItem *) ),
              this, SLOT( load() ) );
+    load();
 }
 
 void DirSelectWidget::setRootPath(KURL rootUrl, KURL currentUrl)
