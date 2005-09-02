@@ -198,8 +198,8 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
         delete item->m_pixmap;
         item->m_pixmap = 0;
     }
-    KIO::PreviewJob* job = KIO::filePreview(item->url(),
-                                            d->tileSize);
+    KIO::PreviewJob* job = KIO::filePreview(item->url(), d->tileSize, 0, 0, 70, true, false);
+    
     connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
             SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
     connect(job, SIGNAL(failed(const KFileItem *)),
@@ -374,8 +374,8 @@ void ThumbBarView::rearrangeItems()
     
     if (!urlList.isEmpty())
     {
-        KIO::PreviewJob* job = KIO::filePreview(urlList,
-                                                d->tileSize);
+        KIO::PreviewJob* job = KIO::filePreview(urlList, d->tileSize, 0, 0, 70, true, false);
+        
         connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
                 SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
         connect(job, SIGNAL(failed(const KFileItem *)),
