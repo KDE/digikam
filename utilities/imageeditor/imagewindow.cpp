@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kcursor.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -960,16 +961,17 @@ void ImageWindow::slotSave()
 
 bool ImageWindow::save()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     KTempFile tmpFile(m_urlCurrent.directory(false), QString::null);
     tmpFile.setAutoDelete(true);
 
     bool result = m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, 
                                           m_PNGCompression, m_TIFFCompression);
     
-    
     if (!result)
     {
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
                                 .arg(m_urlCurrent.filename())
                                 .arg(m_urlCurrent.path().section('/', -2, -2)));
         return false;
@@ -994,6 +996,7 @@ bool ImageWindow::save()
     if (::rename(QFile::encodeName(tmpFile.name()),
                  QFile::encodeName(m_urlCurrent.path())) != 0)
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
         return false;
@@ -1002,7 +1005,7 @@ bool ImageWindow::save()
     m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    
+    kapp->restoreOverrideCursor();
     return true;
 }
 
@@ -1078,9 +1081,9 @@ void ImageWindow::slotSaveAs()
             return;
     }
 
-
     // Now do the actual saving -----------------------------------------------------
 
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     KTempFile tmpFile(newURL.directory(false), QString::null);
     tmpFile.setAutoDelete(true);
 
@@ -1090,6 +1093,7 @@ void ImageWindow::slotSaveAs()
 
     if (result == false)
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
@@ -1123,6 +1127,7 @@ void ImageWindow::slotSaveAs()
     if (::rename(QFile::encodeName(tmpFile.name()),
                  QFile::encodeName(newURL.path())) != 0)
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save to new file"),
                            i18n("Error Saving File"));
         return;
@@ -1134,6 +1139,7 @@ void ImageWindow::slotSaveAs()
     PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
     if (!srcAlbum)
     {
+        kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
         return;
     }
@@ -1142,11 +1148,11 @@ void ImageWindow::slotSaveAs()
     PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
     if (!dstAlbum)
     {
+        kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
         return;
     }
-    
-    
+        
     // Now copy the metadata of the original file to the new file ------------
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
@@ -1166,6 +1172,7 @@ void ImageWindow::slotSaveAs()
     emit signalFileAdded(newURL);
 
     m_canvas->setModified( false );
+    kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
