@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kcursor.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kapplication.h>
@@ -713,12 +714,15 @@ void ShowFoto::slotSaveAs()
         if (result != KMessageBox::Yes)
             return;
     }
+    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
 
     QString tmpFile = saveAsURL.directory() + QString("/.showfoto-tmp-")
                       + saveAsURL.filename();
     if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
                                  m_TIFFCompression, format.lower()))
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save file '%1'")
                            .arg(saveAsURL.filename()));
         ::unlink(QFile::encodeName(tmpFile));
@@ -748,6 +752,7 @@ void ShowFoto::slotSaveAs()
     if (::rename(QFile::encodeName(tmpFile),
                  QFile::encodeName(saveAsURL.path())) != 0)
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to overwrite original file"));
         ::unlink(QFile::encodeName(tmpFile));
         return;
@@ -771,6 +776,7 @@ void ShowFoto::slotSaveAs()
     }
 
     m_bar->setSelected(foundItem);
+    kapp->restoreOverrideCursor();
 }
 
 bool ShowFoto::promptUserSave()
@@ -818,11 +824,14 @@ bool ShowFoto::save()
         return false;
     }
 
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
     QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
                       + url.filename();
     if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
                                  m_TIFFCompression))
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save file '%1'")
                            .arg(url.filename()));
         ::unlink(QFile::encodeName(tmpFile));
@@ -848,6 +857,7 @@ bool ShowFoto::save()
     if (::rename(QFile::encodeName(tmpFile),
                  QFile::encodeName(url.path())) != 0)
     {
+        kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to overwrite original file"));
         ::unlink(QFile::encodeName(tmpFile));
         return false;
@@ -856,6 +866,7 @@ bool ShowFoto::save()
     m_canvas->setModified( false );
     slotOpenURL(m_currentItem->url());
     m_bar->invalidateThumb(m_currentItem);
+    kapp->restoreOverrideCursor();
 
     return true;
 }
