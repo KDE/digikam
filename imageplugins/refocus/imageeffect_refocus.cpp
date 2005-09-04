@@ -88,9 +88,9 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Circular sharpness:"), gboxSettings);
     m_radius = new KDoubleNumInput(gboxSettings);
     m_radius->setPrecision(2);
-    m_radius->setRange(0.0, 5.0, 0.001, true);
+    m_radius->setRange(0.0, 5.0, 0.01, true);
     QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the Circular convolution. It is the most important "
-                                    "parameter for using the plugin. For most images the default value of 0.9 "
+                                    "parameter for using the plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
     gridSettings->addWidget(label2, 0, 0);
@@ -100,8 +100,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     QLabel *label4 = new QLabel(i18n("Correlation:"), gboxSettings);
     m_correlation = new KDoubleNumInput(gboxSettings);
-    m_correlation->setPrecision(3);
-    m_correlation->setRange(0.0, 1.0, 0.001, true);
+    m_correlation->setPrecision(2);
+    m_correlation->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help reducing artifacts. The correlation can "
                                          "range  from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                          "Using a high value for the Correlation will reduce the sharpening effect of the "
@@ -130,7 +130,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Gaussian sharpness:"), gboxSettings);
     m_gauss = new KDoubleNumInput(gboxSettings);
     m_gauss->setPrecision(2);
-    m_gauss->setRange(0.0, 1.0, 0.001, true);
+    m_gauss->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your "
                                    "blurring is of Gaussian type. In most cases you should set this parameter to 0, because "
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
@@ -245,10 +245,10 @@ void ImageEffect_Refocus::resetValues(void)
     m_noise->blockSignals(true);
     
     m_matrixSize->setValue(5);
-    m_radius->setValue(0.9);
+    m_radius->setValue(1.0);
     m_gauss->setValue(0.0);
     m_correlation->setValue(0.5);
-    m_noise->setValue(0.02);
+    m_noise->setValue(0.03);
     
     m_matrixSize->blockSignals(false);
     m_radius->blockSignals(false);
