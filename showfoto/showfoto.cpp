@@ -707,9 +707,15 @@ void ShowFoto::slotSaveAs()
     if ( fi.exists() )
     {
         int result =
-            KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
-                                                  "Are you sure you want to continue?")
-                                       .arg(saveAsURL.filename()) );
+
+            KMessageBox::warningYesNo( this, 
+                                       i18n("A file named \"%1\" already "
+                                            "exists. Are you sure you want "
+                                            "to overwrite it?")
+                                       .arg(saveAsURL.filename()),
+                                       i18n("Overwrite File?"),
+                                       i18n("Overwrite"),
+                                       i18n("Cancel") );
 
         if (result != KMessageBox::Yes)
             return;
