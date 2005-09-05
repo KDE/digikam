@@ -47,6 +47,7 @@
 #include <kaction.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <kstdguiitem.h>
 #include <kstatusbar.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
@@ -1080,8 +1081,8 @@ void ImageWindow::slotSaveAs()
                                             "to overwrite it?")
                                        .arg(newURL.filename()),
                                        i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
-                                       i18n("Cancel") );
+                                       KStdGuiItem::overwrite(),
+                                       KStdGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
             return;

@@ -52,6 +52,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kstdguiitem.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -714,8 +715,8 @@ void ShowFoto::slotSaveAs()
                                             "to overwrite it?")
                                        .arg(saveAsURL.filename()),
                                        i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
-                                       i18n("Cancel") );
+                                       KStdGuiItem::overwrite(),
+                                       KStdGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
             return;
