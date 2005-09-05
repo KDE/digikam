@@ -410,7 +410,7 @@ void ImageDescEdit::slotItemChanged()
     KURL fileURL;
     fileURL.setPath(info->filePath());
 
-    m_thumbJob = new ThumbnailJob(fileURL, 256);
+    m_thumbJob = new ThumbnailJob(fileURL, 256, true, AlbumSettings::instance()->getExifRotate());
 
     connect(m_thumbJob,
             SIGNAL(signalThumbnail(const KURL&,

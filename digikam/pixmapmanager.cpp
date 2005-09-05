@@ -92,7 +92,8 @@ QPixmap* PixmapManager::find(const KURL& url)
     
     if (m_thumbJob.isNull())
     {
-        m_thumbJob = new ThumbnailJob(url, m_size, true);
+        m_thumbJob = new ThumbnailJob(url, m_size, true, AlbumSettings::instance()->getExifRotate());
+        
         connect(m_thumbJob,
                 SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));

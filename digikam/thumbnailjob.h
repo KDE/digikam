@@ -21,9 +21,14 @@
 #ifndef THUMBNAILJOB_H
 #define THUMBNAILJOB_H
 
+// Qt includes.
+
+#include <qcstring.h>
+
+// KDE includes.
+
 #include <kio/job.h>
 #include <kurl.h>
-#include <qcstring.h>
 
 class QPixmap;
 class QImage;
@@ -37,9 +42,9 @@ class ThumbnailJob : public KIO::Job
 public:
 
     ThumbnailJob(const KURL& url, int size,
-                 bool highlight=true);
+                 bool highlight=true, bool exifRotate=false);
     ThumbnailJob(const KURL::List& urlList, int size,
-                 bool highlight=true);
+                 bool highlight=true, bool exifRotate=false);
     ~ThumbnailJob();
 
     void addItem(const  KURL& url);

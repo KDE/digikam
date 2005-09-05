@@ -31,6 +31,7 @@
 
 #include <libkexif/kexifwidget.h>
 
+#include "albumsettings.h"
 #include "thumbnailjob.h"
 #include "imagepropertiesexif.h"
 
@@ -88,7 +89,7 @@ void ImagePropertiesEXIF::setCurrentURL(const KURL& url)
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
-    m_thumbJob = new ThumbnailJob(url, 48);
+    m_thumbJob = new ThumbnailJob(url, 48, true, AlbumSettings::instance()->getExifRotate());
     
     connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
                                                const QPixmap&)),

@@ -30,6 +30,7 @@
 #include <kfilemetainfo.h>
 #include <kglobal.h>
 
+#include "albumsettings.h"
 #include "imageinfo.h"
 #include "thumbnailjob.h"
 #include "imagepropertiesgeneral.h"
@@ -153,7 +154,8 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
     
-    m_thumbJob = new ThumbnailJob(url, 128);
+    m_thumbJob = new ThumbnailJob(url, 128, true, AlbumSettings::instance()->getExifRotate());
+    
     connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
                                                const QPixmap&)),
             SLOT(slotGotThumbnail(const KURL&,

@@ -48,6 +48,7 @@
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "albumsettings.h"
 #include "thumbnailjob.h"
 #include "imagepropertieshistogram.h"
 
@@ -296,7 +297,7 @@ void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int ima
     if (!m_thumbJob.isNull())
         m_thumbJob->kill();
 
-    m_thumbJob = new ThumbnailJob(url, 48);
+    m_thumbJob = new ThumbnailJob(url, 48, true, AlbumSettings::instance()->getExifRotate());
     
     connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
                                                const QPixmap&)),

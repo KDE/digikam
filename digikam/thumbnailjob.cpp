@@ -18,6 +18,19 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+ 
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <fcntl.h>
+#include <unistd.h>
+}
+ 
+// QT includes. 
+ 
 #include <qstring.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -27,20 +40,14 @@
 #include <qcolor.h>
 #include <qdatastream.h>
 
+// KDE includes.
+
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include "albumsettings.h"
-#include "thumbnailjob.h"
+// Local includes.
 
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <fcntl.h>
-#include <unistd.h>
-}
+#include "thumbnailjob.h"
 
 class ThumbnailJobPriv
 {
@@ -49,6 +56,7 @@ public:
     KURL::List    urlList;
     int           size;
     bool          highlight;
+    bool          exifRotate;
 
     KURL          curr_url;
     KURL          next_url;
@@ -62,14 +70,15 @@ public:
 };
 
 ThumbnailJob::ThumbnailJob(const KURL& url, int size,
-                           bool highlight)
+                           bool highlight, bool exifRotate)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
     d->urlList.append(url);
-    d->size      = size;
-    d->highlight = highlight;
+    d->size       = size;
+    d->highlight  = highlight;
+    d->exifRotate = exifRotate;
 
     d->curr_url = d->urlList.first();
     d->next_url = d->curr_url;
@@ -82,15 +91,16 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
 }
 
 ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
-                           bool highlight)
+                           bool highlight, bool exifRotate)
     : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
-    d->urlList   = urlList;
-    d->size      = size;
-    d->highlight = highlight;
-    d->running   = false;
+    d->urlList    = urlList;
+    d->size       = size;
+    d->highlight  = highlight;
+    d->running    = false;
+    d->exifRotate = exifRotate;
 
     d->curr_url = d->urlList.first();
     d->next_url = d->curr_url;
@@ -183,9 +193,8 @@ void ThumbnailJob::processNext()
     if (d->shmid != -1)
         job->addMetaData("shmid", QString::number(d->shmid));
     
-    // Need to test the AlbumSettings validity instance when ThumbnailJob is used out of 
-    // Digikam like when Image Properties dialog is used in Showfoto.
-    if (AlbumSettings::instance() && AlbumSettings::instance()->getExifRotate())
+    // Rotate thumbnail accordindly with Exif rotation tag if necessary.
+    if (d->exifRotate)
         job->addMetaData("exif", "yes");
         
     connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),

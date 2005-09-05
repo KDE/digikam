@@ -319,7 +319,8 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
         {
             d->iconThumbJob = new ThumbnailJob(album->iconKURL(),
                                                (int)ThumbnailSize::Tiny,
-                                               true);
+                                               true,
+                                               AlbumSettings::instance()->getExifRotate());
             connect(d->iconThumbJob,
                     SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                     this,
