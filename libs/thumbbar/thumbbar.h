@@ -86,6 +86,8 @@ private slots:
     void slotUpdate();
     void slotGotPreview(const KFileItem *, const QPixmap &);
     void slotFailedPreview(const KFileItem *);
+    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
+    void slotFailedThumbnail(const KURL& url);
     
 private:
 

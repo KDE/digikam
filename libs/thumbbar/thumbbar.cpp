@@ -25,6 +25,7 @@
 #include <qdict.h>
 #include <qpoint.h>
 #include <qdatetime.h>
+#include <qguardedptr.h>
 
 #include <kfileitem.h>
 #include <kapplication.h>
@@ -38,6 +39,7 @@
 #include <cmath>
 
 #include "thumbbar.h"
+#include "thumbnailjob.h"
 
 namespace Digikam
 {
@@ -67,6 +69,8 @@ public:
     
     QTimer*          timer;
     ThumbBarToolTip* tip;
+    
+    QGuardedPtr<ThumbnailJob> thumbJob;
 };
 
 ThumbBarView::ThumbBarView(QWidget* parent)
@@ -93,8 +97,11 @@ ThumbBarView::ThumbBarView(QWidget* parent)
 
 ThumbBarView::~ThumbBarView()
 {
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    
     clear(false);
-
+        
     delete d->timer;
     delete d->tip;
     delete d;
@@ -198,12 +205,17 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
         delete item->m_pixmap;
         item->m_pixmap = 0;
     }
-    KIO::PreviewJob* job = KIO::filePreview(item->url(), d->tileSize, 0, 0, 70, true, false);
     
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            SLOT(slotFailedPreview(const KFileItem *)));
+    if (!d->thumbJob.isNull())
+       d->thumbJob->kill();
+       
+    d->thumbJob = new ThumbnailJob(item->url(), d->tileSize, true);
+    
+    connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+   
+    connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
+            this, SLOT(slotFailedThumbnail(const KURL&)));     
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -374,12 +386,24 @@ void ThumbBarView::rearrangeItems()
     
     if (!urlList.isEmpty())
     {
+        if (!d->thumbJob.isNull())
+           d->thumbJob->kill();
+
+        d->thumbJob = new ThumbnailJob(urlList, d->tileSize, true);
+        
+        connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+    
+        connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
+                this, SLOT(slotFailedThumbnail(const KURL&)));     
+        
+/*        
         KIO::PreviewJob* job = KIO::filePreview(urlList, d->tileSize, 0, 0, 70, true, false);
         
         connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
                 SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
         connect(job, SIGNAL(failed(const KFileItem *)),
-                SLOT(slotFailedPreview(const KFileItem *)));
+                SLOT(slotFailedPreview(const KFileItem *)));*/
     }
 }
 
@@ -396,6 +420,35 @@ void ThumbBarView::slotUpdate()
 {
     rearrangeItems();
     viewport()->update();
+}
+
+void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
+{
+    if (!pix.isNull())
+    {
+        ThumbBarItem* item = d->itemDict.find(url.url());
+        if (!item)
+            return;
+    
+        if (item->m_pixmap)
+        {
+            delete item->m_pixmap;
+            item->m_pixmap = 0;
+        }
+        
+        item->m_pixmap = new QPixmap(pix);
+        item->repaint();
+    }
+}
+
+void ThumbBarView::slotFailedThumbnail(const KURL& url)
+{
+    KIO::PreviewJob* job = KIO::filePreview(url, d->tileSize, 0, 0, 70, true, false);
+    
+    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
+            SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
+    connect(job, SIGNAL(failed(const KFileItem *)),
+            SLOT(slotFailedPreview(const KFileItem *)));
 }
 
 void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
