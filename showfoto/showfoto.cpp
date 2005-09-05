@@ -715,7 +715,7 @@ void ShowFoto::slotSaveAs()
                                             "to overwrite it?")
                                        .arg(saveAsURL.filename()),
                                        i18n("Overwrite File?"),
-                                       KStdGuiItem::overwrite(),
+                                       i18n("Overwrite"),
                                        KStdGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
