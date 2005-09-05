@@ -321,7 +321,10 @@ void CameraUI::slotConnected(bool val)
                                     i18n("Failed to connect to camera. "
                                          "Please make sure its connected "
                                          "properly and turned on. "
-                                         "Would you like to try again?"))
+                                         "Would you like to try again?"), 
+                                    i18n("Connection failed"),
+                                    i18n("Retry"),
+                                    i18n("Abort"))
           == KMessageBox::Yes)
           QTimer::singleShot(0, m_controller, SLOT(slotConnect()));
       else
