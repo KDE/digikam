@@ -1193,7 +1193,7 @@ void ImageWindow::slotToggleFullScreen()
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenAction->isPlugged(toolBar))
+            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
                 m_fullScreenAction->unplug(toolBar);
             if (toolBar->isHidden())
                 toolBar->show();
@@ -1231,7 +1231,20 @@ void ImageWindow::slotToggleFullScreen()
             if (m_fullScreenHideToolBar)
                 toolBar->hide();
             else
-                m_fullScreenAction->plug(toolBar);
+            {    
+                if ( !m_fullScreenAction->isPlugged(toolBar) )
+                {
+                    m_fullScreenAction->plug(toolBar);
+                    m_removeFullScreenButton=true;
+                }
+                else    
+                {
+                    // If FullScreen button is enable in toolbar settings
+                    // We don't remove it at full screen out.
+                    m_removeFullScreenButton=false;
+                }
+            }
+
         }
 
         // -- Insert all the imageguiclient actions into the accel --

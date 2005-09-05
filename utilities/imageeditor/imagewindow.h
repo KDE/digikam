@@ -88,6 +88,7 @@ private:
     bool                   m_fullScreen;
     bool                   m_fullScreenHideToolBar;
     bool                   m_allowSaving;
+    bool                   m_removeFullScreenButton;
 
     // Actions
 

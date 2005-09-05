@@ -192,6 +192,7 @@ private:
     bool                   m_deleteItem2Trash;
     bool                   m_disableBCGActions;
     bool                   m_slideShowInFullScreen;
+    bool                   m_removeFullScreenButton;
 };
 
 #endif /* SHOWFOTO_H */
