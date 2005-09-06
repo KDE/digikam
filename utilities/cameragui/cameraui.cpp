@@ -322,7 +322,7 @@ void CameraUI::slotConnected(bool val)
                                          "Please make sure its connected "
                                          "properly and turned on. "
                                          "Would you like to try again?"), 
-                                    i18n("Connection failed"),
+                                    i18n("Connection Failed"),
                                     i18n("Retry"),
                                     i18n("Abort"))
           == KMessageBox::Yes)
