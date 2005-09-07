@@ -764,25 +764,19 @@ void ShowFoto::slotSaveAs()
         ::unlink(QFile::encodeName(tmpFile));
         return;
     }
+    
+    m_saveAction->setEnabled(false);
 
     // add the file to the list of images if it's not there already
-    Digikam::ThumbBarItem* foundItem = 0;
-    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    Digikam::ThumbBarItem* item = m_bar->findItemByURL(saveAsURL);
+    m_bar->invalidateThumb(item);
+    
+    if (!item)
     {
-        if (item->url().equals(saveAsURL))
-        {
-            foundItem = item;
-            m_bar->invalidateThumb(item);
-            break;
-        }
+        item = new Digikam::ThumbBarItem(m_bar, saveAsURL);
     }
 
-    if (!foundItem)
-    {
-        foundItem = new Digikam::ThumbBarItem(m_bar, saveAsURL);
-    }
-
-    m_bar->setSelected(foundItem);
+    m_bar->setSelected(item);
     kapp->restoreOverrideCursor();
 }
 
@@ -871,8 +865,7 @@ bool ShowFoto::save()
     }
 
     m_canvas->setModified( false );
-    slotOpenURL(m_currentItem->url());
-    m_bar->invalidateThumb(m_currentItem);
+    m_bar->invalidateThumb(m_bar->findItemByURL(url));
     kapp->restoreOverrideCursor();
 
     return true;

@@ -170,8 +170,24 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
     return 0;
 }
 
+ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
+{
+    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    {
+        if (item->url().equals(url))
+        {
+            return item;
+        }
+    }
+
+    return 0;
+}
+
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
+    if (!item)
+        return;
+        
     if (d->currItem == item)
         return;
 

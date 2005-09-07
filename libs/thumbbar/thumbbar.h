@@ -62,6 +62,7 @@ public:
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
+    ThumbBarItem* findItemByURL(const KURL& url) const;
 
     void invalidateThumb(ThumbBarItem* item);
         
