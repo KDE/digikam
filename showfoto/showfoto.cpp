@@ -52,7 +52,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kstdguiitem.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -88,11 +87,11 @@
 #include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
-    : KMainWindow( 0, "Showfoto" )
+        : KMainWindow( 0, "Showfoto" )
 {
     m_itemsNb                = 0;
     m_splash                 = 0;
-    m_disableBCGActions      = false;
+    m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
     m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
@@ -144,11 +143,43 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
     loadPlugins();
 
-    // If plugin core is available, unplug BCG actions.
-    if ( m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
+    // If plugin core isn't available, plug BCG actions to collection instead.
+    
+    if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
-        actionCollection()->remove(m_BCGAction);
-        m_disableBCGActions = true;
+        m_BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "bcg");
+        m_BCGAction->setDelayed(false);
+    
+        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "gamma_plus");
+        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "gamma_minus");
+        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "brightness_plus");
+        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "brightness_minus");
+        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "contrast_plus");
+        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
+                                            this, SLOT(slotChangeBCG()),
+                                            actionCollection(), "contrast_minus");
+    
+        m_BCGAction->insert(incBrightAction);
+        m_BCGAction->insert(decBrightAction);
+        m_BCGAction->insert(incContrastAction);
+        m_BCGAction->insert(decContrastAction);
+        m_BCGAction->insert(incGammaAction);
+        m_BCGAction->insert(decGammaAction);
+
+        QPtrList<KAction> bcg_actions;
+        bcg_actions.append( m_BCGAction );
+        unplugActionList( "bcg" );
+        plugActionList( "bcg", bcg_actions );
     }
 
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
@@ -389,38 +420,6 @@ void ShowFoto::setupActions()
                                actionCollection(), "crop");
     m_cropAction->setEnabled(false);
 
-    // -- BCG actions ----------------------------------------------------------------
-
-    m_BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"),
-                                  0, actionCollection(), "bcg");
-    m_BCGAction->setDelayed(false);
-
-    KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
-                                          this, SLOT(slotChangeBCG()),
-                                          actionCollection(), "gamma_plus");
-    KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
-                                          this, SLOT(slotChangeBCG()),
-                                          actionCollection(), "gamma_minus");
-    KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
-                                           this, SLOT(slotChangeBCG()),
-                                           actionCollection(), "brightness_plus");
-    KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
-                                           this, SLOT(slotChangeBCG()),
-                                           actionCollection(), "brightness_minus");
-    KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
-                                             this, SLOT(slotChangeBCG()),
-                                             actionCollection(), "contrast_plus");
-    KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
-                                             this, SLOT(slotChangeBCG()),
-                                             actionCollection(), "contrast_minus");
-
-    m_BCGAction->insert(incBrightAction);
-    m_BCGAction->insert(decBrightAction);
-    m_BCGAction->insert(incContrastAction);
-    m_BCGAction->insert(decContrastAction);
-    m_BCGAction->insert(incGammaAction);
-    m_BCGAction->insert(decGammaAction);
-
     // -- help actions -----------------------------------------------
 
     m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
@@ -459,7 +458,7 @@ void ShowFoto::setupActions()
                   i18n("Load Previous Image"),
                   Key_Prior, this, SLOT(slotPrev()),
                   false, true);
-    accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
+    accel->insert("Zoom Plus Key_Plus", i18n("Zoobm In"),
                   i18n("Zoom into Image"),
                   Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
                   false, true);
@@ -708,15 +707,9 @@ void ShowFoto::slotSaveAs()
     if ( fi.exists() )
     {
         int result =
-
-            KMessageBox::warningYesNo( this, 
-                                       i18n("A file named \"%1\" already "
-                                            "exists. Are you sure you want "
-                                            "to overwrite it?")
-                                       .arg(saveAsURL.filename()),
-                                       i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
-                                       KStdGuiItem::cancel() );
+            KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
+                                                  "Are you sure you want to continue?")
+                                       .arg(saveAsURL.filename()) );
 
         if (result != KMessageBox::Yes)
             return;
@@ -764,19 +757,25 @@ void ShowFoto::slotSaveAs()
         ::unlink(QFile::encodeName(tmpFile));
         return;
     }
-    
-    m_saveAction->setEnabled(false);
 
     // add the file to the list of images if it's not there already
-    Digikam::ThumbBarItem* item = m_bar->findItemByURL(saveAsURL);
-    m_bar->invalidateThumb(item);
-    
-    if (!item)
+    Digikam::ThumbBarItem* foundItem = 0;
+    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
     {
-        item = new Digikam::ThumbBarItem(m_bar, saveAsURL);
+        if (item->url().equals(saveAsURL))
+        {
+            foundItem = item;
+            m_bar->invalidateThumb(item);
+            break;
+        }
     }
 
-    m_bar->setSelected(item);
+    if (!foundItem)
+    {
+        foundItem = new Digikam::ThumbBarItem(m_bar, saveAsURL);
+    }
+
+    m_bar->setSelected(foundItem);
     kapp->restoreOverrideCursor();
 }
 
@@ -865,7 +864,8 @@ bool ShowFoto::save()
     }
 
     m_canvas->setModified( false );
-    m_bar->invalidateThumb(m_bar->findItemByURL(url));
+    m_bar->invalidateThumb(m_currentItem);
+    slotOpenURL(m_currentItem->url());
     kapp->restoreOverrideCursor();
 
     return true;
@@ -956,7 +956,7 @@ void ShowFoto::slotToggleFullScreen()
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
+            if (m_fullScreenAction->isPlugged(toolBar))
                 m_fullScreenAction->unplug(toolBar);
             if (toolBar->isHidden())
                 toolBar->show();
@@ -986,19 +986,7 @@ void ShowFoto::slotToggleFullScreen()
             if (m_fullScreenHideToolBar)
                 toolBar->hide();
             else
-            {    
-                if ( !m_fullScreenAction->isPlugged(toolBar) )
-                {
-                    m_fullScreenAction->plug(toolBar);
-                    m_removeFullScreenButton=true;
-                }
-                else    
-                {
-                    // If FullScreen button is enable in toolbar settings
-                    // We don't remove it at full screen out.
-                    m_removeFullScreenButton=false;
-                }
-            }
+                m_fullScreenAction->plug(toolBar);
         }
 
         showFullScreen();
@@ -1143,7 +1131,7 @@ void ShowFoto::toggleActions(bool val)
     m_fileDeleteAction->setEnabled(val);
     m_slideShowAction->setEnabled(val);
 
-    if (!m_disableBCGActions)
+    if (m_BCGAction)
         m_BCGAction->setEnabled(val);
 
     QPtrList<Digikam::ImagePlugin> pluginList
@@ -1385,7 +1373,6 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         m_currentItem = m_bar->currentItem();
         slotOpenURL(m_currentItem->url());
     }
-
 }
 
 void ShowFoto::slotUpdateItemInfo(void)

@@ -1,18 +1,18 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="2" name="showfoto" >
+<gui version="3" name="showfoto" >
 
 <MenuBar>
 
  <Menu name="file" >
    <text>&amp;File</text>
      <Action name="open_file" /> 
-     <Separator />
+     <Separator/>
      <Action name="file_bwd" /> 
      <Action name="file_fwd" /> 
-     <Separator />
+     <Separator/>
      <Action name="file_first" /> 
      <Action name="file_last" /> 
-     <Separator />
+     <Separator/>
      <Action name="save" />
      <Action name="saveas" />
      <Action name="revert" /> 
@@ -38,7 +38,7 @@
 
  <Menu name="Fix" >
    <text>Fi&amp;x</text>
-     <Action name="bcg" />
+     <ActionList name="bcg" />
  </Menu>
 
  <Menu name="Transform" >
@@ -54,10 +54,10 @@
      <Action name="zoom_plus" />
      <Action name="zoom_minus" />
      <Action name="zoom_fit" /> 
-     <Separator />
+     <Separator/>
      <Action name="show_thumbs" /> 
      <Action name="view_histogram" /> 
-     <Separator />
+     <Separator/>
      <Action name="slideshow" /> 
  </Menu>
 
@@ -88,19 +88,19 @@
   <Action name="file_bwd" />
   <Action name="file_fwd" />
   <Action name="file_last" />
-  <Separator />
+  <Separator/>
   <Action name="open_file" />
   <Action name="save" />
   <Action name="saveas" />
   <Action name="undo" /> 
   <Action name="redo" />   
-  <Separator />
+  <Separator/>
   <Action name="zoom_plus" />
   <Action name="zoom_minus" />
   <Action name="zoom_fit" />
-  <Separator />
+  <Separator/>
   <Action name="crop" />
-  <Separator />
+  <Separator/>
   <Action name="full_screen" /> 
   <Action name="slideshow" /> 
   <Merge/>
