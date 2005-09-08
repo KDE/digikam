@@ -34,9 +34,15 @@ class ImagePlugin_HotPixels : public Digikam::ImagePlugin
 public:
 
     ImagePlugin_HotPixels(QObject *parent, const char* name,
-                                 const QStringList &args);
+                          const QStringList &args);
     ~ImagePlugin_HotPixels();
 
+    void setEnabledActions(bool enable);
+        
+private:
+
+    KAction *m_hotpixelsAction;
+        
 private slots:
 
     void slotHotPixels();

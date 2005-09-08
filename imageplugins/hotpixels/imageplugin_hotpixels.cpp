@@ -37,11 +37,11 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_hotpixels,
                             KGenericFactory<ImagePlugin_HotPixels>("digikamimageplugin_hotpixels"));
 
 ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const char*, const QStringList &)
-                            : Digikam::ImagePlugin(parent, "ImagePlugin_HotPixels")
+                     : Digikam::ImagePlugin(parent, "ImagePlugin_HotPixels")
 {
-    new KAction(i18n("Hot Pixels Correction..."), "hotpixels", 0, 
-                this, SLOT(slotHotPixels()),
-                actionCollection(), "imageplugin_hotpixels");
+    m_hotpixelsAction = new KAction(i18n("Hot Pixels Correction..."), "hotpixels", 0, 
+                          this, SLOT(slotHotPixels()),
+                          actionCollection(), "imageplugin_hotpixels");
     
     setXMLFile("digikamimageplugin_hotpixels_ui.rc");            
         
@@ -50,6 +50,11 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const char*, const
 
 ImagePlugin_HotPixels::~ImagePlugin_HotPixels()
 {
+}
+
+void ImagePlugin_HotPixels::setEnabledActions(bool enable)
+{
+    m_hotpixelsAction->setEnabled(enable);
 }
 
 void ImagePlugin_HotPixels::slotHotPixels()
