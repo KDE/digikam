@@ -315,6 +315,14 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     ImageInfo* item;
     for (ImageInfoListIterator it(itemList); (item = it.current()); ++it)
     {
+        KURL url( item->kurl() );
+        url.cleanPath();
+
+        if (AlbumIconItem *oldItem = d->itemDict.find(url.url()))
+        {
+            slotImageListerDeleteItem(oldItem->imageInfo());
+        }
+
         AlbumIconGroupItem* group = d->albumDict.find(item->albumID());
         if (!group)
         {
@@ -332,8 +340,6 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         AlbumIconItem* iconItem = new AlbumIconItem(group, item);
         item->setViewItem(iconItem);
 
-        KURL url( item->kurl() );
-        url.cleanPath();
         d->itemDict.insert(url.url(), iconItem);
     }
 
@@ -347,6 +353,16 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
     AlbumIconItem* iconItem = static_cast<AlbumIconItem*>(item->getViewItem());
 
+    KURL url(item->kurl());
+    url.cleanPath();
+    
+    AlbumIconItem *oldItem = d->itemDict[url.url()];
+    if( oldItem &&
+       (oldItem->imageInfo()->id() != iconItem->imageInfo()->id()))
+    {
+        return;
+    }
+
     d->pixMan->remove(item->kurl());
 
     emit signalItemDeleted(iconItem);
@@ -354,9 +370,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     delete iconItem;
     item->setViewItem(0);
 
-    KURL u(item->kurl());
-    u.cleanPath();
-    d->itemDict.remove(u.url());
+    d->itemDict.remove(url.url());
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;

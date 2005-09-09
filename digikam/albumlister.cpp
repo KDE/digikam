@@ -120,6 +120,7 @@ void AlbumLister::openAlbum(Album *album)
     ds << d->filter;
     ds << AlbumSettings::instance()->getIconShowResolution();
 
+    // Protocol = digikamalbums -> kio_digikamalbums
     d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
     connect(d->job, SIGNAL(result(KIO::Job*)),

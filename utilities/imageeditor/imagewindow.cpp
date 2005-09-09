@@ -1071,6 +1071,7 @@ void ImageWindow::slotSaveAs()
     // Check for overwrite ----------------------------------------------------------
     
     QFileInfo fi(newURL.path());
+    bool fileExists = false;
     if ( fi.exists() )
     {
         int result =
@@ -1086,6 +1087,8 @@ void ImageWindow::slotSaveAs()
 
         if (result != KMessageBox::Yes)
             return;
+
+        fileExists = true;
     }
 
     // Now do the actual saving -----------------------------------------------------
@@ -1176,7 +1179,10 @@ void ImageWindow::slotSaveAs()
         m_urlCurrent = newURL;
     }
 
-    emit signalFileAdded(newURL);
+    if(fileExists)
+        emit signalFileModified(newURL);
+    else
+        emit signalFileAdded(newURL);
 
     m_canvas->setModified( false );
     kapp->restoreOverrideCursor();
