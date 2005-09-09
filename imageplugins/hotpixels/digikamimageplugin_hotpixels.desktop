@@ -2,7 +2,7 @@
 Name=ImagePlugin_HotPixels
 Name[nl]=Afbeeldingsplugin_HotPixels
 Name[sr]=Врући пиксели
-Name[sr@Latn]=Врући пиксели
+Name[sr@Latn]=Vrući pikseli
 Name[sv]=Insticksprogram för vita bildpunkter
 Name[xx]=xxImagePlugin_HotPixelsxx
 Type=Service
@@ -15,7 +15,7 @@ Comment[nl]=digiKam-plugin voor het corrigeren van de hotpixels
 Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[sr]=digiKam-ов прикључак исправку врућих пиксела
-Comment[sr@Latn]=digiKam-ов прикључак исправку врућих пиксела
+Comment[sr@Latn]=digiKam-ov priključak ispravku vrućih piksela
 Comment[sv]=Digikam insticksprogram för korrigering av vita bildpunkter
 Comment[xx]=xxHot pixel correction plugin for Digikamxx
 
