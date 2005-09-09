@@ -615,6 +615,18 @@ void DigikamApp::setupActions()
     }
 }
 
+void DigikamApp::recreateGUI()
+{
+    createGUI("digikamui.rc");
+    applyMainWindowSettings(KGlobal::config());
+    plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
+    plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
+    plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
+    plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
+    plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
+    plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
+}
+
 void DigikamApp::enableThumbSizePlusAction(bool val)
 {
     mThumbSizePlusAction->setEnabled(val);
@@ -860,11 +872,12 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
 {
     if (!ctype) return;
 
-    KAction *cAction = new KAction(ctype->title(), 0,
+    KAction *cAction = new KAction(ctype->title(), "camera", 0,
                                    this, SLOT(slotCameraConnect()),
                                    actionCollection(),
                                    ctype->title().utf8());
     mCameraMenuAction->insert(cAction, 0);
+    recreateGUI();    
     ctype->setAction(cAction);
 }
 
@@ -969,16 +982,7 @@ void DigikamApp::slotConfToolbars()
     KEditToolbar *dlg = new KEditToolbar(actionCollection(), "digikamui.rc");
 
     if (dlg->exec())
-    {
-        createGUI("digikamui.rc");
-        applyMainWindowSettings(KGlobal::config());
-        plugActionList( QString::fromLatin1("file_actions_import"), m_kipiFileActionsImport );
-        plugActionList( QString::fromLatin1("image_actions"), m_kipiImageActions );
-        plugActionList( QString::fromLatin1("tool_actions"), m_kipiToolsActions );
-        plugActionList( QString::fromLatin1("batch_actions"), m_kipiBatchActions );
-        plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
-        plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
-    }
+        recreateGUI();
 
     delete dlg;
 }

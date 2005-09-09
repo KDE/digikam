@@ -94,6 +94,7 @@ private:
     void loadCameras();
     void populateThemes();
     void updateDeleteTrashMenu();
+    void recreateGUI();
 
 protected:
 
