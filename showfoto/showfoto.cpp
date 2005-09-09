@@ -758,23 +758,15 @@ void ShowFoto::slotSaveAs()
         return;
     }
 
+    m_canvas->setModified( false );
+    
     // add the file to the list of images if it's not there already
-    Digikam::ThumbBarItem* foundItem = 0;
-    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
-    {
-        if (item->url().equals(saveAsURL))
-        {
-            foundItem = item;
-            m_bar->invalidateThumb(item);
-            break;
-        }
-    }
+    Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(saveAsURL);
+    m_bar->invalidateThumb(foundItem);
 
     if (!foundItem)
-    {
         foundItem = new Digikam::ThumbBarItem(m_bar, saveAsURL);
-    }
-
+    
     m_bar->setSelected(foundItem);
     kapp->restoreOverrideCursor();
 }
@@ -828,6 +820,7 @@ bool ShowFoto::save()
     
     QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
                       + url.filename();
+    
     if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
                                  m_TIFFCompression))
     {
