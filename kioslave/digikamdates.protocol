@@ -14,6 +14,7 @@ maxInstances=1
 Description=digiKam Dates kioslave
 Description[de]=digiKam Ein/Ausgabe-Modul für Datumsangaben
 Description[et]=DigiKami kuupäevade KIO-moodul
+Description[lt]=digiKam datų kio pagalbinė programa
 Description[nl]=digiKam Datums kioslave
 Description[pt]='kioslave' de datas do digiKam
 Description[sr]=kioslave digiKam-ових датума
