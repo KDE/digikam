@@ -877,7 +877,7 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
                                    actionCollection(),
                                    ctype->title().utf8());
     mCameraMenuAction->insert(cAction, 0);
-    recreateGUI();    
+//    recreateGUI();    
     ctype->setAction(cAction);
 }
 
