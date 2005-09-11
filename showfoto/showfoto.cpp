@@ -458,7 +458,7 @@ void ShowFoto::setupActions()
                   i18n("Load Previous Image"),
                   Key_Prior, this, SLOT(slotPrev()),
                   false, true);
-    accel->insert("Zoom Plus Key_Plus", i18n("Zoobm In"),
+    accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
                   i18n("Zoom into Image"),
                   Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
                   false, true);
