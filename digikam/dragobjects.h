@@ -4,7 +4,7 @@
  * Date  : 2004-06-26
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju, Joern Ahrens
+ * Copyright 2004, 2005 by Renchi Raju, Joern Ahrens
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,17 +38,22 @@ class QWidget;
  * another application which understands KURLDrag, like konqueror, to
  * copy the images. Digikam can use the IDs, if ItemDrag is dropped
  * on digikam itself.
+ * The kioURLs are internally used with the digikamalbums kioslave.
+ * The "normal" KURLDrag urls are used for external drops (k3b, gimp, ...)
  */
 class ItemDrag : public KURLDrag
 {
 public:
 
-    ItemDrag(const KURL::List& urls, const QValueList<int>& albumIDs,
+    ItemDrag(const KURL::List& urls, const KURL::List& kioURLs,
+             const QValueList<int>& albumIDs,
              const QValueList<int>& albumIDs,
              QWidget* dragSource=0, const char* name=0);
 
     static bool canDecode(const QMimeSource* e);
-    static bool decode(const QMimeSource* e, KURL::List &urls, 
+    static bool decode(const QMimeSource* e,
+                       KURL::List &urls,
+                       KURL::List &kioURLs,
                        QValueList<int>& albumIDs,
                        QValueList<int>& imageIDs);
 
@@ -59,6 +64,7 @@ protected:
 
 private:
     
+    KURL::List      m_kioURLs;
     QValueList<int> m_albumIDs;    
     QValueList<int> m_imageIDs;
 };

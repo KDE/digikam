@@ -917,13 +917,14 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         PAlbum *srcAlbum;
 
         KURL::List      urls;
+        KURL::List      kioURLs;
         QValueList<int> albumIDs;
         QValueList<int> imageIDs;
 
-        if (!ItemDrag::decode(e, urls, albumIDs, imageIDs))
+        if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
             return;
 
-        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
         // all the albumids will be the same
@@ -1003,14 +1004,14 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             case 10:
             {
-                KIO::Job* job = DIO::move(urls, destAlbum->kurl());
+                KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
                         SLOT(slotDIOResult(KIO::Job*)));
                 break;
             }
             case 11:
             {
-                KIO::Job* job = DIO::copy(urls, destAlbum->kurl());
+                KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
                         SLOT(slotDIOResult(KIO::Job*)));
                 break;

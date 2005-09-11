@@ -836,6 +836,7 @@ void AlbumIconView::startDrag()
         return;
 
     KURL::List      urls;
+    KURL::List      kioURLs;
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
 
@@ -844,7 +845,8 @@ void AlbumIconView::startDrag()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->kurlForKIO());
+            urls.append(albumItem->imageInfo()->kurl());
+            kioURLs.append(albumItem->imageInfo()->kurlForKIO());
             imageIDs.append(albumItem->imageInfo()->id());
         }
     }
@@ -878,7 +880,7 @@ void AlbumIconView::startDrag()
 
     QDragObject* drag = 0;
 
-    drag = new ItemDrag(urls, albumIDs, imageIDs, this);
+    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
     if (drag)
     {
         drag->setPixmap(pix);

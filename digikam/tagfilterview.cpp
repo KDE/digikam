@@ -263,13 +263,14 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         TAlbum *destAlbum = itemDrop->m_tag;
 
         KURL::List      urls;
+        KURL::List      kioURLs;
         QValueList<int> albumIDs;
         QValueList<int> imageIDs;
 
-        if (!ItemDrag::decode(e, urls, albumIDs, imageIDs))
+        if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
             return;
 
-        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
         int id = 0;
