@@ -116,7 +116,7 @@ void AlbumSettings::init()
     d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
-    d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf *.ids *.x3f";
+    d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf *.pef *.x3f";
     d->thumbnailSize = ThumbnailSize::Medium;
 
     d->showToolTips = true;
