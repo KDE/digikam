@@ -115,7 +115,7 @@
 #   define INTPTR_TYPE int
 # else
 #   define INTPTR_TYPE long long
-#warning "WARNING: Compiling sqlite for a Big Endian Platform."
+#warning "WARNING: Compiling sqlite for a 64 bit Platform."
 #warning "WARNING: If you know this isn't true, please file a bugreport."
 # endif
 #endif
