@@ -110,27 +110,27 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder = AlbumSettings::ByFolder;
+    d->albumSortOrder  = AlbumSettings::ByFolder;
     d->imageSortOrder  = AlbumSettings::ByIName;
                                           
     d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
-    d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov";
+    d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov *.wmf *.asf";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
-    d->rawFilefilter =   "*.crw *.nef *.raf *.mrw *.orf *.pef *.x3f";
-    d->thumbnailSize = ThumbnailSize::Medium;
+    d->rawFilefilter   = "*.crw *.nef *.raf *.mrw *.orf *.pef *.x3f";
+    d->thumbnailSize   = ThumbnailSize::Medium;
 
     d->showToolTips = true;
     d->showSplash   = true;
     d->useTrash     = true;
     
-    d->iconShowName = false;
-    d->iconShowSize = false;
-    d->iconShowDate = true;
-    d->iconShowComments = true;
+    d->iconShowName       = false;
+    d->iconShowSize       = false;
+    d->iconShowDate       = true;
+    d->iconShowComments   = true;
     d->iconShowResolution = false;
-    d->iconShowTags = true;
-    d->saveExifComments = false;
-    d->exifRotate = false;
+    d->iconShowTags       = true;
+    d->saveExifComments   = false;
+    d->exifRotate         = false;
     d->exifSetOrientation = false;
 }
 
