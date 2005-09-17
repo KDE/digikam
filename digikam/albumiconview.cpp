@@ -478,7 +478,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     AlbumManager* man = AlbumManager::instance();
 
-    // Performance: Only check for common tags if there are less then 250 tags.
+    // Performance: Only check for tags if there are <250 images selected
     if (selectedImageIDs.count() > 250 ||
         !man->albumDB()->hasTags(selectedImageIDs))
             popmenu.setItemEnabled(removeTagId, false);
