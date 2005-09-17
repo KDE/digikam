@@ -353,6 +353,14 @@ public:
 
     /**
      * Given a set of items (identified by their IDs),
+     * this will see if any of the items has a tag.
+     * @param imageIDList a list of IDs of the items
+     * @return true if at least one of the items has a tag
+     */
+    bool hasTags(const LLongList& imageIDList);
+    
+    /**
+     * Given a set of items (identified by their IDs),
      * get a list of ID of all common tags
      * @param imageIDList a list of IDs of the items
      * @return the list of common IDs of the given items

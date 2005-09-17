@@ -764,6 +764,38 @@ IntList AlbumDB::getItemTagIDs(Q_LLONG imageID)
     return ids;
 }
 
+bool AlbumDB::hasTags(const LLongList& imageIDList)
+{
+    IntList ids;
+
+    if (imageIDList.isEmpty())
+        return false;
+
+    QStringList values;
+
+    QString sql = QString("SELECT count(tagid) FROM ImageTags "
+            "WHERE imageid=%1 ")
+            .arg(imageIDList.first());
+
+    LLongList::const_iterator iter = imageIDList.begin();
+    ++iter;
+
+    while (iter != imageIDList.end())
+    {
+        sql += QString(" OR imageid=%2 ")
+                .arg(*iter);
+        ++iter;
+    }
+
+    sql += QString(";");
+    execSql( sql, &values );
+
+    if (values[0] == "0")
+        return false;
+    else
+        return true;
+}
+
 IntList AlbumDB::getItemCommonTagIDs(const LLongList& imageIDList)
 {
     IntList ids;

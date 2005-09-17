@@ -114,6 +114,8 @@ extern "C"
 #include "albumicongroupitem.h"
 #include "albumiconview.h"
 
+#include "albumdb.h"
+
 class AlbumIconViewPrivate
 {
 public:
@@ -471,7 +473,16 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             SLOT(slotRemoveTag(int)));
 
     popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
-    popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
+
+    int removeTagId =  popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
+
+    AlbumManager* man = AlbumManager::instance();
+
+    // Performance: Only check for common tags if there are less then 250 tags.
+    if (selectedImageIDs.count() > 250 ||
+        !man->albumDB()->hasTags(selectedImageIDs))
+            popmenu.setItemEnabled(removeTagId, false);
+
     popmenu.insertSeparator();
 
     // Merge in the KIPI plugins actions ----------------------------
