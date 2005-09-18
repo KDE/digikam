@@ -19,6 +19,7 @@
  * ============================================================ */
 
 #include <qfile.h>
+#include <kdebug.h>
 #include <libkexif/kexifdata.h>
 
 #include "jpegmetadata.h"
@@ -27,7 +28,27 @@
 extern "C" {
 #include <stdio.h>
 #include <jpeglib.h>
+#include <setjmp.h>
 }         
+
+struct readJPEGMetaData_error_mgr : public jpeg_error_mgr
+{
+    jmp_buf setjmp_buffer;
+};
+
+extern "C"
+{
+    static void readJPEGMetaData_error_exit(j_common_ptr cinfo)
+    {
+        readJPEGMetaData_error_mgr* myerr =
+            (readJPEGMetaData_error_mgr*) cinfo->err;
+
+        char buffer[JMSG_LENGTH_MAX];
+        (*cinfo->err->format_message)(cinfo, buffer);
+        kdWarning() << buffer << endl;
+        longjmp(myerr->setjmp_buffer, 1);
+    }
+}
 
 namespace Digikam
 {
@@ -42,17 +63,25 @@ void readJPEGMetaData(const QString& filePath,
     comments = QString();
     datetime = QDateTime();
 
-    struct jpeg_decompress_struct srcinfo;
-    struct jpeg_error_mgr jsrcerr;
-
-    srcinfo.err = jpeg_std_error(&jsrcerr);
-    jpeg_create_decompress(&srcinfo);
-
-    FILE *input_file;
-
-    input_file = fopen(QFile::encodeName(filePath), "rb");
+    FILE *input_file = fopen(QFile::encodeName(filePath), "rb");
     if (!input_file)
         return;
+    
+    struct jpeg_decompress_struct     srcinfo;
+    struct readJPEGMetaData_error_mgr jerr;
+
+    srcinfo.err             = jpeg_std_error(&jerr);
+    srcinfo.err->error_exit = readJPEGMetaData_error_exit;
+
+    if (setjmp(jerr.setjmp_buffer))
+    {
+        jpeg_destroy_decompress(&srcinfo);
+        fclose(input_file);
+        return;
+    }
+    
+    jpeg_create_decompress(&srcinfo);
+
 
     unsigned short header;
     
