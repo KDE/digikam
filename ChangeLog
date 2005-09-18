@@ -1,3 +1,603 @@
+v0.8.0-beta2		09/18/05
+----------------------------------------------------------------------------
+
+2005-09-18 00:07  pahlibar
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.cpp:
+	  override default jpeg error handling so that the program doesn't
+	  bail out on encoutering a rogue jpeg file BUGS: 112801
+
+2005-09-17 16:51  toma
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  Disable "remove tags" menu item when there are no common tags,
+	  but to not delay the menu appearance due to finding out if there
+	  are common items, I disable the menu item when there are more
+	  then 250 images. Partly based on patch by Gregory Kokanosky BUG:
+	  111798
+
+2005-09-16 10:44  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: more
+	  video files supported per default
+
+2005-09-15 06:50  pahlibar
+
+	* trunk/extragear/graphics/digikam/sqlite/sqliteInt.h: oops. that
+	  should have been 64-bit and not big endian BUGS: 112526
+
+2005-09-13 09:51  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: Fix
+	  pentax RAW file extension
+
+2005-09-13 09:29  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: add
+	  Sigma and Fuji raw file format support per default
+
+2005-09-11 17:44  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: just a
+	  first workaround, to display the kipi-plugins again in the menu
+	  again
+
+2005-09-11 12:45  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: Some
+	  programs aren't able to handle the digikamalbums:/ protocol
+	  (like k3b). Now digikam uses the file:/ protocol in its
+	  dragobject, so k3b is able to get files per drag 'n drop from
+	  digikam again. This should work for almost every program (I've
+	  tried k3b and gimp which both works now). Internally digikam
+	  still uses digikamalbums:/ for drag 'n drop, so the database is
+	  still updated when moving objects. CCMAIL: digikam-devel@kde.org
+
+2005-09-09 14:21  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.h: When a
+	  camera was added to the toolbar, the icon wasn't displayed after
+	  program restart
+
+2005-09-09 10:49  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  When an image was saved with "Save As" with a filename that
+	  already existed in the album, the new ImageInfo was first
+	  created through signalNewFilteredItems but deleted through
+	  signalDeleteFilteredItem for the old image - because both used
+	  the same filename. BUG: 112000
+
+2005-09-09 07:28  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: showfoto
+	  BugFix : Forget to commit this patch to don't prompt user about
+	  to save image after to do SaveAs operation. CCBUG: 111873
+
+2005-09-08 07:08  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfotoui.rc:
+	  showfoto BugFix : ToolBar settings crash because "bcg" action
+	  instance is created and removed from actionCollection() when
+	  imageplugin_core is available. To fix it : - Do create "bcg"
+	  action (Brightness/Contrast/Gamma) per default but only when
+	  showfoto isn't installed with digikam - Create "bcg" action only
+	  if ImagePlugins_core isn't available (showofoto installed
+	  alone). This is must be done after that createGUI is done using
+	  plugActionList() method. Tested in both ways (digikam
+	  installed/not installed with showfoto) CCBUG: 111875
+
+2005-09-07 07:31  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: showfoto
+	  BugFix : - Refresh the right item to save/saveas properly in
+	  showfoto thumbbar. Using a new method in thumbbar.cpp to find
+	  item by url. - Don't prompt user about to save image after to do
+	  SaveAs operation. CCBUG: 111873
+
+2005-09-06 14:23  osterfeld
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+	  fix capitalization (noticed by binner)
+
+2005-09-05 15:13  osterfeld
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+	  another yes/no replacement
+
+2005-09-05 14:53  osterfeld
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  grmbl, KStdGuiItem::overwrite() is kdelibs >= 3.5 only
+
+2005-09-05 14:48  osterfeld
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  Use kstdguiitems for "Overwrite" and "Cancel" instead of custom
+	  strings.
+
+2005-09-05 14:21  osterfeld
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  "Overwrite?" dialog: replace yes/no by overwrite/cancel, use
+	  message text from kwrite Forgot that yesterday somehow...
+	  CCMAIL: caulier.gilles@free.fr
+
+2005-09-05 11:25  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.h:
+	  Bugfix : no need to plug more than one FullScreen button on Main
+	  Tool bar if there is already one (for example if user adding it
+	  using toolbar settings). Unplug properly it accordinly.
+
+2005-09-05 08:44  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.h,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbnailjob.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbnailjob.h,
+	  trunk/extragear/graphics/digikam/showfoto/Makefile.am: Use
+	  digikamthumbnail protocol with showfoto thumbar when its
+	  available, for exemple in a both digikam/showfoto installation.
+	  This way : - always update properly thumbnails after image
+	  save/saveas. - improve thumnails computation speed, especially
+	  with PNG and JPEG files. - digikamthumbnail protocol will render
+	  properly PNG, TIFF, and JPEG files preview in all case
+	  (KIO::filePreview can't do it). If showfoto is installed without
+	  digikam (digikamthumbnail protocol unavialable), showfoto
+	  thumbar use KIO::filePreview protocol instead to rendering
+	  thumbnails. CCBUG: 111873
+
+2005-09-05 07:00  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesexif.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertiesgeneral.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.h: Remove
+	  digikam database depency on ThumbnailJob implementation
+
+2005-09-04 17:46  osterfeld
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: fix
+	  saveas dialog, do not use "Yes", "No" for buttons but
+	  "Overwrite" and "Cancel".
+
+2005-09-03 21:09  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  Prompt wait cursor during Save/SaveAs operations
+
+2005-09-03 20:43  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: Prompt
+	  wait cursor during Save/SaveAs operations
+
+2005-09-02 19:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  Don't using KFilePreview thumbnails cache to display properly
+	  the image modifications on showfoto thumbbar. Please, give me a
+	  feedback... Nota: using KIO:KfilePreview isn't the better way to
+	  render thumbnails. This method don't work properly with any TIFF
+	  and PNG files generated with imlib2 (especially for example with
+	  hight PNG compression level). Perhaps the better way is to use
+	  the digikamthumbnails kioslave when it's available (for example
+	  in a both installation of showfoto and digikam in the same
+	  computer). CCBUG: 111873
+
+2005-09-01 11:49  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: BugFix :
+	  Hide properly ToolBar in FullScreen mode. CCBUG: 111876
+
+2005-09-01 11:26  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	  re-select preview item in thumbar if cancel is selected when
+	  prompt user save. CCBUG: 111873
+
+2005-09-01 07:48  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.h:
+	  new method to update selection only
+
+2005-08-31 09:00  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h: BugFix :
+	  update properly current item informations when images are
+	  loaded/removed.
+
+2005-08-31 06:54  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: BugFix :
+	  sync properly showfoto config
+
+2005-08-31 05:57  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailjob.cpp: *
+	  apply marcel's patch for executing the items only if cursor is
+	  in the thumbnail area. * double the thumbnail spacing making it
+	  easier to unselect or do drag selection * remove the inner white
+	  border in the thumbnail highligher. makes the highlights look
+	  better, imo and also shows more of the thumbnail BUGS: 111695
+	  110178 99416
+
+2005-08-29 19:26  lauri
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.desktop:
+	  BUGNO:99497
+
+2005-08-29 13:23  pahlibar
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: please
+	  follow indentation style which is consistent with rest of
+	  digikam code. there is a HACKING guide as a guideline
+
+2005-08-29 12:21  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: BugFix :
+	  when current item is deleted, always get the new current item
+	  from thumbbar
+
+2005-08-29 07:53  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: use home
+	  documents path per default to open new urls
+
+2005-08-29 07:38  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: fix :
+	  current Item must be null if no image loaded
+
+2005-08-28 13:53  toma
+
+	* trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+	  Save the size of the advanced search window. Could someone look
+	  if this is the right place and way to do this? CCMAIL:
+	  digikam-devel@kde.org
+
+2005-08-27 21:54  toma
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp:
+	  When moving a file to another folder and the orginal can not be
+	  removed, don't show an error about the destination, but check if
+	  the source is the cause of this and throw an appropiate error.
+
+2005-08-27 20:39  toma
+
+	* trunk/extragear/graphics/digikam/digikam/scanlib.cpp: The hide
+	  thing was not working, probably because it was not shown yet.
+	  This workaround seems to be the solution to prevent the dialog
+	  to be shown while the user looks at the dialog where he has to
+	  decide what to do with deleted folders.
+
+2005-08-27 19:30  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.h: even
+	  when an image comments/tags/date were not being modified, on
+	  item switching the properties were being written out to the db.
+	  prevent that. this should make switching images much faster
+	  especially for those using "write comments to jpeg files"
+
+2005-08-27 17:52  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.cpp: *
+	  indicate why listing failed * check if pointer is valid, before
+	  trying to dereference it
+
+2005-08-26 17:12  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h:
+	  enable/disable menu entries depending on the selected album
+
+2005-08-26 13:29  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/curveswidget.h:
+	  Polish code
+
+2005-08-26 11:35  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.h,
+	  trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.h:
+	  Polish image properties histogram tab using QGroupButton.
+
+2005-08-26 10:04  pahlibar
+
+	* trunk/extragear/graphics/digikam/configure.in.bot: correct kipi
+	  url BUGS: 111511
+
+2005-08-25 20:10  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp:
+	  Using new color gradient widget
+
+2005-08-25 20:09  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.cpp:
+	  Using new color gradient widget
+
+2005-08-25 20:08  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/colorgradientwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/colorgradientwidget.h:
+	  New color gradient widget with no marging and support to toogle
+	  in disable state. Look better than old KColorGradient based
+	  implementation and is more adapted to Histogram Widget.
+
+2005-08-25 19:53  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.h:
+	  fix toggle to disable state fix enum : separate type is better
+	  to use in GUI.
+
+2005-08-25 12:29  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.h:
+	  missing repaint widget in disable state
+
+2005-08-25 10:04  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp:
+	  fix i18n
+
+2005-08-24 17:49  toma
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  This fix makes it possible to delete folders with subfolders in
+	  it. Which is broken in beta1. The routines which ask for
+	  confirmation if it is ok to delete a folder which has subfolder
+	  is a warningYesNo and the routine without subfolders is a
+	  warningContinueCancel. Both are handled by an if statement wich
+	  check for Continue. Obviously this breaks deletion of a folder
+	  with subfolder. For now I'll revert Stephan Binners style change
+	  here. Stephan, what is the best way for both dialogs? yes/no or
+	  continue/cancel as they have to be equal? CCMAIL: binner@kde.org
+
+2005-08-24 11:30  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp:
+	  fix Button group marging to 0
+
+2005-08-24 08:39  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/pics/histogram-lin.png,
+	  trunk/extragear/graphics/digikam/digikam/pics/histogram-log.png,
+	  trunk/extragear/graphics/digikam/digikam/pics/histogram.png,
+	  trunk/extragear/graphics/digikam/digikam/pics/image-full.png,
+	  trunk/extragear/graphics/digikam/digikam/pics/image-selection.png:
+	  New icons
+
+2005-08-24 07:37  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/curveswidget.cpp:
+	  Add black frame around
+
+2005-08-24 07:34  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  more safety checks in albumfolderview
+
+2005-08-24 07:14  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.cpp:
+	  No need to have a QFrame around HistogramWidget since this one
+	  have a black frame. This way reduce a little the space using by
+	  histogram widget.
+
+2005-08-24 06:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/histogramwidget.cpp:
+	  Add black frame around
+
+2005-08-23 22:20  jahrens
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  the beast is back (SVN commit 451394), this "workaround" seems
+	  to help until we find the real problem... it's annoying!
+
+2005-08-23 21:36  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	  Enables/disables items in the album menu, depending on the
+	  selected album. There are still some cases left which have to be
+	  checked.
+
+2005-08-23 12:39  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  Fix Image Editor feedback to AlbumIconView : set properly the
+	  current item enabling/selection to icon view.
+
+2005-08-23 06:53  pahlibar
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageregionwidget.cpp:
+	  fix crash. the button was not set exclusive and so the selected
+	  id returned -1, and since this value was stored in an enum and
+	  then used in a switch statement, a new pixmap was not being
+	  created.
+
+2005-08-22 19:56  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/iconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.h,
+	  trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageproperties.cpp:
+	  Fix image properties and Comments & Tags dialogs feedback to
+	  AlbumIconView : set properly the current item enabling/selection
+	  to icon view.
+
+2005-08-22 19:22  toma
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  Keep the thumbnail completely visible and the next one as well.
+	  I heard from the bugreporter that he is extremely happy and will
+	  buy a pizza for me. BUG: 104031
+
+2005-08-22 14:12  mlaurent
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/transupp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp:
+	  TRUE->true FALSE->false
+
+2005-08-22 09:17  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepropertiesgeneral.cpp:
+	  Bugfix : displaying the album name of the current image selected.
+
+2005-08-21 22:12  toma
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: when
+	  changing an image and pressing next, the method next and the
+	  methos openURL are trying to save the changed images. So that
+	  results in two dialogs. With this little patch I disable the
+	  save menu entry after the first time a users indicates he wants
+	  to discard the image changes, so it will not popup in the next
+	  method. BUG: 104890
+
+2005-08-21 21:44  toma
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h: The state
+	  of the menu's was checked while loading the images, but that is
+	  not sufficient. At the end of the constructor we now check if
+	  all menu items are active which should be active. BUGS: 109271
+
+2005-08-21 20:59  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/sidebar.h: Hide
+	  the right sidebar by default
+
+2005-08-21 17:37  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp:
+	  setting the active tab has to be done through loadViewState()
+
+2005-08-21 11:29  jahrens
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_redeye.cpp:
+	  Corrected a failure while reading the red eye correction config
+
+2005-08-21 05:01  pahlibar
+
+	* trunk/extragear/graphics/digikam/configure.in.in: do not enable
+	  visibility if kdelibs has not been compiled with visbility
+	  enabled, otherwise plugins won't load. ported from 0.7.4 tarball
+
+2005-08-21 01:39  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: fix
+	  crash in tagfolderview, when dragged items where dropped in
+	  empty space
+
+2005-08-20 16:46  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+	  clear selection and select new tag on new tag creation in the
+	  filter view
+
+2005-08-20 15:19  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	  Gilles reported a subtle bug, that the image editor size isn't
+	  restored *sometimes* after starting image editor. The last days
+	  I had this error almost everytime when I started IE. This patch
+	  seems to correct it, since it is gone here now, but I'm not
+	  really sure of it... CCMAIL: caulier.gilles@free.fr
+
+2005-08-19 09:48  mm
+
+	* trunk/extragear/graphics/digikam/utilities/setup/gpiface.cpp:
+	  better leave out GP_PORT_DISK until libgphoto2 2.2 is released
+
+2005-08-19 09:46  mm
+
+	* trunk/extragear/graphics/digikam/digikam/cameralist.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/gpiface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcamera.cpp:
+	  do not unconditionally overwrite port with "usb:", just ports
+	  that start with "usb:". start "disk:" support.
+
+2005-08-19 05:32  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/digikam_export.h: check
+	  if config.h is actually available
+
+2005-08-19 03:57  pahlibar
+
+	* trunk/extragear/graphics/digikam/digikam/main.cpp: KInstance
+	  instance is not ready yet. use I18N_NOOP. BUGS: 110984
+
+2005-08-15 20:16  toma
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.h:
+	  Owen Hirst <n8rider@sbcglobal.net> has provided a patch for KIPI
+	  Rename Images (part of the BatchProcesses Plugin). kipi part: *
+	  Complete rewrite * Use rename instead of copy * Allow formatting
+	  of date string digikam part: * fixes the time and date
+	  adjustment not working * Update database entry when a file is
+	  renamed by a KIPI Plugin * make slideshow available right after
+	  digikams start This fixes the following bugs:
+	  BUGS:110391,110659,110698,110575,99895,104032,105727,110508,104511
+	  great work!
+
 v0.8.0-beta1		08/19/05
 ----------------------------------------------------------------------------
 
