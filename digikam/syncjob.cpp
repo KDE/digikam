@@ -176,7 +176,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
                 SLOT(slotLoadThumbnailFailed()));
 
         enter_loop();
-        delete job;
+        job->kill();
     }
     else
     {

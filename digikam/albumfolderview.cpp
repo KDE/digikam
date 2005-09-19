@@ -212,7 +212,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
 AlbumFolderView::~AlbumFolderView()
 {
-    delete d->iconThumbJob;
+    if (d->iconThumbJob)
+        d->iconThumbJob->kill();
+
     delete d;
 }
 

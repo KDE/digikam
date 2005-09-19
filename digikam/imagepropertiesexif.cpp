@@ -87,7 +87,10 @@ void ImagePropertiesEXIF::setCurrentURL(const KURL& url)
 {
 
     if (!m_thumbJob.isNull())
+    {
         m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
 
     m_thumbJob = new ThumbnailJob(url, 48, true, AlbumSettings::instance()->getExifRotate());
     

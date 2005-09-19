@@ -152,7 +152,10 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
     // ------------------------------------------------------------------------------
 
     if (!m_thumbJob.isNull())
+    {
         m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
     
     m_thumbJob = new ThumbnailJob(url, 128, true, AlbumSettings::instance()->getExifRotate());
     

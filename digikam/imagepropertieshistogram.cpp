@@ -295,7 +295,10 @@ ImagePropertiesHistogram::~ImagePropertiesHistogram()
 void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int imageWidth, int imageHeight)
 {
     if (!m_thumbJob.isNull())
+    {
         m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
 
     m_thumbJob = new ThumbnailJob(url, 48, true, AlbumSettings::instance()->getExifRotate());
     

@@ -165,7 +165,10 @@ void PixmapManager::slotFailedThumbnail(const KURL& url)
 void PixmapManager::slotCompleted()
 {
     if (!m_thumbJob.isNull())
+    {
         m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
 
     AlbumIconItem* item = m_view->nextItemToThumbnail();
     if (!item)

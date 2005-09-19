@@ -399,11 +399,7 @@ void ImageDescEdit::slotItemChanged()
     if (!m_thumbJob.isNull())
     {
         m_thumbJob->kill();
-    }
-
-    if (!m_thumbJob.isNull())
-    {
-        delete m_thumbJob;
+        m_thumbJob = 0;
     }
 
     ImageInfo* info = m_currItem->imageInfo();
