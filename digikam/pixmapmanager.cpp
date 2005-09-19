@@ -81,7 +81,10 @@ void PixmapManager::setThumbnailSize(int size)
     m_size = size;
     m_cache->clear();
     if (!m_thumbJob.isNull())
+    {
         m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
 }
 
 QPixmap* PixmapManager::find(const KURL& url)
@@ -134,6 +137,7 @@ void PixmapManager::clear()
     if (!m_thumbJob.isNull())
     {
         m_thumbJob->kill();
+        m_thumbJob = 0;
     }
 
     m_cache->clear();
