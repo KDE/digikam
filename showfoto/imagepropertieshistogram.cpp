@@ -44,13 +44,13 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kfileitem.h>
-#include <kio/previewjob.h>
 
 // Local includes.
 
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "thumbnailjob.h"
 #include "imagepropertieshistogram.h"
 
 ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selectionArea)
@@ -281,6 +281,9 @@ ImagePropertiesHistogram::~ImagePropertiesHistogram()
     config->writeEntry("Histogram Color", m_colorsCB->currentItem());
     config->writeEntry("Histogram Rendering", m_regionBG->selectedId());
     
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
+        
     if ( m_histogramWidget )
        delete m_histogramWidget;
     
@@ -290,12 +293,21 @@ ImagePropertiesHistogram::~ImagePropertiesHistogram()
 
 void ImagePropertiesHistogram::setData(const KURL& url, uint* imageData, int imageWidth, int imageHeight)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, 48);
+    if (!m_thumbJob.isNull())
+    {
+        m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
+
+    m_thumbJob = new ThumbnailJob(url, 48, true);
     
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            this, SLOT(slotGotThumbnail(const KFileItem *, const QPixmap &)));
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            this, SLOT(slotFailedThumbnail(const KFileItem *)));
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
+            SLOT(slotGotThumbnail(const KURL&,
+                                  const QPixmap&)));
+   
+    connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedThumbnail(const KURL&)));    
             
     // ----------------------------------------------------------------
 
@@ -502,7 +514,9 @@ void ImagePropertiesHistogram::updateInformation()
     m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
 }
 
-void ImagePropertiesHistogram::slotGotThumbnail(const KFileItem *, const QPixmap &pix)
+void ImagePropertiesHistogram::slotGotThumbnail(const KURL&,
+                                                const QPixmap& pix)
+
 {
     if (!pix.isNull())
         m_labelThumb->setPixmap(pix);
@@ -510,7 +524,7 @@ void ImagePropertiesHistogram::slotGotThumbnail(const KFileItem *, const QPixmap
         m_labelThumb->clear();
 }
 
-void ImagePropertiesHistogram::slotFailedThumbnail(const KFileItem *)
+void ImagePropertiesHistogram::slotFailedThumbnail(const KURL&)
 {
     m_labelThumb->clear();
 }

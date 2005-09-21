@@ -33,7 +33,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kfileitem.h>
-#include <kio/previewjob.h>
 
 // LibKExif includes.
 
@@ -41,6 +40,7 @@
 
 // Local includes.
 
+#include "thumbnailjob.h"
 #include "imagepropertiesexif.h"
 
 ImagePropertiesEXIF::ImagePropertiesEXIF(QWidget* page)
@@ -82,6 +82,9 @@ ImagePropertiesEXIF::ImagePropertiesEXIF(QWidget* page)
 
 ImagePropertiesEXIF::~ImagePropertiesEXIF()
 {
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
+        
     KConfig* config = kapp->config();
     config->setGroup("Image Properties Dialog");
     config->writeEntry("EXIF Level", m_levelCombo->currentItem());
@@ -90,12 +93,21 @@ ImagePropertiesEXIF::~ImagePropertiesEXIF()
 
 void ImagePropertiesEXIF::setCurrentURL(const KURL& url)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, 48);
+    if (!m_thumbJob.isNull())
+    {
+        m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
+
+    m_thumbJob = new ThumbnailJob(url, 48, true);
     
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            this, SLOT(slotGotThumbnail(const KFileItem *, const QPixmap &)));
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            this, SLOT(slotFailedThumbnail(const KFileItem *)));
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
+            SLOT(slotGotThumbnail(const KURL&,
+                                  const QPixmap&)));
+   
+    connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedThumbnail(const KURL&)));   
     
     // ----------------------------------------------------------------
 
@@ -115,7 +127,7 @@ void ImagePropertiesEXIF::slotLevelChanged(int)
         m_exifWidget->setMode(KExifWidget::FULL);
 }
 
-void ImagePropertiesEXIF::slotGotThumbnail(const KFileItem *, const QPixmap &pix)
+void ImagePropertiesEXIF::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     if (!pix.isNull())
         m_labelThumb->setPixmap(pix);
@@ -123,7 +135,7 @@ void ImagePropertiesEXIF::slotGotThumbnail(const KFileItem *, const QPixmap &pix
         m_labelThumb->clear();
 }
 
-void ImagePropertiesEXIF::slotFailedThumbnail(const KFileItem *)
+void ImagePropertiesEXIF::slotFailedThumbnail(const KURL&)
 {
     m_labelThumb->clear();
 }

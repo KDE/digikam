@@ -23,7 +23,7 @@
 // Qt includes.
 
 #include <qobject.h>
-//#include <qguardedptr.h>
+#include <qguardedptr.h>
 
 class QComboBox;
 class QPixmap;
@@ -32,6 +32,7 @@ class KURL;
 class KFileItem;
 
 class KExifWidget;
+class ThumbnailJob;
 
 class ImagePropertiesEXIF : public QObject
 {
@@ -49,14 +50,15 @@ private:
     KExifWidget                  *m_exifWidget;
     QComboBox                    *m_levelCombo;
     QLabel                       *m_labelThumb;
-
+    
+    QGuardedPtr<ThumbnailJob>     m_thumbJob;
     QString                       m_currItem;
     
 private slots:
 
     void slotLevelChanged(int);
-    void slotGotThumbnail(const KFileItem *, const QPixmap &);
-    void slotFailedThumbnail(const KFileItem *);
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
+    void slotFailedThumbnail(const KURL&);
 };
 
 #endif /* IMAGEPROPERTIESEXIF_H */

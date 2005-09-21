@@ -32,10 +32,10 @@
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kfileitem.h>
-#include <kio/previewjob.h>
 
 // Local includes.
 
+#include "thumbnailjob.h"
 #include "imagepropertiesgeneral.h"
 
 ImagePropertiesGeneral::ImagePropertiesGeneral(QWidget* page)
@@ -120,16 +120,27 @@ ImagePropertiesGeneral::ImagePropertiesGeneral(QWidget* page)
 
 ImagePropertiesGeneral::~ImagePropertiesGeneral()
 {
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
 }
 
 void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, 128);
-    
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            this, SLOT(slotGotThumbnail(const KFileItem *, const QPixmap &)));
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            this, SLOT(slotFailedThumbnail(const KFileItem *)));
+    if (!m_thumbJob.isNull())
+    {
+        m_thumbJob->kill();
+        m_thumbJob = 0;
+    }
+
+    m_thumbJob = new ThumbnailJob(url, 128, true);
+
+    connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&,
+                                               const QPixmap&)),
+            SLOT(slotGotThumbnail(const KURL&,
+                                  const QPixmap&)));
+
+    connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+            SLOT(slotFailedThumbnail(const KURL&))); 
 
     // ------------------------------------------------------------------------------
     
@@ -179,12 +190,12 @@ void ImagePropertiesGeneral::setCurrentURL(const KURL& url)
     m_filepermissions->setText( fi->permissionsString() );
 }
 
-void ImagePropertiesGeneral::slotGotThumbnail(const KFileItem *, const QPixmap &pix)
+void ImagePropertiesGeneral::slotGotThumbnail(const KURL&, const QPixmap& pix)
 {
     m_thumbLabel->setPixmap(pix);
 }
 
-void ImagePropertiesGeneral::slotFailedThumbnail(const KFileItem *)
+void ImagePropertiesGeneral::slotFailedThumbnail(const KURL&)
 {
     m_thumbLabel->clear();
     m_thumbLabel->setText(i18n("Thumbnail unavailable"));

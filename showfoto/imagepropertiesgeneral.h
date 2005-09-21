@@ -21,6 +21,7 @@
 #define IMAGEPROPERTIESGENERAL_H
 
 #include <qobject.h>
+#include <qguardedptr.h>
 
 class QWidget;
 class QLabel;
@@ -29,6 +30,8 @@ class QPixmap;
 class KSqueezedTextLabel;
 class KURL;
 class KFileItem;
+
+class ThumbnailJob;
 
 class ImagePropertiesGeneral : public QObject
 {
@@ -43,8 +46,8 @@ public:
 
 private slots:
 
-    void slotGotThumbnail(const KFileItem *, const QPixmap &);
-    void slotFailedThumbnail(const KFileItem *);
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
+    void slotFailedThumbnail(const KURL&);
     
 private:
     
@@ -57,6 +60,8 @@ private:
     KSqueezedTextLabel           *m_filesize;
     KSqueezedTextLabel           *m_fileowner;
     KSqueezedTextLabel           *m_filepermissions;
+    
+    QGuardedPtr<ThumbnailJob>     m_thumbJob;
 };
 
 #endif /* IMAGEPROPERTIESGENERAL_H */

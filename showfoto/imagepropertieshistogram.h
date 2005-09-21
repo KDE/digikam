@@ -24,6 +24,7 @@
 
 #include <qobject.h>
 #include <qimage.h>
+#include <qguardedptr.h>
 
 class QComboBox;
 class QSpinBox;
@@ -33,6 +34,8 @@ class QHButtonGroup;
 
 class KURL;
 class KFileItem;
+
+class ThumbnailJob;
 
 namespace Digikam
 {
@@ -63,8 +66,8 @@ private slots:
     void slotColorsChanged(int color);
     void slotRenderingChanged(int rendering);
     void slotIntervChanged(int);
-    void slotGotThumbnail(const KFileItem *, const QPixmap &);
-    void slotFailedThumbnail(const KFileItem *);
+    void slotGotThumbnail(const KURL&, const QPixmap& pix);
+    void slotFailedThumbnail(const KURL&);
 
     void slotUpdateMinInterv(int min);
     void slotUpdateMaxInterv(int max);
@@ -92,6 +95,8 @@ private:
     QImage                        m_imageSelection;
     
     QRect                        *m_selectionArea;
+    
+    QGuardedPtr<ThumbnailJob>     m_thumbJob;
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::HistogramWidget     *m_histogramWidget;
