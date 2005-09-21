@@ -516,12 +516,19 @@ void IconView::sort()
     
     delete [] groups;
 
-    // set the currItem to first item
-    
-    d->currItem = 0;
-    if (d->firstGroup)
-        d->currItem = d->firstGroup->firstItem();
+    if (!d->currItem)
+    {
+        // set the currItem to first item
+        if (d->firstGroup)
+            d->currItem = d->firstGroup->firstItem();
+    }
     d->anchorItem = d->currItem;
+
+    if (d->currItem)
+    {
+        d->currItem->setSelected(true, true);
+        ensureItemVisible(d->currItem);
+    }
 }
 
 void IconView::slotUpdate()
