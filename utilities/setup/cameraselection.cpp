@@ -41,7 +41,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 {
     setHelp("cameraselection.anchor", "digikam");
     UMSCameraNameActual_ = QString("Directory Browse");
-    UMSCameraNameShown_  = QString("USB Mass Storage");
+    UMSCameraNameShown_  = QString("Mounted Camera");
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
