@@ -237,3 +237,23 @@ void CameraIconViewItem::calcRect()
                             m_extraRect.width(), m_extraRect.height());
     }
 }
+
+QRect CameraIconViewItem::clickToOpenRect()
+{
+    QRect  r(rect());
+    
+    if (m_pixmap.isNull())
+    {
+        QRect  pixRect(m_pixRect);
+        pixRect.moveBy(r.x(), r.y());
+        return pixRect;
+    }
+
+
+    QRect pixRect(m_pixRect.x() + (m_pixRect.width() - m_pixmap.width())/2,
+                  m_pixRect.y() + (m_pixRect.height() - m_pixmap.height())/2,
+                  m_pixmap.width(),
+                  m_pixmap.height());
+    pixRect.moveBy(r.x(), r.y());
+    return pixRect;
+}

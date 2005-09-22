@@ -45,6 +45,9 @@ public:
     GPItemInfo* itemInfo() const
         { return m_itemInfo; }
 
+    // reimplemented from IconItem
+    virtual QRect clickToOpenRect();
+    
 protected:
 
     virtual void paintItem();

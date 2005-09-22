@@ -79,6 +79,7 @@ void UMSCamera::getAllFolders(const QString& folder,
 {
     m_cancel = false;
     subFolderList.clear();
+    subFolderList.append(folder);
     listFolders(folder, subFolderList);
 }
 
