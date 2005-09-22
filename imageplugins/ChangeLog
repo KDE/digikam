@@ -1,3 +1,144 @@
+v0.8.0-Beta1 - 22/09/05
+----------------------------------------------------------------------------
+2005-09-08 07:16  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.h:
+	  digiKam HotPixels plugin : missing method to disable menu action
+	  from host app.
+
+2005-09-04 19:39  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp:
+	  Adapt defaults to manual CCMAIL:caulier.gilles@free.fr
+
+2005-09-01 09:44  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.cpp:
+	  slot connection before
+
+2005-08-31 12:27  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageeffect_superimpose.cpp:
+	  Bugfix : open properly the last template superimpose folder used.
+
+2005-08-29 14:11  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp:
+	  Fix enum ref.
+
+2005-08-28 16:31  uga
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp:
+	  Avoid the first empty non-existing black frame, and disable
+	  adding blackframes. It accepts a single blackframe for now
+
+2005-08-27 15:17  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  Fix settings order : 'Exposure' and 'OverExposure indicator'
+	  must be together
+
+2005-08-26 13:54  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h:
+	  digikam WhiteBalance tool : Polish GUI using new layout in user
+	  settings area Gerhard, please can you update handbook
+	  screenshots. CCMAIL: Gerhard Kulzer <gerhard@kulzer.net>
+
+2005-08-26 07:43  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h:
+	  digikam WhiteBalance tool : Polish GUI. - Using QGroupButton to
+	  select histogram scale. - Using QHLoayout to optimize user
+	  settings area size. Gerhard, please update handbook screenshots.
+	  CCMAIL: Gerhard Kulzer <gerhard@kulzer.net>
+
+2005-08-26 07:36  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.h:
+	  digikam ChannelMixer tool : Polish GUI. - Using QGroupButton to
+	  select histogram scale. - Using QHLoayout to optimize user
+	  settings area size. Gerhard, please update handbook screenshots.
+	  CCMAIL: Gerhard Kulzer <gerhard@kulzer.net>
+
+2005-08-26 07:24  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.h:
+	  digikam CurvesAdjust tool : Polish GUI. - Using QGroupButton to
+	  select histogram scale. - Using QHLoayout to optimize user
+	  settings area size. Gerhard, please update handbook screenshots.
+	  CCMAIL: Gerhard Kulzer <gerhard@kulzer.net>
+
+2005-08-26 06:49  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h:
+	  digikam AdjustLevels tool : Polish GUI. - Using new
+	  HistogramWidget. Levels Slider size adjusted. - Using
+	  QGroupButton to select histogram scale. - Using QHLoayout to
+	  optimize user settings area size. Gerhard, please update
+	  handbook screenshots. CCMAIL: Gerhard Kulzer <gerhard@kulzer.net>
+
+2005-08-25 21:02  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  Fix namespace
+
+2005-08-25 20:11  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  Using new color gradient widget
+
+2005-08-24 07:38  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp:
+	  No need to have a QFrame around CurveWidget since this one have
+	  a black frame. This way reduce a little the space using by curve
+	  widget.
+
+2005-08-24 07:16  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  No need to have a QFrame around HistogramWidget since this one
+	  have a black frame. This way reduce a little the space using by
+	  histogram widget.
+
+2005-08-22 15:09  mlaurent
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.h:
+	  Add const
+
+2005-08-22 14:42  mlaurent
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/fontchooserwidget.cpp:
+	  Fix postincremental/listend
+
+2005-08-22 14:17  mlaurent
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp:
+	  
+
 v0.8.0-Beta1 - 19/08/05
 ----------------------------------------------------------------------------
     * Solarize, Raindrop, Border; FreeRotation, ShearTool, LensDistortion,
