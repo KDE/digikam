@@ -40,8 +40,8 @@ CameraSelection::CameraSelection( QWidget* parent )
                   Help|Ok|Cancel, Ok, true)
 {
     setHelp("cameraselection.anchor", "digikam");
-    UMSCameraNameActual_ = QString("Directory Browse");
-    UMSCameraNameShown_  = QString("Mounted Camera");
+    UMSCameraNameActual_ = QString("Directory Browse");   // Don't be i18n!
+    UMSCameraNameShown_  = i18n("Mounted Camera");
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
