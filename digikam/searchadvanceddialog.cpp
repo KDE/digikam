@@ -26,9 +26,11 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qhgroupbox.h>
+#include <qvgroupbox.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -56,11 +58,14 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     m_resultsView   = new SearchResultsView( page );
     m_resultsView->setMinimumSize( QSize(200, 200) );
     m_resultsView->setMaximumWidth(  130*2 + m_resultsView->spacing()*3 + 20 );
+    QWhatsThis::add( m_resultsView, i18n("<p>You can see here the items found in album "
+                                         "library using the current search settings."));
     hbox->addWidget( m_resultsView );
 
     // Box for all the rules
-    m_rulesBox = new QVBox( page );
-    m_rulesBox->setFrameStyle( QFrame::Panel|QFrame::Raised );
+    m_rulesBox = new QVGroupBox( i18n("Search Rules"), page);
+    QWhatsThis::add( m_rulesBox, i18n("<p>You can see here the search rules list used to process items "
+                                      "searching in album library."));
     m_rulesBox->layout()->setSpacing( spacingHint() );
     m_rulesBox->layout()->setMargin( 5 );
     m_rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
@@ -72,8 +77,10 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     // Box for the add/delete
     QGroupBox* groupbox = 0;
-    groupbox            = new QGroupBox( i18n("Add/Delete Option"),
+    groupbox            = new QGroupBox( i18n("Add/Delete Search Rules"),
                                          page, "groupbox" );
+    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents."));
+                                         
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
@@ -113,6 +120,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
     m_title = new QLineEdit(groupbox, "searchTitle");
+    QWhatsThis::add( m_title, i18n("<p>Enter here the name used to save the current search in \"My Searches\" view"));
     groupbox->setFrameStyle( QFrame::NoFrame );
 
     box = new QHBoxLayout( groupbox->layout() );

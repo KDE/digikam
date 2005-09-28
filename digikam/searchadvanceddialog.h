@@ -26,7 +26,7 @@
 
 #include <kdialogbase.h>
 
-class QVBox;
+class QVGroupBox;
 class QPushButton;
 class QComboBox;
 class QLineEdit;
@@ -70,7 +70,7 @@ private slots:
     void slotOk();
 
 private:
-    QVBox*             m_rulesBox;
+    QVGroupBox*        m_rulesBox;
     QPushButton*       m_addButton;
     QPushButton*       m_delButton;
     QPushButton*       m_groupButton;

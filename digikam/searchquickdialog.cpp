@@ -51,10 +51,10 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     
     new QLabel("<b>" + i18n("Search:") + "</b>", hbox);
     m_searchEdit = new QLineEdit(hbox);
-    QWhatsThis::add( m_searchEdit, i18n("<p>Enter here your search arguments in albums database"));
+    QWhatsThis::add( m_searchEdit, i18n("<p>Enter here your search arguments in albums library"));
     
     m_resultsView = new SearchResultsView(vbox);
-    QWhatsThis::add( m_searchEdit, i18n("<p>You can see here the item found in albums database using the current search arguments"));
+    QWhatsThis::add( m_searchEdit, i18n("<p>You can see here the items found in albums library using the current search arguments"));
     
     hbox = new QHBox(vbox);
     hbox->setSpacing(spacingHint());
