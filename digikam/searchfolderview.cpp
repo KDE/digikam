@@ -354,7 +354,7 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
         if ( sItem->m_album->isSimple() )
         {
             popmenu.insertItem(SmallIcon("find"),
-                               i18n("Edit as Extended Search..."), 11);
+                               i18n("Edit as Advanced Search..."), 11);
         }
         popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 12);
 
