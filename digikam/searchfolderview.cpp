@@ -327,7 +327,7 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
     {
         QPopupMenu popmenu(this);
         popmenu.insertItem(SmallIcon("find"), i18n("New Simple Search..."), 10);
-        popmenu.insertItem(SmallIcon("find"), i18n("New Extended Search..."), 11);
+        popmenu.insertItem(SmallIcon("find"), i18n("New Advanced Search..."), 11);
 
         switch (popmenu.exec(QCursor::pos()))
         {

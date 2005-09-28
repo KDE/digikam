@@ -40,8 +40,9 @@
 
 SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     : KDialogBase(parent, 0, true, i18n("Advanced Search"),
-                  Ok|Cancel), m_url(url)
+                  Help|Ok|Cancel), m_url(url)
 {
+    setHelp("advancedsearchtool.anchor", "digikam");
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);

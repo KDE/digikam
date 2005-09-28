@@ -38,8 +38,10 @@
 
 SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     : KDialogBase(parent, 0, true, i18n("Quick Search"),
-                  Ok|Cancel), m_url(url)
+                  Help|Ok|Cancel), m_url(url)
 {
+    setHelp("quicksearchtool.anchor", "digikam");
+    
     QVBox* vbox = new QVBox(this);
     vbox->setSpacing(spacingHint());
 
