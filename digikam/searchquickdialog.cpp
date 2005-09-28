@@ -28,6 +28,7 @@
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qlabel.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -50,15 +51,18 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     
     new QLabel("<b>" + i18n("Search:") + "</b>", hbox);
     m_searchEdit = new QLineEdit(hbox);
+    QWhatsThis::add( m_searchEdit, i18n("<p>Enter here your search arguments in albums database"));
     
     m_resultsView = new SearchResultsView(vbox);
-
+    QWhatsThis::add( m_searchEdit, i18n("<p>You can see here the item found in albums database using the current search arguments"));
+    
     hbox = new QHBox(vbox);
     hbox->setSpacing(spacingHint());
 
     new QLabel(i18n("Save search as:"), hbox);
     m_nameEdit = new QLineEdit(hbox);
     m_nameEdit->setText(i18n("Last Search"));
+    QWhatsThis::add( m_nameEdit, i18n("<p>Enter here the name used to save the current search in \"My Searches\" view"));
     
     setMainWidget(vbox);
 
