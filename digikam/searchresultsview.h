@@ -21,6 +21,11 @@
 #include <qiconview.h>
 #include <qcstring.h>
 #include <qdict.h>
+#include <qguardedptr.h>
+
+// Local includes.
+
+#include "thumbnailjob.h"
 
 class QPixmap;
 class KFileItem;
@@ -28,7 +33,6 @@ class KFileItem;
 namespace KIO
 {
 class TransferJob;
-class PreviewJob;
 class Job;
 }
 
@@ -46,18 +50,21 @@ public:
     
 private:
 
-    KIO::TransferJob*    m_listJob;
-    KIO::PreviewJob*     m_previewJob;
-    QDict<QIconViewItem> m_itemDict;
-    QString              m_libraryPath;
-    QString              m_filter;
+    KIO::TransferJob*         m_listJob;
+    
+    QGuardedPtr<ThumbnailJob> m_thumbJob;
+    
+    QDict<QIconViewItem>      m_itemDict;
+    
+    QString                   m_libraryPath;
+    QString                   m_filter;
 
 private slots:
 
     void slotData(KIO::Job *job, const QByteArray &data);
     void slotResult(KIO::Job *job);
-    void slotPreview(const KFileItem* item, const QPixmap&);
-    void slotFailed(const KFileItem* item);
+    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
+    void slotFailedThumbnail(const KURL& url);
 };
 
 #endif /* SEARCHRESULTSVIEW_H */

@@ -21,7 +21,6 @@
 #include <qdatastream.h>
 
 #include <kio/job.h>
-#include <kio/previewjob.h>
 #include <kfileitem.h>
 #include <kurl.h>
 
@@ -33,8 +32,8 @@
 SearchResultsView::SearchResultsView(QWidget* parent)
     : QIconView(parent)
 {
-    m_listJob   = 0;
-    m_previewJob = 0;
+    m_listJob  = 0;
+    m_thumbJob = 0;
 
     m_libraryPath = AlbumManager::instance()->getLibraryPath();
     m_filter      = AlbumSettings::instance()->getAllFileFilter();
@@ -45,8 +44,8 @@ SearchResultsView::SearchResultsView(QWidget* parent)
 
 SearchResultsView::~SearchResultsView()
 {
-    if (m_previewJob)
-        m_previewJob->kill();
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
     if (m_listJob)
         m_listJob->kill();
 }
@@ -57,9 +56,9 @@ void SearchResultsView::openURL(const KURL& url)
         m_listJob->kill();
     m_listJob = 0;
 
-    if (m_previewJob)
-        m_previewJob->kill();
-    m_previewJob = 0;
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
+    m_thumbJob = 0;
     
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
@@ -83,9 +82,9 @@ void SearchResultsView::clear()
         m_listJob->kill();
     m_listJob = 0;
 
-    if (m_previewJob)
-        m_previewJob->kill();
-    m_previewJob = 0;
+    if (!m_thumbJob.isNull())
+        m_thumbJob->kill();
+    m_thumbJob = 0;
 
     m_itemDict.clear();
     QIconView::clear();
@@ -134,11 +133,13 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     
     if (!ulist.isEmpty())
     {
-        m_previewJob = KIO::filePreview(ulist, 128);
-        connect(m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
-                SLOT(slotPreview(const KFileItem*, const QPixmap&)));
-        connect(m_previewJob, SIGNAL(failed (const KFileItem*)),
-                SLOT(slotFailed(const KFileItem*)));
+        m_thumbJob = new ThumbnailJob(ulist, 128, true);
+    
+        connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+   
+        connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+                this, SLOT(slotFailedThumbnail(const KURL&)));     
     }
 }
 
@@ -149,18 +150,19 @@ void SearchResultsView::slotResult(KIO::Job *job)
     m_listJob = 0;
 }
 
-void SearchResultsView::slotPreview(const KFileItem* item, const QPixmap& pix)
+
+void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
-    QIconViewItem* i = m_itemDict.find(item->url().path());
+    QIconViewItem* i = m_itemDict.find(url.path());
     if (i)
         i->setPixmap(pix);
     
-    m_previewJob = 0;
+    m_thumbJob = 0;
 }
 
-void SearchResultsView::slotFailed(const KFileItem*)
+void SearchResultsView::slotFailedThumbnail(const KURL&)
 {
-    m_previewJob = 0;    
+    m_thumbJob = 0;    
 }
 
 #include "searchresultsview.moc"
