@@ -46,45 +46,45 @@
 
 static struct
 {
-    QString keyText;
+    const char *keyText;
     QString key;
     SearchAdvancedRule::valueWidgetTypes cat;
 }
 RuleKeyTable[] =
 {
-    { i18n("Album"),            "album",           SearchAdvancedRule::ALBUMS },
-    { i18n("Album Name"),       "albumname",       SearchAdvancedRule::LINEEDIT },
-    { i18n("Album Caption"),    "albumcaption",    SearchAdvancedRule::LINEEDIT },
-    { i18n("Album Collection"), "albumcollection", SearchAdvancedRule::LINEEDIT },
-    { i18n("Tag"),              "tag",             SearchAdvancedRule::TAGS },
-    { i18n("Tag Name"),         "tagname",         SearchAdvancedRule::LINEEDIT },
-    { i18n("Image Name"),       "imagename",       SearchAdvancedRule::LINEEDIT },
-    { i18n("Image Date"),       "imagedate",       SearchAdvancedRule::DATE     },
-    { i18n("Image Caption"),    "imagecaption",    SearchAdvancedRule::LINEEDIT },
-    { i18n("Keyword"),          "keyword",         SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Album"),            "album",           SearchAdvancedRule::ALBUMS },
+    { I18N_NOOP("Album Name"),       "albumname",       SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Album Caption"),    "albumcaption",    SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Album Collection"), "albumcollection", SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Tag"),              "tag",             SearchAdvancedRule::TAGS },
+    { I18N_NOOP("Tag Name"),         "tagname",         SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Image Name"),       "imagename",       SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Image Date"),       "imagedate",       SearchAdvancedRule::DATE     },
+    { I18N_NOOP("Image Caption"),    "imagecaption",    SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Keyword"),          "keyword",         SearchAdvancedRule::LINEEDIT },
 };
 static const int RuleKeyTableCount = 10;
 
 static struct
 {
-    QString keyText;
+    const char *keyText;
     QString key;
     SearchAdvancedRule::valueWidgetTypes cat;
 }
 
 RuleOpTable[] =
 {
-    { i18n("Contains"),           "LIKE",         SearchAdvancedRule::LINEEDIT },
-    { i18n("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
-    { i18n("Equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
-    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
-    { i18n("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
-    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS },
-    { i18n("Equals"),             "EQ",           SearchAdvancedRule::TAGS },
-    { i18n("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS },
-    { i18n("After"),              "GT",           SearchAdvancedRule::DATE },
-    { i18n("Before"),             "LT",           SearchAdvancedRule::DATE },
-    { i18n("Equals"),             "EQ",           SearchAdvancedRule::DATE },
+    { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
+    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::TAGS },
+    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS },
+    { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
+    { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },
 };
 static const int RuleOpTableCount = 11;
 
@@ -133,7 +133,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
     m_key = new QComboBox( m_hbox, "key" );
     m_key->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
     for (int i=0; i< RuleKeyTableCount; i++)
-        m_key->insertItem( RuleKeyTable[i].keyText, i );
+        m_key->insertItem( i18n(RuleKeyTable[i].keyText), i );
 
     m_operator = new QComboBox( m_hbox );
     m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
@@ -172,7 +172,7 @@ void SearchAdvancedRule::setValues(const KURL& url)
     for (int i=0; i< RuleKeyTableCount; i++)
         if (RuleKeyTable[i].key == url.queryItem("1.key"))
         {
-            m_key->setCurrentText( RuleKeyTable[i].keyText );
+            m_key->setCurrentText( i18n(RuleKeyTable[i].keyText) );
         }
 
     // set the operator and the last widget
@@ -181,7 +181,7 @@ void SearchAdvancedRule::setValues(const KURL& url)
         if ( RuleOpTable[i].key == url.queryItem("1.op") &&
              RuleOpTable[i].cat == m_widgetType )
         {
-            m_operator->setCurrentText( RuleOpTable[i].keyText );
+            m_operator->setCurrentText( i18n(RuleOpTable[i].keyText) );
         }
 
     // Set the value for the last widget.
@@ -240,7 +240,7 @@ void SearchAdvancedRule::slotKeyChanged(int id)
     for (int i=0; i< RuleOpTableCount; i++)
         if ( RuleOpTable[i].cat == m_widgetType )
     {
-        m_operator->insertItem( RuleOpTable[i].keyText );
+        m_operator->insertItem( i18n(RuleOpTable[i].keyText) );
 
         if ( currentOperator == RuleOpTable[i].key )
             m_operator->setCurrentText( currentOperator );
