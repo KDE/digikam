@@ -77,9 +77,9 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     // Box for the add/delete
     QGroupBox* groupbox = 0;
-    groupbox            = new QGroupBox( i18n("Add/Delete Query"),
+    groupbox            = new QGroupBox( i18n("Add/Delete Option"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents, to adding/removing a query."));
+    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents, to adding/removing an option."));
                                          
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
@@ -100,9 +100,9 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     leftSide->addWidget( groupbox );
 
     // Box for the group/ungroup
-    groupbox            = new QGroupBox( i18n("Group/Ungroup Queries"),
+    groupbox            = new QGroupBox( i18n("Group/Ungroup Options"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can group together or ungroup any search queries from the Search Rules list."));   
+    QWhatsThis::add( groupbox, i18n("<p>You can group together or ungroup any search options from the Search Rules list."));   
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
