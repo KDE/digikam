@@ -45,11 +45,11 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Description = i18n("KDE Photo Viewer and editor");
+    QString Description = i18n("KDE Photo Viewer and Editor");
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.3.0-cvs",
+                          "0.3.0",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2005, digiKam developers team"),
