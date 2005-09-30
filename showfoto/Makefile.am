@@ -38,9 +38,4 @@ xdg_apps_DATA = showfoto.desktop
 
 KDE_ICON = showfoto 
 
-#showfotoicondir = $(kde_datadir)/showfoto/icons
-#showfotoicon_ICON = hi128-app-showfoto.png hi22-app-showfoto.png hi32-app-showfoto.png \
-#                    hi64-app-showfoto.png hi16-app-showfoto.png hi32-action-slideshow.png \
-#		    hi48-app-showfoto.png
-
 
