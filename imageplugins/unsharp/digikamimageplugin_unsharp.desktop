@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_Unsharp
 Name[da]=Billedplugin_Uskarphedsmaske
+Name[el]=ΠρόσθετοΕικόνας_Εξομάλυνση
 Name[it]=PluginImmagini_MascheraContrasto
 Name[nl]=Afbeeldingsplugin_Onscherp
 Name[pt_BR]=Plug-in de efeito unsharp
@@ -15,6 +16,7 @@ Encoding=UTF-8
 Comment=Unsharp mask image filter plugin for digiKam
 Comment[da]=Plugin til forbedring af skarphed med uskarphedsfilter i Digikam
 Comment[de]=Ein digiKam-Modul zum Filtern des Bildes mit einer Unschärfemaske.
+Comment[el]=Πρόσθετο φίλτρο εξομάλυνσης εικόνας για το digiKam
 Comment[es]=Plugin para digiKam con un filtro para imágenes de máscara de desenfoque
 Comment[et]=DigiKami pildi teravustamise maski filter
 Comment[it]=Plugin di effetto di maschera di contrasto delle immagini per digiKam

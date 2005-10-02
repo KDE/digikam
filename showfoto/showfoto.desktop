@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=showFoto
+Name[el]=εμφάνισηΦωτογραφίας
 Name[it]=visualizzaFoto
 Name[pa]=ਫੋਟੋਵੇਖਾਓ
 Name[sv]=Showfoto
@@ -29,6 +30,7 @@ Comment=digiKam photo viewer
 Comment[br]=Gweler foto digiKam
 Comment[da]=Digikam Foto-fremviser
 Comment[de]=digiKam-Photobetrachter
+Comment[el]=digiKam προβολέας εικόνων
 Comment[et]=DigiKami fotode näitaja
 Comment[it]=Visualizzatore di foto digiKam
 Comment[nl]=Fotobewerker voor digiKam

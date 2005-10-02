@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_Solarize
 Name[da]=Billedplugin_Solarisér
+Name[el]=ΠρόσθετοΕικόνας_ΗλιακήςΈκθεσης
 Name[en_GB]=ImagePlugin_Solarise
 Name[it]=PluginImmagini_Solarizza
 Name[nl]=Afbeeldingsplugin_Solarizeren
@@ -17,6 +18,7 @@ Encoding=UTF-8
 Comment=Image solarize effect plugin for digiKam
 Comment[da]=Solariseringsreffekt-plugin til Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Solarisierungseffektes.
+Comment[el]=Πρόσθετο εφέ ηλιακής έκθεσης εικόνας για το digiKam
 Comment[en_GB]=Image solarise effect plugin for digiKam
 Comment[es]=Plugin de efecto de solarización de imágenes para digiKam
 Comment[et]=DigiKami ülesärituse pildiefektiplugin

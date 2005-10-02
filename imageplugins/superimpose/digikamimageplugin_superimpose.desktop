@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_SuperImpose
 Name[da]=Billedplugin_Indkopiering
+Name[el]=ΠρόσθετοΕικόνας_Υπερέκθεση
 Name[it]=PluginImmagini_Sovrapposizione
 Name[nl]=Afbeeldingsplugin_SjabloonToevoegen
 Name[pt_BR]=Plug-in de sobreposição
@@ -16,6 +17,7 @@ Encoding=UTF-8
 Comment=Template superimpose plugin for digiKam
 Comment[da]=Plugin til skabelon-indkopiering i Digikam
 Comment[de]=Ein digKam-Modul zum Anwenden von Schablonen auf ein Bild.
+Comment[el]=Πρόσθετο πρότυπης υπερέκθεσης για το digiKam
 Comment[es]=Plugin de superposición de plantillas para digiKam
 Comment[et]=DigiKami pildile malli lisamise plugin
 Comment[fr]=Module externe de digiKam pour superposer des patrons

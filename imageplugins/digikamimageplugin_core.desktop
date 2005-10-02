@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Core
+Name[el]=ΠρόσθετοΕικόνας_Πυρήνας
 Name[it]=PluginImmagini_Nocciolo
 Name[nl]=Afbeeldingsplugin_Kern
 Name[sr]=Језгро прикључака
@@ -13,6 +14,7 @@ Encoding=UTF-8
 Comment=digiKam Core Image Plugin
 Comment[da]=Grundlæggende Digikam billed-plugin
 Comment[de]=digiKam Kernmodul
+Comment[el]=Πρόσθετο εικόνων πυρήνα digiKam
 Comment[et]=DigiKami peamine pildiplugin
 Comment[it]=Plugin delle immagini centrale di digiKam
 Comment[nl]=digiKam kernafbeeldingsplugin

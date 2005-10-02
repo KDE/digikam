@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_AdjustLevels
 Name[da]=Billedplugin_Niveaujustering
+Name[el]=ΠρόσθετοΕικόνας_ΠροσαρμογήΕπιπέδων
 Name[it]=PluginImmagini_RegolaLivelli
 Name[nl]=Afbeeldingsplugin_NiveausAanpassen
 Name[pt_BR]=Plug-in de ajuste de níveis
@@ -17,6 +18,7 @@ Encoding=UTF-8
 Comment=Image histogram adjust levels plugin for digiKam
 Comment[da]=Plugin til niveaujustering i Digikam
 Comment[de]=Ein digiKam-Modul zur Justierung der Bildhistogrammwerte.
+Comment[el]=Πρόσθετο προσαρμογής των επιπέδων του ιστογράμματος εικόνας για το digiKam
 Comment[es]=Plugin para ajustar los niveles del histograma de la imagen para digiKam
 Comment[et]=DigiKami pildi histogrammi tasemete kohendamise plugin
 Comment[fr]=Module externe de digiKam pour l'ajustement des niveaux d'une image

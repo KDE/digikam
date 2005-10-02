@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Texture
+Name[el]=ΠρόσθετοΕικόνας_Υφή
 Name[it]=PluginImmagini_Trama
 Name[nl]=Afbeeldingsplugin_Textuur
 Name[pt_BR]=Plug-in de textura
@@ -15,6 +16,7 @@ Encoding=UTF-8
 Comment=digiKam plugin to apply texture on image
 Comment[da]=digiKam-plugin til at anvende tekstur til billedet
 Comment[de]=Ein digiKam-Modul zum Hinzufügen einer Textur zu einem Bild.
+Comment[el]=Πρόσθετο εφαρμογής υφής σε εικόνα για το digiKam
 Comment[es]=Plugin de digiKam para aplicar una textura sobre una imagen
 Comment[et]=DigiKami pildile tekstuuri lisamise plugin
 Comment[fr]=Module externe de digiKam pour appliquer une texture à l'image

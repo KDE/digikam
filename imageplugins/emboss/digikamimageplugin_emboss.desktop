@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_Emboss
 Name[da]=Billedplugin_Præg i relief
+Name[el]=ΠρόσθετοΕικόνας_Εμβάθυνση
 Name[it]=PluginImmagini_Rilievo
 Name[nl]=Afbeeldingsplugin_Reliëf
 Name[pt_BR]=Plug-in de relevo
@@ -16,6 +17,7 @@ Encoding=UTF-8
 Comment=Emboss image effect plugin for digiKam
 Comment[da]=Reliefprægnings-plugin til Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Gravureffektes.
+Comment[el]=Πρόσθετο εφέ εμβάθυνσης για το digiKam
 Comment[es]=Plugin de efecto de imagen en relieve para digiKam
 Comment[et]=DigiKami kohrutuse pildiefektiplugin
 Comment[fr]=Module externe de digiKam pour mettre en relief une image

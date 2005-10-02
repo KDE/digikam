@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_LensDistortion
 Name[da]=Billedplugin_Linseforvrængning
+Name[el]=ΠρόσθετοΕικόνας_ΠαραμόρφωσηΦακών
 Name[it]=PluginImmagini_DistorsioneLenticolare
 Name[nl]=Afbeeldingsplugin_Lensafwijking
 Name[pt_BR]=Plug-in de efeito de distorção Lens
@@ -15,6 +16,7 @@ Encoding=UTF-8
 Comment=Spherical aberration image correction plugin for digiKam
 Comment[da]=Plugin til korrigering af sfærisk afvigelse til Digikam
 Comment[de]=Ein digKam Modul zur Reduzierung der kugelförmigen Verzerrung durch Linsen auf einem Bild.
+Comment[el]=Πρόσθετο διόρθωσης εικόνας σφαιρικής παρέκκλισης για το digiKam
 Comment[es]=Plugin de corrección de distorsión esférica para digiKam
 Comment[et]=DigiKami sfäärilise aberratsiooni korrigeerimise plugin
 Comment[fr]=Module externe de digiKam pour la correction des anomalies sphériques

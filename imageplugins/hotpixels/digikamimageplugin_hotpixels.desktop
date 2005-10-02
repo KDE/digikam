@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_HotPixels
+Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
 Name[nl]=Afbeeldingsplugin_HotPixels
 Name[sr]=Врући пиксели
 Name[sr@Latn]=Vrući pikseli
@@ -10,6 +11,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Hot pixel correction plugin for Digikam
 Comment[de]=Ein digKam-Modul zur Korrektur von Hot Pixeln.
+Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστοιχείων για το Digikam
 Comment[et]=DigiKami kuumade pikslite korrigeerimise plugin
 Comment[nl]=digiKam-plugin voor het corrigeren van de hotpixels
 Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem

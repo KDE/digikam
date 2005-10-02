@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_Despeckle
 Name[da]=Billedplugin_Pletfjerning
+Name[el]=ΠρόσθετοΕικόνας_ΑφαίρεσηΚουκίδων
 Name[it]=PluginImmagini_Smacchia
 Name[nl]=Afbeeldingsplugin_RuisReductie
 Name[pt_BR]=Plug-in de redução
@@ -15,6 +16,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
 Comment[de]=Ein digiKam-Modul zum Verringern von Bildrauschen.
+Comment[el]=Πρόσθετο μείωσης θορύβου για το digiKam
 Comment[et]=DigiKami müra vähendamise plugin
 Comment[nl]=digiKam-plugin voor ruisreductie
 Comment[pt]=Um 'plugin' do digiKam para a redução de ruído

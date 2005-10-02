@@ -14,6 +14,7 @@ maxInstances=1
 Description=digiKam Albums kioslave
 Description[br]=kioslave an albomoù evit Digikam
 Description[de]=digiKam Ein/Ausgabe-Modul für Alben
+Description[el]=digiKam kioslave Άλμπουμ
 Description[et]=DigiKami albumite KIO-moodul
 Description[lt]=digiKam albumų kio pagalbinė programa
 Description[pt]='kioslave' de álbuns do digiKam

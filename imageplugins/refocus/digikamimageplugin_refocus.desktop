@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Refocus
+Name[el]=ΠρόσθετοΕικόνας_Επανεστίαση
 Name[nl]=Afbeeldingsplugin_OpnieuwFocussen
 Name[sr]=Префокусирање
 Name[sr@Latn]=Prefokusiranje
@@ -12,6 +13,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to refocus an image
 Comment[de]=Ein digiKam-Modul zum Refokussieren eines Bildes.
+Comment[el]=Πρόσθετο για την επανεστίαση μιας εικόνας για το digiKam
 Comment[et]=DigiKami pildi fookuse muutmise plugin
 Comment[nl]=digiKam-plugin voor het opnieuw focussen van een afbeelding
 Comment[pt]=Um 'plugin' do digiKam para voltar a focar uma imagem

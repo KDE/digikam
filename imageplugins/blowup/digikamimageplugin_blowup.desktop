@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_BlowUp
+Name[el]=ΠρόσθετοΕικόνας_Έκρηξη
 Name[it]=PluginImmagini_Espansione
 Name[nl]=Afbeeldingsplugin_Opblazen
 Name[pt_BR]=Plug-in de explosão
@@ -15,6 +16,7 @@ Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
 Comment[da]=Digikam plugin for at forstørre et fotografi
 Comment[de]=Ein digiKam-Modul zum Vergrößern von Bildern.
+Comment[el]=Πρόσθετο έκρηξης μιας φωτογραφίας για το digiKam
 Comment[es]=Plugin de digiKam para ampliar una fotografía
 Comment[et]=DigiKami foto suurendamise plugin
 Comment[it]=Plugin di digiKam per espandere una fotografia
