@@ -74,8 +74,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
             SLOT(slotTimeOut()));
 
     enableButtonOK(false);
-    setInitialSize(QSize(480,400));
-    adjustSize();
+    resize(configDialogSize("QuickSearch Dialog"));
 
     // check if we are being passed a valid url
     if (m_url.isValid())
@@ -103,6 +102,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
 
 SearchQuickDialog::~SearchQuickDialog()
 {
+    saveDialogSize(("QuickSearch Dialog"));
     delete m_timer;    
 }
 
