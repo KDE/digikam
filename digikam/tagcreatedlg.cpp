@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <kicondialog.h>
 #include <kapplication.h>
+#include <kdeversion.h>
 
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -113,9 +114,16 @@ QString TagCreateDlg::icon() const
 
 void TagCreateDlg::slotIconChange()
 {
+#if KDE_IS_VERSION(3,3,0)
+    KIconDialog dlg(this);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false,
+              true, true);
+    QString icon = dlg.openDialog();
+#else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
     if (icon.startsWith("/"))
         return;
+#endif
 
     if (icon.isEmpty() || m_icon == icon)
         return;
@@ -221,9 +229,16 @@ QString TagEditDlg::icon() const
 
 void TagEditDlg::slotIconChange()
 {
+#if KDE_IS_VERSION(3,3,0)
+    KIconDialog dlg(this);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false,
+              true, true);
+    QString icon = dlg.openDialog();
+#else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
     if (icon.startsWith("/"))
         return;
+#endif
     
     if (icon.isEmpty() || icon == m_icon)
         return;
