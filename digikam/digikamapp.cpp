@@ -114,11 +114,6 @@ DigikamApp::DigikamApp(bool detectCamera)
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mAlbumManager->startScan();
 
-    // Load Cameras
-    if(mSplash)
-        mSplash->message(i18n("Loading cameras"), AlignLeft, white);
-    loadCameras();
-
     // Load KIPI Plugins.
     loadPlugins();
 
@@ -577,6 +572,13 @@ void DigikamApp::setupActions()
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
+    // Load Cameras -- do this before the createGUI so that the cameras
+    // are plugged into the toolbar at startup
+    if (mSplash)
+        mSplash->message(i18n("Loading cameras"), AlignLeft, white);
+    loadCameras();
+
+    
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);
 
     // Initialize Actions ---------------------------------------
