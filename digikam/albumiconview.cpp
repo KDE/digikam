@@ -444,10 +444,13 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(SmallIcon("exifinfo"),
                        i18n("Properties"), 14);
 
-    if( d->currentAlbum && d->currentAlbum->type() == Album::PHYSICAL )
-        popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
-    else
-        popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
+    if (d->currentAlbum)
+    {
+        if (d->currentAlbum->type() == Album::PHYSICAL )
+            popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+        else if (d->currentAlbum->type() == Album::TAG )
+            popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
+    }
 
     popmenu.insertSeparator();
 
