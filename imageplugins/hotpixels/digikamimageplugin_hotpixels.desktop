@@ -4,7 +4,7 @@ Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
 Name[nl]=Afbeeldingsplugin_HotPixels
 Name[sr]=Врући пиксели
 Name[sr@Latn]=Vrući pikseli
-Name[sv]=Insticksprogram för vita bildpunkter
+Name[sv]=Insticksprogram för heta bildpunkter
 Name[xx]=xxImagePlugin_HotPixelsxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -18,7 +18,7 @@ Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[sr]=digiKam-ов прикључак исправку врућих пиксела
 Comment[sr@Latn]=digiKam-ov priključak ispravku vrućih piksela
-Comment[sv]=Digikam insticksprogram för korrigering av vita bildpunkter
+Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
 Comment[xx]=xxHot pixel correction plugin for Digikamxx
 
 X-KDE-Library=digikamimageplugin_hotpixels
