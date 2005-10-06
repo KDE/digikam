@@ -26,6 +26,9 @@
 extern "C" 
 {
 #include <tiffio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 }
  
 // C++ includes.
@@ -99,6 +102,7 @@ public:
     Imlib_Color_Modifier cmod;
     Imlib_Load_Error     errorRet;
     QString              filename;
+    mode_t               filePermissions;
 
     UndoManager*         undoMan;
 };
@@ -189,6 +193,7 @@ bool ImlibInterface::load(const QString& filename)
     d->gamma      = 1.0;
     d->contrast   = 1.0;
     d->brightness = 0.0;
+    d->filePermissions = 0;
 
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
@@ -219,7 +224,14 @@ bool ImlibInterface::load(const QString& filename)
         }
     }
 
-    if (d->image) {
+    if (d->image)
+    {
+        struct stat stbuf;
+        if (::stat(QFile::encodeName(filename), &stbuf) == 0)
+        {
+            d->filePermissions = stbuf.st_mode;
+        }
+        
         imlib_context_set_image(d->image);
         imlib_image_set_changes_on_disk();
 
@@ -1005,6 +1017,12 @@ bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression,
         kdWarning() << "error saving image '" << QFile::encodeName(saveFile).data() << "', " 
                     << (int)d->errorRet << endl;
         return false;  // Do not reload the file if saving failed !
+    }
+
+    // file saved. now preserve the permissions
+    if (d->filePermissions != 0)
+    {
+        ::chmod(QFile::encodeName(saveFile), d->filePermissions);
     }
 
     return true;
