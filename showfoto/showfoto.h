@@ -185,6 +185,7 @@ private:
     int                    m_PNGCompression;
     int                    m_itemsNb;
     
+    bool                   m_removeFullScreenButton;
     bool                   m_fullScreen;
     bool                   m_TIFFCompression;
     bool                   m_fullScreenHideToolBar;
