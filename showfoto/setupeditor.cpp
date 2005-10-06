@@ -144,7 +144,7 @@ void SetupEditor::readSettings()
     m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreenHideToolBar", false));
-    m_hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumblBar", true));
+    m_hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
     m_useTrashCheck->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
     m_showSplashCheck->setChecked(config->readBoolEntry("ShowSplash", true));
 
