@@ -125,11 +125,12 @@ void MonthWidget::drawContents(QPainter *)
     
     int sx, sy;
     int index = 0;
+    bool weekvisible;
     for (int j=3; j<9; j++)
     {
         sy = m_currh * j;
-        p.fillRect(1, sy, m_currw-1, m_currh-1, QColor(210,210,210));
-        
+        weekvisible = false;
+      
         for (int i=1; i<8; i++)
         {
             sx = m_currw * i;
@@ -167,6 +168,19 @@ void MonthWidget::drawContents(QPainter *)
                 
                 p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
                            QString::number(m_days[index].day));
+                           
+                if(!weekvisible)
+                {
+                    int weeknr = KGlobal::locale()->calendar()->
+                                    weekNumber(QDate(m_year, m_month, m_days[index].day));
+                    p.setPen(m_active ? Qt::black : Qt::gray);
+                    p.setFont(fnBold);
+                    p.fillRect(1, sy, m_currw-1, m_currh-1, QColor(210,210,210));
+                    p.drawText(1, sy, m_currw-1, m_currh-1, Qt::AlignVCenter|Qt::AlignHCenter,
+                               QString::number(weeknr));
+                    weekvisible = true;
+                }
+
             }
 
             index++;                                             
