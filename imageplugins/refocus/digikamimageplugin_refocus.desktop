@@ -12,6 +12,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to refocus an image
+Comment[da]=digiKam-plugin til at refokusere et billede
 Comment[de]=Ein digiKam-Modul zum Refokussieren eines Bildes.
 Comment[el]=Πρόσθετο για την επανεστίαση μιας εικόνας για το digiKam
 Comment[et]=DigiKami pildi fookuse muutmise plugin

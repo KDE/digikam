@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam Dates kioslave
+Description[da]=Digikam datoer-kioslave
 Description[de]=digiKam Ein/Ausgabe-Modul für Datumsangaben
 Description[el]=digiKam kioslave Ημερομηνίες
 Description[et]=DigiKami kuupäevade KIO-moodul
