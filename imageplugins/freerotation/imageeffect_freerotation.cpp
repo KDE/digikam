@@ -112,7 +112,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Angle (in degrees):"), gboxSettings);
     m_angleInput = new KDoubleNumInput(gboxSettings);
     m_angleInput->setPrecision(1);
-    m_angleInput->setRange(-180.0, 180.0, 0.1, true);
+    m_angleInput->setRange(-45.0, 45.0, 0.1, true);
     m_angleInput->setValue(0.0);
     QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
                                         "A positive angle rotates the image clockwise; "
