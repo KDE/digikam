@@ -647,7 +647,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             else
             {
                 QPopupMenu popMenu(this);
-                popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
+                popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
                 popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
