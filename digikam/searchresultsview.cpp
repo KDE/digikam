@@ -133,7 +133,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     
     if (!ulist.isEmpty())
     {
-        m_thumbJob = new ThumbnailJob(ulist, 128, true);
+        m_thumbJob = new ThumbnailJob(ulist, 128, true, true);
     
         connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
