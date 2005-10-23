@@ -134,7 +134,7 @@ ImageWindow::ImageWindow()
         }
     }
 
-    m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this)); 
+    m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
     
     // -- Some Accels not available from actions -------------
 
@@ -743,13 +743,18 @@ void ImageWindow::slotContextMenu()
                                                    TagsPopupMenu::REMOVE);
 
                 separatorID = m_contextMenu->insertSeparator();
+
                 m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
-                m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+                int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
 
                 connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
                         SLOT(slotAssignTag(int)));
                 connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                         SLOT(slotRemoveTag(int)));
+
+                AlbumDB* db = AlbumManager::instance()->albumDB();
+                if (!db->hasTags( idList ))
+                    m_contextMenu->setItemEnabled(i,false);
             }
         }
         
