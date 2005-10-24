@@ -191,6 +191,12 @@ int main(int argc, char *argv[])
                           "yves dot chaufour at wanadoo.fr",
                           0);
 
+    aboutData.addCredit ( "Tung Nguyen",
+                          I18N_NOOP("Bug reports and Feedback"),
+                          "ntung at free.fr",
+                          0);
+
+
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); 
 
