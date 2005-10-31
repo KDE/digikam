@@ -1,3 +1,5 @@
+SUBDIRS = pics
+
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libimageeditor.la libimagecanvas.la libshowfoto.la 
@@ -32,12 +34,9 @@ digikaminclude_HEADERS = imageiface.h imagewidget.h imageplugin.h
 
 digikamincludedir = $(includedir)/digikam
 
-digikamimageeditoricondir = $(kde_datadir)/digikam/icons
-digikamimageeditoricon_ICON = AUTO
-
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimagewindowui.rc
 
 kde_servicetypes_DATA = digikamimageplugin.desktop
 
-KDE_OPTIONS=nofinal
+KDE_OPTIONS = nofinal

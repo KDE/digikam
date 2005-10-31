@@ -1,3 +1,7 @@
+SUBDIRS = pics
+
+METASOURCES = AUTO  
+
 bin_PROGRAMS = showfoto
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor \
@@ -26,16 +30,9 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
-METASOURCES = AUTO  
-
 rcdir = $(kde_datadir)/showfoto
 rc_DATA = showfotoui.rc
 
-showfotosplashpicdir = $(kde_datadir)/showfoto
-showfotosplashpic_DATA = showfoto-splash.png
-
 xdg_apps_DATA = showfoto.desktop
-
-KDE_ICON = showfoto 
 
 
