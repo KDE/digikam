@@ -109,11 +109,10 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     KSeparator *line = new KSeparator (Horizontal, gboxSettings);
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
-    QLabel *label3 = new QLabel(i18n("Angle (in degrees):"), gboxSettings);
-    m_angleInput = new KDoubleNumInput(gboxSettings);
-    m_angleInput->setPrecision(1);
-    m_angleInput->setRange(-45.0, 45.0, 0.1, true);
-    m_angleInput->setValue(0.0);
+    QLabel *label3 = new QLabel(i18n("Main Angle (in degrees):"), gboxSettings);
+    m_angleInput = new KIntNumInput(gboxSettings);
+    m_angleInput->setRange(-180, 180, 1, true);
+    m_angleInput->setValue(0);
     QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
@@ -121,35 +120,40 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
 
+    QLabel *label4 = new QLabel(i18n("Fine Angle (in degrees):"), gboxSettings);
+    m_fineAngleInput = new KDoubleNumInput(gboxSettings);
+    m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
+    m_fineAngleInput->setValue(0);
+    QWhatsThis::add( m_fineAngleInput, i18n("<p>This value will be added to Main Angle value "
+                                            "to set fine target angle."));
+
+    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(m_fineAngleInput, 6, 6, 0, 2);
+
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the rotated image. "
                                             "To smooth the target image, it will be blurred a little."));
-    gridSettings->addMultiCellWidget(m_antialiasInput, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
 
-    QLabel *label4 = new QLabel(i18n("Auto-crop:"), gboxSettings);
+    QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
     m_autoCropCB = new QComboBox(false, gboxSettings);
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
     QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process an image auto-croping "
                                             "to remove black frames around rotated image."));
-    gridSettings->addMultiCellWidget(label4, 6, 6, 0, 0);
-    gridSettings->addMultiCellWidget(m_autoCropCB, 6, 6, 1, 2);
+    gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
+    gridSettings->addMultiCellWidget(m_autoCropCB, 8, 8, 1, 2);
 
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
 
-    KConfig *config = kapp->config();
-    config->setGroup("Free Rotation Tool Settings");
+    connect(m_angleInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotTimer()));
 
-    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );
-    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-
-    // -------------------------------------------------------------
-
-    connect(m_angleInput, SIGNAL(valueChanged (double)),
+    connect(m_fineAngleInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
     connect(m_antialiasInput, SIGNAL(toggled (bool)),
@@ -161,17 +165,33 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
 ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 {
+}
+
+void ImageEffect_FreeRotation::readUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Free Rotation Tool Settings");
+
+    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );
+    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
+    kdDebug() << "Reading FreeRotation settings" << endl;
+}
+
+void ImageEffect_FreeRotation::writeUserSettings(void)
+{
     KConfig *config = kapp->config();
     config->setGroup("Free Rotation Tool Settings");
 
     config->writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
     config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
     config->sync();
+    kdDebug() << "Writing FreeRotation settings" << endl;
 }
 
 void ImageEffect_FreeRotation::renderingFinished()
 {
     m_angleInput->setEnabled(true);
+    m_fineAngleInput->setEnabled(true);
     m_antialiasInput->setEnabled(true);
     m_autoCropCB->setEnabled(true);
     kapp->restoreOverrideCursor();
@@ -182,7 +202,8 @@ void ImageEffect_FreeRotation::resetValues()
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
     m_autoCropCB->blockSignals(true);
-    m_angleInput->setValue(0.0);
+    m_angleInput->setValue(0);
+    m_fineAngleInput->setValue(0.0);
     m_antialiasInput->setChecked(true);
     m_autoCropCB->setCurrentItem(FreeRotation::NoAutoCrop);
     m_angleInput->blockSignals(false);
@@ -194,10 +215,11 @@ void ImageEffect_FreeRotation::prepareEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_angleInput->setEnabled(false);
+    m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
 
-    double angle      = m_angleInput->value();
+    double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
     int autocrop      = m_autoCropCB->currentItem();
     QColor background = paletteBackgroundColor().rgb();
@@ -218,10 +240,11 @@ void ImageEffect_FreeRotation::prepareEffect()
 void ImageEffect_FreeRotation::prepareFinal()
 {
     m_angleInput->setEnabled(false);
+    m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
 
-    double angle      = m_angleInput->value();
+    double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
     int autocrop      = m_autoCropCB->currentItem();
     QColor background = Qt::black;

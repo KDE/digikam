@@ -31,6 +31,7 @@ class QLabel;
 class QCheckBox;
 class QComboBox;
 
+class KIntNumInput;
 class KDoubleNumInput;
 
 namespace DigikamFreeRotationImagesPlugin
@@ -54,10 +55,17 @@ private:
     
     QComboBox        *m_autoCropCB;
     
-    KDoubleNumInput  *m_angleInput;
+    KIntNumInput     *m_angleInput;
+
+    KDoubleNumInput  *m_fineAngleInput;
+
+private slots:
+    
+    void readUserSettings(void);
 
 protected:
 
+    void writeUserSettings(void);    
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
