@@ -38,6 +38,7 @@
 #include <knuminput.h>
 #include <kseparator.h>
 #include <kcursor.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 // Digikam includes.
@@ -145,6 +146,25 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
 
 ImageEffect_ShearTool::~ImageEffect_ShearTool()
 {
+}
+
+void ImageEffect_ShearTool::readUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("ShearTool Settings");
+
+    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
+    kdDebug() << "Reading ShearTool settings" << endl;
+}
+
+void ImageEffect_ShearTool::writeUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("ShearTool Settings");
+
+    config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
+    config->sync();
+    kdDebug() << "Writing ShearTool settings" << endl;
 }
 
 void ImageEffect_ShearTool::renderingFinished()

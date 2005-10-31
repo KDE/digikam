@@ -55,8 +55,13 @@ private:
     KDoubleNumInput *m_magnitudeX;
     KDoubleNumInput *m_magnitudeY;
     
-protected:
+private slots:
     
+    void readUserSettings(void);
+
+protected:
+
+    void writeUserSettings(void);    
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
