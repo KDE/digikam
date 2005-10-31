@@ -391,7 +391,7 @@ void ShowFoto::setupActions()
     // -- flip actions ---------------------------------------------------------------
 
     m_flipAction = new KActionMenu(i18n("Flip"),
-                                   "flip_image",
+                                   "flip",
                                    actionCollection(),
                                    "flip");
     m_flipAction->setDelayed(false);
