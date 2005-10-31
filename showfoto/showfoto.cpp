@@ -248,8 +248,8 @@ ShowFoto::~ShowFoto()
 
 void ShowFoto::setupActions()
 {
-    KStdAction::open(this, SLOT(slotOpenFile()),
-                     actionCollection(), "open_file");
+    m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
+                       actionCollection(), "open_file");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
 
@@ -1123,7 +1123,7 @@ void ShowFoto::slotSelected(bool val)
     }
 }
 
-void ShowFoto::toggleActions(bool val)
+void ShowFoto::toggleActions(bool val, bool slideShow)
 {
     m_zoomFitAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
@@ -1134,7 +1134,18 @@ void ShowFoto::toggleActions(bool val)
     m_filePrintAction->setEnabled(val);
     m_resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
-    m_slideShowAction->setEnabled(val);
+    
+    if (!slideShow)
+    {
+       // if no slideshow mode then toggle it.
+       m_slideShowAction->setEnabled(val);
+    }
+    else
+    {
+       // if slideshow mode then toogle file open actions.
+       m_slideShowAction->setEnabled(val);
+       m_fileOpenAction->setEnabled(val);
+    }
 
     if (m_BCGAction)
         m_BCGAction->setEnabled(val);
@@ -1144,7 +1155,8 @@ void ShowFoto::toggleActions(bool val)
     for (Digikam::ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
-        if (plugin) {
+        if (plugin) 
+        {
             plugin->setEnabledActions(val);
         }
     }
@@ -1431,11 +1443,13 @@ void ShowFoto::slotToggleSlideShow()
             m_fullScreenAction->activate();
         }
 
+        toggleActions(false, true);
         m_slideShow->start();
     }
     else
     {
         m_slideShow->stop();
+        toggleActions(true, true);
 
         if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
         {

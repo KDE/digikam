@@ -115,7 +115,7 @@ private:
     void saveSettings();
     bool promptUserSave();
     bool save();
-    void toggleActions(bool val);
+    void toggleActions(bool val, bool slideShow=false);
     void toggleNavigation(int index);
     void loadPlugins();
     void unLoadPlugins();
@@ -157,6 +157,7 @@ private:
     KAction               *m_propertiesAction;
     KAction               *m_filePrintAction;    
     KAction               *m_fileDeleteAction;
+    KAction               *m_fileOpenAction;
     
     KAction               *m_forwardAction;
     KAction               *m_backAction;
