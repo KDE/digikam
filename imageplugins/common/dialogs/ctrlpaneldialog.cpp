@@ -181,7 +181,6 @@ void CtrlPanelDialog::slotCancel()
        kapp->restoreOverrideCursor();
        }
 
-    writeUserSettings();
     done(Cancel);
 }
 
@@ -195,7 +194,6 @@ void CtrlPanelDialog::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
        }
 
-    writeUserSettings();
     e->accept();
 }
 
@@ -259,6 +257,7 @@ void CtrlPanelDialog::slotEffect()
 
 void CtrlPanelDialog::slotOk()
 {
+    writeUserSettings();
     m_currentRenderingMode = FinalRendering;
 
     m_imagePreviewWidget->setEnable(false);

@@ -185,8 +185,6 @@ void ImageGuideDialog::writeSettings(void)
     config->writeEntry( "Guide Color", m_guideColorBt->color() );
     config->writeEntry( "Guide Width", m_guideSize->value() );
     config->sync();
-    
-    writeUserSettings();
 }
 
 void ImageGuideDialog::slotInit()
@@ -272,7 +270,6 @@ void ImageGuideDialog::slotCancel()
        kapp->restoreOverrideCursor();
        }
     
-    writeSettings();
     done(Cancel);
 }
 
@@ -286,7 +283,6 @@ void ImageGuideDialog::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
        }
 
-    writeSettings();
     e->accept();
 }
 
@@ -331,6 +327,7 @@ void ImageGuideDialog::slotEffect()
 
 void ImageGuideDialog::slotOk()
 {
+    writeUserSettings();
     m_currentRenderingMode = FinalRendering;
 
     enableButton(Ok,    false);
