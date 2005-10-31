@@ -347,7 +347,7 @@ void ShowFoto::setupActions()
                                         this, SLOT(slotToggleShowBar()),
                                         actionCollection(), "show_thumbs");
 
-    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), 0, Key_H,
+    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
                                               this, SLOT(slotViewHistogram()),
                                               actionCollection(), "view_histogram");
     m_viewHistogramAction->setEditable(false);
