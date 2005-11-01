@@ -2,6 +2,7 @@
 Name=ImagePlugin_HotPixels
 Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
 Name[nl]=Afbeeldingsplugin_HotPixels
+Name[pt_BR]=Plug-in de Imagens - hotpixels
 Name[sr]=Врући пиксели
 Name[sr@Latn]=Vrući pikseli
 Name[sv]=Insticksprogram för heta bildpunkter
@@ -16,7 +17,7 @@ Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστ�
 Comment[et]=DigiKami kuumade pikslite korrigeerimise plugin
 Comment[nl]=digiKam-plugin voor het corrigeren van de hotpixels
 Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
-Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
+Comment[pt_BR]=Plug-in de correção de hot pixels para o DigiKam
 Comment[sr]=digiKam-ов прикључак исправку врућих пиксела
 Comment[sr@Latn]=digiKam-ov priključak ispravku vrućih piksela
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter

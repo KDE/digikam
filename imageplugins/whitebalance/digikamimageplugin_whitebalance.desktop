@@ -30,6 +30,7 @@ Comment[sr@Latn]=digiKam-ov priključak ispravku balansa belog
 Comment[sv]=Digikam insticksprogram för korrigering av vitbalans
 Comment[tr]=digiKam için beyaz dengesi düzeltme eklentisi
 Comment[xx]=xxWhite balance correction plugin for digiKamxx
+Comment[zh_CN]=digiKam 的白平衡纠正插件
 
 X-KDE-Library=digikamimageplugin_whitebalance
 author=Gilles Caulier, caulier dot gilles at free dot fr

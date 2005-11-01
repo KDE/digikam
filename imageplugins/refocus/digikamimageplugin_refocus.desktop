@@ -2,6 +2,7 @@
 Name=ImagePlugin_Refocus
 Name[el]=ΠρόσθετοΕικόνας_Επανεστίαση
 Name[nl]=Afbeeldingsplugin_OpnieuwFocussen
+Name[pt_BR]=Plug-in de re-foco da imagem
 Name[sr]=Префокусирање
 Name[sr@Latn]=Prefokusiranje
 Name[sv]=Insticksprogram för omfokusering
@@ -19,7 +20,7 @@ Comment[et]=DigiKami pildi fookuse muutmise plugin
 Comment[nl]=digiKam-plugin voor het opnieuw focussen van een afbeelding
 Comment[pa]=ਚਿੱਤਰ ਨੂੰ ਮੁੜ-ਫੋਕਸ ਕਰਨ ਲਈ ਡਿਜ਼ੀਕੈਮ ਪਲੱਗਿੰਨ
 Comment[pt]=Um 'plugin' do digiKam para voltar a focar uma imagem
-Comment[pt_BR]=Um 'plugin' do digiKam para voltar a focar uma imagem
+Comment[pt_BR]=Plug-in de redefinição de foco em imagens para o digiKam
 Comment[sr]=digiKam-ов прикључак за префокусирање слике
 Comment[sr@Latn]=digiKam-ov priključak za prefokusiranje slike
 Comment[sv]=Digikam insticksprogram för att fokusera om en bild
