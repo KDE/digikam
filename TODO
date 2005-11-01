@@ -14,16 +14,16 @@ TODO list later 0.8.0 release:
 
 * Using new image Framework DImage (16 bits/color/pixels) instead QImage/imlib2 :
    - 16 bits/color/pixels support (TIFF, PNM, PNG).
-   - RAW file support in image editor and showfoto
+   - RAW file support in image editor and showfoto.
    - Need to adapt all image plugins accordinly.
    - Support all meta-data (Exif, IPTC, etc.)
 
-   ==> Who : GC (RR ?).
+   ==> Who : GC (& RR ?).
    ==> Status : Under progress.
    ==> Complexity : hight. 
    ==> Priority : hight.
 
-* Add IPTC support using Exiv2 lib.
+* Add IPTC support using Exiv2 lib :
    - Need to rewrite Libkexif or new lib in digiKam core ?
    - Current Exiv2 0.7.0 do not support i18n. When 18n will be available ?
    - DImage can be used directly instead exiv2 ?
@@ -33,20 +33,32 @@ TODO list later 0.8.0 release:
    ==> Complexity : hight. 
    ==> Priority : medium. Depand of DImage progress.
 
-* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop(tm)) [GC]
+* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop(tm)) :
 
    ==> Who : GC.
    ==> Status : todo.
    ==> Complexity: medium. 
    ==> Priority : medium.
 
-* New CD/DVD album folders+database backup/restore tool [GC]
+* New CD/DVD album folders+database backup/restore tool :
+
    - Take a look of music database backup in amarok.
+   - Take a look of image database backup in showimg.
    
    ==> Who : GC.
    ==> Status : todo.
    ==> Complexity: hight. 
    ==> Priority : hight.
+
+* Add support of Text metadata in PNG to stock image comments like JPEG/Exif :
+
+   - Take a look in http://en.wikipedia.org/wiki/PNG for more informations about meta-data 
+     supported bu PNG format.
+
+   ==> Who : ??.
+   ==> Status : todo.
+   ==> Complexity: medium. 
+   ==> Priority : medium.
 
 * post conversion to qlistview: allow selection of multiple 
   albums/tags/dates :
@@ -72,8 +84,9 @@ TODO list later 0.8.0 release:
 
    - Add DCOP interface.
    - Add open dir action (Done - GC).
+   - Add Support KURL for better konqueror interactions.
 
-   ==> Who : GC
+   ==> Who : ??
    ==> Status : todo
    ==> Complexity: medium
    ==> Priority : medium
@@ -83,7 +96,7 @@ TODO list later 0.8.0 release:
    - Hot Pixels Tool : Add manual hot pixel selection.
    - SuperImpose Tool : Complete rewrite of superimpose widget.
 
-   ==> Who : GC - 
+   ==> Who : GC - UG
    ==> Status : todo
    ==> Complexity: medium
    ==> Priority : medium
