@@ -13,3 +13,12 @@ Nota : svn2cl need xstlproc program. Please install it before.
 3/ Copied last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag to the front on ChangeLog.
 
 4/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
+
+5/ Fixed release info in these files and commit it on svn :
+   - digikam/version.h
+   - digikam/digikam.lsm
+
+6/ Edited release_digikam.rb script. Fixed these fields :
+   - version
+   - svnbase
+
