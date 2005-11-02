@@ -22,3 +22,4 @@ Nota : svn2cl need xstlproc program. Please install it before.
    - version
    - svnbase
 
+Nota : docs must be set to 'no' because documentation must be packaged in a separed tarball to reduce source code tarball size.
