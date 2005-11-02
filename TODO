@@ -33,7 +33,7 @@ TODO list later 0.8.0 release:
    ==> Complexity : hight. 
    ==> Priority : medium. Depand of DImage progress.
 
-* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop(tm)) :
+* Add 'Zoom In/Out' capabilities with ImagePreviewWidget :
 
    ==> Who : GC.
    ==> Status : todo.
