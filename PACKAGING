@@ -8,6 +8,8 @@ Notice to make release tarballs from SVN
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
 
-3/ Copied last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor.
+Nota : svn2cl need xstlproc program. Please install it before.
+
+3/ Copied last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag to the front on ChangeLog.
 
 4/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
