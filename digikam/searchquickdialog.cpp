@@ -54,7 +54,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     QWhatsThis::add( m_searchEdit, i18n("<p>Enter here your search arguments in albums library"));
     
     m_resultsView = new SearchResultsView(vbox);
-    QWhatsThis::add( m_searchEdit, i18n("<p>You can see here the items found in albums library using the current search arguments"));
+    QWhatsThis::add( m_resultsView, i18n("<p>You can see here the items found in albums library using the current search arguments"));
     
     hbox = new QHBox(vbox);
     hbox->setSpacing(spacingHint());
