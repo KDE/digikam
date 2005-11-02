@@ -28,3 +28,4 @@ Nota : docs must be set to 'no' because documentation must be packaged in a sepa
 
 8/ When tarball is created, decompress it in a temp folder and tried to compile it to prevent any problems.
 
+9/ Upload tarball on digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from pakagers before to post an offical release.
