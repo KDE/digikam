@@ -95,7 +95,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->insertItem( "4:5" );
     m_ratioCB->insertItem( "5:7" );
     m_ratioCB->insertItem( "7:10" );
-    m_ratioCB->insertItem( "Golden Ratio" );
+    m_ratioCB->insertItem( i18n("Golden Ratio") );
     m_ratioCB->insertItem( i18n("None") );
     m_ratioCB->setCurrentText( "1:1" );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping. "
