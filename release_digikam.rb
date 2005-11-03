@@ -9,14 +9,14 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.8.0-beta2"
+version    = "0.8.0-rc"
 docs       = "no"
 
-svnbase    = "https://toma@svn.kde.org/home/kde"
+svnbase    = "https://jahrens@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
-addDocs    = ["showfoto"]
+addDocs    = []
 addPo      = []
 
 #----------------------------------------------------------------
