@@ -34,3 +34,5 @@ Note : svn2cl need xstlproc program. Please install it before.
 10/ Upload tarball to digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from pakagers before posting an offical release annoucement.
 
 11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/)
+
+12/ If release is final (not beta and candidate), don't forget to copy current svn to http://websvn.kde.org/branches/stable/extragear/graphics/digikam/
