@@ -19,9 +19,10 @@ Nota : svn2cl need xstlproc program. Please install it before.
    - digikam/digikam.lsm
 
 6/ Edited release_digikam.rb script. Fixed these settings :
-   - version
-   - svnbase
-
+   - version.
+   - svnbase.
+   - addPo (for example addPo = [showfoto] if showofoto is include in digikam tarball).
+   
 Nota : docs must be set to 'no' because documentation must be packaged in a separed tarball to reduce source code tarball size.
 
 7/ Commit changed files to svn and run release_digikam.rb script.
