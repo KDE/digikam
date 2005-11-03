@@ -50,10 +50,11 @@ TODO list later 0.8.0 release:
    ==> Complexity: hight. 
    ==> Priority : hight.
 
-* Add support of Text metadata in PNG to stock image comments like JPEG/Exif :
+* Add support of Text metadata in PNG/PNM/TIFF to stock image comments like JPEG/Exif :
 
    - Take a look in http://en.wikipedia.org/wiki/PNG for more informations about meta-data 
      supported bu PNG format.
+   - Using libpng, libnetpbm and libtiff.
 
    ==> Who : ??.
    ==> Status : todo.
