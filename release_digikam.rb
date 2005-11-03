@@ -17,7 +17,7 @@ svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
-addPo      = []
+addPo      = ["showfoto"]
 
 #----------------------------------------------------------------
 
