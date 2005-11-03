@@ -24,7 +24,7 @@ Nota : svn2cl need xstlproc program. Please install it before.
 
 Nota : docs must be set to 'no' because documentation must be packaged in a separed tarball to reduce source code tarball size.
 
-7/ Run release_digikam.rb script
+7/ Commit changed files to svn and run release_digikam.rb script.
 
 8/ When tarball is created, decompress it in a temp folder and tried to compile it to prevent any problems.
 
